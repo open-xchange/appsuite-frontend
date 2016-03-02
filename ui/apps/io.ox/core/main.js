@@ -53,7 +53,7 @@ define('io.ox/core/main', [
 
     // a11y: fix for role="button"
     $(document).on('keydown', 'a[role="button"]', function (e) {
-        if (e.which !== 32) return;
+        if (e.which !== 32 || e.isDefaultPrevented()) return;
         e.preventDefault();
         $(e.currentTarget).click();
     });
@@ -308,7 +308,7 @@ define('io.ox/core/main', [
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
-        var node = $('<li class="launcher">');
+        var node = $('<li class="launcher" role="presentation">');
 
         if (fn) {
             node.on('click', function (e) {
@@ -914,6 +914,9 @@ define('io.ox/core/main', [
                 this.append(
                     $('<li role="presentation">').append(
                         $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
+                        //#, starts the client onboarding wizard that helps users
+                        //#, to setup their smartphone, tablet or laptop to 'connect'
+                        //#, with their appsuite data
                         .text(gt('Connect your Device'))
                     )
                     .on('click', function (e) {
@@ -1373,9 +1376,10 @@ define('io.ox/core/main', [
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
+                deeplink = looksLikeDeepLink && manifest && manifest.deeplink,
                 mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
 
-            if (manifest && (manifest.refreshable || mailto)) {
+            if (manifest && (manifest.refreshable || deeplink || mailto)) {
                 baton.autoLaunch = appURL.split(/,/);
             } else {
                 // clear typical parameter?

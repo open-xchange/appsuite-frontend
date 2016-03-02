@@ -103,11 +103,11 @@ Assuming the app is in _/home/user/myapp_ and the web server's document root is 
 sudo ln -s /home/user/myapp/build /var/www/myapp
 ```
 
-In case Apache ignores the symlink, ensure that its configuration directive _<Directory /var/www/>_ contains "_Options FollowSymlinks_" or something to that effect.
+In case Apache ignores the symlink, ensure that its configuration directive ``Directory /var/www/>`` contains "_Options FollowSymlinks_" or something to that effect.
 
 Second, configure Apache to request from _appserver_ anything that it can't find locally. 
 This configuration requires at least _mod_rewrite_, _mod_proxy_ and _mod_proxy_http_ to be enabled. 
-Editing a file like _/etc/apache2/sites-enabled/000-default_ containing the proxy configuration, add the following inside an eventual _<VirtualHost>_ directive, but outside of any _<Directory>_ directives:
+Editing a file like _/etc/apache2/sites-enabled/000-default_ containing the proxy configuration, add the following inside an eventual _<VirtualHost>_ directive, but outside of any ``<Directory>`` directives:
 
 ```
 RewriteEngine On

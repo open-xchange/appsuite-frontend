@@ -57,7 +57,7 @@ define('io.ox/mail/detail/view', [
         id: 'header',
         index: INDEX += 100,
         draw: function (baton) {
-            var header = $('<header class="detail-view-header" role="heading">');
+            var header = $('<header class="detail-view-header">');
             ext.point('io.ox/mail/detail/header').invoke('draw', header, baton);
             this.append(header);
         }
@@ -566,12 +566,10 @@ define('io.ox/mail/detail/view', [
             this.$el.attr({
                 'data-cid': this.model.cid,
                 'aria-expanded': 'false',
-                'data-loaded': 'false'
+                'data-loaded': 'false',
+                'role': 'group',
+                'aria-label': title
             });
-
-            this.$el.prepend(
-                $('<h2 class="sr-only">').text(title)
-            );
 
             this.$el.data({ view: this, model: this.model });
 

@@ -60,8 +60,19 @@ define('io.ox/core/settings/pane', [
                 );
             });
             this.addClass('settings-container').append(
-                $('<h1>').text(gt('Basic settings'))
+                // headline
+                $('<h1>').text(gt('Basic settings')),
+                // help text
+                $('<div class="help-block">')
+                .text(gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') + ' ')
+                .css('margin-bottom', '24px')
+                .append(
+                    $('<a href="#" role="button" tabindex="1" data-action="reload">')
+                    .text(gt('Reload page'))
+                    .on('click', function (e) { e.preventDefault(); location.reload(); })
+                )
             );
+
             new SettingView({ model: model }).render().$el.attr('role', 'form').appendTo(this);
         }
     });

@@ -277,7 +277,8 @@ define('io.ox/mail/compose/view', [
 
         events: {
             'click [data-action="add"]': 'toggleTokenfield',
-            'keyup [data-extension-id="subject"] input': 'setSubject'
+            'keydown [data-extension-id="subject"] input': 'setSubject',
+            'keydown': 'focusSendButton'
         },
 
         initialize: function (options) {
@@ -966,7 +967,7 @@ define('io.ox/mail/compose/view', [
 
         setSimpleMail: function (content) {
             if (this.model.get('editorMode') === 'text') return;
-            if ($(content).find('table').length === 0) this.editorContainer.find('.editable.mce-content-body').addClass('simple-mail');
+            if (!/<table/.test(content)) this.editorContainer.find('.editable.mce-content-body').addClass('simple-mail');
         },
 
         blockReuse: function (sendtype) {
@@ -977,6 +978,18 @@ define('io.ox/mail/compose/view', [
             this.blocked[sendtype] = (this.blocked[sendtype] || 0) - 1;
             if (this.blocked[sendtype] <= 0) {
                 delete this.blocked[sendtype];
+            }
+        },
+
+        focusEditor: function () {
+            this.editor.focus();
+        },
+
+        focusSendButton: function (e) {
+            // Focus send button on ctrl || meta + Enter (a11y + keyboardsupport)
+            if ((e.metaKey || e.ctrlKey) && ((e.keyCode || e.which) === 13)) {
+                e.preventDefault();
+                this.$el.parents().find('button[data-action="send"]').focus();
             }
         },
 

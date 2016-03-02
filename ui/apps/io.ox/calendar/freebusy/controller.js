@@ -242,8 +242,10 @@ define('io.ox/calendar/freebusy/controller', [
 
             this.bubble = function (eventname, e, data) {
                 // get calendar app
-                var parentapp = options.baton && options.baton.app ? options.baton.app : $();
-                parentapp.trigger(eventname, e, data, 'freebusy-' + this.getCalendarView().mode);
+                var view = this.getCalendarView();
+                if (!view) return;
+                var app = options.baton && options.baton.app ? options.baton.app : $();
+                app.trigger(eventname, e, data, 'freebusy-' + view.mode);
             };
 
             this.getCalendarViewInstance = function (mode) {
@@ -420,7 +422,7 @@ define('io.ox/calendar/freebusy/controller', [
 
             this.autocomplete = new AddParticipant({
                 apiOptions: {
-                    contacts: true,
+                    contacts: false,
                     users: true,
                     groups: true,
                     resources: true,

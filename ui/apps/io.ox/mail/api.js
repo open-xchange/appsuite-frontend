@@ -646,9 +646,9 @@ define('io.ox/mail/api', [
             var trashId = accountAPI.getFoldersByType('trash');
             _(trashId).each(function (id) {
                 folderAPI.list(id, { cache: false });
-            });
-            _(pool.getByFolder(trashId)).each(function (collection) {
-                collection.expired = true;
+                _(pool.getByFolder(id)).each(function (collection) {
+                    collection.expired = true;
+                });
             });
         }
     });
@@ -875,14 +875,8 @@ define('io.ox/mail/api', [
         return transfer('copy', list, targetFolderId);
     };
 
-    var parseMsgref = function (msgref) {
-        var base = _(msgref.toString().split(api.separator)),
-            id = base.last(),
-            folder = base.without(id).join(api.separator);
-        return { folder_id: folder, id: id };
-    };
-
     api.autosave = function (obj) {
+        api.trigger('before:autosave', { data: obj });
         try {
             return http.wait(
                 http.PUT({
@@ -905,7 +899,7 @@ define('io.ox/mail/api', [
             );
         } finally {
             // try/finally is used to set up http.wait() first
-            if (obj.msgref) prepareRemove(parseMsgref(obj.msgref));
+            if (obj.msgref) prepareRemove(util.parseMsgref(api.separator, obj.msgref));
         }
     };
 

@@ -145,14 +145,19 @@ define('io.ox/calendar/edit/main', [
                                 });
 
                                 ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/conflicts/conflictList']).done(function (dialogs, conflictView) {
+
                                     var dialog = new dialogs.ModalDialog({
                                         top: '20%',
                                         center: false,
-                                        container: self.getWindowNode()
-                                    })
-                                    .header(conflictView.drawHeader());
+                                        container: app.getWindow().nodes.outer
+                                    });
 
-                                    dialog.append(conflictView.drawList(con, dialog).addClass('additional-info'));
+                                    dialog
+                                        .header(conflictView.drawHeader())
+                                        .append(
+                                            conflictView.drawList(con, dialog).addClass('additional-info')
+                                        )
+                                        .getContentNode().attr('role', 'document');
 
                                     if (hardConflict) {
                                         dialog.prepend(
@@ -243,7 +248,7 @@ define('io.ox/calendar/edit/main', [
                 } else {
 
                     // default values from settings
-                    data.alarm = settings.get('defaultReminder', 15);
+                    data.alarm = data.alarm || settings.get('defaultReminder', 15);
                     if (data.full_time) {
                         data.shown_as = settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1;
                     }

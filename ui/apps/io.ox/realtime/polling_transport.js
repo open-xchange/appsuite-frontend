@@ -50,7 +50,6 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
     var ackBuffer = {};
 
     var rejectAll = false;
-    var transmitting = false;
     var purging = false;
     var enroled = false;
     var traceAll = false;
@@ -131,16 +130,6 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
         if (api.trace) {
             console.log('Drain buffer');
         }
-        if (transmitting) {
-            if (api.trace) {
-                console.log('Transmitting so skipping purge');
-            }
-            if (api.trace) {
-                console.log('Aborting purge, transmission in progress so setting purging to false');
-            }
-
-            return;
-        }
         if (!enroled) {
             return;
         }
@@ -171,7 +160,6 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
             console.log('Starting purge, so setting purging to true');
         }
 
-        transmitting = true;
         synchronizedHTTP.PUT({
             module: 'rt',
             params: {
@@ -181,9 +169,9 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
             data: stanzas,
             noRetry: true,
             timeout: TIMEOUT,
-            silent: true
+            silent: true,
+            skipable: true
         }).done(function (resp) {
-            transmitting = false;
             purging = false;
             if (api.trace) {
                 console.log('Purged stanzas, so setting purging to false');
@@ -193,7 +181,6 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
                 purge();
             }
         }).fail(function (resp) {
-            transmitting = false;
             purging = false;
             if (api.debug) {
                 console.log('Purging call failed, setting purging to false', resp);
@@ -244,18 +231,18 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
 
         var lastFetchInterval = _.now() - lastCheck;
         var interval = _.now() - lastDelivery;
-        if (lastFetchInterval >= intervals[mode] && !purging && !transmitting) {
+        if (lastFetchInterval >= intervals[mode] && !purging) {
             lastCheck = _.now();
-            transmitting = true;
 
-            http.GET({
+            synchronizedHTTP.GET({
                 module: 'rt',
                 params: {
                     action: 'poll',
                     resource: tabId
                 },
                 timeout: TIMEOUT,
-                silent: true
+                silent: true,
+                skipable: true
             }).done(handleResponse).fail(handleError);
         }
 
@@ -465,10 +452,6 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
     }
 
     function handleError(error) {
-        transmitting = false;
-        if (api.debug) {
-            console.log('handleError: setting transmitting to false');
-        }
 
         if (error.code === 'RT_STANZA-1006' || error.code === 'RT_STANZA-0006' || error.code === 1006 || error.code === 6) {
             if (api.debug) {
@@ -489,10 +472,6 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
     }
 
     function handleResponse(resp) {
-        transmitting = false;
-        if (api.debug) {
-            console.log('handleResponse: setting transmitting to false');
-        }
         damage.reset();
 
         var result = null;
@@ -527,7 +506,7 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
             return $.when();
         }
         if (!enroled) {
-            return http.GET({
+            return synchronizedHTTP.GET({
                 module: 'rt',
                 params: {
                     action: 'enrol',
@@ -610,52 +589,50 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
 
     api.query = function (options) {
         var def = $.Deferred();
+        var previousOperation = null;
         if (options.trace || traceAll) {
             delete options.trace;
             options.tracer = ox.user + '@' + ox.context_id + ' [' + uuids.randomUUID() + ']';
         }
         options.seq = seq;
         seq++;
-        transmitting = true;
-        if (api.debug) {
-            console.log('Transmitting query, so setting transmitting to true');
-        }
+        previousOperation = resendDeferreds[Number(options.seq - 1)] || $.when();
+        // Wait for an ACK for the previous operation, so the stanza gates
+        // don't get mixed up
 
-        synchronizedHTTP.PUT({
-            module: 'rt',
-            params: {
-                action: 'query',
-                resource: tabId
-            },
-            timeout: TIMEOUT,
-            data: options,
-            silent: true
-        }).done(function (resp) {
-            transmitting = false;
-            if (api.debug) {
-                console.log('Query completed, setting transmitting to false');
-            }
-            var stanzas = resp.stanzas;
-            resp.stanzas = [];
-            // Handle the regular stanzas later
-            setTimeout(function () {
-                handleResponse({ stanzas: stanzas });
-            }, 0);
-            if (resp.error) {
-                handleError(resp.error);
+        previousOperation.done(function () {
+            synchronizedHTTP.PUT({
+                module: 'rt',
+                params: {
+                    action: 'query',
+                    resource: tabId
+                },
+                timeout: TIMEOUT,
+                data: options,
+                silent: true
+            }).done(function (resp) {
+                var stanzas = resp.stanzas;
+                resp.stanzas = [];
+                // Handle the regular stanzas later
+                setTimeout(function () {
+                    handleResponse({ stanzas: stanzas });
+                }, 0);
+                if (resp.error) {
+                    handleError(resp.error);
+                    def.reject(resp);
+                } else {
+                    def.resolve(handleResponse(resp));
+                }
+            }).fail(function (resp) {
+                handleError(resp);
+                // Send a dummy message to consume the sequence number
+                api.send({
+                    to: 'devnull://sequenceDiscard',
+                    seq: options.seq,
+                    element: 'message'
+                });
                 def.reject(resp);
-            } else {
-                def.resolve(handleResponse(resp));
-            }
-        }).fail(function (resp) {
-            handleError(resp);
-            // Send a dummy message to consume the sequence number
-            api.send({
-                to: 'devnull://sequenceDiscard',
-                seq: options.seq,
-                element: 'message'
             });
-            def.reject(resp);
         });
 
         return def;

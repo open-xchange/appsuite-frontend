@@ -153,6 +153,7 @@ define('io.ox/calendar/view-detail', [
     $(document).on('click', '.expandable-toggle', function (e) {
         e.preventDefault();
         $(this).closest('fieldset').toggleClass('open');
+        $(this).attr('aria-expanded', $(this).closest('fieldset').hasClass('open'));
     });
 
     // draw details
@@ -170,7 +171,7 @@ define('io.ox/calendar/view-detail', [
             this.append(
                 $('<fieldset class="details expandable">').append(
                     $('<legend class="io-ox-label">').append(
-                        $('<a href="#" class="expandable-toggle" role="button">').append(
+                        $('<a href="#" class="expandable-toggle" role="button" aria-expanded="false">').append(
                             $('<h2>').text(gt('Details'))
                         ),
                         $.txt(' '),

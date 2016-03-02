@@ -21,9 +21,10 @@ define('io.ox/settings/accounts/settings/pane', [
     'io.ox/core/notifications',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/disposable',
+    'io.ox/core/api/filestorage',
     'gettext!io.ox/settings/accounts',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, listUtils, DisposableView, gt) {
+], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, listUtils, DisposableView, filestorageApi, gt) {
 
     'use strict';
 
@@ -114,7 +115,10 @@ define('io.ox/settings/accounts/settings/pane', [
                                 gt('Edit'),
                                 'edit'
                             )
-                    )
+                    ),
+                    // some Filestorage accounts may contain errors, if thats the case show them
+                    // support for standard and oauth accounts
+                    self.model.get('accountType') !== 'mail' ? listUtils.drawError(filestorageApi.getAccountsCache().get(self.model) || filestorageApi.getAccountForOauth(self.model)) : ''
                 );
 
                 return self;
@@ -150,6 +154,17 @@ define('io.ox/settings/accounts/settings/pane', [
                                     popup.close();
                                 }
                             )
+                            .always(function () {
+                                // update folder tree
+                                require(['io.ox/core/api/account', 'io.ox/core/folder/api'], function (accountAPI, folderAPI) {
+                                    accountAPI.getUnifiedInbox().done(function (unifiedInbox) {
+                                        if (!unifiedInbox) return;
+                                        var prefix = unifiedInbox.split('/')[0];
+                                        folderAPI.pool.unfetch(prefix);
+                                        folderAPI.refresh();
+                                    });
+                                });
+                            })
                         );
                     })
                     .show();

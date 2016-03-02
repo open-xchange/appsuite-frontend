@@ -29,13 +29,30 @@ module.exports = function (grunt) {
                 ]
             },
             login: {
-                options: { lessrc: '.lessrc' },
+                options: {
+                    lessrc: '.lessrc',
+                    rootpath: grunt.config('oxbase') + '/'
+                },
                 files: [
                     {
                         src: ['apps/themes/login/login.less'],
                         expand: true,
                         rename: function (dest) { return dest; },
                         dest: 'build/apps/themes/login/login.css'
+                    }
+                ]
+            },
+            busy: {
+                options: {
+                    lessrc: '.lessrc',
+                    rootpath: grunt.config('oxbase') + '/'
+                },
+                files: [
+                    {
+                        src: ['apps/themes/busy/busy.less'],
+                        expand: true,
+                        rename: function (dest) { return dest; },
+                        dest: 'build/apps/themes/busy/busy.css'
                     }
                 ]
             }

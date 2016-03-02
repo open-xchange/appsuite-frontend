@@ -73,7 +73,7 @@ define('io.ox/tasks/view-detail', [
                         $.txt(gt.noI18n(task.title))
                     );
             this.append(
-                $('<header role="heading">').append(
+                $('<header>').append(
                     _.device('smartphone') ? [title, infoPanel] : [infoPanel, title]
                 )
             );

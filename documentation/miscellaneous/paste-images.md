@@ -17,26 +17,28 @@ Whereas OS X does provide the filename and a dummy picture, the clipboard of all
 
 The following table lists all major browsers and their ability to insert pasted images from applications.
 
-| browser | paste support (tested version) | specifics |
-|-------------------|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Chrome | 43.0.2357.81 |  |
-| Safari | <span style="color:red">no support in 8.0.6 </span>| Does not provide images in clipboardData. After pasting, the browser inserts an img-tag with webkit-fake-url. There is no pure javascript solution to retrieve the image data for upload. |
-| Firefox | 38.0.1 | Does not provide images in clipboardData. After pasting, the browser inserts an img-tag with base64 encoded src. |
-| Internet Explorer | 11.0.9600.16428 | IE 10 does not support image pasting. |
+<!--lint disable no-html-->
+| browser           | paste support (tested version)                      | specifics                                                                                                                                                                                 |
+| ----------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chrome            | 43.0.2357.81                                        |                                                                                                                                                                                           |
+| Safari            | <span style="color:red">no support in 8.0.6 </span> | Does not provide images in clipboardData. After pasting, the browser inserts an img-tag with webkit-fake-url. There is no pure javascript solution to retrieve the image data for upload. |
+| Firefox           | 38.0.1                                              | Does not provide images in clipboardData. After pasting, the browser inserts an img-tag with base64 encoded src.                                                                          |
+| Internet Explorer | 11.0.9600.16428                                     | IE 10 does not support image pasting.                                                                                                                                                     |
+<!--lint enable no-html-->
 
 # Applications
 
 This table lists some applications which were tested as copy sources for images.
 Mainly, OS related applications does are not supported as copy source whereas image viewing/editing related applications are supported.
 
-| application | paste support | operating system |
-|----------------------|---------------|------------------|
-| Finder | no | OS X |
-| Preview | yes | OS X |
-| Fotos | yes | OS X |
-| Chrome | yes  | OS X and Windows |
-| Internet Explorer | yes  | Windows |
-| Windows Explorer | no | Windows |
-| Windows Photo Viewer | no | Windows |
-| Paint | yes | Windows |
-| GimP | yes | OS X and Windows |
+| application          | paste support | operating system |
+| -------------------- | ------------- | ---------------- |
+| Finder               | no            | OS X             |
+| Preview              | yes           | OS X             |
+| Fotos                | yes           | OS X             |
+| Chrome               | yes           | OS X and Windows |
+| Internet Explorer    | yes           | Windows          |
+| Windows Explorer     | no            | Windows          |
+| Windows Photo Viewer | no            | Windows          |
+| Paint                | yes           | Windows          |
+| GimP                 | yes           | OS X and Windows |

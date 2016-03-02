@@ -8,17 +8,16 @@ The field "modified" is a hint that simply updating the library to a newer versi
 
 Libraries that are used by the frontend, as delivered to the customer, are listed here: [List of 3rd party libraries used in the UI](http://www.open-xchange.com/licenses-ox-app-suite)
 
-
-| Name & Link | License | Modified? |
-|----------------------|----------------------|-----------|
-| Node.js not included |  |  |
-| Jake | Apache | Yes |
-| UglifiyJS | BSD | No |
-| JSHint | modified MIT license | No |
-| Vows | BSD | No |
-| eyes.js | BSD | No |
-| rimraf | BSD | No |
-| LESS | Apache | No |
-| sax-js | MIT | No |
-| node-xml2js | MIT | No |
-| node-jquery-deferred | MIT | No |
+| Name & Link          | License              | Modified? |
+| -------------------- | -------------------- | --------- |
+| Node.js not included |                      |           |
+| Jake                 | Apache               | Yes       |
+| UglifiyJS            | BSD                  | No        |
+| JSHint               | modified MIT license | No        |
+| Vows                 | BSD                  | No        |
+| eyes.js              | BSD                  | No        |
+| rimraf               | BSD                  | No        |
+| LESS                 | Apache               | No        |
+| sax-js               | MIT                  | No        |
+| node-xml2js          | MIT                  | No        |
+| node-jquery-deferred | MIT                  | No        |

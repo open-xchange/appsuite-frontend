@@ -1,13 +1,13 @@
-<html>
+<html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.2.4. フォルダの共有</title>
+<title>11.2.4. 権限の付与</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="OX App Suite">
+<link rel="home" href="index.html" title="Groupware">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. 権限">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html" title="11.2.3. 新規フォルダの権限">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. 公開と登録">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. 登録">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -29,75 +29,85 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <div class="sect2">
+  <h1 class="sr-only">データの整理</h1>
+<h2 class="sr-only">権限</h2>
+<div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. フォルダの共有</h3></div></div></div>
-<a class="indexterm" name="idm139765666223184"></a><a class="indexterm" name="idm139765666221888"></a><a class="indexterm" name="idm139765666220592"></a><a class="indexterm" name="idm139765666219296"></a><div class="concept">
-<a name="ox.appsuite.user.concept.rights.share"></a><p>他のユーザとデータを共有するには、フォルダを 1 つ以上共有します。対象のフォルダに関する特定の権限を他のユーザに付与すると、そのユーザとフォルダを共有できます。次のようなオプションの機能があります。</p>
+<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. 権限の付与</h3></div></div></div>
+<a class="indexterm" name="id-1.12.5.8.2"></a><a class="indexterm" name="id-1.12.5.8.3"></a><div class="concept">
+<a name="ox.appsuite.user.concept.rights.grant"></a><p>他のユーザとデータを共有するには、フォルダを 1 つ以上共有します。対象のフォルダに関する特定の権限を他のユーザに付与すると、そのユーザとフォルダを共有できます。次のようなオプションの機能があります。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>フォルダ権限の <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.share" title="フォルダ権限を付与する">付与</a>、</p></li>
+<li class="listitem"><p>フォルダ権限の <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.add" title="フォルダ権限を付与する">付与</a>、</p></li>
 <li class="listitem"><p>フォルダ権限の <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.change" title="フォルダ権限を変更する">変更</a>、</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.applyrole" title="ユーザ ロールを適用して権限を付与する">ユーザ ロール</a> の割り当てによる権限の付与、</p></li>
 <li class="listitem"><p>フォルダ権限の <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.remove" title="ユーザのフォルダ権限を削除する">削除</a></p></li>
 </ul></div>
+<p>
+      </p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.share.limitations"></a><p><span class="phrase"><strong>注: </strong></span> 次の制限があることにご注意ください。</p>
+<a name="ox.appsuite.user.concept.rights.limitations"></a><p><span class="phrase"><strong>注: </strong></span> 次の制限があることにご注意ください。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>別のユーザにフォルダの権限を付与するには、対象のフォルダに関する管理者権限が必要です。</p></li>
-<li class="listitem" style="list-style-type: none"><p>個人用の <span class="guilabel"><strong>受信トレイ</strong></span> フォルダを共有することはできません。個人用のメール メッセージに他のユーザからアクセスできるようにするには、<span class="guilabel"><strong>受信トレイ</strong></span> フォルダの配下のメール フォルダを共有し、他のユーザがこのメール フォルダを登録する必要があります。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.share.subscribe.html" title="5.7.2. メール フォルダの登録">5.7.2: メール フォルダの登録</a> を参照してください。</p></li>
-<li class="listitem" style="list-style-type: none"><p>個人の予定表フォルダ、個人の連絡先フォルダ、個人の仕事フォルダについては、あらかじめ排他的な権限が付与されています。これらのフォルダに関する管理者権限は、他のユーザに付与できません。実際の設定例は、<a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="問：">データの整理とチームでの仕事に関する質問</a> を参照してください。</p></li>
+<li class="listitem" style="list-style-type: none"><p>個人用の <span class="guilabel"><strong>受信トレイ</strong></span>フォルダを共有することはできません。個人用のメール メッセージに他のユーザからアクセスできるようにするには、<span class="guilabel"><strong>受信トレイ</strong></span> フォルダの配下のメール フォルダを共有します。他のユーザがこのメール フォルダを登録する必要があります。</p></li>
+<li class="listitem" style="list-style-type: none"><p>個人の予定表フォルダ、個人の連絡先フォルダ、個人の仕事フォルダについては、あらかじめ排他的な権限が付与されています。これらのフォルダに関する管理者権限は、他のユーザに付与できません。</p></li>
 </ul></div>
+<p>
+      </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.share"></a><p class="title"><b>フォルダ権限を付与する</b></p>
+<a name="ox.appsuite.user.task.rights.add"></a><p class="title">フォルダ権限を付与する</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>フォルダ ツリーで、フォルダを <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="特定のフォルダを開く">選択</a> します。</p>
+<p>フォルダ ツリーで、フォルダを <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="フォルダを開く、または選択する：">選択</a> します。</p>
 <p><span class="phrase"><strong>注: </strong></span> 対象のフォルダに関する管理者権限が必要です。</p>
 </li>
 <li class="step"><p>フォルダ名の隣にある <span class="guibutton"><strong>フォルダ アクション</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.share"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> をクリックします。<span class="guibutton"><strong>権限</strong></span> をクリックします。このフォルダに関する現在の権限が <span class="guilabel"><strong>フォルダ権限</strong></span> ウィンドウに表示されます。</p></li>
-<li class="step"><p>画面の一番下にユーザ名を入力し、アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.share.add"></a><img src="../../images/appsuite_user_icon_add.png"></span> をクリックします。そのユーザに既定の権限が付与されます。</p></li>
-<li class="step"><p>権限を変更するには、そのユーザの権限をクリックします。設定例は、<a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="問：">データの整理とチームでの仕事に関する質問</a> を参照してください。</p></li>
+<li class="step"><p>ユーザまたはグループのメールアドレスを入力します。ユーザまたはグループに既定の権限が付与されます。</p></li>
+<li class="step"><p>ユーザまたグループの権限を変更するには、<span class="guibutton"><strong>アクセス権限</strong></span>をクリックします。メニューから権限を選択します。</p></li>
 <li class="step"><p>必要に応じて上記の手順を繰り返し、付与する権限を追加します。</p></li>
+<li class="step">
+<p>全ての既存または新規に作成したサブフォルダに権限を移動するには、<span class="guibutton"><strong>すべてのサブフォルダに適用</strong></span>を有効にします。</p>
+<p><span class="phrase"><strong>注: </strong></span>サブフォルダに関する管理者権限が必要です。</p>
+</li>
 <li class="step"><p><span class="guibutton"><strong>保存</strong></span> をクリックします。</p></li>
 </ol></div>
 <div class="taskrelated">
-<p><span class="phrase"><strong>ヒント: </strong></span>共有フォルダは、<span class="guibutton"><strong>共有</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.rights.share.shared"></a><img src="../../images/appsuite_user_icon_folder_share.png"></span> で表示されます。このアイコンをクリックすると、<span class="guilabel"><strong>フォルダ権限</strong></span> ウィンドウが表示されます。</p>
+          <p><span class="phrase"><strong>ヒント: </strong></span>共有フォルダは、<span class="guibutton"><strong>共有</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.rights.shared"></a><img src="../../images/appsuite_user_icon_folder_shared.png"></span> で表示されます。このアイコンをクリックすると、<span class="guilabel"><strong>フォルダ権限</strong></span> ウィンドウが表示されます。</p>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.change"></a><p class="title"><b>フォルダ権限を変更する</b></p>
+<a name="ox.appsuite.user.task.rights.change"></a><p class="title">フォルダ権限を変更する</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>フォルダ ツリーで、フォルダを <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="特定のフォルダを開く">選択</a> します。</p>
+<p>フォルダ ツリーで、フォルダを <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="フォルダを開く、または選択する：">選択</a> します。</p>
 <p><span class="phrase"><strong>注: </strong></span> 対象のフォルダに関する管理者権限が必要です。</p>
 </li>
 <li class="step"><p>フォルダ名の隣にある <span class="guibutton"><strong>フォルダ アクション</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.change"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> をクリックします。<span class="guibutton"><strong>権限</strong></span> をクリックします。このフォルダに関する現在の権限が <span class="guilabel"><strong>フォルダ権限</strong></span> ウィンドウに表示されます。</p></li>
 <li class="step">
-<p>権限をクリックし、権限を変更します。設定例は、<a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="問：">データの整理とチームでの仕事に関する質問</a> を参照してください。</p>
+<p>ユーザまたグループの権限を変更するには、<span class="guibutton"><strong>アクセス権限</strong></span>をクリックします。メニューから権限を選択します。</p>
 <p><span class="phrase"><strong>注: </strong></span>個人用フォルダの管理者権限は変更できません。</p>
 </li>
 <li class="step"><p><span class="guibutton"><strong>保存</strong></span> をクリックします。</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.applyrole"></a><p class="title"><b>ユーザ ロールを適用して権限を付与する</b></p>
+<a name="ox.appsuite.user.task.rights.applyrole"></a><p class="title">ユーザ ロールを適用して権限を付与する</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>フォルダ ツリーで、フォルダを <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="特定のフォルダを開く">選択</a> します。</p>
+<p>フォルダ ツリーで、フォルダを <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="フォルダを開く、または選択する：">選択</a> します。</p>
 <p><span class="phrase"><strong>注: </strong></span> 対象のフォルダに関する管理者権限が必要です。</p>
 </li>
 <li class="step"><p>フォルダ名の隣にある <span class="guibutton"><strong>フォルダ アクション</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.applyrole"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> をクリックします。<span class="guibutton"><strong>権限</strong></span> をクリックします。このフォルダに関する現在の権限が <span class="guilabel"><strong>フォルダ権限</strong></span> ウィンドウに表示されます。</p></li>
-<li class="step"><p>ユーザ名の隣にある <span class="guibutton"><strong>ロールを割り当てる</strong></span> をクリックし、メニューで、<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles">ユーザ ロール</a> を選択します。</p></li>
+<li class="step"><p>ユーザ名の隣にある<span class="guibutton"><strong> ロールを割り当てる</strong></span>をクリックします。メニューで、<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles">ユーザ ロール</a> を選択します。</p></li>
 <li class="step"><p><span class="guibutton"><strong>保存</strong></span> をクリックします。</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.remove"></a><p class="title"><b>ユーザのフォルダ権限を削除する</b></p>
+<a name="ox.appsuite.user.task.rights.remove"></a><p class="title">ユーザのフォルダ権限を削除する</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>フォルダ ツリーで、フォルダを <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="特定のフォルダを開く">選択</a> します。</p>
+<p>フォルダ ツリーで、フォルダを <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="フォルダを開く、または選択する：">選択</a> します。</p>
 <p><span class="phrase"><strong>注: </strong></span> 対象のフォルダに関する管理者権限が必要です。</p>
 </li>
 <li class="step"><p>フォルダ名の隣にある <span class="guibutton"><strong>フォルダ アクション</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.remove"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> をクリックします。<span class="guibutton"><strong>権限</strong></span> をクリックします。</p></li>
@@ -106,5 +116,6 @@
 </ol></div>
 </div>
 </div>
-</body>
+          </div>
+        </body>
 </html>

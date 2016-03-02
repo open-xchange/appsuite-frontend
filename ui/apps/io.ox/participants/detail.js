@@ -39,6 +39,7 @@ define('io.ox/participants/detail', [
             conf = hash[key] || { status: 0, comment: '' },
             confirm = util.getConfirmationSymbol(conf.status),
             statusClass = util.getConfirmationClass(conf.status),
+            statusLabel = util.getConfirmationLabel(conf.status),
             isPerson = hash[key] || obj.folder_id,
             personClass = isPerson ? 'person' : '',
             text, display_name, name, node, name_lc,
@@ -79,10 +80,12 @@ define('io.ox/participants/detail', [
         } else {
             node.append(
                 coreUtil.renderPersonalName({ email: mail_lc, html: text }, obj).addClass(personClass + ' ' + statusClass),
+                // pause for screenreader
+                $('<span class="sr-only">').text(', ' + statusLabel + '.'),
                 // has confirmation icon?
-                confirm !== '' ? $('<span>').addClass('status ' + statusClass).append(confirm) : '',
+                confirm !== '' ? $('<span class="status" aria-hidden="true">').addClass(statusClass).append(confirm) : '',
                 // has confirmation comment?
-                comment !== '' ? $('<div>').addClass('comment').text(gt.noI18n(conf.comment)) : ''
+                comment !== '' ? $('<div class="comment">').text(gt.noI18n(conf.comment)) : ''
             );
         }
 

@@ -131,7 +131,6 @@ define('io.ox/find/view', [
             this.$el.next().css('margin-top', this.css.body.open);
             // apply dynamic styles
             this.ui.body.css('top', this.css.body.open);
-            this.$el.css('top', this.css.el.open);
             // css switch-class
             this.ui.container.addClass(this.classes.active);
             // bubble

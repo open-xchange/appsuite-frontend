@@ -39,7 +39,7 @@ define('io.ox/calendar/print-compact', [
                 participants.push(item.id);
             }
             if (item.type === 2) {
-                groups.push(item.id);
+                groups.push({ id: item.id });
             }
         });
 

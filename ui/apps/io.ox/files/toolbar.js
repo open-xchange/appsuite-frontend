@@ -77,7 +77,6 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 icon: 'fa fa-user-plus',
                 label: gt('Share'),
-                title: gt('Share current folder'),
                 ref: 'io.ox/files/dropdown/share',
                 customize: function (baton) {
                     var self = this;
@@ -103,8 +102,7 @@ define('io.ox/files/toolbar', [
                     this.parent().addClass('dropdown');
 
                     // set proper tooltip
-                    var folders = 0,
-                        files = 0;
+                    var folders = 0, files = 0;
                     _(_.isArray(baton.data) ? baton.data : [baton.data]).each(function (item) {
                         if (item.folder_id === 'folder') {
                             folders++;
@@ -112,17 +110,24 @@ define('io.ox/files/toolbar', [
                             files++;
                         }
                     });
-                    if (folders) {
-                        if (files) {
-                            this.attr('data-original-title', gt('Share selected objects'));
-                        } else {
-                            this.attr('data-original-title', gt.ngettext('Share selected folder', 'Share selected folders', folders));
-                        }
+
+                    var title = '';
+
+                    if (folders && files) {
+                        // mixed selection
+                        title = gt('Share selected objects');
+                    } else if (folders) {
+                        // folders only
+                        title = gt.ngettext('Share selected folder', 'Share selected folders', folders);
                     } else if (files) {
-                        this.attr('data-original-title', gt.ngettext('Share selected file', 'Share selected files', files));
+                        // files only
+                        title = gt.ngettext('Share selected file', 'Share selected files', files);
                     } else {
-                        this.attr('data-original-title', gt('Share current folder'));
+                        // empty selection
+                        title = gt('Share current folder');
                     }
+
+                    this.attr({ 'aria-label': title, 'data-original-title': title });
                 }
             },
             'mediaplayer-audio': {

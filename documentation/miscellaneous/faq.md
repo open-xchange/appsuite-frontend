@@ -16,8 +16,7 @@ You might see an error message that otherwise gets eaten by a redirect.
 
 If you are running the backend yourself, you are in luck, go, look at the server error log.
 
-# Does not load, fails with error: Could not read...
-
+# Does not load, fails with error: Could not read…
 
 ```javascript
 "Could not read 'io.ox/core/http.js'" 
@@ -26,7 +25,7 @@ If you are running the backend yourself, you are in luck, go, look at the server
 
 That's not all, the system is probably hiding even more errors. 
 It is more probable that the whole UI cannot be found. 
-Check the com.openexchange.apps.path, usually hidden in ``manifests.properties``. 
+Check the com.openexchange.apps.path, usually hidden in `manifests.properties`.
 Does it point to where your webserver serves the files from? The default is /_var/www/appsuite_, on OSX is is more likely to be _/Library/WebServer/Documents/appsuite_
 
 # App Suite loads, but no apps show up
@@ -34,7 +33,7 @@ Does it point to where your webserver serves the files from? The default is /_va
 So bother backend and frontend are devoid of errors, the UI loads nicely, you see the top bar with settings, notifications and refresh button but no apps at all, right? 
 This is a manifest problem. 
 Check the capabilities (see hint in the beginning of this page). 
-If even those are correct, check the backend's ``/tmp`` folder and the ``manifest.properties`` there: Are the paths of _com.openexchange.apps.path_ and _com.openexchange.apps.manifestPath_ pointing to your build directory?
+If even those are correct, check the backend's `/tmp` folder and the `manifest.properties` there: Are the paths of _com.openexchange.apps.path_ and _com.openexchange.apps.manifestPath_ pointing to your build directory?
 
 # Could not read 'io.ox/office/preview/app/... when loading anything but the portal
 

@@ -620,16 +620,24 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         onFileRemoved: function (removedFiles) {
             var self = this,
-                models = _(removedFiles).map(function (file) {
-                    var cid = file.cid,
+                models = _.filter(removedFiles, function (file) {
+                    var cid = file.cid || _.cid(file),
                         model = self.collection.get(cid),
                         index = self.collection.indexOf(model);
 
-                    self.slideViews[index].unload().dispose();
+                    if (index > -1) {
+                        self.slideViews[index].unload().dispose();
+                        return true;
+                    }
 
-                    return model;
+                    return false;
                 }),
                 swiper = this.swiper;
+
+            if (_.isEmpty(models)) {
+                // none of the removed files is currently present in the Viewer collection
+                return;
+            }
 
             this.collection.remove(models);
             this.slideViews = {};

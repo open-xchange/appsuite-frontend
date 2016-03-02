@@ -51,3 +51,11 @@ requires - checks for the needed components and the collection status. (_some_ i
 - index: the position/order of the link
 - label:  the label for the link
 - ref:the reference to the action id
+
+## Disable existing action
+
+Basically a action is a extension point (id: action id) with exactly one action (id: 'default') - so disabling is quite simple:
+
+```
+ext.point('[insert action id here]').disable('default');
+```

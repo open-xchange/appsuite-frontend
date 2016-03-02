@@ -1,6 +1,5 @@
 ---
 title: Advertisment
-icon: fa-usd
 keywords: monetization
 ---
 

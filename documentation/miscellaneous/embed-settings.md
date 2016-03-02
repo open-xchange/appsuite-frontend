@@ -11,7 +11,7 @@ This is a replacement for "Config Jump" of OX6. Not to be confused with simply a
 You can declare pages to embed via [Config Cascade](http://oxpedia.org/wiki/index.php?title=ConfigCascade) settings. 
 There are several ways to do so, this example uses the most comfortable one, a YAML declaration:
 
-``/opt/open-xchange/etc/settings/configjump.yml``
+`/opt/open-xchange/etc/settings/configjump.yml`
 
 ```yaml
 io.ox/settings/configjump//changePlans:
@@ -26,13 +26,12 @@ If you want to add more pages, follow this pattern.
 
 An object of this type has the following properties:
 
-- __url__: The URL to be branched to. The place holder [token] will be replaced by the token you get from the token login system
-- __title__: The title as to be seen on the settings page.
-- __after__, __before__ or __index__: Where the page is supposed to be positioned. _Hint_: If you want to name a page as reference (as opposed to using the index), you need to figure out the name. One way to do so is go to that page in the settings and check for the id parameter in the URL.
-- __advancedMode__: true or false to define if shown in advanced settings mode or not. Default is false
+- **url**: The URL to be branched to. The place holder (token) will be replaced by the token you get from the token login system
+- **title**: The title as to be seen on the settings page.
+- **after**, **before** or **index**: Where the page is supposed to be positioned. _Hint_: If you want to name a page as reference (as opposed to using the index), you need to figure out the name. One way to do so is go to that page in the settings and check for the id parameter in the URL.
+- **advancedMode**: true or false to define if shown in advanced settings mode or not. Default is false
 
-It's also possible to provide custom translations for the title. Just add "title_" plus the locale:
-
+It's also possible to provide custom translations for the title. Just add "title\_" plus the locale:
 
 ```yaml
 io.ox/settings/configjump//changePlans:
@@ -49,11 +48,9 @@ io.ox/settings/configjump//changePlans:
 
 Now you just need to declare the app your are about to embed in the backend and you are good to go:
 
-
 ```bash
 cat /opt/open-xchange/etc/tokenlogin-secrets
 ```
-
 
 ```yaml
 #
@@ -75,7 +72,7 @@ This secret, combined with the token, can be traded for a login.
 GET /login?action=redeemToken
 ```
 
-- __token__: The token you want to trade.
-- __secret__: A valid secret for your app.
+- **token**: The token you want to trade.
+- **secret**: A valid secret for your app.
 
 This request can be sent by the embedded app to the AppSuite backend to get authorisation info.

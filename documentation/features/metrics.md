@@ -1,6 +1,5 @@
 ---
 title: Metrics
-icon: fa-tachometer
 description: Track user behaviour and conditions within OX Appsuite
 ---
 

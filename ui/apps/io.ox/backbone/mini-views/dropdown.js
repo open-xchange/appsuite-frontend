@@ -106,13 +106,12 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     // you may use toggle with boolean values or provide a toggleValue ('togglevalue' is the option not checked value, 'value' is the option checked value)
                     'data-toggle': _.isBoolean(value) || toggleValue !== undefined,
                     'data-togglevalue': toggleValue,
-                    'aria-label': [header, text].join(' ')
+                    'aria-label': _.isFunction(text) ? $('<div>').append(text()).text() : [header, text].join(' ')
                 })
                 // store original value
                 .data('value', value)
                 .append(
-                    $('<i class="fa fa-fw">')
-                        .attr({ 'aria-hidden': true })
+                    $('<i class="fa fa-fw" aria-hidden="true">')
                         .addClass(_.isEqual(currentValue, value) ? 'fa-check' : 'fa-none'),
                     _.isFunction(text) ? text() : $('<span>').text(text)
                 )
@@ -158,7 +157,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     href: '#',
                     tabindex: 1,
                     draggable: false,
-                    role: 'menuitem',
+                    role: 'button',
                     'aria-haspopup': true,
                     'aria-label': ariaLabel,
                     'data-toggle': 'dropdown'

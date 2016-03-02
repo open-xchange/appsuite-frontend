@@ -1166,7 +1166,7 @@ define('io.ox/presenter/views/presentationview', [
          * Destructor function of the PresentationView.
          */
         disposeView: function () {
-            console.info('Presenter - dispose PresentationView');
+            //console.info('Presenter - dispose PresentationView');
 
             // remove touch events
             if (this.documentContainer.disableTouch) {

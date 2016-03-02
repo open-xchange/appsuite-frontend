@@ -786,11 +786,11 @@ define('io.ox/core/tk/wizard', [
 
             // move the popup to the center of the screen
             function alignCenter() {
-                this.$el.addClass('center middle').css({ top: '', right: '', bottom: '', left: '' });
+                $el.addClass('center middle').css({ top: '', right: '', bottom: '', left: '' });
             }
 
             // remove default class and reset all inline positions
-            this.$el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
+            $el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
 
             // find the best position according to the passed options
             switch ((options && options.position) || 'right') {

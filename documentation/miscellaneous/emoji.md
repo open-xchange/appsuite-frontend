@@ -6,9 +6,8 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Emoji
 
 # Enabling emoji support
 
-Emoji support is disabled by default. In order to enable the feature, you must define the capability __emoji__. 
-This is done by just adding the word "emoji" to the property "permissions" in ``/opt/openexchange/etc/permission.properties``:
-
+Emoji support is disabled by default. In order to enable the feature, you must define the capability **emoji**.
+This is done by just adding the word "emoji" to the property "permissions" in `/opt/openexchange/etc/permission.properties`:
 
 ```javascript
 permissions=...,emoji
@@ -18,11 +17,9 @@ permissions=...,emoji
 
 Configuration will be served via [jslob](TODO) service at the following path.
 
-
 ```
 io.ox/mail/emoji
 ```
-
 
 The following settings are relevant for emoji support:
 
@@ -37,18 +34,18 @@ io.ox/mail/emoji//overrideUserCollection=false
 io.ox/mail/emoji//sendEncoding=unified # possible values 'unified', 'pua'
 ```
 
-In order to configure this server-side, just append to existing ``appsuite.properties`` or create a new file ``emoji.properties`` (in same directory; please mind the double-slash, this in not a typo! plus: changing such settings requires a backend restart).
+In order to configure this server-side, just append to existing `appsuite.properties` or create a new file `emoji.properties` (in same directory; please mind the double-slash, this in not a typo! plus: changing such settings requires a backend restart).
 
-| Setting | Setting |
-|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| defaultCollection | Default collection. |
-| availableCollections | Available collections. Comma separated. The order is important, since this will be used as an order for the fallback mechanism. If an icon is not found in the userCollection, the icon is looked up in each available collection and the first 'hit' will be used. |
-| forceEmojiIcons | always convert emoji unicode characters to img-tags |
-| collectionControl | none, dropdown, tabs. |
-| autoClose | Emoji pallet closes when user click or presses any key inside editor |
-| userCollection | Current user collection |
+| Setting                | Setting                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| defaultCollection      | Default collection.                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| availableCollections   | Available collections. Comma separated. The order is important, since this will be used as an order for the fallback mechanism. If an icon is not found in the userCollection, the icon is looked up in each available collection and the first 'hit' will be used.                                                                                                                                                                                                        |
+| forceEmojiIcons        | always convert emoji unicode characters to img-tags                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| collectionControl      | none, dropdown, tabs.                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| autoClose              | Emoji pallet closes when user click or presses any key inside editor                                                                                                                                                                                                                                                                                                                                                                                                       |
+| userCollection         | Current user collection                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | overrideUserCollection | Set this setting to true and the current user collection will not be prefered when replacing unicode characters with an image. (See comment for availableCollections describing the fallback mechanism.) Since Mail compose works with a current collection object, this setting has no effect when inserting icons from the editor plugin into the text. But when rendering any text with unicode characters, this setting will have an effect on the icon that is shown. |
-| sendEncoding | Override the default send encoding to use something else than unified (unicode6) |
+| sendEncoding           | Override the default send encoding to use something else than unified (unicode6)                                                                                                                                                                                                                                                                                                                                                                                           |
 
 # How to add a new icon set
 

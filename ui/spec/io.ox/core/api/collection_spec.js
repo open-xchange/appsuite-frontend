@@ -30,8 +30,8 @@ define([
             [{ id: 70 }, { id: 20 }, { id: 40 }, { id: 50 }, { id: 80 }]
         );
     }
-    describe('Core', function () {
-        describe('Collection loader', function () {
+    describe('Core Collection', function () {
+        describe('loader', function () {
 
             beforeEach(function () {
                 this.loader = new CollectionLoader({ PRIMARY_PAGE_SIZE: 3, SECONDARY_PAGE_SIZE: 3 });
@@ -124,7 +124,7 @@ define([
                 });
             });
         });
-        describe('Collection Pool', function () {
+        describe('Pool', function () {
             var pool;
             beforeEach(function () {
                 pool = Pool.create('collection_spec');

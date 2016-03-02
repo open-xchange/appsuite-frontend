@@ -17,7 +17,7 @@ define([
 ], function (sharedExamplesFor, api, factory) {
     'use strict';
 
-    return describe('mail API', function () {
+    return describe('Mail API', function () {
         var apiFactory = factory({}),
             options = {
                 args: {

@@ -1,9 +1,16 @@
 // Karma configuration
 // Generated on Fri Jun 28 2013 12:45:50 GMT+0200 (CEST)
 
+var fs = require('fs');
+var _ = require('lodash');
+var localConf = {};
+
+if (fs.existsSync('grunt/local.conf.json')) {
+    localConf = JSON.parse(fs.readFileSync('grunt/local.conf.json'));
+}
 module.exports = function (config) {
 
-    config.set({
+    config.set(_.extend({}, {
 
         // base path, that will be used to resolve files and exclude
         basePath: 'build/',
@@ -57,8 +64,7 @@ module.exports = function (config) {
         phantomjsLauncher: {
             options: {
                 viewportSize: { width: 1024, height: 768 }
-            },
-            exitOnResourceError: true
+            }
         },
 
         // If browser does not capture in given timeout [ms], kill it
@@ -72,6 +78,8 @@ module.exports = function (config) {
 
         junitReporter: {
             outputFile: 'reports/test-results.xml'
-        }
-    });
+        },
+
+        appserver: localConf.appserver
+    }, localConf.karma || {}));
 };

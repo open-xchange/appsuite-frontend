@@ -21,8 +21,9 @@ define.async('io.ox/core/tk/contenteditable-editor', [
     'io.ox/mail/api',
     'settings!io.ox/core',
     'settings!io.ox/mail',
+    'gettext!io.ox/core',
     'less!io.ox/core/tk/contenteditable-editor'
-], function (emoji, capabilities, ext, textproc, mailAPI, settings, mailSettings) {
+], function (emoji, capabilities, ext, textproc, mailAPI, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -55,6 +56,18 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             ext.point('3rd.party/emoji/editor_css').each(function (point) {
                 var url = ed.convertURL(require.toUrl(point.css));
                 ed.contentCSS.push(url);
+            });
+        }
+    });
+
+    ext.point(POINT + '/setup').extend({
+        id: 'list-style-position',
+        index: INDEX += 100,
+        draw: function (ed) {
+            ed.on('NodeChange', function (e) {
+                if (e.element.nodeName !== 'LI') return;
+                if (e.element.style.textAlign === 'left' || e.element.style.textAlign === '') return;
+                $(e.element).css('list-style-position', 'inside');
             });
         }
     });
@@ -189,7 +202,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         var toolbar, editor, editorId = el.data('editorId');
 
         el.append(
-            el = $('<div class="contenteditable-editor">').attr('data-editor-id', editorId).append(
+            el = $('<div class="contenteditable-editor">').attr({
+                'data-editor-id': editorId,
+                'title': gt('Rich Text Area. Press ALT-F10 for toolbar')
+            }).append(
                 toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId),
                 editor = $('<div class="editable" tabindex="1">').css('margin-bottom', '32px')
             )

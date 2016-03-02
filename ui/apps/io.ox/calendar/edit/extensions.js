@@ -410,11 +410,8 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed form-spacer'
     });
 
-    function colorClickHandler(e) {
-        // toggle active class
-        $(this).siblings('.active').removeClass('active').attr('aria-checked', false).end().addClass('active').attr('aria-checked', true);
-        // update model
-        e.data.model.set({ 'color_label': e.data.color_label });
+    function changeColorHandler(e) {
+        e.data.model.set('color_label', $(this).parent().children(':checked').val());
     }
 
     //color selection
@@ -426,7 +423,7 @@ define('io.ox/calendar/edit/extensions', [
 
             if (settings.get('colorScheme') !== 'custom') return;
 
-            var activeColor = this.model.get('color_label') || 0;
+            var currentColor = parseInt(this.model.get('color_label'), 10) || 0;
 
             this.listenTo(this.model, 'change:private_flag', function (model, value) {
                 this.$el.find('.no-color').toggleClass('color-label-10', value);
@@ -437,16 +434,18 @@ define('io.ox/calendar/edit/extensions', [
                     $.txt(gt('Color')),
                     $('<div class="custom-color">').append(
                         _.map(_.range(0, 11), function (color_label) {
-                            return $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
+                            return $('<label>').append(
+                                // radio button
+                                $('<input type="radio" tabindex="1" name="color">')
+                                .attr('aria-label', calendarUtil.getColorLabel(color_label))
+                                .val(color_label)
+                                .prop('checked', color_label === currentColor)
+                                .on('change', { model: this.model }, changeColorHandler),
+                                // colored box
+                                $('<span class="box">')
                                 .addClass(color_label > 0 ? 'color-label-' + color_label : 'no-color')
                                 .addClass(color_label === 0 && this.model.get('private_flag') ? 'color-label-10' : '')
-                                .addClass(activeColor === color_label ? 'active' : '')
-                                .attr({
-                                    'aria-checked': activeColor === color_label,
-                                    'aria-label': calendarUtil.getColorLabel(color_label)
-                                })
-                                .append('<i class="fa fa-check">')
-                                .on('click', { color_label: color_label, model: this.model }, colorClickHandler);
+                            );
                         }, this)
                     )
                 )

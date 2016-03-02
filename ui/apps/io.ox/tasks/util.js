@@ -92,8 +92,7 @@ define('io.ox/tasks/util', [
                 return {
                     // UTC
                     endDate: endDate.utc(true).valueOf(),
-                    // Localtime
-                    alarmDate: alarmDate.utc(true).valueOf()
+                    alarmDate: alarmDate.utc().valueOf()
                 };
             },
 

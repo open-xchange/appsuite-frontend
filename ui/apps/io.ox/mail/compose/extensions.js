@@ -73,6 +73,9 @@ define('io.ox/mail/compose/extensions', [
             send: function (baton) {
                 this.append($('<button type="button" class="btn btn-primary" data-action="send" tabindex="1">')
                     .on('click', function () { baton.view.send(); })
+                    .on('keyup', function (e) {
+                        if ((e.keyCode || e.which) === 27) baton.view.focusEditor();
+                    })
                     .text(gt('Send')));
             }
         },
@@ -243,7 +246,8 @@ define('io.ox/mail/compose/extensions', [
             }
 
             return function (baton) {
-                var guid = _.uniqueId('form-control-label-'),
+                var extNode,
+                    guid = _.uniqueId('form-control-label-'),
                     value = baton.model.get(attr) || [],
                     // hide tokeninputfields if necessary (empty cc/bcc)
                     cls = 'row' + (/cc$/.test(attr) && !value.length ? ' hidden' : ''),
@@ -258,7 +262,8 @@ define('io.ox/mail/compose/extensions', [
                             msisdn: true,
                             emailAutoComplete: true
                         },
-                        maxResults: 20
+                        maxResults: 20,
+                        placeholder: tokenfieldTranslations[attr] // for a11y and easy access for custom dev when they want to display placeholders (these are made transparent via less)
                     });
 
                 var node = $('<div class="col-xs-11">').append(
@@ -271,7 +276,7 @@ define('io.ox/mail/compose/extensions', [
                 var title = gt('Click to select contacts');
 
                 this.append(
-                    $('<div data-extension-id="' + attr + '">').addClass(cls).append(
+                    extNode = $('<div data-extension-id="' + attr + '">').addClass(cls).append(
                         $('<div class="maillabel col-xs-1">').append(
                             $('<a href="#" role="button" tabindex="1">')
                             .text(tokenfieldTranslations[attr])
@@ -290,6 +295,8 @@ define('io.ox/mail/compose/extensions', [
                 tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
                     // extension point for validation etc.
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
+                }).on('tokenfield:next', function () {
+                    extNode.nextAll().find('input.tt-input,input[name="subject"]').filter(':visible').first().focus();
                 });
 
                 // bind mail-model to collection

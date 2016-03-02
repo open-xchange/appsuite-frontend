@@ -19,14 +19,14 @@ A common question is what files are supported of the different modules. The foll
 The OX Drive "media player" uses the native html 5 video playback of each browser. 
 The actual file support depends on the user's browser, so a definitive list can not be given:
 
-__Supported Video-Files inside OX Drive Mediaplayer__
+**Supported Video-Files inside OX Drive Mediaplayer**
 
 - Chrome: m4v, ogv, webm
 - Safari: m4v
 - IE: m4v
 - Firefox: ogv, webm
 
-__Supported Audio-Files inside OX Drive Mediaplayer__
+**Supported Audio-Files inside OX Drive Mediaplayer**
 
 For audio files a flash/silverlight fallback is used if a browser is not capable of native mp3 playback like Firefox.
 
@@ -40,12 +40,12 @@ For audio files a flash/silverlight fallback is used if a browser is not capable
 The OX Document Viewer delivers plugin-free document viewing capabilities for Microsoft Office (.docx, .doc, .rtf, .pptx, .ppt, .xlsx, xls) and OpenDocument (.odt, .ods, .odp, .odg) file types as well as for the Portable Document Format (.pdf). 
 It extends OX App Suite with content thumbnails and preview capabilities.
 
-__Images__
+**Images**
 
 - png
 - jpg, jpeg
 
-__Text Documents__
+**Text Documents**
 
 - docx (Microsoft Office Word text document)
 - docm (Microsoft Office Word macro-enabled text document)
@@ -57,7 +57,7 @@ __Text Documents__
 - dot (Microsoft Word 97-2003 text document template)
 - rtf (Rich Text Format)
 
-__Spreadsheet Documents__
+**Spreadsheet Documents**
 
 - xlsx (Microsoft Office Excel workbook)
 - xlsm (Microsoft Office Excel macro-enabled workbook)
@@ -71,7 +71,7 @@ __Spreadsheet Documents__
 - xlt (Microsoft Excel 97-2003 workbook template)
 - xla (Microsoft Excel 97-2003 add-in)
 
-__Presentation Documents__
+**Presentation Documents**
 
 - pptx (Microsoft Office PowerPoint presentation)
 - pptm (Microsoft Office PowerPoint macro-enabled presentation)
@@ -104,7 +104,7 @@ _Miscellaneous_
 
 OX Documents contains OX Text and OX Spreadsheet.
 
-__OX Text Documents__
+**OX Text Documents**
 
 OX Text, is a web-based word processor. 
 Its main focus is on reducing the complexities of text editing while promoting collaborative document creation.
@@ -137,7 +137,7 @@ OX Spreadsheet is the first browser-based spreadsheet application that reads and
 - xlt (Microsoft Excel 97-2003 workbook template)
 - xla (Microsoft Excel 97-2003 add-in)
 
-__OX Presenter__
+**OX Presenter**
 
 OX Presenter allows you to view presentations in a specialized user interface, where you also can give local presentations or presentations where remote participants can join.
 

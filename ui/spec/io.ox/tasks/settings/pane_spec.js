@@ -15,7 +15,7 @@ define(['io.ox/core/extensions',
     'io.ox/tasks/settings/pane'
 ], function (ext, gt) {
 
-    describe.skip('Tasks Settings', function () {
+    describe.skip('Tasks settings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="tasksettingsNode">'));

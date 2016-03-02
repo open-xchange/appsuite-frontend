@@ -19,16 +19,12 @@ define([
 
     describe('Core capabilities', function () {
 
-        beforeEach(function (done) {
-            capabilityWrapper.enable(['webmail', 'contacts', 'foo.dot', 'foo-dash', 'foo/slash']).done(function () {
-                done();
-            });
+        beforeEach(function () {
+            return capabilityWrapper.enable(['webmail', 'contacts', 'foo.dot', 'foo-dash', 'foo/slash']);
         });
 
-        afterEach(function (done) {
-            capabilityWrapper.reset().done(function () {
-                done();
-            });
+        afterEach(function () {
+            return capabilityWrapper.reset();
         });
 
         describe('can evaluate expressions', function () {
