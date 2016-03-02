@@ -29,6 +29,14 @@ A full list of available rules are available [here](https://github.com/wooorm/re
 
 A full list of options are available [here](https://github.com/wooorm/remark#api)
 
+## Disable rules
+
+```
+<!--lint disable [rule-id]-->
+...
+<!--lint enable [rule-id]-->
+```
+
 # Use
 
 
