@@ -26,8 +26,9 @@ define('io.ox/onboarding/clients/wizard', [
     'use strict';
 
     var POINT = 'io.ox/onboarding/clients/views',
+        //#. title for 1st and snd step of the client onboarding wizard
+        //#. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
         titleLabel = gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName),
-        //titleLabel = gt('Take %1$s with you!', ox.serverConfig.productName),
         initiate, wizard;
 
     function yell() {
@@ -161,6 +162,7 @@ define('io.ox/onboarding/clients/wizard', [
             .append(
                 options.getNode('platform', config.getPlatforms())
                     .on('click', 'button', onSelect.bind(this)),
+                //#. user can choose between windows, android, apple (usually)
                 $('<p class="teaser">').attr('id', descriptionId).text(gt('Please select the platform of your device.'))
             );
         // a11y
@@ -174,13 +176,13 @@ define('io.ox/onboarding/clients/wizard', [
             list = config.getDevices(),
             descriptionId = _.uniqueId('description');
         // title
-        this.$('.wizard-title').text(gt('Which device do you want to configure?'));
         this.$('.wizard-title').text(titleLabel);
         // content
         this.$('.wizard-content').empty()
             .append(
                 options.getNode('device', list)
                     .on('click', 'button', onSelect.bind(this)),
+                //#. user can choose between smartphone, tablet and laptop/desktop (usually)
                 $('<p class="teaser">').attr('id', descriptionId).text(gt('What type of device do you want to configure?'))
             );
         // a11y
@@ -223,7 +225,8 @@ define('io.ox/onboarding/clients/wizard', [
             container = this.$('.wizard-content').empty(),
             self = this;
         // title and teaser
-
+        //#. title for 3rd step of the client onboarding wizard
+        //#. user can choose between different scenarios (usually identical with our apps)
         this.$('.wizard-title').attr('id', descriptionId).text(gt('What do you want to use?'));
         // content
         container.append(
