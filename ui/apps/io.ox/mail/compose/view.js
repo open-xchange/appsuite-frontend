@@ -515,6 +515,16 @@ define('io.ox/mail/compose/view', [
                         $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
                     });
                 }
+                data.attachments.forEach(function (a, index) {
+                    var m = model.get('attachments').at(index);
+                    if (typeof m === 'undefined') {
+                        model.get('attachments').add(a);
+                    } else if (m.id !== a.id) {
+                        m.clear({ silent: true });
+                        m.set(a);
+                    }
+                });
+
                 model.set('msgref', result.data);
                 model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
                 model.dirty(false);
