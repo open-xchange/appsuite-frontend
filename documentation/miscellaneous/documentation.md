@@ -73,3 +73,12 @@ remark documentation/miscellaneous/documentation.md -o .
 ```bash
 remark . -o .
 ```
+
+
+# Diasable/Enable rules
+
+```
+<!--lint disable no-duplicate-headings-->
+...
+<!--lint enable no-duplicate-headings-->
+```

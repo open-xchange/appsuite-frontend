@@ -2,6 +2,8 @@
 title: Events
 ---
 
+<!--lint disable no-undefined-references no-shortcut-reference-link no-html-->
+
 A list of all tracked events identified with their composite id (app, ui element, action, detail). Please notice that words within box brackets are used as placeholders.
 
 <!--lint disable no-undefined-references no-shortcut-reference-link no-html-->
