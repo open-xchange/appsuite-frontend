@@ -17,7 +17,7 @@ First, you need to install some tools which are necessary for UI development.
 TL;DR version:
 
 ```bash
-$ npm install -g grunt-cli bower yo generator-ox-ui-module
+npm install -g grunt-cli bower yo generator-ox-ui-module
 ```
 
 Or if needed, there is a complete article about setting up an environment for [grunt](http://oxpedia.org/wiki/index.php?title=AppSuite:GettingStartedWithGrunt#Node).
@@ -28,8 +28,8 @@ All your app development can take place inside one working directory.
 The examples will assume you have created a directory named myapp inside your home directory:
 
 ```bash
-$ mkdir ~/myapp
-$ cd ~/myapp
+mkdir ~/myapp
+cd ~/myapp
 ```
 
 It doesn't need to be in your home directory, and the actual name should reflect the name of your app.
@@ -37,8 +37,8 @@ The main point is that all commands will be executed in this directory and all p
 
 Now, you can generate a grunt configuration using:
 
-``` bash
-$ yo ox-ui-module
+```bash
+yo ox-ui-module
 ```
 
 The source code of your app will reside in the subfolder named apps.
@@ -46,7 +46,7 @@ To avoid name collisions please pick a unique subfolder inside that.
 The easiest and recommended way is to use a domain name that you own. Typically, the domain elements are reversed, like in Java. example.com becomes com.example:
 
 ```bash
-$ mkdir -p apps/com.example
+mkdir -p apps/com.example
 ```
 
 # Writing an App
@@ -60,7 +60,6 @@ define('com.example/register', function () {
     alert('Hello, World!');
 });
 ```
-
 
 and apps/com.example/manifest.json for the manifest which tells the UI that your app exists and what to do with it:
 
@@ -76,9 +75,8 @@ This step will check the source code for syntax errors, compress it, and dependi
 The processed code is then written to a directory named build by default. Start the build with this command:
 
 ```bash
-$ grunt
+grunt
 ```
-
 
 If your editor supports it, you can configure it to call the build system after every file save.
 Take care to call it from the top directory of your app's workspace, not from the directory of the saved file.
@@ -92,11 +90,11 @@ You can register for a free user account on www.ox.io.
 
 You can generate it with this command:
 
-``` bash
-$ grunt show-config:local --output grunt/local.conf.json
+```bash
+grunt show-config:local --output grunt/local.conf.json
 ```
 
-To use the remote www.ox.io AppSuite server, open up the file grunt/local.conf.json in your editor and add ``https://www.ox.io/appsuite/`` to the server setting of the appserver section.
+To use the remote www.ox.io AppSuite server, open up the file grunt/local.conf.json in your editor and add `https://www.ox.io/appsuite/` to the server setting of the appserver section.
 Also make sure that the protocol setting is set to https.
 Else you will get https redirect errors in your browser.
 
@@ -105,21 +103,21 @@ INFO: If you are using a locally installed AppSuite server (in a VM or similar i
 Then start the development server:
 
 ```bash
-$ grunt dev
+grunt dev
 ```
 
 This command will serve your app from the local directory build, and get everything else from the URL specified in the server setting.
 
 Once appserver is running, you can access OX App Suite by opening your browser using this address:
 
-[https://localhost:8337/appsuite](https://localhost:8337/appsuite)
+<https://localhost:8337/appsuite>
 
 After logging in, the app should be loaded and display the alert message.
 
 ## Development cycle
 
 Once you are sure that your setup works, you can extend the example and write the actual code for your app.
-The dev task will detect any changes and rebuild your app and even reload all browsers connected to [https://localhost:8337/appsuite](https://localhost:8337/appsuite).
+The dev task will detect any changes and rebuild your app and even reload all browsers connected to <https://localhost:8337/appsuite>.
 
 While developing always keep in mind, that there is an [article about debugging the user interface](http://oxpedia.org/wiki/index.php?title=AppSuite:Debugging_the_UI) which helps you avoid and fix typical errors.
 
@@ -138,7 +136,7 @@ This source package should contain all dependencies that are installed during bo
 To generate this file, run:
 
 ```bash
-$ grunt dist:source --include-dependencies
+grunt dist:source --include-dependencies
 ```
 
 This file (can be found in the dist/ directory) together with the distribution specific packaging information will be needed to build the package.
@@ -148,7 +146,7 @@ This file (can be found in the dist/ directory) together with the distribution s
 In order to generate a spec file for your project, run:
 
 ```bash
-$ yo ox-ui-module:rpm-pkg
+yo ox-ui-module:rpm-pkg
 ```
 
 Will generate a spec file, with some default values read from your package.json file.
@@ -161,7 +159,7 @@ It will work for very simple cases, but as soon as your package gets more compli
 Once you have the spec file in your project, you can use
 
 ```bash
-$ grunt rpm-build --include-dependencies
+grunt rpm-build --include-dependencies
 # or rpm-build if you are on shared-grunt-config-0.6.0
 ```
 
@@ -170,9 +168,8 @@ $ grunt rpm-build --include-dependencies
 Creating packages for the Debian distribution works similar to rpm packages. Just run:
 
 ```bash
-$ yo ox-ui-module:deb-pkg
+yo ox-ui-module:deb-pkg
 ```
-
 
 This will generate a debian directory containing all needed files.
 Some default values will be read from your package.json file.
@@ -186,7 +183,7 @@ Once you have a debian/ directory for your project, you can go on.
 Now you can run:
 
 ```bash
-$ grunt dpkg-buildpackage --include-dependencies
+grunt dpkg-buildpackage --include-dependencies
 ```
 
 # i18n
@@ -196,10 +193,15 @@ Please browse to the [i18n](http://oxpedia.org/wiki/index.php?title=AppSuite:I18
 
 # Further Reading
 
-+ Congratulations you have just built your first app for OX App Suite, but please keep in mind that there are [quite a few options](http://oxpedia.org/wiki/index.php?title=AppSuite:Developing_for_the_UI#What_can_i_build.3F) for developing for OX App Suite.
-+ In case you want to upgrade your existing app for OX App Suite, read [the upgrade guide](http://oxpedia.org/wiki/index.php?title=AppSuite:Upgrade_app_using_yo).
-+ More information on the build system can be found on github:
-    + [See all available grunt tasks](https://github.com/Open-Xchange-Frontend/shared-grunt-config)
-    + [Documentation of all generator tasks](https://github.com/Open-Xchange-Frontend/generator-ox-ui-module)
-+ If you're stuck somewhere, the article about [debugging the UI](http://oxpedia.org/wiki/index.php?title=AppSuite:Debugging_the_UI) might help you.
-+ You can read this to get a better overview of [developing the user inferface](http://oxpedia.org/wiki/index.php?title=AppSuite:Developing_for_the_UI).
+- Congratulations you have just built your first app for OX App Suite, but please keep in mind that there are [quite a few options](http://oxpedia.org/wiki/index.php?title=AppSuite:Developing_for_the_UI#What_can_i_build.3F) for developing for OX App Suite.
+
+- In case you want to upgrade your existing app for OX App Suite, read [the upgrade guide](http://oxpedia.org/wiki/index.php?title=AppSuite:Upgrade_app_using_yo).
+
+- More information on the build system can be found on github:
+
+  - [See all available grunt tasks](https://github.com/Open-Xchange-Frontend/shared-grunt-config)
+  - [Documentation of all generator tasks](https://github.com/Open-Xchange-Frontend/generator-ox-ui-module)
+
+- If you're stuck somewhere, the article about [debugging the UI](http://oxpedia.org/wiki/index.php?title=AppSuite:Debugging_the_UI) might help you.
+
+- You can read this to get a better overview of [developing the user inferface](http://oxpedia.org/wiki/index.php?title=AppSuite:Developing_for_the_UI).

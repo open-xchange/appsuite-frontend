@@ -10,8 +10,8 @@ It can link a longer view that is opened when the tile is clicked, this we call 
 
 # Where and how to start
 
-Plugins are collected in the folder ``ui/apps/plugins``. 
-Start your new plugin there: Create the following folder ``folder ui/apps/plugins/portal/myAd`` and in this folder, create two files: ``register.js`` (where everything happens) and ``manifest.json``
+Plugins are collected in the folder `ui/apps/plugins`. 
+Start your new plugin there: Create the following folder `folder ui/apps/plugins/portal/myAd` and in this folder, create two files: `register.js` (where everything happens) and `manifest.json`
 
 # An advertisement widget
 
@@ -19,18 +19,17 @@ The simplest portal plugin comes without a side pop-up and shows static content 
 Two uses for this would be presenting an advertisement (or your daily creed, an often used check list....) or showing a link list (for example to other parts of an company's intranet that are not integrated into the AppSuite (yet)). 
 We will now build an advertisement, which is just a slogan.
 
-The beauty of this is that we do not have any dependencies (for example needing another module like the file store), so the content of our ``manifest.json`` is rather simple:
+The beauty of this is that we do not have any dependencies (for example needing another module like the file store), so the content of our `manifest.json` is rather simple:
 
- ```json
+```json
 {
-    "namespace": "portal"
+   "namespace": "portal"
 }
- ```
- 
+```
+
 Nothing to see here. We say we belong in the portal namespace and that's it. We do not need to define any dependencies on other modules.
 
 Our register.js is only slightly longer:
-
 
 ```javascript
 define('plugins/portal/myAd/register', ['io.ox/core/extensions'], function (ext) {
@@ -57,7 +56,7 @@ define('plugins/portal/myAd/register', ['io.ox/core/extensions'], function (ext)
 ```
 
 Please keep in mind, that the first parameter of define()-method refers to your app's path. 
-According to the code above ``plugins/portal/myAd/`` should contain the upper displayed ``register.js``.
+According to the code above `plugins/portal/myAd/` should contain the upper displayed `register.js`.
 
 So what do we have here? We have two extension points:
 
@@ -69,17 +68,16 @@ But that is not needed for now.
 The second is less obvious: It creates an option in the settings area for the portal (the one you reach by "customize this page"). 
 There you will have to enable your setting (yes, this is a very polite advertisement). 
 The title is what is shown as the name of your plugin (so chose a readable one), the type references the one you used in the definition. 
-__Attention__: the type attribute has to be identical to the module name in the extension point. 
+**Attention**: the type attribute has to be identical to the module name in the extension point. 
 In this case "io.ox/portal/widget/myAd/settings" has the module name myAd and the referenced type is identical: myAd. 
 Also make sure, the type doesn’t contain any "/" or "-" characters. 
-You are save if you limit the characters used to numbers, alphabetical characters and "_".
+You are save if you limit the characters used to numbers, alphabetical characters and "\_".
 
 # A more typical portal plugin
 
 A typical portal plugin uses the tile to display a short summary or teaser of its contents and uses a side-popup to show the whole content.
 
 The manifest.json can stay the same, but the register.js needs to do a little more now:
-
 
 ```javascript
 define("plugins/portal/myAd/register", ['io.ox/core/extensions'], function (ext) {
@@ -134,18 +132,18 @@ The _baton_ is actually just that - something to pass around. The baton carries 
 
 How do the three functions interact? 
 
-__load__
+**load**
 
 When a plugin is supposed to be rendered, the first method to be called is "load". 
 Load usually does some (asynchronous) loading of data, be it from the file store or some external source. 
 Meanwhile, the empty tile (well, if you give it a title, that is already rendered, so it is not completely naked) is rendered on the portal page.
 
-__preview__
+**preview**
 
 When the loading is done, it is consensus that the loaded data is stored as baton.data. 
 Then _preview_ is called and usually does something with the data in the baton. It then renders its content, which is appended to the tile.
 
-__draw__
+**draw**
 
 When the tile is clicked on, a side popup is drawn (which, again, is nearly naked). 
 Meanwhile, the function draw is called and is used to draw content into the almost empty side popup.
@@ -171,7 +169,6 @@ But if you are looking for more, we got more:
 
 Sometimes you want to do things even before loading. Maybe pre-populate the baton. For this we have the method _initialize_:
 
-
 ```javascript
  
 ext.point('io.ox/portal/widget/myAd').extend({
@@ -186,7 +183,6 @@ ext.point('io.ox/portal/widget/myAd').extend({
 
 In case you want to make the widget title clickable and perform some action when this happens.
 
-
 ```javascript
 ext.point('io.ox/portal/widget/myAd').extend({
     ...
@@ -196,11 +192,9 @@ ext.point('io.ox/portal/widget/myAd').extend({
 });
 ```
 
-
 ## Things that require a setup
 
 There are some external sources that need some kind of set up before they can be used. Services that need an OAuth authorization, for example. For this, you need to implement two more functions, named _requiresSetup_ and _performSetup_. The former determines whether it is necessary to run a setup, the latter starts the setup process if the former returns _true_.
-
 
 ```javascript
 ext.point('io.ox/portal/widget/myAd').extend({
@@ -214,11 +208,9 @@ ext.point('io.ox/portal/widget/myAd').extend({
 });
 ```
 
-
 ## Unique
 
 Talking about things with OAuth... a lot of data sources are unique - people only have one twitter account. To make sure the widget can only be created once, set it to _unique_:
-
 
 ```javascript
 ext.point('io.ox/portal/widget/myAd/settings').extend({
@@ -228,13 +220,11 @@ ext.point('io.ox/portal/widget/myAd/settings').extend({
 });
 ```
 
-
 ## Error handling
 
 Occasionally, it might happen that there is an error when loading an external source. 
 Should this occur and load (which, as you know, uses a $.Deferred) call fail instead of done, the function error is called. 
 This allows you to handle this case differently.
-
 
 ```javascript
 ext.point('io.ox/portal/widget/myAd').extend({
@@ -264,7 +254,6 @@ ext.point('io.ox/portal/widget/myAd/settings').extend({
        ...
     }
 });
-
 ```
 
 # Stuck somewhere?
@@ -279,7 +268,7 @@ Remember:
 - You have to have settings!
 - The path of the settings extension point must be io.ox/portal/widget/$name/settings
 - The type of the settings extension point must match the $name of the portal plugin!
-- go all lowercase with your widget name, versions <7.6 sometimes had issues with that
+- go all lowercase with your widget name, versions &lt;7.6 sometimes had issues with that
 
 ## My shiny new widget does not show up in the widget selection
 
@@ -299,6 +288,3 @@ Now that you have learned all there is about portal plugins, it is time to clean
 Check whether your plugin only [works when a certain module is active](http://oxpedia.org/wiki/index.php?title=AppSuite:UI_manifests_explained). 
 Also, maybe we can interest you in [preparing the text for readers from other countries](http://oxpedia.org/wiki/index.php?title=AppSuite:I18n)? 
 There is also an article on [plugins only showing under certain circumstances](http://oxpedia.org/wiki/index.php?title=AppSuite:Configuring_portal_plugins).
-
-
-

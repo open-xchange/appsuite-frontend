@@ -8,7 +8,6 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Writing_a_wizard
 
 ## A simple welcome wizzard
 
-
 ```javascript
 /**
  * All content on this website (including text, images, source
@@ -334,5 +333,3 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
     };
 })
 ```
-
-

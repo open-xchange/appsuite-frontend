@@ -6,14 +6,14 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Writing_a_simple_applic
 
 # Getting Started
 
-First create a new folder helloWorld in your namespace in the app folder, in this example the namespace com.example will be used. (``apps/com.example/helloWorld`)
+First create a new folder helloWorld in your namespace in the app folder, in this example the namespace com.example will be used. (``apps/com.example/helloWorld\`)
 
-For starters we need two files: a manifest File ``manifest.json`` and the application file.
-It is convention to name your main application file ``main.js``.
+For starters we need two files: a manifest File `manifest.json` and the application file.
+It is convention to name your main application file `main.js`.
 
 # Manifest
 
-First create a ``manifest.json`` file, describing the basic properties of your app.
+First create a `manifest.json` file, describing the basic properties of your app.
 
 ```
 {
@@ -168,7 +168,6 @@ You can find more detailed information on this topic here: [Appsuite:i18n](http:
 
 If you don't have the need for a toolbar and want a chromeless window, you can it in the ox.ui.createWindow function call.
 
-
 ```javascript
 ...
 var win = ox.ui.createWindow({
@@ -181,8 +180,7 @@ var win = ox.ui.createWindow({
 
 ## Creating a Dialog
 
-In order to open a dialog __io.ox/core/tk/dialogs__ has to be required and use one of the supplied methods.
-
+In order to open a dialog **io.ox/core/tk/dialogs** has to be required and use one of the supplied methods.
 
 ```javascript
 ...
@@ -210,8 +208,7 @@ win.nodes.main
 
 # Displaying a notification
 
-If you want to display notifications you can require _io.ox/core/notifications_and use the yell method, like in the examples below.
-
+If you want to display notifications you can require \_io.ox/core/notifications_and use the yell method, like in the examples below.
 
 ```javascript
 ...
@@ -238,7 +235,7 @@ You can find information about more advanced notifications [here](http://oxpedia
 
 # Displaying a Halo View
 
-__For internal users__
+**For internal users**
 
 ```javascript
 ...
@@ -250,7 +247,7 @@ win.nodes.main.append(
 ...
 ```
 
-__For external users__
+**For external users**
 
 ```javascript
 ...
@@ -261,7 +258,6 @@ win.nodes.main.append(
 );
 ...
 ```
-
 
 ![](simple-application-06.png)
 
@@ -287,7 +283,6 @@ define('com.example/helloWorld/settings/defaults', [], function () {
 ```
 
 ## Model
-
 
 ```javascript
 define('com.example/helloWorld/settings/model',
@@ -318,7 +313,6 @@ define('com.example/helloWorld/settings/model',
 ```
 
 ## Get/Set
-
 
 ```javascript
 ...

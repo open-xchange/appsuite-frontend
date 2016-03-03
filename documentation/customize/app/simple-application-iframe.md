@@ -6,7 +6,6 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Writing_a_simple_applic
 
 # Provide an iframe for the content area (since 7.8)
 
-
 Developing an app with an iframe for the content area is quite easy.
 All it needs is a manifest file (manifest.json) and the app file (main.js).
 
@@ -62,7 +61,6 @@ The provided token can be used to generate a valid session with the [redeem toke
 
 To display an app in the launcher, the property 'topbar': true has to be set in the manifest.json file of the app.
 To define the order, use the index value in the manifest.json file.
-
 
 ```
 {

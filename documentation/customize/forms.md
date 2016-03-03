@@ -4,34 +4,33 @@ description: Apply different changes to the contact form via modifying its exten
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Modifying_forms_by_using_extension_points
 ---
 
-# Show available extension points[edit]
+# Show available extension points
 
 The edit form of the contacts app is constructed by a set of extension points.
 Each extension point controls a single aspect of the form. 
 To apply modifications, the id of the point and the extension is needed. 
 For a quick overview of the available points and extensions you can use the browser console:
 
-
- ```javascript
+```javascript
 // show all available extension points (across all apps)
 require('io.ox/core/extensions').keys();
- ```
+```
 
- ```javascript
+```javascript
 // you can filter down the list by using regular expression 
 _(require('io.ox/core/extensions').keys()).filter(function (point) {
-    if (/io.ox\/contacts\/edit/.test(point)) {
-        return point;
-    }
+   if (/io.ox\/contacts\/edit/.test(point)) {
+       return point;
+   }
 });
- ```
+```
 
- ```javascript
+```javascript
 // show all available extensions of a known extension point
 require('io.ox/core/extensions').point('io.ox/contacts/edit/personal').all();
- ```
+```
 
-# Modify extension points[edit]
+# Modify extension points
 
 As described in [Hands-on introduction](TODO) extension points can be modified in multiple aspects:
 
@@ -58,16 +57,14 @@ require('io.ox/core/extensions').point('io.ox/contacts/edit/personal')
 });
 ```
 
-
- ```javascript
+```javascript
 // modify the index of the display_name field to bring it on top
 require('io.ox/core/extensions').point('io.ox/contacts/edit/personal')
 .replace({
-    id:"display_name",
-    index: 50
+   id:"display_name",
+   index: 50
 });
- ```
- 
+```
 
 ```javascript
 // modify the hidden status to hide the display_name field via get() as alternative way
@@ -77,7 +74,7 @@ require('io.ox/core/extensions').point('io.ox/contacts/edit/personal')
 });
 ```
 
-# Extending the form validation via extension points[edit]
+# Extending the form validation via extension points
 
 In addition to the default validation, another validation step can be implemented by extending the proper extension point:
 

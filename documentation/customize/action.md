@@ -16,7 +16,7 @@ To add an action to the drive app file detail area the extension point _io.ox/fi
 
 Use the Link pattern in _io.ox/core/extPatterns/links.js_ to extend this point.
 
-__Try via browser console__
+**Try via browser console**
 
 ```javascript
 require(['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext, links) {
