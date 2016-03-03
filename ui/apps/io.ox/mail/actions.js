@@ -573,34 +573,6 @@ define('io.ox/mail/actions', [
         section: 'standard'
     }));
 
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX += 100,
-        prio: 'lo',
-        mobile: 'hi',
-        id: 'mark-unread',
-        label:
-            //#. Translation should be as short a possible
-            //#. Instead of "Mark as unread" it's just "Mark unread"
-            //#. German, for example, should be just "Ungelesen"
-            gt('Mark unread'),
-        ref: 'io.ox/mail/actions/mark-unread',
-        section: 'flags'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX + 1,
-        prio: 'lo',
-        mobile: 'hi',
-        id: 'mark-read',
-        label:
-            //#. Translation should be as short a possible
-            //#. Instead of "Mark as read" it's just "Mark read"
-            //#. German, for example, should be just "Gelesen"
-            gt('Mark read'),
-        ref: 'io.ox/mail/actions/mark-read',
-        section: 'flags'
-    }));
-
     new Action('io.ox/mail/actions/label', {
         id: 'label',
         requires: 'toplevel some',
