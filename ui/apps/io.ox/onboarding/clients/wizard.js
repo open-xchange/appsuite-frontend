@@ -408,7 +408,6 @@ define('io.ox/onboarding/clients/wizard', [
                     id: 'platform',
                     back: false,
                     next: false,
-                    width: 'auto',
                     minWidth: '540px'
                 })
                 .on('before:show', drawPlatforms)
@@ -419,7 +418,6 @@ define('io.ox/onboarding/clients/wizard', [
                     id: 'device',
                     back: false,
                     next: false,
-                    width: 'auto',
                     minWidth: '540px'
                 })
                 .on('before:show', drawDevices)
