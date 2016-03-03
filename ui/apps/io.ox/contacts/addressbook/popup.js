@@ -287,7 +287,7 @@ define('io.ox/contacts/addressbook/popup', [
                             .attr('placeholder', gt('Search'))
                         ),
                         $('<div class="col-xs-6">').append(
-                            $('<select class="form-control folder-dropdown" tabindex="1">').append(
+                            $('<select class="form-control folder-dropdown invisible" tabindex="1">').append(
                                 $('<option value="all">').text('All contacts')
                             )
                         )
@@ -297,16 +297,19 @@ define('io.ox/contacts/addressbook/popup', [
                 // fill folder drop-down
                 var $dropdown = view.$('.folder-dropdown');
                 folderAPI.flat({ module: 'contacts' }).done(function (folders) {
+                    var count = 0;
                     $dropdown.append(
                         _(folders).map(function (section, id) {
                             if (!sections[id]) return $();
                             return $('<optgroup>').attr('label', sections[id]).append(
                                 _(section).map(function (folder) {
+                                    count++;
                                     return $('<option>').val(folder.id).text(folder.title);
                                 })
                             );
                         })
                     );
+                    if (count > 1) $dropdown.removeClass('invisible');
                 });
 
                 view.folder = folder;
