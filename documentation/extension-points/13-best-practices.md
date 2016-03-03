@@ -7,7 +7,6 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Extending_the_UI_(best_
 The extension points system allows different strategies to realize the desired behavior. 
 This is a list of solutions for common scenarios pointing out also some disadvantages of different solutions.
 
-
 # scenario: writing extension in general
 
 _separate extension declaration and logic for reusability_
@@ -30,11 +29,9 @@ ext.point('io.ox/mail/detail/content').extend({
 });
 ```
 
-
 # scenario: hide/show action
 
 _simply register a fresh new extension with an index less than the original action extension._
-
 
 ```javascript
 // original extension
@@ -65,15 +62,13 @@ ext.point('io.ox/mail/actions/compose').extend({
 });
 ```
 
-
-__unfavorable variants__
+**unfavorable variants**
 
 _using ext.point(...).replace_
 
 - original requires function is replaced and can not be accessed anymore
 - also copy and paste it contents does not help cause future changes are not carried over automatically
 - see documentation for .replace
-
 
 ```javascript
  // please do not use replace to overwrite 'requires'
@@ -86,8 +81,7 @@ ext.point('io.ox/mail/actions/compose').replace({
 
 # scenario: stop propagation of action
 
-_simply register a fresh new extension with an index less than the original action extension.__
-
+\_simply register a fresh new extension with an index less than the original action extension.\_\_
 
 ```javascript
  // original extension
@@ -99,7 +93,6 @@ new Action('io.ox/mail/actions/compose', {
     ...
 });
 ```
-
 
 ```javascript
 // your extension to hide it
@@ -118,6 +111,6 @@ ext.point('io.ox/mail/actions/compose').extend({
 });
 ```
 
-__hint__ 
+**hint** 
 
 In case the condition for a single action target (f.e. a mail item) do not change you can use 'baton.preventDefault()' alternatively when you condition is met.

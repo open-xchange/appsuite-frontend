@@ -26,7 +26,7 @@ This leads to the following advantages:
 - Modularity- Re-usability
 - Dynamic
 
-![](02_points.gif)
+![](02-points.gif)
 
 ## Some characteristics
 
@@ -37,12 +37,11 @@ This leads to the following advantages:
 
 ## Components
 
-The extension point system lives in the ``io.ox/core/extensions`` module and consists of these elements:
+The extension point system lives in the `io.ox/core/extensions` module and consists of these elements:
 
 - extension point system: accessing the outer parts
 - registry: manages extension points, extensions and their state
-- extension point: part of the systems that can be extended, referenced by a
-unique id 
+- extension point: part of the systems that can be extended, referenced by a unique id 
 - extension: adding/replacing functionality during runtime, referenced by a unique id
 - baton: object used to store context, passed back through callbacks
 
@@ -60,7 +59,6 @@ unique id
 - manages extension points, extensions and their state
 
 ## list points
-
 
 ```javascript
 // returns array of point ids
@@ -85,7 +83,7 @@ var mypoint = ext.point('io.ox/calendar/detail');
 - id
 - description (optional)
 
-__example__
+**example**
 
 ```javascript
  //get a point and it's description
@@ -99,8 +97,7 @@ __example__
 - If the id is not specified, the value 'default' is used.
 - example: add extension with id 'date'
 
-__example__
-
+**example**
 
 ```javascript
  // chainable (returns mypoint)
@@ -119,7 +116,7 @@ __example__
 - when calling replace on a not yet existing extension a new extension is created
 - hint: therefore replace can also be executed before extension is initially created with extend
 
-__example__
+**example**
 
 ```javascript
  // chainable (returns mypoint)
@@ -142,8 +139,7 @@ __example__
 mypoint.invoke(name, context, baton);
 ```
 
-__example__
-
+**example**
 
 ```javascript
 //call 'draw' of all registered extensions (order defined by index attribute)
@@ -168,7 +164,7 @@ mypoint.get(id, callback);
 var exists = mypoint.has(id);
 ```
 
-__enabled only__
+**enabled only**
 
 ```javascript
 // returns array containing all enabled extensions
@@ -188,7 +184,7 @@ mypoint.enable(id);
 mypoint.disable(id);
 ```
 
-__example__
+**example**
 
 ```javascript
  //disable
@@ -199,7 +195,7 @@ __example__
 
 - only considers enabled extensions
 - functions returns underscore-chain object of enabled extensions
-- take a look at [http://underscorejs.org](http://underscorejs.org) for more details
+- take a look at <http://underscorejs.org> for more details
 
 ```javascript
  mypoint.chain();
@@ -210,7 +206,7 @@ __example__
  mypoint.pluck(propertyName);
 ```
 
-__example__
+**example**
 
 ```javascript
 // Shuffle extension order
@@ -224,22 +220,20 @@ ext.point('io.ox/calendar/detail').each(function (e) {
 - Event Hub based on jQuery's on, off, one and trigger
 - differences documentated for each function
 
-
- ```javascript
+```javascript
 // attach listener
 mypoint.on(type, data, function);
- ```
+```
 
- ```javascript
+```javascript
 // detach listener
 mypoint.off(type, function);
- ```
+```
 
 ```javascript
 // attach listener for a single execution
 mypoint.one(type, data, function);
 ```
-
 
 ```javascript
 // trigger event
@@ -265,5 +259,3 @@ This wraps up our little tour of the OX App Suite extension point system.
 It is used to integrate new functionality into the OX App Suite and provides a system for 3rd party applications to become extensible themselves. 
 It can be used to customize the existing UI at the cost of havint to know a bit more about the internals of our application. 
 For now until more comprehensive documentation becomes available, look at the existing OX App Suite code to see concrete extensions and extension points in action.
-
-
