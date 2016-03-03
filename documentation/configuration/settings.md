@@ -6,13 +6,13 @@ title: Settings
 
 Settings (sometimes 'jslob' is used synonymously) fulfils a double function. 
 
-__user settings__
+**user settings**
 
 First of all they're used to store the user settings - no suprise here. 
 The settings object has a _get_ and _set_ function to get and manipulate the different properties. 
 A _save_ function syncs the current state with the database. 
 
-__configurations__
+**configurations**
 
 The second usage is to communicate small configuration 'switches'. 
 In contrast to capabilites these attributes cover small impacts on the ui.
@@ -53,9 +53,19 @@ settings!plugins/upsell
 
 You can use this snippet to get a quick look at the differnt settings - just replace the core namespace with one of the listed ids above
 
+## list all
+
 ```javascript
 require(['settings!io.ox/core']).done(function(settings) {
     console.log(settings.get());
 })
+```
 
+
+## chage
+
+```javascript
+require(['settings!io.ox/core']).done(function(settings) {
+    settings.set('some/id', 'some-value').save();
+})
 ```
