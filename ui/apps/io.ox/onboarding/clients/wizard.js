@@ -28,6 +28,8 @@ define('io.ox/onboarding/clients/wizard', [
     var POINT = 'io.ox/onboarding/clients/views',
         //#. title for 1st and snd step of the client onboarding wizard
         //#. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
+        //#. %1$s the product name
+        //#, c-format
         titleLabel = gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName),
         initiate, wizard;
 

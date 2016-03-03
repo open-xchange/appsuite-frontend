@@ -54,6 +54,10 @@ define('plugins/portal/client-onboarding/register', [
                     .css(style.content)
                     .append(
                         $('<div class="paragraph text-justify">').text(
+                            //#. title for 1st and snd step of the client onboarding wizard
+                            //#. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
+                            //#. %1$s the product name
+                            //#, c-format
                              gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName)
                         ),
                         $('<div class="paragraph text-justify devices">').css(style.devices)
@@ -65,6 +69,8 @@ define('plugins/portal/client-onboarding/register', [
                         $('<div class="paragraph">').append(
                             $('<a>', { tabindex: '1', 'role': 'button' })
                                 .addClass('action')
+                                //#. button label within the client-onboarding widget
+                                //#. button opens the wizard to configure your device
                                 .text(gt('Connect'))
                         )
                     )
