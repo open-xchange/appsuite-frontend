@@ -91,9 +91,9 @@ define('io.ox/core/attachments/view', [
                 )
             );
 
-            this.updateScrollControls();
-
             if (this.openByDefault) this.toggleDetails();
+
+            this.updateScrollControls();
 
             return this;
         },
@@ -163,6 +163,7 @@ define('io.ox/core/attachments/view', [
         onToggleDetails: function (e) {
             e.preventDefault();
             this.toggleDetails();
+            this.updateScrollControls();
         },
 
         onToggleMode: function (e) {
