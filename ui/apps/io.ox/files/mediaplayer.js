@@ -150,7 +150,7 @@ define('io.ox/files/mediaplayer', [
         drawTrackInfo: (function () {
 
             function audioIconError() {
-                this.trackdisplay.find('.album').empty().append($('<i class="fa fa-music"></i>'));
+                this.trackdisplay.find('.album').empty().append($('<i class="fa fa-music" aria-hidden="true"></i>'));
             }
 
             function getCover(file) {
@@ -324,7 +324,7 @@ define('io.ox/files/mediaplayer', [
                 this.container
                     .removeClass('videoplayer')
                     .addClass('audioplayer');
-                this.trackdisplay.find('.album').empty().append($('<i class="fa fa-music"></i>'));
+                this.trackdisplay.find('.album').empty().append($('<i class="fa fa-music" aria-hidden="true"></i>'));
             }
 
             this.playlist.empty();

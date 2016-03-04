@@ -81,7 +81,7 @@ define('io.ox/files/common-extensions', [
         },
 
         fileTypeIcon: function () {
-            this.append('<i class="fa file-type-icon">');
+            this.append('<i class="fa file-type-icon" aria-hidden="true">');
         },
 
         fileTypeClass: function (baton) {
@@ -125,7 +125,7 @@ define('io.ox/files/common-extensions', [
             function error() {
                 //fallback to default
                 $(this).parent().addClass('default-icon').append(
-                    $('<span class="file-icon"><i class="fa file-type-icon"></i></span>')
+                    $('<span class="file-icon"><i class="fa file-type-icon" aria-hidden="true"></i></span>')
                 );
                 $(this).remove();
             }
@@ -139,7 +139,7 @@ define('io.ox/files/common-extensions', [
                     return this.append(
                         $('<div class="icon-thumbnail default-icon">').append(
                             $('<span class="folder-name">').text(baton.model.getDisplayName()),
-                            $('<span class="folder-icon"><i class="fa file-type-icon"></i></span>')
+                            $('<span class="folder-icon"><i class="fa file-type-icon" aria-hidden="true"></i></span>')
                         )
                     );
                 }
@@ -174,7 +174,7 @@ define('io.ox/files/common-extensions', [
                 //
                 this.append(
                     $('<div class="icon-thumbnail default-icon">').append(
-                        $('<span class="file-icon"><i class="fa file-type-icon"></i></span>')
+                        $('<span class="file-icon"><i class="fa file-type-icon" aria-hidden="true"></i></span>')
                     )
                 );
             };

@@ -678,8 +678,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 if (!this.swipeCell) {
                     // append swipe action cell once, will be removed afterwards
                     this.swipeCell = $('<div class="swipe-option-cell">').append(
-                        this.btnDelete = $('<div class="swipe-button delete">').append($('<i class="fa fa-trash">')),
-                        this.btnMore = $('<div class="swipe-button more">').append($('<i class="fa fa-bars">'))
+                        this.btnDelete = $('<div class="swipe-button delete">').append($('<i class="fa fa-trash" aria-hidden="true">')),
+                        this.btnMore = $('<div class="swipe-button more">').append($('<i class="fa fa-bars" aria-hidden="true">'))
                     ).css('height', this.target.outerHeight() + 'px');
                     this.target.before(this.swipeCell);
                 }
@@ -827,7 +827,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.resetSwipe($(e.currentTarget));
         },
 
-        inplaceRemoveScaffold: $('<div class="swipe-left-content"><i class="fa fa-trash-o"/></div>'),
+        inplaceRemoveScaffold: $('<div class="swipe-left-content"><i class="fa fa-trash-o" aria-hidden="true"/></div>'),
 
         renderInplaceRemove: function (node) {
             node.append(this.inplaceRemoveScaffold.clone());

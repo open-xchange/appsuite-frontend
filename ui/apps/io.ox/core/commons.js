@@ -603,7 +603,7 @@ define('io.ox/core/commons', [
                     $('<div class="rightside-navbar">').append(
                         $('<div class="rightside-inline-actions">'),
                         $('<a href="#" tabindex="-1">').append(
-                            $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
+                            $('<i class="fa fa-chevron-left" aria-hidden="true">'), $.txt(' '), $.txt(gt('Back'))
                         ).on('click', { app: app }, click)
                     ),
                     // right
@@ -637,7 +637,7 @@ define('io.ox/core/commons', [
                     this.addClass('visual-focus').append(
                         $('<a href="#" class="toolbar-item" tabindex="1">')
                         .attr('title', gt('Open folder view'))
-                        .append($('<i class="fa fa-angle-double-right">'))
+                        .append($('<i class="fa fa-angle-double-right" aria-hidden="true">'))
                         .on('click', { app: app, state: true }, toggleFolderView)
                     );
                 }

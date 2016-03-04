@@ -109,13 +109,13 @@ define('io.ox/calendar/freebusy/templates', [
         getBackControl: function () {
             return $('<div class="close-control">').append(
                 $('<a href="#" tabindex="3" data-action="cancel">').text(gt('Back to appointment')),
-                $('<i class="fa fa-reply">')
+                $('<i class="fa fa-reply" aria-hidden="true">')
             );
         },
 
         getQuitControl: function () {
             return $('<div class="close-control">').append(
-                $('<a href="#" tabindex="3" data-action="quit">').text(gt('Quit')).append($('<i class="fa fa-times">'))
+                $('<a href="#" tabindex="3" data-action="quit">').text(gt('Quit')).append($('<i class="fa fa-times" aria-hidden="true">'))
             );
         },
 

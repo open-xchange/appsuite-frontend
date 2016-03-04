@@ -102,7 +102,7 @@ define('io.ox/core/attachments/view', [
 
             this.$header.append(
                 $('<a href="#" class="pull-right toggle-mode" tabindex="1">')
-                    .append('<i class="fa">'),
+                    .append('<i class="fa" aria-hidden="true">'),
                 $('<a href="#" class="toggle-details" tabindex="1">').append(
                     $('<i class="fa toggle-caret" aria-hidden="true">'),
                     $('<i class="fa fa-paperclip" aria-hidden="true">'),
@@ -342,7 +342,7 @@ define('io.ox/core/attachments/view', [
             this.$el.append(
                 $('<a href="#" class="control remove" tabindex="1">')
                     .attr('title', gt('Remove attachment'))
-                    .append($('<i class="fa fa-trash-o">'))
+                    .append($('<i class="fa fa-trash-o" aria-hidden="true">'))
             );
         }
     });

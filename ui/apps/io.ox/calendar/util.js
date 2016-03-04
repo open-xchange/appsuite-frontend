@@ -38,7 +38,7 @@ define('io.ox/calendar/util', [
             gt('declined'),
             gt('tentative')
         ],
-        n_confirm = ['', '<i class="fa fa-check">', '<i class="fa fa-times">', '<i class="fa fa-question-circle">'],
+        n_confirm = ['', '<i class="fa fa-check" aria-hidden="true">', '<i class="fa fa-times" aria-hidden="true">', '<i class="fa fa-question-circle" aria-hidden="true">'],
         colorLabels = [gt('no color'), gt('light blue'), gt('dark blue'), gt('purple'), gt('pink'), gt('red'), gt('orange'), gt('yellow'), gt('light green'), gt('dark green'), gt('gray')];
 
     var that = {
@@ -646,7 +646,7 @@ define('io.ox/calendar/util', [
             // init
             _.each(confirmClass, function (cls, i) {
                 ret[i] = {
-                    icon: n_confirm[i] || '<i class="fa fa-exclamation-circle">',
+                    icon: n_confirm[i] || '<i class="fa fa-exclamation-circle" aria-hidden="true">',
                     count: 0,
                     css: cls,
                     title: confirmTitles[i] || ''

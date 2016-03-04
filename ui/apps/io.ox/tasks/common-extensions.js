@@ -112,7 +112,7 @@ define('io.ox/tasks/common-extensions', [
                     'tabindex': '1'
                 });
 
-                this.append($('<i class="fa fa-caret-down">'));
+                this.append($('<i class="fa fa-caret-down" aria-hidden="true">'));
 
                 this.after(
                     $('<ul class="dropdown-menu pull-right" role="menu">').append(

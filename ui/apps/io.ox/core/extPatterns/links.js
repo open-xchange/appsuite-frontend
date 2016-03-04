@@ -556,7 +556,7 @@ define('io.ox/core/extPatterns/links', [
                 .addClass(options.smart ? 'smart-dropdown' : '')
                 .append(
                     options.icon ? $('<i>').addClass(options.icon).attr({ title: label.textContent, 'aria-hidden': true }) : label,
-                    options.noCaret ? $() : $('<i class="fa fa-caret-down">').attr({ 'aria-hidden': true })
+                    options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
                 ),
                 ul = $('<ul class="dropdown-menu" role="menu">')
             )

@@ -23,7 +23,7 @@ define('io.ox/mail/mobile-navbar-extensions', ['io.ox/core/extensions'], functio
             this.$el.append(
                 $('<div class="navbar-action left">').append(
                     $('<a>').append(
-                        $('<i class="fa fa-chevron-left">'),
+                        $('<i class="fa fa-chevron-left" aria-hidden="true">'),
                         baton.left
                     )
                 )

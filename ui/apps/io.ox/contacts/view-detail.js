@@ -414,7 +414,7 @@ define('io.ox/contacts/view-detail', [
                     .append(
                         $('<address>').text($.trim(text)),
                         $('<p>').append(
-                            $('<i class="fa fa-external-link">'),
+                            $('<i class="fa fa-external-link" aria-hidden="true">'),
                             // \u2122 = &trade;
                             $.txt(' Google Maps \u2122')
                         )

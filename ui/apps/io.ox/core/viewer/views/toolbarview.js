@@ -52,7 +52,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.append(
                         // icon
                         !baton.context.standalone ?
-                            $('<i class="fa">').addClass(Util.getIconClass(baton.model)) :
+                            $('<i class="fa" aria-hidden="true">').addClass(Util.getIconClass(baton.model)) :
                             null,
                         // filename
                         $('<span class="filename-label">').text(baton.model.getDisplayName())
@@ -107,7 +107,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Fit to screen width'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitwidth',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">'),
+                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">'),
                         sectionLabel = $('<li class="dropdown-header" role="sectionhead">').text(gt('Zoom'));
                     this.before(sectionLabel);
                     this.prepend(checkIcon)
@@ -124,7 +124,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Fit to screen size'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitheight',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">');
+                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">');
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitheight').attr({
                             tabindex: '1',
@@ -231,7 +231,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: 'io.ox/files/dropdown/share',
                     customize: function (baton) {
                         var self = this;
-                        this.append('<i class="fa fa-caret-down">');
+                        this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
                         this.after(
                             LinksPattern.DropdownLinks({
@@ -699,10 +699,10 @@ define('io.ox/core/viewer/views/toolbarview', [
         renderPageNavigation: function () {
             var prev = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
                     .attr({ 'aria-label': gt('Previous page'), 'title': gt('Previous page') })
-                    .append($('<i class="fa fa-arrow-up">')),
+                    .append($('<i class="fa fa-arrow-up" aria-hidden="true">')),
                 next = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
                     .attr({ 'aria-label': gt('Next page'), 'title': gt('Next page') })
-                    .append($('<i class="fa fa-arrow-down">')),
+                    .append($('<i class="fa fa-arrow-down" aria-hidden="true">')),
                 pageInput = $('<input type="text" class="viewer-toolbar-page" tabindex="1" role="textbox">'),
                 pageInputWrapper = $('<div class="viewer-toolbar-page-wrapper">').append(pageInput),
                 totalPage = $('<div class="viewer-toolbar-page-total">'),

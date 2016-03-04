@@ -483,9 +483,9 @@ define('io.ox/mail/compose/extensions', [
         },
 
         attachment: (function () {
-
             function addLocalFile(model, e) {
-                var attachmentCollection = model.get('attachments'),
+                var self = this,
+                    attachmentCollection = model.get('attachments'),
                     accumulatedSize = attachmentCollection.filter(function (m) {
                         var size = m.get('size');
                         return typeof size !== 'undefined';
@@ -494,6 +494,7 @@ define('io.ox/mail/compose/extensions', [
                     .reduce(function (m, n) { return m + n; }, 0);
 
                 if (attachmentQuota.checkQuota(e.target.files, accumulatedSize)) {
+                    self.trigger('aria-live-update', gt('Added %s to attachments.', _(e.target.files).map(function (file) { return file.name; }).join(', ')));
                     model.attachFiles(
                         _(e.target.files).map(function (file) {
                             return _.extend(file, { group: 'localFile' });
@@ -503,6 +504,7 @@ define('io.ox/mail/compose/extensions', [
             }
 
             function openFilePicker(model) {
+                var self = this;
                 require(['io.ox/files/filepicker'], function (Picker) {
                     new Picker({
                         primaryButtonText: gt('Add'),
@@ -511,6 +513,7 @@ define('io.ox/mail/compose/extensions', [
                         multiselect: true
                     })
                     .done(function (files) {
+                        self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.filename; }).join(', ')));
                         model.attachFiles(
                             _(files).map(function (file) {
                                 return _.extend(file, { group: 'file' });

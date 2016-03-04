@@ -405,7 +405,7 @@ define('io.ox/calendar/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-trash-o">')
+                        $('<i class="fa fa-trash-o" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -427,7 +427,7 @@ define('io.ox/calendar/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-sign-in">')
+                        $('<i class="fa fa-sign-in" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();

@@ -753,7 +753,7 @@ define('io.ox/tasks/main', [
                 if (showSwipeButton) {
                     removeButton();
                 }
-                var div = $('<div class="swipeDelete fadein fast"><i class="fa fa-trash-o trashicon"/></div>');
+                var div = $('<div class="swipeDelete fadein fast"><i class="fa fa-trash-o trashicon" aria-hidden="true"/></div>');
                 this.append(
                     div.on('mousedown', function (e) {
                         // we have to use mousedown as the selection listens to this, too
@@ -823,7 +823,7 @@ define('io.ox/tasks/main', [
                 tagName: 'div',
                 caret: false,
                 label: function () {
-                    return [$('<i class="fa fa-arrow-down">'), $('<i class="fa fa-arrow-up">')];
+                    return [$('<i class="fa fa-arrow-down" aria-hidden="true">'), $('<i class="fa fa-arrow-up" aria-hidden="true">')];
                 }
             })
                 .header(gt('Sort options'))

@@ -833,7 +833,7 @@ define('io.ox/calendar/week/view', [
                             'aria-label': prevStr
                         })
                         .addClass('control prev')
-                        .append($('<i class="fa fa-chevron-left">')),
+                        .append($('<i class="fa fa-chevron-left" aria-hidden="true">')),
                         $('<a>').attr({
                             href: '#',
                             tabindex: 1,
@@ -842,7 +842,7 @@ define('io.ox/calendar/week/view', [
                             'aria-label': nextStr
                         })
                         .addClass('control next')
-                        .append($('<i class="fa fa-chevron-right">'))
+                        .append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
                     ),
                     this.kwInfo
                 ),
@@ -1931,7 +1931,7 @@ define('io.ox/calendar/week/view', [
                     $('<div>')
                     .addClass('appointment-content')
                     .append(
-                        a.get('private_flag') ? $('<span class="private-flag"><i class="fa fa-lock"></i></span>') : '',
+                        a.get('private_flag') ? $('<span class="private-flag"><i class="fa fa-lock" aria-hidden="true"></i></span>') : '',
                         a.get('title') ? $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
                         a.get('location') ? $('<div>').addClass('location').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
                     )

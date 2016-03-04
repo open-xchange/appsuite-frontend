@@ -208,8 +208,8 @@ define('io.ox/core/folder/node', [
             .html(
                 /*eslint-disable no-nested-ternary */
                 hasSubFolders ?
-                    (isOpen ? '<i class="fa fa-' + ICON + '-down">' : '<i class="fa fa-' + ICON + '-right">') :
-                    '<i class="fa fa-fw">'
+                    (isOpen ? '<i class="fa fa-' + ICON + '-down" aria-hidden="true">' : '<i class="fa fa-' + ICON + '-right" aria-hidden="true">') :
+                    '<i class="fa fa-fw" aria-hidden="true">'
                 /*eslint-enable no-nested-ternary */
             );
             // a11y
@@ -368,8 +368,8 @@ define('io.ox/core/folder/node', [
                     this.$.selectable = $('<div class="folder-node" role="presentation">')
                     .css('padding-left', (o.level * this.indentation) + offset)
                     .append(
-                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
-                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw" aria-hidden="true"></i></div>') : [],
+                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw" aria-hidden="true"></i></div>'),
                         $('<div class="folder-label">').append(
                             this.$.label = $('<div>')
                         ),

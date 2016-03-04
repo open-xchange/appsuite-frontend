@@ -79,7 +79,7 @@ define('io.ox/backbone/mini-views/attachments', [
 
             var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size) : '\u00A0';
             return $('<div class="attachment">').append(
-                $('<i class="fa fa-paperclip">'),
+                $('<i class="fa fa-paperclip" aria-hidden="true">'),
                 $('<div class="row-1">').text(attachment.filename),
                 $('<div class="row-2">').append(
                     $('<span class="filesize">').text(size)
@@ -92,7 +92,7 @@ define('io.ox/backbone/mini-views/attachments', [
                 })
                 .data(attachment)
                 .append(
-                    $('<i class="fa fa-trash-o">')
+                    $('<i class="fa fa-trash-o" aria-hidden="true">')
                 )
             );
         },
