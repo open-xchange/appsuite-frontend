@@ -1,6 +1,6 @@
 ---
 title: FAQ
-description: Frequently asked questions about running the App Suite UI
+description: Frequently asked questions about running the OX App Suite UI
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_FAQ
 ---
 
@@ -28,7 +28,7 @@ It is more probable that the whole UI cannot be found.
 Check the com.openexchange.apps.path, usually hidden in `manifests.properties`.
 Does it point to where your webserver serves the files from? The default is /_var/www/appsuite_, on OSX is is more likely to be _/Library/WebServer/Documents/appsuite_
 
-# App Suite loads, but no apps show up
+# OX App Suite loads, but no apps show up
 
 So bother backend and frontend are devoid of errors, the UI loads nicely, you see the top bar with settings, notifications and refresh button but no apps at all, right? 
 This is a manifest problem. 

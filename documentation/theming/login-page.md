@@ -1,10 +1,10 @@
 ---
 title: Theming the login page
-description: How to create a customized theme for the default login page for your appsuite installation and also how to configure different ones for different hostnames.
+description: How to create a customized theme for the default login page for your OX App Suite installation and also how to configure different ones for different hostnames.
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Theming_the_login_page
 ---
 
-It only explains where and how to configure and apply the modifications but not the basics of App Suite theming.
+It only explains where and how to configure and apply the modifications but not the basics of OX App Suite theming.
 
 # style.less
 

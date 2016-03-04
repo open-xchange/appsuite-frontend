@@ -468,7 +468,7 @@ In the browser it looks like this:
 
 # Adding desktop notifications
 
-Finally you can add desktop notifications. This notifications are shown by the browser, if the appsuite is minimized or the tab is not active at the moment. The subview can show individual notifications, if there is only one new item or a more generic notification, if there are multiple new items.
+Finally you can add desktop notifications. This notifications are shown by the browser, if the OX App Suite is minimized or the tab is not active at the moment. The subview can show individual notifications, if there is only one new item or a more generic notification, if there are multiple new items.
 
 To use it you can use the following options:
 

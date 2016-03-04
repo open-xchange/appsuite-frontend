@@ -1,11 +1,11 @@
 ---
 title: Manifests
-description: Manifest files in the app suite declare either apps or plugins.
+description: Manifest files in the OX App Suite declare either apps or plugins.
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_manifests_explained
 ---
 
-They tell the appsuite runtime which files to load when, so the code in it can take effect at the appropriate time. 
-This document should be read by everyone that wants to either build a plugin or an app and contains a description of how to get app suite to run your code. 
+They tell the OX App Suite runtime which files to load when, so the code in it can take effect at the appropriate time. 
+This document should be read by everyone that wants to either build a plugin or an app and contains a description of how to get OX App Suite to run your code. 
 
 # Declaring apps
 
@@ -65,7 +65,7 @@ If your plugin, for example, is only relevant when the user has access to the ca
 }
 ```
 
-Which capabilities are available can be checked by either reading through existing manifests or by running this in the javascript console once logged into appsuite:
+Which capabilities are available can be checked by either reading through existing manifests or by running this in the javascript console once logged into OX App Suite:
 
 ```javascript
 _(ox.serverConfig.capabilities).pluck('id')

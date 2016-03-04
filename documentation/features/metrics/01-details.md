@@ -61,7 +61,7 @@ The metrics module provide some simple API that enables you to track events.
 
 \###name
 
-- name of the page. for OX Appsuite this is the name of the application
+- name of the page. for OX App Suite this is the name of the application
 - _example: ‘mail’_
 
 \###id

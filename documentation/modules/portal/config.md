@@ -10,12 +10,12 @@ This article covers how to configure which plugins ("tiles") are shown, whether 
 # Configuring the portal
 
 
-When running OX AppSuite you may want to specify a starting configuration for which tiles the portal shows and whether certain tiles are mandatory or not. This is especially useful when you are introducing your own tile implementations. 
+When running OX App Suite you may want to specify a starting configuration for which tiles the portal shows and whether certain tiles are mandatory or not. This is especially useful when you are introducing your own tile implementations. 
 To make this possible, the portal consists of three types of tiles: User tiles, eager tiles and protected tiles. 
 User tiles are tiles that the user added herself to the portal page, eager tiles are those suggested by the installation which can be removed and protected tiles are set by the backend.
 
 In order to specify a tile, you will have to know about the configuration data to enter. 
-You can use an appsuite installation to do that. 
+You can use an OX App Suite installation to do that. 
 If you want to configure a tile as eager or protected, navigate to the settings area of the portal page, add the tile you want and, in the JS console, enter:
 
 
@@ -109,7 +109,7 @@ io.ox/portal//widgets/eager/gen_1:
 
 All the "gen_[number]" entries up the tie io.ox/portal//generation will be used for this configuration. 
 If a tile is deleted it is deleted only in that generation so can be reintroduced in a later portal configuration generation. 
-If you want to keep the default tiles as used as a fallback for App Suite, you need this configuration to start out with:
+If you want to keep the default tiles as used as a fallback for OX App Suite, you need this configuration to start out with:
 
 
 ```yaml
@@ -183,7 +183,7 @@ io.ox/portal//widgets/protected:
 In which case, users will be allowed to move the tile.
 
 One caveat in all this: After changing any of the above configuration, you will have to reload the UI *_twice_*, 
-since App Suite uses read-through caching for the settings data.
+since OX App Suite uses read-through caching for the settings data.
 
 
 # Disabling a tile completely

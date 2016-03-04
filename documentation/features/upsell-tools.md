@@ -1,6 +1,6 @@
 ---
 title: Upsell tools
-description: Several ways of promoting applications and other upgrades for App Suite. 
+description: Several ways of promoting applications and other upgrades for OX App Suite. 
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Upsell_tools
 ---
 
@@ -50,7 +50,7 @@ That name points to another part of the YAML file that looks like this:
 ```
 
 What you can see here is that an advertisement consists of several slides. 
-Due to some peculiarities of the App Suite YAML parser, you have to name them "slide?" with a number and cannot use an array. 
+Due to some peculiarities of the OX App Suite YAML parser, you have to name them "slide?" with a number and cannot use an array. 
 The slides will be sorted alphabetically, so if you plan to use more than 10 slides, remember to pad the number with enough zeros, the first slide being 00, the second being 01.
 
 Slides can be provided in different languages. 

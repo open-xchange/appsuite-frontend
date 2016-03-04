@@ -1,19 +1,19 @@
 ---
 title: Metrics
-description: Track user behaviour and conditions within OX Appsuite
+description: Track user behaviour and conditions within OX App Suite
 ---
 
-The Metrics module provides a very flexible and extendible way to track user behaviour and conditions within OX Appsuite.
+The Metrics module provides a very flexible and extendible way to track user behaviour and conditions within OX App Suite.
 
 A common set of events is tracked by default. Out of the box PIWIK is supported as reference analytics framework. Every other analytics framework can be added easily by registering a new adapter within the metrics module where data and events are mapped to the special needs of the target analytics framework.
 
-# Setup Metrics within AppSuite
+# Setup Metrics within OX App Suite
 
-Please follow [theses steps](TODO) to configure AppSuite metrics + PIWIK.
+Please follow [theses steps](TODO) to configure OX App Suite metrics + PIWIK.
 
 # Basics
 
-The metrics framework is located in Appsuite’s front end and can be [configured](#backend) by backend properties. The components and their tasks are listed as follows:
+The metrics framework is located in OX App Suite’s front end and can be [configured](#backend) by backend properties. The components and their tasks are listed as follows:
  
 
 - listener/handler: waiting for events and call metrics module

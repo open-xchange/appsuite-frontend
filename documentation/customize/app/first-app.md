@@ -94,11 +94,11 @@ You can generate it with this command:
 grunt show-config:local --output grunt/local.conf.json
 ```
 
-To use the remote www.ox.io AppSuite server, open up the file grunt/local.conf.json in your editor and add `https://www.ox.io/appsuite/` to the server setting of the appserver section.
+To use the remote www.ox.io OX App Suite server, open up the file grunt/local.conf.json in your editor and add `https://www.ox.io/appsuite/` to the server setting of the appserver section.
 Also make sure that the protocol setting is set to https.
 Else you will get https redirect errors in your browser.
 
-INFO: If you are using a locally installed AppSuite server (in a VM or similar in your local network), just modify the server + protocol accordingly.
+INFO: If you are using a locally installed OX App Suite server (in a VM or similar in your local network), just modify the server + protocol accordingly.
 
 Then start the development server:
 
@@ -188,7 +188,7 @@ grunt dpkg-buildpackage --include-dependencies
 
 # i18n
 
-To use the proven way to translate your AppSuite application, you should now check out the [documentation](http://oxpedia.org/wiki/index.php?title=AppSuite:I18n) about all [i18n](http://oxpedia.org/wiki/index.php?title=AppSuite:I18n) tasks.
+To use the proven way to translate your OX App Suite application, you should now check out the [documentation](http://oxpedia.org/wiki/index.php?title=AppSuite:I18n) about all [i18n](http://oxpedia.org/wiki/index.php?title=AppSuite:I18n) tasks.
 Please browse to the [i18n](http://oxpedia.org/wiki/index.php?title=AppSuite:I18n) page.
 
 # Further Reading

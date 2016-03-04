@@ -1,6 +1,6 @@
 ---
 title: Skills needed
-description: This article explains the languages and frameworks used within the App Suite frontend
+description: This article explains the languages and frameworks used within the OX App Suite frontend
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_developer_primer
 ---
 
@@ -8,7 +8,7 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_developer_primer
 
 ## JavaScript
 
-- No surprise there, the AppSuite frontend is written in JavaScript.
+- No surprise there, the OX App Suite frontend is written in JavaScript.
 - [JavaScript: The Good Parts (youtube)](http://www.youtube.com/watch?v=hQVTIJBZook)
 - Our own style is explained here: [Style Guide](TODO)
 

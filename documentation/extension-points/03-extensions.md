@@ -34,7 +34,7 @@ If more than one extension of a point has the index 'first' or 'last' these will
 
 # Extensions patterns
 
-OX App Suite uses extensions patterns. 
+OX App Suite uses extensions patterns.
 Please keep in mind that this list not necessarily covers all pattern currently used.
 
 **io.ox/backbone/forms.js**

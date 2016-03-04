@@ -11,7 +11,7 @@ With this easy step-by-step guide it should be quite simple to setup PIWIK and a
 
 ### important
 
-Please ensure PIWIK runs also on SSL in case OX Appsuite does.
+Please ensure PIWIK runs also on SSL in case OX App Suite does.
 
 ### adblockers
 
@@ -48,9 +48,9 @@ The script provided by PIWIK will look like this:
   <!-- End Piwik Code -->
 ```
 
-## Appsuite properties
+## OX App Suite properties
 
-Now we have to extract some of the information used in this script. The script itself do not has to be added to OX Appsuite. Use the following file to adjust/add the properties:
+Now we have to extract some of the information used in this script. The script itself do not has to be added to OX App Suite. Use the following file to adjust/add the properties:
 
 ```
   /opt/open-xchange/etc/settings/metrics.properties
@@ -58,7 +58,7 @@ Now we have to extract some of the information used in this script. The script i
 
 ### base url
 
-You need to specify the base url that allows OX Appsuite calling the PIWIK tracking API. You can simply check if got the right url by trying to open the url followed by ‘piwik.php’ in the browser (example: ‘https&#x3A;%%//%%metrics.example.com/piwik/piwik.php’). You should see some message similiar to ‘Piwik is a free/libre web analytics that lets you keep control of your data.’
+You need to specify the base url that allows OX App Suite calling the PIWIK tracking API. You can simply check if got the right url by trying to open the url followed by ‘piwik.php’ in the browser (example: ‘https&#x3A;%%//%%metrics.example.com/piwik/piwik.php’). You should see some message similiar to ‘Piwik is a free/libre web analytics that lets you keep control of your data.’
 
 _generated PIWIK script_
 

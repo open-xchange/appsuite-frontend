@@ -9,7 +9,7 @@ Plugins are collected in the folder ui/apps/plugins. Start your new plugin there
 
 # What are you going to do
 
-Your plugin code can interact with the app suite is by way of extension points and extensions. 
+Your plugin code can interact with the OX App Suite is by way of extension points and extensions. 
 Stated briefly an extension point is an invitation to contributing an implementation to a part of the UI. 
 For example the contact detail view consists of an extension point that receives contributions in the form of renderers, that render different parts of the contact. 
 Say, one for rendering the display name, one for the mail addresses, one for the postal addresses and so on. 

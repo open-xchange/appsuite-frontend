@@ -89,7 +89,7 @@ It must match the name of your icon set prefixed with “.emoji-”.
 
 Each icon will then be identified by a string that can be defined in the icon set metadata.
 
-Find here a short example copied from the unified icon set shipped with Appsuite.
+Find here a short example copied from the unified icon set shipped with OX App Suite.
 
 ```css
 .emoji-unified { 

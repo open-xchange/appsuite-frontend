@@ -13,7 +13,7 @@ Some basics about the extention point concept and advantages compared to inherit
 
 ## Inheritance vs. Extension points
 
-OX App Suite uses the extension point concept to create extension points that allow a simple and flexible way to extending functionality. 
+OX App Suite uses the extension point concept to create extension points that allow a simple and flexible way to extending functionality.
 When system reaches a part that can be extended it asks a central registry if extensions are registered. 
 In that case these extensions will be executes independent of the providing component (some plugin or OX App Suite itself).
 

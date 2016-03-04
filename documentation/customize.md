@@ -4,7 +4,7 @@ icon: fa-plug
 description: Getting ready to develop your own plugins / apps
 ---
 
-There are two ways that your code can interact with the appsuite.
+There are two ways that your code can interact with the OX App Suite.
 First of all there are **apps** that are described briefly [here](/ui/customize/app/first-app.html).
 
 The second way is using **extension points and extensions**.

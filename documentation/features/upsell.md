@@ -31,7 +31,7 @@ For simple demo purposes, you can enable an internal upsell configuration by app
 
 # Custom upsell links
 
-Since other upsell triggers than the usual links would require custom development of the UI, the appsuite provides several upsell triggers which can be configured via settings. 
+Since other upsell triggers than the usual links would require custom development of the UI, the OX App Suite provides several upsell triggers which can be configured via settings. 
 Those triggers will appear, when the expression of required capabilities is not satisfied and the required set of upsell triggers is satisfied. 
 If you configure the upsell settings, the custom upsell triggers will be enabled by default but you can disable them if you want to.
 
@@ -128,13 +128,13 @@ This sections lists the custom triggers and how they can be configured.
 | folderview/calendar/bottom  | color                               | title | caldav                            | This trigger is located at the bottom of the folderview of the calendar app in the premium area. This trigger is styled as a button with the default text 'Try now' and has no icon by default.                                                                                                                                                                                                      |
 | folderview/infostore/bottom | color                               | title | boxcom or google or msliveconnect | This trigger is located at the bottom of the folderview of the drive app in the premium area. This trigger is styled as a button with the default text 'Try now' and has no icon by default.                                                                                                                                                                                                         |
 | topbar-dropdown             | icon, color                         | title | active_sync or caldav or carddav  | This trigger is located on the first position of the dropdown in the secondary toolbar. It contains a text and an icon.                                                                                                                                                                                                                                                                              |
-| portal-widget               | imageURL, removable (boolean), icon | title | active_sync or caldav or carddav  | This trigger adds a draggable portal widget to the appsuite portal. This widget is not removable by default and displays a default text. A customer can add a backgroundimage with **imageURL** and can make this widget **removable** by setting removableto true. If no image is used, the widget displays the title in the center with a customizable space separated list of font-awesome icons. |
+| portal-widget               | imageURL, removable (boolean), icon | title | active_sync or caldav or carddav  | This trigger adds a draggable portal widget to the OX App Suite portal. This widget is not removable by default and displays a default text. A customer can add a backgroundimage with **imageURL** and can make this widget **removable** by setting removableto true. If no image is used, the widget displays the title in the center with a customizable space separated list of font-awesome icons. |
 | mail-folderview-quota       | upsellLimit, icon, color            | title | active_sync or caldav or carddav  | This trigger is appended below the mail quota in the folderview. You can set the **upsellLimit** (in Bytes). If the maximum mail quota is larger than **upsellLimit**, the upsell button will not be shown. This upsell trigger has no icon by default.                                                                                                                                              |
 
 # Upsell Wizard
 
 Customers usually want to offer context-sensitive content in an IFRAME if the upsell is triggered. 
-Therefore, App Suite comes with an integrated but optional plugin that takes care of this. 
+Therefore, OX App Suite comes with an integrated but optional plugin that takes care of this. 
 Just enable `plugins/upsell/simple-wizard` by setting the capability simple-wizard server-side (or by adding it to the URL ...**&cap=simple-wizard** for testing/development purposes).
 
 This plugin registers for the event "_upsell:requires-upsell_", opens a modal popup, and loads a custom URL in an embedded IFRAME.

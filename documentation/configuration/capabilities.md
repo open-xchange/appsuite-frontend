@@ -1,6 +1,6 @@
 ---
 title: Capabilities
-description: How to use capabilities so that your new AppSuite plugin can be enabled or disabled.
+description: How to use capabilities so that your new OX App Suite plugin can be enabled or disabled.
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Capabilities
 ---
 
@@ -26,7 +26,7 @@ In `/opt/open-xchange/etc/[myproduct].properties`:
 com.openexchange.capability.[myproduct]=false
 ```
 
-Then restart the OX Application Server and afterwards use the general OX AppSuite commandline tools to enable the capability/capabilities. 
+Then restart the OX Application Server and afterwards use the general OX App Suite commandline tools to enable the capability/capabilities. 
 
 The **commandline tools** used in the following examples are located in:
 
@@ -157,7 +157,7 @@ Now your plugin will only be loaded if the capability `[myproduct]` is set for a
 
 - For testing purposes use an URL parameter to test capabilities. 
 
-Add the following parameter to your AppSuite URL in the browser to activate:
+Add the following parameter to your OX App Suite URL in the browser to activate:
 
 ```javascript
 &cap=[myproduct]

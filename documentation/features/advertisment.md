@@ -54,7 +54,7 @@ ext.point('the/points/name').extend({
 });
 ```
 
-The following extension points are defined in AppSuite Core UI and can be used to serve ads:
+The following extension points are defined in OX App Suite Core UI and can be used to serve ads:
 
 - io.ox/ads/leaderboard
 - io.ox/ads/skyscraper

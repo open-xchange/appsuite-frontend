@@ -80,7 +80,7 @@ files: [
 ]
 ```
 
-Generate a main loader script to start the test after App Suite Core UI has been booted. The file should be put in `spec/test-main.js`:
+Generate a main loader script to start the test after OX App Suite Core UI has been booted. The file should be put in `spec/test-main.js`:
 
 
 ```javascript

@@ -16,7 +16,7 @@ Start your new plugin there: Create the following folder `folder ui/apps/plugins
 # An advertisement widget
 
 The simplest portal plugin comes without a side pop-up and shows static content on its tile. 
-Two uses for this would be presenting an advertisement (or your daily creed, an often used check list....) or showing a link list (for example to other parts of an company's intranet that are not integrated into the AppSuite (yet)). 
+Two uses for this would be presenting an advertisement (or your daily creed, an often used check list....) or showing a link list (for example to other parts of an company's intranet that are not integrated into the OX App Suite (yet)). 
 We will now build an advertisement, which is just a slogan.
 
 The beauty of this is that we do not have any dependencies (for example needing another module like the file store), so the content of our `manifest.json` is rather simple:

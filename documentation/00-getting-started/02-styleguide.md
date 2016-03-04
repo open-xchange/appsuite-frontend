@@ -1,6 +1,6 @@
 ---
 title: Style Guide
-description: Our set of standards when writing code for open-xchange appsuite
+description: Our set of standards when writing code for open-xchange OX App Suite
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_Development_Style_Guide
 ---
 
@@ -236,4 +236,4 @@ This helps QA a lot.
 
 # Accessibility
 
-Every plugin, module or package released for AppSuite should be accessible.
+Every plugin, module or package released for OX App Suite should be accessible.

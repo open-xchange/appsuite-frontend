@@ -40,7 +40,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
     point.extend({
         id: 'welcomeMessage',
         index: 100,
-        title: "Welcome to App Suite", // be sure to internationalize this
+        title: "Welcome to OX App Suite", // be sure to internationalize this
         draw: function (baton) {
             // A regular #draw method, that you may know and love from other extension points
             // Just append to 'this' to draw what you need. One caveat though: Make sure to 
@@ -191,7 +191,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
         draw: function (baton) {
             // Now, for fun, let's try and build a backbone backed form
             // Depending on the complexity of the form, this is a good route to take
-            // I would, however, also suggest to scour the appsuite source code for
+            // I would, however, also suggest to scour the OX App Suite source code for
             // reusable parts, as they will usually be internationalized, localized,
             // responsive to different devices and accessible. Depending on the use of this
             // wizard, you'll have to take care of these aspects yourself.
@@ -281,7 +281,7 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
         index: 500,
         title: "Thank you!",
         draw: function (baton) {
-            this.append($("<p>").text("Thank you for completing our welcome wizard! Be sure to tell us what you like and what we could improve in App Suite!"));
+            this.append($("<p>").text("Thank you for completing our welcome wizard! Be sure to tell us what you like and what we could improve in OX App Suite!"));
             baton.buttons.enableNext();
         }
     });

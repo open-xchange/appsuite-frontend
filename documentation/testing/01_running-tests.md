@@ -34,7 +34,7 @@ Karma will be installed with all other development dependencies. So just make su
    npm install
 ```
 
-within your ui directory in the appsuite repository.
+within your ui directory in the OX App Suite repository.
 
 # Running the tests
 
