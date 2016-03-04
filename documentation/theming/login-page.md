@@ -8,7 +8,7 @@ It only explains where and how to configure and apply the modifications but not 
 
 # style.less
 
-To apply a theme to the login page you just add the relevant snippets to the ``style.less`` file like for a normal theme and include the logos and artifacts in the theme directory.
+To apply a theme to the login page you just add the relevant snippets to the `style.less` file like for a normal theme and include the logos and artifacts in the theme directory.
 
 Here are some examples of CSS selectors which can be addressed on the login page:
 
@@ -27,15 +27,10 @@ body.down #io-ox-login-container .alert.alert-info
 
 # as-config.yml
 
-To actually apply the above definition the theme needs to be specified in the file ``/opt/open-xchange/etc/as-config.yml``:
-
+To actually apply the above definition the theme needs to be specified in the file `/opt/open-xchange/etc/as-config.yml`:
 
 ```yaml
 signinTheme: MYTHEME
 ```
 
 As as-config.yml can have different configuration based on different hostnames a multi branded configuration can be applied as well.
-
-
-
-

@@ -9,17 +9,17 @@ Described APIs can be distinguished in special application APIs and general APIs
 
 # Calendar
 
-- located: ``io.ox/calendar/api.js``
+- located: `io.ox/calendar/api.js`
 - instantiated via api factory
 
-__constants__
+**constants**
 
 DAY: 86400000
 HOUR: 3600000
 MINUTE: 60000
 WEEK: 604800000
 
-__addToUploadList(key)__
+**addToUploadList(key)**
 
 ```javascript
 /**
@@ -29,7 +29,7 @@ __addToUploadList(key)__
  */
 ```
 
-__attachmentCallback(obj)__
+**attachmentCallback(obj)**
 
 ```javascript
 /**
@@ -40,7 +40,7 @@ __attachmentCallback(obj)__
  */
 ```
 
-__confirm(o)__
+**confirm(o)**
 
 ```javascript
 /**
@@ -50,7 +50,7 @@ __confirm(o)__
  */
 ```
 
-__copy(list, targetFolderId)__
+**copy(list, targetFolderId)**
 
 ```javascript
 /**
@@ -61,8 +61,7 @@ __copy(list, targetFolderId)__
  */
 ```
 
-__create(o)__
-
+**create(o)**
 
 ```javascript
 /**
@@ -74,7 +73,7 @@ __create(o)__
  */
 ```
 
-__freebusy(list, options, useCache)__
+**freebusy(list, options, useCache)**
 
 ```javascript
 /**
@@ -86,7 +85,7 @@ __freebusy(list, options, useCache)__
  */
 ```
 
-__getInvites()__
+**getInvites()**
 
 ```javascript
 /**
@@ -96,7 +95,7 @@ __getInvites()__
  */
 ```
 
-__move(list, targetFolderId)__
+**move(list, targetFolderId)**
 
 ```javascript
 /**
@@ -107,7 +106,7 @@ __move(list, targetFolderId)__
  */
 ```
 
-__removeFromUploadList(key)__
+**removeFromUploadList(key)**
 
 ```javascript
 /** 
@@ -118,7 +117,7 @@ __removeFromUploadList(key)__
  */
 ```
 
-__removeRecurrenceInformation(obj)__
+**removeRecurrenceInformation(obj)**
 
 ```javascript
 /**
@@ -128,7 +127,7 @@ __removeRecurrenceInformation(obj)__
  */
 ```
 
-__update(o)__
+**update(o)**
 
 ```javascript
 /**
@@ -140,7 +139,7 @@ __update(o)__
  */
 ```
 
-__uploadInProgress(key)__
+**uploadInProgress(key)**
 
 ```javascript
 /**
@@ -155,7 +154,7 @@ __uploadInProgress(key)__
 - located: io.ox/contacts/api.js
 - instantiated via api factory
 
-__addToUploadList(key)__
+**addToUploadList(key)**
 
 ```javascript
 /**
@@ -165,7 +164,7 @@ __addToUploadList(key)__
  */
 ```
 
-__birthdays(options)__
+**birthdays(options)**
 
 ```javascript
 /**
@@ -175,7 +174,7 @@ __birthdays(options)__
  */
 ```
 
-__clearFetchCache()__
+**clearFetchCache()**
 
 ```javascript
 /**
@@ -184,7 +183,7 @@ __clearFetchCache()__
  */
 ```
 
-__copy(list, targetFolderId)__
+**copy(list, targetFolderId)**
 
 ```javascript
 /**
@@ -195,7 +194,7 @@ __copy(list, targetFolderId)__
  */
 ```
 
-__create(data, file)__
+**create(data, file)**
 
 ```javascript
 /**
@@ -208,7 +207,7 @@ __create(data, file)__
  */
 ```
 
-__editNewImage(o, changes, file)__
+**editNewImage(o, changes, file)**
 
 ```javascript
 /**
@@ -222,7 +221,7 @@ __editNewImage(o, changes, file)__
  */
 ```
 
-__getByEmailadress(address)__
+**getByEmailadress(address)**
 
 ```javascript
 /**
@@ -232,7 +231,7 @@ __getByEmailadress(address)__
 */
 ```
 
-__getDisplayName(data)__
+**getDisplayName(data)**
 
 ```javascript
 /**
@@ -242,7 +241,7 @@ __getDisplayName(data)__
 */
 ```
 
-__getPicture(obj, options)__
+**getPicture(obj, options)**
 
 ```javascript
 /**
@@ -253,7 +252,7 @@ __getPicture(obj, options)__
 */
 ```
 
-__getPictureURL(obj, options)__
+**getPictureURL(obj, options)**
 
 ```javascript
 /**
@@ -265,7 +264,7 @@ __getPictureURL(obj, options)__
 */
 ```
 
-__getPictureURLSync(obj, options)__
+**getPictureURLSync(obj, options)**
 
 ```javascript
 /**
@@ -276,7 +275,7 @@ __getPictureURLSync(obj, options)__
  */
 ```
 
-__looksLikeDistributionList(obj)__
+**looksLikeDistributionList(obj)**
 
 ```javascript
 /**
@@ -286,7 +285,7 @@ __looksLikeDistributionList(obj)__
  */
 ```
 
-__looksLikeResource(obj)__
+**looksLikeResource(obj)**
 
 ```javascript
 /**
@@ -296,7 +295,7 @@ __looksLikeResource(obj)__
  */
 ```
 
-__move(list, targetFolderId)__
+**move(list, targetFolderId)**
 
 ```javascript
 /**
@@ -307,7 +306,7 @@ __move(list, targetFolderId)__
  */
 ```
 
-__remove(list)__
+**remove(list)**
 
 ```javascript
 /**
@@ -317,7 +316,7 @@ __remove(list)__
  */
 ```
 
-__removeFromUploadList(key)__
+**removeFromUploadList(key)**
 
 ```javascript
 /**
@@ -328,7 +327,7 @@ __removeFromUploadList(key)__
  */
 ```
 
-__update(o)__
+**update(o)**
 
 ```javascript
 /**
@@ -342,7 +341,7 @@ __update(o)__
  */
 ```
 
-__uploadInProgress(key)__
+**uploadInProgress(key)**
 
 ```javascript
 /**
@@ -354,10 +353,10 @@ __uploadInProgress(key)__
 
 # Files
 
-- located: ``io.ox/files/api.js``
+- located: `io.ox/files/api.js`
 - instantiated via api factory
 
-__checkMediaFile(type, filename)__
+**checkMediaFile(type, filename)**
 
 ```javascript
 /**
@@ -368,7 +367,7 @@ __checkMediaFile(type, filename)__
  */
 ```
 
-__copy(list, targetFolderId)__
+**copy(list, targetFolderId)**
 
 ```javascript
 /**
@@ -379,7 +378,7 @@ __copy(list, targetFolderId)__
  */
 ```
 
-__detach(version)__
+**detach(version)**
 
 ```javascript
 /**
@@ -390,7 +389,7 @@ __detach(version)__
  */
 ```
 
-__getUrl(file, mode)__
+**getUrl(file, mode)**
 
 ```javascript
 /**
@@ -401,7 +400,7 @@ __getUrl(file, mode)__
  */
 ```
 
-__move(list, targetFolderId)__
+**move(list, targetFolderId)**
 
 ```javascript
 /**
@@ -412,7 +411,7 @@ __move(list, targetFolderId)__
  */
 ```
 
-__propagate(type, obj, silent)__
+**propagate(type, obj, silent)**
 
 ```javascript
 /**
@@ -427,7 +426,7 @@ __propagate(type, obj, silent)__
  */
 ```
 
-__update(file, makeCurrent)__
+**update(file, makeCurrent)**
 
 ```javascript
 /**
@@ -439,7 +438,7 @@ __update(file, makeCurrent)__
  */
 ```
 
-__uploadFile(options)__
+**uploadFile(options)**
 
 ```javascript
 /**
@@ -455,7 +454,7 @@ __uploadFile(options)__
  */
 ```
 
-__uploadNewVersion(options)__
+**uploadNewVersion(options)**
 
 ```javascript
 /**
@@ -471,7 +470,7 @@ __uploadNewVersion(options)__
  */
 ```
 
-__uploadNewVersionOldSchool(options)__
+**uploadNewVersionOldSchool(options)**
 
 ```javascript
 /**
@@ -489,10 +488,10 @@ __uploadNewVersionOldSchool(options)__
 
 # Mail
 
-- located: ``io.ox/mail/api.js``
+- located: `io.ox/mail/api.js`
 - instantiated via api factory
 
-__constants__
+**constants**
 
 ```javascript
 //type mappings
@@ -532,7 +531,7 @@ COLORS = {
 };
 ```
 
-__beautifyMailText (str, lengthLimit)__
+**beautifyMailText (str, lengthLimit)**
 
 ```javascript
 /**
@@ -543,7 +542,7 @@ __beautifyMailText (str, lengthLimit)__
  */
 ```
 
-__changeColor(list, label, local)__
+**changeColor(list, label, local)**
 
 ```javascript
 /**
@@ -556,7 +555,7 @@ __changeColor(list, label, local)__
  */
 ```
 
-__checkInbox()__
+**checkInbox()**
 
 ```javascript
 /**
@@ -566,7 +565,7 @@ __checkInbox()__
  */
 ```
 
-__clear(folder_id)__
+**clear(folder_id)**
 
 ```javascript
 /**
@@ -577,7 +576,7 @@ __clear(folder_id)__
  */
 ```
 
-__copy (list, targetFolderId)__
+**copy (list, targetFolderId)**
 
 ```javascript
 /** 
@@ -588,7 +587,7 @@ __copy (list, targetFolderId)__
  */
 ```
 
-__expunge (folder_id)__
+**expunge (folder_id)**
 
 ```javascript
 /**
@@ -599,7 +598,7 @@ __expunge (folder_id)__
  */
 ```
 
-__forward(obj, view)__
+**forward(obj, view)**
 
 ```javascript
 /**
@@ -610,7 +609,7 @@ __forward(obj, view)__
  */
 ```
 
-__getAccountIDFromFolder(initialFolder)__
+**getAccountIDFromFolder(initialFolder)**
 
 ```javascript
 /**
@@ -620,7 +619,7 @@ __getAccountIDFromFolder(initialFolder)__
  */
 ```
 
-__getAllThreads(options, useCache)__
+**getAllThreads(options, useCache)**
 
 ```javascript
 /**
@@ -631,7 +630,7 @@ __getAllThreads(options, useCache)__
  */
 ```
 
-__getDefaultFolder()__
+**getDefaultFolder()**
 
 ```javascript
 /**
@@ -639,7 +638,7 @@ __getDefaultFolder()__
  */
 ```
 
-__getSource(obj)__
+**getSource(obj)**
 
 ```javascript
 /**
@@ -649,7 +648,7 @@ __getSource(obj)__
  */
 ```
 
-__getThread(obj)__
+**getThread(obj)**
 
 ```javascript
 /**
@@ -659,7 +658,7 @@ __getThread(obj)__
  */
 ```
 
-__getThreads(ids)__
+**getThreads(ids)**
 
 ```javascript
 /**
@@ -669,7 +668,7 @@ __getThreads(ids)__
  */
 ```
 
-__getUnmodified(obj)__
+**getUnmodified(obj)**
 
 ```javascript
 /**
@@ -679,7 +678,7 @@ __getUnmodified(obj)__
  */
 ```
 
-__getUrl(data, mode)__
+**getUrl(data, mode)**
 
 ```javascript
 /**
@@ -690,7 +689,7 @@ __getUrl(data, mode)__
  */
 ```
 
-__importEML(options)__
+**importEML(options)**
 
 ```javascript
 /**
@@ -701,7 +700,7 @@ __importEML(options)__
  */
 ```
 
-__markRead(list)__
+**markRead(list)**
 
 ```javascript
 /**
@@ -713,7 +712,7 @@ __markRead(list)__
  */
 ```
 
-__markSpam(list)__
+**markSpam(list)**
 
 ```javascript
 /**
@@ -723,7 +722,7 @@ __markSpam(list)__
  */
 ```
 
-__markUnread(list)__
+**markUnread(list)**
 
 ```javascript
 /**
@@ -734,7 +733,7 @@ __markUnread(list)__
  */
 ```
 
-__move(list, targetFolderId)__
+**move(list, targetFolderId)**
 
 ```javascript
 /**
@@ -747,7 +746,7 @@ __move(list, targetFolderId)__
  */
 ```
 
-__newMailTitle(state)__
+**newMailTitle(state)**
 
 ```javascript
 /**
@@ -758,7 +757,7 @@ __newMailTitle(state)__
  */
 ```
 
-__reply(obj, view)__
+**reply(obj, view)**
 
 ```javascript
 /**
@@ -769,7 +768,7 @@ __reply(obj, view)__
  */
 ```
 
-__replyall(obj, view)__
+**replyall(obj, view)**
 
 ```javascript
 /**
@@ -780,7 +779,7 @@ __replyall(obj, view)__
  */
 ```
 
-__saveAttachments(list, target)__
+**saveAttachments(list, target)**
 
 ```javascript
 /**
@@ -792,7 +791,7 @@ __saveAttachments(list, target)__
  */
 ```
 
-__send(data, files, form)__
+**send(data, files, form)**
 
 ```javascript
 /**
@@ -806,7 +805,7 @@ __send(data, files, form)__
  */
 ```
 
-__updateAllCache(list, callback)__
+**updateAllCache(list, callback)**
 
 ```javascript
 /**
@@ -819,10 +818,10 @@ __updateAllCache(list, callback)__
 
 # Tasks
 
-- located: ``io.ox/tasks/api.js``
+- located: `io.ox/tasks/api.js`
 - instantiated via api factory
 
-__create__
+**create**
 
 ```javascript
 /**
@@ -832,7 +831,7 @@ __create__
  */
 ```
 
-__update__
+**update**
 
 ```javascript
 /**
@@ -844,7 +843,7 @@ __update__
  */
 ```
 
-__removeFromCache__
+**removeFromCache**
 
 ```javascript
 /**
@@ -855,7 +854,7 @@ __removeFromCache__
  */
 ```
 
-__updateMultiple__
+**updateMultiple**
 
 ```javascript
 /**
@@ -867,7 +866,7 @@ __updateMultiple__
  */
 ```
 
-__move__
+**move**
 
 ```javascript
 /**
@@ -879,7 +878,7 @@ __move__
  */
 ```
 
-__confirm__
+**confirm**
 
 ```javascript
 /**
@@ -892,7 +891,7 @@ __confirm__
  */
 ```
 
-__getDefaultFolder__
+**getDefaultFolder**
 
 ```javascript
 /**
@@ -900,7 +899,7 @@ __getDefaultFolder__
  */
 ```
 
-__getAllMyTasks__
+**getAllMyTasks**
 
 ```javascript
 /**
@@ -909,7 +908,7 @@ __getAllMyTasks__
  */
 ```
 
-__getTasks__
+**getTasks**
 
 ```javascript
 /**
@@ -920,7 +919,7 @@ __getTasks__
  */
 ```
 
-__uploadInProgress__
+**uploadInProgress**
 
 - used to determine if busy animation should be shown
 
@@ -932,7 +931,7 @@ __uploadInProgress__
  */
 ```
 
-__addToUploadList(key)__
+**addToUploadList(key)**
 
 - used if task edit/create changes list of attached files
 
@@ -944,7 +943,7 @@ __addToUploadList(key)__
  */
 ```
 
-__removeFromUploadList(key)__
+**removeFromUploadList(key)**
 
 - used if add/delete finished
 
@@ -957,7 +956,7 @@ __removeFromUploadList(key)__
  */
 ```
 
-__refresh()__
+**refresh()**
 
 ```javascript
 /**
@@ -971,10 +970,10 @@ __refresh()__
 
 ## Account
 
-- located: ``io.ox/core/api/account.js``
+- located: `io.ox/core/api/account.js`
 - not' instantiated via api factory
 
-__all()__
+**all()**
 
 ```javascript
 /**
@@ -983,7 +982,7 @@ __all()__
  */
 ```
 
-__autoconfig(data)__
+**autoconfig(data)**
 
 ```javascript
 /**
@@ -993,7 +992,7 @@ __autoconfig(data)__
  */
 ```
 
-__create(data)__
+**create(data)**
 
 ```javascript
 /**
@@ -1004,7 +1003,7 @@ __create(data)__
  */
 ```
 
-__get(id)__
+**get(id)**
 
 ```javascript
 /**
@@ -1014,7 +1013,7 @@ __get(id)__
  */
 ```
 
-__getAllSenderAddresses()__
+**getAllSenderAddresses()**
 
 ```javascript
 /**
@@ -1023,7 +1022,7 @@ __getAllSenderAddresses()__
  */
 ```
 
-__getFoldersByType(type)__
+**getFoldersByType(type)**
 
 ```javascript
 /**
@@ -1033,7 +1032,7 @@ __getFoldersByType(type)__
  */
 ```
 
-__getPrimaryAddress(accountId)__
+**getPrimaryAddress(accountId)**
 
 ```javascript
 /**
@@ -1043,7 +1042,7 @@ __getPrimaryAddress(accountId)__
  */
 ```
 
-__getPrimaryAddressFromFolder(folder_id)__
+**getPrimaryAddressFromFolder(folder_id)**
 
 ```javascript
 /**
@@ -1053,7 +1052,7 @@ __getPrimaryAddressFromFolder(folder_id)__
  */
 ```
 
-__getSenderAddresses(accountId)__
+**getSenderAddresses(accountId)**
 
 ```javascript
 /**
@@ -1063,7 +1062,7 @@ __getSenderAddresses(accountId)__
  */
 ```
 
-__getUnifiedMailboxName__
+**getUnifiedMailboxName**
 
 ```javascript
 /**
@@ -1072,7 +1071,7 @@ __getUnifiedMailboxName__
  */
 ```
 
-__is(type, id)__
+**is(type, id)**
 
 ```javascript
 /**
@@ -1083,7 +1082,7 @@ __is(type, id)__
  */
 ```
 
-__isAccount(id)__
+**isAccount(id)**
 
 ```javascript
 /**
@@ -1093,7 +1092,7 @@ __isAccount(id)__
  */
 ```
 
-__isExternal(id)__
+**isExternal(id)**
 
 ```javascript
 /**
@@ -1103,7 +1102,7 @@ __isExternal(id)__
  */
 ```
 
-__isPrimary(id)__
+**isPrimary(id)**
 
 ```javascript
 /**
@@ -1113,7 +1112,7 @@ __isPrimary(id)__
  */
 ```
 
-__isUnified(id)__
+**isUnified(id)**
 
 ```javascript
 /**
@@ -1123,7 +1122,7 @@ __isUnified(id)__
  */
 ```
 
-__isUnifiedFolder(id)__
+**isUnifiedFolder(id)**
 
 ```javascript
 /**
@@ -1133,7 +1132,7 @@ __isUnifiedFolder(id)__
  */
 ```
 
-__parseAccountId(str, strict)__
+**parseAccountId(str, strict)**
 
 ```javascript
 /**
@@ -1144,7 +1143,7 @@ __parseAccountId(str, strict)__
  */
 ```
 
-__refresh()__
+**refresh()**
 
 ```javascript
 /**
@@ -1154,7 +1153,7 @@ __refresh()__
  */
 ```
 
-__remove(data)__
+**remove(data)**
 
 ```javascript
 /**
@@ -1166,7 +1165,7 @@ __remove(data)__
  */
 ```
 
-__update(data)__
+**update(data)**
 
 ```javascript
 /**
@@ -1176,7 +1175,7 @@ __update(data)__
  */
 ```
 
-__validate(data)__
+**validate(data)**
 
 ```javascript
 /**
@@ -1188,10 +1187,10 @@ __validate(data)__
 
 ## Apps
 
-- located: ``io.ox/core/api/apps.js``
+- located: `io.ox/core/api/apps.js`
 - not instantiated via api factory
 
-__get(id)__
+**get(id)**
 
 ```javascript
 /**
@@ -1201,7 +1200,7 @@ __get(id)__
  */
 ```
 
-__getByCategory(id)__
+**getByCategory(id)**
 
 ```javascript
 /**
@@ -1211,7 +1210,7 @@ __getByCategory(id)__
  */
 ```
 
-__getCategories()__
+**getCategories()**
 
 ```javascript
 /**
@@ -1220,7 +1219,7 @@ __getCategories()__
  */
 ```
 
-__getFavorites()__
+**getFavorites()**
 
 ```javascript
 /**
@@ -1230,7 +1229,7 @@ __getFavorites()__
  */
 ```
 
-__getInstalled(mode)__
+**getInstalled(mode)**
 
 ```javascript
 /**
@@ -1240,7 +1239,7 @@ __getInstalled(mode)__
  */
 ```
 
-__isFavorite(data)__
+**isFavorite(data)**
 
 ```javascript
 /**
@@ -1250,7 +1249,7 @@ __isFavorite(data)__
  */
 ```
 
-__markAsFavorite(id)__
+**markAsFavorite(id)**
 
 ```javascript
 /**
@@ -1260,7 +1259,7 @@ __markAsFavorite(id)__
  */
 ```
 
-__unmarkAsFavorite(id)__
+**unmarkAsFavorite(id)**
 
 ```javascript
 /**
@@ -1272,10 +1271,10 @@ __unmarkAsFavorite(id)__
 
 ## Attachment
 
-- located: ``io.ox/core/api/attachment.js``
+- located: `io.ox/core/api/attachment.js`
 - not instantiated via api factory
 
-__getAll()__
+**getAll()**
 
 ```javascript
 /**
@@ -1285,7 +1284,7 @@ __getAll()__
  */
 ```
 
-__remove(options, data)__
+**remove(options, data)**
 
 ```javascript
 /**
@@ -1296,7 +1295,7 @@ __remove(options, data)__
  */
 ```
 
-__create(options, data)__
+**create(options, data)**
 
 ```javascript
 /**
@@ -1307,7 +1306,7 @@ __create(options, data)__
  */
 ```
 
-__createOldWay(options, form)__
+**createOldWay(options, form)**
 
 ```javascript
 /**
@@ -1318,7 +1317,7 @@ __createOldWay(options, form)__
  */
 ```
 
-__getUrl(data, mode)__
+**getUrl(data, mode)**
 
 ```javascript
 /**
@@ -1329,7 +1328,7 @@ __getUrl(data, mode)__
  */
 ```
 
-__save(data, target)__
+**save(data, target)**
 
 ```javascript
 /**
@@ -1340,13 +1339,12 @@ __save(data, target)__
  */
 ```
 
-
 ## Autocomplete
 
-- located: ``io.ox/core/api/autocomplete.js``
+- located: `io.ox/core/api/autocomplete.js`
 - not instantiated via api factory
 
-__search(query)__
+**search(query)**
 
 ```javascript
 /**
@@ -1356,7 +1354,7 @@ __search(query)__
  */
 ```
 
-__processItem(type, data)__
+**processItem(type, data)**
 
 ```javascript
 /**
@@ -1367,7 +1365,7 @@ __processItem(type, data)__
  */
 ```
 
-__processContactResults(type, data, query)__
+**processContactResults(type, data, query)**
 
 ```javascript
 /**
@@ -1379,7 +1377,7 @@ __processContactResults(type, data, query)__
  */
 ```
 
-__processContactItem(type, list, obj, field)__
+**processContactItem(type, list, obj, field)**
 
 ```javascript
 /**
@@ -1396,12 +1394,12 @@ __processContactItem(type, list, obj, field)__
 
 A generic module to request data from a data source and to process obtained/submitted data with a data handler. Thus data is converted from a data source by a data handler.
 
-- located: ``io.ox/core/api/conversion.js``
+- located: `io.ox/core/api/conversion.js`
 - instantiated via api factory
 - no events triggered
 - no caching
 
-__convert()__
+**convert()**
 
 ```javascript
 /**
@@ -1415,13 +1413,13 @@ __convert()__
 
 The module export allows to export specific module data (like Contacts, Tasks or Appointments) from a folder in several formats (iCal, vCard, CSV).
 
-- located: ``io.ox/core/api/export.js``
+- located: `io.ox/core/api/export.js`
 - instantiated via api factory
 - directly wired to http.js
 - no events triggered
 - no caching
 
-__getCSV(folder, simulate)__
+**getCSV(folder, simulate)**
 
 ```javascript
 /**
@@ -1453,7 +1451,7 @@ require(['io.ox/core/api/export.js'], function (exportAPI) {
 })
 ```
 
-__getICAL(folder, simulate)__
+**getICAL(folder, simulate)**
 
 ```javascript
 /**
@@ -1464,7 +1462,7 @@ __getICAL(folder, simulate)__
  */
 ```
 
-__getVCARD(folder, simulate)__
+**getVCARD(folder, simulate)**
 
 ```javascript
 /**
@@ -1479,11 +1477,11 @@ __getVCARD(folder, simulate)__
 
 The group module allows to query available groups. It is mainly used by the dialog for the selection of participants.
 
-- located: ``io.ox/core/api/group.js``
+- located: `io.ox/core/api/group.js`
 - instantiated via api factory
 - no events triggered
 
-__getName(id)__
+**getName(id)**
 
 ```javascript
 /**
@@ -1496,13 +1494,13 @@ __getName(id)__
 
 The module import allows to import specific module data (like Contacts, Tasks or Appointments) in several formats (iCal, vCard, CSV) into a folder.
 
-- located: ``io.ox/core/api/import.js``
+- located: `io.ox/core/api/import.js`
 - not instantiated via api factory
 - custom connection to http.js
 - no events triggered
 - no caching
 
-__importFile(data)__
+**importFile(data)**
 
 ```javascript
 /**
@@ -1521,10 +1519,10 @@ __importFile(data)__
 
 ## Mailfilter
 
-- located: ``io.ox/core/api/mailfilter.js``
+- located: `io.ox/core/api/mailfilter.js`
 - not instantiated via api factory
 
-__delete(ruleId)__
+**delete(ruleId)**
 
 ```javascript
 /**
@@ -1534,7 +1532,7 @@ __delete(ruleId)__
  */
 ```
 
-__create(data)__
+**create(data)**
 
 ```javascript
 /**
@@ -1544,7 +1542,7 @@ __create(data)__
  */
 ```
 
-__getRules(flag)__
+**getRules(flag)**
 
 ```javascript
 /**
@@ -1554,7 +1552,7 @@ __getRules(flag)__
  */
 ```
 
-__update(data)__
+**update(data)**
 
 ```javascript
 /**
@@ -1566,12 +1564,12 @@ __update(data)__
 
 ## Publications / Subscriptions
 
-- located: ``io.ox/core/api/pubsub.js``
+- located: `io.ox/core/api/pubsub.js`
 - referenced as publications respectively subscriptions
 - instantiated via api factory
 - add/edit/remove own publications/subscriptions
 
-__update(data)__
+**update(data)**
 
 ```javascript
 /**
@@ -1581,7 +1579,7 @@ __update(data)__
  */
 ```
 
-__destroy(id)__
+**destroy(id)**
 
 ```javascript
 /**
@@ -1591,7 +1589,7 @@ __destroy(id)__
  */
 ```
 
-__create(data)__
+**create(data)**
 
 ```javascript
 /**
@@ -1601,7 +1599,7 @@ __create(data)__
  */
 ```
 
-__refresh(data)__
+**refresh(data)**
 
 - subscription only
 
@@ -1615,11 +1613,11 @@ __refresh(data)__
 
 ## Publication Targets / Subscription Sources
 
-- located: ``io.ox/core/api/pubsub.js``
+- located: `io.ox/core/api/pubsub.js`
 - referenced as publicationTargets respectively sources
 - instantiated via api factory
 
-__getAll()__
+**getAll()**
 
 - returns possible publication targets respectively subscription sources
 - default api factory method
@@ -1627,10 +1625,10 @@ __getAll()__
 
 ## Quota
 
-- located: ``io.ox/core/api/quota.js``
+- located: `io.ox/core/api/quota.js`
 - not instantiated via api factory
 
-__get__
+**get**
 
 ```javascript
 /**
@@ -1639,7 +1637,7 @@ __get__
  */
 ```
 
-__getFile__
+**getFile**
 
 ```javascript
 /**
@@ -1648,7 +1646,7 @@ __getFile__
  */
 ```
 
-__getMail__
+**getMail**
 
 ```javascript
 /**
@@ -1659,10 +1657,10 @@ __getMail__
 
 ## Reminder
 
-- located: ``io.ox/core/api/reminder.js``
+- located: `io.ox/core/api/reminder.js`
 - not instantiated via api factory
 
-__deleteReminder(reminderId)__
+**deleteReminder(reminderId)**
 
 ```javascript
 /**
@@ -1672,7 +1670,7 @@ __deleteReminder(reminderId)__
  */
 ```
 
-__remindMeAgain(remindDate, reminderId)__
+**remindMeAgain(remindDate, reminderId)**
 
 ```javascript
 /**
@@ -1683,7 +1681,7 @@ __remindMeAgain(remindDate, reminderId)__
  */
 ```
 
-__getReminders(range, module)__
+**getReminders(range, module)**
 
 ```javascript
 /**
@@ -1698,10 +1696,10 @@ __getReminders(range, module)__
 
 ## Ressource
 
-- located: ``io.ox/core/api/resource.js``
+- located: `io.ox/core/api/resource.js`
 - instantiated via api factory
 
-__search(pattern)__
+**search(pattern)**
 
 - default api factory method
 - used to search for one ore more ressources
@@ -1716,10 +1714,10 @@ __search(pattern)__
 
 ## Snippets
 
-- located: ``io.ox/core/api/snippets.js``
+- located: `io.ox/core/api/snippets.js`
 - not instantiated via api factory
 
-__getAll()__
+**getAll()**
 
 ```javascript
 /**
@@ -1728,7 +1726,7 @@ __getAll()__
  */
 ```
 
-__create(snippet)__
+**create(snippet)**
 
 ```javascript
 /**
@@ -1738,7 +1736,7 @@ __create(snippet)__
  */
 ```
 
-__get(id)__
+**get(id)**
 
 ```javascript
 /**
@@ -1748,7 +1746,7 @@ __get(id)__
  */
 ```
 
-__list(ids)__
+**list(ids)**
 
 ```javascript
 /**
@@ -1758,7 +1756,7 @@ __list(ids)__
  */
 ```
 
-__destroy(id)__
+**destroy(id)**
 
 ```javascript
 /**
@@ -1769,13 +1767,12 @@ __destroy(id)__
  */
 ```
 
-
 ## Templating
 
-- located: ``io.ox/core/api/templating.js``
+- located: `io.ox/core/api/templating.js`
 - not instantiated via api factory
 
-__getNames()__
+**getNames()**
 
 ```javascript
 /**
@@ -1786,10 +1783,10 @@ __getNames()__
 
 ## User
 
-- located: ``io.ox/core/api/user.js``
+- located: `io.ox/core/api/user.js`
 - instantiated via api factory
 
-__editNewImage(o, changes, file)__
+**editNewImage(o, changes, file)**
 
 ```javascript
 /**
@@ -1803,7 +1800,7 @@ __editNewImage(o, changes, file)__
  */
 ```
 
-__getName(id)__
+**getName(id)**
 
 ```javascript
 /**
@@ -1813,7 +1810,7 @@ __getName(id)__
  */
 ```
 
-__getGreeting(id)__
+**getGreeting(id)**
 
 ```javascript
 /**
@@ -1823,7 +1820,7 @@ __getGreeting(id)__
  */
 ```
 
-__getTextNode(id)__
+**getTextNode(id)**
 
 ```javascript
 /**
@@ -1833,7 +1830,7 @@ __getTextNode(id)__
  */
 ```
 
-__getLink(id, text)__
+**getLink(id, text)**
 
 ```javascript
 /**
@@ -1844,7 +1841,7 @@ __getLink(id, text)__
  */
 ```
 
-__getPictureURL(id, options)__
+**getPictureURL(id, options)**
 
 ```javascript
 /**
@@ -1855,7 +1852,7 @@ __getPictureURL(id, options)__
 */
 ```
 
-__getPicture(id, options)__
+**getPicture(id, options)**
 
 ```javascript
 /**
@@ -1866,7 +1863,7 @@ __getPicture(id, options)__
 */
 ```
 
-__getCurrentUser()__
+**getCurrentUser()**
 
 ```javascript
 /**
@@ -1875,7 +1872,7 @@ __getCurrentUser()__
  */
 ```
 
-__update(o)__
+**update(o)**
 
 ```javascript
 /**

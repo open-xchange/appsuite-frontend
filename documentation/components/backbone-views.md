@@ -80,6 +80,10 @@ this action is triggered on `<enter>` by default
 **focus**
 
 set initial focus on this element
+=======
+A modal dialog based on ExtensibleView that uses the markup and CSS of Bootstrap's Modal Dialog (see <http://getbootstrap.com/javascript/#modals>).
+
+See `io.ox/backbone/views/modal.js`
 
 **help**
 

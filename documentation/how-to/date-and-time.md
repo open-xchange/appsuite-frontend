@@ -168,7 +168,7 @@ for (; d.getMonth() < 3; d.add(date.DAY)) {
 }
 ```
 
-Iteration with larger intervals like months and years has the additional difficulty, that a single numeric parameter like 30 * date.DAY cannot be interpreted as a month, because it might be just really 30 days. 
+Iteration with larger intervals like months and years has the additional difficulty, that a single numeric parameter like 30 \* date.DAY cannot be interpreted as a month, because it might be just really 30 days. 
 To solve this, there are separate methods for months and years: LocalDate.prototype.addMonths() and LocalDate.prototype.addYears(). They accept the number of months, respective years as parameter.
 
 ```javascript
@@ -179,7 +179,6 @@ for (; g.getYear() < 2013; d.addMonths(1)) {
 ```
 
 Finally, most calendars default to displaying the current date, and therefore need to figure out the iteration range based on an arbitrary point inside that range. In most cases, the start can be computed by simply calling the appropriate setters with all zeros as parameters to find the start of the range, and adding the range duration to find the end. One exception is the week. There is no setter for the day of the week. Instead, the method LocalDate.prototype.setStartOfWeek() can be used to find the start of a week.
-
 
 ```javascript
 // Find the start and the end of the current week
@@ -192,7 +191,6 @@ for (; d < end; d.add(date.DAY)) {
 ```
 
 In addition to explicit method calls, the JavaScript standard method LocalDate.prototype.valueOf() allows native comparison, addition and subtraction operators to work on LocalDate objects. The result of LocalDate.prototype.valueOf(), and therefore of addition and subtraction, is a timestamp, which can be passed to the LocalDate constructor to get a LocalDate object again.
-
 
 ```javascript
 var start = date.Local.parse(prompt(gettext('Start date'), ''));
@@ -207,7 +205,7 @@ The LocalDate classes duplicate most of the Date API with a few exceptions:
 - The constructor can not be called as a function. The Date constructor does in this case nothing useful anyway.
 - The constructor always uses full years, it does not add 1900 for years 0 to 99.
 - Date.UTC() should not be necessary, but since it returns a numeric timestamp and has nothing to do with time zones, it can still be used directly.
-- Except for LocalDate.prototype.toString(), all to*String() methods are replaced by LocalDate.prototype.format().
+- Except for LocalDate.prototype.toString(), all to\*String() methods are replaced by LocalDate.prototype.format().
 - There are no UTC variants of getters and setters. They should not be necessary. But just in case, you can still use a LocalDate class for the time zone 'UTC' instead.
 - The getter and setter for the year are called getYear and setYear instead of getFullYear and setFullYear since we have no legacy code with Y2K issues.
 - Setters return the modified object instead of the timestamp. This is useful for chaining of method calls.
@@ -274,7 +272,7 @@ The lowest number of days of a week which must be in the new year for that week 
 - 1 if the week of January 1st is week number 1,
 - 4 if the first week which has most of its days in the new year is week number 1.
 - 7 if the first week which starts in the new year is week number 1.
-  
+
 ```javascript
   locale.weekStart
 ```
@@ -352,12 +350,12 @@ The core of the date API is the abstract class LocalDate which is the superclass
 
 The constructor mimics the behavior of the Date class, but it can't be called as a function.
 
- ```javascript
+```javascript
 new LocalDate()
 new LocalDate(timestamp)
 new LocalDate(year, month, date, hours, minutes, seconds, ms)
- ```
-  
+```
+
 The constructor accepts the same parameters as the Date constructor. The entire functionality of the class is based on a few low level functions. They should not be necessary outside the date module itself, assuming the API is complete. If you find you need these functions, please let's extend the high level APIs instead.
 
 ```javascript
@@ -403,7 +401,7 @@ Metadata about a time zone is stored directly on the LocalDate object.
 ```
 
 - Original name used to retrieve this time zone.
-  
+
 ```javascript
   LocalDate.displayName
 ```
@@ -416,12 +414,17 @@ Metadata about a time zone is stored directly on the LocalDate object.
 ```
 
 - Parses a string using either the specified format string or localized version of one of predefined format strings selected by format flags.
-- string String - The string to parse.
-- format String or Number - Either a format string with the syntax of CLDR date format patterns, or one of the format flag constants. In the second case, the actual format string is localized for the current user's locale according to locale.formats.
-- Returns LocalDate or null - A new LocalDate object which represents the parsed date and time or null if the string could not be parsed.
+
+- string String: The string to parse.
+
+- format String or Number: Either a format string with the syntax of CLDR date format patterns, or one of the format flag constants. In the second case, the actual format string is localized for the current user's locale according to locale.formats.
+
+- Returns LocalDate or null: A new LocalDate object which represents the parsed date and time or null if the string could not be parsed.
+
 - Methods of LocalDate instances can be grouped into several categories. The first are the setters and getters for individual fields from Date. Since each LocalDate class has its own time zone, There are no UTC variants of each getter and setter. They all work with local time.
- 
- ```javascript
+   
+
+```javascript
 LocalDate.prototype.getYear();
 LocalDate.prototype.getMonth();
 LocalDate.prototype.getDate();
@@ -429,10 +432,10 @@ LocalDate.prototype.getHours();
 LocalDate.prototype.getMinutes();
 LocalDate.prototype.getSeconds();
 LocalDate.prototype.getMilliseconds();
- ```
- 
+```
+
 - Return the corresponding field of the local date or time.
-- Returns Number - The requested field, as a number.
+- Returns Number: The requested field, as a number.
 
 ```javascript
 LocalDate.prototype.setYear(year, month, date)
@@ -445,13 +448,14 @@ LocalDate.prototype.setMilliseconds(ms)
 ```
 
 - Set the specified date or time fields. Any unspecified fields retain their current value. Values outside of the specified ranges will result in overflow to the neighboring periods and can therefore be used for date arithmetic.
-    + year Number - The year.
-    + month Number - The month. Values range from 0 for January to 11 for December.
-    + date Number - The date. Values range from 1 to 31.
-    + hour Number - The hours. Values range from 0 to 23.
-    + min Number - The minutes. Values range from 0 to 59.
-    + sec Number - The seconds. Values range from 0 to 59.
-    + ms Number - The milliseconds. Values range from 0 to 999.
+
+  - year Number - The year.
+  - month Number - The month. Values range from 0 for January to 11 for December.
+  - date Number - The date. Values range from 1 to 31.
+  - hour Number - The hours. Values range from 0 to 23.
+  - min Number - The minutes. Values range from 0 to 59.
+  - sec Number - The seconds. Values range from 0 to 59.
+  - ms Number - The milliseconds. Values range from 0 to 999.
 
 ```javascript
 LocalDate.prototype.getDay()
@@ -487,28 +491,27 @@ LocalDate.prototype.getDays()
 - Sets the UTC timestamp to a new value.
 - time Timestamp - The new UTC timestamp of this object.
 - While setters can be used to perform date arithmetic, LocalDate provides convenience functions for the most frequent cases of adding and subtracting a time period and finding the start of a week.
- 
+
 ```javascript
   LocalDate.prototype.add(time)
 ```
-   
+
 - Adds or subtracts a time period in local time. The results may be invalid if the end result ends up in the middle of a daylight savings switch.
-- time Number - The time period to add, in milliseconds. Use negative values to subtract. See also Constants.
-- Returns this - This object for chaining.
+- time Number: The time period to add, in milliseconds. Use negative values to subtract. See also Constants.
+- Returns this: This object for chaining.
 
 ```javascript
   LocalDate.prototype.addUTC(time)
 ```
-    
-- Adds or subtracts a physical time period, i.e. simply increments the timestamp.
-- time Number - The time period to add, in milliseconds. Use negative values to subtract. See also Constants.
 
+- Adds or subtracts a physical time period, i.e. simply increments the timestamp.
+- time Number: The time period to add, in milliseconds. Use negative values to subtract. See also Constants.
 - Returns this - This object for chaining.
 
 ```javascript
     LocalDate.prototype.addMonths(months)
 ```
-    
+
 - Adds or subtracts a number of months in local time. The results may be invalid if the end result ends up in the middle of a daylight savings switch.
 - months Number - The number of months to add. Use negative values to subtract. Returns this - This object for chaining.
 
@@ -517,7 +520,7 @@ LocalDate.prototype.getDays()
 ```
 
 - Adds or subtracts a number of years in local time. The results may be invalid if the end result ends up in the middle of a daylight savings switch.
-years Number - The number of years to add. Use negative values to subtract.
+  years Number - The number of years to add. Use negative values to subtract.
 
 - Returns this - This object for chaining.
 
@@ -532,7 +535,7 @@ LocalDate.prototype.setStartOfWeek()
 ```javascript
   LocalDate.prototype.format(format)
 ```
-  
+
 - Formats the date according to the specified format flags or format string.
 - format String or Number - Either a format string with the syntax of CLDR date format patterns, or one of the format flag constants. In the second case, the actual format string is localized for the current user's locale according to locale.formats. The default value is DATE_TIME.
 - Returns String - This object formatted according to the specified format.
@@ -540,7 +543,7 @@ LocalDate.prototype.setStartOfWeek()
 ```javascript
   LocalDate.prototype.getIntervalFormat(end, format)
 ```
-    
+
 - Returns a format string for a time interval with this object as the start and another LocalDate object as the end.
 - end LocalDate - The end of the interval.
 - format String or Number - Either a format string with the syntax of CLDR date format patterns, or one of the format flag constants. In the second case, the actual format string is localized for the current user's locale according to locale.intervals and locale.formats. The default value is DATE_TIME.
@@ -551,9 +554,8 @@ LocalDate.prototype.setStartOfWeek()
 ```
 
 - Formats an interval with this object as the start and another LocalDate object as the end.
-end LocalDate - The end of the interval. format String or Number - Either a format string with the syntax of CLDR date format patterns, or one of the format flag constants. In the second case, the actual format string is localized for the current user's locale according to locale.intervals and locale.formats. The default value is DATE_TIME.
-
-- Returns String - The interval formatted accorging to the specified format.
+- end LocalDate: The end of the interval. format String or Number - Either a format string with the syntax of CLDR date format patterns, or one of the format flag constants. In the second case, the actual format string is localized for the current user's locale according to locale.intervals and locale.formats. The default value is DATE_TIME.
+- Returns String : The interval formatted accorging to the specified format.
 - Finally, the JavaScript standard conversion functions allow easy debugging and arithmetic on timestamps.
 
 ```javascript
@@ -562,35 +564,45 @@ end LocalDate - The end of the interval. format String or Number - Either a form
 
 - Converts this object to a string using this.format(FULL_DATE).
 - Returns String - The string representation of this object.
-  
+
 ```javascript
 LocalDate.prototype.valueOf()
 ```
 
--Converts this object to a primitive value by returning the UTC timestamp. This can be used for arithmetic directly on LocalDate objects and as the single parameter to new LocalDate().
+- Converts this object to a primitive value by returning the UTC timestamp. This can be used for arithmetic directly on LocalDate objects and as the single parameter to new LocalDate().
 - Returns Timestamp - The UTC timestamp of this object.
 
 ## Constants
 
 All date classes operate on timestamps expressed as milliseconds since the UNIX epoch, 1970-01-01 00:00 UTC. The date module defines constants for common time intervals with a constant duration.
 
-    SECOND
+```
+SECOND
+```
 
 Number of milliseconds in a second.
 
-    MINUTE
+```
+MINUTE
+```
 
 Number of milliseconds in a minute.
 
-    HOUR
+```
+HOUR
+```
 
 Number of milliseconds in an hour.
 
-    DAY
+```
+DAY
+```
 
 Number of milliseconds in a day.
 
-    WEEK
+```
+WEEK
+```
 
 Number of milliseconds in a week.
 
@@ -628,5 +640,7 @@ See Formatting for usage of this function.
 ```
 
 - Returns the localized format string for the specified format flags.
-format String or Number - Either a format string with the syntax of CLDR date format patterns, or one of the format flag constants. In the second case, the actual format string is localized for the current user's locale according to locale.formats. The default value is DATE_TIME.
+
+  - format String or Number - Either a format string with the syntax of CLDR date format patterns, or one of the format flag constants. In the second case, the actual format string is localized for the current user's locale according to locale.formats. The default value is DATE_TIME.
+
 - Returns String - The localized format string which corresponds to the specified format flags. If format is a string, that string is returned unmodified.

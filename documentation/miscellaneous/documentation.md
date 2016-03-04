@@ -8,6 +8,7 @@ This documetation is based on markdown files that are stored in each components 
 # Tool
 
 Remark is used to lint and autofix the markdown files.
+
 - [github.com/wooorm/remark](https://github.com/wooorm/remark)
 - [github.com/wooorm/remark-lint](https://github.com/wooorm/remark-lint)
 
@@ -38,7 +39,6 @@ A full list of options are available [here](https://github.com/wooorm/remark#api
 ```
 
 # Use
-
 
 First of all navigate to the documentations directory.
 
@@ -73,7 +73,6 @@ remark documentation/miscellaneous/documentation.md -o .
 ```bash
 remark . -o .
 ```
-
 
 # Diasable/Enable rules
 

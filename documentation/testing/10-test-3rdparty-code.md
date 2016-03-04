@@ -17,7 +17,7 @@ The [shared grunt configuration](http://oxpedia.org/wiki/index.php?title=AppSuit
 Still, a little setup is needed to enable automatic testing for an external app. 
 Since we use many standard libraries, this approach can be extended as you wish.
 
-__Setup__
+**Setup**
 
 Make sure, karma executable is installed:
 
@@ -32,7 +32,6 @@ npm install --save-dev karma-mocha karma-chai karma-sinon karma-ox-ui karma-phan
 ```
 
 After that, in your plugin directory generate a new karma.conf.js:
-
 
 ```bash
  jb@wiggum ~/code/appsuite/ox_pgp_mail (git)-[ding] % karma init
@@ -69,7 +68,6 @@ After that, in your plugin directory generate a new karma.conf.js:
 
 Edit the generated file and adjust the following configuration variables:
 
-
 ```javascript
 basePath: 'build/',
 frameworks: ['ox-ui', 'sinon', 'mocha', 'chai'],
@@ -81,7 +79,6 @@ files: [
 ```
 
 Generate a main loader script to start the test after OX App Suite Core UI has been booted. The file should be put in `spec/test-main.js`:
-
 
 ```javascript
 var allTestFiles = [];
@@ -124,11 +121,10 @@ require(['io.ox/core/extPatterns/stage'], function (Stage) {
 });
 ```
 
-__Dealing with JSHINT__
+**Dealing with JSHINT**
 
 JSHINT is notoriously picky. 
-And rightly so. But we still need to teach it to ignore our test frameworks' peculiarities. Extend the global part of your ``.jshintrc`` by these switches:
-
+And rightly so. But we still need to teach it to ignore our test frameworks' peculiarities. Extend the global part of your `.jshintrc` by these switches:
 
 ```json
   "globals": {
@@ -149,11 +145,11 @@ And rightly so. But we still need to teach it to ignore our test frameworks' pec
    }
 ```
 
-__Running the tests__
+**Running the tests**
 
 There are multiple targets provided in [shared grunt configuration](https://github.com/Open-Xchange-Frontend/shared-grunt-config).
 
-The ``grunt/local.conf.json`` needs to be configured and point to an existing build of the core UI (coreDir setting). 
+The `grunt/local.conf.json` needs to be configured and point to an existing build of the core UI (coreDir setting). 
 When testing on a machine with the core UI installed from distribution packages, also the German translations need to be installed to run the tests.
 After that, coreDir can be set to _/opt/open-xchange/appsuite/_.
 
@@ -166,7 +162,6 @@ grunt dev
 This will start a connect server, the karma test server and a watcher for changes. 
 Optionally, it is possible to connect multiple browsers to the host running the karma server (port 9876). 
 Tests will run in those browsers, too. You can trigger a test run manually by running:
-
 
 ```javascript
 grunt testrun

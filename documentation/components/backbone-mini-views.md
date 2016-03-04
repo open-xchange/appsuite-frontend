@@ -521,4 +521,3 @@ window.model.trigger('invalid:password', 'something is wrong here');
 window.model.trigger('valid:password');
 // window.model.trigger('valid:' + [attribute]);
 ```
-

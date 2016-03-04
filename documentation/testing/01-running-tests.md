@@ -17,7 +17,7 @@ Bringing a BDD testing infrastructure to the frontend is still a work in progres
 
 # Setting up your system
 
-__Before starting: Mac only__
+**Before starting: Mac only**
 
 ```bash
   brew install phantomjs
@@ -25,7 +25,7 @@ __Before starting: Mac only__
 
 ...or link it in path and set executable bit on phantomjs binary yourself. After this follow the rest of the guide.
 
-__All__
+**All**
 
 You need at least node version 0.8 to use the latest version of karma, which we need. 
 Karma will be installed with all other development dependencies. So just make sure you ran
@@ -52,5 +52,3 @@ Tests will run in those browsers, too. You can trigger a test run manually by ru
 ```
 
 in another terminal. This will be done automatically by the grunt watch task, after any source file of your project has been changed.
-
-

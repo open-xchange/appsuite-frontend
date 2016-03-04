@@ -6,18 +6,20 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:API_Factory
 
 It's used as superclass for most of our module and common APIs.
 
-- located: ``io.ox/core/io.ox/core/api/factory``
-- uses: ``io.ox/core/io.ox/core/http.js``
+- located: `io.ox/core/io.ox/core/api/factory`
+
+- uses: `io.ox/core/io.ox/core/http.js`
+
 - purposes
-    - factory for creating api instance
-    - instance can be customized via submitted options request
-    - provided functions for requesting server handles caching/event triggering
+
+  - factory for creating api instance
+  - instance can be customized via submitted options request
+  - provided functions for requesting server handles caching/event triggering
 
 # example usage
 
 - use factory to get customized api instance
 - customizable via options object to extend or overwrite
-
 
 ```javascript
 //get factory reference
@@ -56,7 +58,6 @@ require(['io.ox/core/api/factory'], function (factory) {
 ```
 
 # default options
-
 
 ```javascript
 // globally unique id for caches
@@ -109,13 +110,13 @@ filter: null
 
 ## Properties
 
-__DELIM__
+**DELIM**
 
 - constant
 - default value '//'
 - uses as separator in cid function
 
-__caches__
+**caches**
 
 - cache object
 - references subcaches
@@ -123,13 +124,13 @@ __caches__
 - list
 - get
 
-__options__
+**options**
 
 - options object used to extend this instance
 
 # Caching
 
-__cid(options)__
+**cid(options)**
 
 ```javascript
 /**
@@ -140,7 +141,7 @@ __cid(options)__
  */
 ```
 
-__needsRefresh(folder, sort, desc)__
+**needsRefresh(folder, sort, desc)**
 
 ```javascript
 /**
@@ -152,7 +153,7 @@ __needsRefresh(folder, sort, desc)__
  */
 ```
 
-__refresh()__
+**refresh()**
 
 ```javascript
 /**
@@ -162,8 +163,7 @@ __refresh()__
  */
 ```
 
-__updateCaches(ids, silent)__
-
+**updateCaches(ids, silent)**
 
 ```javascript
 /** 
@@ -176,9 +176,9 @@ __updateCaches(ids, silent)__
 ```
 
 ## Requests
-- functions use central comunication layer (http.js)
-get(options, useCache)
 
+- functions use central comunication layer (http.js)
+  get(options, useCache)
 
 ```javascript
 /**
@@ -190,8 +190,7 @@ get(options, useCache)
  */
 ```
 
-__getAll(options, useCache, cache, processResponse)__
-
+**getAll(options, useCache, cache, processResponse)**
 
 ```javascript
 /**
@@ -204,8 +203,7 @@ __getAll(options, useCache, cache, processResponse)__
  */
 ```
 
-__getList(ids, useCache, options)__
-
+**getList(ids, useCache, options)**
 
 ```javascript
 /**
@@ -217,7 +215,7 @@ __getList(ids, useCache, options)__
  */
 ```
 
-__remove(ids, local)__
+**remove(ids, local)**
 
 ```javascript
 /**
@@ -232,10 +230,9 @@ __remove(ids, local)__
  */
 ```
 
-__search(query, options)__
+**search(query, options)**
 
 - only available if defaults for search requests are defined
-
 
 ```javascript
 /**
@@ -248,8 +245,7 @@ __search(query, options)__
 
 ## Utils
 
-__localRemove(list, hash, getKey)__
-
+**localRemove(list, hash, getKey)**
 
 ```javascript
 /**
@@ -261,7 +257,7 @@ __localRemove(list, hash, getKey)__
  */
 ```
 
-__reduce(obj)__
+**reduce(obj)**
 
 ```javascript
 /**
@@ -276,24 +272,20 @@ __reduce(obj)__
 - Event Hub based on jQuery's on, off, one and trigger
 - differences documentated for each function
 
-
 ```javascript
 // attach listener
 api.on(type, data, function);
 ```
-
 
 ```javascript
 // detach listener
 api.off(type, function);
 ```
 
-
 ```javascript
 // attach listener for a single execution
 api.one(type, data, function);
 ```
-
 
 ```javascript
 // trigger event
@@ -302,7 +294,6 @@ api.one(type, data, function);
 api.trigger(types);
 ```
 
-
 ```javascript
 // explicit destroy to clean up.
 api.destroy();
@@ -310,18 +301,18 @@ api.destroy();
 
 ## Events
 
-__delete__
+**delete**
 
 - 'delete:' + id
 - 'delete', ids
 - 'beforedelete', ids
 
-__refresh__
+**refresh**
 
 - 'refresh.all'
 - 'refresh:all:local'
 - 'refresh.list'
 
-__update__
+**update**
 
 - 'update:' + id

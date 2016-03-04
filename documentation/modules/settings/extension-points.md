@@ -10,7 +10,6 @@ This articles covers which extension points are provided by the settings app and
 
 - io.ox/settings/accounts/mail/settings/detail
 
-
 # Customize
 
 ## Add a new settings link
@@ -46,14 +45,14 @@ parentName + '/' + parentID
 
 The following code example creates a subsetting for the setting created above:
 
- ```javascript
+```javascript
 ext.point('io.ox/settings/pane/external/myUniqueID').extend({
-    title: gt('Title of Subsetting'),
-    index: 100,
-    id: 'myOtherUniqueID',
-    ref: 'reference/to/other/settings/page'
+   title: gt('Title of Subsetting'),
+   index: 100,
+   id: 'myOtherUniqueID',
+   ref: 'reference/to/other/settings/page'
 });
- ```
+```
 
 ## Create a new settingsgroup
 
@@ -72,4 +71,3 @@ You have to provide a unique sectionID and a unique subgroupID to create a secti
 ```javascript
 'io.ox/settings/pane/mySectionId'
 ```
-

@@ -11,6 +11,7 @@ This place should be used for actions in context with all involved contacts.
 The baton is forwarded to the the single action functions.
 
 baton contains: data - holds the mail object of the current selected contact
+
 - data.threadKey 
 - data.threadPosition 
 - data.threadSize 
@@ -95,7 +96,7 @@ _option: by label_
 
 sort: 102
 
-_option: show threads (if threadview is enabled), sort by date (if threadview are disabled)__
+\_option: show threads (if threadview is enabled), sort by date (if threadview are disabled)\_\_
 
 sort: 'thread'
 

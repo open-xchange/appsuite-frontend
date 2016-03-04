@@ -17,7 +17,6 @@ A click on the tile (independent of which slide is shown) can start an app, usua
 
 ## Example layout
 
-
 ```yaml
 io.ox/portal//widgets/protected:
   upsellads_0:
@@ -49,7 +48,7 @@ io.ox/upsell//ads:
           text: urban Kowloon assassin skyscraper systema table render-farm. cyber- free-market grenade pistol network engine futurity. youtube paranoid sprawl shoes fetishism nodal point dead. otaku katana decay narrative man tanto dead. range-rover bomb digital BASE jump silent soul-delay crypto-. post- construct apophenia silent soul-delay nodal point drugs. computer tanto receding sensory bridge neon refrigerator. claymore mine saturation point dolphin singularity meta- advert decay nano- receding into warehouse motion geodesic RAF faded apophenia. realism gang warehouse A.I. bridge film post- tank-traps sign youtube 
 ```
 
-__Explanations__
+**Explanations**
 
 The .yml file contains two sections. 
 The first defines the widget itself, how it is place, that it is not removable, but can be moved around. 
@@ -66,4 +65,3 @@ The two parts are connected by an ID (in this case "loremgibsum"), which is in .
 - Slides are named "slide1", "slide2" and so on. This is due to the OX parser not being able to deal with YaML lists, not working with integers as keys and due to JavaScript doing some weird sorting of keys in an object.
 - Start and end date are interpreted in the user's time zone.
 - remember that you will have to provide the translations. You won't be able to get the translators of the main product to do it for you.
-

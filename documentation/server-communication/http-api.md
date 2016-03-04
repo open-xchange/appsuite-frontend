@@ -4,7 +4,7 @@ description: http class is intended as centralized server communication layer cu
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Http.js
 ---
 
-- located at ``io.ox/core/http.js``
+- located at `io.ox/core/http.js`
 
 # HTTP facades
 
@@ -20,7 +20,7 @@ http.GET({
     });
 ```
 
-__GET(options)__
+**GET(options)**
 
 ```javascript
 /**
@@ -30,8 +30,7 @@ __GET(options)__
  */
 ```
 
-__POST(options)__
-
+**POST(options)**
 
 ```javascript
 /**
@@ -41,7 +40,7 @@ __POST(options)__
  */
 ```
 
-__FORM(options)__
+**FORM(options)**
 
 ```javascript
 /**
@@ -53,8 +52,7 @@ __FORM(options)__
  */
 ```
 
-__PUT(options)__
-
+**PUT(options)**
 
 ```javascript
 /**
@@ -64,8 +62,7 @@ __PUT(options)__
  */
 ```
 
-__DELETE(options)__
-
+**DELETE(options)**
 
 ```javascript
 /**
@@ -75,8 +72,7 @@ __DELETE(options)__
  */
 ```
 
-__UPLOAD(options)__
-
+**UPLOAD(options)**
 
 ```javascript
 /**
@@ -88,13 +84,15 @@ __UPLOAD(options)__
 
 # Column Mappings
 
-- server requests   
-    - still require use of columns ids
+- server requests 
+
+  - still require use of columns ids
+
 - server response
-    - column_id keys will be replaced with column names to ease handling
 
-__getAllColumns(module, join)__
+  - column_id keys will be replaced with column names to ease handling
 
+**getAllColumns(module, join)**
 
 ```javascript
 /**
@@ -104,8 +102,7 @@ __getAllColumns(module, join)__
  * @return {arrray|string} ids */ 
 ```
 
-__getColumnMapping(module)__
-
+**getColumnMapping(module)**
 
 ```javascript
 /**
@@ -115,8 +112,7 @@ __getColumnMapping(module)__
  */
 ```
 
-__makeObject(data, module, columns)__
-
+**makeObject(data, module, columns)**
 
 ```javascript
 /**
@@ -131,10 +127,9 @@ __makeObject(data, module, columns)__
 # Request Stacking
 
 - stack ability for calls to minimize overhead of server communication
-pause() and resume()
+  pause() and resume()
 
 _example_
-
 
 ```javascript
 // pause http layer
@@ -158,22 +153,25 @@ _(list).map(function (item) {
 http.resume()
 ```
 
-__retry (request)__
+**retry (request)**
+
 - retry request
 
 # Utils
 
-__simplify(list)__
+**simplify(list)**
 
 - simplify objects in array for list requests
-- returns array of items
-- possible returned item types
-    - { id: '8978989' }
-    - { folder: 'inbox' }
-    - { recurrence_position: 'inbox' }
-    - 8978989
-    - 'inbox'
 
+- returns array of items
+
+- possible returned item types
+
+  - { id: '8978989' }
+  - { folder: 'inbox' }
+  - { recurrence_position: 'inbox' }
+  - 8978989
+  - 'inbox'
 
 ```javascript
 /**
@@ -183,8 +181,7 @@ __simplify(list)__
  */
 ```
 
-__fixList(ids, deferred)__
-
+**fixList(ids, deferred)**
 
 ```javascript
 /**
@@ -197,7 +194,7 @@ __fixList(ids, deferred)__
 
 # Logging
 
-__log()__
+**log()**
 
 ```javascript
 /**
