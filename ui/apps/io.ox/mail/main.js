@@ -788,34 +788,28 @@ define('io.ox/mail/main', [
                     total = model.get('total'),
                     search = app.get('find') && app.get('find').isActive();
 
-                app.right.find('.multi-selection-message .message')
-                    .empty()
-                    .attr('id', 'mail-multi-selection-message')
-                    .append(
-                        // message
-                        $('<div>').append(
-                            gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
-                        ),
-                        // inline actions
-                        id && total && !search ?
-                            $('<div class="inline-actions">').append(
-                                //#. %1$d is the total number of messages
-                                $('<span>').text(gt('The following actions apply to all messages (%1$d) in this folder:', total)),
-                                $('<br>'),
-                                $('<a href="#" data-action="moveAll">').text(gt('Move all messages to another folder')),
-                                $('<br>'),
-                                $('<a href="#" data-action="clear">').text(gt('Delete all messages in this folder'))
-                            )
-                            .on('click', 'a', function (e) {
-                                e.preventDefault();
-                                var action = $(e.currentTarget).data('action');
-                                require(['io.ox/core/folder/actions/common'], function (common) {
-                                    if (action === 'moveAll') common.moveAll(id);
-                                    else if (action === 'clear') common.clearFolder(id);
-                                });
-                            })
-                            : $()
-                    );
+                // defer so that all selection events are triggered (e.g. selection:all)
+                _.defer(function () {
+                    app.right.find('.multi-selection-message .message')
+                        .empty()
+                        .attr('id', 'mail-multi-selection-message')
+                        .append(
+                            // message
+                            $('<div>').append(
+                                gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
+                            ),
+                            // inline actions
+                            id && total > list.length && !search && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
+                                $('<div class="inline-actions">').append(
+                                    gt(
+                                        'There are %1$d messages in this folder; not all messages are displayed in the list. ' +
+                                        'If you want to move or delete all messages, you find corresponding actions in the folder context menu.',
+                                        total
+                                    )
+                                )
+                                : $()
+                        );
+                });
             };
         },
 
