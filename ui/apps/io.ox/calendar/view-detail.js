@@ -81,14 +81,7 @@ define('io.ox/calendar/view-detail', [
             id: 'date',
             draw: function (baton) {
                 this.append(
-                    $('<div class="date-time">').append(
-                        // date
-                        $('<span class="date">').text(util.getDateInterval(baton.data)),
-                        // mdash
-                        $.txt(' \u00A0 '),
-                        // time
-                        util.addTimezoneLabel($('<span class="time">'), baton.data, { placement: 'top' })
-                    )
+                    util.getDateTimeIntervalMarkup(baton.data)
                 );
             }
         },
