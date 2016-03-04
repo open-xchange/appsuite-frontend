@@ -61,7 +61,6 @@ require(['settings!io.ox/core']).done(function(settings) {
 })
 ```
 
-
 ## chage
 
 ```javascript

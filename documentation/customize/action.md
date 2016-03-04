@@ -6,7 +6,6 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Files_App_Actions
 
 For details about actions and links please refer to the main [action article](TODO).
 
-
 # Adding actions to the files detail area
 
 Creating a new action is pretty straight forward.
@@ -41,7 +40,6 @@ require(['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext
     }));
 });
 ```
-
 
 # Disable existing action
 
