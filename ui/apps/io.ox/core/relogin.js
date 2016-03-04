@@ -41,7 +41,7 @@ define('io.ox/core/relogin', [
         var location = capabilities.has('guest') ?
             settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation :
             settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
-        return (location || ox.logoutLocation || '').replace('[hostname]', window.location.hostname);
+        return _.url.vars(location || ox.logoutLocation || '');
     }
 
     function gotoLoginLocation() {
@@ -151,11 +151,9 @@ define('io.ox/core/relogin', [
                     this.find('input').focus();
                 });
 
-        } else {
+        } else if (request && deferred) {
             // enqueue last request
-            if (request && deferred) {
-                queue.push({ request: request, deferred: deferred });
-            }
+            queue.push({ request: request, deferred: deferred });
         }
     }
 
