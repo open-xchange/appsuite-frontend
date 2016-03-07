@@ -8,6 +8,7 @@ This documetation is based on markdown files that are stored in each components 
 # Tool
 
 Remark is used to lint and autofix the markdown files.
+
 - [github.com/wooorm/remark](https://github.com/wooorm/remark)
 - [github.com/wooorm/remark-lint](https://github.com/wooorm/remark-lint)
 
@@ -29,8 +30,15 @@ A full list of available rules are available [here](https://github.com/wooorm/re
 
 A full list of options are available [here](https://github.com/wooorm/remark#api)
 
-# Use
+## Disable rules
 
+```
+<!--lint disable [rule-id]-->
+...
+<!--lint enable [rule-id]-->
+```
+
+# Use
 
 First of all navigate to the documentations directory.
 
@@ -64,4 +72,12 @@ remark documentation/miscellaneous/documentation.md -o .
 
 ```bash
 remark . -o .
+```
+
+# Diasable/Enable rules
+
+```
+<!--lint disable no-duplicate-headings-->
+...
+<!--lint enable no-duplicate-headings-->
 ```

@@ -1,6 +1,6 @@
 ---
-title: Developing for mobile devices
-description: App Suite is designed to work on all device types and sizes. The UI uses responsive design principles to scale nicely on each device size.
+title: Mobile development
+description: OX App Suite is designed to work on all device types and sizes. The UI uses responsive design principles to scale nicely on each device size.
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Mobile
 ---
 
@@ -9,7 +9,7 @@ The UI uses responsive design principles to scale nicely on each device size.
 We do define three display sizes to macht the majority of devices. 
 These are simply named "small", "medium" and "large". 
 Theses classes are used to match smartphones, tablets and desktop PCs. 
-If you are developing a app for App Suite make sure it runs nicely and looks great on all of these three device categories. 
+If you are developing a app for OX App Suite make sure it runs nicely and looks great on all of these three device categories. 
 (If you are not familiar with latest CSS techniques and the principles of responsive design you should have a look at this [article](http://oxpedia.org/wiki/index.php?title=AppSuite:UI_developer_primer)).
 
 Often the simple use of media queries is not enough to customize your app for small and medium screens, you may need to customize your application code as well. 
@@ -24,22 +24,20 @@ Your App should work on devices with this resolution.
 - medium: 481px up to 1024px
 - large: 1025px and higher
 
-# The _.device function
+# The \_.device function
 
-We extended underscore with a new function called __.device_
+We extended underscore with a new function called \__.device_
 
-The __.device()_ function can be used to retrieve informations about the device. The function takes a string as argument which contains a boolean expression. 
+The \__.device()_ function can be used to retrieve informations about the device. The function takes a string as argument which contains a boolean expression. 
 This expression will be evaluated and the result is returned as a boolean.
 
-The device function uses __.browser_ object for informations in combination with __.screenInfo_
+The device function uses `_.browser` object for informations in combination with `_.screenInfo`
 
 The device class 'smartphone' is used to determine a mobile device and is detected by several criteria. For more details, see this [article about smartphone classification](http://oxpedia.org/wiki/index.php?title=AppSuite:UI_smartphone_device_classification).
 
-# Examples for _.device
+# Examples for \_.device
 
 ```javascript
-
-
 // handle different mobile operating systems
 if (_.device('ios')) {
    // true for all devices running iOS, no matter what version
@@ -113,7 +111,6 @@ Developing for mobile should follow some simple rules:
 To setup remote debugging on windows, mac and linux you can follow the instructions from the chrome developer tools website.
 
 [Remote Debugging on Android with Chrome](https://developer.chrome.com/devtools/docs/remote-debugging)
-
 
 If this is not working or not applicable for you, use the following description:
 

@@ -375,7 +375,7 @@ define('io.ox/tasks/util', [
                         // no default
                     }
                     for (var i = 0; i < p; i++) {
-                        $span.append($('<i class="fa fa-exclamation">'));
+                        $span.append($('<i class="fa fa-exclamation" aria-hidden="true">'));
                     }
                     return $span;
                 }

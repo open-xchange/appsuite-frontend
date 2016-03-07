@@ -226,7 +226,7 @@ define('io.ox/core/tk/attachmentsUtil', [
                             $('<a href="#" class="remove" tabindex="6">')
                             .attr('title', gt('Remove attachment'))
                             .append(
-                                $('<i class="fa fa-trash-o">')
+                                $('<i class="fa fa-trash-o" aria-hidden="true">')
                             )
                             .on('click', function (e) {
                                 e.preventDefault();

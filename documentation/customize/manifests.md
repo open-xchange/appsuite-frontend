@@ -1,11 +1,11 @@
 ---
 title: Manifests
-description: Manifest files in the app suite declare either apps or plugins.
+description: Manifest files in the OX App Suite declare either apps or plugins.
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_manifests_explained
 ---
 
-They tell the appsuite runtime which files to load when, so the code in it can take effect at the appropriate time. 
-This document should be read by everyone that wants to either build a plugin or an app and contains a description of how to get app suite to run your code. 
+They tell the OX App Suite runtime which files to load when, so the code in it can take effect at the appropriate time. 
+This document should be read by everyone that wants to either build a plugin or an app and contains a description of how to get OX App Suite to run your code. 
 
 # Declaring apps
 
@@ -28,7 +28,9 @@ It consists of a title for the app and the path to the main entry file, by conve
 
 # Declaring a plugin
 
-    In turn, this is the definition of a plugin file:
+```
+In turn, this is the definition of a plugin file:
+```
 
 ```json
     {
@@ -63,7 +65,7 @@ If your plugin, for example, is only relevant when the user has access to the ca
 }
 ```
 
-Which capabilities are available can be checked by either reading through existing manifests or by running this in the javascript console once logged into appsuite:
+Which capabilities are available can be checked by either reading through existing manifests or by running this in the javascript console once logged into OX App Suite:
 
 ```javascript
 _(ox.serverConfig.capabilities).pluck('id')
@@ -101,7 +103,7 @@ If you need more than declaration in a _manifest.json_ file, you can include the
 
 # What happens to these files?
 
-During a build run the buildsystem picks up these manifest files and consolidates them into a single file _build/manifests/[myapp].json_. 
+During a build run the buildsystem picks up these manifest files and consolidates them into a single file `build/manifests/[myapp].json`. 
 This file, either by creating a symlink to a locally run backend or by installing the app package on a remote backend, winds up in the manifests directory of the backend and is processed and sent to the frontend. 
 You can see all manifest declarations, that have been sent by the backend by looking at
 
@@ -113,12 +115,12 @@ in the javascript console.
 
 # Special namespaces
 
-__signin__
+**signin**
 
 Plugins that choose "signin" as (or amongst) their namespace, are loaded when the login page is shown. 
 The code can be used to rearrange parts of the signin page or add custom behaviour to it.
 
-__core__
+**core**
 
 Core plugins are loaded as soon as the frontend starts up after successfully logging in or reauthenticating with the autologin. 
 This is useful if you need to run code very early.

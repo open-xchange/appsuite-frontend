@@ -59,7 +59,7 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
                                 'data-id': timezone,
                                 'title': timezone
                             })
-                            .append($('<i class="fa fa-trash-o">'))
+                            .append($('<i class="fa fa-trash-o" aria-hidden="true">'))
                         )
                     );
                 })

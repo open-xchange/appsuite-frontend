@@ -31,6 +31,7 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Extension_points_for_co
 - io.ox/core/topbar/right/dropdown
 
 # Misc
+
 - io.ox/core/desktop
 - io.ox/core/person:action
 - io.ox/core/relogin

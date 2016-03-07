@@ -433,7 +433,7 @@ define('io.ox/contacts/view-detail', [
                 .append(
                     address,
                     $('<p>').append(
-                        $('<i class="fa fa-external-link">'),
+                        $('<i class="fa fa-external-link" aria-hidden="true">'),
                         //#. %1$s is a map service, like "Google Maps"
                         $.txt(' ' + gt('Open in %1$s', services[service].label))
                     )

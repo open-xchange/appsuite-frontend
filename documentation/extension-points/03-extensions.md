@@ -6,13 +6,13 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Extending_the_UI
 
 # Attributes
 
-| property | description |
-|----------------|---------------------------------------------------------------------------------------------------|
-| id | unique |
-| index | (optional): numeric value used for specify order of execution (also valid are 'first' and 'last') |
-| [functionname] | as required by the extension point contract |
+| property       | description                                                                                       |
+| -------------- | ------------------------------------------------------------------------------------------------- |
+| id             | unique                                                                                            |
+| index          | (optional): numeric value used for specify order of execution (also valid are 'first' and 'last') |
+| (functionname) | as required by the extension point contract                                                       |
 
-__example__
+**example**
 
 ```javascript
 //defining a extension for some extension point that requires a draw function
@@ -24,7 +24,7 @@ __example__
     }
 };
 ```
- 
+
 # Execution order
 
 To ensure your extension is called first or last use the index 'first' or 'last'. 
@@ -34,10 +34,10 @@ If more than one extension of a point has the index 'first' or 'last' these will
 
 # Extensions patterns
 
-OX App Suite uses extensions patterns. 
+OX App Suite uses extensions patterns.
 Please keep in mind that this list not necessarily covers all pattern currently used.
 
-__io.ox/backbone/forms.js__
+**io.ox/backbone/forms.js**
 
 - CheckBoxField
 - ControlGroup
@@ -51,15 +51,15 @@ __io.ox/backbone/forms.js__
 - SelectBoxField
 - SelectControlGroup
 
-__io.ox/backbone/views.js__
+**io.ox/backbone/views.js**
 
 - AttributeView
 
-__io.ox/calendar/edit/recurrence-view__
+**io.ox/calendar/edit/recurrence-view**
 
 - RecurrenceView
 
-__io.ox/core/extPatterns/links__
+**io.ox/core/extPatterns/links**
 
 - Button
 - DropdownLinks
@@ -67,14 +67,13 @@ __io.ox/core/extPatterns/links__
 - link
 - ToolbarLinks
 
-__io.ox/core/tk/attachments__
+**io.ox/core/tk/attachments**
 
 - AttachmentList
 - EditableAttachmentList
 
-__io.ox/contacts/widgets/pictureUpload.js__
+**io.ox/contacts/widgets/pictureUpload.js**
 
-__io.ox/preview/main.js__
+**io.ox/preview/main.js**
 
 - Engine
-

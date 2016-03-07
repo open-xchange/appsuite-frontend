@@ -9,14 +9,12 @@ For example, if you see mails stacked in the v-split of the mail module, this is
 
 # Create new instance
 
-
 ```javascript
 // pass jQuery node where VGrid should be drawn
 var grid = new ox.ui.tk.VGrid(node);
 ```
 
 # Add basic template
-
 
 ```javascript
 grid.addTemplate({
@@ -55,7 +53,6 @@ grid.addLabelTemplate({
 
 # Add a function to determine if a new label is needed
 
-
 ```javascript
 grid.requiresLabel = function(i, data, current) {
     var name = data.last_name || data.display_name || "#",
@@ -64,9 +61,7 @@ grid.requiresLabel = function(i, data, current) {
 };
 ```
 
-
 # Define functions to get data
-
 
 ```javascript
  // get all IDs of all objects
@@ -87,4 +82,3 @@ grid.requiresLabel = function(i, data, current) {
      return api.getList(ids).done(cont);
  });
 ```
-

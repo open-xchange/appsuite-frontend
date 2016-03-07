@@ -619,7 +619,7 @@ define('io.ox/core/main', [
                 if (!upsell.has(model.get('requires')) && upsell.enabled(model.get('requires'))) {
                     node.addClass('upsell').children('a').first().prepend(
                         _(settings.get('upsell/defaultIcon', 'fa-star').split(/ /)).map(function (icon) {
-                            return $('<i class="fa">').addClass(icon);
+                            return $('<i class="fa" aria-hidden="true">').addClass(icon);
                         })
                     );
                 }
@@ -641,7 +641,7 @@ define('io.ox/core/main', [
                     //#. %1$s is app title/name
                     _.escape(gt('close for %1$s', model.get('title'))),
                 quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel + '">')
-                    .append($('<i class="fa fa-times">'))
+                    .append($('<i class="fa fa-times" aria-hidden="true">'))
                     .on('click', function (e) {
                         e.preventDefault();
                         e.stopImmediatePropagation();
@@ -914,9 +914,9 @@ define('io.ox/core/main', [
                 this.append(
                     $('<li role="presentation">').append(
                         $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
-                        //#, starts the client onboarding wizard that helps users
-                        //#, to setup their smartphone, tablet or laptop to 'connect'
-                        //#, with their appsuite data
+                        //#. starts the client onboarding wizard that helps users
+                        //#. to configure their devices to access/sync appsuites
+                        //#. data (f.e. install ox mail app)
                         .text(gt('Connect your Device'))
                     )
                     .on('click', function (e) {
@@ -1064,7 +1064,7 @@ define('io.ox/core/main', [
                 id: 'logout-button',
                 index: 2000,
                 draw: function () {
-                    var logoutButton = addLauncher('right', $('<i class="fa fa-sign-out launcher-icon">').attr('aria-hidden', 'true'), function () {
+                    var logoutButton = addLauncher('right', $('<i class="fa fa-sign-out launcher-icon" aria-hidden="true">'), function () {
                         logout();
                     }, gt('Sign out'));
                     logoutButton.find('a').tooltip({
@@ -1217,7 +1217,7 @@ define('io.ox/core/main', [
                 content.append(
                     $('<a href="#" class="banner-action" data-action="logout" role="button" tabindex="1">')
                     .attr('title', gt('Sign out'))
-                    .append('<i class="fa fa-sign-out">')
+                    .append('<i class="fa fa-sign-out" aria-hidden="true">')
                     .on('click', function (e) {
                         e.preventDefault();
                         logout();
@@ -1562,7 +1562,7 @@ define('io.ox/core/main', [
                             this.append(
                                 $('<li class="restore-item">').append(
                                     $('<a href="#" role="button" class="remove">').data(item).append(
-                                        $('<i class="fa fa-trash-o">')
+                                        $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
                                     item.icon ? $('<i class="' + item.icon + '">') : $(),
                                     $('<span>').text(gt.noI18n(info)),

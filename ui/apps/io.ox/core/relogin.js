@@ -13,13 +13,12 @@
 
 define('io.ox/core/relogin', [
     'io.ox/core/session',
-    'io.ox/core/util',
     'io.ox/core/notifications',
     'io.ox/core/capabilities',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/core',
     'settings!io.ox/core'
-], function (session, util, notifications, capabilities, dialogs, gt, settings) {
+], function (session, notifications, capabilities, dialogs, gt, settings) {
 
     'use strict';
 

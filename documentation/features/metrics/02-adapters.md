@@ -79,7 +79,7 @@ itself.
 Every time a module/app is used for the first time for each visit the
 corresponding event will be triggered.
 
-You can interpret page titles as _\[appname\] was started \[x\] times_.
+You can interpret page titles as _\[appname] was started \[x] times_.
 Please be aware that after a full refresh of the browser tab used by OX
 Appsuite the app usage is tracked again.
 
@@ -101,7 +101,7 @@ condensed in a single string.
 ### Event category
 
 This part of the event data contains the application were the event
-occurred. You can Interpret it as 'a user action within \[appname\]
+occurred. You can Interpret it as 'a user action within \[appname]
 occurred'. Please be aware that the category is based on the technical
 app that might differ from the abstract application that is communicted
 by the user interface.
@@ -117,7 +117,6 @@ _example: 'delete'_
 ### Event value
 
 An optional value that might contain further details about the event.
-
 
 # Console
 

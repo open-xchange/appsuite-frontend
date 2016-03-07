@@ -94,7 +94,7 @@ define('io.ox/settings/apps/settings/pane', [
                     $('<a class="remove" href="#" tabindex="1" role="button" data-action="delete" aria-label="remove">')
                     .attr({
                         'title': gt('Delete')
-                    }).append('<i class="fa fa-trash-o">')
+                    }).append('<i class="fa fa-trash-o" aria-hidden="true">')
                 )
             );
         },

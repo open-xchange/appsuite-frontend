@@ -1,8 +1,6 @@
 ---
 title: Settings
-
 ---
-
 
 ```
 namespace:  io.ox/settings 

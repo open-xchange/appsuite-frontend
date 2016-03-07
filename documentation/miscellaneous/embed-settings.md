@@ -1,10 +1,10 @@
 ---
 title: Embedding external settings
-description: Embed your own configuration page via iFrame into the AppSuite's settings and pass our session onto your implementation.
+description: Embed your own configuration page via iFrame into the OX App Suite's settings and pass our session onto your implementation.
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Embedding_your_settings_into_AppSuite_settings
 ---
 
-This is a replacement for "Config Jump" of OX6. Not to be confused with simply adding new settings into AppSuite
+This is a replacement for "Config Jump" of OX6. Not to be confused with simply adding new settings into OX App Suite
 
 # Declare the page you want to embed
 
@@ -75,4 +75,4 @@ GET /login?action=redeemToken
 - **token**: The token you want to trade.
 - **secret**: A valid secret for your app.
 
-This request can be sent by the embedded app to the AppSuite backend to get authorisation info.
+This request can be sent by the embedded app to the OX App Suite backend to get authorisation info.

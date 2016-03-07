@@ -18,11 +18,12 @@ define('io.ox/core/tk/tokenfield', [
     'io.ox/participants/model',
     'io.ox/participants/views',
     'io.ox/contacts/api',
+    'gettext!io.ox/core',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, Typeahead, pModel, pViews, contactAPI) {
+], function (ext, Typeahead, pModel, pViews, contactAPI, gt) {
 
     'use strict';
 
@@ -268,6 +269,16 @@ define('io.ox/core/tk/tokenfield', [
                                 value: m.mail
                             }, { silent: true });
                         });
+
+                        var name = e.attrs.model.get('display_name'),
+                            members  = _(models).map(function (m) { return [m.get('token').label + ', ' + m.get('token').value]; });
+
+                        self.$el.trigger('aria-live-update',
+                            members.length === 1 ?
+                                gt('Added distribution list %s with %s member. The only member of the distribution list is %s.', name, members.length, members.join(', ')) :
+                                gt('Added distribution list %s with %s members. Members of the distribution list are %s.', name, members.length, members.join(', '))
+                        );
+
                         self.collection.add(models);
                         self.redrawTokens();
                         // clean input
@@ -281,6 +292,7 @@ define('io.ox/core/tk/tokenfield', [
                         value: e.attrs.value
                     }, { silent: true });
                     e.attrs.value = e.attrs.model.cid;
+                    self.$el.trigger('aria-live-update', gt('Added %s, %s.', e.attrs.model.get('display_name'), e.attrs.model.value));
                     // add model to the collection and save cid to the token
                     self.collection.add(e.attrs.model);
                 },
@@ -337,7 +349,9 @@ define('io.ox/core/tk/tokenfield', [
                 },
                 'tokenfield:removetoken': function (e) {
                     _([].concat(e.attrs)).each(function (el) {
-                        self.collection.remove(self.getModelByCID(el.value));
+                        var model = self.getModelByCID(el.value);
+                        self.$el.trigger('aria-live-update', gt('Removed %s, %s.', model.get('display_name'), model.value));
+                        self.collection.remove(model);
                     });
                 }
             });

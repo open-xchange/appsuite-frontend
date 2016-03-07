@@ -34,6 +34,7 @@ data - holds the contact data object of the current selected contact
 ```
 
 # io.ox/contacts/detail/head
+
 The Point in the contact detail view for the headregion of a single selected contact. The baton is forwarded as argument.
 
 # io.ox/contacts/detail/actions

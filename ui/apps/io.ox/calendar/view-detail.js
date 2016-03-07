@@ -47,7 +47,7 @@ define('io.ox/calendar/view-detail', [
         draw: function (baton) {
             if (!baton.data.private_flag) return;
             this.append(
-                $('<i class="fa fa-lock private-flag">')
+                $('<i class="fa fa-lock private-flag" aria-hidden="true">')
             );
         }
     });
@@ -81,14 +81,7 @@ define('io.ox/calendar/view-detail', [
             id: 'date',
             draw: function (baton) {
                 this.append(
-                    $('<div class="date-time">').append(
-                        // date
-                        $('<span class="date">').text(util.getDateInterval(baton.data)),
-                        // mdash
-                        $.txt(' \u00A0 '),
-                        // time
-                        util.addTimezoneLabel($('<span class="time">'), baton.data, { placement: 'top' })
-                    )
+                    util.getDateTimeIntervalMarkup(baton.data)
                 );
             }
         },
@@ -175,7 +168,7 @@ define('io.ox/calendar/view-detail', [
                             $('<h2>').text(gt('Details'))
                         ),
                         $.txt(' '),
-                        $('<i class="fa expandable-indicator">')
+                        $('<i class="fa expandable-indicator" aria-hidden="true">')
                     ),
                     node
                 )

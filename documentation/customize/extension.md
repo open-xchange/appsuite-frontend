@@ -9,7 +9,7 @@ Plugins are collected in the folder ui/apps/plugins. Start your new plugin there
 
 # What are you going to do
 
-Your plugin code can interact with the app suite is by way of extension points and extensions. 
+Your plugin code can interact with the OX App Suite is by way of extension points and extensions. 
 Stated briefly an extension point is an invitation to contributing an implementation to a part of the UI. 
 For example the contact detail view consists of an extension point that receives contributions in the form of renderers, that render different parts of the contact. 
 Say, one for rendering the display name, one for the mail addresses, one for the postal addresses and so on. 
@@ -23,7 +23,6 @@ A plugin can also disable existing extensions, thereby removing parts of the UI.
 ## Register
 
 As an example, let's add a new renderer to the contact detail view. Let's create a new file myplugin/apps/com.example/contacts/register.js:
-
 
 ```javascript
 define('com.example/contacts/register', ['io.ox/core/extensions'], function (ext) {
@@ -45,13 +44,11 @@ define('com.example/contacts/register', ['io.ox/core/extensions'], function (ext
 });
 ```
 
-
 ## Manifest
 
 Next we have to make sure our code is actually loaded by the UI at the right moment. 
-The right moment in our case is right before it loads the file ``apps/io.ox/contacts/view-detail``, where the extension point is processed. 
-For this, we need another manifest file at ``myplugin/apps/com.example/contacts/manifest.json``:
-
+The right moment in our case is right before it loads the file `apps/io.ox/contacts/view-detail`, where the extension point is processed. 
+For this, we need another manifest file at `myplugin/apps/com.example/contacts/manifest.json`:
 
 ```js
     {
@@ -65,7 +62,6 @@ See the development cycle to keep easy steps in mind you need while developing.
 ## Running a local backend?
 
 If using a local backend, restart it to pick up on the changed manifest, or, for a remote backend, edit myplugin/src/manifests.js again so it reads:
-
 
 ```javascript
 define(function () {

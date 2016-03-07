@@ -201,14 +201,18 @@ define('io.ox/core/folder/contextmenu', [
         empty: function (baton) {
 
             var isTrash = api.is('trash', baton.data);
+            var label = gt('Empty folder');
             if (baton.module !== 'mail' && baton.module !== 'infostore' || (baton.module === 'infostore' && !isTrash)) return;
+
+            if (isTrash) label = gt('Empty trash');
+            else if (baton.module === 'mail') label = gt('Delete all messages');
 
             addLink(this, {
                 action: 'clearfolder',
                 data: { id: baton.data.id },
                 enabled: api.can('delete', baton.data),
                 handler: actions.clearFolder.bind(actions, baton.data.id),
-                text: isTrash ? gt('Empty trash') : gt('Empty folder')
+                text: label
             });
         },
 

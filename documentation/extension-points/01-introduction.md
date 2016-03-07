@@ -52,21 +52,20 @@ Perhaps you have to select another mail to see the difference.
 
 _step 1: default mail detail_
 
-![](01_introduction-01.png)
+![](01-introduction-01.png)
 
 _step 2: execute code in chrome dev tools console_
 
-![](01_introduction-02.png)
+![](01-introduction-02.png)
 
 _step 3: extended mail detail_
 
-![](01_introduction-03.png)
+![](01-introduction-03.png)
 
 ## A qualified mail footer
 
 Let's try and add a section to the mails detail view and use some data of the currently viewed mail. 
 For information about the baton object please take a look at the more detailed article how to extend the UI.
-
 
 ```javascript
 require(['io.ox/core/extensions'], function (ext) {
@@ -89,33 +88,31 @@ require(['io.ox/core/extensions'], function (ext) {
 
 Again: When navigating back to the email view you might have to select another mail to make this change visible.
 
-
 _step 1: default mail detail_
 
-![](01_introduction-04.png)
+![](01-introduction-04.png)
 
 _step 2: execute code in chrome dev tools console_
 
-![](01_introduction-05.png)
+![](01-introduction-05.png)
  
 _step 3: mail detail with disabled inline links_
 
-![](01_introduction-06.png)
+![](01-introduction-06.png)
 
 After switching to the mail app again, you might have to select another mail to once again run through the rendering process that calls on the extensions.
 As you can see in the example above, the code calling the extension passes along the eMail in the data attribute of the baton parameter.
-The _index_ of the extension means that it is rendered after the mail body, who's extensions index is __300__.
+The _index_ of the extension means that it is rendered after the mail body, who's extensions index is **300**.
 Currently (until we have more comprehensive documentation) you can only find the indexes (and the way an extension is supposed to behave) by reading our code.
-Reload the page (to clear out the registered extensions) and try switching the index to __190__ and see where the added sentence shows up now.
+Reload the page (to clear out the registered extensions) and try switching the index to **190** and see where the added sentence shows up now.
 
 # Customizing the UI
 
 Since extensions are a property of the runtime system, you can also modify them. 
-The extension system offers a couple of things you can do with existing extensions like __changing their order, disabling them or replacing them__. 
+The extension system offers a couple of things you can do with existing extensions like **changing their order, disabling them or replacing them**. 
 Let's look at how to accomplish all of these, again by modifying the mail detail view.
 
 ## switch off inline links
-
 
 ```javascript
 require(["io.ox/core/extensions"], function (ext) {
@@ -131,18 +128,17 @@ Again: When navigating back to the email view you might have to select another m
 
 _step 1: default mail detail_
 
-![](01_introduction-07.png)
+![](01-introduction-07.png)
 
 _step 2: execute code in chrome dev tools console_
 
-![](01_introduction-08.png)
+![](01-introduction-08.png)
 
 _step 3: mail detail with disabled inline links_
 
-![](01_introduction-09.png)
+![](01-introduction-09.png)
 
 ## replace the way time is rendered
-
 
 ```javascript
 require(["io.ox/core/extensions", "io.ox/mail/util", "io.ox/core/date"], function (ext, util, date) {
@@ -164,20 +160,19 @@ require(["io.ox/core/extensions", "io.ox/mail/util", "io.ox/core/date"], functio
 
 _step 1: default mail detail_
 
-![](01_introduction-10.png)
+![](01-introduction-10.png)
 
 _step 2: execute code in chrome dev tools console_
 
-![](01_introduction-11.png)
+![](01-introduction-11.png)
 
 _step 3: extended mail detail with unix timestamp_
 
-![](01_introduction-12.png)
+![](01-introduction-12.png)
 
 ## change order
 
 And now let's switch the order around:
-
 
 ```javascript
 require(["io.ox/core/extensions"], function (ext) {
@@ -190,18 +185,17 @@ require(["io.ox/core/extensions"], function (ext) {
 });
 ```
 
-
 _step 1: default mail detail_
 
-![](01_introduction-13.png)
+![](01-introduction-13.png)
 
 _step 2: execute code in chrome dev tools console_
 
-![](01_introduction-14.png)
+![](01-introduction-14.png)
 
 _step 3: pushed subject to header bottom_
 
-![](01_introduction-15.png)
+![](01-introduction-15.png)
 
 # Trouble finding the right extension point?
 

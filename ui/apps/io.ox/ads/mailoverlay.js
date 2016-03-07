@@ -23,7 +23,7 @@ define('io.ox/ads/mailoverlay', [
         var close, open,
             closer = $('<div class="io-ox-ad-close">').append(
                     $('<a href="#" class="close" data-action="close" role="button" tabindex="1">').append(
-                        $('<i class="fa fa-times">')
+                        $('<i class="fa fa-times" aria-hidden="true">')
                     )
                 ),
             overlay = $('<div class="io-ox-ad abs">'),

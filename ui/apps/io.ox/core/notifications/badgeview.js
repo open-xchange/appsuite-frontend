@@ -74,7 +74,7 @@ define('io.ox/core/notifications/badgeview', [
                 'aria-pressed': false
             })
             .append(
-                this.nodes.icon = $('<i class="fa fa-bell launcher-icon">'),
+                this.nodes.icon = $('<i class="fa fa-bell launcher-icon" aria-hidden="true">'),
                 this.nodes.badge = $('<span class="badge">').append(
                     this.nodes.number = $('<span class="number">')
                 )

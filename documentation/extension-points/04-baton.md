@@ -10,11 +10,14 @@ The baton passed back through callbacks within programmatic flow allowing data e
 # attributes
 
 - data: usually contains current entity object, also used for data exchange
-- options: contains data such as the current active application if a baton is used comprehensively
-- flow: 
-    - disabled: stores disabled extensions (managed via baton.disable(pointId, extensionId))
-- $: used to reference a jQuery node object
 
+- options: contains data such as the current active application if a baton is used comprehensively
+
+- flow: 
+
+  - disabled: stores disabled extensions (managed via baton.disable(pointId, extensionId))
+
+- $: used to reference a jQuery node object
 
 # disable extensions
 
@@ -26,8 +29,7 @@ The baton passed back through callbacks within programmatic flow allowing data e
  var isDisabled = baton.isDisabled(pointid, extensionid);
 ```
 
-
-__example__
+**example**
 
 ```javascript
  var pointid = 'io.ox/mail/detail',
@@ -43,10 +45,9 @@ baton.disable(pointid,extensionid);
 ext.point(pointid).invoke('draw', node, baton)
 ```
 
-
 # data exchange
 
-__example__
+**example**
 
 ```javascript
  //extension using baton to store data
@@ -98,13 +99,11 @@ __example__
 var baton = ext.Baton.ensure(obj) 
 ```
 
-__example__
+**example**
 
 ```javascript
  //new baton.data extended by object
  var baton = ext.Baton.ensure({ id: 2 })
 ```
 
-![](04_baton.png)
-
-
+![](04-baton.png)

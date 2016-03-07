@@ -105,7 +105,8 @@ define('plugins/notifications/calendar/register', [
                     });
                 };
 
-            var cid = _.cid(model.attributes);
+            var cid = _.cid(model.attributes),
+                strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' });
             node.attr({
                 'data-cid': cid,
                 'focus-id': 'calendar-invite-' + cid,
@@ -122,8 +123,8 @@ define('plugins/notifications/calendar/register', [
                         _.noI18n(model.get('organizer')))
             }).append(
                 $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                $('<span class="span-to-div time">').text(_.noI18n(util.getTimeInterval(model.attributes))),
-                $('<span class="span-to-div date">').text(_.noI18n(util.getDateInterval(model.attributes))),
+                $('<span class="span-to-div time">').text(_.noI18n(strings.timeStr)),
+                $('<span class="span-to-div date">').text(_.noI18n(strings.dateStr)),
                 $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
                 $('<span class="span-to-div location">').text(_.noI18n(model.get('location'))),
                 $('<span class="span-to-div organizer">').text(_.noI18n(model.get('organizer'))),

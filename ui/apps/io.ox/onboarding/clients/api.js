@@ -34,7 +34,9 @@ define('io.ox/onboarding/clients/api', [
                     id: scenario,
                     action_id: action
                 },
-                data: data
+                data: data,
+                // get warnings
+                processResponse: false
             });
         },
 

@@ -132,6 +132,14 @@ define('io.ox/mail/compose/view', [
                 ext.point(POINT + '/attachments').invoke('draw', node, baton);
                 this.append(node);
             }
+        },
+        {
+            id: 'arialive',
+            index: INDEX += 100,
+            draw: function () {
+                var node = $('<div data-extension-id="arialive" class="sr-only" role="alert" aria-live="assertive">');
+                this.append(node);
+            }
         }
     );
 
@@ -278,7 +286,8 @@ define('io.ox/mail/compose/view', [
         events: {
             'click [data-action="add"]': 'toggleTokenfield',
             'keydown [data-extension-id="subject"] input': 'setSubject',
-            'keydown': 'focusSendButton'
+            'keydown': 'focusSendButton',
+            'aria-live-update': 'ariaLiveUpdate'
         },
 
         initialize: function (options) {
@@ -343,6 +352,10 @@ define('io.ox/mail/compose/view', [
             }
 
             ext.point(POINT + '/mailto').invoke('setup');
+        },
+
+        ariaLiveUpdate: function (e, msg) {
+            this.$('[data-extension-id="arialive"]').text(msg);
         },
 
         fetchMail: function (obj) {
@@ -515,6 +528,16 @@ define('io.ox/mail/compose/view', [
                         $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
                     });
                 }
+                data.attachments.forEach(function (a, index) {
+                    var m = model.get('attachments').at(index);
+                    if (typeof m === 'undefined') {
+                        model.get('attachments').add(a);
+                    } else if (m.id !== a.id) {
+                        m.clear({ silent: true });
+                        m.set(a);
+                    }
+                });
+
                 model.set('msgref', result.data);
                 model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
                 model.dirty(false);

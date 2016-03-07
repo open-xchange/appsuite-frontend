@@ -130,7 +130,7 @@ define('io.ox/core/folder/actions/move', [
 
         all: function (options) {
             // default API is mail API
-            this.item(_.extend({ api: mailAPI, module: 'mail', type: 'moveAll' }, options));
+            this.item(_.extend({ api: mailAPI, module: 'mail', type: 'moveAll', title: gt('Move all messages') }, options));
         },
 
         folder: function (id) {

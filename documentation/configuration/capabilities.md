@@ -1,12 +1,12 @@
 ---
 title: Capabilities
-description: How to use capabilities so that your new AppSuite plugin can be enabled or disabled.
+description: How to use capabilities so that your new OX App Suite plugin can be enabled or disabled.
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Capabilities
 ---
 
 # What are capabilities?
 
-__Usecase__
+**Usecase**
 
 You write a new UI app or plugin (chat module, for example) and in addition, you want to make sure that only a specific set of users or contexts within the system are allowed to use it. 
 
@@ -19,53 +19,46 @@ To do so, you will need to implement the capabilities logic within your UI app o
 
 First, disable it for everyone as default (or enable it for everyone, depending on what your aim is). 
 
-In ``/opt/open-xchange/etc/[myproduct].properties``:
+In `/opt/open-xchange/etc/[myproduct].properties`:
 
 ```bash
 # off for everyone
 com.openexchange.capability.[myproduct]=false
 ```
 
-Then restart the OX Application Server and afterwards use the general OX AppSuite commandline tools to enable the capability/capabilities. 
+Then restart the OX Application Server and afterwards use the general OX App Suite commandline tools to enable the capability/capabilities. 
 
-The __commandline tools__ used in the following examples are located in:
+The **commandline tools** used in the following examples are located in:
 
 ```bash
 /opt/open-xchange/sbin
 ```
 
-In this example, only for a __specific user__:
+In this example, only for a **specific user**:
 
 ```bash
 changeuser ... --config/com.openexchange.capability.[myproduct]=true
 ```
 
-
-...or for a __full context__:
+...or for a **full context**:
 
 ```bash
   changecontext -c ... --config/com.openexchange.capability.[myproduct]=true
 ```
 
-
-...or set the capability to a __context set__:
-
+...or set the capability to a **context set**:
 
 ```bash
 changecontext -c ... --taxonomy/types=premium
 ```
 
-
-To get the capability/capabilities working for context sets (like above), you also need to edit the __contextSet files__ in:
-
+To get the capability/capabilities working for context sets (like above), you also need to edit the **contextSet files** in:
 
 ```bash
   /opt/open-xchange/etc/contextSets/premium.yml
 ```
 
-
 And add the corresponding capability/capabilities:
-
 
 ```javascript
   premium:
@@ -77,14 +70,13 @@ Then restart the OX Application Server!
 
 # Query capabilities via the HTTP API
 
-
-__Query__
+**Query**
 
 ```
   GET /appsuite/api/capabilities?action=all&session=991fd40f635b45...
 ```
 
-__Response__
+**Response**
 
 ```json
 {"data":[
@@ -146,14 +138,11 @@ Here _id_ is the name of the capability.
 
 # Query capabilities in the UI
 
-
 ```javascript
   require(['io.ox/core/capabilities'], function (cap) { if cap.has('[myproduct]' { ... } );
-
 ```
 
 # Require the capabilities in your UI manifest file
-
 
 ```bash
 {
@@ -162,14 +151,13 @@ Here _id_ is the name of the capability.
 }
 ```
 
-Now your plugin will only be loaded if the capability _'[myproduct]'_ is set for a specific user, context, context set.
+Now your plugin will only be loaded if the capability `[myproduct]` is set for a specific user, context, context set.
 
 ## Testing the capabilities
 
-* For testing purposes use an URL parameter to test capabilities. 
+- For testing purposes use an URL parameter to test capabilities. 
 
-Add the following parameter to your AppSuite URL in the browser to activate:
-
+Add the following parameter to your OX App Suite URL in the browser to activate:
 
 ```javascript
 &cap=[myproduct]
@@ -208,8 +196,7 @@ var cap = require('io.ox/core/capabilities');
 }())
 ```
 
-
-
 ## Further informations
-* See the dedicated wiki page of the [ConfigCascade](http://oxpedia.org/wiki/index.php?title=ConfigCascade) mechanism for more details.
-* If you want to know about existing capabilities and the way they are used for upsell, see [Capabilities and Upsell triggers](http://oxpedia.org/wiki/index.php?title=AppSuite:Upsell#Capabilities_and_Upsell_triggers).
+
+- See the dedicated wiki page of the [ConfigCascade](http://oxpedia.org/wiki/index.php?title=ConfigCascade) mechanism for more details.
+- If you want to know about existing capabilities and the way they are used for upsell, see [Capabilities and Upsell triggers](http://oxpedia.org/wiki/index.php?title=AppSuite:Upsell#Capabilities_and_Upsell_triggers).

@@ -101,6 +101,7 @@ Alternatively, it can be a higher domain with a wildcard, e.g. \*.example.com fo
 openssl x509 -req -in host.csr -CA rootCA.crt -CAkey rootCA.key \
         -CAcreateserial -out host.crt -days 365
 ```
+
 d
 `host.csr` is only temporary and can be deleted now.
 Only the files `rootCA.crt`, `host.key` and `host.crt` are used by Grunt.

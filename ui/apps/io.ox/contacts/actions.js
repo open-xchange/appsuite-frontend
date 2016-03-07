@@ -18,9 +18,10 @@ define('io.ox/contacts/actions', [
     'io.ox/contacts/api',
     'io.ox/portal/util',
     'settings!io.ox/contacts',
+    'settings!io.ox/mail',
     'gettext!io.ox/contacts',
     'io.ox/core/pim/actions'
-], function (ext, links, actions, api, portalUtil, settings, gt) {
+], function (ext, links, actions, api, portalUtil, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -217,9 +218,13 @@ define('io.ox/contacts/actions', [
 
     new Action('io.ox/contacts/actions/add-to-contactlist', {
         requires: function (e) {
-            return e.collection.has('one') && !e.context.folder_id && !e.context.id;
+            if (!e.collection.has('one')) return false;
+            if (e.context.folder_id === mailSettings.get('contactCollectFolder')) return true;
+            return !e.context.folder_id && !e.context.id;
         },
         action: function (baton) {
+            var data = _(baton.data).omit('folder_id', 'id');
+            baton = ext.Baton({ data: data });
             require(['io.ox/contacts/actions/addToContactlist'], function (action) {
                 action(baton);
             });
@@ -277,7 +282,7 @@ define('io.ox/contacts/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-envelope">')
+                        $('<i class="fa fa-envelope" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -300,7 +305,7 @@ define('io.ox/contacts/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-calendar-o">')
+                        $('<i class="fa fa-calendar-o" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -322,7 +327,7 @@ define('io.ox/contacts/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-trash-o">')
+                        $('<i class="fa fa-trash-o" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -344,7 +349,7 @@ define('io.ox/contacts/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-share-square-o">')
+                        $('<i class="fa fa-share-square-o" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -382,6 +387,14 @@ define('io.ox/contacts/actions', [
 
     //  inline links
     var INDEX = 100;
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'add-to-contactlist',
+        prio: 'hi',
+        index: INDEX += 100,
+        label: gt('Add to address book'),
+        ref: 'io.ox/contacts/actions/add-to-contactlist'
+    }));
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'send',
@@ -460,12 +473,6 @@ define('io.ox/contacts/actions', [
         ref: 'io.ox/contacts/actions/copy'
     }));
 
-    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
-        id: 'add-to-contactlist',
-        index: INDEX += 100,
-        label: gt('Add to address book'),
-        ref: 'io.ox/contacts/actions/add-to-contactlist'
-    }));
     /*
      ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
      id: 'viewer',

@@ -179,15 +179,16 @@ define('io.ox/calendar/invitations/register', [
         renderSummary: function () {
 
             var data = this.appointment,
+                dateStrings = util.getDateTimeIntervalMarkup(data, { output: 'strings' }),
                 recurrenceString = util.getRecurrenceString(data),
                 separator = data.title ? $.txt(', ') : $.txt('');
 
             this.$el.find('.itip-details').append(
                 $('<b>').text(data.title), separator,
                 $('<span class="day">').append(
-                    $.txt(gt.noI18n(util.getDateInterval(data))),
+                    $.txt(gt.noI18n(dateStrings.dateStr)),
                     $.txt(gt.noI18n(' ')),
-                    $.txt(gt.noI18n(util.getTimeInterval(data))),
+                    $.txt(gt.noI18n(dateStrings.timeStr)),
                     $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')))
                 ),
                 // confirmation

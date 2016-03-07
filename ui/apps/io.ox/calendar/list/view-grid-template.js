@@ -36,7 +36,7 @@ define('io.ox/calendar/list/view-grid-template', [
                     time = $('<div class="time">').attr('aria-hidden', true),
                     $('<div class="contentContainer">').append(
                         date = $('<div class="date">'),
-                        isPrivate = $('<i class="fa fa-lock private-flag">').hide(),
+                        isPrivate = $('<i class="fa fa-lock private-flag" aria-hidden="true">').hide(),
                         title = $('<div class="title">'),
                         $('<div class="location-row">').append(
                             location = $('<span class="location">')

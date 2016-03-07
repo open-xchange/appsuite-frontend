@@ -1,6 +1,5 @@
 ---
 title: Mail
-
 ---
 
 ```
@@ -9,10 +8,9 @@ settings:   io.ox/mail
 capability: webmail
 ```
 
-
 # Special configuration settings
 
-__io.ox/mail//features/alwaysDeleteDraft__
+**io.ox/mail//features/alwaysDeleteDraft**
 
 _values: true/false_
 

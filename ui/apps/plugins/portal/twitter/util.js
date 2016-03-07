@@ -263,7 +263,7 @@ define('plugins/portal/twitter/util', [
                 role: 'button'
             })
             .append(
-                $('<i class="fa fa-trash-o">'),
+                $('<i class="fa fa-trash-o" aria-hidden="true">'),
                 $('<span>').text(gt('Delete'))
                 .on('click', function (e) {
                     e.preventDefault();

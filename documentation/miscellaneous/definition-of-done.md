@@ -16,8 +16,7 @@ needs a “definition of done”.
 - Documentation in OXpedia (if necessary/required)
 - Code has been merged into origin/develop
 - i18n and l10n issues are checked
-- Code is commented where necessary (what does it, what goes in, what
-  comes out)
+- Code is commented where necessary (what does it, what goes in, what comes out)
 
 If done, a user story is marked as “Delivered”. Requestor then accepts
 or rejects the user story.

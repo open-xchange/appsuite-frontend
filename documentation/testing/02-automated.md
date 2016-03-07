@@ -5,5 +5,3 @@ source: http://oxpedia.org/wiki/index.php?title=Automated_GUI_Tests
 ---
 
 TODO:QA
-
-

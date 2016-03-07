@@ -216,7 +216,7 @@ define('io.ox/core/sub/settings/pane', [
                         'data-action': 'remove',
                         'aria-label': displayName + ', ' + gt('Delete')
                     })
-                    .append($('<i class="fa fa-trash-o">'))
+                    .append($('<i class="fa fa-trash-o" aria-hidden="true">'))
                 ),
                 $('<span class="content">').append(
                     $('<span data-property="displayName" class="list-title pull-left">')
