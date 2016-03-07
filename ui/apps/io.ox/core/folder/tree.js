@@ -31,7 +31,8 @@ define('io.ox/core/folder/tree', [
         events: {
             'click .contextmenu-control':                    'onToggleContextMenu',
             'keydown .contextmenu-control':                  'onKeydown',
-            'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu'
+            'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu',
+            'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys'
         },
 
         initialize: function (options) {
@@ -170,6 +171,19 @@ define('io.ox/core/folder/tree', [
                 left = offset.left + target.outerWidth() + 7;
 
             this.toggleContextMenu(target, top, left);
+        },
+
+        onKeydownMenuKeys: function (e) {
+            // Needed for a11y, shift + F10 and the menu key open the contextmenu
+            if (e.type === 'keydown') {
+                var shiftF10 = (e.shiftKey && e.keyCode === 121),
+                    menuKey = (_.device('windows') && e.keyCode === 93);
+                if (shiftF10 || menuKey) {
+                    // e.preventDefault() is needed here to surpress browser menu
+                    e.preventDefault();
+                    this.onContextMenu(e);
+                }
+            }
         },
 
         onContextMenu: function (e) {
