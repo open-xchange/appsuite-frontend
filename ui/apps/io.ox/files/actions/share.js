@@ -45,14 +45,14 @@ define('io.ox/files/actions/share', [
         if (type === 'invite') {
             // invite guests
             dialog
-                .addPrimaryButton('share', gt('Invite'), 'share')
-                .addButton('cancel', gt('Cancel'), 'cancel');
+                .addPrimaryButton('share', gt('Invite'), 'share', { tabIndex: 1 })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
         } else {
             // get a link (anonymouse)
             // TODO: Offer "Remove link" (addAlternativeButton; which does what it says)
             dialog
-                .addPrimaryButton('share', gt('Done'), 'share')
-                .addButton('cancel', gt('Cancel'), 'cancel');
+                .addPrimaryButton('share', gt('Done'), 'share', { tabIndex: 1 })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
         }
 
         dialog.getContentNode().addClass('invisible')
