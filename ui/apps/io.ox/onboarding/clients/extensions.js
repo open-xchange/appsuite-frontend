@@ -26,7 +26,7 @@ define('io.ox/onboarding/clients/extensions', [
     var POINT = 'io.ox/onboarding/clients/views';
 
     function yellError(resp) {
-        if (_.isObject(resp) && 'error' in resp) return yell('error', resp.error_desc || resp.error);
+        if (_.isObject(resp) && 'error' in resp) return yell(resp.warnings ? 'warning' : 'error', resp.error_desc || resp.error);
     }
 
     var util = {
