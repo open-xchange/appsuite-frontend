@@ -1,19 +1,19 @@
-# Luiz Fernando Ranghetti <luiz@bureau-cornavin.com>, 2013, 2014, 2015.
+# Luiz Fernando Ranghetti <luiz@bureau-cornavin.com>, 2013, 2014, 2015, 2016.
 # Aracele Torres <aracele@bureau-cornavin.com>, 2013, 2014, 2015.
 # Bianca Oliveira <bianca@bureau-cornavin.com>, 2013, 2014, 2015, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-02-26 12:00-0300\n"
-"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
+"PO-Revision-Date: 2016-02-29 10:11-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive68@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/backbone/basicModel.js:128 module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js:185
@@ -508,7 +508,7 @@ msgid ""
 "will generally be created on behalf of the owner."
 msgstr ""
 "O calendário selecionado é compartilhado por %1$s. Compromissos nos "
-"calendários compartilhadosgeralmente serão criados em nome do proprietário."
+"calendários compartilhados geralmente serão criados em nome do proprietário."
 
 #: apps/io.ox/calendar/actions/create.js:46 module:io.ox/calendar
 msgid ""
@@ -1684,7 +1684,7 @@ msgid ""
 "decline"
 msgstr ""
 "Receber notificação como criador do compromisso quando os participantes "
-"aceitam ourecusam"
+"aceitam ou recusam"
 
 #: apps/io.ox/calendar/settings/pane.js:174 module:io.ox/calendar
 msgid ""
@@ -3400,7 +3400,7 @@ msgid ""
 "the respective permissions for the public folder."
 msgstr ""
 "Uma pasta pública é usada para conteúdo que é de interesse comum de todos "
-"osusuários. Para permitir que outros usuários leiam ou editem o conteúdo, "
+"os usuários. Para permitir que outros usuários leiam ou editem o conteúdo, "
 "você tem que definiras respectivas permissões para a pasta pública."
 
 #. notification while archiving messages
@@ -4281,8 +4281,8 @@ msgid ""
 msgstr ""
 "Ao executar o arquivo baixado, um assistente de instalação será iniciado."
 "Siga as instruções e instale o atualizador. Instale versões mais recentes "
-"doSoftware cliente do Windows®. O Updater informa automaticamente sobre "
-"novasatualizações. Você pode baixar as atualizações a partir do Updater."
+"do software cliente do Windows®. O Updater informa automaticamente sobre "
+"novas atualizações. Você pode baixar as atualizações a partir do Updater."
 
 #: apps/io.ox/core/settings/downloads/pane.js:68 module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -4752,8 +4752,8 @@ msgid ""
 "Updating subscribed data takes time. Importing 100 contacts for example, may "
 "take up to 5 minutes. Please have some patience."
 msgstr ""
-"A atualização dos dados subscritos leva tempo. Importação de 100 contatos do "
-"Xing, por exemplo, leva até 5 minutos. Tenha um pouco de paciência."
+"A atualização dos dados leva tempo. Importar 100 contatos por exemplo, "
+"pode levar até 5 minutos. Tenha um pouco de paciência."
 
 #. %1$s the filename
 #. %2$s the maximum file size
@@ -5115,7 +5115,7 @@ msgstr "Anterior"
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""
-"Use as setas esquerda/direita para navegar e a tecla ESC para sair da "
+"Use as setas esquerda/direita para navegar e a tecla Esc para sair da "
 "visualização."
 
 #. text of a viewer slide caption
@@ -6079,7 +6079,7 @@ msgid ""
 "access the shared files."
 msgstr ""
 "Convidar pessoas por e-mail. Cada destinatário receberá um link individual "
-"paraacessar os arquivos compartilhados."
+"para acessar os arquivos compartilhados."
 
 #: apps/io.ox/files/share/wizard.js:33 module:io.ox/files
 msgid ""
@@ -6542,7 +6542,7 @@ msgstr "Conta adicionada com sucesso"
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js:53 module:io.ox/settings
 msgid "As incoming mail server"
-msgstr "Como servidor de email recebido"
+msgstr "Como servidor de e-mail recebido"
 
 #. Auth type. Use separate username and password
 #: apps/io.ox/mail/accounts/view-form.js:55 module:io.ox/settings
@@ -7114,8 +7114,8 @@ msgid ""
 "anonymously, select the checkbox and leave the field empty."
 msgstr ""
 "Selecione uma caixa de seleção para definir um nome personalizado para esse "
-"endereço; caso contrário, onome padrão da conta de e-mail será usado. Se "
-"você quiser usar um endereçoanonimamente, selecione a caixa de seleção e "
+"endereço; caso contrário, o nome padrão da conta de e-mail será usado. Se "
+"você quiser usar um endereço anonimamente, selecione a caixa de seleção e "
 "deixe o campo vazio."
 
 #: apps/io.ox/mail/compose/names.js:156 module:io.ox/mail
@@ -9772,7 +9772,7 @@ msgstr "LinkedIn"
 
 #: apps/plugins/portal/linkedIn/register.js:268 module:plugins/portal
 msgid "Press [enter] to jump to the linkedin stream."
-msgstr "Pressione [Enter] para ir ao Linkedin."
+msgstr "Pressione [Enter] para ir ao LinkedIn."
 
 #: apps/plugins/portal/linkedIn/register.js:287 module:plugins/portal
 msgid "You have no new messages"
@@ -10323,7 +10323,7 @@ msgid ""
 "information. It will take less than a minute."
 msgstr ""
 "Antes que você possa continuar usando o produto, você tem que inserir "
-"algumasinformações básicas. Vai levar menos de um minuto."
+"algumas informações básicas. Vai levar menos de um minuto."
 
 #: apps/plugins/wizards/mandatory/main.js:56 module:io.ox/wizards/firstStart
 msgid "Back to sign in"
