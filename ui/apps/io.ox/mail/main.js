@@ -653,6 +653,12 @@ define('io.ox/mail/main', [
                     showTo = account.is('sent|drafts', id);
 
                 app.props.set(_.pick(options, 'sort', 'order', 'thread'));
+
+                // explicitly update when set to from-to (see bug 44458)
+                if (options.sort === 'from-to') {
+                    app.listView.model.set('sort', account.is('sent|drafts', id) ? 604 : 603);
+                }
+
                 app.listView.model.set('folder', id);
                 app.folder.getData();
                 fromTo.text(showTo ? gt('To') : gt('From'));
