@@ -523,12 +523,15 @@ define('io.ox/portal/main', [
                     node.append(
                         $('<div class="content error">').append(
                             $('<div>').text(gt('An error occurred.')),
+                            // message
                             $('<div class="italic">').text(_.isString(e.error) ? e.error : ''),
                             $('<br>'),
-                            $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
-                                node.find('.decoration').addClass('pending');
-                                loadAndPreview(point, node, baton);
-                            })
+                            // retry
+                            e.retry !== false ?
+                                $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
+                                    node.find('.decoration').addClass('pending');
+                                    loadAndPreview(point, node, baton);
+                                }) : $()
                         )
                     );
                     point.invoke('error', node, e, baton);

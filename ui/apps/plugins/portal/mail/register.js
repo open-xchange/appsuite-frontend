@@ -172,16 +172,18 @@ define('plugins/portal/mail/register', [
 
         load: function (baton) {
 
-            function getMails(folderName) {
+            function getMails(folder) {
                 var loader = api.collectionLoader,
-                    params = loader.getQueryParams({ folder: folderName });
-
+                    params = loader.getQueryParams({ folder: folder });
+                if (!folder) {
+                    return $.Deferred().reject({ error: api.mailServerDownMessage, retry: false });
+                }
                 baton.collection = loader.getCollection(params);
-                if (baton.collection.length === 0 || baton.collection.expired) return loadCollection(folderName);
+                if (baton.collection.length === 0 || baton.collection.expired) return loadCollection(folder);
             }
 
-            return $.when(getFolderName(baton)).then(function (folderName) {
-                return getMails(folderName);
+            return $.when(getFolderName(baton)).then(function (folder) {
+                return getMails(folder);
             });
         },
 

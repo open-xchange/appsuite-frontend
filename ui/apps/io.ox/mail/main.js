@@ -1406,9 +1406,11 @@ define('io.ox/mail/main', [
                 win.show();
             })
             .fail(function fail(result) {
-                var errorMsg = (result && result.error) ? result.error + ' ' : '';
-                errorMsg += gt('Application may not work as expected until this problem is solved.');
-                notifications.yell('error', errorMsg);
+                var message = result && result.error ?
+                    result.error + ' ' + gt('Application may not work as expected until this problem is solved.') :
+                    // default error
+                    api.mailServerDownMessage;
+                notifications.yell('error', message);
             });
     });
 
