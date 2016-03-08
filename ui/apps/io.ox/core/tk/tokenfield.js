@@ -257,18 +257,22 @@ define('io.ox/core/tk/tokenfield', [
 
                     // distribution lists
                     if (e.attrs.model.has('distribution_list')) {
-                        var models = _(e.attrs.model.get('distribution_list')).map(function (m) {
-                            m.type = 5;
-                            var model = new pModel.Participant({
-                                type: 5,
-                                display_name: m.display_name,
-                                email1: m.mail
-                            });
-                            return model.set('token', {
-                                label: m.display_name,
-                                value: m.mail
-                            }, { silent: true });
-                        });
+                        // create a model/token for every member with an email address
+                        var models = _.chain(e.attrs.model.get('distribution_list'))
+                            .filter(function (m) { return !!m.mail; })
+                            .map(function (m) {
+                                m.type = 5;
+                                var model = new pModel.Participant({
+                                    type: 5,
+                                    display_name: m.display_name,
+                                    email1: m.mail
+                                });
+                                return model.set('token', {
+                                    label: m.display_name,
+                                    value: m.mail
+                                }, { silent: true });
+                            })
+                            .value();
 
                         var name = e.attrs.model.get('display_name'),
                             members  = _(models).map(function (m) { return [m.get('token').label + ', ' + m.get('token').value]; });
