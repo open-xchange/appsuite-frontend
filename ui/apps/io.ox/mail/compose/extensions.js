@@ -93,13 +93,7 @@ define('io.ox/mail/compose/extensions', [
 
                     function renderFrom(array) {
                         if (!array) return;
-                        var name = _(array).first(), address = _(array).last();
-                        // consider custom settings
-                        if (!settings.get('sendDisplayName', true)) {
-                            name = null;
-                        } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
-                            name = settings.get(['customDisplayNames', address, 'name'], '');
-                        }
+                        var name = array[0], address = array[1];
                         return [
                             $('<span class="name">').text(name ? name + ' ' : ''),
                             $('<span class="address">').text(name ? '<' + address + '>' : address)
@@ -120,7 +114,7 @@ define('io.ox/mail/compose/extensions', [
                             var value = !!settings.get('sendDisplayName', true);
                             settings.set('sendDisplayName', !value).save();
                             baton.model.set('sendDisplayName', !value);
-                            redraw();
+                            ox.trigger('change:customDisplayNames');
                             // stop propagation to keep drop-down open
                             return false;
                         }
@@ -134,12 +128,24 @@ define('io.ox/mail/compose/extensions', [
                             dropdown.$ul.find('[data-name="toggle-display"]').focus();
                         }
 
+                        function applyDisplayName(item) {
+                            // consider custom settings
+                            var name = item[0], address = item[1];
+                            if (!settings.get('sendDisplayName', true)) {
+                                name = null;
+                            } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
+                                name = settings.get(['customDisplayNames', address, 'name'], '');
+                            }
+                            return [name, address];
+                        }
+
                         function drawOptions() {
 
                             if (!list.sortedAddresses.length) return;
                             var options = _(list.sortedAddresses).pluck('option');
 
                             _(options).each(function (item) {
+                                item = applyDisplayName(item);
                                 dropdown.option('from', [item], function () {
                                     return renderFrom(item);
                                 });
@@ -155,16 +161,6 @@ define('io.ox/mail/compose/extensions', [
                                 .link('edit-real-names', gt('Edit names'), editNames);
                         }
 
-                        function updateDisplayName(names) {
-                            // clone 'from'
-                            var from = [].concat(_(baton.model.get('from')).first());
-                            _.each(names, function (data, id) {
-                                if (from[1] !== id) return;
-                                from[0] = data.overwrite ? data.name : data.defaultName;
-                            });
-                            baton.model.set('from', [from]);
-                        }
-
                         drawOptions();
 
                         node.append(
@@ -174,7 +170,13 @@ define('io.ox/mail/compose/extensions', [
                             )
                         );
 
-                        ox.on('change:customDisplayNames', updateDisplayName);
+                        ox.on('change:customDisplayNames', function () {
+                            // fix current value
+                            var from = baton.model.get('from');
+                            if (from) baton.model.set('from', [applyDisplayName(from[0])]);
+                            // redraw drop-down
+                            redraw();
+                        });
                         baton.view.listenTo(baton.model, 'change:from', redraw);
                     });
                 };
