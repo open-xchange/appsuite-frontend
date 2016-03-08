@@ -169,6 +169,9 @@ define('plugins/portal/mail/register', [
                 var loader = baton.collectionLoader,
                     params = loader.getQueryParams({ folder: folder });
                 baton.collection = loader.getCollection(params);
+                if (!folder) {
+                    return $.Deferred().reject({ error: api.mailServerDownMessage, retry: false });
+                }
                 if (baton.collection.length === 0 || baton.collection.expired) return baton.loadCollection(folder);
                 return $.when();
             });

@@ -1796,5 +1796,8 @@ define('io.ox/mail/api', [
         if (params.action === 'threadedAll') api.processThreadMessage(obj); else api.pool.add('detail', obj);
     };
 
+    // need this message at several places
+    api.mailServerDownMessage = gt('Unable to connect to mail server. Possible reasons: the mail server is (temporarily) down or there are network connection problems. Please try again in a few minutes.');
+
     return api;
 });
