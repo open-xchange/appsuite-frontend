@@ -21,12 +21,11 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/core/tk/tokenfield',
     'io.ox/core/dropzone',
     'io.ox/core/capabilities',
-    'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, util, settings, gt) {
 
     var POINT = 'io.ox/mail/compose';
 
