@@ -104,10 +104,6 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 });
         }
 
-        function isBad(value) {
-            return !value && value !== 0;
-        }
-
         this.load = function (params) {
 
             var collection;
@@ -117,7 +113,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             collection = this.collection = this.getCollection(params);
             this.loading = false;
 
-            if (isBad(params.folder) || (collection.length > 0 && !collection.expired && collection.sorted && !collection.preserve)) {
+            if (this.isBad(params.folder) || (collection.length > 0 && !collection.expired && collection.sorted && !collection.preserve)) {
                 // reduce too large collections
                 collection.reset(collection.first(collection.CUSTOM_PAGE_SIZE || this.PRIMARY_PAGE_SIZE), { silent: true });
                 _.defer(function () {
@@ -140,7 +136,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             // offset is collection length minus one to allow comparing last item and first fetched item (see above)
             var offset = Math.max(0, collection.length - 1);
             params = this.getQueryParams(_.extend({ offset: offset }, params));
-            if (isBad(params.folder)) return collection;
+            if (this.isBad(params.folder)) return collection;
             params.limit = offset + ',' + (offset + this.SECONDARY_PAGE_SIZE + 1);
             this.loading = true;
 
@@ -155,7 +151,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             if (this.loading) return collection;
 
             params = this.getQueryParams(_.extend({ offset: 0 }, params));
-            if (isBad(params.folder)) return collection;
+            if (this.isBad(params.folder)) return collection;
             params.limit = '0,' + Math.max(collection.length + (tail || 0), this.PRIMARY_PAGE_SIZE);
             this.loading = true;
 
@@ -216,6 +212,10 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
         virtual: function () {
             return false;
+        },
+
+        isBad: function (value) {
+            return !value && value !== 0;
         },
 
         fetch: function (params) {

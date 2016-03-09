@@ -205,6 +205,7 @@ define('io.ox/find/main', [
                             mode: 'search',
                             PRIMARY_PAGE_SIZE: defaultLoader.PRIMARY_PAGE_SIZE,
                             SECONDARY_PAGE_SIZE: defaultLoader.SECONDARY_PAGE_SIZE,
+                            isBad: $.noop,
                             fetch: function (p) {
                                 var self = this,
                                     limit = p.limit.split(','),
