@@ -97,7 +97,8 @@ define('io.ox/core/viewer/views/displayerview', [
                     onSlideChangeStart: this.onSlideChangeStart.bind(this)
                 };
 
-            if (startIndex < this.preloadOffset) {
+            // if the index is we want to start with is preloaded, we can use it.
+            if (startIndex < this.preloadOffset || this.collection.length < 2 * this.preloadOffset + 1) {
                 swiperParameter.initialSlide = startIndex;
             } else if (startIndex >= this.collection.length - this.preloadOffset) {
                 swiperParameter.initialSlide = 2 * this.preloadOffset - this.collection.length + startIndex + 1;
