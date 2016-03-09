@@ -185,6 +185,7 @@ define('io.ox/find/main', [
                                 module: app.getModuleParam(),
                                 mode: 'search',
                                 LIMIT: defaultLoader.LIMIT,
+                                isBad: $.noop,
                                 fetch: function (params) {
                                     var self = this,
                                         limit = params.limit.split(','),
