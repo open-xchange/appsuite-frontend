@@ -1,19 +1,19 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2010, 2011, 2013.
-# Ivar Snaaijer <ivar@bureau-cornavin.com >, 2010, 2011, 2012, 2013.
+# Ivar Snaaijer <ivar@bureau-cornavin.com >, 2010, 2011, 2012, 2013, 2016.
 # Reinout van Schouwen <reinout@bureau-cornavin.com>, 2012, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-10-11 11:53+0200\n"
-"Last-Translator: \n"
-"Language-Team: Dutch <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2016-03-06 18:44+0100\n"
+"Last-Translator: Ivar Snaaijer <ivar@bureau-cornavin.com>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
@@ -90,7 +90,7 @@ msgstr ""
 "Om een afspraak aan te maken klikt u op Aanmaken in de rechterbovenhoek."
 
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/files.js:35 apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:86
 msgid "Selecting a view"
 msgstr "Selecteer een weergave"
 
@@ -103,7 +103,6 @@ msgstr ""
 "de werkbalk. Selecteer een item uit de Layout sectie."
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
-#: apps/io.ox/tours/files.js:40
 msgid "The List view"
 msgstr "Het Lijstoverzicht"
 
@@ -178,104 +177,220 @@ msgstr ""
 "worden getoond, klikt u Overzicht > Selectievakken aan de rechterkant van de "
 "werkbalk."
 
-#: apps/io.ox/tours/files.js:30 module:io.ox/tours
+#: apps/io.ox/tours/files.js:53 module:io.ox/tours
+msgid "The Drive app tour.txt"
+msgstr "De Drive App rondleiding.txt"
+
+#: apps/io.ox/tours/files.js:59 module:io.ox/tours
+msgid "The Drive app"
+msgstr "De Drive app"
+
+#: apps/io.ox/tours/files.js:60 module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
+"Welkom in uw cloudopslag app. Deze Rondleiding laat u uw nieuwe "
+"online-opslagoplssing zien. Uw enkele toegangspunt voor bestanden in al uw "
+"online-opslagaccounts. Hiervandaan kan u bestanden uploaden, opslaan, delen "
+"en synchroniseren met verschillende apparaten."
+
+#: apps/io.ox/tours/files.js:66 module:io.ox/tours
 msgid "Folder tree"
 msgstr "Mappenboom"
 
-#: apps/io.ox/tours/files.js:31 module:io.ox/tours
-msgid ""
-"Use the folder tree to access own, public or shared files. If the folder "
-"tree is hidden, click on View > Folder view on the right side of the toolbar."
-msgstr ""
-"Gebruik de mappenboom om eigen, publieke of gedeelde mappen te benaderen. "
-"Als de mappenboom verborgen is klikt u op Overzicht > Mappenoverzicht aan de "
-"rechterkant van de werkbalk."
-
-#: apps/io.ox/tours/files.js:36 module:io.ox/tours
-msgid ""
-"To select one of the views List, Icons or Squares, click on View on the "
-"right side of the toolbar."
-msgstr ""
-"Om het Lijst-, Pictogrammen- of Vlakkenoverzicht te selecteren klikt u op "
-"Overzicht aan de rechterkant in de werkbalk."
-
-#: apps/io.ox/tours/files.js:41 module:io.ox/tours
-msgid ""
-"The List view shows details like the size and date of change. Use the "
-"checkboxes to select files. Click on a file to view further details and "
-"functions in the pop-up."
-msgstr ""
-"Het Lijstoverzicht toont details zoals de omvang en datum van de laatste "
-"wijziging. Gebruik de selectievakken om bestanden te selecteren. Klik op een "
-"bestand om meer details en functies te tonen in de pop-up."
-
-#: apps/io.ox/tours/files.js:45 module:io.ox/tours
-msgid "The Icons view"
-msgstr "Het Pictogrammenoverzicht"
-
-#: apps/io.ox/tours/files.js:46 module:io.ox/tours
-msgid ""
-"The Icons view displays an icon and the file name for each file. Click on an "
-"icon to view further details and functions in the pop-up."
-msgstr ""
-"Het Pictogrammenoverzicht toont een picogram en de bestandsnaam van elk "
-"bestand. Klik op een pictogram om meerdere details en functies te tonen in "
-"de pop-up."
-
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-msgid "The Tiles view"
-msgstr "Het Vlakkenoverzicht"
-
-#: apps/io.ox/tours/files.js:51 module:io.ox/tours
-msgid ""
-"The Tiles view shows a big icon for each file. Click on an icon to view "
-"further details and functions in the pop-up."
-msgstr ""
-"Het Vlakkenoverzicht toont een groot pictogram voor elk bestand. Klik op een "
-"pictogram om meerdere details en functies te tonen in de pop-up."
-
-#: apps/io.ox/tours/files.js:55 module:io.ox/tours
-msgid "Uploading a file"
-msgstr "Een bestand uploaden"
-
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-msgid "To upload a file, click on New > Upload new file in the toolbar."
-msgstr ""
-"Om een bestand te uploaden klikt u op Nieuw > Nieuw bestand uploaden uit de "
-"werkbalk."
-
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
-msgid "Creating a note"
-msgstr "Een notitie aanmaken"
-
-#: apps/io.ox/tours/files.js:61 module:io.ox/tours
-msgid "To create a note, click on New > Add note in the toolbar."
-msgstr ""
-"Om een nieuwe notitie te maken klikt u op Nieuw > Notitie toevoegen in de "
-"werkbalk."
-
 #: apps/io.ox/tours/files.js:67 module:io.ox/tours
-msgid "Displaying information"
-msgstr "Tonen van informatie"
-
-#: apps/io.ox/tours/files.js:68 module:io.ox/tours
 msgid ""
-"To view further information, click on a file. A pop-up window displays "
-"further details and functions."
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
 msgstr ""
-"Om meer informatie te zien klikt u op een bestand. Een pop-up met meer "
-"details en functies wordt getoond."
+"Aan de linkerkant ziet u de mappenboom. Deze toont uw mappenstructuur en "
+"hiermee kan u navigeren naar de specifieke mappen en submappen. Om uw leven "
+"eenvoudiger te maken hebben we alvast mappen toegevoegd voor Documenten, "
+"Muziek, Afbeeldingen en Video's"
 
-#. Tour name; general introduction
-#: apps/io.ox/tours/intro.js:46 module:io.ox/tours
-msgid "Getting started"
-msgstr "Aan de slag"
+#: apps/io.ox/tours/files.js:80 module:io.ox/tours
+msgid "Folder content"
+msgstr "Mapinhoud"
 
-#: apps/io.ox/tours/intro.js:63 module:io.ox/tours
+#: apps/io.ox/tours/files.js:81 module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+"Als u op een map klikt toont alle submappen, documenten, media en andere "
+"bestanden dat deze map bevat."
+
+#: apps/io.ox/tours/files.js:88 module:io.ox/tours
+msgid "Select a view"
+msgstr "Selecteer een overzicht"
+
+#: apps/io.ox/tours/files.js:89 module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
+"Verschillende overzichten zijn beschikbaar. Kies het overzicht dat u het "
+"plezierigst vindt."
+
+#: apps/io.ox/tours/files.js:103 module:io.ox/tours
+msgid "Toolbar"
+msgstr "Werkbalk"
+
+#: apps/io.ox/tours/files.js:104 module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+"Aan de bovenzijde vind u een werkbalk met veel functies een extra opties. U "
+"kan eenvoudige nieuwe mappen en bestanden aanmaken en nog veel meer."
+
+#: apps/io.ox/tours/files.js:116 module:io.ox/tours
+msgid "Upload a new file"
+msgstr "Een nieuw bestand uploaden"
+
+#: apps/io.ox/tours/files.js:117 module:io.ox/tours
+msgid ""
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
+msgstr ""
+"Om een nieuw bestand te uploaden vanaf uw lokale apparaat klikt u eenvoudig "
+"op Lokaal bestand toevoegen en selecteert u het bestand dat u wilt toevoegen. "
+"Het is zelfs eenvoudiger als u de bestanden vanaf uw lokale apparaat Drive in "
+"sleept. Het geüploade bestand is nu beschikbaar op al uw apparaten."
+
+#: apps/io.ox/tours/files.js:131 module:io.ox/tours
+msgid "Preview files"
+msgstr "Bestanden inzien"
+
+#: apps/io.ox/tours/files.js:132 module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+"Als u op het Tonen pictogram klikt wordt een voorbeeld van het geselecteerde "
+"bestand getoond."
+
+#: apps/io.ox/tours/files.js:142 module:io.ox/tours
+msgid "Preview mode"
+msgstr "Voorbeeldoverzicht"
+
+#: apps/io.ox/tours/files.js:143 module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
+"Vanuit het voorbeeld kan u ook ander opties kiezen om u te helpen bij het "
+"beheren en om met uw bestanden te werken."
+
+#: apps/io.ox/tours/files.js:156 module:io.ox/tours
+msgid "Share files"
+msgstr "Bestanden delen"
+
+#: apps/io.ox/tours/files.js:157 module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
+msgstr ""
+"Hiervandaan kan u ook bestanden delen met collega's en externe contacten. U "
+"kan ook samenwerken aan één document en verschillende toegangsrechten "
+"instellen."
+
+#: apps/io.ox/tours/files.js:168 module:io.ox/tours
+msgid "Sharing options"
+msgstr "Opties voor het delen"
+
+#: apps/io.ox/tours/files.js:169 module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
+msgstr ""
+"Kies uit twee alternatieven om uw bestanden of mappen te delen. Gebruik "
+"Mensen uitnodigen als u toegangsrechten wilt beheren en de ontvangers "
+"toestaan bestanden toe te voegen en te bewerken. Of u geeft alleen een link "
+"zodat anderen uw bestand kunnen zien en downloaden. Gebruik eventueel een "
+"vervaldatum en een wachtwoord opgeven als u dat wilt."
+
+#: apps/io.ox/tours/files.js:182 module:io.ox/tours
+msgid "Collaborating"
+msgstr "Samenwerken"
+
+#: apps/io.ox/tours/files.js:183 module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
+msgstr ""
+"Bestanden delen door mensen uit te nodigen geeft de ontvangers niet alleen de "
+"mogelijkheid om de bestanden te bewerken en nieuwe aan te maken. Interne en "
+"externe deelnemers kunnen ook tegelijk met u samenwerken aan tekstbestanden "
+"en rekenbladen."
+
+#: apps/io.ox/tours/files.js:197 module:io.ox/tours
+msgid "Edit documents"
+msgstr "Documenten bewerken"
+
+#: apps/io.ox/tours/files.js:198 module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+"Wist u dat u tekstdocumenten en rekenbladen online kan bewerken? Drive werkt "
+"uw bestand automatisch bij, maar door het versiebeheer blijft het originele "
+"bestand ook beschikbaar."
+
+#: apps/io.ox/tours/files.js:205 module:io.ox/tours
+msgid "File details"
+msgstr "Bestandsdetails"
+
+#: apps/io.ox/tours/files.js:206 module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
+"De bestandsdetails in de zijbalk geven extra informatie over uw bestanden. "
+"Schakel deze Bestandsdetailoptie in vanuit het Beeld menu en selecteer een "
+"bestand om deze te zien."
+
+#: apps/io.ox/tours/files.js:221 module:io.ox/tours
+msgid "Add another account"
+msgstr "Een ander account toevoegen"
+
+#: apps/io.ox/tours/files.js:222 module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+"Drive maakt het mogelijk andere opslagmogelijkheden te koppelen. Als u al een "
+"cloud-opslagaccount heeft om uw bestanden op te slaan en te synchroniseren. "
+"Klik hiervoor op het overeenkomstige pictogram om uw bestaande gegevens te "
+"benaderen."
+
+#: apps/io.ox/tours/files.js:231 module:io.ox/tours
+msgid "Restart Guided Tour"
+msgstr "Herstart de Rondleiding"
+
+#: apps/io.ox/tours/files.js:232 module:io.ox/tours
+msgid ""
+"Hint: you can always restart guided tours, any time you need them, from the "
+"system menu."
+msgstr ""
+"Hint: u kan een rondleiding op elk moment dat u wenst starten vanuit het "
+"systeemmenu."
+
+#: apps/io.ox/tours/intro.js:34 module:io.ox/tours
 msgid "Welcome to %s"
 msgstr "Welkom bij %s"
 
-#: apps/io.ox/tours/intro.js:64 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:35 module:io.ox/tours
 msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
@@ -284,19 +399,19 @@ msgstr ""
 "meer gedetailleerde informatie in de rondeleiding van de specifieke "
 "applicatie, of in de online help."
 
-#: apps/io.ox/tours/intro.js:67 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:38 module:io.ox/tours
 msgid "Launching an app"
 msgstr "Een app starten"
 
-#: apps/io.ox/tours/intro.js:68 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:39 module:io.ox/tours
 msgid "To launch an app, click on an entry on the left side of the menu bar."
 msgstr "Om een app te starten moet u op een item links in de menubalk klikken."
 
-#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
 msgstr "Tonen van de help of de instellingen"
 
-#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:45 module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
@@ -304,11 +419,11 @@ msgstr ""
 "Om de help of de instellingen te tonen, klikt u op het systeempictogram in "
 "de menubalk."
 
-#: apps/io.ox/tours/intro.js:79 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
 msgstr "Het 'Nieuwe objecten' pictogram"
 
-#: apps/io.ox/tours/intro.js:80 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:59 module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
@@ -317,11 +432,11 @@ msgstr ""
 "andere berichten. Als u op dit pictogram klikt wordt het meldingengebied "
 "geopend."
 
-#: apps/io.ox/tours/intro.js:85 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:65 module:io.ox/tours
 msgid "The info area"
 msgstr "Het meldingengebied"
 
-#: apps/io.ox/tours/intro.js:86 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
@@ -329,21 +444,21 @@ msgstr ""
 "Als er nieuwe meldingen zijn, bijvoorbeeld uitnodigingen voor een afspraak, "
 "wordt het meldingengebied geopend."
 
-#: apps/io.ox/tours/intro.js:90 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:72 module:io.ox/tours
 msgid "Creating new items"
 msgstr "Nieuwe items aanmaken"
 
-#: apps/io.ox/tours/intro.js:91 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:73 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
 "Om een nieuw e-mailbericht te maken klikt u op 'Nieuw e-mailbericht "
 "opstellen' in de werkbalk."
 
-#: apps/io.ox/tours/intro.js:98 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:81 module:io.ox/tours
 msgid "Opening or closing the folder tree"
 msgstr "Openen of sluiten van de mappenboom"
 
-#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:82 module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
@@ -351,19 +466,19 @@ msgstr ""
 "Om de mappenboom te openen of te sluiten klikt u op Overzicht > "
 "mappenoverzicht aan de rechterkant van de werkbalk."
 
-#: apps/io.ox/tours/intro.js:103 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "Zoeken naar objecten"
 
-#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:95 module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr "Om objecten te zoeken, klikt u op het Zoeken pictogram in de menubalk."
 
-#: apps/io.ox/tours/intro.js:108 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:99 module:io.ox/tours
 msgid "The toolbar"
 msgstr "De werkbalk"
 
-#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:100 module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
@@ -371,11 +486,11 @@ msgstr ""
 "Afhankelijk van de app bevat de werkbalk verschillende functies voor het "
 "aanmaken, bewerken en organiseren van objecten."
 
-#: apps/io.ox/tours/intro.js:113 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
 msgstr "De mappenboom"
 
-#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:105 module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
@@ -383,22 +498,22 @@ msgstr ""
 "Gebruik de mappenboom om een map te openen waarin de objecten staan die u "
 "wilt zien in de lijst."
 
-#: apps/io.ox/tours/intro.js:118 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:109 module:io.ox/tours
 msgid "The list"
 msgstr "De lijst"
 
-#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:110 module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""
 "Gebruik de lijst om een object te selecteren om de inhoud te kunnen zien en "
 "functies uit te voeren."
 
-#: apps/io.ox/tours/intro.js:123 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:114 module:io.ox/tours
 msgid "The Detail view"
 msgstr "Het Detailoverzicht"
 
-#: apps/io.ox/tours/intro.js:124 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:115 module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
@@ -407,11 +522,11 @@ msgstr ""
 "zijn in het Detailoverzicht andere functies te vinden voor het organiseren "
 "van objecten."
 
-#: apps/io.ox/tours/intro.js:128 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:119 module:io.ox/tours
 msgid "Further information"
 msgstr "Meer informatie"
 
-#: apps/io.ox/tours/intro.js:129 module:io.ox/tours
+#: apps/io.ox/tours/intro.js:120 module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
@@ -458,8 +573,8 @@ msgstr "Andere mogelijkheden"
 msgid ""
 "In this area you can find further functions, e.g. for adding attachments."
 msgstr ""
-"In dit gebied kan u extra functies vinden voor bijvoorbeeld het toevoegen van "
-"bijlagen."
+"In dit gebied kan u extra functies vinden voor bijvoorbeeld het toevoegen "
+"van bijlagen."
 
 #: apps/io.ox/tours/mail.js:68 module:io.ox/tours
 msgid "Entering the E-Mail text"
@@ -472,8 +587,8 @@ msgid ""
 "and then click an icon in the formatting bar."
 msgstr ""
 "Geef de tekst van het e-mailbericht in het hoofdgebied. Als het tekstformaat "
-"is ingesteld op HTML in de instellingen kan u de opmaak van het "
-"e-mailbericht aanpassen. Om dit te doen moet u een stuk tekst selecteren en "
+"is ingesteld op HTML in de instellingen kan u de opmaak van het e-"
+"mailbericht aanpassen. Om dit te doen moet u een stuk tekst selecteren en "
 "dan op een pictogram klikken in de opmaakbalk."
 
 #: apps/io.ox/tours/mail.js:74 module:io.ox/tours
@@ -563,12 +678,13 @@ msgid ""
 "side of the menu bar. Select Settings. Click on E-Mail on the left side."
 msgstr ""
 "Om de e-mailinstellingen te openen moet u op het Systeem menu pictogram "
-"klikken in de rechterbovenhoek van de menubalk. Kies Instellingen. Klik op "
-"e-mail aan de linkerkant."
+"klikken in de rechterbovenhoek van de menubalk. Kies Instellingen. Klik op e-"
+"mail aan de linkerkant."
 
-#: apps/io.ox/tours/main.js:77 module:io.ox/tours
-msgid "Guided tour for this app"
-msgstr "Rondleiding door deze app"
+#. Tour name; general introduction
+#: apps/io.ox/tours/main.js:71 module:io.ox/tours
+msgid "Getting started"
+msgstr "Aan de slag"
 
 #: apps/io.ox/tours/portal.js:30 module:io.ox/tours
 msgid "The Portal"
@@ -780,6 +896,81 @@ msgstr ""
 "Om meerdere taken in één keer te bewerken moet u het selectievakje aan de "
 "linkerzijde van de taak inschakelen. Als de selectievakjes niet worden "
 "getoond, kan u het pictogram aan de linker onderkant klikken."
+
+#~ msgid ""
+#~ "Use the folder tree to access own, public or shared files. If the folder "
+#~ "tree is hidden, click on View > Folder view on the right side of the "
+#~ "toolbar."
+#~ msgstr ""
+#~ "Gebruik de mappenboom om eigen, publieke of gedeelde mappen te benaderen. "
+#~ "Als de mappenboom verborgen is klikt u op Overzicht > Mappenoverzicht aan "
+#~ "de rechterkant van de werkbalk."
+
+#~ msgid ""
+#~ "To select one of the views List, Icons or Squares, click on View on the "
+#~ "right side of the toolbar."
+#~ msgstr ""
+#~ "Om het Lijst-, Pictogrammen- of Vlakkenoverzicht te selecteren klikt u op "
+#~ "Overzicht aan de rechterkant in de werkbalk."
+
+#~ msgid ""
+#~ "The List view shows details like the size and date of change. Use the "
+#~ "checkboxes to select files. Click on a file to view further details and "
+#~ "functions in the pop-up."
+#~ msgstr ""
+#~ "Het Lijstoverzicht toont details zoals de omvang en datum van de laatste "
+#~ "wijziging. Gebruik de selectievakken om bestanden te selecteren. Klik op "
+#~ "een bestand om meer details en functies te tonen in de pop-up."
+
+#~ msgid "The Icons view"
+#~ msgstr "Het Pictogrammenoverzicht"
+
+#~ msgid ""
+#~ "The Icons view displays an icon and the file name for each file. Click on "
+#~ "an icon to view further details and functions in the pop-up."
+#~ msgstr ""
+#~ "Het Pictogrammenoverzicht toont een picogram en de bestandsnaam van elk "
+#~ "bestand. Klik op een pictogram om meerdere details en functies te tonen "
+#~ "in de pop-up."
+
+#~ msgid "The Tiles view"
+#~ msgstr "Het Vlakkenoverzicht"
+
+#~ msgid ""
+#~ "The Tiles view shows a big icon for each file. Click on an icon to view "
+#~ "further details and functions in the pop-up."
+#~ msgstr ""
+#~ "Het Vlakkenoverzicht toont een groot pictogram voor elk bestand. Klik op "
+#~ "een pictogram om meerdere details en functies te tonen in de pop-up."
+
+#~ msgid "Uploading a file"
+#~ msgstr "Een bestand uploaden"
+
+#~ msgid "To upload a file, click on New > Upload new file in the toolbar."
+#~ msgstr ""
+#~ "Om een bestand te uploaden klikt u op Nieuw > Nieuw bestand uploaden uit "
+#~ "de werkbalk."
+
+#~ msgid "Creating a note"
+#~ msgstr "Een notitie aanmaken"
+
+#~ msgid "To create a note, click on New > Add note in the toolbar."
+#~ msgstr ""
+#~ "Om een nieuwe notitie te maken klikt u op Nieuw > Notitie toevoegen in de "
+#~ "werkbalk."
+
+#~ msgid "Displaying information"
+#~ msgstr "Tonen van informatie"
+
+#~ msgid ""
+#~ "To view further information, click on a file. A pop-up window displays "
+#~ "further details and functions."
+#~ msgstr ""
+#~ "Om meer informatie te zien klikt u op een bestand. Een pop-up met meer "
+#~ "details en functies wordt getoond."
+
+#~ msgid "Guided tour for this app"
+#~ msgstr "Rondleiding door deze app"
 
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
