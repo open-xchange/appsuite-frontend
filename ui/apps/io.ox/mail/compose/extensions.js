@@ -496,6 +496,8 @@ define('io.ox/mail/compose/extensions', [
                     .reduce(function (m, n) { return m + n; }, 0);
 
                 if (attachmentQuota.checkQuota(e.target.files, accumulatedSize)) {
+                    //#. %s is a list of filenames separeted by commas
+                    //#. it is used by screenreaders to indicate which files are currently added to the list of attachments
                     self.trigger('aria-live-update', gt('Added %s to attachments.', _(e.target.files).map(function (file) { return file.name; }).join(', ')));
                     model.attachFiles(
                         _(e.target.files).map(function (file) {
