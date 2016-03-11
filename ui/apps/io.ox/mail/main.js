@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Alexander Quast <alexander.quast@open-xchange.com>
@@ -653,6 +653,12 @@ define('io.ox/mail/main', [
                     showTo = account.is('sent|drafts', id);
 
                 app.props.set(_.pick(options, 'sort', 'order', 'thread'));
+
+                // explicitly update when set to from-to (see bug 44458)
+                if (options.sort === 'from-to') {
+                    app.listView.model.set('sort', account.is('sent|drafts', id) ? 604 : 603);
+                }
+
                 app.listView.model.set('folder', id);
                 app.folder.getData();
                 fromTo.text(showTo ? gt('To') : gt('From'));
@@ -1617,9 +1623,11 @@ define('io.ox/mail/main', [
                 win.show();
             })
             .fail(function fail(result) {
-                var errorMsg = (result && result.error) ? result.error + ' ' : '';
-                errorMsg += gt('Application may not work as expected until this problem is solved.');
-                notifications.yell('error', errorMsg);
+                var message = result && result.error ?
+                    result.error + ' ' + gt('Application may not work as expected until this problem is solved.') :
+                    // default error
+                    api.mailServerDownMessage;
+                notifications.yell('error', message);
             });
     });
 

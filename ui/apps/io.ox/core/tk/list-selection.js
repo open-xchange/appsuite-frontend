@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -31,7 +31,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         UNFOLD_TIME_FULL =   50,
         RESET_CELL_TIME =   100,
         CELL_HEIGHT = '-68px', // todo: calculate this
-        cell;
+        cell,
+        recentWindowsKey = false;
 
     function Selection(view) {
 
@@ -234,7 +235,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         resetCheckmark: function (items) {
-            items.filter('.selected').removeClass('selected no-checkbox');
+            items.filter('.selected').removeClass('selected no-checkbox').attr('aria-selected', false);
         },
 
         // resets all (usually one) items with swipe-left class
@@ -462,12 +463,18 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 // [Ctrl|Cmd + A] > select all
                 case 65:
                 case 97:
-                    if (e.ctrlKey || e.metaKey) {
+                    if (e.ctrlKey || e.metaKey || recentWindowsKey) {
                         e.preventDefault();
                         this.selectAll();
                     } else if (!e.shiftKey && !e.altKey) {
                         this.view.trigger('selection:archive', this.get());
                     }
+                    break;
+
+                // Windows key (workaround for incomplete detection)
+                case 91:
+                    recentWindowsKey = true;
+                    setTimeout(function () { recentWindowsKey = false; }, 2000);
                     break;
 
                 // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item

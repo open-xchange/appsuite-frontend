@@ -5,7 +5,8 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */

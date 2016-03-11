@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -169,6 +169,9 @@ define('plugins/portal/mail/register', [
                 var loader = baton.collectionLoader,
                     params = loader.getQueryParams({ folder: folder });
                 baton.collection = loader.getCollection(params);
+                if (!folder) {
+                    return $.Deferred().reject({ error: api.mailServerDownMessage, retry: false });
+                }
                 if (baton.collection.length === 0 || baton.collection.expired) return baton.loadCollection(folder);
                 return $.when();
             });

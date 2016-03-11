@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -1795,6 +1795,9 @@ define('io.ox/mail/api', [
     api.collectionLoader.each = function (obj, index, offset, params) {
         if (params.action === 'threadedAll') api.processThreadMessage(obj); else api.pool.add('detail', obj);
     };
+
+    // need this message at several places
+    api.mailServerDownMessage = gt('Unable to connect to mail server. Possible reasons: the mail server is (temporarily) down or there are network connection problems. Please try again in a few minutes.');
 
     return api;
 });

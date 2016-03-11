@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -520,12 +520,15 @@ define('io.ox/portal/main', [
                     node.append(
                         $('<div class="content error">').append(
                             $('<div>').text(gt('An error occurred.')),
+                            // message
                             $('<div class="italic">').text(_.isString(e.error) ? e.error : ''),
                             $('<br>'),
-                            $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
-                                node.find('.decoration').addClass('pending');
-                                loadAndPreview(point, node, baton);
-                            })
+                            // retry
+                            e.retry !== false ?
+                                $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
+                                    node.find('.decoration').addClass('pending');
+                                    loadAndPreview(point, node, baton);
+                                }) : $()
                         )
                     );
                     if (point.prop('stopLoadingOnError')) {

@@ -6,8 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) 2004-2012 Open-Xchange, Inc.
- * Mail: info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
@@ -257,18 +256,22 @@ define('io.ox/core/tk/tokenfield', [
 
                     // distribution lists
                     if (e.attrs.model.has('distribution_list')) {
-                        var models = _(e.attrs.model.get('distribution_list')).map(function (m) {
-                            m.type = 5;
-                            var model = new pModel.Participant({
-                                type: 5,
-                                display_name: m.display_name,
-                                email1: m.mail
-                            });
-                            return model.set('token', {
-                                label: m.display_name,
-                                value: m.mail
-                            }, { silent: true });
-                        });
+                        // create a model/token for every member with an email address
+                        var models = _.chain(e.attrs.model.get('distribution_list'))
+                            .filter(function (m) { return !!m.mail; })
+                            .map(function (m) {
+                                m.type = 5;
+                                var model = new pModel.Participant({
+                                    type: 5,
+                                    display_name: m.display_name,
+                                    email1: m.mail
+                                });
+                                return model.set('token', {
+                                    label: m.display_name,
+                                    value: m.mail
+                                }, { silent: true });
+                            })
+                            .value();
 
                         var name = e.attrs.model.get('display_name'),
                             members  = _(models).map(function (m) { return [m.get('token').label + ', ' + m.get('token').value]; });
@@ -292,7 +295,9 @@ define('io.ox/core/tk/tokenfield', [
                         value: e.attrs.value
                     }, { silent: true });
                     e.attrs.value = e.attrs.model.cid;
-                    self.$el.trigger('aria-live-update', gt('Added %s, %s.', e.attrs.model.get('display_name'), e.attrs.model.value));
+                    //#. %1$s is the display name of an added user or mail recipient
+                    //#. %2$s is the email address of the user or mail recipient
+                    self.$el.trigger('aria-live-update', gt('Added %1$s, %2$s.', e.attrs.model.get('display_name'), e.attrs.model.value));
                     // add model to the collection and save cid to the token
                     self.collection.add(e.attrs.model);
                 },
@@ -350,7 +355,9 @@ define('io.ox/core/tk/tokenfield', [
                 'tokenfield:removetoken': function (e) {
                     _([].concat(e.attrs)).each(function (el) {
                         var model = self.getModelByCID(el.value);
-                        self.$el.trigger('aria-live-update', gt('Removed %s, %s.', model.get('display_name'), model.value));
+                        //#. %1$s is the display name of a removed user or mail recipient
+                        //#. %2$s is the email address of the user or mail recipient
+                        self.$el.trigger('aria-live-update', gt('Removed %1$s, %2$s.', model.get('display_name'), model.value));
                         self.collection.remove(model);
                     });
                 }
