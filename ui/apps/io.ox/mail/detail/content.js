@@ -225,6 +225,30 @@ define('io.ox/mail/detail/content', [
     });
 
     //
+    // Special
+    //
+
+    ext.point('io.ox/mail/detail/special').extend({
+        id: 'anchor-links',
+        index: 100,
+        process: function (baton) {
+            // see Bug 44637 - Inline links to anchors don't work anymore or shift the viewport
+            if (!baton.isHTML) return;
+            // handle anchor links manually / use native listener to avoid leaks
+            this.addEventListener('click', function (e) {
+                if (!$(e.target).is('a[href^="#"]')) return;
+                // manually scroll to
+                e.preventDefault();
+                var id = $.escape($(e.target).attr('href').substr(1)),
+                    anchor = $(this).find('#' + id + ', [name="' + $.escape(id) + '"]');
+                if (anchor.length) anchor[0].scrollIntoView();
+                // safari flexbox bug 44637 (related #43799)
+                if (_.device('safari')) $('#io-ox-windowmanager').scrollTop(0);
+            }, false);
+        }
+    });
+
+    //
     // Content
     //
 
@@ -524,6 +548,9 @@ define('io.ox/mail/detail/content', [
                         });
                     }
                 }
+
+                // special
+                ext.point('io.ox/mail/detail/special').invoke('process', content, baton);
 
                 // process content unless too large
                 if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
