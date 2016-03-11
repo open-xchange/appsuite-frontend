@@ -388,12 +388,16 @@ define('io.ox/core/folder/api', [
         type: 1
     });
 
-    pool.addModel({
-        folder_id: 'default0',
-        id: 'virtual/all-unseen',
-        module: 'mail',
-        title: gt('Unread messages')
-    });
+    if (capabilities.has('webmail')) {
+        // only define if the user actually has mail
+        // otherwise the folder refresh tries to fetch 'default0'
+        pool.addModel({
+            folder_id: 'default0',
+            id: 'virtual/all-unseen',
+            module: 'mail',
+            title: gt('Unread messages')
+        });
+    }
 
     //
     // Propagate
