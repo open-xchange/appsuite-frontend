@@ -22,13 +22,19 @@ define('io.ox/calendar/actions/follow-up', function () {
             'alarm color_label folder_id full_time location note participants private_flag shown_as title'.split(' ')
         );
 
+        // check isBefore once for the start_date; then reuse that information for end_date (see bug 44647)
+        var isBefore = false;
+
         // copy date/time
         ['start_date', 'end_date'].forEach(function (field) {
             var ref = moment(data[field]),
                 // set date to today, keep time, then use same weekday
                 d = moment({ hour: ref.hour(), minute: ref.minute() }).weekday(ref.weekday());
             // add 1 week if date is in the past
-            if (d.isBefore(moment())) d.add(1, 'w');
+            if (isBefore || d.isBefore(moment())) {
+                d.add(1, 'w');
+                isBefore = true;
+            }
             copy[field] = d.valueOf();
         });
 
