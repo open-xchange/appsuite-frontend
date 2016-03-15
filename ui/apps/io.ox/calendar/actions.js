@@ -201,7 +201,7 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/print-appointment', {
-        capabilities: 'printing',
+        capabilities: 'calendar-printing',
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!smartphone');
         },
@@ -241,7 +241,7 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/print-appointment-disabled', {
         requires: 'one',
-        capabilities: 'printing',
+        capabilities: 'calendar-printing',
         action: function (baton) {
             ox.load(['io.ox/core/print']).done(function (print) {
                 var options = { template: 'print.appointment.tmpl' },
@@ -253,7 +253,7 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/print', {
-        capabilities: 'printing',
+        capabilities: 'calendar-printing',
         requires: function (e) {
             var win = e.baton.window;
             if (_.device('!smartphone') && win && win.getPerspective) {
