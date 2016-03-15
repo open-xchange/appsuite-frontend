@@ -1,3 +1,9 @@
+open-xchange-appsuite (7.8.1-5) stable; urgency=medium
+
+  * Fifth preview of 7.8.1 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 15 Mar 2016 14:51:11 +0000
+
 open-xchange-appsuite (7.8.1-4) stable; urgency=medium
 
   * Fourth preview of 7.8.1 release
