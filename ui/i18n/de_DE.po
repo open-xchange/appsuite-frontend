@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-08 13:46+0100\n"
+"PO-Revision-Date: 2016-03-15 09:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3139,7 +3139,6 @@ msgid "Close premium features"
 msgstr "Premium-Funktionen schließen"
 
 #: apps/io.ox/core/commons.js:700 module:io.ox/core
-#, fuzzy
 msgid "Try now!"
 msgstr "Jetzt testen!"
 
@@ -3656,7 +3655,6 @@ msgstr "Meine Ordner"
 
 #: apps/io.ox/core/folder/extensions.js:251 module:io.ox/core
 #: apps/io.ox/files/actions/add-storage-account.js:102 module:io.ox/files
-#, fuzzy
 msgid "Add storage account"
 msgstr "Speicherkonto hinzufügen"
 
@@ -4472,13 +4470,12 @@ msgid "Basic settings"
 msgstr "Grundeinstellungen"
 
 #: apps/io.ox/core/settings/pane.js:67 module:io.ox/core
-#, fuzzy
 msgid ""
 "Some settings (language, timezone, theme) require a page reload or relogin to "
 "take effect."
 msgstr ""
-"Einige Einstellungen (Sprache, Zeitzone, Theme) erfordern das erneute Laden "
-"der Seite oder ein erneutes Anmelden."
+"Einige Einstellungen (Sprache, Zeitzone, Theme) werden erst nach dem erneuten "
+"Laden der Seite oder einer Neuanmeldung wirksam."
 
 #: apps/io.ox/core/settings/pane.js:71 module:io.ox/core
 msgid "Reload page"
@@ -5048,7 +5045,6 @@ msgid "%1$s %2$s %3$s %4$s."
 msgstr "%1$s %2$s %3$s %4$s."
 
 #: apps/io.ox/core/tk/tokenfield.js:278 module:io.ox/core
-#, fuzzy
 msgid ""
 "Added distribution list %s with %s member. The only member of the distribution "
 "list is %s."
@@ -5057,7 +5053,6 @@ msgstr ""
 "Verteilerliste ist %s."
 
 #: apps/io.ox/core/tk/tokenfield.js:279 module:io.ox/core
-#, fuzzy
 msgid ""
 "Added distribution list %s with %s members. Members of the distribution list "
 "are %s."
@@ -5066,12 +5061,10 @@ msgstr ""
 "Verteilerliste sind %s."
 
 #: apps/io.ox/core/tk/tokenfield.js:295 module:io.ox/core
-#, fuzzy
 msgid "Added %s, %s."
 msgstr "%s, %s hinzugefügt."
 
 #: apps/io.ox/core/tk/tokenfield.js:353 module:io.ox/core
-#, fuzzy
 msgid "Removed %s, %s."
 msgstr "%s, %s entfernt."
 
@@ -7153,7 +7146,6 @@ msgstr "Anlagen hier ablegen"
 
 #: apps/io.ox/mail/compose/extensions.js:497 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:516
-#, fuzzy
 msgid "Added %s to attachments."
 msgstr "%s zu Anlagen hinzugefügt."
 
@@ -8600,7 +8592,7 @@ msgstr "%1$s hat die Präsentation beendet."
 #: apps/io.ox/presenter/views/notification.js:226 module:io.ox/presenter
 #, fuzzy
 msgid "Presentation join"
-msgstr "Präsentation beitreten"
+msgstr "Präsentationsbeitritt"
 
 #. message text of a presentation join alert
 #. %1$d is the presenter name
