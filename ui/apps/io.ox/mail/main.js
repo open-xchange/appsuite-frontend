@@ -1406,7 +1406,8 @@ define('io.ox/mail/main', [
                 win.show();
             })
             .fail(function fail(result) {
-                var message = result && result.error ?
+                // missing folder information indicates a connection failure
+                var message = settings.get('folder/inbox') && result && result.error ?
                     result.error + ' ' + gt('Application may not work as expected until this problem is solved.') :
                     // default error
                     api.mailServerDownMessage;
