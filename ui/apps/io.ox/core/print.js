@@ -55,7 +55,7 @@ define('io.ox/core/print', [
 
     function removeCallbacks() {
         for (var id in callbacks) {
-            if (callbacks[id].closed) {
+            if (callbacks[id] && callbacks[id].closed) {
                 delete callbacks[id];
                 delete window[id];
             }
