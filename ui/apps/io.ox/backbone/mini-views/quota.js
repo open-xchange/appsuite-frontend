@@ -15,8 +15,9 @@ define('io.ox/backbone/mini-views/quota', [
     'gettext!io.ox/core',
     'io.ox/core/api/quota',
     'io.ox/core/strings',
-    'io.ox/backbone/mini-views/upsell'
-], function (gt, quotaAPI, strings, UpsellView) {
+    'io.ox/backbone/mini-views/upsell',
+    'settings!io.ox/mail'
+], function (gt, quotaAPI, strings, UpsellView, settings) {
 
     'use strict';
 
@@ -90,7 +91,10 @@ define('io.ox/backbone/mini-views/quota', [
             );
 
             if (opt.quota <= 0) {
-                label.text(gt('unlimited'));
+                label.text(
+                    // -1 means unlimited; if mail server is down (no inbox) we say unknown
+                    this.options.module !== 'mail' || settings.get('folder/inbox') ? gt('unlimited') : gt('unknown')
+                );
             } else {
                 label.text(
                     opt.usage < opt.quota ?
