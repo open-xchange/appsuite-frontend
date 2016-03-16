@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-06 05:14+0100\n"
+"PO-Revision-Date: 2016-03-14 17:55+0100\n"
 "Last-Translator: Arve Eriksson\n"
 "Language-Team: sv <ox@bureau-cornavin.com>\n"
 "Language: sv_SE\n"
@@ -2999,11 +2999,11 @@ msgstr "Lösenord"
 #: apps/io.ox/core/boot/i18n.js:26 module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js:103 module:io.ox/core
 msgid "Sign in"
-msgstr "Skriv in"
+msgstr "Logga in"
 
 #: apps/io.ox/core/boot/i18n.js:27 module:io.ox/core/boot
 msgid "Stay signed in"
-msgstr "Förbli inskriven"
+msgstr "Förbli inloggad"
 
 #: apps/io.ox/core/boot/i18n.js:28 module:io.ox/core/boot
 msgid "Forgot your password?"
@@ -3976,7 +3976,7 @@ msgstr "Om"
 #: apps/io.ox/core/main.js:1031 module:io.ox/core apps/io.ox/core/main.js:1069
 #: apps/io.ox/core/main.js:1071 apps/io.ox/core/main.js:1219
 msgid "Sign out"
-msgstr "Lämna"
+msgstr "Logga ut"
 
 #: apps/io.ox/core/main.js:1097 module:io.ox/core
 msgid "Your Applications"
