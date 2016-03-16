@@ -20,10 +20,11 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/core/dropzone',
     'io.ox/core/capabilities',
     'io.ox/mail/actions/attachmentQuota',
+    'io.ox/core/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js'
-], function (sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, attachmentQuota, settings, gt) {
+], function (sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt) {
 
     function renderFrom(array) {
         if (!array) return;
@@ -211,14 +212,13 @@ define('io.ox/mail/compose/extensions', [
                 // bind model to collection
                 tokenfieldView.listenTo(baton.model, 'change:' + attr, function (mailModel, recipients) {
                     var recArray = _(recipients).map(function (recipient) {
+                        var display_name = util.removeQuotes(recipient[0]),
+                            email = recipient[1];
                         return {
                             type: 5,
-                            display_name: recipient[0],
-                            email1: recipient[1],
-                            token: {
-                                label: recipient[0],
-                                value: recipient[1]
-                            }
+                            display_name: display_name,
+                            email1: email,
+                            token: { label: display_name, value: email }
                         };
                     });
                     this.collection.reset(recArray);
@@ -229,7 +229,8 @@ define('io.ox/mail/compose/extensions', [
                 tokenfieldView.collection.on('change add remove sort', function () {
                     var recipients = this.map(function (model) {
                         var token = model.get('token');
-                        return [token.label, token.value];
+                        var display_name = util.removeQuotes(token.label), email = token.value;
+                        return [display_name, email];
                     });
                     baton.model.set(attr, recipients, { silent: true });
                 });
