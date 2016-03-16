@@ -60,18 +60,8 @@ define('io.ox/core/capabilities', function () {
             _(ox.serverConfig.capabilities).each(function (obj) {
                 capabilities[obj.id] = obj;
             });
-            fixit();
         }
     };
-
-    function fixit() {
-        // a capability is only set if the user really has that capability
-        // that's the basic idea behind capabilities; not further checks needed
-        // until today (big applause):
-        if (!capabilities.read_create_shared_folders || disabled.read_create_shared_folders) {
-            delete capabilities.invite_guests;
-        }
-    }
 
     api.reset();
 
@@ -106,9 +96,6 @@ define('io.ox/core/capabilities', function () {
             disabled[id] = true;
         });
     }
-
-    // and again
-    fixit();
 
     // log
     var caps = _(disabled).keys().sort();
