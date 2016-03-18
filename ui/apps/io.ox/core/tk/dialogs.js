@@ -367,6 +367,18 @@ define('io.ox/core/tk/dialogs', [
             return addButton(action, label, dataaction, options);
         };
 
+        this.addCheckbox = function (label, action, status) {
+            nodes.footer.prepend(
+                $('<div>').addClass('checkbox').append(
+                    $('<div>').addClass('controls'),
+                    $('<label>').text(label).prepend(
+                        $('<input type="checkbox" tabindex="1">').attr({ 'data-action': action, 'checked': status })
+                    )
+                )
+            );
+            return this;
+        };
+
         this.close = function () {
             if (!o || o.async) {
                 close();

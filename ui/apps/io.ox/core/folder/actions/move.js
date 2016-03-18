@@ -17,8 +17,9 @@ define('io.ox/core/folder/actions/move', [
     'io.ox/core/notifications',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/core',
-    'io.ox/mail/api'
-], function (api, picker, notifications, dialogs, gt, mailAPI) {
+    'io.ox/mail/api',
+    'io.ox/core/extensions'
+], function (api, picker, notifications, dialogs, gt, mailAPI, ext) {
 
     'use strict';
 
@@ -55,7 +56,8 @@ define('io.ox/core/folder/actions/move', [
                 input = options.source || options.list,
                 isMove = /^move/.test(type),
                 multiple = type === 'moveAll' || options.list.length > 1,
-                current = options.source || options.list[0].folder_id;
+                current = options.source || options.list[0].folder_id,
+                createRule, folderId;
 
             function success() {
                 notifications.yell('success', multiple ? options.success.multiple : options.success.single);
@@ -98,6 +100,34 @@ define('io.ox/core/folder/actions/move', [
                 );
             }
 
+            function generateRule() {
+                require(['io.ox/mail/mailfilter/settings/filter'
+                ], function (filter) {
+
+                    filter.initialize().then(function (data, config, opt) {
+                        var factory = opt.model.protectedMethods.buildFactory('io.ox/core/mailfilter/model', opt.api),
+                            args = { data: { obj: factory.create(opt.model.protectedMethods.provideEmptyModel()) } },
+                            senderList = _.map(options.list, function (obj) { return obj.from[0][1]; }),
+                            preparedTest;
+
+                        args.data.obj.set('actioncmds', [{ id: 'move', into: folderId }]);
+
+                        if (senderList.length > 1) {
+                            preparedTest = { id: 'anyof', tests: [] };
+                            _.each(senderList, function (item) {
+                                preparedTest.tests.push({ comparison: 'contains', headers: ['From'], id: 'header', values: [item] });
+                            });
+                        } else {
+                            preparedTest = { comparison: 'contains', headers: ['From'], id: 'header', values: [senderList[0]] };
+                        }
+
+                        args.data.obj.set('test', preparedTest);
+
+                        ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config[0]);
+                    });
+                });
+            }
+
             if (options.target) {
                 if (current !== options.target) commit(options.target);
                 return;
@@ -115,9 +145,24 @@ define('io.ox/core/folder/actions/move', [
                 open: options.open,
                 settings: settings,
                 title: options.title,
+                type: options.type,
+
+                initialize: function (dialog, tree) {
+                    if (options.type === 'move' && options.module === 'mail') dialog.addCheckbox(gt('Create rule'), 'create-rule', false);
+
+                    dialog.getFooter().find('[data-action="create-rule"]').on('change', function () {
+                        createRule = $(this).prop('checked');
+                    });
+                    dialog.on('ok', function () {
+                        folderId = tree.selection.get();
+                    });
+                },
 
                 done: function (id) {
                     if (type === 'copy' || id !== current) commit(id);
+                    if (type === 'move' && createRule) {
+                        generateRule();
+                    }
                 },
 
                 disable: function (data, options) {
