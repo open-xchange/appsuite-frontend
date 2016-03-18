@@ -398,9 +398,13 @@ define('io.ox/mail/compose/view', [
 
         fetchMail: function (obj) {
 
-            var self = this,
+            var attachmentMailInfo, self = this,
             mode = obj.mode;
             delete obj.mode;
+
+            if (obj.attachment && obj.attachments) {
+                attachmentMailInfo = obj.attachments[1] ? obj.attachments[1].mail : undefined;
+            }
 
             if (/(compose|edit)/.test(mode)) {
                 return $.when();
@@ -447,6 +451,13 @@ define('io.ox/mail/compose/view', [
                     });
                     delete data.nested_msgs;
                 }
+                // to keep the previews working we copy data from the original mail
+                if (mode === 'forward' || mode === 'edit') {
+                    attachments.map(function (file) {
+                        return _.extend(file, { group: 'mail', mail: attachmentMailInfo });
+                    });
+                }
+
                 self.model.set(data);
                 var attachmentCollection = self.model.get('attachments');
                 attachmentCollection.reset(attachments);
