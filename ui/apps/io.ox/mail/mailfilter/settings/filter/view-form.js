@@ -179,6 +179,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             node.append(warning);
         },
 
+        renderWarningForEmptyActions = function (node) {
+            var warning = $('<div>').addClass('alert alert-danger').text(gt('Please define at least one action.'));
+            node.append(warning);
+        },
+
         prepareFolderForDisplay = function (folder) {
             var arrayOfParts = folder.split('/');
             arrayOfParts.shift();
@@ -186,7 +191,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         },
 
         toggleSaveButton = function (footer, pane) {
-            if (pane.find('input.warning, select.warning').length === 0) {
+            if (pane.find('input.warning, select.warning, .alert-danger').length === 0) {
                 footer.find('[data-action="save"]').prop('disabled', false);
             } else {
                 footer.find('[data-action="save"]').prop('disabled', true);
@@ -893,19 +898,24 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             var headlineTest = $('<legend>').addClass('sectiontitle expertmode conditions').text(gt('Conditions')),
                 headlineActions = $('<legend>').addClass('sectiontitle expertmode actions').text(gt('Actions')),
-                notification = $('<div>');
+                notificationConditions = $('<div>'),
+                notificationActions = $('<div>');
 
             if (_.isEqual(appliedTest[0], {id : 'true'})) {
-                renderWarningForEmptyTests(notification);
+                renderWarningForEmptyTests(notificationConditions);
+            }
+
+            if (_.isEmpty(baton.model.get('actioncmds'))) {
+                renderWarningForEmptyActions(notificationActions);
             }
 
             this.append(
-                headlineTest, notification, listTests,
+                headlineTest, notificationConditions, listTests,
                 elements.drawOptionsExtern(gt('Add condition'), headerTranslation, {
                     test: 'create',
                     toggle: 'dropdown'
                 }),
-                headlineActions, listActions,
+                headlineActions, notificationActions, listActions,
                 elements.drawOptionsExtern(gt('Add action'), actionsTranslations, {
                     action: 'create',
                     toggle: 'dropdown'
