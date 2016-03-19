@@ -2216,6 +2216,12 @@ msgstr "Crear objetos y subcarpetas"
 msgid "Create reminder"
 msgstr "Crear recordatorio"
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#, fuzzy
+#| msgid "Create new rule"
+msgid "Create rule"
+msgstr "Crear nueva regla"
+
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view.js

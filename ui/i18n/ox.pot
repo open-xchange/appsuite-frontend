@@ -4096,6 +4096,11 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js
 #: module:io.ox/core
+msgid "Create rule"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/move.js
+#: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
 msgid "Move all messages"
 msgstr ""

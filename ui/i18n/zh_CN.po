@@ -2182,6 +2182,12 @@ msgstr "创建对象和子文件夹"
 msgid "Create reminder"
 msgstr "创建提醒"
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#, fuzzy
+#| msgid "Create new rule"
+msgid "Create rule"
+msgstr "创建新规则"
+
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view.js

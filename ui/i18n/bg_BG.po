@@ -2195,6 +2195,12 @@ msgstr ""
 msgid "Create reminder"
 msgstr "Създай напомняне"
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#, fuzzy
+#| msgid "Create new rule"
+msgid "Create rule"
+msgstr "Създай ново правило"
+
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view.js

@@ -2177,6 +2177,12 @@ msgstr "オブジェクトとサブフォルダを作成"
 msgid "Create reminder"
 msgstr "アラームを作成"
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#, fuzzy
+#| msgid "Create new rule"
+msgid "Create rule"
+msgstr "新規のルールを作成"
+
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view.js
