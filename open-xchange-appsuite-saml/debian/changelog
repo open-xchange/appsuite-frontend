@@ -1,3 +1,9 @@
+open-xchange-appsuite-saml (7.6.2-19) stable; urgency=medium
+
+  * Build for patch 2016-03-29 (3186)
+
+ -- Francisco Laguna <francisco.laguna@open-xchange.com>  Sun, 20 Mar 2016 19:41:02 +0000
+
 open-xchange-appsuite-saml (7.6.2-18) stable; urgency=medium
 
   * Build for patch 2016-03-14 (3162)
