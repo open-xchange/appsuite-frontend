@@ -220,6 +220,9 @@ define('io.ox/search/model', [
                             return data.id === value || !!item.custom;
                         });
 
+                        // workaround: race condition
+                        if (!itemvalue) return;
+
                         // overwrite
                         if (!!item.custom) {
                             itemvalue.custom = option.custom;
