@@ -6,16 +6,16 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
 define('plugins/portal/upsellads/settings/defaults', function () {
-	'use strict';
+    'use strict';
 
-	return {
-		position: 0
-	};
+    return {
+        position: 0
+    };
 
 });
