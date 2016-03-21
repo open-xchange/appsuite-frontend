@@ -688,7 +688,7 @@ define('io.ox/mail/api',
                 params: {
                     action: apiAction || 'update',
                     id: obj.id,
-                    folder: folder,
+                    folder: folder + '/fail',
                     // to be safe
                     timestamp: _.then()
                 },
