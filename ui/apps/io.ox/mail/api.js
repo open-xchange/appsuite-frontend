@@ -1797,7 +1797,7 @@ define('io.ox/mail/api', [
     };
 
     // need this message at several places
-    api.mailServerDownMessage = gt('Unable to connect to mail server. Possible reasons: the mail server is (temporarily) down or there are network connection problems. Please try again in a few minutes.');
+    api.mailServerDownMessage = gt('Unable to connect to mail server. Possible reasons: The mail server is (temporarily) down or there are network connection problems. Please try again in a few minutes.');
 
     return api;
 });

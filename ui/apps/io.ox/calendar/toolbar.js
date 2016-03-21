@@ -20,10 +20,11 @@ define('io.ox/calendar/toolbar', [
     'io.ox/core/tk/upload',
     'io.ox/core/dropzone',
     'io.ox/core/notifications',
+    'io.ox/core/capabilities',
     'gettext!io.ox/calendar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, gt) {
+], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, capabilities, gt) {
 
     'use strict';
 
@@ -172,10 +173,14 @@ define('io.ox/calendar/toolbar', [
             .option('colorScheme', 'classic', gt('Classic colors'))
             .option('colorScheme', 'dark', gt('Dark colors'))
             .option('colorScheme', 'custom', gt('Custom colors'))
-            .divider()
-            .link('print', gt('Print'), print.bind(null, baton))
             .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
             .listenTo(baton.app.props, 'change:layout', updateColorOption);
+
+            if (capabilities.has('calendar-printing')) {
+                dropdown
+                .divider()
+                .link('print', gt('Print'), print.bind(null, baton));
+            }
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
