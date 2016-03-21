@@ -20,9 +20,10 @@ define('io.ox/mail/actions', [
     'io.ox/core/folder/api',
     'io.ox/core/print',
     'io.ox/core/api/account',
+    'io.ox/core/notifications',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (ext, links, api, util, folderAPI, print, account, settings, gt) {
+], function (ext, links, api, util, folderAPI, print, account, notifications, settings, gt) {
 
     'use strict';
 
@@ -350,7 +351,10 @@ define('io.ox/mail/actions', [
             }, true);
         },
         multiple: function (list) {
-            api.markSpam(list);
+            api.markSpam(list).done(function (result) {
+                var error = _(result).chain().pluck('error').compact().first().value();
+                if (error) notifications.yell(error);
+            });
         }
     });
 
@@ -370,7 +374,10 @@ define('io.ox/mail/actions', [
             }, true);
         },
         multiple: function (list) {
-            api.noSpam(list);
+            api.noSpam(list).done(function (result) {
+                var error = _(result).chain().pluck('error').compact().first().value();
+                if (error) notifications.yell(error);
+            });
         }
     });
 
