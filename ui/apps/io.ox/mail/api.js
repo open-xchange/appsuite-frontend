@@ -579,6 +579,10 @@ define('io.ox/mail/api',
         });
     }
 
+    function resetFolderByType(type) {
+        return pool.resetFolder(accountAPI.getFoldersByType(type));
+    }
+
     /**
      * wrapper for factories remove to update counters
      * @param  {array} ids
@@ -678,15 +682,13 @@ define('io.ox/mail/api',
         // now talk to server
         _(list).map(function (obj) {
             var folder  = obj.folder || obj.folder_id;
-            if (modfolder && modfolder !== folder) {
-                move = true;
-            }
+            if (modfolder && modfolder !== folder) move = true;
             return http.PUT({
                 module: 'mail',
                 params: {
                     action: apiAction || 'update',
                     id: obj.id,
-                    folder: folder,
+                    folder: folder + '/fail',
                     // to be safe
                     timestamp: _.then()
                 },
@@ -1005,37 +1007,38 @@ define('io.ox/mail/api',
         });
     };
 
+    function handleSpam(list, state) {
+        prepareRemove(list);
+        // reset spam folder; we assume that the spam handler will move the message to the spam folder
+        resetFolderByType('spam');
+        http.pause();
+        _(list).map(function (item) {
+            return http.PUT({
+                module: 'mail',
+                params: {
+                    action: 'update',
+                    id: item.id,
+                    folder: item.folder_id,
+                    timestamp: _.then()
+                },
+                data: { flags: api.FLAGS.SPAM, value: state },
+                appendColumns: false
+            });
+        });
+        return http.resume();
+    }
+
     /**
      * marks list of mails as spam
      * @param {array} list
      * @return {deferred}
      */
     api.markSpam = function (list) {
-
-        prepareRemove(list);
-
-        this.trigger('refresh.pending');
-        tracker.clear();
-
-        _(pool.getByFolder(accountAPI.getFoldersByType('spam'))).each(function (collection) {
-            collection.expired = true;
-        });
-
-        return update(list, { flags: api.FLAGS.SPAM, value: true }).fail(notifications.yell);
+        return handleSpam(list, true);
     };
 
     api.noSpam = function (list) {
-
-        prepareRemove(list);
-
-        this.trigger('refresh.pending');
-        tracker.clear();
-
-        _(pool.getByFolder(accountAPI.getFoldersByType('inbox'))).each(function (collection) {
-            collection.expired = true;
-        });
-
-        return update(list, { flags: api.FLAGS.SPAM, value: false }).fail(notifications.yell);
+        return handleSpam(list, false);
     };
 
     /**
