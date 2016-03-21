@@ -486,15 +486,13 @@ define('io.ox/mail/api', [
         // now talk to server
         _(list).map(function (obj) {
             var folder  = obj.folder || obj.folder_id;
-            if (modfolder && modfolder !== folder) {
-                move = true;
-            }
+            if (modfolder && modfolder !== folder) move = true;
             return http.PUT({
                 module: 'mail',
                 params: {
                     action: apiAction || 'update',
                     id: obj.id,
-                    folder: folder,
+                    folder: folder + '/fail',
                     // to be safe
                     timestamp: _.then()
                 },
@@ -702,27 +700,38 @@ define('io.ox/mail/api', [
         });
     };
 
+    function handleSpam(list, state) {
+        prepareRemove(list);
+        // reset spam folder; we assume that the spam handler will move the message to the spam folder
+        resetFolderByType('spam');
+        http.pause();
+        _(list).map(function (item) {
+            return http.PUT({
+                module: 'mail',
+                params: {
+                    action: 'update',
+                    id: item.id,
+                    folder: item.folder_id + '/fail',
+                    timestamp: _.then()
+                },
+                data: { flags: api.FLAGS.SPAM, value: state },
+                appendColumns: false
+            });
+        });
+        return http.resume();
+    }
+
     /**
      * marks list of mails as spam
      * @param {array} list
      * @return {deferred}
      */
     api.markSpam = function (list) {
-
-        prepareRemove(list);
-        // reset spam folder; we assume that the spam handler will move the message to the spam folder
-        resetFolderByType('spam');
-
-        return update(list, { flags: api.FLAGS.SPAM, value: true }).fail(notifications.yell);
+        return handleSpam(list, true);
     };
 
     api.noSpam = function (list) {
-
-        prepareRemove(list);
-        // reset inbox; we assume that the spam handler will move the message (back) to the inbox
-        resetFolderByType('inbox');
-
-        return update(list, { flags: api.FLAGS.SPAM, value: false }).fail(notifications.yell);
+        return handleSpam(list, false);
     };
 
     // combines move & copy
