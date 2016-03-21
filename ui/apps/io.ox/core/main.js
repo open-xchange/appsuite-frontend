@@ -1679,9 +1679,16 @@ define('io.ox/core/main', [
                         // special case: open viewer too?
                         if (hash.app === 'io.ox/files' && hash.id !== undefined) {
                             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
-                                api.get(hash).done(function (data) {
-                                    new Viewer().launch({ files: [data], folder: hash.folder });
-                                });
+                                folderAPI.get(hash.folder)
+                                    .done(function () {
+                                        api.get(hash).done(function (data) {
+                                            new Viewer().launch({ files: [data], folder: hash.folder });
+                                        });
+                                    })
+                                    .fail(function (error) {
+                                        _.url.hash('id', null);
+                                        notifications.yell(error);
+                                    });
                             });
                         }
                         // explicit call?
