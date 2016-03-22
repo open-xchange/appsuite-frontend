@@ -205,7 +205,7 @@ define('io.ox/core/folder/api', [
         },
 
         supportsInviteGuests: function () {
-            return this.supportsInternalSharing() && capabilities.has('invite_guests');
+            return !this.is('mail') && capabilities.has('invite_guests') && this.supportsInternalSharing();
         },
 
         // check if the folder can have shares
