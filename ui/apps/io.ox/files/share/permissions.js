@@ -855,18 +855,17 @@ define('io.ox/files/share/permissions', [
             );
 
             // to change privileges you have to a folder admin
-            var supportsChanges = objModel.isAdmin();
+            var supportsChanges = objModel.isAdmin(),
+                folderModel = objModel.getFolderModel();
+            console.log('objModel', objModel, '->', folderModel);
 
             // whether you can invite further people is a different question:
             // A. you have to be the admin AND (
             //   B. you can invite guests (external contacts) OR
             //   C. you are in a groupware context (internal users and/or groups)
             // )
-            var supportsInvites = supportsChanges && (function () {
-                if (capabilities.has('invite_guests') && objModel.get('module') !== 'mail') return true;
-                if (!capabilities.has('gab') || capabilities.has('alone')) return false;
-                return true;
-            }());
+            var supportsInvites = supportsChanges && folderModel.supportsInternalSharing(),
+                supportsGuests = folderModel.supportsInviteGuests();
 
             if (supportsChanges) {
                 // add action buttons
@@ -900,7 +899,7 @@ define('io.ox/files/share/permissions', [
                 var typeaheadView = new Typeahead({
                         apiOptions: {
                             // mail does not support sharing folders to guets
-                            contacts: capabilities.has('invite_guests') && module !== 'mail',
+                            contacts: supportsGuests,
                             users: true,
                             groups: true
                         },
@@ -912,7 +911,7 @@ define('io.ox/files/share/permissions', [
                             // remove duplicate entries from typeahead dropdown
                             return _(data).filter(function (model) {
                                 // don't offer secondary addresses as guest accounts
-                                if (!capabilities.has('invite_guests') && model.get('field') !== 'email1') return false;
+                                if (!supportsGuests && model.get('field') !== 'email1') return false;
                                 // mail does not support sharing folders to guets
                                 if (module === 'mail' && model.get('field') !== 'email1') return false;
                                 return !permissionsView.collection.get(model.id);
@@ -972,7 +971,7 @@ define('io.ox/files/share/permissions', [
                                 if (module === 'mail') return;
 
                                 // skip manual edit if invite_guests isn't set
-                                if (!capabilities.has('invite_guests')) return;
+                                if (!supportsGuests) return;
 
                                 // enter or blur?
                                 if (e.type === 'keydown' && e.which !== 13) return;

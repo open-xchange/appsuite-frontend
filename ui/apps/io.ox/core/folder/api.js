@@ -193,6 +193,21 @@ define('io.ox/core/folder/api', [
             return !!bits.get('admin');
         },
 
+        supportsInternalSharing: function () {
+            // mail checks gab (webmail, PIM, PIM+infostore)
+            if (this.is('mail')) return capabilities.has('gab');
+            // drive checks read_create_shared_folders (might be wrong; needs clarification; see bug 44833)
+            if (this.is('drive')) return capabilities.has('read_create_shared_folders');
+            // contacts, calendar, tasks
+            if (this.is('public')) return capabilities.has('edit_public_folders');
+            // non-public foldes
+            return capabilities.has('read_create_shared_folders');
+        },
+
+        supportsInviteGuests: function () {
+            return this.supportsInternalSharing() && capabilities.has('invite_guests');
+        },
+
         // check if the folder can have shares
         supportsShares: function () {
             // for mail folders check "capabilities" bitmask

@@ -36,6 +36,11 @@ define('io.ox/files/share/api', [
             return !this.has('folder_id');
         },
 
+        getFolderModel: function () {
+            var id = this.isFile() ? this.get('folder_id') : this.get('id');
+            return folderAPI.pool.getModel(id);
+        },
+
         isAdmin: function () {
             // for files we don't have the parent folder information
             // use shareable attribute instead

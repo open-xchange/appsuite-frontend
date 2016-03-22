@@ -441,18 +441,18 @@ define('io.ox/core/folder/contextmenu', [
                 var id = String(baton.data.id),
                     model = api.pool.getModel(id);
 
-                var supportsPermissions = capabilities.has('gab') && !capabilities.has('alone'),
-                    supportsInvite = capabilities.has('invite_guests'),
+                var supportsInternal = model.supportsInternalSharing(),
+                    supportsInvite = model.supportsInviteGuests(),
                     supportsLinks = capabilities.has('share_links'),
                     showInvitePeople = supportsInvite && model.supportsShares(),
                     showGetLink = supportsLinks && !model.is('mail') && model.isShareable(id);
 
                 // stop if neither invites or links are supported
-                if (!supportsPermissions && !showInvitePeople && !showGetLink) return;
+                if (!supportsInternal && !showInvitePeople && !showGetLink) return;
 
                 header.call(this, gt('Sharing'));
 
-                if (supportsPermissions || showInvitePeople) {
+                if (supportsInternal || showInvitePeople) {
                     addLink(this, {
                         action: 'invite',
                         data: { app: baton.app, id: id },
