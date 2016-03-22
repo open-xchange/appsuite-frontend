@@ -8,8 +8,6 @@
 #
 # © 2016 OX Software GmbH, Germany. info@open-xchange.com
 
- *# Mail: info@open-xchange.com
-
 NOW=$(date -u +%Y%m%d.%H%M%S)
 
 usage(){
