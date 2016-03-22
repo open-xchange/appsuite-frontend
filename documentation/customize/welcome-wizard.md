@@ -16,8 +16,7 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Writing_a_wizard
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Francisco Laguna <...>
  */
