@@ -127,7 +127,7 @@ define('io.ox/core/tk/selection', [
         // };
 
         hasMultiple = function () {
-            return _.isArray(selectedItems) && selectedItems.length > 1;
+            return _.size(selectedItems) > 1;
         };
 
         changed = function () {
