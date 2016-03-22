@@ -1,5 +1,5 @@
 # Slovak translation of Open-Xchange.
-# Copyright (C) 2011 Open-Xchange.
+# Copyright (C) 2016 OX Software GmbH
 # This file is distributed under the same license as the Open-Xchange package.
 # Antje Faber, 2013.
 msgid ""
