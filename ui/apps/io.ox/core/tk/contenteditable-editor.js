@@ -203,11 +203,12 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         el.append(
             el = $('<div class="contenteditable-editor">').attr({
-                'data-editor-id': editorId,
-                'aria-label': gt('Rich Text Area. Press ALT-F10 for toolbar')
+                'data-editor-id': editorId
             }).append(
                 toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId),
-                editor = $('<div class="editable" tabindex="1">').css('margin-bottom', '32px')
+                editor = $('<div class="editable" tabindex="1" role="textbox" aria-multiline="true">')
+                    .attr({ 'aria-label': gt('Rich Text Area. Press ALT-F10 for toolbar') })
+                    .css('margin-bottom', '32px')
             )
         );
 
