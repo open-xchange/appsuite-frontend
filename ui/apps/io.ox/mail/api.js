@@ -492,7 +492,7 @@ define('io.ox/mail/api', [
                 params: {
                     action: apiAction || 'update',
                     id: obj.id,
-                    folder: folder + '/fail',
+                    folder: folder,
                     // to be safe
                     timestamp: _.then()
                 },
@@ -711,7 +711,7 @@ define('io.ox/mail/api', [
                 params: {
                     action: 'update',
                     id: item.id,
-                    folder: item.folder_id + '/fail',
+                    folder: item.folder_id,
                     timestamp: _.then()
                 },
                 data: { flags: api.FLAGS.SPAM, value: state },
