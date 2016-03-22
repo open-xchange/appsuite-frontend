@@ -309,7 +309,7 @@ define('io.ox/files/share/wizard', [
             return $.when(this.model.save()).fail(yell);
         },
 
-        cancel: function () {
+        removeLink: function () {
             this.model.destroy();
             this.remove();
         }
