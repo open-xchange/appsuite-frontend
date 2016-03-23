@@ -531,7 +531,7 @@ define('io.ox/calendar/api', [
                     // within a series as it becomes an exception.
                     // the series does not update, however (see bug 40137)
                     var user = _(data.users).findWhere({ id: ox.user_id });
-                    if (user) user.confirmation = o.data.confirmation;
+                    if (user) _.extend(user, _(o.data).pick('confirmation', 'confirmmessage'));
                     // events
                     api.trigger('update', data);
                     api.trigger('update:' + _.ecid(data), data);
