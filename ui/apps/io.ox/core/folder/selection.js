@@ -71,8 +71,8 @@ define('io.ox/core/folder/selection', [], function () {
             var node = this.byId(id);
             if (node.length) {
                 node[0].scrollIntoView(true);
-                // Fix Safari specific flexbox/scrolling (see bug 43799)
-                if (_.device('safari')) $('#io-ox-windowmanager').scrollTop(0);
+                // specific flexbox/scrolling issue (see bugs 43799, 44938)
+                $('#io-ox-windowmanager').scrollTop(0);
                 this.view.trigger('scrollIntoView', id);
             }
         },

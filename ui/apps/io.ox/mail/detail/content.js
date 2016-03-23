@@ -242,8 +242,8 @@ define('io.ox/mail/detail/content', [
                 var id = $.escape($(e.target).attr('href').substr(1)),
                     anchor = $(this).find('#' + id + ', [name="' + $.escape(id) + '"]');
                 if (anchor.length) anchor[0].scrollIntoView();
-                // safari flexbox bug 44637 (related #43799)
-                if (_.device('safari')) $('#io-ox-windowmanager').scrollTop(0);
+                // flexbox bug 44637 (related #43799)
+                $('#io-ox-windowmanager').scrollTop(0);
             }, false);
         }
     });
