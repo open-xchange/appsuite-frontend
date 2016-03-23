@@ -1796,9 +1796,12 @@ define('io.ox/mail/api', [
         api.pool.add('detail', thread);
     };
 
-    api.collectionLoader.virtual = function (options) {
+    api.collectionLoader.noSelect = function (options) {
         // special handling for top-level mail account folders (e.g. bug 34818)
-        if (/^default\d+$/.test(options.folder)) return [];
+        if (/^default\d+$/.test(options.folder)) return true;
+        // check read access
+        var model = folderAPI.pool.getModel(options.folder);
+        return !model.can('read');
     };
 
     api.collectionLoader.each = function (obj, index, offset, params) {

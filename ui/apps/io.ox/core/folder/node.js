@@ -308,8 +308,9 @@ define('io.ox/core/folder/node', [
 
             // also set: folder, parent, tree
 
-            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
             this.model = api.pool.getModel(o.model_id);
+            this.noSelect = !this.model.can('read');
+            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
             this.describedbyID = _.uniqueId('description-');
@@ -390,7 +391,7 @@ define('io.ox/core/folder/node', [
             // sortable
             if (o.sortable) this.$el.attr('data-sortable', true);
 
-            // virtual?
+            if (this.noSelect && o.level > 0) this.$el.addClass('no-select');
             if (this.isVirtual) this.$el.addClass('virtual');
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)

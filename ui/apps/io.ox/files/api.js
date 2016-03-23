@@ -469,6 +469,12 @@ define('io.ox/files/api', [
         SECONDARY_PAGE_SIZE: 210
     });
 
+    api.collectionLoader.noSelect = function (options) {
+        // check read access
+        var model = folderAPI.pool.getModel(options.folder);
+        return !model.can('read');
+    };
+
     api.collectionLoader.each = function (data) {
         api.pool.add('detail', data);
     };

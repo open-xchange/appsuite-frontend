@@ -210,6 +210,10 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             this.after(offset, params, data);
         },
 
+        noSelect: function () {
+            return false;
+        },
+
         virtual: function () {
             return false;
         },
@@ -223,6 +227,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var module = this.module,
                 key = module + '/' + _.param(_.extend({ session: ox.session }, params)),
                 rampup = ox.rampup[key],
+                noSelect = this.noSelect(params),
                 virtual = this.virtual(params),
                 self = this;
 
@@ -231,9 +236,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 return $.when(rampup);
             }
 
-            if (virtual) {
-                return $.when(virtual);
-            }
+            if (noSelect) return $.when([]);
+            if (virtual) return $.when(virtual);
 
             return http.wait().then(function () {
                 return self.httpGet(module, params).then(function (data) {
