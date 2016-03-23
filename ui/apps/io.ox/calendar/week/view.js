@@ -20,8 +20,9 @@ define('io.ox/calendar/week/view', [
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/print',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, AppointmentModel, util, folderAPI, gt, settings, coreSettings, Dropdown) {
+], function (ext, AppointmentModel, util, folderAPI, gt, settings, coreSettings, Dropdown, print) {
 
     'use strict';
 
@@ -1839,46 +1840,44 @@ define('io.ox/calendar/week/view', [
         },
 
         print: function () {
-            var self = this;
-            ox.load(['io.ox/core/print']).done(function (print) {
-                var folder = self.folder(),
-                    folderID = folder.id || folder.folder,
-                    templates = {
-                        'day': 'cp_dayview_table_appsuite.tmpl',
-                        'workweek': 'cp_weekview_table_appsuite.tmpl',
-                        'week': 'cp_weekview_table_appsuite.tmpl'
-                    },
-                    data = null;
+            var self = this,
+                folder = self.folder(),
+                folderID = folder.id || folder.folder,
+                templates = {
+                    'day': 'cp_dayview_table_appsuite.tmpl',
+                    'workweek': 'cp_weekview_table_appsuite.tmpl',
+                    'week': 'cp_weekview_table_appsuite.tmpl'
+                },
+                data = null;
 
-                if (folderID && folderID !== 'virtual/all-my-appointments') {
-                    data = { folder_id: folderID };
-                }
+            if (folderID && folderID !== 'virtual/all-my-appointments') {
+                data = { folder_id: folderID };
+            }
 
-                var win = print.open('printCalendar', data, {
-                    template: templates[self.mode],
-                    start: moment(self.startDate).utc(true).valueOf(),
-                    end: moment(self.startDate).utc(true).add(self.columns, 'days').valueOf(),
-                    work_day_start_time: self.workStart * 36e5, // multiply with milliseconds
-                    work_day_end_time: self.workEnd * 36e5
-                });
-
-                if (_.browser.firefox) {
-                    // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
-                    var limit = 50,
-                        counter = 0,
-                        interval;
-                    // onLoad does not work with firefox on mac, so ugly polling is used
-                    interval = setInterval(function () {
-                        counter++;
-                        if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
-                            win.print();
-                            clearInterval(interval);
-                        }
-                    }, 100);
-                } else {
-                    win.print();
-                }
+            var win = print.open('printCalendar', data, {
+                template: templates[self.mode],
+                start: moment(self.startDate).utc(true).valueOf(),
+                end: moment(self.startDate).utc(true).add(self.columns, 'days').valueOf(),
+                work_day_start_time: self.workStart * 36e5, // multiply with milliseconds
+                work_day_end_time: self.workEnd * 36e5
             });
+
+            if (_.browser.firefox) {
+                // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+                var limit = 50,
+                    counter = 0,
+                    interval;
+                // onLoad does not work with firefox on mac, so ugly polling is used
+                interval = setInterval(function () {
+                    counter++;
+                    if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
+                        win.print();
+                        clearInterval(interval);
+                    }
+                }, 100);
+            } else {
+                win.print();
+            }
         }
     });
 
