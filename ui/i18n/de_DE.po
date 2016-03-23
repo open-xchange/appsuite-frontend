@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-16 09:35+0100\n"
+"PO-Revision-Date: 2016-03-23 10:25+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -8606,16 +8606,14 @@ msgstr "%1$s hat die Präsentation beendet."
 
 #. headline of a presentation join alert
 #: apps/io.ox/presenter/views/notification.js:226 module:io.ox/presenter
-#, fuzzy
 msgid "Presentation join"
 msgstr "Präsentationsbeitritt"
 
 #. message text of a presentation join alert
 #. %1$d is the presenter name
 #: apps/io.ox/presenter/views/notification.js:229 module:io.ox/presenter
-#, fuzzy
 msgid "Joining the presentation of %1$s."
-msgstr "Präsentation von %1$s beitreten."
+msgstr "Beitritt zur Präsentation von %1$s."
 
 #. message text of an alert box if joining a presentation fails
 #. %1$d is the name of the user who started the presentation
