@@ -194,10 +194,8 @@ define('io.ox/core/folder/api', [
         },
 
         supportsInternalSharing: function () {
-            // mail checks gab (webmail, PIM, PIM+infostore)
-            if (this.is('mail')) return capabilities.has('gab');
-            // drive checks read_create_shared_folders (might be wrong; needs clarification; see bug 44833)
-            if (this.is('drive')) return capabilities.has('read_create_shared_folders');
+            // mail and drive check gab (webmail, PIM, PIM+infostore)
+            if (this.is('mail|drive')) return capabilities.has('gab');
             // contacts, calendar, tasks
             if (this.is('public')) return capabilities.has('edit_public_folders');
             // non-public foldes

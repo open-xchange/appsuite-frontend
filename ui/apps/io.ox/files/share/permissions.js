@@ -857,7 +857,6 @@ define('io.ox/files/share/permissions', [
             // to change privileges you have to a folder admin
             var supportsChanges = objModel.isAdmin(),
                 folderModel = objModel.getFolderModel();
-            console.log('objModel', objModel, '->', folderModel);
 
             // whether you can invite further people is a different question:
             // A. you have to be the admin AND (

@@ -86,6 +86,8 @@ define('io.ox/core/folder/util', [
             case 'tasks':
                 return data.module === 'tasks';
             case 'infostore':
+            case 'files':
+            case 'drive':
                 return data.module === 'infostore';
             case 'account':
                 return data.module === 'system' && /^default(\d+)?/.test(String(data.id));
