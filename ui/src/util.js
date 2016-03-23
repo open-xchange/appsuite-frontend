@@ -749,8 +749,8 @@
                     return { id: s };
                 }
                 return {
-                    folder_id: s.substr(0, pos + 1).replace(/\\(\\?)/g, '$1'),
-                    id: s.substr(pos + 2).replace(/\\(\\?)/g, '$1')
+                    folder_id: s.substr(0, pos + 1).replace(/\\\./g, '.'),
+                    id: s.substr(pos + 2).replace(/\\\./g, '.')
                 };
             }
 
