@@ -17,11 +17,12 @@ define('io.ox/contacts/actions', [
     'io.ox/core/extPatterns/actions',
     'io.ox/contacts/api',
     'io.ox/portal/util',
+    'io.ox/core/print',
     'settings!io.ox/contacts',
     'settings!io.ox/mail',
     'gettext!io.ox/contacts',
     'io.ox/core/pim/actions'
-], function (ext, links, actions, api, portalUtil, settings, mailSettings, gt) {
+], function (ext, links, actions, api, portalUtil, print, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -242,9 +243,7 @@ define('io.ox/contacts/actions', [
                 })).length > 0);
         },
         multiple: function (list) {
-            ox.load(['io.ox/core/print']).done(function (print) {
-                print.request('io.ox/contacts/print', list);
-            });
+            print.request('io.ox/contacts/print', list);
         }
     });
 

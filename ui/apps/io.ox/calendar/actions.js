@@ -17,8 +17,9 @@ define('io.ox/calendar/actions', [
     'io.ox/calendar/api',
     'io.ox/calendar/util',
     'io.ox/core/extPatterns/actions',
+    'io.ox/core/print',
     'gettext!io.ox/calendar'
-], function (ext, links, api, util, actions, gt) {
+], function (ext, links, api, util, actions, print, gt) {
 
     'use strict';
 
@@ -220,22 +221,15 @@ define('io.ox/calendar/actions', [
                         .show()
                         .done(function (action) {
                             if (action === 'detailed') {
-                                ox.load(['io.ox/core/print']).done(function (print) {
-                                    print.request('io.ox/calendar/print', list);
-                                });
-                            }
-                            if (action === 'compact') {
-                                ox.load(['io.ox/core/print']).done(function (print) {
-                                    print.request('io.ox/calendar/print-compact', list);
-                                });
+                                print.request('io.ox/calendar/print', list);
+                            } else if (action === 'compact') {
+                                print.request('io.ox/calendar/print-compact', list);
                             }
                         });
                 });
                 return;
             }
-            ox.load(['io.ox/core/print']).done(function (print) {
-                print.request('io.ox/calendar/print', list);
-            });
+            print.request('io.ox/calendar/print', list);
         }
     });
 
@@ -243,12 +237,10 @@ define('io.ox/calendar/actions', [
         requires: 'one',
         capabilities: 'calendar-printing',
         action: function (baton) {
-            ox.load(['io.ox/core/print']).done(function (print) {
-                var options = { template: 'print.appointment.tmpl' },
-                    POS = 'recurrence_position';
-                if (baton.data[POS]) options[POS] = baton.data[POS];
-                print.open('calendar', baton.data, options);
-            });
+            var options = { template: 'print.appointment.tmpl' },
+                POS = 'recurrence_position';
+            if (baton.data[POS]) options[POS] = baton.data[POS];
+            print.open('calendar', baton.data, options);
         }
     });
 
