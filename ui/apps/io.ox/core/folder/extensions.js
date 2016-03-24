@@ -88,7 +88,8 @@ define('io.ox/core/folder/extensions', [
 
     function getMySharesFolder() {
 
-        if (!capabilities.has('read_create_shared_folders || edit_public_folders || share_links')) return;
+        if (capabilities.has('guest')) return;
+        if (!capabilities.has('gab || share_links')) return;
 
         return $.when({
             id: 'virtual/myshares',

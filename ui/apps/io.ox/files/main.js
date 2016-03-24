@@ -339,7 +339,8 @@ define('io.ox/files/main', [
          */
         'myshares-listview': function (app) {
 
-            if (!capabilities.has('read_create_shared_folders || edit_public_folders || share_links')) return;
+            if (capabilities.has('guest')) return;
+            if (!capabilities.has('gab || share_links')) return;
 
             // add virtual folder to folder api
             folderAPI.virtual.add('virtual/myshares', function () { return $.when([]); });
