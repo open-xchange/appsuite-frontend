@@ -40,6 +40,8 @@ define('io.ox/files/share/model', [
             };
         },
 
+        idAttribute: 'entity',
+
         initialize: function (attributes) {
             this.set('edit', attributes.type === this.TYPES.INVITE);
             this.setOriginal();
