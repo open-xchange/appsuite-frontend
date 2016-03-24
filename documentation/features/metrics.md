@@ -24,6 +24,10 @@ The metrics framework is located in OX App Suite’s front end and can be [confi
 
 The parts a separated by their role/task with high flexibility and extendability in mind.
 
+__hint for development__
+
+Please note that when you are using your local ui you have to temporary disable the related check in the `isEnabled` function (metrics/main.js`).
+
 ### Components
 
 - metrics listener: waiting for a event (example: click on an ‘mail reply’)
