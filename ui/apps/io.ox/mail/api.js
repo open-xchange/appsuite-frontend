@@ -817,13 +817,13 @@ define('io.ox/mail/api', [
         pool.resetFolder(targetFolderId);
 
         return http.wait(
-            update(list, { folder_id: targetFolderId }, type).then(function (response) {
+            update(list, { folder_id: targetFolderId }, type).then(function (data) {
                 // assume success
                 api.trigger(type, list, targetFolderId);
                 folderAPI.reload(targetFolderId, list);
                 // any errors? (debugging code below)
-                var error = _(response).find(function (item) { return !!item.error; });
-                if (error) return $.Deferred().reject(error);
+                var e = _(data.response).find(function (item) { return !!item.error; });
+                if (e) return $.Deferred().reject(e.error);
             })
         );
     }
