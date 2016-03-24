@@ -57,7 +57,12 @@ define('io.ox/core/folder/actions/move', [
                 isMove = /^move/.test(type),
                 multiple = type === 'moveAll' || options.list.length > 1,
                 current = options.source || options.list[0].folder_id,
-                createRule, folderId;
+                createRule, folderId, senderList;
+
+            senderList = _.chain(options.list)
+                .map(function (obj) { return obj.from[0][1]; })
+                .uniq()
+                .value();
 
             function success() {
                 notifications.yell('success', multiple ? options.success.multiple : options.success.single);
@@ -107,11 +112,9 @@ define('io.ox/core/folder/actions/move', [
                     filter.initialize().then(function (data, config, opt) {
                         var factory = opt.model.protectedMethods.buildFactory('io.ox/core/mailfilter/model', opt.api),
                             args = { data: { obj: factory.create(opt.model.protectedMethods.provideEmptyModel()) } },
-                            senderList = _.map(options.list, function (obj) { return obj.from[0][1]; }),
                             preparedTest;
 
                         args.data.obj.set('actioncmds', [{ id: 'move', into: folderId }]);
-
                         if (senderList.length > 1) {
                             preparedTest = { id: 'anyof', tests: [] };
                             _.each(senderList, function (item) {
@@ -148,11 +151,19 @@ define('io.ox/core/folder/actions/move', [
                 type: options.type,
 
                 initialize: function (dialog, tree) {
-                    if (options.type === 'move' && options.module === 'mail') dialog.addCheckbox(gt('Create rule'), 'create-rule', false);
+
+                    var notification = $('<div class="help-block">'),
+                        singleSenderText = gt('All future messages from %1$s will be moved to the selected folder.', senderList[0]),
+                        multipleSenderText = gt('All future messages from the senders of the selected mails will be moved to the selected folder.'),
+                        infoText = senderList.length <= 1 ? singleSenderText : multipleSenderText;
+                    if (options.type === 'move' && options.module === 'mail') dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
 
                     dialog.getFooter().find('[data-action="create-rule"]').on('change', function () {
                         createRule = $(this).prop('checked');
+
+                        if (createRule) notification.text(infoText);
                     });
+                    dialog.getFooter().prepend(notification);
                     dialog.on('ok', function () {
                         folderId = tree.selection.get();
                     });
