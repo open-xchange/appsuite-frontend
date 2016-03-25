@@ -380,13 +380,21 @@ define('io.ox/mail/api', [
 
         var dequeue = _.debounce(function () {
             if (queue.length) {
-                removeOnServer(queue).always(wait.resolve);
+                removeOnServer(queue)
+                    .done(wait.resolve)
+                    .fail(wait.reject)
+                    .fail(fail.bind(null, queue));
                 queue = [];
                 wait = $.Deferred();
             } else {
                 pending = false;
             }
         }, 5000);
+
+        function fail(ids, e) {
+            // handle special case: quota exceeded
+            if (e.code === 'MSG-0039') api.trigger('delete:fail:quota', e, ids);
+        }
 
         function enqueue(ids) {
             queue = queue.concat(ids);
@@ -407,7 +415,7 @@ define('io.ox/mail/api', [
             }, 15000);
         }
 
-        function removeOnServer(ids) {
+        function removeOnServer(ids, force) {
             pending = true;
             return http.wait(
                 // wait a short moment, so that the UI reacts first, i.e. triggers
@@ -415,7 +423,12 @@ define('io.ox/mail/api', [
                 _.wait(100).then(function () {
                     return http.PUT({
                         module: 'mail',
-                        params: { action: 'delete', returnAffectedFolders: true, timestamp: _.then() },
+                        params: {
+                            action: 'delete',
+                            harddelete: force,
+                            returnAffectedFolders: true,
+                            timestamp: _.then()
+                        },
                         data: http.simplify(ids),
                         appendColumns: false
                     })
@@ -442,12 +455,12 @@ define('io.ox/mail/api', [
             );
         }
 
-        function remove(ids, all) {
+        function remove(ids, all, force) {
             try {
                 // add to recently deleted hash
                 remember(ids);
                 // avoid parallel delete requests
-                return pending ? enqueue(ids) : removeOnServer(ids);
+                return pending && !force ? enqueue(ids) : removeOnServer(ids, force);
             } finally {
                 // try/finally is used to set up http.wait() first
                 // otherwise we run into race-conditions (see bug 37707)
