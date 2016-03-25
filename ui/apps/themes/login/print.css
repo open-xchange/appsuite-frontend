@@ -66,6 +66,12 @@ p {
     margin: 0.5em 0 0.5em 0;
 }
 
+blockquote {
+    border-left: 1px solid #aaa;
+    padding: 0 0 0 23px;
+    margin: 16px 0;
+}
+
 .item {
     margin: 0 0 2cm 0;
 }
