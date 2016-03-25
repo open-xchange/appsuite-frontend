@@ -379,7 +379,9 @@ define('io.ox/mail/api', [
                     api.trigger('delete');
                     api.trigger('deleted-mails', ids);
                 })
-                .fail(function () {
+                .fail(function (e) {
+                    // handle special case: quota exceeded
+                    if (e.code === 'MSG-0039') api.trigger('delete:fail:quota', e, ids);
                     // something went wrong; let's kind of rollback
                     api.trigger('refresh.all');
                 })
