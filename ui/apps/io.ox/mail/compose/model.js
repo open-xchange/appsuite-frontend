@@ -37,6 +37,8 @@ define.async('io.ox/mail/compose/model', [
 
         defaults: function () {
             return {
+                savedAsDraft: false,
+                autosavedAsDraft: false,
                 preferredEditorMode: settings.get('messageFormat', 'html'),
                 editorMode: settings.get('messageFormat', 'html'),
                 attachments: new Attachments.Collection(),
@@ -327,6 +329,18 @@ define.async('io.ox/mail/compose/model', [
             }
 
             return mail;
+        },
+
+        needsCleanup: function () {
+            return (this.get('autosavedAsDraft') && !this.get('savedAsDraft') && this.get('originAction') !== 'edit') || this.dirty();
+        },
+
+        cleanAutosave: function () {
+            // never delete on edit
+            if (this.get('originAction') === 'edit') return;
+            // only delete autosaved drafts that are not saved manually and have a msgref
+            if ((!this.get('autosavedAsDraft') && this.get('savedAsDraft')) && this.get('msgref')) return;
+            mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, this.get('msgref'))]);
         },
 
         convertAllToUnified: emoji.converterFor({
