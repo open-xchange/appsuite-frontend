@@ -328,6 +328,14 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             return String(str || '').replace(/[\s\xA0]+$/g, '');
         }
 
+        var stripDataAttributes = function (content) {
+            var tags = content.match(/(<\/?[\S][^>]*>)/gi);
+            tags.forEach(function (tag) {
+                content = content.replace(tag, tag.replace(/\sdata-\S+=["']?(?:.(?!["']?\s+(?:\S+)=|[>"']))+.["']?/g, ''));
+            });
+            return content;
+        };
+
         var resizeEditor = _.debounce(function () {
                 if (el === null) return;
 
@@ -400,10 +408,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 var content = ed.getContent({ format: 'raw' });
                 // convert emojies
                 content = emoji.imageTagsToUnified(content);
+                // strip data attributes (incl. bogus attribute)
+                content = stripDataAttributes(content);
                 // clean up
                 content = content
-                    // remove custom attributes (incl. bogus attribute)
-                    .replace(/\sdata-[^=]+="[^"]*"/g, '')
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
                     .replace(/(<p>(<br>)?<\/p>)+$/, '');
 
