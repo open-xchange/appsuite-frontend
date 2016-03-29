@@ -27,7 +27,7 @@ define('io.ox/tasks/edit/view-template', [
     'io.ox/tasks/util',
     'io.ox/core/folder/api',
     'settings!io.ox/tasks'
-], function (gt, views, yell, mini, DatePicker, util, RecurrenceView, AddParticipant, pViews, attachments, api, ext, taskUtil, folderAPI, settings) {
+], function (gt, views, yell, mini, DatePicker, util, RecurrenceView, AddParticipantView, pViews, attachments, api, ext, taskUtil, folderAPI, settings) {
 
     'use strict';
 
@@ -449,7 +449,7 @@ define('io.ox/tasks/edit/view-template', [
         index: 1700,
         row: '11',
         draw: function (baton) {
-            var view = new AddParticipant({
+            var view = new AddParticipantView({
                 apiOptions: {
                     contacts: true,
                     users: true,

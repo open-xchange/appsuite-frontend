@@ -30,7 +30,7 @@ define('io.ox/calendar/edit/extensions', [
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'less!io.ox/calendar/style'
-], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipant, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
+], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
 
     'use strict';
 
@@ -500,7 +500,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 1500,
         rowClass: 'collapsed',
         draw: function (baton) {
-            var typeahead = new AddParticipant({
+            var typeahead = new AddParticipantView({
                 apiOptions: {
                     contacts: true,
                     users: true,
