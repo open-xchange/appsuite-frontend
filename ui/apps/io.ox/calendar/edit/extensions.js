@@ -656,7 +656,9 @@ define('io.ox/calendar/edit/extensions', [
             start_date: start,
             end_date: end,
             folder: model.get('folder_id'),
-            participants: model.get('participants'),
+            participants: model.getParticipants().map(function (p) {
+                return p.toJSON();
+            }),
             model: model
         });
     }
