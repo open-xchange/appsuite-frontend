@@ -337,10 +337,9 @@ define.async('io.ox/mail/compose/model', [
 
         cleanAutosave: function () {
             // never delete on edit
-            if (this.get('originAction') === 'edit') return;
             // only delete autosaved drafts that are not saved manually and have a msgref
-            if ((!this.get('autosavedAsDraft') && this.get('savedAsDraft')) && this.get('msgref')) return;
-            mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, this.get('msgref'))]);
+            if (this.get('originAction') === 'edit' || this.get('savedAsDraft')) return;
+            if (this.get('autosavedAsDraft') && this.get('msgref')) mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, this.get('msgref'))]);
         },
 
         convertAllToUnified: emoji.converterFor({
