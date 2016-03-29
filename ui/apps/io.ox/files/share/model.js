@@ -40,6 +40,8 @@ define('io.ox/files/share/model', [
             };
         },
 
+        idAttribute: 'entity',
+
         initialize: function (attributes) {
             this.set('edit', attributes.type === this.TYPES.INVITE);
             this.setOriginal();
@@ -201,11 +203,6 @@ define('io.ox/files/share/model', [
                     return api.invite(model.toJSON()).fail(yell);
                 case 'read':
                     return api.getLink(this.toJSON()).then(function (data, timestamp) {
-                        if (data.is_new === true) {
-                            // if existing link add unique ID to simulate existing Backbone model
-                            delete data.is_new;
-                            data.id = _.uniqueId();
-                        }
                         self.set(_.extend(data, { lastModified: timestamp }));
                         self.setOriginal();
                         return data.url;
@@ -220,11 +217,6 @@ define('io.ox/files/share/model', [
                     return (_.isEmpty(changes) ? $.when() : api.updateLink(data, model.get('lastModified')))
                         .done(this.send.bind(this))
                         .fail(yell);
-                case 'delete':
-                    if (this.get('type') === this.TYPES.LINK) {
-                        return api.deleteLink(model.toJSON(), model.get('lastModified')).fail(yell);
-                    }
-                    break;
                 // no default
             }
         },

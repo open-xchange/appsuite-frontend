@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-02 16:43+0100\n"
+"PO-Revision-Date: 2016-03-23 10:38+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -451,7 +451,6 @@ msgid "Share files"
 msgstr "Dateien freigeben"
 
 #: apps/io.ox/tours/files.js:183 module:io.ox/tours
-#, fuzzy
 msgid ""
 "Sharing files by inviting people does not only offer your recipients the "
 "option to create and edit files. Internal and external participants are also "

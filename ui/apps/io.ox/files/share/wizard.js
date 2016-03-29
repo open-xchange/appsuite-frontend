@@ -309,11 +309,15 @@ define('io.ox/files/share/wizard', [
             return $.when(this.model.save()).fail(yell);
         },
 
-        cancel: function () {
-            this.model.destroy();
-            this.remove();
+        removeLink: function () {
+            var self = this,
+                model = this.model;
+            require(['io.ox/files/share/api'], function (api) {
+                api.deleteLink(model.toJSON(), model.get('lastModified')).fail(yell);
+                model.destroy();
+                self.remove();
+            });
         }
-
     });
 
     return ShareWizard;

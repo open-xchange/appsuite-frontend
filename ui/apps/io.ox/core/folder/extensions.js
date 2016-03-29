@@ -102,10 +102,8 @@ define('io.ox/core/folder/extensions', [
 
     function getMySharesFolder() {
 
-        // not for guests
         if (capabilities.has('guest')) return;
-        // normal users need the following capabilites
-        if (!capabilities.has('edit_public_folders') && !capabilities.has('read_create_shared_folders')) return;
+        if (!capabilities.has('gab || share_links')) return;
 
         return $.when({
             id: 'virtual/myshares',
