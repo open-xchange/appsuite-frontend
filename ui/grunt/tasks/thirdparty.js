@@ -62,6 +62,7 @@ module.exports = function (grunt) {
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'typeahead.js/dist/typeahead.jquery.js',
                             'marked/lib/marked.js',
+                            'clipboard/dist/clipboard.min.js',
                             'velocity/velocity.min.js',
                             'moment/moment.js'
                         ],
