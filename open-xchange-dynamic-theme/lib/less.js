@@ -5,8 +5,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2014
- * Mail: info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
@@ -82,7 +81,7 @@ function callClone(o) { return o.clone(); }
                         .replace(/#/g, field.slice(1));
                 case "[":
                     return "this.# && _.map(this.#, callClone)"
-                        .replace(/#/g, field.slice(1)); 
+                        .replace(/#/g, field.slice(1));
                 default:
                     return "this." + field;
                 }

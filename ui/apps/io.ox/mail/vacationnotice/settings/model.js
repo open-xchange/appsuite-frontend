@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
@@ -26,13 +26,14 @@ define('io.ox/mail/vacationnotice/settings/model', [
                 days: attributes.days,
                 id: attributes.internal_id,
                 subject: attributes.subject,
-                text: attributes.text,
-                from: attributes.from
+                text: attributes.text
             },
 
-            preparedData = {
-                'actioncmds': [newAttributes]
-            };
+        preparedData = {
+            'actioncmds': [newAttributes]
+        };
+
+        if (attributes.from) newAttributes.from = attributes.from;
 
         if (attributes.id !== undefined) {
             preparedData.id = attributes.id;
@@ -174,6 +175,7 @@ define('io.ox/mail/vacationnotice/settings/model', [
         text: gt('Text'),
         days: gt('Number of days between vacation notices to the same sender'),
         headlineAdresses: gt('Enabled for the following addresses'),
+        headlineSender: gt('Default sender for vacation notice'),
         addresses: gt('Email addresses'),
         dateFrom: gt('Start'),
         dateUntil: gt('End'),

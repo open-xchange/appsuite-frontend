@@ -6,8 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) 2004-2012 Open-Xchange, Inc.
- * Mail: info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
@@ -259,18 +258,22 @@ define('io.ox/core/tk/tokenfield', [
 
                     // distribution lists
                     if (e.attrs.model.has('distribution_list')) {
-                        var models = _(e.attrs.model.get('distribution_list')).map(function (m) {
-                            m.type = 5;
-                            var model = new pModel.Participant({
-                                type: 5,
-                                display_name: m.display_name,
-                                email1: m.mail
-                            });
-                            return model.set('token', {
-                                label: m.display_name,
-                                value: m.mail
-                            }, { silent: true });
-                        });
+                        // create a model/token for every member with an email address
+                        var models = _.chain(e.attrs.model.get('distribution_list'))
+                             .filter(function (m) { return !!m.mail; })
+                             .map(function (m) {
+                                 m.type = 5;
+                                 var model = new pModel.Participant({
+                                     type: 5,
+                                     display_name: m.display_name,
+                                     email1: m.mail
+                                 });
+                                 return model.set('token', {
+                                     label: m.display_name,
+                                     value: m.mail
+                                 }, { silent: true });
+                             })
+                             .value();
                         self.collection.add(models);
                         self.redrawTokens();
                         // clean input

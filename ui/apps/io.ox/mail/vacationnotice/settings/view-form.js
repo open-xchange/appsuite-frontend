@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -75,6 +75,59 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                             $('<label>').attr({ 'for': 'days' }).addClass('control-label col-md-offset-2 col-md-8').text(model.fields.days),
                             $('<div>').addClass('col-md-2').append(
                                 new mini.SelectView({ list: multiValues.days, name: 'days', model: baton.model, id: 'days', className: 'form-control' }).render().$el
+                            )
+                        )
+                    )
+                );
+            }
+        });
+
+        ext.point(ref + '/edit/view').extend({
+            index: 275,
+            id: ref + '/edit/view/sender',
+            draw: function (baton) {
+                var returnIndex = function (source, target) {
+                    var index = -1;
+                    _.each(source, function (obj, key) {
+                        if (_.isArray(obj)) {
+                            if (obj[0] === target || obj[1] === target) index = key;
+                        } else {
+                            if (obj.label === target || obj.value === target) index = key;
+                        }
+
+                    });
+                    return index;
+                },
+                    SelectView = mini.SelectView.extend({
+                    onChange: function () {
+                        var valuePosition = returnIndex(multiValues.from, this.$el.val());
+                        this.model.set(this.name, multiValues.fromArrays[valuePosition]);
+                    },
+                    update: function () {
+                        var valuePosition,
+                            modelValue = this.model.get(this.name);
+                        if (_.isArray(modelValue)) {
+                            this.$el.val(multiValues.from[returnIndex(multiValues.fromArrays, modelValue[1])].value);
+                        } else {
+                            valuePosition = returnIndex(multiValues.from, modelValue);
+                            if (valuePosition === -1) valuePosition = returnIndex(multiValues.from, modelValue);
+                            this.$el.val(multiValues.from[valuePosition].value);
+                        }
+                    }
+                });
+                this.append(
+                    $('<fieldset>').append(
+                        $('<legend>').addClass('sectiontitle').append(
+                            $('<h2>').text(model.fields.headlineSender)
+                        ),
+                        $('<div class="row form-group">').append(
+                            $('<label for="from" class="control-label sr-only">').text(model.fields.headlineSender),
+                            $('<div class="controls col-sm-6">').append(
+                                new SelectView({
+                                    id: 'from',
+                                    list: multiValues.from,
+                                    model: baton.model
+                                }).render().$el
                             )
                         )
                     )

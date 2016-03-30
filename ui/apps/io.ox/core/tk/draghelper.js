@@ -6,8 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) 2004-2014 Open-Xchange, Inc.
- * Mail: info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */

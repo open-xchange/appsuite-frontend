@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -71,7 +71,8 @@ define('io.ox/core/folder/util', [
         case 'shared':
             return data.type === 3;
         case 'system':
-            return data.type === 5;
+            // some folders have legacy type 7 but are actually system folders, so check module too
+            return data.type === 5 || data.module === 'system';
         case 'trash':
             return data.type === 16;
         case 'mail':
