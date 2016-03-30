@@ -16,6 +16,8 @@
     .tokenfield {
         .border-radius(@border-radius-small @border-radius-small 0px 0px);
         .twitter-typeahead .tt-dropdown-menu { max-height: 150px; }
+        // ensure all inputs share same blank space on the left
+        &.form-control { padding-left: 7px; }
     }
 
     textarea {
