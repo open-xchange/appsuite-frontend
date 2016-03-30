@@ -308,7 +308,7 @@ define('plugins/portal/xing/register', [
                 baton.data = xingResponse;
                 def.resolve(xingResponse);
             }).fail(function (error) {
-                if (error.error_params[0] === 'Invalid OAuth token') {
+                if (error.params && error.error_params[0] === 'Invalid OAuth token') {
                     if (keychain.getStandardAccount('xing')) {
                         baton.reauthorize = true;
                         def.resolve();
