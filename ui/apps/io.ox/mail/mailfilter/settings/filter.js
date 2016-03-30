@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -101,6 +101,9 @@ define('io.ox/mail/mailfilter/settings/filter',
         )
         .addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})
         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
+
+        //disable save button if no action is set
+        if (actionArray.length === 0) myView.dialog.getFooter().find('[data-action="save"]').prop('disabled', true);
 
         myView.dialog.show();
         myView.$el.find('input[name="rulename"]').focus();

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -224,6 +224,12 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         // used by garbage collector to resolve threads
         getDependentModels: function (/* cid */) {
             return [];
+        },
+
+        resetFolder: function (ids) {
+            var list = _(this.getByFolder(ids));
+            list.each(function (collection) { collection.expired = true; });
+            return list;
         }
     });
 
