@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -80,7 +80,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
     node;
 
-    describe('Vacationnotice with one active mail', function () {
+    describe('Mailfilter Vacationnotice with one active mail', function () {
 
         beforeEach(function () {
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
@@ -114,7 +114,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
     });
 
-    describe('Vacationnotice with two active mails', function () {
+    describe('Mailfilter Vacationnotice with two active mails', function () {
 
         beforeEach(function () {
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {

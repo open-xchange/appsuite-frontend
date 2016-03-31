@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
@@ -86,12 +86,14 @@ define('io.ox/backbone/mini-views/datepicker', [
                         });
 
                         // render timezone badge
-                        var timezoneAbbreviation = gt.noI18n(moment.tz(self.model.get(self.options.timezoneAttribute)).zoneAbbr());
+                        var timezone = moment.tz(self.model.get(self.options.timezoneAttribute)),
+                            timezoneAbbreviation = gt.noI18n(timezone.zoneAbbr()),
+                            timezoneFullname = gt.noI18n((timezone.format('Z ') + timezone.zoneAbbr() + ' ' + timezone.tz()).replace(/_/g, ' '));
 
                         if (!self.options.timezoneButton && !self.mobileMode) {
-                            timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation);
+                            timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                         } else {
-                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon btn" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation);
+                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon btn" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                             if (self.model.has('start_date') && self.model.has('end_date')) {
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
                                     calendarUtil.addTimezonePopover(
@@ -200,7 +202,14 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         updateView: function () {
-            var timestamp = parseInt(this.model[this.model.getDate ? 'getDate' : 'get'](this.attribute), 10);
+            // clear if set to null
+            if (_.isNull(this.model.get(this.attribute))) {
+                this.nodes.dayField.val('');
+                if (this.nodes.timeField) {
+                    this.nodes.timeField.val('');
+                }
+            }
+            var timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
             if (_.isNaN(timestamp)) return;
             timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
             if (!this.mobileMode) {
@@ -221,7 +230,8 @@ define('io.ox/backbone/mini-views/datepicker', [
         updateModel: function () {
             var time = this.getTimestamp();
             if (_.isNull(time) || _.isNumber(time)) {
-                this.model[this.model.setDate ? 'setDate' : 'set'](this.attribute, time, { validate: true });
+                var params = { validate: true, fulltime: this.isFullTime() };
+                this.model[this.model.setDate ? 'setDate' : 'set'](this.attribute, time, params);
                 this.model.trigger('valid');
             } else {
                 this.model.trigger('invalid:' + this.attribute, [gt('Please enter a valid date')]);

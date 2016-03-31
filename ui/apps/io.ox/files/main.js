@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
@@ -316,12 +316,10 @@ define('io.ox/files/main', [
          */
         'folder:change': function (app) {
             // see Bug 43512 - Opening a Drive direct link in Safari removes the edit bar
-            if (_.device('safari')) {
-                // hide and show sidepanel for correct layout. Somehow, scroll into view and flexbox-layout have errors in safari
-                app.folderView.tree.selection.view.on('scrollIntoView', function () {
-                    app.getWindow().nodes.sidepanel.hide().show(0);
-                });
-            }
+            // hide and show sidepanel for correct layout. Somehow, scroll into view and flexbox-layout have errors (mostly in safari)
+            app.folderView.tree.selection.view.on('scrollIntoView', function () {
+                app.getWindow().nodes.sidepanel.hide().show(0);
+            });
 
             app.on('folder:change', function (id) {
                 // we clear the list now to avoid flickering due to subsequent layout changes
@@ -339,10 +337,8 @@ define('io.ox/files/main', [
          */
         'myshares-listview': function (app) {
 
-            // not for guests
             if (capabilities.has('guest')) return;
-            // normal users need the following capabilites
-            if (!capabilities.has('edit_public_folders') && !capabilities.has('read_create_shared_folders')) return;
+            if (!capabilities.has('gab || share_links')) return;
 
             // add virtual folder to folder api
             folderAPI.virtual.add('virtual/myshares', function () { return $.when([]); });
@@ -669,6 +665,9 @@ define('io.ox/files/main', [
             app.listView.$el.on('keydown', '.file-type-folder', function (e) {
                 if (e.which === 13) {
                     var obj = _.cid($(e.currentTarget).attr('data-cid'));
+                    app.listView.once('collection:load', function () {
+                        app.listView.selection.select(0);
+                    });
                     app.folder.set(obj.id);
                 }
             });
@@ -1123,9 +1122,13 @@ define('io.ox/files/main', [
                 // check for clicks in folder trew
                 app.on('folder:change folder-virtual:change', function (folder, data) {
                     var list = [];
-                    // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
-                    if (data) { list.push(data.standard_folder_type, data.type); }
+                    data = data || {};
                     if (folderAPI.isVirtual(folder)) { list.push('virtual'); }
+                    // add folder types
+                    if (data.standard_folder_type && data.type) {
+                        // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
+                        list.push(data.standard_folder_type, data.type);
+                    }
                     // add filestorage data
                     if (data.account_id) {
                         // simplify: 'dropbox://164' -> ['dropbox', '164']

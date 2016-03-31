@@ -1,16 +1,17 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
+
 define('io.ox/contacts/model', [
     'io.ox/backbone/modelFactory',
     'io.ox/backbone/validation',
@@ -185,6 +186,15 @@ define('io.ox/contacts/model', [
             validate: function (attributes) {
                 if (attributes.quotaExceeded) {
                     this.add('attachments_list', gt('Files can not be uploaded, because quota exceeded.'));
+                }
+            }
+        });
+
+        ext.point(ref + '/validation').extend({
+            id: 'birthday',
+            validate: function (attributes) {
+                if ('birthday' in attributes && !attributes.birthday) {
+                    this.add('birthday', gt('Please set day and month properly'));
                 }
             }
         });

@@ -5,7 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -29,13 +29,30 @@ module.exports = function (grunt) {
                 ]
             },
             login: {
-                options: { lessrc: '.lessrc' },
+                options: {
+                    lessrc: '.lessrc',
+                    rootpath: grunt.config('oxbase') + '/'
+                },
                 files: [
                     {
                         src: ['apps/themes/login/login.less'],
                         expand: true,
                         rename: function (dest) { return dest; },
                         dest: 'build/apps/themes/login/login.css'
+                    }
+                ]
+            },
+            busy: {
+                options: {
+                    lessrc: '.lessrc',
+                    rootpath: grunt.config('oxbase') + '/'
+                },
+                files: [
+                    {
+                        src: ['apps/themes/busy/busy.less'],
+                        expand: true,
+                        rename: function (dest) { return dest; },
+                        dest: 'build/apps/themes/busy/busy.css'
                     }
                 ]
             }

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -240,7 +240,7 @@ define('io.ox/core/boot/form', [
         // set username input type to text in IE
         if (_.device('IE > 9')) {
             // cannot change type with jQuery's attr()
-            $('#io-ox-login-username')[0].type = 'text';
+            ($('#io-ox-login-username')[0] || {}).type = 'text';
         }
 
         // update productname in password reset dialog

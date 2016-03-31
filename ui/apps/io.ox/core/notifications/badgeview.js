@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -74,7 +74,7 @@ define('io.ox/core/notifications/badgeview', [
                 'aria-pressed': false
             })
             .append(
-                this.nodes.icon = $('<i class="fa fa-bell launcher-icon">'),
+                this.nodes.icon = $('<i class="fa fa-bell launcher-icon" aria-hidden="true">'),
                 this.nodes.badge = $('<span class="badge">').append(
                     this.nodes.number = $('<span class="number">')
                 )

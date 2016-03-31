@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
@@ -23,7 +23,7 @@ define('io.ox/contacts/mobile-navbar-extensions', ['io.ox/core/extensions'], fun
             this.$el.append(
                 $('<div class="navbar-action left">').append(
                     $('<a>').append(
-                        $('<i class="fa fa-chevron-left">'),
+                        $('<i class="fa fa-chevron-left" aria-hidden="true">'),
                         baton.left
                     )
                 )

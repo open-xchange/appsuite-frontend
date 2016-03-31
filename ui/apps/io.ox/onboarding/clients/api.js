@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -23,20 +23,6 @@ define('io.ox/onboarding/clients/api', [
             return http.GET({
                 module: 'onboarding',
                 params: { action: 'config' }
-            }).then(function (data) {
-                // TODO: remove when backend is ready
-                // fix wrong identifiers
-                _.each(data.matching, function (match) {
-                    match.actions = _.map(match.actions, function (action) {
-                        if (action.indexOf('email') > -1) return 'email';
-                        if (action.indexOf('download') > -1) return 'download';
-                        return action;
-                    });
-                });
-                _.each(_.where(data.devices, { id: 'apple.mac' }), function (device) {
-                    device.scenarios = _.without(device.scenarios, 'apple.mac/mailappinstall', 'apple.mac/driveappinstall');
-                });
-                return data;
             });
         },
 
@@ -48,7 +34,9 @@ define('io.ox/onboarding/clients/api', [
                     id: scenario,
                     action_id: action
                 },
-                data: data
+                data: data,
+                // get warnings
+                processResponse: false
             });
         },
 

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -53,7 +53,7 @@ define('io.ox/core/main', [
 
     // a11y: fix for role="button"
     $(document).on('keydown', 'a[role="button"]', function (e) {
-        if (e.which !== 32) return;
+        if (e.which !== 32 || e.isDefaultPrevented()) return;
         e.preventDefault();
         $(e.currentTarget).click();
     });
@@ -308,7 +308,7 @@ define('io.ox/core/main', [
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
-        var node = $('<li class="launcher">');
+        var node = $('<li class="launcher" role="presentation">');
 
         if (fn) {
             node.on('click', function (e) {
@@ -619,7 +619,7 @@ define('io.ox/core/main', [
                 if (!upsell.has(model.get('requires')) && upsell.enabled(model.get('requires'))) {
                     node.addClass('upsell').children('a').first().prepend(
                         _(settings.get('upsell/defaultIcon', 'fa-star').split(/ /)).map(function (icon) {
-                            return $('<i class="fa">').addClass(icon);
+                            return $('<i class="fa" aria-hidden="true">').addClass(icon);
                         })
                     );
                 }
@@ -641,7 +641,7 @@ define('io.ox/core/main', [
                     //#. %1$s is app title/name
                     _.escape(gt('close for %1$s', model.get('title'))),
                 quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel + '">')
-                    .append($('<i class="fa fa-times">'))
+                    .append($('<i class="fa fa-times" aria-hidden="true">'))
                     .on('click', function (e) {
                         e.preventDefault();
                         e.stopImmediatePropagation();
@@ -908,11 +908,15 @@ define('io.ox/core/main', [
             id: 'onboarding',
             index: 120,
             draw: function () {
+                if (_.device('smartphone')) return;
                 if (capabilities.has('!client-onboarding')) return;
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="onboarding" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
+                        //#. starts the client onboarding wizard that helps users
+                        //#. to configure their devices to access/sync appsuites
+                        //#. data (f.e. install ox mail app)
                         .text(gt('Connect your Device'))
                     )
                     .on('click', function (e) {
@@ -1060,7 +1064,7 @@ define('io.ox/core/main', [
                 id: 'logout-button',
                 index: 2000,
                 draw: function () {
-                    var logoutButton = addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
+                    var logoutButton = addLauncher('right', $('<i class="fa fa-sign-out launcher-icon" aria-hidden="true">'), function () {
                         logout();
                     }, gt('Sign out'));
                     logoutButton.find('a').tooltip({
@@ -1213,7 +1217,7 @@ define('io.ox/core/main', [
                 content.append(
                     $('<a href="#" class="banner-action" data-action="logout" role="button" tabindex="1">')
                     .attr('title', gt('Sign out'))
-                    .append('<i class="fa fa-power-off">')
+                    .append('<i class="fa fa-sign-out" aria-hidden="true">')
                     .on('click', function (e) {
                         e.preventDefault();
                         logout();
@@ -1372,9 +1376,10 @@ define('io.ox/core/main', [
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
+                deeplink = looksLikeDeepLink && manifest && manifest.deeplink,
                 mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
 
-            if (manifest && (manifest.refreshable || mailto)) {
+            if (manifest && (manifest.refreshable || deeplink || mailto)) {
                 baton.autoLaunch = appURL.split(/,/);
             } else {
                 // clear typical parameter?
@@ -1557,7 +1562,7 @@ define('io.ox/core/main', [
                             this.append(
                                 $('<li class="restore-item">').append(
                                     $('<a href="#" role="button" class="remove">').data(item).append(
-                                        $('<i class="fa fa-trash-o">')
+                                        $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
                                     item.icon ? $('<i class="' + item.icon + '">') : $(),
                                     $('<span>').text(gt.noI18n(info)),
@@ -1674,9 +1679,16 @@ define('io.ox/core/main', [
                         // special case: open viewer too?
                         if (hash.app === 'io.ox/files' && hash.id !== undefined) {
                             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
-                                api.get(hash).done(function (data) {
-                                    new Viewer().launch({ files: [data], folder: hash.folder });
-                                });
+                                folderAPI.get(hash.folder)
+                                    .done(function () {
+                                        api.get(hash).done(function (data) {
+                                            new Viewer().launch({ files: [data], folder: hash.folder });
+                                        });
+                                    })
+                                    .fail(function (error) {
+                                        _.url.hash('id', null);
+                                        notifications.yell(error);
+                                    });
                             });
                         }
                         // explicit call?
@@ -1685,6 +1697,22 @@ define('io.ox/core/main', [
                                 if (_.isFunction(this[method])) {
                                     this[method]();
                                 }
+                            });
+                        }
+                        // non-app deeplinks
+                        var id = _.url.hash('reg');
+                        if (id && ox.registry.get(id)) {
+                            // normalise args
+                            var list = (_.url.hash('regopt') || '').split(','),
+                                data = {}, parts;
+                            // key:value, key:value... -> object
+                            _.each(list, function (str) {
+                                parts = str.split(':');
+                                data[parts[0]] = parts[1];
+                            });
+                            // call after app is ready
+                            launch.done(function () {
+                                ox.registry.call(id, 'client-onboarding', { data: data });
                             });
                         }
                     });
@@ -1734,7 +1762,8 @@ define('io.ox/core/main', [
     (function () {
 
         var hash = {
-            'mail-compose': 'io.ox/mail/compose/main'
+            'mail-compose': 'io.ox/mail/compose/main',
+            'client-onboarding': 'io.ox/onboarding/clients/wizard'
         };
 
         var custom = {};
@@ -1750,6 +1779,10 @@ define('io.ox/core/main', [
                 var dep = this.get(id),
                     args = _(arguments).toArray().slice(2);
                 return ox.load([dep]).then(function (m) {
+                    // non-apps
+                    if (m.run && _.isFunction(m.run)) return m.run.apply(m, args);
+                    if (!m.reuse || !m.getApp) return;
+                    // app
                     if (m.reuse(name, args[0])) return;
                     return m.getApp().launch().then(function () {
                         return this[name].apply(this, args);
@@ -1797,7 +1830,7 @@ define('io.ox/core/main', [
         return value === undefined ? 'undefined' : value;
     }
 
-    if (ox.debug) {
+    if (ox.debug && _.device('!karma')) {
         ox.on('http:before:send', function (options) {
             var json = _(['params', 'data']).reduce(function (str, id) {
                 return str + (_.isString(options[id]) ? options[id] : JSON.stringify(options[id], replacer));

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -489,12 +489,12 @@ define('io.ox/calendar/month/perspective', [
                 var toolbarNode = $('<div>')
                     .addClass('controls-container')
                     .append(
-                        $('<a href="#" tabindex="1" role="button">').addClass('control prev').append($('<i class="fa fa-chevron-left">'))
+                        $('<a href="#" tabindex="1" role="button">').addClass('control prev').append($('<i class="fa fa-chevron-left" aria-hidden="true">'))
                         .on('click', $.proxy(function (e) {
                             e.preventDefault();
                             this.gotoMonth('prev');
                         }, this)),
-                        $('<a href="#" tabindex="1" role="button">').addClass('control next').append($('<i class="fa fa-chevron-right">'))
+                        $('<a href="#" tabindex="1" role="button">').addClass('control next').append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
                         .on('click', $.proxy(function (e) {
                             e.preventDefault();
                             this.gotoMonth('next');

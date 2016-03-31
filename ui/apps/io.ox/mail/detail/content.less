@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -14,11 +14,17 @@
 .mail-detail-content {
 
     font: normal e('13px/normal') @normal-font-family;
+
+    font-feature-settings: "liga" 0;
+
     // Max-width does not work here, see Bug #24505
     // max-width: 1000px;
     width: 100%;
 
     position: relative;
+
+    // use display: table to cover padding/margin/float issues at the bottom
+    display: table;
 
     // TODO: remove / temp. fix for sanitized HTML
     padding: 0;
@@ -58,6 +64,12 @@
 
         max-width: 10000px;
         vertical-align: middle;
+
+        // Visual indicator for blocked images
+        &[src=""] {
+            background-color: rgba(0,0,0,.1);
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.5) 20px, rgba(255,255,255,.5) 40px);
+        }
     }
 
     p {

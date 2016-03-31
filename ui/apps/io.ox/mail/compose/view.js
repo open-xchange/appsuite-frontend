@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
@@ -26,10 +26,11 @@ define('io.ox/mail/compose/view', [
     'gettext!io.ox/mail',
     'io.ox/mail/actions/attachmentEmpty',
     'io.ox/mail/actions/attachmentQuota',
+    'io.ox/core/tk/dialogs',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs) {
 
     'use strict';
 
@@ -130,6 +131,14 @@ define('io.ox/mail/compose/view', [
             draw: function (baton) {
                 var node = $('<div data-extension-id="attachments" class="row attachments">');
                 ext.point(POINT + '/attachments').invoke('draw', node, baton);
+                this.append(node);
+            }
+        },
+        {
+            id: 'arialive',
+            index: INDEX += 100,
+            draw: function () {
+                var node = $('<div data-extension-id="arialive" class="sr-only" role="alert" aria-live="assertive">');
                 this.append(node);
             }
         }
@@ -277,7 +286,9 @@ define('io.ox/mail/compose/view', [
 
         events: {
             'click [data-action="add"]': 'toggleTokenfield',
-            'keyup [data-extension-id="subject"] input': 'setSubject'
+            'keydown [data-extension-id="subject"] input': 'setSubject',
+            'keydown': 'focusSendButton',
+            'aria-live-update': 'ariaLiveUpdate'
         },
 
         initialize: function (options) {
@@ -342,6 +353,10 @@ define('io.ox/mail/compose/view', [
             }
 
             ext.point(POINT + '/mailto').invoke('setup');
+        },
+
+        ariaLiveUpdate: function (e, msg) {
+            this.$('[data-extension-id="arialive"]').text(msg);
         },
 
         fetchMail: function (obj) {
@@ -467,6 +482,7 @@ define('io.ox/mail/compose/view', [
         },
 
         saveDraft: function () {
+            this.model.set('savedAsDraft', true);
             var win = this.app.getWindow();
             win.busy();
             // get mail
@@ -514,7 +530,18 @@ define('io.ox/mail/compose/view', [
                         $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
                     });
                 }
-                model.set('msgref', result.data, { silent: true });
+                data.attachments.forEach(function (a, index) {
+                    var m = model.get('attachments').at(index);
+                    if (typeof m === 'undefined') {
+                        model.get('attachments').add(a);
+                    } else if (m.id !== a.id) {
+                        m.clear({ silent: true });
+                        m.set(a);
+                    }
+                });
+
+                model.set('msgref', result.data);
+                model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
                 model.dirty(false);
                 notifications.yell('success', gt('Mail saved as draft'));
                 return result;
@@ -534,12 +561,12 @@ define('io.ox/mail/compose/view', [
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-                    if (mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
-                        model.set('msgref', result, { silent: true });
-                    }
-
-                    var saved = model.get('infostore_ids_saved');
-                    model.set('infostore_ids_saved', [].concat(saved, mail.infostore_ids || []));
+                    model.set({
+                        'autosavedAsDraft': true,
+                        'msgref': result,
+                        'sendtype': mailAPI.SENDTYPE.EDIT_DRAFT,
+                        'infostore_ids_saved': [].concat(model.get('infostore_ids_saved'), mail.infostore_ids || [])
+                    });
                     model.updateShadow();
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
@@ -616,42 +643,32 @@ define('io.ox/mail/compose/view', [
 
         discard: function () {
             var self = this,
-                def = $.Deferred();
+                def = $.when();
 
-            if (this.model.dirty()) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    //button texts may become quite large in some languages (e. g. french, see Bug 35581)
-                    //add some extra space
-                    //TODO maybe we could use a more dynamical approach
-                    new dialogs.ModalDialog({ width: 550, container: _.device('smartphone') ? self.$el.closest('.window-container-center') : $('#io-ox-core') })
-                        .text(gt('Do you really want to discard your message?'))
-                        //#. "Discard message" appears in combination with "Cancel" (this action)
-                        //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', { tabIndex: 1 })
-                        .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', { tabIndex: 1 })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
-                                self.clean();
-                                def.resolve();
-                            } else if (action === 'savedraft') {
-                                self.saveDraft().then(function () {
-                                    self.clean();
-                                    def.resolve();
-                                }, def.reject);
-                            } else {
-                                def.reject();
-                            }
-                        });
-                });
-            } else {
-                this.clean();
-                def.resolve();
+            if (this.model.needsCleanup() || this.model.dirty()) {
+                // button texts may become quite large in some languages (e. g. french, see Bug 35581)
+                // add some extra space
+                // TODO maybe we could use a more dynamical approach
+                def = new dialogs.ModalDialog({ width: 550, container: _.device('smartphone') ? self.$el.closest('.window-container-center') : $('#io-ox-core') })
+                    .text(gt('Do you really want to discard your message?'))
+                    //#. "Discard message" appears in combination with "Cancel" (this action)
+                    //#. Translation should be distinguishable for the user
+                    .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', { tabIndex: 1 })
+                    .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', { tabIndex: 1 })
+                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                    .show()
+                    .then(function (action) {
+                        if (action === 'delete') {
+                            self.model.cleanAutosave();
+                        } else if (action === 'savedraft') {
+                            return self.saveDraft();
+                        } else {
+                            return $.Deferred().reject();
+                        }
+                    });
             }
 
-            return def;
+            return def.then(function () { self.clean(); });
         },
 
         send: function () {
@@ -766,23 +783,26 @@ define('io.ox/mail/compose/view', [
         },
 
         toggleEditorMode: function () {
-            var self = this, content;
-            this.editorContainer.busy();
+
+            var content;
 
             if (this.editor) {
                 this.removeSignature();
-
                 content = this.editor.getPlainText();
-
                 this.editor.hide();
             }
 
+            this.editorContainer.busy();
+
             return this.loadEditor(content).then(function () {
-                self.editorContainer.idle();
-                //update the content type of the mail
-                //FIXME: may be, do this somewhere else? in the model?
-                self.model.setMailContentType(self.editor.content_type);
-            });
+                this.editorContainer.idle();
+                // update the content type of the mail
+                // FIXME: may be, do this somewhere else? in the model?
+                this.model.setMailContentType(this.editor.content_type);
+                // reset tinyMCE's undo stack
+                if (!_.isFunction(this.editor.tinymce)) return;
+                this.editor.tinymce().undoManager.clear();
+            }.bind(this));
         },
 
         syncMail: function () {
@@ -803,6 +823,8 @@ define('io.ox/mail/compose/view', [
                 // Remove extranous <br>
                 content = content.replace(/\n<br>&nbsp;$/, '\n');
             }
+
+            this.setSimpleMail(content);
 
             this.editor.setContent(content);
 
@@ -939,7 +961,8 @@ define('io.ox/mail/compose/view', [
 
             return this.toggleEditorMode().then(function () {
                 return self.signaturesLoading;
-            }).done(function () {
+            })
+            .done(function () {
                 var mode = self.model.get('mode');
                 // set focus in compose and forward mode to recipient tokenfield
                 if (/(compose|forward)/.test(mode)) {
@@ -947,12 +970,19 @@ define('io.ox/mail/compose/view', [
                 } else {
                     self.editor.focus();
                 }
-                if (mode === 'replyall' && !_.isEmpty(self.model.get('cc'))) {
-                    self.toggleTokenfield('cc');
+                self.model.setAutoBCC();
+                if (mode === 'replyall' || mode === 'edit') {
+                    if (!_.isEmpty(self.model.get('cc'))) self.toggleTokenfield('cc');
                 }
+                if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');
                 self.setBody(self.model.getContent());
                 self.model.dirty(false);
             });
+        },
+
+        setSimpleMail: function (content) {
+            if (this.model.get('editorMode') === 'text') return;
+            if (!/<table/.test(content)) this.editorContainer.find('.editable.mce-content-body').addClass('simple-mail');
         },
 
         blockReuse: function (sendtype) {
@@ -963,6 +993,18 @@ define('io.ox/mail/compose/view', [
             this.blocked[sendtype] = (this.blocked[sendtype] || 0) - 1;
             if (this.blocked[sendtype] <= 0) {
                 delete this.blocked[sendtype];
+            }
+        },
+
+        focusEditor: function () {
+            this.editor.focus();
+        },
+
+        focusSendButton: function (e) {
+            // Focus send button on ctrl || meta + Enter (a11y + keyboardsupport)
+            if ((e.metaKey || e.ctrlKey) && ((e.keyCode || e.which) === 13)) {
+                e.preventDefault();
+                this.$el.parents().find('button[data-action="send"]').focus();
             }
         },
 

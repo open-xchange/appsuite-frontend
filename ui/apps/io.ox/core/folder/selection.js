@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -71,6 +71,8 @@ define('io.ox/core/folder/selection', [], function () {
             var node = this.byId(id);
             if (node.length) {
                 node[0].scrollIntoView(true);
+                // specific flexbox/scrolling issue (see bugs 43799, 44938)
+                $('#io-ox-windowmanager').scrollTop(0);
                 this.view.trigger('scrollIntoView', id);
             }
         },
@@ -180,6 +182,7 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         check: function (nodes) {
+            if (this.view.disposed) return $();
             var width = this.view.$el.width();
             return nodes.addClass('selected')
                 .attr({ 'aria-selected': true, tabindex: 1 })
@@ -199,7 +202,8 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         getItems: function () {
-            return this.view.$el.find('.selectable');
+            if (this.view.disposed) return $();
+            return this.view.$('.selectable');
         },
 
         addSelectableVirtualFolder: function (id) {

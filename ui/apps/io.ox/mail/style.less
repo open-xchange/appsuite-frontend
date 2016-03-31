@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -49,6 +49,11 @@
         right: 0;
         left: 0 !important;
         z-index: 2;
+        overflow: visible;
+    }
+    // outer layer overflow visible inner layer overflow auto. This is to show scrollbars when needed while keeping the dropdown from hiding under the mail list. see Bug(43449)
+    .thread-view-control {
+        overflow: auto;
     }
     // horizontal resizebar
     .list-view-control .resizebar {
@@ -431,11 +436,16 @@
 
     &:not(.expanded) {
 
-        .fa-paperclip.has-attachments { display: inline-block; }
+        .fa-paperclip.has-attachments {
+            display: inline-block;
+            top: 38px;
+            right: 14px;
+            font-size: 15px;
+        }
 
         .detail-view-row.row-3, .inplace-reply { display: none; }
 
-        .unread-toggle, .flag-picker, .recipients { opacity: 0.3; }
+        .unread-toggle, .flag-picker > a, .recipients { opacity: 0.3; }
 
         &.unread .unread-toggle { opacity: 1; }
 
@@ -447,11 +457,6 @@
     }
 
     &.expanded .detail-view-header { border-bottom: 1px solid #eee; }
-
-    &.no-padding .detail-view-header {
-        padding-left: @picture-padding;
-        padding-right: 0;
-    }
 
     .notifications { cursor: default; }
 
@@ -665,6 +670,7 @@
     &.visible-selection.has-focus .selected {
         .thread-size,
         .account-name,
+        .original-folder,
         .original-folder .breadcrumb-link { color: #fff; }
     }
 
@@ -756,7 +762,7 @@
     & > h1 {
 
         .subject-base();
-        padding-bottom: 8px;
+        padding-bottom: 0;
         background-color: white;
 
         .subject {
@@ -777,7 +783,8 @@
             font-size: 13px;
             line-height: 16px;
             font-weight: 300;
-            margin: -5px @default-padding -11px 0;
+            position: relative;
+            top: -5px;
             html.high-contrast & { color: @hc-gray; }
         }
     }
@@ -980,14 +987,23 @@ textarea.inplace-editor {
         padding: 0;
 
         & > h1 {
-            font-size: @phone-font-size + 2;
+            font-size: @phone-font-size;
             padding-bottom: 24px;
-            .summary { font-size: @phone-font-size - 2; }
+            background-color: #aaa;
+            color: #fff;
+            .summary {
+                font-size: @phone-font-size - 2;
+                color: #fff;
+                margin-top: -8px;
+            }
         }
 
-        .thread-view header { border-bottom: 1px solid #eee; }
+        .thread-view header { border-bottom: 1px solid #ccc; }
 
         .from, .recipients, .date {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
             font-size: @phone-font-size;
             line-height: @phone-line-height;
         }
@@ -1027,7 +1043,7 @@ textarea.inplace-editor {
             padding: 0;
             min-height: auto;
 
-            .from { padding: (@default-padding / 2) 0 0 @default-padding; }
+            .from { padding: (@default-padding / 2) 8px 0 @default-padding; }
 
             time  { padding: (@default-padding / 2) @default-padding 0 0; }
 

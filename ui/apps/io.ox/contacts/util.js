@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -308,7 +308,7 @@ define('io.ox/contacts/util', [
                 options.height *= 2;
             }
 
-            return arg.replace(/^https?\:\/\/[^\/]+/i, '').replace(/^\/ajax/, ox.apiRoot) + $.param(options);
+            return arg.replace(/^https?\:\/\/[^\/]+/i, '').replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(options);
         },
 
         getInitials: (function () {

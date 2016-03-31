@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
@@ -94,7 +94,7 @@ define('io.ox/settings/apps/settings/pane', [
                     $('<a class="remove" href="#" tabindex="1" role="button" data-action="delete" aria-label="remove">')
                     .attr({
                         'title': gt('Delete')
-                    }).append('<i class="fa fa-trash-o">')
+                    }).append('<i class="fa fa-trash-o" aria-hidden="true">')
                 )
             );
         },

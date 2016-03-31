@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -44,7 +44,8 @@ define('plugins/portal/files/register', [
 
         preview: function (baton) {
             //#. %1$s is a filename
-            var content = $('<div class="content pointer" tabindex="1" role="button" aria-label="' + gt.format('Press [enter] to jump to %1$s', baton.data.filename) + '">'),
+            var content = $('<div class="content pointer" tabindex="1" role="button">')
+                .attr('aria-label', gt.format('Press [enter] to jump to %1$s', baton.data.filename)),
                 data, options, url;
 
             if (_.isEmpty(baton.data.filename)) {

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  * TODO:
@@ -308,7 +308,7 @@ define('plugins/portal/xing/register', [
                 baton.data = xingResponse;
                 def.resolve(xingResponse);
             }).fail(function (error) {
-                if (error.error_params[0] === 'Invalid OAuth token') {
+                if (error.params && error.error_params[0] === 'Invalid OAuth token') {
                     if (keychain.getStandardAccount('xing')) {
                         baton.reauthorize = true;
                         def.resolve();

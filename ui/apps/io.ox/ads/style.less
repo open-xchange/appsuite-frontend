@@ -1,0 +1,94 @@
+.io-ox-ad {
+    z-index: 1000;
+    text-align: center;
+    padding-top: 20px;
+    background-color: #fff;
+
+    .io-ox-ad-close .close {
+        padding: 0 16px;
+    }
+
+    &:empty {
+        display: none;
+    }
+}
+
+#io-ox-ad-banner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #000;
+    padding: 0;
+    overflow: hidden;
+}
+
+#io-ox-ad-portal:not(:empty) {
+    height: 120px;
+    padding-top: 30px;
+    text-align: center;
+}
+
+#io-ox-ad-mail-detail {
+    height: 90px;
+    padding-top: 30px;
+    text-align: center;
+}
+
+#io-ox-ad-drive-folder {
+    height: 90px;
+    padding-top: 30px;
+    text-align: center;
+}
+
+.thread-view-control.show-ad .thread-view-list {
+    top: 90px;
+}
+
+#io-ox-core.show-banner.show-ad {
+    @height: 64px;
+    #io-ox-banner { height: @height; padding: @default-padding; }
+    #io-ox-topbar { top: 82px + @height; }
+    #io-ox-screens { top: 82px + @height + 40; }
+    #io-ox-ad-banner { top: @height; }
+}
+
+#io-ox-core.show-ad {
+    @height: 82px;
+    #io-ox-banner { height: @height; padding: @default-padding; }
+    #io-ox-topbar { top: @height; }
+    #io-ox-screens { top: @height + 40; }
+    #io-ox-notifications { top: @height + 40; }
+}
+
+/*TODO: can this be written more sane?*/
+@media (min-width: 900px) {
+
+    #io-ox-ad-skyscraper {
+        display: block;
+    }
+
+
+    #io-ox-windowmanager.show-ad {
+        right: 160px;
+    }
+}
+@media (max-width: 900px) {
+
+    #io-ox-ad-skyscraper {
+        display: none;
+    }
+
+    #io-ox-windowmanager.show-ad {
+        right: 0;
+    }
+}
+
+#io-ox-ad-skyscraper {
+    width: 160px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    text-align: center;
+}

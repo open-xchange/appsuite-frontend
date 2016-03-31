@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Stefan Preuss <stefan.preuss@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
@@ -22,7 +22,8 @@ define('io.ox/preview/main', [
 
     'use strict';
 
-    var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
+    // was: Modernizr.draganddrop but that test is gone
+    var supportsDragOut = !!_.browser.Chrome;
     var dragOutHandler = $.noop;
     var clickableLink = $.noop;
 

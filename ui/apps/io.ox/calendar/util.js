@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -38,10 +38,17 @@ define('io.ox/calendar/util', [
             gt('declined'),
             gt('tentative')
         ],
-        n_confirm = ['', '<i class="fa fa-check">', '<i class="fa fa-times">', '<i class="fa fa-question-circle">'],
+        n_confirm = ['', '<i class="fa fa-check" aria-hidden="true">', '<i class="fa fa-times" aria-hidden="true">', '<i class="fa fa-question-circle" aria-hidden="true">'],
         colorLabels = [gt('no color'), gt('light blue'), gt('dark blue'), gt('purple'), gt('pink'), gt('red'), gt('orange'), gt('yellow'), gt('light green'), gt('dark green'), gt('gray')];
 
     var that = {
+
+        // column translations
+        columns: {
+            title: gt('Subject'),
+            location: gt('Location'),
+            note: gt('Description')
+        },
 
         // day bitmask
         days: {
@@ -130,6 +137,56 @@ define('io.ox/calendar/util', [
             return m.format('ddd, l');
         },
 
+        // function that returns markup for date and time + timzonelabel
+        getDateTimeIntervalMarkup: function (data, options) {
+            if (data && data.start_date && data.end_date) {
+
+                options = _.extend({ timeZoneLabel: { placement: 'top' }, a11y: false, output: 'markup' }, options);
+
+                var startDate,
+                    endDate,
+                    dateStr,
+                    timeStr,
+                    timeZoneStr = gt.noI18n(moment(data.start_date).zoneAbbr()),
+                    fmtstr = options.a11y ? 'dddd, l' : 'ddd, l';
+
+                if (data.full_time) {
+                    startDate = moment.utc(data.start_date).local(true);
+                    endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
+                } else {
+                    startDate = moment(data.start_date);
+                    endDate = moment(data.end_date);
+                }
+                if (startDate.isSame(endDate, 'day')) {
+                    dateStr = startDate.format(fmtstr);
+                    timeStr = this.getTimeInterval(data, options.zone);
+                } else if (data.full_time) {
+                    dateStr = this.getDateInterval(data);
+                    timeStr = this.getTimeInterval(data, options.zone);
+                } else {
+                    // not same day and not fulltime. use interval with date and time, separate date and is confusing
+                    dateStr = startDate.formatInterval(endDate, fmtstr + ' LT');
+                }
+
+                // standard markup or object with strings
+                if (options.output === 'strings') {
+                    return { dateStr: dateStr, timeStr: timeStr || '', timeZoneStr: timeZoneStr };
+                }
+                return $('<div class="date-time">').append(
+                    // date
+                    $('<span class="date">').text(dateStr),
+                    // mdash
+                    $.txt(' \u00A0 '),
+                    // time
+                    $('<span class="time">').append(
+                        timeStr ? $.txt(timeStr) : '',
+                        this.addTimezonePopover($('<span class="label label-default pointer" tabindex="1">').text(timeZoneStr), data, options.timeZoneLabel)
+                    )
+                );
+            }
+            return '';
+        },
+
         getDateInterval: function (data, a11y) {
             if (data && data.start_date && data.end_date) {
                 var startDate, endDate,
@@ -155,7 +212,7 @@ define('io.ox/calendar/util', [
                     //#, c-format
                     return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
                 }
-                return startDate.formatInterval(endDate, 'date');
+                return startDate.formatInterval(endDate, fmtstr);
             }
             return '';
         },
@@ -384,6 +441,10 @@ define('io.ox/calendar/util', [
             return confirmClass[status || 0];
         },
 
+        getConfirmationLabel: function (status) {
+            return confirmTitles[status || 0];
+        },
+
         getRecurrenceString: function (data) {
 
             function getCountString(i) {
@@ -585,7 +646,7 @@ define('io.ox/calendar/util', [
             // init
             _.each(confirmClass, function (cls, i) {
                 ret[i] = {
-                    icon: n_confirm[i] || '<i class="fa fa-exclamation-circle">',
+                    icon: n_confirm[i] || '<i class="fa fa-exclamation-circle" aria-hidden="true">',
                     count: 0,
                     css: cls,
                     title: confirmTitles[i] || ''

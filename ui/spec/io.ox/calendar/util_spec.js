@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
@@ -15,7 +15,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
     'use strict';
 
-    describe('Util for calendar', function () {
+    describe('Calendar utils', function () {
 
         describe('can convert timestamp to even smarter dates', function () {
 
@@ -77,7 +77,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
             it('same day', function () {
                 var start = moment([2012, 10, 11, 11, 11, 0]);
-                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.add(1, 'hour').valueOf() })).to.equal('11:11\u201312:11');
+                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.add(1, 'hour').valueOf() })).to.equal('11:11\u201312:11 Uhr');
             });
 
         });

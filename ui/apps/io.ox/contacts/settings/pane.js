@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
@@ -106,6 +106,30 @@ define('io.ox/contacts/settings/pane', [
                         $('<h2>').text(gt('Display of names'))
                     ),
                     new mini.RadioView({ list: preferences, name: 'fullNameFormat', model: contactsModel }).render().$el
+                )
+            );
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 300,
+        id: 'map-service',
+        draw: function () {
+
+            var options = [
+                { label: gt('Google Maps'), value: 'google' },
+                { label: gt('Open Street Map'), value: 'osm' },
+                { label: gt('No link'), value: 'none' }
+            ];
+
+            if (_.device('ios || macos')) options.splice(2, 0, { label: gt('Apple Maps'), value: 'apple' });
+
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend class="sectiontitle">').append(
+                        $('<h2>').text(gt('Link postal addresses with map service'))
+                    ),
+                    new mini.RadioView({ list: options, name: 'mapService', model: contactsModel }).render().$el
                 )
             );
         }

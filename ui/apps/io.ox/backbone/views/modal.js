@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -36,7 +36,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
         events: {
             'click [data-action]': 'onAction',
-            'keydown input:text, input:password': 'onKeypress'
+            'keydown input:text, input:password': 'onKeypress',
+            'keydown': 'onEscape'
         },
 
         // we use the constructor here not to collide with initialize()
@@ -81,11 +82,17 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             var o = this.options;
             this.render().$el.appendTo(o.container);
             this.trigger('before:open');
-            this.$el.modal({ keyboard: o.keyboard }).modal('show');
+            // keyboard: false to support preventDefault on escape key
+            this.$el.modal({ keyboard: false }).modal('show');
             this.trigger('open');
             // set initial focus
             this.previousFocus = $(document.activeElement);
-            this.$(o.focus).focus();
+            var elem = this.$(o.focus);
+            if (elem.length) {
+                // dialog might be busy, i.e. elements are invisible so focus() might not work
+                this.activeElement = elem[0];
+                elem[0].focus();
+            }
             return this;
         },
 
@@ -115,7 +122,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
         busy: function (withAnimation) {
             this.disableFormElements();
-            this.activeElement = $(document.activeElement);
+            this.activeElement = this.activeElement || document.activeElement;
             if (withAnimation) {
                 this.$body.addClass('invisible');
                 this.$('.modal-content').busy();
@@ -130,7 +137,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             this.enableFormElements();
             this.$('.modal-content').idle();
             this.$body.removeClass('invisible').css('opacity', '');
-            if (this.activeElement) this.activeElement.focus();
+            if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
+            this.activeElement = null;
             return this;
         },
 
@@ -188,6 +196,12 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             if (!this.options.enter) return;
             if (!$(e.target).is('input:text, input:password')) return;
             this.invokeAction(this.options.enter);
+        },
+
+        onEscape: function (e) {
+            if (e.which !== 27) return;
+            if (e.isDefaultPrevented()) return;
+            this.close();
         }
     });
 

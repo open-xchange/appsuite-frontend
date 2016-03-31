@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -80,6 +80,8 @@ define('io.ox/contacts/edit/main', [
 
                         editView.on('save:start', function () {
                             win.busy();
+                            // reset error marker
+                            container.find('[data-field]').removeClass('has-error');
                         });
 
                         editView.on('save:fail', function (e, error) {
@@ -99,7 +101,8 @@ define('io.ox/contacts/edit/main', [
 
                             if (invalid) {
                                 notifications.yell('error', gt('Some fields contain invalid data'));
-                                field.get(0).scrollIntoView();
+                                // set error marker and scroll
+                                field.addClass('has-error').get(0).scrollIntoView();
                                 field = null;
                             } else {
                                 notifications.yell(error);

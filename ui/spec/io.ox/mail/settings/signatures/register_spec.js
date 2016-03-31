@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
@@ -16,7 +16,7 @@ define([
     'waitsFor'
 ], function (register, ext, waitsFor) {
 
-    describe.skip('html signatures', function () {
+    describe.skip('Mail settings Signatures HTML', function () {
         var node,
             baton;
 

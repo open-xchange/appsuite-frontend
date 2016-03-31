@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -17,8 +17,9 @@ define('io.ox/core/folder/actions/move', [
     'io.ox/core/notifications',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/core',
-    'io.ox/mail/api'
-], function (api, picker, notifications, dialogs, gt, mailAPI) {
+    'io.ox/mail/api',
+    'io.ox/core/extensions'
+], function (api, picker, notifications, dialogs, gt, mailAPI, ext) {
 
     'use strict';
 
@@ -55,7 +56,13 @@ define('io.ox/core/folder/actions/move', [
                 input = options.source || options.list,
                 isMove = /^move/.test(type),
                 multiple = type === 'moveAll' || options.list.length > 1,
-                current = options.source || options.list[0].folder_id;
+                current = options.source || options.list[0].folder_id,
+                createRule, folderId, senderList;
+
+            senderList = _.chain(options.list)
+                .map(function (obj) { return obj.from[0][1]; })
+                .uniq()
+                .value();
 
             function success() {
                 notifications.yell('success', multiple ? options.success.multiple : options.success.single);
@@ -98,6 +105,32 @@ define('io.ox/core/folder/actions/move', [
                 );
             }
 
+            function generateRule() {
+                require(['io.ox/mail/mailfilter/settings/filter'
+                ], function (filter) {
+
+                    filter.initialize().then(function (data, config, opt) {
+                        var factory = opt.model.protectedMethods.buildFactory('io.ox/core/mailfilter/model', opt.api),
+                            args = { data: { obj: factory.create(opt.model.protectedMethods.provideEmptyModel()) } },
+                            preparedTest;
+
+                        args.data.obj.set('actioncmds', [{ id: 'move', into: folderId }]);
+                        if (senderList.length > 1) {
+                            preparedTest = { id: 'anyof', tests: [] };
+                            _.each(senderList, function (item) {
+                                preparedTest.tests.push({ comparison: 'contains', headers: ['From'], id: 'header', values: [item] });
+                            });
+                        } else {
+                            preparedTest = { comparison: 'contains', headers: ['From'], id: 'header', values: [senderList[0]] };
+                        }
+
+                        args.data.obj.set('test', preparedTest);
+
+                        ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config[0]);
+                    });
+                });
+            }
+
             if (options.target) {
                 if (current !== options.target) commit(options.target);
                 return;
@@ -115,9 +148,32 @@ define('io.ox/core/folder/actions/move', [
                 open: options.open,
                 settings: settings,
                 title: options.title,
+                type: options.type,
+
+                initialize: function (dialog, tree) {
+
+                    var notification = $('<div class="help-block">'),
+                        singleSenderText = gt('All future messages from %1$s will be moved to the selected folder.', senderList[0]),
+                        multipleSenderText = gt('All future messages from the senders of the selected mails will be moved to the selected folder.'),
+                        infoText = senderList.length <= 1 ? singleSenderText : multipleSenderText;
+                    if (options.type === 'move' && options.module === 'mail') dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
+
+                    dialog.getFooter().find('[data-action="create-rule"]').on('change', function () {
+                        createRule = $(this).prop('checked');
+
+                        if (createRule) notification.text(infoText);
+                    });
+                    dialog.getFooter().prepend(notification);
+                    dialog.on('ok', function () {
+                        folderId = tree.selection.get();
+                    });
+                },
 
                 done: function (id) {
                     if (type === 'copy' || id !== current) commit(id);
+                    if (type === 'move' && createRule) {
+                        generateRule();
+                    }
                 },
 
                 disable: function (data, options) {
@@ -130,7 +186,7 @@ define('io.ox/core/folder/actions/move', [
 
         all: function (options) {
             // default API is mail API
-            this.item(_.extend({ api: mailAPI, module: 'mail', type: 'moveAll' }, options));
+            this.item(_.extend({ api: mailAPI, module: 'mail', type: 'moveAll', title: gt('Move all messages') }, options));
         },
 
         folder: function (id) {

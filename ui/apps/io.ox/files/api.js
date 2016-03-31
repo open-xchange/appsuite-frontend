@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -468,6 +468,12 @@ define('io.ox/files/api', [
         PRIMARY_PAGE_SIZE: 210,
         SECONDARY_PAGE_SIZE: 210
     });
+
+    api.collectionLoader.noSelect = function (options) {
+        // check read access
+        var model = folderAPI.pool.getModel(options.folder);
+        return !model.can('read');
+    };
 
     api.collectionLoader.each = function (data) {
         api.pool.add('detail', data);

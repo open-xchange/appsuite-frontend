@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
@@ -14,6 +14,11 @@ define(['io.ox/mail/compose/model',
     'settings!io.ox/mail'
 ], function (MailModel, settings) {
     'use strict';
+
+    var editors = {
+        text: 'io.ox/core/tk/text-editor',
+        html: 'io.ox/core/tk/contenteditable-editor'
+    };
 
     describe('Mail Compose', function () {
         describe('mail model', function () {

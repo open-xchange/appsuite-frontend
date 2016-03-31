@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -71,7 +71,8 @@ define('io.ox/core/folder/util', [
             case 'shared':
                 return data.type === 3;
             case 'system':
-                return data.type === 5;
+                // some folders have legacy type 7 but are actually system folders, so check module too
+                return data.type === 5 || data.module === 'system';
             case 'trash':
                 // some trash folders have the legacy type 7, so check standard_folder_type too
                 return data.type === 16 || data.standard_folder_type === 12;
@@ -86,6 +87,8 @@ define('io.ox/core/folder/util', [
             case 'tasks':
                 return data.module === 'tasks';
             case 'infostore':
+            case 'files':
+            case 'drive':
                 return data.module === 'infostore';
             case 'account':
                 return data.module === 'system' && /^default(\d+)?/.test(String(data.id));
@@ -250,7 +253,7 @@ define('io.ox/core/folder/util', [
             case 'subscribe:imap':
                 // subscription works for mail only, not for standard folders, and only if the mail system supports it
                 if (!isMail) return false;
-                if (data.standard_folder) return false;
+                if (data.standard_folder && /^(7|9|10|11|12)$/.test(data.standard_folder_type)) return false;
                 return Boolean(data.capabilities & Math.pow(2, 4));
             default:
                 return false;

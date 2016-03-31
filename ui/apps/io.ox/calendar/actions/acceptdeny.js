@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
@@ -71,13 +71,14 @@ define('io.ox/calendar/actions/acceptdeny', [
                             description = $('<b>').text(data.title),
                             descriptionId = _.uniqueId('confirmation-dialog-description-');
                         if (!options.taskmode) {
+                            var strings = util.getDateTimeIntervalMarkup(data, { output: 'strings' });
                             description = [
                                 $('<b>').text(data.title),
                                 $.txt(', '),
-                                $.txt(gt.noI18n(util.getDateInterval(data))),
+                                $.txt(gt.noI18n(strings.dateStr)),
                                 $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''))),
                                 $.txt(' '),
-                                $.txt(util.getTimeInterval(data))
+                                $.txt(strings.timeStr)
                             ];
                         }
 

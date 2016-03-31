@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Alexander Quast <alexander.quast@open-xchange.com>
@@ -50,6 +50,9 @@ define('io.ox/mail/main', [
         id: 'io.ox/mail',
         title: 'Mail'
     });
+
+    // a11y: dumb approach to track recent keyboard usage
+    var openMessageByKeyboard = false;
 
     app.mediator({
         /*
@@ -346,6 +349,7 @@ define('io.ox/mail/main', [
 
             // register load listener which triggers complete
             collection.on('load', function () {
+                this.gc = false;
                 this.complete = true;
                 this.preserve = true;
                 this.CUSTOM_PAGE_SIZE = 250;
@@ -408,6 +412,7 @@ define('io.ox/mail/main', [
                 //.removeClass('hidden')
                 .find('.message-empty')
                 // customize message
+                //#. when items list is empty (e.g. search result)
                 .text(gt('Empty'));
         },
 
@@ -648,6 +653,12 @@ define('io.ox/mail/main', [
                     showTo = account.is('sent|drafts', id);
 
                 app.props.set(_.pick(options, 'sort', 'order', 'thread'));
+
+                // explicitly update when set to from-to (see bug 44458)
+                if (options.sort === 'from-to') {
+                    app.listView.model.set('sort', account.is('sent|drafts', id) ? 604 : 603);
+                }
+
                 app.listView.model.set('folder', id);
                 app.folder.getData();
                 fromTo.text(showTo ? gt('To') : gt('From'));
@@ -695,6 +706,16 @@ define('io.ox/mail/main', [
                 // check if message is still within the current collection
                 if (!app.listView.collection.get(latestMessage)) return;
                 app.threadView.show(latestMessage, app.isThreaded());
+                // a11y: used keyboard?
+                if (openMessageByKeyboard || app.props.get('layout') === 'list') {
+                    openMessageByKeyboard = false;
+                    // set focus
+                    var items = app.threadView.$('.list-item'),
+                        index = items.index(items.filter('.expanded'));
+                    items.filter('.expanded:first').find('.body').focus();
+                    // fix scroll position (focus might scroll down)
+                    if (index === 0) app.threadView.$('.scrollable').scrollTop(0);
+                }
             }
 
             // show instantly
@@ -773,35 +794,28 @@ define('io.ox/mail/main', [
                     total = model.get('total'),
                     search = app.get('find') && app.get('find').isActive();
 
-                app.right.find('.multi-selection-message .message')
-                    .empty()
-                    .attr('id', 'mail-multi-selection-message')
-                    .append(
-                        // message
-                        $('<div>').append(
-                            gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
-                        ),
-                        // inline actions
-                        id && total && !search ?
-                            $('<div class="inline-actions">').append(
-                                $('<span>').text(gt('The following actions apply to all messages (%1$d) in this folder:', total)),
-                                $('<br>'),
-                                //#. %1$d is the total number of messages
-                                $('<a href="#" data-action="moveAll">').text(gt('Move all messages to another folder')),
-                                $('<br>'),
-                                //#. %1$d is the total number of messages
-                                $('<a href="#" data-action="clear">').text(gt('Delete all messages in this folder'))
-                            )
-                            .on('click', 'a', function (e) {
-                                e.preventDefault();
-                                var action = $(e.currentTarget).data('action');
-                                require(['io.ox/core/folder/actions/common'], function (common) {
-                                    if (action === 'moveAll') common.moveAll(id);
-                                    else if (action === 'clear') common.clearFolder(id);
-                                });
-                            })
-                            : $()
-                    );
+                // defer so that all selection events are triggered (e.g. selection:all)
+                _.defer(function () {
+                    app.right.find('.multi-selection-message .message')
+                        .empty()
+                        .attr('id', 'mail-multi-selection-message')
+                        .append(
+                            // message
+                            $('<div>').append(
+                                gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
+                            ),
+                            // inline actions
+                            id && total > list.length && !search && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
+                                $('<div class="inline-actions">').append(
+                                    gt(
+                                        'There are %1$d messages in this folder; not all messages are displayed in the list. ' +
+                                        'If you want to move or delete all messages, you find corresponding actions in the folder context menu.',
+                                        total
+                                    )
+                                )
+                                : $()
+                        );
+                });
             };
         },
 
@@ -1397,12 +1411,24 @@ define('io.ox/mail/main', [
             // mail list: focus mail detail view on <enter>
             // mail list: focus folder on <escape>
             app.listView.$el.on('keydown', '.list-item', function (e) {
-                if (e.which === 13) app.threadView.$('.list-item.expanded .body').focus();
-                if (e.which === 27) { app.folderView.tree.$('.folder.selected').focus(); return false; }
+                // focus message?
+                if (e.which === 13) {
+                    openMessageByKeyboard = true;
+                    return;
+                }
+                // if a message is selected (mouse or keyboard) the focus is set on body
+                if (e.which === 27) {
+                    app.folderView.tree.$('.folder.selected').focus();
+                    return false;
+                }
             });
             // detail view: return back to list view via <escape>
-            app.threadView.$el.on('keydown', '.list-item', function (e) {
-                if (e.which === 27) app.listView.restoreFocus(true);
+            app.threadView.$el.attr('tabindex', -1).on('keydown', function (e) {
+                if (e.which !== 27) return;
+                if ($(e.target).is('.smart-dropdown, .dropdown-toggle, :input')) return;
+                // make sure the detail view closes in list layout
+                app.right.removeClass('preview-visible');
+                app.listView.restoreFocus(true);
             });
             // folder tree: focus list view on <enter>
             // folder tree: focus top-bar on <escape>
@@ -1469,6 +1495,23 @@ define('io.ox/mail/main', [
                         handleError(error);
                     }
                 });
+            });
+        },
+
+        'save-draft': function (app) {
+            api.on('beforesend before:autosave', function (e, obj) {
+                if (!obj.data.msgref) return;
+                var cid = _.cid(util.parseMsgref(api.separator, obj.data.msgref)),
+                    draftsId = account.getFoldersByType('drafts');
+                _(draftsId).each(function (id) {
+                    _(api.pool.getByFolder(id)).each(function (collection) {
+                        collection.remove(cid);
+                    });
+                });
+            });
+            api.on('autosave send', function () {
+                var folder = app.folder.get();
+                if (folderAPI.is('drafts', folder)) app.listView.reload();
             });
         },
 
@@ -1580,9 +1623,12 @@ define('io.ox/mail/main', [
                 win.show();
             })
             .fail(function fail(result) {
-                var errorMsg = (result && result.error) ? result.error + ' ' : '';
-                errorMsg += gt('Application may not work as expected until this problem is solved.');
-                notifications.yell('error', errorMsg);
+                // missing folder information indicates a connection failure
+                var message = settings.get('folder/inbox') && result && result.error ?
+                    result.error + ' ' + gt('Application may not work as expected until this problem is solved.') :
+                    // default error
+                    api.mailServerDownMessage;
+                notifications.yell('error', message);
             });
     });
 

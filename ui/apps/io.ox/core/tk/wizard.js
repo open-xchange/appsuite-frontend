@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -155,6 +155,10 @@ define('io.ox/core/tk/wizard', [
 
         get: function (num) {
             return this.steps[num];
+        },
+
+        getContainer: function () {
+            return this.container;
         },
 
         shift: function (num) {
@@ -782,11 +786,11 @@ define('io.ox/core/tk/wizard', [
 
             // move the popup to the center of the screen
             function alignCenter() {
-                this.$el.addClass('center middle').css({ top: '', right: '', bottom: '', left: '' });
+                $el.addClass('center middle').css({ top: '', right: '', bottom: '', left: '' });
             }
 
             // remove default class and reset all inline positions
-            this.$el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
+            $el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
 
             // find the best position according to the passed options
             switch ((options && options.position) || 'right') {

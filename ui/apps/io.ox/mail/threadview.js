@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -36,14 +36,18 @@ define('io.ox/mail/threadview', [
             this.$el.append(
                 $('<nav class="back-navigation generic-toolbar">').append(
                     $('<div class="button">').append(
-                        $('<a href="#" class="back" tabindex="1">').append(
-                            $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
-                        )
+                        $('<a href="#" role="button" class="back" tabindex="1">')
+                        .attr('aria-label', gt('Back to list'))
+                        .append($('<i class="fa fa-chevron-left" aria-hidden="true">'), $.txt(' '), $.txt(gt('Back')))
                     ),
                     $('<div class="position">'),
                     $('<div class="prev-next">').append(
-                        $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="fa fa-chevron-up">'),
-                        $('<a href="#" class="next-mail" tabindex="1">').append('<i class="fa fa-chevron-down">')
+                        $('<a href="#" role="button" class="previous-mail" tabindex="1">')
+                            .attr('aria-label', gt('Previous message'))
+                            .append('<i class="fa fa-chevron-up" aria-hidden="true">'),
+                        $('<a href="#" role="button" class="next-mail" tabindex="1">')
+                            .attr('aria-label', gt('Next message'))
+                            .append('<i class="fa fa-chevron-down" aria-hidden="true">')
                     )
                 ).attr('role', 'toolbar')
             );
@@ -104,10 +108,11 @@ define('io.ox/mail/threadview', [
         draw: function (baton) {
 
             var length = baton.view.collection.length;
-            if (length <= 1) return;
 
             this.append(
-                $('<div class="summary">').text(gt('%1$d messages in this conversation', length))
+                $('<div class="summary">').text(
+                    length > 1 ? gt('%1$d messages in this conversation', length) : '\u00A0'
+                )
             );
         }
     });
@@ -488,7 +493,7 @@ define('io.ox/mail/threadview', [
                 data: model.toJSON(),
                 disable: {
                     'io.ox/mail/detail': ['subject', 'actions'],
-                    'io.ox/mail/detail/header': ['unread-toggle'],
+                    'io.ox/mail/detail/header': ['unread-toggle', 'paper-clip'],
                     'io.ox/mail/detail/header/row1': ['flag-picker']
                 }
             });

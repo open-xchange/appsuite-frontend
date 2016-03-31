@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -112,7 +112,7 @@ define('io.ox/tasks/common-extensions', [
                     'tabindex': '1'
                 });
 
-                this.append($('<i class="fa fa-caret-down">'));
+                this.append($('<i class="fa fa-caret-down" aria-hidden="true">'));
 
                 this.after(
                     $('<ul class="dropdown-menu pull-right" role="menu">').append(

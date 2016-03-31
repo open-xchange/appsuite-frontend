@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
@@ -23,6 +23,34 @@ define('io.ox/mail/actions/delete', [
 
     'use strict';
 
+    function getQuestion(list) {
+        return gt.ngettext(
+            'Do you want to permanently delete this mail?',
+            'Do you want to permanently delete these mails?',
+            list.length
+        );
+    }
+
+    api.on('delete:fail:quota', function (e, error, list) {
+        require(['io.ox/core/tk/dialogs'], function (dialogs) {
+            new dialogs.ModalDialog()
+                .header(
+                    $('<h4>').text(gt('Mail quota exceeded'))
+                )
+                .append(
+                    $('<div>').text(gt('Emails cannot be put into trash folder while your mail quota is exceeded.')),
+                    $('<div>').text(getQuestion(list))
+                )
+                .addPrimaryButton('delete', gt('Delete'), 'delete', { tabIndex: 1 })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                .on('delete', function () {
+                    // true -> force
+                    api.remove(list, list, true);
+                })
+                .show();
+        });
+    });
+
     return {
 
         multiple: function (list) {
@@ -33,12 +61,6 @@ define('io.ox/mail/actions/delete', [
             var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
             });
-
-            var question = gt.ngettext(
-                'Do you want to permanently delete this mail?',
-                'Do you want to permanently delete these mails?',
-                list.length
-            );
 
             // this probably needs to be done server-side
             // far too much delay when rushing through folders
@@ -62,7 +84,7 @@ define('io.ox/mail/actions/delete', [
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .append(
-                            $('<h4>').text(question)
+                            $('<h4>').text(getQuestion(list))
                         )
                         .addPrimaryButton('delete', gt('Delete'), 'delete', { tabIndex: 1 })
                         .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
@@ -72,27 +94,9 @@ define('io.ox/mail/actions/delete', [
                 });
             } else {
                 api.remove(list, all).fail(function (e) {
-                    // mail quota exceeded?
-                    if (e.code === 'MSG-0039') {
-                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                            new dialogs.ModalDialog()
-                                .header(
-                                    $('<h4>').text(gt('Mail quota exceeded'))
-                                )
-                                .append(
-                                    $('<div>').text(gt('Emails cannot be put into trash folder while your mail quota is exceeded.')),
-                                    $('<div>').text(question)
-                                )
-                                .addPrimaryButton('delete', gt('Delete'), 'delete', { tabIndex: 1 })
-                                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                                .on('delete', function () {
-                                    api.remove(list, { force: true });
-                                })
-                                .show();
-                        });
-                    } else {
-                        notifications.yell(e);
-                    }
+                    // mail quota exceeded? see above
+                    if (e.code === 'MSG-0039') return;
+                    notifications.yell(e);
                 });
             }
         }

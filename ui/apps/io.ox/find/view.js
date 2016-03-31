@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -131,7 +131,6 @@ define('io.ox/find/view', [
             this.$el.next().css('margin-top', this.css.body.open);
             // apply dynamic styles
             this.ui.body.css('top', this.css.body.open);
-            this.$el.css('top', this.css.el.open);
             // css switch-class
             this.ui.container.addClass(this.classes.active);
             // bubble

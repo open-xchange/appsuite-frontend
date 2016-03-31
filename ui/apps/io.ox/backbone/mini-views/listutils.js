@@ -6,7 +6,7 @@
 *
 * http://creativecommons.org/licenses/by-nc-sa/2.5/
 *
-* © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+* © 2016 OX Software GmbH, Germany. info@open-xchange.com
 *
 * @author Christoph Kopp <christoph.kopp@open-xchange.com>
 */
@@ -33,7 +33,7 @@ define('io.ox/backbone/mini-views/listutils', [], function () {
             return target.text(text);
         },
         widgetIcon: function (type) {
-            var icon = $('<i class="widget-icon fa">');
+            var icon = $('<i class="widget-icon fa" aria-hidden="true">');
             switch (type) {
                 case 'mail':
                     icon.addClass('fa-envelope');
@@ -94,7 +94,7 @@ define('io.ox/backbone/mini-views/listutils', [], function () {
                     'data-action': 'delete',
                     'aria-label': title + ', ' + label
                 })
-                .append($('<i class="fa fa-trash-o">'));
+                .append($('<i class="fa fa-trash-o" aria-hidden="true">'));
             } else {
                 // empty dummy
                 control = $('<a class="remove" style="display: none">').attr({
@@ -104,7 +104,7 @@ define('io.ox/backbone/mini-views/listutils', [], function () {
                     title: title,
                     'aria-label': title + ', ' + label
                 })
-                .append($('<i class="fa fa-trash-o" >'));
+                .append($('<i class="fa fa-trash-o" aria-hidden="true">'));
             }
             return control;
         },
@@ -136,7 +136,7 @@ define('io.ox/backbone/mini-views/listutils', [], function () {
                 role: 'button',
                 tabindex: 1
             })
-            .append($('<i class="fa fa-bars">'))
+            .append($('<i class="fa fa-bars" aria-hidden="true">'))
             .on('click', $.preventDefault);
         },
         controlProcessSub: function (title, label, faClass) {
@@ -148,6 +148,12 @@ define('io.ox/backbone/mini-views/listutils', [], function () {
                 tabindex: 1,
                 'aria-label': title + ', ' + label
             });
+        },
+        drawError: function (account) {
+            if (!account || !account.get('hasError')) {
+                return '';
+            }
+            return $('<div class="account-error-message">').text(account.get('error'));
         }
     };
 });

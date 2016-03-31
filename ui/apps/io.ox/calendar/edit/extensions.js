@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
@@ -30,7 +30,7 @@ define('io.ox/calendar/edit/extensions', [
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'less!io.ox/calendar/style'
-], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipant, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
+], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
 
     'use strict';
 
@@ -66,6 +66,7 @@ define('io.ox/calendar/edit/extensions', [
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
+                        fail = _.bind(baton.app.onError || _.noop, baton.app),
                         folder = baton.model.get('folder_id');
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
@@ -82,7 +83,7 @@ define('io.ox/calendar/edit/extensions', [
                     var timezone = baton.model.get('endTimezone');
                     baton.model.unset('endTimezone', { silent: true });
                     baton.model.endTimezone = timezone;
-                    baton.model.save().done(save);
+                    baton.model.save().then(save, fail);
                 })
             );
 
@@ -409,11 +410,8 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed form-spacer'
     });
 
-    function colorClickHandler(e) {
-        // toggle active class
-        $(this).siblings('.active').removeClass('active').attr('aria-checked', false).end().addClass('active').attr('aria-checked', true);
-        // update model
-        e.data.model.set({ 'color_label': e.data.color_label });
+    function changeColorHandler(e) {
+        e.data.model.set('color_label', $(this).parent().children(':checked').val());
     }
 
     //color selection
@@ -425,7 +423,7 @@ define('io.ox/calendar/edit/extensions', [
 
             if (settings.get('colorScheme') !== 'custom') return;
 
-            var activeColor = this.model.get('color_label') || 0;
+            var currentColor = parseInt(this.model.get('color_label'), 10) || 0;
 
             this.listenTo(this.model, 'change:private_flag', function (model, value) {
                 this.$el.find('.no-color').toggleClass('color-label-10', value);
@@ -436,16 +434,18 @@ define('io.ox/calendar/edit/extensions', [
                     $.txt(gt('Color')),
                     $('<div class="custom-color">').append(
                         _.map(_.range(0, 11), function (color_label) {
-                            return $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
+                            return $('<label>').append(
+                                // radio button
+                                $('<input type="radio" tabindex="1" name="color">')
+                                .attr('aria-label', calendarUtil.getColorLabel(color_label))
+                                .val(color_label)
+                                .prop('checked', color_label === currentColor)
+                                .on('change', { model: this.model }, changeColorHandler),
+                                // colored box
+                                $('<span class="box">')
                                 .addClass(color_label > 0 ? 'color-label-' + color_label : 'no-color')
                                 .addClass(color_label === 0 && this.model.get('private_flag') ? 'color-label-10' : '')
-                                .addClass(activeColor === color_label ? 'active' : '')
-                                .attr({
-                                    'aria-checked': activeColor === color_label,
-                                    'aria-label': calendarUtil.getColorLabel(color_label)
-                                })
-                                .append('<i class="fa fa-check">')
-                                .on('click', { color_label: color_label, model: this.model }, colorClickHandler);
+                            );
                         }, this)
                     )
                 )
@@ -461,6 +461,11 @@ define('io.ox/calendar/edit/extensions', [
         index: 1200,
         className: 'col-md-6',
         render: function () {
+
+            // private flag only works in private folders
+            var folder_id = this.model.get('folder_id');
+            if (!folderAPI.pool.getModel(folder_id).is('private')) return;
+
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend>').addClass('simple').text(gt('Type')),
@@ -495,7 +500,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 1500,
         rowClass: 'collapsed',
         draw: function (baton) {
-            var typeahead = new AddParticipant({
+            var typeahead = new AddParticipantView({
                 apiOptions: {
                     contacts: true,
                     users: true,
@@ -600,6 +605,15 @@ define('io.ox/calendar/edit/extensions', [
                                 .on('change', changeHandler)
                                 .appendTo($input.parent());
                     }
+                    // look if the quota is exceeded
+                    baton.model.on('invalid:quota_exceeded', function (messages) {
+                        require(['io.ox/core/yell'], function (yell) {
+                            yell('error', messages[0]);
+                        });
+                    });
+                    baton.model.validate();
+                    // turn of again to prevent double yells on save
+                    baton.model.off('invalid:quota_exceeded');
                 };
             $input.on('change', changeHandler);
             $inputWrap.on('change.fileupload', function () {
@@ -642,7 +656,9 @@ define('io.ox/calendar/edit/extensions', [
             start_date: start,
             end_date: end,
             folder: model.get('folder_id'),
-            participants: model.get('participants'),
+            participants: model.getParticipants().map(function (p) {
+                return p.toJSON();
+            }),
             model: model
         });
     }

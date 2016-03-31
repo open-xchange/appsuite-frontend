@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -40,7 +40,8 @@ define('io.ox/tasks/util', [
         util = {
             computePopupTime: function (value, smartEndDate) {
                 smartEndDate = smartEndDate || false;
-                var alarmDate = moment(),
+                // no need for milliseconds or seconds, minutes are accurate enough
+                var alarmDate = moment().milliseconds(0).seconds(0),
                     endDate;
 
                 if (!isNaN(parseInt(value, 10))) {
@@ -91,8 +92,7 @@ define('io.ox/tasks/util', [
                 return {
                     // UTC
                     endDate: endDate.utc(true).valueOf(),
-                    // Localtime
-                    alarmDate: alarmDate.valueOf()
+                    alarmDate: alarmDate.utc().valueOf()
                 };
             },
 
@@ -375,7 +375,7 @@ define('io.ox/tasks/util', [
                         // no default
                     }
                     for (var i = 0; i < p; i++) {
-                        $span.append($('<i class="fa fa-exclamation">'));
+                        $span.append($('<i class="fa fa-exclamation" aria-hidden="true">'));
                     }
                     return $span;
                 }

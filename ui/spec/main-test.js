@@ -27,7 +27,13 @@ require(['io.ox/core/extPatterns/stage'], function (Stage) {
                 deps: tests,
 
                 // start test run, once Require.js is done
-                callback: window.__karma__.start
+                callback: function () {
+                    // make sure, we always start in mail app
+                    // this prevents single test runs for apps that quit, ending up with an empty workspace
+                    // and launching the default app. This basically is an attempt to minimize
+                    // unwanted side-effects
+                    ox.launch('io.ox/mail/main').then(window.__karma__.start);
+                }
             });
         }
     });

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -83,6 +83,10 @@ define('io.ox/core/boot/fixes', [], function () {
         $.fn.tooltip = function () {
             return this;
         };
+        Modernizr.touch = true;
+        $('html').addClass('touch');
+    } else {
+        Modernizr.touch = false;
     }
 
     // iOS

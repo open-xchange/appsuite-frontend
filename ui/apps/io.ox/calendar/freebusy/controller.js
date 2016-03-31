@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -28,7 +28,7 @@ define('io.ox/calendar/freebusy/controller', [
     'settings!io.ox/core',
     'less!io.ox/calendar/week/style',
     'less!io.ox/calendar/freebusy/style'
-], function (dialogs, WeekView, templates, folderAPI, AddParticipant, pModel, pView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
+], function (dialogs, WeekView, templates, folderAPI, AddParticipantView, pModel, pView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
 
     'use strict';
 
@@ -242,8 +242,10 @@ define('io.ox/calendar/freebusy/controller', [
 
             this.bubble = function (eventname, e, data) {
                 // get calendar app
-                var parentapp = options.baton && options.baton.app ? options.baton.app : $();
-                parentapp.trigger(eventname, e, data, 'freebusy-' + this.getCalendarView().mode);
+                var view = this.getCalendarView();
+                if (!view) return;
+                var app = options.baton && options.baton.app ? options.baton.app : $();
+                app.trigger(eventname, e, data, 'freebusy-' + view.mode);
             };
 
             this.getCalendarViewInstance = function (mode) {
@@ -382,6 +384,10 @@ define('io.ox/calendar/freebusy/controller', [
             this.participants
                 .on('remove', removeParticipant)
                 .on('add', function (model) {
+                    if (model.has('members')) {
+                        resolveParticipants(model.toJSON());
+                        return;
+                    }
                     model.index = templates.getFreeColor(self.participants);
                     drawParticipant(model);
                 })
@@ -418,9 +424,9 @@ define('io.ox/calendar/freebusy/controller', [
 
             var drop;
 
-            this.autocomplete = new AddParticipant({
+            this.autocomplete = new AddParticipantView({
                 apiOptions: {
-                    contacts: true,
+                    contacts: false,
                     users: true,
                     groups: true,
                     resources: true,

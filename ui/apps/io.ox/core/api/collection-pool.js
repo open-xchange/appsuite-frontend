@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -95,8 +95,8 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
         // mark all collections as expired
         _(hash).each(function (entry, id) {
-            // ignore detail collection
-            if (id === 'detail') return;
+            // ignore detail collection and those with gc=false, e.g. all-visible
+            if (id === 'detail' || entry.collection.gc === false) return;
             // mark as expired
             entry.collection.expired = true;
         });

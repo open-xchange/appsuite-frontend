@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  *
@@ -34,6 +34,11 @@ define('io.ox/files/share/api', [
 
         isFolder: function () {
             return !this.has('folder_id');
+        },
+
+        getFolderModel: function () {
+            var id = this.isFile() ? this.get('folder_id') : this.get('id');
+            return folderAPI.pool.getModel(id);
         },
 
         isAdmin: function () {

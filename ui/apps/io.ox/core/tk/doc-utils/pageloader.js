@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
@@ -20,7 +20,7 @@ define('io.ox/core/tk/doc-utils/pageloader', [
     'use strict';
 
     var // the maximum number of simultaneous pending page render requests
-        MAX_REQUESTS = Modernizr.touch ? 2 : 5,
+        MAX_REQUESTS = _.device('touch') ? 2 : 5,
 
         // the number of page render requests currently running
         RUNNING_REQUESTS = 0,

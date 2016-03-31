@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -16,7 +16,7 @@ define([
     'io.ox/files/settings/pane'
 ], function (ext, gt) {
 
-    describe('filessettings', function () {
+    describe('Files settings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="filessettingsNode">'));
@@ -25,7 +25,7 @@ define([
         });
 
         afterEach(function () {
-            $('#filessettingsNode', document).remove();
+            this.node.remove();
         });
 
         it('should draw the form', function () {

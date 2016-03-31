@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  *
@@ -1311,6 +1311,12 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 def.resolve([]);
             }
             return def;
+        },
+
+        getColumn: function (module, column) {
+            if (!module) return idMapping;
+            var columns = idMapping[module] || {};
+            return column ? columns[column] : columns;
         },
 
         // send server ping

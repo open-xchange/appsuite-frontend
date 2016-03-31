@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  *
@@ -817,7 +817,7 @@ define('io.ox/core/desktop', [
                     $('#io-ox-screens').children().each(function () {
                         var attr = $(this).attr('id'),
                             screenId = String(attr || '').substr(6);
-                        if (screenId !== id) {
+                        if (screenId !== id && screenId !== 'ad-skyscraper') {
                             that.hide(screenId);
                         }
                     });

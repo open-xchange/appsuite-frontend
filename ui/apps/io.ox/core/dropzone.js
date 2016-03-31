@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -189,7 +189,7 @@ define('io.ox/core/dropzone', [], function () {
 
             this.$el.hide().append(
                 $('<div class="abs dropzone-caption">').text(this.options.caption || ''),
-                $('<div class="abs dropzone-dragover"><i class="fa fa-check"></i></div>'),
+                $('<div class="abs dropzone-dragover"><i class="fa fa-check" aria-hidden="true"></i></div>'),
                 $('<div class="abs dropzone-overlay">')
             );
 

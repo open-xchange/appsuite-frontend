@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
@@ -37,6 +37,8 @@ define.async('io.ox/mail/compose/model', [
 
         defaults: function () {
             return {
+                savedAsDraft: false,
+                autosavedAsDraft: false,
                 preferredEditorMode: settings.get('messageFormat', 'html'),
                 editorMode: settings.get('messageFormat', 'html'),
                 attachments: new Attachments.Collection(),
@@ -116,6 +118,12 @@ define.async('io.ox/mail/compose/model', [
             if (!this.get('signatures')) this.set('signatures', this.getSignatures());
 
             this.updateShadow();
+        },
+
+        setAutoBCC: function () {
+            if (settings.get('autobcc') && this.get('mode') !== 'edit') {
+                this.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
+            }
         },
 
         getCopy: function () {
@@ -302,22 +310,6 @@ define.async('io.ox/mail/compose/model', [
         getMailForDraft: function () {
             var mail = this.getMail();
 
-            switch (mail.sendtype) {
-                case mailAPI.SENDTYPE.DRAFT:
-                    mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                    break;
-                case mailAPI.SENDTYPE.EDIT_DRAFT:
-                    break;
-                case mailAPI.SENDTYPE.FORWARD:
-                    mail.sendtype = mailAPI.SENDTYPE.DRAFT;
-                    break;
-                default:
-                    mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                    if (mail.msgref) delete mail.msgref;
-            }
-
-            this.set('sendtype', mail.sendtype, { silent: true });
-
             if (_(mail.flags).isUndefined()) {
                 mail.flags = mailAPI.FLAGS.DRAFT;
             } else if ((mail.data.flags & 4) === 0) {
@@ -341,6 +333,17 @@ define.async('io.ox/mail/compose/model', [
             }
 
             return mail;
+        },
+
+        needsCleanup: function () {
+            return (this.get('autosavedAsDraft') && !this.get('savedAsDraft') && this.get('originAction') !== 'edit') || this.dirty();
+        },
+
+        cleanAutosave: function () {
+            // never delete on edit
+            // only delete autosaved drafts that are not saved manually and have a msgref
+            if (this.get('originAction') === 'edit' || this.get('savedAsDraft')) return;
+            if (this.get('autosavedAsDraft') && this.get('msgref')) mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, this.get('msgref'))]);
         },
 
         convertAllToUnified: emoji.converterFor({

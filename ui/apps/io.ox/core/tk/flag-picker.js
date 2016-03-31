@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -47,7 +47,8 @@ define('io.ox/core/tk/flag-picker', [
                     dropdownWidth = $ul.outerWidth(),
                     dropdownHeight = $ul.outerHeight(),
                     availableWidth = $(window).width(),
-                    availableHeight = $(window).height();
+                    // don't overlap topbar
+                    availableHeight = $(window).height() - $('#io-ox-topbar').height();
 
                 // check potential positions
                 if ((offset.top + height + dropdownHeight) < availableHeight) {
@@ -76,7 +77,8 @@ define('io.ox/core/tk/flag-picker', [
                         if ((dropdownHeight + 2 * margin) < availableHeight) {
                             positions.top = 'auto';
                         } else {
-                            positions.top = margin;
+                            // again don't overlap the topbar or the dropdown is hidden underneath it
+                            positions.top = margin + $('#io-ox-topbar').height();
                         }
                     }
                 }

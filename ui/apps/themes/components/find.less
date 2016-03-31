@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -135,6 +135,7 @@
             &.action-cancel { display: none; }
         }
         .search-box-filter { display: none; }
+        .flex(0 1 auto);
     }
 
     /**
@@ -147,8 +148,8 @@
 
         .io-ox-find {
             //top: managed by backbone view
-            position: fixed;
-            width: 100%;
+            position: absolute;
+            width: 100vw;
             height: 40px;
 
             .search-box {

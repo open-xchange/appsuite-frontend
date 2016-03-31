@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
@@ -37,7 +37,7 @@ define('io.ox/mail/detail/mobileView', [
         id: 'header',
         index: INDEX += 100,
         draw: function (baton) {
-            var header = $('<header class="mobile-detail-view-mail detail-view-header" role="heading">');
+            var header = $('<header class="mobile-detail-view-mail detail-view-header">');
             ext.point('io.ox/mail/mobile/detail/header').invoke('draw', header, baton);
             this.append(header);
         }

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
@@ -14,11 +14,36 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
     describe('Mail Compose', function () {
-        var app, pictureHalo, snippetsGetAll;
+
+        var app, pictureHalo, snippetsGetAll, getValidAddress;
+
+        var editors = {
+                text: 'io.ox/core/tk/text-editor',
+                html: 'io.ox/core/tk/contenteditable-editor'
+            },
+            pluginStub;
+
         beforeEach(function () {
-            return require(['io.ox/core/api/snippets', 'io.ox/contacts/api', 'settings!io.ox/mail'], function (snippetAPI, contactsAPI, settings) {
+            pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
+                namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
+                return require([editors[namespace]]);
+            });
+        });
+        afterEach(function () {
+            pluginStub.restore();
+        });
+
+        beforeEach(function () {
+            return require([
+                'io.ox/core/api/snippets',
+                'io.ox/contacts/api',
+                'io.ox/core/api/account',
+                'settings!io.ox/mail'
+            ], function (snippetAPI, contactsAPI, accountAPI, settings) {
                 snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
                 pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
+                getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
+                //load plaintext editor, much faster than spinning up tinymce all the time
                 settings.set('messageFormat', 'html');
             }).then(function () {
                 app = compose.getApp();
@@ -31,8 +56,11 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
             }
             snippetsGetAll.restore();
             pictureHalo.restore();
+            getValidAddress.restore();
             return app.quit();
         });
+
+        //TODO: broken in phantomjs, somehow; tinyMCE does not load
         describe.skip('inline images', function () {
             beforeEach(function () {
                 this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
@@ -47,8 +75,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                 var api = require('io.ox/mail/api');
                 var spy = sinon.stub(api, 'get');
                 var def = waitsFor(function () {
-                    console.log('mu');
-                    return app.view.contentEditable.find('img').length > 0;
+                    return app.view.$el.find('.editable.mce-content-body img').length > 0;
                 });
 
                 app.view.setBody('<div>some<img src="test.png" />text</div>');
@@ -61,17 +88,18 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
 
                 return $.when(def, app.view.saveDraft()).then(function () {
                     expect(spy.calledOnce, 'mailAPI.get called once').to.be.true;
-                    var img = app.view.contentEditable.find('img');
+                    var img = app.view.$el.find('.editable.mce-content-body img');
                     expect(img.attr('src')).to.equal('test_changed_by_backend.png');
                 }).always(function () {
                     spy.restore();
                 });
             });
+
             it('should not switch src attribute of emoji icons', function () {
                 var api = require('io.ox/mail/api');
                 var spy = sinon.stub(api, 'get');
                 var def = waitsFor(function () {
-                    return app.view.contentEditable.find('img').length > 0;
+                    return app.view.$el.find('.editable.mce-content-body img').length > 0;
                 });
 
                 app.view.setBody('<div>some<img src="test.png" />text and emoji<img src="1x1.gif" class="emoji" /></div>');
@@ -84,7 +112,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
 
                 return $.when(def, app.view.saveDraft()).then(function () {
                     expect(spy.calledOnce, 'mailAPI.get called once').to.be.true;
-                    var imgs = $('img', app.view.contentEditable);
+                    var imgs = $('.editable.mce-content-body img', app.view.$el);
                     expect($(imgs[0]).attr('src')).to.equal('test_changed_by_backend.png');
                     expect($(imgs[1]).attr('src')).to.equal('1x1.gif');
                 }).always(function () {

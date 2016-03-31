@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
@@ -350,7 +350,8 @@ define('io.ox/core/tk/upload', [
     return {
 
         dnd: {
-            enabled: Modernizr.draganddrop,
+            // was: Modernizr.draganddrop but that test is gone
+            enabled: _.device('!touch'),
             createDropZone: function (options) {
                 options = options || {};
                 if (!this.enabled) {

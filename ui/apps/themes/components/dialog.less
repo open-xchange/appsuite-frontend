@@ -6,8 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) 2011 Open-Xchange, Inc.
- * Mail: info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author David Bauer <david.bauer@open-xchange.com>
@@ -20,6 +19,12 @@
     .modal-body {
         overflow-y: auto;
         max-height: 400px;
+    }
+
+    .modal-footer .checkbox {
+        float: left;
+        margin-top: 6px;
+        margin-bottom: 0;
     }
 }
 
@@ -77,6 +82,7 @@
         &.max-height-250 { max-height: 250px; }
         &.max-height-300 { max-height: 300px; }
         &.max-height-350 { max-height: 350px; }
+
     }
 
     &.zero-padding {
@@ -106,6 +112,8 @@
     }
 
     .modal-footer > .btn { min-width: 5em; }
+
+    .modal-footer .help-block { text-align: left; }
 
     .io-ox-sidepopup {
         &.right { .border-radius(0 5px 5px 0); }

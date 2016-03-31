@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
@@ -258,9 +258,7 @@ define.async('io.ox/oauth/keychain', [
 
             return def;
         };
-
-        if (this.id === 'xing' || this.id === 'twitter' || this.id === 'linkedin' ||
-            this.id === 'boxcom' || this.id === 'dropbox' || this.id === 'google' || this.id === 'msliveconnect') {
+        if (_.contains(['xing', 'twitter', 'linkedin', 'boxcom', 'dropbox', 'google', 'msliveconnect', 'yahoo'], this.id)) {
             this.canAdd = function () {
                 return self.getAll().length === 0;
             };

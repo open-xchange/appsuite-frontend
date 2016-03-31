@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  * @author Edy Haryono <edy.haryono@open-xchange.com>
@@ -71,7 +71,10 @@ define('io.ox/core/viewer/main', [], function () {
                     self.mainView.on('dispose', function () {
                         // remove id form URL hash (see bug 43410)
                         // use-case: viewer was opened via deep-link; a page-reload might surprise the user
-                        _.url.hash('id', null);
+                        // but don't remove the id from an OX Presenter URL
+                        if (_.url.hash('app') !== 'io.ox/presenter') {
+                            _.url.hash('id', null);
+                        }
                     });
                 });
             }

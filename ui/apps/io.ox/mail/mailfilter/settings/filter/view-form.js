@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -306,9 +306,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 this.model.save().then(function (id) {
                     //first rule gets 0
-                    if (!_.isUndefined(id) && !_.isNull(id)) {
+                    if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.listView)) {
                         self.model.set('id', id);
                         self.listView.collection.add(self.model);
+                    } else if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.collection)) {
+                        self.model.set('id', id);
+                        self.collection.add(self.model);
                     }
                     self.dialog.close();
                 }, self.dialog.idle);

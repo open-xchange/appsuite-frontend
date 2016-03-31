@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
@@ -20,7 +20,7 @@ define([
 
     var capabilities = caputil.preset('common').init('io.ox/mail/util', util);
 
-    describe('Utilities for mail:', function () {
+    describe('Mail Utilities:', function () {
 
         describe('has some capability depending msisdn methods that', function () {
 

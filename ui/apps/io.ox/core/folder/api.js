@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -191,6 +191,19 @@ define('io.ox/core/folder/api', [
         isAdmin: function () {
             var bits = new Bitmask(this.get('own_rights'));
             return !!bits.get('admin');
+        },
+
+        supportsInternalSharing: function () {
+            // mail and drive check gab (webmail, PIM, PIM+infostore)
+            if (this.is('mail|drive')) return capabilities.has('gab');
+            // contacts, calendar, tasks
+            if (this.is('public')) return capabilities.has('edit_public_folders');
+            // non-public foldes
+            return capabilities.has('read_create_shared_folders');
+        },
+
+        supportsInviteGuests: function () {
+            return !this.is('mail') && capabilities.has('invite_guests') && this.supportsInternalSharing();
         },
 
         // check if the folder can have shares
@@ -388,12 +401,16 @@ define('io.ox/core/folder/api', [
         type: 1
     });
 
-    pool.addModel({
-        folder_id: 'default0',
-        id: 'virtual/all-unseen',
-        module: 'mail',
-        title: gt('Unread messages')
-    });
+    if (capabilities.has('webmail')) {
+        // only define if the user actually has mail
+        // otherwise the folder refresh tries to fetch 'default0'
+        pool.addModel({
+            folder_id: 'default0',
+            id: 'virtual/all-unseen',
+            module: 'mail',
+            title: gt('Unread messages')
+        });
+    }
 
     //
     // Propagate
@@ -894,24 +911,25 @@ define('io.ox/core/folder/api', [
         //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
         model.set('unread', 0);
 
-        return update(id, { folder_id: target }, { ignoreWarnings: ignoreWarnings }).then(function success(newId) {
-            // update new parent folder
-            pool.getModel(target).set('subfolders', true);
-            // update all virtual folders
-            virtual.refresh();
-            // add folder to collection
-            pool.getCollection(target).add(model);
-            // trigger event
-            api.trigger('move', id, newId);
-        }, function fail(error) {
-            // update new parent folder
-            pool.getModel(folderId).set('subfolders', true);
-            // update all virtual folders
-            virtual.refresh();
-            // add folder to collection
-            pool.getCollection(folderId).add(model);
-            return error;
-        });
+        return update(id, { folder_id: target }, { ignoreWarnings: ignoreWarnings }).then(
+            function success(newId) {
+                // update new parent folder
+                pool.getModel(target).set('subfolders', true);
+                // update all virtual folders
+                virtual.refresh();
+                // add folder to collection
+                pool.getCollection(target).add(model);
+                // trigger event
+                api.trigger('move', id, newId);
+            },
+            function fail(error) {
+                // re-add folder
+                pool.getModel(folderId).set('subfolders', true);
+                virtual.refresh();
+                pool.getCollection(folderId).add(model);
+                return error;
+            }
+        );
     }
 
     //
@@ -1250,7 +1268,7 @@ define('io.ox/core/folder/api', [
     function getExistingFolder(type) {
         var defaultId = util.getDefaultFolder(type);
         if (defaultId) return $.Deferred().resolve(defaultId);
-        if (type === 'mail') return $.Deferred().resolve('default0' + mailSettings.get('defaultseparator') + 'INBOX');
+        if (type === 'mail') return $.Deferred().resolve('default0' + mailSettings.get('defaultseparator', '/') + 'INBOX');
         if (type === 'infostore') return $.Deferred().resolve(10);
         return flat({ module: type }).then(function (data) {
             for (var section in data) {

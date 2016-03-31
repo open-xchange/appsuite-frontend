@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
@@ -276,7 +276,7 @@ define('io.ox/core/permissions/permissions', [
 
     addRemoveButton = function (entity) {
         if (isFolderAdmin && entity !== ox.user_id) {
-            return $('<a href="# "data-action="remove">').append($('<i class="fa fa-trash-o">'));
+            return $('<a href="# "data-action="remove">').append($('<i class="fa fa-trash-o" aria-hidden="true">'));
         }
         return $();
     };

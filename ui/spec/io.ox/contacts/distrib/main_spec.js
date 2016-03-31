@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -32,7 +32,8 @@ define([
      * Suite: Distributionlist Test
      */
 
-    describe('Distributionlist edit', function () {
+    describe('Contact Distributionlist edit', function () {
+        //FIXME: anti-pattern: dependent tests
         var app = null,
             clock;
 
@@ -56,11 +57,10 @@ define([
             expect(app.launch).to.be.a('function');
         });
 
-        it('should open distributionlist app ', function (done) {
-            app.launch().done(function () {
+        it('should open distributionlist app ', function () {
+            return app.launch().then(function () {
                 app.create(1);
                 expect(app).to.exist;
-                done();
             });
         });
 
@@ -132,11 +132,11 @@ define([
             expect(app.model.get('distribution_list')[0]).to.deep.equal(participants[1]);
         });
 
-        it('quit the app', function (done) {
+        it('quit the app', function () {
             //quit the app, but don't cleanup (force = true)
             //and don't sync any models (override default destroy method)
             app.destroy = _.noop;
-            app.quit(true).done(done);
+            return app.quit(true);
         });
 
     });

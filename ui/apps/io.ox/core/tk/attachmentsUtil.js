@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -226,7 +226,7 @@ define('io.ox/core/tk/attachmentsUtil', [
                             $('<a href="#" class="remove" tabindex="6">')
                             .attr('title', gt('Remove attachment'))
                             .append(
-                                $('<i class="fa fa-trash-o">')
+                                $('<i class="fa fa-trash-o" aria-hidden="true">')
                             )
                             .on('click', function (e) {
                                 e.preventDefault();

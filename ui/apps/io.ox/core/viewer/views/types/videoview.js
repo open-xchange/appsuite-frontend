@@ -5,7 +5,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
@@ -79,7 +79,9 @@ define('io.ox/core/viewer/views/types/videoview', [
             this.$el.idle().find('.viewer-displayer-video').addClass('player-hidden');
             this.$el.find('div.viewer-displayer-notification').remove();
             this.$el.append(
-                this.createNotificationNode(gt('Your browser does not support the video format of this file.'))
+                this.createNotificationNode(
+                    gt('Error while playing the video. Either your browser does not support the format or you have connection problems.')
+                )
             );
         },
 

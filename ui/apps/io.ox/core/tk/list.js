@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -310,6 +310,7 @@ define('io.ox/core/tk/list', [
                 currentY = touches.pageY,
                 distance = currentY - this.pullToRefreshStartY;
 
+
             if (this.pullToRefreshStartY && !this.isPulling && !this.isSwiping) {
                 if ((currentY - this.pullToRefreshStartY) >= PTR_START) {
                     e.preventDefault();
@@ -324,7 +325,8 @@ define('io.ox/core/tk/list', [
                 }
             }
 
-            if (this.isPulling && distance <= PTR_MAX_PULLDOWM /*&& !this.pullToRefreshTriggerd*/) {
+            if (this.isPulling && distance <= PTR_MAX_PULLDOWM) {
+                this.pullToRefreshTriggerd = false;
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -361,17 +363,16 @@ define('io.ox/core/tk/list', [
 
                 e.preventDefault();
                 e.stopPropagation();
-                // reset
-                this.selection.isScrolling = false;
+
 
             } else if (this.isPulling) {
                 // threshold was not reached, just remove the ptr indicator
                 this.removePullToRefreshIndicator(true);
                 e.preventDefault();
                 e.stopPropagation();
-                this.selection.isScrolling = true;
             }
             // reset everything
+            this.selection.isScrolling = false;
             this.pullToRefreshStartY = null;
             this.isPulling = false;
             this.pullToRefreshTriggerd = false;

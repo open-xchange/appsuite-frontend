@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -749,8 +749,8 @@
                     return { id: s };
                 }
                 return {
-                    folder_id: s.substr(0, pos + 1).replace(/\\(\\?)/g, '$1'),
-                    id: s.substr(pos + 2).replace(/\\(\\?)/g, '$1')
+                    folder_id: s.substr(0, pos + 1).replace(/\\\./g, '.'),
+                    id: s.substr(pos + 2).replace(/\\\./g, '.')
                 };
             }
 
@@ -797,7 +797,6 @@
 
         toHash: function (array, prop) {
             var tmp = {};
-            prop = prop || 'id';
             _(array).each(function (obj) {
                 if (obj && prop && _.isString(prop)) tmp[obj[prop]] = obj;
             });
@@ -820,7 +819,7 @@
     };
 
     _.escapeRegExp = function (s) {
-        return (s || '').replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
+        return (s || '').replace(/([$^*+?!:=.|(){}[\]\\])/g, function () { return ('\\' + arguments[1]); });
     };
 
     window.assert = function (value, message) {

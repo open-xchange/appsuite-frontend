@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -16,7 +16,7 @@ define([
 ], function (content, ext) {
     'use strict';
 
-    describe('Content for mail detail:', function () {
+    describe('Mail Content detail', function () {
         describe('beautifies content by', function () {
             it('adding target "_blank" to links within the mail body', function () {
                 var baton = {},

@@ -6,15 +6,14 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
 define('io.ox/mail/mailfilter/settings/register', [
     'io.ox/core/extensions',
-    'gettext!io.ox/mail',
-    'less!io.ox/mail/mailfilter/settings/style'
+    'gettext!io.ox/mail'
 ], function (ext, gt) {
 
     'use strict';

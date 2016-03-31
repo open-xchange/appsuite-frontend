@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
@@ -18,7 +18,9 @@ define('io.ox/calendar/conflicts/conflictList', ['gettext!io.ox/calendar/conflic
     return {
 
         drawHeader: function () {
-            return $('<h4 class="text-error">').text(gt('Conflicts detected'));
+            return $('<h4 class="text-error">')
+                .text(gt('Conflicts detected'))
+                .add($('<div>').text(gt('The new appointment conflicts with existing appointments.')));
         },
 
         drawList: function (conflicts, dialog) {

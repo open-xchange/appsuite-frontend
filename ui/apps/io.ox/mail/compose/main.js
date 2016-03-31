@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
@@ -64,7 +64,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 var def = $.Deferred();
                 _.url.hash('app', 'io.ox/mail/compose:' + type);
 
-                obj = _.extend({ mode: type }, obj);
+                obj = _.extend({ mode: type, originAction: type }, obj);
 
                 app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
 
@@ -76,7 +76,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                     require(['io.ox/mail/compose/bundle'], function () {
                         require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model'], function (MailComposeView, MailComposeModel) {
                             var keepdata = /(compose|edit|forward)/.test(obj.mode) || obj.restored,
-                                data = keepdata ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
+                                data = keepdata ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type', 'originAction');
                             app.model = new MailComposeModel(data);
                             app.view = new MailComposeView({ app: app, model: app.model });
                             win.nodes.main.addClass('scrollable').append(app.view.render().$el);

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -22,9 +22,8 @@ define('io.ox/calendar/print-compact', [
     'use strict';
 
     function getDate(data) {
-        var time = util.getTimeInterval(data),
-            date = util.getDateInterval(data);
-        return date + ' ' + time;
+        var strings = util.getDateTimeIntervalMarkup(data, { output: 'strings' });
+        return strings.dateStr + ' ' + strings.timeStr;
     }
 
     // used to get participants in groups
@@ -39,7 +38,7 @@ define('io.ox/calendar/print-compact', [
                 participants.push(item.id);
             }
             if (item.type === 2) {
-                groups.push(item.id);
+                groups.push({ id: item.id });
             }
         });
 

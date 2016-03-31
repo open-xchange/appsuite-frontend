@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -19,13 +19,17 @@ define('io.ox/contacts/addressbook/popup', [
     'io.ox/core/extensions',
     'io.ox/contacts/util',
     'gettext!io.ox/contacts',
+    'settings!io.ox/mail',
     'less!io.ox/contacts/addressbook/style'
-], function (http, folderAPI, ModalDialog, ListView, ext, util, gt) {
+], function (http, folderAPI, ModalDialog, ListView, ext, util, gt, mailSettings) {
 
     'use strict';
 
     var names = 'last_name first_name display_name'.split(' '),
         addresses = 'email1 email2 email3'.split(' ');
+
+    // special folder id
+    var collected_id = mailSettings.get('contactCollectFolder', 0);
 
     // split words
     var regSplitWords = /[\s,.\-:;\<\>\(\)\_\@\/\'\"]/;
@@ -118,36 +122,20 @@ define('io.ox/contacts/addressbook/popup', [
 
     var getAllMailAddresses = (function () {
 
-        var collected_id = 0;
-
         return function (options) {
 
             options = _.extend({
                 // keep this list really small for good performance!
-                columns: '1,20,500,501,502,505,555,556,557,592,602,606,608',
-                limit: 10000
+                columns: '1,20,500,501,502,505,555,556,557,592,602,606',
+                limit: 5000
             }, options);
 
-            return getFolders().then(function () {
-                if (options.folder === 'all') delete options.folder;
-                return fetchAddresses(options).then(function (list) {
-                    return processAddresses(list, options);
-                });
+            if (options.folder === 'all') delete options.folder;
+
+            return fetchAddresses(options).then(function (list) {
+                return processAddresses(list, options);
             });
         };
-
-        function getFolders() {
-            // get contacts folders
-            return folderAPI.flat({ module: 'contacts' }).done(function (folders) {
-                // exclude "collected addresses"
-                _(folders['private']).find(function (folder) {
-                    if (folder.standard_folder && folder.standard_folder_type === 0) {
-                        collected_id = String(folder.id);
-                        return true;
-                    }
-                });
-            });
-        }
 
         function fetchAddresses(options) {
             return http.PUT({
@@ -155,8 +143,7 @@ define('io.ox/contacts/addressbook/popup', [
                 params: {
                     action: 'search',
                     columns: options.columns,
-                    limit: '0,' + options.limit,
-                    sort: '609'
+                    right_hand_limit: options.limit
                 },
                 data: {
                     // emailAutoComplete doesn't work; need to clean up client-side anyway
@@ -170,11 +157,9 @@ define('io.ox/contacts/addressbook/popup', [
             var result = [], hash = {};
 
             // fail when exceeding the limit
-            if (list.length > options.limit) return $.Deferred().reject('too-many');
+            if (list.length >= options.limit) return $.Deferred().reject('too-many');
 
             list.forEach(function (item) {
-                // skip collected addresses (unless it's the selected folder)
-                if (String(item.folder_id) === collected_id && options.folder !== collected_id) return;
                 // get sort name
                 var sort_name = [], address;
                 names.forEach(function (name) {
@@ -204,7 +189,7 @@ define('io.ox/contacts/addressbook/popup', [
                     });
                 }
             });
-            return { items: _(result).sortBy('sort_name'), hash: hash, index: buildIndex(result) };
+            return { items: result, hash: hash, index: buildIndex(result) };
         }
 
         function process(item, sort_name, address, i) {
@@ -221,18 +206,17 @@ define('io.ox/contacts/addressbook/popup', [
                 display_name: item.display_name,
                 email: address,
                 first_name: item.first_name,
-                folder_id: item.folder_id,
+                folder_id: String(item.folder_id),
                 full_name: util.getFullName(item).toLowerCase(),
                 full_name_html: util.getFullName(item, true),
                 image: util.getImage(item),
-                id: item.id,
+                id: String(item.id),
                 initials: initials,
                 initial_color: util.getInitialsColor(initials),
                 last_name: item.last_name,
                 list: item.mark_as_distributionlist ? item.distribution_list : false,
                 sort_name: sort_name.concat(address).join('_'),
-                title: item.title,
-                use_count: item.useCount + (String(item.folder_id) === '6' ? (3 - i) : 0)
+                title: item.title
             };
         }
 
@@ -246,10 +230,10 @@ define('io.ox/contacts/addressbook/popup', [
     // Sorter for use_count and sort_name
     //
     function sorter(a, b) {
-        // desc
-        if (a.use_count !== b.use_count) return b.use_count - a.use_count;
-        if (a.sort_name === b.sort_name) return 0;
+        if (a.list && !b.list) return +1;
+        if (b.list && !a.list) return -1;
         // asc
+        if (a.sort_name === b.sort_name) return 0;
         return b.sort_name < a.sort_name ? +1 : -1;
     }
 
@@ -269,7 +253,7 @@ define('io.ox/contacts/addressbook/popup', [
     // Open dialog
     //
 
-    var tooMany = false, cachedResponse = null, folder = 'all', appeared = {};
+    var isOpen = false, tooMany = false, cachedResponse = null, folder = 'all', appeared = {};
 
     var sections = {
         'private': gt('My address books'),
@@ -278,6 +262,10 @@ define('io.ox/contacts/addressbook/popup', [
     };
 
     function open(callback) {
+
+        // avoid parallel popups
+        if (isOpen) return;
+        isOpen = true;
 
         return new ModalDialog({
             enter: false,
@@ -299,7 +287,7 @@ define('io.ox/contacts/addressbook/popup', [
                             .attr('placeholder', gt('Search'))
                         ),
                         $('<div class="col-xs-6">').append(
-                            $('<select class="form-control folder-dropdown" tabindex="1">').append(
+                            $('<select class="form-control folder-dropdown invisible" tabindex="1">').append(
                                 $('<option value="all">').text('All contacts')
                             )
                         )
@@ -309,16 +297,19 @@ define('io.ox/contacts/addressbook/popup', [
                 // fill folder drop-down
                 var $dropdown = view.$('.folder-dropdown');
                 folderAPI.flat({ module: 'contacts' }).done(function (folders) {
+                    var count = 0;
                     $dropdown.append(
                         _(folders).map(function (section, id) {
                             if (!sections[id]) return $();
                             return $('<optgroup>').attr('label', sections[id]).append(
                                 _(section).map(function (folder) {
+                                    count++;
                                     return $('<option>').val(folder.id).text(folder.title);
                                 })
                             );
                         })
                     );
+                    if (count > 1) $dropdown.removeClass('invisible');
                 });
 
                 view.folder = folder;
@@ -353,7 +344,7 @@ define('io.ox/contacts/addressbook/popup', [
                 function success(response) {
                     if (view.disposed) return;
                     cachedResponse = response;
-                    view.items = response.items;
+                    view.items = response.items.sort(sorter);
                     view.hash = response.hash;
                     view.index = response.index;
                     view.search('');
@@ -396,11 +387,10 @@ define('io.ox/contacts/addressbook/popup', [
                     }
                     // apply folder-based filter
                     var folder = this.folder;
-                    if (folder !== 'all') {
-                        result = _(result).filter(function (item) {
-                            return item.cid.indexOf(folder + '.') === 0;
-                        });
-                    }
+                    result = _(result).filter(function (item) {
+                        if (folder === 'all') return item.folder_id !== collected_id;
+                        return item.folder_id === folder;
+                    });
                     // render
                     this.renderItems(result);
                 };
@@ -435,6 +425,14 @@ define('io.ox/contacts/addressbook/popup', [
                 view.$('.list-view').on('dblclick', function () {
                     view.trigger('select');
                     view.close();
+                });
+            },
+            onEscape: function (baton) {
+                var view = baton.view;
+                view.$('.list-view').on('keydown', function (e) {
+                    if (e.which !== 27) return;
+                    e.preventDefault();
+                    view.$('.search-field').focus();
                 });
             }
         })
@@ -498,6 +496,9 @@ define('io.ox/contacts/addressbook/popup', [
             };
         })
         .on({
+            'close': function () {
+                isOpen = false;
+            },
             'too-many': function () {
                 tooMany = true;
                 this.trigger('error', gt('Too many contacts in your address book.'));
@@ -520,11 +521,13 @@ define('io.ox/contacts/addressbook/popup', [
             .chain()
             .map(function (item) {
                 if (item.list) return reduce(item.list);
+                var name = item.display_name, mail = item.mail || item.email;
                 return {
-                    display_name: item.display_name,
+                    array: [name || null, mail || null],
+                    display_name: name,
                     id: item.id,
                     folder_id: item.folder_id,
-                    email: item.mail || item.email
+                    email: mail
                 };
             })
             .flatten()

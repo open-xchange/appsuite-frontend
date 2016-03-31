@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
@@ -150,7 +150,9 @@ define('io.ox/mail/accounts/settings', [
             alertPlaceholder.find('.alert').remove();
             alertPlaceholder.find('.busynotice').remove();
             alertPlaceholder.append(
-                $.alert({ message: message, dismissable: true })
+                $.alert({ message: message, dismissable: true }).one('click', '.close', function () {
+                    alertPlaceholder.empty();
+                })
             );
         },
 

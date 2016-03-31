@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -205,6 +205,7 @@ define('io.ox/find/main', [
                             mode: 'search',
                             PRIMARY_PAGE_SIZE: defaultLoader.PRIMARY_PAGE_SIZE,
                             SECONDARY_PAGE_SIZE: defaultLoader.SECONDARY_PAGE_SIZE,
+                            isBad: $.noop,
                             fetch: function (p) {
                                 var self = this,
                                     limit = p.limit.split(','),

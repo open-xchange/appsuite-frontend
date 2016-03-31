@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -365,6 +365,18 @@ define('io.ox/core/tk/dialogs', [
 
         this.addButtonMobile = function (action, label, dataaction, options) {
             return addButton(action, label, dataaction, options);
+        };
+
+        this.addCheckbox = function (label, action, status) {
+            nodes.footer.prepend(
+                $('<div>').addClass('checkbox').append(
+                    $('<div>').addClass('controls'),
+                    $('<label>').text(label).prepend(
+                        $('<input type="checkbox" tabindex="1">').attr({ 'data-action': action, 'checked': status })
+                    )
+                )
+            );
+            return this;
         };
 
         this.close = function () {

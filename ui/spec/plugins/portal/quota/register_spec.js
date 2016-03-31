@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -19,7 +19,7 @@ define([
 
     var capabilities = caputil.preset('common').init('plugins/portal/quota/register', quotaPlugin);
 
-    describe('portal Quota plugin', function () {
+    describe('Portal Quota plugin', function () {
         beforeEach(function (done) {
             this.server.responses = this.server.responses.filter(function (r) {
                 return r.method !== 'PUT' || String(r.url) !== '/api\\/multiple\\?/';

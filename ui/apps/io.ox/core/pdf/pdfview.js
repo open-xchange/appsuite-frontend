@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
@@ -183,7 +183,7 @@ define('io.ox/core/pdf/pdfview', [
                 pageChildren = textWrapperNode.children();
                 _.each(pageChildren, function (child, index) {
                     // Non IPAD case
-                    if (!(Modernizr.touch && _.browser.iOS && _.browser.Safari)) {
+                    if (!(_.device('touch') && _.browser.iOS && _.browser.Safari)) {
                         child.style.margin = margin;
                         child.style.padding = padding;
                         child.style.transformOrigin = origin;

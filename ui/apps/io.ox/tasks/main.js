@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -753,7 +753,7 @@ define('io.ox/tasks/main', [
                 if (showSwipeButton) {
                     removeButton();
                 }
-                var div = $('<div class="swipeDelete fadein fast"><i class="fa fa-trash-o trashicon"/></div>');
+                var div = $('<div class="swipeDelete fadein fast"><i class="fa fa-trash-o trashicon" aria-hidden="true"/></div>');
                 this.append(
                     div.on('mousedown', function (e) {
                         // we have to use mousedown as the selection listens to this, too
@@ -793,7 +793,8 @@ define('io.ox/tasks/main', [
             hideTopbar: _.device('smartphone'),
             hideToolbar: _.device('smartphone'),
             // if it's shown, it should be on the top
-            toolbarPlacement: 'top'
+            toolbarPlacement: 'top',
+            templateOptions: { tagName: 'li', defaultClassName: 'vgrid-cell list-unstyled' }
         });
 
         app.grid = grid;
@@ -822,7 +823,7 @@ define('io.ox/tasks/main', [
                 tagName: 'div',
                 caret: false,
                 label: function () {
-                    return [$('<i class="fa fa-arrow-down">'), $('<i class="fa fa-arrow-up">')];
+                    return [$('<i class="fa fa-arrow-down" aria-hidden="true">'), $('<i class="fa fa-arrow-up" aria-hidden="true">')];
                 }
             })
                 .header(gt('Sort options'))

@@ -5,7 +5,8 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -19,8 +20,9 @@ define('io.ox/calendar/week/view', [
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/print',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, AppointmentModel, util, folderAPI, gt, settings, coreSettings, Dropdown) {
+], function (ext, AppointmentModel, util, folderAPI, gt, settings, coreSettings, Dropdown, print) {
 
     'use strict';
 
@@ -654,7 +656,7 @@ define('io.ox/calendar/week/view', [
             function drawOption() {
                 var timezone = moment.tz(this);
 
-                return $('<span class="offset">').text(timezone.format('Z')).prop('outerHTML') + $('<span class="timezone-abbr">').text(timezone.zoneAbbr()).prop('outerHTML') + this;
+                return [$('<span class="offset">').text(timezone.format('Z')), $('<span class="timezone-abbr">').text(timezone.zoneAbbr()), this];
             }
 
             function drawDropdown() {
@@ -788,7 +790,7 @@ define('io.ox/calendar/week/view', [
             setInterval(renderTimeline, 60000);
 
             // mattes: guess we don't need this any more in week and work week view
-            if (!Modernizr.touch && this.columns === 1) {
+            if (!_.device('touch') && this.columns === 1) {
                 this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
             }
 
@@ -833,7 +835,7 @@ define('io.ox/calendar/week/view', [
                             'aria-label': prevStr
                         })
                         .addClass('control prev')
-                        .append($('<i class="fa fa-chevron-left">')),
+                        .append($('<i class="fa fa-chevron-left" aria-hidden="true">')),
                         $('<a>').attr({
                             href: '#',
                             tabindex: 1,
@@ -842,7 +844,7 @@ define('io.ox/calendar/week/view', [
                             'aria-label': nextStr
                         })
                         .addClass('control next')
-                        .append($('<i class="fa fa-chevron-right">'))
+                        .append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
                     ),
                     this.kwInfo
                 ),
@@ -1838,46 +1840,44 @@ define('io.ox/calendar/week/view', [
         },
 
         print: function () {
-            var self = this;
-            ox.load(['io.ox/core/print']).done(function (print) {
-                var folder = self.folder(),
-                    folderID = folder.id || folder.folder,
-                    templates = {
-                        'day': 'cp_dayview_table_appsuite.tmpl',
-                        'workweek': 'cp_weekview_table_appsuite.tmpl',
-                        'week': 'cp_weekview_table_appsuite.tmpl'
-                    },
-                    data = null;
+            var self = this,
+                folder = self.folder(),
+                folderID = folder.id || folder.folder,
+                templates = {
+                    'day': 'cp_dayview_table_appsuite.tmpl',
+                    'workweek': 'cp_weekview_table_appsuite.tmpl',
+                    'week': 'cp_weekview_table_appsuite.tmpl'
+                },
+                data = null;
 
-                if (folderID && folderID !== 'virtual/all-my-appointments') {
-                    data = { folder_id: folderID };
-                }
+            if (folderID && folderID !== 'virtual/all-my-appointments') {
+                data = { folder_id: folderID };
+            }
 
-                var win = print.open('printCalendar', data, {
-                    template: templates[self.mode],
-                    start: moment(self.startDate).utc(true).valueOf(),
-                    end: moment(self.startDate).utc(true).add(self.columns, 'days').valueOf(),
-                    work_day_start_time: self.workStart * 36e5, // multiply with milliseconds
-                    work_day_end_time: self.workEnd * 36e5
-                });
-
-                if (_.browser.firefox) {
-                    // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
-                    var limit = 50,
-                        counter = 0,
-                        interval;
-                    // onLoad does not work with firefox on mac, so ugly polling is used
-                    interval = setInterval(function () {
-                        counter++;
-                        if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
-                            win.print();
-                            clearInterval(interval);
-                        }
-                    }, 100);
-                } else {
-                    win.print();
-                }
+            var win = print.open('printCalendar', data, {
+                template: templates[self.mode],
+                start: moment(self.startDate).utc(true).valueOf(),
+                end: moment(self.startDate).utc(true).add(self.columns, 'days').valueOf(),
+                work_day_start_time: self.workStart * 36e5, // multiply with milliseconds
+                work_day_end_time: self.workEnd * 36e5
             });
+
+            if (_.browser.firefox) {
+                // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+                var limit = 50,
+                    counter = 0,
+                    interval;
+                // onLoad does not work with firefox on mac, so ugly polling is used
+                interval = setInterval(function () {
+                    counter++;
+                    if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
+                        win.print();
+                        clearInterval(interval);
+                    }
+                }, 100);
+            } else {
+                win.print();
+            }
         }
     });
 
@@ -1931,7 +1931,7 @@ define('io.ox/calendar/week/view', [
                     $('<div>')
                     .addClass('appointment-content')
                     .append(
-                        a.get('private_flag') ? $('<span class="private-flag"><i class="fa fa-lock"></i></span>') : '',
+                        a.get('private_flag') ? $('<span class="private-flag"><i class="fa fa-lock" aria-hidden="true"></i></span>') : '',
                         a.get('title') ? $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
                         a.get('location') ? $('<div>').addClass('location').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
                     )

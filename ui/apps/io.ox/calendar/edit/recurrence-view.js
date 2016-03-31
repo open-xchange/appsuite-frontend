@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
@@ -285,7 +285,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                                 role: 'menuitem',
                                 tabindex: $anchor.attr('tabindex')
                             }).append(
-                                $('<i class="fa fa-check">'),
+                                $('<i class="fa fa-check" aria-hidden="true">'),
                                 $.txt(DAYS.i18n[day])
                             ).on('click', function (e) {
                                 e.preventDefault();
@@ -480,7 +480,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                     detailToggle: $('<a href="#" class="recurrence-detail-toggle">').attr({
                         'role': 'button',
                         'aria-label': gt('Click to close the recurrence view')
-                    }).css({ 'float': 'right' }).append($('<i class="fa fa-times">'))
+                    }).css({ 'float': 'right' }).append($('<i class="fa fa-times" aria-hidden="true">'))
                 };
 
                 // add tabindex to all control elements

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -43,7 +43,7 @@ define(['io.ox/mail/vacationnotice/settings/model'], function (model) {
         }
     };
 
-    describe('Vacationnotice', function () {
+    describe('Mailfilter Vacationnotice', function () {
 
         it('should prepare the data', function () {
 

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
@@ -63,7 +63,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
 
         it('should handle Chrome on Windows 8 convertible devices as non-touch devices', function () {
             _.device.loadUA(userAgents.valid.Chrome[34]);
-            expect(Modernizr.touch).to.be.false;
+            expect(_.device('touch')).to.be.false;
             expect(_.browser.windows8).to.be.true;
         });
 

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
@@ -77,7 +77,7 @@ define('io.ox/files/actions/add-storage-account', [
 
         // consider metrics
         if (metrics.isEnabled()) {
-            this.delegate('.toolbar-item', 'mousedown', function (e) {
+            node.delegate('.storage-account-item', 'mousedown', function (e) {
                 metrics.trackEvent({
                     app: 'drive',
                     target: 'folder/account/add',

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -108,6 +108,12 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
                 return '';
             });
             return { url: url, suffix: suffix };
+        },
+
+        // remove (almost) all quotes from a string
+        removeQuotes: function (str) {
+            // remove all outer single and double quotes; also remove all inner quotes
+            return $.trim(str).replace(/^["'\\]+|["'\\]+$/g, '').replace(/\\?\"/g, '');
         },
 
         // detect URLs in plain text

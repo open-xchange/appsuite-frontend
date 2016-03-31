@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
@@ -110,8 +110,9 @@ define('io.ox/core/tk/attachments', [
                 var properties = settings.get('properties'),
                     size = this.attachmentsToAdd.reduce(function (acc, attachment) {
                         return acc + (attachment.file_size || 0);
-                    }, 0);
-                if (size > properties.attachmentMaxUploadSize) {
+                    }, 0),
+                    max = properties.attachmentMaxUploadSize;
+                if (max && max > 0 && size > max) {
                     this.model.set('quotaExceeded', {
                         actualSize: size,
                         attachmentMaxUploadSize: properties.attachmentMaxUploadSize

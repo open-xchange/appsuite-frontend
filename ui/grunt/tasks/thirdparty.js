@@ -5,7 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -62,6 +62,7 @@ module.exports = function (grunt) {
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'typeahead.js/dist/typeahead.jquery.js',
                             'marked/lib/marked.js',
+                            'clipboard/dist/clipboard.min.js',
                             'velocity/velocity.min.js',
                             'moment/moment.js'
                         ],

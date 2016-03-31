@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  * @author Carsten Driesner <carsten.driesner@open-xchange.com>
@@ -23,7 +23,7 @@ define('io.ox/presenter/rtconnection', [
     'use strict';
 
     var // names of internal events for the real-time connection state
-        INTERNAL_EVENTS = 'online offline reset error:notMember',
+        INTERNAL_EVENTS = 'online offline reset error:notMember timeout error:stanzaProcessingFailed error:joinFailed error:disposed',
 
         // names of runtime push messages
         PUSH_EVENTS = 'update';
@@ -758,6 +758,7 @@ define('io.ox/presenter/rtconnection', [
     });
 
     RTConnection.log = function (msg) { console.info('Presenter - RTConnection - log', msg); };
+    RTConnection.error = function (msg) { console.error('Presenter - RTConnection - error', msg); };
 
     // exports ================================================================
 

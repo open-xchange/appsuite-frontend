@@ -6,14 +6,14 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 define(['io.ox/files/mediasupport'], function (ms) {
     var expect = chai.expect;
 
-    describe('mediasupport util', function () {
+    describe('Files mediasupport util', function () {
 
         describe('has some methods', function () {
             it('that always use same return type', function () {

@@ -5,7 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -20,7 +20,7 @@ module.exports = function (grunt) {
         momentLanguages.push(file.split('.').shift());
     });
 
-    var version = String(grunt.config('pkg.version') + '.' + grunt.template.date(new Date(), 'yyyymmdd.HHMMss'));
+    var version = String(grunt.config('pkg.version') + '.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'));
 
     var process_options = {
         version: version,
@@ -60,6 +60,10 @@ module.exports = function (grunt) {
                     {
                         src: 'html/index.html',
                         dest: 'build/signin'
+                    },
+                    {
+                        src: 'html/busy.html',
+                        dest: 'build/busy.html'
                     }
                 ]
             },
@@ -79,7 +83,7 @@ module.exports = function (grunt) {
             build_static: {
                 files: [
                     {
-                        src: ['.*', '*', '!*.{ejs,hbs}', '!{core_*,index,signin}.html'],
+                        src: ['.*', '*', '!*.{ejs,hbs}', '!{core_*,index,signin,busy}.html'],
                         expand: true,
                         cwd: 'html/',
                         dest: 'build/'

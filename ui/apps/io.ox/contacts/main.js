@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Alexander Quast <alexander.quast@open-xchange.com>
@@ -197,7 +197,7 @@ define('io.ox/contacts/main', [
                 build: function () {
                     var name, description, private_flag;
                     this.addClass('contact').append(
-                        private_flag = $('<i class="fa fa-lock private_flag">').hide(),
+                        private_flag = $('<i class="fa fa-lock private_flag" aria-hidden="true">').hide(),
                         name = $('<div class="fullname">').attr('aria-hidden', true),
                         description = $('<div class="bright-text">').attr('aria-hidden', true)
                     );

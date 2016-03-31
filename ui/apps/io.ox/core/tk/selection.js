@@ -6,8 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) 2004-2012 Open-Xchange, Inc.
- * Mail: info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -128,7 +127,7 @@ define('io.ox/core/tk/selection', [
         // };
 
         hasMultiple = function () {
-            return _.isArray(selectedItems) && selectedItems.length > 1;
+            return _.size(selectedItems) > 1;
         };
 
         changed = function () {

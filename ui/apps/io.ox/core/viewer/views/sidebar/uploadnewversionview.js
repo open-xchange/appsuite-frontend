@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
@@ -80,7 +80,12 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         index: 400,
         id: 'cancel',
         draw: function (baton) {
-            baton.$.addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' });
+            var self = this;
+            baton.$.addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+                .on('cancel', function () {
+                    // reset file input
+                    _.first(self.$('input[type="file"]')).value = '';
+                });
         }
     });
 
@@ -166,7 +171,9 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
                             buttontext: gt('Upload new version')
                         })
                     );
-                });
+                    // Extension point required for Guard implementation
+                    ext.point('io.ox/core/viewer/views/sidebarview/uploadnewversion').invoke('draw', this);
+                }.bind(this));
             }.bind(this));
             return this;
         },

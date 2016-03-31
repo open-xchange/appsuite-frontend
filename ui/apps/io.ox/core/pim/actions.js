@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -77,7 +77,8 @@ define('io.ox/core/pim/actions', [
         view: gt('View'),
         open: gt('Open in browser'),
         download: gt('Download'),
-        save: gt('Save to Drive')
+        //#. %1$s is usually "Drive" (product name; might be customized)
+        save: gt('Save to %1$s', gt.pgettext('app', 'Drive'))
     };
 
     // and let's define all points right now

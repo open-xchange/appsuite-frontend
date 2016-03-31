@@ -1,13 +1,13 @@
 <html lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.2.4. Compartición de carpetas</title>
+<title>11.2.4. conceder permisos</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Permisos">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html" title="11.2.3. Permisos para crear carpetas nuevas">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. Publicar&amp;Suscribirse">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. Suscripciones">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -33,81 +33,88 @@
 <h2 class="sr-only">Permisos</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. Compartición de carpetas</h3></div></div></div>
-<a class="indexterm" name="id-1.12.5.8.2"></a><a class="indexterm" name="id-1.12.5.8.3"></a><a class="indexterm" name="id-1.12.5.8.4"></a><a class="indexterm" name="id-1.12.5.8.5"></a><div class="concept">
-<a name="ox.appsuite.user.concept.rights.share"></a><p>Para compartir datos con otros usuarios comparta una o más carpetas. Puede compartir una carpeta concediendo a otros usuarios permisos concretos sobre ella. Puede utilizar las siguientes opciones: </p>
+<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. conceder permisos</h3></div></div></div>
+<a class="indexterm" name="id-1.12.5.8.2"></a><a class="indexterm" name="id-1.12.5.8.3"></a><div class="concept">
+<a name="ox.appsuite.user.concept.rights.grant"></a><p>Para compartir datos con otros usuarios internos o colaboradores externos, comparta una o más carpetas concediendo permisos concretos sobre ella. Existen las siguientes opciones: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.share" title="Cómo conceder permisos para una carpeta:">conceder</a> derechos sobre una carpeta,</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.add" title="Cómo conceder permisos para una carpeta:">conceder</a> derechos sobre una carpeta,</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.change" title="Cómo cambiar los permisos de una carpeta:">cambiar</a> derechos de una carpeta,</p></li>
-<li class="listitem"><p>conceder derechos aplicando un <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.applyrole" title="Cómo conceder permisos aplicando rol de usuario:">rol de usuario</a>, y</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.remove" title="Cómo eliminar los permisos de un usuario en una carpeta:">borrar</a> los derechos de una carpeta.</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.share.limitations"></a><p><span class="phrase"><strong>Nota:</strong></span> Tenga en cuenta las siguientes restricciones. </p>
+<a name="ox.appsuite.user.concept.rights.limitations"></a><p><span class="phrase"><strong>Nota:</strong></span> Tenga en cuenta las siguientes restricciones. </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>Para conceder permisos a otro usuario sobre una carpeta, usted tiene que tener permisos de administrador para dicha carpeta.</p></li>
-<li class="listitem" style="list-style-type: none"><p>No puede compartir su carpeta personal <span class="guilabel"><strong>Bandeja de entrada</strong></span>. Para conceder acceso a otros usuarios a sus mensajes de correo electrónico, comparta una carpeta de correo electrónico ubicada bajo su carpeta <span class="guilabel"><strong>Bandeja de entrada</strong></span>. A dicha carpeta de correo electrónico han de suscribirse los otros usuarios. Consulte <a class="xref" href="ox.appsuite.user.sect.email.share.subscribe.html" title="5.7.2. Suscripción a carpetas de correo">5.7.2: Suscripción a carpetas de correo</a>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Usted tiene permisos exclusivos sobre sus carpetas personales de calendario, contactos y tareas. No puede conceder permisos de administrador sobre dichas carpetas a otros usuarios. Se pueden encontrar ejemplos prácticos de configuraciones en <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="P:">preguntas sobre organización de datos y trabajo en equipo</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>No puede compartir su carpeta personal <span class="guilabel"><strong>Bandeja de entrada</strong></span>. Para conceder acceso a otros usuarios a sus mensajes de correo, comparta una carpeta de correo ubicada bajo su carpeta <span class="guilabel"><strong>Bandeja de entrada</strong></span>. A dicha carpeta de correo han de suscribirse los otros usuarios.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Usted tiene permisos exclusivos sobre sus carpetas personales de calendario, contactos y tareas. No puede conceder permisos de administrador sobre dichas carpetas a otros usuarios.</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.share"></a><p class="title"><b>Cómo conceder permisos para una carpeta:</b></p>
+<a name="ox.appsuite.user.task.rights.add"></a><p class="title">Cómo conceder permisos para una carpeta:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Cómo abrir una carpeta concreta:">Seleccione</a> una carpeta en el árbol de carpetas.</p>
+<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Cómo abrir o seleccionar una carpeta:">Seleccione</a> una carpeta en el árbol de carpetas.</p>
 <p><span class="phrase"><strong>Nota:</strong></span> Necesitará tener permisos de administración para esta carpeta.</p>
 </li>
-<li class="step"><p>Presione el icono <span class="guibutton"><strong>Acciones específicas de carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.share"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> que hay junto al nombre de la carpeta. Presione <span class="guibutton"><strong>Permisos</strong></span>. La ventana <span class="guilabel"><strong>Permisos de carpeta</strong></span> muestra los permisos actuales para dicha carpeta.</p></li>
-<li class="step"><p>Introduzca un nombre de usuario en la parte inferior. Presione el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.share.add"></a><img src="../../images/appsuite_user_icon_add.png"></span> . El usuario tendrá los permisos preestablecidos. </p></li>
-<li class="step"><p>Presione sobre un permiso de un usuario para cambiarlo. Puede ver ejemplos de estos ajustes en <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="P:">Preguntas sobre organización de datos y trabajo en equipo</a>.</p></li>
-<li class="step"><p>Si es necesario, repita estos pasos para conceder permisos adicionales.</p></li>
+<li class="step"><p>Presione el icono <span class="guibutton"><strong>Acciones específicas de carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.share"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> que hay junto al nombre de la carpeta. Presione <span class="guibutton"><strong>Permisos</strong></span>. Una ventana muestra los permisos actuales para dicha carpeta.</p></li>
+<li class="step">
+<p>Escriba una dirección de correo en <span class="guilabel"><strong>Añadir personas</strong></span>. La dirección de correo se añadirá a la lista como un usuario interno, un grupo o un invitado. Se conceden los permisos preestablecidos.</p>
+<p>Si fuese necesario, escriba un mensaje.</p>
+</li>
+<li class="step">
+<p>Para editar lo permisos, tiene las siguientes opciones.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Para ajustar un rol de usuario, presione en el elemento en <span class="guibutton"><strong>Rol actual</strong></span>. Seleccione un elemento del menú.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para ajustar los detalles del permiso, presione en el elemento en <span class="guibutton"><strong>Derechos de acceso detallados</strong></span>. Seleccione un permiso del menú.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="step">
+<p>Para transferir los permisos a todas las nuevas subcarpetas, nuevas o existentes, de esta carpeta, marque <span class="guibutton"><strong>Aplicar a todas las subcarpetas</strong></span>.</p>
+<p><span class="phrase"><strong>Nota:</strong></span> Necesitará tener permisos de administración para las subcarpetas. </p>
+</li>
 <li class="step"><p>Presione <span class="guibutton"><strong>Guardar</strong></span>.</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>Consejo:</strong></span> Una carpeta compartida se marca con el icono <span class="guibutton"><strong>Compartida</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.rights.share.shared"></a><img src="../../images/appsuite_user_icon_folder_share.png"></span>. Si presiona sobre este icono, se abrirá la ventana <span class="guilabel"><strong>Permisos de carpeta</strong></span>.</p>
+          <p><span class="phrase"><strong>Consejo:</strong></span> Una carpeta compartida se marca con el icono <span class="guibutton"><strong>Compartida</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.rights.shared"></a><img src="../../images/appsuite_user_icon_folder_shared.png"></span> . Si presiona sobre el icono, se abrirá la ventana de ajuste de permisos.</p>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.change"></a><p class="title"><b>Cómo cambiar los permisos de una carpeta:</b></p>
+<a name="ox.appsuite.user.task.rights.change"></a><p class="title">Cómo cambiar los permisos de una carpeta:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Cómo abrir una carpeta concreta:">Seleccione</a> una carpeta en el árbol de carpetas.</p>
+<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Cómo abrir o seleccionar una carpeta:">Seleccione</a> una carpeta en el árbol de carpetas.</p>
 <p><span class="phrase"><strong>Nota:</strong></span> Necesitará tener permisos de administración para esta carpeta.</p>
 </li>
-<li class="step"><p>Presione el icono <span class="guibutton"><strong>Acciones específicas de carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.change"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> que hay junto al nombre de la carpeta. Presione <span class="guibutton"><strong>Permisos</strong></span>. La ventana <span class="guilabel"><strong>Permisos de carpeta</strong></span> muestra los permisos actuales para dicha carpeta.</p></li>
+<li class="step"><p>Presione el icono <span class="guibutton"><strong>Acciones específicas de carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.change"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> que hay junto al nombre de la carpeta. Presione <span class="guibutton"><strong>Permisos</strong></span>. Una ventana muestra los permisos actuales para dicha carpeta.</p></li>
 <li class="step">
-<p>Presione en un permiso para cambiarlo. Puede encontrar ejemplos de estos ajustes en <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="P:">Preguntas sobre organización de datos y trabajo en equipo</a>.</p>
+<p>Utilice los siguientes métodos:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Para ajustar un rol de usuario, presione en el elemento en <span class="guibutton"><strong>Rol actual</strong></span>. Seleccione un elemento del menú.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Para ajustar los detalles del permiso, presione en el elemento en <span class="guibutton"><strong>Derechos de acceso detallados</strong></span>. Seleccione un permiso del menú.</p></li>
+</ul></div>
+<p>
+            </p>
 <p> <span class="phrase"><strong>Nota:</strong></span> No puede cambiar los permisos de administración de una carpeta personal. </p>
 </li>
 <li class="step"><p>Presione <span class="guibutton"><strong>Guardar</strong></span>.</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.applyrole"></a><p class="title"><b>Cómo conceder permisos aplicando rol de usuario:</b></p>
+<a name="ox.appsuite.user.task.rights.remove"></a><p class="title">Cómo eliminar los permisos de un usuario en una carpeta:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Cómo abrir una carpeta concreta:">Seleccione</a> una carpeta en el árbol de carpetas.</p>
+<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Cómo abrir o seleccionar una carpeta:">Seleccione</a> una carpeta en el árbol de carpetas.</p>
 <p><span class="phrase"><strong>Nota:</strong></span> Necesitará tener permisos de administración para esta carpeta.</p>
 </li>
-<li class="step"><p>Presione el icono <span class="guibutton"><strong>Acciones específicas de carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.applyrole"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> que hay junto al nombre de la carpeta. Presione <span class="guibutton"><strong>Permisos</strong></span>. La ventana <span class="guilabel"><strong>Permisos de carpeta</strong></span> mostrará los permisos actuales para dicha carpeta.</p></li>
-<li class="step"><p>Presione en <span class="guibutton"><strong>Aplicar rol</strong></span> junto al nombre de usuario. Seleccione un <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles">Rol de usuario</a> en el menú.</p></li>
-<li class="step"><p>Presione <span class="guibutton"><strong>Guardar</strong></span>.</p></li>
-</ol></div>
-</div>
-<div class="task">
-<a name="ox.appsuite.user.task.rights.remove"></a><p class="title"><b>Cómo eliminar los permisos de un usuario en una carpeta:</b></p>
-<div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Cómo abrir una carpeta concreta:">Seleccione</a> una carpeta en el árbol de carpetas.</p>
-<p><span class="phrase"><strong>Nota:</strong></span> Necesitará tener permisos de administración para esta carpeta.</p>
-</li>
-<li class="step"><p>Presione el icono <span class="guibutton"><strong>Acciones específicas de carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.remove"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> que hay junto al nombre de la carpeta. Presione en <span class="guibutton"><strong>Permisos</strong></span>.</p></li>
-<li class="step"><p>Para eliminar los permisos de un usuario, presione el icono <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.removeuser"></a><img src="../../images/appsuite_user_icon_trash.png"></span> situado junto al nombre del usuario.</p></li>
+<li class="step"><p>Presione el icono <span class="guibutton"><strong>Acciones específicas de carpeta</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.remove"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> que hay junto al nombre de la carpeta. Presione <span class="guibutton"><strong>Permisos</strong></span>. Una ventana muestra los permisos actuales para dicha carpeta.</p></li>
+<li class="step"><p>Para eliminar los permisos de un usuario, presione el icono <span class="guibutton"><strong>Acciones</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.removeuser"></a><img src="../../images/appsuite_user_icon_actions.png"></span> situado junto al nombre del usuario. Presione en <span class="guibutton"><strong>Cancelar acceso</strong></span> en el menú.</p></li>
 <li class="step"><p>Presione <span class="guibutton"><strong>Guardar</strong></span>.</p></li>
 </ol></div>
 </div>

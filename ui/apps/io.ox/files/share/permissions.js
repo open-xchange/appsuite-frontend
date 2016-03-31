@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -253,6 +253,7 @@ define('io.ox/files/share/permissions', [
                 this.user = null;
                 this.display_name = '';
                 this.description = '';
+                this.ariaLabel = '';
 
                 this.parseBitmask();
 
@@ -287,6 +288,7 @@ define('io.ox/files/share/permissions', [
 
             render: function () {
                 this.getEntityDetails();
+                this.$el.attr({ 'aria-label': this.ariaLabel + '.', 'role': 'group' });
                 var baton = ext.Baton({ model: this.model, view: this, parentModel: this.parentModel });
                 ext.point(POINT + '/entity').invoke('draw', this.$el.empty(), baton);
                 return this;
@@ -359,11 +361,14 @@ define('io.ox/files/share/permissions', [
                         break;
                     case 'anonymous':
                         // TODO: public vs. password-protected link
-                        this.display_name = gt('Public link');
+                        this.display_name = this.ariaLabel = gt('Public link');
                         this.description = this.model.get('share_url');
                         break;
                     // no default
                 }
+
+                // a11y: just say "Public link"; other types use their description
+                this.ariaLabel = this.ariaLabel || (this.display_name + ', ' + this.description);
             },
 
             getRole: function () {
@@ -635,7 +640,7 @@ define('io.ox/files/share/permissions', [
                     maxWrite = model.get('write') === 64 ? 64 : 2,
                     maxDelete = model.get('delete') === 64 ? 64 : 2;
 
-                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), model: model, smart: true })
+                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), title: gt('Detailed access rights'), model: model, smart: true })
                     //
                     // FOLDER access
                     //
@@ -702,9 +707,7 @@ define('io.ox/files/share/permissions', [
                 }
 
                 this.append(
-                    $('<div class="col-sm-2 col-xs-4 detail-dropdown">').append(
-                        dropdown.$el.attr('title', gt('Detailed access rights'))
-                    )
+                    $('<div class="col-sm-2 col-xs-4 detail-dropdown">').append(dropdown.$el)
                 );
             }
         },
@@ -720,7 +723,7 @@ define('io.ox/files/share/permissions', [
                 if (!baton.parentModel.isAdmin()) return;
                 if (isFolderAdmin && baton.model.get('entity') === baton.parentModel.get('created_by')) return;
 
-                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') }),
+                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars" aria-hidden="true">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
                     myself = baton.model.isMyself(),
                     isNew = baton.model.has('new'),
@@ -728,20 +731,20 @@ define('io.ox/files/share/permissions', [
 
                 switch (type) {
                     case 'group':
-                        dropdown.link('revoke', gt('Revoke access'));
+                        dropdown.link('revoke', isNew ? gt('Remove') : gt('Revoke access'));
                         break;
                     case 'user':
                     case 'guest':
                         if (!myself && !isNew && !isMail) {
                             dropdown.link('resend', gt('Resend invitation')).divider();
                         }
-                        dropdown.link('revoke', gt('Revoke access'));
+                        dropdown.link('revoke', isNew ? gt('Remove') : gt('Revoke access'));
                         break;
                     case 'anonymous':
                         if (capabilities.has('share_links')) {
                             dropdown.link('edit', gt('Edit')).divider();
                         }
-                        dropdown.link('revoke', gt('Revoke access'));
+                        dropdown.link('revoke', isNew ? gt('Remove') : gt('Revoke access'));
                         break;
                     // no default
                 }
@@ -852,18 +855,16 @@ define('io.ox/files/share/permissions', [
             );
 
             // to change privileges you have to a folder admin
-            var supportsChanges = objModel.isAdmin();
+            var supportsChanges = objModel.isAdmin(),
+                folderModel = objModel.getFolderModel();
 
             // whether you can invite further people is a different question:
             // A. you have to be the admin AND (
             //   B. you can invite guests (external contacts) OR
             //   C. you are in a groupware context (internal users and/or groups)
             // )
-            var supportsInvites = supportsChanges && (function () {
-                if (capabilities.has('invite_guests') && objModel.get('module') !== 'mail') return true;
-                if (!capabilities.has('gab') || capabilities.has('alone')) return false;
-                return true;
-            }());
+            var supportsInvites = supportsChanges && folderModel.supportsInternalSharing(),
+                supportsGuests = folderModel.supportsInviteGuests();
 
             if (supportsChanges) {
                 // add action buttons
@@ -897,7 +898,7 @@ define('io.ox/files/share/permissions', [
                 var typeaheadView = new Typeahead({
                         apiOptions: {
                             // mail does not support sharing folders to guets
-                            contacts: capabilities.has('invite_guests') && module !== 'mail',
+                            contacts: supportsGuests,
                             users: true,
                             groups: true
                         },
@@ -909,7 +910,7 @@ define('io.ox/files/share/permissions', [
                             // remove duplicate entries from typeahead dropdown
                             return _(data).filter(function (model) {
                                 // don't offer secondary addresses as guest accounts
-                                if (!capabilities.has('invite_guests') && model.get('field') !== 'email1') return false;
+                                if (!supportsGuests && model.get('field') !== 'email1') return false;
                                 // mail does not support sharing folders to guets
                                 if (module === 'mail' && model.get('field') !== 'email1') return false;
                                 return !permissionsView.collection.get(model.id);
@@ -969,7 +970,7 @@ define('io.ox/files/share/permissions', [
                                 if (module === 'mail') return;
 
                                 // skip manual edit if invite_guests isn't set
-                                if (!capabilities.has('invite_guests')) return;
+                                if (!supportsGuests) return;
 
                                 // enter or blur?
                                 if (e.type === 'keydown' && e.which !== 13) return;

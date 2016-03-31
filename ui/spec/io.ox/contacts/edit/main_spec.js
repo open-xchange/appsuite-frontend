@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -30,12 +30,8 @@ define([
     describe('Contact edit', function () {
         var app = null;
 
-        beforeEach(function (done) {
-
-            capabilities.reset().done(function () {
-                done();
-            });
-
+        beforeEach(function () {
+            return capabilities.reset();
         });
 
         it('should provide a getApp function', function () {
@@ -47,10 +43,9 @@ define([
             expect(app.launch).to.be.a('function');
         });
 
-        it('should open contact edit app ', function (done) {
-            app.launch().done(function () {
+        it('should open contact edit app ', function () {
+            return app.launch().then(function () {
                 expect(app).to.exist;
-                done();
             });
         });
 

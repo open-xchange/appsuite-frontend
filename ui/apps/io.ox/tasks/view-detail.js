@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -73,7 +73,7 @@ define('io.ox/tasks/view-detail', [
                         $.txt(gt.noI18n(task.title))
                     );
             this.append(
-                $('<header role="heading">').append(
+                $('<header>').append(
                     _.device('smartphone') ? [title, infoPanel] : [infoPanel, title]
                 )
             );
@@ -133,7 +133,7 @@ define('io.ox/tasks/view-detail', [
 
             if (task.recurrence_type) {
                 $details.append(
-                    $('<dt class="detail-value">').text(gt('This task recurs')),
+                    $('<dt class="detail-label">').text(gt('This task recurs')),
                     $('<dd class="detail-value">').text(calendarUtil.getRecurrenceString(baton.data)));
                 hasDetails = true;
             }

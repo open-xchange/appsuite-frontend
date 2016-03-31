@@ -5,7 +5,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
@@ -52,7 +52,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.append(
                         // icon
                         !baton.context.standalone ?
-                            $('<i class="fa">').addClass(Util.getIconClass(baton.model)) :
+                            $('<i class="fa" aria-hidden="true">').addClass(Util.getIconClass(baton.model)) :
                             null,
                         // filename
                         $('<span class="filename-label">').text(baton.model.getDisplayName())
@@ -107,7 +107,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Fit to screen width'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitwidth',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">'),
+                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">'),
                         sectionLabel = $('<li class="dropdown-header" role="sectionhead">').text(gt('Zoom'));
                     this.before(sectionLabel);
                     this.prepend(checkIcon)
@@ -124,7 +124,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Fit to screen size'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitheight',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">');
+                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">');
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitheight').attr({
                             tabindex: '1',
@@ -231,7 +231,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: 'io.ox/files/dropdown/share',
                     customize: function (baton) {
                         var self = this;
-                        this.append('<i class="fa fa-caret-down">');
+                        this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
                         this.after(
                             LinksPattern.DropdownLinks({
@@ -298,7 +298,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'savemailattachmenttodrive': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Save to Drive'),
+                    //#. %1$s is usually "Drive" (product name; might be customized)
+                    label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
                     ref: 'io.ox/mail/actions/save-attachment'
                 },
                 'sendmailattachmentasmail': {
@@ -325,7 +326,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'savemailattachmenttodrive': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Save to Drive'),
+                    //#. %1$s is usually "Drive" (product name; might be customized)
+                    label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
                     ref: 'io.ox/core/tk/actions/save-attachment'
                 }
             },
@@ -378,6 +380,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
+        capabilities: 'infostore',
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
             // detail is the target of popoutstandalone, no support for mail attachments
@@ -399,8 +402,15 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/launchpresenter', {
         capabilities: 'presenter document_preview',
         requires: function (e) {
+            if (!e.collection.has('one', 'read')) {
+                return false;
+            }
+
             var model = e.baton.model;
-            return ((model.isPresentation() || model.isPDF()) && model.isFile());
+            var meta = model.get('meta');
+            var isError = meta && meta.document_conversion_error && meta.document_conversion_error.length > 0;
+
+            return (!isError && model.isFile() && (model.isPresentation() || model.isPDF()));
         },
         action: function (baton) {
             var fileModel = baton.model;
@@ -626,62 +636,74 @@ define('io.ox/core/viewer/views/toolbarview', [
         /**
          * Render the DisplayerView in a queued version, because some extensionpoints are rendered asynchronous.
          * And calling toolbar.empty() before the toolbarpoint has not finished rendering may result in a race condition.
+         * will only store the next model to draw, so we can skip models that are no longer valid
          */
-        renderQueued: _.queued(function (model) {
-            // draw toolbar
-            var origData = model.get('origData'),
-                toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
-                pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
-                isDriveFile = model.isFile(),
-                baton = Ext.Baton({
-                    context: this,
-                    $el: toolbar,
-                    model: model,
-                    models: isDriveFile ? [model] : null,
-                    data: isDriveFile ? model.toJSON() : origData
-                }),
-                appName = model.get('source'),
-                self = this,
-                funcName = toolbarPoint.has(appName) ? 'replace' : 'extend';
+        renderQueued: function (model) {
+            if (this.currentlyDrawn) {
+                this.nextToDraw = model;
+            } else {
+                this.currentlyDrawn = model;
+                // draw toolbar
+                var origData = model.get('origData'),
+                    toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
+                    pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
+                    isDriveFile = model.isFile(),
+                    baton = Ext.Baton({
+                        context: this,
+                        $el: toolbar,
+                        model: model,
+                        models: isDriveFile ? [model] : null,
+                        data: isDriveFile ? model.toJSON() : origData
+                    }),
+                    appName = model.get('source'),
+                    self = this,
+                    funcName = toolbarPoint.has(appName) ? 'replace' : 'extend';
 
-            // remove listener from previous model
-            if (this.model) {
-                this.stopListening(this.model, 'change');
+                // remove listener from previous model
+                if (this.model) {
+                    this.stopListening(this.model, 'change');
+                }
+                // save current data as view model
+                this.model = model;
+                this.listenTo(this.model, 'change', this.onModelChange);
+                // set device type
+                Util.setDeviceClass(this.$el);
+                toolbar.empty().append(pageNavigation);
+                // enable only the link set for the current app
+                _.each(toolbarPoint.keys(), function (id) {
+                    if (id === appName) {
+                        toolbarPoint.enable(id);
+                    } else {
+                        toolbarPoint.disable(id);
+                    }
+                });
+                //extend or replace toolbar extension point with the toolbar links
+                toolbarPoint[funcName](new LinksPattern.InlineLinks({
+                    id: appName,
+                    dropdown: true,
+                    compactDropdown: true,
+                    ref: TOOLBAR_LINKS_ID + '/' + appName,
+                    customize: function () {
+                        // workaround for correct TAB traversal order:
+                        // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
+                        if (self.disposed) return;
+                        // using .dropdown would also select other dropdowns, like the sharing dropdown
+                        this.find('[data-action="more"]').parent().after(
+                            this.find('.viewer-toolbar-togglesidebar, .viewer-toolbar-popoutstandalone, .viewer-toolbar-close').parent()
+                        );
+                    }
+                }));
+                var ret = toolbarPoint.invoke('draw', toolbar, baton);
+                $.when.apply(self, ret.value()).done(function () {
+                    self.currentlyDrawn = null;
+                    if (self.nextToDraw) {
+                        var temp = self.nextToDraw;
+                        self.nextToDraw = null;
+                        self.renderQueued.apply(self, temp);
+                    }
+                });
             }
-            // save current data as view model
-            this.model = model;
-            this.listenTo(this.model, 'change', this.onModelChange);
-            // set device type
-            Util.setDeviceClass(this.$el);
-            toolbar.empty().append(pageNavigation);
-            // enable only the link set for the current app
-            _.each(toolbarPoint.keys(), function (id) {
-                if (id === appName) {
-                    toolbarPoint.enable(id);
-                } else {
-                    toolbarPoint.disable(id);
-                }
-            });
-            //extend or replace toolbar extension point with the toolbar links
-            toolbarPoint[funcName](new LinksPattern.InlineLinks({
-                id: appName,
-                dropdown: true,
-                compactDropdown: true,
-                ref: TOOLBAR_LINKS_ID + '/' + appName,
-                customize: function () {
-                    // workaround for correct TAB traversal order:
-                    // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
-                    if (self.disposed) return;
-                    // using .dropdown would also select other dropdowns, like the sharing dropdown
-                    this.find('[data-action="more"]').parent().after(
-                        this.find('.viewer-toolbar-togglesidebar, .viewer-toolbar-popoutstandalone, .viewer-toolbar-close').parent()
-                    );
-                }
-            }));
-
-            var ret = toolbarPoint.invoke('draw', toolbar, baton);
-            return $.when.apply(this, ret.value());
-        }, 1),
+        },
 
         /**
          * Renders the document page navigation controls.
@@ -689,10 +711,10 @@ define('io.ox/core/viewer/views/toolbarview', [
         renderPageNavigation: function () {
             var prev = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
                     .attr({ 'aria-label': gt('Previous page'), 'title': gt('Previous page') })
-                    .append($('<i class="fa fa-arrow-up">')),
+                    .append($('<i class="fa fa-arrow-up" aria-hidden="true">')),
                 next = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
                     .attr({ 'aria-label': gt('Next page'), 'title': gt('Next page') })
-                    .append($('<i class="fa fa-arrow-down">')),
+                    .append($('<i class="fa fa-arrow-down" aria-hidden="true">')),
                 pageInput = $('<input type="text" class="viewer-toolbar-page" tabindex="1" role="textbox">'),
                 pageInputWrapper = $('<div class="viewer-toolbar-page-wrapper">').append(pageInput),
                 totalPage = $('<div class="viewer-toolbar-page-total">'),

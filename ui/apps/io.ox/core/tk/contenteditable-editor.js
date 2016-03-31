@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -21,8 +21,9 @@ define.async('io.ox/core/tk/contenteditable-editor', [
     'io.ox/mail/api',
     'settings!io.ox/core',
     'settings!io.ox/mail',
+    'gettext!io.ox/core',
     'less!io.ox/core/tk/contenteditable-editor'
-], function (emoji, capabilities, ext, textproc, mailAPI, settings, mailSettings) {
+], function (emoji, capabilities, ext, textproc, mailAPI, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -55,6 +56,18 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             ext.point('3rd.party/emoji/editor_css').each(function (point) {
                 var url = ed.convertURL(require.toUrl(point.css));
                 ed.contentCSS.push(url);
+            });
+        }
+    });
+
+    ext.point(POINT + '/setup').extend({
+        id: 'list-style-position',
+        index: INDEX += 100,
+        draw: function (ed) {
+            ed.on('NodeChange', function (e) {
+                if (e.element.nodeName !== 'LI') return;
+                if (e.element.style.textAlign === 'left' || e.element.style.textAlign === '') return;
+                $(e.element).css('list-style-position', 'inside');
             });
         }
     });
@@ -184,17 +197,20 @@ define.async('io.ox/core/tk/contenteditable-editor', [
     }
 
     function Editor(el, opt) {
-        el.append(
-            el = $('<div class="contenteditable-editor">').attr('data-editor-id', el.data('editorId'))
-        );
-        var toolbar, editor;
-
-        el.append(
-            toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', el.attr('data-editor-id')),
-            editor = $('<div class="editable">').attr('tabindex', 1).css('margin-bottom', '32px')
-        );
 
         var rendered = $.Deferred(), initialized = $.Deferred(), ed;
+        var toolbar, editor, editorId = el.data('editorId');
+
+        el.append(
+            el = $('<div class="contenteditable-editor">').attr({
+                'data-editor-id': editorId
+            }).append(
+                toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId),
+                editor = $('<div class="editable" tabindex="1" role="textbox" aria-multiline="true">')
+                    .attr({ 'aria-label': gt('Rich Text Area. Press ALT-F10 for toolbar') })
+                    .css('margin-bottom', '32px')
+            )
+        );
 
         opt = _.extend({
             toolbar1: 'undo redo | bold italic | emoji | bullist numlist outdent indent',
@@ -223,7 +239,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             opt.plugins = opt.plugins.replace(/emoji/g, '').trim();
         }
 
-        var fixed_toolbar = '[data-editor-id="' + el.attr('data-editor-id') + '"].editable-toolbar';
+        var fixed_toolbar = '.editable-toolbar[data-editor-id="' + editorId + '"]';
 
         // remove all toolbars in mobileapp
         if (window.cordova) {
@@ -312,6 +328,14 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             return String(str || '').replace(/[\s\xA0]+$/g, '');
         }
 
+        var stripDataAttributes = function (content) {
+            var tags = content.match(/(<\/?[\S][^>]*>)/gi);
+            tags.forEach(function (tag) {
+                content = content.replace(tag, tag.replace(/\sdata-\S+=["']?(?:.(?!["']?\s+(?:\S+)=|[>"']))+.["']?/g, ''));
+            });
+            return content;
+        };
+
         var resizeEditor = _.debounce(function () {
                 if (el === null) return;
 
@@ -384,10 +408,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 var content = ed.getContent({ format: 'raw' });
                 // convert emojies
                 content = emoji.imageTagsToUnified(content);
+                // strip data attributes (incl. bogus attribute)
+                content = stripDataAttributes(content);
                 // clean up
                 content = content
-                    // remove custom attributes (incl. bogus attribute)
-                    .replace(/\sdata-[^=]+="[^"]*"/g, '')
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
                     .replace(/(<p>(<br>)?<\/p>)+$/, '');
 
@@ -416,7 +440,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             if (_.device('ios')) return;
             _.defer(function () {
                 ed.focus();
-                ed.execCommand('mceFocus', false, el.attr('data-editor-id'));
+                ed.execCommand('mceFocus', false, editorId);
             });
         };
 
@@ -576,7 +600,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         // convenience access
         this.tinymce = function () {
-            return el.tinymce ? el.tinymce() : {};
+            return editor.tinymce ? editor.tinymce() : {};
         };
 
         this.show = function () {
@@ -621,13 +645,13 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.destroy = function () {
             this.hide();
             clearKeepalive();
-            if (el.tinymce()) {
+            if (editor.tinymce()) {
                 //empty node before removing because tiny saves the contents before.
                 //this might cause server errors if there were inline images (those only exist temporarily and are already removed)
-                el.empty();
-                el.tinymce().remove();
+                editor.empty();
+                editor.tinymce().remove();
             }
-            el = el.tinymce = initialized = rendered = ed = null;
+            el = editor = editor.tinymce = initialized = rendered = ed = null;
         };
 
         var intervals = [];

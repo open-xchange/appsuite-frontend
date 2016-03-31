@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
@@ -20,7 +20,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
     'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/participants/model'
-], function (views, mini, gt, ext, AddParticipant, pViews, pModel) {
+], function (views, mini, gt, ext, AddParticipantView, pViews, pModel) {
 
     'use strict';
 
@@ -120,7 +120,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
         id: 'add-participant',
         index: 400,
         render: function () {
-            var view = new AddParticipant({
+            var view = new AddParticipantView({
                 apiOptions: {
                     contacts: true
                 },

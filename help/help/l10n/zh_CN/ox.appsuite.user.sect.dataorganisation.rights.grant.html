@@ -1,13 +1,13 @@
-<html>
+<html lang="zh_cn">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.2.4. 共享文件夹</title>
+<title>11.2.4. 授予权限</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. 权限">
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html" title="11.2.3. 权限新文件夹的">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. 发布与订阅">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.3. 订阅">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -19,77 +19,83 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html">Prev</a></li>
-<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
-<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.pubsub.html">Next</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html">上一页</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始页</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目录</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.pubsub.html">下一页</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <div class="sect2">
+  <h1 class="sr-only">组织数据</h1>
+<h2 class="sr-only">权限</h2>
+<div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. 共享文件夹</h3></div></div></div>
-<a class="indexterm" name="idm140624660564160"></a><a class="indexterm" name="idm140624660562704"></a><a class="indexterm" name="idm140624660561248"></a><a class="indexterm" name="idm140624660559792"></a><div class="concept">
-<a name="ox.appsuite.user.concept.rights.share"></a><p>要与其他用户共享数据，请共享一个或多个文件夹。您可以通过授予其他用户具体的文件夹权限来共享文件夹。有以下选项：</p>
+<a name="ox.appsuite.user.sect.dataorganisation.rights.grant"></a>11.2.4. 授予权限</h3></div></div></div>
+<a class="indexterm" name="id-1.12.5.8.2"></a><a class="indexterm" name="id-1.12.5.8.3"></a><div class="concept">
+<a name="ox.appsuite.user.concept.rights.grant"></a><p>要与其他用户共享数据，请共享一个或多个文件夹。您可以通过授予其他用户具体的文件夹权限来共享文件夹。有以下选项：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>为文件夹<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.share" title="如何向文件夹授于权限：">授于</a>权限，</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.change" title="如何更改文件权限：">更改</a>文件夹的权限，</p></li>
+<li class="listitem"><p>为文件夹<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.add" title="如何向文件夹授于权限：">授于</a>权限，</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.change" title="如何更改文件权限：">更改</a>一个文件夹的权限，</p></li>
 <li class="listitem"><p>以套用<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.applyrole" title="如何以套用一个用具角色授于权限：">用户角色</a>授于权限</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.remove" title="如何删除一个用户的文件夹权限：">删除</a>文件夹的权限。</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.task.rights.remove" title="如何删除一个用户的文件夹权限：">删除</a>一个文件夹的权限。</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.share.limitations"></a><p><span class="phrase"><strong>备注：</strong></span>小心以下限制。</p>
+<a name="ox.appsuite.user.concept.rights.limitations"></a><p><span class="phrase"><strong>备注：</strong></span>小心以下限制。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>要向其他用户授予文件夹权限，您必须具备该文件夹的管理员权限。</p></li>
-<li class="listitem" style="list-style-type: none"><p>您不可以分享您的个人<span class="guilabel"><strong>收件箱</strong></span>文件夹。为了授权其他用户访问您的电子邮件，请共享您的<span class="guilabel"><strong>收件箱</strong></span>文件夹下的电子邮件文件箱。其他用户必须订阅此电子邮件文件夹。请参阅 <a class="xref" href="ox.appsuite.user.sect.email.share.subscribe.html" title="5.7.2. 订阅电子邮件文件夹">5.7.2: 订阅电子邮件文件夹</a>。</p></li>
-<li class="listitem" style="list-style-type: none"><p>您有您个人文件夹、联系人、任务文件夹的所有权限。您不可以授于以下文件夹管理权给其他用户。实际设定的示例可以到<a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="Q:">数据组织和团队问题</a>。</p></li>
+<li class="listitem" style="list-style-type: none"><p>您不可以分享您的个人<span class="guilabel"><strong>收件箱</strong></span>文件夹。为了授权其他用户访问您的电子邮件，请共享您的<span class="guilabel"><strong>收件箱</strong></span>文件夹下的电子邮件文件箱。其他用户必须订阅此电子邮件文件夹。</p></li>
+<li class="listitem" style="list-style-type: none"><p>您有您个人文件夹、联系人、任务文件夹的所有权限。您不可以授于以下文件夹管理权给其他用户。</p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.share"></a><p class="title"><b>如何向文件夹授于权限：</b></p>
+<a name="ox.appsuite.user.task.rights.add"></a><p class="title">如何向文件夹授于权限：</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>在文件夹树里<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何打开某个文件夹：">选择</a>一个文件夹。</p>
+<p>在文件夹树里<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何打开或选择一个文件夹：">选择</a>一个文件夹。</p>
 <p><span class="phrase"><strong>备注：</strong></span>您需要有此文件夹的管理权。</p>
 </li>
 <li class="step"><p>单击文件夹名称旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.share"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>。单击<span class="guibutton"><strong>权限</strong></span>。<span class="guilabel"><strong>文件夹权限</strong></span>窗口显示此文件夹的当前权限。</p></li>
-<li class="step"><p>在底部，输入一个用户名称。单击图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.share.add"></a><img src="../../images/appsuite_user_icon_add.png"></span>。用户获得默认权限。</p></li>
-<li class="step"><p>单击一个用户的权限以更改。设定的示例可以到<a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="Q:">数据组织和团队问题</a>。</p></li>
+<li class="step"><p>输入一位用户或一个群组的电子邮件地址。用户或群组获得默认权限。</p></li>
+<li class="step"><p>为了更改一位用户或一个群组的权限，单击<span class="guibutton"><strong>访问权限</strong></span>。从菜单里选择一个权限。</p></li>
 <li class="step"><p>如有需要，重复步骤以授于更多权限。</p></li>
+<li class="step">
+<p>为了传送权限到此文件夹里，所有存在或新创建的子文件夹，启用<span class="guibutton"><strong>套用到所有子文件夹</strong></span>。</p>
+<p><span class="phrase"><strong>备注：</strong></span>您需要有子文件夹的管理权。</p>
+</li>
 <li class="step"><p>单击 <span class="guibutton"><strong>保存</strong></span>。</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>提示：</strong></span>一个共享文件夹会标记一个<span class="guibutton"><strong>已分享</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.rights.share.shared"></a><img src="../../images/appsuite_user_icon_folder_share.png"></span>。如果单击图标，<span class="guilabel"><strong>文件夹权限</strong></span>窗口打开。</p>
+          <p><span class="phrase"><strong>提示：</strong></span>一个共享文件夹会标记一个<span class="guibutton"><strong>已分享</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.rights.shared"></a><img src="../../images/appsuite_user_icon_folder_shared.png"></span>。如果单击图标，<span class="guilabel"><strong>文件夹权限</strong></span>窗口打开。</p>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.change"></a><p class="title"><b>如何更改文件权限：</b></p>
+<a name="ox.appsuite.user.task.rights.change"></a><p class="title">如何更改文件权限：</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>在文件夹树里<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何打开某个文件夹：">选择</a>一个文件夹。</p>
+<p>在文件夹树里<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何打开或选择一个文件夹：">选择</a>一个文件夹。</p>
 <p><span class="phrase"><strong>备注：</strong></span>您需要有此文件夹的管理权。</p>
 </li>
 <li class="step"><p>单击文件夹名称旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.change"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>。单击<span class="guibutton"><strong>权限</strong></span>。<span class="guilabel"><strong>文件夹权限</strong></span>窗口显示此文件夹的当前权限。</p></li>
 <li class="step">
-<p>单击一个权限以更改。设定的示例可以到<a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights" title="Q:">数据组织和团队问题</a>。</p>
+<p>为了更改一位用户或一个群组的权限，单击<span class="guibutton"><strong>访问权限</strong></span>。从菜单里选择一个权限。</p>
 <p><span class="phrase"><strong>备注：</strong></span>您不能更改一个个人文件夹的管理权。</p>
 </li>
 <li class="step"><p>单击 <span class="guibutton"><strong>保存</strong></span>。</p></li>
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.applyrole"></a><p class="title"><b>如何以套用一个用具角色授于权限：</b></p>
+<a name="ox.appsuite.user.task.rights.applyrole"></a><p class="title">如何以套用一个用具角色授于权限：</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>在文件夹树里<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何打开某个文件夹：">选择</a>一个文件夹。</p>
+<p>在文件夹树里<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何打开或选择一个文件夹：">选择</a>一个文件夹。</p>
 <p><span class="phrase"><strong>备注：</strong></span>您需要有此文件夹的管理权。</p>
 </li>
 <li class="step"><p>单击文件夹名称旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.applyrole"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>。单击<span class="guibutton"><strong>权限</strong></span>。<span class="guilabel"><strong>文件夹权限</strong></span>窗口显示此文件夹的当前权限。</p></li>
@@ -98,10 +104,10 @@
 </ol></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.rights.remove"></a><p class="title"><b>如何删除一个用户的文件夹权限：</b></p>
+<a name="ox.appsuite.user.task.rights.remove"></a><p class="title">如何删除一个用户的文件夹权限：</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>在文件夹树里<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何打开某个文件夹：">选择</a>一个文件夹。</p>
+<p>在文件夹树里<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="如何打开或选择一个文件夹：">选择</a>一个文件夹。</p>
 <p><span class="phrase"><strong>备注：</strong></span>您需要有此文件夹的管理权。</p>
 </li>
 <li class="step"><p>单击文件夹名称旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.dataorganisation.folder.rights.remove"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>。单击<span class="guibutton"><strong>权限</strong></span>。</p></li>
@@ -110,5 +116,6 @@
 </ol></div>
 </div>
 </div>
-</body>
+          </div>
+        </body>
 </html>

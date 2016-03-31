@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-08-21 23:28+0800\n"
+"PO-Revision-Date: 2016-03-05 04:45+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -11,13 +11,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.7\n"
 
-#: apps/io.ox/tours/files.js:215 module:io.ox/tours
-#, fuzzy
-#| msgid "Add new account"
+#: apps/io.ox/tours/files.js:221 module:io.ox/tours
 msgid "Add another account"
-msgstr "新增帳號"
+msgstr "新增其他帳號"
 
 #: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
@@ -27,19 +25,24 @@ msgstr "新增附件"
 msgid "Adding further details"
 msgstr "新增更多詳情"
 
-#: apps/io.ox/tours/files.js:101 module:io.ox/tours
+#: apps/io.ox/tours/files.js:104 module:io.ox/tours
 msgid ""
 "At the top you can find the toolbar with many functions and additional "
 "options. You can easily create new folders, new files and much more."
 msgstr ""
+"您可在頂端找到含有許多功能與選項的工具列。您可以簡單地建立新資料夾、新檔案，"
+"以及其他功能。"
 
-#: apps/io.ox/tours/files.js:163 module:io.ox/tours
+#: apps/io.ox/tours/files.js:169 module:io.ox/tours
 msgid ""
 "Choose from two alternatives to share your files and folders. Use Invite "
 "people if you want to manage access rights and allow recipients to create "
 "and edit files. Or just get a link to let others view and download your "
 "files. You can use an expiration date and password protection if you like."
 msgstr ""
+"在兩個選項間選擇以分享您的檔案與資料夾。若您想要管理權限並允許受邀者建立與編"
+"輯檔案，請使用邀請成員功能；若只要將鏈結提供給其他人，即可檢視、下載您的檔"
+"案。若您希望的話，也可指定到期日，並加上密碼保護。"
 
 #: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
@@ -47,23 +50,23 @@ msgid ""
 "the corresponding contacts from the selected address book."
 msgstr "點選導覽列左方的字母以顯示選擇的通訊錄中對應的聯絡人。"
 
-#: apps/io.ox/tours/files.js:78 module:io.ox/tours
+#: apps/io.ox/tours/files.js:81 module:io.ox/tours
 msgid ""
 "Clicking on a folder displays all the subfolders, documents, media and other "
 "files that it contains."
-msgstr ""
+msgstr "點擊資料夾後將會顯示當中包含所有的子資料夾、文件、媒體與其他檔案。"
 
-#: apps/io.ox/tours/files.js:129 module:io.ox/tours
+#: apps/io.ox/tours/files.js:132 module:io.ox/tours
 msgid "Clicking on the view icon leads you to a preview of the selected file."
-msgstr ""
+msgstr "點擊檢視圖示，將帶您到選擇檔案的預覽畫面。"
 
 #: apps/io.ox/tours/portal.js:45 module:io.ox/tours
 msgid "Closing a square"
 msgstr "關閉方塊"
 
-#: apps/io.ox/tours/files.js:176 module:io.ox/tours
+#: apps/io.ox/tours/files.js:182 module:io.ox/tours
 msgid "Collaborating"
-msgstr ""
+msgstr "協作"
 
 #: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
@@ -116,16 +119,18 @@ msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr "可以在系統選單 > 說明中找到各程式的詳細操作說明。"
 
-#: apps/io.ox/tours/files.js:192 module:io.ox/tours
+#: apps/io.ox/tours/files.js:198 module:io.ox/tours
 msgid ""
 "Did you know that you can edit text documents and spreadsheets online? Drive "
 "will automatically update your edited file, but thanks to versioning the "
 "original file stays available."
 msgstr ""
+"您知道您可直接在線上編輯文件與試算表嗎？Drive 將自動更新您編輯的檔案，受惠於"
+"版本功能，原始版本將永遠存在。"
 
-#: apps/io.ox/tours/files.js:86 module:io.ox/tours
+#: apps/io.ox/tours/files.js:89 module:io.ox/tours
 msgid "Different views are available. Just select the one you like best."
-msgstr ""
+msgstr "可選擇不同的視圖，選擇您最喜歡的就好。"
 
 #: apps/io.ox/tours/intro.js:44 module:io.ox/tours
 msgid "Displaying the help or the settings"
@@ -135,12 +140,14 @@ msgstr "顯示選項或說明"
 msgid "Drag and drop"
 msgstr "拖曳"
 
-#: apps/io.ox/tours/files.js:216 module:io.ox/tours
+#: apps/io.ox/tours/files.js:222 module:io.ox/tours
 msgid ""
 "Drive allows you to connect to other storage solutions if you already have a "
 "cloud storage account you use to save and sync your files. Simply click on "
 "the appropriate logo to access your existing data."
 msgstr ""
+"若您已經有了雲端儲存空間的帳號，用來儲存與同步檔案的話，您可直接將 Drive 連結"
+"至該線上儲存解決方案。只要點擊對應的圖示後登入即可存取您現有的資料。"
 
 #: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid ""
@@ -148,9 +155,7 @@ msgid ""
 "activated immediately."
 msgstr "編輯右邊的設定，在大多數的情況下變更將會即時生效。"
 
-#: apps/io.ox/tours/files.js:191 module:io.ox/tours
-#, fuzzy
-#| msgid "Edit document"
+#: apps/io.ox/tours/files.js:197 module:io.ox/tours
 msgid "Edit documents"
 msgstr "編輯文件"
 
@@ -226,27 +231,23 @@ msgstr "輸入主旨"
 msgid "Entering the task's data"
 msgstr "輸入任務資料"
 
-#: apps/io.ox/tours/files.js:199 module:io.ox/tours
-#, fuzzy
-#| msgid "File Details"
+#: apps/io.ox/tours/files.js:205 module:io.ox/tours
 msgid "File details"
 msgstr "檔案詳情"
 
-#: apps/io.ox/tours/files.js:77 module:io.ox/tours
-#, fuzzy
-#| msgid "Folder tree"
+#: apps/io.ox/tours/files.js:80 module:io.ox/tours
 msgid "Folder content"
-msgstr "資料夾樹"
+msgstr "資料夾內容"
 
-#: apps/io.ox/tours/files.js:63 module:io.ox/tours
+#: apps/io.ox/tours/files.js:66 module:io.ox/tours
 msgid "Folder tree"
 msgstr "資料夾樹"
 
-#: apps/io.ox/tours/files.js:140 module:io.ox/tours
+#: apps/io.ox/tours/files.js:143 module:io.ox/tours
 msgid ""
 "From preview you can also select other options to help you manage and work "
 "on your files."
-msgstr ""
+msgstr "您也可在預覽畫面選擇其他選項來幫助管理與編輯檔案。"
 
 #: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
@@ -269,17 +270,19 @@ msgstr "開始入門"
 msgid "Halo view"
 msgstr "Halo View"
 
-#: apps/io.ox/tours/files.js:151 module:io.ox/tours
+#: apps/io.ox/tours/files.js:157 module:io.ox/tours
 msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
 "also collaborate on a document and set different access rights."
 msgstr ""
+"您可在此與朋友及外部聯絡人分享檔案。您也可以一起編輯文件，並設定不同存取權"
+"限。"
 
-#: apps/io.ox/tours/files.js:226 module:io.ox/tours
+#: apps/io.ox/tours/files.js:232 module:io.ox/tours
 msgid ""
 "Hint: you can always restart guided tours, any time you need them, from the "
 "system menu."
-msgstr ""
+msgstr "提示: 您可以在需要時從系統選單隨時回來導覽。"
 
 #: apps/io.ox/tours/settings.js:36 module:io.ox/tours
 msgid "How the settings are organized"
@@ -324,29 +327,20 @@ msgstr "邀請其他參與者"
 msgid "Launching an app"
 msgstr "執行應用程式"
 
-#: apps/io.ox/tours/files.js:37 module:io.ox/tours
-msgid ""
-"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy "
-"eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam "
-"voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
-"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit "
-"amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam "
-"nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed "
-"diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet "
-"clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-msgstr ""
-
 #: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
 msgstr "導覽列"
 
-#: apps/io.ox/tours/files.js:64 module:io.ox/tours
+#: apps/io.ox/tours/files.js:67 module:io.ox/tours
 msgid ""
 "On the left you can see the folder tree. It displays your folder structure "
 "and allows you to navigate to specific folders and subfolders. To make your "
 "life easier, we have already included folders for your Documents, Music, "
 "Pictures and Videos."
 msgstr ""
+"您可以在左邊看到資料夾樹，當中將會顯示您的資料夾結構，您可在當中切換至任何資"
+"料夾與子資料夾。為了方便您，我們已經為您的文件、音樂、相片、影片準備了專用資"
+"料夾。"
 
 #: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
@@ -368,15 +362,13 @@ msgstr "開啟說明"
 msgid "Opening the settings"
 msgstr "開啟選項"
 
-#: apps/io.ox/tours/files.js:128 module:io.ox/tours
-#, fuzzy
+#: apps/io.ox/tours/files.js:131 module:io.ox/tours
 msgid "Preview files"
-msgstr "預覽"
+msgstr "預覽檔案"
 
-#: apps/io.ox/tours/files.js:139 module:io.ox/tours
-#, fuzzy
+#: apps/io.ox/tours/files.js:142 module:io.ox/tours
 msgid "Preview mode"
-msgstr "預覽"
+msgstr "預覽模式"
 
 #: apps/io.ox/tours/mail.js:96 module:io.ox/tours
 msgid "Reading E-Mail conversations"
@@ -386,17 +378,15 @@ msgstr "閱讀郵件討論串"
 msgid "Reading the details"
 msgstr "閱讀詳情"
 
-#: apps/io.ox/tours/files.js:225 module:io.ox/tours
+#: apps/io.ox/tours/files.js:231 module:io.ox/tours
 msgid "Restart Guided Tour"
-msgstr ""
+msgstr "重新開始導覽"
 
 #: apps/io.ox/tours/intro.js:94 module:io.ox/tours
 msgid "Searching for objects"
 msgstr "搜尋物件"
 
-#: apps/io.ox/tours/files.js:85 module:io.ox/tours
-#, fuzzy
-#| msgid "Selecting a view"
+#: apps/io.ox/tours/files.js:88 module:io.ox/tours
 msgid "Select a view"
 msgstr "選擇視圖"
 
@@ -413,25 +403,23 @@ msgstr "傳送郵件給某個聯絡人"
 msgid "Sending the E-Mail"
 msgstr "寄送郵件"
 
-#: apps/io.ox/tours/files.js:150 module:io.ox/tours
-#, fuzzy
-#| msgid "Share this file"
+#: apps/io.ox/tours/files.js:156 module:io.ox/tours
 msgid "Share files"
-msgstr "分享此檔案"
+msgstr "分享檔案"
 
-#: apps/io.ox/tours/files.js:177 module:io.ox/tours
+#: apps/io.ox/tours/files.js:183 module:io.ox/tours
 msgid ""
 "Sharing files by inviting people does not only offer your recipients the "
 "option to create and edit files. Internal and external participants are also "
 "able to collaborate with you on text documents and spreadsheets at the same "
 "time."
 msgstr ""
+"透過邀請成員來分享檔案不僅能讓受邀者建立、編輯檔案，內外部的其他參與者也能夠"
+"與您同時編輯文件與試算表。"
 
-#: apps/io.ox/tours/files.js:162 module:io.ox/tours
-#, fuzzy
-#| msgid "Sort options"
+#: apps/io.ox/tours/files.js:168 module:io.ox/tours
 msgid "Sharing options"
-msgstr "排序選項"
+msgstr "分享選項"
 
 #: apps/io.ox/tours/settings.js:54 module:io.ox/tours
 msgid "Signing out"
@@ -457,19 +445,13 @@ msgstr ""
 "詳細視圖會顯示物件的內容，視應用程式而定，您可以在詳細視圖中找到更多管理物件"
 "的功能。"
 
-#: apps/io.ox/tours/files.js:56 module:io.ox/tours
-#, fuzzy
-#| msgctxt "help"
-#| msgid "The Drive App"
+#: apps/io.ox/tours/files.js:59 module:io.ox/tours
 msgid "The Drive app"
 msgstr "Drive 應用程式"
 
-#: apps/io.ox/tours/files.js:50 module:io.ox/tours
-#, fuzzy
-#| msgctxt "help"
-#| msgid "The Drive App"
+#: apps/io.ox/tours/files.js:53 module:io.ox/tours
 msgid "The Drive app tour.txt"
-msgstr "Drive 應用程式"
+msgstr "The Drive app tour.txt"
 
 #: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
 msgid "The List view"
@@ -514,12 +496,14 @@ msgid ""
 "selected time range."
 msgstr "行事曆視圖將會顯示包含指定時間範圍中約會的行事曆。"
 
-#: apps/io.ox/tours/files.js:200 module:io.ox/tours
+#: apps/io.ox/tours/files.js:206 module:io.ox/tours
 msgid ""
 "The file details side bar offers additional information about your files. "
 "Just enable the File details option from the View drop down menu and select "
 "a file to see the details."
 msgstr ""
+"檔案詳細資訊側邊欄提供關於檔案的更多資訊。只要在視圖下拉選單開啟檔案詳情選"
+"項，然後選擇檔案即可看到詳情。"
 
 #: apps/io.ox/tours/intro.js:104 module:io.ox/tours
 msgid "The folder tree"
@@ -755,17 +739,18 @@ msgstr "要排序任務，點選排序依照。選擇排序條件。"
 msgid "To track the editing status, enter the current progress."
 msgstr "要追蹤編輯狀態，輸入目前的進度。"
 
-#: apps/io.ox/tours/files.js:114 module:io.ox/tours
+#: apps/io.ox/tours/files.js:117 module:io.ox/tours
 msgid ""
 "To upload a new file from your local device, simply click on Add local file "
 "and select the file you would like to upload. It is even easier if you just "
 "drag and drop files from your local device into Drive. The uploaded file is "
 "now available in Drive on all your devices."
 msgstr ""
+"若要從您的本機電腦上傳檔案，只要點擊「新增本機檔案」然後選擇想要上傳的檔案即"
+"可。另一個更簡單的方式是直接從您的電腦中拖曳至 Drive。上傳的檔案就可透過 "
+"Drive 在所有裝置中使用。"
 
-#: apps/io.ox/tours/files.js:100 module:io.ox/tours
-#, fuzzy
-#| msgid "The toolbar"
+#: apps/io.ox/tours/files.js:103 module:io.ox/tours
 msgid "Toolbar"
 msgstr "工具列"
 
@@ -773,9 +758,7 @@ msgstr "工具列"
 msgid "Tracking the editing status"
 msgstr "追蹤編輯狀態"
 
-#: apps/io.ox/tours/files.js:113 module:io.ox/tours
-#, fuzzy
-#| msgid "Upload new file"
+#: apps/io.ox/tours/files.js:116 module:io.ox/tours
 msgid "Upload a new file"
 msgstr "上傳新檔案"
 
@@ -799,13 +782,16 @@ msgstr "使用提醒功能"
 msgid "Welcome to %s"
 msgstr "歡迎使用 %s"
 
-#: apps/io.ox/tours/files.js:57 module:io.ox/tours
+#: apps/io.ox/tours/files.js:60 module:io.ox/tours
 msgid ""
 "Welcome to your cloud storage app. This Guided Tour will introduce you to "
 "your new online storage solution - your one point to access online stored "
 "files from all your accounts. This is where you can upload and save your "
 "files, share them and synchronize them with different devices.  "
 msgstr ""
+"歡迎使用您的雲端儲存應用程式。此導覽程式將向您介紹全新的線上儲存解決方案：可"
+"存取您所有帳號當中儲存的檔案的單一窗口。您可上傳並儲存檔案於此處，分享並在不"
+"同裝置間同步。"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s)"

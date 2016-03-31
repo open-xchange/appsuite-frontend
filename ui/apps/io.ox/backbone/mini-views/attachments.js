@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -79,7 +79,7 @@ define('io.ox/backbone/mini-views/attachments', [
 
             var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size) : '\u00A0';
             return $('<div class="attachment">').append(
-                $('<i class="fa fa-paperclip">'),
+                $('<i class="fa fa-paperclip" aria-hidden="true">'),
                 $('<div class="row-1">').text(attachment.filename),
                 $('<div class="row-2">').append(
                     $('<span class="filesize">').text(size)
@@ -92,7 +92,7 @@ define('io.ox/backbone/mini-views/attachments', [
                 })
                 .data(attachment)
                 .append(
-                    $('<i class="fa fa-trash-o">')
+                    $('<i class="fa fa-trash-o" aria-hidden="true">')
                 )
             );
         },
@@ -101,8 +101,9 @@ define('io.ox/backbone/mini-views/attachments', [
             var properties = settings.get('properties'),
                 size = this.attachmentsToAdd.reduce(function (acc, attachment) {
                     return acc + (attachment.file_size || 0);
-                }, 0);
-            if (size > properties.attachmentMaxUploadSize) {
+                }, 0),
+                max = properties.attachmentMaxUploadSize;
+            if (max && max > 0 && size > max) {
                 this.model.set('quotaExceeded', {
                     actualSize: size,
                     attachmentMaxUploadSize: properties.attachmentMaxUploadSize

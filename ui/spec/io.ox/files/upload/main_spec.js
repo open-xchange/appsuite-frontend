@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
@@ -18,7 +18,7 @@ define([
 
     'use strict';
 
-    describe('upload api', function () {
+    describe('Files upload api', function () {
         it('has no inital estimation time', function () {
             expect(upload.getEstimatedTime()).to.equal('0 Sekunden');
         });

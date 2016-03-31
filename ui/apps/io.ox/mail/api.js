@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -269,10 +269,13 @@ define('io.ox/mail/api', [
             delete data.cid;
             //don't save raw data in our models. We only want preformated content there
             if (!obj.view || (obj.view && obj.view !== 'raw')) {
-                // sanitize content Types
-                _(data.attachments).map(function (attachment) {
-                    attachment.content_type = attachment.content_type.replace(/^text\/plain.*/, 'text/plain').replace(/^text\/html.*/, 'text/html');
-                    return attachment;
+                // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
+                // split by ; because this field might contain further unwanted data
+                _(data.attachments).each(function (attachment) {
+                    if (/^text\/(plain|html)/i.test(attachment.content_type)) {
+                        // only clean-up text and html; otherwise we lose data (see bug 43727)
+                        attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
+                    }
                 });
                 // either update or add model
                 if (model) {
@@ -377,13 +380,21 @@ define('io.ox/mail/api', [
 
         var dequeue = _.debounce(function () {
             if (queue.length) {
-                removeOnServer(queue).always(wait.resolve);
+                removeOnServer(queue)
+                    .done(wait.resolve)
+                    .fail(wait.reject)
+                    .fail(fail.bind(null, queue));
                 queue = [];
                 wait = $.Deferred();
             } else {
                 pending = false;
             }
         }, 5000);
+
+        function fail(ids, e) {
+            // handle special case: quota exceeded
+            if (e.code === 'MSG-0039') api.trigger('delete:fail:quota', e, ids);
+        }
 
         function enqueue(ids) {
             queue = queue.concat(ids);
@@ -404,7 +415,7 @@ define('io.ox/mail/api', [
             }, 15000);
         }
 
-        function removeOnServer(ids) {
+        function removeOnServer(ids, force) {
             pending = true;
             return http.wait(
                 // wait a short moment, so that the UI reacts first, i.e. triggers
@@ -412,7 +423,12 @@ define('io.ox/mail/api', [
                 _.wait(100).then(function () {
                     return http.PUT({
                         module: 'mail',
-                        params: { action: 'delete', returnAffectedFolders: true, timestamp: _.then() },
+                        params: {
+                            action: 'delete',
+                            harddelete: force,
+                            returnAffectedFolders: true,
+                            timestamp: _.then()
+                        },
                         data: http.simplify(ids),
                         appendColumns: false
                     })
@@ -439,12 +455,12 @@ define('io.ox/mail/api', [
             );
         }
 
-        function remove(ids, all) {
+        function remove(ids, all, force) {
             try {
                 // add to recently deleted hash
                 remember(ids);
                 // avoid parallel delete requests
-                return pending ? enqueue(ids) : removeOnServer(ids);
+                return pending && !force ? enqueue(ids) : removeOnServer(ids, force);
             } finally {
                 // try/finally is used to set up http.wait() first
                 // otherwise we run into race-conditions (see bug 37707)
@@ -559,9 +575,7 @@ define('io.ox/mail/api', [
         // now talk to server
         _(list).map(function (obj) {
             var folder  = obj.folder || obj.folder_id;
-            if (modfolder && modfolder !== folder) {
-                move = true;
-            }
+            if (modfolder && modfolder !== folder) move = true;
             return http.PUT({
                 module: 'mail',
                 params: {
@@ -643,9 +657,9 @@ define('io.ox/mail/api', [
             var trashId = accountAPI.getFoldersByType('trash');
             _(trashId).each(function (id) {
                 folderAPI.list(id, { cache: false });
-            });
-            _(pool.getByFolder(trashId)).each(function (collection) {
-                collection.expired = true;
+                _(pool.getByFolder(id)).each(function (collection) {
+                    collection.expired = true;
+                });
             });
         }
     });
@@ -775,27 +789,38 @@ define('io.ox/mail/api', [
         });
     };
 
+    function handleSpam(list, state) {
+        prepareRemove(list);
+        // reset spam folder; we assume that the spam handler will move the message to the spam folder
+        resetFolderByType('spam');
+        http.pause();
+        _(list).map(function (item) {
+            return http.PUT({
+                module: 'mail',
+                params: {
+                    action: 'update',
+                    id: item.id,
+                    folder: item.folder_id,
+                    timestamp: _.then()
+                },
+                data: { flags: api.FLAGS.SPAM, value: state },
+                appendColumns: false
+            });
+        });
+        return http.resume();
+    }
+
     /**
      * marks list of mails as spam
      * @param {array} list
      * @return {deferred}
      */
     api.markSpam = function (list) {
-
-        prepareRemove(list);
-        // reset spam folder; we assume that the spam handler will move the message to the spam folder
-        resetFolderByType('spam');
-
-        return update(list, { flags: api.FLAGS.SPAM, value: true }).fail(notifications.yell);
+        return handleSpam(list, true);
     };
 
     api.noSpam = function (list) {
-
-        prepareRemove(list);
-        // reset inbox; we assume that the spam handler will move the message (back) to the inbox
-        resetFolderByType('inbox');
-
-        return update(list, { flags: api.FLAGS.SPAM, value: false }).fail(notifications.yell);
+        return handleSpam(list, false);
     };
 
     // combines move & copy
@@ -805,13 +830,13 @@ define('io.ox/mail/api', [
         pool.resetFolder(targetFolderId);
 
         return http.wait(
-            update(list, { folder_id: targetFolderId }, type).then(function (response) {
+            update(list, { folder_id: targetFolderId }, type).then(function (data) {
                 // assume success
                 api.trigger(type, list, targetFolderId);
                 folderAPI.reload(targetFolderId, list);
                 // any errors? (debugging code below)
-                var error = _(response).find(function (item) { return !!item.error; });
-                if (error) return $.Deferred().reject(error);
+                var e = _(data.response).find(function (item) { return !!item.error; });
+                if (e) return $.Deferred().reject(e.error);
             })
         );
     }
@@ -872,14 +897,8 @@ define('io.ox/mail/api', [
         return transfer('copy', list, targetFolderId);
     };
 
-    var parseMsgref = function (msgref) {
-        var base = _(msgref.toString().split(api.separator)),
-            id = base.last(),
-            folder = base.without(id).join(api.separator);
-        return { folder_id: folder, id: id };
-    };
-
     api.autosave = function (obj) {
+        api.trigger('before:autosave', { data: obj });
         try {
             return http.wait(
                 http.PUT({
@@ -896,13 +915,13 @@ define('io.ox/mail/api', [
                     var draftsFolder = accountAPI.getFoldersByType('drafts');
                     pool.resetFolder(draftsFolder);
                     folderAPI.reload(draftsFolder);
-                    api.trigger('refresh.all');
+                    api.trigger('autosave refresh.all');
                     return result;
                 })
             );
         } finally {
             // try/finally is used to set up http.wait() first
-            if (obj.msgref) prepareRemove(parseMsgref(obj.msgref));
+            if (obj.msgref) prepareRemove(util.parseMsgref(api.separator, obj.msgref));
         }
     };
 
@@ -926,7 +945,7 @@ define('io.ox/mail/api', [
         if (view === 'text' && obj.content_type === 'text/plain' && isDraft) view = 'raw';
 
         // attach original message on touch devices?
-        var attachOriginalMessage = view === 'text' && Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
+        var attachOriginalMessage = view === 'text' && _.device('touch') && settings.get('attachOriginalMessage', false) === true,
             csid = api.csid();
 
         return http.PUT({
@@ -1790,14 +1809,20 @@ define('io.ox/mail/api', [
         api.pool.add('detail', thread);
     };
 
-    api.collectionLoader.virtual = function (options) {
+    api.collectionLoader.noSelect = function (options) {
         // special handling for top-level mail account folders (e.g. bug 34818)
-        if (/^default\d+$/.test(options.folder)) return [];
+        if (/^default\d+$/.test(options.folder)) return true;
+        // check read access
+        var model = folderAPI.pool.getModel(options.folder);
+        return !model.can('read');
     };
 
     api.collectionLoader.each = function (obj, index, offset, params) {
         if (params.action === 'threadedAll') api.processThreadMessage(obj); else api.pool.add('detail', obj);
     };
+
+    // need this message at several places
+    api.mailServerDownMessage = gt('Unable to connect to mail server. Possible reasons: The mail server is (temporarily) down or there are network connection problems. Please try again in a few minutes.');
 
     return api;
 });

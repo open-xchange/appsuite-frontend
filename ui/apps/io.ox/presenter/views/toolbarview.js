@@ -5,7 +5,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
@@ -204,6 +204,22 @@ define('io.ox/presenter/views/toolbarview', [
                     this.addClass('presenter-toolbar-togglesidebar').attr({
                         'aria-label': gt('View participants')
                     });
+                }
+            },
+            'close': {
+                prio: 'hi',
+                mobile: 'hi',
+                icon: 'fa fa-times',
+                //#. button label for closing the Presenter app.
+                label: gt('Close'),
+                //#. button tooltip for closing the Presenter app.
+                title: gt('Close'),
+                ref: PRESENTER_ACTION_ID + '/close',
+                customize: function () {
+                    this.addClass('presenter-toolbar-close').attr({
+                        'aria-label': gt('Close')
+                    });
+                    this.parent().addClass('pull-right');
                 }
             }
         };

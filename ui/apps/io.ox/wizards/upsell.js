@@ -1,22 +1,16 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2013
- * Mail: info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-/**
-* TODO:
-* - empty detail view looks shitty
-* - remove ticked checkboxes after buying product
-* - show un-uncheckable checkboxes if product is owned
-*/
 define('io.ox/wizards/upsell', [
     'io.ox/core/extensions',
     'io.ox/core/wizard/registry',

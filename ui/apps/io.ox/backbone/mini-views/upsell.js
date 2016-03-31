@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -59,7 +59,7 @@ define('io.ox/backbone/mini-views/upsell', [
                         _(this.icon.split(/ /)).map(function (icon, index) {
                             if (icon === '') return;
 
-                            return $('<i class="fa">')
+                            return $('<i class="fa" aria-hidden="true">')
                                 .addClass(icon)
                                 .css({
                                     'margin-left': (index === 0 && self.opt.title && self.opt.title.length > 0) ? '0.5em' : '',

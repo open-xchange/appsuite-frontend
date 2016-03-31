@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
@@ -20,9 +20,10 @@ define('io.ox/mail/actions', [
     'io.ox/core/folder/api',
     'io.ox/core/print',
     'io.ox/core/api/account',
+    'io.ox/core/notifications',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (ext, links, api, util, folderAPI, print, account, settings, gt) {
+], function (ext, links, api, util, folderAPI, print, account, notifications, settings, gt) {
 
     'use strict';
 
@@ -162,15 +163,14 @@ define('io.ox/mail/actions', [
             return data && isDraftMail(data);
         },
         action: function (baton) {
+
             var data = baton.first(),
-                check = false;
-            _.each(ox.ui.apps.models, function (app) {
-                if (app.refId === data.id) {
-                    check = true;
-                    app.launch();
-                }
-            });
-            if (check === true) return;
+                app = _(ox.ui.apps.models).find(function (model) {
+                    return model.refId === data.id;
+                });
+
+            // reuse open editor
+            if (app) return app.launch();
 
             require(['settings!io.ox/mail'], function (settings) {
 
@@ -199,6 +199,36 @@ define('io.ox/mail/actions', [
         action: function (baton) {
             require(['io.ox/mail/actions/source'], function (action) {
                 action(baton);
+            });
+        }
+    });
+
+    new Action('io.ox/mail/actions/filter', {
+        requires: function (e) {
+            // must be at least one message and top-level
+            if (!e.collection.has('some') || !e.collection.has('toplevel')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
+            // multiple and not a thread?
+            if (!e.collection.has('one') && !e.baton.isThread) return;
+            return true;
+        },
+        action: function (baton) {
+            require(['io.ox/mail/mailfilter/settings/filter'
+                ], function (filter) {
+
+                filter.initialize().then(function (data, config, opt) {
+                    var factory = opt.model.protectedMethods.buildFactory('io.ox/core/mailfilter/model', opt.api),
+                        args = { data: { obj: factory.create(opt.model.protectedMethods.provideEmptyModel()) } },
+                        preparedTest = { id: 'allof', tests: [opt.filterDefaults.tests.Subject, opt.filterDefaults.tests.From] };
+
+                    preparedTest.tests[0].values = [baton.data.subject];
+                    preparedTest.tests[1].values = [baton.data.from[0][1]];
+
+                    args.data.obj.set('test', preparedTest);
+
+                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config[0]);
+                });
             });
         }
     });
@@ -321,7 +351,10 @@ define('io.ox/mail/actions', [
             }, true);
         },
         multiple: function (list) {
-            api.markSpam(list);
+            api.markSpam(list).done(function (result) {
+                var error = _(result).chain().pluck('error').compact().first().value();
+                if (error) notifications.yell(error);
+            });
         }
     });
 
@@ -341,7 +374,10 @@ define('io.ox/mail/actions', [
             }, true);
         },
         multiple: function (list) {
-            api.noSpam(list);
+            api.noSpam(list).done(function (result) {
+                var error = _(result).chain().pluck('error').compact().first().value();
+                if (error) notifications.yell(error);
+            });
         }
     });
 
@@ -498,6 +534,9 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/premium/actions/synchronize', {
         capabilities: 'active_sync client-onboarding',
+        requires: function () {
+            return _.device('!smartphone');
+        },
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
                 wizard.run();
@@ -569,34 +608,6 @@ define('io.ox/mail/actions', [
         label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete',
         section: 'standard'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX += 100,
-        prio: 'lo',
-        mobile: 'hi',
-        id: 'mark-unread',
-        label:
-            //#. Translation should be as short a possible
-            //#. Instead of "Mark as unread" it's just "Mark unread"
-            //#. German, for example, should be just "Ungelesen"
-            gt('Mark unread'),
-        ref: 'io.ox/mail/actions/mark-unread',
-        section: 'flags'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX + 1,
-        prio: 'lo',
-        mobile: 'hi',
-        id: 'mark-read',
-        label:
-            //#. Translation should be as short a possible
-            //#. Instead of "Mark as read" it's just "Mark read"
-            //#. German, for example, should be just "Gelesen"
-            gt('Mark read'),
-        ref: 'io.ox/mail/actions/mark-read',
-        section: 'flags'
     }));
 
     new Action('io.ox/mail/actions/label', {
@@ -721,6 +732,16 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'lo',
+        mobile: 'none',
+        id: 'filter',
+        label: gt('Create filter rule'),
+        ref: 'io.ox/mail/actions/filter',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'lo',
         mobile: 'lo',
         id: 'reminder',
         label: gt('Reminder'),
@@ -784,7 +805,8 @@ define('io.ox/mail/actions', [
         id: 'save',
         index: 500,
         mobile: 'high',
-        label: gt('Save to Drive'),
+        //#. %1$s is usually "Drive" (product name; might be customized)
+        label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
         ref: 'io.ox/mail/actions/save-attachment'
     }));
 

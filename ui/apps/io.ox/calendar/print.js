@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -156,12 +156,12 @@ define('io.ox/calendar/print', [
 
     function getDate(data) {
         var recurrenceString = util.getRecurrenceString(data),
-            date = util.getDateInterval(data);
+            date = util.getDateTimeIntervalMarkup(data, { output: 'strings' }).dateStr;
         return date + (recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '');
     }
 
     function getTime(data) {
-        return util.getTimeInterval(data);
+        return util.getDateTimeIntervalMarkup(data, { output: 'strings' }).timeStr;
     }
 
     function process(data) {

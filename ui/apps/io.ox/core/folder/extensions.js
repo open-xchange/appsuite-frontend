@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -50,13 +50,27 @@ define('io.ox/core/folder/extensions', [
 
         // myfolders
         api.virtual.add('virtual/myfolders', function () {
-            var id = api.altnamespace ? 'default0' : INBOX;
-            return api.list(id).then(function (list) {
-                return _(list).filter(function (data) {
-                    if (account.isStandardFolder(data.id)) return false;
-                    if (api.is('public|shared', data)) return false;
-                    return true;
+
+            function filter(data) {
+                if (account.isStandardFolder(data.id)) return false;
+                if (api.is('public|shared', data)) return false;
+                return true;
+            }
+
+            function sortByTitle(data) {
+                return String(data.title || '').trim().toLowerCase();
+            }
+
+            if (api.altnamespace) {
+                // alt namespace; merge INBOX and top-level; sort client-side
+                return this.concat(api.list(INBOX), api.list('default0')).then(function (list) {
+                    return _(list).chain().filter(filter).sortBy(sortByTitle).value();
                 });
+            }
+
+            // normal namespace; use INBOX; keep server-side sorting
+            return api.list(INBOX).then(function (list) {
+                return _(list).filter(filter);
             });
         });
 
@@ -88,10 +102,8 @@ define('io.ox/core/folder/extensions', [
 
     function getMySharesFolder() {
 
-        // not for guests
         if (capabilities.has('guest')) return;
-        // normal users need the following capabilites
-        if (!capabilities.has('edit_public_folders') && !capabilities.has('read_create_shared_folders')) return;
+        if (!capabilities.has('gab || share_links')) return;
 
         return $.when({
             id: 'virtual/myshares',

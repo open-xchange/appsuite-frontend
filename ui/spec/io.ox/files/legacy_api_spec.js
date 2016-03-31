@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -72,7 +72,7 @@ define(['io.ox/files/legacy_api',
             });
         };
 
-    describe('files API (legacy)', function () {
+    describe('Files API (legacy)', function () {
         //tracker
         describe('has a tracker', function () {
             var tracker = api.tracker;

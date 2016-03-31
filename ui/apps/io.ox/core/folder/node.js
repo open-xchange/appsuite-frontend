@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -103,9 +103,8 @@ define('io.ox/core/folder/node', [
         },
 
         onRemove: function (model) {
-            var children = this.$.subfolders.children();
-            children.filter('[data-id="' + $.escape(model.id) + '"]').remove();
-            if (children.length === 0) this.model.set('subfolders', false);
+            this.$.subfolders.children('[data-id="' + $.escape(model.id) + '"]').remove();
+            // we do not update models if the DOM is empty! (see bug 43754)
             this.renderEmpty();
         },
 
@@ -209,8 +208,8 @@ define('io.ox/core/folder/node', [
             .html(
                 /*eslint-disable no-nested-ternary */
                 hasSubFolders ?
-                    (isOpen ? '<i class="fa fa-' + ICON + '-down">' : '<i class="fa fa-' + ICON + '-right">') :
-                    '<i class="fa fa-fw">'
+                    (isOpen ? '<i class="fa fa-' + ICON + '-down" aria-hidden="true">' : '<i class="fa fa-' + ICON + '-right" aria-hidden="true">') :
+                    '<i class="fa fa-fw" aria-hidden="true">'
                 /*eslint-enable no-nested-ternary */
             );
             // a11y
@@ -309,8 +308,9 @@ define('io.ox/core/folder/node', [
 
             // also set: folder, parent, tree
 
-            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
             this.model = api.pool.getModel(o.model_id);
+            this.noSelect = !this.model.can('read');
+            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
             this.describedbyID = _.uniqueId('description-');
@@ -369,8 +369,8 @@ define('io.ox/core/folder/node', [
                     this.$.selectable = $('<div class="folder-node" role="presentation">')
                     .css('padding-left', (o.level * this.indentation) + offset)
                     .append(
-                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
-                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw" aria-hidden="true"></i></div>') : [],
+                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw" aria-hidden="true"></i></div>'),
                         $('<div class="folder-label">').append(
                             this.$.label = $('<div>')
                         ),
@@ -391,7 +391,7 @@ define('io.ox/core/folder/node', [
             // sortable
             if (o.sortable) this.$el.attr('data-sortable', true);
 
-            // virtual?
+            if (this.noSelect && o.level > 0) this.$el.addClass('no-select');
             if (this.isVirtual) this.$el.addClass('virtual');
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
@@ -505,7 +505,7 @@ define('io.ox/core/folder/node', [
 
         renderIcon: function () {
             var o = this.options, type;
-            if (!o.icons || (o.tree.module !== 'mail' && o.tree.module !== 'infostore')) return;
+            if ((o.tree.module !== 'infostore' && !o.icons) || (o.tree.module !== 'mail' && o.tree.module !== 'infostore')) return;
             if (o.tree.module === 'mail') {
                 type = account.getType(this.folder) || 'default';
                 this.$.icon.addClass('visible ' + type);

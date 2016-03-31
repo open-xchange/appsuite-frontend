@@ -1,11 +1,11 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: OX App Suite
 Source: http://open-xchange.com/
-Copyright: 2011, 2012 Open-Xchange, Inc
+Copyright: 2016 OX Software GmbH
 License: CC-BY-NC-SA-3.0
 
 Files: *
-Copyright: 2011 Open-Xchange, Inc
+Copyright: 2016 OX Software GmbH
 License: CC-BY-NC-SA-3.0
 
 License: CC-BY-NC-SA-3.0

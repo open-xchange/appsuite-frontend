@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -200,14 +200,19 @@ define('io.ox/core/folder/contextmenu', [
         //
         empty: function (baton) {
 
-            if (baton.module !== 'mail' && baton.module !== 'infostore' || (baton.module === 'infostore' && !api.is('trash', baton.data))) return;
+            var isTrash = api.is('trash', baton.data);
+            var label = gt('Empty folder');
+            if (baton.module !== 'mail' && baton.module !== 'infostore' || (baton.module === 'infostore' && !isTrash)) return;
+
+            if (isTrash) label = gt('Empty trash');
+            else if (baton.module === 'mail') label = gt('Delete all messages');
 
             addLink(this, {
                 action: 'clearfolder',
                 data: { id: baton.data.id },
                 enabled: api.can('delete', baton.data),
                 handler: actions.clearFolder.bind(actions, baton.data.id),
-                text: gt('Empty folder')
+                text: label
             });
         },
 
@@ -436,18 +441,18 @@ define('io.ox/core/folder/contextmenu', [
                 var id = String(baton.data.id),
                     model = api.pool.getModel(id);
 
-                var supportsPermissions = capabilities.has('gab') && !capabilities.has('alone'),
-                    supportsInvite = capabilities.has('invite_guests'),
+                var supportsInternal = model.supportsInternalSharing(),
+                    supportsInvite = model.supportsInviteGuests(),
                     supportsLinks = capabilities.has('share_links'),
                     showInvitePeople = supportsInvite && model.supportsShares(),
                     showGetLink = supportsLinks && !model.is('mail') && model.isShareable(id);
 
                 // stop if neither invites or links are supported
-                if (!supportsPermissions && !showInvitePeople && !showGetLink) return;
+                if (!supportsInternal && !showInvitePeople && !showGetLink) return;
 
                 header.call(this, gt('Sharing'));
 
-                if (supportsPermissions || showInvitePeople) {
+                if (supportsInternal || showInvitePeople) {
                     addLink(this, {
                         action: 'invite',
                         data: { app: baton.app, id: id },

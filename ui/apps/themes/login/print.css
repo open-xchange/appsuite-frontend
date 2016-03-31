@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -66,13 +66,19 @@ p {
     margin: 0.5em 0 0.5em 0;
 }
 
+blockquote {
+    border-left: 1px solid #aaa;
+    padding: 0 0 0 23px;
+    margin: 16px 0;
+}
+
 .item {
     margin: 0 0 2cm 0;
 }
 
 .item-compact {
     margin: 0 0 0.25cm 0;
-    
+
 }
 
 .compact-subject {

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -302,8 +302,12 @@ define('io.ox/core/tk/vgrid', [
                         .on('click keydown', { grid: this }, fnClickCheckbox)
                 )
                 .prependTo(node),
-            // item template
-            template = new Template({ tempDrawContainer: container }),
+        // item template
+            templateOptions = { tempDrawContainer: container };
+        if (options.templateOptions) {
+            templateOptions = _.extend(templateOptions, options.templateOptions);
+        }
+        var template = new Template(templateOptions),
             // label template
             label = new Template({ tempDrawContainer: container }),
             // item pool

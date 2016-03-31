@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -219,6 +219,9 @@ define('io.ox/search/model', [
                             // folder support via hidden flag
                             return data.id === value || !!item.custom;
                         });
+
+                        // workaround: race condition
+                        if (!itemvalue) return;
 
                         // overwrite
                         if (!!item.custom) {

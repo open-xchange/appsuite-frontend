@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -80,6 +80,11 @@ define('io.ox/files/listview', [
                 }
                 ext.point(ITEM + '/' + layout).invoke('draw', this, baton);
             }
+        },
+        {
+            id: 'aria-label',
+            index: 200,
+            draw: extensions.ariaLabel
         }
     );
 

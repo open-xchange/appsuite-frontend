@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -16,7 +16,7 @@ define([
     'io.ox/calendar/settings/pane'
 ], function (ext, gt) {
 
-    describe('calendarsettings', function () {
+    describe('Calendar settings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="calendarsettingsNode">'));
@@ -61,11 +61,6 @@ define([
 
             this.node.find('input[name="deleteInvitationMailAfterAction"]').should.have.length(1);
             this.node.find('input[name="deleteInvitationMailAfterAction"]').parent().text().should.be.equal(gt('Automatically delete the invitation email after the appointment has been accepted or declined'));
-
-            //wait for deferred painting to happen
-            var def = new $.Deferred();
-            _.defer(def.resolve);
-            return def;
         });
 
     });

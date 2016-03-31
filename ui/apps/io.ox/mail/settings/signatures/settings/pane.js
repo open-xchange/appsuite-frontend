@@ -379,7 +379,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                                                 'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), gt('Delete')),
                                                 role: 'button',
                                                 tabindex: 1
-                                            }).append($('<i class="fa fa-trash-o">'))
+                                            }).append($('<i class="fa fa-trash-o" aria-hidden="true">'))
                                         ),
                                         // do not add a preview pane with single br-tag or empty string
                                         (content === '<br>' || content === '') ? '' : $('<div class="signature-preview">').click(clickEdit).append(content)

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -38,6 +38,15 @@ define('io.ox/core/folder/view', [
             hiddenByWindowResize = false,
             forceOpen = false,
             DEFAULT_WIDTH = 250;
+
+        // smart defaults for flat folders
+        if (!open) {
+            open = {};
+            // open private and public by default
+            if (/^(contacts|calendar|tasks)$/.test(module)) {
+                open[_.display()] = ['virtual/flat/' + module + '/private', 'virtual/flat/' + module + '/public'];
+            }
+        }
 
         //
         // Utility functions

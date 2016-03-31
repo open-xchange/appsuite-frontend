@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
@@ -48,7 +48,7 @@ define('io.ox/core/capabilities', function () {
                 /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
             } catch (e) {
-                console.error('capabilities.has()', str, e);
+                if (_.device('!karma')) console.error('capabilities.has()', str, e);
                 return false;
             }
         },

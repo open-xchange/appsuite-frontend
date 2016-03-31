@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -51,7 +51,7 @@ define('io.ox/core/settings/downloads/pane', [
                     $('<section>').append(
                         $('<h2>').text(gt('Updater')),
                         $('<p>').append(
-                            $('<i class="fa fa-download">'),
+                            $('<i class="fa fa-download" aria-hidden="true">'),
                             $.txt(' '),
                             $('<a>', { href: href, target: '_blank', download: '' }).addClass('action').text(gt('Download installation file (for Windows)'))
                         ),
@@ -132,7 +132,7 @@ define('io.ox/core/settings/downloads/pane', [
                         hasWindowsClient ? $('<div class="shop-link-container">').append(
                             $.txt(windowsClientLabel),
                             $('<br>'),
-                            $('<i class="fa fa-download">'),
+                            $('<i class="fa fa-download" aria-hidden="true">'),
                             $('<a>', { href: windowsClientUrl, target: '_blank', download: '' }).addClass('action').text(gt('Download installation file'))
                         ) : [],
                         $('<div class="shop-link-container">').append(

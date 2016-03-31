@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -18,7 +18,7 @@ define([
 ], function (tasksPlugin, ext, moment, testData) {
     'use strict';
 
-    describe('portal Tasks plugin', function () {
+    describe('Portal Tasks plugin', function () {
 
         describe('should', function () {
             beforeEach(function () {

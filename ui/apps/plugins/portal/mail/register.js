@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -82,7 +82,8 @@ define('plugins/portal/mail/register', [
         className: 'content list-unstyled',
 
         initialize: function () {
-            this.listenTo(this.collection, 'add remove set reset', this.render);
+            // reset is only triggered by garbage collection and causes wrong "empty inbox" messages under certain conditions
+            this.listenTo(this.collection, 'add remove set', this.render);
         },
 
         render: function (baton) {
@@ -97,14 +98,26 @@ define('plugins/portal/mail/register', [
             } else {
                 this.$el.empty().text(gt('No mails in your inbox'));
             }
-
             return this;
         }
     });
 
-    var loadCollection = function (folderName) {
-        var def = new $.Deferred(),
-            collectionLoader = new CollectionLoader({
+    function getFolderName(baton) {
+        var props = baton.model.get('props', {});
+        if (props.id) return $.when('default' + props.id + '/INBOX');
+        return accountAPI.getUnifiedMailboxName().then(function (mb) {
+            return mb ? mb + '/INBOX' : api.getDefaultFolder();
+        });
+    }
+
+    ext.point('io.ox/portal/widget/mail').extend({
+
+        title: gt('Inbox'),
+
+        initialize: function (baton) {
+
+            // create new collection loader instance
+            baton.collectionLoader = new CollectionLoader({
                 module: 'mail',
                 getQueryParams: function (params) {
                     return {
@@ -118,40 +131,28 @@ define('plugins/portal/mail/register', [
                 }
             });
 
-        collectionLoader.each = function (obj) {
-            api.pool.add('detail', obj);
-        };
+            baton.collectionLoader.each = function (obj) {
+                api.pool.add('detail', obj);
+            };
 
-        collectionLoader
-            .load({ folder: folderName })
-            .once('load', function () {
-                def.resolve();
-                this.off('load:fail');
-            })
-            .once('load:fail', function (error) {
-                def.reject(error);
-                this.off('load');
-            });
+            baton.loadCollection = function (folder) {
 
-        return def;
-    };
+                var def = new $.Deferred();
 
-    function getFolderName(baton) {
-        var props = baton.model.get('props', {});
+                this.collectionLoader
+                    .load({ folder: folder })
+                    .once('load', function () {
+                        def.resolve();
+                        this.off('load:fail');
+                    })
+                    .once('load:fail', function (error) {
+                        def.reject(error);
+                        this.off('load');
+                    });
 
-        if (props.id) {
-            return $.when('default' + props.id + '/INBOX');
-        }
-        return accountAPI.getUnifiedMailboxName().then(function (mb) {
-            return mb ? mb + '/INBOX' : api.getDefaultFolder();
-        });
-    }
+                return def;
+            };
 
-    ext.point('io.ox/portal/widget/mail').extend({
-
-        title: gt('Inbox'),
-
-        initialize: function (baton) {
             return $.when(getFolderName(baton)).done(function (folderName) {
                 api.on('update', function (event, list, target) {
                     if (target === folderName) {
@@ -165,16 +166,15 @@ define('plugins/portal/mail/register', [
 
         load: function (baton) {
 
-            function getMails(folderName) {
-                var loader = api.collectionLoader,
-                    params = loader.getQueryParams({ folder: folderName });
-
+            return $.when(getFolderName(baton)).then(function (folder) {
+                var loader = baton.collectionLoader,
+                    params = loader.getQueryParams({ folder: folder });
                 baton.collection = loader.getCollection(params);
-                if (baton.collection.length === 0 || baton.collection.expired) return loadCollection(folderName);
-            }
-
-            return $.when(getFolderName(baton)).then(function (folderName) {
-                return getMails(folderName);
+                if (!folder) {
+                    return $.Deferred().reject({ error: api.mailServerDownMessage, retry: false });
+                }
+                if (baton.collection.length === 0 || baton.collection.expired) return baton.loadCollection(folder);
+                return $.when();
             });
         },
 

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -17,8 +17,9 @@ define('io.ox/calendar/actions', [
     'io.ox/calendar/api',
     'io.ox/calendar/util',
     'io.ox/core/extPatterns/actions',
+    'io.ox/core/print',
     'gettext!io.ox/calendar'
-], function (ext, links, api, util, actions, gt) {
+], function (ext, links, api, util, actions, print, gt) {
 
     'use strict';
 
@@ -201,7 +202,7 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/print-appointment', {
-        capabilities: 'printing',
+        capabilities: 'calendar-printing',
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!smartphone');
         },
@@ -220,40 +221,31 @@ define('io.ox/calendar/actions', [
                         .show()
                         .done(function (action) {
                             if (action === 'detailed') {
-                                ox.load(['io.ox/core/print']).done(function (print) {
-                                    print.request('io.ox/calendar/print', list);
-                                });
-                            }
-                            if (action === 'compact') {
-                                ox.load(['io.ox/core/print']).done(function (print) {
-                                    print.request('io.ox/calendar/print-compact', list);
-                                });
+                                print.request('io.ox/calendar/print', list);
+                            } else if (action === 'compact') {
+                                print.request('io.ox/calendar/print-compact', list);
                             }
                         });
                 });
                 return;
             }
-            ox.load(['io.ox/core/print']).done(function (print) {
-                print.request('io.ox/calendar/print', list);
-            });
+            print.request('io.ox/calendar/print', list);
         }
     });
 
     new Action('io.ox/calendar/detail/actions/print-appointment-disabled', {
         requires: 'one',
-        capabilities: 'printing',
+        capabilities: 'calendar-printing',
         action: function (baton) {
-            ox.load(['io.ox/core/print']).done(function (print) {
-                var options = { template: 'print.appointment.tmpl' },
-                    POS = 'recurrence_position';
-                if (baton.data[POS]) options[POS] = baton.data[POS];
-                print.open('calendar', baton.data, options);
-            });
+            var options = { template: 'print.appointment.tmpl' },
+                POS = 'recurrence_position';
+            if (baton.data[POS]) options[POS] = baton.data[POS];
+            print.open('calendar', baton.data, options);
         }
     });
 
     new Action('io.ox/calendar/detail/actions/print', {
-        capabilities: 'printing',
+        capabilities: 'calendar-printing',
         requires: function (e) {
             var win = e.baton.window;
             if (_.device('!smartphone') && win && win.getPerspective) {
@@ -385,6 +377,9 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/premium/actions/share', {
         capabilities: 'caldav client-onboarding',
+        requires: function () {
+            return _.device('!smartphone');
+        },
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
                 wizard.run();
@@ -402,7 +397,7 @@ define('io.ox/calendar/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-trash-o">')
+                        $('<i class="fa fa-trash-o" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -424,7 +419,7 @@ define('io.ox/calendar/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-sign-in">')
+                        $('<i class="fa fa-sign-in" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();

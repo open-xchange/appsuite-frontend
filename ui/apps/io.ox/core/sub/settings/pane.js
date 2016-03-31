@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
@@ -216,7 +216,7 @@ define('io.ox/core/sub/settings/pane', [
                         'data-action': 'remove',
                         'aria-label': displayName + ', ' + gt('Delete')
                     })
-                    .append($('<i class="fa fa-trash-o">'))
+                    .append($('<i class="fa fa-trash-o" aria-hidden="true">'))
                 ),
                 $('<span class="content">').append(
                     $('<span data-property="displayName" class="list-title pull-left">')

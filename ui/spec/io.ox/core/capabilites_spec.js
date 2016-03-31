@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
@@ -19,16 +19,12 @@ define([
 
     describe('Core capabilities', function () {
 
-        beforeEach(function (done) {
-            capabilityWrapper.enable(['webmail', 'contacts', 'foo.dot', 'foo-dash', 'foo/slash']).done(function () {
-                done();
-            });
+        beforeEach(function () {
+            return capabilityWrapper.enable(['webmail', 'contacts', 'foo.dot', 'foo-dash', 'foo/slash']);
         });
 
-        afterEach(function (done) {
-            capabilityWrapper.reset().done(function () {
-                done();
-            });
+        afterEach(function () {
+            return capabilityWrapper.reset();
         });
 
         describe('can evaluate expressions', function () {

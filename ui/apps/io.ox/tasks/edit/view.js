@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -46,6 +46,15 @@ define('io.ox/tasks/edit/view', [
                     if (!(model.get('end_time')) && model.get('end_time') !== 0) {
                         model.set('end_time', moment(model.get('start_time')).add(1, 'day').valueOf(), { validate: true });
                     }
+                }
+            });
+            // add quota exceeded handler
+            this.model.on('invalid:quota_exceeded', function (messages) {
+                // not during saving to prevent double yells
+                if (!this.saving) {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', messages[0]);
+                    });
                 }
             });
         },

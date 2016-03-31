@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -15,7 +15,7 @@ define(['io.ox/core/extensions',
     'io.ox/tasks/settings/pane'
 ], function (ext, gt) {
 
-    describe.skip('Tasks Settings', function () {
+    describe.skip('Tasks settings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="tasksettingsNode">'));

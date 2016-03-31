@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -42,7 +42,7 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
     multiValues = {},
     model;
 
-    describe('autoforward', function () {
+    describe('Mailfilter Autoforward', function () {
 
         beforeEach(function (done) {
             this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=autoforward/, function (xhr) {

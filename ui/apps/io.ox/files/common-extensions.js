@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -21,6 +21,16 @@ define('io.ox/files/common-extensions', [
     'use strict';
 
     var extensions = {
+
+        ariaLabel: function (baton) {
+            var parts = [];
+            // filename, last modified, and size
+            parts.push(baton.data.filename || baton.data.title);
+            if (baton.model.isFolder()) parts.push(gt('Folder'));
+            parts.push(gt('modified') + ' ' + moment(baton.data.last_modified).format('LLL'));
+            parts.push(gt('size') + ' ' + strings.fileSize(baton.data.file_size || 0, 1));
+            this.attr('aria-label', parts.join(', ') + '.');
+        },
 
         date: function (baton, options) {
             var data = baton.data, t = data.last_modified;
@@ -71,7 +81,7 @@ define('io.ox/files/common-extensions', [
         },
 
         fileTypeIcon: function () {
-            this.append('<i class="fa file-type-icon">');
+            this.append('<i class="fa file-type-icon" aria-hidden="true">');
         },
 
         fileTypeClass: function (baton) {
@@ -115,7 +125,7 @@ define('io.ox/files/common-extensions', [
             function error() {
                 //fallback to default
                 $(this).parent().addClass('default-icon').append(
-                    $('<span class="file-icon"><i class="fa file-type-icon"></i></span>')
+                    $('<span class="file-icon"><i class="fa file-type-icon" aria-hidden="true"></i></span>')
                 );
                 $(this).remove();
             }
@@ -129,7 +139,7 @@ define('io.ox/files/common-extensions', [
                     return this.append(
                         $('<div class="icon-thumbnail default-icon">').append(
                             $('<span class="folder-name">').text(baton.model.getDisplayName()),
-                            $('<span class="folder-icon"><i class="fa file-type-icon"></i></span>')
+                            $('<span class="folder-icon"><i class="fa file-type-icon" aria-hidden="true"></i></span>')
                         )
                     );
                 }
@@ -164,7 +174,7 @@ define('io.ox/files/common-extensions', [
                 //
                 this.append(
                     $('<div class="icon-thumbnail default-icon">').append(
-                        $('<span class="file-icon"><i class="fa file-type-icon"></i></span>')
+                        $('<span class="file-icon"><i class="fa file-type-icon" aria-hidden="true"></i></span>')
                     )
                 );
             };

@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
@@ -42,6 +42,8 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
                     title: gt('Use cursor keys to navigate'),
                     trigger: 'focus'
                 })
+                // make sure it always disappears
+                .on('dispose', function () { $(this).tooltip('destroy'); })
                 // always avoid clearing the URL hash
                 .on('click', 'a', $.preventDefault);
         },
@@ -97,6 +99,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
 
                 // SPACE
                 case 32:
+                    e.preventDefault();
                     $(e.currentTarget).click();
                     break;
 

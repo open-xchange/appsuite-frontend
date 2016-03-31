@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -52,7 +52,7 @@ define('io.ox/core/attachments/view', [
 
             if (this.options.mode === 'preview') this.$el.addClass('show-preview');
 
-            this.$header = $('<header role="heading">');
+            this.$header = $('<header>');
             this.$list = $('<ul class="inline-items">');
             this.$preview = $('<ul class="inline-items preview">');
             this.isListRendered = false;
@@ -91,9 +91,9 @@ define('io.ox/core/attachments/view', [
                 )
             );
 
-            this.updateScrollControls();
-
             if (this.openByDefault) this.toggleDetails();
+
+            this.updateScrollControls();
 
             return this;
         },
@@ -102,7 +102,7 @@ define('io.ox/core/attachments/view', [
 
             this.$header.append(
                 $('<a href="#" class="pull-right toggle-mode" tabindex="1">')
-                    .append('<i class="fa">'),
+                    .append('<i class="fa" aria-hidden="true">'),
                 $('<a href="#" class="toggle-details" tabindex="1">').append(
                     $('<i class="fa toggle-caret" aria-hidden="true">'),
                     $('<i class="fa fa-paperclip" aria-hidden="true">'),
@@ -163,6 +163,7 @@ define('io.ox/core/attachments/view', [
         onToggleDetails: function (e) {
             e.preventDefault();
             this.toggleDetails();
+            this.updateScrollControls();
         },
 
         onToggleMode: function (e) {
@@ -341,7 +342,7 @@ define('io.ox/core/attachments/view', [
             this.$el.append(
                 $('<a href="#" class="control remove" tabindex="1">')
                     .attr('title', gt('Remove attachment'))
-                    .append($('<i class="fa fa-trash-o">'))
+                    .append($('<i class="fa fa-trash-o" aria-hidden="true">'))
             );
         }
     });

@@ -5,7 +5,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
@@ -261,4 +261,14 @@ define('io.ox/presenter/actions', [
             baton.context.app.mainView.presenterEvents.trigger('presenter:zoomout');
         }
     });
+
+    new Action(PRESENTER_ACTION_ID + '/close', {
+        requires: function (e) {
+            return _.isObject(e.baton.context);
+        },
+        action: function (baton) {
+            baton.context.app.mainView.presenterEvents.trigger('presenter:close');
+        }
+    });
+
 });
