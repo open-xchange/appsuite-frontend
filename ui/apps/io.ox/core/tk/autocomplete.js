@@ -118,6 +118,9 @@ define('io.ox/core/tk/autocomplete',
             },
 
             select = function (i, processData) {
+                    // bugs 37471, 43428
+                    if (_.device('ie')) { self.off('blur', fnBlur); }
+
                     processData = typeof processData === 'undefined' ? true : processData;
                     var children;
                     if (i >= 0 && i < (children = scrollpane.children()).length) {
@@ -136,6 +139,13 @@ define('io.ox/core/tk/autocomplete',
                         if (processData) {
                             update();
                         }
+                    }
+
+                    // bugs 37471, 43428
+                    if (_.device('ie')) {
+                        _.defer(function () {
+                            self.on('blur', fnBlur);
+                        });
                     }
                 },
 
@@ -174,20 +184,12 @@ define('io.ox/core/tk/autocomplete',
             listModeOff = function () {
                     $('.autocomplete-popup').off('blur', '.autocomplete-item', fnBlur);
                     $('.autocomplete-popup').off('keydown', '.autocomplete-item', fnKeyDown);
-                    // Bug 37471 - [L3] Search in IE11: dropdown list disappears
-                    if (_.device('ie')) {
-                        _.defer(function () {
-                            self.on('blur', fnBlur);
-                        });
-                    }
                 },
 
             listModeOn = function () {
                     _.defer(function () {
                         $('.autocomplete-popup').on('blur', '.autocomplete-item', fnBlur);
                         $('.autocomplete-popup').on('keydown', '.autocomplete-item', fnKeyDown);
-                        // Bug 37471 - [L3] Search in IE11: dropdown list disappears
-                        if (_.device('ie')) self.off('blur', fnBlur);
                     });
                 },
 
