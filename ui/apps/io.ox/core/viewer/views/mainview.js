@@ -128,7 +128,17 @@ define('io.ox/core/viewer/views/mainview', [
         // handler for keyboard events on the viewer
         onKeydown: function (event) {
             event.stopPropagation();
-            var viewerRootEl = this.$el;
+            var viewerRootEl = this.$el,
+                self = this,
+                handleChangeSlide = _.throttle(function (direction) {
+                    if (direction === 'right') {
+                        self.displayerView.swiper.slideNext();
+                    } else {
+                        self.displayerView.swiper.slidePrev();
+                    }
+                    self.displayerView.focusActiveSlide();
+                }, 200);
+
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {
                 var tabableActions = viewerRootEl.find('[tabindex]:not([tabindex^="-"]):visible'),
@@ -161,12 +171,10 @@ define('io.ox/core/viewer/views/mainview', [
                     }
                     break;
                 case 37: // left arrow
-                    this.displayerView.swiper.slidePrev();
-                    this.displayerView.focusActiveSlide();
+                    handleChangeSlide('left');
                     break;
                 case 39: // right arrow
-                    this.displayerView.swiper.slideNext();
-                    this.displayerView.focusActiveSlide();
+                    handleChangeSlide('right');
                     break;
                 case 33: // page up
                     event.preventDefault();
