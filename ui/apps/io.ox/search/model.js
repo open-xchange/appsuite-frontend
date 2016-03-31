@@ -59,7 +59,7 @@ define('io.ox/search/model',
         // current folder
         start: 0,
         size: 100,
-        extra: 1,
+        extra: 0,
         // show advanced facets block initially
         showadv: false,
         // data container for extensions/plugins
@@ -211,6 +211,9 @@ define('io.ox/search/model',
                             // folder support via hidden flag
                             return data.id === value || !!item.custom;
                         });
+
+                        // race condition
+                        if (!itemvalue) return;
 
                         // overwrite
                         if (!!item.custom) {

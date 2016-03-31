@@ -1097,7 +1097,7 @@ define('io.ox/mail/main',
                                     search.model.set({
                                         'start': start,
                                         'size': size,
-                                        'extra': 1
+                                        'extra': 0
                                     }, { silent: true });
 
                                     var self = this,
@@ -1156,7 +1156,7 @@ define('io.ox/mail/main',
                                                 {
                                                     'start': 0,
                                                     'size': 30,
-                                                    'extra': 1
+                                                    'extra': 0
                                                 }, {silent: true});
                                             // load
                                             app.listView.load();
