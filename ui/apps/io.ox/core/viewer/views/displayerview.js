@@ -53,8 +53,12 @@ define('io.ox/core/viewer/views/displayerview', [
             this.swiper = null;
             // object to store the currently loading slides.
             this.loadingSlides = {};
+            // object to store slides that are removed while loading (prevent errors)
+            this.delayedRemove = {};
             // limit of how much slides are loaded simultaniously
             this.loadingLimit = 3;
+            // limit of how much office slides are loaded simultaniously
+            this.officeLoadingLimit = 1;
             // array to store dummys in use
             this.dummyList = [];
             // listen to blend caption events
@@ -392,22 +396,50 @@ define('io.ox/core/viewer/views/displayerview', [
 
         // loads the next dummy
         loadDummy: function () {
-            var self = this;
+            var self = this,
+                keys = _(this.loadingSlides).keys();
             // free to load a dummy if we still have them
-            if (this.dummyList[0] && _(this.loadingSlides).keys().length <= this.loadingLimit) {
-                var index = this.dummyList[0].index;
-                this.loadingSlides[index] = true;
-                console.log('starting to load', index);
-                this.dummyList[0].load()
-                    .done(function (view) {
-                        console.log('loaded', index);
-                        view.show();
-                        delete self.loadingSlides[index];
-                        self.loadDummy.bind(self);
-                    });
-                this.dummyList.shift();
-            } else {
-                console.log('dont load');
+            if (this.dummyList[0] && keys.length <= this.loadingLimit) {
+                var index = null,
+                    officecount = 0,
+                    position = 0;
+                _(keys).each(function (key) {
+                    if ((self.slideViews[key] && self.slideViews[key].model.isOffice()) || (self.delayedRemove[key] && self.delayedRemove[key].view.model.isOffice())) {
+                        officecount++;
+                    }
+                });
+
+                // find next available
+                for (var i = 0; i < this.dummyList.length; i++) {
+                    if (self.dummyList[i].model.isOffice()) {
+                        if (officecount < self.officeLoadingLimit) {
+                            index = self.dummyList[i].index;
+                            position = i;
+                            break;
+                        }
+                    } else {
+                        index = self.dummyList[i].index;
+                        position = i;
+                        break;
+                    }
+                }
+                if (index !== null) {
+                    this.loadingSlides[index] = true;
+
+                    this.dummyList[position].load()
+                        .done(function (view) {
+                            if (self.delayedRemove[index]) {
+                                self.delayedRemove[index].view.unload(index).dispose();
+                                self.delayedRemove[index].node.remove();
+                            } else {
+                                view.show();
+                            }
+
+                            delete self.loadingSlides[index];
+                            self.loadDummy();
+                        });
+                    this.dummyList.splice(position, 1);
+                }
             }
         },
 
@@ -418,7 +450,6 @@ define('io.ox/core/viewer/views/displayerview', [
          *  Direction of the prefetch: 'left' or 'right' are supported.
          */
         loadSlide: function (direction) {
-            console.log('currently loading slides:', this.loadingSlides, 'show slide', this.activeIndex);
             var self = this,
                 insertOffset = direction === 'right' ? this.preloadOffset : -this.preloadOffset,
                 removeOffset = direction === 'right' ? -this.preloadOffset - 1 : this.preloadOffset + 1,
@@ -431,9 +462,15 @@ define('io.ox/core/viewer/views/displayerview', [
                     swiper.destroyLoop();
 
                     // remove old slide
-                    self.slideViews[removeIndex].unload(removeIndex).dispose();
+                    if (self.loadingSlides[removeIndex]) {
+                        //don't remove currently loading files to prevent errors
+                        self.delayedRemove[removeIndex] = { view: self.slideViews[removeIndex], node: swiper.wrapper.find('*[data-index=' + removeIndex + ']') };
+                        swiper.wrapper.find('*[data-index=' + removeIndex + ']').detach();
+                    } else {
+                        self.slideViews[removeIndex].unload(removeIndex).dispose();
+                        swiper.wrapper.find('*[data-index=' + removeIndex + ']').remove();
+                    }
                     delete self.slideViews[removeIndex];
-                    swiper.wrapper.find('*[data-index=' + removeIndex + ']').remove();
 
                     // add new slide at correct position
                     if (direction === 'right') {
@@ -455,11 +492,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     }
 
                     swiper.createLoop();
-                    var slideviews = _(self.slideViews).keys(), swipeviews = _.unique(_(self.swiper.slides).map(function (i) { return $(i).attr('data-index'); }));
-                    console.log(slideviews, swipeviews, _.difference(slideviews, _.intersection(swipeviews, slideviews)));
-                    if (_.isNaN(parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1)) {
-                        debugger;
-                    }
+
                     // recalculate swiper index
                     swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
                     swiper.update(true);
@@ -468,12 +501,14 @@ define('io.ox/core/viewer/views/displayerview', [
                     self.isBusy = false;
 
                     self.handleDuplicatesSlides.bind(self);
-                    if (swiper.wrapper.find('.swiper-slide').length !== 9) {
-                        debugger;
-                    }
+
                     self.loadDummy();
                 };
 
+            if (this.slideViews[this.activeIndex].model.isOffice() && this.slideViews[this.activeIndex].$el.find('.document-page').length && this.slideViews[this.activeIndex].numberOfPages !== _(this.slideViews[this.activeIndex].loadedPageNodes).keys().length) {
+                //remove not loaded pdf to force true reload
+                this.slideViews[this.activeIndex].$el.find('.document-page').remove();
+            }
             this.slideViews[this.activeIndex].show();
 
             // we do not have to load any slides if the slide to insert already exists
