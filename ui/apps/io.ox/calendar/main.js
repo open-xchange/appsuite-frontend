@@ -807,6 +807,36 @@ define('io.ox/calendar/main', [
         }
     });
 
+    // set what to do if the app is started again
+    // this way we can react to given options, like for example a different folder
+    app.setResume(function (options) {
+        var ret = $.when();
+        // only consider folder option and persepective option
+        if (options) {
+            var defs = [],
+                appNode = this.getWindow();
+            appNode.busy();
+            if (options.folder && options.folder !== this.folder.get()) {
+                defs.push(this.folder.set(options.folder));
+            }
+            if (options.perspective && options.perspective !== app.props.get('layout')) {
+                var perspective = options.perspective;
+                if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], perspective) >= 0) {
+                    perspective = 'week:day';
+                } else if (perspective === 'calendar') {
+                    // corrupt data fix
+                    perspective = 'week:workweek';
+                }
+                defs.push(app.props.set('layout', perspective));
+            }
+            ret = $.when.apply(this, defs);
+            ret.always(function () {
+                appNode.idle();
+            });
+        }
+        return ret;
+    });
+
     return {
         getApp: app.getInstance
     };

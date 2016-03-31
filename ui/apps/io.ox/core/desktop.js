@@ -181,6 +181,7 @@ define('io.ox/core/desktop', [
             state: 'ready',
             saveRestorePointTimer: null,
             launch: function () { return $.when(); },
+            resume: function () { return $.when(); },
             quit: function () { return $.when(); }
         },
 
@@ -358,6 +359,11 @@ define('io.ox/core/desktop', [
             return this;
         },
 
+        setResume: function (fn) {
+            this.set('resume', fn);
+            return this;
+        },
+
         setQuit: function (fn) {
             this.set('quit', fn);
             return this;
@@ -532,6 +538,16 @@ define('io.ox/core/desktop', [
                 this.get('window').show();
                 this.trigger('resume', this);
                 ox.trigger('app:resume', this);
+
+                if (name) {
+                    ext.point(name + '/main').invoke('resume', this, options);
+                }
+                try {
+                    var fnResume = this.get('resume');
+                    deferred = fnResume.call(this, options) || $.when();
+                } catch (e) {
+                    console.error('Error while resuming application:', e.message, e, this);
+                }
                 // if image previews were already displayed in the files app, it might happen that another app (e.g. latest files widget) did some changes to the pool
                 // and the previews were redrawn but not displayed since the 'appear' event has not been triggered
                 $(window).trigger('resize.lazyload');
