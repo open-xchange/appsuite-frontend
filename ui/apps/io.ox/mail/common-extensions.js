@@ -175,7 +175,7 @@ define('io.ox/mail/common-extensions', [
             // only consider thread-size if app is in thread-mode
             var isThreaded = baton.app && baton.app.isThreaded();
             if (!isThreaded) return;
-            if (baton.options.threaded !== true && (!baton.app || baton.app.props.get('thread') === false)) return;
+            if (baton.options.threaded !== true && (!baton.app || !baton.app.isThreaded())) return;
 
             var size = api.threads.size(baton.data);
             if (size <= 1) return;
