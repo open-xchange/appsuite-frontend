@@ -443,14 +443,14 @@
             font-size: 15px;
         }
 
-        .detail-view-row.row-3, .inplace-reply { display: none; }
+        .detail-view-row.row-4, .inplace-reply { display: none; }
 
-        .unread-toggle, .flag-picker > a, .recipients { opacity: 0.3; }
+        .unread-toggle, .flag-picker > a, .recipients, .row-3 { opacity: 0.3; }
 
         &.unread .unread-toggle { opacity: 1; }
 
         .recipients {
-            height: 20px;
+            max-height: 20px;
             .ellipsis();
             html.high-contrast & { opacity: 1; }
         }
@@ -1010,7 +1010,7 @@ textarea.inplace-editor {
 
         .from .person-link.person-from { font-weight: 500; }
 
-        .mail-detail:not(.expanded) .recipients { height: auto; }
+        .mail-detail:not(.expanded) .recipients { max-height: auto; }
     }
 
     .mail-item  {
