@@ -22,6 +22,8 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
 
             this.collection = new api.Collection();
             this.list = new ListView({
+                // seems that threaded option is used for tests only so
+                // it would be nice to get rid of it (if possible)
                 threaded: true,
                 //mail listview needs a reference to the app.props model to listenTo
                 //changes:thread event (support threaded mails)
