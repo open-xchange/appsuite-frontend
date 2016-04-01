@@ -187,7 +187,7 @@ define('io.ox/core/folder/extensions', [
             var defaultId = api.altnamespace ? 'default0' : INBOX;
 
             var node = new TreeNodeView({
-                contextmenu: 'myfolders',
+                contextmenu: '',
                 // always show the folder for altnamespace
                 // otherwise the user cannot create folders
                 empty: !!api.altnamespace,
@@ -725,6 +725,13 @@ define('io.ox/core/folder/extensions', [
             }
         }
 
+        function addMailbox(e) {
+            e.preventDefault();
+            ox.load(['io.ox/core/folder/actions/add']).done(function (add) {
+                add(e.data.id, { module: 'mail' });
+            });
+        }
+
         ext.point('io.ox/core/foldertree/node').extend(
             {
                 id: 'shared-by',
@@ -803,7 +810,24 @@ define('io.ox/core/folder/extensions', [
                             .on('click', { view: baton.view, folder: baton.data }, openColorSelection);
                     }
                 }
+            },
+            {
+                id: 'add-folder',
+                index: 500,
+                draw: function (baton) {
+
+                    if (baton.data.id !== 'virtual/myfolders') return;
+                    var id = api.altnamespace ? 'default0' : api.getDefaultFolder('mail');
+
+                    this.find('.folder-add:first').remove();
+
+                    this.find('.folder-node:first').append(
+                        $('<a href="#" class="folder-add" role="button" tabindex="1"><i class="fa fa-plus-square"></i></a>')
+                        .on('click', { id: id }, addMailbox)
+                    );
+                }
             }
+
         );
     });
 
