@@ -31,11 +31,11 @@ define('io.ox/find/manager/facet-collection', [
     });
 
     // get properties from objects/models
-    function flexget (obj, key) {
+    function flexget(obj, key) {
         return obj.get ? obj.get(key) : obj[key];
     }
 
-    function cid (obj) {
+    function cid(obj) {
         var id = flexget(obj, 'id');
         // create pseudo valueId (simple facets use value-independent ids)
         if (flexget(obj, 'style') === 'simple') {
@@ -59,8 +59,8 @@ define('io.ox/find/manager/facet-collection', [
             var self = this;
             // trigger event: 'active:[current number of active]'
             this.on('change:list-of-actives', _.debounce(function () {
-                    self.trigger('active', this.getActive().length);
-                }, 10)
+                self.trigger('active', this.getActive().length);
+            }, 10)
             );
             // custom value models
             this.facetmodels = {};

@@ -76,6 +76,6 @@ RewriteRule ^$ ui [L]
 
 # online help fallback
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} !help/l10n/en_US
-RewriteRule help/l10n/([a-z_A-Z]+)(.+) help/l10n/en_US$2 [L]
+RewriteCond %{REQUEST_URI} !help(-.+)?/l10n/en_US
+RewriteRule help(-.+)?/l10n/([a-z_A-Z]+)(.+) help$1/l10n/en_US$3 [L]
 

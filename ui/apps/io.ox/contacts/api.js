@@ -42,20 +42,19 @@ define('io.ox/contacts/api', [
                     response.birthday = util.julianToGregorian(response.birthday);
                 }
                 return response;
-            } else {
-                // array of contacts: convert birthdays with year 1 from julian to gregorian calendar
-                _(response).each(function (contact) {
-                    if (contact.birthday && moment.utc(contact.birthday).year() === 1) {
-                        // birthday without year
-                        contact.birthday = util.julianToGregorian(contact.birthday);
-                    }
-                });
-                return response;
             }
+            // array of contacts: convert birthdays with year 1 from julian to gregorian calendar
+            _(response).each(function (contact) {
+                if (contact.birthday && moment.utc(contact.birthday).year() === 1) {
+                    // birthday without year
+                    contact.birthday = util.julianToGregorian(contact.birthday);
+                }
+            });
+            return response;
         };
 
     // mapped ids for msisdn
-    mapping.msisdn =  settings.get('msisdn/columns', mapping.cellular);
+    mapping.msisdn = settings.get('msisdn/columns', mapping.cellular);
 
     // generate basic API
     var api = apiFactory({
@@ -92,61 +91,62 @@ define('io.ox/contacts/api', [
                     opt = opt || {};
                     query = query + '*';
                     var data = {
-                        orSearch: true,
-                        admin: settings.get('showAdmin', false),
-                        emailAutoComplete: !!opt.emailAutoComplete
-                    },
-                    defaultBehaviour = true,
-                    queryField = {
-                        names: {
-                            display_name: query,
-                            first_name: query,
-                            last_name: query,
-                            email1: query,
-                            email2: query,
-                            email3: query
+                            orSearch: true,
+                            admin: settings.get('showAdmin', false),
+                            emailAutoComplete: !!opt.emailAutoComplete
                         },
-                        addresses: {
-                            street_home: query,
-                            postal_code_home: query,
-                            city_home: query,
-                            state_home: query,
-                            country_home: query,
-                            street_business: query,
-                            postal_code_business: query,
-                            city_business: query,
-                            state_business: query,
-                            country_business: query,
-                            street_other: query,
-                            postal_code_other: query,
-                            city_other: query,
-                            state_other: query,
-                            country_other: query
-                        },
-                        phones: {
-                            telephone_business1: query,
-                            telephone_business2: query,
-                            telephone_home1: query,
-                            telephone_home2: query,
-                            telephone_other: query,
-                            fax_business: query,
-                            telephone_callback: query,
-                            telephone_car: query,
-                            telephone_company: query,
-                            fax_home: query,
-                            cellular_telephone1: query,
-                            cellular_telephone2: query,
-                            fax_other: query,
-                            telephone_isdn: query,
-                            telephone_pager: query,
-                            telephone_primary: query,
-                            telephone_radio: query,
-                            telephone_telex: query,
-                            telephone_ttytdd: query,
-                            telephone_ip: query,
-                            telephone_assistant: query
-                        }
-                    };
+                        defaultBehaviour = true,
+                        queryField = {
+                            names: {
+                                display_name: query,
+                                first_name: query,
+                                last_name: query,
+                                email1: query,
+                                email2: query,
+                                email3: query
+                            },
+                            addresses: {
+                                street_home: query,
+                                postal_code_home: query,
+                                city_home: query,
+                                state_home: query,
+                                country_home: query,
+                                street_business: query,
+                                postal_code_business: query,
+                                city_business: query,
+                                state_business: query,
+                                country_business: query,
+                                street_other: query,
+                                postal_code_other: query,
+                                city_other: query,
+                                state_other: query,
+                                country_other: query
+                            },
+                            phones: {
+                                telephone_business1: query,
+                                telephone_business2: query,
+                                telephone_home1: query,
+                                telephone_home2: query,
+                                telephone_other: query,
+                                fax_business: query,
+                                telephone_callback: query,
+                                telephone_car: query,
+                                telephone_company: query,
+                                fax_home: query,
+                                cellular_telephone1: query,
+                                cellular_telephone2: query,
+                                fax_other: query,
+                                telephone_isdn: query,
+                                telephone_pager: query,
+                                telephone_primary: query,
+                                telephone_radio: query,
+                                telephone_telex: query,
+                                telephone_ttytdd: query,
+                                telephone_ip: query,
+                                telephone_assistant: query
+                            }
+                        };
+
                     _(opt).each(function (value, key) {
                         if (_(queryField).chain().keys().contains(key).value() && value === 'on') {
                             data = _(data).extend(queryField[key]);
@@ -260,9 +260,8 @@ define('io.ox/contacts/api', [
             if (missingData) {
                 delete opt.check;
                 return apiGetList.apply(this, arguments);
-            } else {
-                return new $.Deferred().resolve(list);
             }
+            return new $.Deferred().resolve(list);
         }
         return apiGetList.apply(this, arguments);
     };
@@ -381,7 +380,7 @@ define('io.ox/contacts/api', [
      * @fires  api#refresh.all
      * @return {deferred} returns
      */
-    api.update =  function (o) {
+    api.update = function (o) {
 
         var attachmentHandlingNeeded = o.data.tempAttachmentIndicator;
         delete o.data.tempAttachmentIndicator;
@@ -395,50 +394,48 @@ define('io.ox/contacts/api', [
                     api.trigger('update', o);
                     return { folder_id: o.folder, id: o.id };
                 });
-            } else {
-                return $.when();
             }
-        } else {
-            // convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
-            if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() === 1) {
-                o.data.birthday = util.gregorianToJulian(o.data.birthday);
-            }
-            // go!
-            return http.PUT({
-                module: 'contacts',
-                params: {
-                    action: 'update',
-                    id: o.id,
-                    folder: o.folder,
-                    timestamp: o.last_modified || _.then(),
-                    timezone: 'UTC'
-                },
-                data: o.data,
-                appendColumns: false
-            })
-            .then(function () {
-                // get updated contact
-                return api.get({ id: o.id, folder: o.folder }, false).then(function (data) {
-                    return $.when(
-                        api.caches.get.add(data),
-                        api.caches.all.grepRemove(o.folder + api.DELIM),
-                        api.caches.list.remove({ id: o.id, folder: o.folder }),
-                        fetchCache.clear(),
-                        data.user_id ? clearUserApiCache(data) : ''
-                    )
-                    .done(function () {
-                        if (attachmentHandlingNeeded) {
-                            // to make the detailview show the busy animation
-                            api.addToUploadList(_.ecid(data));
-                        }
-                        api.trigger('update:' + _.ecid(data), data);
-                        api.trigger('update', data);
-                        // trigger refresh.all, since position might have changed
-                        api.trigger('refresh.all');
-                    });
+            return $.when();
+        }
+        // convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+        if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() === 1) {
+            o.data.birthday = util.gregorianToJulian(o.data.birthday);
+        }
+        // go!
+        return http.PUT({
+            module: 'contacts',
+            params: {
+                action: 'update',
+                id: o.id,
+                folder: o.folder,
+                timestamp: o.last_modified || _.then(),
+                timezone: 'UTC'
+            },
+            data: o.data,
+            appendColumns: false
+        })
+        .then(function () {
+            // get updated contact
+            return api.get({ id: o.id, folder: o.folder }, false).then(function (data) {
+                return $.when(
+                    api.caches.get.add(data),
+                    api.caches.all.grepRemove(o.folder + api.DELIM),
+                    api.caches.list.remove({ id: o.id, folder: o.folder }),
+                    fetchCache.clear(),
+                    data.user_id ? clearUserApiCache(data) : ''
+                )
+                .done(function () {
+                    if (attachmentHandlingNeeded) {
+                        // to make the detailview show the busy animation
+                        api.addToUploadList(_.ecid(data));
+                    }
+                    api.trigger('update:' + _.ecid(data), data);
+                    api.trigger('update', data);
+                    // trigger refresh.all, since position might have changed
+                    api.trigger('refresh.all');
                 });
             });
-        }
+        });
     };
 
     /**
@@ -483,16 +480,15 @@ define('io.ox/contacts/api', [
                 fixPost: true
             })
             .then(filter);
-        } else {
-            return http.FORM({
-                module: 'contacts',
-                action: 'update',
-                form: file,
-                data: changes,
-                params: { id: o.id, folder: o.folder_id, timestamp: _.then() }
-            })
-            .then(filter);
         }
+        return http.FORM({
+            module: 'contacts',
+            action: 'update',
+            form: file,
+            data: changes,
+            params: { id: o.id, folder: o.folder_id, timestamp: _.then() }
+        })
+        .then(filter);
     };
 
     /**
@@ -503,7 +499,7 @@ define('io.ox/contacts/api', [
      * @fires  api#delete (data)
      * @return {promise}
      */
-    api.remove =  function (list) {
+    api.remove = function (list) {
         api.trigger('beforedelete', list);
         // get array
         list = _.isArray(list) ? list : [list];
@@ -591,11 +587,11 @@ define('io.ox/contacts/api', [
                 if (data.length) {
                     // favor contacts with an image
                     data.sort(function (a, b) {
-                        return !!b.image1_url ? + 1 : -1;
+                        return !!b.image1_url ? +1 : -1;
                     });
                     // favor contacts in global address book
                     data.sort(function (a, b) {
-                        return b.folder_id === '6' ? + 1 : -1;
+                        return b.folder_id === '6' ? +1 : -1;
                     });
                     // just use the first one
                     data = data[0];
@@ -607,10 +603,9 @@ define('io.ox/contacts/api', [
                     }
                     // use first contact
                     return fetchCache.add(address, data);
-                } else {
-                    // no data found
-                    return fetchCache.add(address, {});
                 }
+                // no data found
+                return fetchCache.add(address, {});
             });
         });
     };
@@ -643,11 +638,11 @@ define('io.ox/contacts/api', [
         });
 
         function load(node, url, opt) {
-            function fail () {
+            function fail() {
                 node.css('background-image', 'url(' + fallback + ')').off('.lazyload');
                 node = url = opt = null;
             }
-            function success () {
+            function success() {
                 cachesURLs[url] = url;
                 node.css('background-image', 'url(' + url + ')').off('.lazyload');
                 node = url = opt = null;
@@ -1017,7 +1012,7 @@ define('io.ox/contacts/api', [
         // should be >= 1!
         var minLength = Math.max(1, settings.get('search/minimumQueryLength', 3)),
             // use these fields for local lookups
-            fields = 'display_name email1 email2 email3 first_name last_name'.split(' ');
+            fields = settings.get('search/autocompleteFields', 'display_name,email1,email2,email3,first_name,last_name').split(',');
 
         // check for minimum length
         function hasMinLength(str) {
@@ -1057,7 +1052,7 @@ define('io.ox/contacts/api', [
                 return _(data).map(function (item) {
                     // prepare simple array for fast lookups
                     item.fulltext = _(fields).map(function (id) {
-                        return String(item[id] || '').toLowerCase();
+                        return String(item[id] || '').toLowerCase();
                     });
                     // avoid useless lookups by removing empty strings
                     item.fulltext = _(item.fulltext).compact();
@@ -1072,7 +1067,7 @@ define('io.ox/contacts/api', [
             query = $.trim(query).toLowerCase();
 
             // default: standard columns plus cell phone for MSISDN support
-            var columns = '1,2,5,20,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,551,552';
+            var columns = '1,2,5,20,101,500,501,502,505,519,520,524,555,556,557,569,592,602,606,607,551,552';
             options = _.extend({ admin: false, email: true, sort: '609', columns: columns, cache: true, limit: 0 }, options);
 
             // try local cache

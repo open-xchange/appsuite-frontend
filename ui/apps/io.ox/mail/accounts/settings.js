@@ -150,7 +150,9 @@ define('io.ox/mail/accounts/settings', [
             alertPlaceholder.find('.alert').remove();
             alertPlaceholder.find('.busynotice').remove();
             alertPlaceholder.append(
-                $.alert({ message: message, dismissable: true })
+                $.alert({ message: message, dismissable: true }).one('click', '.close', function () {
+                    alertPlaceholder.empty();
+                })
             );
         },
 
@@ -227,7 +229,7 @@ define('io.ox/mail/accounts/settings', [
                     delete data.transport_password;
                     validateMailaccount(data, popup, def);
                 } else {
-                    var data = {};
+                    data = {};
                     data.primary_address = newMailaddress;
                     if (args) {
                         args.data = data;
@@ -317,9 +319,9 @@ define('io.ox/mail/accounts/settings', [
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var failDialogbox = new dialogs.ModalDialog({
-                        width: 400,
-                        async: true
-                    });
+                    width: 400,
+                    async: true
+                });
                 failDialogbox.header()
                 .append(
                     alertPlaceholder

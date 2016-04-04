@@ -34,36 +34,50 @@ define('io.ox/mail/common-extensions', [
 
     'use strict';
 
+    // little helper
+    function isSearchActive(baton) {
+        return !!baton.app && !!baton.app.get('find') && baton.app.get('find').isActive();
+    }
+
     var extensions = {
 
         a11yLabel: function (baton) {
+
             var data = baton.data,
                 size = api.threads.size(data),
-                threadSize = size <= 1 ? '' :  ', ' + gt.format('Thread contains %1$d messages', gt.noI18n(size)),
                 fromlist = data.from || [['', '']],
-                subject = _.escape($.trim(data.subject)),
-                unread = util.isUnseen(data) ? gt('Unread') + ', ' : '',
-                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date) + threadSize +
-                    (data.attachment ? ', ' + gt('has attachments') : '');
+                parts = [],
+                a11yLabel;
+
+            if (util.isUnseen(data)) parts.push(gt('Unread'));
+            parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.received_date));
+            if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
+            if (data.attachment) parts.push(gt('has attachments'));
+
+            a11yLabel = parts.join(', ') + '.';
 
             this.attr({
                 'aria-hidden': true
-            }).parent().attr({
-                'aria-label': _.escape(a11yLabel)
+            })
+            .parent().attr({
+                // escape that a bit; firefox has a severe XSS issue (see bug 31065)
+                'aria-label': a11yLabel.replace(/["<]/g, function (match) {
+                    if (match === '"') return '&quot';
+                    if (match === '<') return '&lt;';
+                    return match;
+                })
             });
         },
 
         picture: function (baton) {
-
             // show picture of sender or first recipient
             // special cases:
             // - show picture of first recipient in "Sent items" and "Drafts"
             // - exception: always show sender in threaded messages
-
             var data = baton.data,
                 size = api.threads.size(data),
                 single = size <= 1,
-                addresses = single && account.is('sent|drafts', data.folder_id) ? data.to : data.from;
+                addresses = single && !isSearchActive(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from;
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
@@ -74,9 +88,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         senderPicture: function (baton) {
-
             // shows picture of sender see Bug 41023
-
             var addresses = baton.data.from;
             this.append(
                 contactsAPI.pictureHalo(
@@ -97,6 +109,15 @@ define('io.ox/mail/common-extensions', [
             );
         },
 
+        dateOrSize: function (baton) {
+            // show date or size depending on sort option
+            var fn = 'size';
+            if (baton.app && baton.app.props.get('sort') !== 608) {
+                fn = baton.app.props.get('exactDates') ? 'fulldate' : 'smartdate';
+            }
+            extensions[fn].call(this, baton);
+        },
+
         smartdate: function (baton) {
             extensions.date.call(this, baton, { fulldate: false, smart: true });
         },
@@ -109,10 +130,10 @@ define('io.ox/mail/common-extensions', [
 
             var data = baton.data,
                 single = !data.threadSize || data.threadSize === 1,
-                field = single && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
+                field = single && !isSearchActive(baton) && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
                 // get folder data to check capabilities:
                 // if bit 4096 is set, the server sort by local part not display name
-                capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
+                capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
                 useDisplayName = baton.options.sort !== 'from-to' || !(capabilities & 4096);
 
             this.append(
@@ -201,9 +222,13 @@ define('io.ox/mail/common-extensions', [
             );
         },
 
+        envelope: function () {
+            this.append($('<i class="fa seen-unseen-indicator" aria-hidden="true">'));
+        },
+
         unread: function (baton) {
             var isUnseen = util.isUnseen(baton.data);
-            if (isUnseen) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
+            if (isUnseen) extensions.envelope.call(this);
         },
 
         answered: function (baton) {
@@ -258,30 +283,32 @@ define('io.ox/mail/common-extensions', [
         // add orignal folder as label to search result items
         folder: function (baton) {
             // missing data or find currently inactive
-            if (!baton.data.original_folder_id || !(baton.app && baton.app.get('find') && baton.app.get('find').isActive())) return;
+            if (!baton.data.original_folder_id || !isSearchActive(baton)) return;
             // add container
-            var node;
-            this.append(
-                node = $('<span class="original-folder">')
-            );
+            var node = $('<span class="original-folder">').appendTo(this);
             // add breadcrumb
             require(['io.ox/core/folder/breadcrumb'], function (BreadcrumbView) {
                 var view = new BreadcrumbView({
                         folder: baton.data.original_folder_id,
                         app: baton.app,
-                        exclude: [ 'default0' ]
+                        exclude: ['default0']
                     }), renderPathOrig;
                 // not need for this here
                 view.computeWidth = $.noop;
                 // show only folder paths tail
                 renderPathOrig = view.renderPath;
                 view.renderPath = function (path) {
-                    return renderPathOrig.call(this, [].concat(_.last(path)) );
+                    return renderPathOrig.call(this, [].concat(_.last(path)));
                 };
-
                 // append to dom
-                node.append( view.render().$el );
+                node.append(view.render().$el);
             });
+        },
+
+        folderName: function (baton) {
+            if (!baton.app || !baton.app.folder || baton.app.folder.get() !== 'virtual/all-unseen') return;
+
+            this.append($('<span class="original-folder">').append(folderAPI.getTextNode(baton.data.original_folder_id)));
         },
 
         recipients: (function () {
@@ -392,7 +419,7 @@ define('io.ox/mail/common-extensions', [
 
                     // support for fixed position
                     // TODO: introduce as general solution
-                    node.on('show.bs.dropdown', function (e) {
+                    node.on('show.bs.dropdown', function (e) {
                         var link = $(e.relatedTarget),
                             offset = link.offset(),
                             // need to use siblings() instead of next() due to funky backdrop injection on mobile devices (see bug 35863)
@@ -412,7 +439,7 @@ define('io.ox/mail/common-extensions', [
                         $('body').append(overlay);
                     });
 
-                    node.on('hide.bs.dropdown', function (e) {
+                    node.on('hide.bs.dropdown', function (e) {
                         var link = $(e.relatedTarget), overlay = link.data('overlay');
                         link.parent().append(overlay.children());
                         overlay.remove();
@@ -546,7 +573,7 @@ define('io.ox/mail/common-extensions', [
 
                 this.append(
                     $('<div class="notification-item external-images">').append(
-                        $('<button type="button" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
+                        $('<button type="button" class="btn btn-default btn-sm" tabindex="1">').text(gt('Show images')),
                         $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
                     )
                 );

@@ -202,7 +202,7 @@ define([], function () {
             //TODO
         });
 
-        it('_.mythrottle', function (done) {
+        it.skip('_.mythrottle', function (done) {
             //TODO: implement using fake timer
             var finished,
                 //now = new Date(),

@@ -123,12 +123,12 @@ define.async('plugins/halo/api', [
 
         this.draw = function (baton) {
             var defs = point.map(function (ext) {
-                    if (ext.handles(baton.provider)) {
-                        return ext.draw.call(baton.ray, baton);
-                    }
-                })
-                .compact()
-                .value();
+                if (ext.handles(baton.provider)) {
+                    return ext.draw.call(baton.ray, baton);
+                }
+            })
+            .compact()
+            .value();
             return $.when.apply($, defs);
         };
     }

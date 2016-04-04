@@ -40,8 +40,9 @@ define('io.ox/core/import/import', [
             //add option
             formats = ext.point('io.ox/core/import/format').invoke('draw', null, baton)._wrapped;
             formats.forEach(function (node) {
-                if (node)
+                if (node) {
                     node.appendTo(nodes.select);
+                }
             });
 
             //avoid find
@@ -207,10 +208,10 @@ define('io.ox/core/import/import', [
                                 .value(),
                                 defaultMessage = //#. Error message if calendar import failed
                                                  gt('There was no appointment data to import');
-                            if ( module === 'contacts' ) {
+                            if (module === 'contacts') {
                                 defaultMessage = //#. Error message if contact import failed
                                                  gt('There was no contact data to import');
-                            } else if ( module === 'tasks' ) {
+                            } else if (module === 'tasks') {
                                 defaultMessage = //#. Error message if task import failed
                                     gt('There was no task data to import');
                             }
@@ -246,8 +247,9 @@ define('io.ox/core/import/import', [
 
                         // get failed records
                         var failed = _.filter(data, function (item) {
-                            return item && item.error;
-                        });
+                                return item && item.error;
+                            }),
+                            custom;
 
                         // cache
                         try {
@@ -272,11 +274,11 @@ define('io.ox/core/import/import', [
                         } else if (data.length === failed.length) {
                             // failed
                             // #. Failure message if no data (e.g. appointments) could be imported
-                            var custom = { error: gt('Failed to import any data') };
+                            custom = { error: gt('Failed to import any data') };
                             failHandler([].concat(custom, failed));
                         } else {
                             // partially failed
-                            var custom = { error: gt('Data only partially imported (%1$s of %2$s records)', (data.length - failed.length), data.length) };
+                            custom = { error: gt('Data only partially imported (%1$s of %2$s records)', (data.length - failed.length), data.length) };
                             failHandler([].concat(custom, failed));
                         }
 

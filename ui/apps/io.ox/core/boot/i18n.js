@@ -19,6 +19,7 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
 
     // A list of all strings to be included in the POT file.
     /* jshint unused: false */
+    /* eslint-disable no-unused-vars */
     function list() {
         gt('User name');
         gt('Password');
@@ -48,4 +49,5 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
         gt('Offline mode');
         gt('Your browser\'s cookie functionality is disabled. Please turn it on.');
     }
+    /* eslint-disable no-unused-vars */
 });

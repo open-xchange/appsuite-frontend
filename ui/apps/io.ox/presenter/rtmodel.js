@@ -75,14 +75,12 @@ define('io.ox/presenter/rtmodel', [
 
             result.participants = _.filter(data.activeUsers, function (user) {
                 return ((user.joined && (user.active || (!user.active && user.durationOfInactivity < 30))) || (user.userId === data.presenterId));
-            }, this );
+            }, this);
 
             return result;
         },
 
         initialize: function () {
-            //console.info('Presenter - RTModel.initialize()');
-
             this.on('change', function (model) {
                 console.log('Presenter - RTModel - change', model);
             });
@@ -110,6 +108,35 @@ define('io.ox/presenter/rtmodel', [
          */
         isPresenter: function (userId) {
             return (userId === this.get('presenterId'));
+        },
+
+        /**
+         * Returns true if the passed user id belongs to the former presenter.
+         * Which means the given user started and ended the presentation again. And the presentation has not yet been started.
+         * - Intended to be called after a Backbone model change event (otherwise the result may not be valid).
+         *
+         * @param {String} userId
+         *  The user id to check.
+         *
+         * @returns {Boolean}
+         *  Whether the user was the presenter.
+         */
+        wasPresenter: function (userId) {
+            var formerPresenter = this.previous('presenterId');
+            return (!this.hasPresenter() && !_.isEmpty(formerPresenter) && userId === formerPresenter);
+        },
+
+        /**
+         * Returns true if the passed user id belongs to the presenter and the presentation is running.
+         *
+         * @param {String} userId
+         *  The user id to check.
+         *
+         * @returns {Boolean}
+         *  Whether the user is currently presenting.
+         */
+        isPresenting: function (userId) {
+            return (!this.isPaused() && this.isPresenter(userId));
         },
 
         /**
@@ -158,9 +185,6 @@ define('io.ox/presenter/rtmodel', [
 
         /**
          * Returns the real-time user object for the provided user id.
-         *
-         * activeUsers participants
-         * An array of objects representing a
          *
          * @param {String} userId
          *  The user id to look for.
@@ -216,6 +240,17 @@ define('io.ox/presenter/rtmodel', [
          */
         canShowThumbnails: function (userId) {
             return (!this.isJoined(userId) || (this.isPresenter(userId) && this.isPaused()));
+        },
+
+        /**
+         * Returns true if the pause overlay can be displayed for the provided user.
+         * Which means the user must be joined and the presentation must be paused.
+         *
+         * @param {String} userId
+         *  The user id to check.
+         */
+        canShowPauseOverlay: function (userId) {
+            return (this.isPaused() && !this.isPresenter(userId) && this.isJoined(userId));
         }
 
     });

@@ -30,6 +30,23 @@ define('io.ox/find/main', [
             ];
             //toString
             return _.compact(parts).join(':');
+        },
+        // helper object to manage listviews 'empty' message
+        messageEmpty = {
+            original: $(),
+            set: function (parent) {
+                var original = parent.listView.$el.find('.message-empty-container');
+                messageEmpty.original = original.clone();
+                // ensure that node is visible
+                original.removeClass('hidden')
+                    // custom message
+                    .find('.message-empty')
+                    .text(gt('No matching items found.'));
+            },
+            restore: function (parent) {
+                // force to use default 'empty' message again (listView.messageEmpty)
+                parent.listView.$el.find('.message-empty-container').replaceWith(messageEmpty.original);
+            }
         };
 
     // multi instance pattern
@@ -79,8 +96,10 @@ define('io.ox/find/main', [
                     'io.ox/office/text': 'io.ox/files',
                     'io.ox/office/portal': 'io.ox/files',
                     'io.ox/office/spreadsheet': 'io.ox/files',
+                    'io.ox/office/presentation': 'io.ox/files',
                     'io.ox/office/portal/text': 'io.ox/files',
                     'io.ox/office/portal/spreadsheet': 'io.ox/files',
+                    'io.ox/office/portal/presentation': 'io.ox/files',
                     'io.ox/portal': standard,
                     'io.ox/settings': standard
                 });
@@ -95,14 +114,14 @@ define('io.ox/find/main', [
             /**
              * Mode: inplace
              */
-            'window-inplace': function  (app) {
+            'window-inplace': function (app) {
                 if (!app.get('inplace')) return;
 
                 // use 'parent' window
                 app.set('window', app.get('parent').getWindow());
             },
 
-            'state': function  (app) {
+            'state': function (app) {
                 if (!app.get('inplace')) return;
 
                 var parent = app.get('parent');
@@ -125,7 +144,7 @@ define('io.ox/find/main', [
             'enable-disable-toggle': function (app) {
                 if (!app.get('inplace')) return;
                 // disable search field for unsupported folders
-                app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.toggle);
+                app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.updateState);
             },
 
             'vgrid': function (app) {
@@ -149,7 +168,7 @@ define('io.ox/find/main', [
                 // search: list request
                 // forward ids (no explicit all/list request in find/search api)
                 grid.setListRequest('search', function (ids) {
-                    var args = [ ids ];
+                    var args = [ids];
                     return $.Deferred().resolveWith(app, args);
                 });
 
@@ -172,7 +191,7 @@ define('io.ox/find/main', [
                     if (state !== 'launched') return;
                     // check for listview
                     var parent = app.get('parent');
-                    if (!app.get('parent').listView) return;
+                    if (!parent.listView) return;
 
                     require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                         var manager = app.view.model.manager,
@@ -182,35 +201,54 @@ define('io.ox/find/main', [
 
                         // define collection loader for search results
                         var collectionLoader = new CollectionLoader({
-                                module: app.getModuleParam(),
-                                mode: 'search',
-                                LIMIT: defaultLoader.LIMIT,
-                                fetch: function (params) {
-                                    var self = this,
-                                        limit = params.limit.split(','),
-                                        start = parseInt(limit[0]),
-                                        size = parseInt(limit[1]) - start;
+                            module: app.getModuleParam(),
+                            mode: 'search',
+                            PRIMARY_PAGE_SIZE: defaultLoader.PRIMARY_PAGE_SIZE,
+                            SECONDARY_PAGE_SIZE: defaultLoader.SECONDARY_PAGE_SIZE,
+                            isBad: $.noop,
+                            fetch: function (p) {
+                                var self = this,
+                                    limit = p.limit.split(','),
+                                    start = parseInt(limit[0], 10),
+                                    size = parseInt(limit[1], 10) - start;
 
-                                    app.model.set({
-                                        'start': start,
-                                        'size': size,
-                                        'extra': 1
-                                    }, { silent: true });
+                                app.model.set({
+                                    'start': start,
+                                    'size': size,
+                                    'extra': 1
+                                }, { silent: true });
 
-                                    var params = { sort: app.props.get('sort'), order: app.props.get('order') };
-                                    return app.getSearchResult(params, true).then(function (response) {
-                                        response = response || {};
-                                        var list = response.results || [],
-                                            request = response.request || {};
-                                        // add 'more results' info to collection (compare request limits and result)
-                                        self.collection.search = {
-                                            next: list.length !== 0 && list.length === request.data.size
-                                        };
-                                        return list;
+                                var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+                                return app.getSearchResult(params, true).then(function (response) {
+                                    response = response || {};
+                                    var list = response.results || [],
+                                        request = response.request || {};
+                                    // add 'more results' info to collection (compare request limits and result)
+                                    self.collection.search = {
+                                        next: list.length !== 0 && list.length === request.data.size
+                                    };
+
+                                    if (!list.length) return list;
+
+                                    var item = list[0];
+                                    // irrelevant (not original folder property/value)
+                                    if (!item.original_folder_id) return list;
+                                    // already correct (folder id and original folder id matches)
+                                    if (item.original_folder_id === item.folder_id) return list;
+
+                                    // special: use original ids to allow proper propagation of changes (bug 41209)
+                                    list.forEach(function (obj) {
+                                        _.extend(obj, {
+                                            id: obj.original_id || obj.id,
+                                            folder_id: obj.original_folder_id || obj.folder_id
+                                        });
                                     });
-                                },
-                                cid: searchcid
-                            });
+
+                                    return list;
+                                });
+                            },
+                            cid: searchcid
+                        });
                         // collection cache used: trigger event ususally trigger by apiproxy
                         parent.listView.on('collection:cache', function () {
                             if (this.loader.mode === 'search') {
@@ -219,20 +257,22 @@ define('io.ox/find/main', [
                         });
                         app.trigger('collectionLoader:created', collectionLoader);
                         var register = function () {
-                                var view = app.view.model,
-                                    // remember original setCollection
-                                    setCollection = parent.listView.setCollection;
-                                // hide sort options
-                                parent.listControl.$el.find('.grid-options:first').hide();
-                                parent.listView.connect(collectionLoader);
-                                mode = 'search';
-                                // wrap setCollection
-                                parent.listView.setCollection = function (collection) {
-                                    view.stopListening();
-                                    view.listenTo(collection, 'add reset remove', app.trigger.bind(view, 'find:query:result', collection));
-                                    return setCollection.apply(this, arguments);
-                                };
+                            var view = app.view.model,
+                                // remember original setCollection
+                                setCollection = parent.listView.setCollection;
+                            // hide sort options
+                            parent.listControl.$el.find('.grid-options:first').hide();
+                            parent.listView.connect(collectionLoader);
+                            mode = 'search';
+                            // activate/adjust 'empty' message
+                            messageEmpty.set(parent);
+                            // wrap setCollection
+                            parent.listView.setCollection = function (collection) {
+                                view.stopListening();
+                                view.listenTo(collection, 'add reset remove', app.trigger.bind(view, 'find:query:result', collection));
+                                return setCollection.apply(this, arguments);
                             };
+                        };
 
                         // events
                         app.on({
@@ -240,6 +280,8 @@ define('io.ox/find/main', [
                                 if (mode === 'search') {
                                     // show sort options
                                     parent.listControl.$el.find('.grid-options:first').show();
+                                    // restore old 'empty' message
+                                    messageEmpty.restore(parent);
                                     // reset collection loader
                                     parent.listView.connect(defaultLoader);
                                     parent.listView.load();
@@ -268,7 +310,7 @@ define('io.ox/find/main', [
             /**
              * Mode: standalone
              */
-            'window-standalone': function  (app) {
+            'window-standalone': function (app) {
                 if (app.get('inplace')) return;
 
                 var win;
@@ -303,10 +345,10 @@ define('io.ox/find/main', [
             if (this.view) this.view.cancel();
         };
 
-        app.toggle = function (folderid) {
+        app.updateState = function (folderid) {
             var notWhitelisted = !FOLDERWHITELIST[folderid];
             // is folder unsupported?
-            app.trigger( folderAPI.isVirtual(folderid) && notWhitelisted ? 'view:disable' : 'view:enable');
+            app.trigger(folderAPI.isVirtual(folderid) && notWhitelisted ? 'view:disable' : 'view:enable');
         };
 
         // parent app id
@@ -333,7 +375,7 @@ define('io.ox/find/main', [
         };
 
         // register event listeners
-        function register () {
+        function register() {
             var model = app.model,
                 manager = model.manager;
 
@@ -343,16 +385,15 @@ define('io.ox/find/main', [
              */
             app.listenTo(manager, {
                 'active': _.debounce(function (count) {
-                        // ignore folder facet not combined with another facet
-                        if (app.model.manager.isFolderOnly()) count = 0;
-                        app.trigger(count ? 'find:query' : 'find:idle');
-                    }, 10)
+                    // ignore folder facet not combined with another facet
+                    if (app.model.manager.isFolderOnly()) count = 0;
+                    app.trigger(count ? 'find:query' : 'find:idle');
+                }, 10)
             });
 
             // TODO: move to ext point (>= 7.8.1)
             app.listenTo(manager, {
                 'change:list-of-actives': _.debounce(function (state, value, model) {
-                    if (app.model.manager.isFolderOnly());
                     require(['io.ox/metrics/main'], function (metrics) {
                         var name = app.get('parent').get('name') || 'unknown',
                             apptitle = _.last(name.split('/')),
@@ -409,6 +450,9 @@ define('io.ox/find/main', [
             // setup
             app.mediate();
             app.placeholder = new PlaceholderView({ app: app });
+            // disable when virtual folder selected
+            var folder = app.get('parent').folder.get();
+            app.updateState(folder);
             // delay launch app (on focus)
             app.listenToOnce(app.placeholder, 'launch', app.launch);
             app.set('state', 'prepared');
@@ -450,7 +494,7 @@ define('io.ox/find/main', [
             });
         };
 
-        function configPreprocess () {
+        function configPreprocess() {
             var parent = app.get('parent');
 
             return $.when(parent.folder.getData(), parent.folder.isDefault())

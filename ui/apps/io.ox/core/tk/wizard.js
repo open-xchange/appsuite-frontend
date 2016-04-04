@@ -32,18 +32,21 @@ define('io.ox/core/tk/wizard', [
 
     var backdrop = $('<div class="wizard-backdrop abs">');
 
-    // special node for fullscreen wizards on smartphone
-    var container = $(
-        '<div class="wizard-container abs">' +
-        '  <div class="wizard-navbar">' +
-        '    <div class="wizard-back"></div>' +
-        '    <div class="wizard-title"></div>' +
-        '    <div class="wizard-next"></div>' +
-        '  </div>' +
-        '  <div class="wizard-pages"></div>' +
-        '  <div class="wizard-animation"></div>' +
-        '</div>'
-    );
+    var container = _.device('smartphone') ?
+        // special node for fullscreen wizards on smartphone
+        $(
+            '<div class="wizard-container abs">' +
+            '  <div class="wizard-navbar">' +
+            '    <div class="wizard-back"></div>' +
+            '    <div class="wizard-title"></div>' +
+            '    <div class="wizard-next"></div>' +
+            '  </div>' +
+            '  <div class="wizard-pages"></div>' +
+            '  <div class="wizard-animation"></div>' +
+            '</div>'
+        ) :
+        // simple container on desktop for flex layout
+        $('<div class="wizard-container abs">');
 
     function getBounds(elem) {
         var o = elem.offset();
@@ -91,10 +94,13 @@ define('io.ox/core/tk/wizard', [
 
     function Wizard(options) {
 
-        this.options = options || {};
+        this.options = options || {};
         this.currentStep = 0;
         this.steps = [];
         this.closed = false;
+
+        // ensure model
+        this.options.model = this.options.model || new Backbone.Model();
 
         // add event hub
         _.extend(this, Backbone.Events);
@@ -118,6 +124,7 @@ define('io.ox/core/tk/wizard', [
             $('.wizard-step:visible').focus();
         });
 
+        this.container = container.clone();
         if (_.device('smartphone')) initalizeSmartphoneSupport.call(this);
     }
 
@@ -146,10 +153,22 @@ define('io.ox/core/tk/wizard', [
             this.trigger('change:step');
         },
 
+        get: function (num) {
+            return this.steps[num];
+        },
+
+        getContainer: function () {
+            return this.container;
+        },
+
         shift: function (num) {
             this.withCurrentStep(function (step) {
                 step.hide();
             });
+            if (this.isInvalidShift(num)) {
+                this.trigger('skip:step');
+                return this.shift(num < 0 ? num - 1 : num + 1);
+            }
             this.setCurrentStep(this.currentStep + num);
             this.withCurrentStep(function (step) {
                 step.show();
@@ -184,7 +203,7 @@ define('io.ox/core/tk/wizard', [
             _(this.steps).each(function (step) {
                 step.dispose();
             });
-            if (_.device('smartphone')) this.container.remove().empty();
+            this.container.remove().empty();
             // unregister / clean up
             $(document).off('click.wizard');
             this.steps = [];
@@ -196,8 +215,17 @@ define('io.ox/core/tk/wizard', [
             return this;
         },
 
-        start: function () {
+        isInvalidShift: function (num) {
+            // corresponding step value already set
+            var index = this.currentStep + (num || 0),
+                step = this.get(index);
+            if (!step) return false;
+            // last on is always valid
+            if (index === this.steps.length - 1) return false;
+            return step.hasValue();
+        },
 
+        start: function () {
             if (_.device('smartphone')) {
                 this.trigger('before:start');
                 _(this.steps).invoke('show');
@@ -207,17 +235,21 @@ define('io.ox/core/tk/wizard', [
                 });
                 this.trigger('start');
             } else {
-                this.withCurrentStep(function (step) {
-                    this.trigger('before:start');
-                    step.show();
-                    this.trigger('start');
-                });
+                this.trigger('before:start');
+                this.container.appendTo('body');
+                this.showFirst();
+                this.trigger('start');
             }
 
             // for debugging
             window.wizard = this;
 
             return this;
+        },
+
+        showFirst: function () {
+            this.currentStep = 0;
+            this.shift(0);
         },
 
         spotlight: function (selector) {
@@ -276,6 +308,7 @@ define('io.ox/core/tk/wizard', [
         onAction: function (e) {
             e.preventDefault();
             var action = $(e.currentTarget).attr('data-action');
+            e.stopImmediatePropagation();
             this.trigger(action);
         },
 
@@ -298,11 +331,12 @@ define('io.ox/core/tk/wizard', [
         onKeyUp: function (e) {
             switch (e.which) {
                 // check if "close" button exists
-                case 27: if (this.$('.close').length) this.trigger('close'); break;
-                // check if "back" button is enabled
-                case 37: if (!this.$('[data-action="back"]').prop('disabled')) this.trigger('back'); break;
-                // check if "next" button is enabled
-                case 39: if (!this.$('[data-action="next"]').prop('disabled')) this.trigger('next'); break;
+                case 27: if (this.$('.wizard-close').length) this.trigger('close'); break;
+                // check if "back" button is enabled and available
+                case 37: if (this.$('[data-action="back"]:enabled').length) this.trigger('back'); break;
+                // check if "next" button is enabled and available
+                case 39: if (this.$('[data-action="next"]:enabled').length) this.trigger('next'); break;
+                // no default
             }
         },
 
@@ -311,6 +345,7 @@ define('io.ox/core/tk/wizard', [
             this.parent = parent;
 
             this.options = _.extend({
+                id: undefined,
                 // general
                 modal: true,
                 focusWatcher: true,
@@ -320,29 +355,60 @@ define('io.ox/core/tk/wizard', [
                 enableBack: true,
                 labelBack: gt('Back'),
                 //#. finish the tour
-                labelDone: gt.pgettext('tour', 'Finish')
+                labelDone: gt.pgettext('tour', 'Finish'),
+                // attribues
+                attributes: {}
+
             }, options);
 
             // forward events
             this.on('all', function (type) {
-                this.parent.trigger('step:' + type);
+                this.parent.trigger('step:' + type, this.parent.currentStep);
             });
+
+            // custom css
+            _(['width', 'minWidth']).each(function (type) {
+                if (this.options[type]) this.$el.css(type, this.options[type]);
+            }, this);
 
             // navbar needs an update for every change
             // only once for normal popups
             if (!_.device('smartphone')) this.once('before:show', this.renderButtons);
 
+            // custom attributes
+            this.$el.attr(this.options.attributes);
+
             this.render();
         },
 
         // append to title element
-        title: append('.title'),
+        title: append('.wizard-title'),
 
         // append to content element
-        content: append('.content'),
+        content: append('.wizard-content'),
 
         // append to footer element
-        footer: append('.footer'),
+        footer: append('.wizard-footer'),
+
+        getModel: function () {
+            return this.parent.options.model;
+        },
+
+        getId: function () {
+            return this.options.id;
+        },
+
+        setValue: function (value) {
+            return this.getModel.set(this.getId(), value);
+        },
+
+        getValue: function () {
+            return this.getModel().get(this.getId());
+        },
+
+        hasValue: function () {
+            return this.getValue() !== undefined;
+        },
 
         // render scaffold
         render: function () {
@@ -353,15 +419,15 @@ define('io.ox/core/tk/wizard', [
                 'aria-labelledby': 'dialog-title'
             })
             .append(
-                $('<div class="header">').append(
-                    $('<button class="close pull-right" tabindex="1" data-action="close">').append(
+                $('<div class="wizard-header">').append(
+                    $('<button class="wizard-close close pull-right" tabindex="1" data-action="close">').append(
                         $('<span aria-hidden="true">&times;</span>'),
                         $('<span class="sr-only">').text(gt('Close'))
                     ),
-                    $('<h4 class="title" id="dialog-title">')
+                    $('<h4 class="wizard-title" id="dialog-title">')
                 ),
-                $('<div class="content" id="dialog-content">'),
-                $('<div class="footer">')
+                $('<div class="wizard-content" id="dialog-content">'),
+                $('<div class="wizard-footer">')
             );
             return this;
         },
@@ -371,7 +437,7 @@ define('io.ox/core/tk/wizard', [
         renderButtons: function () {
 
             var dir = this.getDirections(),
-                footer = this.$('.footer').empty();
+                footer = this.$('.wizard-footer').empty();
 
             // show "Back" button
             if (dir.back) this.addButton(footer, { action: 'back', className: 'btn-default', label: this.getLabelBack() });
@@ -422,14 +488,14 @@ define('io.ox/core/tk/wizard', [
             return {
                 back: this.options.back && this.parent.hasBack(),
                 next: this.options.next && this.parent.hasNext(),
-                done: this.isLast()
+                done: this.options.next && this.isLast()
             };
         },
 
         // define that this step is mandatory
         // removes the '.close' icon; escape key no longer works
         mandatory: function () {
-            this.$('.header .close').remove();
+            this.$('.wizard-header .wizard-close').remove();
             return this;
         },
 
@@ -502,7 +568,7 @@ define('io.ox/core/tk/wizard', [
             function cont() {
 
                 // make invisible and add to DOM to allow proper alignment
-                this.$el.addClass('invisible').appendTo('body');
+                this.$el.addClass('invisible').appendTo(this.parent.container);
 
                 // counter-event to "wait"
                 this.trigger('ready');
@@ -720,28 +786,28 @@ define('io.ox/core/tk/wizard', [
 
             // move the popup to the center of the screen
             function alignCenter() {
-                this.$el.addClass('center middle').css({ top: '', right: '', bottom: '', left: '' });
+                $el.addClass('center middle').css({ top: '', right: '', bottom: '', left: '' });
             }
 
             // remove default class and reset all inline positions
-            this.$el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
+            $el.removeClass('center middle').css({ top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' });
 
             // find the best position according to the passed options
             switch ((options && options.position) || 'right') {
-            case 'right':
-                if (!(alignRight() || alignBottom() || alignLeft() || alignTop())) alignCenter();
-                break;
-            case 'left':
-                if (!(alignLeft() || alignBottom() || alignRight() || alignTop())) alignCenter();
-                break;
-            case 'bottom':
-                if (!(alignBottom() || alignTop() || alignRight() || alignLeft())) alignCenter();
-                break;
-            case 'top':
-                if (!(alignTop() || alignBottom() || alignRight() || alignLeft())) alignCenter();
-                break;
-            default:
-                alignCenter();
+                case 'right':
+                    if (!(alignRight() || alignBottom() || alignLeft() || alignTop())) alignCenter();
+                    break;
+                case 'left':
+                    if (!(alignLeft() || alignBottom() || alignRight() || alignTop())) alignCenter();
+                    break;
+                case 'bottom':
+                    if (!(alignBottom() || alignTop() || alignRight() || alignLeft())) alignCenter();
+                    break;
+                case 'top':
+                    if (!(alignTop() || alignBottom() || alignRight() || alignLeft())) alignCenter();
+                    break;
+                default:
+                    alignCenter();
             }
 
             this.trigger('align');
@@ -790,7 +856,6 @@ define('io.ox/core/tk/wizard', [
 
     function initalizeSmartphoneSupport() {
 
-        this.container = container.clone();
         this.container.find('.wizard-title').text(this.options.title || gt('Welcome'));
 
         this.container.on('tap', '[data-action]', { parent: this }, function (e) {
@@ -857,7 +922,9 @@ define('io.ox/core/tk/wizard', [
             touchend: function () {
                 if (!moved) return;
                 var pct = x / width * 100;
+                /*eslint-disable no-nested-ternary */
                 self.shift(pct < 0 ? (pct > -50 ? 0 : +1) : (pct < +50 ? 0 : -1));
+                /*eslint-enable no-nested-ternary */
             }
         });
     }

@@ -230,12 +230,12 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         });
     }
 
-    that =  {
+    that = {
         id: 'indexeddb',
         index: 100,
         getInstance: function (id) {
             if (!instances[id]) {
-                return instances[id] = new IndexeddbStorage(id);
+                return (instances[id] = new IndexeddbStorage(id));
             }
             return instances[id];
         },
@@ -285,10 +285,10 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     function ITER(request) {
 
         var callbacks = {
-            step: [],
-            end: [],
-            fail: []
-        }, failed = false, ended = false;
+                step: [],
+                end: [],
+                fail: []
+            }, failed = false, ended = false;
 
         request.onerror = function (event) {
             if (!failed && !ended) {
@@ -366,7 +366,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     // Open the Meta-Database
     try {
 
-        var opened = window.indexedDB.open('appsuite.cache.metadata', SCHEMA);
+        opened = window.indexedDB.open('appsuite.cache.metadata', SCHEMA);
 
         opened.onupgradeneeded = function (e) {
             // Set up object stores

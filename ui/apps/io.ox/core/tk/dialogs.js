@@ -140,7 +140,7 @@ define('io.ox/core/tk/dialogs', [
                     .find('input, select, button')
                     .add(
                         nodes.body
-                            .css('opacity','')
+                            .css('opacity', '')
                             .find('input, select, button, textarea')
                     )
                     .each(function (key, val) {
@@ -179,45 +179,45 @@ define('io.ox/core/tk/dialogs', [
                 var items, focus, index;
 
                 switch (e.which || e.keyCode) {
-                case 27:
-                    // ESC
-                    if (!isBusy && self.getBody().find('.open > .dropdown-menu').length === 0) {
-                        // prevent other elements to trigger close
-                        e.stopPropagation();
-                        if (o.easyOut) invoke('cancel');
-                    }
-                    break;
-                case 13:
-                    // Enter
-                    if (!isBusy && $(e.target).is('input:text, input:password')) {
-                        if (!o.enter) return false;
-                        if (_.isFunction(o.enter)) return o.enter.call(self);
-                        invoke(o.enter);
-                        return false;
-                    }
-                    break;
-                case 9:
-                    // tab
-                    if (o.tabTrap) {
-                        // get items first
-                        items = $(this).find('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible');
-                        if (items.length) {
-                            e.preventDefault();
-                            focus = $(document.activeElement);
-                            index = (items.index(focus) >= 0) ? items.index(focus) : 0;
-                            index += (e.shiftKey) ? -1 : 1;
-
-                            if (index >= items.length) {
-                                index = 0;
-                            } else if (index < 0) {
-                                index = items.length - 1;
-                            }
-                            items.eq(index).focus();
+                    case 27:
+                        // ESC
+                        if (!isBusy && self.getBody().find('.open > .dropdown-menu').length === 0) {
+                            // prevent other elements to trigger close
+                            e.stopPropagation();
+                            if (o.easyOut) invoke('cancel');
                         }
-                    }
-                    break;
-                default:
-                    break;
+                        break;
+                    case 13:
+                        // Enter
+                        if (!isBusy && $(e.target).is('input:text, input:password')) {
+                            if (!o.enter) return false;
+                            if (_.isFunction(o.enter)) return o.enter.call(self);
+                            invoke(o.enter);
+                            return false;
+                        }
+                        break;
+                    case 9:
+                        // tab
+                        if (o.tabTrap) {
+                            // get items first
+                            items = $(this).find('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible');
+                            if (items.length) {
+                                e.preventDefault();
+                                focus = $(document.activeElement);
+                                index = (items.index(focus) >= 0) ? items.index(focus) : 0;
+                                index += (e.shiftKey) ? -1 : 1;
+
+                                if (index >= items.length) {
+                                    index = 0;
+                                } else if (index < 0) {
+                                    index = items.length - 1;
+                                }
+                                items.eq(index).focus();
+                            }
+                        }
+                        break;
+                    default:
+                        break;
                 }
             };
         // pass options to ext point
@@ -251,9 +251,9 @@ define('io.ox/core/tk/dialogs', [
                 var overSize = docHeight - neededHeight,
                     heightVal = bodyHeight + overSize;
                 if (heightVal >= cellHeight) {
-                    self.getBody().css('height', heightVal +'px');
+                    self.getBody().css('height', heightVal + 'px');
                 } else {
-                    self.getBody().css('height', cellHeight +'px');
+                    self.getBody().css('height', cellHeight + 'px');
                 }
             }
         };
@@ -564,7 +564,7 @@ define('io.ox/core/tk/dialogs', [
             return this;
         };
 
-        this.setUnderlayStyle =  function (css) {
+        this.setUnderlayStyle = function (css) {
             nodes.underlay.css(css || {});
             return this;
         };
@@ -588,7 +588,8 @@ define('io.ox/core/tk/dialogs', [
     // global click handler to properly close side-popups
     $(document).on('click', function (e) {
 
-        var popups = $('.io-ox-sidepopup'), target = $(e.target);
+        var popups, target = $(e.target);
+
         if (target.hasClass('apptitle')) {
             popups = $('.io-ox-sidepopup:not(.preserve-on-appchange)');
         } else {
@@ -623,7 +624,6 @@ define('io.ox/core/tk/dialogs', [
 
         var open,
             close,
-            closeAll,
             // for example: The view within this SidePopup closes itself
             closeByEvent,
             previousProp,
@@ -632,7 +632,7 @@ define('io.ox/core/tk/dialogs', [
 
             overlay,
 
-            pane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="1">'),
+            sidepopuppane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="1">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
                     $('<a href="#" class="close" data-action="close" role="button" tabindex="1">').append(
@@ -640,7 +640,7 @@ define('io.ox/core/tk/dialogs', [
                     )
                 ),
 
-            popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, pane),
+            popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, sidepopuppane),
 
             arrow = options.arrow === false ? $() :
                 $('<div class="io-ox-sidepopup-arrow">').append(
@@ -673,7 +673,7 @@ define('io.ox/core/tk/dialogs', [
                 }
             },
 
-            pane = pane.scrollable();
+            pane = sidepopuppane.scrollable();
 
         // add event hub
         Events.extend(this);
@@ -746,9 +746,10 @@ define('io.ox/core/tk/dialogs', [
             }
         };
 
-        closeAll = function (e) {
-            e.data.target.find('.io-ox-sidepopup').trigger('close');
-        };
+        // TODO: unused
+        // closeAll = function (e) {
+        //     e.data.target.find('.io-ox-sidepopup').trigger('close');
+        // };
 
         popup.on('close', close);
 

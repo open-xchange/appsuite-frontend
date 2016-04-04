@@ -72,7 +72,7 @@ define(['io.ox/files/legacy_api',
             });
         };
 
-    describe('files API (legacy)', function () {
+    describe('Files API (legacy)', function () {
         //tracker
         describe('has a tracker', function () {
             var tracker = api.tracker;

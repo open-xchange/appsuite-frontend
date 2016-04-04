@@ -15,10 +15,11 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/extensions',
     'io.ox/core/folder/actions/common',
     'io.ox/core/folder/api',
+    'io.ox/core/api/account',
     'io.ox/core/capabilities',
     'io.ox/core/api/filestorage',
     'gettext!io.ox/core'
-], function (ext, actions, api, capabilities, filestorage, gt) {
+], function (ext, actions, api, account, capabilities, filestorage, gt) {
 
     'use strict';
 
@@ -95,10 +96,10 @@ define('io.ox/core/folder/contextmenu', [
                 self.$el.append(
                     $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
                     .addClass('color-label-' + colorNumber)
-                    .addClass(folderColor == colorNumber ? 'active' : '')
+                    .addClass(folderColor === colorNumber ? 'active' : '')
                     .attr({
                         'data-index': colorNumber,
-                        'aria-checked': folderColor == colorNumber,
+                        'aria-checked': folderColor === colorNumber,
                         'aria-label': util.getColorLabel(colorNumber)
                     })
                     .append('<i class="fa fa-check">')
@@ -134,16 +135,14 @@ define('io.ox/core/folder/contextmenu', [
         // Move all messages to a target folder ...
         //
         moveAllMessages: function (baton) {
-            // disabled until API ready
-            if (true || baton.module !== 'mail') return;
+
+            if (baton.module !== 'mail') return;
 
             addLink(this, {
                 action: 'move-all-messages',
-                data: { folder: baton.data.id, app: baton.app },
+                data: { id: baton.data.id },
                 enabled: true,
-                handler: function () {
-                    alert('Available once we get the proper API action');
-                },
+                handler: actions.moveAll.bind(actions, baton.data.id),
                 text: gt('Move all messages')
             });
         },
@@ -159,7 +158,7 @@ define('io.ox/core/folder/contextmenu', [
                 action: 'expunge',
                 data: { folder: baton.data.id },
                 enabled: api.can('delete', baton.data),
-                handler: actions.expungeFolder,
+                handler: actions.expunge.bind(actions, baton.data.id),
                 text: gt('Clean up')
             });
         },
@@ -180,9 +179,13 @@ define('io.ox/core/folder/contextmenu', [
                 if (baton.module !== 'mail') return;
                 if (!capabilities.has('archive_emails')) return;
 
+                // is in a subfolder of archive?
+                var id = baton.data.id;
+                if (account.is('archive', id)) return;
+
                 addLink(this, {
                     action: 'archive',
-                    data: { id: baton.data.id },
+                    data: { id: id },
                     enabled: api.can('delete', baton.data),
                     handler: handler,
                     //#. Verb: (to) archive messages
@@ -197,14 +200,19 @@ define('io.ox/core/folder/contextmenu', [
         //
         empty: function (baton) {
 
-            if (baton.module !== 'mail' && baton.module !== 'infostore' || (baton.module === 'infostore' && !api.is('trash', baton.data))) return;
+            var isTrash = api.is('trash', baton.data);
+            var label = gt('Empty folder');
+            if (baton.module !== 'mail' && baton.module !== 'infostore' || (baton.module === 'infostore' && !isTrash)) return;
+
+            if (isTrash) label = gt('Empty trash');
+            else if (baton.module === 'mail') label = gt('Delete all messages');
 
             addLink(this, {
                 action: 'clearfolder',
-                data: { id: baton.data.id, module: baton.module },
+                data: { id: baton.data.id },
                 enabled: api.can('delete', baton.data),
-                handler: actions.clearFolder,
-                text: gt('Empty folder')
+                handler: actions.clearFolder.bind(actions, baton.data.id),
+                text: label
             });
         },
 
@@ -433,18 +441,18 @@ define('io.ox/core/folder/contextmenu', [
                 var id = String(baton.data.id),
                     model = api.pool.getModel(id);
 
-                var supportsPermissions = capabilities.has('gab') && !capabilities.has('alone'),
-                    supportsInvite = capabilities.has('invite_guests'),
+                var supportsInternal = model.supportsInternalSharing(),
+                    supportsInvite = model.supportsInviteGuests(),
                     supportsLinks = capabilities.has('share_links'),
                     showInvitePeople = supportsInvite && model.supportsShares(),
                     showGetLink = supportsLinks && !model.is('mail') && model.isShareable(id);
 
                 // stop if neither invites or links are supported
-                if (!supportsPermissions && !showInvitePeople && !showGetLink) return;
+                if (!supportsInternal && !showInvitePeople && !showGetLink) return;
 
                 header.call(this, gt('Sharing'));
 
-                if (supportsPermissions || showInvitePeople) {
+                if (supportsInternal || showInvitePeople) {
                     addLink(this, {
                         action: 'invite',
                         data: { app: baton.app, id: id },
@@ -482,7 +490,7 @@ define('io.ox/core/folder/contextmenu', [
 
             return function (baton) {
 
-                if (!api.can('subscribe', baton.data || api.is('trash', baton.data))) return;
+                if (!api.can('subscribe', baton.data) || api.is('trash', baton.data)) return;
 
                 var tempLink, node, self = this;
 

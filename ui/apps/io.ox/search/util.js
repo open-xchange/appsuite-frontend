@@ -52,9 +52,10 @@ define('io.ox/search/util', [
                     'data-original-title': title
                 })
                 .tooltip()
-                .on('click', function () {
-                    if (node.tooltip)
+                .on('click', function () {
+                    if (node.tooltip) {
                         node.tooltip('hide');
+                    }
                 });
             }
             return node;
@@ -165,7 +166,7 @@ define('io.ox/search/util', [
 
             defaultfolder = (folderAPI.getDefaultFolder(module) || '').toString();
 
-            function cont (type, data) {
+            function cont(type, data) {
                 var types = {
                     'all': def.resolve.bind(this, {}),
                     'selected': def.resolve.bind(this, {
@@ -193,12 +194,10 @@ define('io.ox/search/util', [
                         } else {
                             cont('selected', data);
                         }
+                    } else if (isVirtual) {
+                        cont('invalid', data);
                     } else {
-                        if (isVirtual) {
-                            cont('invalid', data);
-                        } else {
-                            cont('selected', data);
-                        }
+                        cont('selected', data);
                     }
                 });
 

@@ -28,7 +28,7 @@ define('io.ox/search/main', [
         id: 'default',
         config: function (data) {
             // used only for search app
-            data.defaultApp =  settings.get('search/default', 'io.ox/mail');
+            data.defaultApp = settings.get('search/default', 'io.ox/mail');
         }
     });
 
@@ -53,8 +53,10 @@ define('io.ox/search/main', [
                 'io.ox/office/text': 'io.ox/files',
                 'io.ox/office/portal': 'io.ox/files',
                 'io.ox/office/spreadsheet': 'io.ox/files',
+                'io.ox/office/presentation': 'io.ox/files',
                 'io.ox/office/portal/text': 'io.ox/files',
                 'io.ox/office/portal/spreadsheet': 'io.ox/files',
+                'io.ox/office/portal/presentation': 'io.ox/files',
                 'io.ox/portal': data.defaultApp,
                 'io.ox/search': data.defaultApp,
                 'io.ox/settings': data.defaultApp
@@ -91,9 +93,9 @@ define('io.ox/search/main', [
     //     id: 'flags',
     //     config: function (data) {
     //         // limit active facets to 1
-    //         data.flags = (data.flags || []).concat('singleton');
+    //         data.flags = (data.flags || []).concat('singleton');
     //         // keep input value after selecting facet from dropdown
-    //         data.switches = (data.switches || {});
+    //         data.switches = (data.switches || {});
     //         data.switches.keepinput = true;
     //     }
     // });
@@ -128,8 +130,7 @@ define('io.ox/search/main', [
             closable: true,
             window: win
         }),
-        sidepopup,
-        win, model, run;
+        model, run;
 
     // hide/show topbar search field
     win.on('show', function () {
@@ -143,8 +144,9 @@ define('io.ox/search/main', [
     });
     // ensure launchbar entry
     win.on('show', function () {
-        if (!ox.ui.apps.get(app))
+        if (!ox.ui.apps.get(app)) {
             ox.ui.apps.add(app);
+        }
     });
 
     app.busy = function () {
@@ -261,7 +263,7 @@ define('io.ox/search/main', [
         win.show(function () {
             // detail view sidepopo
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                sidepopup = new dialogs.SidePopup({ tabTrap: true })
+                new dialogs.SidePopup({ tabTrap: true })
                             .delegate(app.view.$el, '.item', openSidePopup);
             });
         });
@@ -284,13 +286,14 @@ define('io.ox/search/main', [
 
         if (app.is('ready')) {
             // not started yet use app callback for inital stuff
-            app.launch.call(app);
+            app.launch();
         } else {
             // reset model and update current app
             model.reset({ silent: true });
             current = ox.ui.App.getCurrentApp().get('name');
-            if (current !== 'io.ox/search')
+            if (current !== 'io.ox/search') {
                 model.set('app', current, { silent: true });
+            }
             // update state
             app.set('state', 'running');
             // reset view
@@ -309,7 +312,7 @@ define('io.ox/search/main', [
         run: run,
 
         getView: function () {
-            return app.view = SearchView.factory.create(app, model);
+            return (app.view = SearchView.factory.create(app, model));
         },
 
         model: model,

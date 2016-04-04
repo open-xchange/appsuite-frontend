@@ -72,16 +72,14 @@ define('io.ox/core/tk/upload', [
                     // IE has no pointer-events: none
                     if (!_.browser.IE) {
                         $actionNode.removeClass('io-ox-dropzone-hover');
-                    } else {
-                        if (!$(e.target).hasClass('dropzone') && !$(e.target).hasClass('dndignore')) {
-                            $actionNode.removeClass('io-ox-dropzone-hover');
-                        }
+                    } else if (!$(e.target).hasClass('dropzone') && !$(e.target).hasClass('dndignore')) {
+                        $actionNode.removeClass('io-ox-dropzone-hover');
                     }
                 },
                 drop: function (e) {
 
                     e = e.originalEvent || e;
-                    var files = e.dataTransfer.files;
+                    var files = e.dataTransfer.files, i;
 
                     // And the pass them on
                     if (highlightedAction) highlightedAction.removeClass('io-ox-dropzone-hover');
@@ -89,7 +87,7 @@ define('io.ox/core/tk/upload', [
                     // Fix for Bug 26235
                     if (_.browser.Chrome && _.browser.Chrome > 21) {
                         var items = e.dataTransfer.items;
-                        for (var i = 0; i < items.length; i++) {
+                        for (i = 0; i < items.length; i++) {
                             var entry = items[i].webkitGetAsEntry();
                             if (entry.isDirectory) {
                                 notifications.yell('error', gt('Uploading folders is not supported.'));
@@ -100,7 +98,7 @@ define('io.ox/core/tk/upload', [
                     }
 
                     if (options.actions[0].id === 'importEML') {
-                        for (var i = 0; i < files.length; i++) {
+                        for (i = 0; i < files.length; i++) {
                             var valid_extensions = /(\.eml)$/i;
                             if (!valid_extensions.test(files[i].name)) {
                                 notifications.yell('error', gt('Mail was not imported. Only .eml files are supported.'));
@@ -110,7 +108,7 @@ define('io.ox/core/tk/upload', [
                         }
                     }
 
-                    for (var i = 0, l = files.length; i < l; i++) {
+                    for (i = 0; i < files.length; i++) {
                         if (options.actions[0].id === 'mailAttachment') {
                             self.trigger('drop', files[i]);
                         } else {
@@ -150,7 +148,9 @@ define('io.ox/core/tk/upload', [
                         effectAllowed;
                     try {
                         effectAllowed = origEvt.dataTransfer.effectAllowed;
-                    } catch (err) {}
+                    } catch (e) {
+                        if (ox.debug) console.error(e);
+                    }
                     origEvt.dataTransfer.dropEffect = effectAllowed === 'move' || effectAllowed === 'linkMove' ? 'move' : 'copy';
 
                     clearTimeout(dragLeaveTimer);
@@ -350,7 +350,8 @@ define('io.ox/core/tk/upload', [
     return {
 
         dnd: {
-            enabled: Modernizr.draganddrop,
+            // was: Modernizr.draganddrop but that test is gone
+            enabled: _.device('!touch'),
             createDropZone: function (options) {
                 options = options || {};
                 if (!this.enabled) {

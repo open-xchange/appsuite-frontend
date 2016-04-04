@@ -93,7 +93,7 @@ define('io.ox/files/share/listview', [
             switch (this.model.get('sort')) {
                 case 'date':
                     this.collection.comparator = function (shareA) {
-                        return desc ? shareA.get('last_modified') : -shareA.get('last_modified');
+                        return desc ? -shareA.get('last_modified') : shareA.get('last_modified');
                     };
                     break;
                 case 'name':
@@ -184,7 +184,7 @@ define('io.ox/files/share/listview', [
                 var model = baton.model,
                     breadcrumb = new BreadcrumbView({
                         folder: model.getFolderID(),
-                        exclude: ['9'],
+                        exclude: ['9'],
                         notail: true,
                         isLast: true
                     });

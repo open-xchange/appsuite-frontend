@@ -156,12 +156,12 @@ define('io.ox/calendar/print', [
 
     function getDate(data) {
         var recurrenceString = util.getRecurrenceString(data),
-            date = util.getDateInterval(data);
+            date = util.getDateTimeIntervalMarkup(data, { output: 'strings' }).dateStr;
         return date + (recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '');
     }
 
     function getTime(data) {
-        return util.getTimeInterval(data);
+        return util.getDateTimeIntervalMarkup(data, { output: 'strings' }).timeStr;
     }
 
     function process(data) {

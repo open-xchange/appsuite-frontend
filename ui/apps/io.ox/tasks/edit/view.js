@@ -38,7 +38,7 @@ define('io.ox/tasks/edit/view', [
                 if (value) {
                     if (!(model.get('start_time')) && model.get('start_time') !== 0) {
                         if (model.get('end_time') !== undefined && model.get('end_time') !== null) {
-                            model.set('start_time',  moment(model.get('end_time')).subtract(1, 'day').valueOf(), { validate: true });
+                            model.set('start_time', moment(model.get('end_time')).subtract(1, 'day').valueOf(), { validate: true });
                         } else {
                             model.set('start_time', _.now(), { validate: true });
                         }
@@ -48,11 +48,20 @@ define('io.ox/tasks/edit/view', [
                     }
                 }
             });
+            // add quota exceeded handler
+            this.model.on('invalid:quota_exceeded', function (messages) {
+                // not during saving to prevent double yells
+                if (!this.saving) {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', messages[0]);
+                    });
+                }
+            });
         },
 
         autoOpen: function (data) {
-            var data = data || this.model.attributes,
-                expandLink = this.$el.find('.expand-link'),
+            data = data || this.model.attributes;
+            var expandLink = this.$el.find('.expand-link'),
                 expandDetailsLink = this.$el.find('.expand-details-link');
             if (expandLink.length === 0 || !this.collapsed) {
                 return;
@@ -149,8 +158,11 @@ define('io.ox/tasks/edit/view', [
             }
             //delegate some events
             self.$el.delegate('.title-field', 'keyup blur', function () {
-                var value = $(this).val();
-                var title = value ? value : (self.model.get('id') ? gt('Edit task') : gt('Create task'));
+                var value = $(this).val(),
+                    title = value;
+                if (!title) {
+                    title = self.model.get('id') ? gt('Edit task') : gt('Create task');
+                }
                 app.setTitle(title);
                 fnToggleSave(value);
             });

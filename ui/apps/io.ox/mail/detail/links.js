@@ -118,7 +118,7 @@ define('io.ox/mail/detail/links', [
 
             var data = parseDeepLink(node.nodeValue),
                 text = ('id' in data ? items[data.app] : folders[data.app]) || gt('Link'),
-                link = $('<a role="button" href="#" target="_blank" class="deep-link btn btn-primary btn-xs" style="font-family: Arial; color: white; text-decoration: none;">')
+                link = $('<a href="#" target="_blank" class="deep-link" role="button">')
                     .attr('href', data.link)
                     .text(text);
 
@@ -182,14 +182,13 @@ define('io.ox/mail/detail/links', [
     // Complex Mail Address: "name" <address>
     //
 
-    var regMailComplex = /^([\s\S]*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>([\s\S]*)$/,
-        regMailComplexMatch = /^([\s\S]*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>([\s\S]*)$/;
+    var regMailComplexMatch = /^([\s\S]*?)(?:&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(?:\s|<br>)+(?:<|&#60;)([^@]+@[^&].*?)(?:>|&#62;)([\s\S]*)$/;
 
     function processComplexMailAddress(node) {
 
         var matches = node.nodeValue.match(regMailComplexMatch);
         if (matches === null || matches.length === 0) return node;
-        var prefix = matches[1], name = matches[4], address = matches[7], suffix = matches[8];
+        var prefix = matches[1], name = matches[2] || matches[3] || matches[4], address = matches[5], suffix = matches[6];
 
         var link = $('<a href="#" class="mailto-link" target="_blank">').attr('href', 'mailto:' + address)
             .data({ address: address, name: name })
@@ -222,17 +221,17 @@ define('io.ox/mail/detail/links', [
         },
 
         'mail-address-complex': {
-            test: function (node) {
+            test: function (node) {
                 // quick check
                 if (node.nodeValue.indexOf('@') === -1) return false;
                 // precise check
-                return regMailComplex.test(node.nodeValue) && $(node).closest('a').length === 0;
+                return regMailComplexMatch.test(node.nodeValue) && $(node).closest('a').length === 0;
             },
             process: processComplexMailAddress
         },
 
         'mail-address': {
-            test: function (node) {
+            test: function (node) {
                 // quick check
                 if (node.nodeValue.indexOf('@') === -1) return false;
                 // precise check
@@ -254,7 +253,7 @@ define('io.ox/mail/detail/links', [
         'long-character-sequences': {
             test: function (node) {
                 var text = node.nodeValue;
-                return text.length >= 30 && /\S{30}/.test(text) && $(node).closest('a').length === 0;
+                return text.length >= 30 && /[\S\u00A0\x20]/.test(text) && $(node).closest('a').length === 0;
             },
             process: function (node) {
                 return { node: node, replacement: $.parseHTML(util.breakableHTML(node.nodeValue)) };

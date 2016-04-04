@@ -37,10 +37,10 @@ define('io.ox/calendar/main', [
 
     // application object
     var app = ox.ui.createApp({
-        name: 'io.ox/calendar',
-        id: 'io.ox/calendar',
-        title: 'Calendar'
-    }), win;
+            name: 'io.ox/calendar',
+            id: 'io.ox/calendar',
+            title: 'Calendar'
+        }), win;
 
     app.mediator({
         /*
@@ -311,6 +311,13 @@ define('io.ox/calendar/main', [
             app.folderView.resize.enable();
         },
 
+        'premium-area': function (app) {
+            commons.addPremiumFeatures(app, {
+                upsellId: 'folderview/calendar/bottom',
+                upsellRequires: 'caldav'
+            });
+        },
+
         'toggle-folder-editmode': function (app) {
 
             if (_.device('!smartphone')) return;
@@ -479,6 +486,49 @@ define('io.ox/calendar/main', [
         },
 
         /*
+         * change to default folder on no permission or folder not found errors
+         */
+        'no-permission': function (app) {
+            // use debounce, so errors from folder and app api are only handled once.
+            var handleError = _.debounce(function (error) {
+                // work with (error) and (event, error) arguments
+                if (error && !error.error) {
+                    if (arguments[1] && arguments[1].error) {
+                        error = arguments[1];
+                    } else {
+                        return;
+                    }
+                }
+                // only change if folder is currently displayed
+                if (error.error_params[0] && String(app.folder.get()) !== String(error.error_params[0])) {
+                    return;
+                }
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                    // try to load the default folder
+                    // guests do not have a default folder, so the first visible one is chosen
+                    app.folder.setDefault();
+                });
+            }, 300);
+
+            folderAPI.on('error:FLD-0008', handleError);
+            api.on('error:FLD-0008', handleError);
+            api.on('error:APP-0013', function (e, error) {
+                // check if folder is currently displayed
+                if (String(app.folder.get()) !== String(error.error_params[0])) {
+                    return;
+                }
+                // see if we can still access the folder, although we are not allowed to view the contents
+                // this is important because otherwise we would not be able to change permissions (because the view jumps to the default folder all the time)
+                folderAPI.get(app.folder.get(), { cache: false }).fail(function (error) {
+                    if (error.code === 'FLD-0003') {
+                        handleError(error);
+                    }
+                });
+            });
+        },
+
+        /*
          * Handle page change on delete on mobiles
          */
         'delete-mobile': function (app) {
@@ -492,7 +542,7 @@ define('io.ox/calendar/main', [
 
         'inplace-find': function (app) {
 
-            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
 
             app.searchable();
 
@@ -500,32 +550,35 @@ define('io.ox/calendar/main', [
                 SEARCH_PERSPECTIVE = 'list',
                 find = app.get('find');
             // additional handler: switch to list perspective (and back)
-            find.on({
-                'find:query': function () {
-                    // hide sort options
-                    app.grid.getToolbar().find('.grid-options:first').hide();
-                    // switch to supported perspective
-                    lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
-                    if (lastPerspective !== SEARCH_PERSPECTIVE) {
-                        // fluent option: do not write to user settings
-                        app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
-                        // cancel search when user changes view
-                        app.props.on('change', find.cancel);
+            if (find) {
+                find.on({
+                    'find:query': function () {
+                        // hide sort options
+                        app.grid.getToolbar().find('.grid-options:first').hide();
+                        // switch to supported perspective
+                        lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
+                        if (lastPerspective !== SEARCH_PERSPECTIVE) {
+                            // fluent option: do not write to user settings
+                            app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
+                            // cancel search when user changes view
+                            app.props.on('change', find.cancel);
+                        }
+                    },
+                    'find:cancel': function () {
+                        // switch back to perspective used before
+                        var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
+                        if (lastPerspective && lastPerspective !== currentPerspective) {
+                            app.props.set('layout', lastPerspective);
+                        }
+                        // show sort options again
+                        app.grid.getToolbar().find('.grid-options:first').show();
+                        // disable
+                        app.props.off('change', find.cancel);
+                        // reset
+                        lastPerspective = undefined;
                     }
-                },
-                'find:cancel': function () {
-                    // switch back to perspective used before
-                    var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
-                    if (lastPerspective && lastPerspective !== currentPerspective)
-                        app.props.set('layout', lastPerspective);
-                    // show sort options again
-                    app.grid.getToolbar().find('.grid-options:first').show();
-                    // disable
-                    app.props.off('change', find.cancel);
-                    // reset
-                    lastPerspective = undefined;
-                }
-            });
+                });
+            }
         },
 
         /*
@@ -715,25 +768,43 @@ define('io.ox/calendar/main', [
         win.addClass('io-ox-calendar-main');
 
         // go!
-        commons.addFolderSupport(app, null, 'calendar', options.folder || 'virtual/all-my-appointments')
-            .always(function () {
-                app.mediate();
-                win.show();
-            })
-            .done(function () {
+        var defaultFolder  = options.folder || 'virtual/all-my-appointments';
+        if (!options.folder && capabilities.has('guest')) {
+            // guests don't have the all-my-appointments folder
+            // try to select the first shared folder available
+            if (folderAPI.getFlatCollection('calendar', 'shared').fetched) {
+                addFolderSupport(folderAPI.getFlatCollection('calendar', 'shared').models[0].get('id'));
+            } else {
+                // shared section wasn't fetched yet. Do it now.
+                folderAPI.flat({ module: 'calendar' }).done(function (sections) {
+                    addFolderSupport(sections.shared[0]);
+                });
+            }
+        } else {
+            addFolderSupport(defaultFolder);
+        }
 
-                // app perspective
-                var lastPerspective = options.perspective || _.url.hash('perspective') || app.props.get('layout');
+        function addFolderSupport(folder) {
+            commons.addFolderSupport(app, null, 'calendar', folder)
+                .always(function () {
+                    app.mediate();
+                    win.show();
+                })
+                .done(function () {
 
-                if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
-                    lastPerspective = 'week:day';
-                } else {
-                    // corrupt data fix
-                    if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
-                }
-                ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
-                app.props.set('layout', lastPerspective);
-            });
+                    // app perspective
+                    var lastPerspective = options.perspective || _.url.hash('perspective') || app.props.get('layout');
+
+                    if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
+                        lastPerspective = 'week:day';
+                    } else if (lastPerspective === 'calendar') {
+                        // corrupt data fix
+                        lastPerspective = 'week:workweek';
+                    }
+                    ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
+                    app.props.set('layout', lastPerspective);
+                });
+        }
     });
 
     return {

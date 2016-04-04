@@ -64,7 +64,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                 var dayConst = DAYS[day.toUpperCase()];
 
                 if (_.isUndefined(dayConst)) {
-                    throw 'Invalid day: ' + day;
+                    throw new Error('Invalid day: ' + day);
                 }
                 result = result | dayConst;
             });
@@ -152,7 +152,9 @@ define('io.ox/calendar/edit/recurrence-view', [
                     }
                     try {
                         $content.remove();
-                    } catch (e) {}
+                    } catch (e) {
+                        if (ox.debug) console.error(e);
+                    }
                     $anchor.show();
                     self[attribute] = value;
                     self.trigger('change', self);
@@ -175,7 +177,9 @@ define('io.ox/calendar/edit/recurrence-view', [
                     keys.destroy();
                     try {
                         $content.remove();
-                    } catch (e) {}
+                    } catch (e) {
+                        if (ox.debug) console.error(e);
+                    }
                     $anchor.show();
                 });
             });
@@ -281,7 +285,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                                 role: 'menuitem',
                                 tabindex: $anchor.attr('tabindex')
                             }).append(
-                                $('<i class="fa fa-check">'),
+                                $('<i class="fa fa-check" aria-hidden="true">'),
                                 $.txt(DAYS.i18n[day])
                             ).on('click', function (e) {
                                 e.preventDefault();
@@ -401,7 +405,9 @@ define('io.ox/calendar/edit/recurrence-view', [
                             $dateInput.datepicker('remove');
                         }
                         $dateInput.remove();
-                    } catch (e) {}
+                    } catch (e) {
+                        if (ox.debug) console.error(e);
+                    }
                     $anchor.show().focus();
                 }
             });
@@ -474,7 +480,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                     detailToggle: $('<a href="#" class="recurrence-detail-toggle">').attr({
                         'role': 'button',
                         'aria-label': gt('Click to close the recurrence view')
-                    }).css({ 'float': 'right' }).append($('<i class="fa fa-times">'))
+                    }).css({ 'float': 'right' }).append($('<i class="fa fa-times" aria-hidden="true">'))
                 };
 
                 // add tabindex to all control elements
@@ -507,9 +513,13 @@ define('io.ox/calendar/edit/recurrence-view', [
                         tabindex: self.tabindex,
                         recurrenceType: {
                             options: {
+                                //#. recurring appointment: the appointment is repeated daily
                                 1: gt('daily'),
+                                //#. recurring appointment: the appointment is repeated weekly
                                 2: gt('weekly'),
+                                //#. recurring appointment: the appointment is repeated monthly
                                 3: gt('monthly'),
+                                //#. recurring appointment: the appointment is repeated yearly
                                 4: gt('yearly')
                             },
                             initial: 2
@@ -832,79 +842,81 @@ define('io.ox/calendar/edit/recurrence-view', [
                     this.sentences.rectype.set('recurrenceType', type);
 
                     switch (type) {
-                    case RECURRENCE_TYPES.DAILY:
-                        this.nodes.alternative1.append(this.sentences.daily.$el);
-                        this.setChoice(this.sentences.daily);
-                        this.choice.set('interval', this.model.get('interval') || 1);
-                        this.setHint(this.sentences.useLinksHint);
-                        break;
-                    case RECURRENCE_TYPES.WEEKLY:
-                        this.nodes.alternative1.append(this.sentences.weekly.$el);
-                        this.setChoice(this.sentences.weekly);
-                        if (this.model.isSet('interval')) {
-                            this.choice.set('interval', this.model.get('interval'));
-                        }
-                        if (this.model.isSet('days')) {
-                            this.choice.set('days', this.model.get('days'));
-                        }
-                        this.setHint(this.sentences.useLinksHint);
-                        break;
-                    case RECURRENCE_TYPES.MONTHLY:
-                        this.nodes.alternative1.append(
+                        case RECURRENCE_TYPES.DAILY:
+                            this.nodes.alternative1.append(this.sentences.daily.$el);
+                            this.setChoice(this.sentences.daily);
+                            this.choice.set('interval', this.model.get('interval') || 1);
+                            this.setHint(this.sentences.useLinksHint);
+                            break;
+                        case RECURRENCE_TYPES.WEEKLY:
+                            this.nodes.alternative1.append(this.sentences.weekly.$el);
+                            this.setChoice(this.sentences.weekly);
+                            if (this.model.isSet('interval')) {
+                                this.choice.set('interval', this.model.get('interval'));
+                            }
+                            if (this.model.isSet('days')) {
+                                this.choice.set('days', this.model.get('days'));
+                            }
+                            this.setHint(this.sentences.useLinksHint);
+                            break;
+                        case RECURRENCE_TYPES.MONTHLY:
+                            this.nodes.alternative1.append(
                             this.createGhost(this.sentences.monthlyDay)
                         );
-                        this.nodes.alternative2.show().append(
+                            this.nodes.alternative2.show().append(
                             this.createGhost(this.sentences.monthlyDate)
                         );
-                        this.setHint(this.sentences.useLinksHint);
-                        if (this.model.isSet('days')) {
-                            this.setChoice(this.sentences.monthlyDay);
-                            this.choice.set('ordinal', this.model.get('day_in_month'));
-                            this.choice.set('day', this.model.get('days'));
-                            this.choice.set('interval', this.model.get('interval'));
-                            this.nodes.alternative1.children().detach();
-                            this.nodes.alternative1.append(this.sentences.monthlyDay.$el);
-                        } else if (this.model.isSet('day_in_month')) {
-                            this.setChoice(this.sentences.monthlyDate);
-                            this.choice.set('dayInMonth', this.model.get('day_in_month'));
-                            this.choice.set('interval', this.model.get('interval'));
-                            this.nodes.alternative2.children().detach();
-                            this.nodes.alternative2.show().append(this.sentences.monthlyDate.$el);
-                        } else {
-                            this.setHint(this.sentences.chooseSentenceHint);
-                            this.nodes.alternative1.find('.text-muted').removeClass('text-muted');
-                            this.nodes.alternative2.find('.text-muted').removeClass('text-muted');
-                            this.setChoice(null);
-                        }
-                        break;
-                    case RECURRENCE_TYPES.YEARLY:
-                        this.nodes.alternative1.append(
+                            this.setHint(this.sentences.useLinksHint);
+                            if (this.model.isSet('days')) {
+                                this.setChoice(this.sentences.monthlyDay);
+                                this.choice.set('ordinal', this.model.get('day_in_month'));
+                                this.choice.set('day', this.model.get('days'));
+                                this.choice.set('interval', this.model.get('interval'));
+                                this.nodes.alternative1.children().detach();
+                                this.nodes.alternative1.append(this.sentences.monthlyDay.$el);
+                            } else if (this.model.isSet('day_in_month')) {
+                                this.setChoice(this.sentences.monthlyDate);
+                                this.choice.set('dayInMonth', this.model.get('day_in_month'));
+                                this.choice.set('interval', this.model.get('interval'));
+                                this.nodes.alternative2.children().detach();
+                                this.nodes.alternative2.show().append(this.sentences.monthlyDate.$el);
+                            } else {
+                                this.setHint(this.sentences.chooseSentenceHint);
+                                this.nodes.alternative1.find('.text-muted').removeClass('text-muted');
+                                this.nodes.alternative2.find('.text-muted').removeClass('text-muted');
+                                this.setChoice(null);
+                            }
+                            break;
+                        case RECURRENCE_TYPES.YEARLY:
+                            this.nodes.alternative1.append(
                             this.createGhost(this.sentences.yearlyDay)
                         );
-                        this.nodes.alternative2.show().append(
+                            this.nodes.alternative2.show().append(
                             this.createGhost(this.sentences.yearlyDate)
                         );
-                        this.setHint(this.sentences.useLinksHint);
-                        if (this.model.isSet('days')) {
-                            this.setChoice(this.sentences.yearlyDay);
-                            this.choice.set('ordinal', this.model.get('day_in_month'));
-                            this.choice.set('day', this.model.get('days'));
-                            this.choice.set('month', this.model.get('month'));
-                            this.nodes.alternative1.children().detach();
-                            this.nodes.alternative1.append(this.sentences.yearlyDay.$el);
-                        } else if (this.model.isSet('day_in_month')) {
-                            this.setChoice(this.sentences.yearlyDate);
-                            this.choice.set('month', this.model.get('month'));
-                            this.choice.set('dayInMonth', this.model.get('day_in_month'));
-                            this.nodes.alternative2.children().detach();
-                            this.nodes.alternative2.show().append(this.sentences.yearlyDate.$el);
-                        } else {
-                            this.setHint(this.sentences.chooseSentenceHint);
-                            this.nodes.alternative1.find('.text-muted').removeClass('text-muted');
-                            this.nodes.alternative2.find('.text-muted').removeClass('text-muted');
-                            this.setChoice(null);
-                        }
-                        break;
+                            this.setHint(this.sentences.useLinksHint);
+                            if (this.model.isSet('days')) {
+                                this.setChoice(this.sentences.yearlyDay);
+                                this.choice.set('ordinal', this.model.get('day_in_month'));
+                                this.choice.set('day', this.model.get('days'));
+                                this.choice.set('month', this.model.get('month'));
+                                this.nodes.alternative1.children().detach();
+                                this.nodes.alternative1.append(this.sentences.yearlyDay.$el);
+                            } else if (this.model.isSet('day_in_month')) {
+                                this.setChoice(this.sentences.yearlyDate);
+                                this.choice.set('month', this.model.get('month'));
+                                this.choice.set('dayInMonth', this.model.get('day_in_month'));
+                                this.nodes.alternative2.children().detach();
+                                this.nodes.alternative2.show().append(this.sentences.yearlyDate.$el);
+                            } else {
+                                this.setHint(this.sentences.chooseSentenceHint);
+                                this.nodes.alternative1.find('.text-muted').removeClass('text-muted');
+                                this.nodes.alternative2.find('.text-muted').removeClass('text-muted');
+                                this.setChoice(null);
+                            }
+                            break;
+
+                        // no default
                     }
 
                     this.nodes.endsChoice.children().detach();
@@ -964,89 +976,90 @@ define('io.ox/calendar/edit/recurrence-view', [
                     var recType = parseInt(this.sentences.rectype.recurrenceType, 10);
 
                     switch (recType) {
-                    case 1:
-                        var daily =  {
-                            recurrence_type: recType,
-                            interval: this.sentences.daily.interval
-                        };
-                        this.model.set(daily, { validate: true });
-                        break;
-                    case 2:
-                        var weekly =  {
-                            recurrence_type: recType,
-                            interval: this.sentences.weekly.interval,
-                            days: this.sentences.weekly.days
-                        };
-                        this.model.set(weekly, { validate: true });
-                        break;
-                    case 3:
-                        var monthly =  {
-                            recurrence_type: recType
-                        };
-                        if (this.choice.id === 'monthlyDate') {
-                            _.extend(monthly, {
+                        case 1:
+                            var daily = {
                                 recurrence_type: recType,
-                                day_in_month: this.choice.dayInMonth,
-                                interval: this.choice.interval
-                            });
-                        } else {
-                            this.setChoice(this.sentences.monthlyDay);
-                            _.extend(monthly, {
-                                day_in_month: this.choice.ordinal,
-                                days: this.choice.day,
-                                interval: this.choice.interval
-                            });
-                        }
-                        this.model.set(monthly, { validate: true });
-                        break;
-                    case 4:
-                        var yearly =  {
-                            recurrence_type: recType
-                        };
-                        if (this.choice.id === 'yearlyDate') {
-                            _.extend(yearly, {
-                                day_in_month: this.choice.dayInMonth,
-                                month: this.choice.month,
-                                interval: 1
-                            });
-                        } else {
-                            this.setChoice(this.sentences.yearlyDay);
-                            _.extend(yearly, {
-                                day_in_month: this.choice.ordinal,
-                                days: this.choice.day,
-                                month: this.choice.month,
-                                interval: 1
-                            });
-                        }
+                                interval: this.sentences.daily.interval
+                            };
+                            this.model.set(daily, { validate: true });
+                            break;
+                        case 2:
+                            var weekly = {
+                                recurrence_type: recType,
+                                interval: this.sentences.weekly.interval,
+                                days: this.sentences.weekly.days
+                            };
+                            this.model.set(weekly, { validate: true });
+                            break;
+                        case 3:
+                            var monthly = {
+                                recurrence_type: recType
+                            };
+                            if (this.choice.id === 'monthlyDate') {
+                                _.extend(monthly, {
+                                    recurrence_type: recType,
+                                    day_in_month: this.choice.dayInMonth,
+                                    interval: this.choice.interval
+                                });
+                            } else {
+                                this.setChoice(this.sentences.monthlyDay);
+                                _.extend(monthly, {
+                                    day_in_month: this.choice.ordinal,
+                                    days: this.choice.day,
+                                    interval: this.choice.interval
+                                });
+                            }
+                            this.model.set(monthly, { validate: true });
+                            break;
+                        case 4:
+                            var yearly =  {
+                                recurrence_type: recType
+                            };
+                            if (this.choice.id === 'yearlyDate') {
+                                _.extend(yearly, {
+                                    day_in_month: this.choice.dayInMonth,
+                                    month: this.choice.month,
+                                    interval: 1
+                                });
+                            } else {
+                                this.setChoice(this.sentences.yearlyDay);
+                                _.extend(yearly, {
+                                    day_in_month: this.choice.ordinal,
+                                    days: this.choice.day,
+                                    month: this.choice.month,
+                                    interval: 1
+                                });
+                            }
 
-                        this.model.set(yearly, { validate: true });
-                        break;
-                    default:
-                        break;
+                            this.model.set(yearly, { validate: true });
+                            break;
+                        default:
+                            break;
                     }
 
                     if (this.endsChoice) {
                         switch (this.endsChoice.id) {
-                        case 'never':
-                            // remove this when backend bug 24870 is fixed
-                            this.model.set({
-                                until: null
-                            }, { validate: true });
-                            // ----
-                            break;
-                        case 'date':
-                            this.model.set({
-                                until: this.endsChoice.until
-                            }, { validate: true });
-                            break;
-                        case 'after':
-                            if (this.endsChoice.occurrences <= 0) {
-                                this.endsChoice.occurrences = 1;
-                            }
-                            this.model.set({
-                                occurrences: this.endsChoice.occurrences
-                            }, { validate: true });
-                            break;
+                            case 'never':
+                                // TODO: remove this when backend bug 24870 is fixed
+                                this.model.set({
+                                    until: null
+                                }, { validate: true });
+                                // ----
+                                break;
+                            case 'date':
+                                this.model.set({
+                                    until: this.endsChoice.until
+                                }, { validate: true });
+                                break;
+                            case 'after':
+                                if (this.endsChoice.occurrences <= 0) {
+                                    this.endsChoice.occurrences = 1;
+                                }
+                                this.model.set({
+                                    occurrences: this.endsChoice.occurrences
+                                }, { validate: true });
+                                break;
+                            // no default
                         }
                     }
                 } else {
@@ -1073,15 +1086,16 @@ define('io.ox/calendar/edit/recurrence-view', [
             },
             endingChanged: function (sentence) {
                 switch (String(sentence.ending)) {
-                case '1':
-                    this.endsChoice = this.ends.never;
-                    break;
-                case '2':
-                    this.endsChoice = this.ends.date;
-                    break;
-                case '3':
-                    this.endsChoice = this.ends.after;
-                    break;
+                    case '1':
+                        this.endsChoice = this.ends.never;
+                        break;
+                    case '2':
+                        this.endsChoice = this.ends.date;
+                        break;
+                    case '3':
+                        this.endsChoice = this.ends.after;
+                        break;
+                    // no default
                 }
                 this.updateModel();
             },
@@ -1160,7 +1174,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                         if (!_.isUndefined(sentence.days) && !(sentence.days & previousAttributes.dayBits)) {
                             return false;
                         }
-                        if (!_.isUndefined(sentence.day) &&  (sentence.day !== previousAttributes.dayBits)) {
+                        if (!_.isUndefined(sentence.day) && (sentence.day !== previousAttributes.dayBits)) {
                             return false;
                         }
                         if (!_.isUndefined(sentence.dayInMonth) && (sentence.dayInMonth !== previousAttributes.dayInMonth)) {
@@ -1169,7 +1183,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                         if (!_.isUndefined(sentence.month) && (sentence.month !== previousAttributes.month)) {
                             return false;
                         }
-                        if (!_.isUndefined(sentence.ordinal) &&  (sentence.ordinal !== previousAttributes.ordinal)) {
+                        if (!_.isUndefined(sentence.ordinal) && (sentence.ordinal !== previousAttributes.ordinal)) {
                             return false;
                         }
                         return true;

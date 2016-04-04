@@ -17,10 +17,12 @@ define('io.ox/contacts/actions', [
     'io.ox/core/extPatterns/actions',
     'io.ox/contacts/api',
     'io.ox/portal/util',
+    'io.ox/core/print',
     'settings!io.ox/contacts',
+    'settings!io.ox/mail',
     'gettext!io.ox/contacts',
     'io.ox/core/pim/actions'
-], function (ext, links, actions, api, portalUtil, settings, gt) {
+], function (ext, links, actions, api, portalUtil, print, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -81,11 +83,8 @@ define('io.ox/contacts/actions', [
     new Action('io.ox/contacts/actions/distrib', {
         index: 100,
         requires: function (e) {
-            if (_.device('smartphone')) {
-                return false;
-            } else {
-                return e.baton.app.folder.can('create');
-            }
+            if (_.device('smartphone')) return false;
+            return e.baton.app.folder.can('create');
         },
         action: function (baton) {
             ox.load(['io.ox/contacts/distrib/main']).done(function (m) {
@@ -136,20 +135,19 @@ define('io.ox/contacts/actions', [
             if (contact.id === 0 || contact.folder_id === 0) {
                 // check if contains mail
                 return !!(contact.email1 || contact.email2 || contact.email3);
-            } else {
-                var list = [].concat(contact);
-                // is request needed?
-                return api.getList(list, true, {
-                    check: function (obj) {
-                        return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3;
-                    }
-                }).then(function (list) {
-                    var test = (e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                        return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                    }, 0).value() > 0);
-                    return test;
-                });
             }
+            var list = [].concat(contact);
+            // is request needed?
+            return api.getList(list, true, {
+                check: function (obj) {
+                    return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3;
+                }
+            }).then(function (list) {
+                var test = (e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                    return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                }, 0).value() > 0);
+                return test;
+            });
         },
         multiple: function (list) {
             require(['io.ox/contacts/actions/send'], function (action) {
@@ -178,18 +176,17 @@ define('io.ox/contacts/actions', [
             if (contact.id === 0 || contact.folder_id === 0) {
                 // check if contains mail
                 return !!(contact.email1 || contact.email2 || contact.email3);
-            } else {
-                var list = [].concat(contact);
-                return api.getList(list, true, {
-                    check: function (obj) {
-                        return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3;
-                    }
-                }).then(function (list) {
-                    return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
-                        return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                    }, 0).value() > 0;
-                });
             }
+            var list = [].concat(contact);
+            return api.getList(list, true, {
+                check: function (obj) {
+                    return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3;
+                }
+            }).then(function (list) {
+                return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                    return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                }, 0).value() > 0;
+            });
         },
         multiple: function (list) {
             require(['io.ox/contacts/actions/invite'], function (action) {
@@ -222,9 +219,13 @@ define('io.ox/contacts/actions', [
 
     new Action('io.ox/contacts/actions/add-to-contactlist', {
         requires: function (e) {
-            return e.collection.has('one') && !e.context.folder_id && !e.context.id;
+            if (!e.collection.has('one')) return false;
+            if (e.context.folder_id === mailSettings.get('contactCollectFolder')) return true;
+            return !e.context.folder_id && !e.context.id;
         },
         action: function (baton) {
+            var data = _(baton.data).omit('folder_id', 'id');
+            baton = ext.Baton({ data: data });
             require(['io.ox/contacts/actions/addToContactlist'], function (action) {
                 action(baton);
             });
@@ -242,8 +243,18 @@ define('io.ox/contacts/actions', [
                 })).length > 0);
         },
         multiple: function (list) {
-            ox.load(['io.ox/core/print']).done(function (print) {
-                print.request('io.ox/contacts/print', list);
+            print.request('io.ox/contacts/print', list);
+        }
+    });
+
+    new Action('io.ox/contacts/premium/actions/synchronize', {
+        capabilities: 'carddav client-onboarding',
+        requires: function () {
+            return _.device('!smartphone');
+        },
+        action: function () {
+            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                wizard.run();
             });
         }
     });
@@ -270,7 +281,7 @@ define('io.ox/contacts/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-envelope">')
+                        $('<i class="fa fa-envelope" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -293,7 +304,7 @@ define('io.ox/contacts/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-calendar-o">')
+                        $('<i class="fa fa-calendar-o" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -315,7 +326,7 @@ define('io.ox/contacts/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-trash-o">')
+                        $('<i class="fa fa-trash-o" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -337,7 +348,7 @@ define('io.ox/contacts/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-share-square-o">')
+                        $('<i class="fa fa-share-square-o" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -375,6 +386,14 @@ define('io.ox/contacts/actions', [
 
     //  inline links
     var INDEX = 100;
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'add-to-contactlist',
+        prio: 'hi',
+        index: INDEX += 100,
+        label: gt('Add to address book'),
+        ref: 'io.ox/contacts/actions/add-to-contactlist'
+    }));
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'send',
@@ -453,12 +472,6 @@ define('io.ox/contacts/actions', [
         ref: 'io.ox/contacts/actions/copy'
     }));
 
-    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
-        id: 'add-to-contactlist',
-        index: INDEX += 100,
-        label: gt('Add to address book'),
-        ref: 'io.ox/contacts/actions/add-to-contactlist'
-    }));
     /*
      ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
      id: 'viewer',
@@ -468,4 +481,18 @@ define('io.ox/contacts/actions', [
      ref: 'io.ox/contacts/actions/viewer'
      }));
     */
+    ext.point('io.ox/contacts/folderview/premium-area').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-premium-links',
+        ref: 'io.ox/contacts/links/premium-links',
+        classes: 'list-unstyled'
+    }));
+
+    ext.point('io.ox/contacts/links/premium-links').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'synchronize-contacts',
+        label: gt('Share your contacts'),
+        ref: 'io.ox/contacts/premium/actions/synchronize'
+    }));
 });

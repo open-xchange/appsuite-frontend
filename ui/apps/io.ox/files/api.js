@@ -42,7 +42,7 @@ define('io.ox/files/api', [
          * Constructor, to initialize the model with mail and PIM attachments,
          * besides Drive model attributes.
          */
-        constructor: function ( attributes, options ) {
+        constructor: function (attributes, options) {
             attributes = attributes || {};
             var normalizedAttrs;
             // check if model is initialized with mail, pim or drive model attributes
@@ -82,7 +82,7 @@ define('io.ox/files/api', [
                 normalizedAttrs.source = 'drive';
             }
             // call parent constructor
-            backbone.Model.call( this, normalizedAttrs, options );
+            backbone.Model.call(this, normalizedAttrs, options);
 
             this.listenTo(this, 'change:filename', function (m, newName) {
                 //maybe update versions if filename is changed
@@ -137,8 +137,12 @@ define('io.ox/files/api', [
             return /^application\/vnd.(ms-powerpoint|openxmlformats-officedocument.presentationml|oasis.opendocument.presentation)/.test(type || this.getMimeType());
         },
 
+        isGuard: function () {
+            return this.get('source') === 'guard';
+        },
+
         isEncrypted: function () {
-            if (this.get('source') === 'guard') return (true);
+            if (this.isGuard()) return (true);
             // check if file has "guard" file extension
             return /\.(grd|grd2|pgp)$/.test(this.get('filename'));
         },
@@ -195,7 +199,8 @@ define('io.ox/files/api', [
         types: {
             image: /^(gif|bmp|tiff|jpe?g|gmp|png)$/,
             audio: /^(aac|mp3|m4a|m4b|ogg|opus|wav)$/,
-            video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm)$/,
+            video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm|wmv)$/,
+            vcf:   /^(vcf)$/,
             doc:   /^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/,
             xls:   /^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb|ods|ots)$/,
             ppt:   /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa|odg|otg)$/,
@@ -257,6 +262,7 @@ define('io.ox/files/api', [
         'ogv':  'video/ogg',
         'ogm':  'video/ogg',
         'webm': 'video/webm',
+        'wmv':  'video/video/x-ms-wmv',
         // CSV
         'csv':  'text/csv',
         // open office
@@ -296,6 +302,7 @@ define('io.ox/files/api', [
         'xlb':  'application/vnd.ms-excel',
         'xlt':  'application/vnd.ms-excel',
         'ppt':  'application/vnd.ms-powerpoint',
+        'pot':  'application/vnd.ms-powerpoint',
         'pps':  'application/vnd.ms-powerpoint'
     };
 
@@ -403,30 +410,63 @@ define('io.ox/files/api', [
                 sort: params.sort || '702',
                 order: params.order || 'asc',
                 // tell server to prefetch thumbnails (see bug 39897)
-                pregenerate_previews: true,
+                // default is true; can be set to false
+                pregenerate_previews: params.pregenerate_previews !== false,
                 timezone: 'utc'
             };
         },
         httpGet: function (module, params) {
-            return $.when(
-                folderAPI.list(params.folder),
-                // this one might fail due to lack of permissions; error are transformed to empty array
-                http.GET({ module: module, params: _(params).omit('limit') }).then(null, $.when)
-            )
-            .then(function (folders, files) {
+            // since we don't have a unified API for files and folders
+            // we fetch folders first to see how many we get.
+            // we always have to do that even if the offset is > 0
+            // since the number might have changed.
+            // next, we can calculate the proper limit for the files request
+            return folderAPI.list(params.folder).then(function (folders) {
                 // sort by date client-side
                 if (String(params.sort) === '5') {
                     folders = _(folders).sortBy('last_modified');
                 }
                 if (params.order === 'desc') folders.reverse();
-                return [].concat(folders, files[0] || []);
+                // get remaining limit for files
+                var split = params.limit.split(/,/),
+                    start = Number(split[0]),
+                    stop = Number(split[1]),
+                    // construct new values
+                    newStart = start - folders.length,
+                    newStop = stop - folders.length,
+                    limit = newStart + ',' + newStop;
+                // folders exceed upper limit?
+                if (folders.length >= stop) return folders.slice(start, stop);
+                // fetch files
+                return http.GET({ module: module, params: _.extend({}, params, { limit: limit }) }).then(
+                    function (files) {
+                        // build virual response of folders, placeholders, and files
+                        // simple solution to get proper slice
+                        var unified = [].concat(
+                            folders,
+                            // fill up with placeholders
+                            new Array(Math.max(0, start - folders.length)),
+                            files
+                        );
+                        return unified.slice(start, stop);
+                    },
+                    function fail(e) {
+                        if (e.code === 'IFO-0400' && e.error_params.length === 0) {
+                            // IFO-0400 is missing the folder in the error params -> adding this manually
+                            e.error_params.push(params.folder);
+                        }
+                        api.trigger('error error:' + e.code, e);
+                        // this one might fail due to lack of permissions; error are transformed to empty array
+                        if (ox.debug) console.warn('files.httpGet', e.error, e);
+                        return [];
+                    }
+                );
             });
         },
-        // use client-side limit
-        useSlice: true,
         // set higher limit; works much faster than mail
         // we pick a number that looks ok for typical columns, so 5 * 6 * 7 = 210
-        LIMIT: 210
+        PRIMARY_PAGE_SIZE: 210,
+        SECONDARY_PAGE_SIZE: 210
     });
 
     api.collectionLoader.each = function (data) {
@@ -443,10 +483,9 @@ define('io.ox/files/api', [
                 var data = folderAPI.pool.getModel(cid.substr(7)).toJSON();
                 data.folder_id = 'folder';
                 return new api.Model(data);
-            } else {
-                // return existing file model
-                return pool.get('detail').get(cid);
             }
+            // return existing file model
+            return pool.get('detail').get(cid);
         }
 
         return function (list, json) {
@@ -467,7 +506,7 @@ define('io.ox/files/api', [
             var model = pool.get('detail').get(_.cid(file));
             // look for an attribute that is not part of the "all" request
             // to determine if we can use a cached model
-            if (model && model.has('description')) return $.when(model.toJSON());
+            if (model && !model.get('expired') && model.has('description')) return $.when(model.toJSON());
         }
 
         var params =  {
@@ -486,6 +525,9 @@ define('io.ox/files/api', [
         .then(function (data) {
             pool.add('detail', data);
             return data;
+        }, function (error) {
+            api.trigger('error error:' + error.code, error);
+            return error;
         });
     };
 
@@ -508,6 +550,9 @@ define('io.ox/files/api', [
         .then(function (data) {
             pool.add('detail', data);
             return data;
+        }, function (error) {
+            api.trigger('error error:' + error.code, error);
+            return error;
         });
     };
 
@@ -652,9 +697,10 @@ define('io.ox/files/api', [
     //
     folderAPI.on({
         'before:clear': function (id) {
+            var isTrash = String(settings.get('folder/trash')) === id;
             // clear target folder
             _(pool.getByFolder(id)).each(function (collection) {
-                var files = collection.filter(function (model) { return model.isFile(); });
+                var files = collection.filter(function (model) { return isTrash || model.isFile(); });
                 collection.remove(files);
             });
         },
@@ -712,13 +758,29 @@ define('io.ox/files/api', [
     //
 
     function move(list, targetFolderId, ignoreWarnings) {
+
         http.pause();
-        _(list).map(function (item) {
-            // move files and folders
-            return item.folder_id === 'folder' ?
-                folderAPI.move(item.id, targetFolderId, ignoreWarnings) :
-                api.update(item, { folder_id: targetFolderId }, { silent: true,  ignoreWarnings: ignoreWarnings });
+
+        var folders = _(list).where({ folder_id: 'folder' }),
+            items = _(list).difference(folders);
+
+        // move all files
+        if (items) {
+            http.PUT({
+                module: 'files',
+                params: {
+                    action: 'move',
+                    folder: targetFolderId
+                },
+                data: items,
+                appendColumns: false
+            });
+        }
+
+        _(folders).each(function (item) {
+            folderAPI.move(item.id, targetFolderId, ignoreWarnings);
         });
+
         return http.resume();
     }
 
@@ -742,6 +804,7 @@ define('io.ox/files/api', [
     }
 
     function transfer(type, list, targetFolderId, ignoreWarnings) {
+
         var fn = type === 'move' ? move : copy;
 
         return http.wait(fn(list, targetFolderId, ignoreWarnings)).then(function (response) {
@@ -799,7 +862,7 @@ define('io.ox/files/api', [
     //
     api.update = function (file, changes, options) {
 
-        function process (prev, model, response) {
+        function process(prev, model, response) {
             // success
             if (!(response && response.error)) return;
             // restore old attribute properties
@@ -1179,6 +1242,7 @@ define('io.ox/files/api', [
                 case 'unlock':
                     // nothing to do for unlock
                     break;
+                // no default
             }
         };
 

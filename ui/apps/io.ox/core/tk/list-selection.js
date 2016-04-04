@@ -31,12 +31,15 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         UNFOLD_TIME_FULL =   50,
         RESET_CELL_TIME =   100,
         CELL_HEIGHT = '-68px', // todo: calculate this
-        cell;
+        cell,
+        recentWindowsKey = false;
 
     function Selection(view) {
 
         this.view = view;
         this.behavior = behavior;
+        this._direction = 'down';
+        this._lastPosition = -1;
         this.view.$el
             .on('mousedown', $.proxy(this.onMousedown, this))
             .on('mouseup', $.proxy(this.onMouseup, this))
@@ -74,10 +77,10 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     .on('touchstart', SELECTABLE, this, this.onTouchStart)
                     .on('touchmove', SELECTABLE, this, this.onTouchMove)
                     .on('touchend', SELECTABLE, this, this.onTouchEnd)
-                    .on('tap', SWIPEDELETE,  $.proxy(function (e) {
+                    .on('tap', SWIPEDELETE, $.proxy(function (e) {
                         this.onSwipeDelete(e);
                     }, this))
-                    .on('tap', SWIPEMORE,  $.proxy(function (e) {
+                    .on('tap', SWIPEMORE, $.proxy(function (e) {
                         this.onSwipeMore(e);
                     }, this));
             } else if (isTouch) {
@@ -110,7 +113,14 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         getPosition: function (items) {
             items = items || this.getItems();
-            return items.index(items.filter('.precursor'));
+            var pos = items.index(items.filter('.precursor'));
+            if (pos !== this._lastPosition) this._direction = pos < this._lastPosition ? 'up' : 'down';
+            this._lastPosition = pos;
+            return pos;
+        },
+
+        getDirection: function () {
+            return this._direction;
         },
 
         check: function (nodes) {
@@ -125,7 +135,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             if (node.hasClass('selected')) this.uncheck(node); else this.check(node);
         },
 
-        set: function (list) {
+        set: function (list, focus) {
 
             if (!_.isArray(list)) return;
 
@@ -148,7 +158,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             });
 
             if (lastIndex > -1) {
-                items.eq(lastIndex).attr('tabindex', '1');
+                var node = items.eq(lastIndex).attr('tabindex', '1');
+                if (focus) node.focus();
             }
         },
 
@@ -174,8 +185,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             } else if (list.length > 1) {
                 events += ' selection:multiple';
             }
-            // all vs subset
-            if (items.length > 0 && items.length === list.length) {
+            // to keep correct select all checkbox state
+            // if the folder only contains one item, we must check the checkbox status
+            if (items && items.length > 0 && items.length === list.length && (items.length !== 1 || !$(items[0]).hasClass('no-checkbox'))) {
                 events += ' selection:all';
             } else {
                 events += ' selection:subset';
@@ -223,11 +235,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         resetCheckmark: function (items) {
-            items.filter('.selected').removeClass('selected no-checkbox');
-            // collect garbage: remove preserved items when selection changes
-            _.defer(function () {
-                items.filter('.preserved').not('.selected').fadeOut('fast', function () { $(this).remove(); });
-            });
+            items.filter('.selected').removeClass('selected no-checkbox').attr('aria-selected', false);
         },
 
         // resets all (usually one) items with swipe-left class
@@ -309,7 +317,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         selectAll: function (items) {
             items = _.isString(items) ? this.getItems(items) : (items || this.getItems());
             var slice = items.slice(0, items.length);
-            slice.removeClass('no-checkbox');
+            slice.removeClass('no-checkbox precursor');
+            slice.first().addClass('precursor');
             this.check(slice);
             this.focus(0, items);
             this.triggerChange(items);
@@ -348,15 +357,21 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 selected = items.filter('.selected'),
                 length = selected.length,
                 first = items.index(selected.first()),
-                apply = this.select.bind(this);
+                last = items.index(selected.last()),
+                tail = items.length - 1,
+                apply = this.select.bind(this),
+                direction = this.getDirection();
 
             // All: if all items are selected we dodge by clearing the entire selection
             if (items.length === length) return this.clear();
 
-            // Tail: if there's no room inbetween or after the selection we move up
-            if ((first + length) === items.length) return apply(first - 1, items);
+            // up and enough room
+            if (direction === 'up' && first > 0) return apply(first - 1, items);
 
-            // iterate over list
+            // down and enough room
+            if (direction === 'down' && last < tail) return apply(last + 1, items);
+
+            // otherwise: iterate over list to find a free spot
             items.slice(first).each(function (index) {
                 if (!$(this).hasClass('selected')) {
                     apply(first + index, items);
@@ -386,7 +401,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             var cursorUpDown = e.which === 38 || e.which === 40,
                 cursorBack = e.which === 37 || e.which === 38,
                 step = grid && cursorUpDown ? width : 1;
-            index +=  cursorBack ? -step : +step;
+            index += cursorBack ? -step : +step;
 
             // move to very last element on cursor down?
             if (step > 1 && e.which === 40 && index >= items.length && column >= (items.length % width)) index = items.length - 1;
@@ -399,13 +414,17 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             e.preventDefault();
 
             // jump to top/bottom OR range select / single select
-            index = this.isMultiple(e) ? (e.which === 38 ? 0 : -1) : index;
+            if (this.isMultiple(e)) {
+                index = (e.which === 38 ? 0 : -1);
+            }
 
             this.resetTabIndex(items, items.eq(index));
             this.resetCheckmark(items);
             this.pick(index, items, e);
-            //alternative selection mode needs this, has no effect in default mode
-            if ( this.isMultiple(e) || this.isRange(e)) {
+            // just call get position to update "direction"
+            this.getPosition();
+            // alternative selection mode needs this, has no effect in default mode
+            if (this.isMultiple(e) || this.isRange(e)) {
                 this.triggerChange(items);
             } else {
                 this.selectEvents(items);
@@ -414,15 +433,14 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         // defines behaviour when index out of bounds should be selected by arrow keys
         outOfBounds: function (index, items) {
-            if (index < 0) {
-                return false;
-            } else if (index >= items.length) {
+            if (index < 0) return false;
+
+            if (index >= items.length) {
                 // scroll to very bottom if at end of list (to keep a11y support)
                 this.view.$el.scrollTop(0xFFFFFF);
                 return false;
-            } else {
-                return index;
             }
+            return index;
         },
 
         onPageUpDown: function (e) {
@@ -437,42 +455,49 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             switch (e.which) {
 
-            // [enter] > action
-            case 13:
-                this.triggerAction(e);
-                break;
+                // [enter] > action
+                case 13:
+                    this.triggerAction(e);
+                    break;
 
-            // [Ctrl|Cmd + A] > select all
-            case 65:
-            case 97:
-                if (e.ctrlKey || e.metaKey) {
+                // [Ctrl|Cmd + A] > select all
+                case 65:
+                case 97:
+                    if (e.ctrlKey || e.metaKey || recentWindowsKey) {
+                        e.preventDefault();
+                        this.selectAll();
+                    } else if (!e.shiftKey && !e.altKey) {
+                        this.view.trigger('selection:archive', this.get());
+                    }
+                    break;
+
+                // Windows key (workaround for incomplete detection)
+                case 91:
+                    recentWindowsKey = true;
+                    setTimeout(function () { recentWindowsKey = false; }, 2000);
+                    break;
+
+                // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
+                case 8:
+                case 46:
                     e.preventDefault();
-                    this.selectAll();
-                } else {
-                    this.view.trigger('selection:archive', this.get());
-                }
-                break;
+                    this.view.trigger('selection:delete', this.get());
+                    break;
 
-            // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
-            case 8:
-            case 46:
-                e.preventDefault();
-                this.view.trigger('selection:delete', this.get());
-                break;
+                // cursor left/right up/down
+                case 37:
+                case 38:
+                case 39:
+                case 40:
+                    this.onCursor(e);
+                    break;
 
-            // cursor left/right up/down
-            case 37:
-            case 38:
-            case 39:
-            case 40:
-                this.onCursor(e);
-                break;
-
-            // page up/down
-            case 33:
-            case 34:
-                this.onPageUpDown(e);
-                break;
+                // page up/down
+                case 33:
+                case 34:
+                    this.onPageUpDown(e);
+                    break;
+                // no default
             }
         },
 
@@ -520,7 +545,11 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     this.removeAttr('style');
                     // reset velocitie's transfrom cache manually
                     _(this).each(function (listItem) {
-                        $(listItem).data('velocity').transformCache = {};
+                        // assigning the value directly leads to a typeerror on ios
+                        // like $(listItem).data('velocity').transformCache = {}
+                        var c = $(listItem).data('velocity');
+                        c.transformCache = {};
+                        $(listItem).data('velocity', c);
                     });
                     self.view.off('remove-mobile', resetStyle);
                 };
@@ -568,7 +597,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             return !!this.unfold;
         },
 
-        resetSwipeCell: function (selection, a) {
+        resetSwipeCell: function (selection, a, instant) {
             var self = this;
             try {
                 selection.startX = 0;
@@ -576,17 +605,24 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 selection.unfold = false;
                 selection.target = null;
                 selection.otherUnfolded = false;
-                $(self).velocity({
-                    'translateX': [0, a]
-                }, {
-                    duration: RESET_CELL_TIME,
-                    complete: function () {
-                        $(self).removeAttr('style');
-                        $(self).removeClass('unfolded');
-                        if (self.swipeCell) self.swipeCell.remove();
-                        self.swipeCell = null;
-                    }
-                });
+                if (!instant) {
+                    $(self).velocity({
+                        'translateX': [0, a]
+                    }, {
+                        duration: RESET_CELL_TIME,
+                        complete: function () {
+                            $(self).removeAttr('style');
+                            $(self).removeClass('unfolded');
+                            if (self.swipeCell) self.swipeCell.remove();
+                            self.swipeCell = null;
+                        }
+                    });
+                } else {
+                    $(self).removeAttr('style');
+                    $(self).removeClass('unfolded');
+                    if (self.swipeCell) self.swipeCell.remove();
+                    self.swipeCell = null;
+                }
             } catch (e) {
                 console.warn('something went wrong during reset', e);
             }
@@ -595,7 +631,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onTouchStart: function (e) {
             var touches = e.originalEvent.touches[0],
                 currentX = touches.pageX, currentY = touches.pageY,
-                t = $(this).css('transition','');
+                t = $(this).css('transition', '');
             // var unfold indicates if any node is unfolded
             // var unfolded indicates if currently touched node is unfolded
             this.startX = currentX;
@@ -623,7 +659,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.distanceX = (this.startX - currentX) * -1; // invert value
             this.scrolling = false;
 
-            // try to swipe right at the start
+            // try to swipe to the right at the start
             if (currentX > this.startX && !this.unfolded && this.distanceX <= THRESHOLD_X) {
                 return; // left to right is not allowed at the start
             }
@@ -649,8 +685,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 if (!this.swipeCell) {
                     // append swipe action cell once, will be removed afterwards
                     this.swipeCell = $('<div class="swipe-option-cell">').append(
-                        this.btnDelete = $('<div class="swipe-button delete">').append($('<i class="fa fa-trash">')),
-                        this.btnMore = $('<div class="swipe-button more">').append($('<i class="fa fa-bars">'))
+                        this.btnDelete = $('<div class="swipe-button delete">').append($('<i class="fa fa-trash" aria-hidden="true">')),
+                        this.btnMore = $('<div class="swipe-button more">').append($('<i class="fa fa-bars" aria-hidden="true">'))
                     ).css('height', this.target.outerHeight() + 'px');
                     this.target.before(this.swipeCell);
                 }
@@ -679,13 +715,16 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         onTouchEnd: function (e) {
-
             if (this.scrolling) return; // return if simple list scroll
 
             this.remove = this.unfold = e.data.view.isSwiping = false;
             this.isMoving = false;
             // left to right on closed cells is not allowed, we have to check this in touchmove and touchend
-            if ((this.distanceX > 0) && !this.unfolded) return;
+            if ((this.distanceX > 0) && !this.unfolded) {
+                // always reset the cell to prevent half-opened cells
+                e.data.resetSwipeCell.call(this, e.data, 0, true);
+                return;
+            }
 
             // check for tap on unfolded cell
             if (this.unfolded && this.distanceX <= 10) {
@@ -709,7 +748,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             }
 
             cell = $(this); // save for later animation
-
             if (this.unfold) {
                 this.expandDelete = false;
 
@@ -755,7 +793,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                                 duration: MOVE_UP_TIME,
                                 complete: function () {
                                     var node = $(self).closest(SELECTABLE),
-                                    cid = node.attr('data-cid');
+                                        cid = node.attr('data-cid');
                                     // bind reset event
                                     theView.on('remove-mobile', resetStyle, cellsBelow);
                                     theView.trigger('selection:delete', [cid]);
@@ -767,7 +805,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                             });
                         } else {
                             var node = $(self).closest(SELECTABLE),
-                            cid = node.attr('data-cid');
+                                cid = node.attr('data-cid');
                             // bind reset event
                             theView.on('remove-mobile', resetStyle, cellsBelow);
                             theView.trigger('selection:delete', [cid]);
@@ -796,7 +834,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.resetSwipe($(e.currentTarget));
         },
 
-        inplaceRemoveScaffold: $('<div class="swipe-left-content"><i class="fa fa-trash-o"/></div>'),
+        inplaceRemoveScaffold: $('<div class="swipe-left-content"><i class="fa fa-trash-o" aria-hidden="true"/></div>'),
 
         renderInplaceRemove: function (node) {
             node.append(this.inplaceRemoveScaffold.clone());
@@ -824,6 +862,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         pickSingle: function (node) {
             node.addClass('selected no-checkbox').attr('aria-selected', true);
+            // remove select all checkbox;
+            this.view.trigger('selection:subset');
         },
 
         onKeydown: function (e) {
@@ -845,16 +885,14 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         outOfBounds: function (index, items) {
-            if (index < 0) {
-                return 0;
-            } else if (index >= items.length) {
+            if (index < 0) return 0;
+
+            if (index >= items.length) {
                 index = items.length - 1;
                 // scroll to very bottom if at end of list (to keep a11y support)
                 this.view.$el.scrollTop(0xFFFFFF);
-                return index;
-            } else {
-                return index;
             }
+            return index;
         },
 
         onClick: function (e) {
@@ -875,7 +913,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     events = 'selection:change selection:action';
 
                 // to keep correct select all checkbox state
-                if (items  && items.length > 0 && items.length === list.length) {
+                // if the folder only contains one item, we must check the checkbox status
+                if (items && items.length > 0 && items.length === list.length && (items.length !== 1 || !$(items[0]).hasClass('no-checkbox'))) {
                     events += ' selection:all';
                 } else {
                     events += ' selection:subset';

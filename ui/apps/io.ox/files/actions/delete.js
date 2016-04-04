@@ -64,8 +64,8 @@ define('io.ox/files/actions/delete', [
                 'Do you really want to delete these items?',
                 list.length
             ))
-            .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
+            .addPrimaryButton('delete', gt('Delete'), 'delete', { 'tabIndex': '1' })
+            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
             .on('delete', function () {
                 _.defer(function () { process(list); });
             })

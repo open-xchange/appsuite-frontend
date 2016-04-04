@@ -12,13 +12,13 @@
  */
 
 .dateinput {
-    input {
-        text-align: center;
-    }
+    input { text-align: center; }
+
     .time-field {
         width: 100px;
         border-left: none;
     }
+
     .typeahead.calendaredit {
         height: 200px;
         overflow-y: auto;
@@ -29,19 +29,16 @@
             padding: 3px 15px 3px 3px;
         }
     }
-    &.dateonly .datepicker-day-field {
-        border-radius: @border-radius-base;
-    }
-    .datepicker-day-field {
-        width: 120px;
-    }
+
+    &.dateonly .datepicker-day-field { border-radius: @border-radius-base; }
+
+    .datepicker-day-field { width: 120px; }
+
     .timezone {
         width: auto;
         font-size: 12px;
 
-        &.btn {
-            cursor: pointer;
-        }
+        &.btn { cursor: pointer; }
 
         &:hover, &:active, &:focus {
             color: #555;
@@ -52,11 +49,10 @@
 
 /* Mobile */
 @media all and (max-width: 480px), all and (max-device-width: 480px) {
-
     .dateinput {
-        .input-group {
-            display: block;
-        }
+
+        .input-group { display: block; }
+
         .datepicker-day-field {
             padding: 4px 6px;
             width: 100%;

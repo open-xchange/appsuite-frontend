@@ -33,7 +33,7 @@ define('io.ox/core/cache/simple', ['io.ox/core/extensions'], function (ext) {
                 return resolve();
             },
             get: function (key) {
-                var key = String(key);
+                key = String(key);
                 return resolve(
                     key in storage[id] ? JSON.parse(storage[id][key]) : null
                 );
@@ -62,7 +62,7 @@ define('io.ox/core/cache/simple', ['io.ox/core/extensions'], function (ext) {
         index: 1000,
         getInstance: function (theId) {
             if (!instances[theId]) {
-                return instances[theId] = new SimpleStorage(theId);
+                return (instances[theId] = new SimpleStorage(theId));
             }
             return instances[theId];
         },

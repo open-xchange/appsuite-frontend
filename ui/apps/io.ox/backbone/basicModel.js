@@ -97,20 +97,18 @@ define('io.ox/backbone/basicModel', [
                 self.trigger('invalid', errors, self);
                 self.errors = errors;
                 self._valid = false;
-            } else {
-                if (!self._valid) {
-                    _(self.attributeValidity).each(function (wasValid, attribute) {
-                        if (!wasValid) {
-                            self.trigger('valid:' + attribute, self);
-                        }
-                    });
+            } else if (!self._valid) {
+                _(self.attributeValidity).each(function (wasValid, attribute) {
+                    if (!wasValid) {
+                        self.trigger('valid:' + attribute, self);
+                    }
+                });
 
-                    _(attributes).chain().keys().each(function (key) {
-                        self.attributeValidity[key] = true;
-                    });
-                    self._valid = true;
-                    this.trigger('valid');
-                }
+                _(attributes).chain().keys().each(function (key) {
+                    self.attributeValidity[key] = true;
+                });
+                self._valid = true;
+                this.trigger('valid');
             }
         },
         parse: function () {
@@ -127,7 +125,15 @@ define('io.ox/backbone/basicModel', [
             if ((action === 'update' || action === 'create')) {
                 //isValid actually calls the validate function, no need to do this manually
                 if (!this.isValid({ isSave: true })) {
-                    return $.Deferred().reject({ error: gt('Invalid data'), model: this });
+                    var errorMessage = gt('The dialog contains invalid data'),
+                        errors = this.errors.errors;
+
+                    // if it's only one error and it has an error message we show that instead of the generic message
+                    // there may be more errors for one attribute (stored in an array), we just pick the first one
+                    if (_(errors).size() === 1 && _.isString(errors[_(errors).keys()[0]][0])) {
+                        errorMessage = errors[_(errors).keys()[0]];
+                    }
+                    return $.Deferred().reject({ error: errorMessage, model: this });
                 }
             }
             if (this.syncer) {
@@ -152,9 +158,8 @@ define('io.ox/backbone/basicModel', [
                         self.trigger(action + ':always');
                         self.trigger('sync:always');
                     });
-            } else {
-                throw 'No Syncer specified!';
             }
+            throw new Error('No Syncer specified!');
         },
         isSet: function () {
             var self = this;

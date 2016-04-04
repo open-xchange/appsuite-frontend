@@ -82,6 +82,7 @@ define('io.ox/files/guidance/statistics', [
             'potx': 'Presentations',
             'potm': 'Presentations',
             'ppt':  'Presentations',
+            'pot':  'Presentations',
             'pps':  'Presentations',
 
             //Pdf
@@ -139,20 +140,18 @@ define('io.ox/files/guidance/statistics', [
     function getAllSubFolders(folder, recursionDepth) {
         recursionDepth = recursionDepth || 0;
 
-        if (recursionDepth === 3) {
-            return [];
-        } else {
-            return folderAPI.list(folder.id).then(function (subfolders) {
-                return $.when.apply($,
-                    _(subfolders).map(function (subFolder) {
-                        return getAllSubFolders(subFolder, recursionDepth + 1);
-                    })
-                )
-                .then(function () {
-                    return _([folder].concat(_(arguments).toArray())).flatten();
-                });
+        if (recursionDepth === 3) return [];
+
+        return folderAPI.list(folder.id).then(function (subfolders) {
+            return $.when.apply($,
+                _(subfolders).map(function (subFolder) {
+                    return getAllSubFolders(subFolder, recursionDepth + 1);
+                })
+            )
+            .then(function () {
+                return _([folder].concat(_(arguments).toArray())).flatten();
             });
-        }
+        });
     }
 
     //this is used to cache the information of files to not reload on every request

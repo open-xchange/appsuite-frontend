@@ -23,7 +23,7 @@ define('io.ox/core/tk/typeahead', [
 
     // https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md
 
-    function customEvent (state, data) {
+    function customEvent(state, data) {
         this.model.set({
             source: state
         });
@@ -125,8 +125,9 @@ define('io.ox/core/tk/typeahead', [
                             var dropdown = dateset.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu'),
                                 emptyAction = dropdown.find('.tt-dataset-0').is(':empty'),
                                 query = dropdown.find('span.info').attr('data-query');
-                            if (!emptyAction)
+                            if (!emptyAction) {
                                 self.model.set('query', query);
+                            }
                             if (dropdown.is(':visible')) {
                                 self.model.set('dropdown', 'opened');
                             }
@@ -161,8 +162,9 @@ define('io.ox/core/tk/typeahead', [
                 // dirty hack to get a reliable info about open/close state
                 'typeahead:closed': function () {
                     var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
-                    if (!dropdown.is(':visible'))
+                    if (!dropdown.is(':visible')) {
                         self.model.set('dropdown', 'closed');
+                    }
                 },
                 'typeahead:selected typeahead:autocompleted': function (e, item) {
                     o.click.call(this, e, item);

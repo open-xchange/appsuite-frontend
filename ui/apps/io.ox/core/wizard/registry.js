@@ -246,26 +246,23 @@ define('io.ox/core/wizard/registry', [
         }
 
         this.updateButtonState = function () {
-            if (isBusy) {
-                return;
-            }
+            if (isBusy) return;
+
+            var next = this.navButtons.find('.wizard-next'),
+                done = this.navButtons.find('.wizard-done');
+
             if (isNextEnabled()) {
-                var next = this.navButtons.find('.wizard-next'),
-                    done = this.navButtons.find('.wizard-done');
                 next.prop('disabled', false);
                 next.addClass('btn-primary');
                 next.removeClass('btn-disabled');
-                done.prop('disabled', false);
-                done.removeClass('btn-disabled');
             } else {
-                var next = this.navButtons.find('.wizard-next'),
-                    done = this.navButtons.find('.wizard-done');
                 next.prop('disabled', true);
                 next.removeClass('btn-primary');
                 next.addClass('btn-disabled');
-                done.prop('disabled', false);
-                done.removeClass('btn-disabled');
             }
+
+            done.prop('disabled', false);
+            done.removeClass('btn-disabled');
         };
 
         this.point = function () {

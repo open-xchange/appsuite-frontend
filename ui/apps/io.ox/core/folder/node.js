@@ -33,11 +33,11 @@ define('io.ox/core/folder/node', [
         indentation: _.device('smartphone') ? 15 : 30,
 
         events: {
-            'click .folder-options':  'onOptions',
-            'click .folder-arrow':    'onArrowClick',
-            'dblclick .folder-label': 'onToggle',
-            'mousedown .folder-arrow':'onArrowMousedown',
-            'keydown':                'onKeydown'
+            'click .folder-options':   'onOptions',
+            'click .folder-arrow':     'onArrowClick',
+            'dblclick .folder-label':  'onToggle',
+            'mousedown .folder-arrow': 'onArrowMousedown',
+            'keydown':                 'onKeydown'
         },
 
         list: function () {
@@ -103,8 +103,8 @@ define('io.ox/core/folder/node', [
         },
 
         onRemove: function (model) {
-            var children = this.$.subfolders.children();
-            children.filter('[data-id="' + $.escape(model.id) + '"]').remove();
+            this.$.subfolders.children('[data-id="' + $.escape(model.id) + '"]').remove();
+            // we do not update models if the DOM is empty! (see bug 43754)
             this.renderEmpty();
         },
 
@@ -193,7 +193,7 @@ define('io.ox/core/folder/node', [
         // utility functions
         hasSubFolders: function () {
             var isFlat = /^virtual\/flat/.test(this.folder);
-            return this.options.subfolders && (isFlat || this.model.get('subfolders') === true);
+            return this.options.subfolders && (isFlat || this.model.get('subfolders') === true);
         },
 
         // respond to new sub-folders
@@ -206,9 +206,11 @@ define('io.ox/core/folder/node', [
             this.$.arrow
             .toggleClass('invisible', !hasSubFolders)
             .html(
+                /*eslint-disable no-nested-ternary */
                 hasSubFolders ?
-                    (isOpen ? '<i class="fa fa-' + ICON + '-down">' : '<i class="fa fa-' + ICON + '-right">') :
-                    '<i class="fa fa-fw">'
+                    (isOpen ? '<i class="fa fa-' + ICON + '-down" aria-hidden="true">' : '<i class="fa fa-' + ICON + '-right" aria-hidden="true">') :
+                    '<i class="fa fa-fw" aria-hidden="true">'
+                /*eslint-enable no-nested-ternary */
             );
             // a11y
             if (hasSubFolders) this.$el.attr('aria-expanded', isOpen); else this.$el.removeAttr('aria-expanded');
@@ -364,10 +366,10 @@ define('io.ox/core/folder/node', [
                 .append(
                     // folder
                     this.$.selectable = $('<div class="folder-node" role="presentation">')
-                    .css('padding-left', (o.level * this.indentation) +  offset)
+                    .css('padding-left', (o.level * this.indentation) + offset)
                     .append(
-                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
-                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw" aria-hidden="true"></i></div>') : [],
+                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw" aria-hidden="true"></i></div>'),
                         $('<div class="folder-label">').append(
                             this.$.label = $('<div>')
                         ),
@@ -502,9 +504,29 @@ define('io.ox/core/folder/node', [
 
         renderIcon: function () {
             var o = this.options, type;
-            if (!o.icons || o.tree.module !== 'mail') return;
-            type = account.getType(this.folder) || 'default';
-            this.$.icon.addClass('visible ' + type);
+            if ((o.tree.module !== 'infostore' && !o.icons) || (o.tree.module !== 'mail' && o.tree.module !== 'infostore')) return;
+            if (o.tree.module === 'mail') {
+                type = account.getType(this.folder) || 'default';
+                this.$.icon.addClass('visible ' + type);
+                return;
+            }
+
+            var iconClass = '',
+                infostoreDefaultFolder = String(api.getDefaultFolder('infostore'));
+
+            switch (this.folder) {
+                case 'virtual/myshares':
+                    iconClass = 'visible myshares';
+                    break;
+                case infostoreDefaultFolder:
+                    iconClass = 'visible myfiles';
+                    break;
+                // no default
+            }
+            if (iconClass === '' && api.is('trash', this.model.attributes) && this.model.get('standard_folder')) {
+                iconClass = 'visible trash';
+            }
+            this.$.icon.addClass(iconClass);
         },
 
         render: function () {

@@ -1,5 +1,9 @@
 {
-    "namespace": "io.ox/dev/testing/main",
+    "title": "Edit Distribution List",
+    "company": "Open-Xchange",
+    "icon": "addressbook.png",
+    "category": "Basic",
+    "settings": false,
     "requires": "contacts",
-    "path": "io.ox/contacts/distrib/test"
+    "visible": false
 }

@@ -26,7 +26,21 @@ define('io.ox/calendar/week/perspective', [
 
     'use strict';
 
-    var perspective = new ox.ui.Perspective('week');
+    var perspective = new ox.ui.Perspective('week'),
+        // ensure cid is used in model and collection as idAttribute properly
+        // hint: please note that WeekAppointment is actually not used as Model
+        //       cause we currently still have to deal with the ModelFactory
+        WeekAppointment = Backbone.Model.extend({
+            idAttribute: 'cid',
+            initialize: function () {
+                this.cid = this.attributes.cid = _.cid(this.attributes);
+                // backward compatibility
+                this.id = this.cid;
+            }
+        }),
+        WeekAppointmentCollection = Backbone.Collection.extend({
+            model: WeekAppointment
+        });
 
     _.extend(perspective, {
 
@@ -169,24 +183,24 @@ define('io.ox/calendar/week/perspective', [
                     .show()
                     .done(function (action) {
                         switch (action) {
-                        case 'series':
-                            // get recurrence master object
-                            if (obj.old_start_date || obj.old_end_date) {
-                                // bypass cache to have a fresh last_modified timestamp (see bug 42376)
-                                api.get({ id: obj.id, folder_id: obj.folder_id }, false).done(function (data) {
-                                    // calculate new dates if old dates are available
-                                    data.start_date += (obj.start_date - obj.old_start_date);
-                                    data.end_date += (obj.end_date - obj.old_end_date);
-                                    apiUpdate(data);
-                                });
-                            }
-                            break;
-                        case 'appointment':
-                            apiUpdate(api.removeRecurrenceInformation(obj));
-                            break;
-                        default:
-                            self.refresh();
-                            return;
+                            case 'series':
+                                // get recurrence master object
+                                if (obj.old_start_date || obj.old_end_date) {
+                                    // bypass cache to have a fresh last_modified timestamp (see bug 42376)
+                                    api.get({ id: obj.id, folder_id: obj.folder_id }, false).done(function (data) {
+                                        // calculate new dates if old dates are available
+                                        data.start_date += (obj.start_date - obj.old_start_date);
+                                        data.end_date += (obj.end_date - obj.old_end_date);
+                                        apiUpdate(data);
+                                    });
+                                }
+                                break;
+                            case 'appointment':
+                                apiUpdate(api.removeRecurrenceInformation(obj));
+                                break;
+                            default:
+                                self.refresh();
+                                return;
                         }
                     });
             } else {
@@ -224,8 +238,11 @@ define('io.ox/calendar/week/perspective', [
                 obj = self.view.getRequestParam();
             return api.getAll(obj, useCache).done(function (list) {
                 self.view.reset(obj.start, list);
-            }).fail(function () {
-                notifications.yell('error', gt('An error occurred. Please try again.'));
+            }).fail(function (error) {
+                // no permission to read appointments in this folder
+                if (error && error.code !== 'APP-0013') {
+                    notifications.yell('error', gt('An error occurred. Please try again.'));
+                }
             });
         },
 
@@ -320,22 +337,22 @@ define('io.ox/calendar/week/perspective', [
                     appExtPoint: 'io.ox/calendar/week/view/appointment'
                 });
                 switch (this.view.mode) {
-                case 'day':
-                    this.main.attr({
-                        'aria-label': gt('Day View')
-                    });
-                    break;
-                case 'workweek':
-                    this.main.attr({
-                        'aria-label': gt('Workweek View')
-                    });
-                    break;
-                default:
-                case 'week':
-                    this.main.attr({
-                        'aria-label': gt('Week View')
-                    });
-                    break;
+                    case 'day':
+                        this.main.attr({
+                            'aria-label': gt('Day View')
+                        });
+                        break;
+                    case 'workweek':
+                        this.main.attr({
+                            'aria-label': gt('Workweek View')
+                        });
+                        break;
+                    default:
+                    case 'week':
+                        this.main.attr({
+                            'aria-label': gt('Week View')
+                        });
+                        break;
                 }
 
                 // bind listener for view events
@@ -369,7 +386,7 @@ define('io.ox/calendar/week/perspective', [
         followDeepLink: function () {
             var cid = _.url.hash('id'), e;
             if (cid) {
-                cid = cid.split(',',1)[0];
+                cid = cid.split(',', 1)[0];
 
                 if (_.device('smartphone')) {
                     ox.launch('io.ox/calendar/detail/main', { cid: cid });
@@ -401,8 +418,7 @@ define('io.ox/calendar/week/perspective', [
                     'role': 'navigation',
                     'aria-label': gt('Appointment list')
                 });
-
-            this.collection = new Backbone.Collection([]);
+            this.collection = new WeekAppointmentCollection([]);
 
             var refresh = function () { self.refresh(true); },
                 reload = function () { self.refresh(false); };

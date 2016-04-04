@@ -20,8 +20,8 @@ define('io.ox/core/notifications/badgeview', [
 
     var BadgeModel = Backbone.Model.extend({
         defaults: {
-            count: 0,//overall count, should be used as read only, add notificationViews to update
-            registeredViews: {}//stores the notificationViews that should be included in the calculation of the count
+            count: 0, //overall count, should be used as read only, add notificationViews to update
+            registeredViews: {} //stores the notificationViews that should be included in the calculation of the count
         }
     });
 
@@ -61,7 +61,7 @@ define('io.ox/core/notifications/badgeview', [
             var a11yState = open ? gt('The notification area is open') : gt('The notification area is closed');
 
             this.$el.attr({
-                'aria-pressed': open ? true : false,
+                'aria-pressed': !!open,
                 'aria-label': this.model.get('a11y') + ' ' + a11yState
             });
         },
@@ -74,7 +74,7 @@ define('io.ox/core/notifications/badgeview', [
                 'aria-pressed': false
             })
             .append(
-                this.nodes.icon = $('<i class="fa fa-bell launcher-icon">'),
+                this.nodes.icon = $('<i class="fa fa-bell launcher-icon" aria-hidden="true">'),
                 this.nodes.badge = $('<span class="badge">').append(
                     this.nodes.number = $('<span class="number">')
                 )

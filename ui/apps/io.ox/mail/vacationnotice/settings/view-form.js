@@ -86,31 +86,19 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             index: 275,
             id: ref + '/edit/view/sender',
             draw: function (baton) {
-                var returnIndex = function (source, target) {
-                    var index = -1;
-                    _.each(source, function (obj, key) {
-                        if (_.isArray(obj)) {
-                            if (obj[0] === target || obj[1] === target) index = key;
-                        } else {
-                            if (obj.label === target || obj.value === target) index = key;
-                        }
-
-                    });
-                    return index;
-                },
-                    SelectView = mini.SelectView.extend({
+                var SelectView = mini.SelectView.extend({
                     onChange: function () {
-                        var valuePosition = returnIndex(multiValues.from, this.$el.val());
+                        var valuePosition = _.findIndex(multiValues.from, { value: this.$el.val() });
                         this.model.set(this.name, multiValues.fromArrays[valuePosition]);
                     },
                     update: function () {
                         var valuePosition,
                             modelValue = this.model.get(this.name);
                         if (_.isArray(modelValue)) {
-                            this.$el.val(multiValues.from[returnIndex(multiValues.fromArrays, modelValue[1])].value);
+                            this.$el.val(multiValues.from[_.findIndex(multiValues.fromArrays, modelValue)].value);
                         } else {
-                            valuePosition = returnIndex(multiValues.from, modelValue);
-                            if (valuePosition === -1) valuePosition = returnIndex(multiValues.from, modelValue);
+                            valuePosition = _.findIndex(multiValues.from, { value: modelValue });
+                            if (valuePosition === -1) valuePosition = _.findIndex(multiValues.from, { label: modelValue });
                             this.$el.val(multiValues.from[valuePosition].value);
                         }
                     }
@@ -200,7 +188,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     draw: function (baton) {
                         var checkboxView = new mini.CheckboxView({ name: 'activateTimeFrame', model: baton.model });
 
-                        baton.model.off('change:' + checkboxView.name, null,  ext.point(ref + '/edit/view'));
+                        baton.model.off('change:' + checkboxView.name, null, ext.point(ref + '/edit/view'));
                         baton.model.on('change:' + checkboxView.name, function (model, checked) {
                             $('.dateFrom').find('.form-control').attr('disabled', !checked);
                             $('.dateUntil').find('.form-control').attr('disabled', !checked);

@@ -60,8 +60,8 @@ define('io.ox/calendar/actions/acceptdeny', [
                 }
 
                 return new dialogs.ModalDialog({
-                        help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus'
-                    })
+                    help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus'
+                })
                     .build(function () {
                         if (!series && o.recurrence_position) {
                             data = api.removeRecurrenceInformation(data);
@@ -71,13 +71,14 @@ define('io.ox/calendar/actions/acceptdeny', [
                             description = $('<b>').text(data.title),
                             descriptionId = _.uniqueId('confirmation-dialog-description-');
                         if (!options.taskmode) {
+                            var strings = util.getDateTimeIntervalMarkup(data, { output: 'strings' });
                             description = [
                                 $('<b>').text(data.title),
                                 $.txt(', '),
-                                $.txt(gt.noI18n(util.getDateInterval(data))),
+                                $.txt(gt.noI18n(strings.dateStr)),
                                 $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''))),
                                 $.txt(' '),
-                                $.txt(util.getTimeInterval(data))
+                                $.txt(strings.timeStr)
                             ];
                         }
 
@@ -129,17 +130,17 @@ define('io.ox/calendar/actions/acceptdeny', [
                             }
 
                             switch (action) {
-                            case 'accepted':
-                                apiData.data.confirmation = 1;
-                                break;
-                            case 'declined':
-                                apiData.data.confirmation = 2;
-                                break;
-                            case 'tentative':
-                                apiData.data.confirmation = 3;
-                                break;
-                            default:
-                                return;
+                                case 'accepted':
+                                    apiData.data.confirmation = 1;
+                                    break;
+                                case 'declined':
+                                    apiData.data.confirmation = 2;
+                                    break;
+                                case 'tentative':
+                                    apiData.data.confirmation = 3;
+                                    break;
+                                default:
+                                    return;
                             }
 
                             // set (default) reminder?
@@ -232,8 +233,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                     _.defer(cont, action === 'series');
                     return;
                 });
-        } else {
-            return cont();
         }
+        return cont();
     };
 });

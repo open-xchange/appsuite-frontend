@@ -35,6 +35,7 @@ define('plugins/portal/helloworld/register', [
 
         // if 'action' is implemented the widget title becomes clickable
         action: function (baton) {
+            /*eslint no-alert: 0*/
             alert(baton.hello);
         },
 

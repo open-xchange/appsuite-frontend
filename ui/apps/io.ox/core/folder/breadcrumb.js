@@ -37,7 +37,6 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
             if (options.app) {
 
-                var self = this;
                 this.app = options.app;
                 this.handler = function (id) { this.app.folder.set(id); };
                 this.folder = this.app.folder.get();
@@ -56,7 +55,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                 }
 
                 // do not use listen to here, does not work with dom events, see http://stackoverflow.com/questions/14460855/
-                $(window).on('resize', this.computeWidth.bind(self));
+                $(window).on('resize', $.proxy(this.computeWidth, this));
 
                 this.on('dispose', function () {
                     $(window).off('resize', this.computeWidth);
@@ -100,7 +99,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             );
         },
 
-        computeWidth: _.throttle( function () {
+        computeWidth: _.throttle(function () {
 
             if (this.disposed || !this.$el.is(':visible')) return;
 
@@ -114,16 +113,12 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             // we store this once (per folder)
             this.ownWidth = ownWidth;
 
-            if (ownWidth > maxWidth) {
-                if (this.ellipsisCount === 4) {
-                    this.ellipsisCount = 2;
-                    this.render();
-                }
-            } else {
-                if (this.ellipsisCount === 2) {
-                    this.ellipsisCount = 4;
-                    this.render();
-                }
+            if (ownWidth > maxWidth && this.ellipsisCount === 4) {
+                this.ellipsisCount = 2;
+                this.render();
+            } else if (ownWidth <= maxWidth && this.ellipsisCount === 2) {
+                this.ellipsisCount = 4;
+                this.render();
             }
 
             this.$el.css('max-width', maxWidth);

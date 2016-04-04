@@ -14,7 +14,8 @@
 define('io.ox/core/tk/flag-picker', [
     'io.ox/mail/api',
     'io.ox/core/folder/api',
-    'gettext!io.ox/mail'
+    'gettext!io.ox/mail',
+    'less!io.ox/core/tk/flag-picker'
 ], function (api, folderAPI, gt) {
 
     'use strict';
@@ -33,7 +34,7 @@ define('io.ox/core/tk/flag-picker', [
                 $zIndex = $parent.parents('[style*="z-index"]'),
                 transformOffset = $parent.closest('[style*="translate3d"]').offset() || { top: 0, left: 0 },
                 margin = 8,
-            $scrollContainer = $parent.closest('.ios .io-ox-sidepopup-pane, .ios .io-ox-dialog-popup');
+                $scrollContainer = $parent.closest('.ios .io-ox-sidepopup-pane, .ios .io-ox-dialog-popup');
 
             $scrollContainer.css('-webkit-overflow-scrolling', 'auto');
 
@@ -46,7 +47,8 @@ define('io.ox/core/tk/flag-picker', [
                     dropdownWidth = $ul.outerWidth(),
                     dropdownHeight = $ul.outerHeight(),
                     availableWidth = $(window).width(),
-                    availableHeight = $(window).height();
+                    // don't overlap topbar
+                    availableHeight = $(window).height() - $('#io-ox-topbar').height();
 
                 // check potential positions
                 if ((offset.top + height + dropdownHeight) < availableHeight) {
@@ -75,7 +77,8 @@ define('io.ox/core/tk/flag-picker', [
                         if ((dropdownHeight + 2 * margin) < availableHeight) {
                             positions.top = 'auto';
                         } else {
-                            positions.top = margin;
+                            // again don't overlap the topbar or the dropdown is hidden underneath it
+                            positions.top = margin + $('#io-ox-topbar').height();
                         }
                     }
                 }

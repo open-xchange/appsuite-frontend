@@ -36,6 +36,8 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
             function drawAllVersions(allVersions) {
                 _.chain(allVersions)
+                // avoid unnecessary model changes / change events
+                .clone(versionSorter)
                 .sort(versionSorter)
                 .each(function (version) {
                     var entryRow = $('<tr class="version">');
@@ -45,7 +47,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 });
             }
 
-            function versionSorter (version1, version2) {
+            function versionSorter(version1, version2) {
                 // current version always on top
                 if (version1.current_version) {
                     return -versions.length;
@@ -58,7 +60,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             panelBody.empty();
             if (!model || !_.isArray(versions)) { return; }
 
-            table = $('<table>').addClass('versiontable table').append(
+            table = $('<table>').addClass('versiontable table').attr('data-latest-version', _.last(versions).version).append(
                         $('<caption>').addClass('sr-only').text(gt('File version table, the first row represents the current version.')),
                         $('<thead>').addClass('sr-only').append(
                             $('<tr>').append(
@@ -128,7 +130,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 30,
         draw: function (baton) {
             var isToday = moment().isSame(moment(baton.data.last_modified), 'day'),
-            dateString = (baton.data.last_modified) ? moment(baton.data.last_modified).format(isToday ? 'LT' : 'l LT') : '-';
+                dateString = (baton.data.last_modified) ? moment(baton.data.last_modified).format(isToday ? 'LT' : 'l LT') : '-';
 
             this.find('td:last').append($('<div class="last_modified">').text(gt.noI18n(dateString)));
         }
@@ -154,7 +156,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             if (!_.isEmpty(baton.data.version_comment)) {
                 this.find('td:last').append(
                     $('<div class="comment">').append(
-                        ($node = $('<span class="version-comment">'))
+                        $node = $('<span class="version-comment">')
                     )
                 );
 
@@ -162,6 +164,10 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             }
         }
     });
+
+    // since a file change redraws the entire view
+    // we need to track the open/close state manually
+    var open = {};
 
     /**
      * The FileVersionsView is intended as a sub view of the SidebarView and
@@ -172,21 +178,34 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         className: 'viewer-fileversions',
 
         initialize: function () {
+            PanelBaseView.prototype.initialize.apply(this, arguments);
             // initially hide the panel
             this.$el.hide();
             // attach event handlers
             this.on('dispose', this.disposeView.bind(this));
-            this.$el.on('open', this.onOpen.bind(this));
+            this.$el.on({
+                open: this.onOpen.bind(this),
+                close: this.onClose.bind(this)
+            });
             this.listenTo(this.model, 'change:number_of_versions', this.render);
             this.listenTo(this.model, 'change:versions change:current_version change:number_of_versions change:version change:filename', this.renderVersions);
         },
 
         onOpen: function () {
-            this.$('.sidebar-panel-heading').busy();
+            var header = this.$('.sidebar-panel-heading').busy();
+            // remember
+            open[this.model.cid] = true;
             // loading versions will trigger 'change:version' which in turn renders the version list
-            FilesAPI.versions.load(this.model.toJSON(), { cache: false }).fail(function (error) {
-                if (ox.debug) console.error('FilesAPI.versions.load()', 'error', error);
-            });
+            FilesAPI.versions.load(this.model.toJSON(), { cache: false })
+                .always($.proxy(header.idle, header))
+                .done($.proxy(this.renderVersionsAsNeeded, this))
+                .fail(function (error) {
+                    if (ox.debug) console.error('FilesAPI.versions.load()', 'error', error);
+                });
+        },
+
+        onClose: function () {
+            delete open[this.model.cid];
         },
 
         render: function () {
@@ -195,6 +214,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             this.setPanelHeader(gt('Versions (%1$d)', _.noI18n(count)));
             // show the versions panel only if we have at least 2 versions
             this.$el.toggle(count > 1);
+            this.togglePanel(count > 1 && !!open[this.model.cid]);
             return this;
         },
 
@@ -202,7 +222,27 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
          * Render the version list
          */
         renderVersions: function () {
+            if (!this.model) return this;
             Ext.point(POINT + '/list').invoke('draw', this.$el, Ext.Baton({ model: this.model, data: this.model.toJSON() }));
+        },
+
+        renderVersionsAsNeeded: function () {
+            // might be disposed meanwhile
+            if (!this.$el) return;
+            // in case FilesAPI.versions.load will not indirectly triggers a 'change:version'
+            // f.e. when a new office document is created and the model
+            // is up-to-date when toggling versions pane
+            var node = this.$('table.versiontable'),
+                model = this.model, versions;
+            // is empty
+            if (!node.length) return this.renderVersions();
+            // missing versions
+            versions = model.get('versions') || [];
+            if (!versions.length) return this.renderVersions();
+            // added and removed same number of versions
+            if (node.find('tr.version').length !== versions.length) return this.renderVersions();
+            // has difference in version count
+            if (node.attr('data-latest-version') !== _.last(versions).version) return this.renderVersions();
         },
 
         /**

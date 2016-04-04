@@ -73,7 +73,7 @@ define('io.ox/core/viewer/views/sidebarview', [
     /**
      * notifications lazy load
      */
-    function notify () {
+    function notify() {
         var self = this, args = arguments;
         require(['io.ox/core/notifications'], function (notifications) {
             notifications.yell.apply(self, args);
@@ -167,6 +167,7 @@ define('io.ox/core/viewer/views/sidebarview', [
                 case 32: // space
                     this.onTabClicked(event);
                     break;
+                // no default
             }
         },
 
@@ -246,6 +247,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             // remove dropzone handler
             if (this.zone) {
                 this.zone.off();
+                this.zone.remove();
                 this.zone = null;
             }
             // render sections only if side bar is open

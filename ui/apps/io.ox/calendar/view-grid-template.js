@@ -39,7 +39,7 @@ define('io.ox/calendar/view-grid-template', [
                 this.addClass('calendar').append(
                     time = $('<div class="time">'),
                     date = $('<div class="date">'),
-                    isPrivate = $('<i class="fa fa-lock private-flag">').hide(),
+                    isPrivate = $('<i class="fa fa-lock private-flag" aria-hidden="true">').hide(),
                     title = $('<div class="title">'),
                     $('<div class="location-row">').append(
                         shown_as = $('<span class="shown_as label label-info">&nbsp;</span>'),
@@ -61,8 +61,7 @@ define('io.ox/calendar/view-grid-template', [
             set: function (data, fields) {
                 var self = this,
                     isPrivate = _.isUndefined(data.title),
-                    a11yLabel = '',
-                    tmpStr = '';
+                    a11yLabel = '';
                 //conflicts with appointments, where you aren't a participant don't have a folder_id.
                 if (data.folder_id) {
                     var folder = folderAPI.get(data.folder_id);
@@ -83,12 +82,15 @@ define('io.ox/calendar/view-grid-template', [
                         );
                 }
                 if (data.location) {
-                    a11yLabel += ', ' + data.location;
+                    //#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+                    //#. This fragment appears within a long string for screen readers.
+                    //#. Some languages (e.g. German) might need to translate "location:".
+                    a11yLabel += ', ' + gt.pgettext('a11y', 'at %1$s', data.location);
                 }
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
-                fields.time.text(tmpStr = gt.noI18n(util.getTimeInterval(data)));
+                fields.time.text(gt.noI18n(util.getTimeInterval(data)));
                 a11yLabel += ', ' + util.getTimeIntervalA11y(data);
-                fields.date.text(tmpStr = gt.noI18n(util.getDateInterval(data)));
+                fields.date.text(gt.noI18n(util.getDateInterval(data)));
                 a11yLabel += ', ' + gt.noI18n(util.getDateIntervalA11y(data));
                 fields.shown_as.get(0).className = 'shown_as label ' + util.getShownAsLabel(data);
                 if (data.participants && data.conflict) {
@@ -142,7 +144,7 @@ define('io.ox/calendar/view-grid-template', [
                 } else {
                     fields.isPrivate.hide();
                 }
-                this.attr({ 'aria-label': _.escape(a11yLabel) });
+                this.attr('aria-label', _.escape(a11yLabel) + '.');
             }
         },
 

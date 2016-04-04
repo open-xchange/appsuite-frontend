@@ -41,8 +41,9 @@ define('io.ox/formats/vcard', function () {
         data[tmp.key][tmp.type] = {};
 
         //adjustments
-        if (tmp.key === 'fn')
+        if (tmp.key === 'fn') {
             tmp.values[0] = tmp.values[0];
+        }
 
         if (tmp.key === 'bday') {
             tmp.values[0] = tmp.values[0].slice(0, 4) + '-' + tmp.values[0].slice(4, 6) + '-' + tmp.values[0].slice(6, 8);
@@ -80,13 +81,13 @@ define('io.ox/formats/vcard', function () {
         //typeless vs. typed: 'key:value' vs. 'key;type:value'
         //value vs. valuelist: 'key:value' vs. 'key:value;value;value'
         var regexps = {
-            valid: /^(tel|email|version|n|adr|fn|title|org|role|url|bday|category|role|note)[\:\;](.+)$/i,
-            next: /^(end)[\:](VCARD)$/i,
-            photo: /^(photo)[\:\;](.+)$/i
-        }, n,
-        contacts = [],
-        imagecontainer = '',
-        lines = vcard.split(/\r?\n/);
+                valid: /^(tel|email|version|n|adr|fn|title|org|role|url|bday|category|role|note)[\:\;](.+)$/i,
+                next: /^(end)[\:](VCARD)$/i,
+                photo: /^(photo)[\:\;](.+)$/i
+            }, n,
+            contacts = [],
+            imagecontainer = '',
+            lines = vcard.split(/\r?\n/);
 
         for (n in lines) {
             var line = lines[n],
@@ -151,9 +152,9 @@ define('io.ox/formats/vcard', function () {
         }
 
         //org, title, role
-        output += contact.org ?  '<div class="org">' + contact.org.typeless + '</div>' : '';
-        output += contact.title ?  '<div class="title">' + contact.title.typeless + '</div>' : '';
-        output += contact.role ?  '<div class="role">' + contact.role.typeless + '</div>' : '';
+        output += contact.org ? '<div class="org">' + contact.org.typeless + '</div>' : '';
+        output += contact.title ? '<div class="title">' + contact.title.typeless + '</div>' : '';
+        output += contact.role ? '<div class="role">' + contact.role.typeless + '</div>' : '';
 
         //url (multitype)
         for (type in contact.url) {
@@ -199,13 +200,13 @@ define('io.ox/formats/vcard', function () {
             for (i in ordered) {
                 key = ordered[i];
                 value = contact.adr[type][key];
-                output += value ?  '<div class="' + key + '">' + value + '</div>' : '';
+                output += value ? '<div class="' + key + '">' + value + '</div>' : '';
             }
             output += '</div>';
         }
 
         //birthday
-        output += contact.bday ?  '<div class="bday">' + contact.bday.typeless + '</div>' : '';
+        output += contact.bday ? '<div class="bday">' + contact.bday.typeless + '</div>' : '';
 
         output += '</div><br>';
         return output.replace(/\\n/g, '<br/>');
@@ -220,7 +221,7 @@ define('io.ox/formats/vcard', function () {
     var hCard = function (contacts) {
         var content = '';
         _.each(contacts, function (contact) {
-            return content += hCardContact(contact);
+            return (content += hCardContact(contact));
         });
         return '<body style="font: 14px/20px Arial; padding: 30px;">' + content + '</body>';
     };

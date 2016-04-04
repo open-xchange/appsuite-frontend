@@ -45,9 +45,10 @@ define('io.ox/core/capabilities', function () {
                 });
 
             try {
+                /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
             } catch (e) {
-                console.error('capabilities.has()', str, e);
+                if (_.device('!karma')) console.error('capabilities.has()', str, e);
                 return false;
             }
         },
@@ -105,10 +106,11 @@ define('io.ox/core/capabilities', function () {
         var capcur = _.pluck(api.get(), 'id').sort(),
             data = { enabled: [], disabled: [], mismatch: [] };
         _.each(capcur, function (id) {
-            if (api.has(id))
+            if (api.has(id)) {
                 data.enabled.push(id);
-            else
+            } else {
                 data.disabled.push(id);
+            }
         });
         return data;
     };

@@ -15,8 +15,9 @@ define('io.ox/mail/view-options', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/api/account',
-    'gettext!io.ox/mail'
-], function (ext, Dropdown, account, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/core/commons'
+], function (ext, Dropdown, account, gt, commons) {
 
     'use strict';
 
@@ -65,17 +66,28 @@ define('io.ox/mail/view-options', [
         index: 1000,
         draw: function (baton) {
 
+            var app = baton.app, model = app.props;
+
             var dropdown = new Dropdown({
                 caret: true,
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort by'),
-                model: baton.app.props
+                model: model
             });
+
+            function toggle() {
+                var folder = app.folder.get();
+                dropdown.$el.toggle(folder !== 'virtual/all-unseen');
+            }
+
+            app.on('folder:change', toggle);
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
             this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
                 e.stopPropagation();
             }));
+
+            toggle();
         }
     });
 
@@ -88,6 +100,8 @@ define('io.ox/mail/view-options', [
             e.preventDefault();
             var i = $(this).find('i'), selection = e.data.baton.app.listView.selection;
             if (i.hasClass('fa-check-square-o')) selection.selectNone(); else selection.selectAll();
+            // get the focus back
+            $(this).focus();
         }
     }
 
@@ -122,18 +136,20 @@ define('io.ox/mail/view-options', [
 
     function toggleFolderView(e) {
         e.preventDefault();
-        e.data.app.folderView.forceOpen = e.data.state;
-        e.data.app.props.set('folderview', e.data.state);
+        var state = !!e.data.state;
+        e.data.app.folderView.forceOpen = state;
+        e.data.app.props.set('folderview', state);
+        // keep focus
+        var selector = '[data-action="' + (state ? 'close' : 'open') + '-folder-view"]';
+        e.data.app.getWindow().nodes.outer.find(selector).focus();
     }
 
     function onFolderViewOpen(app) {
-        app.getWindow().nodes.main.find('.list-view-control')
-            .removeClass('toolbar-bottom-visible');
+        app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
     }
 
     function onFolderViewClose(app) {
-        app.getWindow().nodes.main.find('.list-view-control')
-            .addClass('toolbar-bottom-visible');
+        app.getWindow().nodes.main.find('.list-view-control').addClass('toolbar-bottom-visible');
     }
 
     ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
@@ -142,7 +158,7 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
 
             this.append(
-                $('<a href="#" class="toolbar-item" tabindex="1">')
+                $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="open-folder-view">')
                 .attr('title', gt('Open folder view'))
                 .append($('<i class="fa fa-angle-double-right">'))
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
@@ -153,7 +169,7 @@ define('io.ox/mail/view-options', [
             side.addClass('bottom-toolbar');
             side.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button" tabindex="1">')
+                    $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="close-folder-view">')
                     .append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Close folder view'))
@@ -168,6 +184,17 @@ define('io.ox/mail/view-options', [
             });
 
             if (baton.app.folderViewIsVisible()) _.defer(onFolderViewOpen, baton.app);
+        }
+    });
+
+    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
+        id: 'premium-area',
+        index: 200,
+        draw: function (baton) {
+            commons.addPremiumFeatures(baton.app, {
+                upsellId: 'folderview/mail/bottom',
+                upsellRequires: 'active_sync'
+            });
         }
     });
 });

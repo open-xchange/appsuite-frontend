@@ -18,11 +18,12 @@ define('io.ox/core/tk/tokenfield', [
     'io.ox/participants/views',
     'io.ox/contacts/api',
     'io.ox/core/util',
+    'gettext!io.ox/core',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, Typeahead, pModel, pViews, contactAPI, util) {
+], function (ext, Typeahead, pModel, pViews, contactAPI, util, gt) {
 
     'use strict';
 
@@ -30,10 +31,10 @@ define('io.ox/core/tk/tokenfield', [
 
     $.fn.tokenfield.Constructor.prototype.getTokensList = function (delimiter, beautify, active) {
         delimiter = delimiter || this._firstDelimiter;
-        beautify = ( typeof beautify !== 'undefined' && beautify !== null ) ? beautify : this.options.beautify;
+        beautify = (typeof beautify !== 'undefined' && beautify !== null) ? beautify : this.options.beautify;
 
-        var separator = delimiter + ( beautify && delimiter !== ' ' ? ' ' : '');
-        return $.map( this.getTokens(active), function (token) {
+        var separator = delimiter + (beautify && delimiter !== ' ' ? ' ' : '');
+        return $.map(this.getTokens(active), function (token) {
             if (token.model) {
                 var displayname = token.model.getDisplayName(),
                     email = token.model.getEmail ? token.model.getEmail() : undefined;
@@ -55,8 +56,8 @@ define('io.ox/core/tk/tokenfield', [
 
         if (typeof tokens === 'string') {
             if (this._delimiters.length) {
-                // Split based on comma as delimiter whilst ignoring comma in quotes
-                tokens = tokens.match(/('[^']*'|"[^"]*"|[^"',]+)+/g);
+                // Split based on comma or semi-colon as delimiter whilst ignoring comma in quotes
+                tokens = tokens.match(/('[^']*'|"[^"]*"|[^"',;]+)+/g);
             } else {
                 tokens = [tokens];
             }
@@ -134,10 +135,10 @@ define('io.ox/core/tk/tokenfield', [
                 index: 100,
                 draw: function (data) {
                     var pview = new pViews.ParticipantEntryView({
-                            model: data.model,
-                            closeButton: false,
-                            halo: false
-                        });
+                        model: data.model,
+                        closeButton: false,
+                        halo: false
+                    });
                     this.append(pview.render().$el);
                 }
             });
@@ -193,7 +194,7 @@ define('io.ox/core/tk/tokenfield', [
                     if (self.autoselect[query]) {
                         // trigger enter key press event
                         self.input.trigger(
-                            $.Event( 'keydown', { keyCode: 13, which: 13 } )
+                            $.Event('keydown', { keyCode: 13, which: 13 })
                         );
                         // remove from hash
                         delete self.autoselect[query];
@@ -212,10 +213,11 @@ define('io.ox/core/tk/tokenfield', [
                     }
 
                     // edit
-                    var inputData = self.getInput().data();
+                    var inputData = self.getInput().data(),
+                        newAttrs;
                     if (inputData.edit === true) {
                         // edit mode
-                        var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
+                        newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
                         if (_.isArray(newAttrs)) {
                             // this is a mail address
                             e.attrs.label = util.removeQuotes(newAttrs[1]);
@@ -240,7 +242,7 @@ define('io.ox/core/tk/tokenfield', [
 
                     // create model for unknown participants
                     if (!e.attrs.model) {
-                        var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
+                        newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
                         if (_.isArray(newAttrs)) {
                             // this is a mail address
                             e.attrs.label = util.removeQuotes(newAttrs[1]);
@@ -260,20 +262,30 @@ define('io.ox/core/tk/tokenfield', [
                     if (e.attrs.model.has('distribution_list')) {
                         // create a model/token for every member with an email address
                         var models = _.chain(e.attrs.model.get('distribution_list'))
-                             .filter(function (m) { return !!m.mail; })
-                             .map(function (m) {
-                                 m.type = 5;
-                                 var model = new pModel.Participant({
-                                     type: 5,
-                                     display_name: m.display_name,
-                                     email1: m.mail
-                                 });
-                                 return model.set('token', {
-                                     label: m.display_name,
-                                     value: m.mail
-                                 }, { silent: true });
-                             })
-                             .value();
+                            .filter(function (m) { return !!m.mail; })
+                            .map(function (m) {
+                                m.type = 5;
+                                var model = new pModel.Participant({
+                                    type: 5,
+                                    display_name: m.display_name,
+                                    email1: m.mail
+                                });
+                                return model.set('token', {
+                                    label: m.display_name,
+                                    value: m.mail
+                                }, { silent: true });
+                            })
+                            .value();
+
+                        var name = e.attrs.model.get('display_name'),
+                            members  = _(models).map(function (m) { return [m.get('token').label + ', ' + m.get('token').value]; });
+
+                        self.$el.trigger('aria-live-update',
+                            members.length === 1 ?
+                                gt('Added distribution list %s with %s member. The only member of the distribution list is %s.', name, members.length, members.join(', ')) :
+                                gt('Added distribution list %s with %s members. Members of the distribution list are %s.', name, members.length, members.join(', '))
+                        );
+
                         self.collection.add(models);
                         self.redrawTokens();
                         // clean input
@@ -287,6 +299,9 @@ define('io.ox/core/tk/tokenfield', [
                         value: e.attrs.value
                     }, { silent: true });
                     e.attrs.value = e.attrs.model.cid;
+                    //#. %1$s is the display name of an added user or mail recipient
+                    //#. %2$s is the email address of the user or mail recipient
+                    self.$el.trigger('aria-live-update', gt('Added %1$s, %2$s.', e.attrs.model.get('display_name'), e.attrs.model.value));
                     // add model to the collection and save cid to the token
                     self.collection.add(e.attrs.model);
                 },
@@ -321,11 +336,34 @@ define('io.ox/core/tk/tokenfield', [
                             // token.label might have quotes, so we need to clean up again
                             e.attrs.value = token.label ? '"' + util.removeQuotes(token.label) + '" <' + token.value + '>' : token.value;
                         }
+                        self.getInput().one('blur', function () {
+                            // see if there is a token with the cid
+                            var tokens = self.$el.parent().find('.token'),
+                                cid = self.getInput().data().editModel.cid,
+                                found = false;
+
+                            for (var i = 0; i < tokens.length; i++) {
+                                if ($(tokens[i]).data('attrs').value === cid) {
+                                    found = true;
+                                    return;
+                                }
+                            }
+
+                            // user tries to remove token by clearing the token in editmode
+                            // token was removed but it's still in the collection, so we need to remove it correctly
+                            if (!found) {
+                                self.collection.remove(self.getModelByCID(cid));
+                            }
+                        });
                     }
                 },
                 'tokenfield:removetoken': function (e) {
                     _([].concat(e.attrs)).each(function (el) {
-                        self.collection.remove(self.getModelByCID(el.value));
+                        var model = self.getModelByCID(el.value);
+                        //#. %1$s is the display name of a removed user or mail recipient
+                        //#. %2$s is the email address of the user or mail recipient
+                        self.$el.trigger('aria-live-update', gt('Removed %1$s, %2$s.', model.get('display_name'), model.value));
+                        self.collection.remove(model);
                     });
                 }
             });
@@ -343,13 +381,13 @@ define('io.ox/core/tk/tokenfield', [
                     allowEditing: o.allowEditing,
                     typeahead: self.typeaheadOptions,
                     html: this.options.html || false,
-                    inputType: 'email'
+                    inputType: this.options.inputtype || 'email'
                 });
 
             this.register();
 
             // save original typeahead input
-            this.input =  $(this.$el).data('bs.tokenfield').$input;
+            this.input = $(this.$el).data('bs.tokenfield').$input;
             // call typehead render
             Typeahead.prototype.render.call({
                 $el: this.input,
@@ -407,17 +445,17 @@ define('io.ox/core/tk/tokenfield', [
                     forcePlaceholderSize: true,
                     // update: _.bind(this.resort, this),
                     stop: function () {
-                        self.resort.call(self);
+                        self.resort();
                     },
                     receive: function (e, ui) {
                         var tokenData = ui.item.data();
                         self.collection.add(tokenData.attrs.model);
-                        self.resort.call(self);
+                        self.resort();
                     },
                     remove: function (e, ui) {
                         var tokenData = ui.item.data();
                         self.collection.remove(tokenData.attrs.model);
-                        self.resort.call(self);
+                        self.resort();
                     }
                 }).droppable({
                     hoverClass: 'drophover'

@@ -81,14 +81,13 @@ define.async('io.ox/core/manifests', [
                         return moduleDef;
                     }
                 };
-            } else {
-                // Not explicitely plugin aware, so, let's require everything beforehand
-                return {
-                    dependencies: this.withPluginsFor(pointName, dependencies),
-                    definitionFunction: definitionFunction,
-                    after: this.pluginsFor('after:' + pointName)
-                };
             }
+            // Not explicitely plugin aware, so, let's require everything beforehand
+            return {
+                dependencies: this.withPluginsFor(pointName, dependencies),
+                definitionFunction: definitionFunction,
+                after: this.pluginsFor('after:' + pointName)
+            };
         },
         isDisabled: function (id) {
             validate();
@@ -132,8 +131,7 @@ define.async('io.ox/core/manifests', [
 
         // check capabilities. skip this if upsell=true.
         // Such plugins take care of missing capabilities own their own
-        if (isDisabled(manifest))
-            return;
+        if (isDisabled(manifest)) return;
 
         // loop over namespaces (might be multiple)
         // supports: 'one', ['array'] or 'one two three'

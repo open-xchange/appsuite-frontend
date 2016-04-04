@@ -20,7 +20,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         // open files app
         require(['io.ox/core/folder/api'], function (api) {
             api.get(id).then(
-                function () {
+                function () {
                     ox.launch(app, { folder: id }).done(function () {
                         // set proper folder
                         if (this.folder.get() !== id) this.folder.set(id);
@@ -39,7 +39,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         var data = $(this).data(),
             // special handling for text and spreadsheet
             options = /^io.ox\/office\//.test(data.app) ?
-                { action: 'load', file: { folder_id: data.folder, id: data.id }} :
+                { action: 'load', file: { folder_id: data.folder, id: data.id } } :
                 _(data).pick('folder', 'folder_id', 'id');
 
         ox.launch(data.app + '/main', options).done(function () {
@@ -99,7 +99,12 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         var data = $(this).data();
         if (data.id) {
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/api', 'io.ox/calendar/view-detail']).done(function (dialogs, api, view) {
-                new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
+                // chrome uses a shadowdom, this prevents the sidepopup from finding the correct parent to attach.
+                var sidepopup = new dialogs.SidePopup({ arrow: !_.device('chrome'), tabTrap: true });
+                if (_.device('chrome')) {
+                    sidepopup.setTarget(document.body);
+                }
+                sidepopup.show(e, function (popup) {
                     popup.busy();
                     api.get(data).done(function (data) {
                         popup.idle().append(view.draw(data));
@@ -118,12 +123,14 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         e.preventDefault();
         var data = $(this).data();
         ox.launch('io.ox/tasks/main', { folder: data.folder }).done(function () {
-            var app = this, folder = data.folder, id = data.id;
+            var app = this, folder = data.folder, id = data.id,
+                cid = id && id.indexOf('.') !== -1 ? id : _.cid({ folder: folder, id: id });
+
             if (app.folder.get() === folder) {
-                app.getGrid().selection.set(id);
+                app.getGrid().selection.set(cid);
             } else {
                 app.folder.set(folder).done(function () {
-                    app.getGrid().selection.set(id);
+                    app.getGrid().selection.set(cid);
                 });
             }
         });
@@ -159,7 +166,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         // go!
         ox.registry.call('mail-compose', 'compose', {
             to: [[name, address]],
-            subject: params.subject || '',
+            subject: params.subject || '',
             attachments: params.body ? [{ content: params.body || '' }] : undefined
         });
     });

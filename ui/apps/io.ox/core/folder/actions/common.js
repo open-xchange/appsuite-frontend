@@ -29,45 +29,56 @@ define('io.ox/core/folder/actions/common', [
             mailAPI.allSeen(e.data.folder);
         },
 
-        expungeFolder: function (e) {
-            // get current folder id
-            var folder = e.data.folder;
+        moveAll: function (source) {
+            ox.load(['io.ox/core/folder/actions/move']).done(function (move) {
+                move.all({ button: gt('Move all'), source: source });
+            });
+        },
+
+        expunge: function (id) {
             notifications.yell('busy', gt('Cleaning up ...'));
-            mailAPI.expunge(folder).done(function () {
+            mailAPI.expunge(id).done(function () {
                 notifications.yell('success', gt('The folder has been cleaned up.'));
             });
         },
 
-        clearFolder: function (e) {
-            var id = e.data.id;
-            folderAPI.get(id).done(function (folder) {
-                new dialogs.ModalDialog()
-                    .text(gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)))
-                    .addPrimaryButton('delete', gt('Empty folder'), 'delete', { tabIndex: 1 })
-                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                    .on('delete', function () {
+        clearFolder: (function () {
 
-                        function clear() {
-                            // dedicated message for drive because "empty" does not remove folders
-                            var message = folder.module === 'infostore' ?
-                                gt('All files have been deleted') :
-                                gt('The folder has been emptied');
-                            folderAPI.clear(id).done(function () {
-                                notifications.yell('success', message);
-                            });
-                        }
+            function clear(id, module) {
+                folderAPI.clear(id).done(function () {
+                    notifications.yell('success', getMessage(module));
+                });
+            }
 
-                        if (account.is('spam', id)) {
-                            http.pause();
-                            mailAPI.allSeen(id);
-                            clear();
-                            http.resume();
-                        } else {
-                            clear();
-                        }
-                    })
-                    .show();
-            });
-        }
+            function getMessage(module) {
+                switch (module) {
+                    case 'mail': return gt('All messages have been deleted');
+                    // dedicated message for drive because "empty" does not remove folders
+                    case 'infostore': return gt('All files have been deleted');
+                    default: return gt('The folder has been emptied');
+                }
+            }
+
+            return function (id) {
+
+                folderAPI.get(id).done(function (folder) {
+                    new dialogs.ModalDialog()
+                        .text(gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)))
+                        .addPrimaryButton('delete', gt('Empty folder'), 'delete', { tabIndex: 1 })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                        .on('delete', function () {
+                            if (account.is('spam', id)) {
+                                http.pause();
+                                mailAPI.allSeen(id);
+                                clear(id, folder.module);
+                                http.resume();
+                            } else {
+                                clear(id, folder.module);
+                            }
+                        })
+                        .show();
+                });
+            };
+        }())
     };
 });

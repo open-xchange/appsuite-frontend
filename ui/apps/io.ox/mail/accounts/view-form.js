@@ -33,6 +33,11 @@ define.async('io.ox/mail/accounts/view-form', [
             { label: gt.noI18n('POP3'), value: 'pop3' }
         ],
 
+        serverTypePorts = {
+            'imap': { common: '143', secure: '993' },
+            'pop3': { common: '110', secure: '995' }
+        },
+
         optionsRefreshRatePop = [
             { label: gt.noI18n('3'), value: '3' },
             { label: gt.noI18n('5'), value: '5' },
@@ -45,11 +50,11 @@ define.async('io.ox/mail/accounts/view-form', [
 
         optionsAuthType = [
             //#. Auth type. Short for "Use same credentials as incoming mail server"
-            { value: 'mail',    label: gt('As incoming mail server') },
+            { value: 'mail', label: gt('As incoming mail server') },
             //#. Auth type. Use separate username and password
-            { value: 'custom',  label: gt('Use separate username and password') },
+            { value: 'custom', label: gt('Use separate username and password') },
             //#. Auth type. None. No authentication
-            { value: 'none',    label: gt('None') }
+            { value: 'none', label: gt('None') }
         ],
 
         // already for 7.8.0
@@ -91,8 +96,7 @@ define.async('io.ox/mail/accounts/view-form', [
 
             var secure = model.get('mail_secure'),
                 protocol = model.get('mail_protocol') || 'imap';
-
-            return protocol === 'imap' ? (secure ? '993' : '143') : (secure ? '995' : '110');
+            return serverTypePorts[protocol][secure ? 'secure' : 'common'];
         },
 
         defaultDisplayName = '',
@@ -103,7 +107,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 //if the server has no pop3 support and this account is a new one, remove the pop3 option from the selection box
                 //we leave it in with existing accounts to display them correctly even if they have pop3 protocol (we deny protocol changing when editing accounts anyway)
                 if (!capabilities.has('pop3') && !this.model.get('id')) {
-                    optionsServerType = [ { label: gt.noI18n('IMAP'), value: 'imap' } ];
+                    optionsServerType = [{ label: gt.noI18n('IMAP'), value: 'imap' }];
                 }
 
                 //check if login and mailaddress are synced
@@ -168,8 +172,9 @@ define.async('io.ox/mail/accounts/view-form', [
                         } else {
                             //conditional defaults
                             _.each(defaults.pop3, function (value, key) {
-                                if (!model.has(key))
+                                if (!model.has(key)) {
                                     model.set(key, value);
+                                }
                             });
                             pop3nodes.show();
                         }

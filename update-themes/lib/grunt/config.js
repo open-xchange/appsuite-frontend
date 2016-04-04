@@ -17,15 +17,24 @@ module.exports = function (grunt) {
     grunt.config.extend('clean', {
         default: {}
     });
+    grunt.file.expand({cwd: 'apps/themes/'}, '*/common.css').forEach(function (file) {
+        //directories with a common.css file are themes that need to be cleaned
+        //this way, css files of already uninstalled themes get removed by update-themes
+        var themeName = file.replace(/\/common.css$/, '');
+        grunt.verbose.writeln('found theme', themeName);
+        var cleanConfig = {};
+        cleanConfig[themeName] = ['apps/themes/' + themeName + '/**/*.css'];
+        grunt.config.extend('clean', cleanConfig);
+    });
 
     grunt.config.extend('less', {
         default: {}
     });
     grunt.file.expand({cwd: 'apps/themes/'}, '*/definitions.less').forEach(function (file) {
+        //directories with a definitions.less file are themes that need to be built
         var themeName = file.replace(/\/definitions.less$/, '');
         grunt.verbose.writeln('found theme', themeName);
         var theme = {};
-        var cleanConfig = {};
         theme[themeName] = {
             options: {
                 compress: true,
@@ -94,9 +103,7 @@ module.exports = function (grunt) {
                 }
             ]
         };
-        cleanConfig[themeName] = ['apps/themes/' + themeName + '/**/*.css'];
         grunt.config.extend('less', theme);
-        grunt.config.extend('clean', cleanConfig);
     });
 
     grunt.registerTask('default', ['clean', 'less']);

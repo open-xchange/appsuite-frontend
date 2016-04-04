@@ -66,14 +66,12 @@ define('io.ox/core/tk/vgrid', [
         this.getHeight = function () {
             if (isEmpty) {
                 return 0;
-            } else {
-                // not sure if template ever contains more than one element
-                if (template[0].getHeight) {
-                    return template[0].getHeight();
-                } else {
-                    return getHeight(this.getClone().node);
-                }
             }
+            // not sure if template ever contains more than one element
+            if (template[0].getHeight) {
+                return template[0].getHeight();
+            }
+            return getHeight(this.getClone().node);
 
         };
 
@@ -327,8 +325,12 @@ define('io.ox/core/tk/vgrid', [
                             .on('click', { grid: this }, fnToggleEditable)
                 )
                 .prependTo(node),
-            // item template
-            template = new Template({ tempDrawContainer: container }),
+        // item template
+            templateOptions = { tempDrawContainer: container };
+        if (options.templateOptions) {
+            templateOptions = _.extend(templateOptions, options.templateOptions);
+        }
+        var template = new Template(templateOptions),
             // label template
             label = new Template({ tempDrawContainer: container }),
             // item pool
@@ -528,16 +530,16 @@ define('io.ox/core/tk/vgrid', [
         cloneRow = (function () {
 
             var createCheckbox = function () {
-                    var fields = {};
-                    this.prepend(
+                var fields = {};
+                this.prepend(
                         fields.div = $('<div class="vgrid-cell-checkbox">').append(
                             fields.label = $('<label>').append(
                                 fields.input = $('<input type="checkbox" class="reflect-selection" aria-hidden="true">').attr('tabindex', -1)
                             )
                         )
                     );
-                    return { checkbox: fields };
-                };
+                return { checkbox: fields };
+            };
 
             return function (template) {
                 // get clone
@@ -666,9 +668,8 @@ define('io.ox/core/tk/vgrid', [
                 offset = Math.max(offset >> 0, 0);
                 if (offset === currentOffset) {
                     return DONE;
-                } else {
-                    currentOffset = offset;
                 }
+                currentOffset = offset;
 
                 // get all items
                 return loader.load(offset, all).then(
@@ -699,7 +700,7 @@ define('io.ox/core/tk/vgrid', [
             numVisible = Math.max(1, ((node.height() / itemHeight) >> 0) + 2);
             numRows = CHUNK_SIZE;
             // prepare pool
-            var  i = 0, clone, frag = document.createDocumentFragment();
+            var i = 0, clone, frag = document.createDocumentFragment();
             for (; i < numRows; i++) {
                 if (i >= pool.length) {
                     // get clone
@@ -822,9 +823,8 @@ define('io.ox/core/tk/vgrid', [
                         //console.debug('case #1 restoreHashSelection()', ids);
                         restoreHashSelection(ids, changed);
                         return;
-                    } else {
-                        _.url.hash('id', null);
                     }
+                    _.url.hash('id', null);
                 }
 
                 if (autoSelectAllowed()) {
@@ -884,21 +884,21 @@ define('io.ox/core/tk/vgrid', [
                 // always reset loader since header data (e.g. flags) might have changed
                 loader.reset();
 
-                if (isArray(list)) {
-                    return apply(list)
-                        .always(function () {
-                            self.idle();
-                        })
-                        .done(function () {
-                            var hasChanged = !_.isEqual(all, list);
-                            updateSelection(hasChanged);
-                            // global event
-                            ox.trigger('grid:stop', _.clone(props.toJSON()), list);
-                        });
-                } else {
+                if (!_.isArray(list)) {
                     console.warn('VGrid.all() must provide an array!');
                     return $.Deferred().reject();
                 }
+
+                return apply(list)
+                    .always(function () {
+                        self.idle();
+                    })
+                    .done(function () {
+                        var hasChanged = !_.isEqual(all, list);
+                        updateSelection(hasChanged);
+                        // global event
+                        ox.trigger('grid:stop', _.clone(props.toJSON()), list);
+                    });
             }
 
             return function () {
@@ -1091,7 +1091,8 @@ define('io.ox/core/tk/vgrid', [
 
         this.refresh = function (force) {
             // load all (if painted before)
-            return !firstRun ? loadAll() : (force === true ? this.paint() : DONE);
+            if (!firstRun) return loadAll();
+            return force === true ? this.paint() : DONE;
         };
 
         this.pending = function () {
@@ -1202,12 +1203,10 @@ define('io.ox/core/tk/vgrid', [
                         responsiveChange = true;
                     }
                     return this;
-                } else {
-                    return options[key];
                 }
-            } else {
-                return options;
+                return options[key];
             }
+            return options;
         };
 
         this.props = props;
@@ -1226,12 +1225,10 @@ define('io.ox/core/tk/vgrid', [
                         responsiveChange = true;
                     }
                     return this;
-                } else {
-                    return props.get(key);
                 }
-            } else {
-                return props.toJSON();
+                return props.get(key);
             }
+            return props.toJSON();
         };
 
         this.scrollTop = function (t) {

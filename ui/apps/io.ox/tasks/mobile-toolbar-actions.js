@@ -176,7 +176,7 @@ define('io.ox/tasks/mobile-toolbar-actions', [
 
             // multiselect
             function updateSecondaryToolbar(list) {
-                if (app.props.get('checkboxes') !== true ) return;
+                if (app.props.get('checkboxes') !== true) return;
                 if (list.length === 0) {
                     // reset to remove old baton
                     app.pages.getSecondaryToolbar('listView')

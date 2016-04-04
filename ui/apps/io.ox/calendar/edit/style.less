@@ -12,22 +12,19 @@
  */
 
 .io-ox-calendar-edit {
-
     // baseline adjustment
-    padding-top: 16px;
+    padding-top: @default-padding;
 
-    .btn.btn-link {
-        padding-left: 0;
-    }
+    .btn.btn-link { padding-left: 0; }
 
     .actionToggle {
         display: none;
         margin: 10px 0;
     }
 
-    .recurrenceview div.checkbox {
-        margin-top: 0;
-    }
+    .recurrenceview div.checkbox { margin-top: 0; }
+
+    input[name="title"] { font-weight: bold; }
 
     textarea.note {
         resize: vertical;
@@ -35,11 +32,44 @@
         min-height: 120px;
     }
 
-    .find-free-time {
-        margin-top: 12px;
-    }
+    .find-free-time { margin-top: 12px; }
 
     .custom-color {
+
+        padding-top: 8px;
+
+        input[type="radio"] {
+            // display: none does NOT work; cannot receive focus
+            position: absolute;
+            clip: rect(0, 0, 0, 0);
+        }
+
+        label {
+            padding: 0;
+            margin: 0;
+        }
+
+        .box:before {
+            font-family: 'FontAwesome';
+            content: '\00a0';
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-right: 4px;
+            border-radius: @border-radius-small;
+            text-align: center;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        input[type="radio"]:focus + .box:before {
+            box-shadow: 0 0 3px @link-color;
+        }
+
+        input[type="radio"]:checked + .box:before {
+            content: '\f00c';
+        }
+
         .generate-color-label(@counter) when (@counter > 0) {
             .generate-color-label((@counter - 1));
 
@@ -47,9 +77,9 @@
             @color-label-contrast: contrast(@@color-label-bg-mod);
 
             .color-label-@{counter} {
-                @color-label-counter: ~"color-label-bg-@{counter}";
-                background-color: darken(@@color-label-counter, 10%);
-                .fa {
+                &:before {
+                    @color-label-counter: ~"color-label-bg-@{counter}";
+                    background-color: darken(@@color-label-counter, 10%);
                     color: @color-label-contrast;
                 }
             }
@@ -57,83 +87,39 @@
 
         .generate-color-label(10);
 
-        .color-label {
-            width: 20px;
-            height: 20px;
-            margin: 2px;
-            text-align: center;
-            border-radius: @border-radius-small;
-            cursor: pointer;
-
-            &.no-color {
-                border: 1px solid #555;
-                margin-right: 22px;
-                color: @black;
-            }
-
-            .fa {
-                display: none;
-            }
-
-            &.active {
-                .fa {
-                    display: inline-block;
-                }
-            }
+        .box.no-color:before {
+            border: 1px solid #888;
+            margin-right: 24px;
+            color: @black;
         }
     }
 
-    .hard-conflict {
-        margin: 1em 0 0 0;
-    }
+    .hard-conflict { margin: 1em 0 0 0; }
 
     /* Mobile */
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
+        .actionToggle { display: block; }
 
-        .actionToggle {
-            display: block;
-        }
+        .collapsed { display: none; }
 
-        .collapsed {
-            display: none;
-        }
+        textarea.note { min-height: 50px; }
 
-        textarea.note {
-            min-height: 50px;
-        }
+        .custom-color .color-label {
+            width: 40px;
+            height: 40px;
+            margin: 4px;
+            font-size: 30px;
 
-        .custom-color {
-            .color-label {
-                width: 40px;
-                height: 40px;
-                margin: 4px;
-                font-size: 30px;
+            &.no-color { margin-right: 52px; }
 
-                &.no-color {
-                    margin-right: 52px;
-                }
-
-                &.active {
-                    .fa {
-                        line-height: 40px;
-                    }
-                }
-            }
+            &.active .fa { line-height: 40px; }
         }
     }
 }
 
-.io-ox-calendar-edit-window {
-    &.header-top {
-        .window-header {
-            .header-right {
-                float: right;
-                line-height: 32px;
+.io-ox-calendar-edit-window.header-top .window-header .header-right {
+    float: right;
+    line-height: 32px;
 
-                a {
-                    margin-left: 0.2em;
-                }
-            }
-        }
-    }
+    a { margin-left: 0.2em; }
 }

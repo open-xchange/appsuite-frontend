@@ -276,10 +276,9 @@ define('io.ox/core/permissions/permissions', [
 
     addRemoveButton = function (entity) {
         if (isFolderAdmin && entity !== ox.user_id) {
-            return $('<a href="# "data-action="remove">').append($('<i class="fa fa-trash-o">'));
-        } else {
-            return $();
+            return $('<a href="# "data-action="remove">').append($('<i class="fa fa-trash-o" aria-hidden="true">'));
         }
+        return $();
     };
 
     preventAdminPermissions = function (permission, baton) {
@@ -396,7 +395,8 @@ define('io.ox/core/permissions/permissions', [
                     var ids = _.chain(data.permissions)
                         .filter(function (obj) { return obj.group === false; })
                         .pluck('entity')
-                        .value();
+                        .value(),
+                        cascadePermissionsFlag = false;
 
                     dialog.getContentNode().addClass('scrollpane').busy();
 
@@ -421,8 +421,7 @@ define('io.ox/core/permissions/permissions', [
                             }
                         });
 
-                        var cascadePermissionsFlag = false,
-                            buildCheckbox = function () {
+                        var buildCheckbox = function () {
                                 var checkbox = $('<input type="checkbox" tabindex="1">')
                                 .on('change', function () {
                                     cascadePermissionsFlag = checkbox.prop('checked');

@@ -71,7 +71,7 @@ define('io.ox/core/taskQueue', function () {
         };
 
         this.chainTask = function (taskDef) {
-            return this.nextTask = new Task(taskDef);
+            return (this.nextTask = new Task(taskDef));
         };
 
         this.destroy = function () {
@@ -119,7 +119,7 @@ define('io.ox/core/taskQueue', function () {
             if (tasks[taskId]) {
                 return tasks[taskId].start();
             }
-            throw 'Unknown TaskId ' + taskId;
+            throw new Error('Unknown TaskId ' + taskId);
         };
 
         this.get = function (taskId) {
@@ -130,7 +130,7 @@ define('io.ox/core/taskQueue', function () {
             if (tasks[taskId]) {
                 return tasks[taskId].when();
             }
-            throw 'Unknown TaskId ' + taskId;
+            throw new Error('Unknown TaskId ' + taskId);
         };
 
         this.start = function () {

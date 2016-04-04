@@ -101,7 +101,7 @@ define('io.ox/contacts/view-detail', [
         id: 'inline-actions',
         draw: function (baton) {
             if (!api.looksLikeResource(baton.data)) {
-                ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton.data);
+                ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton);
             }
         }
     });
@@ -112,7 +112,7 @@ define('io.ox/contacts/view-detail', [
         draw: function (baton) {
             var node;
             this.append(
-                node = $('<header class="contact-header" role="heading">')
+                node = $('<header class="contact-header">')
             );
             ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
@@ -263,9 +263,8 @@ define('io.ox/contacts/view-detail', [
                 .filter(function (member) {
                     if (hash[member.mail]) {
                         return false;
-                    } else {
-                        return (hash[member.mail] = true);
                     }
+                    return (hash[member.mail] = true);
                 })
                 .each(function (member) {
                     ext.point('io.ox/contacts/detail/member').invoke('draw', $list, member);
@@ -415,7 +414,7 @@ define('io.ox/contacts/view-detail', [
                     .append(
                         $('<address>').text($.trim(text)),
                         $('<p>').append(
-                            $('<i class="fa fa-external-link">'),
+                            $('<i class="fa fa-external-link" aria-hidden="true">'),
                             // \u2122 = &trade;
                             $.txt(' Google Maps \u2122')
                         )
@@ -461,14 +460,7 @@ define('io.ox/contacts/view-detail', [
                         simple(data, 'nickname'),
                         row('birthday', function () {
                             if (baton.data.birthday) {
-                                //use utc time. birthdays must not be converted
-                                var birthday = moment.utc(baton.data.birthday);
-                                if (birthday.year() === 1) {
-                                    //Year 0 is special for birthdays without year (backend changes this to 1...)
-                                    return birthday.format(moment.localeData().longDateFormat('l').replace(/Y/g, ''));
-                                } else {
-                                    return birthday.format('l');
-                                }
+                                return util.getBirthday(baton.data.birthday);
                             }
                         }),
                         row('url', function () {
@@ -476,9 +468,8 @@ define('io.ox/contacts/view-detail', [
                                 if (baton.data.url.indexOf('http://') !== 0 && baton.data.url.indexOf('https://') !== 0) {
                                     //fix urls
                                     return $('<a>', { href: 'http://' + baton.data.url, target: '_blank' }).text(baton.data.url);
-                                } else {
-                                    return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
                                 }
+                                return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
                             }
                         }),
                         // --- rare ---

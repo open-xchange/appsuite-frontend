@@ -51,28 +51,30 @@ define('plugins/administration/groups/settings/edit', [
 
         render: function () {
 
-            var guid, self = this, view = new Typeahead({
-                apiOptions: {
-                    users: true,
-                    split: false
-                },
-                placeholder: gt('User name'),
-                harmonize: function (data) {
-                    data = _(data).map(function (m) {
-                        m.internal_userid = m.id;
-                        return new members.Member(m);
-                    });
-                    // remove duplicate entries from typeahead dropdown
-                    var col = self.membersView.collection;
-                    return _(data).filter(function (model) {
-                        return !col.get(model.id);
-                    });
-                },
-                click: function (e, member) {
-                    self.membersView.collection.add(member, { parse: true });
-                },
-                extPoint: 'plugins/administration/groups/settings/edit'
-            });
+            var guid,
+                self = this,
+                view = new Typeahead({
+                    apiOptions: {
+                        users: true,
+                        split: false
+                    },
+                    placeholder: gt('User name'),
+                    harmonize: function (data) {
+                        data = _(data).map(function (m) {
+                            m.internal_userid = m.id;
+                            return new members.Member(m);
+                        });
+                        // remove duplicate entries from typeahead dropdown
+                        var col = self.membersView.collection;
+                        return _(data).filter(function (model) {
+                            return !col.get(model.id);
+                        });
+                    },
+                    click: function (e, member) {
+                        self.membersView.collection.add(member, { parse: true });
+                    },
+                    extPoint: 'plugins/administration/groups/settings/edit'
+                });
 
             this.$el.append(
                 // name

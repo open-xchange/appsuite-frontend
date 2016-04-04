@@ -38,10 +38,10 @@ define('io.ox/core/tk/reminder-util', [
             var toggle, menu,
                 // super special function to have overflow scroll and dropdowns as popups see Bug 40962 and https://github.com/twbs/bootstrap/issues/7160
                 dropDownFixPosition = function (button, dropdown) {
-                var dropDownTop = button.offset().top + button.outerHeight();
-                dropdown.css('top', dropDownTop + 'px');
-                dropdown.css('left', button.offset().left + 'px');
-            };
+                    var dropDownTop = button.offset().top + button.outerHeight();
+                    dropdown.css('top', dropDownTop + 'px');
+                    dropdown.css('left', button.offset().left + 'px');
+                };
 
             node.append(
                 $('<div>').addClass('dropdown').css({ 'float': 'left' }).append(
@@ -107,11 +107,12 @@ define('io.ox/core/tk/reminder-util', [
             //#, c-format
             label = gt('%1$s %2$s %3$s.', _.noI18n(model.get('title')), endText, statusText);
         } else {
+            var strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' });
             //appointment
             info = [
                 $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                $('<span class="span-to-div time">').text(util.getTimeInterval(model.attributes)),
-                $('<span class="span-to-div date">').text(util.getDateInterval(model.attributes)),
+                $('<span class="span-to-div time">').text(strings.timeStr),
+                $('<span class="span-to-div date">').text(strings.dateStr),
                 $('<span class="span-to-div title">').text(model.get('title')),
                 $('<span class="span-to-div location">').text(model.get('location'))
             ];

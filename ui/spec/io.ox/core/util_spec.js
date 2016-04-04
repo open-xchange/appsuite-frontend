@@ -131,6 +131,7 @@ define(['io.ox/core/util'], function (util) {
                 expect(util.breakableHTML('com.openexchange.session.contextId=1337')).to.equal('com.<wbr>openexchange.<wbr>session.<wbr>contextId=<wbr>1337<wbr>');
                 expect(util.breakableHTML('com.openexchange 01234567890123456789 01234567890123456789')).to.equal('com.openexchange 01234567890123456789 01234567890123456789');
                 expect(util.breakableHTML('com.openexchange.0123456789012345678901234567890123456789')).to.equal('com.<wbr>openexchange.<wbr>012345678901234567890123456789<wbr>0123456789');
+                expect(util.breakableHTML('0123456789\u00a00123456789\u00a00123456789\u00a01')).to.equal('0123456789\u00a0<wbr>0123456789\u00a0<wbr>0123456789\u00a0<wbr>1');
             });
         });
 

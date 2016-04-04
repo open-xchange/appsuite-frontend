@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -9,6 +10,7 @@
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
+
 define('io.ox/files/actions/upload-new-version', [
     'io.ox/files/api',
     'io.ox/core/tk/dialogs',
@@ -23,7 +25,7 @@ define('io.ox/files/actions/upload-new-version', [
         /**
          * notifications lazy load
          */
-        function notify () {
+        function notify() {
             var self = this, args = arguments;
             require(['io.ox/core/yell'], function (yell) {
                 yell.apply(self, args);
@@ -73,8 +75,8 @@ define('io.ox/files/actions/upload-new-version', [
                 filename,
                 $('<textarea rows="6" class="form-control" tabindex="1">')
             )
-            .addPrimaryButton('upload', gt('Upload'), 'upload',  { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'),  'cancel',  { 'tabIndex': '1' })
+            .addPrimaryButton('upload', gt('Upload'), 'upload', { 'tabIndex': '1' })
+            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
             .on('upload', function () {
                 var $node = this.getContentNode(),
                     files = $node.find('input[type="file"]')[0].files,
@@ -82,6 +84,9 @@ define('io.ox/files/actions/upload-new-version', [
 
                 process(_.first(files), comment).then(this.close, this.idle)
                 .fail(function () {
+                    if (files.length === 0) {
+                        notify('info', gt('You have to select a file to upload.'));
+                    }
                     _.defer(function () { $node.focus(); });
                 });
             })

@@ -50,10 +50,9 @@ define('io.ox/core/attachments/view', [
             // editable?
             if (this.options.editable) this.$el.addClass('editable');
 
-            // Previewmode on smartpfone as default
-            if (_.device('smartphone')) this.$el.addClass('show-preview');
+            if (this.options.mode === 'preview') this.$el.addClass('show-preview');
 
-            this.$header = $('<header role="heading">');
+            this.$header = $('<header>');
             this.$list = $('<ul class="inline-items">');
             this.$preview = $('<ul class="inline-items preview">');
             this.isListRendered = false;
@@ -92,9 +91,9 @@ define('io.ox/core/attachments/view', [
                 )
             );
 
-            this.updateScrollControls();
-
             if (this.openByDefault) this.toggleDetails();
+
+            this.updateScrollControls();
 
             return this;
         },
@@ -103,7 +102,7 @@ define('io.ox/core/attachments/view', [
 
             this.$header.append(
                 $('<a href="#" class="pull-right toggle-mode" tabindex="1">')
-                    .append('<i class="fa">'),
+                    .append('<i class="fa" aria-hidden="true">'),
                 $('<a href="#" class="toggle-details" tabindex="1">').append(
                     $('<i class="fa toggle-caret" aria-hidden="true">'),
                     $('<i class="fa fa-paperclip" aria-hidden="true">'),
@@ -164,11 +163,13 @@ define('io.ox/core/attachments/view', [
         onToggleDetails: function (e) {
             e.preventDefault();
             this.toggleDetails();
+            this.updateScrollControls();
         },
 
         onToggleMode: function (e) {
             e.preventDefault();
             this.$el.toggleClass('show-preview');
+            this.trigger('change:layout', this.$el.hasClass('show-preview') ? 'preview' : 'list');
             // to provoke lazyload
             this.$preview.trigger('scroll');
             this.updateScrollControls();
@@ -203,7 +204,7 @@ define('io.ox/core/attachments/view', [
             return Math.max(0, Math.ceil((scrollWidth - width) / this.scrollStep));
         },
 
-        updateScrollControls: function (index, max) {
+        updateScrollControls: function (index) {
             if (index === undefined) index = this.getScrollIndex();
             var max = this.getMaxScrollIndex();
             this.$('.scroll-left').attr('disabled', index <= 0 ? 'disabled' : null);
@@ -341,7 +342,7 @@ define('io.ox/core/attachments/view', [
             this.$el.append(
                 $('<a href="#" class="control remove" tabindex="1">')
                     .attr('title', gt('Remove attachment'))
-                    .append($('<i class="fa fa-trash-o">'))
+                    .append($('<i class="fa fa-trash-o" aria-hidden="true">'))
             );
         }
     });

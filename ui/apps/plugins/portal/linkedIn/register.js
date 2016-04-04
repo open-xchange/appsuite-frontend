@@ -196,6 +196,8 @@ define('plugins/portal/linkedIn/register', [
     ext.point('io.ox/portal/widget/linkedIn').extend({
 
         title: 'LinkedIn',
+        // prevent loading on refresh when error occurs to not bloat logs (see Bug 41740)
+        stopLoadingOnError: true,
 
         initialize: function () {
             keychain.submodules.linkedin.on('delete', refreshWidget);
@@ -247,20 +249,19 @@ define('plugins/portal/linkedIn/register', [
                     return (baton.data = data.values);
                 });
 
-            } else {
-
-                return http.GET({
-                    module: 'integrations/linkedin/portal',
-                    params: { action: 'updates' }
-                })
-                .then(function (activities) {
-                    if (activities && activities.values && activities.values !== 0) {
-                        baton.data = activities.values;
-                    } else {
-                        baton.data = activities;
-                    }
-                });
             }
+
+            return http.GET({
+                module: 'integrations/linkedin/portal',
+                params: { action: 'updates' }
+            })
+            .then(function (activities) {
+                if (activities && activities.values && activities.values !== 0) {
+                    baton.data = activities.values;
+                } else {
+                    baton.data = activities;
+                }
+            });
         },
 
         preview: function (baton) {

@@ -16,8 +16,9 @@ define('io.ox/backbone/mini-views/attachments', [
     'io.ox/core/api/attachment',
     'io.ox/core/tk/attachments',
     'io.ox/core/strings',
-    'gettext!io.ox/core'
-], function (AbstractView, api, attachments, strings, gt) {
+    'gettext!io.ox/core',
+    'settings!io.ox/core'
+], function (AbstractView, api, attachments, strings, gt, settings) {
 
     'use strict';
 
@@ -78,7 +79,7 @@ define('io.ox/backbone/mini-views/attachments', [
 
             var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size) : '\u00A0';
             return $('<div class="attachment">').append(
-                $('<i class="fa fa-paperclip">'),
+                $('<i class="fa fa-paperclip" aria-hidden="true">'),
                 $('<div class="row-1">').text(attachment.filename),
                 $('<div class="row-2">').append(
                     $('<span class="filesize">').text(size)
@@ -91,9 +92,25 @@ define('io.ox/backbone/mini-views/attachments', [
                 })
                 .data(attachment)
                 .append(
-                    $('<i class="fa fa-trash-o">')
+                    $('<i class="fa fa-trash-o" aria-hidden="true">')
                 )
             );
+        },
+
+        checkQuota: function () {
+            var properties = settings.get('properties'),
+                size = this.attachmentsToAdd.reduce(function (acc, attachment) {
+                    return acc + (attachment.file_size || 0);
+                }, 0),
+                max = properties.attachmentMaxUploadSize;
+            if (max && max > 0 && size > max) {
+                this.model.set('quotaExceeded', {
+                    actualSize: size,
+                    attachmentMaxUploadSize: properties.attachmentMaxUploadSize
+                });
+            } else {
+                this.model.unset('quotaExceeded');
+            }
         },
 
         loadAttachments: function () {
@@ -114,6 +131,7 @@ define('io.ox/backbone/mini-views/attachments', [
                     return toDelete.id === attachment.id;
                 });
             });
+            this.checkQuota();
             this.attachmentsChanged();
         },
 
@@ -255,19 +273,17 @@ define('io.ox/backbone/mini-views/attachments', [
                         //in file picker dialog - other browsers still seem to work)
                         $input[0].value = '';
                         $input.trigger('reset.fileupload');
-                    } else {
-                        if ($input.val()) {
-                            var fileData = {
-                                name: $input.val().match(/[^\/\\]+$/),
-                                size: 0,
-                                hiddenField: $input
-                            };
-                            list.addFile(fileData);
-                            $input.addClass('add-attachment').hide();
-                            $input.parent().append(
-                                $input = $('<input type="file">')
-                            );
-                        }
+                    } else if ($input.val()) {
+                        var fileData = {
+                            name: $input.val().match(/[^\/\\]+$/),
+                            size: 0,
+                            hiddenField: $input
+                        };
+                        list.addFile(fileData);
+                        $input.addClass('add-attachment').hide();
+                        $input.parent().append(
+                            $input = $('<input type="file">')
+                        );
                     }
                 })
                 .on('focus', function () {

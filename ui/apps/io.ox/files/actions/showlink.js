@@ -45,7 +45,7 @@ define('io.ox/files/actions/showlink', [
                     })
                 );
             })
-            .addPrimaryButton('cancel', gt('Close'), 'cancel',  { 'tabIndex': '1' })
+            .addPrimaryButton('cancel', gt('Close'), 'cancel', { 'tabIndex': '1' })
             .show(function () {
                 this.find('a.direct-link').focus();
             });

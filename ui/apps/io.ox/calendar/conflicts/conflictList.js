@@ -18,7 +18,9 @@ define('io.ox/calendar/conflicts/conflictList', ['gettext!io.ox/calendar/conflic
     return {
 
         drawHeader: function () {
-            return $('<h4 class="text-error">').text(gt('Conflicts detected'));
+            return $('<h4 class="text-error">')
+                .text(gt('Conflicts detected'))
+                .add($('<div>').text(gt('The new appointment conflicts with existing appointments.')));
         },
 
         drawList: function (conflicts, dialog) {

@@ -21,32 +21,30 @@ define('io.ox/contacts/actions/send', ['io.ox/contacts/api'], function (api) {
             // just one contact
             var adress = list[0].email1 || list[0].email2 || list[0].email3;
             return $.Deferred().resolve([[adress, adress]]);
-        } else {
-            // multiple contacts
-            return api.getList(list, true, {
-                check: function (obj) {
-                    return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3;
-                }
-            })
-            .then(function (list) {
-                // set recipient
-                return _.chain(list)
-                    .map(function (obj) {
-                        if (obj.distribution_list && obj.distribution_list.length) {
-                            return _(obj.distribution_list).map(function (obj) {
-                                return [obj.display_name, obj.mail];
-                            });
-                        } else {
-                            return [[obj.display_name, obj.email1 || obj.email2 || obj.email3]];
-                        }
-                    })
-                    .flatten(true)
-                    .filter(function (obj) {
-                        return !!obj[1];
-                    })
-                    .value();
-            });
         }
+        // multiple contacts
+        return api.getList(list, true, {
+            check: function (obj) {
+                return obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3;
+            }
+        })
+        .then(function (list) {
+            // set recipient
+            return _.chain(list)
+                .map(function (obj) {
+                    if (obj.distribution_list && obj.distribution_list.length) {
+                        return _(obj.distribution_list).map(function (obj) {
+                            return [obj.display_name, obj.mail];
+                        });
+                    }
+                    return [[obj.display_name, obj.email1 || obj.email2 || obj.email3]];
+                })
+                .flatten(true)
+                .filter(function (obj) {
+                    return !!obj[1];
+                })
+                .value();
+        });
     }
 
     return function (list) {

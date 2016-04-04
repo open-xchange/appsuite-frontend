@@ -46,9 +46,8 @@ define('io.ox/contacts/print', [
         .filter(function (member) {
             if (hash[member.mail]) {
                 return false;
-            } else {
-                return (hash[member.mail] = true);
             }
+            return (hash[member.mail] = true);
         })
         .map(function (member) {
             return (member.display_name ? ' "' + member.display_name + '"' : ' ') + '\u0020<' + member.mail + '>';
@@ -80,10 +79,9 @@ define('io.ox/contacts/print', [
             name = String(name).substr(0, 1).toUpperCase();
             if (name === current) {
                 return false;
-            } else {
-                current = name;
-                return true;
             }
+            current = name;
+            return true;
         };
         fn.get = function () {
             return current;

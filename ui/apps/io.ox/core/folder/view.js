@@ -39,6 +39,15 @@ define('io.ox/core/folder/view', [
             forceOpen = false,
             DEFAULT_WIDTH = 250;
 
+        // smart defaults for flat folders
+        if (!open) {
+            open = {};
+            // open private and public by default
+            if (/^(contacts|calendar|tasks)$/.test(module)) {
+                open[_.display()] = ['virtual/flat/' + module + '/private', 'virtual/flat/' + module + '/public'];
+            }
+        }
+
         //
         // Utility functions
         //
@@ -61,7 +70,7 @@ define('io.ox/core/folder/view', [
         }
 
         function applyWidth(x) {
-            var width = x === undefined ? '' :  x + 'px';
+            var width = x === undefined ? '' : x + 'px';
             nodes.body.css('left', width);
             nodes.sidepanel.css('width', width);
         }
@@ -121,8 +130,7 @@ define('io.ox/core/folder/view', [
 
             resize: (function () {
 
-                var bar = $(),
-                    maxSidePanelWidth = 0,
+                var maxSidePanelWidth = 0,
                     minSidePanelWidth = 150,
                     base, width;
 
@@ -158,7 +166,7 @@ define('io.ox/core/folder/view', [
                 return {
                     enable: function () {
                         sidepanel.append(
-                            bar = $('<div class="resizebar">').on('mousedown.resize', mousedown)
+                            $('<div class="resizebar">').on('mousedown.resize', mousedown)
                         );
                     },
                     autoHideThreshold: options.autoHideThreshold
@@ -275,8 +283,8 @@ define('io.ox/core/folder/view', [
                             // in our apps folders are organized in virtual folders, we need to open the matching section too (private, shared, public)
                             section = api.getSection(_(path).where({ 'id': id })[0].type);
 
-                        if (section && _(['mail','contacts', 'calendar', 'tasks', 'infostore']).contains(tree.module) && tree.flat && tree.context === 'app') {
-                            ids.push('virtual/flat/' + tree.module + '/' + section );
+                        if (section && _(['mail', 'contacts', 'calendar', 'tasks', 'infostore']).contains(tree.module) && tree.flat && tree.context === 'app') {
+                            ids.push('virtual/flat/' + tree.module + '/' + section);
                         }
                         tree.open = _(tree.open.concat(ids)).uniq();
                     })
@@ -326,6 +334,10 @@ define('io.ox/core/folder/view', [
                 ignoreChangeEvent = true;
                 app.folder.set(id);
                 ignoreChangeEvent = false;
+            });
+
+            tree.on('virtual', function (id) {
+                app.trigger('folder-virtual:change', id);
             });
 
             app.on('folder:change', function (id) {

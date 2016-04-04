@@ -162,7 +162,7 @@ define('io.ox/core/settings/errorlog/settings/pane', [
 
         updateChart: function () {
 
-            var canvas, data, chart, ctx;
+            var canvas, data, chart, ctx, ping;
 
             function transform(list) {
 
@@ -191,8 +191,8 @@ define('io.ox/core/settings/errorlog/settings/pane', [
                 return data;
             }
 
-            var data = transform(http.statistics.data()),
-                ping = transform(http.statistics.ping());
+            data = transform(http.statistics.data());
+            ping = transform(http.statistics.ping());
 
             chart = {
                 labels: [0, '', 100, '', 200, '', 300, '', 400, '', '> 0.5s', '> 1s'],

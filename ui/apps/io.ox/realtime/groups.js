@@ -121,9 +121,8 @@ define('io.ox/realtime/groups', [
             }
             if (options.expectWelcomeMessage) {
                 return this.query(stanza);
-            } else {
-                this.send(stanza);
             }
+            this.send(stanza);
         };
 
         this.leave = function (options) {
@@ -148,9 +147,8 @@ define('io.ox/realtime/groups', [
             };
             if (options.expectSignOffMessage) {
                 return this.query(stanza);
-            } else {
-                this.send(stanza);
             }
+            this.send(stanza);
         };
 
         this.sendWithoutSequence = function (message) {

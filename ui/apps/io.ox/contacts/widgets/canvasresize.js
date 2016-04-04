@@ -58,7 +58,8 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
              */
             detectSubsampling: function (img) {
                 var iw = img.width, ih = img.height;
-                if (iw * ih > 1048576) { // subsampling may happen over megapixel image
+                // subsampling may happen over megapixel image
+                if (iw * ih > 1048576) {
                     var canvas = document.createElement('canvas');
                     canvas.width = canvas.height = 1;
                     var ctx = canvas.getContext('2d');
@@ -67,9 +68,8 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
                     // check alpha channel value to confirm image is covering edge pixel or not.
                     // if alpha value is 0 image is not covering, hence subsampled.
                     return ctx.getImageData(0, 0, 1, 1).data[3] === 0;
-                } else {
-                    return false;
                 }
+                return false;
             },
             /**
              * Update the orientation according to the specified rotation angle
@@ -101,60 +101,60 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
              */
             transformCoordinate: function (canvas, width, height, orientation) {
                 switch (orientation) {
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                    canvas.width = height;
-                    canvas.height = width;
-                    break;
-                default:
-                    canvas.width = width;
-                    canvas.height = height;
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                        canvas.width = height;
+                        canvas.height = width;
+                        break;
+                    default:
+                        canvas.width = width;
+                        canvas.height = height;
                 }
                 var ctx = canvas.getContext('2d');
                 switch (orientation) {
-                case 1:
-                    // nothing
-                    break;
-                case 2:
-                    // horizontal flip
-                    ctx.translate(width, 0);
-                    ctx.scale(-1, 1);
-                    break;
-                case 3:
-                    // 180 rotate left
-                    ctx.translate(width, height);
-                    ctx.rotate(Math.PI);
-                    break;
-                case 4:
-                    // vertical flip
-                    ctx.translate(0, height);
-                    ctx.scale(1, -1);
-                    break;
-                case 5:
-                    // vertical flip + 90 rotate right
-                    ctx.rotate(0.5 * Math.PI);
-                    ctx.scale(1, -1);
-                    break;
-                case 6:
-                    // 90 rotate right
-                    ctx.rotate(0.5 * Math.PI);
-                    ctx.translate(0, -height);
-                    break;
-                case 7:
-                    // horizontal flip + 90 rotate right
-                    ctx.rotate(0.5 * Math.PI);
-                    ctx.translate(width, -height);
-                    ctx.scale(-1, 1);
-                    break;
-                case 8:
-                    // 90 rotate left
-                    ctx.rotate(-0.5 * Math.PI);
-                    ctx.translate(-width, 0);
-                    break;
-                default:
-                    break;
+                    case 1:
+                        // nothing
+                        break;
+                    case 2:
+                        // horizontal flip
+                        ctx.translate(width, 0);
+                        ctx.scale(-1, 1);
+                        break;
+                    case 3:
+                        // 180 rotate left
+                        ctx.translate(width, height);
+                        ctx.rotate(Math.PI);
+                        break;
+                    case 4:
+                        // vertical flip
+                        ctx.translate(0, height);
+                        ctx.scale(1, -1);
+                        break;
+                    case 5:
+                        // vertical flip + 90 rotate right
+                        ctx.rotate(0.5 * Math.PI);
+                        ctx.scale(1, -1);
+                        break;
+                    case 6:
+                        // 90 rotate right
+                        ctx.rotate(0.5 * Math.PI);
+                        ctx.translate(0, -height);
+                        break;
+                    case 7:
+                        // horizontal flip + 90 rotate right
+                        ctx.rotate(0.5 * Math.PI);
+                        ctx.translate(width, -height);
+                        ctx.scale(-1, 1);
+                        break;
+                    case 8:
+                        // 90 rotate left
+                        ctx.rotate(-0.5 * Math.PI);
+                        ctx.translate(-width, 0);
+                        break;
+                    default:
+                        break;
                 }
             },
             /**
@@ -201,8 +201,9 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
                 for (; a < al; a++) {
                     if ((prop = arguments[a]) !== null) {
                         for (var i in prop) {
-                            if (target === prop[i])
+                            if (target === prop[i]) {
                                 continue;
+                            }
                             if (deep && typeof prop[i] === 'object' && target[i]) {
                                 methods.extend(target[i], prop[i]);
                             } else if (prop[i] !== undefined) {
@@ -320,9 +321,8 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
     return function (file, options) {
         if (typeof file === 'string') {
             return methods[file](options);
-        } else {
-            new Plugin(file, options);
         }
+        new Plugin(file, options);
     };
 
 });

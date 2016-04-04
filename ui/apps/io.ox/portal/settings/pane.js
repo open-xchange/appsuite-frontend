@@ -123,14 +123,13 @@ define('io.ox/portal/settings/pane', [
 
                     if (isUnique || !isVisible) {
                         return $();
-                    } else {
-                        return $('<li role="presentation">')
+                    }
+                    return $('<li role="presentation">')
                         // add disabld class if requires upsell
                         .addClass(!upsell.has(options.requires) ? 'requires-upsell' : undefined)
                         .append(
                             $('<a>', { href: '#', 'data-type': options.type, role: 'menuitem', tabindex: 1 }).text(options.title)
                         );
-                    }
                 })
             );
         });
@@ -214,24 +213,24 @@ define('io.ox/portal/settings/pane', [
         }
 
         switch (e.which) {
-        case 38:
-            if (index > 0) {
-                // up
-                e.preventDefault();
-                current.insertBefore(current.prevAll('.draggable:first'));
-                cont();
-            }
-            break;
-        case 40:
-            if (index < items.length) {
-                // down
-                e.preventDefault();
-                current.insertAfter(current.nextAll('.draggable:first'));
-                cont();
-            }
-            break;
-        default:
-            break;
+            case 38:
+                if (index > 0) {
+                    // up
+                    e.preventDefault();
+                    current.insertBefore(current.prevAll('.draggable:first'));
+                    cont();
+                }
+                break;
+            case 40:
+                if (index < items.length) {
+                    // down
+                    e.preventDefault();
+                    current.insertAfter(current.nextAll('.draggable:first'));
+                    cont();
+                }
+                break;
+            default:
+                break;
         }
 
     }

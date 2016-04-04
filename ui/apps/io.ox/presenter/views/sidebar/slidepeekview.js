@@ -12,19 +12,28 @@
  */
 define('io.ox/presenter/views/sidebar/slidepeekview', [
     'io.ox/backbone/disposable',
+    'io.ox/core/tk/doc-converter-utils',
     'io.ox/presenter/util',
     'gettext!io.ox/presenter'
-], function (DisposableView, Util, gt) {
+], function (DisposableView, DocConverterUtils, Util, gt) {
 
     var slidepeekView = DisposableView.extend({
 
         className: 'presenter-sidebar-section',
+
+        events: {
+            'click .slidepeek': 'onSlidePeekClicked'
+        },
 
         initialize: function (options) {
             _.extend(this, options);
 
             this.slidePeekLoadDef = Util.createAbortableDeferred($.noop);
             this.activeSlideIndex = this.app.mainView.getActiveSlideIndex();
+
+            this.onResizeDebounced = _.debounce(this.onResize.bind(this), 500);
+            this.listenTo(this.presenterEvents, 'presenter:resize', this.onResizeDebounced);
+            this.listenTo(this.presenterEvents, 'presenter:page:loaded', this.onPageLoaded);
 
             this.on('dispose', this.disposeView.bind(this));
         },
@@ -50,7 +59,7 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
             }
 
             this.$el.empty().addClass('io-ox-busy');
-            this.slidePeekLoadDef = Util.beginConvert(this.model.toJSON())
+            this.slidePeekLoadDef = DocConverterUtils.beginConvert(this.model)
                 .done(beginConvertSuccess.bind(this))
                 .fail(beginConvertError.bind(this))
                 .always(beginConvertFinished.bind(this));
@@ -66,47 +75,106 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
          *  the convert jobID and the total page count.
          */
         loadSlidePeek: function (convertData) {
+            var self = this;
+            var slidePeek = this.$('.slidepeek');
+            var slidePeekImage = this.$('.slidepeek-image');
+            var peekPageNumber = this.activeSlideIndex + 2;
             // build thumbnail request param
             var params = {
-                    action: 'convertdocument',
-                    convert_action: 'getpage',
-                    target_format: 'png',
-                    target_width: 600,
-                    target_zoom: 1,
-                    job_id: convertData.jobID,
-                    id: encodeURIComponent(this.model.get('id')),
-                    folder_id: this.model.get('folder_id'),
-                    filename: encodeURIComponent(this.model.get('filename')),
-                    version: this.model.get('version')
-                },
-                slidePeekImage = this.$('.slidepeek-image'),
-                self = this;
+                action: 'convertdocument',
+                convert_action: 'getpage',
+                target_format: 'png',
+                target_width: 600,
+                target_zoom: 1,
+                page_number: peekPageNumber,
+                job_id: convertData.jobID,
+                id: encodeURIComponent(this.model.get('id')),
+                folder_id: this.model.get('folder_id'),
+                filename: encodeURIComponent(this.model.get('filename')),
+                version: this.model.get('version')
+            };
 
-            // set peek page number to the request param
-            var peekPageNumber = this.activeSlideIndex + 2;
             if (peekPageNumber > convertData.pageCount) {
                 //#. info text on the next slide preview, which means the presenting user reached the last slide.
-                var endNotification = $('<div class="end-notification">').text(gt('End of Slides')),
-                    slidePeek = this.$('.slidepeek');
+                var endNotification = $('<div class="end-notification">').text(gt('End of Slides'));
+                // apply slide size to slide peek
                 slidePeek.empty().addClass('end').append(endNotification);
-                // apply slide size to slide peek if available
-                if (this.app.slideSize) {
-                    slidePeek.css(this.app.slideSize);
+                this.updateSlidePeekSize();
+
+            } else {
+                // load the preview image
+                var thumbnailUrl = DocConverterUtils.getConverterUrl(params);
+                slidePeekImage.attr('src', thumbnailUrl)
+                .on('load', function () {
+                    $(this).show();
+                    self.updateSlidePeekSize();
+                });
+            }
+        },
+
+        /**
+        * Sets the size of the slide peek according to the main slide size.
+        * - the slide peek matches 50% of the main slide size.
+        */
+        updateSlidePeekSize: function () {
+            var slidePeek = this.$('.slidepeek');
+            var pageSize = this.app.mainView.presentationView.pdfDocument.getOriginalPageSize();
+            var zoom = this.app.mainView.presentationView.currentZoomFactor * 0.01;
+            var factor = zoom * 0.5;
+            var maxWidth = slidePeek.parent().width();
+            var width;
+            var height;
+
+            if (pageSize && pageSize.width > 0 && pageSize.height > 0) {
+                width = pageSize.width * factor;
+                height = pageSize.height * factor;
+
+                if (width > maxWidth) {
+                    width = maxWidth;
+                    height = maxWidth * pageSize.height / pageSize.width;
                 }
+
+                slidePeek.css({
+                    width: width,
+                    height: height
+                });
+            }
+        },
+
+        /**
+         * Handles page loaded events.
+         *
+         * @param {Number} page
+         *  The 1-based page number.
+         *
+         */
+        onPageLoaded: function (page) {
+            if (this.disposed || ox.ui.App.getCurrentApp().getName() !== 'io.ox/presenter') {
                 return;
             }
 
-            // load the preview image
-            params.page_number = peekPageNumber;
-            var thumbnailUrl = Util.getConverterUrl(params);
-            slidePeekImage.attr('src', thumbnailUrl)
-                .on('load', function () {
-                    $(this).show();
-                    self.app.slideSize = {
-                        width: $(this).width(),
-                        height: $(this).height()
-                    };
-                });
+            if (page === (this.activeSlideIndex + 1)) {
+                this.updateSlidePeekSize();
+            }
+        },
+
+        /**
+         * Handles presenter resize events
+         */
+        onResize: function () {
+            if (this.disposed || ox.ui.App.getCurrentApp().getName() !== 'io.ox/presenter') {
+                return;
+            }
+
+            this.updateSlidePeekSize();
+        },
+
+        /**
+         * Handles clicks on the slide peek.
+         */
+        onSlidePeekClicked: function (event) {
+            event.preventDefault();
+            this.app.mainView.showNextSlide();
         },
 
         disposeView: function () {
@@ -117,7 +185,7 @@ define('io.ox/presenter/views/sidebar/slidepeekview', [
             }
             // close convert jobs while quitting
             def.done(function (response) {
-                Util.endConvert(this.model.toJSON(), response.jobID);
+                DocConverterUtils.endConvert(this.model, response.jobID);
             }.bind(this));
         }
     });

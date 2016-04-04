@@ -58,35 +58,35 @@ define('plugins/notifications/tasks/register', [
             var label = gt('%1$s %2$s.', _.noI18n(baton.model.get('title')), endText);
 
             node.attr({
-                    'data-cid': _.cid(data),
-                    'aria-label': label,
-                    'aria-describedby': descriptionId
-                })
-                .append(
-                    $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
-                    $('<span class="span-to-div title">').text(_.noI18n(data.title)),
-                    $('<div class"clearfix">').append(
-                        $('<span class="end_date">').text(_.noI18n(data.end_time)),
-                        $('<span class="status pull-right">').text(data.status).addClass(data.badge)
-                    ),
-                    $('<div class="actions">').append(
-                        $('<button type="button" tabindex="1" class="btn btn-default" data-action="done">')
-                        .text(gt('Done'))
-                        .on('click', function (e) {
-                            e.stopPropagation();
-                            api.update({
-                                id: data.id,
-                                folder_id: data.folder_id,
-                                status: 3,
-                                percent_completed: 100,
-                                date_completed: _.now()
-                            }).done(function (result) {
-                                api.trigger('update:' + _.ecid(data), result);
-                            });
-                            baton.view.removeNotifications(data.id);
-                        })
-                    )
-                );
+                'data-cid': _.cid(data),
+                'aria-label': label,
+                'aria-describedby': descriptionId
+            })
+            .append(
+                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="span-to-div title">').text(_.noI18n(data.title)),
+                $('<div class"clearfix">').append(
+                    $('<span class="end_date">').text(_.noI18n(data.end_time)),
+                    $('<span class="status pull-right">').text(data.status).addClass(data.badge)
+                ),
+                $('<div class="actions">').append(
+                    $('<button type="button" tabindex="1" class="btn btn-default" data-action="done">')
+                    .text(gt('Done'))
+                    .on('click', function (e) {
+                        e.stopPropagation();
+                        api.update({
+                            id: data.id,
+                            folder_id: data.folder_id,
+                            status: 3,
+                            percent_completed: 100,
+                            date_completed: _.now()
+                        }).done(function (result) {
+                            api.trigger('update:' + _.ecid(data), result);
+                        });
+                        baton.view.removeNotifications(data.id);
+                    })
+                )
+            );
         }
     });
 
@@ -111,7 +111,7 @@ define('plugins/notifications/tasks/register', [
                     autoOpen: autoOpen,
                     genericDesktopNotification: {
                         title: gt('New overdue tasks'),
-                        body: gt('You\'ve got overdue tasks'),
+                        body: gt('You have overdue tasks'),
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
@@ -130,7 +130,7 @@ define('plugins/notifications/tasks/register', [
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
-                subview.model.set('autoOpen', value );
+                subview.model.set('autoOpen', value);
             });
 
             api.getTasks();
@@ -202,7 +202,7 @@ define('plugins/notifications/tasks/register', [
                         //#. Title for a generic desktop notification about new reminders for tasks
                         title: gt('New task reminders'),
                         //#. Content for a generic desktop notification about new reminders for tasks
-                        body: gt('You\'ve got task reminders'),
+                        body: gt('You have new task reminders'),
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
@@ -223,7 +223,7 @@ define('plugins/notifications/tasks/register', [
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
-                subview.model.set('autoOpen', value );
+                subview.model.set('autoOpen', value);
             });
 
             reminderAPI.getReminders();
@@ -249,10 +249,14 @@ define('plugins/notifications/tasks/register', [
 
                     var data = baton.model.attributes;
                     ox.load(['io.ox/calendar/actions/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
-                        acceptdeny(data, { taskmode: true, api: api, callback: function () {
-                            //update detailview
-                            api.trigger('update:' + _.ecid({ id: data.id, folder_id: data.folder_id }));
-                        }});
+                        acceptdeny(data, {
+                            taskmode: true,
+                            api: api,
+                            callback: function () {
+                                //update detailview
+                                api.trigger('update:' + _.ecid({ id: data.id, folder_id: data.folder_id }));
+                            }
+                        });
                     });
                 },
                 onClickAccept = function (e) {
@@ -261,10 +265,10 @@ define('plugins/notifications/tasks/register', [
                     if ((e.type !== 'click') && (e.which !== 13)) { return; }
 
                     var o = {
-                            id: baton.model.get('id'),
-                            folder_id: baton.model.get('folder_id'),
-                            data: { confirmmessage: '', confirmation: 1 }
-                        };
+                        id: baton.model.get('id'),
+                        folder_id: baton.model.get('folder_id'),
+                        data: { confirmmessage: '', confirmation: 1 }
+                    };
                     view.responsiveRemove(model);
                     api.confirm(o).done(function () {
                         // remove model from hidden collection or new invitations when the appointment changes will not be displayed
@@ -344,7 +348,7 @@ define('plugins/notifications/tasks/register', [
                         //#. Title for a generic desktop notification about new invitations to tasks
                         title: gt('New task invitations'),
                         //#. Content for a generic desktop notification about new invitations to tasks
-                        body: gt('You\'ve got task invitations'),
+                        body: gt('You have new task invitations'),
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
@@ -365,7 +369,7 @@ define('plugins/notifications/tasks/register', [
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
-                subview.model.set('autoOpen', value );
+                subview.model.set('autoOpen', value);
             });
         }
     });

@@ -20,7 +20,7 @@
         this.each(function () {
             _.defer(function () {
                 // look for potential scrollpane
-                this.closest('.scrollpane, .scrollable, .list-view, .tt-dropdown-menu, .preview-container').lazyloadScrollpane();
+                this.closest('.scrollpane, .scrollable, .tt-dropdown-menu, .preview-container').lazyloadScrollpane();
                 this.trigger('scroll');
             }.bind($(this).addClass('lazyload')));
         });
@@ -31,51 +31,55 @@
     $.fn.lazyloadScrollpane = function (options) {
 
         // don't add twice
-        if (this.prop('lazyload')) return this; else this.prop('lazyload', true);
+        if (this.prop('lazyload')) return this;
+        this.prop('lazyload', true);
 
-        var scrollpane = this;
+        var scrollpane = this, viewport;
         options = _.extend({ effect: 'show' }, options);
+
+        function lazyload() {
+            // skip if already loaded
+            if (this.loaded) return;
+            // get offset for each element
+            var element = $(this), offset = this.getBoundingClientRect();
+            // checks
+            if (aboveViewport(viewport, offset, element.height())) return;
+            if (leftOfViewport(viewport, offset, element.width())) return;
+            // we assume that elements are in order, i.e. we can stop the loop if we are below or right of the viewport
+            if (belowViewport(viewport, offset) || rightOfViewport(viewport, offset)) return false;
+            // otherwise
+            element.trigger('appear');
+            _.defer(onAppear.bind(this, options));
+        }
 
         function update() {
             // might be disposed
             if (!scrollpane || scrollpane.length === 0) return;
             // get viewport dimensions once
-            var viewport = getViewport(scrollpane);
+            viewport = getViewport(scrollpane);
             // loop over all elements with class="lazyload"
-            scrollpane.find('.lazyload').each(function () {
-                // skip if already loaded
-                if (this.loaded) return;
-                // get offset for each element
-                var element = $(this), offset = element.offset();
-                // checks
-                if (aboveViewport(viewport, offset, element.height())) return;
-                if (leftOfViewport(viewport, offset, element.width())) return;
-                // we assume that elements are in order, i.e. we can stop the loop if we are below or right of the viewport
-                if (belowViewport(viewport, offset) || rightOfViewport(viewport, offset)) return false;
-                // otherwise
-                element.trigger('appear');
+            scrollpane.find('.lazyload').each(lazyload);
+            //find .lazyload elements also in shadow dom
+            scrollpane.find('.shadow-root-container').each(function () {
+                $(this.shadowRoot).find('.lazyload').each(lazyload);
             });
         }
 
         // respond to resize event; some elements might become visible
         $(window).on('resize.lazyload', _.debounce(update, 100));
 
-        this.on('appear.lazyload', '.lazyload', function (e) {
-                // response to appear event
-                onAppear.call(this, options);
-            })
-            .on({
-                // response to add.lazyload event
-                'add.lazyload': _.debounce(update, 10),
-                // update on scroll stop
-                'scroll.lazyload': _.debounce(update, 300),
-                // clean up on dispose
-                'dispose': function () {
-                    $(window).off('resize.lazyload');
-                    $(this).off('add.lazyload scroll.lazyload appear.lazyload');
-                    scrollpane = options = null;
-                }
-            });
+        this.on({
+            // response to add.lazyload event
+            'add.lazyload': _.debounce(update, 10),
+            // update on scroll stop
+            'scroll.lazyload': _.debounce(update, 300),
+            // clean up on dispose
+            'dispose': function () {
+                $(window).off('resize.lazyload');
+                $(this).off('add.lazyload scroll.lazyload');
+                scrollpane = options = null;
+            }
+        });
 
         return this;
     };

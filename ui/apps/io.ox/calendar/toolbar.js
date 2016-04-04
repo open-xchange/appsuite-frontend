@@ -20,10 +20,11 @@ define('io.ox/calendar/toolbar', [
     'io.ox/core/tk/upload',
     'io.ox/core/dropzone',
     'io.ox/core/notifications',
+    'io.ox/core/capabilities',
     'gettext!io.ox/calendar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, gt) {
+], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, capabilities, gt) {
 
     'use strict';
 
@@ -172,10 +173,14 @@ define('io.ox/calendar/toolbar', [
             .option('colorScheme', 'classic', gt('Classic colors'))
             .option('colorScheme', 'dark', gt('Dark colors'))
             .option('colorScheme', 'custom', gt('Custom colors'))
-            .divider()
-            .link('print', gt('Print'), print.bind(null, baton))
             .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
             .listenTo(baton.app.props, 'change:layout', updateColorOption);
+
+            if (capabilities.has('calendar-printing')) {
+                dropdown
+                .divider()
+                .link('print', gt('Print'), print.bind(null, baton));
+            }
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
@@ -192,20 +197,28 @@ define('io.ox/calendar/toolbar', [
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
-            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+
+            var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbar.render().$el
+                toolbarView.render().$el
             );
-            app.updateToolbar = _.queued(function (list) {
-                if (!list) return $.when();
+
+            function updateCallback($toolbar) {
+                toolbarView.replaceToolbar($toolbar).initButtons();
+            }
+
+            app.updateToolbar = _.debounce(function (list) {
+                if (!list) return;
                 // extract single object if length === 1
                 list = list.length === 1 ? list[0] : list;
+                // disable visible buttons
+                toolbarView.disableButtons();
                 // draw toolbar
-                var baton = ext.Baton({ $el: toolbar.$list, data: list, app: app }),
-                    ret = ext.point('io.ox/calendar/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                return $.when.apply($, ret.value()).then(function () {
-                    toolbar.initButtons();
-                });
+                var $toolbar = toolbarView.createToolbar(),
+                    baton = ext.Baton({ $el: $toolbar, data: list, app: app }),
+                    ret = ext.point('io.ox/calendar/classic-toolbar').invoke('draw', $toolbar, baton);
+                $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
             }, 10);
         }
     });

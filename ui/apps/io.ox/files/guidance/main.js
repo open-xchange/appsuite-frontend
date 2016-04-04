@@ -37,7 +37,7 @@ define('io.ox/files/guidance/main', [
 
             dialog.show(e, function (popup) {
                 app.folder.getData().done(function (data) {
-                    var baton = new ext.Baton({ id: id, dialog: dialog, folder: folder, app: app, data: data, quota: quota, options: { type: 'files' }});
+                    var baton = new ext.Baton({ id: id, dialog: dialog, folder: folder, app: app, data: data, quota: quota, options: { type: 'files' } });
 
                     ext.point('io.ox/files/guidance').invoke('draw', popup.addClass('guidance'), baton);
 
@@ -63,7 +63,7 @@ define('io.ox/files/guidance/main', [
                 statistics.clearCache();
 
                 app.folder.getData().done(function (data) {
-                    var baton = new ext.Baton({ id: id, dialog: lastBaton.dialog, folder: folder, app: app, data: data, quota: quota, options: { type: 'files' }});
+                    var baton = new ext.Baton({ id: id, dialog: lastBaton.dialog, folder: folder, app: app, data: data, quota: quota, options: { type: 'files' } });
 
                     ext.point('io.ox/files/guidance').invoke('draw', lastPopup, baton);
                 });

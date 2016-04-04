@@ -21,18 +21,17 @@ define('io.ox/realtime/stanza', function () {
         var i;
         if (matches(json, namespace, element)) {
             return new RealtimePayload(json);
-        } else {
-            if (json.payloads || json.data) {
-                var payloads = json.payloads || json.data;
-                for (i = 0; i < payloads.length; i++) {
-                    var payload = get(payloads[i], namespace, element);
-                    if (payload !== null) {
-                        return payload;
-                    }
+        }
+        if (json.payloads || json.data) {
+            var payloads = json.payloads || json.data;
+            for (i = 0; i < payloads.length; i++) {
+                var payload = get(payloads[i], namespace, element);
+                if (payload !== null) {
+                    return payload;
                 }
             }
-            return null;
         }
+        return null;
     }
 
     function getAll(collector, json, namespace, element) {

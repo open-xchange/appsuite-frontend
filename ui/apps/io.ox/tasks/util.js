@@ -12,8 +12,9 @@
  */
 define('io.ox/tasks/util', [
     'gettext!io.ox/tasks',
-    'settings!io.ox/core'
-], function (gt, coreSettings) {
+    'settings!io.ox/core',
+    'io.ox/core/capabilities'
+], function (gt, coreSettings, capabilities) {
 
     'use strict';
 
@@ -39,7 +40,8 @@ define('io.ox/tasks/util', [
         util = {
             computePopupTime: function (value, smartEndDate) {
                 smartEndDate = smartEndDate || false;
-                var alarmDate = moment(),
+                // no need for milliseconds or seconds, minutes are accurate enough
+                var alarmDate = moment().milliseconds(0).seconds(0),
                     endDate;
 
                 if (!isNaN(parseInt(value, 10))) {
@@ -55,7 +57,7 @@ define('io.ox/tasks/util', [
                         if (value === 't') {
                             //tomorow
                             alarmDate.add(1, 'day');
-                        } else if ( value === 'ww') {
+                        } else if (value === 'ww') {
                             // next week
                             alarmDate.add(1, 'week');
                         } else if (value.indexOf('w') === 0) {
@@ -90,8 +92,7 @@ define('io.ox/tasks/util', [
                 return {
                     // UTC
                     endDate: endDate.utc(true).valueOf(),
-                    // Localtime
-                    alarmDate: alarmDate.valueOf()
+                    alarmDate: alarmDate.utc().valueOf()
                 };
             },
 
@@ -152,7 +153,7 @@ define('io.ox/tasks/util', [
                 // tomorrow
                 result.push(['t', gt('tomorrow')]);
 
-                for (i = (now.day() + 2) % 7;i !== now.day(); i = ++i % 7) {
+                for (i = (now.day() + 2) % 7; i !== now.day(); i = ++i % 7) {
                     //#. reminder date selection
                     //#. %1$s is a weekday, like 'next Monday'
                     result.push(['w' + i, gt('next %1$s', moment.weekdays(i))]);
@@ -164,7 +165,7 @@ define('io.ox/tasks/util', [
             },
 
             isOverdue: function (task) {
-                return ( task.end_time !== undefined && task.end_time !== null && task.end_time < _.now() && task.status !== 3 );
+                return (task.end_time !== undefined && task.end_time !== null && task.end_time < _.now() && task.status !== 3);
             },
 
             getSmartEnddate: function (data) {
@@ -174,19 +175,63 @@ define('io.ox/tasks/util', [
                 if (m.isBefore(startOfDay)) {
                     if (m.isAfter(startOfDay.subtract(1, 'day'))) {
                         return gt('Yesterday') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
-                    } else {
-                        return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
                     }
-                } else {
-                    // future
-                    if (m.isBefore(startOfDay.add(1,'days'))) {
-                        return gt('Today') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
-                    } else if (m.isBefore(startOfDay.add(1, 'day'))) {
-                        return gt('Tomorrow') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
-                    } else {
-                        return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
-                    }
+                    return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
                 }
+                // future
+                if (m.isBefore(startOfDay.add(1, 'days'))) {
+                    return gt('Today') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                } else if (m.isBefore(startOfDay.add(1, 'day'))) {
+                    return gt('Tomorrow') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                }
+                return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
+            },
+
+            // looks in the task note for 'mail:' + _.cid(maildata), removes that from the note and returns the mail link as a button that opens the mailapp
+            // currently only looks for one link at the end of the note. Used by mail reminders.
+            checkMailLinks: function (note) {
+
+                // find the link (note using .+ and not \w+ as folders might contain spaces)
+                var links = note.match(/mail:\/\/.+?\.\w+/g),
+                    link;
+
+                if (links && links[0] && capabilities.has('webmail')) {
+
+                    for (var i = 0; i < links.length; i++) {
+                        link = '<span role="button" cid="' + links[i].replace(/^mail:\/\//, '') + '" class="ox-internal-mail-link label label-primary">' + gt('Original mail') + '</span>';
+                        // replace links
+                        note = note.replace(links[i], link);
+                    }
+
+                    // add function but make sure they are added only once
+                    // code can be moved once we introduce general links for apps
+                    $('.task-detail-container').undelegate('.ox-internal-mail-link', 'click').delegate('.ox-internal-mail-link', 'click', function () {
+                        var self = $(this),
+                            cid = self.attr('cid'),
+                            // save height and width so it doesn't change when the busy animation is drawn
+                            width = self.outerWidth() + 'px',
+                            height = self.outerHeight() + 'px';
+                        if (cid) {
+                            self.css({ width: width, height: height }).busy(true);
+                            require(['io.ox/mail/api'], function (api) {
+                                // see if mail is still there. Also loads the mail into the pool. Needed for the app to work
+                                api.get(_.extend({}, { unseen: true }, _.cid(cid))).done(function () {
+                                    ox.launch('io.ox/mail/detail/main', { cid: cid });
+                                }).fail(function (error) {
+                                    //if the mail was moved or the mail was deleted the cid cannot be found, show error
+                                    require(['io.ox/core/yell'], function (yell) {
+                                        yell(error);
+                                    });
+                                }).always(function () {
+                                    self.idle().css({ width: 'auto', height: 'auto' }).text(gt('Original mail'));
+                                });
+                            });
+                        }
+                    });
+                    //remove signature style divider "--" used by tasks created by mail reminder function (if it's at the start remove it entirely)
+                    note = note.replace(/(<br>)+-+(<br>)*/, '<br>').replace(/^-+(<br>)*/, '');
+                }
+                return note;
             },
 
             //change status number to status text. format enddate to presentable string
@@ -198,29 +243,30 @@ define('io.ox/tasks/util', [
                 //no state for task over time, so manual check is needed
                 if (!options.noOverdue && this.isOverdue(task)) {
                     task.status = gt('Overdue');
-                    task.badge = 'badge badge-important';
+                    task.badge = 'badge badge-overdue';
                 } else if (task.status) {
                     switch (task.status) {
                         case 1:
                             task.status = gt('Not started');
-                            task.badge = 'badge';
+                            task.badge = 'badge badge-notstarted';
                             break;
                         case 2:
                             task.status = gt('In progress');
-                            task.badge = 'badge';
+                            task.badge = 'badge badge-inprogress';
                             break;
                         case 3:
                             task.status = gt('Done');
-                            task.badge = 'badge badge-success';
+                            task.badge = 'badge badge-done';
                             break;
                         case 4:
                             task.status = gt('Waiting');
-                            task.badge = 'badge';
+                            task.badge = 'badge badge-waiting';
                             break;
                         case 5:
                             task.status = gt('Deferred');
-                            task.badge = 'badge';
+                            task.badge = 'badge badge-deferred';
                             break;
+                        // no default
                     }
                 } else {
                     task.status = '';
@@ -267,22 +313,18 @@ define('io.ox/tasks/util', [
                         }
                         if (a.title.toLowerCase() > b.title.toLowerCase()) {
                             return 1;
-                        } else {
-                            return -1;
                         }
+                        return -1;
                     },
                     //sort by endDate. If equal, sort by alphabet
                     dateSort = function (a, b) {
-                        /* jshint eqeqeq: false */
                         if (a.end_time > b.end_time) {
                             return 1;
-                        // use == here so end_time=null and end_time=undefined are equal. may happen with done tasks
-                        } else if (a.end_time == b.end_time) {
+                        // treat end_time=null and end_time=undefined equally. may happen with done tasks
+                        } else if (a.end_time === b.end_time || (a.end_time === undefined && b.end_time === null) || (a.end_time === null && b.end_time === undefined)) {
                             return alphabetSort(a, b);
-                        } else {
-                            return -1;
                         }
-                        /* jshint eqeqeq: true */
+                        return -1;
                     };
 
                 for (var i = 0; i < tasks.length; i++) {
@@ -330,9 +372,10 @@ define('io.ox/tasks/util', [
                         case 3:
                             $span.addClass('high').attr('title', gt('High priority'));
                             break;
+                        // no default
                     }
                     for (var i = 0; i < p; i++) {
-                        $span.append($('<i class="fa fa-exclamation">'));
+                        $span.append($('<i class="fa fa-exclamation" aria-hidden="true">'));
                     }
                     return $span;
                 }

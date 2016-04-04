@@ -27,8 +27,10 @@ define('plugins/notifications/mail/register', [
     function filter(model) {
         // ignore virtual/all (used by search, for example) and unsubscribed folders
         if (!model.get('subscribed') || (/^default0\/virtual/.test(model.id))) return false;
-        return /^default0\D/.test(model.id) && !account.is('spam|trash', model.id) && folderApi.getSection(model.get('type') === 'private');
+        return /^default0\D/.test(model.id) && !account.is('spam|trash|unseen', model.id) && folderApi.getSection(model.get('type') === 'private');
     }
+
+    var lastCount = -1;
 
     var update = _.debounce(function () {
 
@@ -43,6 +45,11 @@ define('plugins/notifications/mail/register', [
                 return sum + (model && model.get('unread')) || 0;
             }, 0)
             .value();
+
+        if (count !== lastCount) {
+            api.trigger('all-unseen', count);
+            lastCount = count;
+        }
 
         // don't let the badge grow infinite
         if (count > 99) count = '99+';
@@ -69,20 +76,20 @@ define('plugins/notifications/mail/register', [
     // removes mails of a whole folder from notificationview
     function removeFolder(folder) {
         var mails = _.compact(_(ids.models).map(function (item) {
-                if (item.attributes.folder_id === folder) {
-                    return item.attributes.id;
-                }
-            }));
+            if (item.attributes.folder_id === folder) {
+                return item.attributes.id;
+            }
+        }));
         if (mails.length > 0) {
             ids.remove(mails);
         }
     }
-    function checkNew (items) {
+    function checkNew(items) {
         var newIds = _(items).map(function (item) {
-                return item.folder_id + '.'  + item.id;
+                return item.folder_id + '.' + item.id;
             }),
             oldIds = _(ids.models).map(function (model) {
-                return model.get('folder_id') + '.'  + model.get('id');
+                return model.get('folder_id') + '.' + model.get('id');
             }),
             newItems = _.difference(newIds, oldIds);
         if (newItems.length) {
@@ -91,7 +98,7 @@ define('plugins/notifications/mail/register', [
                 if (newItems.length > 1) {
                     desktopNotifications.show({
                         title: gt('New mails'),
-                        body: gt('You\'ve got new mails'),
+                        body: gt('You have new mail'),
                         icon: ''
                     });
                 } else {

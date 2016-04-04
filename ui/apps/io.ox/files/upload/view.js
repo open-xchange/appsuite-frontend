@@ -31,7 +31,7 @@ define('io.ox/files/upload/view', [
                 this.model = baton.model;
                 this.index = baton.index;
 
-                this.model.on('change:progress', function (object, val) {
+                this.model.on('change:progress', function () {
                     var val = Math.round(self.model.get('progress') * 100);
 
                     if (self.model.get('progress') === 1) {
@@ -130,7 +130,7 @@ define('io.ox/files/upload/view', [
             dialog.header($('<h4>').text(gt('Upload progress')));
             dialog.getBody().append(container);
             dialog
-                .addButton('cancel', gt('Close'), 'close',  { 'tabIndex': '1' })
+                .addButton('cancel', gt('Close'), 'close', { 'tabIndex': '1' })
                 .on('close', function () {
                     fileUpload.collection.each(function (model) {
                         //remove all change listeners from the models in the collection

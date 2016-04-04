@@ -16,8 +16,11 @@ define('io.ox/core/commons', [
     'io.ox/core/extPatterns/links',
     'gettext!io.ox/core',
     'io.ox/core/folder/api',
-    'io.ox/core/api/account'
-], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI) {
+    'io.ox/core/api/account',
+    'settings!io.ox/core',
+    'io.ox/backbone/mini-views/upsell',
+    'io.ox/core/capabilities'
+], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI, coreSettings, UpsellView, capabilities) {
 
     'use strict';
 
@@ -41,7 +44,7 @@ define('io.ox/core/commons', [
 
             node.idle().empty().append(
                 $('<div class="io-ox-center multi-selection-message">').append(
-                    $('<div id="' + grid.multiselectId + '">').append(
+                    $('<div class="message" id="' + grid.multiselectId + '">').append(
                         gt.format(
                             //#. number of selected item
                             //#. %1$s is the number surrounded by a tag
@@ -221,14 +224,15 @@ define('io.ox/core/commons', [
          * Wire grid & window
          */
         wireGridAndWindow: function (grid, win) {
-            var top = 0, on = function () {
-                grid.keyboard(true);
-                if (grid.selection.get().length) {
-                    // only retrigger if selection is not empty; hash gets broken if caches are empty
-                    // TODO: figure out why this was important
-                    grid.selection.retriggerUnlessEmpty();
-                }
-            };
+            var top = 0,
+                on = function () {
+                    grid.keyboard(true);
+                    if (grid.selection.get().length) {
+                        // only retrigger if selection is not empty; hash gets broken if caches are empty
+                        // TODO: figure out why this was important
+                        grid.selection.retriggerUnlessEmpty();
+                    }
+                };
 
             grid.setApp(win.app);
             // show
@@ -461,9 +465,8 @@ define('io.ox/core/commons', [
                     if (id === null) return app.folder.setDefault();
                     return apply(id);
                 });
-            } else {
-                return app.folder.setDefault();
             }
+            return app.folder.setDefault();
         },
 
         /**
@@ -600,7 +603,7 @@ define('io.ox/core/commons', [
                     $('<div class="rightside-navbar">').append(
                         $('<div class="rightside-inline-actions">'),
                         $('<a href="#" tabindex="-1">').append(
-                            $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
+                            $('<i class="fa fa-chevron-left" aria-hidden="true">'), $.txt(' '), $.txt(gt('Back'))
                         ).on('click', { app: app }, click)
                     ),
                     // right
@@ -634,7 +637,7 @@ define('io.ox/core/commons', [
                     this.addClass('visual-focus').append(
                         $('<a href="#" class="toolbar-item" tabindex="1">')
                         .attr('title', gt('Open folder view'))
-                        .append($('<i class="fa fa-angle-double-right">'))
+                        .append($('<i class="fa fa-angle-double-right" aria-hidden="true">'))
                         .on('click', { app: app, state: true }, toggleFolderView)
                     );
                 }
@@ -663,6 +666,47 @@ define('io.ox/core/commons', [
             onFolderViewClose(app);
 
             if (app.folderViewIsVisible()) _.defer(onFolderViewOpen, app);
+        },
+
+        addPremiumFeatures: function (app, opt) {
+
+            if (_.device('smartphone')) return;
+            if (!capabilities.has('client-onboarding')) return;
+            if (!coreSettings.get('upsell/premium/folderView/visible')) return;
+            if (coreSettings.get('upsell/premium/folderView/closedByUser')) return;
+
+            var sidepanel = app.getWindow().nodes.sidepanel,
+                container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus in">').append(
+                    $('<div class="header">').append(
+                        gt('Premium features'),
+                        $('<a href="#" role="button" class="pull-right">').append(
+                            $('<i class="fa fa-times" aria-hidden="true">'),
+                            $('<span class="sr-only">').text(gt('Close premium features'))
+                        )
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            $(this).closest('.premium-toolbar').collapse('hide');
+                            coreSettings.set('upsell/premium/folderView/closedByUser', true).save();
+                        })
+                    )
+                );
+
+            ext.point(app.get('name') + '/folderview/premium-area').invoke('draw', container, {});
+            if (container.find('li').length === 0) return;
+            var upsellView = new UpsellView({
+                id: opt.upsellId || 'folderview/' + app.get('name') + '/bottom',
+                requires: opt.upsellRequires,
+                icon: '',
+                title: gt('Try now!'),
+                customize: function () {
+                    this.$('a').addClass('btn btn-default');
+                }
+            });
+            if (upsellView.visible) {
+                container.append(upsellView.render().$el);
+                $('.header a', container).remove();
+            }
+            sidepanel.append(container);
         }
     };
 
@@ -740,7 +784,7 @@ define('io.ox/core/commons', [
         if (_.isArray(data)) {
             // multiple items - just listen to generic events.
             // otherweise "select all" of some thousands items freezes browser
-            folderAPI.on('update',  redraw);
+            folderAPI.on('update', redraw);
             // ignore move case for multiple
             api.on('delete update', redraw);
         } else {

@@ -18,7 +18,7 @@ define([
 
     'use strict';
 
-    describe('upload api', function () {
+    describe('Files upload api', function () {
         it('has no inital estimation time', function () {
             expect(upload.getEstimatedTime()).to.equal('0 Sekunden');
         });

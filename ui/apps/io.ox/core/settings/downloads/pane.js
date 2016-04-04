@@ -51,7 +51,7 @@ define('io.ox/core/settings/downloads/pane', [
                     $('<section>').append(
                         $('<h2>').text(gt('Updater')),
                         $('<p>').append(
-                            $('<i class="fa fa-download">'),
+                            $('<i class="fa fa-download" aria-hidden="true">'),
                             $.txt(' '),
                             $('<a>', { href: href, target: '_blank', download: '' }).addClass('action').text(gt('Download installation file (for Windows)'))
                         ),
@@ -93,13 +93,15 @@ define('io.ox/core/settings/downloads/pane', [
             var lang = ox.language.split('_')[0],
                 // languages we have custom shop icons for
                 langs = driveClientsSettings.get('l10nImages'),
-                imagePath = ox.abs + ox.root + '/apps/plugins/portal/oxdriveclients/img/',
-                platform = platform.toLowerCase();
+                imagePath = ox.abs + ox.root + '/apps/plugins/portal/oxdriveclients/img/';
+
+            platform = platform.toLowerCase();
+
             // fallback
             if (_.indexOf(langs, lang) === -1) lang = 'en';
 
-            var $img = $('<div aria-hidden="true" class="oxdrive-shop-image ' + platform +'">')
-                .css('background-image', 'url(' + imagePath + lang + '_'  + platform + '.png)');
+            var $img = $('<div aria-hidden="true" class="oxdrive-shop-image ' + platform + '">')
+                .css('background-image', 'url(' + imagePath + lang + '_' + platform + '.png)');
 
             return $('<a class="shoplink">').attr({
                 href: url,
@@ -130,7 +132,7 @@ define('io.ox/core/settings/downloads/pane', [
                         hasWindowsClient ? $('<div class="shop-link-container">').append(
                             $.txt(windowsClientLabel),
                             $('<br>'),
-                            $('<i class="fa fa-download">'),
+                            $('<i class="fa fa-download" aria-hidden="true">'),
                             $('<a>', { href: windowsClientUrl, target: '_blank', download: '' }).addClass('action').text(gt('Download installation file'))
                         ) : [],
                         $('<div class="shop-link-container">').append(

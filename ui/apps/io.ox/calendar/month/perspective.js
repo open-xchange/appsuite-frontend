@@ -26,7 +26,19 @@ define('io.ox/calendar/month/perspective', [
 
     'use strict';
 
-    var perspective = new ox.ui.Perspective('month');
+    var perspective = new ox.ui.Perspective('month'),
+        // ensure cid is used in model and collection as idAttribute properly
+        MonthAppointment = Backbone.Model.extend({
+            idAttribute: 'cid',
+            initialize: function () {
+                this.cid = this.attributes.cid = _.cid(this.attributes);
+                // backward compatibility
+                this.id = this.cid;
+            }
+        }),
+        MonthAppointmentCollection = Backbone.Collection.extend({
+            model: MonthAppointment
+        });
 
     _.extend(perspective, {
 
@@ -148,7 +160,7 @@ define('io.ox/calendar/month/perspective', [
         updateWeeks: function (opt, useCache) {
             // fetch appointments
             var self = this,
-                weeks = opt.weeks || this.updateLoad,
+                weeks = opt.weeks || this.updateLoad,
                 apiData = {
                     start: opt.start,
                     end: moment(opt.start).add(weeks, 'weeks').valueOf()
@@ -176,9 +188,7 @@ define('io.ox/calendar/month/perspective', [
                                     tmpEnd = moment.utc(tmpEnd).local(true).valueOf();
                                 }
                                 if ((tmpStart >= start && tmpStart < end) || (tmpEnd > start && tmpEnd <= end) || (tmpStart <= start && tmpEnd >= end)) {
-                                    var m = new Backbone.Model(mod);
-                                    m.id = _.cid(mod);
-                                    retList.push(m);
+                                    retList.push(new MonthAppointment(mod));
                                 }
                             }
                         }
@@ -223,7 +233,7 @@ define('io.ox/calendar/month/perspective', [
                     monthDelimiter = curWeek.date() > endDate.date();
 
                 // add collection for week
-                self.collections[day] = new Backbone.Collection([]);
+                self.collections[day] = new MonthAppointmentCollection([]);
                 // new view
                 var view = createView({
                     collection: self.collections[day],
@@ -241,7 +251,7 @@ define('io.ox/calendar/month/perspective', [
                     views.push($('<div class="week month-name">').attr('id', endDate.year() + '-' + endDate.month()).append($('<div>').text(gt.noI18n(endDate.format('MMMM YYYY')))));
                     view.$el.addClass('no-border');
 
-                    if (endDate.date() != 1) {
+                    if (endDate.date() !== 1) {
                         views.push(createView({
                             collection: self.collections[day],
                             day: day,
@@ -357,8 +367,10 @@ define('io.ox/calendar/month/perspective', [
                 }
             }
 
-            var firstDay = $('#' + target.year() + '-' + target.month(), self.pane),
-                nextFirstDay = $('#' + target.year() + '-' + (target.month() + 1), self.pane),
+            // we cannot use target.month() + 1 or we might get month 13 in 2015 instead of month 1 in 2016
+            var nextMonth = moment(target).add(1, 'month'),
+                firstDay = $('#' + target.year() + '-' + target.month(), self.pane),
+                nextFirstDay = $('#' + nextMonth.year() + '-' + (nextMonth.month()), self.pane),
                 scrollToDate = function () {
                     // scroll to position
                     if (firstDay.length === 0) return;
@@ -367,18 +379,16 @@ define('io.ox/calendar/month/perspective', [
 
             if (firstDay.length > 0 && nextFirstDay.length > 0) {
                 scrollToDate();
+            } else if (target.valueOf() < self.current.valueOf()) {
+                this.drawWeeks({ up: true }).done(function () {
+                    firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
+                    scrollToDate();
+                });
             } else {
-                if (target.valueOf() < self.current.valueOf()) {
-                    this.drawWeeks({ up: true }).done(function () {
-                        firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
-                        scrollToDate();
-                    });
-                } else {
-                    this.drawWeeks().done(function () {
-                        firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
-                        scrollToDate();
-                    });
-                }
+                this.drawWeeks().done(function () {
+                    firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
+                    scrollToDate();
+                });
             }
         },
 
@@ -479,12 +489,12 @@ define('io.ox/calendar/month/perspective', [
                 var toolbarNode = $('<div>')
                     .addClass('controls-container')
                     .append(
-                        $('<a href="#" tabindex="1" role="button">').addClass('control prev').append($('<i class="fa fa-chevron-left">'))
+                        $('<a href="#" tabindex="1" role="button">').addClass('control prev').append($('<i class="fa fa-chevron-left" aria-hidden="true">'))
                         .on('click', $.proxy(function (e) {
                             e.preventDefault();
                             this.gotoMonth('prev');
                         }, this)),
-                        $('<a href="#" tabindex="1" role="button">').addClass('control next').append($('<i class="fa fa-chevron-right">'))
+                        $('<a href="#" tabindex="1" role="button">').addClass('control next').append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
                         .on('click', $.proxy(function (e) {
                             e.preventDefault();
                             this.gotoMonth('next');
@@ -526,7 +536,7 @@ define('io.ox/calendar/month/perspective', [
                         month = this.tops[y].data('date');
                     }
 
-                    if (prevMonth != this.previous.valueOf()) {
+                    if (prevMonth !== this.previous.valueOf()) {
                         this.previous = moment(prevMonth);
                     }
 
@@ -558,20 +568,20 @@ define('io.ox/calendar/month/perspective', [
             this.main
                 .on('keydown', function (e) {
                     switch (e.which) {
-                    case 37:
-                        // left
-                        self.gotoMonth('prev');
-                        break;
-                    case 39:
-                        // right
-                        self.gotoMonth('next');
-                        break;
-                    case 13:
-                        // enter
-                        $(e.target).click();
-                        break;
-                    default:
-                        break;
+                        case 37:
+                            // left
+                            self.gotoMonth('prev');
+                            break;
+                        case 39:
+                            // right
+                            self.gotoMonth('next');
+                            break;
+                        case 13:
+                            // enter
+                            $(e.target).click();
+                            break;
+                        default:
+                            break;
                     }
                 });
 

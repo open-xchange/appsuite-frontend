@@ -58,7 +58,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         $(document).off('.yell');
     }
 
-    function click (e) {
+    function click(e) {
 
         var alert = $('.io-ox-alert');
         if (alert.length === 0) return;
@@ -83,7 +83,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         textCon
             .contents()
             .filter(function () {
-                return this.nodeType == 3; //Node.TEXT_NODE
+                return this.nodeType === 3; //Node.TEXT_NODE
             }).remove();
 
         $('#io-ox-alert-screenreader').css('clip', 'auto');

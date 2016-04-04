@@ -40,6 +40,8 @@ define('plugins/portal/flickr/register', [
     ext.point('io.ox/portal/widget/flickr').extend({
 
         title: 'Flickr',
+        // prevent loading on refresh when error occurs to not bloat logs (see Bug 41740)
+        stopLoadingOnError: true,
 
         initialize: function (baton) {
 
@@ -65,10 +67,9 @@ define('plugins/portal/flickr/register', [
                 return baton.feed.load().done(function (data) {
                     baton.data = data;
                 });
-            } else {
-                baton.data = [];
-                return $.when();
             }
+            baton.data = [];
+            return $.when();
         },
 
         preview: function (baton) {
@@ -102,7 +103,7 @@ define('plugins/portal/flickr/register', [
                     });
                     // use size
                     this.addClass('photo-stream').append(
-                        $('<div class="content pointer" tabindex="1" role="button" aria-label="' +  gt('Press [enter] to jump to the flicker stream.') + '">')
+                        $('<div class="content pointer" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the flicker stream.') + '">')
                         .css('backgroundImage', 'url(' + url + ')')
                         .addClass('decoration')
                     );

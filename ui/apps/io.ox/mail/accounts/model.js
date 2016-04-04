@@ -46,8 +46,9 @@ define('io.ox/mail/accounts/model', [
             ],
             login: function (value) {
                 //for setups without any explicit login name for primary account
-                if (this.attributes.id !== 0 && $.trim(value) === '')
+                if (this.attributes.id !== 0 && $.trim(value) === '') {
                     return gt('This field has to be filled');
+                }
             },
             password: function (value) {
                 //if we have an id we are in edit mode, not create new account mode. Here we don't get the password from the server, so this field may be empty.
@@ -61,40 +62,48 @@ define('io.ox/mail/accounts/model', [
                 },
                 msg: gt('This field has to be filled')
             },
-            mail_port: [{
-                required: function () {
-                    return !this.isHidden();
+            mail_port: [
+                {
+                    required: function () {
+                        return !this.isHidden();
+                    },
+                    msg: gt('This field has to be filled')
                 },
-                msg: gt('This field has to be filled')
-            }, { fn: function (val) {
-                var temp = validation.formats.number(val);
-                if (temp === true) {
-                    // strangely if the validation returns true here, it is marked as invalid...
-                    return false;
-                } else {
-                    return temp;
+                {
+                    fn: function (val) {
+                        var temp = validation.formats.number(val);
+                        if (temp === true) {
+                            // strangely if the validation returns true here, it is marked as invalid...
+                            return false;
+                        }
+                        return temp;
+                    }
                 }
-            }}],
+            ],
             transport_server: {
                 required: function () {
                     return !this.isHidden();
                 },
                 msg: gt('This field has to be filled')
             },
-            transport_port: [{
-                required: function () {
-                    return !this.isHidden();
+            transport_port: [
+                {
+                    required: function () {
+                        return !this.isHidden();
+                    },
+                    msg: gt('This field has to be filled')
                 },
-                msg: gt('This field has to be filled')
-            }, { fn: function (val) {
-                var temp = validation.formats.number(val);
-                if (temp === true) {
-                    // strangely if the validation returns true here, it is marked as invalid...
-                    return false;
-                } else {
-                    return temp;
+                {
+                    fn: function (val) {
+                        var temp = validation.formats.number(val);
+                        if (temp === true) {
+                            // strangely if the validation returns true here, it is marked as invalid...
+                            return false;
+                        }
+                        return temp;
+                    }
                 }
-            }}]
+            ]
         },
 
         isHidden: function () {
@@ -115,9 +124,7 @@ define('io.ox/mail/accounts/model', [
 
             var regEmail = /\@/.test(newMailaddress);
 
-            if (!regEmail) {
-                return gt('This is not a valid email address');
-            }
+            if (!regEmail) return gt('This is not a valid email address');
         },
 
         initialize: function () {
@@ -163,16 +170,15 @@ define('io.ox/mail/accounts/model', [
                     });
 
                 }.bind(this));
-
-            } else {
-                if (obj) {
-                    obj = _.extend({ unified_inbox_enabled: false }, obj);
-                    obj.name = obj.personal = obj.primary_address;
-                    this.attributes = obj;
-                    this.attributes.spam_handler = 'NoSpamHandler';
-                }
-                return AccountAPI.create(this.attributes);
             }
+
+            if (obj) {
+                obj = _.extend({ unified_inbox_enabled: false }, obj);
+                obj.name = obj.personal = obj.primary_address;
+                this.attributes = obj;
+                this.attributes.spam_handler = 'NoSpamHandler';
+            }
+            return AccountAPI.create(this.attributes);
         },
 
         destroy: function () {

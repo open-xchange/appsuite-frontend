@@ -22,9 +22,11 @@ define('io.ox/mail/detail/view', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/emoji/util',
     'gettext!io.ox/mail',
+    'less!io.ox/mail/detail/content',
+    'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
-], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, gt) {
+], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, gt, shadowStyle) {
 
     'use strict';
 
@@ -40,7 +42,6 @@ define('io.ox/mail/detail/view', [
         id: 'subject',
         index: INDEX += 100,
         draw: function (baton) {
-
             var subject = util.getSubject(baton.data),
                 node = $('<h1 class="subject">').text(subject);
 
@@ -56,7 +57,7 @@ define('io.ox/mail/detail/view', [
         id: 'header',
         index: INDEX += 100,
         draw: function (baton) {
-            var header = $('<header class="detail-view-header" role="heading">');
+            var header = $('<header class="detail-view-header">');
             ext.point('io.ox/mail/detail/header').invoke('draw', header, baton);
             this.append(header);
         }
@@ -82,9 +83,9 @@ define('io.ox/mail/detail/view', [
     });
 
     /* move the actions menu to the top in sidepanel on smartphones */
-    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header';
+    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header/row3';
 
-    ext.point(extPoint).extend(new links.Dropdown({
+    ext.point(extPoint).extend(new links.InlineLinks({
         id: 'actions',
         index: _.device('smartphone') ? 50 : INDEX_header += 100,
         classes: _.device('smartphone') ? '' : 'actions pull-right',
@@ -96,52 +97,105 @@ define('io.ox/mail/detail/view', [
         smart: true
     }));
 
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'unread-toggle',
-        index: INDEX_header += 100,
-        draw: extensions.unreadToggle
-    });
-
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'date',
-        index: INDEX_header += 100,
-        draw: extensions.fulldate
-    });
-
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'from',
-        index: INDEX_header += 100,
-        draw: function (baton) {
-            this.append(
-                $('<div class="from">').append(
-                    util.serializeList(baton.data, 'from')
-                )
-            );
+    //
+    // Header
+    //
+    ext.point('io.ox/mail/detail/header').extend(
+        {
+            id: 'unread-toggle',
+            index: INDEX_header += 100,
+            draw: extensions.unreadToggle
+        },
+        {
+            id: 'paper-clip',
+            index: INDEX_header += 100,
+            draw: extensions.paperClip
+        },
+        {
+            id: 'rows',
+            index: INDEX_header += 100,
+            draw: function (baton) {
+                for (var i = 1, node; i <= 3; i++) {
+                    node = $('<div class="detail-view-row row-' + i + ' clearfix">');
+                    ext.point('io.ox/mail/detail/header/row' + i).invoke('draw', node, baton);
+                    this.append(node);
+                }
+            }
         }
-    });
+    );
 
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'flag-picker',
-        index: INDEX_header += 100,
-        draw: extensions.flagPicker
-    });
+    //
+    // Row 1
+    //
+    ext.point('io.ox/mail/detail/header/row1').extend(
+        {
+            id: 'from',
+            index: INDEX_header += 100,
+            draw: function (baton) {
+                this.append(
+                    $('<div class="from">').append(
+                        util.serializeList(baton.data, 'from')
+                    )
+                );
+            }
+        },
+        {
+            id: 'flag-picker',
+            index: INDEX_header += 100,
+            draw: extensions.flagPicker
+        },
+        {
+            id: 'date',
+            index: INDEX_header += 100,
+            draw: extensions.fulldate
+        },
+        {
+            id: 'priority',
+            index: INDEX_header += 100,
+            draw: extensions.priority
+        }
+    );
 
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'priority',
-        index: INDEX_header += 100,
-        draw: extensions.priority
-    });
+    //
+    // Row 2
+    //
+    ext.point('io.ox/mail/detail/header/row2').extend(
+        {
+            id: 'recipients',
+            index: INDEX_header += 100,
+            draw: function (baton) {
+                ext.point('io.ox/mail/detail/header/recipients').invoke('draw', this, baton);
+            }
+        }
+    );
 
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'paper-clip',
-        index: INDEX_header += 100,
-        draw: extensions.paperClip
-    });
-
-    ext.point('io.ox/mail/detail/header').extend({
-        id: 'recipients',
-        index: INDEX_header += 100,
+    //
+    // Row 3
+    //
+    ext.point('io.ox/mail/detail/header/recipients').extend({
+        id: 'default',
+        index: 100,
         draw: extensions.recipients
+    });
+
+    // Inplace/quick reply
+
+    ext.point('io.ox/mail/detail').extend({
+        id: 'inplace-reply',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            var model = baton.model;
+
+            require(['io.ox/mail/inplace-reply', 'io.ox/core/extPatterns/actions'], function (InplaceReplyView, actions) {
+                if (!InplaceReplyView.hasDraft(model.cid)) return;
+                baton = new ext.Baton({ data: model.toJSON(), view: baton.view });
+                // trigger click to open
+                baton.view.$('.detail-view-header').click();
+                actions.invoke('io.ox/mail/actions/inplace-reply', null, baton);
+                model = null;
+            });
+        }
     });
 
     ext.point('io.ox/mail/detail').extend({
@@ -181,10 +235,16 @@ define('io.ox/mail/detail/view', [
             var $body;
             this.append(
                 $('<section class="attachments">'),
-                $body = $('<section class="body user-select-text">')
+                // must have tabindex=1, otherwise tabindex inside Shadow DOM doesn't work
+                $body = $('<section class="body user-select-text" tabindex="1">')
             );
+            // rendering mails in chrome is slow if we do not use a shadow dom
+            if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
+                $body[0].createShadowRoot();
+                $body.addClass('shadow-root-container');
+            }
             $body.on('dispose', function () {
-                var $content = $(this).find('.content');
+                var $content = $(this.shadowRoot || this);
                 if ($content[0] && $content[0].children.length > 0) {
                     //cleanup content manually, since this subtree might get very large
                     //content only contains the mail and should not have any handlers assigned
@@ -215,8 +275,10 @@ define('io.ox/mail/detail/view', [
         id: 'content',
         index: 1000,
         draw: function (baton) {
+
             var data = content.get(baton.data),
                 node = data.content;
+
             if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
                 emoji.processEmoji(node.innerHTML, function (html, lib) {
                     baton.processedEmoji = !lib.loaded;
@@ -224,7 +286,24 @@ define('io.ox/mail/detail/view', [
                     node.innerHTML = html;
                 });
             }
+
+            // restore height or set minimum height of 100px
+            $(node).css('min-height', baton.model.get('visualHeight') || 100);
+            // add to DOM
             this.idle().append(node);
+            // ensure, that the scrollable is a lazyload scrollpane
+            if (this[0].host) {
+                // if it is a shadow dom, we must trigger add.lazyload to ensure, that lazyloading is updated at least once
+                $(this[0].host).closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
+                // copy events
+                _($._data(document).events.click).each(function (e) {
+                    if (!e.namespace && e.selector) $(node).on('click', e.selector, e.handler);
+                });
+            } else {
+                this.closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
+            }
+            // now remember height
+            baton.model.set('visualHeight', $(node).height(), { silent: true });
         }
     });
 
@@ -289,6 +368,14 @@ define('io.ox/mail/detail/view', [
                 this.model.previous('attachments')[0].content !== this.model.get('attachments')[0].content) this.onChangeContent();
         },
 
+        getEmptyBodyNode: function () {
+            // get shadow DOM or body node
+            var body = this.$el.find('section.body'),
+                shadowRoot = body.prop('shadowRoot');
+            if (shadowRoot) shadowRoot.innerHTML = '<style>' + shadowStyle + '</style>'; else body.empty();
+            return $(shadowRoot || body);
+        },
+
         onChangeContent: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({
@@ -297,17 +384,25 @@ define('io.ox/mail/detail/view', [
                     data: data,
                     attachments: util.getAttachments(data)
                 }),
-            node = this.$el.find('section.body').empty();
-            ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
-            // global event for tracking purposes
-            ox.trigger('mail:detail:body:render', this);
+                body = this.$el.find('section.body'),
+                node = this.getEmptyBodyNode(),
+                view = this;
+            // set outer height & clear content
+            body.css('min-height', this.model.get('visualHeight') || null);
+            // draw
+            _.delay(function () {
+                ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
+                // global event for tracking purposes
+                ox.trigger('mail:detail:body:render', view);
+                body = node = view = null;
+            }, 20);
         },
 
         onChangeRecipients: _.debounce(function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, model: this.model, view: this }),
                 node = this.$('.recipients').empty();
-            extensions.recipients.call(node, baton);
+            ext.point('io.ox/mail/detail/header/recipients').invoke('draw', node, baton);
         }, 10),
 
         onToggle: function (e) {
@@ -368,10 +463,11 @@ define('io.ox/mail/detail/view', [
         },
 
         onLoadFail: function (e) {
+            this.trigger('load:fail');
             this.trigger('load:done');
             if (!this.$el) return;
             this.$el.attr('data-loaded', false);
-            this.$('section.body').removeClass('loading').empty().append(
+            this.getEmptyBodyNode().empty().append(
                 $('<div class="mail-detail-content">').append(
                     $('<div class="loading-error">').append(
                         $('<h4>').text(gt('Error while loading message content')),
@@ -470,12 +566,10 @@ define('io.ox/mail/detail/view', [
             this.$el.attr({
                 'data-cid': this.model.cid,
                 'aria-expanded': 'false',
-                'data-loaded': 'false'
+                'data-loaded': 'false',
+                'role': 'group',
+                'aria-label': title
             });
-
-            this.$el.prepend(
-                $('<h2 class="sr-only">').text(title)
-            );
 
             this.$el.data({ view: this, model: this.model });
 

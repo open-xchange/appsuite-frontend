@@ -50,6 +50,11 @@ define('io.ox/mail/settings/pane', [
             { label: gt('10 minutes'), value: '10_minutes' }
         ];
 
+    // not possible to set nested defaults, so do it here
+    if (mailSettings.get('features/registerProtocolHandler') === undefined) {
+        mailSettings.set('features/registerProtocolHandler', true);
+    }
+
     var MailSettingsView = Backbone.View.extend({
         tagName: 'div',
 
@@ -113,11 +118,6 @@ define('io.ox/mail/settings/pane', [
             mailViewSettings = new MailSettingsView({ model: mailSettings });
 
             this.append(mailViewSettings.render(baton).$el);
-
-            if (Modernizr.touch) {
-                // see Bug 24802 - iPad: Cannot write email
-                this.find('input[name="messageFormat"]:first').closest('.control-group').hide().prev().hide();
-            }
 
             if (!capabilities.has('emoji')) {
                 // see Bug 25537 - Emotes not working as advertised
@@ -191,6 +191,21 @@ define('io.ox/mail/settings/pane', [
                             $('<label>').text(gt('Use fixed-width font for text mails')).prepend(
                                 new mini.CheckboxView({ name: 'useFixedWidthFont', model: mailSettings }).render().$el
                             )
+                        ),
+                        // mailto handler registration
+                        $('<div class="checkbox expertmode">').append(
+                            $('<label>').text(gt('Ask for mailto link registration')).prepend(
+                                new mini.CheckboxView({ name: 'features/registerProtocolHandler', model: mailSettings }).render().$el
+                            ),
+                            // if supported add register now link
+                            navigator.registerProtocolHandler ?
+                            $('<a href="#" >').text(gt('Register now')).css('margin-left', '8px').on('click', function (e) {
+                                e.preventDefault();
+                                var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
+                                navigator.registerProtocolHandler(
+                                    'mailto', url + '#app=' + ox.registry.get('mail-compose') + ':compose&mailto=%s', ox.serverConfig.productNameMail
+                                );
+                            }) : []
                         )
                     )
                 )
@@ -218,6 +233,13 @@ define('io.ox/mail/settings/pane', [
                                 new mini.CheckboxView({ name: 'appendMailTextOnReply', model: mailSettings }).render().$el
                             )
                         )
+                        // $('<div class="checkbox">').append(
+                        //     //#. this setting is about what happens when the user presses <enter>
+                        //     //#. in mail compose: either simple line breaks (<br> tags) or paragraphs (<p> tags)
+                        //     $('<label>').text(gt('Insert line breaks instead paragraphs when pressing <enter>')).prepend(
+                        //         new mini.CheckboxView({ name: 'simpleLineBreaks', model: mailSettings }).render().$el
+                        //     )
+                        // )
                     )
                 ),
                 $('<fieldset>').append(
@@ -228,7 +250,7 @@ define('io.ox/mail/settings/pane', [
                 ),
 
                 (function () {
-                    if (_.device('smartphone || tablet')) return $();
+                    if (_.device('smartphone')) return $();
                     return $('<fieldset>').append(
                         $('<legend>').addClass('sectiontitle').append(
                             $('<h2>').text(gt('Format emails as'))
@@ -241,24 +263,6 @@ define('io.ox/mail/settings/pane', [
                 $('<fieldset>').append(
                     $('<legend>').addClass('sectiontitle sr-only').append(
                         $('<h2>').text(gt('Additional settings'))
-                    ),
-                    $('<div>').addClass('form-group expertmode').append(
-
-                        $('<label for="lineWrapAfter">').addClass('control-label').text(
-                            //#. It's a label for an input field with a number
-                            //#. This only applies for plain text messages, so please keep this information in translations
-                            gt('Automatically wrap plain text after character:')
-                        ),
-                        $('<div>').addClass('controls').append(
-                            $('<div>').addClass('row').append(
-                                $('<div>').addClass('col-md-2').append(
-                                    new mini.InputView({ name: 'lineWrapAfter', model: mailSettings, className: 'form-control', id: 'lineWrapAfter' }).render().$el
-                                ),
-                                $('<div>').addClass('col-md-10').append(
-                                    new mini.ErrorView({ selector: '.form-group.expertmode' }).render().$el
-                                )
-                            )
-                        )
                     ),
                     $('<div>').addClass('form-group').append(
                         $('<label>').attr({ 'for': 'defaultSendAddress' }).text(gt('Default sender address')),

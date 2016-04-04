@@ -11,7 +11,7 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/help', [], function () {
+define('io.ox/backbone/mini-views/help', ['gettext!io.ox/core'], function (gt) {
 
     'use strict';
 
@@ -38,6 +38,9 @@ define('io.ox/backbone/mini-views/help', [], function () {
         },
 
         onClick: function (e) {
+
+            e.preventDefault();
+
             var href = this.options.href,
                 base = this.options.base;
 
@@ -48,6 +51,8 @@ define('io.ox/backbone/mini-views/help', [], function () {
                 base = href.base || base;
                 href = href.target || href;
             }
+
+            window.open(base + '/l10n/' + ox.language + '/' + href);
 
             // metrics
             require(['io.ox/metrics/main'], function (metrics) {
@@ -65,17 +70,13 @@ define('io.ox/backbone/mini-views/help', [], function () {
                     detail: href.substr(href.lastIndexOf('#') + 1)
                 });
             });
-
-            window.open(base + '/l10n/' + ox.language + '/' + href);
-
-            e.preventDefault();
         },
 
         initialize: function (options) {
             this.options = _.extend({
                 href: 'index.html',
                 tabindex: '1',
-                content: $('<i class="fa fa-question-circle">'),
+                content: $('<i class="fa fa-question-circle" aria-hidden="true">'),
                 base: 'help'
             }, options);
 
@@ -85,14 +86,15 @@ define('io.ox/backbone/mini-views/help', [], function () {
         },
 
         render: function () {
-            this.$el.append(
-                this.options.content
-            ).attr({
-                target: '_blank',
-                href: '',
-                role: 'menuitem',
-                tabindex: this.options.tabindex
-            });
+            this.$el
+                .append(this.options.content)
+                .attr({
+                    href: '#',
+                    role: 'button',
+                    tabindex: this.options.tabindex,
+                    target: '_blank',
+                    'aria-label': gt('Online help')
+                });
             return this;
         }
     });

@@ -28,7 +28,7 @@ define('io.ox/core/sub/settings/pane', [
 
     var point = views.point('io.ox/core/sub/settings/list'),
         SettingView = point.createView({ className: 'sub settings' }),
-        filter, folderState, dialog;
+        filter, folderState;
 
     function openFileDetailView(popup, e, target) {
         e.preventDefault();
@@ -91,7 +91,7 @@ define('io.ox/core/sub/settings/pane', [
                 view.render().$el
             );
             // add side popup for single file publications
-            dialog = new dialogs.SidePopup().delegate(this, '.file-detail-link', openFileDetailView);
+            new dialogs.SidePopup().delegate(this, '.file-detail-link', openFileDetailView);
         }
     });
 
@@ -109,7 +109,7 @@ define('io.ox/core/sub/settings/pane', [
 
         breadcrumb = new BreadcrumbView({
             folder: folder,
-            exclude: ['9'],
+            exclude: ['9'],
             notail: true,
             isLast: true
         });
@@ -216,7 +216,7 @@ define('io.ox/core/sub/settings/pane', [
                         'data-action': 'remove',
                         'aria-label': displayName + ', ' + gt('Delete')
                     })
-                    .append($('<i class="fa fa-trash-o">'))
+                    .append($('<i class="fa fa-trash-o" aria-hidden="true">'))
                 ),
                 $('<span class="content">').append(
                     $('<span data-property="displayName" class="list-title pull-left">')

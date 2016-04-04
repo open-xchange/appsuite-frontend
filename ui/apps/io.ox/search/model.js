@@ -81,11 +81,10 @@ define('io.ox/search/model', [
         // ignore folder facet with 'custom' (it's equivalent to an unset filter)
         var relevant = _.filter(list, function (value) {
             var facet = pool[value.facet];
-            if (value.facet === 'folder' && (facet.values.custom.custom === 'custom' || !facet.values.custom.custom)) {
+            if (value.facet === 'folder' && (facet.values.custom.custom === 'custom' || !facet.values.custom.custom)) {
                 return false;
-            } else {
-                return true;
             }
+            return true;
         });
 
         // collect facets that should be disabled/
@@ -111,9 +110,8 @@ define('io.ox/search/model', [
                         compact.custom = 'custom';
                         tmp = compact;
                         return false;
-                    } else {
-                        return true;
                     }
+                    return true;
                 });
                 list.unshift(tmp);
             } else {
@@ -130,9 +128,10 @@ define('io.ox/search/model', [
 
         // FLAG: highlander
         // keep only last added value of highlander facets
+        var data, facet;
         for (i = list.length - 1; i >= 0; i--) {
-            var data = list[i],
-                facet = pool[data.facet];
+            data = list[i];
+            facet = pool[data.facet];
             if (_.contains(facet.flags, 'highlander') && Object.keys(facet.values).length > 1) {
                 if (!hash[data.facet]) {
                     // keep latest value (negative loop)
@@ -148,8 +147,8 @@ define('io.ox/search/model', [
         var last;
         if (_.contains(this.getOptions().flags, 'singleton')) {
             for (i = list.length - 1; i >= 0; i--) {
-                var data = list[i],
-                    facet = pool[data.facet];
+                data = list[i];
+                facet = pool[data.facet];
                 if (facet.id !== 'folder' && !_.contains(facet.flags, 'advanced')) {
                     if (last) {
                         list.splice(i, 1);
@@ -168,7 +167,7 @@ define('io.ox/search/model', [
         this.set('poollist', list);
     };
 
-    function isFolderSet (model) {
+    function isFolderSet(model) {
         var folder = model.get('pool').folder,
             value = folder ? folder.values.custom.custom || !model.isMandatory('folder') : undefined,
             disabled = model.get('pooldisabled').folder;
@@ -191,7 +190,7 @@ define('io.ox/search/model', [
                 app = this.get('app');
                 // ensure options
                 if (!options.mapping) {
-                    ext.point('io.ox/search/main').invoke('config',  $(), options);
+                    ext.point('io.ox/search/main').invoke('config', $(), options);
                 }
                 // return module param for api calls
                 return (options.mapping[app] || options.mapping[app + '/edit'] || app);
@@ -205,8 +204,9 @@ define('io.ox/search/model', [
                     autocomplete = this.get('autocomplete');
 
                 // in case folder is man
-                if (!autocomplete.length)
+                if (!autocomplete.length) {
                     autocomplete = _.copy(options.sticky, true);
+                }
 
                 // add facet to pool
                 _.each(autocomplete, function (data) {
@@ -246,7 +246,7 @@ define('io.ox/search/model', [
                             facet: facet,
                             value: value,
                             // a) simple or default without options, b) exclusive, c) default with options
-                            option: data.style === 'simple' || itemvalue.filter || !itemvalue.options ? '' : option || itemvalue.options[0].id
+                            option: data.style === 'simple' || itemvalue.filter || !itemvalue.options ? '' : option || itemvalue.options[0].id
                         };
 
                         (itemvalue || data)._compact = compact;
@@ -266,8 +266,9 @@ define('io.ox/search/model', [
 
                 this.trigger('facet:add', facet, value, option);
 
-                if (facet !== 'folder' && !silent)
+                if (facet !== 'folder' && !silent) {
                     this.trigger('query', this.getApp());
+                }
             },
             remove: function (facet, value) {
                 var pool = this.get('pool'),
@@ -319,7 +320,7 @@ define('io.ox/search/model', [
                     for (var i = list.length - 1; i >= 0; i--) {
                         var item = list[i];
                         if (item.facet === facet && item.value === value) {
-                            _.extend(item, facetdata.style === 'exclusive' ?  { value: data.option } : {}, data);
+                            _.extend(item, facetdata.style === 'exclusive' ? { value: data.option } : {}, data);
                         }
                     }
                 }
@@ -368,7 +369,7 @@ define('io.ox/search/model', [
                         simple = _.copy(value, true);
                     }
 
-                    if (value && (value.id !== 'custom' || (value.custom && value.custom !== 'custom'))) {
+                    if (value && (value.id !== 'custom' || (value.custom && value.custom !== 'custom'))) {
                         active.push({
                             //remove temporary suffix
                             facet: facet.id.split('.')[0],
@@ -402,10 +403,11 @@ define('io.ox/search/model', [
                 return def.then(function (data) {
                     data = data || {};
                     if (!isFolderSet(self)) {
-                        if (self.get('pool').folder && data.id)
+                        if (self.get('pool').folder && data.id) {
                             self.update('folder', 'custom', data);
-                        else
+                        } else {
                             self.add('folder', 'custom', data);
+                        }
                     }
                 }, function () {
                     return {
@@ -487,9 +489,9 @@ define('io.ox/search/model', [
                     pooldisabled: {},
                     start: 0
                 },
-                {
-                    silent: true
-                });
+                    {
+                        silent: true
+                    });
                 if (!opt.silent) this.trigger('reset');
             }
         }

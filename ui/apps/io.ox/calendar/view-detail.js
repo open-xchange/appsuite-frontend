@@ -47,7 +47,7 @@ define('io.ox/calendar/view-detail', [
         draw: function (baton) {
             if (!baton.data.private_flag) return;
             this.append(
-                $('<i class="fa fa-lock private-flag">')
+                $('<i class="fa fa-lock private-flag" aria-hidden="true">')
             );
         }
     });
@@ -81,14 +81,7 @@ define('io.ox/calendar/view-detail', [
             id: 'date',
             draw: function (baton) {
                 this.append(
-                    $('<div class="date-time">').append(
-                        // date
-                        $('<span class="date">').text(util.getDateInterval(baton.data)),
-                        // mdash
-                        $.txt(' \u00A0 '),
-                        // time
-                        util.addTimezoneLabel($('<span class="time">'), baton.data, { placement: 'top' })
-                    )
+                    util.getDateTimeIntervalMarkup(baton.data)
                 );
             }
         },
@@ -153,6 +146,7 @@ define('io.ox/calendar/view-detail', [
     $(document).on('click', '.expandable-toggle', function (e) {
         e.preventDefault();
         $(this).closest('fieldset').toggleClass('open');
+        $(this).attr('aria-expanded', $(this).closest('fieldset').hasClass('open'));
     });
 
     // draw details
@@ -170,11 +164,11 @@ define('io.ox/calendar/view-detail', [
             this.append(
                 $('<fieldset class="details expandable">').append(
                     $('<legend class="io-ox-label">').append(
-                        $('<a href="#" class="expandable-toggle" role="button">').append(
+                        $('<a href="#" class="expandable-toggle" role="button" aria-expanded="false">').append(
                             $('<h2>').text(gt('Details'))
                         ),
                         $.txt(' '),
-                        $('<i class="fa expandable-indicator">')
+                        $('<i class="fa expandable-indicator" aria-hidden="true">')
                     ),
                     node
                 )
@@ -198,14 +192,14 @@ define('io.ox/calendar/view-detail', [
                 $('<dd class="detail organizer">').append(
                     coreUtil.renderPersonalName(
                         baton.data.organizerId ?
-                        {
-                            html: userAPI.getTextNode(baton.data.organizerId),
-                            user_id: baton.data.organizerId
-                        } : {
-                            name: baton.data.organizer,
-                            email: baton.data.organizer
-                        },
-                        baton.data
+                            {
+                                html: userAPI.getTextNode(baton.data.organizerId),
+                                user_id: baton.data.organizerId
+                            } : {
+                                name: baton.data.organizer,
+                                email: baton.data.organizer
+                            },
+                            baton.data
                     )
                 )
             );
@@ -248,7 +242,7 @@ define('io.ox/calendar/view-detail', [
         }
     });
 
-    function getDeepLink (data) {
+    function getDeepLink(data) {
         return [
             ox.abs,
             ox.root,

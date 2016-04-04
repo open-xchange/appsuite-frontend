@@ -80,6 +80,8 @@ define('io.ox/contacts/edit/main', [
 
                         editView.on('save:start', function () {
                             win.busy();
+                            // reset error marker
+                            container.find('[data-field]').removeClass('has-error');
                         });
 
                         editView.on('save:fail', function (e, error) {
@@ -99,7 +101,8 @@ define('io.ox/contacts/edit/main', [
 
                             if (invalid) {
                                 notifications.yell('error', gt('Some fields contain invalid data'));
-                                field.get(0).scrollIntoView();
+                                // set error marker and scroll
+                                field.addClass('has-error').get(0).scrollIntoView();
                                 field = null;
                             } else {
                                 notifications.yell(error);
@@ -111,7 +114,7 @@ define('io.ox/contacts/edit/main', [
                         });
 
                         function fnToggleSave(isDirty) {
-                            var node = container.find('.btn[data-action="save"]');
+                            var node = win.nodes.header.find('.btn[data-action="save"]');
                             if (_.device('smartphone')) node = container.parent().parent().find('.btn[data-action="save"]');
                             if (isDirty) node.prop('disabled', false); else node.prop('disabled', true);
                         }
@@ -124,7 +127,7 @@ define('io.ox/contacts/edit/main', [
                             });
 
                             if (contact.id === undefined && _.keys(contact.attributes).length <= 1) {
-                                container.find('.btn[data-action="save"]').prop('disabled', true);
+                                win.nodes.header.find('.btn[data-action="save"]').prop('disabled', true);
                             }
 
                             container.find('input[type="text"]').on('keyup', _.debounce(function () {
@@ -254,8 +257,8 @@ define('io.ox/contacts/edit/main', [
                         .text(gt('Do you really want to discard your changes?'))
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete',  { 'tabIndex': '1' })
-                        .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { 'tabIndex': '1' })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

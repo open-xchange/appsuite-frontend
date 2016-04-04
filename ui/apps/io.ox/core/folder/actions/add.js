@@ -31,7 +31,9 @@ define('io.ox/core/folder/actions/add', [
      */
     function add(folder, title, opt) {
 
-        var opt = opt || {}, invalid = false;
+        opt = opt || {};
+
+        var invalid = false;
 
         // check for valid filename
         ext.point('io.ox/core/filename')
@@ -97,7 +99,7 @@ define('io.ox/core/folder/actions/add', [
                     ),
                     // help
                     $('<div class="help-block">').text(
-                        gt( 'A public folder is used for content that is of common interest for all users. ' +
+                        gt('A public folder is used for content that is of common interest for all users. ' +
                             'To allow other users to read or edit the contents, you have to set ' +
                             'the respective permissions for the public folder.'
                         )

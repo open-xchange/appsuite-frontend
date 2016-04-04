@@ -75,7 +75,7 @@ define('io.ox/keychain/api', [
         _.each(data, function (extension) {
             api.submodules[extension.id] = extension;
             extension.invoke('init');
-            if (extension.on) {
+            if (extension.on && !extension.isInitialized) {
                 extension.on('triggered', function () {
                     var args = $.makeArray(arguments);
                     args.shift();
@@ -84,7 +84,11 @@ define('io.ox/keychain/api', [
                     }
                     api.trigger.apply(api, args);
                 });
+                // we don't want to add the same listener multiple times
+                extension.isInitialized = true;
             }
+            // for extensions relying on the triggered listener to be present
+            extension.trigger('initialized');
         });
     }
 

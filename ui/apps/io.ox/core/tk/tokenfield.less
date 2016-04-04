@@ -26,9 +26,7 @@
         margin: 0 5px 3px 0;
         border-radius: @border-radius-small;
 
-        &.ui-sortable-helper {
-            background-color: @white;
-        }
+        &.ui-sortable-helper { background-color: @white; }
 
         .contact-image {
             display: inline-block;
@@ -44,7 +42,6 @@
 
     // background color if dropable widget is active
     &.drophover {
-
         background-color: #eee;
 
         .token-input {
@@ -57,19 +54,20 @@
 
     .twitter-typeahead {
 
-        & > .token-input.tt-input, & > .token-input.tt-hint {
+        & > .token-input.tt-input,
+        & > .token-input.tt-hint {
             height: 22px;
             border: 0;
             padding: 0 5px;
         }
 
-        & > .token-input.tt-hint, & > .token-input.tt-input,{
-            min-width: @tokenfield-menu-width !important;
-        }
+        & > .token-input.tt-hint,
+        & > .token-input.tt-input { min-width: @tokenfield-menu-width !important; }
 
         .tt-dropdown-menu {
             width: @tokenfield-menu-width;
             min-width: @tokenfield-menu-width;
+
             @media all and (min-width: 320px) and (max-width: 480px) {
                 border-radius: 0;
                 border: 1px solid #fff;

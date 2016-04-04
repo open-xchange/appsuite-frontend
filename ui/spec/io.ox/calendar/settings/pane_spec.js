@@ -16,7 +16,7 @@ define([
     'io.ox/calendar/settings/pane'
 ], function (ext, gt) {
 
-    describe('calendarsettings', function () {
+    describe('Calendar settings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="calendarsettingsNode">'));
@@ -60,12 +60,7 @@ define([
             this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').parent().text().should.be.equal(gt('Receive notification as appointment participant when other participants accept or decline'));
 
             this.node.find('input[name="deleteInvitationMailAfterAction"]').should.have.length(1);
-            this.node.find('input[name="deleteInvitationMailAfterAction"]').parent().text().should.be.equal(gt('Automatically delete incoming notifications after the appointment has been accepted or declined'));
-
-            //wait for deferred painting to happen
-            var def = new $.Deferred();
-            _.defer(def.resolve);
-            return def;
+            this.node.find('input[name="deleteInvitationMailAfterAction"]').parent().text().should.be.equal(gt('Automatically delete the invitation email after the appointment has been accepted or declined'));
         });
 
     });

@@ -52,7 +52,7 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
             var left = middle - (difference / 2) - 1;
             var right = middle + (difference / 2) + 1;
 
-            return string.substring(0, left)  + '...' + string.substring(right, string.length);
+            return string.substring(0, left) + '...' + string.substring(right, string.length);
         },
 
         fileSize: function (size, decimalPlaces) {

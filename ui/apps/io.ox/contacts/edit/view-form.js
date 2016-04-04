@@ -335,8 +335,9 @@ define('io.ox/contacts/edit/view-form', [
                 delete mod.display_name;
                 this.$el.text(util.getFullName(mod) || '\u00A0');
                 //fix top margin if picture upload was removed
-                if (isMyContactData && !capabilities.has('gab'))
+                if (isMyContactData && !capabilities.has('gab')) {
                     this.$el.css('margin-top', '0px');
+                }
                 return this;
             }
         });
@@ -495,7 +496,9 @@ define('io.ox/contacts/edit/view-form', [
 
         function propagateAttachmentChange(model, id, errors) {
 
-            var folder_id = model.get('folder_id'), id = model.get('id') || id,
+            id = model.get('id') || id;
+
+            var folder_id = model.get('folder_id'),
                 upload = api.uploadInProgress(_.ecid({ folder: folder_id, id: id }));
 
             //if there are errors show them
@@ -522,9 +525,8 @@ define('io.ox/contacts/edit/view-form', [
                             api.removeFromUploadList(_.ecid(data));
                             api.trigger('refresh.list');
                         });
-                    } else {
-                        return $.when();
                     }
+                    return $.when();
                 });
         }
 
@@ -586,13 +588,11 @@ define('io.ox/contacts/edit/view-form', [
                     // hide block if block contains no paragraph with content
                     if (block.children('div.has-content, div.always').length === 0) {
                         block.addClass('hidden');
+                    } else if (this.find('fieldset.block').length % 2) {
+                        block.addClass('odd');
                     } else {
-                        if (this.find('fieldset.block').length % 2) {
-                            block.addClass('odd');
-                        } else {
-                            block.addClass('even');
-                            this.append($('<div class="clearfix">'));
-                        }
+                        block.addClass('even');
+                        this.append($('<div class="clearfix">'));
                     }
                 }
             });

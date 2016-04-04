@@ -80,10 +80,8 @@ define('io.ox/backbone/modelFactory', [
 
                                         if (o[key] === undefined) {
                                             different = true;
-                                        } else {
-                                            if (val2 !== o[key][key2]) {
-                                                different = true;
-                                            }
+                                        } else if (val2 !== o[key][key2]) {
+                                            different = true;
                                         }
                                     });
 
@@ -375,7 +373,7 @@ define('io.ox/backbone/modelFactory', [
             if (options.id) {
                 // Assume this was loaded
                 var realm = this.realm('default');
-                return realm.create.call(realm, options);
+                return realm.create(options);
             }
             return new this.model(options);
         };

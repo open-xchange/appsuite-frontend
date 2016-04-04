@@ -83,6 +83,10 @@ define('io.ox/core/boot/fixes', [], function () {
         $.fn.tooltip = function () {
             return this;
         };
+        Modernizr.touch = true;
+        $('html').addClass('touch');
+    } else {
+        Modernizr.touch = false;
     }
 
     // iOS

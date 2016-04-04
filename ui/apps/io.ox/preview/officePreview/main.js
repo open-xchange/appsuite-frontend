@@ -52,7 +52,7 @@ define('io.ox/preview/officePreview/main', [
             _.url.hash('dataURL', file.dataURL);
         }
 
-        var app, win, container;
+        var app, win, container = $('<div>');
 
         app = ox.ui.createApp({
             name: 'io.ox/preview/officePreview',
@@ -77,8 +77,6 @@ define('io.ox/preview/officePreview/main', [
                 e.preventDefault();
                 app.previousPage();
             });
-
-        var container = $('<div>');
 
         function loading() {
             win.busy();

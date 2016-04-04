@@ -80,6 +80,11 @@ define('io.ox/files/listview', [
                 }
                 ext.point(ITEM + '/' + layout).invoke('draw', this, baton);
             }
+        },
+        {
+            id: 'aria-label',
+            index: 200,
+            draw: extensions.ariaLabel
         }
     );
 

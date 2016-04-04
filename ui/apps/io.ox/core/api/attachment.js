@@ -118,25 +118,25 @@ define('io.ox/core/api/attachment', [
         createOldWay: function (options, form) {
 
             var json = {
-                module: options.module,
-                attached: options.id,
-                folder: options.folder || options.folder_id
-            },
-            uploadCounter = 0,
-            self = this,
-            deferred = $.Deferred();
+                    module: options.module,
+                    attached: options.id,
+                    folder: options.folder || options.folder_id
+                },
+                uploadCounter = 0,
+                self = this,
+                deferred = $.Deferred();
 
             $(':input.add-attachment', form).each(function (index, field) {
                 var jqField = $(field);
                 if (jqField.attr('type') === 'file') {
                     jqField.attr('name', 'file_' + uploadCounter);
-                    $(form).append($('<input>',  { 'type': 'hidden', 'name': 'json_' + uploadCounter, 'value': JSON.stringify(json) }));
+                    $(form).append($('<input>', { 'type': 'hidden', 'name': 'json_' + uploadCounter, 'value': JSON.stringify(json) }));
                     uploadCounter++;
                 }
             });
 
             var tmpName = 'iframe_' + _.now(),
-                frame = $('<iframe>',  { 'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
+                frame = $('<iframe>', { 'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
 
             $('#tmp').append(frame);
             window.callback_attach = function (response) {
@@ -183,13 +183,13 @@ define('io.ox/core/api/attachment', [
                     source: 'task'
                 });
             switch (mode) {
-            case 'view':
-            case 'open':
-                return url + '&delivery=view';
-            case 'download':
-                return url + '&delivery=download';
-            default:
-                return url;
+                case 'view':
+                case 'open':
+                    return url + '&delivery=view';
+                case 'download':
+                    return url + '&delivery=download';
+                default:
+                    return url;
             }
         },
 

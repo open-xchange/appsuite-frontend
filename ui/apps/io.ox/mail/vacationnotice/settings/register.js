@@ -84,7 +84,6 @@ define('io.ox/mail/vacationnotice/settings/register', [
                             from: assembleFrom(aliases),
                             fromArrays: assembleArrays(user.aliases)
                         };
-
                     filters.editVacationtNotice($container, multiValues, user.email1).done(function (filter) {
                         filterModel = filter;
                         touchAttributes(filterModel);

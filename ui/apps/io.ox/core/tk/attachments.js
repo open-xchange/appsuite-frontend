@@ -91,7 +91,7 @@ define('io.ox/core/tk/attachments', [
 
                 removeFile.on('click', function () { self.deleteAttachment(attachment); });
 
-                if (size.text() === '0 B') {size.text(' '); }
+                if (size.text() === '0 B') size.text(' ');
 
                 return $el;
             },
@@ -106,6 +106,22 @@ define('io.ox/core/tk/attachments', [
                 }
             },
 
+            checkQuota: function () {
+                var properties = settings.get('properties'),
+                    size = this.attachmentsToAdd.reduce(function (acc, attachment) {
+                        return acc + (attachment.file_size || 0);
+                    }, 0),
+                    max = properties.attachmentMaxUploadSize;
+                if (max && max > 0 && size > max) {
+                    this.model.set('quotaExceeded', {
+                        actualSize: size,
+                        attachmentMaxUploadSize: properties.attachmentMaxUploadSize
+                    });
+                } else {
+                    this.model.unset('quotaExceeded');
+                }
+            },
+
             updateState: function () {
                 var self = this;
                 this.allAttachments = _(this.attachmentsOnServer.concat(this.attachmentsToAdd)).reject(function (attachment) {
@@ -113,6 +129,7 @@ define('io.ox/core/tk/attachments', [
                         return toDelete.id === attachment.id;
                     });
                 });
+                this.checkQuota();
                 this.attachmentsChanged();
             },
 
@@ -429,8 +446,9 @@ define('io.ox/core/tk/attachments', [
                             _(attachments).each(function (a) {
                                 drawAttachment(a, _.noI18n(a.filename));
                             });
-                            if (attachments.length > 1)
+                            if (attachments.length > 1) {
                                 drawAttachment(attachments, gt('All attachments')).find('a').removeClass('attachment-link');
+                            }
                         } else {
                             $node.append(gt('None'));
                         }

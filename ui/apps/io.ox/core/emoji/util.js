@@ -59,17 +59,16 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
                 return str;
             }
 
-            if (tooLarge || !hasEmoji) {
+            if (tooLarge || !hasEmoji || _.device('emoji')) {
                 return cont(str);
             } else if (emoji) {
                 return cont(convert(str));
-            } else {
-                require(['io.ox/emoji/bundle'], function (code) {
-                    emoji = code;
-                    cont(convert(str), true);
-                });
-                return str;
             }
+            require(['io.ox/emoji/bundle'], function (code) {
+                emoji = code;
+                cont(convert(str), true);
+            });
+            return str;
         },
 
         imageTagsToUnified: function (html) {

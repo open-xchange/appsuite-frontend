@@ -173,12 +173,16 @@
             }
 
             &.inbox { i:before { content: '\f01c'; }} // fa-inbox
+            &.unseen { i:before { content: '\f0e0'; }} // fa-envelope
             &.sent { i:before { content: '\f1d8'; }} // fa-paper-plane
             &.drafts { i:before { content: '\f15b'; }} // fa-file
             &.trash { i:before { content: '\f1f8'; }} // fa-trash
             &.spam { i:before { content: '\f05e'; }} // fa-ban
             &.archive { i:before { content: '\f187'; }} // fa-archive
             &.default { i { color: #aaa; }}
+
+            &.myshares { i:before{ content: '\f0c2'; }} // fa-cloud
+            &.myfiles { i:before{ content: '\f007'; }} // fa-user
         }
 
         .folder-checkbox {
@@ -214,7 +218,7 @@
         display: block;
     }
 
-    .favorites, .unified-folders, .standard-folders, .other-folders, .myshares, .root-folders {
+    .favorites, .unified-folders, .standard-folders, .other-folders, .myshares, .root-folders, .private-drive-folders, .public-drive-folders, .filestorage-folders {
         margin-bottom: @default-padding;
         @media (max-width: 480px), (max-device-width: 480px) {
             margin-bottom: 0;
@@ -258,7 +262,6 @@
         }
     }
 
-
     // links
     .links {
 
@@ -291,11 +294,6 @@
             }
         }
     }
-
-    .window-sidepanel.top-toolbar & { top: @toolbar-height; }
-    .window-sidepanel.bottom-toolbar & { bottom: @toolbar-height; }
-    .window-sidepanel.bottom-toolbar & { bottom: @toolbar-height; }
-    .window-sidepanel.bottom-toolbar.file-storage-toolbar & { bottom: @toolbar-height + 72px; }
 
     @media(max-width: 480px), (max-device-width: 480px) {
 

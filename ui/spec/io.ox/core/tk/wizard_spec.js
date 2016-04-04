@@ -122,7 +122,7 @@ define(['io.ox/core/tk/wizard'], function (Wizard) {
                 expect($('.wizard-step').length).to.equal(0);
             });
 
-            it('shows proper content', function () {
+            it.skip('shows proper content', function () {
                 this.wizard.steps[0].content('Lorem ipsum');
                 this.wizard.start();
                 expect($('.wizard-step .content').text()).to.equal('Lorem ipsum');

@@ -9,7 +9,7 @@
 *
 * @author document.js build task
 */
-define('io.ox/help/core_doc',  ['io.ox/core/extensions'], function (ext) {
+define('io.ox/help/core_doc', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 

@@ -18,10 +18,11 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/extPatterns/actions',
     'io.ox/files/api',
     'io.ox/mail/api',
+    'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, Util, Settings, gt) {
+], function (Dropdown, DisposableView, Ext, LinksPattern, ActionsPattern, FilesAPI, MailAPI, DocConverterUtils, Util, Settings, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -51,7 +52,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.append(
                         // icon
                         !baton.context.standalone ?
-                            $('<i class="fa">').addClass(Util.getIconClass(baton.model)) :
+                            $('<i class="fa" aria-hidden="true">').addClass(Util.getIconClass(baton.model)) :
                             null,
                         // filename
                         $('<span class="filename-label">').text(baton.model.getDisplayName())
@@ -106,7 +107,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Fit to screen width'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitwidth',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">'),
+                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">'),
                         sectionLabel = $('<li class="dropdown-header" role="sectionhead">').text(gt('Zoom'));
                     this.before(sectionLabel);
                     this.prepend(checkIcon)
@@ -123,7 +124,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Fit to screen size'),
                 ref: TOOLBAR_ACTION_ID + '/zoomfitheight',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check">');
+                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">');
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitheight').attr({
                             tabindex: '1',
@@ -226,11 +227,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'hi',
                     icon: 'fa fa-user-plus',
                     label: gt('Share'),
-                    title: gt('Share selected files'),
+                    title: gt('Share this file'),
                     ref: 'io.ox/files/dropdown/share',
                     customize: function (baton) {
                         var self = this;
-                        this.append('<i class="fa fa-caret-down">');
+                        this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
                         this.after(
                             LinksPattern.DropdownLinks({
@@ -297,7 +298,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'savemailattachmenttodrive': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Save to Drive'),
+                    //#. %1$s is usually "Drive" (product name; might be customized)
+                    label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
                     ref: 'io.ox/mail/actions/save-attachment'
                 },
                 'sendmailattachmentasmail': {
@@ -324,7 +326,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'savemailattachmenttodrive': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Save to Drive'),
+                    //#. %1$s is usually "Drive" (product name; might be customized)
+                    label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
                     ref: 'io.ox/core/tk/actions/save-attachment'
                 }
             },
@@ -359,8 +362,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             return e.baton.context.standalone && (model.isOffice() || model.isPDF() || model.isText());
         },
         action: function (baton) {
-            var convertParams = Util.getConvertParams(baton.context.model),
-                documentPDFUrl = Util.getConverterUrl(convertParams);
+            var documentPDFUrl = DocConverterUtils.getEncodedConverterUrl(baton.context.model);
             window.open(documentPDFUrl, '_blank');
         }
     });
@@ -378,19 +380,19 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_ID + '/popoutstandalone', {
+        capabilities: 'infostore',
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
             // detail is the target of popoutstandalone, no support for mail attachments
             return currentApp !== 'io.ox/files/detail';
         },
         action: function (baton) {
-            var fileModel,
-                currentApp = ox.ui.App.getCurrentApp().getName();
+            var fileModel;
 
-            if (currentApp === 'io.ox/mail') {
-                fileModel = { file: baton.data };
-            } else {
+            if (baton.model.isFile()) {
                 fileModel = baton.model;
+            } else {
+                fileModel = { file: baton.data };
             }
 
             ox.launch('io.ox/files/detail/main', fileModel);
@@ -400,8 +402,15 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_ID + '/launchpresenter', {
         capabilities: 'presenter document_preview',
         requires: function (e) {
+            if (!e.collection.has('one', 'read')) {
+                return false;
+            }
+
             var model = e.baton.model;
-            return (model.isPresentation() && model.isFile());
+            var meta = model.get('meta');
+            var isError = meta && meta.document_conversion_error && meta.document_conversion_error.length > 0;
+
+            return (!isError && model.isFile() && (model.isPresentation() || model.isPDF()));
         },
         action: function (baton) {
             var fileModel = baton.model;
@@ -466,7 +475,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         action: function (baton) {
             var viewedAttachment = baton.data;
             MailAPI.get({ id: viewedAttachment.mail.id, folder_id: viewedAttachment.mail.folder_id }).done(function (mail) {
-                ox.registry.call('mail-compose', 'replyall', mail ).then(function (MailApp) {
+                ox.registry.call('mail-compose', 'replyall', mail).then(function (MailApp) {
                     // look for currently viewed attachment in the list of attachments of the source email
                     var attachmentToSend = _.find(mail.attachments, function (attachment) {
                         return attachment.id === viewedAttachment.id;
@@ -511,7 +520,7 @@ define('io.ox/core/viewer/views/toolbarview', [
          * - renders the page navigation in the toolbar.
          */
         onDocumentLoaded: function () {
-            if (this.standalone &&  !_.device('smartphone')) {
+            if (this.standalone && !_.device('smartphone')) {
                 this.renderPageNavigation();
             }
         },
@@ -642,7 +651,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                     data: isDriveFile ? model.toJSON() : origData
                 }),
                 appName = model.get('source'),
-                self = this;
+                self = this,
+                funcName = toolbarPoint.has(appName) ? 'replace' : 'extend';
 
             // remove listener from previous model
             if (this.model) {
@@ -662,8 +672,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                     toolbarPoint.disable(id);
                 }
             });
-            //extend toolbar extension point with the toolbar links
-            toolbarPoint.extend(new LinksPattern.InlineLinks({
+            //extend or replace toolbar extension point with the toolbar links
+            toolbarPoint[funcName](new LinksPattern.InlineLinks({
                 id: appName,
                 dropdown: true,
                 compactDropdown: true,
@@ -689,10 +699,10 @@ define('io.ox/core/viewer/views/toolbarview', [
         renderPageNavigation: function () {
             var prev = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
                     .attr({ 'aria-label': gt('Previous page'), 'title': gt('Previous page') })
-                    .append($('<i class="fa fa-arrow-up">')),
+                    .append($('<i class="fa fa-arrow-up" aria-hidden="true">')),
                 next = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
                     .attr({ 'aria-label': gt('Next page'), 'title': gt('Next page') })
-                    .append($('<i class="fa fa-arrow-down">')),
+                    .append($('<i class="fa fa-arrow-down" aria-hidden="true">')),
                 pageInput = $('<input type="text" class="viewer-toolbar-page" tabindex="1" role="textbox">'),
                 pageInputWrapper = $('<div class="viewer-toolbar-page-wrapper">').append(pageInput),
                 totalPage = $('<div class="viewer-toolbar-page-total">'),
@@ -719,15 +729,15 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             }
             function onInputChange(event, options) {
-                var options = _.extend({ preventPageScroll: false }, options),
-                    newValue = parseInt($(this).val()),
-                    oldValue = parseInt($(this).attr('data-page-number')),
-                    pageTotal = parseInt($(this).attr('data-page-total'));
+                options = _.extend({ preventPageScroll: false }, options);
+                var newValue = parseInt($(this).val(), 10),
+                    oldValue = parseInt($(this).attr('data-page-number'), 10),
+                    pageTotal = parseInt($(this).attr('data-page-total'), 10);
                 if (isNaN(newValue)) {
                     $(this).val(oldValue);
                     return;
                 }
-                if (newValue <= 0 ) {
+                if (newValue <= 0) {
                     $(this).val(1);
                     newValue = 1;
                 }
@@ -747,7 +757,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                     self.viewerEvents.trigger('viewer:document:scrolltopage', newValue);
                 }
             }
-            pageInput.on('keydown', onInputKeydown).on('change', onInputChange);
+            function onClick() {
+                $(this).select();
+            }
+
+            pageInput.on('keydown', onInputKeydown).on('change', onInputChange).on('click', onClick);
             prev.on('click', onPrevPage);
             next.on('click', onNextPage);
             group.append(prev, next, pageInputWrapper, totalPage)

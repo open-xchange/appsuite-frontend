@@ -291,8 +291,8 @@ define('io.ox/emoji/main', [
                     );
                 //parse unicode number
                 var unicode = parseUnicode(_.find(node.find('span').attr('class').split('emoji'), isFalsyString)),
-                css = null,
-                defaultCollection = self.getInstance();
+                    css = null,
+                    defaultCollection = self.getInstance();
 
                 if (!unicode) {
                     continue;
@@ -361,7 +361,7 @@ define('io.ox/emoji/main', [
 
         converterFor: function (options, format) {
             var self = this;
-            format =  format || 'html';
+            format = format || 'html';
 
             options = _.extend({
                 from: 'unified',

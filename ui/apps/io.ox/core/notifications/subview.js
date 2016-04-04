@@ -25,7 +25,7 @@ define('io.ox/core/notifications/subview', [
                 viewNode = view.$el,
                 model = view.model,
                 api = model.get('api'),
-                items = view.collection.models,
+                items = view.collection.models, i,
                 max = model.get('max') || items.length,
                 itemNode = $('<ul class="items list-unstyled">'),
                 extensionPoints = model.get('extensionPoints'),
@@ -47,7 +47,7 @@ define('io.ox/core/notifications/subview', [
                 //reminders need both to work correctly (reminderObject and task/appointment)
 
                 //make sure we have a model
-                if ( !model ) {
+                if (!model) {
                     model = requestedModel;
                 } else if (!model.get) {
                     model = new Backbone.Model(model);
@@ -67,11 +67,10 @@ define('io.ox/core/notifications/subview', [
                                 .attr({
                                     tabindex: 1,
                                     'data-action': 'clear-single',
-                                    'aria-label': gt ('Hide this notification')
+                                    'aria-label': gt('Hide this notification')
                                 }).on('click', function () {
-                                        view.hide(requestedModel);
-                                    }
-                                )
+                                    view.hide(requestedModel);
+                                })
                             )
                         );
                 }
@@ -89,24 +88,24 @@ define('io.ox/core/notifications/subview', [
                         return obj.attributes;
                     });
                     api.getList(requestData).then(function (data) {
-                        for (var i = 0; i < max && items[i]; i++) {
+                        for (i = 0; i < max && items[i]; i++) {
                             drawItem(data[i], items[i]);
                         }
                         itemNode.idle();
                     });
                 } else {
                     var defs = [];
-                    for (var i = 0; i < max && items[i]; i++) {
+                    for (i = 0; i < max && items[i]; i++) {
                         //mail needs unseen attribute, shouldn't bother other apis
                         //extend with empty object to not overwrite the model
-                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial( drawItem, _, items[i])));
+                        defs.push(api.get(_.extend({}, items[i].attributes, { unseen: true })).then(_.partial(drawItem, _, items[i])));
                     }
                     $.when.apply($, defs).then(function () {
                         itemNode.idle();
                     });
                 }
             } else {
-                for (var i = 0; i < max && items[i]; i++) {
+                for (i = 0; i < max && items[i]; i++) {
                     drawItem(items[i], items[i]);
                 }
                 itemNode.idle();
@@ -133,7 +132,7 @@ define('io.ox/core/notifications/subview', [
     });
 
     //use function here to not override defaults on extending
-    function defaults () {
+    function defaults() {
         return {
             id: '',
             title: '',
@@ -154,7 +153,7 @@ define('io.ox/core/notifications/subview', [
             desktopNotificationSupport: true,
             genericDesktopNotification: {
                 title: gt('New notifications'),
-                body: gt('You\'ve got new notifications'),
+                body: gt('You have new notifications'),
                 icon: ''
             },
             specificDesktopNotification: null,
@@ -162,8 +161,8 @@ define('io.ox/core/notifications/subview', [
         };
     }
     var SubviewModel = Backbone.Model.extend({
-            defaults: defaults()
-        });
+        defaults: defaults()
+    });
 
     var Subview = Backbone.View.extend({
         tagName: 'div',
@@ -361,7 +360,7 @@ define('io.ox/core/notifications/subview', [
                 items = [].concat(items);
             }
             //stop here if nothing changes, to prevent event triggering and redrawing
-            if (items.length === 0 ||  (items.length === 1 && items[0].id && !this.collection.get(items[0]))) {
+            if (items.length === 0 || (items.length === 1 && items[0].id && !this.collection.get(items[0]))) {
                 return;
             }
             this.collection.remove(items, { silent: silent });
@@ -381,7 +380,7 @@ define('io.ox/core/notifications/subview', [
         onClick: function (e) {
             if ((!(this.model.get('detailview'))) ||
                 ((e.type !== 'click') && (e.which !== 13)) ||
-                $(e.target).filter('.dropdown, select, a, button, .btn').length > 0 ) {
+                $(e.target).filter('.dropdown, select, a, button, .btn').length > 0) {
                 return;
             }
             var cid = String($(e.currentTarget).data('cid')),

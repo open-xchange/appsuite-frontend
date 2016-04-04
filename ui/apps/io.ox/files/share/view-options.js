@@ -11,7 +11,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
- define('io.ox/files/share/view-options', [
+define('io.ox/files/share/view-options', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
     'gettext!io.ox/files',
@@ -80,7 +80,7 @@
         index: 200,
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="toolbar-item" tabindex="1">')
+                $('<a href="#" role="button" class="toolbar-item" tabindex="1">')
                 .attr('title', gt('Open folder view'))
                 .append($('<i class="fa fa-angle-double-right">'))
                 .on('click', { app: baton.app, state: true }, toggleFolderView)

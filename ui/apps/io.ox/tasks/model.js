@@ -18,8 +18,9 @@ define('io.ox/tasks/model', [
     'io.ox/core/extensions',
     'io.ox/participants/model',
     'settings!io.ox/core',
+    'io.ox/core/strings',
     'gettext!io.ox/tasks'
-], function (api, ModelFactory, Validations, ext, pModel, settings, gt) {
+], function (api, ModelFactory, Validations, ext, pModel, settings, strings, gt) {
 
     'use strict';
 
@@ -40,6 +41,7 @@ define('io.ox/tasks/model', [
             ref: 'io.ox/tasks/model',
             api: api,
             model: {
+                idAttribute: 'id',
                 defaults: defaults,
                 getParticipants: function () {
                     if (this._participants) {
@@ -71,21 +73,29 @@ define('io.ox/tasks/model', [
                 },
 
                 // special get function for datepicker
-                getDate: function () {
+                getDate: function (attribute, options) {
                     var time = this.get.apply(this, arguments);
+                    options = options || {};
+                    // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
+                    options.fulltime = _.isBoolean(options.fulltime) ? options.fulltime : this.get('full_time');
+
                     // if time is undefined moment initializes with the current date, we need to prevent that
                     // !time check would be wrong for timestamp 0 so specific check is needed
-                    if ((time !== undefined && time !== null) && this.get('full_time')) {
+                    if ((time !== undefined && time !== null) && options.fulltime) {
                         time = moment.utc(time).local(true).valueOf();
                     }
                     return time;
                 },
 
                 // special set function for datepicker
-                setDate: function (attr, time) {
+                setDate: function (attr, time, options) {
+                    options = options || {};
+                    // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
+                    options.fulltime = _.isBoolean(options.fulltime) ? options.fulltime : this.get('full_time');
+
                     // if time is undefined moment initializes with the current date, we need to prevent that
                     // !time check would be wrong for timestamp 0 so specific check is needed
-                    if ((time !== undefined && time !== null) && this.get('full_time')) {
+                    if ((time !== undefined && time !== null) && options.fulltime) {
                         time = moment(time);
                         arguments[1] = time.utc(true).valueOf();
                     }
@@ -121,7 +131,8 @@ define('io.ox/tasks/model', [
         validate: function (attributes) {
             //start_time = end_time is valid
             if (attributes.start_time && attributes.end_time && attributes.end_time < attributes.start_time) {
-                this.add('end_time', gt('The start date must be before the due date.'));
+                this.add('start_time', gt('The start date must be before the due date.'));
+                this.add('end_time', gt('The due date must not be before the start date.'));
             }
         }
     });
@@ -186,6 +197,16 @@ define('io.ox/tasks/model', [
             //0 is a valid number so check precisely
             if (attributes.recurrence_type && (attributes.end_time === undefined || attributes.end_time === null)) {
                 this.add('end_time', gt('Recurring tasks need a valid due date.'));
+            }
+        }
+    });
+
+    ext.point('io.ox/tasks/model/validation').extend({
+        id: 'upload-quota',
+        validate: function (attributes) {
+            if (attributes.quotaExceeded) {
+                //#. %1$s is an upload limit like for example 10mb
+                this.add('quota_exceeded', gt('Files can not be uploaded, because upload limit of %1$s is exceeded.', strings.fileSize(attributes.quotaExceeded.attachmentMaxUploadSize, 2)));
             }
         }
     });

@@ -103,7 +103,7 @@ define('io.ox/core/api/resource', [
     api.create = function (data) {
         return http.PUT({
             module: 'resource',
-            params: { action: 'new' },
+            params: { action: 'new' },
             data: data,
             appendColumns: false
         })
@@ -122,7 +122,7 @@ define('io.ox/core/api/resource', [
     api.update = function (data) {
         return http.PUT({
             module: 'resource',
-            params: { action: 'update', id: data.id, timestamp: _.then() },
+            params: { action: 'update', id: data.id, timestamp: _.then() },
             data: _(data).pick('description', 'display_name', 'mailaddress', 'name'),
             appendColumns: false
         })
@@ -141,7 +141,7 @@ define('io.ox/core/api/resource', [
         api.trigger('before:remove', id);
         return http.PUT({
             module: 'resource',
-            params: { action: 'delete', timestamp: _.then() },
+            params: { action: 'delete', timestamp: _.then() },
             data: { id: id },
             appendColumns: false
         })

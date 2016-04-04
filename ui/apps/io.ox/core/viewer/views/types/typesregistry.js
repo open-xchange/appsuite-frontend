@@ -11,7 +11,7 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/types/typesregistry', [
-'io.ox/core/capabilities'
+    'io.ox/core/capabilities'
 ], function (Capabilities) {
 
     'use strict';
@@ -29,6 +29,7 @@ define('io.ox/core/viewer/views/types/typesregistry', [
         ppt: 'documentview',
         pdf: 'documentview',
         audio: 'audioview',
+        vcf: 'contactview',
         video: 'videoview',
         txt: 'textview'
     };
@@ -61,14 +62,11 @@ define('io.ox/core/viewer/views/types/typesregistry', [
             // special check for nested messages
             if (model.isMailAttachment() && model.get('file_mimetype') === 'message/rfc822') modelType = 'mailview';
 
-            return require(['io.ox/core/viewer/views/types/' + modelType]).then(
-                function (Type) {
-                    return $.Deferred().resolve(Type);
-                },
-                function () {
-                    return $.Deferred().reject('could not require ' + modelType);
-                }
-            );
+            //FIXME: special handling for contact details. Not possible in most contexts, but if all data is available.
+            //if file_mimetype is set, we are dealing with a file, not an actual contact
+            if (modelType === 'contactview' && (model.get('file_mimetype') || '').indexOf('text/vcard') >= 0) modelType = 'defaultview';
+
+            return require(['io.ox/core/viewer/views/types/' + modelType]);
         }
 
     };

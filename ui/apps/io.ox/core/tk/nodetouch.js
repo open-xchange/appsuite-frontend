@@ -21,32 +21,32 @@ define('io.ox/core/tk/nodetouch', [
      */
     function registerTouchHandlers(nodes, _options) {
 
-        var defaults = {
+        var defaults =
+            {
+                // determines the distance that decides between tap and swipe event
+                threshold: 3,
 
-            // determines the distance that decides between tap and swipe event
-            threshold: 3,
+                // determines the maximum finger down time in milliseconds to detect a tap event
+                tapTime: 250,
 
-            // determines the maximum finger down time in milliseconds to detect a tap event
-            tapTime: 250,
+                // determines the maximum time in milliseconds between taps to detect a multi tap
+                tapInterval: 300,
 
-            // determines the maximum time in milliseconds between taps to detect a multi tap
-            tapInterval: 300,
+                // determines the maximum number of taps that are recognized
+                maxTapCount: 2,
 
-            // determines the maximum number of taps that are recognized
-            maxTapCount: 2,
+                // determines the horizontal distance a swipe is detected
+                horSwipeThreshold: 100,
 
-            // determines the horizontal distance a swipe is detected
-            horSwipeThreshold: 100,
+                // determines if horStripe in between events are generated ('move' phase) or if only the 'end' phase is fired
+                horSwipeStrict: true,
 
-            // determines if horStripe in between events are generated ('move' phase) or if only the 'end' phase is fired
-            horSwipeStrict: true,
+                // ...
+                horSwipePreventDefault: true
+            },
+            options = $.extend({}, defaults, _options),
 
-            // ...
-            horSwipePreventDefault: true
-        },
-        options = $.extend({}, defaults, _options),
-
-        selector = _options && _options.selector;
+            selector = _options && _options.selector;
 
         options.taps = 0;
 
@@ -110,7 +110,7 @@ define('io.ox/core/tk/nodetouch', [
     function cancelSwipe(event) {
         event.data.horSwipeDetected = false;
         event.data.horSwipePossible = false;
-        if (event.data.horSwipeHandler&&event.data.horSwipeStrict === false) {
+        if (event.data.horSwipeHandler && event.data.horSwipeStrict === false) {
             event.data.horSwipeHandler('cancel');
         }
     }
@@ -145,11 +145,11 @@ define('io.ox/core/tk/nodetouch', [
                     if (phase === 'end') {
                         // check for the allowed press time
                         var tapTimeEnd = Date.now();
-                        if ((tapTimeEnd-event.data.tapTimeStart <= event.data.tapTime) && (Math.abs(_distance(event.data.tapPosX1, event.data.tapPosY1, event.data.tapPosX2, event.data.tapPosY2)) <= event.data.threshold)) {
+                        if ((tapTimeEnd - event.data.tapTimeStart <= event.data.tapTime) && (Math.abs(_distance(event.data.tapPosX1, event.data.tapPosY1, event.data.tapPosX2, event.data.tapPosY2)) <= event.data.threshold)) {
                             event.data.taps++;
                             if (event.data.taps !== 1) {
                                 // check if the tap interval is valid
-                                if (event.data.tapTimeStart-event.data.tapTimeLast > event.data.tapInterval) {
+                                if (event.data.tapTimeStart - event.data.tapTimeLast > event.data.tapInterval) {
                                     // previous taps do not count
                                     event.data.taps = 1;
                                 }
@@ -186,7 +186,7 @@ define('io.ox/core/tk/nodetouch', [
             if (event.data.horSwipeHandler) {
                 if (fingers === 0) {
                     if (phase === 'end') {
-                        if (event.data.horSwipeDetected&&event.data.horSwipePossible) {
+                        if (event.data.horSwipeDetected && event.data.horSwipePossible) {
                             event.data.horSwipeHandler(phase, event, event.data.lastHorDistance);
                             if (event.data.horSwipePreventDefault) {
                                 event.preventDefault();
@@ -206,7 +206,7 @@ define('io.ox/core/tk/nodetouch', [
 
                     } else if (phase === 'move') {
                         if (event.data.horSwipePossible) {
-                            var horDistance = event.originalEvent.touches[0].pageX-event.data.swipeX,
+                            var horDistance = event.originalEvent.touches[0].pageX - event.data.swipeX,
                                 absHorDistance = Math.abs(horDistance);
                             if (!event.data.horSwipeDetected) {
                                 event.data.horSwipeDetected = absHorDistance >= event.data.horSwipeThreshold;
@@ -237,7 +237,7 @@ define('io.ox/core/tk/nodetouch', [
             }
 
             if (event.data.pinchHandler) {
-                if (fingers === 2&&(phase === 'start'||phase === 'move')) {
+                if (fingers === 2 && (phase === 'start' || phase === 'move')) {
                     event.data.pinchHandler(phase, event,
                             _distance(event.originalEvent.touches[0].pageX,
                                       event.originalEvent.touches[0].pageY,
@@ -248,7 +248,7 @@ define('io.ox/core/tk/nodetouch', [
                     );
                     event.preventDefault();
 
-                } else if (fingers === 1&&phase === 'end') {
+                } else if (fingers === 1 && phase === 'end') {
                     event.data.pinchHandler(phase, event);
 
                 } else {

@@ -86,12 +86,14 @@ define('io.ox/backbone/mini-views/datepicker', [
                         });
 
                         // render timezone badge
-                        var timezoneAbbreviation = gt.noI18n(moment.tz(self.model.get(self.options.timezoneAttribute)).zoneAbbr());
+                        var timezone = moment.tz(self.model.get(self.options.timezoneAttribute)),
+                            timezoneAbbreviation = gt.noI18n(timezone.zoneAbbr()),
+                            timezoneFullname = gt.noI18n((timezone.format('Z ') + timezone.zoneAbbr() + ' ' + timezone.tz()).replace(/_/g, ' '));
 
                         if (!self.options.timezoneButton && !self.mobileMode) {
-                            timezoneContainer = self.nodes.timezoneField  = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation);
+                            timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                         } else {
-                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon btn" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation);
+                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon btn" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                             if (self.model.has('start_date') && self.model.has('end_date')) {
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
                                     calendarUtil.addTimezonePopover(
@@ -200,12 +202,21 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         updateView: function () {
-            var timestamp = parseInt(this.model[this.model.getDate ? 'getDate' : 'get'](this.attribute), 10);
+            // clear if set to null
+            if (_.isNull(this.model.get(this.attribute))) {
+                this.nodes.dayField.val('');
+                if (this.nodes.timeField) {
+                    this.nodes.timeField.val('');
+                }
+            }
+            var timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
             if (_.isNaN(timestamp)) return;
             timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
             if (!this.mobileMode) {
                 this.nodes.timeField.val(timestamp.format('LT'));
-                if (this.nodes.dayField.datepicker) {
+                // check if datepicker plugin is not loaded and initialized
+                // if not initialized, the update call would create a new datepicker, using the standard values. So the clear button might be missing etc.
+                if (this.nodes.dayField.datepicker && this.nodes.dayField.data('datepicker')) {
                     this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
                 } else {
                     this.nodes.dayField.val(this.getDateStr(timestamp));
@@ -219,7 +230,8 @@ define('io.ox/backbone/mini-views/datepicker', [
         updateModel: function () {
             var time = this.getTimestamp();
             if (_.isNull(time) || _.isNumber(time)) {
-                this.model[this.model.setDate ? 'setDate' : 'set'](this.attribute, time, { validate: true });
+                var params = { validate: true, fulltime: this.isFullTime() };
+                this.model[this.model.setDate ? 'setDate' : 'set'](this.attribute, time, params);
                 this.model.trigger('valid');
             } else {
                 this.model.trigger('invalid:' + this.attribute, [gt('Please enter a valid date')]);
@@ -229,9 +241,8 @@ define('io.ox/backbone/mini-views/datepicker', [
         isFullTime: function () {
             if (!this.options.ignoreToggle && this.model.has('full_time')) {
                 return !!this.model.get('full_time');
-            } else {
-                return this.options.display === 'DATE';
             }
+            return this.options.display === 'DATE';
         },
 
         getDateStr: function (val) {
@@ -246,7 +257,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                 formatStr = 'l';
 
             // empty?
-            if (dateStr === '')  return null;
+            if (dateStr === '') return null;
 
             // change format string for datetime if timefield is present
             if (!this.isFullTime()) {

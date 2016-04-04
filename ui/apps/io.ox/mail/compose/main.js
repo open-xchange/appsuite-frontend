@@ -112,11 +112,11 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
             if (app.view) return app.view.discard();
         });
 
-        app.compose  = compose('compose');
-        app.forward  = compose('forward');
-        app.reply    = compose('reply');
+        app.compose = compose('compose');
+        app.forward = compose('forward');
+        app.reply = compose('reply');
         app.replyall = compose('replyall');
-        app.edit     = compose('edit');
+        app.edit = compose('edit');
 
         // for debugging purposes
         window.compose = app;
@@ -142,7 +142,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
             if (type === 'forward' && unblocked(mailAPI.SENDTYPE.FORWARD)) {
                 var cid;
                 if (_.isArray(data)) {
-                    cid = _(data).map(function (o) {return _.cid(o); }).join();
+                    cid = _(data).map(function (o) { return _.cid(o); }).join();
                 } else {
                     cid = _.cid(data);
                 }

@@ -22,9 +22,8 @@ define('io.ox/calendar/print-compact', [
     'use strict';
 
     function getDate(data) {
-        var time = util.getTimeInterval(data),
-            date = util.getDateInterval(data);
-        return date + ' ' + time;
+        var strings = util.getDateTimeIntervalMarkup(data, { output: 'strings' });
+        return strings.dateStr + ' ' + strings.timeStr;
     }
 
     // used to get participants in groups
@@ -39,7 +38,7 @@ define('io.ox/calendar/print-compact', [
                 participants.push(item.id);
             }
             if (item.type === 2) {
-                groups.push(item.id);
+                groups.push({ id: item.id });
             }
         });
 

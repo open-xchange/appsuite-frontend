@@ -245,7 +245,9 @@ define('io.ox/tasks/main', [
 
         'vgrid': function (app) {
 
-            var grid = app.grid;
+            var grid = app.grid,
+                allRequest,
+                listRequest;
 
             app.left.append(app.gridContainer);
 
@@ -263,12 +265,13 @@ define('io.ox/tasks/main', [
                 });
             }
             //custom requests
-            var allRequest = function () {
+            allRequest = function () {
                 var datacopy,
                     done = grid.prop('done'),
                     sort = grid.prop('sort'),
                     order = grid.prop('order'),
                     column;
+
                 if (sort !== 'urgency') {
                     column = sort;
                 } else {
@@ -288,7 +291,8 @@ define('io.ox/tasks/main', [
                     }
                     return datacopy;
                 });
-            },
+            };
+
             listRequest = function (ids) {
                 return api.getList(ids).pipe(function (list) {
                     //use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
@@ -357,7 +361,7 @@ define('io.ox/tasks/main', [
 
             drawTask = function (data) {
                 var baton = ext.Baton({ data: data });
-                // since we use a classic toolbar on non-smartphone devices, we disable inline links in this case
+                // since we use a classic toolbar on non-smartphone devices, we disable inline ox.ui.createApps in this case
                 baton.disable('io.ox/tasks/detail-inline', 'inline-links');
                 app.right.idle().empty().append(viewDetail.draw(baton));
             };
@@ -509,6 +513,49 @@ define('io.ox/tasks/main', [
         },
 
         /*
+         * change to default folder on no permission or folder not found errors
+         */
+        'no-permission': function (app) {
+            // use debounce, so errors from folder and app api are only handled once.
+            var handleError = _.debounce(function (error) {
+                // work with (error) and (event, error) arguments
+                if (error && !error.error) {
+                    if (arguments[1] && arguments[1].error) {
+                        error = arguments[1];
+                    } else {
+                        return;
+                    }
+                }
+                // only change if folder is currently displayed
+                if (error.error_params[0] && String(app.folder.get()) !== String(error.error_params[0])) {
+                    return;
+                }
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                    // try to load the default folder
+                    // guests do not have a default folder, so the first visible one is chosen
+                    app.folder.setDefault();
+                });
+            }, 300);
+
+            folderAPI.on('error:FLD-0008', handleError);
+            api.on('error:FLD-0008', handleError);
+            api.on('error:TSK-0023', function (e, error) {
+                // check if folder is currently displayed
+                if (String(app.folder.get()) !== String(error.error_params[1])) {
+                    return;
+                }
+                // see if we can still access the folder, although we are not allowed to view the contents
+                // this is important because otherwise we would not be able to change permissions (because the view jumps to the default folder all the time)
+                folderAPI.get(app.folder.get(), { cache: false }).fail(function (error) {
+                    if (error.code === 'FLD-0003') {
+                        handleError(error);
+                    }
+                });
+            });
+        },
+
+        /*
          * Drag and Drop support
          */
         'drag-n-drop': function (app) {
@@ -571,7 +618,7 @@ define('io.ox/tasks/main', [
 
         'inplace-find': function (app) {
 
-            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
             var find = app.searchable().get('find');
 
             find.on({
@@ -668,9 +715,6 @@ define('io.ox/tasks/main', [
         }
     });
 
-    // application object
-    var app = ox.ui.createApp({ name: 'io.ox/tasks', title: 'Tasks' });
-
     // launcher
     app.setLauncher(function (options) {
 
@@ -709,7 +753,7 @@ define('io.ox/tasks/main', [
                 if (showSwipeButton) {
                     removeButton();
                 }
-                var div = $('<div class="swipeDelete fadein fast"><i class="fa fa-trash-o trashicon"/></div>');
+                var div = $('<div class="swipeDelete fadein fast"><i class="fa fa-trash-o trashicon" aria-hidden="true"/></div>');
                 this.append(
                     div.on('mousedown', function (e) {
                         // we have to use mousedown as the selection listens to this, too
@@ -742,14 +786,15 @@ define('io.ox/tasks/main', [
         };
         app.gridContainer = $('<div class="border-right">');
 
-        var grid = new VGrid(app.gridContainer, {
+        grid = new VGrid(app.gridContainer, {
             settings: settings,
             swipeLeftHandler: swipeRightHandler,
             showToggle: _.device('smartphone'),
             hideTopbar: _.device('smartphone'),
             hideToolbar: _.device('smartphone'),
             // if it's shown, it should be on the top
-            toolbarPlacement: 'top'
+            toolbarPlacement: 'top',
+            templateOptions: { tagName: 'li', defaultClassName: 'vgrid-cell list-unstyled' }
         });
 
         app.grid = grid;
@@ -774,13 +819,13 @@ define('io.ox/tasks/main', [
         index: 1000000000000,
         draw: function () {
             var dropdown = new Dropdown({
-                    model: app.grid.props,
-                    tagName: 'div',
-                    caret: false,
-                    label: function () {
-                        return [$('<i class="fa fa-arrow-down">'), $('<i class="fa fa-arrow-up">')];
-                    }
-                })
+                model: app.grid.props,
+                tagName: 'div',
+                caret: false,
+                label: function () {
+                    return [$('<i class="fa fa-arrow-down" aria-hidden="true">'), $('<i class="fa fa-arrow-up" aria-hidden="true">')];
+                }
+            })
                 .header(gt('Sort options'))
                 .option('sort', 'urgency', gt('Urgency'))
                 .option('sort', '300', gt('Status'))

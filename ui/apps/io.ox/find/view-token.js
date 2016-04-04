@@ -42,8 +42,9 @@ define('io.ox/find/view-token', [
                 .append(
                     this.model.isPerson() ? this.getDropdown() : this.getNameNode()
                 );
-            if (this.model.isPerson())
+            if (this.model.isPerson()) {
                 this.addImage();
+            }
             // TODO: reset calculated width (https://github.com/sliptree/bootstrap-tokenfield/issues/155)
             this.api.update();
             return this;
@@ -52,8 +53,9 @@ define('io.ox/find/view-token', [
         getNameNode: function () {
             if (this.model.isPerson()) return $();
 
-            if (!this.model.getNameDetail())
+            if (!this.model.getNameDetail()) {
                 return $.txt(this.model.getName());
+            }
 
             return [
                 $('<span class="token-name">').text(this.model.getName()),

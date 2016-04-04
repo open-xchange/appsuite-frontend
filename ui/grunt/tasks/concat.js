@@ -39,7 +39,6 @@ module.exports = function (grunt) {
                             'bower_components/requirejs/require.js',
                             'lib/require-fix.js',
                             'lib/modernizr.js',
-                            'bower_components/bigscreen/bigscreen.js',
                             'src/lazyload.js',
                             'src/util.js',
                             'src/browser.js',
@@ -114,7 +113,7 @@ module.exports = function (grunt) {
                                 '    config.user().then(def.resolve, def.reject);\n' +
                                 '}\n' +
                                 'def.then(function () {\n',
-                    footer: '});\n});\n' //closing the precore definition and the resolve callback for def variable
+                    footer: '});\n});\n' // closing the precore definition and the resolve callback for def variable
                 },
                 files: [
                     {
@@ -191,6 +190,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/page-controller.js',
                             'apps/io.ox/mail/actions.js',
                             'apps/io.ox/mail/actions/attachmentEmpty.js',
+                            'apps/io.ox/mail/actions/attachmentQuota.js',
                             'apps/io.ox/mail/toolbar.js',
                             'apps/io.ox/mail/import.js',
                             'apps/io.ox/mail/folderview-extensions.js',

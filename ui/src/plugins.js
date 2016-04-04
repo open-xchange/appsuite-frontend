@@ -15,21 +15,25 @@
  * LESS is distributed under the terms of the Apache License, Version 2.0
  */
 
+ /* global assert */
+
 (function () {
 
     // File Caching
-    var fileCache, dummyFileCache = {
-        retrieve: function () {
-            return $.Deferred().reject();
-        },
-        cache: function () {
-            return;
-        }
-    };
+    var fileCache,
+        dummyFileCache = {
+            retrieve: function () {
+                return $.Deferred().reject();
+            },
+            cache: function () {
+                return;
+            }
+        };
 
     fileCache = dummyFileCache;
 
     function runCode(name, code) {
+        /*eslint no-eval: 0*/
         eval('//@ sourceURL=' + name + '.js\n' + code);
     }
 
@@ -218,7 +222,7 @@
                                 }
                             );
                         },
-                        function transactionFail(e) {
+                        function transactionFail() {
                             def.reject();
                         }
                     );
@@ -240,10 +244,11 @@
                             if (e && e.code === 4) {
                                 quotaExceeded = true;
                                 if (ox.debug) console.error('WebSQL quota exceeded', e);
-                                catchException(e);
+                                // catchException is not defined!
+                                // catchException(e);
                             }
                         }
-                    )
+                    );
                 });
             };
 
@@ -280,7 +285,7 @@
 
             // if we've got an old version clear the cache and create a new one
             var ui = JSON.parse(storage.getItem('appsuite-ui'));
-            if (ui && ui.version != ox.version) {
+            if (ui && ui.version !== ox.version) {
 
                 if (ox.debug) console.warn('New UI Version - clearing storage');
 
@@ -301,7 +306,7 @@
                     if (e.name === 'QUOTA_EXCEEDED_ERR' || e.name === 'QuotaExceededError') {
                         console.warn('localStorage quota exceeded.');
                     } else {
-                        console.warn('Failed writing to localStorage. ')
+                        console.warn('Failed writing to localStorage. ');
                     }
                     return;
                 }
@@ -313,7 +318,7 @@
                 if (result) {
                     def.resolve(result);
                 } else {
-                    def.reject()
+                    def.reject();
                 }
                 return def;
             };
@@ -526,20 +531,20 @@
             }
             ox.theme = name;
             var path = ox.base + '/apps/themes/' + name + '/',
-            icons = {
-                favicon: 'favicon.ico',
-                icon57: 'icon57.png',
-                icon72: 'icon72.png',
-                icon76: 'icon76.png',
-                icon114: 'icon114.png',
-                icon120: 'icon120.png',
-                icon144: 'icon144.png',
-                icon152: 'icon152.png',
-                splash460: 'splashscreen_460.jpg',
-                splash920: 'splashscreen_920.jpg',
-                splash1096: 'splashscreen_1096.jpg',
-                win8Icon: 'icon144_win.png'
-            };
+                icons = {
+                    favicon: 'favicon.ico',
+                    icon57: 'icon57.png',
+                    icon72: 'icon72.png',
+                    icon76: 'icon76.png',
+                    icon114: 'icon114.png',
+                    icon120: 'icon120.png',
+                    icon144: 'icon144.png',
+                    icon152: 'icon152.png',
+                    splash460: 'splashscreen_460.jpg',
+                    splash920: 'splashscreen_920.jpg',
+                    splash1096: 'splashscreen_1096.jpg',
+                    win8Icon: 'icon144_win.png'
+                };
             for (var i in icons) {
                 $('head #' + i).attr({ href: path + icons[i] }).detach().appendTo('head');
             }
@@ -547,9 +552,8 @@
                 themeCommon.path = path + 'common';
                 themeStyle.path = path + 'style';
                 return $.when.apply($, _.map(lessFiles, insertLess));
-            } else {
-                return $.when();
             }
+            return $.when();
         }
     });
 }());

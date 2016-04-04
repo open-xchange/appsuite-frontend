@@ -166,7 +166,10 @@ define('io.ox/mail/api', [
      * updates the view used for get requests, used on mail settings save to be responsive
      */
     api.updateViewSettings = function () {
-        api.options.requests.get.view = settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'html' : 'noimg') : 'text';
+        api.options.requests.get.view = 'text';
+        if (settings.get('allowHtmlMessages', true)) {
+            api.options.requests.get.view = settings.get('allowHtmlImages', false) ? 'html' : 'noimg';
+        }
         //special event to redraw current detailview
         api.trigger('viewChanged');
     };
@@ -264,14 +267,25 @@ define('io.ox/mail/api', [
         return get.call(api, obj, options && options.cache).done(function (data) {
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
-            // either update or add model
-            if (model) {
-                // if we already have a model we promote changes for threads
-                model.set(data);
-                propagate(model);
-            } else {
-                // add new model
-                pool.add('detail', data);
+            //don't save raw data in our models. We only want preformated content there
+            if (!obj.view || (obj.view && obj.view !== 'raw')) {
+                // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
+                // split by ; because this field might contain further unwanted data
+                _(data.attachments).each(function (attachment) {
+                    if (/^text\/(plain|html)/i.test(attachment.content_type)) {
+                        // only clean-up text and html; otherwise we lose data (see bug 43727)
+                        attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
+                    }
+                });
+                // either update or add model
+                if (model) {
+                    // if we already have a model we promote changes for threads
+                    model.set(data);
+                    propagate(model);
+                } else {
+                    // add new model
+                    pool.add('detail', data);
+                }
             }
         });
     };
@@ -360,36 +374,98 @@ define('io.ox/mail/api', [
      * @param  {object} options [see api factory]
      * @return { deferred} resolves as array
      */
-    api.remove = function (ids, all) {
-        try {
+    api.remove = (function () {
+
+        var pending = false, queue = [], wait = $.Deferred(), recentlyDeleted = {};
+
+        var dequeue = _.debounce(function () {
+            if (queue.length) {
+                removeOnServer(queue).always(wait.resolve);
+                queue = [];
+                wait = $.Deferred();
+            } else {
+                pending = false;
+            }
+        }, 5000);
+
+        function enqueue(ids) {
+            queue = queue.concat(ids);
+            return wait.promise();
+        }
+
+        // remember deleted messages for 15 seconds
+        function remember(ids) {
+            var list = [].concat(ids);
+            list.forEach(function (item) {
+                recentlyDeleted[_.cid(item)] = true;
+            });
+            setTimeout(function () {
+                list.forEach(function (item) {
+                    delete recentlyDeleted[_.cid(item)];
+                });
+                list = null;
+            }, 15000);
+        }
+
+        function removeOnServer(ids) {
+            pending = true;
             return http.wait(
-                http.PUT({
-                    module: 'mail',
-                    params: { action: 'delete', timestamp: _.then() },
-                    data: http.simplify(ids),
-                    appendColumns: false
-                })
-                .done(function () {
-                    // reset trash folder
-                    var trashId = accountAPI.getFoldersByType('trash');
-                    pool.resetFolder(trashId);
-                    // update unread counter and folder item counter
-                    folderAPI.reload(ids, trashId);
-                    // trigger delete to update notification area
-                    api.trigger('delete');
-                    api.trigger('deleted-mails', ids);
-                })
-                .fail(function () {
-                    // something went wrong; let's kind of rollback
-                    api.trigger('refresh.all');
+                // wait a short moment, so that the UI reacts first, i.e. triggers
+                // the next message; apparently a "delete" blocks that otherwise
+                _.wait(100).then(function () {
+                    return http.PUT({
+                        module: 'mail',
+                        params: { action: 'delete', returnAffectedFolders: true, timestamp: _.then() },
+                        data: http.simplify(ids),
+                        appendColumns: false
+                    })
+                    .done(function (data) {
+                        // update affected folders
+                        _(data.folders).each(function (changes, id) {
+                            folderAPI.pool.getModel(id).set(changes);
+                        });
+                        // trigger delete to update notification area
+                        api.trigger('delete');
+                        api.trigger('deleted-mails', ids);
+                        // if this is a trash folder trigger special event (quota updates)
+                        // checking the first id is enough, all id's must be from the same folder anyway when using our UI
+                        if (accountAPI.is('trash', ids[0].folder_id)) {
+                            api.trigger('deleted-mails-from-trash');
+                        }
+                    })
+                    .fail(function () {
+                        // something went wrong; let's kind of rollback
+                        api.trigger('refresh.all');
+                    })
+                    .always(dequeue);
                 })
             );
-        } finally {
-            // try/finally is used to set up http.wait() first
-            // otherwise we run into race-conditions (see bug 37707)
-            prepareRemove(ids, all);
         }
-    };
+
+        function remove(ids, all) {
+            try {
+                // add to recently deleted hash
+                remember(ids);
+                // avoid parallel delete requests
+                return pending ? enqueue(ids) : removeOnServer(ids);
+            } finally {
+                // try/finally is used to set up http.wait() first
+                // otherwise we run into race-conditions (see bug 37707)
+                prepareRemove(ids, all);
+            }
+        }
+
+        remove.getRecentlyDeleted = function () {
+            return recentlyDeleted;
+        };
+
+        remove.isRecentlyDeleted = function (id) {
+            return !!recentlyDeleted[id];
+        };
+
+        return remove;
+
+    }());
 
     /**
      * archives a list of files
@@ -570,9 +646,9 @@ define('io.ox/mail/api', [
             var trashId = accountAPI.getFoldersByType('trash');
             _(trashId).each(function (id) {
                 folderAPI.list(id, { cache: false });
-            });
-            _(pool.getByFolder(trashId)).each(function (collection) {
-                collection.expired = true;
+                _(pool.getByFolder(id)).each(function (collection) {
+                    collection.expired = true;
+                });
             });
         }
     });
@@ -768,6 +844,27 @@ define('io.ox/mail/api', [
         }
     };
 
+    api.moveAll = function (source, target) {
+
+        // clear affected collections
+        _(pool.getByFolder(source)).each(function (collection) {
+            collection.reset([]);
+            collection.complete = true;
+        });
+
+        return http.wait(
+            http.PUT({
+                module: 'mail',
+                appendColumns: false,
+                params: { action: 'move_all' },
+                data: { source: source, target: target }
+            })
+        )
+        .done(function () {
+            folderAPI.reload([source, target]);
+        });
+    };
+
     /**
      * copies a number of mails to another folder
      * @param  {array} list
@@ -778,35 +875,31 @@ define('io.ox/mail/api', [
         return transfer('copy', list, targetFolderId);
     };
 
-    var parseMsgref = function (msgref) {
-        var base = _(msgref.toString().split(api.separator)),
-            id = base.last(),
-            folder = base.without(id).join(api.separator);
-        return { folder_id: folder, id: id };
-    };
-
     api.autosave = function (obj) {
+        api.trigger('before:autosave', { data: obj });
         try {
             return http.wait(
                 http.PUT({
-                module: 'mail',
-                params: {
-                    action: 'autosave'
-                },
-                data: obj,
-                appendColumns: false
-            })
-            .then(function (result) {
-                // reset draft folder
-                var draftsFolder = accountAPI.getFoldersByType('drafts');
-                pool.resetFolder(draftsFolder);
-                folderAPI.reload(draftsFolder);
-                api.trigger('autosave refresh.all');
-                return result;
-            }));
+                    module: 'mail',
+                    params: {
+                        action: 'autosave',
+                        lineWrapAfter: 0
+                    },
+                    data: obj,
+                    appendColumns: false
+                })
+                .then(function (result) {
+                    // reset draft folder
+                    var draftsFolder = accountAPI.getFoldersByType('drafts');
+                    pool.resetFolder(draftsFolder);
+                    folderAPI.reload(draftsFolder);
+                    api.trigger('autosave refresh.all');
+                    return result;
+                })
+            );
         } finally {
             // try/finally is used to set up http.wait() first
-            if (obj.msgref) prepareRemove(parseMsgref(obj.msgref));
+            if (obj.msgref) prepareRemove(util.parseMsgref(api.separator, obj.msgref));
         }
     };
 
@@ -827,10 +920,10 @@ define('io.ox/mail/api', [
         view = view === 'text/html' ? 'html' : view;
 
         if (view === 'html' && obj.content_type === 'text/plain' && !isDraft) view = 'text';
-        if (view === 'text' && obj.content_type === 'text/plain' && isDraft)  view = 'raw';
+        if (view === 'text' && obj.content_type === 'text/plain' && isDraft) view = 'raw';
 
         // attach original message on touch devices?
-        var attachOriginalMessage = view === 'text' && Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
+        var attachOriginalMessage = view === 'text' && _.device('touch') && settings.get('attachOriginalMessage', false) === true,
             csid = api.csid();
 
         return http.PUT({
@@ -860,20 +953,18 @@ define('io.ox/mail/api', [
             if (data.attachments && data.attachments.length) {
                 if (data.attachments[0].content === '') {
                     // nothing to do - nothing to break
+                } else if (data.attachments[0].content_type === 'text/html') {
+                    // content-type specific
+                    // robust approach for large mails
+                    tmp = document.createElement('DIV');
+                    tmp.innerHTML = data.attachments[0].content;
+                    _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
+                        node.removeAttribute('style');
+                    });
+                    text = tmp.innerHTML;
+                    tmp = null;
                 } else {
-                    //content-type specific
-                    if (data.attachments[0].content_type === 'text/html') {
-                        // robust approach for large mails
-                        tmp = document.createElement('DIV');
-                        tmp.innerHTML = data.attachments[0].content;
-                        _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
-                            node.removeAttribute('style');
-                        });
-                        text = tmp.innerHTML;
-                        tmp = null;
-                    } else {
-                        text = $.trim(data.attachments[0].content);
-                    }
+                    text = $.trim(data.attachments[0].content);
                 }
             } else {
                 data.attachments = data.attachments || [{}];
@@ -924,16 +1015,14 @@ define('io.ox/mail/api', [
                         if (obj.id === id) {
                             obj.parent = parent;
                             return true;
-                        } else {
-                            return false;
                         }
+                        return false;
                     })
                     .first().value();
             });
-        } else {
-            console.error('api.getUnmodified(). Invalid case.', obj);
-            return $.Deferred().resolve(obj);
         }
+        console.error('api.getUnmodified(). Invalid case.', obj);
+        return $.Deferred().resolve(obj);
     };
 
     /**
@@ -1043,6 +1132,8 @@ define('io.ox/mail/api', [
 
         deferred = handleSendXHR2(data, files, deferred);
 
+        var DELAY = api.SEND_REFRESH_DELAY;
+
         return deferred
             .done(function () {
                 contactsAPI.trigger('maybyNewContact');
@@ -1059,38 +1150,50 @@ define('io.ox/mail/api', [
                     resetFolderByType('sent');
                     resetFolderByType('drafts');
                     api.trigger('refresh.all');
-                }, 3000);
+                }, DELAY);
                 // IE9
-                if (_.isObject(text))
-                    return text;
+                if (_.isObject(text)) return text;
                 // process HTML-ish non-JSONP response
                 var a = text.indexOf('{'),
                     b = text.lastIndexOf('}');
                 if (a > -1 && b > -1) {
                     return JSON.parse(text.substr(a, b - a + 1));
-                } else {
-                    return {};
                 }
+                return {};
             })
             .then(function (result) {
                 if (result.data) {
                     var base = _(result.data.toString().split(api.separator)),
                         id = base.last(),
                         folder = base.without(id).join(api.separator);
-                    $.when(accountAPI.getUnifiedMailboxName())
-                    .done(function (isUnified) {
-                        if (isUnified !== null) {
-                            folderAPI.refresh();
-                        } else {
-                            folderAPI.reload(folder);
-                        }
-                        api.trigger('refresh.list');
+                    $.when(accountAPI.getUnifiedMailboxName(), accountAPI.getPrimaryAddress())
+                    .done(function (isUnified, senderAddress) {
+                        // check if mail was sent to self to update inbox counters correctly
+                        var sendToSelf = false;
+                        _.chain(_.union(data.to, data.cc, data.bcc)).each(function (item) {
+                            if (item[1] === senderAddress[1]) {
+                                sendToSelf = true;
+                                return;
+                            }
+                        });
+                        // wait a moment, then update folders as well
+                        setTimeout(function () {
+                            if (isUnified !== null) {
+                                folderAPI.refresh();
+                            } else if (sendToSelf) {
+                                folderAPI.reload(folder, accountAPI.getInbox());
+                            } else {
+                                folderAPI.reload(folder);
+                            }
+                        }, DELAY);
                     });
                 }
-
                 return result;
             });
     };
+
+    // delay to refresh mail list and folders after sending a message
+    api.SEND_REFRESH_DELAY = 5000;
 
     function handleSendXHR2(data, files) {
 
@@ -1110,7 +1213,8 @@ define('io.ox/mail/api', [
         return http.UPLOAD({
             module: 'mail',
             params: {
-                action: 'new'
+                action: 'new',
+                lineWrapAfter: 0
             },
             data: form,
             dataType: 'json',
@@ -1187,28 +1291,27 @@ define('io.ox/mail/api', [
                     id: _(data).pluck('id').join(','),
                     session: ox.session
                 });
-            } else {
-                // single EML
-                url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:\/]/g, '_') + '.eml') : '') + '?' +
-                    $.param($.extend(api.reduce(first), {
-                        action: 'get',
-                        src: 1,
-                        save: 1,
-                        session: ox.session
-                    }));
-                return url;
             }
-        } else {
-            // inject filename for more convenient file downloads
-            var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined;
-            url += (data.filename ? '/' + encodeURIComponent(filename) : '') + '?' +
-                $.param({
-                    action: 'attachment',
-                    folder: (data.parent || data.mail).folder_id,
-                    id: (data.parent || data.mail).id,
-                    attachment: data.id
-                });
-            switch (mode) {
+            // single EML
+            url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:\/]/g, '_') + '.eml') : '') + '?' +
+                $.param($.extend(api.reduce(first), {
+                    action: 'get',
+                    src: 1,
+                    save: 1,
+                    session: ox.session
+                }));
+            return url;
+        }
+        // inject filename for more convenient file downloads
+        var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined;
+        url += (data.filename ? '/' + encodeURIComponent(filename) : '') + '?' +
+            $.param({
+                action: 'attachment',
+                folder: (data.parent || data.mail).folder_id,
+                id: (data.parent || data.mail).id,
+                attachment: data.id
+            });
+        switch (mode) {
             case 'view':
             case 'open':
                 return url + '&delivery=view';
@@ -1216,7 +1319,6 @@ define('io.ox/mail/api', [
                 return url + '&delivery=download';
             default:
                 return url;
-            }
         }
     };
 
@@ -1549,6 +1651,13 @@ define('io.ox/mail/api', [
             var top = this.reverse[cid];
             if (!top) return 1;
             return (this.hash[top] || [cid]).length;
+        },
+
+        append: function (existingCID, newCID) {
+            var root = this.reverse[existingCID];
+            if (!root) return;
+            (this.hash[root] = (this.hash[root] || [])).unshift(newCID);
+            this.touch(root);
         }
     };
 
@@ -1557,10 +1666,32 @@ define('io.ox/mail/api', [
         return api.threads.getModels(cid);
     };
 
+    function filterAllSeen(data) {
+        // rewrite folder_id and id
+        data.id = data.original_id;
+        data.folder_id = data.original_folder_id;
+        // drop seen messages (faster check first)
+        if ((data.flags & 32) === 32) return false;
+        // drop messages from spam and trash
+        return !accountAPI.is('spam|trash', data.folder_id);
+    }
+
     // collection loader
     api.collectionLoader = new CollectionLoader({
         module: 'mail',
         getQueryParams: function (params) {
+            // is all unseen?
+            if (params.folder === 'virtual/all-unseen') {
+                return {
+                    action: 'all',
+                    folder: 'default0/virtual/all',
+                    // need original_id and original_folder_id
+                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655,656',
+                    sort: '651',
+                    order: 'asc',
+                    timezone: 'utc'
+                };
+            }
             // use threads?
             if (params.thread === true) {
                 return {
@@ -1573,31 +1704,48 @@ define('io.ox/mail/api', [
                     max: (params.offset || 0) + 300,
                     timezone: 'utc'
                 };
-            } else {
-                return {
-                    action: 'all',
-                    folder: params.folder,
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
-                    sort: params.sort || '610',
-                    order: params.order || 'desc',
-                    timezone: 'utc'
-                };
             }
-        }
+            return {
+                action: 'all',
+                folder: params.folder,
+                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                sort: params.sort || '610',
+                order: params.order || 'desc',
+                timezone: 'utc'
+            };
+        },
+        filter: function (item) {
+            return !api.remove.isRecentlyDeleted(_.cid(item));
+        },
+        fail: function (error) {
+            api.trigger('error error:' + error.code, error);
+            return error;
+        },
+        httpGet: function (module, params) {
+            // apply static limit for all-unseen
+            var isAllUnseen = params.folder === 'default0/virtual/all' && params.sort === '651';
+            if (isAllUnseen) params.limit = '0,250';
+            return http.GET({ module: module, params: params }).then(function (data) {
+                // drop all seen messages for all-unseen
+                return isAllUnseen ? _(data).filter(filterAllSeen) : data;
+            });
+        },
+        PRIMARY_PAGE_SIZE: settings.get('listview/primaryPageSize', 50),
+        SECONDARY_PAGE_SIZE: settings.get('listview/secondaryPageSize', 200)
     });
 
     function filterDeleted(item) {
         return !util.isDeleted(item);
     }
 
-    function getThreadList (obj) {
+    function getThreadList(obj) {
         // thread references returned within object
         if (obj.thread) return obj.thread;
         // may thread references already available in pool
         var current = api.threads.get(_.cid(obj)) || {};
         if (current && current.length > 1) return current;
         // no thread references at all
-        return [ obj ];
+        return [obj];
     }
 
     api.processThreadMessage = function (obj) {
@@ -1647,6 +1795,9 @@ define('io.ox/mail/api', [
     api.collectionLoader.each = function (obj, index, offset, params) {
         if (params.action === 'threadedAll') api.processThreadMessage(obj); else api.pool.add('detail', obj);
     };
+
+    // need this message at several places
+    api.mailServerDownMessage = gt('Unable to connect to mail server. Possible reasons: The mail server is (temporarily) down or there are network connection problems. Please try again in a few minutes.');
 
     return api;
 });

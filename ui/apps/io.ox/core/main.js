@@ -51,6 +51,18 @@ define('io.ox/core/main', [
         };
     }
 
+    // a11y: fix for role="button"
+    $(document).on('keydown', 'a[role="button"]', function (e) {
+        if (e.which !== 32 || e.isDefaultPrevented()) return;
+        e.preventDefault();
+        $(e.currentTarget).click();
+    });
+
+    // a11y: focus folder tree from top-bar on <enter>
+    $(document).on('keydown', '#io-ox-topbar .active-app a', function (e) {
+        if (e.which === 13) $('.folder-tree:visible .folder.selected').focus();
+    });
+
     debug('core: Loaded');
     ox.trigger('core:load');
 
@@ -95,9 +107,7 @@ define('io.ox/core/main', [
                             fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
                             logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
                         // Substitute some variables
-                        // [hostname], [login]
-                        logoutLocation = logoutLocation.replace('[hostname]', window.location.hostname);
-                        _.url.redirect(logoutLocation);
+                        _.url.redirect(_.url.vars(logoutLocation));
                     });
                 },
                 function cancel() {
@@ -275,9 +285,8 @@ define('io.ox/core/main', [
             itemsLeftWidth += this.getBoundingClientRect().width;
         });
 
-        var visibleTabs, i = 0, hidden = 0;
+        var i = 0, hidden = 0;
         for (i = items.length; i > 1; i--) {
-            visibleTabs = itemsVisible.length - hidden;
             if (itemsLeftWidth + itemsRightWidth <= viewPortWidth) {
                 break;
             } else {
@@ -299,7 +308,7 @@ define('io.ox/core/main', [
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
-        var node = $('<li class="launcher">');
+        var node = $('<li class="launcher" role="presentation">');
 
         if (fn) {
             node.on('click', function (e) {
@@ -334,9 +343,8 @@ define('io.ox/core/main', [
                     role: 'button',
                     'aria-label': arialabel ? _.escape(arialabel) : null
                 }).append(label);
-            } else {
-                return label;
             }
+            return label;
         });
 
         return node.appendTo(side === 'left' ? launchers : topbar);
@@ -591,6 +599,8 @@ define('io.ox/core/main', [
 
     function launch() {
 
+        var dedicatedLogoutButton;
+
         debug('Launching ...');
 
         /**
@@ -609,7 +619,7 @@ define('io.ox/core/main', [
                 if (!upsell.has(model.get('requires')) && upsell.enabled(model.get('requires'))) {
                     node.addClass('upsell').children('a').first().prepend(
                         _(settings.get('upsell/defaultIcon', 'fa-star').split(/ /)).map(function (icon) {
-                            return $('<i class="fa">').addClass(icon);
+                            return $('<i class="fa" aria-hidden="true">').addClass(icon);
                         })
                     );
                 }
@@ -631,7 +641,7 @@ define('io.ox/core/main', [
                     //#. %1$s is app title/name
                     _.escape(gt('close for %1$s', model.get('title'))),
                 quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel + '">')
-                    .append($('<i class="fa fa-times">'))
+                    .append($('<i class="fa fa-times" aria-hidden="true">'))
                     .on('click', function (e) {
                         e.preventDefault();
                         e.stopImmediatePropagation();
@@ -811,10 +821,10 @@ define('io.ox/core/main', [
                 if (capabilities.has('search') && _.device('smartphone')) {
                     this.append(
                         addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
-                                require(['io.ox/search/main'], function (searchapp) {
-                                    searchapp.run({ reset: true });
-                                });
-                            },  gt('Search'))
+                            require(['io.ox/search/main'], function (searchapp) {
+                                searchapp.run({ reset: true });
+                            });
+                        }, gt('Search'))
                         .attr('id', 'io-ox-search-topbar-icon')
                     );
                 }
@@ -844,7 +854,7 @@ define('io.ox/core/main', [
                 this.append(
                     addLauncher('right', new HelpView({
                         iconClass: 'launcher-icon',
-                        tabindex: '-1',
+                        tabindex: '1',
                         href: getHelp
                     }).render().$el)
                 );
@@ -889,6 +899,31 @@ define('io.ox/core/main', [
                     .on('click', function (e) {
                         e.preventDefault();
                         ox.launch('io.ox/settings/main');
+                    })
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'onboarding',
+            index: 120,
+            draw: function () {
+                if (_.device('smartphone')) return;
+                if (capabilities.has('!client-onboarding')) return;
+
+                this.append(
+                    $('<li role="presentation">').append(
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
+                        //#. starts the client onboarding wizard that helps users
+                        //#. to configure their devices to access/sync appsuites
+                        //#. data (f.e. install ox mail app)
+                        .text(gt('Connect your Device'))
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                            wizard.run();
+                        });
                     })
                 );
             }
@@ -959,7 +994,7 @@ define('io.ox/core/main', [
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
-            id: 'divider-before-fullscreen',
+            id: 'divider-before-about',
             index: 290,
             draw: function () {
                 this.append(
@@ -967,34 +1002,6 @@ define('io.ox/core/main', [
                 );
             }
         });
-
-        // fullscreen doesn't work for safari (see )
-        if (_.device('desktop && !safari')) {
-            ext.point('io.ox/core/topbar/right/dropdown').extend({
-                id: 'fullscreen',
-                index: 300,
-                draw: function () {
-                    if (BigScreen.enabled) {
-                        var fullscreenButton;
-                        BigScreen.onenter = function () {
-                            fullscreenButton.text(gt('Exit Fullscreen'));
-                        };
-                        BigScreen.onexit = function () {
-                            fullscreenButton.text(gt('Fullscreen'));
-                        };
-                        this.append(
-                            $('<li role="presentation">').append(
-                                fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="-1">').text(gt('Fullscreen'))
-                            )
-                            .on('click', function (e) {
-                                e.preventDefault();
-                                BigScreen.toggle();
-                            })
-                        );
-                    }
-                }
-            });
-        }
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'about',
@@ -1051,15 +1058,15 @@ define('io.ox/core/main', [
             }
         });
 
-        var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
+        dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
         if (dedicatedLogoutButton) {
             ext.point('io.ox/core/topbar/right').extend({
                 id: 'logout-button',
                 index: 2000,
                 draw: function () {
-                    var logoutButton = addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
+                    var logoutButton = addLauncher('right', $('<i class="fa fa-sign-out launcher-icon" aria-hidden="true">'), function () {
                         logout();
-                    },  gt('Sign out'));
+                    }, gt('Sign out'));
                     logoutButton.find('a').tooltip({
                         title: gt('Sign out'),
                         placement: function (tip, el) {
@@ -1117,7 +1124,7 @@ define('io.ox/core/main', [
                 if (topbar) {
                     // get hash of exisiting favorites
                     _(favorites).each(function (obj) { hash[obj.id] = obj; });
-                    _(topbarApps).each(function (obj) {hash[obj.id] = obj; });
+                    _(topbarApps).each(function (obj) { hash[obj.id] = obj; });
                     // get proper order
                     favorites = _(topbar.split(','))
                         .chain()
@@ -1210,7 +1217,7 @@ define('io.ox/core/main', [
                 content.append(
                     $('<a href="#" class="banner-action" data-action="logout" role="button" tabindex="1">')
                     .attr('title', gt('Sign out'))
-                    .append('<i class="fa fa-power-off">')
+                    .append('<i class="fa fa-sign-out" aria-hidden="true">')
                     .on('click', function (e) {
                         e.preventDefault();
                         logout();
@@ -1248,25 +1255,25 @@ define('io.ox/core/main', [
             draw: function () {
                 require(['io.ox/metrics/main'], function (metrics) {
                     metrics.watch({
-                            node: $('#io-ox-banner'),
-                            selector: '.banner-title',
-                            type: 'click'
-                        }, {
-                            app: 'core',
-                            target: 'banner/title',
-                            type: 'click',
-                            action: 'noop'
-                        });
+                        node: $('#io-ox-banner'),
+                        selector: '.banner-title',
+                        type: 'click'
+                    }, {
+                        app: 'core',
+                        target: 'banner/title',
+                        type: 'click',
+                        action: 'noop'
+                    });
                     metrics.watch({
-                            node: $('#io-ox-banner'),
-                            selector: '.banner-logo',
-                            type: 'click'
-                        }, {
-                            app: 'core',
-                            target: 'banner/logo',
-                            type: 'click',
-                            action: 'noop'
-                        });
+                        node: $('#io-ox-banner'),
+                        selector: '.banner-logo',
+                        type: 'click'
+                    }, {
+                        app: 'core',
+                        target: 'banner/logo',
+                        type: 'click',
+                        action: 'noop'
+                    });
                 });
             }
         });
@@ -1314,7 +1321,8 @@ define('io.ox/core/main', [
         function appCheck(baton) {
 
             var hash = _.url.hash(),
-                looksLikeDeepLink = !('!!' in hash);
+                looksLikeDeepLink = !('!!' in hash),
+                usesDetailPage;
             // fix old infostore
             if (hash.m === 'infostore') hash.m = 'files';
 
@@ -1324,8 +1332,8 @@ define('io.ox/core/main', [
 
                 // new-school: app + folder + id
                 // replace old IDs with a dot by 'folder_id SLASH id'
-                var id = /^\d+\./.test(hash.id) ? hash.id.replace(/\./, '/') : hash.id,
-                    usesDetailPage = /^io.ox\/(mail|contacts|calendar|tasks)$/.test(hash.app);
+                var id = /^\d+\./.test(hash.id) ? hash.id.replace(/\./, '/') : hash.id;
+                usesDetailPage = /^io.ox\/(mail|contacts|calendar|tasks)$/.test(hash.app);
 
                 _.url.hash({
                     app: usesDetailPage ? hash.app + '/detail' : hash.app,
@@ -1338,7 +1346,7 @@ define('io.ox/core/main', [
             } else if (hash.m && hash.f && hash.i) {
 
                 // old-school: module + folder + id
-                var usesDetailPage = /^(mail|contacts|calendar|tasks)$/.test(hash.m);
+                usesDetailPage = /^(mail|contacts|calendar|tasks)$/.test(hash.m);
 
                 _.url.hash({
                     // special treatment for files (viewer + drive app)
@@ -1368,9 +1376,10 @@ define('io.ox/core/main', [
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
+                deeplink = looksLikeDeepLink && manifest && manifest.deeplink,
                 mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
 
-            if (manifest && (manifest.refreshable || mailto)) {
+            if (manifest && (manifest.refreshable || deeplink || mailto)) {
                 baton.autoLaunch = appURL.split(/,/);
             } else {
                 // clear typical parameter?
@@ -1553,7 +1562,7 @@ define('io.ox/core/main', [
                             this.append(
                                 $('<li class="restore-item">').append(
                                     $('<a href="#" role="button" class="remove">').data(item).append(
-                                        $('<i class="fa fa-trash-o">')
+                                        $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
                                     item.icon ? $('<i class="' + item.icon + '">') : $(),
                                     $('<span>').text(gt.noI18n(info)),
@@ -1683,6 +1692,22 @@ define('io.ox/core/main', [
                                 }
                             });
                         }
+                        // non-app deeplinks
+                        var id = _.url.hash('reg');
+                        if (id && ox.registry.get(id)) {
+                            // normalise args
+                            var list = (_.url.hash('regopt') || '').split(','),
+                                data = {}, parts;
+                            // key:value, key:value... -> object
+                            _.each(list, function (str) {
+                                parts = str.split(':');
+                                data[parts[0]] = parts[1];
+                            });
+                            // call after app is ready
+                            launch.done(function () {
+                                ox.registry.call(id, 'client-onboarding', { data: data });
+                            });
+                        }
                     });
                     // restore apps
                     ox.ui.App.restore();
@@ -1706,11 +1731,10 @@ define('io.ox/core/main', [
                     // instant fade out
                     $('#background-loader').idle().hide();
                     return $.when();
-                } else {
-                    var def = $.Deferred();
-                    $('#background-loader').idle().fadeOut(DURATION, def.resolve);
-                    return def;
                 }
+                var def = $.Deferred();
+                $('#background-loader').idle().fadeOut(DURATION, def.resolve);
+                return def;
             }
         });
 
@@ -1731,7 +1755,8 @@ define('io.ox/core/main', [
     (function () {
 
         var hash = {
-            'mail-compose': 'io.ox/mail/compose/main'
+            'mail-compose': 'io.ox/mail/compose/main',
+            'client-onboarding': 'io.ox/onboarding/clients/wizard'
         };
 
         var custom = {};
@@ -1747,6 +1772,10 @@ define('io.ox/core/main', [
                 var dep = this.get(id),
                     args = _(arguments).toArray().slice(2);
                 return ox.load([dep]).then(function (m) {
+                    // non-apps
+                    if (m.run && _.isFunction(m.run)) return m.run.apply(m, args);
+                    if (!m.reuse || !m.getApp) return;
+                    // app
                     if (m.reuse(name, args[0])) return;
                     return m.getApp().launch().then(function () {
                         return this[name].apply(this, args);
@@ -1784,10 +1813,27 @@ define('io.ox/core/main', [
                 break;
             case 'LGI-0016':
                 // redirect based on error message; who had the brilliant idea to name the message of the error object 'error'?
-                location.href = error.error;
+                location.href = _.url.vars(error.error);
                 break;
+            // no default
         }
     });
+
+    function replacer(key, value) {
+        return value === undefined ? 'undefined' : value;
+    }
+
+    if (ox.debug && _.device('!karma')) {
+        ox.on('http:before:send', function (options) {
+            var json = _(['params', 'data']).reduce(function (str, id) {
+                return str + (_.isString(options[id]) ? options[id] : JSON.stringify(options[id], replacer));
+            }, '');
+            // look for missing id, folder, or folder_id
+            if (/"(id|folder|folder_id)":("undefined"|null)/.test(json)) {
+                console.error('Spotted undefined or null value for id, folder, or folder_id', options);
+            }
+        });
+    }
 
     // white list warninff codes
     var isValidWarning = (function () {

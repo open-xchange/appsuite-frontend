@@ -81,7 +81,7 @@ define('io.ox/core/attachments/backbone', [
             require(['io.ox/files/api'], function (filesAPI) {
                 var meta = _.clone(model.get('meta'));
                 // get URL of preview image
-                meta.previewUrl = filesAPI.getUrl(model.toJSON(), 'view')  + '&scaleType=cover&width=' + size + '&height=' + size;
+                meta.previewUrl = filesAPI.getUrl(model.toJSON(), 'view') + '&scaleType=cover&width=' + size + '&height=' + size;
                 if (!regIsImage.test(model.get('filename'))) meta.previewUrl += '&format=preview_image&session=' + ox.session;
                 def.resolve(meta.previewUrl);
                 model.set('meta', meta);

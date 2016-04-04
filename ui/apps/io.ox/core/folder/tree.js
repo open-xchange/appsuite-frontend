@@ -31,7 +31,8 @@ define('io.ox/core/folder/tree', [
         events: {
             'click .contextmenu-control':                    'onToggleContextMenu',
             'keydown .contextmenu-control':                  'onKeydown',
-            'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu'
+            'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu',
+            'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys'
         },
 
         initialize: function (options) {
@@ -101,6 +102,9 @@ define('io.ox/core/folder/tree', [
         },
 
         filter: function (folder, model) {
+            // .hideTrashfolder hides the trashfolder, used when saving attachments to drive see Bug 38280
+            if (this.options.hideTrashfolder && api.is('trash', model.attributes)) { return false; }
+
             // custom filter?
             var filter = this.options.filter,
                 result = _.isFunction(filter) ? filter.apply(this, arguments) : undefined;
@@ -169,10 +173,23 @@ define('io.ox/core/folder/tree', [
             this.toggleContextMenu(target, top, left);
         },
 
+        onKeydownMenuKeys: function (e) {
+            // Needed for a11y, shift + F10 and the menu key open the contextmenu
+            if (e.type === 'keydown') {
+                var shiftF10 = (e.shiftKey && e.keyCode === 121),
+                    menuKey = (_.device('windows') && e.keyCode === 93);
+                if (shiftF10 || menuKey) {
+                    // e.preventDefault() is needed here to surpress browser menu
+                    e.preventDefault();
+                    this.onContextMenu(e);
+                }
+            }
+        },
+
         onContextMenu: function (e) {
             // clicks bubbles. right-click not
+            // DO NOT ADD e.preventDefault() HERE (see bug 42409)
             e.stopPropagation();
-            e.preventDefault();
             var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
             if (target.is('.contextmenu-control')) {
                 top = target.offset().top;
@@ -194,8 +211,7 @@ define('io.ox/core/folder/tree', [
             // if (!dropdown.hasClass('open')) return;
             // shift-tab
             // if (e.shiftKey && e.which === 9) return;
-            switch (e.which) {
-            case 32:
+            if (e.which === 32) {
                 // cursor down
                 e.preventDefault();
                 $(e.currentTarget).click();

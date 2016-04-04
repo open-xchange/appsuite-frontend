@@ -95,10 +95,9 @@ define('io.ox/search/view-template', [
                 row = $('<div class="row applications">').append(cell),
                 id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
-                row, cell,
                 items = [],
                 titles = {},
-                apps = settings.get('search/modules', []),
+                apps = settings.get('search/modules') || [],
                 elem;
 
             // apply mapping (infostore-files-drive chameleon)
@@ -164,8 +163,9 @@ define('io.ox/search/view-template', [
                 var cell = $(e.target),
                     next = cell.closest('a').attr('data-app');
 
-                if (next && next !== id)
+                if (next && next !== id) {
                     baton.model.setModule(next);
+                }
             });
 
             //append or replace

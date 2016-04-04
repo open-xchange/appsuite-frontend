@@ -41,7 +41,7 @@
         &.bottom { .bottom-toolbar(); }
 
         .grid-options {
-            padding: 0 5px 0 0;
+            padding: 0 16px 0 0;
         }
 
         .grid-options > a {
@@ -92,7 +92,9 @@
 
     &:not(.upside-down) {
         &.toolbar-top-visible .list-view { top: @height-default; }
+        &.toolbar-top-visible .list-view>.message-empty-container  { padding-bottom: @height-default; }
         &.toolbar-bottom-visible .list-view { bottom: @height-small; }
+        &.toolbar-bottom-visible .list-view>.message-empty-container { padding-top: @height-small; }
     }
 
     &.upside-down {
@@ -180,6 +182,23 @@
         }
     }
 
+    .message-empty-container {
+        display: none;
+        &:only-child {
+            display: table;
+            height: 100%;
+            width: 100%;
+            .message-empty {
+                color: #777;
+                font-weight: 300;
+                font-size: 16px;
+                display: table-cell;
+                text-align: center;
+                vertical-align: middle;
+            }
+        }
+    }
+
     &.hide-checkboxes .list-item {
         padding-left: @list-view-padding;
         .list-item-checkmark {
@@ -257,7 +276,7 @@
     }
 
     // use this for empty list
-    .busy-indicator:first-child {
+    .busy-indicator:nth-child(2) {
         width: 100% !important;
         height: 100% !important;
         background-color: transparent;

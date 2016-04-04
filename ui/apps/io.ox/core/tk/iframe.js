@@ -49,9 +49,8 @@ define('io.ox/core/tk/iframe', [
                         initWindowAndShow(win, data);
                     }
                 });
-            } else {
-                initWindowAndShow(win);
             }
+            initWindowAndShow(win);
 
         });
 

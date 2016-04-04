@@ -27,14 +27,13 @@ define('io.ox/core/api/import', ['io.ox/core/http'], function (http) {
                 data: formData,
                 fixPost: true
             });
-        } else {
-            return http.FORM({
-                module: 'import',
-                action: data.type,
-                form: data.form,
-                params: { folder: data.folder, ignoreUIDs: data.ignoreUIDs }
-            });
         }
+        return http.FORM({
+            module: 'import',
+            action: data.type,
+            form: data.form,
+            params: { folder: data.folder, ignoreUIDs: data.ignoreUIDs }
+        });
     }
 
     /**

@@ -28,13 +28,12 @@ define('io.ox/files/util', [
         REJECT = $.Deferred().reject();
 
     // pseudo reject -> real reject
-    function normalize (val) {
+    function normalize(val) {
         // consider: fc
         if (!_.isUndefined(val) && val === false) {
             return $.Deferred().reject();
-        } else {
-            return $.Deferred().resolve();
         }
+        return $.Deferred().resolve();
     }
 
     return {
@@ -61,16 +60,16 @@ define('io.ox/files/util', [
             // conditions
             _.each(list, function (cond) {
                 var async = !!cond.then,
-                    def = async ? cond.then(normalize) : (cond ? RESOLVE : REJECT);
+                    def = cond ? RESOLVE : REJECT;
                 // line up conditions
                 chain = chain.then(function () {
-                    return def;
+                    return async ? cond.then(normalize) : def;
                 });
             });
 
             //real reject/resolve -> pseudo resolve/reject
             chain.always(function () {
-                return response.resolveWith(undefined, [chain.state() === 'resolved' ? true : false]);
+                return response.resolveWith(undefined, [chain.state() === 'resolved']);
             });
 
             return response.promise();
@@ -85,7 +84,7 @@ define('io.ox/files/util', [
         isFolderType: (function () {
             // tries to get data from current/provided folder
             // hint: may returns a empty objec in case no usable data is provided
-            function getFolder (baton) {
+            function getFolder(baton) {
                 var app = baton.app,
                     data = baton.data || {};
                 if (app) {
@@ -93,10 +92,9 @@ define('io.ox/files/util', [
                 } else if (data.folder_id) {
                     // no app given, maybe the item itself has a folder
                     return folderAPI.get(data.folder_id);
-                } else {
-                    // continue without getFolder
-                    return $.Deferred().resolveWith(data);
                 }
+                // continue without getFolder
+                return $.Deferred().resolveWith(data);
             }
             return function (type, baton) {
                 return getFolder(baton)
@@ -111,9 +109,8 @@ define('io.ox/files/util', [
                                 // reject/resolve
                                 if (inverse ? !result : result) {
                                     return RESOLVE;
-                                } else {
-                                    return REJECT;
                                 }
+                                return REJECT;
                             });
             };
         })(),
@@ -232,7 +229,7 @@ define('io.ox/files/util', [
             serverFilename = String(serverFilename || '');
             formFilename = String(formFilename || '');
             var def = $.Deferred(),
-                extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) :  '',
+                extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) : '',
                 extForm = _.last(formFilename.split('.')),
                 $hint = $('<div class="muted inset">').append(
                             $('<small style="padding-top: 8px">').text(
@@ -254,8 +251,8 @@ define('io.ox/files/util', [
                 new dialogs.ModalDialog(opt)
                             .header($('<h4>').text(gt('Confirmation')))
                             .append(message, $hint)
-                            .addPrimaryButton('rename', gt('Yes'), 'rename',  { 'tabIndex': '1' })
-                            .addButton('change', gt('Adjust'), 'change',  { 'tabIndex': '1' })
+                            .addPrimaryButton('rename', gt('Yes'), 'rename', { 'tabIndex': '1' })
+                            .addButton('change', gt('Adjust'), 'change', { 'tabIndex': '1' })
                             .show()
                             .done(function (action) {
                                 if (action === 'rename') {
@@ -296,10 +293,9 @@ define('io.ox/files/util', [
                 } else if (type) {
                     //e.g. /^image\/.*(gif|png|jpe?g|bmp|tiff).*$/i
                     return (regexp[key] = new RegExp('^' + type + '\\/.*' + list + '.*$', 'i')).test(file.file_mimetype);
-                } else {
-                    //e.g. /^.*\.(gif|png|jpe?g|bmp|tiff)$/i
-                    return (regexp[key] = new RegExp('^.*\\.' + list + '$', 'i')).test(file.filename);
                 }
+                //e.g. /^.*\.(gif|png|jpe?g|bmp|tiff)$/i
+                return (regexp[key] = new RegExp('^.*\\.' + list + '$', 'i')).test(file.filename);
             }
 
             //identify mode

@@ -42,9 +42,9 @@ define('io.ox/mail/sender', [
      */
     function getSender(data) {
         var sender = {
-                display_name: data[0],
-                address: util.getChannel(data[1]) === 'email' ? data[1] : util.cleanupPhone(data[1]) + util.getChannelSuffixes().msisdn
-            };
+            display_name: data[0],
+            address: util.getChannel(data[1]) === 'email' ? data[1] : util.cleanupPhone(data[1]) + util.getChannelSuffixes().msisdn
+        };
         //hide may existing type suffix for text
         sender.text = util.formatSender(sender.display_name, data[1], false);
         sender.value = util.formatSender(sender.display_name, sender.address);
@@ -252,17 +252,11 @@ define('io.ox/mail/sender', [
             return that.getAddresses().then(function (addresses, numbers, primary) {
 
                 var defaultAddress = fallbackAddress || primary[1],
-                    defaultValue,
                     list = [].concat(addresses, numbers);
 
                 // process with mail addresses and phone numbers
                 list = _(list).map(function (address) {
                     var sender = getSender(address);
-                    //support typed or typeless defaultAddress
-                    if (address[1] === defaultAddress || sender.address === defaultAddress) {
-                        defaultValue = sender.value;
-                    }
-
                     return { value: sender.value, option: address };
                 });
 

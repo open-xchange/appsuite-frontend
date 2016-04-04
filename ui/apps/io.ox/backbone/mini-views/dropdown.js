@@ -15,6 +15,12 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
     'use strict';
 
+    function getLabel(value) {
+        if (_.isFunction(value)) return value();
+        if (_.isObject(value)) return value;
+        return $.txt(value);
+    }
+
     // Bootstrap dropdown
 
     var Dropdown = AbstractView.extend({
@@ -100,19 +106,18 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     // you may use toggle with boolean values or provide a toggleValue ('togglevalue' is the option not checked value, 'value' is the option checked value)
                     'data-toggle': _.isBoolean(value) || toggleValue !== undefined,
                     'data-togglevalue': toggleValue,
-                    'aria-label': [header, text].join(' ')
+                    'aria-label': _.isFunction(text) ? $('<div>').append(text()).text() : [header, text].join(' ')
                 })
                 // store original value
                 .data('value', value)
                 .append(
-                    $('<i class="fa fa-fw">')
-                        .attr({ 'aria-hidden': true })
+                    $('<i class="fa fa-fw" aria-hidden="true">')
                         .addClass(_.isEqual(currentValue, value) ? 'fa-check' : 'fa-none'),
                     _.isFunction(text) ? text() : $('<span>').text(text)
                 )
             );
             // in firefox draggable=false is not enough to prevent dragging...
-            if ( _.device('firefox') ) {
+            if (_.device('firefox')) {
                 link.attr('ondragstart', 'return false;');
             }
             return this;
@@ -124,10 +129,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 .text(text);
             if (callback) link.on('click', callback);
             // in firefox draggable=false is not enough to prevent dragging...
-            if ( _.device('firefox') ) {
+            if (_.device('firefox')) {
                 link.attr('ondragstart', 'return false;');
             }
-            return this.append( link );
+            return this.append(link);
         },
 
         header: function (text) {
@@ -141,7 +146,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         render: function () {
-            var label = _.isFunction(this.options.label) ? this.options.label() : (_.isObject(this.options.label) ? this.options.label : $.txt(this.options.label)),
+            var label = getLabel(this.options.label),
                 ariaLabel = this.options.aria ? this.options.aria : null,
                 toggle;
             if (_.isString(label)) {
@@ -152,7 +157,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     href: '#',
                     tabindex: 1,
                     draggable: false,
-                    role: 'menuitem',
+                    role: 'button',
                     'aria-haspopup': true,
                     'aria-label': ariaLabel,
                     'data-toggle': 'dropdown'
@@ -172,7 +177,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             // use smart drop-down? (fixed positioning)
             if (this.options.smart) toggle.addClass('smart-dropdown');
             // in firefox draggable=false is not enough to prevent dragging...
-            if ( _.device('firefox') ) {
+            if (_.device('firefox')) {
                 toggle.attr('ondragstart', 'return false;');
             }
             toggle.dropdown();

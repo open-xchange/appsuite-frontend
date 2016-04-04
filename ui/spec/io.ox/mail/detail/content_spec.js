@@ -16,7 +16,7 @@ define([
 ], function (content, ext) {
     'use strict';
 
-    describe('Content for mail detail:', function () {
+    describe('Mail Content detail', function () {
         describe('beautifies content by', function () {
             it('adding target "_blank" to links within the mail body', function () {
                 var baton = {},

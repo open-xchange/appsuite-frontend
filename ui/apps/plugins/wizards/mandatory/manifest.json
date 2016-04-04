@@ -1,6 +1,6 @@
 [{
     "namespace": "io.ox/wizards/firstStart",
-    "requires": "mandatory_wizard",
+    "requires": "mandatory_wizard && !guest",
     "path": "plugins/wizards/mandatory/main",
     "category": "wizards"
 }]

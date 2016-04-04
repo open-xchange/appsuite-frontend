@@ -109,10 +109,10 @@ define('plugins/upsell/bubbles/main', [
                 endDate = bubble.endDate,
                 now = new Date().getTime();
 
-            if (startDate && Date.parse(startDate) >  now) {
+            if (startDate && Date.parse(startDate) > now) {
                 return;
             }
-            if (endDate && Date.parse(endDate) <  now) {
+            if (endDate && Date.parse(endDate) < now) {
                 return;
             }
 

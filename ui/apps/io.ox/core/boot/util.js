@@ -29,8 +29,9 @@ define('io.ox/core/boot/util', [], function () {
             )
         ).show();
     }
+    var feedbackNode = null;
+    // var feedbackType = null;
 
-    var feedbackType = null, feedbackNode = null;
     ox.on('language', displayFeedback);
 
     var exports = {
@@ -47,7 +48,7 @@ define('io.ox/core/boot/util', [], function () {
         },
 
         feedback: function (type, node) {
-            feedbackType = type;
+            // feedbackType = type;
             feedbackNode = node;
             displayFeedback();
         },
@@ -61,9 +62,8 @@ define('io.ox/core/boot/util', [], function () {
 
         gotoSignin: function (hash) {
             var ref = (location.hash || '').replace(/^#/, ''),
-                path = String(ox.serverConfig.loginLocation || ox.loginLocation),
+                path = _.url.vars(ox.serverConfig.loginLocation || ox.loginLocation),
                 glue = path.indexOf('#') > -1 ? '&' : '#';
-            path = path.replace('[hostname]', window.location.hostname);
             hash = (hash || '') + (ref ? '&ref=' + encodeURIComponent(ref) : '');
             _.url.redirect((hash ? path + glue + hash : path));
         },
@@ -96,7 +96,7 @@ define('io.ox/core/boot/util', [], function () {
                             $('<a target="_blank" role="button" class="btn btn-primary btn">')
                                 .text(self.gt('Change password'))
                                 // error_params[0] should contain a url to password change manager or sth.
-                                .attr( 'href', error.error_params[0] )];
+                                .attr('href', error.error_params[0])];
                 });
             } else {
                 this.feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));

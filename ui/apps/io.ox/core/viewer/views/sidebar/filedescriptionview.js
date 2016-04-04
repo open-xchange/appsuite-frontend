@@ -81,15 +81,17 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         onKeyUp: function (event) {
             //console.info('event type: ', event.type, 'keyCode: ', event.keyCode, 'charCode: ', event.charCode);
             switch (event.which || event.keyCode) {
-            case 13:
-            case 32:
-                this.editDescription();
-                event.preventDefault();
-                break;
+                case 13:
+                case 32:
+                    this.editDescription();
+                    event.preventDefault();
+                    break;
+                // no default
             }
         },
 
         initialize: function () {
+            PanelBaseView.prototype.initialize.apply(this, arguments);
             if (this.model && this.model.isFile()) {
                 this.setPanelHeader(gt('Description'));
                 this.togglePanel(true);

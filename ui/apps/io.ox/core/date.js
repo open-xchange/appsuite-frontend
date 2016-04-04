@@ -18,7 +18,7 @@ define.async('io.ox/core/date', [
 ], function (gettext, settings, gt) {
 
     'use strict';
-
+    /* eslint-disable */
     var dateTimeFormats = [
         '', 'E', 'yMd', 'yMEd', 'Hm', 'yMEdHm', 'yMdHm',
         'yMEdHm', 'v', 'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Hmv',
@@ -72,10 +72,10 @@ define.async('io.ox/core/date', [
                 //#. Strings to build input formats to be more accessible
                 //#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
                 //#. Sample for de_DE: TT.MM.JJJJ
-                return y ? gt('yyyy') :
-                       m ? gt('MM') :
-                       d ? gt('dd') :
-                       _;
+                if (y) return gt('yyyy');
+                if (m) return gt('MM');
+                if (d) return gt('dd');
+                return _;
             });
         },
 
@@ -458,8 +458,9 @@ define.async('io.ox/core/date', [
             y: 1970, m: 0, d: 1, h: 0, h2: 0, min: 0, s: 0, ms: 0,
             w: 1, wd: 0
         };
-        for (var i = 0; i < handlers.length; i++)
+        for (var i = 0; i < handlers.length; i++) {
             handlers[i](match[i + 1], d);
+        }
         if (!d.h) d.h = Number(d.h2) + (d.pm ? 12 : 0);
         if (d.h < 0 || d.h >= 24 || d.min < 0 || d.min >= 60 ||
             d.s < 0 || d.s >= 60 || d.ms < 0 || d.ms >= 1000) {
@@ -563,9 +564,9 @@ define.async('io.ox/core/date', [
         }
         function when(i) {
             var t = m[i + 5] ? time(i + 5) : 72e5;
-            return m[i]     ? julian(m[i], t) :
-                   m[i + 1] ? gregorian(m[i + 1], t) :
-                              monthly(m[i + 2], m[i + 3], m[i + 4], t);
+            if (m[i])     return julian(m[i], t);
+            if (m[i + 1]) return gregorian(m[i + 1], t);
+            return monthly(m[i + 2], m[i + 3], m[i + 4], t);
         }
         if (m) {
             var std = {
@@ -736,12 +737,13 @@ define.async('io.ox/core/date', [
             }
 
             return function (t) {
+                var i;
                 if (t < firstTransition) {
                     return initialTTInfo;
                 } else if (t >= lastTransition) {
                     return finalTTInfo(t, local);
                 } else {
-                    for (var i = hash[getBin(t)]; transitions[i].start > t; --i) {}
+                    for (i = hash[getBin(t)]; transitions[i].start > t; --i) {}
                     return transitions[i].ttinfo;
                 }
             };
@@ -767,9 +769,8 @@ define.async('io.ox/core/date', [
 
         $.extend(LocalDate.prototype, DatePrototype);
         if (Object.defineProperty) {
-            for (var i in DatePrototype) {
-                Object.defineProperty(LocalDate.prototype, i,
-                                      { enumerable: false });
+            for (var o in DatePrototype) {
+                Object.defineProperty(LocalDate.prototype, o, { enumerable: false });
             }
         }
 
@@ -922,10 +923,11 @@ define.async('io.ox/core/date', [
             return formatDateTime(api.getFormat(format), this);
         },
         getIntervalFormat: function (end, format) {
-            var L = api.locale;
+            var L = api.locale,
+                diff;
             if (format & api.TIME) {
                 if (this.getDays() === end.getDays()) {
-                    var diff = L.intervals[(L.h12 ? 'hm' : 'Hm') + (format & api.TIMEZONE ? 'v' : '')];
+                    diff = L.intervals[(L.h12 ? 'hm' : 'Hm') + (format & api.TIMEZONE ? 'v' : '')];
                     if (L.h12 && (this.getHours() < 12) !== (end.getHours() < 12)) {
                         return diff.a;
                     } else if (this.getHours() !== end.getHours()) {
@@ -939,8 +941,7 @@ define.async('io.ox/core/date', [
                     format |= api.DATE;
                 }
             } else {
-                var diff = format & api.DAYOFWEEK ? L.intervals.yMMMEd :
-                                                    L.intervals.yMMMd;
+                diff = format & api.DAYOFWEEK ? L.intervals.yMMMEd : L.intervals.yMMMd;
                 if (this.getYear() !== end.getYear()) {
                     return diff.y;
                 } else if (this.getMonth() !== end.getMonth()) {
@@ -1002,7 +1003,7 @@ define.async('io.ox/core/date', [
         dayMap = makeMap(api.locale.days, api.locale.daysShort);
     });
 
-    console.warn('date is deprecated: please use moment.js instead');
+    console.warn('date is deprecated and will be removed with 7.10.0. Please use moment.js instead');
 
     // TODO: get default from local clock
     return $.when(
@@ -1015,4 +1016,5 @@ define.async('io.ox/core/date', [
         api.Local = tz;
         return api;
     });
+    /* eslint-enable */
 });

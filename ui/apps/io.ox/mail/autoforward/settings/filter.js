@@ -28,33 +28,31 @@ define('io.ox/mail/autoforward/settings/filter', [
 
             api.getRules('autoforward').done(function (data) {
 
+                var autoForwardData = { userMainEmail: userMainEmail },
+                    ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward'),
+                    autoForward;
+
                 if (_.isEmpty(data)) {
-                    var autoForwardData = {},
-                        ForwardEdit,
-                        autoForward;
-                    autoForwardData.userMainEmail = userMainEmail;
-                    ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward');
 
                     autoForward = new ForwardEdit({ model: factory.create(autoForwardData) });
 
-                    $node.append(autoForward.render().$el);
-                    $node.one('dispose', function () {
-                        if (_.isEmpty(autoForward.model.changed) && $(document.activeElement).is(':input')) {
-                            //make the active element lose focus to get the changes of the field a user was editing
-                            $(document.activeElement).blur();
-                            //unsaved changes (grid changed while input field was still selected with unsaved changes)
-                            if (!_.isEmpty(autoForward.model.changed)) {
-                                autoForward.model.save();
+                    $node
+                        .append(autoForward.render().$el)
+                        .one('dispose', function () {
+                            if (_.isEmpty(autoForward.model.changed) && $(document.activeElement).is(':input')) {
+                                //make the active element lose focus to get the changes of the field a user was editing
+                                $(document.activeElement).blur();
+                                //unsaved changes (grid changed while input field was still selected with unsaved changes)
+                                if (!_.isEmpty(autoForward.model.changed)) {
+                                    autoForward.model.save();
+                                }
                             }
-                        }
-                    });
+                        });
 
                     api.getRules().done(function (data) {
                         var isVacation = false;
                         _.each(data, function (single) {
-                            if (_.contains(single.flags, 'vacation')) {
-                                isVacation = true;
-                            }
+                            isVacation = _.contains(single.flags, 'vacation');
                         });
 
                         if (isVacation && data.length > 1) {
@@ -66,13 +64,11 @@ define('io.ox/mail/autoforward/settings/filter', [
                     });
 
                 } else {
-                    var autoForwardData = {},
-                        ForwardEdit,
-                        autoForward;
-
-                    autoForwardData.id = data[0].id;
-                    autoForwardData.active = data[0].active;
-                    autoForwardData.keep = false;
+                    _.extend(autoForwardData, {
+                        id: data[0].id,
+                        active: data[0].active,
+                        keep: false
+                    });
 
                     _(data[0].actioncmds).each(function (value) {
                         if (value.id === 'redirect') {
@@ -81,32 +77,24 @@ define('io.ox/mail/autoforward/settings/filter', [
                             autoForwardData.keep = true;
                         }
                     });
-                    autoForwardData.userMainEmail = userMainEmail;
-                    ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward');
 
                     autoForward = new ForwardEdit({ model: factory.create(autoForwardData) });
 
-                    if (data[0].active === true) {
-                        // set active state
-                    }
-                    $node.append(autoForward.render().$el);
-                    $node.one('dispose', function () {
-                        if (_.isEmpty(autoForward.model.changed) && $(document.activeElement).is(':input')) {
-                            //make the active element lose focus to get the changes of the field a user was editing
-                            $(document.activeElement).blur();
-                            //unsaved changes (grid changed while input field was still selected with unsaved changes)
-                            if (!_.isEmpty(autoForward.model.changed)) {
-                                autoForward.model.save();
+                    $node
+                        .append(autoForward.render().$el)
+                        .one('dispose', function () {
+                            if (_.isEmpty(autoForward.model.changed) && $(document.activeElement).is(':input')) {
+                                //make the active element lose focus to get the changes of the field a user was editing
+                                $(document.activeElement).blur();
+                                //unsaved changes (grid changed while input field was still selected with unsaved changes)
+                                if (!_.isEmpty(autoForward.model.changed)) {
+                                    autoForward.model.save();
+                                }
                             }
-                        }
-                    });
+                        });
 
                     api.getRules('vacation').done(function (data) {
-                        if (_.isEmpty(data)) {
-                            autoForward.model.set('position', 0);
-                        } else {
-                            autoForward.model.set('position', 1);
-                        }
+                        autoForward.model.set('position', _.isEmpty(data) ? 0 : 1);
                         deferred.resolve(autoForward.model);
                     });
                 }
@@ -116,8 +104,6 @@ define('io.ox/mail/autoforward/settings/filter', [
             });
 
             return deferred;
-
         }
     };
-
 });

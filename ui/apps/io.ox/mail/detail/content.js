@@ -11,6 +11,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/*jshint scripturl:true*/
+
 define('io.ox/mail/detail/content', [
     'io.ox/mail/api',
     'io.ox/core/util',
@@ -27,31 +29,30 @@ define('io.ox/mail/detail/content', [
     /*
      * Helpers to beautify text mails
      */
-    var markupQuotes = function (text) {
-        var lines = String(text || '').split(/<br\s?\/?>/i),
-            quoting = false,
+
+    var markupQuotes = function (str) {
+        var blockquoteStart = '<blockquote type="cite">',
+            blockquoteEnd = '</blockquote>',
             regQuoted = /^&gt;( |$)/i,
-            i = 0, $i = lines.length, tmp = [], line;
-        for (text = ''; i < $i; i++) {
-            line = lines[i];
-            if (!regQuoted.test(line)) {
-                if (!quoting) {
-                    text += line + '<br>';
-                } else {
-                    tmp = $.trim(tmp.join('\n')).replace(/\n/g, '<br>');
-                    text = text.replace(/<br>$/, '') + '<blockquote type="cite"><p>' + tmp + '</p></blockquote>' + line;
-                    quoting = false;
-                }
-            } else {
-                if (quoting) {
-                    tmp.push(line.replace(regQuoted, ''));
-                } else {
-                    quoting = true;
-                    tmp = [line.replace(regQuoted, '')];
-                }
+            level = 0;
+
+        if (!str) return;
+
+        var lines = str.split(/<br\s?\/?>/i);
+
+        _(lines).each(function (line, i) {
+            if (line.length > 0) {
+                var lineLevel = 0;
+                for (; line.match(regQuoted); lineLevel++) line = line.replace(regQuoted, '');
+                for (; lineLevel > level; level++) line = blockquoteStart + line;
+                for (; lineLevel < level; level--) lines[i - 1] = lines[i - 1] + blockquoteEnd;
             }
-        }
-        return text.replace(/<br>$/, '');
+            lines[i] = line;
+        });
+
+        for (; level > 0; level--) lines.push(blockquoteEnd);
+
+        return lines.join('<br>').replace(/<br><\/blockquote>/g, '</blockquote>');
     };
 
     var regHTML = /^text\/html$/i,
@@ -128,9 +129,8 @@ define('io.ox/mail/detail/content', [
             .join('');
         var hasBlockquotes = text.match(/(&gt; )+/g);
         if (hasBlockquotes) {
-            $.each(hasBlockquotes.sort().reverse()[0].match(/&gt; /g), function () {
-                text = markupQuotes(text);
-            });
+            text = markupQuotes(text);
+
         }
         return text;
     };
@@ -200,7 +200,11 @@ define('io.ox/mail/detail/content', [
         id: 'link-target',
         index: 500,
         process: function (baton) {
-            baton.source = baton.source.replace(/<a[^>]*href=(?:\"|\')(https?:\/\/[^>]+)(?:\"|\')[^>]*>/g, setLinkTarget);
+            baton.source = baton.source
+                // fix missing protocol
+                .replace(/(<a.*?href=("|'))www\./g, '$1http://www.')
+                // fix targets
+                .replace(/<a[^>]*href=(?:\"|\')(https?:\/\/[^>]+)(?:\"|\')[^>]*>/g, setLinkTarget);
         }
     });
 
@@ -234,7 +238,7 @@ define('io.ox/mail/detail/content', [
     function hasParent(elem, selector) {
         while (elem) {
             elem = elem.parentNode;
-            if (elem && elem.matches(selector)) return true;
+            if (elem && elem.matches && elem.matches(selector)) return true;
         }
         return false;
     }
@@ -310,7 +314,7 @@ define('io.ox/mail/detail/content', [
         process: function () {
             each(this, 'a', function (node) {
                 var link = $(node),
-                    href = link.attr('href') || '',
+                    href = link.attr('href') || '',
                     data, text;
                 // deep links?
                 if (links.isInternalDeepLink(href)) {
@@ -390,6 +394,32 @@ define('io.ox/mail/detail/content', [
         }
     });
 
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'check-simple',
+        index: 1100,
+        process: function () {
+            var container = $(this);
+            // if a mail contains a table, we assume that it is a mail with a lot of markup
+            // and styles and things like max-width: 100% will destroy the layout
+            if (container.find('table').length === 0) container.addClass('simple-mail');
+        }
+    });
+
+    // commented out DUE TO BUGS! (27.01.2016)
+    // ext.point('io.ox/mail/detail/content').extend({
+    //     id: 'lazyload-images',
+    //     index: 1200,
+    //     process: function () {
+    //         $(this).find('img[src!=""]').each(function () {
+    //             var img = $(this);
+    //             img.attr({
+    //                 'data-original': img.attr('src'),
+    //                 'src': '//:0'
+    //             }).addClass('lazyload');
+    //         });
+    //     }
+    // });
+
     function isBlockquoteToggle(elem) {
         return $(elem).parent().hasClass('blockquote-toggle');
     }
@@ -445,14 +475,13 @@ define('io.ox/mail/detail/content', [
 
             try {
 
-                // find first text/html attachment to determine content type
+                // find first text/html attachment that is not displaytype attachment or none to determine content type
                 _(data.attachments).find(function (obj) {
-                    if ((/^text\/(plain|html)$/i).test(obj.content_type)) {
+                    if ((obj.disp !== 'attachment' && obj.disp !== 'none') && (/^text\/(plain|html)$/i).test(obj.content_type)) {
                         baton.type = obj.content_type;
                         return true;
-                    } else {
-                        return false;
                     }
+                    return false;
                 });
 
                 // add other parts?
@@ -477,16 +506,16 @@ define('io.ox/mail/detail/content', [
                 if (baton.isHTML) {
                     // robust constructor for large HTML -- no jQuery here to avoid its caches
                     content = document.createElement('DIV');
-                    content.className = 'content noI18n';
+                    content.className = 'mail-detail-content noI18n';
                     content.innerHTML = baton.source;
                     // last line of defense
                     each(content, 'script, base, meta', function (node) {
-                        node.parentNode.remove(node);
+                        node.parentNode.removeChild(node);
                     });
                 } else {
                     // plain TEXT
                     content = document.createElement('DIV');
-                    content.className = 'content plain-text noI18n';
+                    content.className = 'mail-detail-content plain-text noI18n';
                     content.innerHTML = beautifyText(baton.source);
                     if (!baton.processedEmoji) {
                         emoji.processEmoji(baton.source, function (text, lib) {

@@ -42,7 +42,7 @@ define('io.ox/files/view-options', [
         draw: function () {
             this.data('view')
                 .option('sort', 702, gt('Name'))
-                .option('sort',   5, gt('Date'))
+                .option('sort', 5, gt('Date'))
                 .option('sort', 704, gt('Size'));
         }
     });
@@ -225,87 +225,11 @@ define('io.ox/files/view-options', [
     }
 
     ext.point('io.ox/files/list-view/toolbar/bottom').extend({
-        id: 'add-accounts',
-        index: 100,
-        draw: function (baton) {
-            require(['io.ox/keychain/api', 'io.ox/core/api/filestorage'], function (keychainApi, filestorageApi) {
-                var toolbar = baton.app.getWindow().nodes.sidepanel,
-                    draw = function () {
-                        var availableServices = _(keychainApi.submodules).filter(function (submodule) {
-                                return !submodule.canAdd || submodule.canAdd.apply(this);
-                            }),
-                            buttonTemplates = {
-                                'google': [gt('Add Google Drive account'),'logo-google'],
-                                'dropbox': [gt('Add Dropbox account'),'logo-dropbox'],
-                                'msliveconnect': [gt('Add OneDrive account'),'logo-onedrive'],
-                                'boxcom': [gt('Add Box account'), 'logo-boxcom']
-                            },
-                            buttons = {},
-                            container = toolbar.find('.over-bottom').length ? toolbar.find('.over-bottom') : $('<div class="generic-toolbar over-bottom visual-focus">').appendTo(toolbar);
-
-                        _(availableServices).each(function (service) {
-                            if (service.id === 'google' || service.id === 'dropbox' || service.id === 'boxcom' || service.id === 'msliveconnect') {
-                                buttonTemplates[service.id].push(service);
-                                buttons[service.id] = (buildbutton.apply(this, buttonTemplates[service.id]));
-                            }
-                        });
-
-                        //if we don't have any buttons hide the whole toolbar
-                        if (_.size(buttons) === 0) {
-                            toolbar.removeClass('file-storage-toolbar');
-                            container.hide();
-                            return;
-                        }
-                        function buildbutton (text, customclass, service) {
-                            var node = $('<a href="#" class="toolbar-item" role="button">').addClass(customclass)
-                                .append(
-                                    $('<span class="sr-only">').text(text)
-                                ).attr({
-                                    'data-trigger': 'hover',
-                                    'data-toggle': 'tooltip',
-                                    'data-placement': 'top',
-                                    'data-animation': 'false',
-                                    'data-container': 'body',
-                                    'title': text
-                                }).tooltip();
-                            if (service) {
-                                node.on('click', function (e) {
-                                    e.preventDefault();
-                                    var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
-                                    service.createInteractively(win);
-                                });
-                            }
-                            return node;
-                        }
-
-                        toolbar.addClass('file-storage-toolbar');
-                        container.append(
-                            $('<label class=add-acc-label>').text(gt('Add account')),
-                            $('<div class="clearfix">').append(
-                                buttons.dropbox || '',
-                                buttons.google || '',
-                                buttons.msliveconnect || '',
-                                buttons.boxcom || ''
-                                /*buildbutton(gt('Add account'), 'misc-link').on('click', function () {
-                                    ox.launch('io.ox/settings/main', { id: 'io.ox/settings/accounts' }).done(function () {
-                                        this.setSettingsPane({ id: 'io.ox/settings/accounts' });
-                                    });
-                                })*/
-                                )
-                            ).show();
-                    };
-                $(filestorageApi).on('create delete update', draw);
-                draw();
-            });
-        }
-    });
-
-    ext.point('io.ox/files/list-view/toolbar/bottom').extend({
         id: 'toggle-folderview',
         index: 200,
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="toolbar-item" tabindex="1">')
+                $('<a href="#" role="button" class="toolbar-item" tabindex="1">')
                 .attr('title', gt('Open folder view'))
                 .append($('<i class="fa fa-angle-double-right">'))
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
@@ -316,7 +240,7 @@ define('io.ox/files/view-options', [
             side.addClass('bottom-toolbar');
             side.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button" tabindex="1">')
+                    $('<a href="#" role="button" class="toolbar-item" tabindex="1">')
                     .append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Close folder view'))

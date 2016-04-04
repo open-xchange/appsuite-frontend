@@ -21,11 +21,12 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/core/tk/tokenfield',
     'io.ox/core/dropzone',
     'io.ox/core/capabilities',
+    'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, util, settings, gt) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -55,26 +56,27 @@ define('io.ox/mail/compose/extensions', [
         buttons: {
             discard: function (baton) {
                 this.append(
-                    $('<button type="button" class="btn btn-default" data-action="discard">')
+                    $('<button type="button" class="btn btn-default" data-action="discard" tabindex="1">')
                         .on('click', function () { baton.view.app.quit(); })
                         .text(gt('Discard')));
             },
             save: function (baton) {
-                this.append($('<button type="button" class="btn btn-default" data-action="save">')
+                this.append($('<button type="button" class="btn btn-default" data-action="save" tabindex="1">')
                     .on('click', function () {
                         if (baton.view.isSaving === true) return false;
                         baton.view.isSaving = true;
-                        baton.view.saveDraft().done(function () {
-                            baton.view.isSaving = false;
-                        }).fail(function () {
+                        baton.view.saveDraft().always(function () {
                             baton.view.isSaving = false;
                         });
                     })
                     .text(gt('Save')));
             },
             send: function (baton) {
-                this.append($('<button type="button" class="btn btn-primary" data-action="send">')
+                this.append($('<button type="button" class="btn btn-primary" data-action="send" tabindex="1">')
                     .on('click', function () { baton.view.send(); })
+                    .on('keyup', function (e) {
+                        if ((e.keyCode || e.which) === 27) baton.view.focusEditor();
+                    })
                     .text(gt('Send')));
             }
         },
@@ -236,7 +238,8 @@ define('io.ox/mail/compose/extensions', [
             if (attr === 'reply_to' && settings.get('showReplyTo/configurable', false) === false) return;
 
             return function (baton) {
-                var guid = _.uniqueId('form-control-label-'),
+                var extNode,
+                    guid = _.uniqueId('form-control-label-'),
                     value = baton.model.get(attr) || [],
                     // hide tokeninputfields if necessary (empty cc/bcc)
                     cls = 'row' + (/cc$/.test(attr) && !value.length ? ' hidden' : ''),
@@ -251,7 +254,8 @@ define('io.ox/mail/compose/extensions', [
                             msisdn: true,
                             emailAutoComplete: true
                         },
-                        maxResults: 20
+                        maxResults: 20,
+                        placeholder: tokenfieldTranslations[attr] // for a11y and easy access for custom dev when they want to display placeholders (these are made transparent via less)
                     });
 
                 var node = $('<div class="col-xs-11">').append(
@@ -262,7 +266,7 @@ define('io.ox/mail/compose/extensions', [
                 }
 
                 this.append(
-                    $('<div data-extension-id="' + attr + '">').addClass(cls)
+                    extNode = $('<div data-extension-id="' + attr + '">').addClass(cls)
                         .append(
                             $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid }),
                             node
@@ -272,6 +276,8 @@ define('io.ox/mail/compose/extensions', [
                 tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
                     // extension point for validation etc.
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
+                }).on('tokenfield:next', function () {
+                    extNode.nextAll().find('input.tt-input,input[name="subject"]').filter(':visible').first().focus();
                 });
 
                 // bind mail-model to collection
@@ -392,9 +398,10 @@ define('io.ox/mail/compose/extensions', [
 
             require(['io.ox/core/attachments/view'], function (Attachments) {
                 var view = new Attachments.List({
-                        collection: baton.model.get('attachments'),
-                        editable: true
-                    });
+                    collection: baton.model.get('attachments'),
+                    editable: true,
+                    mode: settings.get('attachments/layout/compose/' + _.display(), 'preview')
+                });
 
                 // dropzone
                 var zone = new dropzone.Inplace({
@@ -468,6 +475,10 @@ define('io.ox/mail/compose/extensions', [
                 // needed when adding several contacts via 'send as vcard'
                 view.updateScrollControls();
 
+                view.on('change:layout', function (mode) {
+                    settings.set('attachments/layout/compose/' + _.display(), mode).save();
+                });
+
                 def.resolve(view);
             }, def.reject);
 
@@ -475,16 +486,30 @@ define('io.ox/mail/compose/extensions', [
         },
 
         attachment: (function () {
-
             function addLocalFile(model, e) {
-                model.attachFiles(
-                    _(e.target.files).map(function (file) {
-                        return _.extend(file, { group: 'localFile' });
+                var self = this,
+                    attachmentCollection = model.get('attachments'),
+                    accumulatedSize = attachmentCollection.filter(function (m) {
+                        var size = m.get('size');
+                        return typeof size !== 'undefined';
                     })
-                );
+                    .map(function (m) { return m.get('size'); })
+                    .reduce(function (m, n) { return m + n; }, 0);
+
+                if (attachmentQuota.checkQuota(e.target.files, accumulatedSize)) {
+                    //#. %s is a list of filenames separeted by commas
+                    //#. it is used by screenreaders to indicate which files are currently added to the list of attachments
+                    self.trigger('aria-live-update', gt('Added %s to attachments.', _(e.target.files).map(function (file) { return file.name; }).join(', ')));
+                    model.attachFiles(
+                        _(e.target.files).map(function (file) {
+                            return _.extend(file, { group: 'localFile' });
+                        })
+                    );
+                }
             }
 
             function openFilePicker(model) {
+                var self = this;
                 require(['io.ox/files/filepicker'], function (Picker) {
                     new Picker({
                         primaryButtonText: gt('Add'),
@@ -493,6 +518,7 @@ define('io.ox/mail/compose/extensions', [
                         multiselect: true
                     })
                     .done(function (files) {
+                        self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.filename; }).join(', ')));
                         model.attachFiles(
                             _(files).map(function (file) {
                                 return _.extend(file, { group: 'file' });

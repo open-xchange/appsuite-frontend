@@ -12,17 +12,16 @@
  */
 define('io.ox/presenter/views/mainview', [
     'io.ox/backbone/disposable',
-    'io.ox/core/notifications',
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/actions',
-    'io.ox/presenter/sessionrestore',
+    'io.ox/core/tk/sessionrestore',
     'io.ox/presenter/views/presentationview',
     'io.ox/presenter/views/sidebarview',
     'io.ox/presenter/views/toolbarview',
     'io.ox/presenter/views/thumbnailview',
-    'gettext!io.ox/presenter',
+    'io.ox/presenter/views/notification',
+    'static/3rd.party/bigscreen/bigscreen.min.js',
     'io.ox/core/tk/nodetouch'
-], function (DisposableView, Notifications, Ext, ActionsPattern, SessionRestore, PresentationView, SidebarView, ToolbarView, ThumbnailView, gt) {
+], function (DisposableView, Ext, SessionRestore, PresentationView, SidebarView, ToolbarView, ThumbnailView, Notification, BigScreen) {
 
     'use strict';
 
@@ -71,6 +70,8 @@ define('io.ox/presenter/views/mainview', [
             // listen to presentation start, end events
             this.listenTo(this.presenterEvents, 'presenter:presentation:start', this.onPresentationStart);
             this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.onPresentationEnd);
+            // listen to presenter close evemts
+            this.listenTo(this.presenterEvents, 'presenter:close', this.closePresenter);
 
             // show navigation panel on user activity
             this.$el.on('mousemove', _.throttle(this.onMouseMove.bind(this), 500));
@@ -78,6 +79,9 @@ define('io.ox/presenter/views/mainview', [
             // listen to RTModel updates
             //this.listenTo(this.app.rtModel, 'change:presenterId change:activeSlide change:paused change:participants', this.onRTModelUpdate);
             this.listenTo(this.app.rtModel, 'change', this.onRTModelUpdate);
+
+            // listen to local model updates
+            this.listenTo(this.app.localModel, 'change', this.onLocalModelUpdate);
         },
 
         /**
@@ -110,8 +114,6 @@ define('io.ox/presenter/views/mainview', [
          *  The real-time model instance.
          */
         onRTModelUpdate: function (rtModel) {
-            console.info('Presenter - MainView - onRTUpdatertData - RTModel - change', rtModel);
-
             var currentPresenterId,
                 previousPresenterId,
                 localSlideId = this.getActiveSlideIndex(),
@@ -141,7 +143,36 @@ define('io.ox/presenter/views/mainview', [
                 this.presenterEvents.trigger(eventType);
             }
 
-            //always focus in navigation for keyboard stuff
+            // always focus in navigation for keyboard stuff
+            this.presentationView.focusActiveSlide();
+        },
+
+        /**
+         * Handles local model data changes.
+         *
+         * @param {LocalModel} localModel
+         *  The local model instance.
+         */
+        onLocalModelUpdate: function (localModel) {
+            if (localModel.hasChanged('presenterId')) {
+                // compare current with previous presenter id
+                var currentPresenterId = localModel.get('presenterId');
+                var previousPresenterId = localModel.previous('presenterId');
+
+                if (!_.isEmpty(currentPresenterId) && _.isEmpty(previousPresenterId)) {
+                    this.presenterEvents.trigger('presenter:presentation:start', { presenterId: currentPresenterId, presenterName: localModel.get('presenterName') });
+
+                } else if (_.isEmpty(currentPresenterId) && !_.isEmpty(previousPresenterId)) {
+                    this.presenterEvents.trigger('presenter:presentation:end', { presenterId: previousPresenterId, presenterName: localModel.previous('presenterName') });
+                }
+            }
+            if (localModel.hasChanged('paused')) {
+                // compare current with previous presentation pause state
+                var eventType = (localModel.get('paused') && !localModel.previous('paused')) ? 'presenter:presentation:pause' : 'presenter:presentation:continue';
+                this.presenterEvents.trigger(eventType);
+            }
+
+            // always focus in navigation for keyboard stuff
             this.presentationView.focusActiveSlide();
         },
 
@@ -149,16 +180,20 @@ define('io.ox/presenter/views/mainview', [
          * Handles remote presentation start invoked by the real-time framework.
          */
         onPresentationStart: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid();
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
 
             if (rtModel.isPresenter(userId)) {
                 // store presenter state and slide id to restore presentation on browser reload
                 SessionRestore.state('presenter~' + this.model.get('id'), { isPresenter: true, slideId: this.getActiveSlideIndex() });
             }
 
-            // show presentation start notification to all participants.
-            this.notifyPresentationStart();
+            if (!localModel.isPresenter(userId)) {
+                // show presentation start notification to all participants in case of a remote presentation.
+                var baton = Ext.Baton({ context: this, model: this.model, data: this.model.toJSON() });
+                Notification.notifyPresentationStart(this.app.rtModel, this.app.rtConnection, baton);
+            }
         },
 
         /**
@@ -173,17 +208,33 @@ define('io.ox/presenter/views/mainview', [
          *   the display name of the former presenter
          */
         onPresentationEnd: function (formerPresenter) {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid();
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
 
-            // leave full screen mode for all participants.
-            if (!rtModel.hasPresenter() && (userId !== formerPresenter.presenterId)) {
+            function wasParticipant(userId) {
+                return !rtModel.wasPresenter(userId) && _.some(rtModel.previous('participants'), function (user) {
+                    return (userId === user.userId);
+                }, this);
+            }
+
+            // handle end of a remote / local presentation
+            if (rtModel.wasPresenter(formerPresenter.presenterId)) {
+
+                // show presentation end notification to all participants that joined the remote presentation.
+                if (wasParticipant(userId)) {
+                    Notification.notifyPresentationEnd(this.app.rtModel, this.app.rtConnection);
+                }
+
+                // leave full screen mode
+                this.toggleFullscreen(false);
+
+                // remove presenter id from session store
+                SessionRestore.state('presenter~' + this.model.get('id'), null);
+
+            } else if (localModel.wasPresenter(formerPresenter.presenterId)) {
                 this.toggleFullscreen(false);
             }
-            // remove presenter id from session store
-            SessionRestore.state('presenter~' + this.model.get('id'), null);
-            // show presentation end notification to all participants.
-            this.notifyPresentationEnd();
         },
 
         /**
@@ -192,112 +243,84 @@ define('io.ox/presenter/views/mainview', [
         onKeydown: function (event) {
             event.stopPropagation();
 
-            var self = this,
-                rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid();
+            var self = this;
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var rtConnection = this.app.rtConnection;
+            var userId = rtConnection.getRTUuid();
 
-            // TODO: check if we need to handle TAB traversal ourselves.
-            // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
-            function tabHandler(event) {
-                var tabableActions = this.$el.find('[tabindex]:not([tabindex^="-"]):visible'),
-                    tabableActionsCount = tabableActions.length;
-                // quit immediately if no tabable actions are found
-                if (tabableActionsCount === 0) { return; }
-                var focusedElementIndex = tabableActions.index(document.activeElement),
-                    traversalStep = event.shiftKey ? -1 : 1,
-                    nextElementIndex = focusedElementIndex + traversalStep;
-                // prevent default TAB traversal
-                event.preventDefault();
-                // traverse to prev/next action
-                if (nextElementIndex >= tabableActionsCount) {
-                    nextElementIndex = 0;
-                }
-                // focus next action candidate
-                tabableActions.eq(nextElementIndex).focus();
-            }
-
-            function togglePause () {
-                var app = self.app,
-                    userId = app.rtConnection.getRTUuid();
-                if (app.rtModel.canPause(userId)) {
-                    app.rtConnection.pausePresentation();
-                    app.mainView.toggleFullscreen(false);
-                } else if (app.rtModel.canContinue(userId)) {
-                    app.rtConnection.continuePresentation();
+            function togglePause() {
+                if (rtModel.canPause(userId)) {
+                    rtConnection.pausePresentation();
+                    self.toggleFullscreen(false);
+                } else if (localModel.canPause(userId)) {
+                    localModel.pausePresentation(userId);
+                } else if (rtModel.canContinue(userId)) {
+                    rtConnection.continuePresentation();
+                } else if (localModel.canContinue(userId)) {
+                    localModel.continuePresentation(userId);
                 }
             }
 
-            console.info('event type: ', event.type, 'keyCode: ', event.keyCode, 'charCode: ', event.charCode);
+            function startOrJoinPresentation() {
+                if (rtModel.canStart(userId)) {
+                    var slideId = self.getActiveSlideIndex();
+                    rtConnection.startPresentation({ activeSlide: slideId });
+                } else if (rtModel.canJoin(userId)) {
+                    self.joinPresentation();
+                }
+            }
 
             switch (event.which || event.keyCode) {
-                case 9: // TAB key
-                    // TODO: check if we need to handle TAB traversal ourselves.
-                    if (false /*activate for manual tab traversal*/) {
-                        tabHandler(event);
-                    }
-                    break;
+
                 case 37: // left arrow : show previous slide
-                    this.presentationView.showPreviousSlide();
-                    break;
-                case 39: // right arrow : show next slide
-                    this.presentationView.showNextSlide();
-                    break;
                 case 38: // up arrow : show previous slide
-                    this.presentationView.showPreviousSlide();
-                    break;
-                case 40: // down arrow : show next slide
-                    this.presentationView.showNextSlide();
-                    break;
                 case 33: // page up : show previous slide
-                    this.presentationView.showPreviousSlide();
+                    this.showPreviousSlide();
                     break;
+
+                case 39: // right arrow : show next slide
+                case 40: // down arrow : show next slide
                 case 34: // page down : show next slide
-                    this.presentationView.showNextSlide();
+                    this.showNextSlide();
                     break;
-                case 8: // ctrl + backspace : ends or leaves the presentation. backspace: show previous slide
+
+                case 8: // ctrl + backspace : ends or leaves the presentation. backspace : show previous slide
                     if (event.ctrlKey) {
-                        if (rtModel.canLeave(userId)) {
-                            this.app.rtConnection.leavePresentation();
-                        }
-                        if (rtModel.isPresenter(userId)) {
-                            this.app.rtConnection.endPresentation();
-                        }
+                        this.endOrLeavePresentation();
                     } else {
                         event.preventDefault();
-                        this.presentationView.showPreviousSlide();
+                        this.showPreviousSlide();
                     }
                     break;
+
                 case 13: // ctrl + enter :  starts or joins a presentation.
                     if (event.ctrlKey) {
-                        if (rtModel.canStart(userId)) {
-                            var slideId = this.app.mainView.getActiveSlideIndex();
-                            this.app.rtConnection.startPresentation({ activeSlide: slideId });
-                        }
-                        if (rtModel.canJoin(userId)) {
-                            this.joinPresentation();
-                        }
+                        startOrJoinPresentation();
                     } else { // enter: show next slide
-                        this.presentationView.showNextSlide();
+                        this.showNextSlide();
                     }
                     break;
+
                 case 36: // home : show first slide
-                    this.presentationView.showSlide(0);
+                    this.showFirstSlide();
                     break;
+
                 case 35: // end : show last slide
-                    var slideCount = this.getSlideCount();
-                    this.presentationView.showSlide(slideCount - 1);
+                    this.showLastSlide();
                     break;
+
                 case 190: // period : pause / continue presentation
-                    togglePause();
-                    break;
                 case 188: // comma : pause / continue presentation
                     togglePause();
                     break;
+
                 case 70: // ctrl + shift + f : go into fullscreen for presenters
                     if (event.ctrlKey && event.shiftKey && rtModel.isPresenter(userId)) {
                         this.toggleFullscreen();
                     }
                     break;
+                // no default
             }
         },
 
@@ -366,128 +389,6 @@ define('io.ox/presenter/views/mainview', [
         },
 
         /**
-         * Shows an alert banner.
-         *
-         * @param {Object} yellOptions
-         *  The settings for the alert banner:
-         *  @param {String} [yellOptions.type='info']
-         *      The type of the alert banner. Supported types are 'success',
-         *      'info', 'warning', and 'error'.
-         *  @param {String} [yellOptions.headline]
-         *      An optional headline shown above the message text.
-         *  @param {String} yellOptions.message
-         *      The message text shown in the alert banner.
-         *  @param {Number} [yellOptions.duration]
-         *      The time to show the alert banner, in milliseconds; or -1 to
-         *      show a permanent alert.
-         *  @param {Object} [yellOptions.action]
-         *      An arbitrary action button that will be shown below the
-         *      message text, with the following properties:
-         *      @param {String} yellOptions.action.label
-         *          The display text for the button.
-         *      @param {String} yellOptions.action.ref
-         *          The action reference id.
-         *      @param {Baton} [yellOptions.action.baton=null]
-         *          The baton to hand over to the action.
-         */
-        showNotification: function (yellOptions) {
-            var // the notification DOM element
-                yellNode = null;
-
-            function onNotificationAppear () {
-                // add action button to the message
-                var // the button label
-                    label = yellOptions.action.label,
-                    // the action ref the button invokes
-                    ref = yellOptions.action.ref,
-                    // the baton to hand over to the action
-                    baton = yellOptions.action.baton || null,
-                    // the message node as target for additional contents
-                    messageNode = yellNode.find('.message'),
-                    // the button node to add to the message
-                    button = $('<a role="button" class="presenter-notification-btn" tabindex="1">').attr('title', label).text(label);
-
-                button.on('click', function () {
-                    ActionsPattern.invoke(ref, null, baton);
-                    Notifications.yell.close();
-                });
-
-                messageNode.append($('<div>').append(button));
-            }
-
-            // add default options
-            yellOptions = _.extend({ type: 'info' }, yellOptions);
-            // create and show the notification DOM node
-            yellNode = Notifications.yell(yellOptions);
-            // register event handlers
-
-            if (_.isObject(yellOptions.action)) {
-                yellNode.one('notification:appear', onNotificationAppear);
-            }
-        },
-
-        /**
-         * Shows a notification for the participants when the presenter starts the presentation.
-         */
-        notifyPresentationStart: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid();
-
-            if (rtModel.isPresenter(userId) || rtModel.isJoined(userId)) { return; }
-
-            var baton = Ext.Baton({ context: this, model: this.model, data: this.model.toJSON() });
-            var yellOptions = {
-                //#. headline of a presentation start alert
-                headline: gt('Presentation start'),
-                //#. message text of of a presentation start alert
-                //#. %1$d is the presenter name
-                message: gt('%1$s has started the presentation.', this.app.rtModel.get('presenterName')),
-                duration: -1,
-                focus: true,
-                action: {
-                    //#. link button to join the currently running presentation
-                    label: gt('Join Presentation'),
-                    ref: 'io.ox/presenter/actions/join',
-                    baton: baton
-                }
-            };
-
-            this.showNotification(yellOptions);
-        },
-
-        /**
-         * Shows a notification to all participants when the presenter ends the presentation.
-         */
-        notifyPresentationEnd: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid(),
-                presenterId,
-                presenterName;
-
-            if (_.isEmpty(rtModel.get('presenterId'))) {
-                // the presenter has already been reset, look for previous data
-                presenterId = rtModel.previous('presenterId');
-                presenterName = rtModel.previous('presenterName');
-
-            } else {
-                // use current presenter
-                presenterId = rtModel.get('presenterId');
-                presenterName = rtModel.get('presenterName');
-            }
-
-            if (userId === presenterId) { return; }
-
-            this.showNotification({
-                //#. headline of a presentation end alert
-                headline: gt('Presentation end'),
-                //#. message text of a presentation end alert
-                //#. %1$d is the presenter name
-                message: gt('%1$s has ended the presentation.', presenterName),
-                duration: 6000
-            });
-        },
-
-        /**
          * Toggles full screen mode of the main view depending on the given state.
          *  A state of 'true' starts full screen mode, 'false' exits the full screen mode and
          *  'undefined' toggles the full screen state.
@@ -522,7 +423,6 @@ define('io.ox/presenter/views/mainview', [
          * Handle main view entering full screen mode
          */
         onEnterFullscreen: function () {
-            //console.info('Presenter - mainview - onEnterFullscreen()');
             this.fullscreen = true;
             this.sidebarBeforeFullscreen = this.sidebarView.opened;
             this.sidebarView.toggleSidebar(false);
@@ -533,10 +433,8 @@ define('io.ox/presenter/views/mainview', [
          * Handle main view leaving full screen mode
          */
         onExitFullscreen: function () {
-            //console.info('Presenter - mainview - onExitFullscreen()');
             this.fullscreen = false;
             this.sidebarView.toggleSidebar(this.sidebarBeforeFullscreen);
-
             this.presenterEvents.trigger('presenter:fullscreen:exit');
         },
 
@@ -544,7 +442,7 @@ define('io.ox/presenter/views/mainview', [
          * Handle main view full screen toggle errors
          */
         onErrorFullscreen: function (foo) {
-            console.info('Presenter - mainview - onErrorFullscreen()', foo);
+            console.info('Presenter - error toggle fullscreen, reason:', foo);
         },
 
         /**
@@ -594,6 +492,27 @@ define('io.ox/presenter/views/mainview', [
         },
 
         /**
+         * Show the first slide, but only if the user is presenter or has not joined the presentation.
+         */
+        showFirstSlide: function () {
+            this.showSlide(0);
+            this.presentationView.focusActiveSlide();
+        },
+
+        /**
+         * Show the last slide, but only if the user is presenter or has not joined the presentation.
+         */
+        showLastSlide: function () {
+            var slideCount = this.getSlideCount();
+
+            if (slideCount > 0) {
+                this.showSlide(slideCount - 1);
+            }
+
+            this.presentationView.focusActiveSlide();
+        },
+
+        /**
          * Tries to join the presentation. Shows an error alert on failure.
          */
         joinPresentation: function () {
@@ -611,15 +530,8 @@ define('io.ox/presenter/views/mainview', [
                 this.toggleFullscreen(false);
 
                 // show an alert box for known errors
-                if (_.isObject(error) && (error.error === 'GENERAL_MAX_PARTICIPANTS_FOR_PRESENTATION_REACHED_ERROR')) {
-                    this.showNotification({
-                        type: 'error',
-                        //#. message text of an alert box if joining a presentation fails
-                        //#. %1$d is the name of the user who started the presentation
-                        //#, c-format
-                        message: gt('The limit of participants has been reached. Please contact the presenter %1$s.', this.app.rtModel.get('presenterName')),
-                        focus: true
-                    });
+                if (_.isObject(error) && (error.error === 'PRESENTER_MAX_PARTICIPANTS_FOR_PRESENTATION_REACHED_ERROR')) {
+                    Notification.notifyMaxParticipantsReached(this.app.rtModel.get('presenterName'));
                 }
             }.bind(this));
 
@@ -627,7 +539,39 @@ define('io.ox/presenter/views/mainview', [
         },
 
         /**
-         * Destructor function of the PresentationView.
+         * Ends the presentation if the user is currently presenting (locally or remote),
+         * or leaves the presentation if the user participates a remote presentation.
+         *
+         * @returns {jQuery.Promise}
+         */
+        endOrLeavePresentation: function () {
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var rtConnection = this.app.rtConnection;
+            var userId = rtConnection.getRTUuid();
+
+            if (rtModel.isPresenter(userId)) {
+                return rtConnection.endPresentation();
+            } else if (localModel.isPresenter(userId)) {
+                localModel.endPresentation(userId);
+            } else if (rtModel.canLeave(userId)) {
+                return rtConnection.leavePresentation();
+            }
+
+            return $.when();
+        },
+
+        /**
+         * Presenter close handler.
+         */
+        closePresenter: function () {
+            this.endOrLeavePresentation().done(function () {
+                this.app.quit();
+            }.bind(this));
+        },
+
+        /**
+         * Destructor function of the MainView.
          */
         disposeView: function () {
             //console.info('Presenter - dispose MainView');

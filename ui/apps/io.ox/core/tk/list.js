@@ -21,19 +21,19 @@ define('io.ox/core/tk/list', [
     'use strict';
 
     var keyEvents = {
-        13: 'enter',
-        27: 'escape',
-        32: 'space',
-        37: 'cursor:left',
-        38: 'cursor:up',
-        39: 'cursor:right',
-        40: 'cursor:down'
-    },
+            13: 'enter',
+            27: 'escape',
+            32: 'space',
+            37: 'cursor:left',
+            38: 'cursor:up',
+            39: 'cursor:right',
+            40: 'cursor:down'
+        },
     // PULL TO REFRESH constants
-    PTR_START =           5,    // Threshold when pull-to-refresh starts
-    PTR_TRIGGER =       150,    // threshold when refresh is done
-    PTR_MAX_PULLDOWM =  300,    // max distance where the PTR node can be dragged to
-    PTR_ROTATE_ANGLE =  360;    // total rotation angle of the spinner while pulled down
+        PTR_START =           5,    // Threshold when pull-to-refresh starts
+        PTR_TRIGGER =       150,    // threshold when refresh is done
+        PTR_MAX_PULLDOWM =  300,    // max distance where the PTR node can be dragged to
+        PTR_ROTATE_ANGLE =  360;    // total rotation angle of the spinner while pulled down
 
     // helper
     function NOOP() { return $.when(); }
@@ -51,6 +51,9 @@ define('io.ox/core/tk/list', [
         ),
 
         busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down"/></li>'),
+
+        // disabled by default via 'hidden class'
+        messageEmpty: $('<li class="message-empty-container hidden"><div class="message-empty"></div></li>'),
 
         pullToRefreshIndicator: $(
             '<div class="pull-to-refresh" style="transform: translate3d(0, -70px,0)">' +
@@ -76,19 +79,26 @@ define('io.ox/core/tk/list', [
             // ignore fake clicks
             if (!e.pageX) return;
             // restore focus
+            this.restoreFocus();
+        },
+
+        restoreFocus: function (greedy) {
             // try to find the correct item to focus
-            var selectedItems = this.getItems().filter('.selected');
-            if (selectedItems.length !== 0) {
-                if (selectedItems.length === 1) {
-                    // only one item, just focus that
-                    selectedItems.focus();
-                } else if (selectedItems.filter(document.activeElement).length === 1) {
-                    // the activeElement is in the list, focus it
-                    selectedItems.filter(document.activeElement).focus();
-                } else {
-                    // just use the last selected item to focus
-                    selectedItems.last().focus();
-                }
+            var items = this.getItems(),
+                selectedItems = items.filter('.selected');
+            if (selectedItems.length === 0) {
+                if (greedy) this.selection.select(0, items);
+                return;
+            }
+            if (selectedItems.length === 1) {
+                // only one item, just focus that
+                selectedItems.focus();
+            } else if (selectedItems.filter(document.activeElement).length === 1) {
+                // the activeElement is in the list, focus it
+                selectedItems.filter(document.activeElement).focus();
+            } else {
+                // just use the last selected item to focus
+                selectedItems.last().focus();
             }
         },
 
@@ -96,29 +106,27 @@ define('io.ox/core/tk/list', [
             if (keyEvents[e.which]) this.trigger(keyEvents[e.which], e);
         },
 
-        onScroll: _.debounce(function () {
+        // use throttle instead of debouce in order to respond during scroll momentum
+        onScroll: _.throttle(function () {
 
-            if (this.isBusy || this.complete || !this.$el.is(':visible')) return;
+            if (this.isBusy || this.complete || !this.loader.collection || !this.$el.is(':visible')) return;
 
             var height = this.$el.outerHeight(),
                 scrollTop = this.el.scrollTop,
                 scrollHeight = this.el.scrollHeight,
-                tail = scrollHeight - (scrollTop + height);
+                bottom = scrollTop + height;
 
-            // do anything?
-            if (tail > height) return;
-            // show indicator
-            this.addBusyIndicator();
-            // really refresh?
             // two competing concepts:
             // a) the user wants to see the end of the list; some users feel better; more orientation. Less load on server.
             // b) powers users hate to wait; never want to see the end of the list. More load on server.
-            // Uncommented next line with 7.8.0:
-            // if (tail > 1) return;
-            // immediately load more
+            // we're know using b) by preloading if the bottom edge exceeds 80%
+            if (bottom / scrollHeight < 0.80) return;
+
+            // show indicator & fetch next page
+            this.addBusyIndicator();
             this.processPaginate();
 
-        }, 50),
+        }, 20),
 
         onLoad: function () {
             this.idle();
@@ -150,7 +158,7 @@ define('io.ox/core/tk/list', [
         empty: function () {
             this.idle();
             this.toggleComplete(false);
-            this.$el.empty();
+            this.getItems().remove();
             if (this.selection) this.selection.reset();
             this.$el.scrollTop(0);
         },
@@ -198,15 +206,6 @@ define('io.ox/core/tk/list', [
 
             if (li.length === 0) return;
 
-            // preserve item?
-            if (isSelected && this.options.preserve) {
-                // note: preserved items are no longer part of the collection, i.e.
-                // they won't respond to model changes! They are just visible until
-                // the selection is changed by the user
-                li.addClass('preserved');
-                return;
-            }
-
             // keep scroll position if element is above viewport
             if (li[0].offsetTop < this.el.scrollTop) {
                 this.el.scrollTop -= li.outerHeight(true);
@@ -246,9 +245,9 @@ define('io.ox/core/tk/list', [
 
             // get affected DOM nodes and remove them
             items.filter(function () {
-                    var cid = $(this).attr('data-cid');
-                    return !!hash[cid];
-                })
+                var cid = $(this).attr('data-cid');
+                return !!hash[cid];
+            })
                 .remove();
 
             if (!selected) return;
@@ -311,6 +310,7 @@ define('io.ox/core/tk/list', [
                 currentY = touches.pageY,
                 distance = currentY - this.pullToRefreshStartY;
 
+
             if (this.pullToRefreshStartY && !this.isPulling && !this.isSwiping) {
                 if ((currentY - this.pullToRefreshStartY) >= PTR_START) {
                     e.preventDefault();
@@ -325,7 +325,8 @@ define('io.ox/core/tk/list', [
                 }
             }
 
-            if (this.isPulling && distance <= PTR_MAX_PULLDOWM /*&& !this.pullToRefreshTriggerd*/) {
+            if (this.isPulling && distance <= PTR_MAX_PULLDOWM) {
+                this.pullToRefreshTriggerd = false;
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -333,7 +334,7 @@ define('io.ox/core/tk/list', [
                     top = -70 + ((70 / PTR_TRIGGER) * distance);
 
                 this.pullToRefreshIndicator
-                    .css('-webkit-transform', 'translate3d(0,' + top +  'px,0)');
+                    .css('-webkit-transform', 'translate3d(0,' + top + 'px,0)');
 
                 $('#ptr-spinner').css('-webkit-transform', 'rotateZ(' + rotationAngle + 'deg)');
 
@@ -362,19 +363,16 @@ define('io.ox/core/tk/list', [
 
                 e.preventDefault();
                 e.stopPropagation();
-                // reset
-                this.selection.isScrolling = false;
 
-            } else {
-                if (this.isPulling) {
-                    // threshold was not reached, just remove the ptr indicator
-                    this.removePullToRefreshIndicator(true);
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.selection.isScrolling = true;
-                }
+
+            } else if (this.isPulling) {
+                // threshold was not reached, just remove the ptr indicator
+                this.removePullToRefreshIndicator(true);
+                e.preventDefault();
+                e.stopPropagation();
             }
             // reset everything
+            this.selection.isScrolling = false;
             this.pullToRefreshStartY = null;
             this.isPulling = false;
             this.pullToRefreshTriggerd = false;
@@ -438,12 +436,10 @@ define('io.ox/core/tk/list', [
             // app: application
             // pagination: use pagination (default is true)
             // draggable: add drag'n'drop support
-            // preserve: don't remove selected items (e.g. for unseen messages)
             // swipe: enables swipe handling (swipe to delete etc)
             this.options = _.extend({
                 pagination: true,
                 draggable: false,
-                preserve: false,
                 selection: true,
                 scrollable: true,
                 swipe: false
@@ -622,19 +618,19 @@ define('io.ox/core/tk/list', [
             this.collection = loader.getDefaultCollection();
             this.loader = loader;
 
-            this.load = function () {
+            this.load = function (options) {
                 // load data
                 this.empty();
-                loader.load(this.model.toJSON());
+                loader.load(_.extend(this.model.toJSON(), options));
                 this.setCollection(loader.collection);
             };
 
-            this.paginate = function () {
-                loader.paginate(this.model.toJSON());
+            this.paginate = function (options) {
+                loader.paginate(_.extend(this.model.toJSON(), options));
             };
 
-            this.reload = function () {
-                loader.reload(this.model.toJSON());
+            this.reload = function (options) {
+                loader.reload(_.extend(this.model.toJSON(), options));
             };
         },
 
@@ -655,6 +651,7 @@ define('io.ox/core/tk/list', [
                 });
             }
             this.$el.attr('data-ref', this.ref);
+            this.addMessageEmpty();
             // fix evil CSS transition issue with phantomJS
             if (_.device('phantomjs')) this.$el.addClass('no-transition');
             return this;
@@ -698,6 +695,10 @@ define('io.ox/core/tk/list', [
 
         getBusyIndicator: function () {
             return this.$el.find('.busy-indicator');
+        },
+
+        addMessageEmpty: function () {
+            this.messageEmpty.clone().appendTo(this.$el);
         },
 
         addBusyIndicator: function () {

@@ -12,6 +12,8 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
+ /* global DocumentTouch */
+
 (function () {
 
     var us = {},
@@ -31,8 +33,7 @@
         standalone,
         uiwebview,
         chromeIOS,
-        browserLC = {},
-        slice = Array.prototype.slice;
+        browserLC = {};
 
     // supported browsers
     us.browserSupport = {
@@ -48,62 +49,6 @@
     function allFalsy(d) {
         for (var i in d) if (d[i]) return false;
         return true;
-    }
-
-    function extend() {
-        var source = slice.call(arguments, 1);
-        for (var i = 0; i < source.length; i++) {
-            for (var prop in source) {
-                obj[prop] = source[prop];
-            }
-        }
-        return obj;
-    }
-    /*
-     * matchMedia() polyfill - test whether a CSS media type or media query applies
-     * primary author: Scott Jehl
-     * Copyright (c) 2010 Filament Group, Inc
-     * MIT license
-     * adapted by Paul Irish to use the matchMedia API
-     * http://dev.w3.org/csswg/cssom-view/#dom-window-matchmedia
-     * which webkit now supports: http://trac.webkit.org/changeset/72552
-     *
-     * Doesn't implement media.type as there's no way for crossbrowser property
-     * getters. instead of media.type == 'tv' just use media.matchMedium('tv')
-     */
-    if (!(window.matchMedia)) {
-
-        window.matchMedia = (function (doc, undefined) {
-
-            var cache = {},
-                docElem = doc.documentElement,
-                fakeBody = doc.createElement('body'),
-                testDiv = doc.createElement('div');
-
-            testDiv.setAttribute('id', 'ejs-qtest');
-            fakeBody.appendChild(testDiv);
-
-            return function (q) {
-                if (cache[q] === undefined) {
-                    var styleBlock = doc.createElement('style'),
-                        cssrule = '@media ' + q + ' { #ejs-qtest { position: absolute; } }';
-                    //must set type for IE!
-                    styleBlock.type = 'text/css';
-                    if (styleBlock.styleSheet) {
-                        styleBlock.styleSheet.cssText = cssrule;
-                    } else {
-                        styleBlock.appendChild(doc.createTextNode(cssrule));
-                    }
-                    docElem.insertBefore(fakeBody, docElem.firstChild);
-                    docElem.insertBefore(styleBlock, docElem.firstChild);
-                    cache[q] = ((window.getComputedStyle ? window.getComputedStyle(testDiv,null) : testDiv.currentStyle).position == 'absolute');
-                    docElem.removeChild(fakeBody);
-                    docElem.removeChild(styleBlock);
-                }
-                return cache[q];
-            };
-
-        })(document);
     }
 
     function detectBrowser(nav) {
@@ -137,6 +82,7 @@
                 webkit = false;
             }
 
+            /*eslint no-nested-ternary: 0*/
             // add namespaces, just sugar
             us.browser = {
                 /** is IE? */
@@ -208,7 +154,7 @@
             // Only major versions will be kept
             // '7.2.3' will be 7.2
             // '6.0.1' will be 6
-            if (typeof(value) === 'string') {
+            if (typeof value === 'string') {
                 value = value === '' ? true : parseFloat(value, 10);
                 us.browser[key] = value;
             }
@@ -217,19 +163,20 @@
 
         }
 
-        // fixes for Windows 8 Chrome
-        // Windows 8 Chrome does report touch events which leads to
-        // a wrong feature set (disabled stuff) as AppSuite thinks
-        // this is a Smartphone or tablet without a mouse.
-        if (us.browser.chrome && us.browser.windows8 && Modernizr.touch) {
-            // overwrite Modernizr's touch property and remove html class
-            Modernizr.touch = false;
-            document.getElementsByTagName('html')[0].className = document.getElementsByTagName('html')[0].className.replace(/\btouch\b/,'');
-        }
     }
 
     // first detection
     detectBrowser(navigator);
+
+    function detectTouch() {
+
+        // Windows 8 Chrome does report touch events which leads to
+        // a wrong feature set (disabled stuff) as AppSuite thinks
+        // this is a Smartphone or tablet without a mouse.
+        if (us.browser.chrome && us.browser.windows8) return false;
+
+        return ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+    }
 
     // do media queries here
     // TODO define sizes to match pads and phones
@@ -262,7 +209,7 @@
             stockBrowser = android && android[1] < 537,
             ratio = stockBrowser ? (window.devicePixelRatio || 1) : 1,
             size = Math.min(screen.width / ratio, screen.height / ratio) < 540,
-            touch = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch),
+            touch = detectTouch(),
             razrHD = navigator.userAgent.indexOf('RAZR 4G') >= 0;
 
         return (size && touch && mobileOS) || razrHD;
@@ -279,7 +226,7 @@
 
         // make this public so that it can be patched by UI plugins
         hasNativeEmoji: function () {
-            var support = us.browser.ios > 5 || us.browser.Android > 4.1 || (us.browser.MacOS && us.browser.Safari);
+            var support = us.browser.ios > 5 || us.browser.Android > 4.1 || us.browser.Safari || window.cordova !== undefined;
             return support;
         },
 
@@ -313,7 +260,7 @@
             var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
-            misc.touch = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch);
+            misc.touch = detectTouch();
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();
             // no arguments?s
@@ -331,6 +278,7 @@
                 console.debug(condition);
             }
             try {
+                /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
             } catch (e) {
                 console.error('_.device()', condition, e);

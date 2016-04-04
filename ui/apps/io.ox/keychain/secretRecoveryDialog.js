@@ -35,8 +35,8 @@ define('io.ox/keychain/secretRecoveryDialog', [
                         )
                     );
                 })
-                .addPrimaryButton('migrate', gt('Recover'), 'migrate',  { 'tabIndex': '1' })
-                .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
+                .addPrimaryButton('migrate', gt('Recover'), 'migrate', { 'tabIndex': '1' })
+                .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
                 .on('cancel', function () {
                     this.getContentNode().find('input').val('');
                 })

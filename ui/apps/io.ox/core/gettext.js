@@ -11,6 +11,8 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
+/* global assert: true */
+
 define('io.ox/core/gettext', function () {
 
     'use strict';
@@ -33,8 +35,9 @@ define('io.ox/core/gettext', function () {
     }
 
     function debugAttr(e) {
-        if (e.originalEvent.attrName in { title: 1, value: 1 })
+        if (e.originalEvent.attrName in { title: 1, value: 1 }) {
             verify(e.originalEvent.newValue, e.target);
+        }
     }
 
     function debugData(e) {
@@ -73,6 +76,7 @@ define('io.ox/core/gettext', function () {
 
     function gt(id, po) {
 
+        /*eslint no-new-func: 0*/
         po.plural = new Function('n', 'return ' + po.plural + ';');
 
         function gettext(text) {
@@ -80,11 +84,10 @@ define('io.ox/core/gettext', function () {
             text = gettext.pgettext('', text);
             if (arguments.length < 2) {
                 return text;
-            } else {
-                args = Array.prototype.slice.call(arguments);
-                args.splice(0, 1, text);
-                return gettext.format.apply(gettext, args);
             }
+            args = Array.prototype.slice.call(arguments);
+            args.splice(0, 1, text);
+            return gettext.format.apply(gettext, args);
         }
 
         if (_.url.hash('debug-i18n')) {
@@ -140,9 +143,13 @@ define('io.ox/core/gettext', function () {
         function npgettext(context, singular, plural, n) {
             var key = (context ? context + '\x00' : '') + singular + '\x01' + plural,
                 translation = get(key);
+
+            /*eslint-disable no-nested-ternary */
             return translation ?
                 translation[Number(po.plural(Number(n)))] :
                 Number(n) !== 1 ? plural : singular;
+            /*eslint-enable no-nested-ternary */
+
         }
 
         return gettext;

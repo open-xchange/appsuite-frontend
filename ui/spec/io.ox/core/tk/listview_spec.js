@@ -15,7 +15,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
 
     'use strict';
 
-    describe('The ListView.', function () {
+    describe.skip('The ListView.', function () {
         var pictureHalo;
 
         beforeEach(function () {

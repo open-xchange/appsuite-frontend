@@ -36,14 +36,18 @@ define('io.ox/mail/threadview', [
             this.$el.append(
                 $('<nav class="back-navigation generic-toolbar">').append(
                     $('<div class="button">').append(
-                        $('<a href="#" class="back" tabindex="1">').append(
-                            $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
-                        )
+                        $('<a href="#" role="button" class="back" tabindex="1">')
+                        .attr('aria-label', gt('Back to list'))
+                        .append($('<i class="fa fa-chevron-left" aria-hidden="true">'), $.txt(' '), $.txt(gt('Back')))
                     ),
                     $('<div class="position">'),
                     $('<div class="prev-next">').append(
-                        $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="fa fa-chevron-up">'),
-                        $('<a href="#" class="next-mail" tabindex="1">').append('<i class="fa fa-chevron-down">')
+                        $('<a href="#" role="button" class="previous-mail" tabindex="1">')
+                            .attr('aria-label', gt('Previous message'))
+                            .append('<i class="fa fa-chevron-up" aria-hidden="true">'),
+                        $('<a href="#" role="button" class="next-mail" tabindex="1">')
+                            .attr('aria-label', gt('Next message'))
+                            .append('<i class="fa fa-chevron-down" aria-hidden="true">')
                     )
                 ).attr('role', 'toolbar')
             );
@@ -88,7 +92,7 @@ define('io.ox/mail/threadview', [
         index: 200,
         draw: function (baton) {
             var keepFirstPrefix = baton.view.collection.length === 1,
-                subject = util.getSubject(baton.view.collection.at(0).toJSON(), keepFirstPrefix),
+                subject = util.getSubject(baton.view.model.toJSON(), keepFirstPrefix),
                 node = $('<div class="subject">').text(subject);
 
             this.append(node);
@@ -102,13 +106,18 @@ define('io.ox/mail/threadview', [
         id: 'summary',
         index: 300,
         draw: function (baton) {
+
             var length = baton.view.collection.length;
-            if (length <= 1) return;
+
             this.append(
-                $('<div class="summary">').text(gt('%1$d messages in this conversation', length))
+                $('<div class="summary">').text(
+                    length > 1 ? gt('%1$d messages in this conversation', length) : '\u00A0'
+                )
             );
         }
     });
+
+    // Thread view
 
     var ThreadView = Backbone.View.extend({
 
@@ -130,7 +139,7 @@ define('io.ox/mail/threadview', [
             this.model = null;
         },
 
-        updateHeader: _.debounce(function () {
+        updateHeader: function () {
 
             var baton = new ext.Baton({ view: this }),
                 node = this.$el.find('.thread-view-list > h1').empty();
@@ -141,7 +150,7 @@ define('io.ox/mail/threadview', [
 
             this.$el.find('.thread-view').toggleClass('multiple-messages', this.collection.length > 1);
 
-        }, 10),
+        },
 
         updatePosition: function (position) {
             this.$el.find('.position').text(position);
@@ -245,10 +254,9 @@ define('io.ox/mail/threadview', [
             if (this.collection.length === 0) {
                 this.empty();
                 return;
-            } else {
-                this.$messages.empty();
-                this.$el.scrollTop(0);
             }
+            this.$messages.empty();
+            this.$el.scrollTop(0);
 
             this.updateHeader();
 
@@ -267,7 +275,8 @@ define('io.ox/mail/threadview', [
 
             var index = model.get('index'),
                 children = this.getItems(),
-                li = this.renderListItem(model);
+                li = this.renderListItem(model),
+                open = this.$el.data('open');
 
             // insert or append
             if (index < children.length) children.eq(index).before(li); else this.$messages.append(li);
@@ -278,6 +287,11 @@ define('io.ox/mail/threadview', [
 
             this.zIndex();
             this.updateHeader();
+
+            if (open) {
+                this.showMail(open);
+                this.$el.data('open', null);
+            }
         },
 
         onRemove: function (model) {
@@ -343,6 +357,7 @@ define('io.ox/mail/threadview', [
                     if (e.shiftKey) this.onPrevious(e);
                     if (e.altKey) this.focusMessage(e, +1);
                     break;
+                // no default
             }
         },
 
@@ -361,11 +376,12 @@ define('io.ox/mail/threadview', [
             items.eq(index).get(0).scrollIntoView(true);
         },
 
-        initialize: function () {
+        initialize: function (options) {
 
             this.model = null;
             this.threaded = true;
             this.collection = new backbone.Collection();
+            options = options || {};
 
             this.listenTo(this.collection, {
                 add: this.onAdd,
@@ -379,15 +395,25 @@ define('io.ox/mail/threadview', [
 
             this.$messages = $();
 
+            // make view accessible via DOM
+            this.$el.data('view', this);
+
             this.$el.on('toggle', '.list-item', this.onToggle.bind(this));
 
-            // enable drag & drop support
-            dnd.enable({
-                container: this.$el,
-                draggable: true,
-                selectable: '.detail-view-header .contact-picture',
-                simple: true
-            });
+            // we don't need drag support when it's open in a separate detailview (there is no foldertree to drag to)
+            if (!options.disableDrag) {
+                // enable drag & drop support
+                dnd.enable({
+                    container: this.$el,
+                    draggable: true,
+                    selectable: '.detail-view-header .contact-picture',
+                    simple: true
+                });
+                // fix lost focus when just cliking .contact-picture
+                this.$el.on('mouseup', '.detail-view-header .contact-picture', function (e) {
+                    $(e.target).closest('article').focus();
+                });
+            }
         },
 
         // return alls items of this list
@@ -430,19 +456,12 @@ define('io.ox/mail/threadview', [
         }
     });
 
-    // Mobile
+    // Mobile, remove halo links in thread-overview
     ext.point('io.ox/mail/mobile').extend({
         id: 'remove-halo-link',
-        index: 100,
+        index: 'last',
         customize: function () {
-            var elem = this.$el.find('.person-link');
-            _(elem).each(function (el) {
-                var span = $('<span>').text($(el).text());
-                span.addClass(elem.attr('class'));
-                span.addClass('sp').removeClass('halo-link');
-                $(el).after(span);
-            });
-            elem.remove();
+            this.$el.find('.halo-link').removeClass('halo-link');
         }
     });
 
@@ -474,7 +493,8 @@ define('io.ox/mail/threadview', [
                 data: model.toJSON(),
                 disable: {
                     'io.ox/mail/detail': ['subject', 'actions'],
-                    'io.ox/mail/detail/header': ['flag-picker', 'unread-toggle']
+                    'io.ox/mail/detail/header': ['unread-toggle', 'paper-clip'],
+                    'io.ox/mail/detail/header/row1': ['flag-picker']
                 }
             });
 

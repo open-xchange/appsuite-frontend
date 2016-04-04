@@ -49,6 +49,7 @@ define('l10n/ja_JP/io.ox/collation', function () {
     // the sorter
     // order is: Kana, Other, Latin, Empty
     sorter = function (a, b) {
+        /*eslint no-nested-ternary: 0*/
         a = a.sort_name[0];
         b = b.sort_name[0];
         // empty (put at end)

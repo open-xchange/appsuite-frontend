@@ -23,12 +23,10 @@ define(['io.ox/core/desktop'], function (desktop) {
             describe('provides the App API which', function () {
                 var app;
 
-                afterEach(function (done) {
+                afterEach(function () {
                     //clean up
                     if (app && app.get('state') === 'running') {
-                        app.quit().done(done);
-                    } else {
-                        done();
+                        return app.quit();
                     }
                 });
 
@@ -47,12 +45,11 @@ define(['io.ox/core/desktop'], function (desktop) {
                         expect(ox.ui.App).to.exist;
                     });
 
-                    it('should launch a test app', function (done) {
+                    it('should launch a test app', function () {
                         expect(app.get('state')).to.equal('ready');
-                        app.launch().then(function () {
+                        return app.launch().then(function () {
                             expect(ox.ui.apps.models).to.contain(app);
                             expect(app.get('state')).to.equal('running');
-                            done();
                         });
                     });
 
@@ -90,23 +87,22 @@ define(['io.ox/core/desktop'], function (desktop) {
                         expect(callback.calledTwice, 'callback has been called twice').to.be.true;
                     });
 
-                    it('during initialization', function (done) {
+                    it('during initialization', function () {
 
                         expect(app.get('state')).to.equal('ready');
-                        app.launch({ callback: callback }).done(function () {
+                        var def = app.launch({ callback: callback }).then(function () {
                             expect(ox.ui.apps.models).to.contain(app);
                             expect(app.get('state')).to.equal('running');
                             callback();
-                            done();
                         });
                         expect(app.get('state')).to.equal('initializing');
+                        return def;
                     });
 
-                    it('after initialization', function (done) {
+                    it('after initialization', function () {
                         app.setLauncher(launcher);
-                        app.launch({ callback: callback }).done(function () {
+                        return app.launch({ callback: callback }).then(function () {
                             callback();
-                            done();
                         });
                     });
                 });

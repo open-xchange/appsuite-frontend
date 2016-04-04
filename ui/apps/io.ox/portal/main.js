@@ -44,7 +44,7 @@ define('io.ox/portal/main', [
     function isFirstVisitWidget(type, baton) {
 
         function hasDataShown(type) {
-            return _.contains(hadData, type) ? true : false;
+            return _.contains(hadData, type);
         }
 
         function containsData(type) {
@@ -71,9 +71,8 @@ define('io.ox/portal/main', [
                     // reset for debugging
                     // settings.set('settings/hadData', []).save();
                     return false;
-                } else {
-                    return true;
                 }
+                return true;
             }
         } else {
             return false;
@@ -88,9 +87,8 @@ define('io.ox/portal/main', [
             return gt('Good morning, %s', name);
         } else if (hour >= 18 && hour <= 23) {
             return gt('Good evening, %s', name);
-        } else {
-            return gt('Hello %s', name);
         }
+        return gt('Hello %s', name);
     }
 
     function openSettings() {
@@ -337,7 +335,7 @@ define('io.ox/portal/main', [
     collection.wasElementDeleted = function (model) {
         var needle = model.cid,
             haystack = this.models;
-        return !_(haystack).some(function (suspiciousHay) {return suspiciousHay.cid === needle; });
+        return !_(haystack).some(function (suspiciousHay) { return suspiciousHay.cid === needle; });
     };
 
     app.getTour = function () {
@@ -386,12 +384,10 @@ define('io.ox/portal/main', [
 
         if (model.get('enabled') === false) {
             node.hide();
-        } else {
-            if (!widgets.visible(model.get('type'))) {
-                // hide due to missing capabilites
-                node.hide();
-                return;
-            }
+        } else if (!widgets.visible(model.get('type'))) {
+            // hide due to missing capabilites
+            node.hide();
+            return;
         }
         if (add) {
             var lastProtected = appBaton.$.widgets.find('li.protected').last();
@@ -484,6 +480,7 @@ define('io.ox/portal/main', [
             decoration = node.find('.decoration');
         return $.when.apply($, defs).then(
             function success() {
+                baton.options.loadingError = false;
                 var widgetType = _.last(baton.point.split('/'));
                 node.find('.content').remove();
                 // draw summary only on smartphones (please adjust settings pane when adjusting this check)
@@ -523,14 +520,20 @@ define('io.ox/portal/main', [
                     node.append(
                         $('<div class="content error">').append(
                             $('<div>').text(gt('An error occurred.')),
+                            // message
                             $('<div class="italic">').text(_.isString(e.error) ? e.error : ''),
                             $('<br>'),
-                            $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
-                                node.find('.decoration').addClass('pending');
-                                loadAndPreview(point, node, baton);
-                            })
+                            // retry
+                            e.retry !== false ?
+                                $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
+                                    node.find('.decoration').addClass('pending');
+                                    loadAndPreview(point, node, baton);
+                                }) : $()
                         )
                     );
+                    if (point.prop('stopLoadingOnError')) {
+                        baton.options.loadingError = true;
+                    }
                     point.invoke('error', node, e, baton);
                 } else {
                     // missing oAuth account
@@ -618,7 +621,10 @@ define('io.ox/portal/main', [
 
     // can be called every 30 seconds
     app.refresh = _.throttle(function () {
-        widgets.getEnabled().each(app.refreshWidget);
+        _(widgets.getEnabled()).chain().filter(function (model) {
+            // don't refresh widgets with loading errors automatically so logs don't get spammed (see bug 41740)
+            return !(model.attributes.baton && model.attributes.baton.options && model.attributes.baton.options.loadingError);
+        }).each(app.refreshWidget);
     }, 30000);
 
     ox.on('refresh^', function () {
@@ -723,7 +729,7 @@ define('io.ox/portal/main', [
             }
 
             // make sortable, but not for Touch devices
-            if (!Modernizr.touch) {
+            if (!_.device('touch')) {
                 require(['static/3rd.party/jquery-ui.min.js']).done(function () {
                     appBaton.$.widgets.sortable({
                         cancel: 'li.protected',

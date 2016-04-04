@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/find/apiproxy',[
+define('io.ox/find/apiproxy', [
     'io.ox/core/extensions',
     'io.ox/find/api',
     'io.ox/core/notifications',
@@ -61,7 +61,7 @@ define('io.ox/find/apiproxy',[
          * @param  {[type]} data [description]
          * @return {deferred} returns available facets
          */
-        function extend (request, data) {
+        function extend(request, data) {
             var baton = ext.Baton.ensure({
                 app: app,
                 data: data.facets,
@@ -83,7 +83,7 @@ define('io.ox/find/apiproxy',[
          * @return {deferred} returns available facets
          * extended into one new options object
          */
-        function autocomplete (request) {
+        function autocomplete(request) {
             // create request params
             request.data.facets = model.manager.getRequest();
             request.data.options = request.data.options || {};
@@ -91,8 +91,9 @@ define('io.ox/find/apiproxy',[
             // request.data.options.folder = app.get('parent').folder.get();
 
             // ignore virtual folders
-            if (/^virtual/.test(request.data.options.folder) && !app.isMandatory('folder'))
+            if (/^virtual/.test(request.data.options.folder) && !app.isMandatory('folder')) {
                 request.data.options.folder = undefined;
+            }
 
             // call api
             return api.autocomplete(request).then(extend.bind(this, request));
@@ -116,11 +117,11 @@ define('io.ox/find/apiproxy',[
                 // suggestions
                 search: function (query) {
                     var standard = {
-                            params: { module: app.getModuleParam() },
-                            data: { prefix: query }
-                        };
+                        params: { module: app.getModuleParam() },
+                        data: { prefix: query }
+                    };
 
-                    function updateModel (data) {
+                    function updateModel(data) {
                         model.set({
                             query: query
                         });

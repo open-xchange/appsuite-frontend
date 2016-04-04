@@ -13,8 +13,9 @@
 
 define('io.ox/core/pdf/pdfview', [
     'io.ox/core/pdf/pdftextlayerbuilder',
+    'io.ox/core/pdf/pdfannotationslayerbuilder',
     'less!io.ox/core/pdf/pdfstyle'
-], function (PDFTextLayerBuilder) {
+], function (PDFTextLayerBuilder, PDFAnnotationsLayerBuilder) {
 
     'use strict';
 
@@ -45,7 +46,8 @@ define('io.ox/core/pdf/pdfview', [
         MAXIMUM_SIDE_SIZE = (_.browser.iOS || _.browser.Android || _.browser.Safari || _.browser.IE <= 10) ? 2156 : 4096,
 
         /**
-         * Queues the render calls for execution. The last call added is the first one to be executed (last in, first out).
+         * Queues the render calls for execution. The first call added
+         * is the first one to be executed (first in, first out).
          * Waits after every render call an amount of 250ms before executing the next one.
          */
         handleRenderQueue = (function () {
@@ -53,8 +55,8 @@ define('io.ox/core/pdf/pdfview', [
                 queue = [];
 
             return function (deferred) {
-                // add the deferred to the beginning of the queue
-                queue.unshift(deferred);
+                // add the deferred to the end of the queue
+                queue.push(deferred);
 
                 lastDef = lastDef.then(function () {
                     var def = $.Deferred(),
@@ -181,7 +183,7 @@ define('io.ox/core/pdf/pdfview', [
                 pageChildren = textWrapperNode.children();
                 _.each(pageChildren, function (child, index) {
                     // Non IPAD case
-                    if (!(Modernizr.touch && _.browser.iOS && _.browser.Safari)) {
+                    if (!(_.device('touch') && _.browser.iOS && _.browser.Safari)) {
                         child.style.margin = margin;
                         child.style.padding = padding;
                         child.style.transformOrigin = origin;
@@ -284,7 +286,7 @@ define('io.ox/core/pdf/pdfview', [
                             }
                         });
 
-                        $.when.apply($, renderDefs).always( function () {
+                        $.when.apply($, renderDefs).always(function () {
                             // notify possible <code>renderCallbacks.endRendering</code> callback function
                             if (_.isObject(renderCallbacks) && _.isFunction(renderCallbacks.endRendering)) {
                                 renderCallbacks.endRendering(pagesToRender);
@@ -353,7 +355,7 @@ define('io.ox/core/pdf/pdfview', [
         this.setRenderCallbacks = function (callbacks) {
             this.clearRenderCallbacks();
 
-            if (_.isObject(callbacks) && _.isFunction(callbacks.getVisiblePageNumbers) &&  _.isFunction(callbacks.getPageNode)) {
+            if (_.isObject(callbacks) && _.isFunction(callbacks.getVisiblePageNumbers) && _.isFunction(callbacks.getPageNode)) {
                 renderCallbacks = callbacks;
                 intervalId = window.setInterval(intervalHandler, 100);
             }
@@ -413,25 +415,34 @@ define('io.ox/core/pdf/pdfview', [
          * @param {jquery.Node} parentNode
          *  The parent node to be rendered within.
          *
-         * @param {Number} pageNumber
+         * @param {Object} options
+         *  Additional rendering options, defaulted by the global options.
          *
-         * @param {Number} pageZoom
+         *  @param {Number} [pageNumber]
+         *      The 1-based page number.
          *
-         * @returns {jquery Promise}
-         *  The promise of the rendering function, that is resolved, when rendering is finshed.
+         *  @param {Number} [pageZoom]
+         *      The page zoom level.
+         *
+         *  @param {Boolean} [textOverlay]
+         *      If true overlay divs over the PDF text are created
+         *      to provide text-selection functionality for the PDF.
+         *
+         * @returns {Object}
+         *  The page size object the page was rendered with.
          */
         this.createPDFPageNode = function (parentNode, options) {
-            var // the jquery parent node
-                jqParentNode = $(parentNode),
-                options = options || {},
-                pageSize = options.pageSize;
+            var opt = _.extend({}, globalOptions, options);
+            var pageSize = opt.pageSize;
+            var pageNumer = opt.pageNumer;
+            var pageZoom = opt.pageZoom;
 
             if (!(_.isObject(pageSize) && _.isNumber(pageSize.width) && _.isNumber(pageSize.height))) {
-                pageSize = _.isNumber(options.pageNumer) ? pdfDocument.getOriginalPageSize(options.pageNumer) : pdfDocument.getDefaultPageSize();
+                pageSize = _.isNumber(pageNumer) ? pdfDocument.getOriginalPageSize(pageNumer) : pdfDocument.getDefaultPageSize();
             }
 
-            if (_.isNumber(options.pageZoom)) {
-                pageSize = PDFView.getNormalizedSize({ width: pageSize.width * options.pageZoom, height: pageSize.height * options.pageZoom });
+            if (_.isNumber(pageZoom)) {
+                pageSize = PDFView.getNormalizedSize({ width: pageSize.width * pageZoom, height: pageSize.height * pageZoom });
             }
 
             // set retrieved PDF page size as page node data and append correctly initialized canvas to given page node
@@ -442,12 +453,12 @@ define('io.ox/core/pdf/pdfview', [
 
                 pageNode.append(canvasWrapper.append($('<canvas ' + extentAttr + '>')));
 
-                if (options.textOverlay) {
+                if (opt.textOverlay) {
                     var textWrapper = $('<div class="text-wrapper user-select-text" ' + extentAttr + '>');
                     pageNode.append(textWrapper);
                 }
 
-                jqParentNode.append(pageNode);
+                $(parentNode).append(pageNode);
             }
 
             return pageSize;
@@ -506,8 +517,7 @@ define('io.ox/core/pdf/pdfview', [
          */
         this.getPageZoom = function (pageNumber) {
             var curPageData = getPageData(pageNumber - 1);
-
-            return _.isNumber(pageNumber) ? (curPageData.pageZoom ? curPageData.pageZoom : 1.0) : 1.0;
+            return _.isNumber(pageNumber) && curPageData.pageZoom ? curPageData.pageZoom : 1.0;
         };
 
         // ---------------------------------------------------------------------
@@ -527,9 +537,13 @@ define('io.ox/core/pdf/pdfview', [
          *   The real size of the page in pixels, based on the original size and the pageZoom
          */
         this.getRealPageSize = function (pageNumber, pageZoom) {
-            var pageSize = _.isObject(pdfDocument) ? (_.isNumber(pageNumber) ? pdfDocument.getOriginalPageSize(pageNumber) : pdfDocument.getDefaultPageSize()) : null,
-                curPageZoom = this.getPageZoom(pageNumber, pageZoom);
-
+            var pageSize = null,
+                curPageZoom = _.isNumber(pageZoom) ? pageZoom : this.getPageZoom(pageNumber);
+            if (_.isObject(pdfDocument)) {
+                pageSize = _.isNumber(pageNumber) ?
+                            pdfDocument.getOriginalPageSize(pageNumber) :
+                            pdfDocument.getDefaultPageSize();
+            }
             return _.isObject(pageSize) ? { width: Math.ceil(curPageZoom * pageSize.width), height: Math.ceil(curPageZoom * pageSize.height) } : { width: 0, height: 0 };
         };
 
@@ -563,7 +577,7 @@ define('io.ox/core/pdf/pdfview', [
             }
 
             // reset isInRendering flag after rendering is done or in failure case
-            def.always( function () {
+            def.always(function () {
                 if (pageData[pagePos]) {
                     pageData[pagePos].isInRendering = null;
                 }
@@ -575,7 +589,7 @@ define('io.ox/core/pdf/pdfview', [
 
                 var renderDef = $.Deferred();
                 renderDef.done(function () {
-                    pdfDocument.getPDFJSPage(pageNumber).then( function (pdfjsPage) {
+                    pdfDocument.getPDFJSPage(pageNumber).then(function (pdfjsPage) {
                         if (pageNode.children().length) {
                             var viewport = getPageViewport(pdfjsPage, pageZoom),
                                 pageSize = PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }),
@@ -584,12 +598,12 @@ define('io.ox/core/pdf/pdfview', [
                                 canvasNode = canvasWrapperNode.children('canvas'),
                                 textWrapperNode = pageNode.children('.text-wrapper'),
                                 pdfTextBuilder = null,
+                                pdfAnnotationsBuilder = null,
                                 getScale = function (orgSize) {
                                     if (orgSize * DEVICE_OUTPUTSCALING > MAXIMUM_SIDE_SIZE) {
                                         return MAXIMUM_SIDE_SIZE / (orgSize * DEVICE_OUTPUTSCALING);
-                                    } else {
-                                        return DEVICE_OUTPUTSCALING;
                                     }
+                                    return DEVICE_OUTPUTSCALING;
                                 },
                                 xScale = getScale(scaledSize.width),
                                 yScale = getScale(scaledSize.height);
@@ -614,6 +628,16 @@ define('io.ox/core/pdf/pdfview', [
                                 });
                             }
 
+                            if (globalOptions.annotationsOverlay) {
+                                pdfAnnotationsBuilder = new PDFAnnotationsLayerBuilder({
+                                    pageDiv: pageNode[0],
+                                    pdfPage: pdfjsPage,
+                                    linkService: globalOptions.linkService
+                                });
+
+                                pdfAnnotationsBuilder.setupAnnotations(viewport);
+                            }
+
                             var canvasCtx = canvasNode[0].getContext('2d');
 
                             canvasCtx._transformMatrix = [xScale, 0, 0, yScale, 0, 0];
@@ -622,21 +646,19 @@ define('io.ox/core/pdf/pdfview', [
                             return pdfjsPage.render({
                                 canvasContext: canvasCtx,
                                 viewport: viewport
-                            }).then( function () {
+                            }).then(function () {
                                 if (pdfTextBuilder) {
-                                    return pdfjsPage.getTextContent().then( function (pdfTextContent) {
+                                    return pdfjsPage.getTextContent().then(function (pdfTextContent) {
                                         pdfTextBuilder.setTextContent(pdfTextContent);
                                         pdfTextBuilder.render();
                                         prepareTextLayerForTextSelection(textWrapperNode);
                                         return def.resolve();
                                     });
-                                } else {
-                                    def.resolve();
                                 }
+                                def.resolve();
                             });
-                        } else {
-                            return def.reject();
                         }
+                        return def.reject();
                     });
                 });
                 handleRenderQueue(renderDef);

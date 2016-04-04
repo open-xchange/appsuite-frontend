@@ -17,7 +17,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
     'io.ox/mail/api',
     'io.ox/core/capabilities',
     'gettext!io.ox/mail'
-], function (ext, links, api, capabilities, gt) {
+], function (ext, links, api, cap, gt) {
 
     'use strict';
 
@@ -115,7 +115,6 @@ define('io.ox/mail/mobile-toolbar-actions', [
             icon: 'fa fa-archive',
             //#. Verb: (to) archive messages
             label: gt.pgettext('verb', 'Archive'),
-            section: 'file-op',
             ref: 'io.ox/mail/actions/archive',
             cssClasses: 'io-ox-action-link mobile-toolbar-action'
         }
@@ -141,8 +140,11 @@ define('io.ox/mail/mobile-toolbar-actions', [
     addAction(pointDetailView, ['reply', 'reply-all', 'delete', 'forward']);
 
     //multiselect in listview
+
     var actionList = ['delete', 'forward', 'move'];
-    if (capabilities.has('archive_emails')) actionList.push('archive');
+
+    if (cap.has('archive_emails')) actionList.push('archive');
+
     addAction(pointListViewMultiSelect, actionList);
 
     pointDetailView.extend(new links.Dropdown({
@@ -159,12 +161,13 @@ define('io.ox/mail/mobile-toolbar-actions', [
     // add submenu as text link to toolbar in multiselect
     pointListViewMultiSelect.extend(new links.Dropdown({
         index: 50,
-        label: $('<span>').text(
-            //.# Will be used as menu heading in mail module which then shows the sub-actions "mark as read" and "mark as unread"
-            gt('Mark as')
-        ),
+        icon: 'fa fa-bars',
+        prio: 'hi',
+        mobile: 'hi',
+        label: gt('Actions'),
         // don't draw the caret icon beside menu link
         noCaret: true,
+        classes: 'io-ox-action-link mobile-toolbar-action',
         ref: 'io.ox/mail/mobile/toolbar/submenuActions'
     }));
 
@@ -185,7 +188,6 @@ define('io.ox/mail/mobile-toolbar-actions', [
     }));
 
     var updateToolbar = _.debounce(function (selection) {
-
         if (!selection) return;
 
         // remember if this list is based on a single thread
@@ -196,8 +198,11 @@ define('io.ox/mail/mobile-toolbar-actions', [
         if (list.length === 0) isThread = false;
 
         // extract single object if length === 1
+
         list = list.length === 1 ? list[0] : list;
 
+        // don't set an empty baton
+        // if (selection.length === 0 && list.length === 0) return;
         // draw toolbar
         var baton = ext.Baton({ data: list, isThread: isThread, selection: selection, app: this });
 
@@ -251,11 +256,12 @@ define('io.ox/mail/mobile-toolbar-actions', [
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             // selection:action also triggers if the same mail is opened again, so the toolbar has to be drawn
             app.listView.on('selection:change change selection:action', function () {
+                var cp = app.pages.getCurrentPage();
                 // don't update in folderview
-                if (app.pages.getCurrentPage().name === 'folderTree') return;
+                if (cp.name === 'folderTree') return;
                 // if there's a thread-mail baton already set, don't overwrite it
                 // Happens becuase the change event occurs later than the "showmail" event
-                if (app.pages.getCurrentPage().toolbar.baton.threadMember) return;
+                if (cp.toolbar && cp.toolbar.baton.threadMember) return;
                 app.updateToolbar(app.listView.selection.get());
             });
 

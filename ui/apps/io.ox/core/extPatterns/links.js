@@ -138,7 +138,7 @@ define('io.ox/core/extPatterns/links', [
         if (!process) return;
 
         // add least one desription exists so inject dividers
-        if (!extension.description) { return injectDescriptionDividers(this);}
+        if (!extension.description) return injectDescriptionDividers(this);
 
         // add help description
         var id = extension.ref.replace(/\//g, '-') + '-descr';
@@ -172,11 +172,11 @@ define('io.ox/core/extPatterns/links', [
                 this.append(
                     $('<li>').attr({ role: 'presentation' }).append(
                         link = $('<a>').attr({
-                                    'data-action': extension.ref,
-                                    role: 'menuitem',
-                                    href: '#',
-                                    tabindex: 1
-                                }).text(extension.label)
+                            'data-action': extension.ref,
+                            role: 'menuitem',
+                            href: '#',
+                            tabindex: 1
+                        }).text(extension.label)
                                 .on('click', { baton: baton, extension: extension }, actionClick)
                     )
                 );
@@ -342,7 +342,7 @@ define('io.ox/core/extPatterns/links', [
         // loop over all items and visually group by "section"
         var list = node.children('li');
         node.children('li').each(function (index, node) {
-            var node = $(node);
+            node = $(node);
             // get descriptions
             if (!node.hasClass('dropdown-description')) return;
             // related link is not first child && divider not already added
@@ -415,14 +415,15 @@ define('io.ox/core/extPatterns/links', [
                             'data-toggle': 'dropdown',
                             'data-action': 'more',
                             'aria-haspopup': true,
-                            'aria-label': isSmartphone ? gt('Actions') : gt('More')
+                            'aria-label': isSmartphone ? gt('Actions') : gt('More actions'),
+                            'title': isSmartphone ? gt('Actions') : gt('More actions')
                         })
                         .append(
                             isSmartphone && !extension.compactDropdown ?
                                 $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
                                 $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
                         )
-                        .on(Modernizr.touch ? 'touchstart' : 'click', function () {
+                        .on(_.device('touch') ? 'touchstart' : 'click', function () {
                             // fix dropdown position on-the-fly
                             var left = $(this).parent().position().left;
                             $(this).next().attr('class', 'dropdown-menu' + (left < 200 ? '' : ' pull-right'));
@@ -433,10 +434,24 @@ define('io.ox/core/extPatterns/links', [
                     )
                 );
 
+                if (!isSmartphone) {
+                    dd.attr({
+                        'data-placement': 'bottom',
+                        'data-animation': 'false',
+                        'data-container': 'body'
+                    })
+                    .tooltip({ trigger: 'hover' })
+                    .parent()
+                    .on('shown.bs.dropdown dispose', function () {
+                        $(this).children('a').tooltip('hide');
+                    });
+                }
+
                 //in firefox draggable=false is not enough to prevent dragging...
                 if (_.device('firefox')) {
                     dd.attr('ondragstart', 'return false;');
                 }
+
                 dd.dropdown();
                 injectDividers(nav.find('ul'));
             }
@@ -526,14 +541,14 @@ define('io.ox/core/extPatterns/links', [
         var label = baton.label || options.label,
             args = $.makeArray(arguments),
             node = baton.$el || $('<div>'),
-            ul, toggle;
+            ul;
 
         // label: Use baton or String or DOM node
         label = _.isString(label) ? $.txt(label) : label;
         // build dropdown
         this.append(
             node.addClass('dropdown').append(
-                toggle = $('<a href="#" role="button" tabindex="1">').attr({
+                $('<a href="#" role="button" tabindex="1">').attr({
                     'data-toggle': 'dropdown',
                     'aria-haspopup': true,
                     'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
@@ -541,7 +556,7 @@ define('io.ox/core/extPatterns/links', [
                 .addClass(options.smart ? 'smart-dropdown' : '')
                 .append(
                     options.icon ? $('<i>').addClass(options.icon).attr({ title: label.textContent, 'aria-hidden': true }) : label,
-                    options.noCaret ? $() : $('<i class="fa fa-caret-down">').attr({ 'aria-hidden': true })
+                    options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
                 ),
                 ul = $('<ul class="dropdown-menu" role="menu">')
             )
@@ -576,7 +591,7 @@ define('io.ox/core/extPatterns/links', [
     var DropdownLinks = function (options, baton, wrap) {
         options = options || {};
         baton.$el = $('<ul class="dropdown-menu" role="menu">');
-        var wrap = options.wrap === undefined ? true : !!options.wrap;
+        wrap = !!_.defaultValue(options.wrap, true);
         drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap).done(function () {
             // if dropdown is emtpy and we have an empty-callback, execute it(some async drawing methods use this)
             if (!baton.$el) return;

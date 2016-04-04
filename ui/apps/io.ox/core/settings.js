@@ -174,9 +174,8 @@ define('io.ox/core/settings', [
                             meta = data[0].meta;
                             saved = JSON.parse(JSON.stringify(tree));
                             return applyDefaults();
-                        } else {
-                            return $.when();
                         }
+                        return $.when();
                     },
                     function fail(e) {
                         tree = {};
@@ -204,11 +203,10 @@ define('io.ox/core/settings', [
             } else if (ox.online) {
                 // online
                 return load();
-            } else {
-                // offline
-                self.detach();
-                return $.Deferred().resolve({ tree: tree, meta: meta });
             }
+            // offline
+            self.detach();
+            return $.Deferred().resolve({ tree: tree, meta: meta });
         };
 
         this.clear = function () {
@@ -303,9 +301,9 @@ define('io.ox/core/settings', [
                     var list = _.isArray(this) ? this : [this];
                     _.each(list, function (current) {
                         if (current.state) {
-                            console.warn('SAVEANDYELL: ' +  current.state());
+                            console.warn('SAVEANDYELL: ' + current.state());
                         } else if (def.state) {
-                            console.warn('SAVEANDYELL: ' +  def.state());
+                            console.warn('SAVEANDYELL: ' + def.state());
                         }
                     });
                 });

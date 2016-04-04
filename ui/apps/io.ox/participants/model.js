@@ -81,6 +81,7 @@ define('io.ox/participants/model', [
                             newType = this.TYPE_EXTERNAL_USER;
                         }
                         break;
+                    // no default
                 }
                 this.set('type', newType);
             }
@@ -99,22 +100,18 @@ define('io.ox/participants/model', [
             // It's a kind of magic
             // convert external user having an internal user id to internal users
             if (this.has('field')) {
-                if (this.get('field') === 'email1') {
-                    if (this.get('type') === this.TYPE_EXTERNAL_USER && this.get('internal_userid')) {
-                        this.set({
-                            'type': this.TYPE_USER,
-                            'contact_id': this.get('id'),
-                            'id': this.get('internal_userid')
-                        });
-                    }
-                } else {
-                    if (this.get('type') === this.TYPE_USER && this.get('contact_id')) {
-                        this.set({
-                            'type': this.TYPE_EXTERNAL_USER,
-                            'internal_userid': this.get('id'),
-                            'id': this.get('contact_id')
-                        });
-                    }
+                if (this.get('field') === 'email1' && this.get('type') === this.TYPE_EXTERNAL_USER && this.get('internal_userid')) {
+                    this.set({
+                        'type': this.TYPE_USER,
+                        'contact_id': this.get('id'),
+                        'id': this.get('internal_userid')
+                    });
+                } else if (this.get('field') !== 'email1' && this.get('type') === this.TYPE_USER && this.get('contact_id')) {
+                    this.set({
+                        'type': this.TYPE_EXTERNAL_USER,
+                        'internal_userid': this.get('id'),
+                        'id': this.get('contact_id')
+                    });
                 }
             }
 
@@ -131,9 +128,8 @@ define('io.ox/participants/model', [
         getContactID: function () {
             if (this.get('type') === this.TYPE_USER && this.get('contact_id')) {
                 return this.get('contact_id');
-            } else {
-                return this.get('id');
             }
+            return this.get('id');
         },
 
         getDisplayName: function () {
@@ -165,9 +161,8 @@ define('io.ox/participants/model', [
                 return this.get('mail_field');
             } else if (this.get('field')) {
                 return parseInt(this.get('field').slice(-1), 10);
-            } else {
-                return 0;
             }
+            return 0;
         },
 
         getAPIData: function () {
@@ -222,13 +217,12 @@ define('io.ox/participants/model', [
                     if (this.get('display_name') && 'image1_url' in this.attributes) break;
                     if (this.get('id') && this.get('folder_id')) {
                         return contactAPI.get(this.pick('id', 'folder_id')).then(update);
-                    } else {
-                        return contactAPI.getByEmailaddress(this.getEmail()).then(partialUpdate);
                     }
-                    break;
+                    return contactAPI.getByEmailaddress(this.getEmail()).then(partialUpdate);
                 case this.TYPE_DISTLIST:
                     if (this.get('display_name') && 'distribution_list' in this.attributes) break;
                     return contactAPI.get(this.pick('id', 'folder_id')).then(update);
+                // no default
             }
 
             return $.when();
@@ -270,14 +264,10 @@ define('io.ox/participants/model', [
                 .each(function (participant) {
                     // resolve distribution lists
                     var add;
-                    if (participant instanceof self.model) {
-                        if (participant.get('mark_as_distributionlist')) {
-                            add = participant.get('distribution_list');
-                        }
-                    } else {
-                        if (participant.mark_as_distributionlist) {
-                            add = participant.distribution_list;
-                        }
+                    if (participant instanceof self.model && participant.get('mark_as_distributionlist')) {
+                        add = participant.get('distribution_list');
+                    } else if (participant.mark_as_distributionlist) {
+                        add = participant.distribution_list;
                     }
                     _([].concat(add || participant)).each(function (data) {
                         // check if model

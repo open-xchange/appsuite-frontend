@@ -9,7 +9,7 @@
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
-define('io.ox/core/viewer/views/types/audioview',  [
+define('io.ox/core/viewer/views/types/audioview', [
     'io.ox/core/viewer/views/types/baseview',
     'io.ox/files/api',
     'gettext!io.ox/core'

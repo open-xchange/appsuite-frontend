@@ -22,7 +22,8 @@ define('io.ox/preview/main', [
 
     'use strict';
 
-    var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
+    // was: Modernizr.draganddrop but that test is gone
+    var supportsDragOut = !!_.browser.Chrome;
     var dragOutHandler = $.noop;
     var clickableLink = $.noop;
 
@@ -290,10 +291,12 @@ define('io.ox/preview/main', [
         this.options = options || {};
 
         //ensure integer (if numeric) for valid url params
-        if (this.options.width && _.isNumber(this.options.width))
+        if (this.options.width && _.isNumber(this.options.width)) {
             this.options.width = Math.floor(this.options.width);
-        if (this.options.height && _.isNumber(this.options.height))
+        }
+        if (this.options.height && _.isNumber(this.options.height)) {
             this.options.height = Math.floor(this.options.height);
+        }
 
         this.renderer = null;
 

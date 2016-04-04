@@ -142,14 +142,12 @@ define('io.ox/mail/util', [
                     target = that.cleanupPhone(match[3]);
                 }
                 name = util.unescapeDisplayName(match[1]);
-            } else {
+            } else if (that.getChannel(recipient) === 'email') {
                 // case 2: assume plain email address / telephone number
-                if (that.getChannel(recipient) === 'email') {
-                    target = recipient.replace(rMailCleanup, '').toLowerCase();
-                    name = target.split(/@/)[0];
-                } else {
-                    name = target = that.cleanupPhone(recipient);
-                }
+                target = recipient.replace(rMailCleanup, '').toLowerCase();
+                name = target.split(/@/)[0];
+            } else {
+                name = target = that.cleanupPhone(recipient);
             }
             return [name, target];
         },
@@ -178,8 +176,9 @@ define('io.ox/mail/util', [
                             message = that.removeChannelSuffix(message);
                         });
                     } else if (_.isObject(mail)) {
-                        if (mail.from && _.isArray(mail.from[0]) && mail.from[0][1])
+                        if (mail.from && _.isArray(mail.from[0]) && mail.from[0][1]) {
                             mail.from[0][1] = remove(mail.from[0][1]);
+                        }
                         if (_.isArray(mail.to)) {
                             _.each(mail.to, function (recipient) {
                                 recipient[1] = remove(recipient[1]);
@@ -252,7 +251,7 @@ define('io.ox/mail/util', [
 
                 if (i < $i - 1) {
                     tmp.append(
-                        $('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2014 ')))
+                        $('<span class="delimiter">').text(',\u00A0\u00A0\u00A0 ')
                     );
                 }
             }
@@ -396,8 +395,9 @@ define('io.ox/mail/util', [
             if (subject === '') return gt('No subject');
 
             // remove mailing list stuff (optional)
-            if (settings.get('features/cleanSubjects', false))
+            if (settings.get('features/cleanSubjects', false)) {
                 subject = subject.replace(/\[[^\[]*\]\s*/g, '');
+            }
 
             return keepFirstPrefix ?
                 subject.replace(/^((re|fwd|aw|wg):\s?)((re|fwd|aw|wg):\s?)*/i, '$1') :
@@ -428,8 +428,7 @@ define('io.ox/mail/util', [
         },
 
         getFullDate: function (timestamp) {
-            if (!_.isNumber(timestamp))
-                return gt('unknown');
+            if (!_.isNumber(timestamp)) return gt('unknown');
             return moment(timestamp).format('l LT');
         },
 
@@ -443,8 +442,7 @@ define('io.ox/mail/util', [
                 MINUTE = 60 * 1000,
                 HOUR = MINUTE * 60;
             console.warn('This method is deprecated and will be removed with 7.6.0 or at any random date later');
-            if (!_.isNumber(timestamp))
-                return gt('unknown');
+            if (!_.isNumber(timestamp)) return gt('unknown');
             var now = new Date(),
                 zone = now.getTimezoneOffset(),
                 time = now.getTime() - zone * 60 * 1000,
@@ -456,16 +454,14 @@ define('io.ox/mail/util', [
                 if (delta < HOUR) {
                     n = Math.ceil(delta / MINUTE);
                     return String(format(ngettext('%d minute ago', '%d minutes ago', n), n)); /*i18n*/
-                } else {
-                    n = Math.ceil(delta / HOUR);
-                    return String(format(ngettext('%d hour ago', '%d hours ago', n), n)); /*i18n*/
                 }
+                n = Math.ceil(delta / HOUR);
+                return String(format(ngettext('%d hour ago', '%d hours ago', n), n)); /*i18n*/
             } else if (d.getDate() === now.getDate() - 1) {
                 // yesterday
                 return 'Yesterday';
-            } else {
-                return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
             }
+            return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
         },
 
         count: function (data) {
@@ -542,6 +538,13 @@ define('io.ox/mail/util', [
                 .replace(/data-mce-src="[^"]+"\s?/, '');
         },
 
+        parseMsgref: function (separator, msgref) {
+            var base = _(msgref.toString().split(separator)),
+                id = base.last(),
+                folder = base.without(id).join(separator);
+            return { folder_id: folder, id: id };
+        },
+
         signatures: (function () {
 
             var looksLikeHTML = function (text) {
@@ -564,18 +567,17 @@ define('io.ox/mail/util', [
                             $parsed.text(clean);
                         }
                         return $parsed.html();
-                    } else {
-                        if (!looksLikeHTML(clean)) {
-                            $parsed.text(clean);
-                        }
-                        $parsed.find('p').replaceWith(function () {
-                            return $(this).html() + '\n\n';
-                        });
-                        $parsed.find('br').replaceWith(function () {
-                            return $(this).html() + '\n';
-                        });
-                        return $parsed.text().trim();
                     }
+                    if (!looksLikeHTML(clean)) {
+                        $parsed.text(clean);
+                    }
+                    $parsed.find('p').replaceWith(function () {
+                        return $(this).html() + '\n\n';
+                    });
+                    $parsed.find('br').replaceWith(function () {
+                        return $(this).html() + '\n';
+                    });
+                    return $parsed.text().trim();
                 },
                 preview = function (text) {
                     return general(text)
@@ -601,20 +603,18 @@ define('io.ox/mail/util', [
                         // consider changes applied by appsuite
                         var clean = add(signature.content, !!isHTML);
                         // consider changes applied by tiny
-                        if (clean === '') {
-                            return '<br>';
-                        } else {
-                            return clean
-                                // set breaks
-                                .replace(/(\r\n|\n|\r)/g, '<br>')
-                                // replace surrounding white-space (except linebreaks)
-                                .replace(/>[\t\f\v ]+/g, '>')
-                                .replace(/[\t\f\v ]+</g, '<')
-                                // remove empty alt attribute(added by tiny)
-                                .replace(/ alt=""/, '');
-                        }
+                        if (clean === '') return '<br>';
+
+                        return clean
+                            // set breaks
+                            .replace(/(\r\n|\n|\r)/g, '<br>')
+                            // replace surrounding white-space (except linebreaks)
+                            .replace(/>[\t\f\v ]+/g, '>')
+                            .replace(/[\t\f\v ]+</g, '<')
+                            // remove empty alt attribute(added by tiny)
+                            .replace(/ alt=""/, '');
                     });
-                    return _(signatures).indexOf(add(text, !!isHTML)) > - 1;
+                    return _(signatures).indexOf(add(text, !!isHTML)) > -1;
                 }
             };
         })(),
@@ -638,7 +638,7 @@ define('io.ox/mail/util', [
             return function (data) {
                 data = data || {};
                 var i, $i, obj, dat, attachments = [],
-                mail = { id: data.id, folder_id: data.folder_id };
+                    mail = { id: data.id, folder_id: data.folder_id };
 
                 // get nested messages
                 for (i = 0, $i = (data.nested_msgs || []).length; i < $i; i++) {
@@ -667,7 +667,7 @@ define('io.ox/mail/util', [
 
                 //fix referenced mail
                 if (data.parent && mail && mail.folder_id === undefined) {
-                    mail.id =  data.parent.id;
+                    mail.id = data.parent.id;
                     mail.folder_id = data.parent.folder_id;
                 }
 

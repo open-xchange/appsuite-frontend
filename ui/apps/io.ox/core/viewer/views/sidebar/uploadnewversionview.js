@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -30,7 +31,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     /**
      * notifications lazy load
      */
-    function notify () {
+    function notify() {
         var self = this, args = arguments;
         require(['io.ox/core/notifications'], function (notifications) {
             notifications.yell.apply(self, args);
@@ -66,7 +67,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         id: 'primary',
         draw: function (baton) {
             var self = this;
-            baton.$.addPrimaryButton('upload', gt('Upload'), 'upload',  { 'tabIndex': '1' })
+            baton.$.addPrimaryButton('upload', gt('Upload'), 'upload', { 'tabIndex': '1' })
                 .on('upload', function () {
                     var comment = baton.$.getContentNode().find('textarea.comment').val() || '';
                     // upload file
@@ -79,7 +80,12 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         index: 400,
         id: 'cancel',
         draw: function (baton) {
-            baton.$.addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' });
+            var self = this;
+            baton.$.addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+                .on('cancel', function () {
+                    // reset file input
+                    _.first(self.$('input[type="file"]')).value = '';
+                });
         }
     });
 
@@ -117,9 +123,9 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
 
             // open dropdown for
             var baton = ext.Baton({
-                    data: this.getFile(),
-                    $: new Dialogs.ModalDialog()
-                });
+                data: this.getFile(),
+                $: new Dialogs.ModalDialog()
+            });
             // draw modal body
             ext.point(POINT + '/dialog').invoke('draw', this, baton);
 
@@ -131,10 +137,10 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
 
         upload: function (comment) {
             var data = {
-                    file: this.getFile(),
-                    id: this.model.get('id'),
-                    folder: this.model.get('folder_id')
-                };
+                file: this.getFile(),
+                id: this.model.get('id'),
+                folder: this.model.get('folder_id')
+            };
 
             if (COMMENTS) data.version_comment = comment || '';
 
@@ -165,7 +171,9 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
                             buttontext: gt('Upload new version')
                         })
                     );
-                });
+                    // Extension point required for Guard implementation
+                    ext.point('io.ox/core/viewer/views/sidebarview/uploadnewversion').invoke('draw', this);
+                }.bind(this));
             }.bind(this));
             return this;
         },

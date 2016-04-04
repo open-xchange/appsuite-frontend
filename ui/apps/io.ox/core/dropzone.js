@@ -36,21 +36,22 @@ define('io.ox/core/dropzone', [], function () {
         onDrag: function (e) {
             if (!this.$el.parent().is(':visible')) return;
             switch (e.type) {
-            case 'dragenter':
-            case 'dragover':
-                this.stop(e);
-                this.leaving = false;
-                if (!this.visible) this.show(e);
-                return false;
-            case 'dragleave':
-                this.leaving = true;
-                clearTimeout(this.timeout);
-                this.timeout = setTimeout(this.onLeave.bind(this), 100, e);
-                break;
-            case 'drop':
-                this.stop(e);
-                this.hide();
-                return false;
+                case 'dragenter':
+                case 'dragover':
+                    this.stop(e);
+                    this.leaving = false;
+                    if (!this.visible) this.show(e);
+                    return false;
+                case 'dragleave':
+                    this.leaving = true;
+                    clearTimeout(this.timeout);
+                    this.timeout = setTimeout(this.onLeave.bind(this), 100, e);
+                    break;
+                case 'drop':
+                    this.stop(e);
+                    this.hide();
+                    return false;
+                // no default
             }
         },
 
@@ -188,7 +189,7 @@ define('io.ox/core/dropzone', [], function () {
 
             this.$el.hide().append(
                 $('<div class="abs dropzone-caption">').text(this.options.caption || ''),
-                $('<div class="abs dropzone-dragover"><i class="fa fa-check"></i></div>'),
+                $('<div class="abs dropzone-dragover"><i class="fa fa-check" aria-hidden="true"></i></div>'),
                 $('<div class="abs dropzone-overlay">')
             );
 

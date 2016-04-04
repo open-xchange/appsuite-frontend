@@ -188,20 +188,22 @@ define('io.ox/mail/mailfilter/settings/filter', [
         editMailfilter: function ($node, baton) {
 
             var createExtpointForSelectedFilter = function (node, args, config) {
-                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
-                };
+                ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
+            };
 
             return $.when(api.getRules(), api.getConfig()).then(function (data, config) {
-                var data = data[0],
-                    config = config[0];
+                data = data[0];
+                config = config[0];
 
                 collection = factory.createCollection(data);
                 collection.comparator = function (model) {
                     return model.get('position');
                 };
 
-                var FilterSettingsView = DisposableView.extend({
+                var FilterSettingsView,
+                    MailfilterEdit;
 
+                FilterSettingsView = DisposableView.extend({
                     tagName: 'li',
 
                     className: 'widget-settings-view',
@@ -229,7 +231,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         }
 
                         function getEditableState() {
-                            return (checkForUnknown() === 'unknown' || _.contains(['autoforward', 'spam', 'vacation'], flag))  ? 'fixed' : 'editable';
+                            return (checkForUnknown() === 'unknown' || _.contains(['autoforward', 'spam', 'vacation'], flag)) ? 'fixed' : 'editable';
                         }
 
                         var title = self.model.get('rulename'),
@@ -320,28 +322,39 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         e.preventDefault();
                         var self = this,
                             id = self.model.get('id');
-                        if (id !== false) {
-                            //yell on reject
-                            settingsUtil.yellOnReject(
-                                api.deleteRule(id).done(function () {
-                                    var arrayOfFilters,
-                                        data;
-                                    self.model.collection.remove(id);
-                                    $node.find('.controls [data-action="add"]').focus();
 
-                                    arrayOfFilters = $node.find('li[data-id]');
-                                    data = _.map(arrayOfFilters, function (single) {
-                                        return parseInt($(single).attr('data-id'), 10);
-                                    });
+                        new dialogs.ModalDialog()
+                        .text(gt('Do you really want to delete this filter rule?'))
+                        .addPrimaryButton('delete', gt('Delete'), 'delete', { 'tabIndex': '1' })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+                        .show()
+                        .done(function (action) {
+                            if (action === 'delete') {
+                                if (id !== false) {
                                     //yell on reject
+                                    self.model.collection.remove(id);
                                     settingsUtil.yellOnReject(
-                                        api.reorder(data)
-                                    );
-                                    updatePositionInCollection(collection, data);
+                                        api.deleteRule(id).done(function () {
+                                            var arrayOfFilters,
+                                                data;
+                                            $node.find('.controls [data-action="add"]').focus();
 
-                                })
-                            );
-                        }
+                                            arrayOfFilters = $node.find('li[data-id]');
+                                            data = _.map(arrayOfFilters, function (single) {
+                                                return parseInt($(single).attr('data-id'), 10);
+                                            });
+                                            //yell on reject
+                                            settingsUtil.yellOnReject(
+                                                api.reorder(data)
+                                            );
+                                            updatePositionInCollection(collection, data);
+
+                                        })
+                                    );
+                                }
+                            }
+                        });
+
                     },
 
                     onEdit: function (e) {
@@ -397,21 +410,17 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         }
 
                         switch (e.which) {
-                        case 38:
-                            if (index > 0) {
-                                keyHandle('up');
-                            }
-                            break;
-                        case 40:
-                            if (index < items.length) {
-                                keyHandle('down');
-                            }
-                            break;
-                        default:
-                            break;
+                            case 38:
+                                if (index > 0) keyHandle('up');
+                                break;
+                            case 40:
+                                if (index < items.length) keyHandle('down');
+                                break;
+                            default:
+                                break;
                         }
                     }
-                }),
+                });
 
                 MailfilterEdit = Backbone.View.extend({
 
@@ -478,9 +487,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             stop: function (e, ui) {
                                 ui.item.attr('aria-grabbed', 'false');
                                 var arrayOfFilters = $node.find('li[data-id]'),
-                                data = _.map(arrayOfFilters, function (single) {
-                                    return parseInt($(single).attr('data-id'), 10);
-                                });
+                                    data = _.map(arrayOfFilters, function (single) {
+                                        return parseInt($(single).attr('data-id'), 10);
+                                    });
 
                                 //yell on reject
                                 settingsUtil.yellOnReject(
@@ -491,9 +500,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         });
                     }
 
-                }),
+                });
 
-                mailFilter = new MailfilterEdit();
+                var mailFilter = new MailfilterEdit();
+
                 $node.append(mailFilter.render().$el);
                 return collection;
             });

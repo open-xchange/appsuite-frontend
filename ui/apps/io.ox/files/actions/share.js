@@ -45,14 +45,13 @@ define('io.ox/files/actions/share', [
         if (type === 'invite') {
             // invite guests
             dialog
-                .addPrimaryButton('share', gt('Invite'), 'share')
-                .addButton('cancel', gt('Cancel'), 'cancel');
+                .addPrimaryButton('share', gt('Invite'), 'share', { tabIndex: 1 })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
         } else {
             // get a link (anonymouse)
-            // TODO: Offer "Remove link" (addAlternativeButton; which does what it says)
             dialog
-                .addPrimaryButton('share', gt('Done'), 'share')
-                .addButton('cancel', gt('Cancel'), 'cancel');
+                .addPrimaryButton('share', gt('Close'), 'share', { tabIndex: 1 })
+                .addAlternativeButton('remove', gt('Remove link'), 'remove', { tabIndex: 1 });
         }
 
         dialog.getContentNode().addClass('invisible')
@@ -66,11 +65,16 @@ define('io.ox/files/actions/share', [
                 .find('.btn-primary').prop('disabled', false);
         });
 
-        dialog.on('share', function () {
+        dialog
+            .on('share', function () {
                 view.share().then(this.close, this.idle);
             })
+            .on('remove', function () {
+                view.removeLink();
+                notifications.yell('success', gt('The link has been removed'));
+                this.close();
+            })
             .on('cancel', function () {
-                view.cancel();
                 this.close();
             });
 

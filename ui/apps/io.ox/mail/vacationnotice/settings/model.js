@@ -29,9 +29,9 @@ define('io.ox/mail/vacationnotice/settings/model', [
                 text: attributes.text
             },
 
-        preparedData = {
-            'actioncmds': [newAttributes]
-        };
+            preparedData = {
+                'actioncmds': [newAttributes]
+            };
 
         if (attributes.from) newAttributes.from = attributes.from;
 
@@ -56,9 +56,9 @@ define('io.ox/mail/vacationnotice/settings/model', [
         }
 
         var testForTimeframe = {
-                'id': 'allof',
-                'tests': []
-            };
+            'id': 'allof',
+            'tests': []
+        };
 
         if (attributes.dateFrom) {
             testForTimeframe.tests.push(
@@ -174,7 +174,7 @@ define('io.ox/mail/vacationnotice/settings/model', [
         subject: gt('Subject'),
         text: gt('Text'),
         days: gt('Number of days between vacation notices to the same sender'),
-        headlineAdresses: gt('Enabled for the following addresses'),
+        headlineAdresses: gt('Enable for the following addresses'),
         headlineSender: gt('Default sender for vacation notice'),
         addresses: gt('Email addresses'),
         dateFrom: gt('Start'),

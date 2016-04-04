@@ -119,6 +119,7 @@ define('io.ox/find/view-tokenfield', [
                 placeholder: gt('Search') + '...',
                 className: 'search-field',
                 delayedautoselect: true,
+                inputtype: 'search',
                 dnd: false,
                 // tokenfield options
                 hint: false,
@@ -136,7 +137,7 @@ define('io.ox/find/view-tokenfield', [
                         list = [];
                     // IMPORTANT: add models to collection (but not folder!)
                     // do not change folder facet values here (see bug 42395)
-                    manager.update(data, { keep: 'folder' } );
+                    manager.update(data, { keep: 'folder' });
                     data = manager.filter(function (facet) {
                         return facet.is('tokenfield') && !facet.is('hidden');
                     });
@@ -167,7 +168,7 @@ define('io.ox/find/view-tokenfield', [
                         var individual = ext.point(POINT + '/item/' + facetId);
 
                         // use special draw handler
-                        if (individual.list().length) {
+                        if (individual.list().length) {
                             // special
                             individual.invoke('draw', this, baton);
                         } else {
@@ -177,12 +178,7 @@ define('io.ox/find/view-tokenfield', [
                     };
 
                     var node = $('<div class="autocomplete-item">'),
-                        value = tokendata.model,
-                        facet = value.get('facet');
-
-                    var regular;
-
-                    regular = !facet.isType('simple') && !!facet.getName();
+                        value = tokendata.model;
 
                     draw.call(node, value);
 
@@ -201,11 +197,11 @@ define('io.ox/find/view-tokenfield', [
                 click: function (e, data) {
                     // apply selected filter
                     var baton = ext.Baton.ensure({
-                            // for in8
-                            deferred: $.Deferred().resolve(data.model),
-                            model: model//,
-                            //view: view
-                        });
+                        // for in8
+                        deferred: $.Deferred().resolve(data.model),
+                        model: model//,
+                        //view: view
+                    });
                     // data.model.activate()
                     ext.point(POINT + '/handler/click').invoke('flow', this, baton);
                 }
@@ -253,6 +249,14 @@ define('io.ox/find/view-tokenfield', [
             this.trigger(e.type, e);
         },
 
+        reopenDropdown: function () {
+            var api = this.hiddenapi;
+            if (api.dropdown.isOpen) return;
+            if (!this.getQuery()) return;
+            // skip internal check if query has changed an fire manually
+            api.input.trigger('queryChanged', api.input.query);
+        },
+
         disable: function () {
             this.api('disable');
         },
@@ -264,7 +268,7 @@ define('io.ox/find/view-tokenfield', [
         // register additional handlers
         register: function () {
             var self = this;
-            function preventOnCancel (e) {
+            function preventOnCancel(e) {
                 if ($(document.activeElement).is('body')) e.preventDefault();
             }
             //retrigger events on view
@@ -275,7 +279,7 @@ define('io.ox/find/view-tokenfield', [
                 'tokenfield:createdtoken',
                 'tokenfield:removetoken',
                 'tokenfield:removedtoken'
-                ].join(' '), _.bind(this.retrigger, this));
+            ].join(' '), _.bind(this.retrigger, this));
             // listen for tokenfield:events
             this.on({
                 // stop creation when cancel button is clicked while dropdown is open
@@ -289,8 +293,11 @@ define('io.ox/find/view-tokenfield', [
             this.ui.view.on({
                 'typeahead-custom:dropdown-rendered': _.bind(this.restoreSelection, this)
             });
-
-            //
+            // main view events
+            this.app.view.on({
+                'focusin': _.bind(self.reopenDropdown, self)
+            });
+            // app events
             this.app.on({
                 'view:disable': _.bind(self.disable, self),
                 'view:enable': _.bind(self.enable, self)
@@ -298,7 +305,9 @@ define('io.ox/find/view-tokenfield', [
         },
 
         updateSelection: function (action, e, item) {
-            if (action !== 'add' || !item) return this.ui.selected = undefined;
+            if (action !== 'add' || !item) {
+                return (this.ui.selected = undefined);
+            }
             this.ui.selected = item.model.get('id');
         },
 
@@ -306,7 +315,9 @@ define('io.ox/find/view-tokenfield', [
         restoreSelection: function () {
             if (!this.ui.selected) return;
             var node = $('.tt-suggestion> [data-id="' + this.ui.selected + '"]');
-            if (!node.length) return this.ui.selected = undefined;
+            if (!node.length) {
+                return (this.ui.selected = undefined);
+            }
             node.parent().addClass('tt-cursor');
         },
 
@@ -321,13 +332,17 @@ define('io.ox/find/view-tokenfield', [
             return this.ui.field;
         },
 
+        getQuery: function () {
+            return this.ui.tokeninput.val().trim();
+        },
+
         isEmpty: function () {
             // get active facets and filter the mandatory
             var active = this.model.manager.getActive(),
                 nonmandatory = _.filter(active, function (facet) { return !facet.is('mandatory'); });
 
             // TODO: empty check also for not yet tokenized input (data loss?!)
-            return !nonmandatory.length && this.api('getTokens').length === 0 && this.ui.tokeninput.val().trim() === '';
+            return !nonmandatory.length && this.api('getTokens').length === 0 && this.getQuery() === '';
         },
 
         empty: function () {
@@ -366,7 +381,7 @@ define('io.ox/find/view-tokenfield', [
             this.ui.container
                 .find('input.tt-input')
                 .attr({
-                    placeholder: this.isEmpty() ? this.ui.view.options.placeholder || '' : ''
+                    placeholder: this.isEmpty() ? this.ui.view.options.placeholder || '' : ''
                 });
         }
 

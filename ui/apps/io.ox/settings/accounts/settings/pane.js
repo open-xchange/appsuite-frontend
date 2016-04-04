@@ -154,6 +154,17 @@ define('io.ox/settings/accounts/settings/pane', [
                                     popup.close();
                                 }
                             )
+                            .always(function () {
+                                // update folder tree
+                                require(['io.ox/core/api/account', 'io.ox/core/folder/api'], function (accountAPI, folderAPI) {
+                                    accountAPI.getUnifiedInbox().done(function (unifiedInbox) {
+                                        if (!unifiedInbox) return;
+                                        var prefix = unifiedInbox.split('/')[0];
+                                        folderAPI.pool.unfetch(prefix);
+                                        folderAPI.refresh();
+                                    });
+                                });
+                            })
                         );
                     })
                     .show();
@@ -187,7 +198,7 @@ define('io.ox/settings/accounts/settings/pane', [
         index: 300,
         id: 'accountssettings',
         draw: function (data) {
-            var  that = this;
+            var that = this;
 
             function redraw() {
 
@@ -226,7 +237,7 @@ define('io.ox/settings/accounts/settings/pane', [
 
                         // Enhance Add... options
 
-                        function add(e) {
+                        function add(e) {
                             e.preventDefault();
                             var submodule = e.data.submodule;
                             // looks like oauth?
@@ -270,7 +281,7 @@ define('io.ox/settings/accounts/settings/pane', [
             redraw();
 
             function onChange(id, list) {
-                if (!list || list.length === 0 || id !== 'virtual/io.ox/settings/accounts') {
+                if (!list || list.length === 0 || (id !== 'virtual/io.ox/settings/accounts' && id !== 'virtual/settings/io.ox/settings/accounts')) {
                     api.off('refresh.all refresh.list', redraw);
                     data.tree.off('virtual', onChange);
                 }

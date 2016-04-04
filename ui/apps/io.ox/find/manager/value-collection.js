@@ -62,7 +62,7 @@ define('io.ox/find/manager/value-collection', [
         },
 
         _createModel: function (item, facet) {
-            var Model = this.valuemodels[facet.get('id')] ||  BaseModel;
+            var Model = this.valuemodels[facet.get('id')] || BaseModel;
             return new Model({ data: item, facet: facet });
         },
 

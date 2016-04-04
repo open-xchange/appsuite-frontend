@@ -149,12 +149,10 @@ define('plugins/portal/twitter/register', [
                         if (!jsonResponse.errors) {
                             $tweets.prepend(util.renderTweet(jsonResponse));
                             tweetCache.add(jsonResponse.id_str, jsonResponse);
+                        } else if (_.isArray(jsonResponse.errors)) {
+                            notifications.yell('error', jsonResponse.errors[0].message);
                         } else {
-                            if (_.isArray(jsonResponse.errors)) {
-                                notifications.yell('error', jsonResponse.errors[0].message);
-                            } else {
-                                notifications.yell('error', jsonResponse.errors);
-                            }
+                            notifications.yell('error', jsonResponse.errors);
                         }
 
                         options.textArea.attr({ rows: '1', placeholder: 'Compose new tweet...' })
@@ -239,9 +237,8 @@ define('plugins/portal/twitter/register', [
             });
         } else if (errorCode === 88 || errorCode === 130) {
             return $('<a class="solution">').text(gt('Click to retry later.')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
-        } else {
-            return $('<a class="solution">').text(gt('Click to retry')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
         }
+        return $('<a class="solution">').text(gt('Click to retry')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
     };
 
     var refreshWidget = function () {
@@ -258,6 +255,8 @@ define('plugins/portal/twitter/register', [
     ext.point('io.ox/portal/widget/twitter').extend({
 
         title: gt('Twitter'),
+        // prevent loading on refresh when error occurs to not bloat logs (see Bug 41740)
+        stopLoadingOnError: true,
 
         initialize: function () {
             keychain.submodules.twitter.on('update delete', refreshWidget);
@@ -299,8 +298,7 @@ define('plugins/portal/twitter/register', [
 
         load: function (baton) {
 
-            if (!keychain.hasStandardAccount('twitter'))
-                return $.Deferred().reject({ code: 'OAUTH-0006' });
+            if (!keychain.hasStandardAccount('twitter')) return $.Deferred().reject({ code: 'OAUTH-0006' });
 
             return loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
                 baton.data = data;
@@ -311,7 +309,7 @@ define('plugins/portal/twitter/register', [
 
         preview: function (baton) {
             if (!baton.data) { return; }
-            var content = $('<ul class="content pointer list-unstyled" tabindex="1" role="button" aria-label="' +  gt('Press [enter] to jump to the twitter feed.') + '">');
+            var content = $('<ul class="content pointer list-unstyled" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the twitter feed.') + '">');
             baton.contentNode = content;
             drawPreview(baton);
             this.append(content);

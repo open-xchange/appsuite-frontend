@@ -116,7 +116,7 @@ define('io.ox/find/view-facets', [
                         return api.isVirtual(data.id);
                     },
                     'account': function (data, option) {
-                        return data.account = option.account;
+                        return (data.account = option.account);
                     }
                 }, match;
 
@@ -129,7 +129,7 @@ define('io.ox/find/view-facets', [
             var self = this,
                 is = self.is;
 
-            function isAccount (data) {
+            function isAccount(data) {
                 var account = self.model.manager.get('account');
                 if (!account) return true;
                 return data.account_id === account.getValue().getOption().value;
@@ -153,7 +153,7 @@ define('io.ox/find/view-facets', [
                         api.get(target)
                             .always(function (data) {
                                 //use id as fallback label
-                                var label = (data || {}).title || target;
+                                var label = (data || {}).title || target;
                                 manager.activate(facet.id, 'custom', {
                                     value: target,
                                     id: target,

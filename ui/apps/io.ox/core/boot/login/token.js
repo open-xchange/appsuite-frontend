@@ -88,7 +88,7 @@ define('io.ox/core/boot/login/token', [
             locale: data.locale,
             session: data.session,
             user: data.user,
-            user_id: parseInt(data.user_id, 10) || 0,
+            user_id: parseInt(data.user_id, 10) || 0,
             context_id: data.context_id
         });
 

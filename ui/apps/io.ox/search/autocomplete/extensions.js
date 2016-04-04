@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/autocomplete/extensions',[
+define('io.ox/search/autocomplete/extensions', [
     'io.ox/core/extensions',
     'io.ox/contacts/api',
     'settings!io.ox/contacts',
@@ -52,6 +52,7 @@ define('io.ox/search/autocomplete/extensions',[
                 placeholder: gt('Search') + '...',
                 className: 'search-field',
                 delayedautoselect: true,
+                inputtype: 'search',
                 dnd: false,
                 // tokenfield options
                 hint: false,
@@ -77,7 +78,7 @@ define('io.ox/search/autocomplete/extensions',[
                     var individual = ext.point(POINT + '/item/' + baton.data.facet);
 
                     // use special draw handler
-                    if (individual.list().length) {
+                    if (individual.list().length) {
                         // special
                         individual.invoke('draw', node, baton);
                     } else {
@@ -92,7 +93,7 @@ define('io.ox/search/autocomplete/extensions',[
                     var ValueModel = Backbone.Model.extend({
                         getDisplayName: function () {
                             var value = this.get('value');
-                            return (value.item && value.item.name ? value.item.name : value.name || '\u00A0' );
+                            return (value.item && value.item.name ? value.item.name : value.name || '\u00A0');
                         }
                     });
 
@@ -102,7 +103,7 @@ define('io.ox/search/autocomplete/extensions',[
                             return ['contacts', 'contact', 'participant', 'task_participants'].indexOf(this.id) > -1;
                         };
 
-                        _.each(facet.values || [ facet ], function (data) {
+                        _.each(facet.values || [facet], function (data) {
                             var value = $.extend({}, data, { facet: facet.id }),
                                 valueModel = new ValueModel({
                                     facet: facet,
@@ -126,15 +127,15 @@ define('io.ox/search/autocomplete/extensions',[
                 click: function (e, data) {
                     // apply selected filter
                     var baton = ext.Baton.ensure({
-                            deferred: $.Deferred().resolve(),
-                            view: view,
-                            model: model,
-                            token: {
-                                label: data.label,
-                                value: data.value,
-                                model: data.model
-                            }
-                        });
+                        deferred: $.Deferred().resolve(),
+                        view: view,
+                        model: model,
+                        token: {
+                            label: data.label,
+                            value: data.value,
+                            model: data.model
+                        }
+                    });
 
                     ext.point(POINT + '/handler/click').invoke('flow', this, baton);
                 }
@@ -280,7 +281,7 @@ define('io.ox/search/autocomplete/extensions',[
         },
 
         a11y: function () {
-            var text = this.find('.name').text() + ' ' +  this.find('.detail').text();
+            var text = this.find('.name').text() + ' ' + this.find('.detail').text();
             this.attr({
                 'aria-label': text,
                 'tabIndex': 1

@@ -62,7 +62,7 @@ define('io.ox/core/tk/attachmentsUtil', [
             } else if (file instanceof $ && file[0].tagName === 'INPUT') {
                 //file input: old mode for IE9 (local)
                 data = {
-                    type:  file.val().split('.').length > 1  ? file.val().split('.').pop() : '',
+                    type:  file.val().split('.').length > 1 ? file.val().split('.').pop() : '',
                     module: 'mail',
                     group: 'input'
                 };
@@ -169,10 +169,9 @@ define('io.ox/core/tk/attachmentsUtil', [
             //office
             } else if (isOffice) {
                 return true;
-            //stored file
-            } else {
-                return (/(png|gif|jpe?g|bmp)$/i).test(data.type) || (/(txt)$/i).test(data.type);
             }
+            //stored file
+            return (/(png|gif|jpe?g|bmp)$/i).test(data.type) || (/(txt)$/i).test(data.type);
         },
         /**
          * returns node
@@ -220,19 +219,20 @@ define('io.ox/core/tk/attachmentsUtil', [
                             $('<div class="row-1">').text(_.noI18n(_.ellipsis(name, { max: opt.labelmax, charpos: 'middle' }))),
                             $('<div class="row-2">').append(
                                 info,
-                                opt.showpreview  ? createPreview(obj.file, opt.rightside) : $(),
+                                opt.showpreview ? createPreview(obj.file, opt.rightside) : $(),
                                 $.txt('\u00A0')
                             ),
                              // remove
                             $('<a href="#" class="remove" tabindex="6">')
                             .attr('title', gt('Remove attachment'))
                             .append(
-                                $('<i class="fa fa-trash-o">')
+                                $('<i class="fa fa-trash-o" aria-hidden="true">')
                             )
                             .on('click', function (e) {
                                 e.preventDefault();
-                                if (!('remove' in caller))
+                                if (!('remove' in caller)) {
                                     console.error('Caller should provide a remove function.');
+                                }
                                 caller.remove(obj);
                             })
                     )
@@ -258,7 +258,7 @@ define('io.ox/core/tk/attachmentsUtil', [
             e.preventDefault();
 
             var file = target.data('file'),
-                data = self.get(file),  preview, reader;
+                data = self.get(file), preview, reader;
 
             //close if editor is selected (causes overlapping, bug 27875)
             if (target.data('rightside')) {

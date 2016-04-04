@@ -150,24 +150,25 @@ define('io.ox/calendar/invitations/register', [
 
             if (status > 0) {
                 switch (status) {
-                case 1:
-                    message = this.type !== 'task' ?
+                    case 1:
+                        message = this.type !== 'task' ?
                         gt('You have accepted this appointment') :
                         gt('You have accepted this task');
-                    className = 'accepted';
-                    break;
-                case 2:
-                    message = this.type !== 'task' ?
+                        className = 'accepted';
+                        break;
+                    case 2:
+                        message = this.type !== 'task' ?
                         gt('You declined this appointment') :
                         gt('You declined this task');
-                    className = 'declined';
-                    break;
-                case 3:
-                    message = this.type !== 'task' ?
+                        className = 'declined';
+                        break;
+                    case 3:
+                        message = this.type !== 'task' ?
                         gt('You tentatively accepted this invitation') :
                         gt('You tentatively accepted this task');
-                    className = 'tentative';
-                    break;
+                        className = 'tentative';
+                        break;
+                    // no default
                 }
                 return $('<div class="confirmation-status">').addClass(className).text(message);
             }
@@ -178,15 +179,16 @@ define('io.ox/calendar/invitations/register', [
         renderSummary: function () {
 
             var data = this.appointment,
+                dateStrings = util.getDateTimeIntervalMarkup(data, { output: 'strings' }),
                 recurrenceString = util.getRecurrenceString(data),
                 separator = data.title ? $.txt(', ') : $.txt('');
 
             this.$el.find('.itip-details').append(
                 $('<b>').text(data.title), separator,
                 $('<span class="day">').append(
-                    $.txt(gt.noI18n(util.getDateInterval(data))),
+                    $.txt(gt.noI18n(dateStrings.dateStr)),
                     $.txt(gt.noI18n(' ')),
-                    $.txt(gt.noI18n(util.getTimeInterval(data))),
+                    $.txt(gt.noI18n(dateStrings.timeStr)),
                     $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')))
                 ),
                 // confirmation

@@ -73,7 +73,7 @@ $(window).load(function () {
     // teach require.js to use deferred objects
     //
 
-    (function (require) {
+    (function (require) {
 
         function fallback(error) {
             console.error('require: Error in ' + error.requireModules, error.stack);
@@ -89,10 +89,9 @@ $(window).load(function () {
                 var def = $.Deferred().done(success).fail(fail || fallback);
                 require(deps, def.resolve, def.reject);
                 return def.promise();
-            } else {
-                // bypass
-                return require.apply(this, arguments);
             }
+            // bypass
+            return require.apply(this, arguments);
         };
 
         _.extend(window.require, require);

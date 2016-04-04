@@ -30,8 +30,8 @@ define('io.ox/tasks/view-detail', [
         draw: function (baton) {
 
             // make sure we have a baton
-            var baton = ext.Baton.ensure(baton),
-                data = baton.data;
+            baton = ext.Baton.ensure(baton);
+            var data = baton.data;
 
             if (!data) return $('<div>');
 
@@ -73,7 +73,7 @@ define('io.ox/tasks/view-detail', [
                         $.txt(gt.noI18n(task.title))
                     );
             this.append(
-                $('<header role="heading">').append(
+                $('<header>').append(
                     _.device('smartphone') ? [title, infoPanel] : [infoPanel, title]
                 )
             );
@@ -101,7 +101,9 @@ define('io.ox/tasks/view-detail', [
         id: 'note',
         draw: function (baton) {
             var note = calendarUtil.getNote(baton.interpretedData);
-            if (note !== '') {
+            note = util.checkMailLinks(note);
+
+            if (note) {
                 this.append(
                     $('<div class="note">').html(
                         note
@@ -203,7 +205,7 @@ define('io.ox/tasks/view-detail', [
             }
             this.append(
                 // status
-                $('<div>').text(task.status).addClass('state ' +  task.badge)
+                $('<div>').text(task.status).addClass('state ' + task.badge)
             );
         }
     });
@@ -238,7 +240,7 @@ define('io.ox/tasks/view-detail', [
                     if (data.length > 1) {
                         buildDropdown(attachmentNode, gt('All attachments'), data).find('a').removeClass('attachment-item');
                     }
-                    attachmentNode.delegate('a', 'click', function (e) {e.preventDefault(); });
+                    attachmentNode.delegate('a', 'click', function (e) { e.preventDefault(); });
                 }).fail(function () {
                     attachmentFail(attachmentNode, task);
                 });
@@ -256,10 +258,10 @@ define('io.ox/tasks/view-detail', [
 
     var buildDropdown = function (container, label, data) {
         var bla = new links.Dropdown({
-                label: label,
-                classes: 'attachment-item',
-                ref: 'io.ox/core/tk/attachment/links'
-            }).draw.call(container, data);
+            label: label,
+            classes: 'attachment-item',
+            ref: 'io.ox/core/tk/attachment/links'
+        }).draw.call(container, data);
 
         //no inline style for mobile
         if (_.device('smartphone')) {

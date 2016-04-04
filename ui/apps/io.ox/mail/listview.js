@@ -38,9 +38,6 @@ define('io.ox/mail/listview', [
             index: 100,
             draw: function (baton) {
 
-                //add multiselection message
-                this.parent().attr('aria-describedby', 'mail-multi-selection-message');
-
                 // fix missing threadSize (aparently only used by tests)
                 fixThreadSize(baton.data);
 
@@ -81,7 +78,7 @@ define('io.ox/mail/listview', [
             index: 100,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-1">');
-                extensions.unread.call(column, baton);
+                extensions.envelope.call(column, baton);
                 this.append(column);
             }
         },
@@ -154,6 +151,11 @@ define('io.ox/mail/listview', [
             draw: extensions.folder
         },
         {
+            id: 'unseen-foldername',
+            index: 175,
+            draw: extensions.folderName
+        },
+        {
             id: 'flag',
             index: 200,
             draw: extensions.flag
@@ -188,12 +190,7 @@ define('io.ox/mail/listview', [
     ext.point('io.ox/mail/listview/item/small/col6').extend({
         id: 'date/size',
         index: 100,
-        draw: function (baton) {
-            // show date or size depending on sort option
-            var fn = baton.app.props.get('sort') === 608 ? 'size' :
-                baton.app && baton.app.props.get('exactDates') ? 'fulldate' : 'smartdate';
-            extensions[fn].call(this, baton);
-        }
+        draw: extensions.dateOrSize
     });
 
     /* default */
@@ -242,12 +239,7 @@ define('io.ox/mail/listview', [
         {
             id: 'date/size',
             index: 100,
-            draw: function (baton) {
-                // show date or size depending on sort option
-                var fn = baton.app && baton.app.props.get('sort') === 608 ? 'size' :
-                    baton.app && baton.app.props.get('exactDates') ? 'fulldate' : 'smartdate';
-                extensions[fn].call(this, baton);
-            }
+            draw: extensions.dateOrSize
         },
         {
             id: 'from',
@@ -266,6 +258,11 @@ define('io.ox/mail/listview', [
             id: 'original-folder',
             index: 150,
             draw: extensions.folder
+        },
+        {
+            id: 'unseen-foldername',
+            index: 175,
+            draw: extensions.folderName
         },
         {
             id: 'flag',
@@ -319,6 +316,7 @@ define('io.ox/mail/listview', [
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('mail-item');
             this.on('collection:load', this.lookForUnseenMessage);
+            this.$el.on('click mousedown', '.selectable .seen-unseen-indicator', this.markRead.bind(this));
 
             // track some states
             if (options && options.app) {
@@ -346,9 +344,26 @@ define('io.ox/mail/listview', [
             folderAPI.setUnseenMinimum(folder_id, unseen);
         },
 
+        markRead: function (e) {
+            var cid = $(e.currentTarget).closest('.selectable').data('cid'),
+                thread = api.threads.get(cid),
+                isUnseen = _(thread).reduce(function (memo, item) {
+                    return memo || util.isUnseen(item);
+                }, false);
+
+            if (isUnseen) {
+                api.markRead(thread);
+            } else {
+                api.markUnread(thread);
+            }
+
+            e.preventDefault();
+            e.stopPropagation();
+        },
+
         reprocessThread: function (model) {
             // only used when in thread mode
-            if ( !(this.app && this.app.isThreaded()) ) return;
+            if (!(this.app && this.app.isThreaded())) return;
 
             // get full thread objects (instead of cids)
             var threadlist = api.threads.get(model.cid);
@@ -363,9 +378,9 @@ define('io.ox/mail/listview', [
 
             // generate updated data object (similar to server response structure)
             var obj = _.extend(model.toJSON(), threadlist[0], {
-                    thread: threadlist,
-                    threadSize: threadlist.length
-                });
+                thread: threadlist,
+                threadSize: threadlist.length
+            });
 
             // do the thread hokey-pokey-dance
             api.processThreadMessage(obj);
@@ -401,6 +416,8 @@ define('io.ox/mail/listview', [
                 return memo || parseInt(obj.color_label || 0, 10);
             }, 0);
             data.color_label = color;
+            // set subject to first message in thread so a Thread has a constant subject
+            data.subject = thread[thread.length - 1].subject;
             // done
             return data;
         },

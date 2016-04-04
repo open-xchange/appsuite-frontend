@@ -18,10 +18,12 @@ define('io.ox/calendar/edit/main', [
     'io.ox/calendar/edit/view',
     'io.ox/core/notifications',
     'io.ox/core/folder/api',
+    'io.ox/calendar/util',
+    'io.ox/core/http',
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/edit/style'
-], function (appointmentFactory, api, dnd, EditView, notifications, folderAPI, gt, settings) {
+], function (AppointmentModel, api, dnd, EditView, notifications, folderAPI, util, http, gt, settings) {
 
     'use strict';
 
@@ -110,19 +112,27 @@ define('io.ox/calendar/edit/main', [
                             .on('change', function () {
                                 self.considerSaved = false;
                             })
-                            .on('backendError', function (response) {
+                            .on('backendError', function (error) {
                                 try {
                                     self.getWindow().idle();
                                 } catch (e) {
-                                    if (response.code === 'UPL-0005') {
+                                    if (error.code === 'UPL-0005') {
                                         //uploadsize to big; remove busy animation
                                         api.removeFromUploadList(_.ecid(this.attributes));
                                     }
                                 }
-                                if (response.conflicts) {
-                                    return;
+                                if (error.conflicts) return;
+                                var message;
+                                if (error.problematic) {
+                                    message = _(error.problematic).map(function (field) {
+                                        var id = http.getColumn('calendar', field.id) || field.id,
+                                            name = util.columns[id] || id;
+                                        return gt('The field "%1$s" exceeds its maximum size of %2$d characters.', name, field.max_size);
+                                    }).join(' ');
+                                } else {
+                                    message = error.error;
                                 }
-                                notifications.yell('error', response.error);
+                                notifications.yell('error', message);
                             })
                             .on('conflicts', function (con) {
                                 var hardConflict = false;
@@ -135,14 +145,19 @@ define('io.ox/calendar/edit/main', [
                                 });
 
                                 ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/conflicts/conflictList']).done(function (dialogs, conflictView) {
+
                                     var dialog = new dialogs.ModalDialog({
                                         top: '20%',
                                         center: false,
-                                        container: self.getWindowNode()
-                                    })
-                                    .header(conflictView.drawHeader());
+                                        container: app.getWindow().nodes.outer
+                                    });
 
-                                    dialog.append(conflictView.drawList(con, dialog).addClass('additional-info'));
+                                    dialog
+                                        .header(conflictView.drawHeader())
+                                        .append(
+                                            conflictView.drawList(con, dialog).addClass('additional-info')
+                                        )
+                                        .getContentNode().attr('role', 'document');
 
                                     if (hardConflict) {
                                         dialog.prepend(
@@ -157,13 +172,12 @@ define('io.ox/calendar/edit/main', [
                                         .done(function (action) {
                                             if (action === 'cancel') {
                                                 // add temp timezone attribute again
-                                                self.model.set('endTimezone', self.model.endTimezone,  { silent: true });
+                                                self.model.set('endTimezone', self.model.endTimezone, { silent: true });
                                                 delete self.model.endTimezone;
                                                 // restore model attributes for moving
                                                 if (self.moveAfterSave) {
-                                                    self.model.set('folder_id', self.moveAfterSave,  { silent: true });
+                                                    self.model.set('folder_id', self.moveAfterSave, { silent: true });
                                                 }
-                                                self.model.silentMode = false;
                                                 return;
                                             }
                                             if (action === 'ignore') {
@@ -198,32 +212,12 @@ define('io.ox/calendar/edit/main', [
                         if (opt.mode === 'edit') {
 
                             if (opt.action === 'appointment') {
-                                // ensure to create a change exception
-                                self.model.touch('recurrence_position');
                                 self.model.set('recurrence_type', 0, { validate: true });
+                                self.model.mode = 'appointment';
                             }
 
                             if (opt.action === 'series') {
-
-                                // fields for recurrences
-                                var x = 0,
-                                    fields = [
-                                        'recurrence_date_position',
-                                        'change_exceptions',
-                                        'delete_exceptions',
-                                        'recurrence_type',
-                                        'days',
-                                        'day_in_month',
-                                        'month',
-                                        'interval',
-                                        'until',
-                                        'occurrences'
-                                    ];
-
-                                // ensure theses fields will be send to backend to edit the whole series
-                                for (; x < fields.length; x++) {
-                                    self.model.touch(fields[x]);
-                                }
+                                self.model.mode = 'series';
                             }
 
                             // init alarm
@@ -249,17 +243,16 @@ define('io.ox/calendar/edit/main', [
                 if (opt.mode === 'edit' && data.id) {
                     // hash support
                     self.setState({ folder: data.folder_id, id: data.id });
-                    self.model = appointmentFactory.create(data);
+                    self.model = new AppointmentModel(data);
                     loadFolder();
                 } else {
 
                     // default values from settings
-                    data.alarm = settings.get('defaultReminder', 15);
+                    data.alarm = data.alarm || settings.get('defaultReminder', 15);
                     if (data.full_time) {
                         data.shown_as = settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1;
                     }
-
-                    self.model = appointmentFactory.realm('default').create(data);
+                    self.model = new AppointmentModel(data);
                     if (!data.folder_id || /^virtual/.test(data.folder_id)) {
                         self.model.set('folder_id', data.folder_id = folderAPI.getDefaultFolder('calendar'));
                         loadFolder();
@@ -354,7 +347,6 @@ define('io.ox/calendar/edit/main', [
                         save();
                     }, fail);
                 } else {
-                    this.model.silentMode = false;
                     if (this.model.endTimezone) {
                         this.model.set('endTimezone', this.model.endTimezone);
                         delete this.model.endTimezone;
@@ -366,10 +358,18 @@ define('io.ox/calendar/edit/main', [
             },
 
             onError: function (error) {
-                this.model.silentMode = false;
+                // conflicts have their own special handling
+                if (error.conflicts) return;
+
+                this.model.set('ignore_conflicts', false, { validate: true });
                 if (this.model.endTimezone) {
                     this.model.set('endTimezone', this.model.endTimezone);
                     delete this.model.endTimezone;
+                }
+
+                // restore state of model attributes for moving
+                if (this.moveAfterSave && this.model.get('folder_id') !== this.moveAfterSave) {
+                    this.model.set('folder_id', this.moveAfterSave, { silent: true });
                 }
                 delete this.moveAfterSave;
                 this.getWindow().idle();
@@ -420,7 +420,7 @@ define('io.ox/calendar/edit/main', [
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
                         .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { 'tabIndex': '1' })
-                        .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

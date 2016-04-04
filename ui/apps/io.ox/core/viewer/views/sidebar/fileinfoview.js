@@ -46,8 +46,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
             if (!baton.model) return;
 
-            var panelBody,
-                model = baton.model,
+            var model = baton.model,
                 name = model.getDisplayName() || '-',
                 size = model.get('file_size'),
                 sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
@@ -124,7 +123,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 );
             }
 
-            panelBody = this.find('.sidebar-panel-body').empty().append(dl);
+            this.find('.sidebar-panel-body').empty().append(dl);
         }
     });
 
@@ -137,6 +136,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         className: 'viewer-fileinfo',
 
         initialize: function (options) {
+            PanelBaseView.prototype.initialize.apply(this, arguments);
             this.options = options || {};
             this.closable = !!this.options.closable;
             //#. File and folder details
@@ -148,7 +148,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
         render: function () {
 
-            if (!this.model) return;
+            if (!this.model) return this;
 
             var data = this.model.isFile() ? this.model.toJSON() : this.model.get('origData'),
                 baton = Ext.Baton({ model: this.model, data: data, options: this.options });

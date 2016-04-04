@@ -32,8 +32,8 @@ define('io.ox/files/actions/edit-description', [
             .append(
                 $('<textarea rows="10" class="form-control" tabindex="1">')
             )
-            .addPrimaryButton('save', gt('Save'), 'save',  { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
+            .addPrimaryButton('save', gt('Save'), 'save', { 'tabIndex': '1' })
+            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
             .on('save', save)
             .show(function () {
                 var node = this.find('textarea').val(data.description);

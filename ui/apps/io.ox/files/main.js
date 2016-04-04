@@ -205,6 +205,7 @@ define('io.ox/files/main', [
             FolderView.initialize({ app: app, tree: tree });
             app.folderView.resize.enable();
         },
+
         /*
          * Folder view mobile support
          */
@@ -314,6 +315,13 @@ define('io.ox/files/main', [
          * Respond to folder change
          */
         'folder:change': function (app) {
+            // see Bug 43512 - Opening a Drive direct link in Safari removes the edit bar
+            if (_.device('safari')) {
+                // hide and show sidepanel for correct layout. Somehow, scroll into view and flexbox-layout have errors in safari
+                app.folderView.tree.selection.view.on('scrollIntoView', function () {
+                    app.getWindow().nodes.sidepanel.hide().show(0);
+                });
+            }
 
             app.on('folder:change', function (id) {
                 // we clear the list now to avoid flickering due to subsequent layout changes
@@ -331,10 +339,8 @@ define('io.ox/files/main', [
          */
         'myshares-listview': function (app) {
 
-            // not for guests
             if (capabilities.has('guest')) return;
-            // normal users need the following capabilites
-            if (!capabilities.has('edit_public_folders') && !capabilities.has('read_create_shared_folders')) return;
+            if (!capabilities.has('gab || share_links')) return;
 
             // add virtual folder to folder api
             folderAPI.virtual.add('virtual/myshares', function () { return $.when([]); });
@@ -345,7 +351,6 @@ define('io.ox/files/main', [
                 'virtual': function (id) {
                     if (id !== 'virtual/myshares') return;
 
-                    app.trigger('folder-virtual:change', id, { type: 'myshares', standard_folder_type: 'virtual' });
                     app.folder.unset();
 
                     if (app.mysharesListViewControl) {
@@ -392,12 +397,12 @@ define('io.ox/files/main', [
 
                         app.updateMyshareToolbar = _.debounce(function (list) {
                             var baton = ext.Baton({
-                                $el: toolbar.$list,
-                                data: app.mysharesListView.collection.get(list),
-                                collection: app.mysharesListView.collection,
-                                model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
-                            }),
-                            ret = ext.point('io.ox/files/share/classic-toolbar')
+                                    $el: toolbar.$list,
+                                    data: app.mysharesListView.collection.get(list),
+                                    collection: app.mysharesListView.collection,
+                                    model: app.mysharesListView.collection.get(app.mysharesListView.collection.get(list))
+                                }),
+                                ret = ext.point('io.ox/files/share/classic-toolbar')
                                 .invoke('draw', toolbar.$list.empty(), baton);
 
                             $.when.apply($, ret.value()).then(function () {
@@ -465,7 +470,7 @@ define('io.ox/files/main', [
          * Respond to changed sort option
          */
         'change:sort': function (app) {
-            app.props.on('change:sort', function (model, value) {
+            app.props.on('change:sort', function (m, value) {
                 // set proper order first
                 var model = app.listView.model;
                 model.set('order', (/^(5|704)$/).test(value) ? 'desc' : 'asc', { silent: true });
@@ -488,7 +493,7 @@ define('io.ox/files/main', [
 
             if (_.device('touch')) return;
 
-            app.listView.on('selection:change', function () {
+            function updateSidebar() {
 
                 // do nothing if closed
                 if (!sidebarView.open) return;
@@ -515,6 +520,12 @@ define('io.ox/files/main', [
                     sidebarView.renderSections();
                     sidebarView.$('img').trigger('appear.lazyload');
                     sidebarView.$('.sidebar-panel-thumbnail').attr('aria-label', gt('thumbnail'));
+                }
+            }
+            app.listView.on('selection:change', updateSidebar);
+            api.pool.get('detail').on('expired_models', function (ids) {
+                if (sidebarView && sidebarView.model && _(ids).indexOf(sidebarView.model.cid) !== -1) {
+                    updateSidebar();
                 }
             });
         },
@@ -656,6 +667,9 @@ define('io.ox/files/main', [
             app.listView.$el.on('keydown', '.file-type-folder', function (e) {
                 if (e.which === 13) {
                     var obj = _.cid($(e.currentTarget).attr('data-cid'));
+                    app.listView.once('collection:load', function () {
+                        app.listView.selection.select(0);
+                    });
                     app.folder.set(obj.id);
                 }
             });
@@ -789,7 +803,7 @@ define('io.ox/files/main', [
         'refresh': function (app) {
             ox.on('refresh^', function () {
                 _.defer(function () {
-                    app.listView.reload();
+                    app.listView.reload({ pregenerate_previews: false });
                 });
             });
         },
@@ -810,6 +824,46 @@ define('io.ox/files/main', [
                 _(api.pool.getByFolder(data.folder_id)).each(function (collection) {
                     collection.expired = true;
                 });
+            });
+        },
+
+        /*
+         * change to default folder on no permission or folder not found errors
+         */
+        'no-permission': function (app) {
+            // use debounce, so errors from folder and app api are only handled once.
+            var handleError = _.debounce(function (error) {
+                // work with (error) and (event, error) arguments
+                if (error && !error.error) {
+                    if (arguments[1] && arguments[1].error) {
+                        error = arguments[1];
+                    } else {
+                        return;
+                    }
+                }
+                // only change if folder is currently displayed
+                if (error.error_params[0] && String(app.folder.get()) !== String(error.error_params[0])) {
+                    return;
+                }
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                    // try to load the default folder
+                    // guests do not have a default folder, so the first visible one is chosen
+                    app.folder.setDefault();
+                });
+            }, 300);
+
+            folderAPI.on('error:FLD-0008 error:FLD-0003', handleError);
+            api.on('error:FLD-0008', handleError);
+            api.on('error:IFO-0400', function (error) {
+                // check if folder is currently displayed
+                if (String(app.folder.get()) !== String(error.error_params[0])) {
+                    return;
+                }
+                // see if we can still access the folder, although we are not allowed to view the contents
+                // this is important because otherwise we would not be able to change permissions (because the view jumps to the default folder all the time)
+                // if the useer is nto allowed to view this folder, the folderapi will trigger error:FLD-0003
+                folderAPI.get(app.folder.get(), { cache: false });
             });
         },
 
@@ -908,6 +962,13 @@ define('io.ox/files/main', [
             );
         },
 
+        'premium-area': function (app) {
+            commons.addPremiumFeatures(app, {
+                upsellId: 'folderview/infostore/bottom',
+                upsellRequires: 'boxcom || google || msliveconnect'
+            });
+        },
+
         /*
          * folder edit mode for mobile
          */
@@ -931,7 +992,7 @@ define('io.ox/files/main', [
 
         'inplace-find': function (app) {
 
-            if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
 
             app.searchable();
         },
@@ -957,12 +1018,19 @@ define('io.ox/files/main', [
             if (_.device('smartphone')) return;
 
             api.on('beforedelete', function (ids) {
-                // change selection
-                app.listView.selection.dodge();
-                // optimization for many items
-                if (ids.length === 1) return;
-                // remove all DOM elements of current collection; keep the first item
-                app.listView.onBatchRemove(ids.slice(1));
+                var selection = app.listView.selection.get();
+                var cids = _.map(ids, _.cid);
+
+                //intersection check for Bug 41861
+                if (_.intersection(cids, selection).length) {
+
+                    // change selection
+                    app.listView.selection.dodge();
+                    // optimization for many items
+                    if (ids.length === 1) return;
+                    // remove all DOM elements of current collection; keep the first item
+                    app.listView.onBatchRemove(ids.slice(1));
+                }
             });
         },
 
@@ -995,6 +1063,16 @@ define('io.ox/files/main', [
                     toolbar = nodes.body.find('.classic-toolbar-container'),
                     control = nodes.body.find('.list-view-control > .generic-toolbar'),
                     sidepanel = nodes.sidepanel;
+                metrics.watch({
+                    node: sidepanel,
+                    selector: '[data-action="add-storage-account"]',
+                    type: 'click'
+                }, {
+                    app: 'drive',
+                    target: 'folder/account',
+                    type: 'click',
+                    action: 'add'
+                });
                 // toolbar actions
                 toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
                     metrics.trackEvent({
@@ -1022,7 +1100,7 @@ define('io.ox/files/main', [
                         action = node.attr('data-name'),
                         detail = node.attr('data-value');
                     // special handling for select 'links'
-                    if (['all','files','none'].indexOf(action) > -1) {
+                    if (['all', 'files', 'none'].indexOf(action) > -1) {
                         detail = action;
                         action = 'select';
                     }
@@ -1045,14 +1123,25 @@ define('io.ox/files/main', [
                 });
                 // check for clicks in folder trew
                 app.on('folder:change folder-virtual:change', function (folder, data) {
-                    // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
-                    // hint: custom ids for virtual folder 'vi'
+                    var list = [];
+                    data = data || {};
+                    if (folderAPI.isVirtual(folder)) { list.push('virtual'); }
+                    // add folder types
+                    if (data.standard_folder_type && data.type) {
+                        // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
+                        list.push(data.standard_folder_type, data.type);
+                    }
+                    // add filestorage data
+                    if (data.account_id) {
+                        // simplify: 'dropbox://164' -> ['dropbox', '164']
+                        list = list.concat(data.account_id.split('://'));
+                    }
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'folder',
                         type: 'click',
                         action: 'select',
-                        detail:  data.standard_folder_type + '.' + data.type
+                        detail: list.join('/')
                     });
                 });
                 // selection in listview
@@ -1081,6 +1170,34 @@ define('io.ox/files/main', [
                     }
                 });
             });
+        },
+
+        'select-file': function (app) {
+
+            app.selectFile = function (obj) {
+
+                function isCurrentFolder() {
+                    return app.listView.collection.cid && app.listView.collection.cid.indexOf('folder=' + obj.folder_id) > -1;
+                }
+
+                function select() {
+                    if (!isCurrentFolder()) return;
+                    app.listView.off('collection:load', select);
+                    app.listView.selection.set([obj], true);
+
+                    // must trigger for a updated toolbar
+                    app.listView.trigger('selection:change');
+                }
+
+                obj = _.isString(obj) ? _.cid(obj) : obj;
+
+                if (isCurrentFolder()) {
+                    select();
+                } else {
+                    app.listView.on('collection:load', select);
+                    app.folder.set(obj.folder_id);
+                }
+            };
         }
     });
 

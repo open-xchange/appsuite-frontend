@@ -85,7 +85,7 @@ define([
                 subview.resetNotifications([testModel1, testModel2]);
                 expect(subview.collection.size()).to.equal(2);
             });
-            it('draw a placeholder', function () {
+            it.skip('draw a placeholder', function () {
                 notifications.update();
                 var node = $('.notifications-main-testview'),
                     placeholder = $('.notification-placeholder');
@@ -93,7 +93,7 @@ define([
                 expect(node.length).to.equal(0);
                 expect(placeholder.length).to.equal(1);
             });
-            it('draw header and apply strings', function () {
+            it.skip('draw header and apply strings', function () {
                 subview.resetNotifications(testModel1);
                 notifications.update();
                 var node = $('.notifications-main-testview'),
@@ -108,7 +108,7 @@ define([
                 expect($(node.find('.clear-button')).length).to.equal(1);
                 expect($(node.find('.clear-button')).attr('aria-label')).to.equal('Hide all test notifications');
             });
-            it('draw notifications', function () {
+            it.skip('draw notifications', function () {
                 subview.resetNotifications(testModel1);
                 notifications.update();
                 var node = $('.notifications-main-testview');
@@ -116,7 +116,7 @@ define([
                 expect($(node.find('.testviewNotification')).length).to.equal(1);
                 expect($(node.find('.testTitle')).text()).to.equal('Testmodel1');
             });
-            it('hide notifications', function () {
+            it.skip('hide notifications', function () {
                 subview.resetNotifications([testModel1, testModel2]);
                 notifications.update();
                 var node = $('.notifications-main-testview');
@@ -136,7 +136,7 @@ define([
             });
             //karma won't load desktopNotifications because it misses the global browservariable Notifications (see http://www.w3.org/TR/notifications)
             //todoo: finish this when desktopNotification is loadable
-            xit('show desktop notifications', function () {
+            it.skip('show desktop notifications', function () {
                 /*var spy = sinon.spy(desktopNotifications, 'show');
                 subview.resetNotifications([testModel1, testModel2]);
                 var message = spy.args[0];
@@ -153,7 +153,7 @@ define([
                 expect(triggered).to.be.true;
                 subview.off('autoopen', test);
             });
-            it('open detailview', function () {
+            it.skip('open detailview', function () {
                 subview.resetNotifications(testModel1);
                 notifications.update();
                 var node = $('.notifications-main-testview .item');

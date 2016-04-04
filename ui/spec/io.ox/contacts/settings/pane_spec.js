@@ -16,7 +16,7 @@ define([
     'io.ox/contacts/settings/pane'
 ], function (ext, gt) {
 
-    describe('contactssettings', function () {
+    describe('Contact settings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="contactssettingsNode">'));

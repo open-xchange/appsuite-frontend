@@ -10,6 +10,9 @@
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
+
+/* global MediaElementPlayer: true */
+
 /*
     NOTE:
 
@@ -67,7 +70,7 @@ define('io.ox/files/mediaplayer', [
                 this.win = this.app.getWindow();
             } else {
                 //get active window by hand
-                this.win = { nodes: { outer: $('.window-container:visible').first() }};
+                this.win = { nodes: { outer: $('.window-container:visible').first() } };
             }
             this.lastActiveElement = $(document.activeElement);
 
@@ -126,7 +129,7 @@ define('io.ox/files/mediaplayer', [
             this.container.on('keydown', function (e) {
                 // close on ESC unless in fullscreen mode
                 // note: macos' native fullscreen mode does not close on ESC (same for Chrome & Firefox)
-                if (e.keyCode === 27 && BigScreen.element === null && !MediaElementPlayer.fullscreen) self.close();
+                if (e.keyCode === 27 && !MediaElementPlayer.fullscreen) self.close();
             });
         },
 
@@ -147,7 +150,7 @@ define('io.ox/files/mediaplayer', [
         drawTrackInfo: (function () {
 
             function audioIconError() {
-                this.trackdisplay.find('.album').empty().append($('<i class="fa fa-music"></i>'));
+                this.trackdisplay.find('.album').empty().append($('<i class="fa fa-music" aria-hidden="true"></i>'));
             }
 
             function getCover(file) {
@@ -168,8 +171,8 @@ define('io.ox/files/mediaplayer', [
         drawPlayer: function (url, mimetype) {
             var el = '<audio>',
             // Flash support is pretty bad for video so we only use it for audio
-            plugins = ['flash', 'silverlight'],
-            self = this;
+                plugins = ['flash', 'silverlight'],
+                self = this;
             if (this.config.videoSupport) {
                 el = '<video>';
                 plugins = false;
@@ -321,7 +324,7 @@ define('io.ox/files/mediaplayer', [
                 this.container
                     .removeClass('videoplayer')
                     .addClass('audioplayer');
-                this.trackdisplay.find('.album').empty().append($('<i class="fa fa-music"></i>'));
+                this.trackdisplay.find('.album').empty().append($('<i class="fa fa-music" aria-hidden="true"></i>'));
             }
 
             this.playlist.empty();

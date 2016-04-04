@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/find/date/patterns',[
+define('io.ox/find/date/patterns', [
     'io.ox/core/extensions',
     'gettext!io.ox/core'
 ], function (ext, gt) {
@@ -80,7 +80,7 @@ define('io.ox/find/date/patterns',[
             if (!self.regex.test(value)) return;
 
             // split and get formats
-            parts = value.match(reParts).slice(0,2);
+            parts = value.match(reParts).slice(0, 2);
             list = _.map(parts, function (part) {
                 return {
                     value: part,
@@ -104,20 +104,20 @@ define('io.ox/find/date/patterns',[
     var getFormat = (function () {
         var regexEndian = /(\d{1,4})([\/\.\-])(\d{1,2})[\/\.\-](\d{1,4})/,
             replaceEndian = function (matchedPart, first, separator, second, third) {
-            var hasYearSuffix = first.length < third.length,
-                parts = hasYearSuffix ? [undefined, undefined, 'YYYY'] : ['YYYY', undefined, undefined];
-            // special case: MM/DD/YYYY
-            if (separator === '/' && hasYearSuffix) {
-                parts[0] = first.replace(/./g, 'M');
-                parts[1] = second.replace(/./g, 'D');
-            }
-            // month: always in the middle
-            parts[1] = parts[1] || second.replace(/./g, 'M');
-            // day: fill up last undefined part
-            parts[0] = parts[0] || first.replace(/./g, 'D');
-            parts[2] = parts[2] || third.replace(/./g, 'D');
-            return parts.join(separator);
-        };
+                var hasYearSuffix = first.length < third.length,
+                    parts = hasYearSuffix ? [undefined, undefined, 'YYYY'] : ['YYYY', undefined, undefined];
+                // special case: MM/DD/YYYY
+                if (separator === '/' && hasYearSuffix) {
+                    parts[0] = first.replace(/./g, 'M');
+                    parts[1] = second.replace(/./g, 'D');
+                }
+                // month: always in the middle
+                parts[1] = parts[1] || second.replace(/./g, 'M');
+                // day: fill up last undefined part
+                parts[0] = parts[0] || first.replace(/./g, 'D');
+                parts[2] = parts[2] || third.replace(/./g, 'D');
+                return parts.join(separator);
+            };
         return function (value) {
             return value.replace(regexEndian, replaceEndian);
         };
@@ -161,7 +161,7 @@ define('io.ox/find/date/patterns',[
         function addMonth(year, name, index) {
             // skip if future month
             if (year === currentYear && index > currentMonth) return;
-            var basestring = (index + 1)  + ' ' + year;
+            var basestring = (index + 1) + ' ' + year;
             add(name + ' ' + year, -(year + index * 0.01), {
                 start: moment(basestring, 'M YYYY').startOf('month'),
                 end: moment(basestring, 'M YYYY').endOf('month')
@@ -189,19 +189,19 @@ define('io.ox/find/date/patterns',[
             start: moment(),
             end: moment()
         });
-        add([ gt('Last day'), gt('Yesterday') ], 0, {
+        add([gt('Last day'), gt('Yesterday')], 0, {
             start: moment().subtract(1, 'day'),
             end: moment().subtract(1, 'day')
         });
-        add([ gt('Last week'), gt('Previous week') ], 0, {
+        add([gt('Last week'), gt('Previous week')], 0, {
             start: moment().subtract(7, 'day').startOf('week'),
             end: moment().subtract(7, 'day').endOf('week')
         });
-        add([ gt('Last month'), gt('Previous month') ], 1, {
+        add([gt('Last month'), gt('Previous month')], 1, {
             start: moment().subtract(1, 'month').startOf('month'),
             end: moment().subtract(1, 'month').endOf('month')
         });
-        add([ gt('Last year'), gt('Previous year') ], 2, {
+        add([gt('Last year'), gt('Previous year')], 2, {
             start: moment().subtract(1, 'year').startOf('year'),
             end: moment().subtract(1, 'year').endOf('year')
         });

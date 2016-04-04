@@ -43,7 +43,7 @@ define(['io.ox/mail/vacationnotice/settings/model'], function (model) {
         }
     };
 
-    describe('Vacationnotice', function () {
+    describe('Mailfilter Vacationnotice', function () {
 
         it('should prepare the data', function () {
 

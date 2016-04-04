@@ -73,7 +73,7 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
                 return util.conditionChain(
-                    e.collection.has('one'),
+                    e.collection.has('one', 'modify'),
                     !util.hasStatus('lockedByOthers', e),
                     (/\.(csv|txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
                     (e.baton.openedBy !== 'io.ox/mail/compose'),
@@ -309,6 +309,21 @@ define('io.ox/files/actions', [
         }
     });
 
+    new Action('io.ox/files/actions/launchpresenter', {
+        capabilities: 'presenter document_preview',
+        requires: function (e) {
+            if (!e.collection.has('one')) {
+                return false;
+            }
+            var model = e.baton.models[0];
+            return ((model.isPresentation() || model.isPDF()) && model.isFile());
+        },
+        action: function (baton) {
+            var fileModel = baton.models[0];
+            ox.launch('io.ox/presenter/main', fileModel);
+        }
+    });
+
     //drive action for double-click or enter in files
     new Action('io.ox/files/actions/default', {
         action: function (baton) {
@@ -508,17 +523,30 @@ define('io.ox/files/actions', [
     moveAndCopy('move', gt('Move'), { single: gt('File has been moved'), multiple: gt('Files have been moved') });
     moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
+    function isShareable(e, type) {
+        var id, model;
+        // not possible for multi-selection
+        if (e.collection.has('multiple')) return false;
+        // get folder id
+        if (e.collection.has('one')) {
+            // use selected file or folders
+            id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;
+        } else if (e.baton.app) {
+            // use current folder
+            id = e.baton.app.folder.get();
+        }
+        if (!id) return false;
+        // general capability and folder check
+        model = folderAPI.pool.getModel(id);
+        if (!model.isShareable()) return false;
+        return type === 'invite' ? model.supportsInviteGuests() : true;
+    }
+
     // folder based actions
     new Action('io.ox/files/actions/invite', {
         capabilities: 'invite_guests',
         requires: function (e) {
-            var id;
-            if (e.baton.app) {
-                id = e.baton.app.folder.get();
-            } else if (e.collection.has('one')) {
-                id = e.baton.data.folder_id;
-            }
-            return id ? folderAPI.pool.getModel(id).isShareable() : false;
+            return isShareable(e, 'invite');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
@@ -539,13 +567,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/getalink', {
         capabilities: 'share_links',
         requires: function (e) {
-            var id;
-            if (e.baton.app) {
-                id = e.baton.app.folder.get();
-            } else if (e.collection.has('one')) {
-                id = e.baton.data.folder_id;
-            }
-            return id ? folderAPI.pool.getModel(id).isShareable() : false;
+            return isShareable(e, 'link');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
@@ -623,7 +645,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/add-folder', {
         requires: function (e) {
             var model = folderAPI.pool.getModel(e.baton.app.folder.get());
-            return folderAPI.can('create:folder', model.toJSON());
+            return folderAPI.can('create:folder', model.toJSON()) && !folderAPI.is('trash', model.toJSON());
         },
         action: function (baton) {
             var id = baton.app.folder.get(), model = folderAPI.pool.getModel(id);
@@ -646,6 +668,18 @@ define('io.ox/files/actions', [
         action: function (baton) {
             require(['io.ox/files/guidance/main'], function (guidance) {
                 guidance.reloadPopup(baton.app, baton.e);
+            });
+        }
+    });
+
+    new Action('io.ox/files/premium/actions/synchronize', {
+        capabilities: 'client-onboarding (boxcom || google || msliveconnect)',
+        requires: function () {
+            return _.device('!smartphone');
+        },
+        action: function () {
+            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                wizard.run();
             });
         }
     });
@@ -735,7 +769,7 @@ define('io.ox/files/actions', [
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id:'download-folder',
+        id: 'download-folder',
         prio: 'hi',
         mobile: 'lo',
         label: gt('Download'),
@@ -938,9 +972,8 @@ define('io.ox/files/actions', [
                     'Drop here to upload a <b class="dndignore">new version</b> of "%1$s"',
                     String(app.currentFile.filename || app.currentFile.title).replace(/</g, '&lt;')
                 );
-            } else {
-                return gt('Drop here to upload a <b class="dndignore">new version</b>');
             }
+            return gt('Drop here to upload a <b class="dndignore">new version</b>');
         },
         action: function (file, app) {
             require(['io.ox/files/upload/main'], function (fileUpload) {
@@ -948,4 +981,19 @@ define('io.ox/files/actions', [
             });
         }
     });
+
+    ext.point('io.ox/files/folderview/premium-area').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-premium-links',
+        ref: 'io.ox/files/links/premium-links',
+        classes: 'list-unstyled'
+    }));
+
+    ext.point('io.ox/files/links/premium-links').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'share-files',
+        label: gt('Share your folders'),
+        ref: 'io.ox/files/premium/actions/synchronize'
+    }));
 });

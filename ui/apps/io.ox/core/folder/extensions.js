@@ -24,8 +24,9 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/folder/folder-color',
     'io.ox/backbone/mini-views/upsell',
     'settings!io.ox/core',
+    'settings!io.ox/mail',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, settings) {
+], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, settings, mailSettings) {
 
     'use strict';
 
@@ -34,13 +35,17 @@ define('io.ox/core/folder/extensions', [
     if (capabilities.has('webmail')) {
         // define virtual/standard
         api.virtual.add('virtual/standard', function () {
-            return this.concat(
+            var list = [
                 // inbox
                 api.get(INBOX),
                 // sent, drafts, spam, trash, archive
                 // default0 is alternative for IMAP server that list standard folders below INBOX
-                api.list('default0'), api.list(INBOX)
-            );
+                api.list('default0')
+            ];
+            // append all-unssen below INBOX
+            if (mailSettings.get('features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
+            list.push(api.list(INBOX));
+            return this.concat.apply(this, list);
         });
 
         // myfolders
@@ -83,10 +88,8 @@ define('io.ox/core/folder/extensions', [
 
     function getMySharesFolder() {
 
-        // not for guests
         if (capabilities.has('guest')) return;
-        // normal users need the following capabilites
-        if (!capabilities.has('edit_public_folders') && !capabilities.has('read_create_shared_folders')) return;
+        if (!capabilities.has('gab || share_links')) return;
 
         return $.when({
             id: 'virtual/myshares',
@@ -153,7 +156,7 @@ define('io.ox/core/folder/extensions', [
                 // standard folders
                 new TreeNodeView({
                     filter: function (id, model) {
-                        return account.isStandardFolder(model.id);
+                        return account.isStandardFolder(model.id) || model.id === 'virtual/all-unseen';
                     },
                     folder: 'virtual/standard',
                     headless: true,
@@ -221,6 +224,55 @@ define('io.ox/core/folder/extensions', [
             );
         },
 
+        addStorageAccount: (function () {
+            if (_.device('smartphone')) return $.noop;
+
+            var links = $('<div class="links">');
+
+            function getAvailableServices() {
+                var services = ['google', 'dropbox', 'boxcom', 'msliveconnect'];
+
+                return require(['io.ox/keychain/api']).then(function (keychainApi) {
+                    return _(keychainApi.submodules).filter(function (submodule) {
+                        if (services.indexOf(submodule.id) < 0) return false;
+
+                        return !submodule.canAdd || submodule.canAdd.apply(this);
+                    });
+                });
+            }
+
+            function draw() {
+                getAvailableServices().done(function (services) {
+                    if (services.length > 0) {
+                        links.empty().show().append(
+                            $('<a href="#" data-action="add-storage-account" tabindex="1" role="button">')
+                            .text(gt('Add storage account'))
+                            .on('click', function (e) {
+                                e.preventDefault();
+                                require(['io.ox/files/actions/add-storage-account'], function (addStorageAccount) {
+                                    addStorageAccount();
+                                });
+                            })
+                        );
+                    } else {
+                        links.hide();
+                    }
+                });
+            }
+
+            return function () {
+                this.append(links);
+
+                require(['io.ox/core/api/filestorage'], function (filestorageApi) {
+                    // remove old listeners
+                    filestorageApi.off('create delete update', draw);
+                    // append new listeners and draw immediatly
+                    filestorageApi.on('create delete update', draw);
+                    draw();
+                });
+            };
+        })(),
+
         addRemoteAccount: function () {
             if (!capabilities.has('multiple_mail_accounts')) return;
 
@@ -272,12 +324,12 @@ define('io.ox/core/folder/extensions', [
 
         rootFolders: function (tree) {
             var options = {
-                    folder: tree.root,
-                    headless: true,
-                    open: true,
-                    tree: tree,
-                    parent: tree
-                };
+                folder: tree.root,
+                headless: true,
+                open: true,
+                tree: tree,
+                parent: tree
+            };
 
             if (tree.options.hideTrashfolder) {
                 options.filter = function (id, model) {
@@ -460,6 +512,10 @@ define('io.ox/core/folder/extensions', [
             id: 'remote-accounts',
             index: 300,
             draw: extensions.fileStorageAccounts
+        }, {
+            id: 'add-external-account',
+            index: 400,
+            draw: extensions.addStorageAccount
         }
     );
 
@@ -554,7 +610,7 @@ define('io.ox/core/folder/extensions', [
                         privateFolders.toggle(true);
                     });
 
-                    publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: getTitle(module, 'public') }));
+                    publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public', model_id: model_id + '/public', title: getTitle(module, 'public') }));
 
                     placeholder.replaceWith(
                         // private folders
@@ -564,13 +620,13 @@ define('io.ox/core/folder/extensions', [
                         // public folders
                         publicFolders.render().$el.addClass('section'),
                         // shared with me
-                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared',  model_id: model_id + '/shared',  title: getTitle(module, 'shared') }))
+                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared', model_id: model_id + '/shared', title: getTitle(module, 'shared') }))
                         .render().$el.addClass('section'),
                         // // shared by me
                         // new TreeNodeView(_.extend({}, defaults, { folder: folder + '/sharing', model_id: model_id + '/sharing', title: gt('Shared by me') }))
                         // .render().$el.addClass('section'),
                         // hidden folders
-                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden',  model_id: model_id + '/hidden',  title: getTitle(module, 'hidden') }))
+                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden', model_id: model_id + '/hidden', title: getTitle(module, 'hidden') }))
                         .render().$el.addClass('section')
                     );
                 });
@@ -613,21 +669,6 @@ define('io.ox/core/folder/extensions', [
         //
         // Upsell
         //
-
-        ext.point('io.ox/core/foldertree/contacts/links').extend({
-            index: 300,
-            id: 'upsell-contacts',
-            draw: function (baton) {
-
-                if (baton.context !== 'app') return;
-
-                this.append(new UpsellView({
-                    id: 'folderview/contacts',
-                    requires: 'carddav',
-                    title: gt('Synchronize with your tablet or smartphone')
-                }).render().$el);
-            }
-        });
 
         ext.point('io.ox/core/foldertree/calendar/links').extend({
             index: 300,

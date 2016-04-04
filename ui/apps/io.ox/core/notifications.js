@@ -48,10 +48,10 @@ define('io.ox/core/notifications', [
             $(document.body).on('click', function (e) {
                 // don't check if notification area is closed
                 if (self.getStatus() !== 'closed') {
-                    var isInside = $( e.target )
+                    var isInside = $(e.target)
                         .closest('#io-ox-notifications, #io-ox-notifications-sidepopup, #io-ox-notifications-icon, .io-ox-dialog-underlay, .io-ox-dialog-popup, .modal-footer, .custom-dropdown').length > 0;
 
-                    if (!isInside ) {
+                    if (!isInside) {
                         self.hide({ refocus: document.body === document.activeElement });
                     }
                 }
@@ -73,7 +73,7 @@ define('io.ox/core/notifications', [
                         collection = collection.collection;
                     }
                     self.model.get('markedForRedraw')[collection.subviewId] = true;
-                    self.delayedUpdate.call(self);
+                    self.delayedUpdate();
                 });
 
                 subview.on('autoopen', _.bind(self.show, self));
@@ -130,13 +130,13 @@ define('io.ox/core/notifications', [
                     laterButton = $('<button class="later-button btn btn-warning">').text(gt('Later')).on('click', function (e) {
                         e.stopPropagation();
                         cleanup();
-                    }),
-                    disableButton = $('<button class="disable-button btn btn-danger">').text(gt('Disable')).on('click', function (e) {
+                    }),                                                                      //#. declines the use of desktop notifications
+                    disableButton = $('<button class="disable-button btn btn-danger">').text(gt('Never')).on('click', function (e) {
                         settings.set('showDesktopNotifications', false).save();
                         e.stopPropagation();
                         cleanup();
-                    }),
-                    enableButton = $('<button class="enable-button btn btn-success">').text(gt('Enable')).on('click', function (e) {
+                    }),                                                                     //#. Opens popup to decide if desktop notifications should be shown
+                    enableButton = $('<button class="enable-button btn btn-success">').text(gt('Decide now')).on('click', function (e) {
                         e.stopPropagation();
                         desktopNotifications.requestPermission(function (result) {
                             if (result === 'granted') {
@@ -161,7 +161,7 @@ define('io.ox/core/notifications', [
                         disableButton.remove();
                         self.hideNotificationInfo = true;
                     },
-                    containerNode = $('<div class="desktop-notification-info clearfix">').append( textNode, enableButton, disableButton, laterButton );
+                    containerNode = $('<div class="desktop-notification-info clearfix">').append(textNode, enableButton, disableButton, laterButton);
 
                 if (self.hideNotificationInfo) {
                     cleanup();
@@ -192,19 +192,19 @@ define('io.ox/core/notifications', [
                                 }
                                 node.addClass('io-ox-notifications-sidepopup first');
                                 var cont = function (data) {
-                                        //work with real model view or just draw method with baton
-                                        if (renderer.View) {
-                                            var view = new renderer.View({ data: data });
-                                            popup.idle().append(view.render().expand().$el.addClass('no-padding'));
-                                        } else {
-                                            popup.idle().append(renderer.draw({ data: data }).addClass('no-padding'));
-                                        }
+                                    //work with real model view or just draw method with baton
+                                    if (renderer.View) {
+                                        var view = new renderer.View({ data: data });
+                                        popup.idle().append(view.render().expand().$el.addClass('no-padding'));
+                                    } else {
+                                        popup.idle().append(renderer.draw({ data: data }).addClass('no-padding'));
+                                    }
 
-                                        if (_.device('smartphone')) {
-                                            self.nodes.main.removeClass('active');
-                                        }
-                                        return data;
-                                    };
+                                    if (_.device('smartphone')) {
+                                        self.nodes.main.removeClass('active');
+                                    }
+                                    return data;
+                                };
                                 //check if data is deferred
                                 if (data.then) {
                                     // fetch proper item now
@@ -320,7 +320,7 @@ define('io.ox/core/notifications', [
         },
 
         hide: function (opt) {
-            var opt = _.extend({ refocus: true }, opt || {});
+            opt = _.extend({ refocus: true }, opt || {});
             $(document).off('keydown.notification');
             var badgeview = this.badgeview;
             // if it's closed already we're done

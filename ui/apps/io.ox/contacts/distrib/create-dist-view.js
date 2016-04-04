@@ -86,9 +86,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
         render: function () {
             var self = this;
             // define collection
-            this.baton.member = new Backbone.Collection(this.baton.model.get('distribution_list'), {
-                model: pModel.Participant
-            });
+            this.baton.member = new pModel.Participants(this.baton.model.get('distribution_list'));
 
             this.listenTo(this.baton.member, 'add remove reset', function (ctx, col) {
                 var all = col.map(function (m) {
@@ -100,13 +98,12 @@ define('io.ox/contacts/distrib/create-dist-view', [
                             mail: m.getTarget(),
                             mail_field: m.getFieldNumber()
                         };
-                    } else {
-                        return {
-                            display_name: m.getDisplayName(),
-                            mail: m.getTarget(),
-                            mail_field: 0
-                        };
                     }
+                    return {
+                        display_name: m.getDisplayName(),
+                        mail: m.getTarget(),
+                        mail_field: 0
+                    };
                 });
                 self.baton.model.set('distribution_list', all);
             });
@@ -115,9 +112,6 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 collection: this.baton.member,
                 baton: this.baton
             }).render().$el);
-
-            // trigger an empty remove just to get rid of unnecessary values in contacts
-            if (!_.isEmpty(this.baton.model.get('distribution_list'))) this.baton.member.trigger('remove', {}, this.baton.member);
         }
     });
 

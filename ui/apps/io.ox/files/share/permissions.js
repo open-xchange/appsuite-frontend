@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
- define('io.ox/files/share/permissions', [
+define('io.ox/files/share/permissions', [
     'io.ox/core/extensions',
     'io.ox/backbone/disposable',
     'io.ox/core/yell',
@@ -118,14 +118,15 @@
                         return this.get('display_name');
                     case 'guest':
                         var data = this.get('contact');
-                        return data[data.field] || data.email1;
+                        return data[data.field] || data.email1;
                     case 'anonymous':
                         return gt('Public link');
+                    // no default
                 }
             },
 
             getEmail: function () {
-                return contactsUtil.getMail( this.get('contact') );
+                return contactsUtil.getMail(this.get('contact'));
             },
 
             getSortName: function () {
@@ -137,10 +138,11 @@
                     case 'group':
                         return this.get('display_name');
                     case 'guest':
-                        var data = this.get('contact');
-                        return data[data.field] || data.email1;
+                        data = this.get('contact');
+                        return data[data.field] || data.email1;
                     case 'anonymous':
                         return '';
+                    // no default
                 }
             },
 
@@ -179,6 +181,7 @@
                         case 'anonymous':
                             data.type = type;
                             break;
+                        // no default
                     }
                 }
 
@@ -203,6 +206,7 @@
                         }
                     }
                 } catch (e) {
+                    if (ox.debug) console.error(e);
                 }
 
                 return isGuest;
@@ -212,8 +216,12 @@
                 if (a.isMyself()) return -1;
                 if (b.isMyself()) return +1;
                 var snA = a.getSortName(),
-                    snB = b.getSortName(),
-                    lexic = snA < snB ? -1 : snA > snB ? +1 : 0;
+                    snB = b.getSortName(), lexic;
+
+                /*eslint-disable no-nested-ternary */
+                lexic = snA === snB ? 0 : (snA > snB ? +1 : -1);
+                /*eslint-enable no-nested-ternary */
+
                 if (a.isGroup() && b.isGroup()) return lexic;
                 if (a.isGroup()) return -1;
                 if (b.isGroup()) return +1;
@@ -245,6 +253,7 @@
                 this.user = null;
                 this.display_name = '';
                 this.description = '';
+                this.ariaLabel = '';
 
                 this.parseBitmask();
 
@@ -279,6 +288,7 @@
 
             render: function () {
                 this.getEntityDetails();
+                this.$el.attr({ 'aria-label': this.ariaLabel + '.', 'role': 'group' });
                 var baton = ext.Baton({ model: this.model, view: this, parentModel: this.parentModel });
                 ext.point(POINT + '/entity').invoke('draw', this.$el.empty(), baton);
                 return this;
@@ -346,15 +356,19 @@
                         break;
                     case 'guest':
                         this.user = this.model.get('contact');
-                        this.display_name = this.user[this.user.field] || this.user.email1;
+                        this.display_name = this.user[this.user.field] || this.user.email1;
                         this.description = gt('Guest');
                         break;
                     case 'anonymous':
                         // TODO: public vs. password-protected link
-                        this.display_name = gt('Public link');
+                        this.display_name = this.ariaLabel = gt('Public link');
                         this.description = this.model.get('share_url');
                         break;
+                    // no default
                 }
+
+                // a11y: just say "Public link"; other types use their description
+                this.ariaLabel = this.ariaLabel || (this.display_name + ', ' + this.description);
             },
 
             getRole: function () {
@@ -528,7 +542,7 @@
                 if (!baton.model.isPerson()) return;
                 var email = baton.model.getEmail();
                 this.find('.display_name, .image').each(function (index, node) {
-                    node.addClass('halo-link').data({ email1: email });
+                    $(node).addClass('halo-link').data({ email1: email });
                 });
             }
         },
@@ -541,7 +555,7 @@
             id: 'role',
             draw: function (baton) {
 
-                var $el, node, dropdown,
+                var $el, dropdown,
                     role = baton.view.getRole(),
                     description = baton.view.getRoleDescription(role),
                     isFile = baton.parentModel.isFile(),
@@ -586,7 +600,7 @@
                             model.set('bits', isFile ? fileRoles[value] : roles[value].bit);
                         }
                     });
-                    node = dropdown.render().$el;
+                    dropdown.render();
                 }
 
                 this.append($el);
@@ -626,7 +640,7 @@
                     maxWrite = model.get('write') === 64 ? 64 : 2,
                     maxDelete = model.get('delete') === 64 ? 64 : 2;
 
-                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), model: model, smart: true })
+                var dropdown = new DropdownView({ caret: true, keep: true, label: gt('Details'), title: gt('Detailed access rights'), model: model, smart: true })
                     //
                     // FOLDER access
                     //
@@ -693,9 +707,7 @@
                 }
 
                 this.append(
-                    $('<div class="col-sm-2 col-xs-4 detail-dropdown">').append(
-                        dropdown.$el.attr('title', gt('Detailed access rights'))
-                    )
+                    $('<div class="col-sm-2 col-xs-4 detail-dropdown">').append(dropdown.$el)
                 );
             }
         },
@@ -711,7 +723,7 @@
                 if (!baton.parentModel.isAdmin()) return;
                 if (isFolderAdmin && baton.model.get('entity') === baton.parentModel.get('created_by')) return;
 
-                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars">'), smart: true, title: gt('Actions') }),
+                var dropdown = new DropdownView({ label: $('<i class="fa fa-bars" aria-hidden="true">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
                     myself = baton.model.isMyself(),
                     isNew = baton.model.has('new'),
@@ -719,21 +731,22 @@
 
                 switch (type) {
                     case 'group':
-                        dropdown.link('revoke', gt('Revoke access'));
+                        dropdown.link('revoke', isNew ? gt('Remove') : gt('Revoke access'));
                         break;
                     case 'user':
                     case 'guest':
                         if (!myself && !isNew && !isMail) {
                             dropdown.link('resend', gt('Resend invitation')).divider();
                         }
-                        dropdown.link('revoke', gt('Revoke access'));
+                        dropdown.link('revoke', isNew ? gt('Remove') : gt('Revoke access'));
                         break;
                     case 'anonymous':
                         if (capabilities.has('share_links')) {
                             dropdown.link('edit', gt('Edit')).divider();
                         }
-                        dropdown.link('revoke', gt('Revoke access'));
+                        dropdown.link('revoke', isNew ? gt('Remove') : gt('Revoke access'));
                         break;
+                    // no default
                 }
 
                 this.append(
@@ -744,6 +757,11 @@
             }
         }
     );
+
+    // helper
+    function getBitsExternal(model) {
+        return model.isFolder() ? 257 : 1;
+    }
 
     var that = {
 
@@ -836,11 +854,28 @@
                 permissionsView.render().$el
             );
 
-            if (objModel.isAdmin()) {
+            // to change privileges you have to a folder admin
+            var supportsChanges = objModel.isAdmin(),
+                folderModel = objModel.getFolderModel();
+
+            // whether you can invite further people is a different question:
+            // A. you have to be the admin AND (
+            //   B. you can invite guests (external contacts) OR
+            //   C. you are in a groupware context (internal users and/or groups)
+            // )
+            var supportsInvites = supportsChanges && folderModel.supportsInternalSharing(),
+                supportsGuests = folderModel.supportsInviteGuests();
+
+            if (supportsChanges) {
                 // add action buttons
                 dialog
                     .addPrimaryButton('save', options.share ? gt('Share') : gt('Save'), 'save', { tabindex: 1 })
                     .addButton('cancel', gt('Cancel'), 'cancel', { tabindex: 1 });
+            } else {
+                dialog.addPrimaryButton('cancel', gt('Close'));
+            }
+
+            if (supportsInvites) {
 
                 /*
                  * extension point for autocomplete item
@@ -863,7 +898,7 @@
                 var typeaheadView = new Typeahead({
                         apiOptions: {
                             // mail does not support sharing folders to guets
-                            contacts: capabilities.has('invite_guests') && module !== 'mail',
+                            contacts: supportsGuests,
                             users: true,
                             groups: true
                         },
@@ -875,7 +910,7 @@
                             // remove duplicate entries from typeahead dropdown
                             return _(data).filter(function (model) {
                                 // don't offer secondary addresses as guest accounts
-                                if (!capabilities.has('invite_guests') && model.get('field') !== 'email1') return false;
+                                if (!supportsGuests && model.get('field') !== 'email1') return false;
                                 // mail does not support sharing folders to guets
                                 if (module === 'mail' && model.get('field') !== 'email1') return false;
                                 return !permissionsView.collection.get(model.id);
@@ -886,7 +921,7 @@
                             var isInternal = member.get('type') === 2 || member.get('type') === 1,
                                 isGuest = member.get('type') === 5,
                                 obj = {
-                                    bits: isInternal ? 4227332 : objModel.isFolder() ? 257 : 1, // Author : (Viewer for folders: Viewer for files)
+                                    bits: isInternal ? 4227332 : getBitsExternal(objModel), // Author : (Viewer for folders: Viewer for files)
                                     group: member.get('type') === 2,
                                     type: member.get('type') === 2 ? 'group' : 'user',
                                     new: true
@@ -935,7 +970,7 @@
                                 if (module === 'mail') return;
 
                                 // skip manual edit if invite_guests isn't set
-                                if (!capabilities.has('invite_guests')) return;
+                                if (!supportsGuests) return;
 
                                 // enter or blur?
                                 if (e.type === 'keydown' && e.which !== 13) return;
@@ -946,7 +981,7 @@
 
                                 // add to collection
                                 permissionsView.collection.add(new Permission({
-                                    bits: objModel.isFolder() ? 257 : 1,
+                                    bits: getBitsExternal(objModel),
                                     contact: { email1: value },
                                     type: 'guest',
                                     new: true
@@ -975,9 +1010,6 @@
                 );
 
                 typeaheadView.render();
-
-            } else {
-                dialog.addPrimaryButton('cancel', gt('Close'));
             }
 
             dialog.on('save', function () {

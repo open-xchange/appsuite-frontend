@@ -57,19 +57,10 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                     vacationData = data[0].actioncmds[0];
                     vacationData.internal_id = vacationData.id;
                     vacationData.id = data[0].id;
-
-                    var returnIndex = function (source, target) {
-                        var index = -1;
-                        _.each(source, function (obj, key) {
-                            if (obj.label === target || obj.value === target) index = key;
-                        });
-                        return index;
-                    };
                     // reset the from value if the submitted value is unknown
-                    if (setSender && returnIndex(multiValues.from, vacationData.from) === -1 && returnIndex(multiValues.from, vacationData.from) === -1) {
+                    if (setSender && _.findIndex(multiValues.from, { label: vacationData.from }) === -1 && _.findIndex(multiValues.from, { value: vacationData.from }) === -1) {
                         vacationData.from = _.first(multiValues.fromArrays);
                     }
-
                     if (!setSender && vacationData.from) delete vacationData.from;
 
                     if (_(data[0].test).size() === 2) {
@@ -120,8 +111,6 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                     saveText: function () {
                         var textarea = $(this.el).find('textarea'),
                             model = this.model;
-
-                        $(this.el).find('#subject').trigger('change');
                         textarea.on('keyup keydown', function () {
                             model.set('text', textarea.val(), { silent: true });
                         });

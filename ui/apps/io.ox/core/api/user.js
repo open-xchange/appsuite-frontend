@@ -30,17 +30,16 @@ define('io.ox/core/api/user', [
                 response.birthday = util.julianToGregorian(response.birthday);
             }
             return response;
-        //we have an array of users
-        } else {
-            //convert birthdays with year 1 from julian to gregorian calendar
-            _(response).each(function (contact) {
-                //birthday without year
-                if (contact.birthday && moment.utc(contact.birthday).local(true).year() === 1) {
-                    contact.birthday = util.julianToGregorian(contact.birthday);
-                }
-            });
-            return response;
         }
+        //we have an array of users
+        //convert birthdays with year 1 from julian to gregorian calendar
+        _(response).each(function (contact) {
+            //birthday without year
+            if (contact.birthday && moment.utc(contact.birthday).local(true).year() === 1) {
+                contact.birthday = util.julianToGregorian(contact.birthday);
+            }
+        });
+        return response;
     };
 
     // generate basic API
@@ -96,63 +95,58 @@ define('io.ox/core/api/user', [
      * @fires  api#refresh.list
      * @return { deferred} done returns object with timestamp, data
      */
-    api.update =  function (o) {
-        if (_.isEmpty(o.data)) {
-            return $.when();
-        } else {
-            var def = $.Deferred();
-            require(['io.ox/contacts/api'], function (contactsApi) {
-                //convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
-                if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() === 1) {
-                    o.data.birthday = util.gregorianToJulian(o.data.birthday);
-                }
-                return http.PUT({
-                    module: 'user',
-                    params: {
-                        action: 'update',
-                        id: o.id,
-                        folder: o.folder,
-                        timestamp: o.timestamp || _.then()
-                    },
-                    data: o.data,
-                    appendColumns: false
-                })
-                .pipe(function () {
-                    // get updated contact
-                    return api.get({ id: o.id }, false)
-                        .pipe(function (data) {
-                            return $.when(
-                                api.caches.get.add(data),
-                                api.caches.all.clear(),
-                                api.caches.list.remove({ id: o.id }),
-                                // update contact caches
-                                //no add here because this userdata not contactdata (similar but not equal)
-                                contactsApi.caches.get.remove({ folder_id: data.folder_id, id: data.contact_id }),
-                                contactsApi.caches.all.grepRemove(o.folder + contactsApi.DELIM),
-                                contactsApi.caches.list.remove({ id: data.contact_id, folder: o.folder }),
-                                contactsApi.clearFetchCache()
-                            )
-                            .done(function () {
-                                def.resolve(data);
-                                api.trigger('update:' + _.ecid(data), data);
-                                api.trigger('update', data);
-                                api.trigger('refresh.list');
-                                // get new contact and trigger contact events
-                                // skip this if GAB is missing
-                                if (data.folder_id === 6 && capabilities.has('!gab')) return;
-                                // fetch contact
-                                contactsApi.get({ folder_id: data.folder_id, id: data.contact_id }).done(function (contactData) {
-                                    contactsApi.trigger('update:' + _.ecid(contactData), contactData);
-                                    contactsApi.trigger('update', contactData);
-                                });
-                            });
+    api.update = function (o) {
+        if (_.isEmpty(o.data)) return $.when();
+
+        return require(['io.ox/contacts/api']).then(function (contactsApi) {
+            //convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+            if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() === 1) {
+                o.data.birthday = util.gregorianToJulian(o.data.birthday);
+            }
+            return http.PUT({
+                module: 'user',
+                params: {
+                    action: 'update',
+                    id: o.id,
+                    folder: o.folder,
+                    timestamp: o.timestamp || _.then()
+                },
+                data: o.data,
+                appendColumns: false
+            })
+            .then(function () {
+                // get updated contact
+                return api.get({ id: o.id }, false).then(function (data) {
+                    return $.when(
+                        api.caches.get.add(data),
+                        api.caches.all.clear(),
+                        api.caches.list.remove({ id: o.id }),
+                        // update contact caches
+                        //no add here because this userdata not contactdata (similar but not equal)
+                        contactsApi.caches.get.remove({ folder_id: data.folder_id, id: data.contact_id }),
+                        contactsApi.caches.all.grepRemove(o.folder + contactsApi.DELIM),
+                        contactsApi.caches.list.remove({ id: data.contact_id, folder: o.folder }),
+                        contactsApi.clearFetchCache()
+                    )
+                    .then(function () {
+                        return data;
+                    })
+                    .done(function () {
+                        api.trigger('update:' + _.ecid(data), data);
+                        api.trigger('update', data);
+                        api.trigger('refresh.list');
+                        // get new contact and trigger contact events
+                        // skip this if GAB is missing
+                        if (data.folder_id === 6 && capabilities.has('!gab')) return;
+                        // fetch contact
+                        contactsApi.get({ folder_id: data.folder_id, id: data.contact_id }).done(function (contactData) {
+                            contactsApi.trigger('update:' + _.ecid(contactData), contactData);
+                            contactsApi.trigger('update', contactData);
                         });
-                }, function (error) {
-                    def.reject(error);
+                    });
                 });
             });
-            return def;
-        }
+        });
     };
 
     /**
@@ -192,16 +186,15 @@ define('io.ox/core/api/user', [
                 fixPost: true
             })
             .pipe(filter);
-        } else {
-            return http.FORM({
-                module: 'user',
-                action: 'update',
-                form: file,
-                data: changes,
-                params: { id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.then() }
-            })
-            .pipe(filter);
         }
+        return http.FORM({
+            module: 'user',
+            action: 'update',
+            form: file,
+            data: changes,
+            params: { id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.then() }
+        })
+        .pipe(filter);
     };
 
     /**
@@ -267,6 +260,13 @@ define('io.ox/core/api/user', [
             return api.getCurrentUser();
         });
     };
+
+    // reload account API if current user gets changed
+    api.on('update:' + _.ecid({ folder_id: 6, id: ox.user_id }), function () {
+        require(['io.ox/core/api/account'], function (accountAPI) {
+            accountAPI.reload();
+        });
+    });
 
     return api;
 });

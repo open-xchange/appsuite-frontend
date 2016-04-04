@@ -63,7 +63,7 @@ define('io.ox/tasks/actions', [
             if (!(e.collection.has('some') && e.collection.has('modify'))) {
                 return false;
             }
-            return (e.baton.data.length  !== undefined || e.baton.data.status !== 3);
+            return (e.baton.data.length !== undefined || e.baton.data.status !== 3);
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/actions/doneUndone']).done(function (action) {
@@ -77,7 +77,7 @@ define('io.ox/tasks/actions', [
             if (!(e.collection.has('some') && e.collection.has('modify'))) {
                 return false;
             }
-            return (e.baton.data.length  !== undefined || e.baton.data.status === 3);
+            return (e.baton.data.length !== undefined || e.baton.data.status === 3);
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/actions/doneUndone']).done(function (action) {
@@ -201,7 +201,7 @@ define('io.ox/tasks/actions', [
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="fa fa-trash-o">')
+                        $('<i class="fa fa-trash-o" aria-hidden="true">')
                             .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();

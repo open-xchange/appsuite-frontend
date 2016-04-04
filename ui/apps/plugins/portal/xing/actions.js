@@ -64,7 +64,7 @@ define('plugins/portal/xing/actions', [
 
             return $('<div>').addClass('xing possible-action comment').append(
                 $('<span>').addClass('comment-toggle').append(
-                    $('<i class="fa fa-comment">'),
+                    $('<i class="fa fa-comment" aria-hidden="true">'),
                     $.txt(gt('Comment'))
                 ).on('click', commentToggle),
                 container = $('<div>').addClass('comment-form').append(
@@ -115,7 +115,7 @@ define('plugins/portal/xing/actions', [
             };
 
             return $('<div class="xing possible-action delete">').append(
-                    $('<i class="fa fa-trash-o">'),
+                    $('<i class="fa fa-trash-o" aria-hidden="true">'),
                     $.txt(gt('Delete'))
                 ).on('click', handler);
         }
@@ -166,15 +166,14 @@ define('plugins/portal/xing/actions', [
 
             if (isAlreadyLiked) {
                 return $('<div class="xing possible-action unlike">').append(
-                    $('<i class="fa fa-thumbs-down">'),
+                    $('<i class="fa fa-thumbs-down" aria-hidden="true">'),
                     $.txt(gt('Un-like'))
                 ).on('click', handler);
-            } else {
-                return $('<div class="xing possible-action like">').append(
-                    $('<i class="fa fa-thumbs-up">'),
-                    $.txt(gt('Like'))
-                ).on('click', handler);
             }
+            return $('<div class="xing possible-action like">').append(
+                $('<i class="fa fa-thumbs-up" aria-hidden="true">'),
+                $.txt(gt('Like'))
+            ).on('click', handler);
         }
     });
 
@@ -205,7 +204,7 @@ define('plugins/portal/xing/actions', [
             };
 
             return $('<div class="xing possible-action share">').append(
-                    $('<i class="fa fa-share">'),
+                    $('<i class="fa fa-share" aria-hidden="true">'),
                     $.txt(gt('Share'))
                 ).on('click', handler);
         }

@@ -31,18 +31,18 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                         target = (node.attr('data-i18n-attr') || 'text').split(',');
                     _.each(target, function (el) {
                         switch (el) {
-                        case 'value':
-                            node.val(val);
-                            break;
-                        case 'text':
-                            node.text(val);
-                            break;
-                        case 'label':
-                            node.contents().get(-1).nodeValue = val;
-                            break;
-                        default:
-                            node.attr(el, val);
-                            break;
+                            case 'value':
+                                node.val(val);
+                                break;
+                            case 'text':
+                                node.text(val);
+                                break;
+                            case 'label':
+                                node.contents().get(-1).nodeValue = val;
+                                break;
+                            default:
+                                node.attr(el, val);
+                                break;
                         }
                     });
                 });

@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -10,14 +11,16 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
+
 define('io.ox/contacts/model', [
     'io.ox/backbone/modelFactory',
     'io.ox/backbone/validation',
+    'io.ox/core/extensions',
     'io.ox/contacts/api',
     'io.ox/core/capabilities',
     'io.ox/settings/util',
     'gettext!io.ox/contacts'
-], function (ModelFactory, Validators, api, capabilities, settingsUtil, gt) {
+], function (ModelFactory, Validators, ext, api, capabilities, settingsUtil, gt) {
 
     'use strict';
 
@@ -38,11 +41,10 @@ define('io.ox/contacts/model', [
                         return yell(
                                 api.editNewImage({ id: model.id, folder_id: model.get('folder_id') }, data, file)
                             );
-                    } else {
-                        return yell(
-                            api.update({ id: model.id, folder: model.get('folder_id'), last_modified: model.get('last_modified'), data: data })
-                        );
                     }
+                    return yell(
+                        api.update({ id: model.id, folder: model.get('folder_id'), last_modified: model.get('last_modified'), data: data })
+                    );
                 },
 
                 updateEvents: ['edit'],
@@ -177,6 +179,24 @@ define('io.ox/contacts/model', [
             addressBusiness: { format: 'string' },
             addressOther: { format: 'string' },
             private_flag: { format: 'boolean' }
+        });
+
+        ext.point(ref + '/validation').extend({
+            id: 'upload_quota',
+            validate: function (attributes) {
+                if (attributes.quotaExceeded) {
+                    this.add('attachments_list', gt('Files can not be uploaded, because quota exceeded.'));
+                }
+            }
+        });
+
+        ext.point(ref + '/validation').extend({
+            id: 'birthday',
+            validate: function (attributes) {
+                if ('birthday' in attributes && !attributes.birthday) {
+                    this.add('birthday', gt('Please set day and month properly'));
+                }
+            }
         });
 
         return factory;

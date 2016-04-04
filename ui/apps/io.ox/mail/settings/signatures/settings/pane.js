@@ -18,7 +18,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
      * By updating the last access timestamp the referenced file is prevented from being deleted from both session and disk storage.
      * Needed for inline images
      */
-    function keepAlive (id) {
+    function keepAlive(id) {
         return http.GET({
             module: 'file',
             params: { action: 'keepalive', id: id }
@@ -74,7 +74,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     },
                     class: 'io-ox-signature-edit',
                     keepalive: keepAlive,
-                    scrollpane: baton.$.contentEditable
+                    scrollpane: baton.$.contentEditable,
+                    oxContext: { signature: true }
                 }).done(function (ed) {
                     baton.editor = ed;
                     baton.editor.show();
@@ -149,7 +150,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
         .on('save', function () {
             if (baton.$.name.val() !== '') {
-                var update = signature.id ? {} : { type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: { insertion: 'below', 'content-type': 'text/html' }},
+                var update = signature.id ? {} : { type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: { insertion: 'below', 'content-type': 'text/html' } },
                     editorContent = baton.editor.getContent();
 
                 update.id = signature.id;
@@ -159,8 +160,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 if (baton.$.name.val() !== signature.displayname) update.displayname = baton.$.name.val();
 
                 // remove trailing whitespace when copy/paste signatures out of html pages
-                if (update && update.content)
-                    update.content = update.content.replace(/(<br>)\s+(\S)/g, '$1$2');
+                if (update && update.content) update.content = update.content.replace(/(<br>)\s+(\S)/g, '$1$2');
 
                 popup.busy();
 
@@ -296,7 +296,26 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         id: 'header',
         index: 100,
         draw: function () {
-            this.append($('<h1>').text(gt('Signatures')));
+            var buttonContainer = $('<div class="btn-group pull-right">').append(
+                $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add new signature')).on('click', fnEditSignature)
+            );
+
+            this.append(
+                $('<div class="io-ox-signature-settings">').append(
+                    $('<h1 class="pull-left">').text(gt('Signatures')),
+                    !_.device('smartphone') ? buttonContainer : [],
+                    $('<div class="clearfix">')
+                )
+            );
+
+            if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
+                buttonContainer.append(
+                    $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
+                        fnImportSignatures(e, config.get('gui.mail.signatures'));
+                        return false;
+                    })
+                );
+            }
         },
         save: function () {
             mailSettings.saveAndYell().done(function () {
@@ -360,22 +379,23 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                                                 'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), gt('Delete')),
                                                 role: 'button',
                                                 tabindex: 1
-                                            }).append($('<i class="fa fa-trash-o">'))
+                                            }).append($('<i class="fa fa-trash-o" aria-hidden="true">'))
                                         ),
                                         // do not add a preview pane with single br-tag or empty string
                                         (content === '<br>' || content === '') ? '' : $('<div class="signature-preview">').click(clickEdit).append(content)
                                     )
                                 );
 
-                        if (isDefault)
+                        if (isDefault) {
                             $item.addClass('default');
+                        }
                         $list.append($item);
                         defaultSignatureView.trigger('appendOption', { value: signature.id, label: signature.displayname, isDefault: settings.get('defaultSignature') === signature.id });
                         defaultReplyForwardView.trigger('appendOption', { value: signature.id, label: signature.displayname, isDefault: settings.get('defaultReplyForwardSignature') === signature.id });
                     });
                 }, require('io.ox/core/notifications').yell);
             }
-            var radioNone, radioCustom, signatureText;
+            var radioCustom, signatureText;
             try {
                 if (_.device('smartphone')) {
                     var type = settings.get('mobileSignatureType');
@@ -384,8 +404,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         $('<div class="form-group">').append(
                             $('<div class="radio">').append(
                                 $('<label>').append(
-                                    radioNone = $('<input type="radio" name="mobileSignature">')
-                                    .prop('checked', type === 'none'),
+                                    $('<input type="radio" name="mobileSignature">')
+                                        .prop('checked', type === 'none'),
                                     gt('No signature')
                                 )
                                 .on('change', radioChange)
@@ -427,8 +447,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             }
 
             function addSignatureList($node) {
-                var section;
-
                 // Register edit and delete events
                 $list = $('<ul class="list-unstyled list-group settings-list">')
                 .on('click keydown', 'a[data-action=edit]', function (e) {
@@ -448,15 +466,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     }
                 })
                 .appendTo($node);
-
-                // Append "add signature" button
-                $node.append(
-                    $('<div class="sectioncontent">').append(
-                        section = $('<div class="form-group">').append(
-                            $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add new signature')).on('click', fnEditSignature)
-                        )
-                    )
-                );
 
                 defaultSignatureView = new mini.SelectView({ list: [], name: 'defaultSignature', model: baton.model, id: 'defaultSignature', className: 'form-control' })
                 .on('appendOption', function (option) {
@@ -502,16 +511,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 //draw signatures
                 fnDrawAll();
                 snippets.on('refresh.all', fnDrawAll);
-
-                if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
-                    section.append(
-                        $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
-                            fnImportSignatures(e, config.get('gui.mail.signatures'));
-                            return false;
-                        })
-                    );
-                }
-                section = null;
             }
         }
     });

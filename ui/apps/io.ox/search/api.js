@@ -84,7 +84,7 @@ define('io.ox/search/api', [
         },
         simpleCache = new cache.SimpleCache('search-find');
 
-    function getColumns (options) {
+    function getColumns(options) {
         var module = options.params.module,
             data = _.extend(columns[module]);
         // merge columnlist strings (see bug #38853)
@@ -103,7 +103,7 @@ define('io.ox/search/api', [
 
     // get default options
     function getDefault(key) {
-        var  obj = _.copy(api.options.requests[key], true);
+        var obj = _.copy(api.options.requests[key], true);
         // filter admin contacts
         _.extend(obj.data.options, { admin: settings.get('showAdmin', false) });
         return obj;

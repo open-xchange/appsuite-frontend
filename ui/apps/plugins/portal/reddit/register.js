@@ -21,19 +21,15 @@ define('plugins/portal/reddit/register', [
     var MediaPlayer = function () {}, settings = {};
 
     var drawPlugin = function (index) {
-        if (!index) {
-            index = 100;
-        }
+        if (!index) index = 100;
 
-        var mp = new MediaPlayer();
-        var apiUrl = {
+        var mp = new MediaPlayer(),
+            apiUrl = {
                 'new': 'http://www.reddit.com/r/##subreddit##/new.json?sort=new',
                 'hot': 'http://www.reddit.com/r/##subreddit##/.json?sort='
-            };
-
-        var lastShowedPreview = false;
-
-        var subreddits = settings.get('subreddits');
+            },
+            lastShowedPreview = false,
+            subreddits = settings.get('subreddits');
 
         _.each(subreddits, function (v) {
             if (apiUrl[v.mode]) {
@@ -120,7 +116,7 @@ define('plugins/portal/reddit/register', [
                 lastShowedPreview = entry.name;
 
                 if (thumbUrl !== '') {
-                    var $img = $('<img/>',  { 'data-original': thumbUrl });
+                    var $img = $('<img/>', { 'data-original': thumbUrl });
                     return $img;
                 }
 
@@ -153,7 +149,7 @@ define('plugins/portal/reddit/register', [
                 } else if (imageUrl) {
                     willDisableBusyIndicator = true;
 
-                    $img = $('<img/>',  { 'src': imageUrl }).css({ display: 'none' })
+                    $img = $('<img/>', { 'src': imageUrl }).css({ display: 'none' })
                         .load(function () {
                             if ($busyIndicator) {
                                 $busyIndicator.detach();

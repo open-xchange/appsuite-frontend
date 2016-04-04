@@ -15,8 +15,9 @@ define('io.ox/backbone/mini-views/quota', [
     'gettext!io.ox/core',
     'io.ox/core/api/quota',
     'io.ox/core/strings',
-    'io.ox/backbone/mini-views/upsell'
-], function (gt, quotaAPI, strings, UpsellView) {
+    'io.ox/backbone/mini-views/upsell',
+    'settings!io.ox/mail'
+], function (gt, quotaAPI, strings, UpsellView, settings) {
 
     'use strict';
 
@@ -49,26 +50,27 @@ define('io.ox/backbone/mini-views/quota', [
             quotaAPI.mailQuota.off('change', this.updateQuota);
         },
 
-        getQuota: function () {
+        getQuota: function (forceReload) {
 
             var o = this.options,
                 module = o.module,
                 quotaField = o.quotaField,
                 usageField = o.usageField;
 
-            if (o.quota && o.usage) {
+            // use forceReload to prevent using the cashed data
+            // quotaAPI.get will trigger an automated redraw
+            if (!forceReload && o.quota && o.usage) {
                 return $.when({
                     quota: o.quota,
                     usage: o.usage
                 });
-            } else {
-                return quotaAPI.load().then(function (result) {
-                    return {
-                        quota: result[module][quotaField],
-                        usage: result[module][usageField]
-                    };
-                });
             }
+            return quotaAPI.load().then(function (result) {
+                return {
+                    quota: result[module][quotaField],
+                    usage: result[module][usageField]
+                };
+            });
         },
 
         updateQuota: function () {
@@ -84,13 +86,16 @@ define('io.ox/backbone/mini-views/quota', [
             var label;
             this.$el.append(
                 $('<div class="quota-description">').append(
-                    $('<span class="title pull-left">').text(this.options.title),
-                    label = $('<span class="numbers">')
+                    $('<div class="title">').text(this.options.title),
+                    label = $('<div class="numbers">')
                 )
             );
 
             if (opt.quota <= 0) {
-                label.text(gt('unlimited'));
+                label.text(
+                    // -1 means unlimited; if mail server is down (no inbox) we say unknown
+                    this.options.module !== 'mail' || settings.get('folder/inbox') ? gt('unlimited') : gt('unknown')
+                );
             } else {
                 label.text(
                     opt.usage < opt.quota ?

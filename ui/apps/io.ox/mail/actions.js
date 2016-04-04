@@ -17,11 +17,12 @@ define('io.ox/mail/actions', [
     'io.ox/core/extPatterns/links',
     'io.ox/mail/api',
     'io.ox/mail/util',
-    'gettext!io.ox/mail',
     'io.ox/core/folder/api',
     'io.ox/core/print',
-    'io.ox/core/api/account'
-], function (ext, links, api, util, gt, folderAPI, print, account) {
+    'io.ox/core/api/account',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (ext, links, api, util, folderAPI, print, account, settings, gt) {
 
     'use strict';
 
@@ -49,6 +50,44 @@ define('io.ox/mail/actions', [
         multiple: function (list) {
             require(['io.ox/mail/actions/delete'], function (action) {
                 action.multiple(list);
+            });
+        }
+    });
+
+    new Action('io.ox/mail/actions/inplace-reply', {
+        requires: function (e) {
+            // desktop only
+            if (!_.device('desktop')) return;
+            // feature toggle
+            if (!settings.get('features/inplaceReply', true)) return;
+            // must be top-level
+            if (!e.collection.has('toplevel', 'one')) return;
+            // get first mail
+            var data = e.baton.first();
+            // has sender? and not a draft mail
+            return util.hasFrom(data) && !isDraftMail(data);
+        },
+        action: function (baton) {
+
+            var cid = _.cid(baton.data),
+                // needs baton view
+                view = baton.view,
+                // hide inline link
+                link = view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').hide();
+
+            require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
+                view.$('section.body').before(
+                    new InplaceReplyView({ tagName: 'section', cid: cid })
+                    .on('send', function (cid) {
+                        view.$el.closest('.thread-view-control').data('open', cid);
+                    })
+                    .on('dispose', function () {
+                        link.show().focus();
+                        view = link = null;
+                    })
+                    .render()
+                    .$el
+                );
             });
         }
     });
@@ -123,15 +162,14 @@ define('io.ox/mail/actions', [
             return data && isDraftMail(data);
         },
         action: function (baton) {
+
             var data = baton.first(),
-                check = false;
-            _.each(ox.ui.apps.models, function (app) {
-                if (app.refId === data.id) {
-                    check = true;
-                    app.launch();
-                }
-            });
-            if (check === true) return;
+                app = _(ox.ui.apps.models).find(function (model) {
+                    return model.refId === data.id;
+                });
+
+            // reuse open editor
+            if (app) return app.launch();
 
             require(['settings!io.ox/mail'], function (settings) {
 
@@ -149,7 +187,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/source', {
         requires: function (e) {
             // must be at least one message and top-level
-            if (!e.collection.has('some') || !e.collection.has('toplevel')) return;
+            if (!e.collection.has('some') || !e.collection.has('toplevel')) return;
             // multiple selection
             if (e.baton.selection && e.baton.selection.length > 1) return;
             // multiple and not a thread?
@@ -179,7 +217,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/archive', {
         capabilities: 'archive_emails',
         requires: function (e) {
-            if (!e.collection.has('some')) return false;
+            if (!e.collection.has('some', 'delete')) return false;
             return _(e.baton.array()).reduce(function (memo, obj) {
                 // already false?
                 if (memo === false) return false;
@@ -194,7 +232,7 @@ define('io.ox/mail/actions', [
             }, true);
         },
         action: function (baton) {
-            var list = _.isArray(baton.data) ? baton.data : [ baton.data ];
+            var list = _.isArray(baton.data) ? baton.data : [baton.data];
             api.archive(list);
         }
     });
@@ -206,7 +244,7 @@ define('io.ox/mail/actions', [
     function generate(type, label, success) {
 
         new Action('io.ox/mail/actions/' + type, {
-            requires: 'toplevel some',
+            requires: 'toplevel some' + (type === 'move' ? ' delete' : ''),
             multiple: function (list, baton) {
                 require(['io.ox/mail/actions/copyMove'], function (action) {
                     action.multiple({
@@ -227,7 +265,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/mark-unread', {
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'modify')) return;
             // partiallySeen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || !util.isUnseen(obj);
@@ -243,7 +281,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/mark-read', {
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'modify')) return;
             // partiallyUnseen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || util.isUnseen(obj);
@@ -262,7 +300,7 @@ define('io.ox/mail/actions', [
         capabilities: 'spam',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel', 'some')) return false;
+            if (!e.collection.has('toplevel', 'some', 'delete')) return false;
             // is spam?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 // already false?
@@ -271,6 +309,10 @@ define('io.ox/mail/actions', [
                 if (!account.isPrimary(obj.folder_id)) return false;
                 // is spam folder?
                 if (account.is('spam', obj.folder_id)) return false;
+                // is sent folder?
+                if (account.is('sent', obj.folder_id)) return false;
+                // is drafts folder?
+                if (account.is('drafts', obj.folder_id)) return false;
                 // is marked as spam already?
                 if (util.isSpam(obj)) return false;
                 // else
@@ -320,7 +362,7 @@ define('io.ox/mail/actions', [
         multiple: function (attachmentList, baton) {
             ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
                 var options = { files: attachmentList };
-                if ( baton.startItem ) {
+                if (baton.startItem) {
                     options.selection = baton.startItem;
                 }
                 action(options);
@@ -380,8 +422,8 @@ define('io.ox/mail/actions', [
         requires: function (e) {
             var context = _.isArray(e.context) ? _.first(e.context) : e.context,
                 hasRightSuffix = context.filename && !!context.filename.match(/\.ics$/i),
-                isCalendarType = context.content_type  && !!context.content_type.match(/^text\/calendar/i),
-                isAppType = context.content_type  && !!context.content_type.match(/^application\/ics/i);
+                isCalendarType = context.content_type && !!context.content_type.match(/^text\/calendar/i),
+                isAppType = context.content_type && !!context.content_type.match(/^application\/ics/i);
             return hasRightSuffix || isCalendarType || isAppType;
         },
         action: function (baton) {
@@ -453,12 +495,35 @@ define('io.ox/mail/actions', [
         }
     });
 
+    new Action('io.ox/mail/premium/actions/synchronize', {
+        capabilities: 'active_sync client-onboarding',
+        requires: function () {
+            return _.device('!smartphone');
+        },
+        action: function () {
+            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                wizard.run();
+            });
+        }
+    });
+
     // inline links
     var INDEX = 0;
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'hi',
+        id: 'inplace-reply',
+        mobile: 'hi',
+        //#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
+        label: gt('Quick reply'),
+        ref: 'io.ox/mail/actions/inplace-reply',
+        section: 'standard'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'lo',
         id: 'reply',
         mobile: 'hi',
         label: gt('Reply'),
@@ -508,34 +573,6 @@ define('io.ox/mail/actions', [
         section: 'standard'
     }));
 
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX += 100,
-        prio: 'hi',
-        mobile: 'hi',
-        id: 'mark-unread',
-        label:
-            //#. Translation should be as short a possible
-            //#. Instead of "Mark as unread" it's just "Mark unread"
-            //#. German, for example, should be just "Ungelesen"
-            gt('Mark unread'),
-        ref: 'io.ox/mail/actions/mark-unread',
-        section: 'flags'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX + 1,
-        prio: 'hi',
-        mobile: 'hi',
-        id: 'mark-read',
-        label:
-            //#. Translation should be as short a possible
-            //#. Instead of "Mark as read" it's just "Mark read"
-            //#. German, for example, should be just "Gelesen"
-            gt('Mark read'),
-        ref: 'io.ox/mail/actions/mark-read',
-        section: 'flags'
-    }));
-
     new Action('io.ox/mail/actions/label', {
         id: 'label',
         requires: 'toplevel some',
@@ -544,7 +581,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
-        prio: 'hi',
+        prio: 'lo',
         mobile: 'hi',
         id: 'spam',
         label: gt('Mark as spam'),
@@ -554,7 +591,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX + 1,
-        prio: 'hi',
+        prio: 'lo',
         mobile: 'hi',
         id: 'nospam',
         label: gt('Not spam'),
@@ -615,7 +652,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
-        prio: 'hi',
+        prio: 'lo',
         mobile: 'hi',
         id: 'archive',
         //#. Verb: (to) archive messages
@@ -721,7 +758,8 @@ define('io.ox/mail/actions', [
         id: 'save',
         index: 500,
         mobile: 'high',
-        label: gt('Save to Drive'),
+        //#. %1$s is usually "Drive" (product name; might be customized)
+        label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
         ref: 'io.ox/mail/actions/save-attachment'
     }));
 
@@ -744,4 +782,19 @@ define('io.ox/mail/actions', [
             app.queues.importEML.offer(file, { folder: app.folder.get() });
         }
     });
+
+    ext.point('io.ox/mail/folderview/premium-area').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-premium-links',
+        ref: 'io.ox/mail/links/premium-links',
+        classes: 'list-unstyled'
+    }));
+
+    ext.point('io.ox/mail/links/premium-links').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'synchronize',
+        label: gt('Synchronize with Outlook'),
+        ref: 'io.ox/mail/premium/actions/synchronize'
+    }));
 });

@@ -81,15 +81,13 @@ define.async('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], funct
     var api = {
 
         get: function (path, defaultValue) {
-            if (!path) { // undefined, null, ''
+            if (!path) {
                 return config;
-            } else {
-                if (defaultValue === undefined) {
-                    return get(path);
-                } else {
-                    return contains(path) ? get(path) : defaultValue;
-                }
             }
+            if (defaultValue === undefined) {
+                return get(path);
+            }
+            return contains(path) ? get(path) : defaultValue;
         },
 
         set: function (path, value, permanent) {

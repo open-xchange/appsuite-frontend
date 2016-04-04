@@ -217,14 +217,14 @@
                 if (arguments.length === 0) {
                     return url.data;
                 } else if (arguments.length === 1) {
-                    if (_.isString(name)) {
-                        return url.data[name];
-                    } else {
-                        _(name).each(function (value, name) {
-                            url.set(name, value);
-                        });
-                        url.update();
-                    }
+                    if (_.isString(name)) return url.data[name];
+
+                    _(name).each(function (value, name) {
+                        url.set(name, value);
+                    });
+
+                    url.update();
+
                 } else if (arguments.length === 2) {
                     url.set(name, value);
                     url.update();
@@ -421,6 +421,11 @@
             return _.copy(elem, true);
         },
 
+        // until es6 default parameters
+        defaultValue: function (value, defaultvalue) {
+            return _.isUndefined(value) ? defaultvalue : value;
+        },
+
         /**
          * Lastest function only
          * Works with non-anonymous functions only
@@ -450,12 +455,15 @@
          */
         queued: function (fn, timeout) {
 
-            var hash = {};
+            var hash = {}, guid = 0;
 
             return function () {
 
+                // add guid
+                fn.queue_guid = fn.queue_guid || guid++;
+
                 var def = $.Deferred(),
-                    queue = hash[fn] || (hash[fn] = [$.when()]),
+                    queue = hash[fn.queue_guid] || (hash[fn.queue_guid] = [$.when()]),
                     last = _(queue).last(),
                     self = this,
                     args = $.makeArray(arguments);
@@ -562,10 +570,10 @@
         filesize: function (size, options) {
 
             var opt = _.extend({
-                    digits: 0,
-                    force: true,
-                    zerochar: undefined
-                }, options || {});
+                digits: 0,
+                force: true,
+                zerochar: undefined
+            }, options || {});
 
             //for security so math.pow doesn't get really high values
             if (opt.digits > 10) {
@@ -578,8 +586,8 @@
             }
             val = (Math.round(size * dp, 1) / dp);
             //replacement to 0
-            if (typeof opt.zerochar !== 'undefined' && val === 0)
-                return opt.zerochar;
+            if (typeof opt.zerochar !== 'undefined' && val === 0) return opt.zerochar;
+
             return (opt.force ? val : val.toFixed(opt.digits)) + '\xA0' + sizes[i];
         },
 
@@ -594,6 +602,7 @@
          * @return {string}
          */
         ellipsis: function (str, options) {
+            /* eslint dot-notation: [2, {"allowKeywords": true}] */
             //be robust
             str = String(str || '').trim();
             var opt = _.extend({
@@ -607,14 +616,13 @@
                 return str;
             } else if (opt.charpos === 'end') {
                 return str.substr(0, opt.max - opt.char.length) + opt.char;
-            } else {
-                //fix invalid length
-                if (!opt.length || opt.length * 2 > space) {
-                    //save space for ellipse char
-                    opt.length = (space % 2 === 0 ? space  / 2 : (opt.max / 2) - 1) || 1;
-                }
-                return str.substr(0, opt.length).trim() + opt.char + str.substr(str.length - opt.length).trim();
             }
+            //fix invalid length
+            if (!opt.length || opt.length * 2 > space) {
+                //save space for ellipse char
+                opt.length = (space % 2 === 0 ? space / 2 : (opt.max / 2) - 1) || 1;
+            }
+            return str.substr(0, opt.length).trim() + opt.char + str.substr(str.length - opt.length).trim();
         },
 
         /**
@@ -697,9 +705,8 @@
                 if (remaining <= 0) {
                     previous = now;
                     result = func.apply(context, args);
-                } else {
-                    timeout = setTimeout(later, remaining);
                 }
+                timeout = setTimeout(later, remaining);
                 return result;
             };
         },
@@ -740,12 +747,11 @@
                 var pos = s.search(/([^\\])\./);
                 if (pos === -1) {
                     return { id: s };
-                } else {
-                    return {
-                        folder_id: s.substr(0, pos + 1).replace(/\\(\\?)/g, '$1'),
-                        id: s.substr(pos + 2).replace(/\\(\\?)/g, '$1')
-                    };
                 }
+                return {
+                    folder_id: s.substr(0, pos + 1).replace(/\\(\\?)/g, '$1'),
+                    id: s.substr(pos + 2).replace(/\\(\\?)/g, '$1')
+                };
             }
 
             return function (o) {
@@ -766,8 +772,8 @@
                     if (o[r] !== undefined && o[r] !== null) {
                         // if we have a recurrence position we need a folder
                         tmp = encode(f || 0) + '.' + tmp + '.' + encode(o[r]);
-                    } else {
-                        if (f !== undefined) { tmp = encode(f) + '.' + tmp; }
+                    } else if (f !== undefined) {
+                        tmp = encode(f) + '.' + tmp;
                     }
                     return tmp;
                 }
@@ -792,8 +798,7 @@
         toHash: function (array, prop) {
             var tmp = {};
             _(array).each(function (obj) {
-                if (obj && prop && _.isString(prop))
-                    tmp[obj[prop]] = obj;
+                if (obj && prop && _.isString(prop)) tmp[obj[prop]] = obj;
             });
             return tmp;
         },
@@ -829,11 +834,11 @@
      * @return The unescaped string with resolved entities.
      */
     _.unescapeHTML = function (html) {
+        /*eslint no-nested-ternary: 0*/
         return (html || '').replace(/&(?:(\w+)|#x([0-9A-Fa-f]+)|#(\d+));/g,
                             function (original, entity, hex, dec) {
                                 return entity ? _.unescapeHTML.entities[entity] || original :
-                                       hex    ? String.fromCharCode(parseInt(hex, 16)) :
-                                                String.fromCharCode(parseInt(dec, 10));
+                                       hex ? String.fromCharCode(parseInt(hex, 16)) : String.fromCharCode(parseInt(dec, 10));
                             });
     };
 

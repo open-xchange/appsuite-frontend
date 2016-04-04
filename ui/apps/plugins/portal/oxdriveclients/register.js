@@ -49,20 +49,20 @@ define('plugins/portal/oxdriveclients/register', [
         return ['Android', 'iOS', 'Mac OS', 'Windows'];
     }
 
-    function getShopLinkWithImage(platform, url) {
+    function getShopLinkWithImage(_platform, url) {
 
         var lang = ox.language.split('_')[0],
             // languages we have custom shop icons for
             langs = settings.get('l10nImages'),
             imagePath = ox.abs + ox.root + '/apps/plugins/portal/oxdriveclients/img/',
-            platform = platform.toLowerCase();
+            platform = _platform.toLowerCase();
         // fallback
         if (_.indexOf(langs, lang) === -1) lang = 'en';
 
         if (platform.match(/android|ios|mac os/)) {
             if (platform === 'mac os') platform = 'mac_os';
-            var $img = $('<div class="oxdrive-shop-image ' + platform +'">')
-                .css('background-image', 'url(' + imagePath + lang + '_'  + platform + '.png)');
+            var $img = $('<div class="oxdrive-shop-image ' + platform + '">')
+                .css('background-image', 'url(' + imagePath + lang + '_' + platform + '.png)');
 
             return $('<a class="shoplink">').attr({
                 href: url,
@@ -86,14 +86,13 @@ define('plugins/portal/oxdriveclients/register', [
                     target: '_blank'
                 }).text(gt.format(gt('Download %s via the OX Updater'), settings.get('productName')))
             ];
-        } else {
-            return $();
         }
+        return $();
     }
 
     function createAppIcon() {
         var icon = settings.get('appIconAsBase64');
-        return $('<div class="appicon">').css('background-image', icon && ('url(' + icon + ')'));
+        return $('<div class="appicon">').css('background-image', icon);
     }
 
     ext.point('io.ox/portal/widget/oxdriveclients').extend({
@@ -119,7 +118,7 @@ define('plugins/portal/oxdriveclients/register', [
             this.append(
                 $('<ul class="oxdrive content pointer list-unstyled">').append(
                     $('<li class="first">').append(
-                        $('<div class="appicon">').css('background-image', icon && ('url(' + icon + ')'))
+                        $('<div class="appicon">').css('background-image', icon)
                     ),
                     $('<li class="message">').append($('<h4>').text(baton.message)),
                     $('<li class="teaser">').text(baton.teaser),

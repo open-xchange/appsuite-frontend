@@ -66,6 +66,7 @@ define('io.ox/calendar/edit/extensions', [
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
+                        fail = _.bind(baton.app.onError || _.noop, baton.app),
                         folder = baton.model.get('folder_id');
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
@@ -77,15 +78,12 @@ define('io.ox/calendar/edit/extensions', [
                         baton.model.set({ 'folder_id': oldFolder }, { silent: true });
                         //actual moving is done in the app.onSave method, because this method is also called after confirming conflicts, so we don't need duplicated code
                         baton.app.moveAfterSave = folder;
-                        // prevent some onChange event handlers that would be called on the first save
-                        // causes problems, like the change fulltime handler changing the endtime (see Bug 41710)
-                        baton.model.silentMode = true;
                     }
                     // cleanup temp timezone data from attributes without change events but keep it in the model (previousAttributes might be cleaned in some cases so it's not safe)
                     var timezone = baton.model.get('endTimezone');
                     baton.model.unset('endTimezone', { silent: true });
                     baton.model.endTimezone = timezone;
-                    baton.model.save().done(save);
+                    baton.model.save().then(save, fail);
                 })
             );
 
@@ -412,11 +410,8 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed form-spacer'
     });
 
-    function colorClickHandler(e) {
-        // toggle active class
-        $(this).siblings('.active').removeClass('active').attr('aria-checked', false).end().addClass('active').attr('aria-checked', true);
-        // update model
-        e.data.model.set({ 'color_label': e.data.color_label });
+    function changeColorHandler(e) {
+        e.data.model.set('color_label', $(this).parent().children(':checked').val());
     }
 
     //color selection
@@ -428,7 +423,7 @@ define('io.ox/calendar/edit/extensions', [
 
             if (settings.get('colorScheme') !== 'custom') return;
 
-            var activeColor = this.model.get('color_label') || 0;
+            var currentColor = parseInt(this.model.get('color_label'), 10) || 0;
 
             this.listenTo(this.model, 'change:private_flag', function (model, value) {
                 this.$el.find('.no-color').toggleClass('color-label-10', value);
@@ -439,16 +434,18 @@ define('io.ox/calendar/edit/extensions', [
                     $.txt(gt('Color')),
                     $('<div class="custom-color">').append(
                         _.map(_.range(0, 11), function (color_label) {
-                            return $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
+                            return $('<label>').append(
+                                // radio button
+                                $('<input type="radio" tabindex="1" name="color">')
+                                .attr('aria-label', calendarUtil.getColorLabel(color_label))
+                                .val(color_label)
+                                .prop('checked', color_label === currentColor)
+                                .on('change', { model: this.model }, changeColorHandler),
+                                // colored box
+                                $('<span class="box">')
                                 .addClass(color_label > 0 ? 'color-label-' + color_label : 'no-color')
                                 .addClass(color_label === 0 && this.model.get('private_flag') ? 'color-label-10' : '')
-                                .addClass(activeColor == color_label ? 'active' : '')
-                                .attr({
-                                    'aria-checked': activeColor == color_label,
-                                    'aria-label': calendarUtil.getColorLabel(color_label)
-                                })
-                                .append('<i class="fa fa-check">')
-                                .on('click', { color_label: color_label, model: this.model }, colorClickHandler);
+                            );
                         }, this)
                     )
                 )
@@ -464,6 +461,11 @@ define('io.ox/calendar/edit/extensions', [
         index: 1200,
         className: 'col-md-6',
         render: function () {
+
+            // private flag only works in private folders
+            var folder_id = this.model.get('folder_id');
+            if (!folderAPI.pool.getModel(folder_id).is('private')) return;
+
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend>').addClass('simple').text(gt('Type')),
@@ -588,23 +590,30 @@ define('io.ox/calendar/edit/extensions', [
                         //in file picker dialog - other browsers still seem to work)
                         $input[0].value = '';
                         $input.trigger('reset.fileupload');
-                    } else {
+                    } else if ($input.val()) {
                         //IE
-                        if ($input.val()) {
-                            var fileData = {
-                                name: $input.val().match(/[^\/\\]+$/),
-                                size: 0,
-                                hiddenField: $input
-                            };
-                            baton.attachmentList.addFile(fileData);
-                            //hide input field with file
-                            $input.addClass('add-attachment').hide();
-                            //create new input field
-                            $input = $('<input>', { type: 'file', name: 'file' })
-                                    .on('change', changeHandler)
-                                    .appendTo($input.parent());
-                        }
+                        var fileData = {
+                            name: $input.val().match(/[^\/\\]+$/),
+                            size: 0,
+                            hiddenField: $input
+                        };
+                        baton.attachmentList.addFile(fileData);
+                        //hide input field with file
+                        $input.addClass('add-attachment').hide();
+                        //create new input field
+                        $input = $('<input>', { type: 'file', name: 'file' })
+                                .on('change', changeHandler)
+                                .appendTo($input.parent());
                     }
+                    // look if the quota is exceeded
+                    baton.model.on('invalid:quota_exceeded', function (messages) {
+                        require(['io.ox/core/yell'], function (yell) {
+                            yell('error', messages[0]);
+                        });
+                    });
+                    baton.model.validate();
+                    // turn of again to prevent double yells on save
+                    baton.model.off('invalid:quota_exceeded');
                 };
             $input.on('change', changeHandler);
             $inputWrap.on('change.fileupload', function () {
@@ -624,8 +633,6 @@ define('io.ox/calendar/edit/extensions', [
                 app.view.baton.attachmentList.addFile(fileData);
             });
         }
-    }, {
-        rowClass: 'collapsed'
     });
 
     function openFreeBusyView(e) {

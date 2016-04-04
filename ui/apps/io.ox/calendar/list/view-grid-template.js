@@ -31,12 +31,12 @@ define('io.ox/calendar/list/view-grid-template', [
                 return 70;
             },
             build: function () {
-                var title, location, time, date, shown_as, conflicts, isPrivate, contentContainer;
+                var title, location, time, date, shown_as, conflicts, isPrivate;
                 this.addClass('calendar').append(
                     time = $('<div class="time">').attr('aria-hidden', true),
-                    contentContainer = $('<div class="contentContainer">').append(
+                    $('<div class="contentContainer">').append(
                         date = $('<div class="date">'),
-                        isPrivate = $('<i class="fa fa-lock private-flag">').hide(),
+                        isPrivate = $('<i class="fa fa-lock private-flag" aria-hidden="true">').hide(),
                         title = $('<div class="title">'),
                         $('<div class="location-row">').append(
                             location = $('<span class="location">')
@@ -55,6 +55,7 @@ define('io.ox/calendar/list/view-grid-template', [
                 };
             },
             set: function (data, fields) {
+
                 var self = this,
                     a11yLabel = '',
                     tmpStr = '',
@@ -83,24 +84,24 @@ define('io.ox/calendar/list/view-grid-template', [
                     .text(a11yLabel = data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
 
                 if (data.location) {
-                    a11yLabel += ', ' + data.location;
+                    //#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+                    //#. This fragment appears within a long string for screen readers
+                    a11yLabel += ', ' + gt.format(gt.pgettext('a11y', 'location %1$s'), data.location);
                 }
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
 
-                fields.time.empty().append(
-                    $('<div class="fragment">').text(gt.noI18n(timeSplits[0])),
-                    $('<div class="fragment">').text(gt.noI18n(timeSplits[1]))
-                ).addClass('custom_shown_as ' + util.getShownAsClass(data));
+                fields.time.empty()
+                    .addClass('custom_shown_as ' + util.getShownAsClass(data))
+                    .append(
+                        $('<div class="fragment">').text(gt.noI18n(timeSplits[0])),
+                        $('<div class="fragment">').text(gt.noI18n(timeSplits[1]))
+                    );
 
                 a11yLabel += ', ' + util.getShownAs(data);
 
-                fields.date.empty().text(util.getDateInterval(data));
-
-                if (!data.full_time && (util.getDurationInDays(data) > 0)) {
-                    fields.date.show();
-                } else {
-                    fields.date.hide();
-                }
+                fields.date.empty()
+                    .text(util.getDateInterval(data))
+                    .toggle(!data.full_time && (util.getDurationInDays(data) > 0));
 
                 if (data.full_time) {
                     startDate = moment.utc(data.start_date).local(true);
@@ -122,12 +123,9 @@ define('io.ox/calendar/list/view-grid-template', [
 
                 a11yLabel += ', ' + tmpStr;
 
-                if (data.private_flag === true) {
-                    fields.isPrivate.show();
-                } else {
-                    fields.isPrivate.hide();
-                }
-                this.attr({ 'aria-label': a11yLabel });
+                fields.isPrivate.toggle(!!data.private_flag);
+
+                this.attr('aria-label', _.escape(a11yLabel) + '.');
             }
         },
 

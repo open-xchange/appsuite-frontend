@@ -73,7 +73,7 @@ define('plugins/portal/birthdays/register', [
 
         preview: function (baton) {
 
-            var $list = $('<ul class="content list-unstyled" tabindex="1" role="button" aria-label="' +  gt('Press [enter] to jump to complete list of Birthdays.') + '">'),
+            var $list = $('<ul class="content list-unstyled" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to complete list of Birthdays.') + '">'),
                 hash = {},
                 contacts = baton.data,
                 numOfItems = _.device('smartphone') ? 5 : 15;
@@ -106,11 +106,8 @@ define('plugins/portal/birthdays/register', [
                     } else if (birthday.diff(today, 'day') === -1) {
                         //yesterday
                         birthdayText = gt('Yesterday');
-                    } else if (birthday.year() === 1) {
-                        //Year 0 is special for birthdays without year (backend changes this to 1...)
-                        birthdayText = birthday.format(moment.localeData().longDateFormat('l').replace(/Y/g, ''));
                     } else {
-                        birthdayText = birthday.format('l');
+                        birthdayText = util.getBirthday(birthday);
                     }
 
                     if (!isDuplicate(name, birthday, hash)) {
@@ -170,6 +167,7 @@ define('plugins/portal/birthdays/register', [
                             nextBirthday.add(1, 'year');
                             delta = nextBirthday.diff(moment(), 'day');
                         }
+                        /*eslint no-nested-ternary: 0*/
                         delta = delta === 0 ? gt('Today') : delta === 1 ? gt('Tomorrow') : delta === -1 ? gt('Yesterday') : gt('In %1$d days', Math.ceil(delta));
 
                         $list.append(

@@ -21,9 +21,20 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
 
     var InputView = AbstractView.extend({
         el: '<input type="text" class="form-control">',
-        events: { 'change': 'onChange' },
+        // firefox does not trigger a change event if you drop text.
+        events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop' } : { 'change': 'onChange' },
         onChange: function () {
             this.model.set(this.name, this.$el.val(), { validate: true });
+        },
+        // used by firefox only, because it doesn't trigger a change event automatically
+        onDrop: function (e) {
+            if (e.originalEvent.dataTransfer.getData('text')) {
+                var self = this;
+                // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
+                this.$el.one('input', function () {
+                    self.$el.trigger('change');
+                });
+            }
         },
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
@@ -79,9 +90,20 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
 
     var TextView = AbstractView.extend({
         el: '<textarea class="form-control">',
-        events: { 'change': 'onChange' },
+        // firefox does not trigger a change event if you drop text.
+        events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop' } : { 'change': 'onChange' },
         onChange: function () {
-            this.model.set(this.name, this.$el.val());
+            this.model.set(this.name, this.$el.val(), { validate: true });
+        },
+        // used by firefox only, because it doesn't trigger a change event automatically
+        onDrop: function (e) {
+            if (e.originalEvent.dataTransfer.getData('text')) {
+                var self = this;
+                // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
+                this.$el.one('input', function () {
+                    self.$el.trigger('change');
+                });
+            }
         },
         setup: function (options) {
             this.rows = options.rows;

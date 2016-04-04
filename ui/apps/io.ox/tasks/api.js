@@ -87,7 +87,7 @@ define('io.ox/tasks/api', [
          */
         updateAllCache = function (tasks, folder, modifications) {
 
-            var list = _.copy(tasks, true),
+            var list = _.copy(tasks, true);
             //make sure we have an array
             list = list || [];
             list = _.isArray(list) ? list : [list];
@@ -128,13 +128,11 @@ define('io.ox/tasks/api', [
                     });
                     if (found) {
                         return api.caches.all.add(cacheKey, cachevalue);
-                    } else {
-                        return $.when();
                     }
-                } else {
-                    //just leave it to the next all request, no need to do it here
                     return $.when();
                 }
+                //just leave it to the next all request, no need to do it here
+                return $.when();
             });
         },
 
@@ -182,28 +180,27 @@ define('io.ox/tasks/api', [
                     var tmp = {};
                     tmp.type = participant.type;
                     switch (participant.type) {
-                    case 1://internal user
-                        tmp.type = participant.type;
-                        tmp.mail = participant.email1;
-                        tmp.display_name = participant.display_name;
-                        tmp.id = participant.id;
-                        break;
-                    case 5://external user
-                        tmp.type = participant.type;
-                        tmp.mail = participant.mail;
-                        tmp.display_name = participant.display_name;
-                        tmp.id = 0;
-                        break;
-                    default://all the rest
-                        tmp = participant;
-                        break;
+                        case 1://internal user
+                            tmp.type = participant.type;
+                            tmp.mail = participant.email1;
+                            tmp.display_name = participant.display_name;
+                            tmp.id = participant.id;
+                            break;
+                        case 5://external user
+                            tmp.type = participant.type;
+                            tmp.mail = participant.mail;
+                            tmp.display_name = participant.display_name;
+                            tmp.id = 0;
+                            break;
+                        default://all the rest
+                            tmp = participant;
+                            break;
                     }
                     list.push(tmp);
                 });
                 return list;
-            } else {
-                return participants;
             }
+            return participants;
         };
 
     // generate basic API
@@ -227,7 +224,7 @@ define('io.ox/tasks/api', [
         requests: {
             all: {
                 folder: folderAPI.getDefaultFolder('tasks'),
-                columns: '1,20,101,200,203,220,300,301,317',
+                columns: '1,5,20,101,200,203,220,300,301,317',
                 extendColumns: 'io.ox/tasks/api/all',
                 sort: '317',
                 order: 'asc',
@@ -237,7 +234,7 @@ define('io.ox/tasks/api', [
             },
             list: {
                 action: 'list',
-                columns: '1,2,20,101,200,203,220,221,300,301,309,317,401',
+                columns: '1,2,5,20,101,200,203,220,221,300,301,309,316,317,401',
                 extendColumns: 'io.ox/tasks/api/list',
                 timezone: 'UTC'
             },
@@ -247,7 +244,7 @@ define('io.ox/tasks/api', [
             },
             search: {
                 action: 'search',
-                columns: '1,2,20,101,200,203,220,221,300,301,309,317',
+                columns: '1,2,5,20,101,200,203,220,221,300,301,309,317',
                 extendColumns: 'io.ox/tasks/api/all',
                 sort: '317',
                 order: 'asc',
@@ -351,13 +348,13 @@ define('io.ox/tasks/api', [
 
         // recurrence attribute key present but undefined means it must be removed so set to null
         // this is different from calendar implementation, where recurrence attributes that are not in the request are set to null automatically by the backend
-        if ( _(task).has('days') && task.days === undefined) {
+        if (_(task).has('days') && task.days === undefined) {
             task.days = null;
         }
-        if ( _(task).has('day_in_month ') && task.day_in_month  === undefined) {
+        if (_(task).has('day_in_month ') && task.day_in_month === undefined) {
             task.day_in_month = null;
         }
-        if ( _(task).has('month') && task.month === undefined) {
+        if (_(task).has('month') && task.month === undefined) {
             task.month = null;
         }
 
@@ -513,9 +510,8 @@ define('io.ox/tasks/api', [
                 return api.update(task, newFolder);
             } else if (task.length === 1) {
                 return api.update(task[0], newFolder);
-            } else {
-                return api.updateMultiple(task, { folder_id: newFolder });
             }
+            return api.updateMultiple(task, { folder_id: newFolder });
         });
     };
 
@@ -524,7 +520,7 @@ define('io.ox/tasks/api', [
      * @param  {object} options (properties: data, folder_id, id)
      * @return { promise }
      */
-    api.confirm =  function (options) {
+    api.confirm = function (options) {
         //options.id is the id of the task not userId
         var key = (options.folder_id || options.folder) + '.' + options.id;
         return http.PUT({

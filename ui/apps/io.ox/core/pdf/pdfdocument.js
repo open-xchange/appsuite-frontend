@@ -13,8 +13,9 @@
 
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
-    '3rd.party/pdfjs/pdf.combined'
-], function (PDFView, PDFJS) {
+    '3rd.party/pdfjs/pdf.combined',
+    'settings!io.ox/core'
+], function (PDFView, PDFJS, Settings) {
 
     'use strict';
 
@@ -47,30 +48,41 @@ define('io.ox/core/pdf/pdfdocument', [
             defaultPageSize = null,
 
             // the size of the first page is treated as default page size {[{width, height}, ...]}
-            pageSizes = [];
+            pageSizes = [],
+
+            // whether to enable range requests support
+            enableRangeRequests = Settings.get('pdf/enableRangeRequests');
 
         /**
-         * TODO (KA): check reenabling range request,
-         * but ATM, we're running into into rate limits
-         * much too often
-         *
-         * Additionally Safari has issues with cached range requests see:
-         * https://github.com/mozilla/pdf.js/issues/3260
-         *
-         * Disable range requests
+         * Range request support. If the server supports range requests the PDF will be fetched in chunks.
          */
-        PDFJS.disableRange = true;
+        PDFJS.disableRange = !enableRangeRequests;
 
         /**
-         * On Safari also disable streaming
-         * taken from pdfjs/compatibility.js
+         * Streaming of PDF file data.
          */
-        if (_.device('safari')) {
-            PDFJS.disableStream = true;
-        }
+        PDFJS.disableStream = !enableRangeRequests;
 
-        // set verbosity level for PDF.js to errors only
+        /**
+         * Pre-fetching of PDF file data. PDF.js will automatically keep fetching more data even if it isn't needed to display the current page.
+         * NOTE: It is also necessary to disable streaming, see above, in order for disabling of pre-fetching to work correctly.
+         */
+        PDFJS.disableAutoFetch = !enableRangeRequests;
+
+        /**
+         * set verbosity level for PDF.js to errors only
+         */
         PDFJS.verbosity = PDFJS.VERBOSITY_LEVELS.errors;
+
+        /**
+         * Open external links in a new window
+         */
+        PDFJS.openExternalLinksInNewWindow = true;
+
+        /**
+         * Path for image resources, mainly for annotation icons. Include trailing slash.
+         */
+        PDFJS.imageResourcesPath = ox.base + '/apps/3rd.party/pdfjs/web/images/';
 
         // ---------------------------------------------------------------------
 
@@ -78,7 +90,7 @@ define('io.ox/core/pdf/pdfdocument', [
             var def = $.Deferred();
 
             if (_.isNumber(pageNumber) && (pageNumber > 0) && (pageNumber <= pageCount)) {
-                self.getPDFJSPage(pageNumber).then( function (pdfjsPage) {
+                self.getPDFJSPage(pageNumber).then(function (pdfjsPage) {
                     var viewport = pdfjsPage.getViewport(PDFView.getAdjustedZoom(1.0));
                     return def.resolve(PDFView.getNormalizedSize({ width: viewport.width, height: viewport.height }));
                 });
@@ -189,7 +201,7 @@ define('io.ox/core/pdf/pdfdocument', [
         // ---------------------------------------------------------------------
 
         // convert document to PDF
-        PDFJS.getDocument(pdfConverterURL).promise.then( function (document) {
+        PDFJS.getDocument(pdfConverterURL).promise.then(function (document) {
             var error = true;
 
             if (document) {
@@ -199,7 +211,7 @@ define('io.ox/core/pdf/pdfdocument', [
                 if (pageCount > 0) {
                     error = false;
 
-                    initializePageSize(1).then( function (pageSize) {
+                    initializePageSize(1).then(function (pageSize) {
                         pageSizes[0] = defaultPageSize = pageSize;
                         return loadDef.resolve(pageCount);
                     });
@@ -210,7 +222,15 @@ define('io.ox/core/pdf/pdfdocument', [
                 loadDef.resolve({ cause: 'importError' });
             }
         }, function () {
-            $.get(pdfConverterURL).always(function (data) {
+            // In case of an error, extend the given URL with the
+            // enctest=pdf flag, so that we get a correct error code
+            // even in case of PDF source files, which are not treated
+            // by the documentconverter otherwise;
+            // The documentconverter will perform an encryption test on
+            // a given PDF file and set the password error response accordingly
+            var encTestPDFConverterURL = pdfConverterURL + '&enctest=pdf';
+
+            $.get(encTestPDFConverterURL).always(function (data) {
                 loadDef.resolve(
                   (_.isObject(data) && _.isString(data.responseText)) ?
                       $.parseJSON(data.responseText) :

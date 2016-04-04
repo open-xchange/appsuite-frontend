@@ -57,7 +57,9 @@ define('io.ox/backbone/mini-views/upsell', [
                     $('<a href="#">').css('color', this.opt.color).append(
                         this.opt.title,
                         _(this.icon.split(/ /)).map(function (icon, index) {
-                            return $('<i class="fa">')
+                            if (icon === '') return;
+
+                            return $('<i class="fa" aria-hidden="true">')
                                 .addClass(icon)
                                 .css({
                                     'margin-left': (index === 0 && self.opt.title && self.opt.title.length > 0) ? '0.5em' : '',

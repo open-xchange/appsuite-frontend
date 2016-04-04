@@ -88,7 +88,9 @@ define('io.ox/core/tk/list-dnd', [
         function over(e) {
 
             // avoid handling bubbling events
-            if (e.isDefaultPrevented()) return; else e.preventDefault();
+            if (e.isDefaultPrevented()) return;
+
+            e.preventDefault();
 
             // use first here or we get the arrows of the subfolder nodes as well
             var arrow = $(this).find('.folder-arrow:first');
@@ -108,7 +110,7 @@ define('io.ox/core/tk/list-dnd', [
         }
 
         //
-        // Auto-Scroll
+        // Auto-scroll
         //
 
         var scroll = (function () {
@@ -125,12 +127,16 @@ define('io.ox/core/tk/list-dnd', [
                 },
                 over: function () {
                     if (timer) return;
-                    var height = this.clientHeight;
+                    var height = this.clientHeight, direction, px, speed;
                     timer = setInterval(function () {
-                        var threshold = Math.round(y / height * 10) - 5,
-                            sign = threshold < 0 ? -1 : +1,
-                            abs = Math.abs(threshold);
-                        if (abs > 2) this.scrollTop += sign * (abs - 2) * 2;
+                        direction = y < (height / 2) ? -1 : +1;
+                        px = Math.min(y, height - y);
+                        // smaller area that triggers auto-scroll;
+                        // to avoid unwanted scrolling
+                        if (px > 24) return;
+                        // and another even smaller area that causes faster scrolling
+                        speed = px < 8 ? 3 : 1;
+                        this.scrollTop += direction * speed;
                     }.bind(this), 5);
                 }
             };
@@ -206,12 +212,14 @@ define('io.ox/core/tk/list-dnd', [
 
         function drop(e) {
             // avoid multiple events on parent tree nodes
-            if (e.isDefaultPrevented()) return; else e.preventDefault();
+            if (e.isDefaultPrevented()) return;
+
+            e.preventDefault();
             // process drop
             clearTimeout(toggleTimer);
             // abort unless it was a real drag move
             if (!dragged) return;
-            var target = $(this).attr('data-model') || $(this).attr('data-id') || $(this).attr('data-cid') || $(this).attr('data-obj-id'),
+            var target = $(this).attr('data-model') || $(this).attr('data-id') || $(this).attr('data-cid') || $(this).attr('data-obj-id'),
                 baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
             $(this).trigger('selection:drop', [baton]);
         }

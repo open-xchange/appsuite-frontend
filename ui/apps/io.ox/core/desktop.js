@@ -12,6 +12,8 @@
  *
  */
 
+/* global assert: true */
+
 define('io.ox/core/desktop', [
     'io.ox/core/event',
     'io.ox/core/extensions',
@@ -33,21 +35,20 @@ define('io.ox/core/desktop', [
      */
 
     // current window
-    var currentWindow = null;
-
-    // top bar
-    var appGuid = 0,
+    var currentWindow = null,
+        appGuid = 0,
         appCache = new cache.SimpleCache('app-cache', true);
 
     // Apps collection
     ox.ui.apps = new Backbone.Collection();
 
-    function supportsFind (name) {
+    function supportsFind(name) {
         // enabled apps
-        var list = coreConfig.get('search/modules', []),
-            name = name.replace(/^io\.ox\//, '');
-        // drive alias
-        name = name === 'files' ? 'drive' : name;
+        var list = coreConfig.get('search/modules') || [];
+
+        name = name.replace(/^io\.ox\//, '')
+            .replace(/files/, 'drive'); // drive alias
+
         return list.indexOf(name) > -1;
     }
 
@@ -59,9 +60,10 @@ define('io.ox/core/desktop', [
 
         initialize: function (options) {
             var self = this;
-            this.guid = appGuid++;
-            this.id = this.id || 'app-' + appGuid;
             this.options = options || {};
+            this.guid = options.guid;
+            this.id = this.id || 'app-' + this.guid;
+            this.set('id', this.id);
             this.getInstance = function () {
                 return self;
             };
@@ -127,10 +129,9 @@ define('io.ox/core/desktop', [
                 return ox.launch(id, { launched: def.promise() })
                          .then(function () { self.quit(); })
                          .always(def.resolve);
-            } else {
-                upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
-                return $.when();
             }
+            upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
+            return $.when();
         },
 
         quit: function () {
@@ -185,7 +186,6 @@ define('io.ox/core/desktop', [
 
         initialize: function () {
             var self = this;
-
             // call super constructor
             AbstractApp.prototype.initialize.apply(this, arguments);
 
@@ -230,7 +230,7 @@ define('io.ox/core/desktop', [
                             if (!appchange) {
                                 // update window title & toolbar?
                                 if (win) {
-                                    win.setTitle(_.noI18n(data.title || ''));
+                                    win.setTitle(_.noI18n(data.title || ''));
                                     win.updateToolbar();
                                 }
                                 // update grid?
@@ -255,8 +255,9 @@ define('io.ox/core/desktop', [
                             var def = $.Deferred();
                             if (id !== undefined && id !== null && String(id) !== folder) {
 
-                                var app = _.url.hash('app');
-                                var model = api.pool.getModel(id), data = model.toJSON();
+                                var app = _.url.hash('app'),
+                                    model = api.pool.getModel(id),
+                                    data = model.toJSON();
 
                                 if (model.has('title')) {
                                     change(id, data, app, def);
@@ -273,8 +274,7 @@ define('io.ox/core/desktop', [
                                 }
                             } else if (String(id) === folder) {
                                 // see Bug 34927 - [L3] unexpected application error when clicking on "show all messages in inbox" in notification area
-                                var model = api.pool.getModel(id), data = model.toJSON();
-                                def.resolve(data, false);
+                                def.resolve(api.pool.getModel(id).toJSON(), false);
                             } else {
                                 def.reject();
                             }
@@ -292,23 +292,22 @@ define('io.ox/core/desktop', [
                             var defaultFolder = type === 'mail' ? mailConfig.get('folder/inbox') : coreConfig.get('folder/' + type);
                             if (defaultFolder) {
                                 return that.set(defaultFolder);
-                            } else {
-                                return api.getExistingFolder(type).then(
-                                    function (id) {
-                                        return that.set(id);
-                                    },
-                                    function () {
-                                        return $.Deferred().reject({ error: gt('Could not get a default folder for this application.') });
-                                    }
-                                );
                             }
+                            return api.getExistingFolder(type).then(
+                                function (id) {
+                                    return that.set(id);
+                                },
+                                function () {
+                                    return $.Deferred().reject({ error: gt('Could not get a default folder for this application.') });
+                                }
+                            );
                         });
                     },
 
                     isDefault: function () {
                         return require(['settings!io.ox/mail']).then(function (mailConfig) {
                             var defaultFolder = type === 'mail' ? mailConfig.get('folder/inbox') : coreConfig.get('folder/' + type);
-                            return folder == defaultFolder;
+                            return folder === defaultFolder;
                         });
                     },
 
@@ -568,6 +567,7 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.quit', win);
                     win.destroy();
                 }
+
                 // remove from list
                 ox.ui.apps.remove(self);
                 // mark as not running
@@ -615,13 +615,11 @@ define('io.ox/core/desktop', [
                     }
                     if (list.length > 0) {
                         return ox.ui.App.setSavePoints(list);
-                    } else {
-                        return $.when();
                     }
+                    return $.when();
                 });
-            } else {
-                return $.when();
             }
+            return $.when();
         },
 
         removeRestorePoint: function () {
@@ -772,8 +770,8 @@ define('io.ox/core/desktop', [
 
         // find all applications with unsaved changes
         var dirtyApps = ox.ui.apps.filter(function (app) {
-                return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
-            });
+            return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
+        });
 
         // browser will show a confirmation dialog, if onbeforeunload returns a string
         var unsavedChanges = dirtyApps.length > 0;
@@ -787,6 +785,7 @@ define('io.ox/core/desktop', [
      * Create app
      */
     ox.ui.createApp = function (options) {
+        options.guid = appGuid++;
         return new ox.ui.App(options);
     };
 
@@ -818,7 +817,7 @@ define('io.ox/core/desktop', [
                     $('#io-ox-screens').children().each(function () {
                         var attr = $(this).attr('id'),
                             screenId = String(attr || '').substr(6);
-                        if (screenId !== id) {
+                        if (screenId !== id && screenId !== 'ad-skyscraper') {
                             that.hide(screenId);
                         }
                     });
@@ -1487,8 +1486,9 @@ define('io.ox/core/desktop', [
             // add event hub
             Events.extend(win);
 
-            if (opt.search)
+            if (opt.search) {
                 console.warn('search is deprecated with 7.6.0. Please use io.ox/find instead');
+            }
 
             if (opt.facetedsearch) {
                 console.warn('io.ox/search is deprecated with 7.8.0. Please use io.ox/find instead');
@@ -1620,30 +1620,6 @@ define('io.ox/core/desktop', [
                     id: 'links',
                     ref: opt.name + '/links/toolbar'
                 }));
-
-                // add fullscreen handler
-                if (opt.fullscreen === true) {
-
-                    new links.Action(opt.name + '/actions/fullscreen', {
-                        action:  function (baton) {
-                            if (BigScreen.enabled) {
-                                BigScreen.toggle(baton.$.outer.get(0));
-                            }
-                        }
-                    });
-
-                    new links.ActionLink(opt.name + '/links/toolbar/fullscreen', {
-                        ref: opt.name + '/actions/fullscreen'
-                    });
-
-                    new links.ActionGroup(opt.name + '/links/toolbar', {
-                        id: 'fullscreen',
-                        index: 1000,
-                        icon: function () {
-                            return $('<i class="fa fa-expand">');
-                        }
-                    });
-                }
             }
             // inc
             guid++;

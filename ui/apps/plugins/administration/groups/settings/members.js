@@ -101,7 +101,7 @@ define('plugins/administration/groups/settings/members', [
         },
 
         getSortName: function () {
-            return (this.get('last_name') || this.get('first_name') || this.get('display_name') || '').toLowerCase();
+            return (this.get('last_name') || this.get('first_name') || this.get('display_name') || '').toLowerCase();
         },
 
         getFullName: function () {

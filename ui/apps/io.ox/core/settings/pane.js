@@ -60,8 +60,19 @@ define('io.ox/core/settings/pane', [
                 );
             });
             this.addClass('settings-container').append(
-                $('<h1>').text(gt('Basic settings'))
+                // headline
+                $('<h1>').text(gt('Basic settings')),
+                // help text
+                $('<div class="help-block">')
+                .text(gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') + ' ')
+                .css('margin-bottom', '24px')
+                .append(
+                    $('<a href="#" role="button" tabindex="1" data-action="reload">')
+                    .text(gt('Reload page'))
+                    .on('click', function (e) { e.preventDefault(); location.reload(); })
+                )
             );
+
             new SettingView({ model: model }).render().$el.attr('role', 'form').appendTo(this);
         }
     });
@@ -389,7 +400,19 @@ define('io.ox/core/settings/pane', [
                         $('<div>').addClass('checkbox').append(
                             $('<label class="control-label">').text(gt('Show desktop notifications')).prepend(
                                 new miniViews.CheckboxView({ name: 'showDesktopNotifications', model: this.baton.model }).render().$el
-                            )
+                            ),
+                            // add ask now link (by design browsers only allow asking if there was no decision yet)
+                                                                                                               //#. Opens popup to decide if desktop notifications should be shown
+                            desktopNotifications.getPermissionStatus() === 'default' ? $('<a href="#" >').text(gt('Manage permission now')).css('margin-left', '8px').on('click', function (e) {
+                                e.preventDefault();
+                                desktopNotifications.requestPermission(function (result) {
+                                    if (result === 'granted') {
+                                        settings.set('showDesktopNotifications', true).save();
+                                    } else if (result === 'denied') {
+                                        settings.set('showDesktopNotifications', false).save();
+                                    }
+                                });
+                            }) : []
                         )
                     )
                 );

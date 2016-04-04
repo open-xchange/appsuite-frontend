@@ -18,7 +18,7 @@ define('io.ox/find/manager/facet-model', [
     'use strict';
 
     // array of strings to hash
-    function toHash (list) {
+    function toHash(list) {
         var tmp = {};
         list.forEach(function (id) {
             tmp[id] = true;

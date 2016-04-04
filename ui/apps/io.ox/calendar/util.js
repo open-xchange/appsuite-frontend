@@ -38,10 +38,17 @@ define('io.ox/calendar/util', [
             gt('declined'),
             gt('tentative')
         ],
-        n_confirm = ['', '<i class="fa fa-check">', '<i class="fa fa-times">', '<i class="fa fa-question-circle">'],
+        n_confirm = ['', '<i class="fa fa-check" aria-hidden="true">', '<i class="fa fa-times" aria-hidden="true">', '<i class="fa fa-question-circle" aria-hidden="true">'],
         colorLabels = [gt('no color'), gt('light blue'), gt('dark blue'), gt('purple'), gt('pink'), gt('red'), gt('orange'), gt('yellow'), gt('light green'), gt('dark green'), gt('gray')];
 
     var that = {
+
+        // column translations
+        columns: {
+            title: gt('Subject'),
+            location: gt('Location'),
+            note: gt('Description')
+        },
 
         // day bitmask
         days: {
@@ -63,27 +70,24 @@ define('io.ox/calendar/util', [
             }, opt);
 
             if (settings.get('bossyAppointmentHandling', false)) {
-
                 var check = function (data) {
                     if (folderAPI.is('private', data)) {
                         var isOrganizer = opt.app.organizerId === ox.user_id;
                         return opt.invert ? !isOrganizer : isOrganizer;
-                    } else {
-                        return true;
                     }
+                    return true;
                 };
 
                 if (opt.folderData) {
                     return $.Deferred().resolve(check(opt.folderData));
-                } else {
-                    return folderAPI.get(opt.app.folder_id).then(function (data) {
-                        return check(data);
-                    });
                 }
+                return folderAPI.get(opt.app.folder_id)
+                                .then(function (data) {
+                                    return check(data);
+                                });
 
-            } else {
-                return $.Deferred().resolve(true);
             }
+            return $.Deferred().resolve(true);
         },
 
         getFirstWeekDay: function () {
@@ -120,26 +124,75 @@ define('io.ox/calendar/util', [
             if (m.isBefore(startOfDay)) {
                 if (m.isAfter(startOfDay.subtract(1, 'day'))) {
                     return gt('Yesterday') + ', ' + m.format('l');
-                } else {
-                    return m.format('ddd, l');
                 }
-            } else {
-                // future
-                if (m.isBefore(startOfDay.add(1,'days'))) {
-                    return gt('Today') + ', ' + m.format('l');
-                } else if (m.isBefore(startOfDay.add(1, 'day'))) {
-                    return gt('Tomorrow') + ', ' + m.format('l');
-                } else {
-                    return m.format('ddd, l');
-                }
+                return m.format('ddd, l');
             }
+            // future
+            if (m.isBefore(startOfDay.add(1, 'days'))) {
+                return gt('Today') + ', ' + m.format('l');
+            }
+            if (m.isBefore(startOfDay.add(1, 'day'))) {
+                return gt('Tomorrow') + ', ' + m.format('l');
+            }
+            return m.format('ddd, l');
+        },
+
+        // function that returns markup for date and time + timzonelabel
+        getDateTimeIntervalMarkup: function (data, options) {
+            if (data && data.start_date && data.end_date) {
+
+                options = _.extend({ timeZoneLabel: { placement: 'top' }, a11y: false, output: 'markup' }, options);
+
+                var startDate,
+                    endDate,
+                    dateStr,
+                    timeStr,
+                    timeZoneStr = gt.noI18n(moment(data.start_date).zoneAbbr()),
+                    fmtstr = options.a11y ? 'dddd, l' : 'ddd, l';
+
+                if (data.full_time) {
+                    startDate = moment.utc(data.start_date).local(true);
+                    endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
+                } else {
+                    startDate = moment(data.start_date);
+                    endDate = moment(data.end_date);
+                }
+                if (startDate.isSame(endDate, 'day')) {
+                    dateStr = startDate.format(fmtstr);
+                    timeStr = this.getTimeInterval(data, options.zone);
+                } else if (data.full_time) {
+                    dateStr = this.getDateInterval(data);
+                    timeStr = this.getTimeInterval(data, options.zone);
+                } else {
+                    // not same day and not fulltime. use interval with date and time, separate date and is confusing
+                    dateStr = startDate.formatInterval(endDate, fmtstr + ' LT');
+                }
+
+                // standard markup or object with strings
+                if (options.output === 'strings') {
+                    return { dateStr: dateStr, timeStr: timeStr || '', timeZoneStr: timeZoneStr };
+                }
+                return $('<div class="date-time">').append(
+                    // date
+                    $('<span class="date">').text(dateStr),
+                    // mdash
+                    $.txt(' \u00A0 '),
+                    // time
+                    $('<span class="time">').append(
+                        timeStr ? $.txt(timeStr) : '',
+                        this.addTimezonePopover($('<span class="label label-default pointer" tabindex="1">').text(timeZoneStr), data, options.timeZoneLabel)
+                    )
+                );
+            }
+            return '';
         },
 
         getDateInterval: function (data, a11y) {
             if (data && data.start_date && data.end_date) {
                 var startDate, endDate,
-                    a11y = a11y || false,
                     fmtstr = a11y ? 'dddd, l' : 'ddd, l';
+
+                a11y = a11y || false;
 
                 if (data.full_time) {
                     startDate = moment.utc(data.start_date).local(true);
@@ -150,21 +203,18 @@ define('io.ox/calendar/util', [
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
-                } else {
-
-                    if (a11y && data.full_time) {
-                        //#. date intervals for screenreaders
-                        //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
-                        //#. %1$s is the start date
-                        //#. %2$s is the end date
-                        //#, c-format
-                        return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
-                    }
-                    return startDate.formatInterval(endDate, 'date');
                 }
-            } else {
-                return '';
+                if (a11y && data.full_time) {
+                    //#. date intervals for screenreaders
+                    //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                    //#. %1$s is the start date
+                    //#. %2$s is the end date
+                    //#, c-format
+                    return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
+                }
+                return startDate.formatInterval(endDate, fmtstr);
             }
+            return '';
         },
 
         getDateIntervalA11y: function (data) {
@@ -175,23 +225,22 @@ define('io.ox/calendar/util', [
             if (!data || !data.start_date || !data.end_date) return '';
             if (data.full_time) {
                 return this.getFullTimeInterval(data, true);
-            } else {
-                var start = moment(data.start_date),
-                    end = moment(data.end_date);
-                if (zone) {
-                    start.tz(zone);
-                    end.tz(zone);
-                }
-                if (a11y) {
-                    //#. date intervals for screenreaders
-                    //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
-                    //#. %1$s is the start date
-                    //#. %2$s is the end date
-                    //#, c-format
-                    return gt('%1$s to %2$s', start.format('LT'), end.format('LT'));
-                }
-                return start.formatInterval(end, 'time');
             }
+            var start = moment(data.start_date),
+                end = moment(data.end_date);
+            if (zone) {
+                start.tz(zone);
+                end.tz(zone);
+            }
+            if (a11y) {
+                //#. date intervals for screenreaders
+                //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                //#. %1$s is the start date
+                //#. %2$s is the end date
+                //#, c-format
+                return gt('%1$s to %2$s', start.format('LT'), end.format('LT'));
+            }
+            return start.formatInterval(end, 'time');
         },
 
         getTimeIntervalA11y: function (data, zone) {
@@ -200,7 +249,7 @@ define('io.ox/calendar/util', [
 
         getFullTimeInterval: function (data, smart) {
             var length = this.getDurationInDays(data);
-            return length <= 1  && smart ? gt('Whole day') : gt.format(
+            return length <= 1 && smart ? gt('Whole day') : gt.format(
                 //#. General duration (nominative case): X days
                 //#. %d is the number of days
                 //#, c-format
@@ -243,30 +292,31 @@ define('io.ox/calendar/util', [
                 { value: 20160, format: 'weeks' },
                 { value: 30240, format: 'weeks' },
                 { value: 40320, format: 'weeks' }
-            ],
-            options = {};
+                ],
+                options = {};
 
             _(reminderListValues).each(function (item) {
                 var i;
                 switch (item.format) {
-                case 'string':
-                    options[item.value] = gt('No reminder');
-                    break;
-                case 'minutes':
-                    options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
-                    break;
-                case 'hours':
-                    i = Math.floor(item.value / 60);
-                    options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
-                    break;
-                case 'days':
-                    i  = Math.floor(item.value / 60 / 24);
-                    options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
-                    break;
-                case 'weeks':
-                    i = Math.floor(item.value / 60 / 24 / 7);
-                    options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
-                    break;
+                    case 'string':
+                        options[item.value] = gt('No reminder');
+                        break;
+                    case 'minutes':
+                        options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
+                        break;
+                    case 'hours':
+                        i = Math.floor(item.value / 60);
+                        options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
+                        break;
+                    case 'days':
+                        i = Math.floor(item.value / 60 / 24);
+                        options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
+                        break;
+                    case 'weeks':
+                        i = Math.floor(item.value / 60 / 24 / 7);
+                        options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
+                        break;
+                    // no default
                 }
             });
 
@@ -391,6 +441,10 @@ define('io.ox/calendar/util', [
             return confirmClass[status || 0];
         },
 
+        getConfirmationLabel: function (status) {
+            return confirmTitles[status || 0];
+        },
+
         getRecurrenceString: function (data) {
 
             function getCountString(i) {
@@ -435,48 +489,48 @@ define('io.ox/calendar/util', [
 
             switch (data.recurrence_type) {
 
-            // DAILY
-            case 1:
-                str = interval === 1 ?
-                gt('Every day') :
-                //#. recurrence string
-                //#. %1$d: numeric
-                gt('Every %1$d days', interval);
-                break;
-
-            // WEEKLY
-            case 2:
-                // special case: weekly but all days checked
-                if (days === 127) {
+                // DAILY
+                case 1:
                     str = interval === 1 ?
+                    gt('Every day') :
+                    //#. recurrence string
+                    //#. %1$d: numeric
+                    gt('Every %1$d days', interval);
+                    break;
+
+                // WEEKLY
+                case 2:
+                    // special case: weekly but all days checked
+                    if (days === 127) {
+                        str = interval === 1 ?
                         gt('Every day') :
                         //#. recurrence string
                         //#. %1$d: numeric
                         gt('Every %1$d weeks on all days', interval);
-                } else if (days === 62) { // special case: weekly on work days
-                    str = interval === 1 ?
+                    } else if (days === 62) { // special case: weekly on work days
+                        str = interval === 1 ?
+                            //#. recurrence string
+                            gt('On work days') :
+                            //#. recurrence string
+                            //#. %1$d: numeric
+                            gt('Every %1$d weeks on work days', interval);
+                    } else {
+                        str = interval === 1 ?
                         //#. recurrence string
-                        gt('On work days') :
+                        //#. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
+                        gt('Weekly on %1$s', getDayString(days)) :
                         //#. recurrence string
                         //#. %1$d: numeric
-                        gt('Every %1$d weeks on work days', interval);
-                } else {
-                    str = interval === 1 ?
-                    //#. recurrence string
-                    //#. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-                    gt('Weekly on %1$s', getDayString(days)) :
-                    //#. recurrence string
-                    //#. %1$d: numeric
-                    //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-                    gt('Every %1$d weeks on %2$s', interval, getDayString(days));
-                }
+                        //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
+                        gt('Every %1$d weeks on %2$s', interval, getDayString(days));
+                    }
 
-                break;
+                    break;
 
-            // MONTHLY
-            case 3:
-                if (days === null) {
-                    str = interval === 1 ?
+                // MONTHLY
+                case 3:
+                    if (days === null) {
+                        str = interval === 1 ?
                         //#. recurrence string
                         //#. %1$d: numeric, day in month
                         gt('Monthly on day %1$d', day_in_month) :
@@ -484,8 +538,8 @@ define('io.ox/calendar/util', [
                         //#. %1$d: numeric, interval
                         //#. %1$d: numeric, day in month
                         gt('Every %1$d months on day %2$d', interval, day_in_month);
-                } else {
-                    str = interval === 1 ?
+                    } else {
+                        str = interval === 1 ?
                     //#. recurrence string
                     //#. %1$s: count string, e.g. first, second, or last
                     //#. %2$s: day string, e.g. Monday
@@ -495,14 +549,14 @@ define('io.ox/calendar/util', [
                     //#. %2$s: count string, e.g. first, second, or last
                     //#. %3$s: day string, e.g. Monday
                     gt('Every %1$d months on the %2$s %3$s', interval, getCountString(day_in_month), getDayString(days));
-                }
+                    }
 
-                break;
+                    break;
 
-            // YEARLY
-            case 4:
-                if (days === null) {
-                    str = !interval || interval === 1 ?
+                // YEARLY
+                case 4:
+                    if (days === null) {
+                        str = !interval || interval === 1 ?
                         //#. recurrence string
                         //#. %1$s: Month nane, e.g. January
                         //#. %2$d: Date, numeric, e.g. 29
@@ -512,8 +566,8 @@ define('io.ox/calendar/util', [
                         //#. %2$s: Month nane, e.g. January
                         //#. %3$d: Date, numeric, e.g. 29
                         gt('Every %1$d years on %2$s %3$d', interval, getMonthString(month), day_in_month);
-                } else {
-                    str = !interval || interval === 1 ?
+                    } else {
+                        str = !interval || interval === 1 ?
                     //#. recurrence string
                     //#. %1$s: count string, e.g. first, second, or last
                     //#. %2$s: day string, e.g. Monday
@@ -525,9 +579,10 @@ define('io.ox/calendar/util', [
                     //#. %3$s: day string, e.g. Monday
                     //#. %4$s: month nane, e.g. January
                     gt('Every %1$d years on the %2$s %3$s of %4$d', interval, getCountString(day_in_month), getDayString(days), getMonthString(month));
-                }
+                    }
 
-                break;
+                    break;
+                // no default
             }
 
             if (data.recurrence_type > 0) {
@@ -591,7 +646,7 @@ define('io.ox/calendar/util', [
             // init
             _.each(confirmClass, function (cls, i) {
                 ret[i] = {
-                    icon: n_confirm[i] || '<i class="fa fa-exclamation-circle">',
+                    icon: n_confirm[i] || '<i class="fa fa-exclamation-circle" aria-hidden="true">',
                     count: 0,
                     css: cls,
                     title: confirmTitles[i] || ''
@@ -676,6 +731,7 @@ define('io.ox/calendar/util', [
                             mail_field: 0
                         });
                         break;
+                    // no default
                 }
             });
 
@@ -739,12 +795,10 @@ define('io.ox/calendar/util', [
             if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
                 // public appointments which are not from you are always colored in the calendar color
                 return 'color-label-' + folderColor;
-            } else {
-                // set color of appointment. if color is 0, then use color of folder
-                var color = appointmentColor === 0 ? folderColor : appointmentColor;
-
-                return 'color-label-' + color;
             }
+            // set color of appointment. if color is 0, then use color of folder
+            var color = appointmentColor === 0 ? folderColor : appointmentColor;
+            return 'color-label-' + color;
         },
 
         canAppointmentChangeColor: function (folder, appointment) {

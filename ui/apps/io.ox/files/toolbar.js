@@ -77,7 +77,6 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 icon: 'fa fa-user-plus',
                 label: gt('Share'),
-                title: gt('Share selected files'),
                 ref: 'io.ox/files/dropdown/share',
                 customize: function (baton) {
                     var self = this;
@@ -101,6 +100,34 @@ define('io.ox/files/toolbar', [
                     }).dropdown();
 
                     this.parent().addClass('dropdown');
+
+                    // set proper tooltip
+                    var folders = 0, files = 0;
+                    _(_.isArray(baton.data) ? baton.data : [baton.data]).each(function (item) {
+                        if (item.folder_id === 'folder') {
+                            folders++;
+                        } else {
+                            files++;
+                        }
+                    });
+
+                    var title = '';
+
+                    if (folders && files) {
+                        // mixed selection
+                        title = gt('Share selected objects');
+                    } else if (folders) {
+                        // folders only
+                        title = gt.ngettext('Share selected folder', 'Share selected folders', folders);
+                    } else if (files) {
+                        // files only
+                        title = gt.ngettext('Share selected file', 'Share selected files', files);
+                    } else {
+                        // empty selection
+                        title = gt('Share current folder');
+                    }
+
+                    this.attr({ 'aria-label': title, 'data-original-title': title });
                 }
             },
             'mediaplayer-audio': {
@@ -123,6 +150,13 @@ define('io.ox/files/toolbar', [
                 icon: 'fa fa-eye',
                 label: gt('View'),
                 ref: 'io.ox/files/actions/viewer'
+            },
+            'presenter': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-picture-o',
+                label: gt('Present'),
+                ref: 'io.ox/files/actions/launchpresenter'
             },
             'download': {
                 prio: 'hi',
@@ -283,10 +317,17 @@ define('io.ox/files/toolbar', [
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
-            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+
+            var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbar.render().$el
+                toolbarView.render().$el
             );
+
+            function updateCallback($toolbar) {
+                toolbarView.replaceToolbar($toolbar).initButtons();
+            }
+
             app.updateToolbar = _.debounce(function (list) {
                 if (!list) return;
                 // turn cids into proper objects
@@ -294,12 +335,13 @@ define('io.ox/files/toolbar', [
                 list = _(models).invoke('toJSON');
                 // extract single object if length === 1
                 var data = list.length === 1 ? list[0] : list;
+                // disable visible buttons
+                toolbarView.disableButtons();
                 // draw toolbar
-                var baton = ext.Baton({ $el: toolbar.$list, data: data, models: models, collection: app.listView.collection, app: this, allIds: [] }),
-                    ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                $.when.apply($, ret.value()).then(function () {
-                    toolbar.initButtons();
-                });
+                var $toolbar = toolbarView.createToolbar(),
+                    baton = ext.Baton({ $el: $toolbar, data: data, models: models, collection: app.listView.collection, app: this, allIds: [] }),
+                    ret = ext.point('io.ox/files/classic-toolbar').invoke('draw', $toolbar, baton);
+                $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
             }, 10);
         }
     });

@@ -55,7 +55,9 @@ define('io.ox/core/upsell', [
     function upgrade(options) {
         console.debug('upsell:upgrade', options);
         // needs no translation; just for demo purposes
+        /*eslint-disable no-alert*/
         alert('User decided to upgrade! (global event: upsell:upgrade)');
+        /*eslint-enable no-alert */
     }
 
     // local copy for speed
@@ -131,12 +133,12 @@ define('io.ox/core/upsell', [
 
             return function () {
                 // you can pass separate arguments as arrays and if two operands are not connected by an operator an && is automatically inserted
-                var condition = _(arguments).flatten().join(' || ').replace(/([^&\|]) ([^&\|])/gi, '$1 && $2'),
+                var condition = _(arguments).flatten().join(' || ').replace(/([^&\|]) ([^&\|])/gi, '$1 && $2');
                 condition = condition.replace(/[a-z_:-]+/ig, function (match) {
                     match = match.toLowerCase();
                     return isEnabled(match);
                 });
-
+                /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
             };
 
@@ -171,10 +173,16 @@ define('io.ox/core/upsell', [
             c.portal = c.webmail = c.contacts = true;
             c.calendar = c.infostore = c.tasks = c.active_sync = c['active_sync || caldav || carddav'] = false;
             c.publication = c.subscription = false;
+            // uncomment the following lines to show the triggers at the bottom of all folderviews.
+            // e.caldav = e.boxcom = e.google = e.msliveconnect = true;
+            // c.calendar = c.infostore = true;
+            // c.caldav = c.carddav = c['boxcom || google || msliveconnect'] = false;
+            // c.boxcom = c.google = c.msliveconnect = false;
             settings.set('features/upsell/secondary-launcher', { icon: 'fa-star fa-star fa-star', color: '#ff0' });
             settings.set('features/upsell/portal-widget', { imageURL: 'http://lorempixel.com/400/300/' });
             settings.set('features/upsell/folderview/mail/i18n/en_US', { title: 'Custom english title for synchronizing mails.' });
             settings.set('features/upsell/topbar-dropdown', { color: '#f00' });
+            settings.set('features/upsell/mail-folderview-quota', { upsellLimit: 10 * 1024 * 1024 });
             console.debug('Disabled inline actions regarding calendar, tasks, and files; enabled upsell instead');
             if (!debugCustomWizard) {
                 that.useDefaults();

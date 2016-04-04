@@ -20,7 +20,7 @@ define([
 
     var capabilities = caputil.preset('common').init('io.ox/mail/util', util);
 
-    describe('Utilities for mail:', function () {
+    describe('Mail Utilities:', function () {
 
         describe('has some capability depending msisdn methods that', function () {
 

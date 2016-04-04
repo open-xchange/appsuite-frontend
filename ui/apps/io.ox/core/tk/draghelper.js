@@ -10,6 +10,7 @@
  *
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
+
 define('io.ox/core/tk/draghelper', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';

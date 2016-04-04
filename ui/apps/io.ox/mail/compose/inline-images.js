@@ -33,21 +33,20 @@ define('io.ox/mail/compose/inline-images', [
                     data: formData,
                     fixPost: true
                 });
-            } else {
-                return http.FORM({
-                    module: 'file',
-                    form: data.form,
-                    params: { module: 'mail', type: 'image' }
-                });
             }
+            return http.FORM({
+                module: 'file',
+                form: data.form,
+                params: { module: 'mail', type: 'image' }
+            });
         },
         getInsertedImageUrl: function (data) {
             var url = ox.apiRoot + '/file',
-            url_params = $.param({
-                action: 'get',
-                id: data.data[0],
-                session: ox.session
-            });
+                url_params = $.param({
+                    action: 'get',
+                    id: data.data[0],
+                    session: ox.session
+                });
             return url + '?' + url_params;
         }
     };
@@ -84,7 +83,7 @@ define('io.ox/mail/compose/inline-images', [
     return {
         api: api,
         show: function () {
-            var noBusy = (_.browser.IE && _.browser.IE < 10),//IE9 upload fails if window becomes busy
+            var noBusy = (_.browser.IE && _.browser.IE < 10), // IE9 upload fails if window becomes busy
                 dialog = new dialogs.ModalDialog({ async: true, noBusy: noBusy }),
                 baton =  new ext.Baton({ $: {} }),
                 def = $.Deferred(),

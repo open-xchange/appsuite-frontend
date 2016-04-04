@@ -69,7 +69,7 @@ define('io.ox/settings/main', [
 
         function disableListetSettingsPanes(subgroup) {
             _.each(ext.point(subgroup).list(), function (p) {
-                var result = _.indexOf(disabledSettingsPanes, p.id) === -1 ? false : true;
+                var result = _.indexOf(disabledSettingsPanes, p.id) >= 0;
                 if (result) ext.point(subgroup).disable(p.id);
             });
         }
@@ -78,11 +78,11 @@ define('io.ox/settings/main', [
             ignoreChangeEvent,
 
             saveSettings = function (triggeredBy) {
-
+                var settingsID;
                 switch (triggeredBy) {
                     case 'changeMain':
                         if (currentSelection !== null && currentSelection.lazySaveSettings !== true) {
-                            var settingsID = currentSelection.id + '/settings';
+                            settingsID = currentSelection.id + '/settings';
                             ext.point(settingsID + '/detail').invoke('save');
                         } else if (currentSelection !== null && currentSelection.lazySaveSettings === true) {
                             changeStatus = true;
@@ -90,14 +90,14 @@ define('io.ox/settings/main', [
                         break;
                     case 'changeGrid':
                         if (previousSelection !== null && previousSelection.lazySaveSettings === true && changeStatus === true) {
-                            var settingsID = previousSelection.id + '/settings';
+                            settingsID = previousSelection.id + '/settings';
                             ext.point(settingsID + '/detail').invoke('save');
                             changeStatus = false;
                         }
                         break;
                     case 'changeGridMobile':
                         if (currentSelection.lazySaveSettings === true && changeStatus === true) {
-                            var settingsID = currentSelection.id + '/settings';
+                            settingsID = currentSelection.id + '/settings';
                             ext.point(settingsID + '/detail').invoke('save');
                             changeStatus = false;
                         }
@@ -105,14 +105,14 @@ define('io.ox/settings/main', [
                     case 'hide':
                     case 'logout':
                         if (currentSelection !== null && currentSelection.lazySaveSettings === true && changeStatus === true) {
-                            var settingsID = currentSelection.id + '/settings',
-                                defs = ext.point(settingsID + '/detail').invoke('save').compact().value();
+                            settingsID = currentSelection.id + '/settings';
+                            var defs = ext.point(settingsID + '/detail').invoke('save').compact().value();
                             changeStatus = false;
                             return $.when.apply($, defs);
                         }
                         break;
                     default:
-                        var settingsID = currentSelection.id + '/settings';
+                        settingsID = currentSelection.id + '/settings';
                         ext.point(settingsID + '/detail').invoke('save');
                 }
 
@@ -178,7 +178,7 @@ define('io.ox/settings/main', [
 
             disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [];
             function filterAvailableSettings(point) {
-                var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
+                var shown = _.indexOf(disabledSettingsPanes, point.id) === -1;
                 if (expertmode && shown) {
                     return true;
                 } else if (!point.advancedMode && shown) {
@@ -263,8 +263,9 @@ define('io.ox/settings/main', [
             tree.selection.preselect(id);
             app.folder.set(id);
 
-            var item = tree.selection.byId(id),
-                view = item.closest('li').data('view');
+            item = tree.selection.byId(id);
+
+            var view = item.closest('li').data('view');
 
             // view may not exists if the user does not have this setting
             if (!view) return;
@@ -401,7 +402,7 @@ define('io.ox/settings/main', [
             // try to get a translated title
             var title = declaration['title_' + ox.language] || /*#, dynamic*/gt(declaration.title) || '';
 
-            ext.point('io.ox/settings/pane/' + (declaration.group || 'tools')).extend(_.extend({
+            ext.point('io.ox/settings/pane/' + (declaration.group || 'tools')).extend(_.extend({
                 id: id,
                 ref: 'io.ox/configjump/' + id,
                 loadSettingPane: false
@@ -448,16 +449,16 @@ define('io.ox/settings/main', [
 
             var node = app.getWindow().nodes.outer;
             metrics.watch({
-                    node: node,
-                    selector: '.io-ox-accounts-settings [data-actionname="mailaccount"]',
-                    type: 'click'
+                node: node,
+                selector: '.io-ox-accounts-settings [data-actionname="mailaccount"]',
+                type: 'click'
 
-                }, {
-                    app: 'mail',
-                    target: 'settings/account',
-                    type: 'click',
-                    action: 'add'
-                });
+            }, {
+                app: 'mail',
+                target: 'settings/account',
+                type: 'click',
+                action: 'add'
+            });
         });
 
         ext.point('io.ox/settings/pane').extend({
@@ -512,16 +513,15 @@ define('io.ox/settings/main', [
                     // updateExpertMode();
                     if (focus) vsplit.right.focus();
                 });
-            } else {
-                return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
-                    // again, since require makes this async
-                    right.empty().idle();
-                    vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
-                    ext.point(extPointPart).invoke('draw', right, baton);
-                    // updateExpertMode();
-                    if (focus) vsplit.right.focus();
-                });
             }
+            return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
+                // again, since require makes this async
+                right.empty().idle();
+                vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
+                ext.point(extPointPart).invoke('draw', right, baton);
+                // updateExpertMode();
+                if (focus) vsplit.right.focus();
+            });
         };
 
         // trigger auto save on any change
@@ -555,13 +555,12 @@ define('io.ox/settings/main', [
                         baton = new ext.Baton({ data: pool.getModel(id).get('meta'), options: options || {} });
                     tree.trigger('virtual', id, {}, baton);
                 });
-            } else {
-                if (!_.device('smartphone')) {
-                    tree.selection.resetSelected(tree.selection.getItems());
-                    tree.selection.pick(0);
-                }
-                return $.when();
             }
+            if (!_.device('smartphone')) {
+                tree.selection.resetSelected(tree.selection.getItems());
+                tree.selection.pick(0);
+            }
+            return $.when();
         };
 
         // go!

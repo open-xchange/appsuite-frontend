@@ -121,6 +121,12 @@ define('io.ox/core/folder/api', [
     // no deep recursion needed here, children are sufficient
     function calculateSubtotal(model) {
         return pool.getCollection(model.id).reduce(function (total, model) {
+            // use account API so it works with non standard accounts as well
+            var type = account.getType(model.get('id'));
+            // don't count trash or spam root folders
+            if (type === 'trash' || type === 'spam') {
+                return total;
+            }
             return total + (model.get('subtotal') || 0) + (model.get('unread') || 0);
         }, 0);
     }
@@ -152,11 +158,11 @@ define('io.ox/core/folder/api', [
         }
     }
 
-    function onChangeSubtotal (model, value) {
+    function onChangeSubtotal(model, value) {
         bubbleSubtotal(model, value, 'subtotal');
     }
 
-    function onChangeUnread (model, value) {
+    function onChangeUnread(model, value) {
         bubbleSubtotal(model, value, 'unread');
         // forward event
         api.trigger('change:unread', model, value);
@@ -185,6 +191,19 @@ define('io.ox/core/folder/api', [
         isAdmin: function () {
             var bits = new Bitmask(this.get('own_rights'));
             return !!bits.get('admin');
+        },
+
+        supportsInternalSharing: function () {
+            // mail and drive check gab (webmail, PIM, PIM+infostore)
+            if (this.is('mail|drive')) return capabilities.has('gab');
+            // contacts, calendar, tasks
+            if (this.is('public')) return capabilities.has('edit_public_folders');
+            // non-public foldes
+            return capabilities.has('read_create_shared_folders');
+        },
+
+        supportsInviteGuests: function () {
+            return !this.is('mail') && capabilities.has('invite_guests') && this.supportsInternalSharing();
         },
 
         // check if the folder can have shares
@@ -285,15 +304,20 @@ define('io.ox/core/folder/api', [
             }
             collection[type](models);
             collection.fetched = true;
-            if (this.models[id] && this.models[id].get('module') !== 'system') {
+            // some virtual folders have type undefined. Track subtotal for them too.
+            if (this.models[id] && (this.models[id].get('module') === 'mail' || this.models[id].get('module') === undefined)) {
                 var subtotal = 0;
                 for (var i = 0; i < models.length; i++) {
-                    subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
-                    // add virtual parent references
-                    if (isVirtual(id)) {
-                        var newParents = models[i].get('virtual_parents');
-                        newParents.push(id);
-                        models[i].set('virtual_parents', _.uniq(newParents));
+                    // use account API so it works with non standard accounts as well
+                    var ctype = account.getType(models[i].get('id'));
+                    if (ctype !== 'trash' && ctype !== 'spam') {
+                        subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
+                        // add virtual parent references
+                        if (isVirtual(id)) {
+                            var newParents = models[i].get('virtual_parents');
+                            newParents.push(id);
+                            models[i].set('virtual_parents', _.uniq(newParents));
+                        }
                     }
                 }
                 this.models[id].set('subtotal', subtotal);
@@ -376,6 +400,17 @@ define('io.ox/core/folder/api', [
         total: -1,
         type: 1
     });
+
+    if (capabilities.has('webmail')) {
+        // only define if the user actually has mail
+        // otherwise the folder refresh tries to fetch 'default0'
+        pool.addModel({
+            folder_id: 'default0',
+            id: 'virtual/all-unseen',
+            module: 'mail',
+            title: gt('Unread messages')
+        });
+    }
 
     //
     // Propagate
@@ -503,6 +538,9 @@ define('io.ox/core/folder/api', [
         })
         .then(function (data) {
             return renameDefaultCalendarFolders(data);
+        }, function (error) {
+            api.trigger('error error:' + error.code, error);
+            return error;
         })
         .then(function (data) {
             // update/add model
@@ -590,7 +628,10 @@ define('io.ox/core/folder/api', [
             },
             appendColumns: true
         })
-        .then(renameDefaultCalendarFolders)
+        .then(renameDefaultCalendarFolders, function (error) {
+            api.trigger('error error:' + error.code, error);
+            return error;
+        })
         .then(function (array) {
             array = processListResponse(id, array);
             pool.addCollection(collectionId, array);
@@ -751,13 +792,13 @@ define('io.ox/core/folder/api', [
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
                 var array = _(section).filter(function (folder) {
-                        // store section / easier than type=1,2,3
-                        if (hash[folder.id]) { hidden.push(folder); return false; }
-                        // sharing?
-                        if (util.is('shared-by-me', folder)) sharing.push(folder);
-                        // otherwise
-                        return true;
-                    });
+                    // store section / easier than type=1,2,3
+                    if (hash[folder.id]) { hidden.push(folder); return false; }
+                    // sharing?
+                    if (util.is('shared-by-me', folder)) sharing.push(folder);
+                    // otherwise
+                    return true;
+                });
                 // inject 'All my appointments' for calender/private
                 if (module === 'calendar' && id === 'private') injectVirtualCalendarFolder(array);
                 // process response and add to pool
@@ -827,10 +868,13 @@ define('io.ox/core/folder/api', [
                     if ('title' in changes) api.trigger('rename', id, model.toJSON());
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
-                if (id !== newId || changes.title || changes.folder_id ) return list(model.get('folder_id'), { cache: false }).then(function () {
-                    pool.getCollection(model.get('folder_id')).sort();
-                    return newId;
-                });
+                if (id !== newId || changes.title || changes.folder_id) {
+                    return list(model.get('folder_id'), { cache: false })
+                            .then(function () {
+                                pool.getCollection(model.get('folder_id')).sort();
+                                return newId;
+                            });
+                }
             },
             function fail(error) {
                 //get fresh data for the model (the current ones are wrong since we applied the changes early to be responsive)
@@ -852,7 +896,8 @@ define('io.ox/core/folder/api', [
 
     function move(id, target, ignoreWarnings) {
 
-        if (id === target) return;
+        // doesn't make sense but let's silently finish
+        if (id === target) return $.when();
 
         // prepare move
         var model = pool.getModel(id),
@@ -866,24 +911,25 @@ define('io.ox/core/folder/api', [
         //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
         model.set('unread', 0);
 
-        return update(id, { folder_id: target }, { ignoreWarnings: ignoreWarnings }).then(function success(newId) {
-            // update new parent folder
-            pool.getModel(target).set('subfolders', true);
-            // update all virtual folders
-            virtual.refresh();
-            // add folder to collection
-            pool.getCollection(target).add(model);
-            // trigger event
-            api.trigger('move', id, newId);
-        }, function fail(error) {
-            // update new parent folder
-            pool.getModel(folderId).set('subfolders', true);
-            // update all virtual folders
-            virtual.refresh();
-            // add folder to collection
-            pool.getCollection(folderId).add(model);
-            return error;
-        });
+        return update(id, { folder_id: target }, { ignoreWarnings: ignoreWarnings }).then(
+            function success(newId) {
+                // update new parent folder
+                pool.getModel(target).set('subfolders', true);
+                // update all virtual folders
+                virtual.refresh();
+                // add folder to collection
+                pool.getCollection(target).add(model);
+                // trigger event
+                api.trigger('move', id, newId);
+            },
+            function fail(error) {
+                // re-add folder
+                pool.getModel(folderId).set('subfolders', true);
+                virtual.refresh();
+                pool.getCollection(folderId).add(model);
+                return error;
+            }
+        );
     }
 
     //
@@ -987,6 +1033,10 @@ define('io.ox/core/folder/api', [
             api.trigger('remove', id, data);
             api.trigger('remove:' + id, data);
             api.trigger('remove:' + data.module, data);
+            if (account.is('trash', id)) {
+                // if this is a trash folder trigger special event (quota updates)
+                api.trigger('cleared-trash');
+            }
         })
         .fail(function () {
             api.trigger('remove:fail', id);
@@ -1011,6 +1061,10 @@ define('io.ox/core/folder/api', [
             data: [id]
         })
         .done(function () {
+            if (account.is('trash', id)) {
+                // if this is a trash folder trigger special event (quota updates)
+                api.trigger('cleared-trash');
+            }
             api.trigger('clear', id);
             refresh();
         });
@@ -1066,7 +1120,8 @@ define('io.ox/core/folder/api', [
     //
 
     function getFolderId(arg) {
-        return _.isString(arg) ? arg : (arg ? arg.folder_id : null);
+        if (_.isString(arg)) return arg;
+        return arg ? arg.folder_id : null;
     }
 
     function reload() {
@@ -1175,7 +1230,7 @@ define('io.ox/core/folder/api', [
     ox.on('please:refresh refresh^', refresh);
 
     // If there is a new filestorage refresh the folders
-    $(filestorageApi).on('create delete update', refresh);
+    filestorageApi.on('create delete update', refresh);
 
     //
     // Get standard mail folders
@@ -1212,9 +1267,9 @@ define('io.ox/core/folder/api', [
 
     function getExistingFolder(type) {
         var defaultId = util.getDefaultFolder(type);
-        if (defaultId) return defaultId;
-        if (type === 'mail') return 'default0' + mailSettings.get('defaultseparator') + 'INBOX';
-        if (type === 'infostore') return 10;
+        if (defaultId) return $.Deferred().resolve(defaultId);
+        if (type === 'mail') return $.Deferred().resolve('default0' + mailSettings.get('defaultseparator', '/') + 'INBOX');
+        if (type === 'infostore') return $.Deferred().resolve(10);
         return flat({ module: type }).then(function (data) {
             for (var section in data) {
                 if (section === 'hidden') continue;

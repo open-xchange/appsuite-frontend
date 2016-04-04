@@ -70,8 +70,9 @@ define('io.ox/find/extensions-facets', [
                 }
             });
 
-            if (advanced.length)
-                 ext.point('io.ox/find/facets/dropdown/default').invoke('draw', this, baton, advanced);
+            if (advanced.length) {
+                ext.point('io.ox/find/facets/dropdown/default').invoke('draw', this, baton, advanced);
+            }
         },
 
         dropdownDefault: function (baton, list) {
@@ -89,7 +90,7 @@ define('io.ox/find/extensions-facets', [
             });
 
             // listen for option changes
-            ddmodel.on('change', function (model, option) {
+            ddmodel.on('change', function (model) {
                 var facet = Object.keys(model.changed)[0],
                     value = model.get(facet + ':value'),
                     option = model.get(facet);
@@ -132,8 +133,9 @@ define('io.ox/find/extensions-facets', [
                     // option vs. link
                     dropdown.option(id, option.id, label);
 
-                    if (conflicting)
+                    if (conflicting) {
                         dropdown.$ul.children().last().addClass('conflicting');
+                    }
                 });
             });
         },

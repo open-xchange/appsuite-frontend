@@ -23,7 +23,7 @@ define('io.ox/presenter/rtconnection', [
     'use strict';
 
     var // names of internal events for the real-time connection state
-        INTERNAL_EVENTS = 'online offline reset error:notMember',
+        INTERNAL_EVENTS = 'online offline reset error:notMember timeout error:stanzaProcessingFailed error:joinFailed error:disposed',
 
         // names of runtime push messages
         PUSH_EVENTS = 'update';
@@ -340,15 +340,13 @@ define('io.ox/presenter/rtconnection', [
                 _.find(payloads, function (payload) {
                     if (_.isObject(payload) && _.isObject(payload.data) && _.isString(payload.element)) {
                         switch (payload.element) {
-                        case 'error':
-                            hasError = true;
-                            data = { error: payload.data };
-                            break;
-                        default:
-                            if (!data) {
-                                data = payload.data;
-                            }
-                            break;
+                            case 'error':
+                                hasError = true;
+                                data = { error: payload.data };
+                                break;
+                            default:
+                                if (!data) data = payload.data;
+                                break;
                         }
                     }
                     return hasError;
@@ -451,17 +449,15 @@ define('io.ox/presenter/rtconnection', [
                 } else if (payloads.length > 0) {
                     handleJoinResponse(def, response);
                     joining = false;
-                } else {
+                } else if (_.isFunction(retryHandler)) {
                     // We encountered an illegal state for our join request.
-                    if (_.isFunction(retryHandler)) {
-                        // try to re-join if handler is available
-                        handleRejoin(def, response, retryHandler);
-                    } else {
-                        // without retry handler just process the original
-                        // response
-                        handleJoinResponse(def, response);
-                        joining = false;
-                    }
+                    // try to re-join if handler is available
+                    handleRejoin(def, response, retryHandler);
+                } else {
+                    // without retry handler just process the original
+                    // response
+                    handleJoinResponse(def, response);
+                    joining = false;
                 }
             }, function (response) {
                 handleRejectedJoinRequest(def, response, retryHandler);
@@ -762,6 +758,7 @@ define('io.ox/presenter/rtconnection', [
     });
 
     RTConnection.log = function (msg) { console.info('Presenter - RTConnection - log', msg); };
+    RTConnection.error = function (msg) { console.error('Presenter - RTConnection - error', msg); };
 
     // exports ================================================================
 

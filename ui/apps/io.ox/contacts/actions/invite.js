@@ -28,10 +28,9 @@ define('io.ox/contacts/actions/invite', [
             } else if (obj.internal_userid || obj.user_id) {
                 // internal user
                 return { type: 1, id: obj.internal_userid || obj.user_id };
-            } else {
-                // external user
-                return { type: 5, display_name: obj.display_name, mail: obj.mail || obj.email1 || obj.email2 || obj.email3 };
             }
+            // external user
+            return { type: 5, display_name: obj.display_name, mail: obj.mail || obj.email1 || obj.email2 || obj.email3 };
         }
 
         function filterContact(obj) {

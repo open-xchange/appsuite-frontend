@@ -86,7 +86,6 @@ define('io.ox/core/tk/selection', [
             isCheckbox,
             isMultiple,
             isRange,
-            isDragged,
             getIndex,
             getNode,
             selectFirst,
@@ -94,6 +93,9 @@ define('io.ox/core/tk/selection', [
             selectLast,
             selectNext,
             // marker mode
+            mark,
+            fastMark,
+            clearMarks,
             isMarker = $.noop,
             // trick for smooth updates
             lastIndex = -1,
@@ -119,19 +121,13 @@ define('io.ox/core/tk/selection', [
             return e && e.shiftKey && multiple;
         };
 
-        isDragged = function (e) {
-            return $(e.currentTarget).hasClass('dnd-over');
-        };
+        // TODO: unused
+        // isDragged = function (e) {
+        //     return $(e.currentTarget).hasClass('dnd-over');
+        // };
 
         hasMultiple = function () {
-            var mult = 0, id;
-            for (id in selectedItems) {
-                mult++;
-                if (mult > 1) {
-                    return true;
-                }
-            }
-            return false;
+            return _.isArray(selectedItems) && selectedItems.length > 1;
         };
 
         changed = function () {
@@ -171,16 +167,14 @@ define('io.ox/core/tk/selection', [
             if (!touchstart) {
                 // event
                 changed();
-            } else {
+            } else if (isCheckbox(e) || mobileSelectMode) {
                 // check if select mode
                 // check if checkbox tap
                 // else call apply again without touchstart
-                if (isCheckbox(e) || mobileSelectMode) {
-                    e.preventDefault();
-                    selectOnly();
-                } else {
-                    apply(id, e);
-                }
+                e.preventDefault();
+                selectOnly();
+            } else {
+                apply(id, e);
             }
         };
 
@@ -234,43 +228,45 @@ define('io.ox/core/tk/selection', [
 
             // process event
             switch (e.which) {
-            case 38:
-                e.preventDefault();
-                if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
-                // cursor up
-                if (e.metaKey || e.ctrlKey) {
-                    selectFirst(e);
-                } else {
-                    selectPrevious(e);
-                }
-                break;
-            case 32:
-                // last is the current selected/focussed
-                if (options.markable) {
+                case 38:
                     e.preventDefault();
-                    toggle(last);
-                }
-                break;
-            case 40:
-                e.preventDefault();
-                if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
-                // cursor down
-                if (e.metaKey || e.crtlKey) {
-                    selectLast(e);
-                } else {
-                    selectNext(e);
-                }
-                break;
-            case 9:
-                if (options.markable)
-                    clearMarks();
-                break;
-            // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
-            case 8:
-            case 46:
-                e.preventDefault();
-                self.trigger('selection:delete', self.get());
-                break;
+                    if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
+                    // cursor up
+                    if (e.metaKey || e.ctrlKey) {
+                        selectFirst(e);
+                    } else {
+                        selectPrevious(e);
+                    }
+                    break;
+                case 32:
+                    // last is the current selected/focussed
+                    if (options.markable) {
+                        e.preventDefault();
+                        toggle(last);
+                    }
+                    break;
+                case 40:
+                    e.preventDefault();
+                    if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
+                    // cursor down
+                    if (e.metaKey || e.crtlKey) {
+                        selectLast(e);
+                    } else {
+                        selectNext(e);
+                    }
+                    break;
+                case 9:
+                    if (options.markable) {
+                        clearMarks();
+                    }
+                    break;
+                // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
+                case 8:
+                case 46:
+                    e.preventDefault();
+                    self.trigger('selection:delete', self.get());
+                    break;
+                // no default
             }
         };
 
@@ -485,78 +481,80 @@ define('io.ox/core/tk/selection', [
 
         // mark option block
         if (options.markable) {
+            var clearOrginal = clear, markedItem;
 
             this.classMarked = 'marked';
 
+            // overwrite
             isMarker = function (e) {
                 return multiple && e && (e.which === 38 || e.which === 40);
             };
+            // clear wrapper
+            clear = function (e) {
+                // clear mark
+                clearMarks();
+                if (isMarker(e)) return;
+                // call orignale clear
+                clearOrginal(e);
+            };
+            fastMark = function (id, node) {
+                var key = self.serialize(id);
+                markedItem = id;
+                var $node = (node || getNode(key));
+                // set focus?
+                if (container.has(document.activeElement).length && options.tabFix !== false) $node.focus();
+                var guid = $node.attr('id') || _.uniqueId('option-');
 
-            var clearOrginal = clear,
-                markedItem,
-                // clear wrapper
-                clear = function (e) {
-                    // clear mark
-                    clearMarks();
-                    if (isMarker(e)) return;
-                    // call orignale clear
-                    clearOrginal(e);
-                },
-                fastMark = function (id, node) {
-                    var key = self.serialize(id);
-                    markedItem = id;
-                    var $node = (node || getNode(key));
-                    // set focus?
-                    if (container.has(document.activeElement).length && options.tabFix !== false) $node.focus();
-                    var guid = $node.attr('id') || _.uniqueId('option-');
-
-                    return $node
-                            .addClass(self.classMarked)
-                            .attr({
-                                'tabindex': options.tabFix !== false ? options.tabFix : null,
-                                id: guid
-                            })
-                            // apply a11y
-                            // TODO: when descent attribute was set voiceover doesn't notifies user about changed selection when using 'select with space'
-                            .parent('[role="listbox"]')
-                            .attr('aria-activedescendant', guid)
-                            .end();
-                },
-                mark = function (id, silent) {
-                    if (id) {
-                        fastMark(id).intoViewport(options.scrollpane);
-                        last = id;
-                        lastIndex = getIndex(id);
-                        if (prev === empty) {
-                            prev = id;
-                            lastValidIndex = lastIndex;
-                        }
-                        if (silent !== true) {
-                            self.trigger('mark', self.serialize(id));
-                        }
+                return $node
+                        .addClass(self.classMarked)
+                        .attr({
+                            'tabindex': options.tabFix !== false ? options.tabFix : null,
+                            id: guid
+                        })
+                        // apply a11y
+                        // TODO: when descent attribute was set voiceover doesn't notifies user about changed selection when using 'select with space'
+                        .parent('[role="listbox"]')
+                        .attr('aria-activedescendant', guid)
+                        .end();
+            };
+            mark = function (id, silent) {
+                if (id) {
+                    fastMark(id).intoViewport(options.scrollpane);
+                    last = id;
+                    lastIndex = getIndex(id);
+                    if (prev === empty) {
+                        prev = id;
+                        lastValidIndex = lastIndex;
                     }
-                },
-                clearMarks = function () {
-                    if (markedItem) {
-                        var key = self.serialize(markedItem);
-                        markedItem = undefined;
-                        getNode(key)
-                            .removeClass(self.classMarked)
-                            .attr({
-                                tabindex: options.tabFix !== false ? -1 : null
-                            })
-                            .parent('[role="listbox"]')
-                            .removeAttr('aria-activedescendant');
-                        markedItem = undefined;
+                    if (silent !== true) {
+                        self.trigger('mark', self.serialize(id));
                     }
-                };
+                }
+            };
+            clearMarks = function () {
+                if (markedItem) {
+                    var key = self.serialize(markedItem);
+                    markedItem = undefined;
+                    getNode(key)
+                        .removeClass(self.classMarked)
+                        .attr({
+                            tabindex: options.tabFix !== false ? -1 : null
+                        })
+                        .parent('[role="listbox"]')
+                        .removeAttr('aria-activedescendant');
+                    markedItem = undefined;
+                }
+            };
         }
 
         /**
          * Serialize object to get a flat key
          */
         this.serialize = function (obj) {
-            return typeof obj === 'object' ? (obj.folder_id !== undefined) ? _.cid(obj) : obj.id : obj;
+            if (typeof obj === 'object') {
+                return (obj.folder_id !== undefined) ? _.cid(obj) : obj.id;
+            }
+            return obj;
         };
 
         this.setSerializer = function (fn) {
@@ -716,12 +714,9 @@ define('io.ox/core/tk/selection', [
             // rebuild list
             observedItems = _(observedItems).filter(function (item) {
                 var cid = item.cid;
-                if (cid in hash) {
-                    return false;
-                } else {
-                    observedItemsIndex[cid] = index++;
-                    return true;
-                }
+                if (cid in hash) return false;
+                observedItemsIndex[cid] = index++;
+                return true;
             });
         };
 
@@ -999,12 +994,10 @@ define('io.ox/core/tk/selection', [
                 var tmp = this.get();
                 this.clear();
                 this.set(tmp);
+            } else if (mobileSelectMode) {
+                selectOnly();
             } else {
-                if (mobileSelectMode) {
-                    selectOnly();
-                } else {
-                    changed();
-                }
+                changed();
             }
         };
 
@@ -1088,8 +1081,9 @@ define('io.ox/core/tk/selection', [
             function over(e) {
 
                 // avoid handling bubbling events
-                if (e.isDefaultPrevented()) return; else e.preventDefault();
+                if (e.isDefaultPrevented()) return;
 
+                e.preventDefault();
                 var arrow = $(this).find('.folder-arrow');
 
                 // css hover doesn't work!
@@ -1159,10 +1153,10 @@ define('io.ox/core/tk/selection', [
                 $(document).on('mousemove.dnd', move)
                     .one('mousemove.dnd', firstMove)
                     .on('mouseover.dnd', '.folder-tree', scroll.over)
-                    .on('mouseout.dnd',  '.folder-tree', scroll.out)
+                    .on('mouseout.dnd', '.folder-tree', scroll.out)
                     .on('mousemove.dnd', '.folder-tree', scroll.move)
                     .on('mouseover.dnd', '.selectable', over)
-                    .on('mouseout.dnd',  '.selectable', out);
+                    .on('mouseout.dnd', '.selectable', out);
             }
 
             function remove() {
@@ -1192,7 +1186,8 @@ define('io.ox/core/tk/selection', [
 
             function drop(e) {
                 // avoid multiple events on parent tree nodes
-                if (e.isDefaultPrevented()) return; else e.preventDefault();
+                if (e.isDefaultPrevented()) return;
+                e.preventDefault();
                 // process drop
                 clearTimeout(expandTimer);
                 var target = $(this).attr('data-obj-id') || $(this).attr('data-cid') || $(this).attr('data-id'),

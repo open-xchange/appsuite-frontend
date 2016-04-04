@@ -43,7 +43,7 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         get: function (attribute) {
-            return this.view.$el.find('.selectable.selected').attr(attribute || 'data-id');
+            return this.view.$el.find('.selectable.selected').attr(attribute || 'data-id');
         },
 
         set: function (id) {
@@ -69,7 +69,12 @@ define('io.ox/core/folder/selection', [], function () {
         scrollIntoView: function (id) {
             // scroll viewport to top (see bug 38411)
             var node = this.byId(id);
-            if (node.length) node[0].scrollIntoView(true);
+            if (node.length) {
+                node[0].scrollIntoView(true);
+                // Fix Safari specific flexbox/scrolling (see bug 43799)
+                if (_.device('safari')) $('#io-ox-windowmanager').scrollTop(0);
+                this.view.trigger('scrollIntoView', id);
+            }
         },
 
         onClick: function (e) {
@@ -78,7 +83,8 @@ define('io.ox/core/folder/selection', [], function () {
             if ($(e.target).is(':checkbox')) return;
 
             // avoid double selections
-            if (e.isDefaultPrevented()) return; else e.preventDefault();
+            if (e.isDefaultPrevented()) return;
+            e.preventDefault();
 
             // only select in mobile edit mode when clicking on the label
             if (this.view.app && this.view.app.props && this.view.app.props.get('mobileFolderSelectMode') === true && !$(e.target).parent().hasClass('folder-label')) return;
@@ -91,6 +97,7 @@ define('io.ox/core/folder/selection', [], function () {
 
             // trigger action event
             this.view.trigger('selection:action', items, index);
+
             // do nothing if already selected
             if (current.hasClass('selected')) return;
 
@@ -104,10 +111,11 @@ define('io.ox/core/folder/selection', [], function () {
             if (!$(e.target).hasClass('selectable')) return;
             // cursor up/down
             switch (e.which) {
-            case 38:
-            case 40:
-                this.onCursorUpDown(e);
-                break;
+                case 38:
+                case 40:
+                    this.onCursorUpDown(e);
+                    break;
+                // no default
             }
         },
 
@@ -121,7 +129,8 @@ define('io.ox/core/folder/selection', [], function () {
             if (index >= items.length || index < 0) return;
 
             // avoid duplicates and unwanted scrolling
-            if (e.isDefaultPrevented()) return; else e.preventDefault();
+            if (e.isDefaultPrevented()) return;
+            e.preventDefault();
 
             // sort?
             if (e.altKey && current.parent().parent().attr('data-sortable') === 'true') {
@@ -173,6 +182,7 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         check: function (nodes) {
+            if (this.view.disposed) return $();
             var width = this.view.$el.width();
             return nodes.addClass('selected')
                 .attr({ 'aria-selected': true, tabindex: 1 })
@@ -192,7 +202,8 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         getItems: function () {
-            return this.view.$el.find('.selectable');
+            if (this.view.disposed) return $();
+            return this.view.$('.selectable');
         },
 
         addSelectableVirtualFolder: function (id) {

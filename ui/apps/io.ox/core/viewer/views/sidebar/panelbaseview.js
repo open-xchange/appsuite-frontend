@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -9,6 +10,7 @@
  *
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
+
 define('io.ox/core/viewer/views/sidebar/panelbaseview', [
     'io.ox/backbone/disposable',
     'gettext!io.ox/core/viewer'
@@ -24,12 +26,11 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
     var PanelBaseView = DisposableView.extend({
 
         // overwrite constructor to keep initialize intact
-        constructor: function (options) {
+        initialize: function (options) {
 
             var panelId = _.uniqueId('panel-');
 
             // we only need the DOM element at this point
-            this._ensureElement();
             this.$el.addClass('sidebar-panel');
 
             // ensure we have options
@@ -65,9 +66,6 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
 
                 this.$el.on('click', '.sidebar-panel-heading', this.onTogglePanel.bind(this));
             }
-
-            // call parent constructor that also calls initialize
-            DisposableView.prototype.constructor.apply(this, arguments);
         },
 
         /**

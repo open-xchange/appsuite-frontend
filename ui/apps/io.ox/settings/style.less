@@ -12,7 +12,6 @@
  */
 
 .io-ox-settings-main {
-
     .window-controls label {
         display: inline-block;
         margin-bottom: 0;
@@ -84,10 +83,12 @@
                 cursor: pointer;
 
                 i {
+                    height: 9px;
+                    overflow: hidden;
                     position: absolute;
                     top: 50%;
                     left: 50%;
-                    margin: -7px 0 0 -6px;
+                    margin: -5px 0 0 -6px;
                     color: #aaa;
                 }
                 &:hover {
@@ -251,6 +252,7 @@
     }
 
     label, legend { cursor: default; }
+
     label.checkbox, label.radio { cursor: pointer; }
 
     .section { max-width: 800px; }
@@ -312,9 +314,7 @@
             line-height: 22px;
         }
 
-        input {
-            margin-top: 5px;
-        }
+        input { margin-top: 5px; }
     }
 
     input, select, button {
@@ -339,40 +339,7 @@
         }
     }
 
-/*    .form-horizontal {
-        .control-group > label {
-            float: left;
-            width: 150px;
-            padding-top: 5px;
-            text-align: right;
-        }
-
-        .control-label {
-            float: left;
-            width: 150px;
-            padding-top: 5px;
-            text-align: right;
-            padding-top: 5px;
-            font-size: 14px;
-            border-bottom: none;
-            line-height: 20px;
-        }
-
-        .controls, .help-inline { margin-left: 170px; }
-    }
-
-    .form-inline .controls {
-        margin-left: 0;
-        text-align: right;
-        width: 440px;
-    }
-*/
-
-    .form-inline .controls {
-        input {
-            width: 70px;
-        }
-    }
+    .form-inline .controls input { width: 70px; }
 
     .io-ox-accounts-settings {
 
@@ -410,9 +377,7 @@
             margin: 0 0 7px 0;
             text-align: left;
 
-            &.default {
-                .list-title { font-weight: bold; }
-            }
+            &.default .list-title { font-weight: bold; }
 
             .list-title { margin-right: 2em; }
 
@@ -429,9 +394,7 @@
 
         .error-id { color: #555; }
 
-        .url {
-            .ellipsis();
-        }
+        .url { .ellipsis(); }
 
         .stack-trace, .url { clear: both; }
 
@@ -470,7 +433,8 @@
 
     .busynotice { text-align: center; }
 
-    .add-mail-account-address, .add-mail-account-password {
+    .add-mail-account-address,
+    .add-mail-account-password {
         display: block;
         max-width: 355px;
     }
@@ -478,28 +442,23 @@
 
 @media (max-width: 480px), (max-device-width: 480px)  {
 
-    .io-ox-settings-window {
-        .vgrid-cell {
-            font-size: 15px;
-            border-top: 1px solid #eee;
-        }
+    .io-ox-settings-window .vgrid-cell {
+        font-size: 15px;
+        border-top: 1px solid #eee;
     }
 
     .settings-detail-pane {
 
-         &.default-content-padding {
+        &.default-content-padding {
             padding: 7px 8px 8px 8px;
         }
 
-        h1:first-child, h1.pane-headline:first-child { margin: 0; }
+        h1:first-child,
+        h1.pane-headline:first-child { margin: 0; }
 
-        .form-group {
-            margin-bottom: 0;
-        }
+        .form-group { margin-bottom: 0; }
 
-        .btn.btn-primary {
-            margin-bottom: 7px;
-        }
+        .btn.btn-primary { margin-bottom: 7px; }
 
         h1 + .sectiondelimiter {
             border: none;
@@ -534,19 +493,17 @@
                 }
             }
 
-            legend+.control-group { margin-top: 0; }
+            legend + .control-group { margin-top: 0; }
         }
 
-        .io-ox-accounts-settings {
+        .io-ox-accounts-settings .controls {
+            padding-left: 0;
 
-            .controls {
-                padding-left: 0;
-                .btn-group.pull-right { float: none; }
-            }
+            .btn-group.pull-right { float: none; }
         }
 
-        .io-ox-calendar-settings, .io-ox-tasks-settings {
-
+        .io-ox-calendar-settings,
+        .io-ox-tasks-settings {
             .form-horizontal .control-group>label {
                 float: none;
                 width: 160px;
@@ -554,7 +511,6 @@
         }
 
         .form-horizontal {
-
             .control-label {
                 margin-bottom: 0;
                 float: none;
@@ -564,7 +520,8 @@
 
             .control-group > label { text-align: left; }
 
-            .controls, .help-inline, .control-group > label { margin-left: 5px; }
+            .controls, .help-inline,
+            .control-group > label { margin-left: 5px; }
 
             .control-group label.control-label {
                 float: none;

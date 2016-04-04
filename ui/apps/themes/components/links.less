@@ -105,7 +105,7 @@ ul.io-ox-inline-links + header {
 
 .multi-selection-message {
     display: table;
-    div {
+    .message {
         color: #777;
         font-weight: 300;
         font-size: 16px;
@@ -116,6 +116,16 @@ ul.io-ox-inline-links + header {
         html.high-contrast & {
             color: @black;
         }
+    }
+    .inline-actions {
+        font-size: 14px;
+        font-weight: normal;
+        margin: 32px auto 0 auto;
+        max-width: 500px;
+        background-color: #FFF6DB;
+        padding: 16px;
+        border: 1px solid #FFBF00;
+        .border-radius(4px);
     }
 }
 

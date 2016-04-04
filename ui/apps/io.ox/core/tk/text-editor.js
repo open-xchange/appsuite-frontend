@@ -148,6 +148,40 @@ define('io.ox/core/tk/text-editor', [], function () {
             this.setContent('\n' + str + '\n\n' + content);
         };
 
+        this.setContentParts = function (data, type) {
+            var content = '';
+            // normalise
+            data = _.isString(data) ? { content: data } : data;
+            // concat content parts
+            if (data.content) content += data.content;
+            if (type === 'above' && data.cite) content += ('\n\n' + data.cite);
+            if (data.quote) content += ('\n\n' + data.quote || '');
+            if (type === 'below' && data.cite) content += ('\n\n' + data.cite);
+            this.setContent(content);
+        };
+
+        // hint: does not detects the cite block
+        this.getContentParts = function () {
+            var content = this.getContent(),
+                index = content.indexOf('\n> ');
+            // special case: initial reply/forward
+            if (content.substring(0, 2) === '> ') index = 0;
+            if (index < 0) return { content: content };
+            return {
+                // content without trailing whitespace
+                content: content.substring(0, index).replace(/\s+$/g, ''),
+                quote: content.substring(index),
+                cite: undefined
+            };
+        };
+
+        this.insertPrevCite = function (str) {
+            var data = this.getContentParts();
+            // add cite
+            data.cite = str;
+            this.setContentParts(data, 'above');
+        };
+
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), pos, top;
             // exists?
@@ -157,9 +191,8 @@ define('io.ox/core/tk/text-editor', [], function () {
                 this.setContent(content.substr(0, pos) + (rep || '') + content.substr(pos + str.length));
                 this.scrollTop(top);
                 return true;
-            } else {
-                return false;
             }
+            return false;
         };
 
         this.show = function () {
@@ -167,12 +200,10 @@ define('io.ox/core/tk/text-editor', [], function () {
 
             _.defer(function () {
                 textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
-                //autosize(textarea);
             });
 
-            function resizeEditor () {
+            function resizeEditor() {
                 textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
-                //autosize.update(textarea);
             }
 
             $(window).on('resize.text-editor', resizeEditor);

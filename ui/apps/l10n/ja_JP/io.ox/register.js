@@ -11,6 +11,8 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
+/*eslint-disable */
+
 define('l10n/ja_JP/io.ox/register', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
@@ -48,9 +50,9 @@ define('l10n/ja_JP/io.ox/register', [
                 if (yomiField === 'yomiCompany') {
                     // don't do anything if company is empty
                     if (value === '') return;
-                } else {
+                } else if ($.trim(baton.data.yomiLastName) === '' && $.trim(baton.data.yomiFirstName) === '') {
                     // don't add white-space if neither last nor first name has data
-                    if ($.trim(baton.data.yomiLastName) === '' && $.trim(baton.data.yomiFirstName) === '') return;
+                    return;
                 }
 
                 if (yomiField === 'yomiTitle') {

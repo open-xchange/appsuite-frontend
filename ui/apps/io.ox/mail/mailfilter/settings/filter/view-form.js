@@ -24,7 +24,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'use strict';
 
     var POINT = 'io.ox/mailfilter/settings/filter/detail',
-        testCapabilities = {},
+        testCapabilities,
 
         sizeValues = {
             'over': gt('Is bigger than'),
@@ -189,7 +189,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             className: 'io-ox-mailfilter-edit',
 
             initialize: function (opt) {
-
+                testCapabilities = {};
                 _.each(opt.config.tests, function (value) {
                     testCapabilities[value.test] = value.comparison;
                 });
@@ -206,7 +206,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 _.each(conditionsMapping, function (list, conditionGroup) {
                     if (!_.has(testCapabilities, conditionGroup)) {
                         _.each(conditionsMapping[conditionGroup], function (condition) {
-                            delete headerTranslation[condition] ;
+                            delete headerTranslation[condition];
                         });
                     }
                 });
@@ -240,15 +240,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 if (checkForMultipleTests(this.el).length > 2) {
                     testArray.tests.splice(testID, 1);
+                } else if (testArray.tests) {
+                    testArray.tests.splice(testID, 1);
+                    testArray = testArray.tests[0];
                 } else {
-
-                    if (testArray.tests) {
-                        testArray.tests.splice(testID, 1);
-                        testArray = testArray.tests[0];
-                    } else {
-                        testArray = { id: 'true' };
-                    }
-
+                    testArray = { id: 'true' };
                 }
 
                 this.model.set('test', testArray);
@@ -435,16 +431,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             var conditionList = $('<ol class="widget-list list-unstyled tests">'),
                 actionList = $('<ol class="widget-list list-unstyled actions">'),
                 appliedConditions = baton.model.get('test'),
-
+                inputId,
                 drawDeleteButton = function (type) {
                     return $('<a href="#" class="remove" tabindex="1" data-action="remove-' + type + '">').append($('<i class="fa fa-trash-o">'));
                 };
 
-            if (appliedConditions.tests) {
-                appliedConditions = appliedConditions.tests;
-            } else {
-                appliedConditions = [appliedConditions];
-            }
+            appliedConditions = appliedConditions.tests ? appliedConditions.tests : [appliedConditions];
 
             _(appliedConditions).each(function (condition, num) {
                 var ConditionModel = Backbone.Model.extend({
@@ -453,27 +445,24 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 if (_.isNaN(attrs.size) || attrs.size === '') {
                                     this.trigger('invalid:size');
                                     return 'error';
-                                } else {
-                                    this.trigger('valid:size');
                                 }
+                                this.trigger('valid:size');
                             }
 
                             if (_.has(attrs, 'headers')) {
                                 if ($.trim(attrs.headers[0]) === '') {
                                     this.trigger('invalid:headers');
                                     return 'error';
-                                } else {
-                                    this.trigger('valid:headers');
                                 }
+                                this.trigger('valid:headers');
                             }
 
-                            if (_.has(attrs, 'values') ) {
+                            if (_.has(attrs, 'values')) {
                                 if ($.trim(attrs.values[0]) === '') {
                                     this.trigger('invalid:values');
                                     return 'error';
-                                } else {
-                                    this.trigger('valid::values');
                                 }
+                                this.trigger('valid::values');
                             }
 
                         }
@@ -485,29 +474,32 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 });
 
                 var Input = mini.InputView.extend({
-                    events: { 'change': 'onChange', 'keyup': 'onKeyup' },
-                    onChange: function () {
-                        if (this.name === 'size') {
-                            var sizeValue = _.isNaN(parseInt(this.$el.val(), 10)) ? '' : parseInt(this.$el.val(), 10);
-                            this.model.set(this.name, sizeValue);
-                            this.update();
+                        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
+                        onChange: function () {
+                            if (this.name === 'size') {
+                                var isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
+                                if (isValid) {
+                                    this.model.set(this.name, parseInt(this.$el.val(), 10));
+                                    this.update();
+                                }
+                            }
+                            if (this.name === 'values' || this.name === 'headers') this.model.set(this.name, [this.$el.val()]);
+                        },
+                        onKeyup: function () {
+                            var state,
+                                isValid;
+                            if (this.name === 'size') {
+                                isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
+                                state = isValid ? 'valid:' : 'invalid:';
+                            } else {
+                                state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
+                            }
+                            this.model.trigger(state + this.name);
+                            toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
                         }
-                        if (this.name === 'values' || this.name === 'headers') this.model.set(this.name, [this.$el.val()]);
-                    },
-                    onKeyup: function () {
-                        var state;
-                        if (this.name === 'size') {
-                            state = _.isNaN(parseInt(this.$el.val(), 10)) ? 'invalid:' : 'valid:';
-                        } else {
-                            state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
-                        }
-                        this.model.trigger(state + this.name);
-                        toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
-                    }
-                });
+                    }), secondInputId;
 
                 function drawCondition(o) {
-
                     if (o.secondInputId) {
                         return $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num }).append(
                             $('<div>').addClass('col-sm-4 doubleline').append(
@@ -534,32 +526,31 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             ),
                             drawDeleteButton('test')
                         );
-                    } else {
-                        return $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num }).append(
-                            $('<div>').addClass('col-sm-4 singleline').append(
-                                $('<span>').addClass('list-title').text(o.title)
-                            ),
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-sm-4').append(
-                                        new mini.DropdownLinkView(o.dropdownOptions).render().$el
-                                    ),
-                                    $('<div class="col-sm-8">').append(
-                                        $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
-                                        new Input(o.inputOptions).render().$el,
-                                        o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
-                                    )
-                                )
-                            ),
-                            drawDeleteButton('test')
-                        );
                     }
+                    return $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num }).append(
+                        $('<div>').addClass('col-sm-4 singleline').append(
+                            $('<span>').addClass('list-title').text(o.title)
+                        ),
+                        $('<div>').addClass('col-sm-8').append(
+                            $('<div>').addClass('row').append(
+                                $('<div>').addClass('col-sm-4').append(
+                                    new mini.DropdownLinkView(o.dropdownOptions).render().$el
+                                ),
+                                $('<div class="col-sm-8">').append(
+                                    $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
+                                    new Input(o.inputOptions).render().$el,
+                                    o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
+                                )
+                            )
+                        ),
+                        drawDeleteButton('test')
+                    );
 
                 }
 
                 switch (cmodel.get('id')) {
                     case 'size':
-                        var inputId = _.uniqueId('size');
+                        inputId = _.uniqueId('size');
                         conditionList.append(
                             drawCondition({
                                 inputId: inputId,
@@ -572,7 +563,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         );
                         break;
                     case 'body':
-                        var inputId = _.uniqueId('values');
+                        inputId = _.uniqueId('values');
                         conditionList.append(
                             drawCondition({
                                 inputId: inputId,
@@ -616,7 +607,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                             new mini.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues('currentdate', timeValues) }).render().$el
                                         ),
                                         $('<div class="col-sm-8">').append(
-                                            new ModifiedDatePicker({ model: cmodel, display: 'DATE', attribute: 'datevalue', label: gt('datepicker' ) }).render().$el
+                                            new ModifiedDatePicker({ model: cmodel, display: 'DATE', attribute: 'datevalue', label: gt('datepicker') }).render().$el
                                         )
                                     )
                                 ),
@@ -626,9 +617,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         if (cmodel.get('datevalue')[0] === null || cmodel.get('datevalue').length === 0) conditionList.find('[data-test-id="' + num + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
                         break;
                     case 'header':
-                        var title,
-                            inputId = _.uniqueId('headers'),
-                            secondInputId = _.uniqueId('values');
+                        var title;
+                        secondInputId = _.uniqueId('values');
+
+                        inputId = _.uniqueId('headers');
+
                         if (cmodel.get('headers').length === 4) {
                             title = headerTranslation.mailingList;
                         } else if (cmodel.get('headers').length === 2) {
@@ -666,7 +659,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         }
                         break;
                     case 'envelope':
-                        var inputId = _.uniqueId('values');
+                        inputId = _.uniqueId('values');
                         conditionList.append(
                             drawCondition({
                                 inputId: inputId,
@@ -678,6 +671,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             })
                         );
                         break;
+                    // no default
                 }
                 // inintial validation to disable save button
                 if (!cmodel.isValid()) {
@@ -693,27 +687,24 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 if ($.trim(attrs.to) === '') {
                                     this.trigger('invalid:to');
                                     return 'error';
-                                } else {
-                                    this.trigger('valid:to');
                                 }
+                                this.trigger('valid:to');
                             }
 
                             if (_.has(attrs, 'text')) {
                                 if ($.trim(attrs.text) === '') {
                                     this.trigger('invalid:text');
                                     return 'error';
-                                } else {
-                                    this.trigger('valid:text');
                                 }
+                                this.trigger('valid:text');
                             }
 
                             if (_.has(attrs, 'flags')) {
                                 if ($.trim(attrs.flags[0]) === '$') {
                                     this.trigger('invalid:flags');
                                     return 'error';
-                                } else {
-                                    this.trigger('valid:flags');
                                 }
+                                this.trigger('valid:flags');
                             }
                         }
                     }),
@@ -724,40 +715,42 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 });
 
                 var Input = mini.InputView.extend({
-                    events: { 'change': 'onChange', 'keyup': 'onKeyup' },
-                    onChange: function () {
-                        if (this.name === 'flags') {
-                            var value = (/customflag_/g.test(this.id)) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
-                            this.model.set(this.name, value);
-                        } else {
-                            this.model.set(this.name, this.$el.val());
+                        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
+                        onChange: function () {
+                            if (this.name === 'flags') {
+                                var value = (/customflag_/g.test(this.id)) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
+                                this.model.set(this.name, value);
+                            } else if (this.name === 'to') {
+                                this.model.set(this.name, this.$el.val().trim());
+                            } else {
+                                this.model.set(this.name, this.$el.val());
+                            }
+                        },
+                        update: function () {
+                            if (/customflag_/g.test(this.id)) {
+                                this.$el.val(this.model.get('flags')[0].replace(/^\$+/, ''));
+                            } else if (/move_/g.test(this.id)) {
+                                this.$el.val(prepareFolderForDisplay(this.model.get('into')));
+                            } else {
+                                this.$el.val($.trim(this.model.get(this.name)));
+                            }
+                        },
+                        onKeyup: function () {
+                            var state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
+                            this.model.trigger(state + this.name);
+                            toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
                         }
-                    },
-                    update: function () {
-                        if (/customflag_/g.test(this.id)) {
-                            this.$el.val(this.model.get('flags')[0].replace(/^\$+/, ''));
-                        } else if (/move_/g.test(this.id)) {
-                            this.$el.val(prepareFolderForDisplay(this.model.get('into')));
-                        } else {
-                            this.$el.val($.trim(this.model.get(this.name)));
-                        }
-                    },
-                    onKeyup: function () {
-                        var state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
-                        this.model.trigger(state +  this.name);
-                        toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
-                    }
-                }),
+                    }),
                     Dropdown = mini.DropdownLinkView.extend({
-                    onClick: function (e) {
-                        e.preventDefault();
-                        if (/markas_/g.test(this.id)) {
-                            this.model.set(this.name, [$(e.target).attr('data-value')]);
-                        } else {
-                            this.model.set(this.name, $(e.target).attr('data-value'));
+                        onClick: function (e) {
+                            e.preventDefault();
+                            if (/markas_/g.test(this.id)) {
+                                this.model.set(this.name, [$(e.target).attr('data-value')]);
+                            } else {
+                                this.model.set(this.name, $(e.target).attr('data-value'));
+                            }
                         }
-                    }
-                });
+                    });
 
                 function drawColorDropdown(activeColor, colors, colorflags) {
 
@@ -825,35 +818,34 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             drawDeleteButton('action')
                         );
                     } else if (/discard_/g.test(inputId) || /keep_/g.test(inputId)) {
-                        return $('<li>').addClass('filter-settings-view ' +  o.addClass +' row').attr('data-action-id', num).append(
+                        return $('<li>').addClass('filter-settings-view ' + o.addClass + ' row').attr('data-action-id', num).append(
                             $('<div>').addClass('col-sm-4 singleline').append(
                                 $('<span>').addClass('list-title').text(o.title)
-                            ),
-                            drawDeleteButton('action')
-                        );
-                    } else {
-                        return $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
-                            $('<div>').addClass('col-sm-4 singleline').append(
-                                $('<span>').addClass('list-title').text(o.title)
-                            ),
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-sm-8 col-sm-offset-4').append(
-                                        $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
-                                        new Input(o.inputOptions).render().$el,
-                                        errorView
-                                    )
-                                )
                             ),
                             drawDeleteButton('action')
                         );
                     }
+                    return $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
+                        $('<div>').addClass('col-sm-4 singleline').append(
+                            $('<span>').addClass('list-title').text(o.title)
+                        ),
+                        $('<div>').addClass('col-sm-8').append(
+                            $('<div>').addClass('row').append(
+                                $('<div>').addClass('col-sm-8 col-sm-offset-4').append(
+                                    $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
+                                    new Input(o.inputOptions).render().$el,
+                                    errorView
+                                )
+                            )
+                        ),
+                        drawDeleteButton('action')
+                    );
                 }
 
                 if (action.id !== 'stop') {
                     switch (action.id) {
                         case 'redirect':
-                            var inputId = _.uniqueId('redirect');
+                            inputId = _.uniqueId('redirect');
                             actionList.append(
                                 drawAction({
                                     inputId: inputId,
@@ -865,7 +857,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             );
                             break;
                         case 'move':
-                            var inputId = _.uniqueId('move_');
+                            inputId = _.uniqueId('move_');
                             actionList.append(
                                 drawAction({
                                     inputId: inputId,
@@ -877,7 +869,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             );
                             break;
                         case 'reject':
-                            var inputId = _.uniqueId('reject');
+                            inputId = _.uniqueId('reject');
                             actionList.append(
                                 drawAction({
                                     inputId: inputId,
@@ -890,7 +882,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             break;
                         case 'addflags':
                             if (/delete|seen/.test(action.flags[0])) {
-                                var inputId = _.uniqueId('markas_');
+                                inputId = _.uniqueId('markas_');
                                 actionList.append(
                                     drawAction({
                                         inputId: inputId,
@@ -899,7 +891,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                     })
                                 );
                             } else if (/^\$cl/.test(action.flags[0])) {
-                                var inputId = _.uniqueId('colorflag_');
+                                inputId = _.uniqueId('colorflag_');
                                 actionList.append($('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
                                     $('<div>').addClass('col-sm-4 singleline').append(
                                         $('<span>').addClass('list-title').text(actionsTranslations.flag)
@@ -914,7 +906,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                     drawDeleteButton('action')
                                 ));
                             } else {
-                                var inputId = _.uniqueId('customflag_');
+                                inputId = _.uniqueId('customflag_');
                                 actionList.append(
                                     drawAction({
                                         inputId: inputId,
@@ -927,7 +919,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             }
                             break;
                         case 'discard':
-                            var inputId = _.uniqueId('discard_');
+                            inputId = _.uniqueId('discard_');
                             actionList.append(
                                 drawAction({
                                     inputId: inputId,
@@ -937,7 +929,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             );
                             break;
                         case 'keep':
-                            var inputId = _.uniqueId('keep_');
+                            inputId = _.uniqueId('keep_');
                             actionList.append(
                                 drawAction({
                                     inputId: inputId,
@@ -945,6 +937,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 })
                             );
                             break;
+                        // no default
                     }
                     // inintial validation to disable save button
                     if (!amodel.isValid()) {
@@ -1019,42 +1012,38 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         id: 'stopaction',
         draw: function (baton) {
             var checkStopAction = function (e) {
-                currentState = $(e.currentTarget).find('[type="checkbox"]').prop('checked');
-                var arrayOfActions = baton.model.get('actioncmds');
+                    currentState = $(e.currentTarget).find('[type="checkbox"]').prop('checked');
+                    var arrayOfActions = baton.model.get('actioncmds');
 
-                function getCurrentPosition(array) {
-                    var currentPosition;
-                    _.each(array, function (single, id) {
-                        if (single.id === 'stop') {
-                            currentPosition = id;
-                        }
-                    });
+                    function getCurrentPosition(array) {
+                        var currentPosition;
+                        _.each(array, function (single, id) {
+                            if (single.id === 'stop') {
+                                currentPosition = id;
+                            }
+                        });
 
-                    return currentPosition;
-                }
+                        return currentPosition;
+                    }
 
-                if (currentState === true) {
-                    arrayOfActions.splice(getCurrentPosition(arrayOfActions), 1);
+                    if (currentState === true) {
+                        arrayOfActions.splice(getCurrentPosition(arrayOfActions), 1);
+                    } else {
+                        arrayOfActions.push({ id: 'stop' });
+                    }
+                    baton.model.set('actioncmds', arrayOfActions);
+                },
 
-                } else {
-                    arrayOfActions.push({ id: 'stop' });
-                }
-
-                baton.model.set('actioncmds', arrayOfActions);
-
-            },
-
-            drawcheckbox = function (value) {
-                return $('<div>').addClass('control-group mailfilter checkbox').append(
-                    $('<div>').addClass('controls'),
-                    $('<label>').text(gt('Process subsequent rules')).prepend(
-                        $('<input type="checkbox" tabindex="1">').attr({ 'data-action': 'check-for-stop', 'checked': value })
-                    )
-                );
-            },
-
-            target = baton.view.dialog.getFooter(),
-            arrayOfActions = baton.model.get('actioncmds');
+                drawcheckbox = function (value) {
+                    return $('<div>').addClass('control-group mailfilter checkbox').append(
+                        $('<div>').addClass('controls'),
+                        $('<label>').text(gt('Process subsequent rules')).prepend(
+                            $('<input type="checkbox" tabindex="1">').attr({ 'data-action': 'check-for-stop', 'checked': value })
+                        )
+                    );
+                },
+                target = baton.view.dialog.getFooter(),
+                arrayOfActions = baton.model.get('actioncmds');
 
             function checkForStopAction(array) {
                 var stopAction;

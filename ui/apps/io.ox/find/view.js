@@ -20,6 +20,14 @@ define('io.ox/find/view', [
 
     'use strict';
 
+    /**
+     * view
+     *     view-searchbox
+     *         view-tokenfield
+     *             view-token
+     *     view-facets
+     */
+
     var FindView = Backbone.View.extend({
 
         events: {
@@ -116,11 +124,13 @@ define('io.ox/find/view', [
         },
 
         show: function () {
+            this.trigger('focusin');
             if (this.isActive()) return;
             this.calculateDimensions();
+            // apply margin to next
+            this.$el.next().css('margin-top', this.css.body.open);
             // apply dynamic styles
             this.ui.body.css('top', this.css.body.open);
-            this.$el.css('top', this.css.el.open);
             // css switch-class
             this.ui.container.addClass(this.classes.active);
             // bubble
@@ -133,6 +143,8 @@ define('io.ox/find/view', [
         // collapse (keep focus)
         hide: function () {
             if (!this.isActive() || !this.isEmpty()) return;
+            // remove margin-top from next
+            this.$el.next().css('margin-top', '');
             // reset dynamic styles
             this.ui.body.css('top', this.css.body.closed);
             this.$el.css('top', this.css.el.closed);
@@ -182,6 +194,7 @@ define('io.ox/find/view', [
         // on focusout
         smartCancel: function () {
             var self = this;
+            this.app.trigger('focusout');
             // ensures click event in toolbar resolves before cancel is executed
             _.delay(function () {
                 if (!self.hasFocus() && self.isEmpty() && !self.hasChanged()) {
@@ -204,8 +217,9 @@ define('io.ox/find/view', [
             box.outerHeight(box.outerHeight() + delta);
             facets.outerHeight(facets.outerHeight() + delta);
             tree.offset({ top: tree.offset().top + delta });
-            if (this.app.isActive())
+            if (this.app.isActive()) {
                 winbody.offset({ top: winbody.offset().top + delta });
+            }
         },
 
         register: function () {

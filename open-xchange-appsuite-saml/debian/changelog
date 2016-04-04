@@ -1,92 +1,74 @@
-open-xchange-appsuite-saml (7.8.0-20) stable; urgency=medium
+open-xchange-appsuite-saml (7.8.1-7) stable; urgency=medium
 
-  * Build for patch 2016-03-29 (3188)
+  * Second candidate for 7.8.1 release
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 22 Mar 2016 15:59:36 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 30 Mar 2016 13:09:26 +0000
 
-open-xchange-appsuite-saml (7.8.0-19) stable; urgency=medium
+open-xchange-appsuite-saml (7.8.1-6) stable; urgency=medium
 
-  * Build for patch 2016-03-14 (3148)
+  * First candidate for 7.8.1 release
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 09 Mar 2016 15:07:17 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 25 Mar 2016 12:24:40 +0000
 
-open-xchange-appsuite-saml (7.8.0-18) stable; urgency=medium
+open-xchange-appsuite-saml (7.8.1-5) stable; urgency=medium
 
-  * Build for patch 2016-02-29 (3121)
+  * Fifth preview of 7.8.1 release
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 23 Feb 2016 17:57:54 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 15 Mar 2016 14:54:57 +0000
 
-open-xchange-appsuite-saml (7.8.0-17) stable; urgency=medium
+open-xchange-appsuite-saml (7.8.1-4) stable; urgency=medium
 
-  * Build for patch 2016-02-18 (3106)
+  * Fourth preview of 7.8.1 release
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 15 Feb 2016 18:46:01 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 04 Mar 2016 15:04:11 +0000
 
-open-xchange-appsuite-saml (7.8.0-16) stable; urgency=medium
+open-xchange-appsuite-saml (7.8.1-3) stable; urgency=medium
 
-  * Build for patch 2016-02-08 (3073)
+  * Third candidate for 7.8.1 release
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 03 Feb 2016 16:37:47 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Sat, 20 Feb 2016 16:24:58 +0000
 
-open-xchange-appsuite-saml (7.8.0-15) stable; urgency=medium
+open-xchange-appsuite-saml (7.8.1-2) stable; urgency=medium
 
-  * Build for patch 2016-01-25 (3031)
+  * Second candidate for 7.8.1 release
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 20 Jan 2016 09:08:39 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 02 Feb 2016 10:45:48 +0000
 
-open-xchange-appsuite-saml (7.8.0-14) stable; urgency=medium
+open-xchange-appsuite-saml (7.8.1-1) stable; urgency=medium
 
-  * Build for patch 2016-01-13 (2982)
+  * First candidate for 7.8.1 release
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 04 Jan 2016 14:36:10 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 26 Jan 2016 10:30:14 +0000
 
-open-xchange-appsuite-saml (7.8.0-13) stable; urgency=medium
+open-xchange-appsuite-saml (7.8.1-0) stable; urgency=low
 
-  * Build for patch 2015-12-21 (2953)
+  * Prepare for 7.8.1
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 15 Dec 2015 15:01:32 +0000
-
-open-xchange-appsuite-saml (7.8.0-12) stable; urgency=medium
-
-  * Build for patch 2015-12-07 (2918)
-
- -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 02 Dec 2015 16:14:46 +0000
-
-open-xchange-appsuite-saml (7.8.0-11) stable; urgency=medium
-
-  * Build for patch 2015-12-04 (2911)
-
- -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 24 Nov 2015 08:05:20 +0000
-
-open-xchange-appsuite-saml (7.8.0-10) stable; urgency=medium
-
-  * Build for patch 2015-11-23 (2878)
-
- -- Markus Wagner <markus.wagner@open-xchange.com>  Thu, 19 Nov 2015 15:54:21 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Thu, 08 Oct 2015 17:16:43 +0200
 
 open-xchange-appsuite-saml (7.8.0-9) stable; urgency=medium
 
   * Build for patch 2015-11-09 (2840)
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 06 Nov 2015 12:39:38 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 06 Nov 2015 13:39:38 +0100
 
 open-xchange-appsuite-saml (7.8.0-8) stable; urgency=medium
 
   * Build for patch 2015-10-26 (2816)
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 20 Oct 2015 09:44:29 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 20 Oct 2015 11:44:29 +0200
 
 open-xchange-appsuite-saml (7.8.0-7) stable; urgency=medium
 
   * Build for patch 2015-10-26 (2812)
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 19 Oct 2015 11:34:19 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 19 Oct 2015 13:34:19 +0200
 
 open-xchange-appsuite-saml (7.8.0-6) stable; urgency=medium
 
   * Sixth candidate for 7.8.0 release
 
- -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 06 Oct 2015 07:35:09 +0000
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 06 Oct 2015 09:35:09 +0200
 
 open-xchange-appsuite-saml (7.8.0-5) stable; urgency=medium
 
@@ -123,6 +105,30 @@ open-xchange-appsuite-saml (7.8.0-0) stable; urgency=low
   * Prepare for 7.8.0
 
  -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 07 Jul 2015 11:27:29 +0200
+
+open-xchange-appsuite-saml (7.6.2-7) stable; urgency=medium
+
+  * Build for patch 2015-11-16 (2862)
+
+ -- Francisco Laguna <francisco.laguna@open-xchange.com>  Wed, 11 Nov 2015 20:19:50 +0100
+
+open-xchange-appsuite-saml (7.6.2-6) stable; urgency=medium
+
+  * Build for patch 2015-11-09 (2841)
+
+ -- Francisco Laguna <francisco.laguna@open-xchange.com>  Tue, 03 Nov 2015 15:46:21 +0100
+
+open-xchange-appsuite-saml (7.6.2-5) stable; urgency=medium
+
+  * Build for patch 2015-11-11 (2844)
+
+ -- Francisco Laguna <francisco.laguna@open-xchange.com>  Thu, 29 Oct 2015 13:57:44 +0100
+
+open-xchange-appsuite-saml (7.6.2-4) stable; urgency=medium
+
+  * Build for patch  2015-10-12 (2784)
+
+ -- Francisco Laguna <francisco.laguna@open-xchange.com>  Wed, 30 Sep 2015 17:54:15 +0200
 
 open-xchange-appsuite-saml (7.6.2-3) stable; urgency=medium
 

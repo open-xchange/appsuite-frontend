@@ -28,6 +28,7 @@ define('io.ox/files/legacy_api', [
 
     'use strict';
 
+    /* eslint-disable */
     var tracker = (function () {
 
         var fileLocks = {},
@@ -193,6 +194,7 @@ define('io.ox/files/legacy_api', [
         'xlb': 'application/vnd.ms-excel',
         'xlt': 'application/vnd.ms-excel',
         'ppt': 'application/vnd.ms-powerpoint',
+        'pot': 'application/vnd.ms-powerpoint',
         'pps': 'application/vnd.ms-powerpoint'
     };
 
@@ -972,7 +974,7 @@ define('io.ox/files/legacy_api', [
                 api.trigger('refresh.all');
             });
         },
-        'remove:infostore': function (e, id) {
+        'remove:infostore': function () {
             var id = settings.get('folder/trash');
             if (id) folderAPI.list(id, { cache: false });
         }
@@ -991,5 +993,5 @@ define('io.ox/files/legacy_api', [
     };
 
     return api;
-
+    /* eslint-enable */
 });

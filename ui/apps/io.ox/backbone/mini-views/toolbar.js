@@ -20,35 +20,60 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         className: 'classic-toolbar-container',
 
         events: {
-            'mousedown ul.classic-toolbar>li>a': 'onMousedown',
-            'keydown ul.classic-toolbar>li>a': 'onKeydown'
+            'mousedown ul.classic-toolbar > li > a': 'onMousedown',
+            'keydown ul.classic-toolbar > li > a': 'onKeydown'
         },
 
         initialize: function (opt) {
-            var defaults = {
-                tabindex: 0
-            };
-            this.options = _.extend(defaults, opt);
+            this.options = _.extend({ tabindex: 0 }, opt);
+            this.$list = this.createToolbar();
+        },
+
+        createToolbar: function () {
+            return $('<ul class="classic-toolbar" role="toolbar">')
+                //#. screenreader label for main toolbar
+                .attr({ 'aria-label': gt('Actions. Use cursor keys to navigate.') })
+                .tooltip({
+                    animation: false,
+                    container: 'body',
+                    delay: 2000,
+                    placement: 'left',
+                    //#. Tooltip for main toolbar
+                    title: gt('Use cursor keys to navigate'),
+                    trigger: 'focus'
+                })
+                // make sure it always disappears
+                .on('dispose', function () { $(this).tooltip('destroy'); })
+                // always avoid clearing the URL hash
+                .on('click', 'a', $.preventDefault);
         },
 
         render: function () {
             this.$el.attr({
                 role: 'navigation',
                 'aria-label': gt('Inline menu %1$s', this.options.title || '')
-            }).append(
-                this.$list = $('<ul>').attr({
-                    role: 'toolbar',
-                    'aria-label': gt('Actions')
-                }).addClass('classic-toolbar')
-            );
+            })
+            .append(this.$list);
+            return this;
+        },
+
+        getButtons: function () {
+            return this.$el.find('ul.classic-toolbar > li > a');
+        },
+
+        disableButtons: function () {
+            // remove all event handlers
+            this.getButtons().off().tooltip('hide').tooltip('disable');
+            return this;
+        },
+
+        replaceToolbar: function (toolbar) {
+            this.$el.find('ul.classic-toolbar').tooltip('hide').replaceWith(toolbar);
             return this;
         },
 
         initButtons: function () {
-            this.$links = this.$el.find('ul.classic-toolbar>li>a').attr({
-                role: 'button',
-                tabindex: -1
-            });
+            this.$links = this.getButtons().attr({ role: 'button', tabindex: -1 });
             // set focus to first element
             this.$links.first().attr({
                 tabindex: this.options.tabindex
@@ -74,6 +99,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
 
                 // SPACE
                 case 32:
+                    e.preventDefault();
                     $(e.currentTarget).click();
                     break;
 

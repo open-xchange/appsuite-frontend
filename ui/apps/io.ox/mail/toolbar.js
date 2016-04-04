@@ -265,25 +265,33 @@ define('io.ox/mail/toolbar', [
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
+
             if (_.device('smartphone')) return;
 
-            var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+            var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbar.render().$el
+                toolbarView.render().$el
             );
-            app.updateToolbar = _.queued(function (selection) {
-                if (!selection) return $.when();
+
+            function updateCallback($toolbar) {
+                toolbarView.replaceToolbar($toolbar).initButtons();
+            }
+
+            app.updateToolbar = _.debounce(function (selection) {
+                if (!selection) return;
                 var isThread = this.props.get('thread');
                 // resolve thread
                 var list = api.resolve(selection, isThread);
                 // extract single object if length === 1
                 list = list.length === 1 ? list[0] : list;
+                // disable visible buttons
+                toolbarView.disableButtons();
                 // draw toolbar
-                var baton = ext.Baton({ $el: toolbar.$list, data: list, isThread: isThread, selection: selection, app: this }),
-                    ret = ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.$list.empty(), baton);
-                return $.when.apply($, ret.value()).then(function () {
-                    toolbar.initButtons();
-                });
+                var $toolbar = toolbarView.createToolbar(),
+                    baton = ext.Baton({ $el: $toolbar, data: list, isThread: isThread, selection: selection, app: this }),
+                    ret = ext.point('io.ox/mail/classic-toolbar').invoke('draw', $toolbar, baton);
+                $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
             }, 10);
         }
     });

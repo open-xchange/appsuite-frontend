@@ -16,12 +16,14 @@ define('io.ox/presenter/views/presentationview', [
     'io.ox/core/pdf/pdfdocument',
     'io.ox/core/pdf/pdfview',
     'io.ox/presenter/views/navigationview',
-    // TODO: move code to document converter utils
+    'io.ox/presenter/views/notification',
+    'io.ox/core/tk/doc-converter-utils',
+    'io.ox/core/tk/doc-utils/pageloader',
     'io.ox/presenter/util',
     'gettext!io.ox/presenter',
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (DisposableView, PDFDocument, PDFView, NavigationView, Util, gt) {
+], function (DisposableView, PDFDocument, PDFView, NavigationView, Notification, DocConverterUtils, PageLoader, Util, gt) {
 
     'use strict';
 
@@ -61,6 +63,9 @@ define('io.ox/presenter/views/presentationview', [
         spaceBetween: 0
     };
 
+    // defines how many pages are loaded before and after the visible pages
+    var NON_VISIBLE_PAGES_TO_LOAD_BESIDE = 1;
+
     /**
      * Creates the HTML mark-up for a slide navigation button.
      *
@@ -73,7 +78,7 @@ define('io.ox/presenter/views/presentationview', [
      * @returns {jQuery}
      *  the button node.
      */
-    function createNavigationButton (type, id) {
+    function createNavigationButton(type, id) {
         var button = $('<a href="#" class="swiper-button-control" tabindex="1" role="button" aria-controls="presenter-carousel">'),
             icon = $('<i class="fa" aria-hidden="true">');
 
@@ -83,8 +88,7 @@ define('io.ox/presenter/views/presentationview', [
             //#. button tooltip for 'go to previous presentation slide' action
             title: gt('Previous slide'),
             'aria-label': gt('Previous slide')
-        } :
-        {
+        } : {
             //#. button tooltip for 'go to next presentation slide' action
             title: gt('Next slide'),
             'aria-label': gt('Next slide')
@@ -108,13 +112,12 @@ define('io.ox/presenter/views/presentationview', [
 
             // the RT connection
             this.rtConnection = this.app.rtConnection;
-            // the name of the document converter server module.
-            this.CONVERTER_MODULE_NAME = 'oxodocumentconverter';
             // amount of page side margins in pixels
             this.PAGE_SIDE_MARGIN = _.device('desktop') ? 30 : 15;
             // run own disposer function at global dispose
             this.on('dispose', this.disposeView.bind(this));
             // timeout object for the slide caption
+            this.captionTimeoutId = null;
             // the swiper carousel root node
             this.carouselRoot = null;
             // instance of the swiper plugin
@@ -123,8 +126,14 @@ define('io.ox/presenter/views/presentationview', [
             this.pdfView = null;
             // the PDFDocument instance
             this.pdfDocument = null;
+            // the PDF page rendering queue
+            this.pageLoader = null;
             // a Deferred object indicating the load process of this document view.
             this.documentLoad = $.Deferred();
+            // all page nodes with contents, keyed by one-based page number
+            this.loadedPageNodes = {};
+            // the timer that loads more pages above and below the visible ones
+            this.loadMorePagesTimerId = null;
             // predefined zoom factors.
             // iOS Limits are handled by pdfview.js
             this.ZOOM_FACTORS = [25, 35, 50, 75, 100, 125, 150, 200, 300, 400];
@@ -136,6 +145,8 @@ define('io.ox/presenter/views/presentationview', [
             this.setZoomLevelDebounced = _.debounce(this.setZoomLevel.bind(this), 500);
             // create a debounced version of the resize handler
             this.onResizeDebounced = _.debounce(this.onResize.bind(this), 500);
+            // create a debounced version of refresh function
+            this.refreshDebounced = _.debounce(this.refresh.bind(this), 500);
             // the index of the current slide, defaults to the first slide
             this.currentSlideIndex = 0;
             // the slide count, defaults to 1
@@ -157,8 +168,11 @@ define('io.ox/presenter/views/presentationview', [
             // register presentation pause /continue handler
             this.listenTo(this.presenterEvents, 'presenter:presentation:pause', this.onPresentationPause);
             this.listenTo(this.presenterEvents, 'presenter:presentation:continue', this.onPresentationContinue);
-
+            // register thumbnail view slide select handler
             this.listenTo(this.presenterEvents, 'presenter:showslide', this.showSlide);
+            // register presentation start/end handler
+            this.listenTo(this.presenterEvents, 'presenter:presentation:start', this.onPresentationStartEnd);
+            this.listenTo(this.presenterEvents, 'presenter:presentation:end', this.onPresentationStartEnd);
         },
 
         /**
@@ -167,13 +181,10 @@ define('io.ox/presenter/views/presentationview', [
          * @returns {PresentationView}
          */
         render: function () {
-            console.info('Presenter - render()');
+            //console.info('Presenter - render()');
 
-            // TODO: move to document converter utils
-            var convertParams = Util.getConvertParams(this.model),
-                documentUrl = Util.getConverterUrl(convertParams);
-
-            var carouselRoot = $('<div id="presenter-carousel" class="swiper-container" role="listbox">'),
+            var documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model),
+                carouselRoot = $('<div id="presenter-carousel" class="swiper-container" role="listbox">'),
                 carouselInner = $('<div class="swiper-wrapper document-container io-ox-core-pdf">'),
                 caption = $('<div class="presentation-caption">');
 
@@ -215,28 +226,48 @@ define('io.ox/presenter/views/presentationview', [
          * Creates the presentation pause overlay.
          */
         renderPauseOverlay: function () {
-            var overlay = $('<div class="pause-overlay">'),
-                infoBox = $('<div class="pause-infobox">'),
-                pauseNotification = $('<span class="pause-message">').text(
+            var overlay = $('<div class="pause-overlay">');
+
+            var infoBox = $('<div class="pause-infobox">');
+            var pauseNotification = $('<span class="pause-message">')
+                .text(
                     //#. Info text that says the presentation is paused.
                     gt('Presentation is paused.')
-                ),
-                leaveButton = $('<button class="btn btn-default pause-leave" role="button" type="button" tabindex="1">')
-                    .attr({
-                        //#. tooltip for the leave presentation button
-                        'title': gt('Leave presentation'),
-                        'aria-label': gt('Leave presentation')
-                    })
-                    //#. label for the leave presentation button
-                    .text(gt('Leave'));
+                );
+            var leaveButton = $('<button class="btn btn-default pause-leave" role="button" type="button" tabindex="1">')
+                .attr({
+                    //#. tooltip for the leave presentation button
+                    'title': gt('Leave presentation'),
+                    'aria-label': gt('Leave presentation')
+                })
+                //#. label for the leave presentation button
+                .text(gt('Leave'));
+
+            var pauseButton = $('<a href="#" class="pause-continue" tabindex="1" role="button"><i class="fa fa-pause" aria-hidden="true"></i></a>')
+                .attr({
+                    //#. tooltip for the continue presentation button
+                    'title': gt('Continue presentation'),
+                    'aria-label': gt('Continue presentation')
+                });
+
+            // leave the paused remote presentation
             function onPauseLeave() {
                 this.togglePauseOverlay();
                 this.app.rtConnection.leavePresentation();
                 this.app.mainView.toggleFullscreen(false);
             }
+            // continue the paused local presentation
+            function onPauseContinue() {
+                var localModel = this.app.localModel;
+                var userId = this.rtConnection.getRTUuid();
+                localModel.continuePresentation(userId);
+                this.togglePauseOverlay();
+            }
+
             leaveButton.on('click', onPauseLeave.bind(this));
             infoBox.append(pauseNotification, leaveButton);
-            overlay.append(infoBox);
+            pauseButton.on('click', onPauseContinue.bind(this));
+            overlay.append(pauseButton, infoBox);
             this.$el.append(overlay);
         },
 
@@ -351,6 +382,8 @@ define('io.ox/presenter/views/presentationview', [
 
             console.info('Presenter - onSlideChangeEnd', 'slide-index', activeSlideIndex);
 
+            this.loadVisiblePages();
+
             //#. text of a presentation slide caption
             //#. Example result: "1 of 10"
             //#. %1$d is the slide index of the current
@@ -372,6 +405,14 @@ define('io.ox/presenter/views/presentationview', [
         },
 
         /**
+         * Handles presentation start and end.
+         */
+        onPresentationStartEnd: function () {
+            this.updateNavigationArrows();
+            this.updateSwiperParams();
+        },
+
+        /**
          * Handles remote slide changes invoked by the real-time framework.
          *
          * @param {Number} index
@@ -381,7 +422,7 @@ define('io.ox/presenter/views/presentationview', [
             var rtModel = this.app.rtModel,
                 userId = this.app.rtConnection.getRTUuid();
 
-            if (rtModel.isJoined(userId)) {
+            if (rtModel.isJoined(userId) && !rtModel.isPresenter(userId)) {
                 this.internalShowSlide(index);
             }
         },
@@ -403,11 +444,18 @@ define('io.ox/presenter/views/presentationview', [
          * Handles presentation pause invoked by the real-time framework.
          */
         onPresentationPause: function () {
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
+
             console.info('Presenter - presentation - pause');
             this.updateNavigationArrows();
             this.updateSwiperParams();
             this.togglePauseOverlay();
-            this.hideNavigation(0);
+
+            if (localModel.canContinue(userId) || rtModel.canContinue(userId)) {
+                this.hideNavigation(0);
+            }
         },
 
         /**
@@ -424,20 +472,23 @@ define('io.ox/presenter/views/presentationview', [
          * Toggles the visibility of the pause overlay for presentation participants.
          */
         togglePauseOverlay: function () {
-            var userId = this.app.rtConnection.getRTUuid(),
-                rtModel = this.app.rtModel;
-            // presenter never gets the pause overlay
-            if (rtModel.isPresenter(userId)) { return; }
-            // to see the pause overlay the participant needs to be joined and the presentation needs to be paused
-            if (rtModel.isJoined(userId) && rtModel.isPaused()) {
-                this.$('.pause-overlay').show();
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
+
+            // to see the pause overlay the presentation needs to be paused and the user needs to be
+            // the presenter of a local presentation or joined in a remote presentation.
+            if (localModel.canShowPauseOverlay(userId)) {
+                this.$('.pause-overlay').addClass('local-presenation').removeClass('remote-presenation').show();
+            } else if (rtModel.canShowPauseOverlay(userId)) {
+                this.$('.pause-overlay').addClass('remote-presenation').removeClass('local-presenation').show();
             } else {
                 this.$('.pause-overlay').hide();
             }
         },
 
         /**
-         * Returns the active Swiper slide jQuery node.
+         * Returns the active Swiper slide node.
          *
          * @returns {jQuery}
          *  the active node.
@@ -477,6 +528,19 @@ define('io.ox/presenter/views/presentationview', [
         },
 
         /**
+         * Returns all Swiper slide nodes.
+         *
+         * @returns {jQuery}
+         *  the slide nodes.
+         */
+        getSlides: function () {
+            if (!this.swiper || !this.swiper.slides) {
+                return $();
+            }
+            return this.swiper.slides;
+        },
+
+        /**
          * Switches Swiper to the slide with the given index.
          *
          * @param {Number} index
@@ -484,7 +548,7 @@ define('io.ox/presenter/views/presentationview', [
          */
         internalShowSlide: function (index) {
             if (this.swiper && _.isNumber(index)) {
-                this.swiper.slideTo(index);
+                this.swiper.slideTo(index, 0);
             }
         },
 
@@ -520,7 +584,7 @@ define('io.ox/presenter/views/presentationview', [
             }
 
             if (this.swiper && (!rtModel.isJoined(userId) || rtModel.isPresenter(userId))) {
-                this.swiper.slideNext();
+                this.swiper.slideNext(true, 0);
             }
         },
 
@@ -540,7 +604,7 @@ define('io.ox/presenter/views/presentationview', [
             }
 
             if (this.swiper && (!rtModel.isJoined(userId) || rtModel.isPresenter(userId))) {
-                this.swiper.slidePrev();
+                this.swiper.slidePrev(true, 0);
             }
         },
 
@@ -552,11 +616,12 @@ define('io.ox/presenter/views/presentationview', [
          *  - the current user is the presenter and the presentation is paused
          */
         updateNavigationArrows: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid(),
-                navigationArrows = this.$el.find('.swiper-button-control');
+            var rtModel = this.app.rtModel;
+            var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
+            var navigationArrows = this.$el.find('.swiper-button-control');
 
-            if (!rtModel.isJoined(userId) || (rtModel.isPresenter(userId) && rtModel.isPaused())) {
+            if (!localModel.isPresenter(userId) && (!rtModel.isJoined(userId) || (rtModel.isPresenter(userId) && rtModel.isPaused()))) {
                 navigationArrows.show();
             } else {
                 navigationArrows.hide();
@@ -571,9 +636,11 @@ define('io.ox/presenter/views/presentationview', [
          *  - the current user is the presenter
          */
         updateSwiperParams: function () {
-            var rtModel = this.app.rtModel,
-                userId = this.app.rtConnection.getRTUuid(),
-                enable = !rtModel.isJoined(userId) || rtModel.isPresenter(userId);
+            var rtModel = this.app.rtModel;
+            //var localModel = this.app.localModel;
+            var userId = this.app.rtConnection.getRTUuid();
+            //var enable = !rtModel.isJoined(userId) || rtModel.isPresenter(userId) || localModel.isPresenter(userId);
+            var enable = !rtModel.isJoined(userId) || rtModel.isPresenter(userId);
 
             if (!this.swiper) { return; }
 
@@ -613,10 +680,11 @@ define('io.ox/presenter/views/presentationview', [
          * but only if the current user is the presenter and the presentation is no paused.
          */
         showNavigation: function () {
-            var userId = this.app.rtConnection.getRTUuid(),
-                rtModel = this.app.rtModel;
+            var userId = this.app.rtConnection.getRTUuid();
+            var localModel = this.app.localModel;
+            var rtModel = this.app.rtModel;
 
-            if (rtModel.isPresenter(userId) && !rtModel.isPaused()) {
+            if (localModel.isPresenting(userId) || rtModel.isPresenting(userId)) {
                 this.navigationView.$el.show();
             }
         },
@@ -632,66 +700,177 @@ define('io.ox/presenter/views/presentationview', [
         },
 
         /**
-         * PDFjs render callback.
+         * Returns the page node for the given page number.
          *
-         * Calculates document page numbers to render depending on
-         * the current slide index.
-         *
-         * @returns {Array} pagesToRender
-         *  an array of page numbers which should be rendered.
-         */
-        getPagesToRender: function () {
-            var pagesToRender = [];
-
-            // add previous slide
-            if (this.currentSlideIndex > 0) {
-                pagesToRender.push(this.currentSlideIndex - 1);
-            }
-            // add current slide
-            pagesToRender.push(this.currentSlideIndex);
-            // add next slide
-            if (this.currentSlideIndex < (this.numberOfSlides - 1)) {
-                pagesToRender.push(this.currentSlideIndex + 1);
-            }
-
-            //console.info('Presenter - getPagesToRender()', pagesToRender);
-            return pagesToRender;
-        },
-
-        /**
-         * PDFjs render callback
-         *
-         * Returns the pageNode with the given pageNumber.
-         *
-         * @param pageNumber
-         *  The 1-based number of the page nod to return
+         * @param {Number} pageNumber
+         *  The 1-based number of the page node to return.
          *
          * @returns {jquery.Node} pageNode
-         *  The jquery page node for the requested page number.
+         *  The jQuery page node for the requested page number.
          */
         getPageNode: function (pageNumber) {
-            return (_.isNumber(pageNumber) && (pageNumber >= 1) && this.documentContainer) ?
-                this.documentContainer.children().eq(pageNumber - 1).find('.document-page') : null;
+            return ((pageNumber > 0) && this.documentContainer) ?
+                this.documentContainer.children().eq(pageNumber - 1).find('.document-page') : $();
         },
 
         /**
-         * PDFjs render callback, called just before pages get rendered.
+         * Returns the active page node.
          *
-         * @param pageNumbers
-         *  The array of 1-based page numbers to be rendered
+         * @returns {jquery.Node} pageNode
+         *  The active jQuery page node.
          */
-        beginPageRendering: function (pageNumbers) {
-            console.info('Presenter - Begin PDF rendering: ' + pageNumbers);
+        getActivePageNode: function () {
+            return this.getPageNode(this.getActiveSlideIndex() + 1);
         },
 
         /**
-         * PDFjs render callback, called just after pages are rendered.
-         *
-         * @param pageNumbers
-         *  The array of 1-based page numbers that have been rendered
+         * Loads all pages that are currently visible in the DocumentView plus
+         * one page before the visible pages and one page after the visible pages;
+         * the non visible pages are loaded with lower priority, if necessary.
          */
-        endPageRendering: function (pageNumbers) {
-            console.info('Presenter - End PDF rendering: ' + pageNumbers);
+        loadVisiblePages: function () {
+
+            var currentPage = this.currentSlideIndex + 1;
+
+            // abort old requests not yet running
+            this.pageLoader.abortQueuedRequests();
+            this.cancelMorePagesTimer();
+
+            // load visible page with high priority
+            this.loadPage(currentPage, 'high');
+
+            // load the invisible pages above and below the visible area with medium priority after a short delay
+            this.loadMorePagesTimerId = window.setTimeout(function () {
+                for (var i = 1; i <= NON_VISIBLE_PAGES_TO_LOAD_BESIDE; i++) {
+                    // pages before the visible pages
+                    if ((currentPage - i) > 0) {
+                        this.loadPage(currentPage - i, 'medium');
+                    }
+                    // pages after the visible pages
+                    if ((currentPage + i) <= this.numberOfSlides) {
+                        this.loadPage(currentPage + i, 'medium');
+                    }
+                }
+            }.bind(this), 50);
+
+            // clear all other pages
+            _.each(this.loadedPageNodes, function (pageNode, pageNumber) {
+                if ((pageNumber < (currentPage - NON_VISIBLE_PAGES_TO_LOAD_BESIDE)) || (pageNumber > (currentPage + NON_VISIBLE_PAGES_TO_LOAD_BESIDE))) {
+                    this.emptyPageNode(pageNode);
+                    delete this.loadedPageNodes[pageNumber];
+                }
+            }, this);
+        },
+
+        /**
+         * Loads the specified page, and stores the original page size at the
+         * page node.
+         *
+         * @param {Number} pageNumber
+         *  The 1-based page number.
+         *
+         * @param {String} priority
+         *  The priority to load the page with.
+         *  Supported are 'high', 'medium' and 'low'.
+         */
+        loadPage: function (pageNumber, priority) {
+            var // the page node of the specified page
+                pageNode = this.getPageNode(pageNumber),
+                // the slide node of the specified page
+                slideNode = pageNode.parent(),
+                // the page load options
+                options = {
+                    format: 'pdf',
+                    priority: priority,
+                    pageZoom: this.currentZoomFactor / 100
+                };
+
+            // to prevent mobile Safari crashing due to rendering overload
+            // only the rendered slides are set to visible, all others are hidden.
+            slideNode.css({ visibility: 'visible' });
+
+            // do not load correctly initialized page again
+            if (pageNode.children().length === 0) {
+                // render the PDF via the PDF.js library onto HTML5 canvas elements
+                this.pageLoader.loadPage(pageNode, pageNumber, options).done(function () {
+                    this.loadedPageNodes[pageNumber] = pageNode;
+                    this.refresh(pageNumber);
+                    this.presenterEvents.trigger('presenter:page:loaded', pageNumber);
+
+                }.bind(this)).fail(function () {
+                    pageNode.append(
+                        $('<div>').addClass('error-message').text(gt('Sorry, this page is not available at the moment.'))
+                    );
+                });
+            }
+        },
+
+        /**
+         * Refreshes the specified page or all pages.
+         *
+         * @param {Number} [pageNumberToRefresh]
+         *  The 1-based page number to refresh.
+         *  If not set all pages were refreshed.
+         */
+        refresh: function (pageNumberToRefresh) {
+            if (this.numberOfSlides > 0) {
+
+                var self = this,
+                    pageZoom = this.currentZoomFactor / 100;
+
+                if (_.isNumber(pageNumberToRefresh)) {
+                    // Process the page node
+                    var pageNode = this.getPageNode(pageNumberToRefresh);
+                    this.pageLoader.setPageZoom(pageNode, pageZoom);
+
+                } else {
+                    // empty all pages in case of a complete refresh request
+                    _.each(this.getSlides(), function (slide) {
+                        var // get page node from slide node
+                            page = $(slide).children(':first');
+
+                        // detach page node
+                        page.detach();
+                        // empty page node and set zoom
+                        self.emptyPageNode(page);
+                        self.pageLoader.setPageZoom(page, pageZoom);
+                        // re-attach page node to slide node again
+                        page.appendTo(slide);
+
+                    }, this);
+
+                    this.loadVisiblePages();
+                }
+            }
+        },
+
+        /**
+         * Cancels all running background tasks regarding updating the page
+         * nodes in the visible area.
+         */
+        cancelMorePagesTimer: function () {
+            // cancel the timer that loads more pages above and below the visible
+            // area, e.g. to prevent (or defer) out-of-memory situations on iPad
+            if (this.loadMorePagesTimerId) {
+                window.clearTimeout(this.loadMorePagesTimerId);
+                this.loadMorePagesTimerId = null;
+            }
+        },
+
+        /**
+         * Clears a page node
+         *
+         * @param {jquery.Node} pageNode
+         *  The jQuery page node to clear.
+         */
+        emptyPageNode: function (pageNode) {
+            if (pageNode) {
+                // to prevent mobile Safari crashing due to rendering overload
+                // set slides with empty pages to hidden, only rendered slides
+                // are set to visible.
+                pageNode.parent().css({ visibility: 'hidden' });
+                pageNode.data('data-rendertype', '').empty();
+            }
         },
 
         /**
@@ -717,7 +896,7 @@ define('io.ox/presenter/views/presentationview', [
             }
             // forward 'resolved' errors to error handler
             if (_.isObject(pageCount) && (pageCount.cause.length > 0)) {
-                this.pdfDocumentLoadError.call(this, pageCount);
+                this.pdfDocumentLoadError(pageCount);
                 return;
             }
 
@@ -725,12 +904,15 @@ define('io.ox/presenter/views/presentationview', [
                 swiperPrevButtonId = _.uniqueId('presenter-button-prev-');
 
             // configure Swiper
+            //
+            // listen to onTransitionEnd instead of onSlideChangeEnd. Swiper doesn't trigger the onSlideChangeEnd event
+            // when a resize events occurs during the processing of a swiper.slideTo() call.
             var swiperParameter = {
                 initialSlide: this.startIndex,
                 nextButton: '#' + swiperNextButtonId,
                 prevButton: '#' + swiperPrevButtonId,
-                onSlideChangeEnd: this.onSlideChangeEnd.bind(this),
-                onSlideChangeStart: this.onSlideChangeStart.bind(this)
+                onSlideChangeStart: this.onSlideChangeStart.bind(this),
+                onTransitionEnd: this.onSlideChangeEnd.bind(this)
             };
             swiperParameter = _.extend(swiperParameter, SWIPER_PARAMS_DEFAULT);
             // enable swiping on touch devices
@@ -740,7 +922,11 @@ define('io.ox/presenter/views/presentationview', [
 
             this.numberOfSlides = pageCount;
             // create the PDF view after successful loading;
-            this.pdfView = new PDFView(this.pdfDocument, { textOverlay: true });
+            this.pdfView = new PDFView(this.pdfDocument, { textOverlay: false });
+            // the PDF page rendering queue
+            this.pageLoader = new PageLoader(this.pdfDocument, this.pdfView);
+            // set scale/zoom according to device's viewport
+            this.currentZoomFactor = this.getFitScreenZoomFactor();
 
             // add navigation buttons
             if (pageCount > 1) {
@@ -751,37 +937,34 @@ define('io.ox/presenter/views/presentationview', [
             }
 
             // draw page nodes and apply css sizes
+            var docContainerHeight = this.documentContainer.height();
+            var pdfPageZoom = this.currentZoomFactor / 100;
+
             _.times(pageCount, function (index) {
-                var swiperSlide = $('<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">'),
-                    documentPage = $('<div class="document-page">'),
-                    pageSize = this.pdfView.getRealPageSize(index + 1);
+                // to prevent mobile Safari crashing due to rendering overload default the slide 'visibility' to 'hidden'
+                // and set only the rendered slides to 'visible'.
+                var pageNumber = index + 1;
+                var pageSize = this.pdfView.getRealPageSize(pageNumber, pdfPageZoom);
+                var pageWidth = pageSize.width;
+                var pageHeight = pageSize.height;
+                // create DOM from strings to optimize performance for presentations with lots of slides
+                var swiperSlide = '<div class="swiper-slide" tabindex="-1" role="option" aria-selected="false" style="visibility: hidden; line-height: ' + docContainerHeight + 'px;">';
+                var documentPage = '<div class="document-page" data-page="' + pageNumber + '" width="' + pageWidth + '" height="' + pageHeight + '" style="width: ' + pageWidth + 'px; height: ' + pageHeight + 'px;"></div>';
 
-                this.documentContainer.append(
-                   swiperSlide.append(
-                       documentPage.css(pageSize)
-                   )
-                );
-
-                swiperSlide.css('line-height', swiperSlide.height() + 'px');
+                this.documentContainer.append(swiperSlide + documentPage + '</div>');
 
             }, this);
 
             // initiate swiper
             this.swiper = new window.Swiper(this.carouselRoot[0], swiperParameter);
             this.pages = this.$el.find('.document-page');
+
+            // render visible PDF pages
+            this.loadVisiblePages();
+
             // trigger initial slide change event
             this.presenterEvents.trigger('presenter:local:slide:change', this.startIndex);
 
-            // set callbacks at this.pdfView to start rendering
-            var renderCallbacks = {
-                getVisiblePageNumbers: this.getPagesToRender.bind(this),
-                getPageNode: this.getPageNode.bind(this),
-                beginRendering: this.beginPageRendering.bind(this),
-                endRendering: this.endPageRendering.bind(this)
-            };
-            this.pdfView.setRenderCallbacks(renderCallbacks);
-            // set scale/zoom according to device's viewport width
-            this.setZoomLevel(this.getFitScreenZoomFactor());
             // bind slide click handler
             if (_.device('desktop')) {
                 this.pages.on('mousedown mouseup', this.onSlideClick.bind(this));
@@ -800,6 +983,7 @@ define('io.ox/presenter/views/presentationview', [
          */
         pdfDocumentLoadError: function (error) {
             console.warn('Presenter - failed loading PDF document. Cause: ', error.cause);
+            this.$el.append(Notification.createErrorNode(error, { category: 'conversion' }));
             // reject the document load Deferred.
             this.documentLoad.reject();
         },
@@ -828,7 +1012,7 @@ define('io.ox/presenter/views/presentationview', [
          * @returns {Number} zoom factor
          */
         getFitScreenZoomFactor: function () {
-            var offset = 80,
+            var offset = 40,
                 slideHeight = this.$el.height(),
                 slideWidth = this.$el.width(),
                 originalPageSize = this.pdfDocument.getOriginalPageSize(),
@@ -885,26 +1069,23 @@ define('io.ox/presenter/views/presentationview', [
          * Applies passed zoom level to the document.
          *
          * @param {Number} zoomLevel
-         *  zoom level numbers between 25 and 800 (supported zoom factors)
+         *  zoom level numbers between 25 and 400 (supported zoom factors)
          */
         setZoomLevel: function (zoomLevel) {
-            if (!_.isNumber(zoomLevel) || !this.pdfView ||
-                (zoomLevel < this.getMinZoomFactor()) || (zoomLevel > this.getMaxZoomFactor())) {
+            if (!_.isNumber(zoomLevel) || !this.pdfView) {
                 return;
             }
-            var pdfView = this.pdfView,
-                documentTopPosition = this.documentContainer.scrollTop();
 
-            _.each(this.pages, function (page, pageIndex) {
-                pdfView.setPageZoom(zoomLevel / 100, pageIndex + 1);
-                var realPageSize = pdfView.getRealPageSize(pageIndex + 1);
-                $(page).css(realPageSize);
-            }, this);
+            zoomLevel = Util.minMax(zoomLevel, this.getMinZoomFactor(), this.getMaxZoomFactor());
+
+            var documentTopPosition = this.documentContainer.scrollTop();
+
+            // set page zoom to all pages and apply the new size to all page wrappers
+            this.currentZoomFactor = zoomLevel;
+            this.refreshDebounced();
 
             // adjust document scroll position according to new zoom
             this.documentContainer.scrollTop(documentTopPosition * zoomLevel / this.currentZoomFactor);
-            // save new zoom level to view
-            this.currentZoomFactor = zoomLevel;
 
             //#. text of a presentation zoom level caption
             //#. Example result: "100 %"
@@ -948,7 +1129,7 @@ define('io.ox/presenter/views/presentationview', [
                     // After an on resize call, the plugin 'resets' the active slide to the beginning.
                     //this.swiper.slideTo(this.currentSlideIndex);
                 }
-                swiperSlide.css('line-height', swiperSlide.height() + 'px');
+                this.getSlides().css('line-height', swiperSlide.height() + 'px');
 
             }.bind(this));
         },
@@ -976,6 +1157,7 @@ define('io.ox/presenter/views/presentationview', [
                             this.showNextSlide();
                         }
                         break;
+                    // no default
                 }
             };
         })(),
@@ -984,11 +1166,19 @@ define('io.ox/presenter/views/presentationview', [
          * Destructor function of the PresentationView.
          */
         disposeView: function () {
-            console.info('Presenter - dispose PresentationView');
+            //console.info('Presenter - dispose PresentationView');
 
             // remove touch events
             if (this.documentContainer.disableTouch) {
                 this.documentContainer.disableTouch();
+            }
+
+            // destroy the page loader instance
+            if (this.pageLoader) {
+                this.pageLoader.abortQueuedRequests();
+                this.cancelMorePagesTimer();
+                this.pageLoader.destroy();
+                this.pageLoader = null;
             }
 
             // destroy the swiper instance
