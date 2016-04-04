@@ -41,7 +41,7 @@ define('io.ox/files/share/listview', [
 
             this.load();
 
-            this.model.set({ sort: 'name', order: 'asc' });
+            this.model.set({ sort: options.app.props.get('sort'), order: options.app.props.get('order') });
             this.toggleCheckboxes(false);
 
             this.listenTo(this.collection, 'reset', this.redraw);
@@ -91,12 +91,12 @@ define('io.ox/files/share/listview', [
         sortBy: function () {
             var desc = this.model.get('order') === 'desc';
             switch (this.model.get('sort')) {
-                case 'date':
+                case 5:
                     this.collection.comparator = function (shareA) {
                         return desc ? -shareA.get('last_modified') : shareA.get('last_modified');
                     };
                     break;
-                case 'name':
+                case 702:
                     this.collection.comparator = function (shareA, shareB) {
                         var a = (shareA.isFolder() ? '0' : '1') + shareA.getDisplayName().toLowerCase(),
                             b = (shareB.isFolder() ? '0' : '1') + shareB.getDisplayName().toLowerCase();
@@ -112,6 +112,7 @@ define('io.ox/files/share/listview', [
                 model.set('index', index);
             });
             this.collection.trigger('sort');
+            this.app.props.set(this.model.attributes);
         }
     });
 
