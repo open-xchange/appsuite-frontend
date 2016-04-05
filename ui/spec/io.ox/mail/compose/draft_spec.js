@@ -59,8 +59,8 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     clock.restore();
                     clock = null;
                 }
-                if (app.view && app.view.model) {
-                    app.view.model.dirty(false);
+                if (app.model) {
+                    app.model.dirty(false);
                 }
                 snippetsGetAll.restore();
                 pictureHalo.restore();
@@ -99,6 +99,8 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     //takes a little while for the request to be sent
                     clock.tick(500);
                     expect(callback.called, 'callback called').to.be.true;
+                    //do not show confirmation dialog
+                    app.model.set('autoDismiss', true);
                 });
             });
             describe('manual save', function () {
