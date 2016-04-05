@@ -38,6 +38,7 @@ define.async('io.ox/mail/compose/model', [
         defaults: function () {
             return {
                 autosavedAsDraft: false,
+                // Autodismiss confirmation dialog
                 autoDismiss: false,
                 preferredEditorMode: settings.get('messageFormat', 'html'),
                 editorMode: settings.get('messageFormat', 'html'),
