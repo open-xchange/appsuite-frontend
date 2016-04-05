@@ -64,7 +64,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 var def = $.Deferred();
                 _.url.hash('app', 'io.ox/mail/compose:' + type);
 
-                obj = _.extend({ mode: type, originAction: type }, obj);
+                obj = _.extend({ mode: type }, obj);
 
                 app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
 
@@ -76,7 +76,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                     require(['io.ox/mail/compose/bundle'], function () {
                         require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model'], function (MailComposeView, MailComposeModel) {
                             var keepdata = /(compose|edit|forward)/.test(obj.mode) || obj.restored,
-                                data = keepdata ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type', 'originAction');
+                                data = keepdata ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
                             app.model = new MailComposeModel(data);
                             app.view = new MailComposeView({ app: app, model: app.model });
                             win.nodes.main.addClass('scrollable').append(app.view.render().$el);
