@@ -102,6 +102,32 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     //do not show confirmation dialog
                     app.model.set('autoDismiss', true);
                 });
+                it('should show a confirmation dialog when discarding the mail', function () {
+                    var callback = sinon.spy();
+
+                    this.server.respondWith('PUT', /api\/mail\?action=autosave/, function (xhr) {
+                        callback();
+                        xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                            data: {}
+                        }));
+                    });
+                    clock = sinon.useFakeTimers(new Date().getTime());
+                    //initialize timer (again) _after_ setting up fake timer
+                    app.view.initAutoSaveAsDraft();
+                    app.view.setBody('some text');
+                    clock.tick(59999);
+                    expect(callback.called, 'callback called').to.be.false;
+                    //takes a little while for the request to be sent
+                    clock.tick(500);
+                    expect(callback.called, 'callback called').to.be.true;
+                    clock.restore();
+                    clock = null;
+                    expect($('.io-ox-dialog-popup').length > 0, 'dialog is shown').to.be.false;
+                    app.view.discard();
+                    expect($('.io-ox-dialog-popup').length > 0, 'dialog is shown').to.be.true;
+                    $('.io-ox-dialog-popup [data-action="cancel"]').click();
+                    app.model.set('autoDismiss', true);
+                });
             });
             describe('manual save', function () {
                 beforeEach(function () {
