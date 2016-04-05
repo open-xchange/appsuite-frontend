@@ -18,6 +18,8 @@ License:        CC-BY-NC-SA
 Summary:        OX App Suite HTML5 client
 Source:         %{name}_%{version}.orig.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
+Provides:       open-xchange-documents-ui-viewer = %{version}
+Obsoletes:      open-xchange-documents-ui-viewer < %{version}
 
 %if 0%{?suse_version}
 Requires:       apache2

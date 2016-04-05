@@ -12,6 +12,8 @@ Package: open-xchange-appsuite
 Architecture: all
 Depends: ${misc:Depends}, apache2
 Description: OX App Suite HTML5 client
+Replaces: open-xchange-documents-ui-viewer
+Conflicts: open-xchange-documents-ui-viewer
 
 Package: open-xchange-appsuite-manifest
 Architecture: all
