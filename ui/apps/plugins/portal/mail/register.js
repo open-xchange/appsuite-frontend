@@ -21,8 +21,9 @@ define('plugins/portal/mail/register', [
     'io.ox/core/tk/dialogs',
     'gettext!plugins/portal',
     'io.ox/backbone/disposable',
-    'io.ox/core/api/collection-loader'
-], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader) {
+    'io.ox/core/api/collection-loader',
+    'io.ox/core/emoji/util'
+], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, emoji) {
 
     'use strict';
 
@@ -54,6 +55,7 @@ define('plugins/portal/mail/register', [
 
         render: function (baton) {
             var self = this,
+                subjectNode,
                 received = moment(this.model.get('received_date')).format('l');
 
             this.$el.empty()
@@ -65,9 +67,14 @@ define('plugins/portal/mail/register', [
                         }
                     })(),
                     $('<span class="bold">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' '),
-                    $('<span class="normal">').text(_.noI18n(_.ellipsis(this.model.get('subject'), { max: 50 }))), $.txt(' '),
+                    subjectNode = $('<span class="normal">').text(_.noI18n(_.ellipsis(this.model.get('subject'), { max: 50 }))), $.txt(' '),
                     $('<span class="accent">').text(_.noI18n(received))
                 );
+
+            //process emoji
+            emoji.processEmoji(subjectNode.html(), function (text) {
+                subjectNode.html(text);
+            });
 
             // Give plugins a chance to customize mail display
             ext.point('io.ox/mail/portal/list/item').invoke('customize', this.$el, this.model.toJSON(), baton, this.$el);

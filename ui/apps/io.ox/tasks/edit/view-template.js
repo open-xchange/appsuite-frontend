@@ -242,7 +242,7 @@ define('io.ox/tasks/edit/view-template', [
                     .append($('<option>')
                     //#. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
                     .text(gt('Manual input')), taskUtil.buildDropdownMenu(),
-                    $('<option>').text('No reminder'))
+                    $('<option>').text(gt('No reminder')))
                     .on('change', function () {
                         if (selector.prop('selectedIndex') === 0) {
                             // manual input selected, change nothing

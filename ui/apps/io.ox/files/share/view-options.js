@@ -43,8 +43,8 @@ define('io.ox/files/share/view-options', [
                 model: baton.app.mysharesListView.model,
                 caret: true
             })
-            .option('sort', 'name', gt('Name'))
-            .option('sort', 'date', gt('Date'))
+            .option('sort', 702, gt('Name'))
+            .option('sort', 5, gt('Date'))
             .divider()
             .option('order', 'asc', gt('Ascending'))
             .option('order', 'desc', gt('Descending'));

@@ -83,7 +83,7 @@ define('io.ox/mail/detail/view', [
     });
 
     /* move the actions menu to the top in sidepanel on smartphones */
-    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header/row3';
+    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header/row4';
 
     ext.point(extPoint).extend(new links.InlineLinks({
         id: 'actions',
@@ -115,7 +115,7 @@ define('io.ox/mail/detail/view', [
             id: 'rows',
             index: INDEX_header += 100,
             draw: function (baton) {
-                for (var i = 1, node; i <= 3; i++) {
+                for (var i = 1, node; i <= 4; i++) {
                     node = $('<div class="detail-view-row row-' + i + ' clearfix">');
                     ext.point('io.ox/mail/detail/header/row' + i).invoke('draw', node, baton);
                     this.append(node);
@@ -162,21 +162,44 @@ define('io.ox/mail/detail/view', [
     ext.point('io.ox/mail/detail/header/row2').extend(
         {
             id: 'recipients',
-            index: INDEX_header += 100,
+            index: 100,
             draw: function (baton) {
                 ext.point('io.ox/mail/detail/header/recipients').invoke('draw', this, baton);
             }
         }
     );
 
-    //
-    // Row 3
-    //
     ext.point('io.ox/mail/detail/header/recipients').extend({
         id: 'default',
         index: 100,
         draw: extensions.recipients
     });
+
+    //
+    // Row 3
+    //
+    ext.point('io.ox/mail/detail/header/row3').extend(
+        {
+            id: 'different-subject',
+            index: 100,
+            draw: function (baton) {
+
+                var data = baton.data, threadSubject, mailSubject;
+
+                // no thread?
+                if (data.threadSize === 1) return;
+                // identical subject?
+                threadSubject = util.getSubject(api.threads.subject(data), false);
+                mailSubject = util.getSubject(data, false);
+                if (mailSubject === threadSubject) return;
+
+                this.append(
+                    $('<span class="io-ox-label">').text(gt('Subject') + '\u00a0 '),
+                    $('<span class="different-subject">').text(mailSubject)
+                );
+            }
+        }
+    );
 
     // Inplace/quick reply
 

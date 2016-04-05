@@ -219,6 +219,8 @@
     // define devices as combination of screensize and OS
     display.smartphone = isSmartphone();
     display.tablet = display.medium && mobileOS; // maybe to fuzzy...
+    // as there is no android desktop yet, this must be a tablet
+    if (us.browser.android && display.large) display.tablet = true;
     display.desktop = !mobileOS;
     us.displayInfo = display;
     // extend underscore utilities

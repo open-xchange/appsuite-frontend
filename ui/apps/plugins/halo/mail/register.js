@@ -49,8 +49,7 @@ define('plugins/halo/mail/register', [
                         collection: api.pool.add(cid, data),
                         pagination: false,
                         selection:  false,
-                        scrollable: false,
-                        threaded:   false
+                        scrollable: false
                     }).render().$el.addClass('compact');
                 }
 

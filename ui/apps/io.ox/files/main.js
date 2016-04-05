@@ -251,9 +251,10 @@ define('io.ox/files/main', [
         'get-view-options': function (app) {
 
             app.getViewOptions = function (folder) {
-                var options = app.settings.get(['viewOptions', folder], {});
+                var options = app.settings.get(['viewOptions', folder], {}),
+                    defaultSort = folder === 'virtual/myshares' ? 5 : 702;
                 if (!/^(list|icon|tile)/.test(options.layout)) options.layout = 'list';
-                return _.extend({ sort: 702, order: 'asc', layout: 'list' }, options);
+                return _.extend({ sort: defaultSort, order: 'asc', layout: 'list' }, options);
             };
         },
 
@@ -330,8 +331,13 @@ define('io.ox/files/main', [
                 app.listView.model.set('folder', null, { silent: true });
                 app.listView.model.set('folder', id);
             });
-        },
 
+            app.on('folder-virtual:change', function (id) {
+                app.listView.empty();
+                var options = app.getViewOptions(id);
+                app.props.set(options);
+            });
+        },
         /*
          * Respond to virtual myshares
          */
@@ -445,7 +451,7 @@ define('io.ox/files/main', [
         'store-view-options': function (app) {
             app.props.on('change', _.debounce(function () {
                 if (app.props.get('find-result')) return;
-                var folder = app.folder.get(), data = app.props.toJSON();
+                var folder = app.folder.get() || 'virtual/myshares', data = app.props.toJSON();
                 app.settings
                     .set(['viewOptions', folder], { sort: data.sort, order: data.order, layout: data.layout });
                 if (_.device('!smartphone')) {
@@ -1252,6 +1258,20 @@ define('io.ox/files/main', [
                     $(window).trigger('resize');
                 });
             });
+    });
+
+    // set what to do if the app is started again
+    // this way we can react to given options, like for example a different folder
+    app.setResume(function (options) {
+        // only consider folder option for now
+        if (options && options.folder && options.folder !== this.folder.get()) {
+            var appNode = this.getWindow();
+            appNode.busy();
+            return this.folder.set(options.folder).always(function () {
+                appNode.idle();
+            });
+        }
+        return $.when();
     });
 
     return {

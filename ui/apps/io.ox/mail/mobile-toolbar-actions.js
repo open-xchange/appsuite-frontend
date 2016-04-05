@@ -191,7 +191,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
         if (!selection) return;
 
         // remember if this list is based on a single thread
-        var isThread = this.props.get('thread');
+        var isThread = this.isThreaded();
 
         // resolve thread
         var list = api.resolve(selection, isThread);

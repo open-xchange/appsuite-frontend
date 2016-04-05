@@ -760,7 +760,7 @@ define('io.ox/mail/main', [
             // clicking on a thread will show a custom overview
             // based on a custom threadview only showing mail headers
             app.showThreadOverview = function (cid) {
-                app.threadView.show(cid, app.props.get('thread'));
+                app.threadView.show(cid, app.isThreaded());
             };
         },
 
@@ -786,7 +786,7 @@ define('io.ox/mail/main', [
             app.showMultiple = function (list) {
 
                 app.threadView.empty();
-                list = api.resolve(list, app.props.get('thread'));
+                list = api.resolve(list, app.isThreaded());
 
                 // check if a folder is selected
                 var id = app.folder.get(),
@@ -829,7 +829,7 @@ define('io.ox/mail/main', [
 
                 app.threadView.empty();
                 if (list) {
-                    list = api.resolve(list, app.props.get('thread'));
+                    list = api.resolve(list, app.isThreaded());
                     app.pages.getCurrentPage().navbar.setTitle(
                         //#. This is a short version of "x messages selected", will be used in mobile mail list view
                         gt('%1$d selected', list.length));
@@ -1176,7 +1176,7 @@ define('io.ox/mail/main', [
             api.on('beforedelete', function () {
                 if (app.pages.getCurrentPage().name === 'detailView') {
                     // check if the threadoverview is empty
-                    if (app.props.get('thread') && app.threadView.collection.length === 1) {
+                    if (app.isThreaded() && app.threadView.collection.length === 1) {
                         app.pages.changePage('listView', { animation: 'slideright' });
                     } else {
                         app.pages.goBack();
@@ -1194,7 +1194,7 @@ define('io.ox/mail/main', [
                 // remember if this list is based on a single thread
                 baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
                 // resolve thread
-                baton.data = api.resolve(baton.data, app.props.get('thread'));
+                baton.data = api.resolve(baton.data, app.isThreaded());
                 // call action
                 actions.check('io.ox/mail/actions/move', baton.data).done(function () {
                     actions.invoke('io.ox/mail/actions/move', null, baton);
@@ -1211,7 +1211,7 @@ define('io.ox/mail/main', [
                 // remember if this list is based on a single thread
                 baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
                 // resolve thread
-                baton.data = api.resolve(baton.data, app.props.get('thread'));
+                baton.data = api.resolve(baton.data, app.isThreaded());
                 // call action
                 actions.check('io.ox/mail/actions/archive', baton.data).done(function () {
                     actions.invoke('io.ox/mail/actions/archive', null, baton);
@@ -1228,7 +1228,7 @@ define('io.ox/mail/main', [
                 // remember if this list is based on a single thread
                 baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
                 // resolve thread
-                baton.data = api.resolve(baton.data, app.props.get('thread'));
+                baton.data = api.resolve(baton.data, app.isThreaded());
                 // call action
                 // check if action can be called
                 actions.check('io.ox/mail/actions/delete', baton.data).done(function () {
@@ -1279,7 +1279,7 @@ define('io.ox/mail/main', [
                 // remember if this list is based on a single thread
                 baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
                 // resolve thread
-                baton.data = api.resolve(baton.data, app.props.get('thread'));
+                baton.data = api.resolve(baton.data, app.isThreaded());
                 // call action
                 // we open a dropdown here with options.
                 ext.point('io.ox/mail/mobile/swipeButtonMore').invoke('draw', node, baton);
@@ -1630,6 +1630,20 @@ define('io.ox/mail/main', [
                     api.mailServerDownMessage;
                 notifications.yell('error', message);
             });
+    });
+
+    // set what to do if the app is started again
+    // this way we can react to given options, like for example a different folder
+    app.setResume(function (options) {
+        // only consider folder option for now
+        if (options && options.folder && options.folder !== this.folder.get()) {
+            var appNode = this.getWindow();
+            appNode.busy();
+            return this.folder.set(options.folder).always(function () {
+                appNode.idle();
+            });
+        }
+        return $.when();
     });
 
     return {

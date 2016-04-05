@@ -423,6 +423,7 @@ define('io.ox/mail/listview', [
         },
 
         getCompositeKey: function (model) {
+            // seems that threaded option is used for tests only
             return this.options.threaded ? 'thread.' + model.cid : model.cid;
         }
     });

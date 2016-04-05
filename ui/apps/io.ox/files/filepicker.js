@@ -244,7 +244,7 @@ define('io.ox/files/filepicker', [
 
             done: function (id, dialog) {
                 def.resolve(
-                    _(filesPane.find('input:checked')).map(function (node) {
+                    _(filesPane.find('li.selected input')).map(function (node) {
                         return $(node).data('file');
                     })
                 );

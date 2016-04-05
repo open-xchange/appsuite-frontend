@@ -280,7 +280,7 @@ define('io.ox/mail/toolbar', [
 
             app.updateToolbar = _.debounce(function (selection) {
                 if (!selection) return;
-                var isThread = this.props.get('thread');
+                var isThread = this.isThreaded();
                 // resolve thread
                 var list = api.resolve(selection, isThread);
                 // extract single object if length === 1

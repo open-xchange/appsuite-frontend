@@ -1675,6 +1675,12 @@ define('io.ox/mail/api', [
             return (this.hash[top] || [cid]).length;
         },
 
+        subject: function (cid) {
+            cid = _.isString(cid) ? cid : _.cid(cid);
+            var top = this.reverse[cid], model = this.collection.get(top);
+            return model ? model.get('subject') : '';
+        },
+
         append: function (existingCID, newCID) {
             var root = this.reverse[existingCID];
             if (!root) return;
