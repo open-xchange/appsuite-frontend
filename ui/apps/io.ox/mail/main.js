@@ -924,7 +924,8 @@ define('io.ox/mail/main', [
 
                 if (layout !== 'list' && app.props.previousAttributes().layout === 'list' && !app.right.hasClass('preview-visible')) {
                     //listview did not create a detailview for the last mail, it was only selected, so detailview needs to be triggered manually(see bug 33456)
-                    app.listView.selection.selectEvents();
+                    app.listView.selection.selectEvents(app.listView.selection.getItems());
+
                 }
             };
 
