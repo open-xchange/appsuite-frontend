@@ -152,7 +152,8 @@ define('io.ox/core/gettext', function () {
         }
 
         function printf(str, args, offset) {
-            return _.printf(str, Array.prototype.slice.call(args, offset || 0));
+            args = Array.prototype.slice.call(args, offset || 0);
+            return args.length ? _.printf(str, args) : str;
         }
 
         return gettext;
