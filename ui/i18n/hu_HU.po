@@ -1,4 +1,4 @@
-﻿# Gabor Kelemen <gabor@bureau-cornavin.com>, 2012, 2013, 2014.
+# Gabor Kelemen <gabor@bureau-cornavin.com>, 2012, 2013, 2014.
 # Kálmán Kéménczy <kalman@bureau-cornavin.com>, 2013, 2014, 2015, 2016.
 msgid ""
 msgstr ""
