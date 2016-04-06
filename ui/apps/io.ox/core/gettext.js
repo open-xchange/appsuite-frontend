@@ -80,14 +80,8 @@ define('io.ox/core/gettext', function () {
         po.plural = new Function('n', 'return ' + po.plural + ';');
 
         function gettext(text) {
-            var args;
-            text = gettext.pgettext('', text);
-            if (arguments.length < 2) {
-                return text;
-            }
-            args = Array.prototype.slice.call(arguments);
-            args.splice(0, 1, text);
-            return gettext.format.apply(gettext, args);
+            var str = get(text) || text;
+            return printf(str, arguments, 1);
         }
 
         if (_.url.hash('debug-i18n')) {
@@ -116,12 +110,13 @@ define('io.ox/core/gettext', function () {
             gettext.npgettext = npgettext;
         }
 
-        gettext.gettext = function (text) {
-            return gettext.pgettext('', text);
+        gettext.gettext = function (/* text */) {
+            return gettext.apply(null, arguments);
         };
 
-        gettext.ngettext = function (singular, plural, n) {
-            return gettext.npgettext('', singular, plural, n);
+        gettext.ngettext = function (/* singular, plural, n */) {
+            var args = Array.prototype.concat.apply([''], arguments);
+            return npgettext.apply(null, args);
         };
 
         gettext.getDictionary = function () {
@@ -136,20 +131,28 @@ define('io.ox/core/gettext', function () {
         }
 
         function pgettext(context, text) {
-            var key = context ? context + '\x00' + text : text;
-            return get(key) || text;
+            var key = context ? context + '\x00' + text : text,
+                str = get(key) || text;
+            return printf(str, arguments, 2);
         }
 
         function npgettext(context, singular, plural, n) {
+
             var key = (context ? context + '\x00' : '') + singular + '\x01' + plural,
-                translation = get(key);
+                translation = get(key),
+                str;
 
-            /*eslint-disable no-nested-ternary */
-            return translation ?
-                translation[Number(po.plural(Number(n)))] :
-                Number(n) !== 1 ? plural : singular;
-            /*eslint-enable no-nested-ternary */
+            if (translation) {
+                str = translation[Number(po.plural(Number(n)))];
+            } else {
+                str = Number(n) !== 1 ? plural : singular;
+            }
 
+            return printf(str, arguments, 4);
+        }
+
+        function printf(str, args, offset) {
+            return _.printf(str, Array.prototype.slice.call(args, offset || 0));
         }
 
         return gettext;
