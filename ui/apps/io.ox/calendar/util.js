@@ -63,31 +63,29 @@ define('io.ox/calendar/util', [
 
         isBossyAppointmentHandling: function (opt) {
 
-            _.extend({
+            opt = _.extend({
                 app: {},
                 invert: false,
                 folderData: null
             }, opt);
 
-            if (settings.get('bossyAppointmentHandling', false)) {
-                var check = function (data) {
-                    if (folderAPI.is('private', data)) {
-                        var isOrganizer = opt.app.organizerId === ox.user_id;
-                        return opt.invert ? !isOrganizer : isOrganizer;
-                    }
-                    return true;
-                };
+            if (!settings.get('bossyAppointmentHandling', false)) return $.when(true);
 
-                if (opt.folderData) {
-                    return $.Deferred().resolve(check(opt.folderData));
+            var check = function (data) {
+                if (folderAPI.is('private', data)) {
+                    var isOrganizer = opt.app.organizerId === ox.user_id;
+                    return opt.invert ? !isOrganizer : isOrganizer;
                 }
-                return folderAPI.get(opt.app.folder_id)
-                                .then(function (data) {
-                                    return check(data);
-                                });
+                return true;
+            };
 
-            }
-            return $.Deferred().resolve(true);
+            if (opt.folderData) return $.when(check(opt.folderData));
+
+            if (!opt.app.folder_id) return $.when(false);
+
+            return folderAPI.get(opt.app.folder_id).then(function (data) {
+                return check(data);
+            });
         },
 
         getFirstWeekDay: function () {
