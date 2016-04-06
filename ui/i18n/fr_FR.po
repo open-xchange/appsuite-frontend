@@ -2068,6 +2068,10 @@ msgstr ""
 "Convertir les dates saisies pour le début et la fin pour faire correspondre "
 "les fuseaux horaires"
 
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+msgid "Copied"
+msgstr ""
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
@@ -2081,6 +2085,12 @@ msgstr "Copier"
 msgctxt "CC"
 msgid "Copy"
 msgstr "Copie"
+
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#, fuzzy
+#| msgid "copy to clipboard"
+msgid "Copy to clipboard"
+msgstr "copier vers le presse-papiers"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Copy to description"
@@ -5281,7 +5291,8 @@ msgid "No recipients"
 msgstr "Pas de destinataires"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "No reminder"
 msgstr "Pas de rappel"
 
@@ -7578,7 +7589,7 @@ msgstr "Étudiant"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
@@ -8365,9 +8376,14 @@ msgid "This document is password protected and cannot be displayed."
 msgstr ""
 "Ce document est protégé par un mot de passe et ne peut donc être affiché."
 
+#. %1$d a list of email addresses
 #: apps/io.ox/participants/add.js module:io.ox/core
+#, fuzzy, c-format
+#| msgid "This email address cannot be used"
 msgid "This email address cannot be used"
-msgstr "Cette adresse de courrier électronique ne peut pas être utilisée"
+msgid_plural "The following email addresses cannot be used: %1$d"
+msgstr[0] "Cette adresse de courrier électronique ne peut pas être utilisée"
+msgstr[1] "Cette adresse de courrier électronique ne peut pas être utilisée"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains a task"
@@ -9664,6 +9680,16 @@ msgstr "comme date"
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "as daterange"
 msgstr "comme intervalle de dates"
+
+#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+#. This fragment appears within a long string for screen readers.
+#. Some languages (e.g. German) might need to translate "location:".
+#: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
+#, fuzzy
+#| msgid "next %1$s"
+msgctxt "a11y"
+msgid "at %1$s"
+msgstr "%1$s prochain"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
@@ -12810,9 +12836,6 @@ msgstr "aaaa"
 
 #~ msgid "collapse"
 #~ msgstr "réduire"
-
-#~ msgid "copy to clipboard"
-#~ msgstr "copier vers le presse-papiers"
 
 #~ msgid "date range"
 #~ msgstr "intervalle de dates"

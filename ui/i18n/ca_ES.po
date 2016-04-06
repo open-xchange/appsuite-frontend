@@ -2094,6 +2094,10 @@ msgstr "Converses"
 msgid "Convert the entered start and end dates to match the modified timezones"
 msgstr ""
 
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+msgid "Copied"
+msgstr ""
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
@@ -2107,6 +2111,12 @@ msgstr "Copia"
 msgctxt "CC"
 msgid "Copy"
 msgstr "Copia"
+
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#, fuzzy
+#| msgid "Copy to description"
+msgid "Copy to clipboard"
+msgstr "Copia a la descripció"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Copy to description"
@@ -5330,7 +5340,8 @@ msgid "No recipients"
 msgstr "Sense destinataris"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "No reminder"
 msgstr "Sense recordatori"
 
@@ -7633,7 +7644,7 @@ msgstr "Estudiant"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
@@ -8396,9 +8407,13 @@ msgstr ""
 msgid "This document is password protected and cannot be displayed."
 msgstr ""
 
+#. %1$d a list of email addresses
 #: apps/io.ox/participants/add.js module:io.ox/core
+#, c-format
 msgid "This email address cannot be used"
-msgstr ""
+msgid_plural "The following email addresses cannot be used: %1$d"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains a task"
@@ -9674,6 +9689,15 @@ msgstr ""
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "as daterange"
 msgstr ""
+
+#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+#. This fragment appears within a long string for screen readers.
+#. Some languages (e.g. German) might need to translate "location:".
+#: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
+#, fuzzy
+msgctxt "a11y"
+msgid "at %1$s"
+msgstr "Venciment %1$s"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 #, fuzzy

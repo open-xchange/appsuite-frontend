@@ -2019,6 +2019,10 @@ msgstr "談話"
 msgid "Convert the entered start and end dates to match the modified timezones"
 msgstr "轉換輸入的開始與結束日期，以符合修改的時區"
 
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+msgid "Copied"
+msgstr ""
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
@@ -2032,6 +2036,12 @@ msgstr "複製"
 msgctxt "CC"
 msgid "Copy"
 msgstr "副本"
+
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#, fuzzy
+#| msgid "copy to clipboard"
+msgid "Copy to clipboard"
+msgstr "複製至剪貼簿"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Copy to description"
@@ -5150,7 +5160,8 @@ msgid "No recipients"
 msgstr "無收件人"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/util.js apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "No reminder"
 msgstr "無提醒"
 
@@ -7397,7 +7408,7 @@ msgstr "學生"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
@@ -8129,9 +8140,14 @@ msgstr "此文件沒有任何內容。"
 msgid "This document is password protected and cannot be displayed."
 msgstr "此文件已受密碼保護，無法顯示。"
 
+#. %1$d a list of email addresses
 #: apps/io.ox/participants/add.js module:io.ox/core
+#, fuzzy, c-format
+#| msgid "This email address cannot be used"
 msgid "This email address cannot be used"
-msgstr "無法使用此電子郵件地址"
+msgid_plural "The following email addresses cannot be used: %1$d"
+msgstr[0] "無法使用此電子郵件地址"
+msgstr[1] "無法使用此電子郵件地址"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains a task"
@@ -9359,6 +9375,16 @@ msgstr "作為日期"
 #: apps/io.ox/find/date/patterns.js module:io.ox/core
 msgid "as daterange"
 msgstr "作為日期範圍"
+
+#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+#. This fragment appears within a long string for screen readers.
+#. Some languages (e.g. German) might need to translate "location:".
+#: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
+#, fuzzy
+#| msgid "next %1$s"
+msgctxt "a11y"
+msgid "at %1$s"
+msgstr "下 %1$s"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
@@ -13577,9 +13603,6 @@ msgstr "年"
 
 #~ msgid "collapse"
 #~ msgstr "摺疊"
-
-#~ msgid "copy to clipboard"
-#~ msgstr "複製至剪貼簿"
 
 #~ msgid "date range"
 #~ msgstr "日期範圍"
