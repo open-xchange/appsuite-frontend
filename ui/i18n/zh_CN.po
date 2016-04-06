@@ -223,7 +223,8 @@ msgstr "%1$s %2$s"
 #. %3$s Appointment time
 #. %4$s Appointment location
 #. %5$s Appointment Organizer
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 #, c-format
 msgid "%1$s %2$s %3$s %4$s %5$s."
 msgstr "%1$s %2$s %3$s %4$s %5$s."
@@ -604,7 +605,8 @@ msgstr "缺乏"
 msgid "Accept"
 msgstr "接受"
 
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Accept / Decline"
 msgstr "接受 / 拒绝"
 
@@ -612,8 +614,8 @@ msgstr "接受 / 拒绝"
 msgid "Accept changes"
 msgstr "接受更改"
 
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Accept invitation"
 msgstr "接受邀请"
 
@@ -621,8 +623,8 @@ msgstr "接受邀请"
 msgid "Accept/Decline"
 msgstr "接受 / 拒绝"
 
-#: apps/io.ox/calendar/print.js module:io.ox/calendar apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
+#: apps/io.ox/calendar/print.js module:io.ox/calendar
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Accepted"
 msgstr "接受"
 
@@ -672,8 +674,8 @@ msgid "Account updated"
 msgstr "户口已更新"
 
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-#: apps/io.ox/settings/main.js
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js
 msgid "Accounts"
 msgstr "账户"
 
@@ -694,12 +696,14 @@ msgid "Actions. Use cursor keys to navigate."
 msgstr "动作。使用方向键导航。"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Actual costs"
 msgstr "实质费用"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Actual duration in minutes"
 msgstr "按分钟设置间隔"
 
@@ -721,7 +725,8 @@ msgstr "添加 %1$s 户口"
 msgid "Add a description"
 msgstr "添加一个描述"
 
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "Add account"
 msgstr "添加新户口"
 
@@ -1154,7 +1159,8 @@ msgid "Appointment Details"
 msgstr "约会详情"
 
 #. Invitations (notifications) about appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Appointment invitations"
 msgstr "约会邀请"
 
@@ -1164,7 +1170,8 @@ msgid "Appointment list"
 msgstr "约会列表"
 
 #. Reminders (notifications) about appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Appointment reminders"
 msgstr "约会提醒"
 
@@ -1334,10 +1341,10 @@ msgstr "暗送"
 
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-#: apps/io.ox/contacts/main.js module:io.ox/contacts apps/io.ox/core/commons.js
-#: module:io.ox/core apps/io.ox/core/tk/wizard.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/mail/threadview.js apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/tk/wizard.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/mail/threadview.js
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Back"
 msgstr "向后"
 
@@ -1365,7 +1372,8 @@ msgid ""
 msgstr "在您能继续使用产品之前，您必须输入一些基本信息。这将会花少于一分钟。"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Billing information"
 msgstr "开票信息"
 
@@ -1388,7 +1396,8 @@ msgstr "暗送"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Blue"
 msgstr "蓝色"
 
@@ -1523,19 +1532,21 @@ msgstr "日历："
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions/delete.js
-#: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js
-#: apps/io.ox/tasks/edit/main.js apps/io.ox/tasks/main.js
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts apps/io.ox/settings/apps/settings/pane.js
+#: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
+#: apps/io.ox/tasks/common-extensions.js apps/io.ox/tasks/edit/main.js
+#: apps/io.ox/tasks/main.js
 #: apps/plugins/administration/groups/settings/edit.js
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
 #: apps/plugins/core/feedback/register.js
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
-#: apps/plugins/portal/flickr/register.js module:plugins/portal
-#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
-#: apps/plugins/portal/tumblr/register.js apps/plugins/portal/twitter/util.js
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications apps/plugins/portal/flickr/register.js
+#: module:plugins/portal apps/plugins/portal/mail/register.js
+#: apps/plugins/portal/rss/register.js apps/plugins/portal/tumblr/register.js
+#: apps/plugins/portal/twitter/util.js
 #: apps/plugins/portal/userSettings/register.js
 #: apps/plugins/portal/xing/register.js
 msgid "Cancel"
@@ -1871,7 +1882,8 @@ msgid "Compact"
 msgstr "精简"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Companies"
 msgstr "公司"
 
@@ -2258,7 +2270,8 @@ msgstr "只导入部分数据（%2$s 中 %1$ 条记录）"
 msgid "Date"
 msgstr "日期"
 
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Date completed"
 msgstr "完成日期"
 
@@ -2295,8 +2308,8 @@ msgstr "现在决定"
 msgid "Decline"
 msgstr "拒绝"
 
-#: apps/io.ox/calendar/print.js module:io.ox/calendar apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
+#: apps/io.ox/calendar/print.js module:io.ox/calendar
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Declined"
 msgstr "已拒绝"
 
@@ -2345,9 +2358,9 @@ msgstr "延迟"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-#: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/actions/delete.js
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/actions/delete.js
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/actions/remove.js
 #: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
@@ -2361,9 +2374,10 @@ msgstr "延迟"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/mail/toolbar.js apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts apps/io.ox/settings/apps/settings/pane.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/toolbar.js
@@ -2372,7 +2386,8 @@ msgstr "延迟"
 msgid "Delete"
 msgstr "删除"
 
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "删除户口"
 
@@ -2560,7 +2575,8 @@ msgid "Display of names"
 msgstr "显示名称"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Distance"
 msgstr "距离"
 
@@ -2620,7 +2636,8 @@ msgstr "您真的要删除 \"%1$s\" 资源吗？此动作是无法挽回的！"
 msgid "Do you really want to delete these items?"
 msgstr "确定要删除该项吗？"
 
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "Do you really want to delete this account?"
 msgstr "确定要删除此户口吗？"
 
@@ -2903,15 +2920,16 @@ msgstr "EB"
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
-#: module:io.ox/mail apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/main.js
+#: module:io.ox/mail apps/io.ox/contacts/toolbar.js
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks apps/io.ox/tasks/main.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/toolbar.js
@@ -3191,12 +3209,14 @@ msgid "Errors"
 msgstr "错误"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Estimated costs"
 msgstr "预估成本"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "Estimated duration in minutes"
 msgstr "预估持续时间（分钟）"
 
@@ -3507,8 +3527,8 @@ msgid "Files can not be uploaded, because quota exceeded."
 msgstr "因为文件超出限额，所以未能上载。"
 
 #. %1$s is an upload limit like for example 10mb
-#: apps/io.ox/calendar/model.js module:io.ox/calendar apps/io.ox/tasks/model.js
-#: module:io.ox/tasks
+#: apps/io.ox/calendar/model.js module:io.ox/calendar
+#: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Files can not be uploaded, because upload limit of %1$s is exceeded."
 msgstr "文件由于超出上载限额 %1$s，因此不能上载。"
 
@@ -3648,7 +3668,8 @@ msgstr "食物"
 msgid "For best results, please use "
 msgstr "为了最好的结果，请使用"
 
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid ""
 "For security reasons, all credentials are encrypted with your primary "
 "account password. If you change your primary password, your external "
@@ -3780,13 +3801,15 @@ msgstr "Google Play"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Gray"
 msgstr "灰色"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Green"
 msgstr "绿色"
 
@@ -3858,12 +3881,14 @@ msgid "Hide"
 msgstr "隐藏"
 
 #. Invitations (notifications) about appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Hide all appointment invitations."
 msgstr "隐藏所有约会邀请。"
 
 #. Reminders (notifications) about appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "隐藏所有约会提醒。"
 
@@ -4020,7 +4045,8 @@ msgstr "忽视警告"
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js
 #: apps/io.ox/calendar/week/perspective.js
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "Ignore conflicts"
 msgstr "忽视冲突"
 
@@ -4419,13 +4445,15 @@ msgstr "生活"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Light blue"
 msgstr "浅蓝色"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Light green"
 msgstr "浅绿色"
 
@@ -4839,14 +4867,14 @@ msgid "More than the currently displayed %1$s items were found"
 msgstr "找到当前显示以外的 %1$s 个项目"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/contextmenu.js
-#: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail apps/io.ox/contacts/toolbar.js
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/actions/move.js apps/io.ox/tasks/mobile-toolbar-actions.js
 #: apps/io.ox/tasks/toolbar.js
 msgid "Move"
@@ -4964,17 +4992,20 @@ msgstr "新约会"
 
 #. Title of generic desktop notification about new invitations to appointments
 #. Title of the desktop notification about new invitation to a specific appointment
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "New appointment invitation"
 msgstr "新约会邀请"
 
 #. Title of the desktop notification about new reminder for a specific appointment
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "New appointment reminder"
 msgstr "新约会提醒"
 
 #. Title of generic desktop notification about new reminders for appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "New appointment reminders"
 msgstr "新约会提醒"
 
@@ -5485,7 +5516,8 @@ msgstr "选项"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Orange"
 msgstr "橙色"
 
@@ -5573,7 +5605,8 @@ msgstr "密码"
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "密码长度必须在 %1$d 和 %2$d 字符之间。"
 
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "Password recovery"
 msgstr "密码恢复"
 
@@ -5715,7 +5748,8 @@ msgstr "在此选择一个时间"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Pink"
 msgstr "粉红色"
 
@@ -6035,8 +6069,8 @@ msgid "Press [enter] to jump to the twitter feed."
 msgstr "按下 [enter] 以跳到推特 feed。"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Press [enter] to open"
 msgstr "按下 [enter] 以打开"
 
@@ -6115,9 +6149,9 @@ msgstr "优先级"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/contacts/view-detail.js
-#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit
+#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
 msgstr "私人"
 
@@ -6204,7 +6238,8 @@ msgstr "购买配置"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Purple"
 msgstr "紫色"
 
@@ -6330,7 +6365,8 @@ msgid "Recover"
 msgstr "还原"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
 msgid "Recover passwords"
 msgstr "还原密码"
 
@@ -6348,7 +6384,8 @@ msgstr "重复任务需要一个有效开始日期。"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
 msgid "Red"
 msgstr "红色"
 
@@ -6964,7 +7001,8 @@ msgstr "进阶用户设置"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
-#: module:io.ox/files apps/plugins/portal/xing/actions.js module:plugins/portal
+#: module:io.ox/files apps/plugins/portal/xing/actions.js
+#: module:plugins/portal
 msgid "Share"
 msgstr "共享"
 
@@ -7200,8 +7238,8 @@ msgid "Signed in as:"
 msgstr "登录为："
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#: module:io.ox/core/viewer apps/io.ox/files/view-options.js
+#: module:io.ox/files apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Size"
 msgstr "大小"
 
@@ -7607,8 +7645,8 @@ msgstr "临时"
 msgid "Tentative"
 msgstr "暂定"
 
-#: apps/io.ox/calendar/print.js module:io.ox/calendar apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
+#: apps/io.ox/calendar/print.js module:io.ox/calendar
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Tentatively accepted"
 msgstr "暂定接受"
 
@@ -8285,7 +8323,8 @@ msgid ""
 "rule to specific messages."
 msgstr "此规则适用于所有消息，请在特定消息添加一个条件以限制此规则。"
 
-#: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/view-detail.js
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#: apps/io.ox/tasks/view-detail.js
 msgid "This task recurs"
 msgstr "此任务重复频率是"
 
@@ -8342,8 +8381,9 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/core/tk/datepicker.js module:io.ox/core
-#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js module:io.ox/tasks
-#: apps/plugins/portal/birthdays/register.js module:plugins/portal
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
+#: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
+#: module:plugins/portal
 msgid "Today"
 msgstr "今天"
 
@@ -8477,8 +8517,8 @@ msgstr "无法读取邮件过滤设置。"
 msgid "Unable to load mail filter settings."
 msgstr "无法联系邮件过滤后台。"
 
-#: apps/io.ox/calendar/print.js module:io.ox/calendar apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
+#: apps/io.ox/calendar/print.js module:io.ox/calendar
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Unconfirmed"
 msgstr "未确认"
 
@@ -8715,9 +8755,10 @@ msgstr "视频"
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/core/pim/actions.js module:io.ox/core apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/core/pim/actions.js module:io.ox/core
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/toolbar.js
 msgid "View"
 msgstr "视图"
 
@@ -9091,12 +9132,14 @@ msgid "You have declined the appointment"
 msgstr "您已经拒绝了约会"
 
 #. Body text of generic desktop notification about new invitations to appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "You have new appointment invitations"
 msgstr "您有新约会邀请"
 
 #. Body text of generic desktop notification about new reminders for appointments
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgid "You have new appointment reminders"
 msgstr "您有新约会提醒"
 
@@ -9375,16 +9418,6 @@ msgstr "成日期"
 msgid "as daterange"
 msgstr "成日期范围"
 
-#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
-#. This fragment appears within a long string for screen readers.
-#. Some languages (e.g. German) might need to translate "location:".
-#: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
-#, fuzzy
-#| msgid "next %1$s"
-msgctxt "a11y"
-msgid "at %1$s"
-msgstr "下 %1$s"
-
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "返回"
@@ -9599,7 +9632,8 @@ msgstr "iCal"
 msgid "in"
 msgstr "在"
 
-#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
 msgctxt "in"
 msgid "in %d minute"
 msgid_plural "in %d minutes"
@@ -13712,6 +13746,12 @@ msgstr "年"
 
 #~ msgid "april"
 #~ msgstr "四月"
+
+#, fuzzy
+#~| msgid "next %1$s"
+#~ msgctxt "a11y"
+#~ msgid "at %1$s"
+#~ msgstr "下 %1$s"
 
 #~ msgid "august"
 #~ msgstr "八月"
