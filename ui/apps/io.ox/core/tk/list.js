@@ -168,6 +168,10 @@ define('io.ox/core/tk/list', [
             this.$el.append(
                 this.collection.map(this.renderListItem, this)
             );
+
+            // manage empty message
+            this.$el.find('.message-empty-container').toggleClass('hidden', this.collection.length > 0);
+
             this.trigger('reset', this.collection, this.firstReset);
             if (this.firstReset) {
                 this.trigger('first-reset', this.collection);
@@ -181,6 +185,9 @@ define('io.ox/core/tk/list', [
             var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
                 children = this.getItems(),
                 li = this.renderListItem(model);
+
+            // manage the empty message
+            this.$el.find('.message-empty-container').toggleClass('hidden', this.collection.length > 0);
 
             // insert or append
             if (index < children.length) {
@@ -213,6 +220,9 @@ define('io.ox/core/tk/list', [
 
             if (this.selection) this.selection.remove(cid, li);
             li.remove();
+
+            // manage the empty message
+            this.$el.find('.message-empty-container').toggleClass('hidden', this.collection.length > 0);
 
             this.trigger('remove-mobile');
             // selection changes if removed item was selected
@@ -249,6 +259,9 @@ define('io.ox/core/tk/list', [
                 return !!hash[cid];
             })
                 .remove();
+
+            // manage the empty message
+            this.$el.find('.message-empty-container').toggleClass('hidden', this.collection.length > 0);
 
             if (!selected) return;
 
