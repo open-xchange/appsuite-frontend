@@ -303,10 +303,21 @@ define('io.ox/mail/compose/extensions', [
                     }
                 });
 
+                view.listenTo(baton.model, 'change:attachments', function () {
+                    view.$list.empty();
+                    view.$preview.empty();
+                    view.renderList();
+                    view.updateScrollControls();
+                });
+
                 view.listenToOnce(view.collection, 'add remove reset', _.debounce(function () {
                     if (this.getValidModels().length > 0) {
                         this.$el.addClass('open');
-                        if (!this.isListRendered) this.renderList();
+                        if (!this.isListRendered) {
+                            this.renderList();
+                            view.updateScrollControls();
+                        }
+                        $(window).trigger('resize');
                     }
                 }));
 
