@@ -39,6 +39,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             // keep drop-down open?
             if (keep) e.stopPropagation();
             // ignore plain links
+            if (node.hasClass('disabled')) return;
             if (value === undefined) return;
             if (this.model) {
                 var nextValue = value;

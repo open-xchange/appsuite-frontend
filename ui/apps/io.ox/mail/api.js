@@ -1787,7 +1787,8 @@ define('io.ox/mail/api', [
                 columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
                 sort: params.sort || '610',
                 order: params.order || 'desc',
-                timezone: 'utc'
+                timezone: 'utc',
+                filter: params.filter
             };
         },
         filter: function (item) {

@@ -1643,6 +1643,42 @@ define('io.ox/mail/main', [
                     }
                 });
             });
+        },
+
+        'mail-categories': function (app) {
+            if (_.device('smartphone')) return;
+            if (!capabilities.has('mail_categories')) return;
+
+            var mapper;
+            // register settings listener
+            if (settings.get('categories/enabled')) refresh();
+            settings.on('change:categories/enabled', refresh);
+
+            var Mapper = function (cat) {
+                var mapper = {
+                    initialize: function () {
+                        cat.init({ mail: app, pool: api.pool.get('detail') });
+                        this.categories = cat;
+                        return this;
+                    },
+                    refresh: function () {
+                        this.categories.config.load();
+                    }
+                };
+                return mapper.initialize();
+            };
+
+            // apply settings change (enable/disable)
+            function refresh() {
+                // refresh config (triggers show/hide internally)
+                if (mapper) return mapper.refresh();
+                // in case require not resolved in time
+                mapper = { refresh: $.noop };
+                // init on first call of 'apply'
+                require(['io.ox/mail/categories/main'], function (cat) {
+                    mapper = new Mapper(cat);
+                });
+            }
         }
     });
 

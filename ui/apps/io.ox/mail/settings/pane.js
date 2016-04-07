@@ -298,6 +298,39 @@ define('io.ox/mail/settings/pane', [
         }
     });
 
+    ext.point(POINT + '/pane').extend({
+        index: 450,
+        id: 'mail-categories',
+        draw: function () {
+
+            if (_.device('smartphone')) return;
+            if (!capabilities.has('mail_categories')) return;
+
+            var list = [
+                { label: gt('Ask'), value: 'dialog' },
+                { label: gt('Always'), value: 'always' },
+                { label: gt('Never'), value: 'never' }
+            ];
+            this.append(
+                    fieldset(
+                        gt('Mail categories'),
+                        // enable
+                        checkbox(
+                            gt('Show Tabs for inbox'),
+                            new mini.CheckboxView({ name: 'categories/enabled', model: settings }).render().$el
+                        ),
+                        // default behavior after move
+                        $('<dev class="col-xs-12 col-md-6">').append(
+                            $('<div class="row">').append(
+                                $('<label>').attr({ 'for': 'categories-generate' }).text(gt('Apply move to all mails from a sender')),
+                                new mini.SelectView({ list: list, name: 'categories/generate', model: settings, id: 'categories-generate', className: 'form-control' }).render().$el
+                            )
+                        )
+                    )
+                );
+        }
+    });
+
     // extension point with index 500 is in 'io.ox/mail/settings/signatures/register'
     // and displays signature settings
 
@@ -319,5 +352,6 @@ define('io.ox/mail/settings/pane', [
             );
         }
     });
+
 
 });
