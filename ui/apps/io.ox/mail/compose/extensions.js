@@ -431,6 +431,7 @@ define('io.ox/mail/compose/extensions', [
                     view.$list.empty();
                     view.$preview.empty();
                     view.renderList();
+                    view.updateScrollControls();
                 });
 
                 view.listenToOnce(view.collection, 'add remove reset', _.debounce(function () {
@@ -438,6 +439,7 @@ define('io.ox/mail/compose/extensions', [
                         this.$el.addClass('open');
                         if (!this.isListRendered) {
                             this.renderList();
+                            view.updateScrollControls();
                         }
                         $(window).trigger('resize');
                     }
