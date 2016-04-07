@@ -75,7 +75,8 @@ define('io.ox/mail/actions/attachmentQuota', [
     }
 
     function attachmentsExceedQuota(files) {
-        var allAttachmentsSizes = [].concat(files).map(function (m) { return m.size || 0; }),
+        if (!_.isArray(files)) return false;
+        var allAttachmentsSizes = files.map(function (m) { return m.size || 0; }),
             quota = coreSettings.get('properties/attachmentQuota', 0),
             accumulatedSize = allAttachmentsSizes
                 .reduce(function (acc, size) {
