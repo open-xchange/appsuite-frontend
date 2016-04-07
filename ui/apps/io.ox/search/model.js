@@ -213,7 +213,7 @@ define('io.ox/search/model',
                         });
 
                         // race condition
-                        if (!itemvalue) return;
+                        if (item.values && item.values.length && !itemvalue) return;
 
                         // overwrite
                         if (!!item.custom) {
