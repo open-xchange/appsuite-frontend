@@ -44,6 +44,9 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
                 })
                 // make sure it always disappears
                 .on('dispose', function () { $(this).tooltip('destroy'); })
+                .on('hide.bs.dropdown', '.dropdown', function (e) {
+                    $(e.target).closest('ul.classic-toolbar').tooltip('destroy');
+                })
                 // always avoid clearing the URL hash
                 .on('click', 'a', $.preventDefault);
         },
