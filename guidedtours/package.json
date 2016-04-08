@@ -9,7 +9,7 @@
   "dependencies": {},
   "description": "Guided tours for App Suite",
   "optionalDependencies": {
-    "open-xchange-shared-grunt-config": "^0.11.7",
+    "open-xchange-shared-grunt-config": "^0.12.0",
     "assemble-less": "^0.7.0",
     "grunt": "^0.4.5",
     "grunt-bump": "^0.3.1",
