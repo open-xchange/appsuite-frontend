@@ -1,6 +1,7 @@
 define.async('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/handlers'], function (ext) {
     var def = $.Deferred();
     if (ox.serverConfig.samlLogin && noSessionSet()) {
+        ox.busy(true);
         $.get(ox.apiRoot + '/saml/init?flow=login').done(function (data) {
             var baton = new ext.Baton({data: data});
             ext.point('io.ox.saml/login').invoke('handle', baton, baton);
