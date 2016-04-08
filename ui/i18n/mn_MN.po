@@ -9307,6 +9307,16 @@ msgstr ""
 msgid "as daterange"
 msgstr ""
 
+#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+#. This fragment appears within a long string for screen readers.
+#. Some languages (e.g. German) might need to translate "location:".
+#: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Location"
+msgctxt "a11y"
+msgid "at %1$s"
+msgstr "Байршил"
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr ""
@@ -9851,9 +9861,3 @@ msgstr ""
 
 #~ msgid "This email address cannot be used for appointments"
 #~ msgstr "Энэхүү и-майлыг уулзалтанд ашиглах боломжгүй"
-
-#, fuzzy
-#~| msgid "Location"
-#~ msgctxt "a11y"
-#~ msgid "at %1$s"
-#~ msgstr "Байршил"

@@ -9535,6 +9535,16 @@ msgstr "日付"
 msgid "as daterange"
 msgstr "日付の範囲"
 
+#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+#. This fragment appears within a long string for screen readers.
+#. Some languages (e.g. German) might need to translate "location:".
+#: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
+#, fuzzy
+#| msgid "next %1$s"
+msgctxt "a11y"
+msgid "at %1$s"
+msgstr "次の %1$s"
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "戻る"
@@ -17388,12 +17398,6 @@ msgstr "yyyy"
 
 #~ msgid "april"
 #~ msgstr "4 月"
-
-#, fuzzy
-#~| msgid "next %1$s"
-#~ msgctxt "a11y"
-#~ msgid "at %1$s"
-#~ msgstr "次の %1$s"
 
 #~ msgid "attachment"
 #~ msgstr "添付ファイル"

@@ -9583,6 +9583,16 @@ msgstr "som datum"
 msgid "as daterange"
 msgstr "som datumintervall"
 
+#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+#. This fragment appears within a long string for screen readers.
+#. Some languages (e.g. German) might need to translate "location:".
+#: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
+#, fuzzy
+#| msgid "next %1$s"
+msgctxt "a11y"
+msgid "at %1$s"
+msgstr "nästa %1$s"
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "bakåt"
@@ -16095,12 +16105,6 @@ msgstr "yyyy"
 
 #~ msgid "and %1$d others ..."
 #~ msgstr "och %1$d till ..."
-
-#, fuzzy
-#~| msgid "next %1$s"
-#~ msgctxt "a11y"
-#~ msgid "at %1$s"
-#~ msgstr "nästa %1$s"
 
 #, fuzzy
 #~ msgid "characters"

@@ -9590,6 +9590,16 @@ msgstr "как дата"
 msgid "as daterange"
 msgstr "как диапазон дат"
 
+#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+#. This fragment appears within a long string for screen readers.
+#. Some languages (e.g. German) might need to translate "location:".
+#: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
+#, fuzzy
+#| msgid "next %1$s"
+msgctxt "a11y"
+msgid "at %1$s"
+msgstr "след. %1$s"
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "назад"
@@ -12328,12 +12338,6 @@ msgstr "гггг"
 
 #~ msgid "april"
 #~ msgstr "апрель"
-
-#, fuzzy
-#~| msgid "next %1$s"
-#~ msgctxt "a11y"
-#~ msgid "at %1$s"
-#~ msgstr "след. %1$s"
 
 #~ msgid "august"
 #~ msgstr "август"
