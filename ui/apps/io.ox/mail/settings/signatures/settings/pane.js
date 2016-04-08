@@ -65,8 +65,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
 
             require(['io.ox/core/tk/contenteditable-editor'], function (Editor) {
                 new Editor(baton.$.contentEditable, {
-                    toolbar1: 'bold italic | alignleft aligncenter alignright | link | image',
-                    advanced: 'fontselect fontsizeselect | forecolor',
+                    toolbar1: 'bold italic | alignleft aligncenter alignright | link image',
+                    advanced: 'fontselect fontsizeselect forecolor | code',
                     css: {
                         'min-height': '230px', //overwrite min-height of editor
                         'height': '230px',
@@ -137,7 +137,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
 
         if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
-        var popup = new dialogs.ModalDialog({ async: true, tabTrap: false, width: 600, addClass: 'io-ox-signature-dialog' });
+        var popup = new dialogs.ModalDialog({ async: true, tabTrap: false, width: 640, addClass: 'io-ox-signature-dialog' });
         popup.header($('<h4>').text(signature.id === null ? gt('Add signature') : gt('Edit signature')));
 
         var baton = new ext.Baton({
