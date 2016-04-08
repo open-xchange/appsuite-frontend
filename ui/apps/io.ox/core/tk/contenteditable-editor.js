@@ -522,6 +522,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.getContentParts = function () {
             var content = this.getContent(),
                 index = content.indexOf('<blockquote type="cite">');
+            // special case: initially replied/forwarded text mail
+            if (content.substring(0, 15) === '<blockquote><p>') index = 0;
+            // special case: switching between signatures in such a mail
+            if (content.substring(0, 23) === '<p><br></p><blockquote>') index = 0;
             if (index < 0) return { content: content };
             return {
                 // content without trailing whitespace
