@@ -423,6 +423,28 @@ define('io.ox/files/actions', [
         }
     });
 
+    new Action('io.ox/files/actions/save-as-pdf', {
+        requires: function (e) {
+            // one?
+            if (!e.collection.has('one')) return false;
+
+            // hide in mail compose preview
+            if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+
+            // is folder?
+            if (e.collection.has('folders')) return false;
+
+            var model = e.baton.models[0];
+            return (model.isFile() && (model.isOffice() || model.isText())); // preferred variant over >> return (model.isFile() && !model.isPDF()); <<
+        },
+        action: function (baton) {
+            // files use the file rename action
+            ox.load(['io.ox/files/actions/save-as-pdf']).done(function (action) {
+                action(baton);
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
             if (!e.collection.has('one', 'items')) return false;
@@ -866,6 +888,16 @@ define('io.ox/files/actions', [
         ref: 'io.ox/files/actions/edit-description',
         section: 'edit'
     }));
+
+    //ext.point('io.ox/files/links/inline').extend(new links.Link({
+    //    id: 'save-as-pdf',
+    //    index: index += 100,
+    //    prio: 'lo',
+    //    mobile: 'lo',
+    //    label: gt('Save as PDF'),
+    //    ref: 'io.ox/files/actions/save-as-pdf',
+    //    section: 'save-as'
+    //}));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'move',
