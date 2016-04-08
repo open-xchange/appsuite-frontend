@@ -1016,9 +1016,6 @@ define('io.ox/files/share/permissions', [
 
                 var changes, options = dialogConfig.toJSON(), def;
 
-                // no notification messages for mail
-                if (objModel.get('module') === 'mail') delete options.notification;
-
                 if (objModel.isFolder()) {
                     changes = { permissions: permissionsView.collection.toJSON() };
                     def = folderAPI.update(objModel.get('id'), changes, options);
