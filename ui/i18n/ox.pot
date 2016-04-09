@@ -275,6 +275,7 @@ msgstr ""
 #: module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js
+#: apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js
@@ -718,6 +719,7 @@ msgstr ""
 #: module:io.ox/editor
 #: apps/io.ox/files/actions/edit-description.js
 #: module:io.ox/files
+#: apps/io.ox/files/actions/save-as-pdf.js
 #: apps/io.ox/files/filepicker.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/mail/accounts/settings.js
@@ -6709,6 +6711,12 @@ msgstr[1] ""
 #: apps/io.ox/files/actions/download.js
 #: module:io.ox/files
 msgid "Items without a file can not be downloaded."
+msgstr ""
+
+#: apps/io.ox/files/actions/save-as-pdf.js
+#: module:io.ox/files
+#: apps/io.ox/files/toolbar.js
+msgid "Save as PDF"
 msgstr ""
 
 #: apps/io.ox/files/actions/sendlink.js

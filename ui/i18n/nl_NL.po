@@ -1556,7 +1556,8 @@ msgstr "Agenda:"
 #: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
-#: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/share.js
+#: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
@@ -6855,8 +6856,9 @@ msgstr "Verkoopvolume"
 #: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/settings/user.js
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/edit-description.js module:io.ox/files
-#: apps/io.ox/files/filepicker.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -6870,6 +6872,13 @@ msgstr "Verkoopvolume"
 #: module:io.ox/portal apps/plugins/portal/tumblr/register.js
 msgid "Save"
 msgstr "Opslaan"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js
+#, fuzzy
+#| msgid "Save as file"
+msgid "Save as PDF"
+msgstr "Opslaan als bestand"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/mail/actions.js module:io.ox/mail
