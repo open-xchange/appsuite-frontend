@@ -42,7 +42,10 @@ define('io.ox/core/boot/main', [
                 util.debug('Using login type', loginType);
                 this[loginType]();
             } else {
-                console.error('Unkown login type', loginType);
+                $('#io-ox-login-container').empty().append(
+                    $('<div class="alert alert-info">').text('Unkown login type "' + loginType + '"')
+                );
+                $('#background-loader').fadeOut(250);
             }
         },
 
