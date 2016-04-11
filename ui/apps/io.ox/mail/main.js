@@ -557,7 +557,13 @@ define('io.ox/mail/main',
                     fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
                     showFrom = account.is('sent|drafts', id);
 
-                app.props.set(options);
+                app.props.set(_.pick(options, 'sort', 'order', 'thread'));
+
+                // explicitly update when set to from-to (see bug 44458)
+                if (options.sort === 'from-to') {
+                    app.listView.model.set('sort', account.is('sent|drafts', id) ? 604 : 603);
+                }
+
                 app.listView.model.set('folder', id);
                 app.folder.getData();
 
@@ -1091,7 +1097,7 @@ define('io.ox/mail/main',
                                     search.model.set({
                                         'start': start,
                                         'size': size,
-                                        'extra': 1
+                                        'extra': 0
                                     }, { silent: true });
 
                                     var self = this,
@@ -1150,7 +1156,7 @@ define('io.ox/mail/main',
                                                 {
                                                     'start': 0,
                                                     'size': 30,
-                                                    'extra': 1
+                                                    'extra': 0
                                                 }, {silent: true});
                                             // load
                                             app.listView.load();

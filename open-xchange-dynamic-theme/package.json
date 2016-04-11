@@ -1,11 +1,12 @@
 {
   "name": "open-xchange-dynamic-theme",
-  "version": "7.6.3-8",
+  "version": "7.6.3-9",
   "dependencies": {
     "less": "1.7.3",
     "assemble": "^0.4.42"
   },
   "optionalDependencies": {
+    "grunt": "^0.4.5",
     "grunt-check-dependencies": "^0.9.0",
     "open-xchange-shared-grunt-config": "^0.11.3"
   },
