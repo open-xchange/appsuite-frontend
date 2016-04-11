@@ -118,14 +118,15 @@ define('io.ox/calendar/week/view', [
 
             // initialize main objects
             _.extend(this, {
-                pane:         $('<div>').addClass('scrollpane f6-target').attr({ tabindex: 1 }),
+                pane:         $('<div>').addClass('scrollpane f6-target').attr({ tabindex: 1 }).on('scroll', this.updateHiddenIndicators.bind(this)),
                 fulltimePane: $('<div>').addClass('fulltime'),
                 fulltimeCon:  $('<div>').addClass('fulltime-container'),
                 fulltimeNote: $('<div>').addClass('note'),
                 timeline:     $('<div>').addClass('timeline'),
                 dayLabel:     $('<div>').addClass('footer'),
                 kwInfo:       _.device('smartphone') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info').on('click', $.preventDefault),
-                weekCon:      $('<div>').addClass('week-container')
+                weekCon:      $('<div>').addClass('week-container'),
+                moreAppointmentsIndicators: $('<div>').addClass('more-appointments-container')
             });
 
             this.kwInfo.attr({
@@ -330,6 +331,63 @@ define('io.ox/calendar/week/view', [
             this.trigger('onRefresh');
             return false;
         },
+
+        /**
+         * Get visible edges in time format
+         */
+        getTimeOfVisibleEdges: function () {
+            return {
+                min: this.getTimeFromPos(this.pane.scrollTop()),
+                max: this.getTimeFromPos(this.pane.scrollTop() + this.pane.height())
+            };
+        },
+
+        /**
+         * handler to update indicators for hidden appointments
+         *
+         * this handler is throttled to only run once every 100ms
+         *
+         */
+        updateHiddenIndicators: (function () {
+            function indicatorButton(column, width) {
+                return $('<span>')
+                        .addClass('more-appointments fa')
+                        .css({
+                            left: (column * width) + '%',
+                            width: width + '%'
+                        });
+            }
+
+            return _.throttle(function () {
+                var min = this.pane.scrollTop(),
+                    max = this.pane.scrollTop() + this.pane.height(),
+                    columnWidth = 100 / this.columns;
+
+                this.moreAppointmentsIndicators.empty();
+                for (var d = 0; d < this.columns; d++) {
+                    var appointments = this.weekCon.find('.day:nth-child(' + (d + 1) + ') > .appointment');
+                    var earlier = appointments.filter(function (index, el) {
+                        return $(el).position().top < min;
+                    }).length;
+                    var later = appointments.filter(function (index, el) {
+                        el = $(el);
+                        return el.position().top + el.height() > max;
+                    }).length;
+                    if (earlier > 0) {
+                        this.moreAppointmentsIndicators.append(
+                            indicatorButton(d, columnWidth)
+                                .addClass('earlier fa-arrow-up')
+                        );
+                    }
+                    if (later > 0) {
+                        this.moreAppointmentsIndicators.append(
+                            indicatorButton()
+                                .addClass('later fa-arrow-down')
+                        );
+                    }
+                }
+            }, 100);
+        }()),
 
         /**
          * handler for key events in view
@@ -796,7 +854,12 @@ define('io.ox/calendar/week/view', [
 
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px' });
 
-            // create days
+            // visual indicators for hidden appointmeints
+            this.moreAppointmentsIndicators.css({
+                top: (this.options.showFulltime ? 21 : 1) + 'px'
+            });
+
+             // create days
             for (var d = 0; d < this.columns; d++) {
 
                 var day = $('<div>')
@@ -817,6 +880,7 @@ define('io.ox/calendar/week/view', [
                         .addClass((i === (this.workStart * this.fragmentation) || i === (this.workEnd * this.fragmentation)) ? 'working-time-border' : '')
                     );
                 }
+
                 this.weekCon.append(day);
             }
 
@@ -857,7 +921,8 @@ define('io.ox/calendar/week/view', [
                     this.pane.empty().append(
                         primaryTimeLabel,
                         self.weekCon
-                    )
+                    ),
+                    this.moreAppointmentsIndicators
                 )
             );
 
@@ -1676,6 +1741,7 @@ define('io.ox/calendar/week/view', [
                         self.onUpdateAppointment(app);
                     }
                 });
+            this.updateHiddenIndicators();
 
             // global event for tracking purposes
             ox.trigger('calendar:items:render', this);

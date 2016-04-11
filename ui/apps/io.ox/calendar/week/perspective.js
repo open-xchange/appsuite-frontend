@@ -329,7 +329,7 @@ define('io.ox/calendar/week/perspective', [
 
             // init views
             if (this.views[opt.perspective] === undefined) {
-                this.view = new View({
+                this.view = window.weekview = new View({
                     app: app,
                     collection: this.collection,
                     mode: opt.perspective.split(':')[1],

@@ -173,6 +173,30 @@
                     padding: 4px 10px;
                 }
             }
+
+        }
+
+        .more-appointments-container {
+            left: 100px;
+            right: 0px;
+            bottom: 0px;
+            // 0px xor 21px, needs to be "calculated" on in code
+            //top: 0px;
+            width: auto;
+            height: auto;
+            position: absolute;
+            pointer-events: none;
+
+            .more-appointments {
+                position: absolute;
+                text-align: center;
+                &.earlier {
+                    top: 0px;
+                }
+                &.later {
+                    bottom: 0px;
+                }
+            }
         }
 
         .day {
