@@ -251,7 +251,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         }
 
         var options = {
-            script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.jquery.min.js',
+            script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
 
             extended_valid_elements: 'blockquote[type]',
 
