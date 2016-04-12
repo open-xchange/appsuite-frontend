@@ -352,7 +352,16 @@ define('io.ox/mail/compose/view', [
                 _.url.hash('mailto', null);
             }
 
+            this.listenTo(mailAPI.queue.collection, 'change:pct', this.onSendProgress);
+
             ext.point(POINT + '/mailto').invoke('setup');
+        },
+
+        onSendProgress: function (model, value) {
+            var csid = this.model.get('csid');
+            if (csid !== model.get('id')) return;
+            console.log('Soooo', csid, value);
+            if (value >= 0) this.app.getWindow().busy(value);
         },
 
         ariaLiveUpdate: function (e, msg) {

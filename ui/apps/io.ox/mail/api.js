@@ -1154,7 +1154,11 @@ define('io.ox/mail/api', [
 
         deferred = handleSendXHR2(data, files, deferred);
 
-        var DELAY = api.SEND_REFRESH_DELAY;
+        var DELAY = api.SEND_REFRESH_DELAY,
+            isSaveDraft = data.flags === api.FLAGS.DRAFT,
+            csid = data.csid;
+
+        api.queue.add(csid);
 
         return deferred
             .done(function () {
@@ -1164,6 +1168,14 @@ define('io.ox/mail/api', [
             })
             .fail(function () {
                 ox.trigger('mail:send:fail');
+            })
+            .progress(function (e) {
+                // no progress for saving a draft
+                if (isSaveDraft) return;
+                api.queue.update(csid, e.loaded, e.total);
+            })
+            .always(function () {
+                api.queue.remove(csid);
             })
             .then(function (text) {
                 // wait a moment, then update mail index
@@ -1243,6 +1255,41 @@ define('io.ox/mail/api', [
             fixPost: true
         });
     }
+
+    api.queue = (function () {
+
+        function pct(loaded, total) {
+            if (!total) return 0;
+            return Math.max(0, Math.min(100, Math.round(loaded / total * 100))) / 100;
+        }
+
+        return {
+
+            collection: new Backbone.Collection().on('add remove change:pct', function () {
+                var loaded = 0, total = 0;
+                this.each(function (model) {
+                    loaded += model.get('loaded');
+                    total += model.get('total');
+                });
+                this.trigger('progress', { count: this.length, loaded: loaded, pct: pct(loaded, total), total: total });
+            }),
+
+            add: function (csid) {
+                this.collection.add(new Backbone.Model({ id: csid, loaded: 0, pct: 0, total: 0 }));
+            },
+
+            remove: function (csid) {
+                var model = this.collection.get(csid);
+                this.collection.remove(model);
+            },
+
+            update: function (csid, loaded, total) {
+                var model = this.collection.get(csid);
+                if (!model) return;
+                model.set({ loaded: loaded, pct: pct(loaded, total), total: total });
+            }
+        };
+    }());
 
     /**
      * save mail attachments in files app

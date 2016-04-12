@@ -231,8 +231,6 @@ define('io.ox/mail/main', [
 
             // tree view
             app.treeView = new TreeView({ app: app, module: 'mail', contextmenu: true });
-
-            // initialize folder view
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
         },
@@ -1514,6 +1512,51 @@ define('io.ox/mail/main', [
                 var folder = app.folder.get();
                 if (folderAPI.is('drafts', folder)) app.listView.reload();
             });
+        },
+
+        'mail-progress': function () {
+
+            ext.point('io.ox/mail/sidepanel').extend({
+                id: 'progress',
+                index: 300,
+                draw: function () {
+
+                    var $el = $('<div class="generic-toolbar bottom mail-progress">')
+                        .hide()
+                        .append(
+                            $('<div class="progress"><div class="progress-bar"></div></div>'),
+                            $('<div class="caption">')
+                        );
+
+                    api.queue.collection.on('progress', function (data) {
+                        if (!data.count) return $el.hide();
+                        var n = data.count,
+                            pct = Math.round(data.pct * 100),
+                            //#. %1$d is number of messages; %2$d is progress in percent
+                            caption = gt.ngettext('Sending 1 message ... %2$d%', 'Sending %1$d messages ... %2$d%', n, n, pct);
+                        $el.find('.progress-bar').css('width', pct + '%');
+                        $el.find('.caption').text(caption);
+                        $el.show();
+                    });
+
+                    this.append($el);
+                }
+            });
+        },
+
+        'sidepanel': function (app) {
+
+            ext.point('io.ox/mail/sidepanel').extend({
+                id: 'tree',
+                index: 100,
+                draw: function (baton) {
+                    // add border & render tree and add to DOM
+                    this.addClass('border-right').append(baton.app.treeView.$el);
+                }
+            });
+
+            var node = app.getWindow().nodes.sidepanel;
+            ext.point('io.ox/mail/sidepanel').invoke('draw', node, ext.Baton({ app: app }));
         },
 
         'metrics': function (app) {
