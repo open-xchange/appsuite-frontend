@@ -26,15 +26,28 @@ define('io.ox/core/folder/actions/remove', [
 
     return function (id) {
 
-        var model = api.pool.getModel(id);
+        var model = api.pool.getModel(id),
+            dialog = new dialogs.ModalDialog();
 
-        new dialogs.ModalDialog()
-        .text(gt('Do you really want to delete folder "%s"?', model.get('title')))
+        function isShared() {
+            if (model.get('permissions').length > 1) return true;
+        }
+
+        function assembleText() {
+            var deleteNotice = gt('Do you really want to delete folder "%s"?', model.get('title')),
+                shareNotice = gt('This folder is shared with others. It won\'t be available for the invited guests any more.');
+
+            return isShared() ? deleteNotice + '\n' + shareNotice : deleteNotice;
+        }
+
+        dialog.text(assembleText())
         .addPrimaryButton('delete', gt('Delete'))
         .addButton('cancel', gt('Cancel'))
         .on('delete', function () {
             handler(id);
         })
         .show();
+
+        dialog.getContentNode().find('h4').addClass('white-space');
     };
 });
