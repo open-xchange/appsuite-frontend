@@ -1,6 +1,14 @@
 define.async('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/handlers'], function (ext) {
     var def = $.Deferred();
     if (ox.serverConfig.samlLogin && noSessionSet()) {
+        if (!ox.busy) {
+             ox.busy = function (block) {
+                // init screen blocker
+                $('#background-loader')[block ? 'busy' : 'idle']()
+                    .show()
+                    .addClass('secure' + (block ? ' block' : ''));
+            };
+        }
         ox.busy(true);
         $.get(ox.apiRoot + '/saml/init?flow=login').done(function (data) {
             var baton = new ext.Baton({data: data});
