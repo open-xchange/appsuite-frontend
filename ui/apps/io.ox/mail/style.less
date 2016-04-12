@@ -253,9 +253,9 @@
 
     &.expanded section {
         &.attachments,
-        &.body,
-        &.notifications     { display: block; }
-        // for proper overflow behavior */
+        &.notifications { display: block; }
+        // for proper overflow behavior (see bug 45248)
+        &.body { display: table; }
         &.attachments:empty { display: none;  }
     }
 
