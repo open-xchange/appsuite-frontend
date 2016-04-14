@@ -124,6 +124,14 @@ define('io.ox/core/session', [
                 set(data);
                 // global event
                 ox.trigger('login', data);
+                // convert to true boolean
+                if (_.isString(store)) {
+                    if (store === 'true') {
+                        store = true;
+                    } else if (store === 'false') {
+                        store = false;
+                    }
+                }
                 // call store for token-based login / not for pure auto-login
                 return store ? that.store().then(function () { return data; }) : data;
             });
