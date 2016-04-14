@@ -103,7 +103,7 @@ define('io.ox/core/session',
                         }
                     })
                     .then(function (response) {
-                        store = _.url.hash('store');
+                        store = _.url.hash('store') === 'true';
                         return response.data;
                     });
                 }
