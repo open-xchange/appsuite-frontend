@@ -160,6 +160,8 @@ define('io.ox/core/tk/doc-converter-utils', [
             // the Promise returned by this method
             promise = null;
 
+        requestProps.processResponse = !!(params && params.processResponse);
+
         // send the AJAX request
         ajaxRequest = CoreHTTP.GET(requestProps);
 

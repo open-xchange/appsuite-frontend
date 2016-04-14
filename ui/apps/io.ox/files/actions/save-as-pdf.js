@@ -18,7 +18,7 @@ define('io.ox/files/actions/save-as-pdf', [
     'io.ox/files/util',
     'io.ox/core/tk/doc-converter-utils',
     'gettext!io.ox/files'
-], function (api, ext, dialogs, FilesUtil, ConverterUtils, gt) {
+], function (FilesApi, ext, dialogs, FilesUtil, ConverterUtils, gt) {
 
     'use strict';
 
@@ -40,9 +40,20 @@ define('io.ox/files/actions/save-as-pdf', [
 
         function save(name) {
             return ConverterUtils.sendConverterRequest(model, {
+
                 documentformat: 'pdf',
                 saveas_filename: name,
                 saveas_folder_id: model.get('folder_id')
+
+            }).done(function (response) {
+              //console.log('+++ save as pdf :: done - response : ', response);
+
+                if (("id" in response) && ("filename" in response)) {
+
+                    FilesApi.trigger('add:file');
+                }/* else {
+                    // could be used for error handling
+                }*/
             });
         }
 
