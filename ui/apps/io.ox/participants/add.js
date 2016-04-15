@@ -17,8 +17,9 @@ define('io.ox/participants/add', [
     'io.ox/participants/views',
     'io.ox/core/tk/typeahead',
     'io.ox/mail/util',
+    'io.ox/contacts/util',
     'gettext!io.ox/core'
-], function (ext, pModel, pViews, Typeahead, util, gt) {
+], function (ext, pModel, pViews, Typeahead, util, contactsUtil, gt) {
 
     'use strict';
 
@@ -56,14 +57,16 @@ define('io.ox/participants/add', [
         },
 
         getInvalid: function (list) {
-            var invalid = [],
-                blacklist = this.options.blacklist;
-            _.each(list, function (obj) {
-                // string, data or model
-                var value = _.isString(obj) ? obj : obj.email1 || (obj.get && obj.getEmail());
-                if (blacklist.indexOf(value) > -1) invalid.push(value);
+
+            var blacklist = this.options.blacklist;
+
+            return _(list).filter(function (item) {
+                // string, data, or model
+                if (_.isString(item)) item = { email1: item };
+                else if (item instanceof Backbone.Model) item = item.toJSON();
+                var address = contactsUtil.getMail(item);
+                return !!blacklist[address];
             });
-            return invalid;
         },
 
         yell: function (list, invalid) {
@@ -96,8 +99,13 @@ define('io.ox/participants/add', [
 
         initialize: function (o) {
             this.options = $.extend({}, this.options, o || {});
-            if (this.options.blacklist) {
-                this.options.blacklist = this.options.blacklist.split(',');
+            if (_.isString(this.options.blacklist)) {
+                // turn blacklist into hash to have simpler checks
+                var hash = {};
+                _(this.options.blacklist.split(/,/)).each(function (address) {
+                    hash[address.trim().toLowerCase()] = true;
+                });
+                this.options.blacklist = hash;
                 _.extend(this, validation);
             }
             this.options.click = _.bind(this.addParticipant, this);
