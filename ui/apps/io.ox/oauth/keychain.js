@@ -137,7 +137,7 @@ define.async('io.ox/oauth/keychain', [
                         }
                         if (account) {
                             // if this Oauth account belongs to a filestorage service (like dropbox etc.), we create a matching filestorage account.
-                            // the folders appear will then appear in the drive module
+                            // the folders will then appear in the drive module
                             // if the rampup has failed, just ignore filestorages
                             if (filestorageApi.rampupDone && filestorageApi.isStorageAvailable(account.serviceId)) {
                                 filestorageApi.createAccountFromOauth(account).done(function () {
