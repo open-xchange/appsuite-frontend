@@ -381,7 +381,7 @@ define('io.ox/calendar/week/view', [
                     }
                     if (later > 0) {
                         this.moreAppointmentsIndicators.append(
-                            indicatorButton()
+                            indicatorButton(d, columnWidth)
                                 .addClass('later fa-arrow-down')
                         );
                     }
