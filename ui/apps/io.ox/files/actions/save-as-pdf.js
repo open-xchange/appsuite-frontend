@@ -48,7 +48,7 @@ define('io.ox/files/actions/save-as-pdf', [
             }).done(function (response) {
               //console.log('+++ save as pdf :: done - response : ', response);
 
-                if (("id" in response) && ("filename" in response)) {
+                if (('id' in response) && ('filename' in response)) {
 
                     FilesApi.trigger('add:file');
                 }/* else {
