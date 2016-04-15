@@ -1037,7 +1037,7 @@ msgstr "Alle filer er blevet slettet"
 msgid "All folders"
 msgstr "Alle mapper"
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 #, fuzzy
 #| msgid ""
 #| "All messages older than %1$d days will be moved to the archive folder"
@@ -1045,7 +1045,7 @@ msgid "All future messages from %1$s will be moved to the selected folder."
 msgstr ""
 "Alle beskeder der er ældre end %1$d dage vil blive flyttet til arkivmappen"
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 #, fuzzy
 #| msgid ""
 #| "All messages older than %1$d days will be moved to the archive folder"
@@ -2205,8 +2205,8 @@ msgstr "Opret kontakt"
 msgid "Create distribution list"
 msgstr "Opret distributionsliste"
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions/copyMove.js
 #, fuzzy
 #| msgid "Create new rule"
 msgid "Create filter rule"

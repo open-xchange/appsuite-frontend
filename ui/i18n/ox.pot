@@ -4119,23 +4119,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js
 #: module:io.ox/core
-msgid "All future messages from %1$s will be moved to the selected folder."
-msgstr ""
-
-#: apps/io.ox/core/folder/actions/move.js
-#: module:io.ox/core
-msgid "All future messages from the senders of the selected mails will be moved to the selected folder."
-msgstr ""
-
-#: apps/io.ox/core/folder/actions/move.js
-#: module:io.ox/core
-#: apps/io.ox/mail/actions.js
-#: module:io.ox/mail
-msgid "Create filter rule"
-msgstr ""
-
-#: apps/io.ox/core/folder/actions/move.js
-#: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
 msgid "Move all messages"
 msgstr ""
@@ -7959,6 +7942,12 @@ msgstr ""
 
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
+#: apps/io.ox/mail/actions/copyMove.js
+msgid "Create filter rule"
+msgstr ""
+
+#: apps/io.ox/mail/actions.js
+#: module:io.ox/mail
 msgid "Add to calendar"
 msgstr ""
 
@@ -8014,6 +8003,16 @@ msgstr[1] ""
 #: apps/io.ox/mail/actions/attachmentSave.js
 #: module:io.ox/mail
 msgid "Save attachment"
+msgstr ""
+
+#: apps/io.ox/mail/actions/copyMove.js
+#: module:io.ox/mail
+msgid "All future messages from %1$s will be moved to the selected folder."
+msgstr ""
+
+#: apps/io.ox/mail/actions/copyMove.js
+#: module:io.ox/mail
+msgid "All future messages from the senders of the selected mails will be moved to the selected folder."
 msgstr ""
 
 #: apps/io.ox/mail/actions/delete.js

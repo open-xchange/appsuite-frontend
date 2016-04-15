@@ -1030,7 +1030,7 @@ msgstr "Tutti i file sono stati eliminati"
 msgid "All folders"
 msgstr "Tutte le cartelle"
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 #, fuzzy
 #| msgid ""
 #| "All messages older than %1$d days will be moved to the archive folder"
@@ -1039,7 +1039,7 @@ msgstr ""
 "Tutti i messaggi più vecchi di %1$d giorni saranno spostati nella cartella "
 "archivio"
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 #, fuzzy
 #| msgid ""
 #| "All messages older than %1$d days will be moved to the archive folder"
@@ -2206,8 +2206,8 @@ msgstr "Crea contatto"
 msgid "Create distribution list"
 msgstr "Crea una lista di distribuzione"
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions/copyMove.js
 #, fuzzy
 #| msgid "Create a filter"
 msgid "Create filter rule"

@@ -1049,7 +1049,7 @@ msgstr "Toate fișierele au fost șterse"
 msgid "All folders"
 msgstr "Toate dosarele"
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 #, fuzzy
 #| msgid ""
 #| "All messages older than %1$d days will be moved to the archive folder"
@@ -1057,7 +1057,7 @@ msgid "All future messages from %1$s will be moved to the selected folder."
 msgstr ""
 "Toate mesajele mai vechi de %1$d zile vor fi mutate în dosarul de arhive"
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 #, fuzzy
 #| msgid ""
 #| "All messages older than %1$d days will be moved to the archive folder"
@@ -2224,8 +2224,8 @@ msgstr "Creează un contact"
 msgid "Create distribution list"
 msgstr "Creează o listă de distribuție"
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions/copyMove.js
 #, fuzzy
 #| msgid "Create a filter"
 msgid "Create filter rule"

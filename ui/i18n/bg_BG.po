@@ -1022,11 +1022,11 @@ msgstr ""
 msgid "All folders"
 msgstr ""
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
 msgstr ""
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
@@ -2172,8 +2172,8 @@ msgstr "Създай контакт"
 msgid "Create distribution list"
 msgstr ""
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions/copyMove.js
 #, fuzzy
 #| msgid "Create new rule"
 msgid "Create filter rule"

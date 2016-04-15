@@ -1033,13 +1033,13 @@ msgstr "Ale Dateien wurden gelöscht"
 msgid "All folders"
 msgstr "Alle Ordner"
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
 msgstr ""
 "Alle zukünftigen Nachrichten von %1$s werden in den ausgewählten Ordner "
 "verschoben."
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
@@ -2207,8 +2207,8 @@ msgstr "Kontakt anlegen"
 msgid "Create distribution list"
 msgstr "Verteilerliste anlegen"
 
-#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions/copyMove.js
 msgid "Create filter rule"
 msgstr "Filterregel erstellen"
 
