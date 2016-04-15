@@ -253,10 +253,11 @@ define('io.ox/mail/api', [
     api.get = function (obj, options) {
 
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
-            model = pool.get('detail').get(cid);
+            model = pool.get('detail').get(cid),
+            cache = options && options.cache ? options.cache : true;
 
         // TODO: make this smarter
-        if (!obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
+        if (cache && !obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
 
         // determine default view parameter
         if (!obj.view) obj.view = defaultView(obj);
@@ -264,28 +265,28 @@ define('io.ox/mail/api', [
         // limit default size
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
 
-        return get.call(api, obj, options && options.cache).done(function (data) {
+        // never use factory's internal cache, therefore always 'false' at this point
+        return get.call(api, obj, false).done(function (data) {
+            // don't save raw data in our models. We only want preformated content there
+            if (obj.view === 'raw') return;
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
-            //don't save raw data in our models. We only want preformated content there
-            if (!obj.view || (obj.view && obj.view !== 'raw')) {
-                // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
-                // split by ; because this field might contain further unwanted data
-                _(data.attachments).each(function (attachment) {
-                    if (/^text\/(plain|html)/i.test(attachment.content_type)) {
-                        // only clean-up text and html; otherwise we lose data (see bug 43727)
-                        attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
-                    }
-                });
-                // either update or add model
-                if (model) {
-                    // if we already have a model we promote changes for threads
-                    model.set(data);
-                    propagate(model);
-                } else {
-                    // add new model
-                    pool.add('detail', data);
+            // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
+            // split by ; because this field might contain further unwanted data
+            _(data.attachments).each(function (attachment) {
+                if (/^text\/(plain|html)/i.test(attachment.content_type)) {
+                    // only clean-up text and html; otherwise we lose data (see bug 43727)
+                    attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
                 }
+            });
+            // either update or add model
+            if (model) {
+                // if we already have a model we promote changes for threads
+                model.set(data);
+                propagate(model);
+            } else {
+                // add new model
+                pool.add('detail', data);
             }
         });
     };
