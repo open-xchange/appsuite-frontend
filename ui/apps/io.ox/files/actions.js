@@ -424,6 +424,7 @@ define('io.ox/files/actions', [
     });
 
     new Action('io.ox/files/actions/save-as-pdf', {
+        capabilities: 'document_preview', // document converter.
         requires: function (e) {
             // one?
             if (!e.collection.has('one')) return false;
