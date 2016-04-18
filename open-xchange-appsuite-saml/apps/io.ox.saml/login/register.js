@@ -8,8 +8,7 @@ define.async('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/
                     .show()
                     .addClass('secure' + (block ? ' block' : ''));
             };
-        }
-        ox.busy(true);
+        }      
         $.get(ox.apiRoot + '/saml/init?flow=login').done(function (data) {
             var baton = new ext.Baton({data: data});
             ext.point('io.ox.saml/login').invoke('handle', baton, baton);
@@ -29,8 +28,10 @@ define.async('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/
             );
             $('#background-loader').fadeOut(250);
             console.warn('Server is down.');
+        } else {
+            ox.busy(true);
         }
-        return def.reject(); // actually doesn't really do anything yet
+        return def.resolve(); // actually doesn't really do anything yet
     } else {
         def.resolve({});
     }
