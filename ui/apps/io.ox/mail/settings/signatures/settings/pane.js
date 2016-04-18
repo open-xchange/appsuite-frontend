@@ -7,10 +7,9 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/backbone/mini-views',
     'io.ox/core/http',
     'io.ox/core/config',
-    'io.ox/mail/settings/model',
     'io.ox/core/notifications',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, gt, settings, dialogs, snippets, mini, http, config, mailSettings, notifications) {
+], function (ext, gt, settings, dialogs, snippets, mini, http, config, notifications) {
 
     'use strict';
 
@@ -318,7 +317,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             }
         },
         save: function () {
-            mailSettings.saveAndYell().done(function () {
+            settings.saveAndYell().done(function () {
                 //update mailapi
                 require(['io.ox/mail/api'], function (mailAPI) {
                     mailAPI.updateViewSettings();
@@ -333,7 +332,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         id: 'signatures',
         index: 200,
         draw: function (baton) {
-            baton.model = mailSettings;
+            baton.model = settings;
 
             var $node,
                 $list,
