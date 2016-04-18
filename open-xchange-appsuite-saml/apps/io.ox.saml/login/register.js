@@ -31,10 +31,11 @@ define.async('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/
             );
             $('#background-loader').fadeOut(250);
             console.warn('Server is down.');
+            return def;
         } else {
             ox.busy(true);
+            return def.resolve();
         }
-        return def.resolve(); // actually doesn't really do anything yet
     } else {
         def.resolve({});
     }
