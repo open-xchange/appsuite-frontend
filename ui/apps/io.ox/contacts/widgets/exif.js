@@ -114,6 +114,7 @@ define('io.ox/contacts/widgets/exif', function () {
         switch (type) {
             case 1:
                 // byte, 8-bit unsigned int
+                // falls through
             case 7:
                 // undefined, 8-bit byte, value depending on field
                 if (numValues === 1) {

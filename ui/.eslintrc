@@ -178,7 +178,7 @@
         'no-extra-bind': 2,
 
         // disallow fallthrough of case statements
-        'no-fallthrough': 2,
+        'no-fallthrough': [2, { "commentPattern": "falls through" }],
 
         // disallow the use of leading or trailing decimal points in numeric literals
         'no-floating-decimal': 2,
