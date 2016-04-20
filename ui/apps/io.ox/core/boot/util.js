@@ -76,6 +76,10 @@ define('io.ox/core/boot/util', [], function () {
             return _.url.hash('login_type') === 'guest';
         },
 
+        isContinue: function () {
+            return /^(guest|message_continue)$/.test(_.url.hash('login_type'));
+        },
+
         isGuestWithPassword: function () {
             return _.url.hash('login_type') === 'guest_password';
         },
