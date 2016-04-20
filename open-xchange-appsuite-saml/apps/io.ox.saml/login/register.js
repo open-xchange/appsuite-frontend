@@ -61,7 +61,6 @@ define('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/handle
             return {};
         }
     } else {
-        def.resolve({});
         hideLogin();
     }
     return {};
