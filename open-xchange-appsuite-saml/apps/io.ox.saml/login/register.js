@@ -55,10 +55,10 @@ define('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/handle
             );
             $('#background-loader').fadeOut(250);
             console.warn('Server is down.');
-            return def;
+            return {};
         } else {
             ox.busy(true);
-            return def.resolve();
+            return {};
         }
     } else {
         def.resolve({});
