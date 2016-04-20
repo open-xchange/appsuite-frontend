@@ -44,31 +44,25 @@ define('io.ox/core/boot/form', [
 
     return function () {
 
-        var sc = ox.serverConfig, gt = util.gt,
-            bindLogin = true, messageReplacement;
+        var sc = ox.serverConfig, gt = util.gt, bindLogin = true;
 
         util.debug('Show form ...');
 
         function displayMessageOnly() {
+            hideFormElements();
+        }
+
+        function displayContinue(data) {
+            $('#io-ox-login-button').attr('data-i18n', gt('Continue')).val(gt('Continue'));
+            $('#io-ox-login-restoremail, #io-ox-login-username').val(data.login_name || '').prop('readonly', true);
+            $('#io-ox-login-password').val('');
+        }
+
+        function hideFormElements() {
             // remove all other inputs
             $('#io-ox-login-form div.row')
                 .filter('.username, .password, .options, .buttons')
                 .remove();
-        }
-
-        function displayContinue() {
-            $('#io-ox-login-button').attr({
-                'data-i18n': gt('Continue'),
-                placeholder: gt('Continue')
-            });
-
-            var loginName = _.url.hash('login_name');
-            $('.row.username').hide();
-            $('.row.password').hide();
-            $('#io-ox-forgot-password').hide();
-            if (!_.isEmpty(loginName)) {
-                $('#io-ox-login-restoremail, #io-ox-login-username').val(loginName).prop('readonly', true);
-            }
         }
 
         function resetPassword() {
@@ -111,10 +105,6 @@ define('io.ox/core/boot/form', [
 
         function guestLogin() {
             var loginName = _.url.hash('login_name');
-
-            // use more suitable message
-            //messageReplacement = gt('Please enter your password.');
-
             $('.row.username').hide();
             if (!_.isEmpty(loginName)) {
                 $('#io-ox-login-restoremail, #io-ox-login-username').val(loginName).prop('readonly', true);
@@ -148,11 +138,17 @@ define('io.ox/core/boot/form', [
             }
         }
 
-        switch (_.url.hash('login_type')) {
+        var loginType = _.url.hash('login_type'), showContinue = false;
 
-            // show continue screen
+        switch (loginType) {
+
             case 'guest':
-                displayContinue();
+            case 'message_continue':
+                // remove all form elements except buttons
+                $('#io-ox-login-form div.row')
+                    .filter('.username, .password, .options')
+                    .hide();
+                showContinue = true;
                 break;
 
             // show guest login
@@ -165,48 +161,40 @@ define('io.ox/core/boot/form', [
                 anonymousLogin();
                 break;
 
-            // no login_type
+            case 'reset_password':
+                resetPassword();
+                break;
+
+            case 'message':
+                displayMessageOnly();
+                break;
+
             default:
-                switch (_.url.hash('message_type')) {
-                    case 'INFO':
-                        switch (_.url.hash('status')) {
-                            case 'reset_password_info':
-                                displayMessageOnly();
-                                break;
-
-                            case 'reset_password':
-                                resetPassword();
-                                break;
-                            // no default
-                        }
-                        break;
-
-                    case 'ERROR':
-                        displayMessageOnly();
-                        break;
-
-                    default:
-                        // at this point we know that a "normal" (i.e. non-guest) login is required
-                        // therefore we finally check if a custom login location is set
-                        var loginLocation =  ox.serverConfig.loginLocation;
-                        if (loginLocation && loginLocation !== 'ui') return util.gotoSignin();
-                        defaultLogin();
-                        break;
-                }
+                // at this point we know that a "normal" (i.e. non-guest) login is required
+                // therefore we finally check if a custom login location is set
+                var loginLocation = ox.serverConfig.loginLocation;
+                if (loginLocation && loginLocation !== 'ui') return util.gotoSignin();
+                defaultLogin();
                 break;
         }
 
         $('#io-ox-login-feedback').hide();
 
         // handle message params
-        if (_.url.hash('message') || messageReplacement) {
-            var type = (_.url.hash('message_type') || 'info').toLowerCase(),
-                message = messageReplacement || _.url.hash('message');
-            if (type === 'info') {
-                $('#io-ox-login-help').text(message);
-            } else {
-                util.feedback(type, message);
-            }
+        if (_.url.hash('token')) {
+            http.GET({ module: 'share/redeem/token', params: { token: _.url.hash('token') }, appendSession: false, processResponse: false })
+                .done(function (data) {
+                    if (data.message_type === 'ERROR') {
+                        util.feedback('error', data.message);
+                    } else {
+                        $('#io-ox-login-help').text(data.message);
+                    }
+                    if (showContinue) displayContinue(data);
+                })
+                .fail(function (e) {
+                    util.feedback('error', e.error);
+                    if (showContinue) hideFormElements();
+                });
         }
 
         language.render();
@@ -231,7 +219,9 @@ define('io.ox/core/boot/form', [
             var box = $('#io-ox-login-store-box'), cookie = _.getCookie('staySignedIn');
             if (cookie !== undefined) {
                 box.prop('checked', cookie === 'true');
-            } else if ('staySignedIn' in sc) box.prop('checked', !!sc.staySignedIn);
+            } else if ('staySignedIn' in sc) {
+                box.prop('checked', !!sc.staySignedIn);
+            }
             box.on('change', function () {
                 _.setCookie('staySignedIn', $(this).prop('checked'));
             });

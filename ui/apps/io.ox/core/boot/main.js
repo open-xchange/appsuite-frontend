@@ -28,6 +28,14 @@ define('io.ox/core/boot/main', [
 
     'use strict';
 
+    var synonyms = {
+        guest: 'useForm',
+        guest_password: 'useForm',
+        anonymous_password: 'useForm',
+        message: 'useForm',
+        message_continue: 'useForm'
+    };
+
     var exports = {
 
         start: function () {
@@ -38,12 +46,13 @@ define('io.ox/core/boot/main', [
 
         invoke: function (loginType) {
             // invoke login method
-            if (_.isFunction(this[loginType])) {
-                util.debug('Using login type', loginType);
-                this[loginType]();
+            var type = synonyms[loginType] || loginType;
+            if (_.isFunction(this[type])) {
+                util.debug('Using login type', type);
+                this[type]();
             } else {
                 $('#io-ox-login-container').empty().append(
-                    $('<div class="alert alert-info">').text('Unkown login type "' + loginType + '"')
+                    $('<div class="alert alert-info">').text('Unknown login type "' + type + '"')
                 );
                 $('#background-loader').fadeOut(250);
             }
@@ -87,18 +96,6 @@ define('io.ox/core/boot/main', [
                 util.debug('Error while loading config from server', error);
                 ox.trigger('server:down', error);
             });
-        },
-
-        guest: function () {
-            this.useForm();
-        },
-
-        guest_password: function () {
-            this.useForm();
-        },
-
-        anonymous_password: function () {
-            this.useForm();
         },
 
         useToken: function () {

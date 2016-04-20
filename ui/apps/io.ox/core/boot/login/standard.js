@@ -38,7 +38,7 @@ define('io.ox/core/boot/login/standard', [
         if ($.trim(username).length === 0 && !util.isAnonymous()) {
             return util.fail({ error: util.gt('Please enter your credentials.'), code: 'UI-0001' }, 'username');
         }
-        if ($.trim(password).length === 0 && !util.isGuest()) {
+        if ($.trim(password).length === 0 && !util.isContinue()) {
             return util.fail({ error: util.gt('Please enter your password.'), code: 'UI-0002' }, 'password');
         }
 
@@ -54,7 +54,8 @@ define('io.ox/core/boot/login/standard', [
                     target: null,
                     login_type: null,
                     message: null,
-                    message_type: null
+                    message_type: null,
+                    token: null
                 });
                 // deep-link?
                 if (data.module && data.folder) {
