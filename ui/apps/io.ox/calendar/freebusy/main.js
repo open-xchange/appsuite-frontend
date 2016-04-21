@@ -72,6 +72,7 @@ define('io.ox/calendar/freebusy/main', [
                 });
 
                 freebusy.promise.done(function (action, data) {
+                    debugger;
                     switch (action) {
                         case 'quit':
                             quit();

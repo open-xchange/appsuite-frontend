@@ -204,7 +204,7 @@ define('io.ox/participants/views', [
         render: function () {
             this.$el.append(
                 $('<fieldset>').append(
-                    $('<legend>').text(this.options.label || gt('Participants')),
+                    $('<legend>').text(this.options.label || gt('Participants')).addClass(this.options.labelClass || ''),
                     this.$ul = $('<ul class="list-unstyled">')
                 )
             );
@@ -217,9 +217,9 @@ define('io.ox/participants/views', [
                 tagName: 'li',
                 model: participant,
                 baton: self.options.baton,
-                halo: true,
+                halo: self.options.halo !== undefined ? self.options.halo : true,
                 closeButton: true
-            }).render().$el.addClass('col-xs-12 col-sm-6');
+            }).render().$el.addClass(self.options.entryClass || 'col-xs-12 col-sm-6');
 
             // bring organizer up
             if (participant.get('id') === self.options.baton.model.get('organizerId')) {

@@ -636,30 +636,26 @@ define('io.ox/calendar/edit/extensions', [
     });
 
     function openFreeBusyView(e) {
-        var app = e.data.app,
-            model = e.data.model,
-            start = model.get('start_date'),
-            end = model.get('end_date');
-        e.preventDefault();
+        require(['io.ox/calendar/freetime/main'], function (freetime) {
+            freetime.showDialog({ parentModel: e.data.model }).done(function (data) {
+                var view = data.view;
+                data.dialog.on('save', function () {
+                    var appointment = view.createAppointment();
 
-        //when editing a series we are not interested in the past (see Bug 35492)
-        if (model.get('recurrence_type') !== 0) {
-            start = _.now();
-            //prevent end_date before start_date
-            if (start > end) {
-                //just add an hour
-                end = start + 3600000;
-            }
-        }
-        ox.launch('io.ox/calendar/freebusy/main', {
-            app: app,
-            start_date: start,
-            end_date: end,
-            folder: model.get('folder_id'),
-            participants: model.getParticipants().map(function (p) {
-                return p.toJSON();
-            }),
-            model: model
+                    if (appointment) {
+                        e.data.model.set({
+                            full_time: appointment.full_time,
+                            start_date: appointment.start_date
+                        }, { validate: true });
+                        // add to participants collection instead of the model attribute to make sure the edit view is redrawn correctly
+                        e.data.model._participants.set(appointment.participants);
+                        // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
+                        e.data.model.set({
+                            end_date: appointment.end_date
+                        }, { validate: true });
+                    }
+                });
+            });
         });
     }
 

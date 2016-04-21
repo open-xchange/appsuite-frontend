@@ -237,8 +237,9 @@ define('io.ox/participants/model', [
             return this.map(function (model) { return model.getAPIData(); });
         },
 
-        initialize: function () {
+        initialize: function (models, options) {
             var self = this;
+            this.options = options || {};
             this.on('change', function () {
                 // Deduplication on model change
                 var idMap = {},
@@ -269,14 +270,31 @@ define('io.ox/participants/model', [
                     } else if (participant.mark_as_distributionlist) {
                         add = participant.distribution_list;
                     }
-                    _([].concat(add || participant)).each(function (data) {
-                        // check if model
-                        var mod = data instanceof self.model ? data : new self.model(data);
-                        // wait for fetch, then add to collection
-                        mod.loading.then(function () {
-                            self.oldAdd(mod, opt);
+                    // split groups into single users if the option is set. Note: this requires a server call
+                    if (self.options.splitGroups && (participant.type === 2 || (participant.get && participant.get('type') === 2))) {
+                        var groupUsers = participant.get ? participant.get('members') : participant.members;
+                        // if member attribute is not present we need to fetch the group first
+                        if (!groupUsers) {
+                            groupAPI.get({ id: participant.id || participant.get('id') }).done(function (group) {
+                                groupUsers = group.members;
+                                userAPI.getList(groupUsers).done(function (Users) {
+                                    self.addUniquely(Users);
+                                });
+                            });
+                        }
+                        userAPI.getList(groupUsers).done(function (Users) {
+                            self.addUniquely(Users);
                         });
-                    });
+                    } else {
+                        _([].concat(add || participant)).each(function (data) {
+                            // check if model
+                            var mod = data instanceof self.model ? data : new self.model(data);
+                            // wait for fetch, then add to collection
+                            mod.loading.then(function () {
+                                self.oldAdd(mod, opt);
+                            });
+                        });
+                    }
                 });
         }
     });

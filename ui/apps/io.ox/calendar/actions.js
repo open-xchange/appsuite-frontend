@@ -324,13 +324,25 @@ define('io.ox/calendar/actions', [
             return _.device('!smartphone');
         },
         action: function (baton) {
-            var perspective = baton.app.getWindow().getPerspective(),
-                start_date = perspective && perspective.getStartDate ? perspective.getStartDate() : _.now();
-            ox.launch('io.ox/calendar/freebusy/main', {
-                baton: baton,
-                folder: baton.app.folder.get(),
-                participants: [{ id: ox.user_id, type: 1 }],
-                start_date: start_date
+            require(['io.ox/calendar/freetime/main'], function (freetime) {
+                var perspective = baton.app.getWindow().getPerspective(),
+                    startDate = perspective && perspective.getStartDate ? perspective.getStartDate() : _.now();
+
+                freetime.showDialog({ startDate: startDate, participants: [{ id: ox.user_id, type: 1 }] }).done(function (data) {
+                    var view = data.view;
+                    data.dialog.on('save', function () {
+                        var appointment = view.createAppointment();
+
+                        if (appointment) {
+                            appointment.folder = baton.app.folder.get();
+                            ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
+                                edit.getApp().launch().done(function () {
+                                    this.create(appointment);
+                                });
+                            });
+                        }
+                    });
+                });
             });
         }
     });

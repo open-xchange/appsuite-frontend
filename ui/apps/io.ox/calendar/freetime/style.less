@@ -1,0 +1,139 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ */
+
+.freetime-view {
+
+    .toolbar {
+        height: 35px;
+        padding-top: 0;
+
+        .info {
+            left: auto;
+        }
+    }
+
+    .freetime-view-header {
+        display: flex;
+        display: -webkit-flex;
+
+        .freetime-participants-view-header {
+            min-width: 300px;
+
+            legend {
+                margin-bottom: 0;
+                padding-top: 16px;
+                padding-left: 15px;
+            }
+        }
+        .freetime-time-view-header {
+            flex: 1;
+
+            .freetime-timeline {
+                display: flex;
+                display: -webkit-flex;
+                border-bottom: 1px solid #ccc;
+                padding-top: 11px;
+
+                .freetime-hour {
+                    flex: 1;
+                    border-left: 1px solid #ccc;
+                    text-align: center;
+
+                    &.working-hour {
+                        font-weight: bold;
+                        border-left: #aaa solid 2px;
+                    }
+                }
+            }
+        }
+    }
+
+    .freetime-view-body {
+        display: flex;
+        display: -webkit-flex;
+
+        .freetime-participants-view-body {
+            width: 300px;
+            padding-top: 8px;
+
+            .participant-image {
+                margin-top: 8px;
+                width: 38px;
+                height: 38px;
+            }
+        }
+        .freetime-time-view-body {
+            flex: 1;
+            position: relative;
+            height: 100%;
+
+            .freetime-table {
+
+                .freetime-time-table {
+                    display: flex;
+                    display: -webkit-flex;
+                    height: 100%;
+                    width: 100%;
+                    position: absolute;
+
+                    .freetime-table-cell {
+                        border-left: #ccc solid 1px;
+                        height: 100%;
+                        flex: 1;
+
+                        &.working-hour {
+                            border-left: #aaa solid 2px;
+                        }
+                    }
+                }
+                .freetime-lasso {
+                    background-color: #ccc;
+                    opacity: 0.5;
+                    bottom: 0;
+                    top: 8px;
+                    position: absolute;
+                    z-index: 1;
+                }
+            }
+            .appointments {
+                position: relative;
+                padding-top: 8px;
+
+                .appointment-table {
+                    height: 54px;
+                    margin-bottom: 2px;
+                    position: relative;
+
+                    .appointment {
+                        height: 100%;
+                        position: absolute;
+                        cursor: default;
+                        border-left: 1px solid rgba(0, 0, 0, 0.2);
+
+                        &.fulltime {
+                            height: 50%;
+                        }
+
+                        .title {
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            overflow: hidden;
+                        }
+
+                    }
+                }
+            }
+        }
+
+    }
+}
