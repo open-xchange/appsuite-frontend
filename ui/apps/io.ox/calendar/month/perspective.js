@@ -174,7 +174,7 @@ define('io.ox/calendar/month/perspective', [
                 // update single week view collections
                 var start = opt.start;
                 for (var i = 1; i <= weeks; i++) {
-                    var end = moment(start).add(1, 'week').valueOf(),
+                    var end = moment(start).tz('utc').add(1, 'week').valueOf(),
                         collection = self.collections[start];
                     if (collection) {
                         var retList = [];
@@ -194,7 +194,7 @@ define('io.ox/calendar/month/perspective', [
                         }
                         collection.reset(retList);
                     }
-                    start = moment(start).add(1, 'week').valueOf();
+                    start = moment(start).tz('utc').add(1, 'week').valueOf();
                     collection = null;
                 }
             });
