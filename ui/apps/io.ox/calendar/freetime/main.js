@@ -64,6 +64,24 @@ define('io.ox/calendar/freetime/main', [
                 this.timeSubview.renderBody();
             },
 
+            renderHeader: function () {
+                this.header = this.header || $('<div class="freetime-view freetime-view-header">');
+                this.header.empty();
+                this.header.append(this.participantsSubview.headerNode, this.timeSubview.headerNode);
+                this.participantsSubview.renderHeader();
+                this.timeSubview.renderHeader();
+                return this.header;
+            },
+
+            renderBody: function () {
+                this.body = this.body || $('<div class="freetime-view freetime-view-body">');
+                this.body.empty();
+                this.body.append(this.participantsSubview.bodyNode, this.timeSubview.bodyNode);
+                this.participantsSubview.renderBody();
+                this.timeSubview.renderBody();
+                return this.body;
+            },
+
             // for convenienece
             createAppointment: function () {
                 return this.timeSubview.createAppointment();
@@ -85,11 +103,12 @@ define('io.ox/calendar/freetime/main', [
                 popup.addCancelButton();
                 popup.addButton({ label: gt('Save'), action: 'save' });
                 popup.open();
-                popup.$body.append(view.$el);
+                // append after header so it does not scroll with the rest of the view
+                popup.$el.find('.modal-header').after(view.renderHeader());
+                popup.$body.css('padding-top', 0).append(view.renderBody());
                 popup.on('close', function () {
                     view.dispose();
                 });
-                view.render();
                 def.resolve({ dialog: popup, view: view });
             });
             return def;

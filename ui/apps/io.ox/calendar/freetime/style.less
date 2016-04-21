@@ -11,7 +11,12 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-.freetime-view {
+.freetime-view-header {
+    display: flex;
+    display: -webkit-flex;
+    padding: 16px 16px 0px 16px;
+    // use min height or flex grow produces overlap when participant list is large
+    min-height: 83px;
 
     .toolbar {
         height: 35px;
@@ -22,118 +27,111 @@
         }
     }
 
-    .freetime-view-header {
-        display: flex;
-        display: -webkit-flex;
+    .freetime-participants-view-header {
+        min-width: 300px;
 
-        .freetime-participants-view-header {
-            min-width: 300px;
-
-            legend {
-                margin-bottom: 0;
-                padding-top: 16px;
-                padding-left: 15px;
-            }
+        legend {
+            margin-bottom: 0;
+            padding-top: 16px;
+            padding-left: 15px;
         }
-        .freetime-time-view-header {
-            flex: 1;
+    }
+    .freetime-time-view-header {
+        flex: 1;
 
-            .freetime-timeline {
-                display: flex;
-                display: -webkit-flex;
-                border-bottom: 1px solid #ccc;
-                padding-top: 11px;
+        .freetime-timeline {
+            display: flex;
+            display: -webkit-flex;
+            border-bottom: 1px solid #ccc;
+            padding-top: 11px;
 
-                .freetime-hour {
-                    flex: 1;
-                    border-left: 1px solid #ccc;
-                    text-align: center;
+            .freetime-hour {
+                flex: 1;
+                border-left: 1px solid #ccc;
+                text-align: center;
 
-                    &.working-hour {
-                        font-weight: bold;
-                        border-left: #aaa solid 2px;
-                    }
+                &.working-hour {
+                    font-weight: bold;
+                    border-left: #aaa solid 2px;
                 }
             }
         }
     }
+}
 
-    .freetime-view-body {
-        display: flex;
-        display: -webkit-flex;
+.freetime-view-body {
+    display: flex;
+    display: -webkit-flex;
 
-        .freetime-participants-view-body {
-            width: 300px;
+    .freetime-participants-view-body {
+        width: 300px;
+        padding-top: 8px;
+
+        .participant-image {
+            margin-top: 8px;
+            width: 38px;
+            height: 38px;
+        }
+    }
+    .freetime-time-view-body {
+        flex: 1;
+        position: relative;
+        height: 100%;
+
+        .freetime-table {
+
+            .freetime-time-table {
+                display: flex;
+                display: -webkit-flex;
+                height: 100%;
+                width: 100%;
+                position: absolute;
+
+                .freetime-table-cell {
+                    border-left: #ccc solid 1px;
+                    height: 100%;
+                    flex: 1;
+
+                    &.working-hour {
+                        border-left: #aaa solid 2px;
+                    }
+                }
+            }
+            .freetime-lasso {
+                background-color: #ccc;
+                opacity: 0.5;
+                bottom: 0;
+                top: 8px;
+                position: absolute;
+                z-index: 1;
+            }
+        }
+        .appointments {
+            position: relative;
             padding-top: 8px;
 
-            .participant-image {
-                margin-top: 8px;
-                width: 38px;
-                height: 38px;
-            }
-        }
-        .freetime-time-view-body {
-            flex: 1;
-            position: relative;
-            height: 100%;
-
-            .freetime-table {
-
-                .freetime-time-table {
-                    display: flex;
-                    display: -webkit-flex;
-                    height: 100%;
-                    width: 100%;
-                    position: absolute;
-
-                    .freetime-table-cell {
-                        border-left: #ccc solid 1px;
-                        height: 100%;
-                        flex: 1;
-
-                        &.working-hour {
-                            border-left: #aaa solid 2px;
-                        }
-                    }
-                }
-                .freetime-lasso {
-                    background-color: #ccc;
-                    opacity: 0.5;
-                    bottom: 0;
-                    top: 8px;
-                    position: absolute;
-                    z-index: 1;
-                }
-            }
-            .appointments {
+            .appointment-table {
+                height: 54px;
+                margin-bottom: 2px;
                 position: relative;
-                padding-top: 8px;
 
-                .appointment-table {
-                    height: 54px;
-                    margin-bottom: 2px;
-                    position: relative;
+                .appointment {
+                    height: 100%;
+                    position: absolute;
+                    cursor: default;
+                    border-left: 1px solid rgba(0, 0, 0, 0.2);
 
-                    .appointment {
-                        height: 100%;
-                        position: absolute;
-                        cursor: default;
-                        border-left: 1px solid rgba(0, 0, 0, 0.2);
+                    &.fulltime {
+                        height: 50%;
+                    }
 
-                        &.fulltime {
-                            height: 50%;
-                        }
-
-                        .title {
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                            overflow: hidden;
-                        }
-
+                    .title {
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
                     }
                 }
             }
         }
-
     }
 }
