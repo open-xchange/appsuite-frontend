@@ -211,8 +211,13 @@ define('io.ox/files/share/model', [
                 case 'create':
                     var changes = self.getChanges(),
                         data = model.toJSON();
-                    // remove password from data unless it has changed
-                    if (!('password' in changes)) delete data.password;
+                    // set password to null if password protection was revoked
+                    if (changes.secured === false) {
+                        data.password = null;
+                    } else if (!('password' in changes)) {
+                        // remove password from data unless it has changed
+                        delete data.password;
+                    }
                     // update only if there are relevant changes
                     return (_.isEmpty(changes) ? $.when() : api.updateLink(data, model.get('lastModified')))
                         .done(this.send.bind(this))
