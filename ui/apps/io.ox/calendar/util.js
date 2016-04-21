@@ -659,10 +659,9 @@ define('io.ox/calendar/util', [
 
         getWeekScaffold: function (timestamp) {
             var day = moment(timestamp).startOf('week'),
-                i = 0,
                 obj,
                 ret = { days: [] };
-            for (; i < 7; i += 1) {
+            for (var i = 0; i < 7; i++) {
                 ret.days.push(obj = {
                     year: day.year(),
                     month: day.month(),

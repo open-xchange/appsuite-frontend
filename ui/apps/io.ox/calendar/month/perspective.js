@@ -173,7 +173,7 @@ define('io.ox/calendar/month/perspective', [
             return api.getAll(apiData, useCache).done(function (list) {
                 // update single week view collections
                 var start = opt.start;
-                for (var i = 1; i <= weeks; i++) {
+                for (var i = 0; i < weeks; i++) {
                     var end = moment(start).add(1, 'week').valueOf(),
                         collection = self.collections[start];
                     if (collection) {
@@ -227,7 +227,7 @@ define('io.ox/calendar/month/perspective', [
             }
 
             // draw all weeks
-            for (var i = 1; i <= weeks; i++, curWeek.add(1, 'week')) {
+            for (var i = 0; i < weeks; i++, curWeek.add(1, 'week')) {
                 var day = curWeek.valueOf(),
                     endDate = moment(curWeek).add(1, 'week'),
                     monthDelimiter = curWeek.date() > endDate.date();
