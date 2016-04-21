@@ -183,12 +183,12 @@ define('io.ox/calendar/month/perspective', [
                 }
                 var start = opt.start;
                 for (var i = 0; i < weeks; i++) {
-                    var end = moment(start).add(1, 'week').valueOf(),
+                    var end = moment(start).tz('utc').add(1, 'week').valueOf(),
                         collection = self.collections[start];
                     if (collection) {
                         collection.reset(appointmentsBetween(start, end));
                     }
-                    start = moment(start).add(1, 'week').valueOf();
+                    start = moment(start).tz('utc').add(1, 'week').valueOf();
                     collection = null;
                 }
             });
@@ -221,7 +221,7 @@ define('io.ox/calendar/month/perspective', [
             }
 
             // draw all weeks
-            for (var i = 0; i < weeks; i++, curWeek.add(1, 'week')) {
+            for (var i = 0; i < weeks; i++, curWeek.tz('utc').add(1, 'week')) {
                 var day = curWeek.valueOf(),
                     endDate = moment(curWeek).add(1, 'week'),
                     monthDelimiter = curWeek.date() > endDate.date();
