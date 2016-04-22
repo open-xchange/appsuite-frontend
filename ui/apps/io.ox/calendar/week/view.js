@@ -376,13 +376,13 @@ define('io.ox/calendar/week/view', [
                     if (earlier > 0) {
                         this.moreAppointmentsIndicators.append(
                             indicatorButton(d, columnWidth)
-                                .addClass('earlier fa-arrow-up')
+                                .addClass('earlier fa-caret-up')
                         );
                     }
                     if (later > 0) {
                         this.moreAppointmentsIndicators.append(
                             indicatorButton(d, columnWidth)
-                                .addClass('later fa-arrow-down')
+                                .addClass('later fa-caret-down')
                         );
                     }
                 }
