@@ -316,7 +316,7 @@ define('io.ox/mail/settings/pane', [
                     fieldset(
                         gt('Mail categories'),
                         // enable
-                        checkbox(
+                        settings.get('categories/forced') ? $() : checkbox(
                             gt('Show Tabs for inbox'),
                             new mini.CheckboxView({ name: 'categories/enabled', model: settings }).render().$el
                         ),

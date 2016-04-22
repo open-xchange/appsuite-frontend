@@ -55,10 +55,8 @@ define('io.ox/mail/categories/api', [
             var opt = _.extend({ past: true, future: true }, options);
             if (!opt.category || !opt.data) return;
             // plain list of mail addresses
-            var data = _.chain(options.data)
-                        .map(function (obj) {
-                            return obj.from[0][1];
-                        })
+            var list = _.chain(options.data)
+                        .map(function (obj) { return obj.from[0][1]; })
                         .uniq()
                         .value();
             return http.PUT({
@@ -69,7 +67,9 @@ define('io.ox/mail/categories/api', [
                     'apply-for-existing': opt.past,
                     'apply-for-future-ones': opt.future
                 },
-                data: data
+                data: {
+                    from: list
+                }
             });
         },
         // update categories
