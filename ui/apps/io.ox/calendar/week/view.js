@@ -361,17 +361,19 @@ define('io.ox/calendar/week/view', [
             return _.throttle(function () {
                 var min = this.pane.scrollTop(),
                     max = this.pane.scrollTop() + this.pane.height(),
+                    threshold = 3,
                     columnWidth = 100 / this.columns;
 
                 this.moreAppointmentsIndicators.empty();
                 for (var d = 0; d < this.columns; d++) {
                     var appointments = this.weekCon.find('.day:nth-child(' + (d + 1) + ') > .appointment');
                     var earlier = appointments.filter(function (index, el) {
-                        return $(el).position().top < min;
+                        el = $(el);
+                        return el.position().top + el.height() - threshold < min;
                     }).length;
                     var later = appointments.filter(function (index, el) {
                         el = $(el);
-                        return el.position().top + el.height() > max;
+                        return el.position().top + threshold > max;
                     }).length;
                     if (earlier > 0) {
                         this.moreAppointmentsIndicators.append(
