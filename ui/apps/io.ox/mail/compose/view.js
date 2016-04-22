@@ -380,11 +380,7 @@ define('io.ox/mail/compose/view', [
 
             var self = this,
                 mode = obj.mode,
-                attachmentMailInfo;
-
-            if (obj.attachment && obj.attachments) {
-                attachmentMailInfo = obj.attachments[1] ? obj.attachments[1].mail : undefined;
-            }
+                attachmentMailInfo = obj.attachment ? obj.attachments[1].mail : undefined;
 
             delete obj.mode;
 
