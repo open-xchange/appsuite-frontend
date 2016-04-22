@@ -377,11 +377,7 @@ define('io.ox/mail/compose/view', [
 
             var self = this,
                 mode = obj.mode,
-                attachmentMailInfo;
-
-            if (obj.attachment && obj.attachments) {
-                attachmentMailInfo = obj.attachments[1] ? obj.attachments[1].mail : undefined;
-            }
+                mailReference = _(obj).pick('id', 'folder_id');
 
             delete obj.mode;
 
@@ -416,7 +412,7 @@ define('io.ox/mail/compose/view', [
                     // to keep the previews working we copy data from the original mail
                     if (mode === 'forward' || mode === 'edit') {
                         attachments.forEach(function (file) {
-                            _.extend(file, { group: 'mail', mail: attachmentMailInfo });
+                            _.extend(file, { group: 'mail', mail: mailReference });
                         });
                     }
 
