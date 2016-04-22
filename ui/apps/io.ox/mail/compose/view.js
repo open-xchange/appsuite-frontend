@@ -956,7 +956,9 @@ define('io.ox/mail/compose/view', [
         prependNewLine: function () {
             var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''),
                 nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
-            this.editor.setContent(nl + content);
+
+            // Prepend newline in all modes except when editing draft
+            if (this.model.get('mode') !== 'edit') this.editor.setContent(nl + content);
         },
 
         setMail: function () {
