@@ -27,7 +27,7 @@ define('io.ox/mail/categories/main', [
 
     // TODO: trigger unread after train/move
 
-    if (!capabilities.has('mail_categories')) {
+    if (!capabilities.has('mail_categories') || !capabilities.has('mail_categories_dev')) {
         console.error("mail/categories/main: capababilty 'mail_categories' missing");
     }
 
