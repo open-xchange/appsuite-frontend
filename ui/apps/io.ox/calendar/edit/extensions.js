@@ -643,12 +643,10 @@ define('io.ox/calendar/edit/extensions', [
                     var appointment = view.createAppointment();
 
                     if (appointment) {
-                        e.data.model.set({
-                            full_time: appointment.full_time,
-                            start_date: appointment.start_date
-                        }, { validate: true });
+                        e.data.model.set({ full_time: appointment.full_time });
+                        e.data.model.set({ start_date: appointment.start_date });
                         // add to participants collection instead of the model attribute to make sure the edit view is redrawn correctly
-                        e.data.model._participants.set(appointment.participants);
+                        e.data.model._participants.reset(appointment.participants);
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                         e.data.model.set({
                             end_date: appointment.end_date
