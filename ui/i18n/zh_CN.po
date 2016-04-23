@@ -1054,6 +1054,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "允许外部链接图像的预加载"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1123,6 +1127,31 @@ msgstr "在此问题被修复前，应用程序可能未能如常工作。"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Applications"
 msgstr "应用程序"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply"
+msgstr "套用角色"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply for all mails?"
+msgstr "套用到所有子文件夹"
+
+#. %1$s single mail address or comma separated list of multiple
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Email from %1$s: %2$s"
+msgid "Apply for mails from %1$s"
+msgstr "来自 %1$s 的电子邮件：%2$d"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply move to all mails from a sender"
+msgstr "套用到所有子文件夹"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1239,6 +1268,10 @@ msgstr "一个外来邮件服务器"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "升序"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1532,7 +1565,7 @@ msgstr "日历："
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/main.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4590,6 +4623,13 @@ msgstr "邮件地址（必填）"
 msgid "Mail and Messaging"
 msgstr "邮件和即时通讯"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Mail categories"
+msgstr "可用类别："
+
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "邮件总数限额"
@@ -4971,6 +5011,7 @@ msgstr "需要更多空间？"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "从来没有"
 
@@ -6651,6 +6692,12 @@ msgstr "转送"
 msgid "Retweeted by %s"
 msgstr "由 %s 转推"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Never"
+msgid "Revert"
+msgstr "从来没有"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "复检您的订单"
@@ -7124,6 +7171,12 @@ msgstr "购物车"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "显示为"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show inbox"
+msgid "Show Tabs for inbox"
+msgstr "显示收件箱"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -8340,6 +8393,13 @@ msgstr "此邮件已添加到门户"
 
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
+msgstr "此邮件没有内容"
+
+#. %1$s target mail category
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "This mail has no content"
+msgid "This mail was moved to %1$s."
 msgstr "此邮件没有内容"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
@@ -10422,11 +10482,6 @@ msgstr "年"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "安提瓜和巴布达"
 
-#, fuzzy
-#~| msgid "Apply role"
-#~ msgid "Apply"
-#~ msgstr "套用角色"
-
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
 #~ msgstr[0] "约会已复制"
@@ -10611,9 +10666,6 @@ msgstr "年"
 
 #~ msgid "Availability"
 #~ msgstr "可用性"
-
-#~ msgid "Available Categories:"
-#~ msgstr "可用类别："
 
 #~ msgid "Available Teams:"
 #~ msgstr "可用团队："
@@ -12946,9 +12998,6 @@ msgstr "年"
 
 #~ msgid "Show first page"
 #~ msgstr "显示第一页"
-
-#~ msgid "Show inbox"
-#~ msgstr "显示收件箱"
 
 #~ msgid "Show last page"
 #~ msgstr "显示最后页"

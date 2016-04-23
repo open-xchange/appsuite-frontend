@@ -1073,6 +1073,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Laden extern verlinkter Bilder erlauben"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr "Den folgenden Empfänger immer zu Blind Carbon Copy (BCC) hinzufügen"
 
@@ -1148,6 +1152,29 @@ msgstr ""
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Applications"
 msgstr "Applikationen"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Apply"
+msgstr "Anwenden"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply for all mails?"
+msgstr "Auf alle Unterordner anwenden"
+
+#. %1$s single mail address or comma separated list of multiple
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Email from %1$s: %2$s"
+msgid "Apply for mails from %1$s"
+msgstr "E-Mail von %1$s: %2$s"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply move to all mails from a sender"
+msgstr "Auf alle Unterordner anwenden"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1264,6 +1291,10 @@ msgstr "Wie eingehender Mailserver"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Aufsteigend"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1567,7 +1598,7 @@ msgstr "Kalender:"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/main.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4691,6 +4722,13 @@ msgstr "E-Mail-Adresse (Pflichtfeld)"
 msgid "Mail and Messaging"
 msgstr "E-Mail und Messaging"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
+#, fuzzy
+#| msgid "Mail address"
+msgid "Mail categories"
+msgstr "E-Mail-Adresse"
+
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "E-Mail-Anzahl"
@@ -5073,6 +5111,7 @@ msgstr "Sie brauchen mehr Speicher?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nie"
 
@@ -6784,6 +6823,12 @@ msgstr "Weitergeleitet (Retweet)"
 msgid "Retweeted by %s"
 msgstr "Weitergeleitet (Retweet) von %s"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Never"
+msgid "Revert"
+msgstr "Nie"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "Prüfen Sie Ihre Bestellung"
@@ -7256,6 +7301,12 @@ msgstr "Einkaufswagen"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Zeigen"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show inbox"
+msgid "Show Tabs for inbox"
+msgstr "Posteingang zeigen"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -8548,6 +8599,13 @@ msgstr "Diese E-Mail wurde dem Portal hinzugefügt"
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Diese E-Mail hat keinen Inhalt"
+
+#. %1$s target mail category
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "This file is locked by %1$s"
+msgid "This mail was moved to %1$s."
+msgstr "Diese Datei wurde durch %1$s gesperrt"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js
@@ -10645,9 +10703,6 @@ msgstr "JJJJ"
 
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigua und Barbuda"
-
-#~ msgid "Apply"
-#~ msgstr "Anwenden"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -12923,9 +12978,6 @@ msgstr "JJJJ"
 #~ msgid "Show first page"
 #~ msgstr "Erste Seite anzeigen"
 
-#~ msgid "Show inbox"
-#~ msgstr "Posteingang zeigen"
-
 #~ msgid "Show last page"
 #~ msgstr "Letzte Seite anzeigen"
 
@@ -13431,9 +13483,6 @@ msgstr "JJJJ"
 #~ msgid_plural "These files have not been unlocked"
 #~ msgstr[0] "Die Sperre für diese Datei wurde nicht aufgehoben"
 #~ msgstr[1] "Die Sperre für diese Dateien wurde nicht aufgehoben"
-
-#~ msgid "This file is locked by %1$s"
-#~ msgstr "Diese Datei wurde durch %1$s gesperrt"
 
 #~ msgid "This file is locked by you"
 #~ msgstr "Diese Datei wurde durch Sie gesperrt"

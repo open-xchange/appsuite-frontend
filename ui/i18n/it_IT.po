@@ -1077,6 +1077,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Consenti il pre-caricamento delle immagini esterne collegate"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1152,6 +1156,31 @@ msgstr ""
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Applications"
 msgstr "Applicazioni"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply"
+msgstr "Applica ruolo"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply for all mails?"
+msgstr "Applica a tutte le sottocartelle"
+
+#. %1$s single mail address or comma separated list of multiple
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Email from %1$s: %2$s"
+msgid "Apply for mails from %1$s"
+msgstr "Messaggio di posta da %1$s: %2$s"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply move to all mails from a sender"
+msgstr "Applica a tutte le sottocartelle"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1268,6 +1297,10 @@ msgstr "Come server di posta in entrata"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Crescente"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1571,7 +1604,7 @@ msgstr "Calendario:"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/main.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4685,6 +4718,13 @@ msgstr "Indirizzo di posta (obbligatorio)"
 msgid "Mail and Messaging"
 msgstr "Posta e messaggistica"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Mail categories"
+msgstr "Categorie disponibili:"
+
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Quota del numero di messaggi"
@@ -5066,6 +5106,7 @@ msgstr "Hai bisogno di altro spazio?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Mai"
 
@@ -6777,6 +6818,12 @@ msgstr "Retweet eseguito"
 msgid "Retweeted by %s"
 msgstr "Retweet di %s"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Never"
+msgid "Revert"
+msgstr "Mai"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "Verifica i tuoi acquisti"
@@ -7255,6 +7302,12 @@ msgstr "Carrello della spesa"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Mostra"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show inbox"
+msgid "Show Tabs for inbox"
+msgstr "Mostra Posta in arrivo"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -8538,6 +8591,13 @@ msgstr "Questo messaggio è stato aggiunto al portale"
 
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
+msgstr "Questo messaggio non ha contenuto"
+
+#. %1$s target mail category
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "This mail has no content"
+msgid "This mail was moved to %1$s."
 msgstr "Questo messaggio non ha contenuto"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
@@ -10678,11 +10738,6 @@ msgstr "aaaa"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigua e Barbuda"
 
-#, fuzzy
-#~| msgid "Apply role"
-#~ msgid "Apply"
-#~ msgstr "Applica ruolo"
-
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
 #~ msgstr[0] "L'appuntamento è stato copiato"
@@ -10909,9 +10964,6 @@ msgstr "aaaa"
 
 #~ msgid "Availability"
 #~ msgstr "Disponibilità"
-
-#~ msgid "Available Categories:"
-#~ msgstr "Categorie disponibili:"
 
 #~ msgid "Available Teams:"
 #~ msgstr "Squadre disponibili:"
@@ -13254,9 +13306,6 @@ msgstr "aaaa"
 
 #~ msgid "Show first page"
 #~ msgstr "Mostra la prima pagina"
-
-#~ msgid "Show inbox"
-#~ msgstr "Mostra Posta in arrivo"
 
 #~ msgid "Show last page"
 #~ msgstr "Mostra l'ultima pagina"

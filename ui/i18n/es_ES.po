@@ -1077,6 +1077,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Permitir la precarga de imágenes externas enlazadas"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1150,6 +1154,31 @@ msgstr ""
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Applications"
 msgstr "Aplicaciones"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply"
+msgstr "Aplicar rol"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply for all mails?"
+msgstr "Aplicar a todas las subcarpetas"
+
+#. %1$s single mail address or comma separated list of multiple
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Email from %1$s: %2$s"
+msgid "Apply for mails from %1$s"
+msgstr "Correo de %1$s: %2$s"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply move to all mails from a sender"
+msgstr "Aplicar a todas las subcarpetas"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1266,6 +1295,10 @@ msgstr "Como servidor de correo entrante"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Ascendente"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1569,7 +1602,7 @@ msgstr "Calendario:"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/main.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4682,6 +4715,13 @@ msgstr "Dirección de correo (obligatoria)"
 msgid "Mail and Messaging"
 msgstr "Correo y mensajería"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Mail categories"
+msgstr "Categorías disponibles:"
+
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Cuota de número de de correos"
@@ -5063,6 +5103,7 @@ msgstr "¿Necesita más espacio?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nunca"
 
@@ -6781,6 +6822,12 @@ msgstr "Retuiteado"
 msgid "Retweeted by %s"
 msgstr "Retuiteado por %s"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Never"
+msgid "Revert"
+msgstr "Nunca"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "Revise sus compras"
@@ -7261,6 +7308,12 @@ msgstr "Cesta de la compra"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Mostrar"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show inbox"
+msgid "Show Tabs for inbox"
+msgstr "Mostrar Bandeja de entrada"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -8535,6 +8588,13 @@ msgstr "Este correo se ha añadido al portal"
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Este correo no tiene contenido"
+
+#. %1$s target mail category
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "This file is locked by %1$s"
+msgid "This mail was moved to %1$s."
+msgstr "El fichero está bloqueado por %1$s"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js
@@ -11786,11 +11846,6 @@ msgstr "yyyy"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigua y Barbuda"
 
-#, fuzzy
-#~| msgid "Apply role"
-#~ msgid "Apply"
-#~ msgstr "Aplicar rol"
-
 #~ msgid "Apply a Template (optional)"
 #~ msgstr "Aplicar una plantilla (opcional)"
 
@@ -12384,9 +12439,6 @@ msgstr "yyyy"
 
 #~ msgid "Availability"
 #~ msgstr "Disponibilidad"
-
-#~ msgid "Available Categories:"
-#~ msgstr "Categorías disponibles:"
 
 #~ msgid "Available Teams:"
 #~ msgstr "Equipos disponibles:"
@@ -16815,9 +16867,6 @@ msgstr "yyyy"
 #~ msgid "Show in Calendar"
 #~ msgstr "Mostrar en el calendario"
 
-#~ msgid "Show inbox"
-#~ msgstr "Mostrar Bandeja de entrada"
-
 #~ msgid "Show last page"
 #~ msgstr "Mostrar última página "
 
@@ -17869,9 +17918,6 @@ msgstr "yyyy"
 #~ msgid_plural "These files have not been unlocked"
 #~ msgstr[0] "Este fichero no ha sido desbloqueado"
 #~ msgstr[1] "Estos ficheros no han sido desbloqueados"
-
-#~ msgid "This file is locked by %1$s"
-#~ msgstr "El fichero está bloqueado por %1$s"
 
 #~ msgid "This file is locked by you"
 #~ msgstr "El fichero está bloqueado por usted"

@@ -292,6 +292,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/actions/reminder.js
+#: apps/io.ox/mail/categories/main.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js
 #: apps/io.ox/mail/compose/names.js
@@ -4793,6 +4794,8 @@ msgstr ""
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
 msgid "Never"
 msgstr ""
 
@@ -8142,6 +8145,35 @@ msgstr ""
 msgid "Couldn't load your auto forward."
 msgstr ""
 
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "Apply for all mails?"
+msgstr ""
+
+#. %1$s target mail category
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+#, c-format
+msgid "This mail was moved to %1$s."
+msgstr ""
+
+#. %1$s single mail address or comma separated list of multiple
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+#, c-format
+msgid "Apply for mails from %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "Apply"
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "Revert"
+msgstr ""
+
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
@@ -9065,6 +9097,32 @@ msgstr ""
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Show requests for read receipts"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Ask"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
+msgid "Mail categories"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Show Tabs for inbox"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Apply move to all mails from a sender"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js

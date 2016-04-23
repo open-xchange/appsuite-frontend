@@ -1059,6 +1059,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1128,6 +1132,25 @@ msgstr ""
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Applications"
 msgstr "Приложения"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Apply"
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Apply for all mails?"
+msgstr ""
+
+#. %1$s single mail address or comma separated list of multiple
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Email from %1$s: %2$s"
+msgid "Apply for mails from %1$s"
+msgstr "Мейл от %1$s: %2$s"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Apply move to all mails from a sender"
+msgstr ""
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1244,6 +1267,10 @@ msgstr ""
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Възходящ"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1543,7 +1570,7 @@ msgstr "Календар:"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/main.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4591,6 +4618,11 @@ msgstr ""
 msgid "Mail and Messaging"
 msgstr ""
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
+msgid "Mail categories"
+msgstr ""
+
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr ""
@@ -4976,6 +5008,7 @@ msgstr ""
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Никога"
 
@@ -6655,6 +6688,12 @@ msgstr ""
 msgid "Retweeted by %s"
 msgstr ""
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Never"
+msgid "Revert"
+msgstr "Никога"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr ""
@@ -7129,6 +7168,12 @@ msgstr ""
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Покажи"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "No mails in your inbox"
+msgid "Show Tabs for inbox"
+msgstr "Няма мейли във входящата поща."
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -8311,6 +8356,12 @@ msgstr ""
 
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
+msgstr ""
+
+#. %1$s target mail category
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, c-format
+msgid "This mail was moved to %1$s."
 msgstr ""
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail

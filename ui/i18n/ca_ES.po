@@ -1096,6 +1096,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Permet la precàrrega d'imatges externes enllaçades"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1168,6 +1172,29 @@ msgstr ""
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Applications"
 msgstr "Aplicacions"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply"
+msgstr "Aplica rol"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+msgid "Apply for all mails?"
+msgstr "Totes les carpetes"
+
+#. %1$s single mail address or comma separated list of multiple
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Email from %1$s: %2$s"
+msgid "Apply for mails from %1$s"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+msgid "Apply move to all mails from a sender"
+msgstr "Totes les carpetes"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1287,6 +1314,10 @@ msgstr "Com a servidor de correu d'entrada"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Ascendent"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1590,7 +1621,7 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/main.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4741,6 +4772,13 @@ msgstr "Adreça de correu electrònic"
 msgid "Mail and Messaging"
 msgstr "Correu i missatgeria"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
+#, fuzzy
+#| msgid "Mail address"
+msgid "Mail categories"
+msgstr "Adreça de correu electrònic"
+
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Quota de nombre de correus"
@@ -5132,6 +5170,7 @@ msgstr ""
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Mai"
 
@@ -6866,6 +6905,12 @@ msgstr "Retuitat"
 msgid "Retweeted by %s"
 msgstr "Retuitat per %s"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Never"
+msgid "Revert"
+msgstr "Mai"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "Revisau les vostres compres"
@@ -7344,6 +7389,12 @@ msgstr "Cistella de la compra"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Mostra"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show inbox"
+msgid "Show Tabs for inbox"
+msgstr "Mostra la safata d'entrada"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -8612,6 +8663,13 @@ msgstr "Aquest correu s'ha afegit al portal"
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Aquest correu no té contingut"
+
+#. %1$s target mail category
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "This file is locked by %1$s"
+msgid "This mail was moved to %1$s."
+msgstr "El fitxer està bloquejat per %1$s"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js
@@ -10823,9 +10881,6 @@ msgstr ""
 #~ msgid "Show file"
 #~ msgstr "Mostra els títols"
 
-#~ msgid "Show inbox"
-#~ msgstr "Mostra la safata d'entrada"
-
 #~ msgid "Show more comments"
 #~ msgstr "Mostra'n més comentaris"
 
@@ -10954,9 +11009,6 @@ msgstr ""
 #~ msgid_plural "These files have not been unlocked"
 #~ msgstr[0] "Aquest fitxer no ha estat desbloquejat"
 #~ msgstr[1] "Aquests fitxers no han estat desbloquejats"
-
-#~ msgid "This file is locked by %1$s"
-#~ msgstr "El fitxer està bloquejat per %1$s"
 
 #~ msgid "This file is locked by you"
 #~ msgstr "El fitxer està bloquejat per vós"

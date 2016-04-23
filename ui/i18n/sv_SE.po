@@ -1066,6 +1066,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Tillåt laddning i förväg av externt länkade bilder"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1137,6 +1141,31 @@ msgstr "Programmet kanske inte fungerar som väntat tills problemet är löst."
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Applications"
 msgstr "Program"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply role"
+msgid "Apply"
+msgstr "Tillämpa roll"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply for all mails?"
+msgstr "Verkställ för alla underliggande mappar"
+
+#. %1$s single mail address or comma separated list of multiple
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Email from %1$s: %2$s"
+msgid "Apply for mails from %1$s"
+msgstr "E-post från %1$s: %2$s"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply move to all mails from a sender"
+msgstr "Verkställ för alla underliggande mappar"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1253,6 +1282,10 @@ msgstr "Som inkommande e-postserver"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Stigande"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1554,7 +1587,7 @@ msgstr "Kalender:"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/main.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4648,6 +4681,13 @@ msgstr "E-postadress (obligatoriskt)"
 msgid "Mail and Messaging"
 msgstr "E-post och snabbmeddelanden"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
+#, fuzzy
+#| msgid "Mail address"
+msgid "Mail categories"
+msgstr "E-postadress"
+
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Kvot för e-postmängd"
@@ -5029,6 +5069,7 @@ msgstr "Behöver du mer utrymme?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Aldrig"
 
@@ -6731,6 +6772,12 @@ msgstr "Retweetad"
 msgid "Retweeted by %s"
 msgstr "Retweetad av %s"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Never"
+msgid "Revert"
+msgstr "Aldrig"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "Gå igenom dina inköp"
@@ -7207,6 +7254,12 @@ msgstr "Shoppingvagn"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Visa"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show inbox"
+msgid "Show Tabs for inbox"
+msgstr "Visa inkorg"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -8465,6 +8518,13 @@ msgstr "E-brevet har lagts till i portalen"
 
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
+msgstr "E-brevet har inget innehåll"
+
+#. %1$s target mail category
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "This mail has no content"
+msgid "This mail was moved to %1$s."
 msgstr "E-brevet har inget innehåll"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
@@ -10859,11 +10919,6 @@ msgstr "yyyy"
 
 #~ msgid "Another group with same identifier name exists: %1$d."
 #~ msgstr "En annan grupp med samma namn finns redan: %1$d."
-
-#, fuzzy
-#~| msgid "Apply role"
-#~ msgid "Apply"
-#~ msgstr "Tillämpa roll"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -13851,9 +13906,6 @@ msgstr "yyyy"
 
 #~ msgid "Show first page"
 #~ msgstr "Visa första sidan"
-
-#~ msgid "Show inbox"
-#~ msgstr "Visa inkorg"
 
 #~ msgid "Show last page"
 #~ msgstr "Visa sista sidan"

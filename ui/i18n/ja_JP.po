@@ -1044,6 +1044,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "外部リンク先の画像の事前読み込みを許可"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1115,6 +1119,29 @@ msgstr ""
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Applications"
 msgstr "アプリケーション"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Apply"
+msgstr "ロールを割り当てる"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply for all mails?"
+msgstr "全てのサブフォルダに適用"
+
+#. %1$s single mail address or comma separated list of multiple
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Email from %1$s: %2$s"
+msgid "Apply for mails from %1$s"
+msgstr "%1$s からのメール: %2$s"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply move to all mails from a sender"
+msgstr "全てのサブフォルダに適用"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1231,6 +1258,10 @@ msgstr "受信メール サーバ"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "昇順"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1527,7 +1558,7 @@ msgstr "予定表："
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/main.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -4632,6 +4663,13 @@ msgstr "メールアドレス（必須）"
 msgid "Mail and Messaging"
 msgstr "メールとメッセージング"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Mail categories"
+msgstr "利用可能なカテゴリ:"
+
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "メール数割当量"
@@ -5015,6 +5053,7 @@ msgstr "容量が必要ですか？"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "期限なし"
 
@@ -6707,6 +6746,12 @@ msgstr "リツイートの取り消し"
 msgid "Retweeted by %s"
 msgstr "%s さんがリツイート"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Never"
+msgid "Revert"
+msgstr "期限なし"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "購入品を確認"
@@ -7177,6 +7222,12 @@ msgstr "ショッピング カート"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "表示"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show inbox"
+msgid "Show Tabs for inbox"
+msgstr "受信フォルダを表示"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -8424,6 +8475,13 @@ msgstr "このメールをポータルに追加しました。"
 
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
+msgstr "このメールには内容がありません。"
+
+#. %1$s target mail category
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "This mail has no content"
+msgid "This mail was moved to %1$s."
 msgstr "このメールには内容がありません。"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
@@ -10951,10 +11009,6 @@ msgstr "yyyy"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "アンティグア‐バルブダ"
 
-#~| msgid "Apply role"
-#~ msgid "Apply"
-#~ msgstr "ロールを割り当てる"
-
 #~ msgid "Appointment '%s' not found."
 #~ msgstr "アポイント '%s' が見つかりません。"
 
@@ -11383,9 +11437,6 @@ msgstr "yyyy"
 
 #~ msgid "Availability"
 #~ msgstr "空き時間の確認"
-
-#~ msgid "Available Categories:"
-#~ msgstr "利用可能なカテゴリ:"
 
 #~ msgid "Available Teams:"
 #~ msgstr "利用可能なチーム:"
@@ -15578,9 +15629,6 @@ msgstr "yyyy"
 
 #~ msgid "Show in Calendar"
 #~ msgstr "予定表に表示"
-
-#~ msgid "Show inbox"
-#~ msgstr "受信フォルダを表示"
 
 #~ msgid "Show last page"
 #~ msgstr "最後のページを表示"
