@@ -279,14 +279,14 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: [
-                            'bower_components/tinymce-dist/tinymce.jquery.min.js',
+                            'bower_components/tinymce-dist/tinymce.min.js',
                             'lib/tinymce/themes/unobtanium/theme.min.js',
-                            'bower_components/tinymce-dist/plugins/{autolink,link,paste,textcolor,lists}/plugin.min.js',
+                            'bower_components/tinymce-dist/plugins/{autolink,code,link,paste,textcolor,lists}/plugin.min.js',
                             'lib/tinymce/plugins/oximage/plugin.min.js',
                             'lib/tinymce/plugins/oxpaste/plugin.min.js',
                             'lib/tinymce/plugins/oxdrop/plugin.min.js'
                         ],
-                        dest: 'build/apps/3rd.party/tinymce/tinymce.jquery.min.js',
+                        dest: 'build/apps/3rd.party/tinymce/tinymce.min.js',
                         nonull: true
                     }
                 ]

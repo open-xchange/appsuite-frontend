@@ -170,31 +170,25 @@ define('io.ox/calendar/month/perspective', [
                 apiData.folder = this.folder.id;
             }
 
-            return api.getAll(apiData, useCache).done(function (list) {
+            return api.getAll(apiData, useCache).then(function (list) {
                 // update single week view collections
+                function appointmentsBetween(start, end) {
+                    return list.filter(function (mod) {
+                        var tmpStart = mod.full_time ? moment.utc(mod.start_date).local(true).valueOf() : mod.start_date,
+                            tmpEnd = mod.full_time ? moment.utc(mod.end_date).local(true).valueOf() : mod.end_date;
+                        return (tmpStart >= start && tmpStart < end) || (tmpEnd > start && tmpEnd <= end) || (tmpStart <= start && tmpEnd >= end);
+                    }).map(function (obj) {
+                        return new MonthAppointment(obj);
+                    });
+                }
                 var start = opt.start;
-                for (var i = 1; i <= weeks; i++) {
-                    var end = moment(start).add(1, 'week').valueOf(),
+                for (var i = 0; i < weeks; i++) {
+                    var end = moment(start).tz('utc').add(1, 'week').valueOf(),
                         collection = self.collections[start];
                     if (collection) {
-                        var retList = [];
-                        if (list.length > 0) {
-                            for (var j = 0; j < list.length; j++) {
-                                var mod = list[j],
-                                    tmpStart = mod.start_date,
-                                    tmpEnd = mod.end_date;
-                                if (mod.full_time) {
-                                    tmpStart = moment.utc(tmpStart).local(true).valueOf();
-                                    tmpEnd = moment.utc(tmpEnd).local(true).valueOf();
-                                }
-                                if ((tmpStart >= start && tmpStart < end) || (tmpEnd > start && tmpEnd <= end) || (tmpStart <= start && tmpEnd >= end)) {
-                                    retList.push(new MonthAppointment(mod));
-                                }
-                            }
-                        }
-                        collection.reset(retList);
+                        collection.reset(appointmentsBetween(start, end));
                     }
-                    start = moment(start).add(1, 'week').valueOf();
+                    start = moment(start).tz('utc').add(1, 'week').valueOf();
                     collection = null;
                 }
             });
@@ -227,7 +221,7 @@ define('io.ox/calendar/month/perspective', [
             }
 
             // draw all weeks
-            for (var i = 1; i <= weeks; i++, curWeek.add(1, 'week')) {
+            for (var i = 0; i < weeks; i++, curWeek.tz('utc').add(1, 'week')) {
                 var day = curWeek.valueOf(),
                     endDate = moment(curWeek).add(1, 'week'),
                     monthDelimiter = curWeek.date() > endDate.date();

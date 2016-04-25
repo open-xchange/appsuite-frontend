@@ -164,20 +164,6 @@ define('io.ox/mail/view-options', [
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
             );
 
-            var side = baton.app.getWindow().nodes.sidepanel;
-
-            side.addClass('bottom-toolbar');
-            side.append(
-                $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="close-folder-view">')
-                    .append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
-                        $('<span class="sr-only">').text(gt('Close folder view'))
-                    )
-                    .on('click', { app: baton.app, state: false }, toggleFolderView)
-                )
-            );
-
             baton.app.on({
                 'folderview:open': onFolderViewOpen.bind(null, baton.app),
                 'folderview:close': onFolderViewClose.bind(null, baton.app)
@@ -187,14 +173,34 @@ define('io.ox/mail/view-options', [
         }
     });
 
-    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
-        id: 'premium-area',
-        index: 200,
+    ext.point('io.ox/mail/sidepanel').extend({
+        id: 'toggle-folderview',
+        index: 1000,
         draw: function (baton) {
-            commons.addPremiumFeatures(baton.app, {
-                upsellId: 'folderview/mail/bottom',
-                upsellRequires: 'active_sync'
-            });
+            this.addClass('bottom-toolbar').append(
+                $('<div class="generic-toolbar bottom visual-focus">').append(
+                    $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="close-folder-view">')
+                    .append(
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Close folder view'))
+                    )
+                    .on('click', { app: baton.app, state: false }, toggleFolderView)
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/sidepanel').extend({
+        id: 'premium-area',
+        index: 10000,
+        draw: function (baton) {
+            this.append(
+                commons.addPremiumFeatures(baton.app, {
+                    append: false,
+                    upsellId: 'folderview/mail/bottom',
+                    upsellRequires: 'active_sync'
+                })
+            );
         }
     });
 });

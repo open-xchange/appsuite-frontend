@@ -253,10 +253,11 @@ define('io.ox/mail/api', [
     api.get = function (obj, options) {
 
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
-            model = pool.get('detail').get(cid);
+            model = pool.get('detail').get(cid),
+            cache = options && options.cache ? options.cache : true;
 
         // TODO: make this smarter
-        if (!obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
+        if (cache && !obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
 
         // determine default view parameter
         if (!obj.view) obj.view = defaultView(obj);
@@ -264,28 +265,28 @@ define('io.ox/mail/api', [
         // limit default size
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
 
-        return get.call(api, obj, options && options.cache).done(function (data) {
+        // never use factory's internal cache, therefore always 'false' at this point
+        return get.call(api, obj, false).done(function (data) {
+            // don't save raw data in our models. We only want preformated content there
+            if (obj.view === 'raw') return;
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
-            //don't save raw data in our models. We only want preformated content there
-            if (!obj.view || (obj.view && obj.view !== 'raw')) {
-                // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
-                // split by ; because this field might contain further unwanted data
-                _(data.attachments).each(function (attachment) {
-                    if (/^text\/(plain|html)/i.test(attachment.content_type)) {
-                        // only clean-up text and html; otherwise we lose data (see bug 43727)
-                        attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
-                    }
-                });
-                // either update or add model
-                if (model) {
-                    // if we already have a model we promote changes for threads
-                    model.set(data);
-                    propagate(model);
-                } else {
-                    // add new model
-                    pool.add('detail', data);
+            // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
+            // split by ; because this field might contain further unwanted data
+            _(data.attachments).each(function (attachment) {
+                if (/^text\/(plain|html)/i.test(attachment.content_type)) {
+                    // only clean-up text and html; otherwise we lose data (see bug 43727)
+                    attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
                 }
+            });
+            // either update or add model
+            if (model) {
+                // if we already have a model we promote changes for threads
+                model.set(data);
+                propagate(model);
+            } else {
+                // add new model
+                pool.add('detail', data);
             }
         });
     };
@@ -1154,7 +1155,11 @@ define('io.ox/mail/api', [
 
         deferred = handleSendXHR2(data, files, deferred);
 
-        var DELAY = api.SEND_REFRESH_DELAY;
+        var DELAY = api.SEND_REFRESH_DELAY,
+            isSaveDraft = data.flags === api.FLAGS.DRAFT,
+            csid = data.csid;
+
+        api.queue.add(csid);
 
         return deferred
             .done(function () {
@@ -1164,6 +1169,14 @@ define('io.ox/mail/api', [
             })
             .fail(function () {
                 ox.trigger('mail:send:fail');
+            })
+            .progress(function (e) {
+                // no progress for saving a draft
+                if (isSaveDraft) return;
+                api.queue.update(csid, e.loaded, e.total);
+            })
+            .always(function () {
+                api.queue.remove(csid);
             })
             .then(function (text) {
                 // wait a moment, then update mail index
@@ -1243,6 +1256,41 @@ define('io.ox/mail/api', [
             fixPost: true
         });
     }
+
+    api.queue = (function () {
+
+        function pct(loaded, total) {
+            if (!total) return 0;
+            return Math.max(0, Math.min(100, Math.round(loaded / total * 100))) / 100;
+        }
+
+        return {
+
+            collection: new Backbone.Collection().on('add remove change:pct', function () {
+                var loaded = 0, total = 0;
+                this.each(function (model) {
+                    loaded += model.get('loaded');
+                    total += model.get('total');
+                });
+                this.trigger('progress', { count: this.length, loaded: loaded, pct: pct(loaded, total), total: total });
+            }),
+
+            add: function (csid) {
+                this.collection.add(new Backbone.Model({ id: csid, loaded: 0, pct: 0, total: 0 }));
+            },
+
+            remove: function (csid) {
+                var model = this.collection.get(csid);
+                this.collection.remove(model);
+            },
+
+            update: function (csid, loaded, total) {
+                var model = this.collection.get(csid);
+                if (!model) return;
+                model.set({ loaded: loaded, pct: pct(loaded, total), total: total });
+            }
+        };
+    }());
 
     /**
      * save mail attachments in files app
@@ -1739,7 +1787,8 @@ define('io.ox/mail/api', [
                 columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
                 sort: params.sort || '610',
                 order: params.order || 'desc',
-                timezone: 'utc'
+                timezone: 'utc',
+                filter: params.filter
             };
         },
         filter: function (item) {

@@ -303,18 +303,25 @@ define('io.ox/calendar/main', [
          */
         'folder-view': function (app) {
 
-            // tree view
-            var tree = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'calendar' });
-
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
+            app.treeView = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'calendar' });
+            FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
         },
 
         'premium-area': function (app) {
-            commons.addPremiumFeatures(app, {
-                upsellId: 'folderview/calendar/bottom',
-                upsellRequires: 'caldav'
+
+            ext.point('io.ox/calendar/sidepanel').extend({
+                id: 'premium-area',
+                index: 10000,
+                draw: function () {
+                    this.append(
+                        commons.addPremiumFeatures(app, {
+                            append: false,
+                            upsellId: 'folderview/calendar/bottom',
+                            upsellRequires: 'caldav'
+                        })
+                    );
+                }
             });
         },
 
@@ -627,6 +634,21 @@ define('io.ox/calendar/main', [
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.sect.calendar.gui';
             };
+        },
+
+        'sidepanel': function (app) {
+
+            ext.point('io.ox/calendar/sidepanel').extend({
+                id: 'tree',
+                index: 100,
+                draw: function (baton) {
+                    // add border & render tree and add to DOM
+                    this.addClass('border-right').append(baton.app.treeView.$el);
+                }
+            });
+
+            var node = app.getWindow().nodes.sidepanel;
+            ext.point('io.ox/calendar/sidepanel').invoke('draw', node, ext.Baton({ app: app }));
         },
 
         'metrics': function (app) {

@@ -63,31 +63,29 @@ define('io.ox/calendar/util', [
 
         isBossyAppointmentHandling: function (opt) {
 
-            _.extend({
+            opt = _.extend({
                 app: {},
                 invert: false,
                 folderData: null
             }, opt);
 
-            if (settings.get('bossyAppointmentHandling', false)) {
-                var check = function (data) {
-                    if (folderAPI.is('private', data)) {
-                        var isOrganizer = opt.app.organizerId === ox.user_id;
-                        return opt.invert ? !isOrganizer : isOrganizer;
-                    }
-                    return true;
-                };
+            if (!settings.get('bossyAppointmentHandling', false)) return $.when(true);
 
-                if (opt.folderData) {
-                    return $.Deferred().resolve(check(opt.folderData));
+            var check = function (data) {
+                if (folderAPI.is('private', data)) {
+                    var isOrganizer = opt.app.organizerId === ox.user_id;
+                    return opt.invert ? !isOrganizer : isOrganizer;
                 }
-                return folderAPI.get(opt.app.folder_id)
-                                .then(function (data) {
-                                    return check(data);
-                                });
+                return true;
+            };
 
-            }
-            return $.Deferred().resolve(true);
+            if (opt.folderData) return $.when(check(opt.folderData));
+
+            if (!opt.app.folder_id) return $.when(false);
+
+            return folderAPI.get(opt.app.folder_id).then(function (data) {
+                return check(data);
+            });
         },
 
         getFirstWeekDay: function () {
@@ -661,10 +659,9 @@ define('io.ox/calendar/util', [
 
         getWeekScaffold: function (timestamp) {
             var day = moment(timestamp).startOf('week'),
-                i = 0,
                 obj,
                 ret = { days: [] };
-            for (; i < 7; i += 1) {
+            for (var i = 0; i < 7; i++) {
                 ret.days.push(obj = {
                     year: day.year(),
                     month: day.month(),
@@ -778,24 +775,22 @@ define('io.ox/calendar/util', [
         },
 
         getAppointmentColorClass: function (folder, appointment) {
+
             var folderColor = that.getFolderColor(folder),
                 appointmentColor = appointment.color_label || 0,
                 conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
 
             // shared appointments which are unconfirmed or declined don't receive color classes
-            if (/^(unconfirmed|declined)$/.test(that.getConfirmationClass(conf))) {
-                return '';
-            }
+            if (/^(unconfirmed|declined)$/.test(that.getConfirmationClass(conf))) return '';
 
             // private appointments are colored with gray instead of folder color
-            if (appointment.private_flag) {
-                folderColor = 10;
-            }
+            if (appointment.private_flag) folderColor = 10;
 
-            if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
-                // public appointments which are not from you are always colored in the calendar color
-                return 'color-label-' + folderColor;
-            }
+            // if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
+            //     // public appointments which are not from you are always colored in the calendar color
+            //     return 'color-label-' + folderColor;
+            // }
+
             // set color of appointment. if color is 0, then use color of folder
             var color = appointmentColor === 0 ? folderColor : appointmentColor;
             return 'color-label-' + color;

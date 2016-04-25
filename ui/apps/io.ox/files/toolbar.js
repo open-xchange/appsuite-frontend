@@ -196,6 +196,13 @@ define('io.ox/files/toolbar', [
                 ref: 'io.ox/files/actions/edit-description',
                 section: 'edit'
             },
+            'save-as-pdf': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Save as PDF'),
+                ref: 'io.ox/files/actions/save-as-pdf',
+                section: 'save-as'
+            },
             'send': {
                 prio: 'lo',
                 mobile: 'lo',

@@ -17,13 +17,14 @@ define('io.ox/mail/toolbar', [
     'io.ox/core/extPatterns/actions',
     'io.ox/core/tk/flag-picker',
     'io.ox/mail/api',
+    'io.ox/core/capabilities',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/toolbar',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (ext, links, actions, flagPicker, api, Dropdown, Toolbar, gt) {
+], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, gt) {
 
     'use strict';
 
@@ -293,6 +294,26 @@ define('io.ox/mail/toolbar', [
                     ret = ext.point('io.ox/mail/classic-toolbar').invoke('draw', $toolbar, baton);
                 $.when.apply($, ret.value()).done(_.lfo(updateCallback, $toolbar));
             }, 10);
+        }
+    });
+
+
+    // classic toolbar
+    ext.point('io.ox/mail/mediator').extend({
+        id: 'categories',
+        index: 10000,
+        setup: function (app) {
+
+            if (_.device('smartphone')) return;
+            if (!capabilities.has('mail_categories')) return;
+            if (!capabilities.has('mail_categories_dev')) return;
+
+            var toolbarView = new Toolbar({ title: gt('Mail categories'), tabindex: 1, className: 'categories-toolbar-container' });
+            toolbarView.createToolbar();
+
+            app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
+                toolbarView.render().$el
+            );
         }
     });
 

@@ -253,9 +253,9 @@
 
     &.expanded section {
         &.attachments,
-        &.body,
-        &.notifications     { display: block; }
-        // for proper overflow behavior */
+        &.notifications { display: block; }
+        // for proper overflow behavior (see bug 45248)
+        &.body { display: table; }
         &.attachments:empty { display: none;  }
     }
 
@@ -787,6 +787,25 @@
             top: -5px;
             html.high-contrast & { color: @hc-gray; }
         }
+    }
+}
+
+//
+// Progress
+//
+
+.mail-progress {
+    .progress {
+        height: 4px;
+        margin-bottom: 8px;
+        background-color: transparent;
+        box-shadow: none;
+        border-radius: 0;
+    }
+    .caption {
+        font-size: 12px;
+        line-height: 16px;
+        text-align: center;
     }
 }
 

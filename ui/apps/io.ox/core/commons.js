@@ -643,18 +643,22 @@ define('io.ox/core/commons', [
                 }
             });
 
-            var side = app.getWindow().nodes.sidepanel.addClass('bottom-toolbar');
-
-            side.append(
-                $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button" tabindex="1">')
-                    .append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
-                        $('<span class="sr-only">').text(gt('Close folder view'))
-                    )
-                    .on('click', { app: app, state: false }, toggleFolderView)
-                )
-            );
+            ext.point(app.get('name') + '/sidepanel').extend({
+                id: 'toggle-folderview',
+                index: 1000,
+                draw: function () {
+                    this.addClass('bottom-toolbar').append(
+                        $('<div class="generic-toolbar bottom visual-focus">').append(
+                            $('<a href="#" class="toolbar-item" role="button" tabindex="1">')
+                            .append(
+                                $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
+                                $('<span class="sr-only">').text(gt('Close folder view'))
+                            )
+                            .on('click', { app: app, state: false }, toggleFolderView)
+                        )
+                    );
+                }
+            });
 
             app.on({
                 'folderview:open': onFolderViewOpen.bind(null, app),
@@ -675,8 +679,7 @@ define('io.ox/core/commons', [
             if (!coreSettings.get('upsell/premium/folderView/visible')) return;
             if (coreSettings.get('upsell/premium/folderView/closedByUser')) return;
 
-            var sidepanel = app.getWindow().nodes.sidepanel,
-                container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus in">').append(
+            var container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus in">').append(
                     $('<div class="header">').append(
                         gt('Premium features'),
                         $('<a href="#" role="button" class="pull-right">').append(
@@ -692,7 +695,9 @@ define('io.ox/core/commons', [
                 );
 
             ext.point(app.get('name') + '/folderview/premium-area').invoke('draw', container, {});
+
             if (container.find('li').length === 0) return;
+
             var upsellView = new UpsellView({
                 id: opt.upsellId || 'folderview/' + app.get('name') + '/bottom',
                 requires: opt.upsellRequires,
@@ -702,11 +707,17 @@ define('io.ox/core/commons', [
                     this.$('a').addClass('btn btn-default');
                 }
             });
+
             if (upsellView.visible) {
                 container.append(upsellView.render().$el);
                 $('.header a', container).remove();
             }
-            sidepanel.append(container);
+
+            if (opt.append !== false) {
+                app.getWindow().nodes.sidepanel.append(container);
+            }
+
+            return container;
         }
     };
 

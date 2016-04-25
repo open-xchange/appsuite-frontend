@@ -958,7 +958,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 renderWarningForEmptyTests(notificationConditions);
             }
 
-            if (_.isEmpty(baton.model.get('actioncmds'))) {
+            //disable save button if no action is set or just the stop action
+            if (_.isEmpty(baton.model.get('actioncmds')) || _.isEqual(baton.model.get('actioncmds'), [{ id: 'stop' }])) {
                 renderWarningForEmptyActions(notificationActions);
             }
 

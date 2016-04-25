@@ -198,11 +198,8 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone')) return;
 
-            // tree view
-            var tree = new TreeView({ app: app, module: 'infostore', root: settings.get('rootFolderId', 9), contextmenu: true });
-
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
+            app.treeView = new TreeView({ app: app, module: 'infostore', root: settings.get('rootFolderId', 9), contextmenu: true });
+            FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
         },
 
@@ -966,10 +963,20 @@ define('io.ox/files/main', [
             );
         },
 
-        'premium-area': function (app) {
-            commons.addPremiumFeatures(app, {
-                upsellId: 'folderview/infostore/bottom',
-                upsellRequires: 'boxcom || google || msliveconnect'
+        'premium-area': function () {
+
+            ext.point('io.ox/files/sidepanel').extend({
+                id: 'premium-area',
+                index: 10000,
+                draw: function (baton) {
+                    this.append(
+                        commons.addPremiumFeatures(baton.app, {
+                            append: false,
+                            upsellId: 'folderview/infostore/bottom',
+                            upsellRequires: 'boxcom || google || msliveconnect'
+                        })
+                    );
+                }
             });
         },
 
@@ -1057,6 +1064,21 @@ define('io.ox/files/main', [
             app.listView.$el
                 .addClass('dropzone')
                 .attr('data-dropzones', '.selectable.file-type-folder');
+        },
+
+        'sidepanel': function (app) {
+
+            ext.point('io.ox/files/sidepanel').extend({
+                id: 'tree',
+                index: 100,
+                draw: function (baton) {
+                    // add border & render tree and add to DOM
+                    this.addClass('border-right').append(baton.app.treeView.$el);
+                }
+            });
+
+            var node = app.getWindow().nodes.sidepanel;
+            ext.point('io.ox/files/sidepanel').invoke('draw', node, ext.Baton({ app: app }));
         },
 
         'metrics': function (app) {

@@ -1815,6 +1815,7 @@ define('io.ox/core/main', [
             case 'MSG-1000':
             case 'MSG-1001':
             // INUSE (see bug 37218)
+            // falls through
             case 'MSG-1031':
                 notifications.yell(error);
                 break;

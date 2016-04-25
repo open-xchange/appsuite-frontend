@@ -226,7 +226,7 @@ define('io.ox/contacts/util', [
 
         getMail: function (obj) {
             // get the first mail address
-            return obj ? (obj.email1 || obj.email2 || obj.email3 || obj.mail || '').toLowerCase() : '';
+            return obj ? (obj.email1 || obj.email2 || obj.email3 || obj.mail || '').trim().toLowerCase() : '';
         },
 
         getJob: function (obj) {

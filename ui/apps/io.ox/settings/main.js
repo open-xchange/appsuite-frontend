@@ -259,8 +259,7 @@ define('io.ox/settings/main', [
             var focus = true,
                 refresh = (baton && baton.options) ? baton.options.refresh : false;
 
-            tree.selection.resetSelected(tree.selection.getItems());
-            tree.selection.preselect(id);
+            tree.selection.uncheck().preselect(id);
             app.folder.set(id);
 
             item = tree.selection.byId(id);
@@ -557,8 +556,7 @@ define('io.ox/settings/main', [
                 });
             }
             if (!_.device('smartphone')) {
-                tree.selection.resetSelected(tree.selection.getItems());
-                tree.selection.pick(0);
+                tree.selection.uncheck().pick(0);
             }
             return $.when();
         };

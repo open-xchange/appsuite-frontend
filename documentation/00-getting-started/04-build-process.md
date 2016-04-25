@@ -251,3 +251,18 @@ Output lines belonging to the same client request are grouped together and separ
 Specifies the path to the zoneinfo database. On POSIX systems, the default of `/usr/share/zoneinfo/` should always work.
 Even on systems without the database everything should just work if `--server` is specified, since any missing files will be fetched from the remote server.
 This option may still be useful when debugging time zone problems caused by different versions of the zoneinfo database.
+
+# FAQ
+
+## ui does not build properly
+
+- delete ui/build directory
+- delete ui/node_modules
+- delete ui/bower_components
+- runt `grunt build` again
+
+
+## The ui starts but the top bar does not contain any apps/modules
+
+Please check the manifests file returned by your (local/remote) server.
+

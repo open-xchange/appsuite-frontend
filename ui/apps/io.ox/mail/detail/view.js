@@ -184,14 +184,16 @@ define('io.ox/mail/detail/view', [
             index: 100,
             draw: function (baton) {
 
-                var data = baton.data, threadSubject, mailSubject;
+                var data = baton.data, baseSubject, threadSubject, mailSubject;
 
                 // no thread?
                 if (data.threadSize === 1) return;
+
                 // identical subject?
-                threadSubject = util.getSubject(api.threads.subject(data), false);
+                baseSubject = api.threads.subject(data);
+                threadSubject = util.getSubject(baseSubject, false);
                 mailSubject = util.getSubject(data, false);
-                if (mailSubject === threadSubject) return;
+                if (baseSubject === '' || threadSubject === mailSubject) return;
 
                 this.append(
                     $('<span class="io-ox-label">').text(gt('Subject') + '\u00a0 '),

@@ -352,7 +352,16 @@ define('io.ox/mail/compose/view', [
                 _.url.hash('mailto', null);
             }
 
+            this.listenTo(mailAPI.queue.collection, 'change:pct', this.onSendProgress);
+
             ext.point(POINT + '/mailto').invoke('setup');
+        },
+
+        onSendProgress: function (model, value) {
+            var csid = this.model.get('csid');
+            if (csid !== model.get('id')) return;
+            console.log('Soooo', csid, value);
+            if (value >= 0) this.app.getWindow().busy(value);
         },
 
         ariaLiveUpdate: function (e, msg) {
@@ -368,11 +377,7 @@ define('io.ox/mail/compose/view', [
 
             var self = this,
                 mode = obj.mode,
-                attachmentMailInfo;
-
-            if (obj.attachment && obj.attachments) {
-                attachmentMailInfo = obj.attachments[1] ? obj.attachments[1].mail : undefined;
-            }
+                mailReference = _(obj).pick('id', 'folder_id');
 
             delete obj.mode;
 
@@ -406,8 +411,8 @@ define('io.ox/mail/compose/view', [
                     var attachments = _.clone(data.attachments);
                     // to keep the previews working we copy data from the original mail
                     if (mode === 'forward' || mode === 'edit') {
-                        attachments.map(function (file) {
-                            return _.extend(file, { group: 'mail', mail: attachmentMailInfo });
+                        attachments.forEach(function (file) {
+                            _.extend(file, { group: 'mail', mail: mailReference });
                         });
                     }
 
@@ -482,7 +487,7 @@ define('io.ox/mail/compose/view', [
         },
 
         saveDraft: function () {
-            this.model.set('savedAsDraft', true);
+            this.model.set('autoDismiss', true);
             var win = this.app.getWindow();
             win.busy();
             // get mail
@@ -645,7 +650,8 @@ define('io.ox/mail/compose/view', [
             var self = this,
                 def = $.when();
 
-            if (this.model.needsCleanup() || this.model.dirty()) {
+            // This dialog gets automatically dismissed
+            if (this.model.dirty() || this.model.get('autosavedAsDraft') && !this.model.get('autoDismiss')) {
                 // button texts may become quite large in some languages (e. g. french, see Bug 35581)
                 // add some extra space
                 // TODO maybe we could use a more dynamical approach
@@ -659,7 +665,7 @@ define('io.ox/mail/compose/view', [
                     .show()
                     .then(function (action) {
                         if (action === 'delete') {
-                            self.model.cleanAutosave();
+                            self.model.discard();
                         } else if (action === 'savedraft') {
                             return self.saveDraft();
                         } else {
@@ -672,6 +678,8 @@ define('io.ox/mail/compose/view', [
         },
 
         send: function () {
+
+            this.model.set('autoDismiss', true);
 
             var mail = this.model.getMail(),
                 view = this,
@@ -698,7 +706,9 @@ define('io.ox/mail/compose/view', [
                     if (baton.isDisabled(point.id, p.id)) return;
                     return p.perform.apply(undefined, [baton]);
                 });
-            }, $.when());
+            }, $.when()).fail(function () {
+                baton.model.set('autoDismiss', false);
+            });
         },
 
         toggleTokenfield: function (e) {
@@ -951,7 +961,9 @@ define('io.ox/mail/compose/view', [
         prependNewLine: function () {
             var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''),
                 nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
-            this.editor.setContent(nl + content);
+
+            // Prepend newline in all modes except when editing draft
+            if (this.model.get('mode') !== 'edit') this.editor.setContent(nl + content);
         },
 
         setMail: function () {

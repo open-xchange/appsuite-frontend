@@ -188,6 +188,11 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     draw: function (baton) {
                         var checkboxView = new mini.CheckboxView({ name: 'activateTimeFrame', model: baton.model });
 
+                        // see bug 45187, ignore change events triggerd by the initial datepicker setup
+                        this.on('change', function (e) {
+                            if (e.target.disabled) e.stopPropagation();
+                        });
+
                         baton.model.off('change:' + checkboxView.name, null, ext.point(ref + '/edit/view'));
                         baton.model.on('change:' + checkboxView.name, function (model, checked) {
                             $('.dateFrom').find('.form-control').attr('disabled', !checked);
@@ -211,7 +216,6 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     index: 450,
                     id: ref + '/edit/view/start_date',
                     draw: function (baton) {
-
                         var dateView = new DatePicker({
                             model: baton.model,
                             className: 'col-sm-6 dateFrom',

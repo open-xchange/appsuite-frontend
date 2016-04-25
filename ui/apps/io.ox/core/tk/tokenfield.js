@@ -360,6 +360,7 @@ define('io.ox/core/tk/tokenfield', [
                 'tokenfield:removetoken': function (e) {
                     _([].concat(e.attrs)).each(function (el) {
                         var model = self.getModelByCID(el.value);
+                        if (!model) return;
                         //#. %1$s is the display name of a removed user or mail recipient
                         //#. %2$s is the email address of the user or mail recipient
                         self.$el.trigger('aria-live-update', gt('Removed %1$s, %2$s.', model.get('display_name'), model.value));

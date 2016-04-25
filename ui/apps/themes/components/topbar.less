@@ -64,8 +64,11 @@
         & > a {
 
             color: @topbar-launcher-color;
-            padding: 12px @default-padding;
+            padding: 0 @default-padding;
             line-height: 40px;
+            // strict limit of 40px (see bug 45294)
+            height: 40px;
+            display: inline-block;
 
             html.high-contrast & {
                 color: @black;
@@ -186,7 +189,6 @@
 
                 &.apptitle {
                     float: left;
-                    line-height: 16px;
                 }
             }
 
@@ -200,9 +202,9 @@
                 }
 
                 &.fa-times {
-                    padding: 12px 16px;
+                    padding: 0 16px;
                     margin: 0;
-
+                    vertical-align: top;
                     &:hover { color: #fff; }
                 }
             }
@@ -374,14 +376,9 @@
             }
         }
 
-        i {
-            vertical-align: top;
-            top: 0px;
-        }
-
         .badge {
             position: relative;
-            top: -7px;
+            top: 7px;
             left: -11px;
             z-index: 1;
             vertical-align: top;

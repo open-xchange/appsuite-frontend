@@ -1,5 +1,5 @@
 {
-  "name": "OX App Suite",
+  "name": "ox-appsuite",
   "version": "7.8",
   "private": true,
   "ignore": [
@@ -25,19 +25,19 @@
     "marked": "0.3.5",
     "mediaelement": "2.19.0",
     "mobiscroll": "2.16.1",
-    "moment": "2.10.6",
+    "moment": "^2.13.0",
     "moment-interval": "https://github.com/Open-Xchange-Frontend/moment-interval.git",
-    "moment-timezone": "0.4.1",
+    "moment-timezone": "^0.5.3",
     "open-sans-fontface": "1.2.1",
     "pdfjs-dist": "1.1.366",
     "requirejs": "2.1.22",
     "swiper": "3.0.6",
     "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
-    "tinymce-dist": "4.3.7",
+    "tinymce-dist": "4.3.9",
     "typeahead.js": "0.10.5",
     "underscore": "1.8.3",
     "velocity": "1.2.2",
-    "clipboard": "1.5.9"
+    "clipboard": "1.5.10"
   },
   "resolutions": {
     "backbone": "fda02db428c464badb12010c990622ee91f28a48"

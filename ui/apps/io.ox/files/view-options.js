@@ -228,25 +228,12 @@ define('io.ox/files/view-options', [
         id: 'toggle-folderview',
         index: 200,
         draw: function (baton) {
+
             this.append(
                 $('<a href="#" role="button" class="toolbar-item" tabindex="1">')
                 .attr('title', gt('Open folder view'))
                 .append($('<i class="fa fa-angle-double-right">'))
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
-            );
-
-            var side = baton.app.getWindow().nodes.sidepanel;
-
-            side.addClass('bottom-toolbar');
-            side.append(
-                $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" role="button" class="toolbar-item" tabindex="1">')
-                    .append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
-                        $('<span class="sr-only">').text(gt('Close folder view'))
-                    )
-                    .on('click', { app: baton.app, state: false }, toggleFolderView)
-                )
             );
 
             baton.app.on({
@@ -255,6 +242,23 @@ define('io.ox/files/view-options', [
             });
 
             if (baton.app.folderViewIsVisible()) _.defer(onFolderViewOpen, baton.app);
+        }
+    });
+
+    ext.point('io.ox/files/sidepanel').extend({
+        id: 'toggle-folderview',
+        index: 1000,
+        draw: function (baton) {
+            this.addClass('bottom-toolbar').append(
+                $('<div class="generic-toolbar bottom visual-focus">').append(
+                    $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="close-folder-view">')
+                    .append(
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Close folder view'))
+                    )
+                    .on('click', { app: baton.app, state: false }, toggleFolderView)
+                )
+            );
         }
     });
 });

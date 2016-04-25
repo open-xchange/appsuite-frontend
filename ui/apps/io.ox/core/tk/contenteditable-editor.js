@@ -217,7 +217,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             advanced: 'styleselect fontselect fontsizeselect | forecolor backcolor | link image',
             toolbar2: '',
             toolbar3: '',
-            plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists',
+            plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
             theme: 'unobtanium',
             skin: 'lightgray'
         }, opt);
@@ -251,7 +251,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         }
 
         var options = {
-            script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.jquery.min.js',
+            script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
 
             extended_valid_elements: 'blockquote[type]',
 
@@ -522,6 +522,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.getContentParts = function () {
             var content = this.getContent(),
                 index = content.indexOf('<blockquote type="cite">');
+            // special case: initially replied/forwarded text mail
+            if (content.substring(0, 15) === '<blockquote><p>') index = 0;
+            // special case: switching between signatures in such a mail
+            if (content.substring(0, 23) === '<p><br></p><blockquote>') index = 0;
             if (index < 0) return { content: content };
             return {
                 // content without trailing whitespace

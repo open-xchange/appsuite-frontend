@@ -231,8 +231,6 @@ define('io.ox/mail/main', [
 
             // tree view
             app.treeView = new TreeView({ app: app, module: 'mail', contextmenu: true });
-
-            // initialize folder view
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
         },
@@ -1008,8 +1006,11 @@ define('io.ox/mail/main', [
                 }
 
                 if (layout !== 'list' && app.props.previousAttributes().layout === 'list' && !app.right.hasClass('preview-visible')) {
-                    //listview did not create a detailview for the last mail, it was only selected, so detailview needs to be triggered manually(see bug 33456)
-                    app.listView.selection.selectEvents();
+                    // listview did not create a detailview for the last mail, it was only selected, so detailview needs to be triggered manually(see bug 33456)
+                    // only trigger if we actually have selected mails
+                    if (app.listView.selection.get().length > 0) {
+                        app.listView.selection.selectEvents(app.listView.selection.getItems());
+                    }
                 }
             };
 
@@ -1515,6 +1516,51 @@ define('io.ox/mail/main', [
             });
         },
 
+        'mail-progress': function () {
+
+            ext.point('io.ox/mail/sidepanel').extend({
+                id: 'progress',
+                index: 300,
+                draw: function () {
+
+                    var $el = $('<div class="generic-toolbar bottom mail-progress">')
+                        .hide()
+                        .append(
+                            $('<div class="progress"><div class="progress-bar"></div></div>'),
+                            $('<div class="caption">')
+                        );
+
+                    api.queue.collection.on('progress', function (data) {
+                        if (!data.count) return $el.hide();
+                        var n = data.count,
+                            pct = Math.round(data.pct * 100),
+                            //#. %1$d is number of messages; %2$d is progress in percent
+                            caption = gt.ngettext('Sending 1 message ... %2$d%', 'Sending %1$d messages ... %2$d%', n, n, pct);
+                        $el.find('.progress-bar').css('width', pct + '%');
+                        $el.find('.caption').text(caption);
+                        $el.show();
+                    });
+
+                    this.append($el);
+                }
+            });
+        },
+
+        'sidepanel': function (app) {
+
+            ext.point('io.ox/mail/sidepanel').extend({
+                id: 'tree',
+                index: 100,
+                draw: function (baton) {
+                    // add border & render tree and add to DOM
+                    this.addClass('border-right').append(baton.app.treeView.$el);
+                }
+            });
+
+            var node = app.getWindow().nodes.sidepanel;
+            ext.point('io.ox/mail/sidepanel').invoke('draw', node, ext.Baton({ app: app }));
+        },
+
         'metrics': function (app) {
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
@@ -1597,6 +1643,43 @@ define('io.ox/mail/main', [
                     }
                 });
             });
+        },
+
+        'mail-categories': function (app) {
+            if (_.device('smartphone')) return;
+            if (!capabilities.has('mail_categories')) return;
+            if (!capabilities.has('mail_categories_dev')) return;
+
+            var mapper;
+            // register settings listener
+            if (settings.get('categories/enabled')) refresh();
+            settings.on('change:categories/enabled', refresh);
+
+            var Mapper = function (cat) {
+                var mapper = {
+                    initialize: function () {
+                        cat.init({ mail: app, pool: api.pool.get('detail') });
+                        this.categories = cat;
+                        return this;
+                    },
+                    refresh: function () {
+                        this.categories.config.load();
+                    }
+                };
+                return mapper.initialize();
+            };
+
+            // apply settings change (enable/disable)
+            function refresh() {
+                // refresh config (triggers show/hide internally)
+                if (mapper) return mapper.refresh();
+                // in case require not resolved in time
+                mapper = { refresh: $.noop };
+                // init on first call of 'apply'
+                require(['io.ox/mail/categories/main'], function (cat) {
+                    mapper = new Mapper(cat);
+                });
+            }
         }
     });
 

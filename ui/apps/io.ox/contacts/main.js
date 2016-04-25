@@ -614,11 +614,8 @@ define('io.ox/contacts/main', [
          */
         'folder-view': function (app) {
 
-            // tree view
-            var tree = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'contacts' });
-
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
+            app.treeView = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'contacts' });
+            FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
         },
 
@@ -771,9 +768,19 @@ define('io.ox/contacts/main', [
         },
 
         'premium-area': function (app) {
-            commons.addPremiumFeatures(app, {
-                upsellId: 'folderview/contacts/bottom',
-                upsellRequires: 'carddav'
+
+            ext.point('io.ox/contacts/sidepanel').extend({
+                id: 'premium-area',
+                index: 10000,
+                draw: function () {
+                    this.append(
+                        commons.addPremiumFeatures(app, {
+                            append: false,
+                            upsellId: 'folderview/contacts/bottom',
+                            upsellRequires: 'carddav'
+                        })
+                    );
+                }
             });
         },
 
@@ -855,6 +862,21 @@ define('io.ox/contacts/main', [
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.sect.contacts.gui';
             };
+        },
+
+        'sidepanel': function (app) {
+
+            ext.point('io.ox/contacts/sidepanel').extend({
+                id: 'tree',
+                index: 100,
+                draw: function (baton) {
+                    // add border & render tree and add to DOM
+                    this.addClass('border-right').append(baton.app.treeView.$el);
+                }
+            });
+
+            var node = app.getWindow().nodes.sidepanel;
+            ext.point('io.ox/contacts/sidepanel').invoke('draw', node, ext.Baton({ app: app }));
         },
 
         'metrics': function (app) {

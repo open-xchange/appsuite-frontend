@@ -928,7 +928,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             var r, def = $.Deferred();
 
             // whitelisting sessionless actions (config, login, autologin)
-            if (!o.params.session) {
+            if (!o.params.session && o.appendSession !== false) {
                 // check whitelist
                 var whiteList = ['login#*', 'capabilities#*', 'apps/manifests#*', 'files#document', 'office#getFile'],
                     found = _.find(whiteList, function (moduleAction) {

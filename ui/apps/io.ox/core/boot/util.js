@@ -76,6 +76,10 @@ define('io.ox/core/boot/util', [], function () {
             return _.url.hash('login_type') === 'guest';
         },
 
+        isContinue: function () {
+            return /^(guest|message_continue)$/.test(_.url.hash('login_type'));
+        },
+
         isGuestWithPassword: function () {
             return _.url.hash('login_type') === 'guest_password';
         },
@@ -134,7 +138,7 @@ define('io.ox/core/boot/util', [], function () {
     //
 
     ox.relogin = function () {
-        exports.gotoSignin('login_type=none');
+        exports.gotoSignin('login_type=useForm');
     };
 
     ox.on('relogin:required', ox.relogin);
