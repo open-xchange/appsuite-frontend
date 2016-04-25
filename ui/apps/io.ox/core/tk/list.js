@@ -445,7 +445,17 @@ define('io.ox/core/tk/list',
         },
 
         next: function () {
-            if (this.hasNext()) this.selection.next(); else this.processPaginate();
+            // can not use this.hasNext here. Pagination must be handled separately.
+            if (!this.collection) return;
+            if (this.getPosition() + 1 < this.collection.length) {
+                 this.selection.next();
+            } else if (!this.complete) {
+                var selection = this.selection;
+                this.collection.once('paginate', function () {
+                    selection.next();
+                });
+                this.processPaginate();
+            }
         },
 
         hasPrevious: function () {
