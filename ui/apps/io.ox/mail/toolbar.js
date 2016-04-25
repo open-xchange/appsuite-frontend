@@ -306,7 +306,6 @@ define('io.ox/mail/toolbar', [
 
             if (_.device('smartphone')) return;
             if (!capabilities.has('mail_categories')) return;
-            if (!capabilities.has('mail_categories_dev')) return;
 
             var toolbarView = new Toolbar({ title: gt('Mail categories'), tabindex: 1, className: 'categories-toolbar-container' });
             toolbarView.createToolbar();

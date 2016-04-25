@@ -1648,7 +1648,6 @@ define('io.ox/mail/main', [
         'mail-categories': function (app) {
             if (_.device('smartphone')) return;
             if (!capabilities.has('mail_categories')) return;
-            if (!capabilities.has('mail_categories_dev')) return;
 
             var mapper;
             // register settings listener

@@ -18,7 +18,7 @@ define('io.ox/mail/categories/api', [
 
     'use strict';
 
-    if (!capabilities.has('mail_categories') || !capabilities.has('mail_categories_dev')) {
+    if (!capabilities.has('mail_categories')) {
         console.error("mail/categories/api: capababilty 'mail_categories' missing");
     }
 

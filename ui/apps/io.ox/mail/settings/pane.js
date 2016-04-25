@@ -305,7 +305,6 @@ define('io.ox/mail/settings/pane', [
 
             if (_.device('smartphone')) return;
             if (!capabilities.has('mail_categories')) return;
-            if (!capabilities.has('mail_categories_dev')) return;
 
             var list = [
                 { label: gt('Ask'), value: 'dialog' },
