@@ -238,7 +238,6 @@ define('io.ox/mail/categories/main', [
             this.dialog.show(baton);
         },
         show: function () {
-            debugger;
             this.trigger('show:before');
             this.ui.container.addClass('mail-categories-enabled');
         },
@@ -382,7 +381,6 @@ define('io.ox/mail/categories/main', [
         show: function () {
             if (!this.props.get('enabled')) return;
             if (!this.isFolderSupported()) return this.hide();
-            debugger;
             // thread restore
             if (this.props.get('thread') === undefined) {
                 this.props.set('thread', this.mail.props.get('thread'));
