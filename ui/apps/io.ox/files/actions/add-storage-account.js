@@ -39,10 +39,13 @@ define('io.ox/files/actions/add-storage-account', [
     };
 
     function getAvailableServices() {
-        return require(['io.ox/keychain/api']).then(function (keychainApi) {
+        return require(['io.ox/keychain/api', 'io.ox/core/api/filestorage']).then(function (keychainApi, filestorageApi) {
+
+            var availableFilestorageServices = _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; });
             return _(keychainApi.submodules).filter(function (submodule) {
                 if (!services[submodule.id]) return false;
-                return !submodule.canAdd || submodule.canAdd.apply(this);
+                // we need support for both accounts, Oauth accounts and filestorage accounts.
+                return (!submodule.canAdd || submodule.canAdd.apply(this)) && availableFilestorageServices.indexOf(submodule.id) >= 0;
             });
         });
     }

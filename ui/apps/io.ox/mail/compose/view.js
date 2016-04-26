@@ -26,10 +26,11 @@ define('io.ox/mail/compose/view', [
     'gettext!io.ox/mail',
     'io.ox/mail/actions/attachmentEmpty',
     'io.ox/mail/actions/attachmentQuota',
+    'io.ox/core/tk/dialogs',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs) {
 
     'use strict';
 
@@ -405,8 +406,8 @@ define('io.ox/mail/compose/view', [
                     var attachments = _.clone(data.attachments);
                     // to keep the previews working we copy data from the original mail
                     if (mode === 'forward' || mode === 'edit') {
-                        attachments.map(function (file) {
-                            return _.extend(file, { group: 'mail', mail: attachmentMailInfo });
+                        attachments.forEach(function (file) {
+                            _.extend(file, { group: 'mail', mail: attachmentMailInfo });
                         });
                     }
 
@@ -481,6 +482,7 @@ define('io.ox/mail/compose/view', [
         },
 
         saveDraft: function () {
+            this.model.set('autoDismiss', true);
             var win = this.app.getWindow();
             win.busy();
             // get mail
@@ -559,12 +561,12 @@ define('io.ox/mail/compose/view', [
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-
-                    model.set('msgref', result);
-                    model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
-
-                    var saved = model.get('infostore_ids_saved');
-                    model.set('infostore_ids_saved', [].concat(saved, mail.infostore_ids || []));
+                    model.set({
+                        'autosavedAsDraft': true,
+                        'msgref': result,
+                        'sendtype': mailAPI.SENDTYPE.EDIT_DRAFT,
+                        'infostore_ids_saved': [].concat(model.get('infostore_ids_saved'), mail.infostore_ids || [])
+                    });
                     model.updateShadow();
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
@@ -641,45 +643,38 @@ define('io.ox/mail/compose/view', [
 
         discard: function () {
             var self = this,
-                def = $.Deferred();
+                def = $.when();
 
-            if (this.model.dirty()) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    //button texts may become quite large in some languages (e. g. french, see Bug 35581)
-                    //add some extra space
-                    //TODO maybe we could use a more dynamical approach
-                    new dialogs.ModalDialog({ width: 550, container: _.device('smartphone') ? self.$el.closest('.window-container-center') : $('#io-ox-core') })
-                        .text(gt('Do you really want to discard your message?'))
-                        //#. "Discard message" appears in combination with "Cancel" (this action)
-                        //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', { tabIndex: 1 })
-                        .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', { tabIndex: 1 })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
-                                self.clean();
-                                def.resolve();
-                            } else if (action === 'savedraft') {
-                                self.saveDraft().then(function () {
-                                    self.clean();
-                                    def.resolve();
-                                }, def.reject);
-                            } else {
-                                def.reject();
-                            }
-                        });
-                });
-            } else {
-                this.clean();
-                def.resolve();
+            // This dialog gets automatically dismissed
+            if (this.model.dirty() || this.model.get('autosavedAsDraft') && !this.model.get('autoDismiss')) {
+                // button texts may become quite large in some languages (e. g. french, see Bug 35581)
+                // add some extra space
+                // TODO maybe we could use a more dynamical approach
+                def = new dialogs.ModalDialog({ width: 550, container: _.device('smartphone') ? self.$el.closest('.window-container-center') : $('#io-ox-core') })
+                    .text(gt('Do you really want to discard your message?'))
+                    //#. "Discard message" appears in combination with "Cancel" (this action)
+                    //#. Translation should be distinguishable for the user
+                    .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', { tabIndex: 1 })
+                    .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', { tabIndex: 1 })
+                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                    .show()
+                    .then(function (action) {
+                        if (action === 'delete') {
+                            self.model.discard();
+                        } else if (action === 'savedraft') {
+                            return self.saveDraft();
+                        } else {
+                            return $.Deferred().reject();
+                        }
+                    });
             }
 
-            return def;
+            return def.then(function () { self.clean(); });
         },
 
         send: function () {
+
+            this.model.set('autoDismiss', true);
 
             var mail = this.model.getMail(),
                 view = this,
@@ -706,7 +701,9 @@ define('io.ox/mail/compose/view', [
                     if (baton.isDisabled(point.id, p.id)) return;
                     return p.perform.apply(undefined, [baton]);
                 });
-            }, $.when());
+            }, $.when()).fail(function () {
+                baton.model.set('autoDismiss', false);
+            });
         },
 
         toggleTokenfield: function (e) {
