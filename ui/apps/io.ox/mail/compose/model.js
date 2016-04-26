@@ -27,6 +27,9 @@ define('io.ox/mail/compose/model', [
 
         defaults: function () {
             return {
+                autosavedAsDraft: false,
+                autoDismiss: false,
+                preferredEditorMode: settings.get('messageFormat', 'html'),
                 editorMode: settings.get('messageFormat', 'html'),
                 account_name: '',
                 attachment: '',
@@ -129,6 +132,7 @@ define('io.ox/mail/compose/model', [
                 this.set({ 'signature': '' });
             }
 
+            this.set('autoDismiss', this.get('mode') === 'edit');
             this.updateShadow();
         },
 
@@ -356,6 +360,13 @@ define('io.ox/mail/compose/model', [
             }
 
             return mail;
+        },
+
+        discard: function () {
+            // never delete on edit
+            // only delete autosaved drafts that are not saved manually and have a msgref
+            if (this.get('autoDismiss')) return;
+            if (this.get('autosavedAsDraft') && this.get('msgref')) mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, this.get('msgref'))]);
         },
 
         convertAllToUnified: emoji.converterFor({
