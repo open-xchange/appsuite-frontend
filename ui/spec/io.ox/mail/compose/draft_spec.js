@@ -130,7 +130,6 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     var spy = sinon.spy(api, 'send');
 
                     expect(spy.called, 'mail API send has been called').to.be.false;
-                    var server = this.server;
                     var def = app.view.saveDraft().then(function () {
                         expect(spy.calledOnce, 'mail API send has been called once').to.be.true;
                         var mail = spy.firstCall.args[0];
@@ -162,6 +161,45 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                         spy.restore();
                     });
                     return def;
+                });
+                it('should overwrite attachments with backend response after save', function () {
+                    this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
+                        xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                            data: 'default0/INBOX/Drafts/666'
+                        }));
+                    });
+                    this.server.respondWith('GET', /api\/mail\?action=get/, function (xhr) {
+                        xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                            data: {
+                                id: '666',
+                                folder_id: 'default0/INBOX/Drafts',
+                                msgref: 'default0/INBOX/Drafts/666',
+                                attachments: [{
+                                    id: '1',
+                                    content: ''
+                                }, { id: '2' }, { id: '3' }]
+                            }
+                        }));
+                    });
+                    app.model.set('to', [['Testuser', 'test@example.com']]);
+                    app.model.set('subject', 'example mail');
+                    app.model.get('attachments').reset([{
+                        id: '1',
+                        content: ''
+                    }, { id: '1.1' }, { id: '1.2' }], { silent: true });
+                    expect(app.model.get('attachments').pluck('id')).to.deep.equal(['1', '1.1', '1.2']);
+
+                    var api = require('io.ox/mail/api');
+                    var spy = sinon.spy(api, 'send');
+
+                    return app.view.saveDraft().then(function () {
+                        expect(spy.calledOnce, 'mail API send has been called once').to.be.true;
+                        expect(app.model.get('attachments').length, 'number of attachments').to.equal(3);
+                        expect(app.model.get('attachments').pluck('id')).to.deep.equal(['1', '2', '3']);
+                    }).always(function (result) {
+                        expect(result || {}).not.to.have.property('error');
+                        spy.restore();
+                    });
                 });
             });
         });

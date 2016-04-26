@@ -382,6 +382,10 @@ define('io.ox/calendar/freebusy/controller', [
             this.participants
                 .on('remove', removeParticipant)
                 .on('add', function (model) {
+                    if (model.has('members')) {
+                        resolveParticipants(model.toJSON());
+                        return;
+                    }
                     model.index = templates.getFreeColor(self.participants);
                     drawParticipant(model);
                 })

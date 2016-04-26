@@ -231,8 +231,12 @@ define('io.ox/files/view-options', [
             require(['io.ox/keychain/api', 'io.ox/core/api/filestorage'], function (keychainApi, filestorageApi) {
                 var toolbar = baton.app.getWindow().nodes.sidepanel,
                     draw = function () {
-                        var availableServices = _(keychainApi.submodules).filter(function (submodule) {
-                                return !submodule.canAdd || submodule.canAdd.apply(this);
+                        var services = ['google', 'dropbox', 'boxcom', 'msliveconnect'],
+                            availableFilestorageServices = _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; }),
+                            availableServices = _(keychainApi.submodules).filter(function (submodule) {
+                                if (services.indexOf(submodule.id) < 0) return false;
+                                // we need support for both accounts, Oauth accounts and filestorage accounts.
+                                return (!submodule.canAdd || submodule.canAdd.apply(this)) && availableFilestorageServices.indexOf(submodule.id) >= 0;
                             }),
                             buttonTemplates = {
                                 'google': [gt('Add Google Drive account'),'logo-google'],
@@ -244,10 +248,8 @@ define('io.ox/files/view-options', [
                             container = toolbar.find('.over-bottom').length ? toolbar.find('.over-bottom') : $('<div class="generic-toolbar over-bottom visual-focus">').appendTo(toolbar);
 
                         _(availableServices).each(function (service) {
-                            if (service.id === 'google' || service.id === 'dropbox' || service.id === 'boxcom' || service.id === 'msliveconnect') {
-                                buttonTemplates[service.id].push(service);
-                                buttons[service.id] = (buildbutton.apply(this, buttonTemplates[service.id]));
-                            }
+                            buttonTemplates[service.id].push(service);
+                            buttons[service.id] = (buildbutton.apply(this, buttonTemplates[service.id]));
                         });
 
                         //if we don't have any buttons hide the whole toolbar
@@ -286,11 +288,6 @@ define('io.ox/files/view-options', [
                                 buttons.google || '',
                                 buttons.msliveconnect || '',
                                 buttons.boxcom || ''
-                                /*buildbutton(gt('Add account'), 'misc-link').on('click', function () {
-                                    ox.launch('io.ox/settings/main', { id: 'io.ox/settings/accounts' }).done(function () {
-                                        this.setSettingsPane({ id: 'io.ox/settings/accounts' });
-                                    });
-                                })*/
                                 )
                             ).show();
                     };
