@@ -308,7 +308,20 @@ define('io.ox/mail/toolbar', [
             if (!capabilities.has('mail_categories')) return;
 
             var toolbarView = new Toolbar({ title: gt('Mail categories'), tabindex: 1, className: 'categories-toolbar-container' });
-            toolbarView.createToolbar();
+
+            // add categories and action toolbar
+            toolbarView.$list = [
+                toolbarView.createToolbar().addClass('categories'),
+                toolbarView.createToolbar().addClass('actions').append(
+                    $('<li role="presentation">')
+                    .append(
+                        $('<a class="io-ox-action-link no-underline" href="#" tabindex="-1" data-action="options" draggable="false" role="button" data-section="default" data-prio="hi" title=""">').append(
+                                $('<i class="fa fa-cog">')
+                            )
+                    )
+                )
+            ];
+            toolbarView.initButtons();
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbarView.render().$el

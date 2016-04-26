@@ -16,12 +16,12 @@ define('io.ox/mail/categories/main', [
     'io.ox/mail/api',
     'io.ox/core/api/account',
     'io.ox/core/tk/list-dnd',
+    'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
     'io.ox/core/yell',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail',
     'less!io.ox/mail/categories/style'
-], function (api, mailAPI, accountAPI, dnd, capabilities, yell, settings, gt) {
+], function (api, mailAPI, accountAPI, dnd, links, capabilities, yell, settings) {
 
     'use strict';
 
@@ -31,19 +31,12 @@ define('io.ox/mail/categories/main', [
         console.error("mail/categories/main: capababilty 'mail_categories' missing");
     }
 
-    var DEBUG = true,
+    var DEBUG = false,
         // category config propertys that should be synced
         SYNCED = ['id', 'name', 'active'],
         Model, Collection, View, module;
 
     function trigger() { this.trigger.apply(this, arguments); }
-
-    function senderlist(data) {
-        return _.chain(data)
-                .map(function (mail) { return mail.from[0][1]; })
-                .uniq()
-                .value();
-    }
 
     // helper: merge cateogories part of the server side and local config
     function merge(target, source) {
@@ -83,6 +76,7 @@ define('io.ox/mail/categories/main', [
         },
         is: function (id) {
             if (id === 'disabled') return !this.get('active');
+            return this.get(id);
         }
     });
 
@@ -106,82 +100,22 @@ define('io.ox/mail/categories/main', [
         }
     });
 
-    // VIEW: SUBMODULE DIALOG
-    var Dialog = function (context) {
-        // hint: dialog === view.dialog
-        var dialog = {
-            // hint: this = view
-            bind: function () {
-                // bind all functions to context (view)
-                _.each(dialog, function (func, key) {
-                    if (key === 'bind') return;
-                    this[key] = this[key].bind(context);
-                }.bind(this));
-                return this;
-            },
-            render: function (baton) {
-                var def = $.Deferred(),
-                    list = senderlist(baton.data);
-                // modal dialog
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    this.dialog.instance = new dialogs.ModalDialog()
-                            .header($('<h3>').text(gt('Apply for all mails?')))
-                            .build(function () {
-                                this.getPopup().addClass('mail-categopries-dialog');
-                                this.getContentNode().append(
-                                    // TODO: i18n plural
-                                    //#. %1$s target mail category
-                                    //#, c-format
-                                    $('<p>').html(gt('This mail was moved to %1$s.', '<i>' + baton.target + '</i>')),
-                                    //#. %1$s single mail address or comma separated list of multiple
-                                    //#, c-format
-                                    $('<p>').html(gt('Apply for mails from %1$s', '<b>' + list.join(', ') + '</b>'))
-                                );
-                            })
-                            .data(baton)
-                            .addPrimaryButton('generalize', gt('Apply'))
-                            .addButton('cancel', gt('Cancel'))
-                            .addAlternativeButton('revert', gt('Revert'));
-                    def.resolve();
-                }.bind(this));
-                return def;
-            },
-            show: function (baton) {
-                // preferred setting for generation (never, always, ask[default])
-                if (this.props.get('generalize') === 'never') return;
-                if (this.props.get('generalize') === 'always') return this.trigger('dialog:generalize', baton);
-
-                // render modal dialog, register handler and show
-                this.dialog.render(baton).then(function () {
-                    this.dialog.register();
-                    this.dialog.instance.show();
-                }.bind(this));
-            },
-            register: function () {
-                // retrigger on view: generalize -> data:apply, revert -> data:revert
-                this.dialog.instance.on('generalize revert', function retrigger(e, data) {
-                    this.trigger('dialog:' + e.type, data);
-                }.bind(this));
-            }
-
-        };
-        return dialog.bind(context);
-    };
-
     // VIEW: knows module, collection, module.props
     View = Backbone.View.extend({
         dialog: undefined,
         events: {
             'click .category': 'onSelect',
             'click [data-action="toggle"]': 'onToggle',
-            'selection:drop': 'onDrop'
+            'selection:drop': 'onDrop',
+            'click [data-action="options"]': 'showOptions'
         },
         initialize: function (options) {
             _.extend(this, options || {});
             this.setElement($('.categories-toolbar-container'));
             // helper
             this.ui = {
-                list: this.$el.find('.classic-toolbar'),
+                list: this.$el.find('.classic-toolbar.categories'),
+                actions: this.$el.find('.classic-toolbar.actions'),
                 body: this.$el.closest('.window-body'),
                 container: this.$el.closest('.window-container')
             };
@@ -192,7 +126,7 @@ define('io.ox/mail/categories/main', [
         register: function () {
             // collection
             this.listenTo(this.categories, 'update reset', _.throttle(this.render, 130));
-            this.listenTo(this.categories, 'change:unread change:active change:name', this.refresh);
+            this.listenTo(this.categories, 'change', _.throttle(this.render, 200));
             // module
             this.listenTo(this.module, 'move:after', this.showDialog);
             this.listenTo(this.props, 'change:selected', this.refreshSelection);
@@ -204,7 +138,7 @@ define('io.ox/mail/categories/main', [
         refresh: function (model, node) {
             node = (node || {}).addClass ? node : this.ui.list.find('[data-id="' + model.get('id') + '"]');
             if (model.is('disabled')) { node.addClass('disabled'); } else { node.removeClass('disabled'); }
-            //if (model.is('disabled')) { node.addClass('hidden'); } else { node.removeClass('hidden'); }
+            if (model.is('disabled')) { node.addClass('hidden'); } else { node.removeClass('hidden'); }
             if (model.id === this.props.get('selected')) {
                 node.addClass('selected');
             } else {
@@ -223,9 +157,6 @@ define('io.ox/mail/categories/main', [
                         $('<div class="category-name truncate">').text(model.get('name')),
                         $('<div class="category-counter">').append(
                             $('<span class="counter">').text(model.getCount())
-                        ),
-                        $('<div class="category-actions">').append(
-                            model.can('disable') ? $('<i class="fa fa-fw fa-eye-slash" data-action="toggle">') : $()
                         )
                     ).attr('data-id', model.get('id'))
                 );
@@ -234,8 +165,16 @@ define('io.ox/mail/categories/main', [
             }.bind(this));
         },
         showDialog: function (baton) {
-            this.dialog = new Dialog(this);
-            this.dialog.show(baton);
+            require(['io.ox/mail/categories/dialogs'], function (dialog) {
+                // triggers update event in this view (with data param)
+                new dialog.Generalize(this, baton);
+            }.bind(this));
+        },
+        showOptions: function () {
+            require(['io.ox/mail/categories/dialogs'], function (dialog) {
+                // triggers update event in this view (with data param)
+                new dialog.Options(this);
+            }.bind(this));
         },
         show: function () {
             this.trigger('show:before');
@@ -293,6 +232,8 @@ define('io.ox/mail/categories/main', [
                 this.categories.reset(config.list);
                 this.props.set('enabled', config.enabled);
                 this.trigger('load');
+                // update unread count
+                _.defer(_.bind(this.refresh, this));
             },
             save: function () {
                 this.trigger('save:before');
@@ -339,10 +280,11 @@ define('io.ox/mail/categories/main', [
             // props
             this.props.set('selected', this.preselected());
             // inital refresh
-            _.defer(_.bind(this.refresh, this));
+            //_.defer(_.bind(this.refresh, this));
         },
         register: function () {
             this.listenTo(this.view, 'disable enable', this.toggle);
+            this.listenTo(this.view, 'update', this.update);
             this.listenTo(this.view, 'select', this.select);
             // retrigger as custom value based event (change:enabled -> enabled:true/false)
             this.listenTo(this.props, 'change:enabled change:visible', retrigger);
@@ -358,8 +300,8 @@ define('io.ox/mail/categories/main', [
             this.listenTo(this.view, 'dialog:generalize', this.generalize);
             this.listenTo(this.view, 'dialog:revert', this.revert);
             // triggers settings save
-            this.listenTo(this.props, 'change:enabled', this.config.save);
-            this.listenTo(this.categories, 'change:name change:active', this.config.save);
+            this.listenTo(this.props, 'change:enabled', _.throttle(this.config.save, 2000, { leading: false }));
+            this.listenTo(this, 'update:after', this.config.save);
             // reload: listview
             this.listenTo(this.props, 'change:selected', this.reload);
             this.listenTo(this.props, 'change:enabled', this.reload);
@@ -417,7 +359,7 @@ define('io.ox/mail/categories/main', [
             _.url.hash('category', id);
             return id;
         },
-        // actions
+        // category-based actions
         select: function (categoryId) {
             _.url.hash('category', categoryId);
             this.props.set('selected', categoryId);
@@ -425,6 +367,10 @@ define('io.ox/mail/categories/main', [
         toggle: function (categoryId, action) {
             this.trigger('toggle', action);
             this.categories.get(categoryId).set('active', action === 'enable');
+        },
+        update: function (categories) {
+            this.categories.set(categories);
+            this.trigger('update:after');
         },
         move: function (baton, revert) {
             baton.source = this.props.get('selected');

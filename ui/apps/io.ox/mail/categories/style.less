@@ -19,6 +19,43 @@
     i {
         font-weight: 500;
     }
+
+    .fa {
+        color: #777;
+        font-size: 18px;
+    }
+
+    .fa-checkmark {
+        &:before { content: "\f096"; }
+    }
+
+    .category-item {
+        display: flex;
+        align-items: center;
+        padding-bottom: 6px;
+        .status {
+            height: 14px;
+            width: 14px;
+            margin: 0;
+            margin-right: 8px;
+        }
+        .name {
+            flex: 1;
+            display: inline-block;
+        }
+
+        .hint {
+            font-style: italic;
+        }
+
+        // disabled state
+        &:not(.active) .name  {
+            font-style: italic;
+            color: #888;
+        }
+    }
+
+
 }
 
 .window-container.mail-categories-enabled:not(.io-ox-find-active) {
@@ -42,6 +79,12 @@
         .classic-toolbar {
             background: #f5f5f5;
             display: flex;
+            position: static;
+        }
+
+        .classic-toolbar.actions {
+            padding-left: 16px;
+            width: 60px;
         }
 
         .category {
@@ -71,7 +114,6 @@
                 border-left: 1px solid #dddddd;
                 border-right: 1px solid #dddddd;
                 border-bottom: 2px solid #3c73aa;
-                .category-actions { display: none; }
             }
 
             // avoid double borders on edge
@@ -100,9 +142,6 @@
                 }
             }
 
-            .category-actions {
-                padding-left: 12px;
-            }
         }
 
         .truncate {
