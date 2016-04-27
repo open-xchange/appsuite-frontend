@@ -312,8 +312,9 @@ define('io.ox/mail/toolbar', [
             // add categories and action toolbar
             toolbarView.$list = [
                 toolbarView.createToolbar().addClass('categories'),
+                $('<div class="free-space">'),
                 toolbarView.createToolbar().addClass('actions').append(
-                    $('<li role="presentation">')
+                    $('<li role="presentation aria-hidden="true">')
                     .append(
                         $('<a class="io-ox-action-link no-underline" href="#" tabindex="-1" data-action="options" draggable="false" role="button" data-section="default" data-prio="hi" title=""">').append(
                                 $('<i class="fa fa-cog">')

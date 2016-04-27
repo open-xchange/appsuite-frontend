@@ -20,8 +20,9 @@ define('io.ox/mail/categories/main', [
     'io.ox/core/capabilities',
     'io.ox/core/yell',
     'settings!io.ox/mail',
+    'gettext!io.ox/mail',
     'less!io.ox/mail/categories/style'
-], function (api, mailAPI, accountAPI, dnd, links, capabilities, yell, settings) {
+], function (api, mailAPI, accountAPI, dnd, links, capabilities, yell, settings, gt) {
 
     'use strict';
 
@@ -105,7 +106,7 @@ define('io.ox/mail/categories/main', [
         dialog: undefined,
         events: {
             'click .category': 'onSelect',
-            'click [data-action="toggle"]': 'onToggle',
+            'keydown .category': 'onKeydown',
             'selection:drop': 'onDrop',
             'click [data-action="options"]': 'showOptions'
         },
@@ -137,7 +138,6 @@ define('io.ox/mail/categories/main', [
         },
         refresh: function (model, node) {
             node = (node || {}).addClass ? node : this.ui.list.find('[data-id="' + model.get('id') + '"]');
-            if (model.is('disabled')) { node.addClass('disabled'); } else { node.removeClass('disabled'); }
             if (model.is('disabled')) { node.addClass('hidden'); } else { node.removeClass('hidden'); }
             if (model.id === this.props.get('selected')) {
                 node.addClass('selected');
@@ -145,7 +145,8 @@ define('io.ox/mail/categories/main', [
                 node.removeClass('selected');
             }
             if (model.getCount()) { node.find('.counter').text(model.getCount()); }
-            node.find('.category-name').text(model.get('name'));
+            //#. use as a fallback name in case a user enters a empty string as the name of tab
+            node.find('.category-name').text(model.get('name').trim() || gt('Unnamed'));
         },
         render: function () {
             this.trigger('render');
@@ -153,16 +154,19 @@ define('io.ox/mail/categories/main', [
             this.categories.forEach(function (model) {
                 container.append(
                     node = $('<li class="category">').append(
-                        $('<div class="category-icon">'),
-                        $('<div class="category-name truncate">').text(model.get('name')),
-                        $('<div class="category-counter">').append(
-                            $('<span class="counter">').text(model.getCount())
+                        $('<a class="link" tabindex="1" role="button">').append(
+                            $('<div class="category-icon">'),
+                            $('<div class="category-name truncate">').text(model.get('name')),
+                            $('<div class="category-counter">').append(
+                                $('<span class="counter">').text(model.getCount())
+                            )
                         )
                     ).attr('data-id', model.get('id'))
                 );
                 // states
                 this.refresh(model, node);
             }.bind(this));
+            container.append($('<li class="free-space" aria-hidden="true">'));
         },
         showDialog: function (baton) {
             require(['io.ox/mail/categories/dialogs'], function (dialog) {
@@ -196,18 +200,13 @@ define('io.ox/mail/categories/main', [
             baton.data = mailAPI.resolve(baton.data);
             this.trigger('drop', baton);
         },
+        onKeydown: function (e) {
+            if (e.which === 13) this.onSelect(e);
+        },
         onSelect: function (e) {
-            // action clicked
-            if ($(e.target).closest('.category-actions').length) return;
             // currently disabled
             var model = this.resolve(e);
-            if (model.is('disabled')) return;
             this.trigger('select', model.get('id'));
-        },
-        onToggle: function (e) {
-            var model = this.resolve(e),
-                name = model.is('disabled') ? 'enable' : 'disable';
-            this.trigger(name, model.get('id'), name);
         }
     });
 
@@ -283,7 +282,6 @@ define('io.ox/mail/categories/main', [
             //_.defer(_.bind(this.refresh, this));
         },
         register: function () {
-            this.listenTo(this.view, 'disable enable', this.toggle);
             this.listenTo(this.view, 'update', this.update);
             this.listenTo(this.view, 'select', this.select);
             // retrigger as custom value based event (change:enabled -> enabled:true/false)
