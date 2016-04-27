@@ -4,19 +4,26 @@ title: Settings
 
 # Introduction
 
-Settings (sometimes 'jslob' is used synonymously) fulfils a double function. 
+Settings (sometimes 'jslob' is used synonymously) fulfils a double function.
 
 **user settings**
 
-First of all they're used to store the user settings - no suprise here. 
-The settings object has a _get_ and _set_ function to get and manipulate the different properties. 
-A _save_ function syncs the current state with the database. 
+First of all they're used to store the user settings - no suprise here.
+The settings object has a _get_ and _set_ function to get and manipulate the different properties.
+A _save_ function syncs the current state with the database.
 
 **configurations**
 
-The second usage is to communicate small configuration 'switches'. 
+The second usage is to communicate small configuration 'switches'.
 In contrast to capabilites these attributes cover small impacts on the ui.
 Of course they are read only are not synced when calling _save_.
+
+**capability vs. setting**
+
+Capabilities covers more global configurations with it's simple enabled/disabled states.
+For example the capability _tasks_ controlls the availability of the task app.
+
+Settings in opposite are more flexible (more than true/false) and tend to affect the ui in more subtler ways.
 
 # Setting namespaces
 

@@ -1,5 +1,5 @@
 ---
-title: Advertisment
+title: Advertisement
 keywords: monetization
 ---
 
