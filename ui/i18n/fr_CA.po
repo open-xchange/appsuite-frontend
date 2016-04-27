@@ -1160,20 +1160,20 @@ msgstr ""
 msgid "Applications"
 msgstr "Applications"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply role"
 msgid "Apply"
 msgstr "Appliquer le rôle"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply to all subfolders"
 msgid "Apply for all mails?"
 msgstr "Appliquer à tous les sous-dossiers"
 
 #. %1$s single mail address or comma separated list of multiple
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy, c-format
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
@@ -1607,7 +1607,7 @@ msgstr "Agenda :"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/main.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -3057,6 +3057,13 @@ msgstr "Modifier le contact"
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Edit Flickr photo stream"
 msgstr "Modifier un flux de photos Flickr"
+
+#. might be suitable to use 'tabs' rather than translating it
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Edit task"
+msgid "Edit Tabs"
+msgstr "Modifier la tâche"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Edit Tumblr feed"
@@ -5119,6 +5126,7 @@ msgstr "Mes tâches"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -6083,6 +6091,16 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Veuillez saisir votre mot de passe."
 
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+msgid ""
+"Please feel free to rename tabs to better match your needs. Use checkboxes "
+"to hide or show specific tabs."
+msgstr ""
+
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+msgid "Please note that some of the tabs can not be disabled."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
@@ -6859,7 +6877,7 @@ msgstr "Renvoyé un microblogue Tweeter"
 msgid "Retweeted by %s"
 msgstr "Microblogue Tweeter renvoyé par %s"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Never"
 msgid "Revert"
@@ -6936,7 +6954,8 @@ msgstr "Chiffre d'affaires"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/compose/names.js
+#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
@@ -8640,7 +8659,7 @@ msgid "This mail has no content"
 msgstr "Ce message n'a pas de contenu"
 
 #. %1$s target mail category
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy, c-format
 #| msgid "This mail has no content"
 msgid "This mail was moved to %1$s."

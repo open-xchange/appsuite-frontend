@@ -292,7 +292,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/dialogs.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js
 #: apps/io.ox/mail/compose/names.js
@@ -730,6 +730,7 @@ msgstr ""
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js
 #: module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -2676,6 +2677,8 @@ msgstr ""
 #: apps/io.ox/files/share/view-options.js
 #: module:io.ox/files
 #: apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -8145,33 +8148,49 @@ msgstr ""
 msgid "Couldn't load your auto forward."
 msgstr ""
 
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
 msgid "Apply for all mails?"
 msgstr ""
 
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
+msgid "Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs."
+msgstr ""
+
 #. %1$s target mail category
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
 #, c-format
 msgid "This mail was moved to %1$s."
 msgstr ""
 
 #. %1$s single mail address or comma separated list of multiple
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
 #, c-format
 msgid "Apply for mails from %1$s"
 msgstr ""
 
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
+msgid "Revert"
+msgstr ""
+
+#: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
 msgid "Apply"
 msgstr ""
 
-#: apps/io.ox/mail/categories/main.js
+#. might be suitable to use 'tabs' rather than translating it
+#: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
-msgid "Revert"
+msgid "Edit Tabs"
+msgstr ""
+
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
+msgid "Please note that some of the tabs can not be disabled."
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
