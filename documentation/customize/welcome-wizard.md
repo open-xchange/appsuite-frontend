@@ -10,18 +10,6 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Writing_a_wizard
 
 ```javascript
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Francisco Laguna <...>
- */
- 
-/**
 * In this example we will build a simple welcome wizard, that tries to complete the users information.
 */
 define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/wizard/registry'], function (ext, wizards) {
