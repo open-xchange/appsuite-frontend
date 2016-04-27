@@ -34,9 +34,15 @@ define('io.ox/files/actions/save-as-pdf', [
             data     = baton.data,
             model    = baton.models[0],
 
-            filename = model.getDisplayName() + '.pdf';
+        //  filename =     model.getDisplayName() + '.pdf';
+            filename = model.getDisplayName(),
 
-        console.log('+++ io.ox/files/actions/save-as-pdf :: data, model, filename : ', data, model, filename);
+            len      = filename.length,
+            idx      = filename.lastIndexOf('.');
+
+        filename = filename.substring(0, ((idx >= 0) ? idx : len)) + '.pdf';
+
+      //console.log('+++ io.ox/files/actions/save-as-pdf :: data, model, filename : ', data, model, filename);
 
         function save(name) {
             return ConverterUtils.sendConverterRequest(model, {
