@@ -233,9 +233,6 @@ define('io.ox/core/folder/contextmenu', [
                 // only mail and infostore show hierarchies
                 if (/^(contacts|calendar|tasks)$/.test(baton.module)) return;
 
-                // special case: default0/INBOX with altnamespace
-                if (api.altnamespace && baton.data.id === api.getDefaultFolder('mail')) return;
-
                 // special case: default0 with altnamespace
                 var canCreate = baton.data.id === 'default0' && api.altnamespace;
                 if (!canCreate && !api.can('create:folder', baton.data)) return;
