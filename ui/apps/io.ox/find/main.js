@@ -560,6 +560,12 @@ define('io.ox/find/main', [
                     app.view.render();
                     app.set('state', 'launched');
                 });
+                // reset cache on contact changes
+                require(['io.ox/contacts/api'], function (contactsAPI) {
+                    contactsAPI.on('refresh.all', function () {
+                        app.getProxy().done(function (proxy) { proxy.resetCache(); });
+                    });
+                });
             });
         };
 
