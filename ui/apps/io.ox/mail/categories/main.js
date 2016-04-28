@@ -108,7 +108,7 @@ define('io.ox/mail/categories/main', [
             'click .category': 'onSelect',
             'keydown .category': 'onKeydown',
             'selection:drop': 'onDrop',
-            'click [data-action="options"]': 'showOptions'
+            'click [data-action="tabbed-inbox-options"]': 'showOptions'
         },
         initialize: function (options) {
             _.extend(this, options || {});
