@@ -29,8 +29,6 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             this.label = options.label;
             this.exclude = options.exclude;
             this.disable = options.disable;
-            this.ellipsisCount = 4;
-            this.ownWidth = 0;
 
             // last item is a normal item (not a unclickable tail node)
             this.notail = options.notail;
@@ -66,8 +64,6 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
         onChangeFolder: function (id) {
             this.folder = id;
             this.render();
-            this.ownWidth = 0;
-            this.computeWidth();
         },
 
         render: function () {
@@ -92,36 +88,38 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             _(path).each(this.listenToFolderChange, this);
 
             this.$el.empty().append(
+                // ellipsis
+                $('<span class="breadcrumb-ellipsis" aria-hidden="true">&hellip;</span>'),
                 // label
                 this.label ? $('<span class="breadcrumb-label">').text(this.label) : [],
                 // path
                 _(path).map(this.renderLink, this)
             );
+
+            this.computeWidth();
         },
 
         computeWidth: _.throttle(function () {
 
             if (this.disposed || !this.$el.is(':visible')) return;
 
-            var ownWidth = this.ownWidth || this.el.scrollWidth,
-                parentWidth = this.$el.parent().width(),
+            var parentWidth = this.$el.parent().width(),
                 siblingsWidth = _(this.$el.siblings(':visible')).reduce(function (sum, node) {
                     return sum + $(node).outerWidth(true);
                 }, 0),
-                maxWidth = Math.max(0, parentWidth - siblingsWidth - 40);
+                maxWidth = Math.max(0, parentWidth - siblingsWidth - 96),
+                childrenWidth = 0;
 
-            // we store this once (per folder)
-            this.ownWidth = ownWidth;
+            this.$el.addClass('invisible').children().show();
 
-            if (ownWidth > maxWidth && this.ellipsisCount === 4) {
-                this.ellipsisCount = 2;
-                this.render();
-            } else if (ownWidth <= maxWidth && this.ellipsisCount === 2) {
-                this.ellipsisCount = 4;
-                this.render();
-            }
+            this.$el.children().toArray().slice(1).reverse().forEach(function (node, index) {
+                childrenWidth += $(node).outerWidth(true);
+                $(node).toggle(index === 0 || childrenWidth < maxWidth);
+            });
 
-            this.$el.css('max-width', maxWidth);
+            this.$el.children('.breadcrumb-ellipsis').toggle(childrenWidth > maxWidth);
+
+            this.$el.css('max-width', maxWidth + 32).removeClass('invisible');
 
         }, 100),
 
@@ -132,13 +130,6 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                 missingPrivileges = !api.can('read', data),
                 isDisabled = missingPrivileges || (this.disable && _(this.disable).indexOf(data.id) > -1),
                 node;
-
-            // add ellipsis for more than four items
-            if (length > this.ellipsisCount && index > 0 && index < length - (this.ellipsisCount - 1)) {
-                return index === 1 ?
-                    $('<span class="breadcrumb-ellipsis" aria-hidden="true">&hellip;</span><i class="fa breadcrumb-divider" aria-hidden="true"></span>') :
-                    $();
-            }
 
             // add plain text tail or clickable link
             if (isLast && !this.notail) node = $('<span class="breadcrumb-tail">');
