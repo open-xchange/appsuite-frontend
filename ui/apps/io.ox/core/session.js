@@ -19,7 +19,11 @@ define('io.ox/core/session', [
 
     'use strict';
 
-    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000 }, CLIENT = 'open-xchange-appsuite';
+    var TIMEOUTS = {
+            AUTOLOGIN: ox.serverConfig.autoLoginTimeout || 5000,
+            LOGIN: ox.serverConfig.loginTimeout || 10000
+        },
+        CLIENT = 'open-xchange-appsuite';
 
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
