@@ -209,13 +209,15 @@ define('io.ox/metrics/util', function () {
         ].indexOf('1') > -1;
     }
 
+    var KEY = 'metrics-userhash-v2';
+
     // hash of userdata + salt
-    function getUserHash () {
-        var userhash = _.getCookie('metrics-userhash');
+    function getUserHash() {
+        var userhash = _.getCookie(KEY);
         if (!userhash) {
             var salt = (Math.random() + 1).toString(36).substring(2),
-                userhash = md5(salt + ox.user + ox.user_id);
-            _.setCookie('metrics-userhash', userhash);
+                userhash = md5(salt);
+            _.setCookie(KEY, userhash);
         }
         return userhash;
     }
