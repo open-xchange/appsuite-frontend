@@ -316,7 +316,7 @@ define('io.ox/mail/toolbar', [
                 toolbarView.createToolbar().addClass('actions').append(
                     $('<li role="presentation aria-hidden="true">')
                     .append(
-                        $('<a class="io-ox-action-link no-underline" href="#" tabindex="-1" data-action="options" draggable="false" role="button" data-section="default" data-prio="hi" title=""">').append(
+                        $('<a class="io-ox-action-link no-underline" href="#" tabindex="-1" data-action="tabbed-inbox-options" draggable="false" role="button" data-section="default" data-prio="hi" title=""">').append(
                                 $('<i class="fa fa-cog">')
                             )
                     )

@@ -1567,7 +1567,7 @@ define('io.ox/mail/main', [
 
                 var nodes = app.getWindow().nodes,
                     node = nodes.outer,
-                    toolbar = nodes.body.find('.classic-toolbar-container'),
+                    toolbar = nodes.body.find('.classic-toolbar-container, .categories-toolbar-container'),
                     sidepanel = nodes.sidepanel;
                 // A/B testing which add mail account button is prefered
                 metrics.watch({
@@ -1597,6 +1597,15 @@ define('io.ox/mail/main', [
                         target: 'toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                toolbar.delegate('.category', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: 'select-tab',
+                        detail: $(e.currentTarget).attr('data-id')
                     });
                 });
                 // toolbar options dropfdown
