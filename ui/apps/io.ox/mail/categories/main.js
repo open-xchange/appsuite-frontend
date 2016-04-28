@@ -120,6 +120,7 @@ define('io.ox/mail/categories/main', [
                 body: this.$el.closest('.window-body'),
                 container: this.$el.closest('.window-container')
             };
+            this.$el.addClass('categories-container');
             dnd.enable({ draggable: true, container: this.$el, selection: this.selection, dropzone: true, dropzoneSelector: '.category' });
 
             this.register();

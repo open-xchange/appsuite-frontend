@@ -16,9 +16,7 @@
 }
 
 .mail-categopries-dialog {
-    i {
-        font-weight: 500;
-    }
+    i { font-weight: 500; }
 
     .category-item {
         display: flex;
@@ -49,9 +47,17 @@
 
 .window-container.mail-categories-enabled:not(.io-ox-find-active) {
 
-    .abs.window-content {  top: 80px; }
+    // layout: compact
+    .window-body:not(.classic-toolbar-visible) {
+        .abs.window-content {  top: 40px; }
+    }
 
-    .classic-toolbar-container:nth-child(1) .classic-toolbar { top: 40px; }
+    // layout: vertical, horizontal, list
+    .window-body.classic-toolbar-visible {
+        .abs.window-content {  top: 80px; }
+        .classic-toolbar-container:not(.categories-container) .classic-toolbar { top: 40px; }
+
+    }
 
     .categories-toolbar-container {
 
