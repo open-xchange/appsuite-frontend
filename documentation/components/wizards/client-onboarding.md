@@ -85,29 +85,3 @@ io.ox/portal/widget/client-onboarding
 // defines that this widget is unique and can be added only once
 io.ox/portal/widget/client-onboarding/settings
 ```
-
-# deprecated parts
-
-The wizard replaces and extends the functionality of the old Download Section in settings and the correspoinding widgets. We recommend to disable these outdated parts.
-
-- widget: get ox drive
-- widget: update
-- settings entry: downloads
-
-## remove settings section 'Downloads'
-
-Edit the property file and change the value to `true`:
-
-```
-io.ox/core//settings/downloadsDisabled
-```
-
-## remove widgets
-
-To remove the both related portal widget/tiles please refer to:
-
-[oxpedia > configuring portal plugins > Disabling_a_tile_completely
-](https://oxpedia.org/wiki/index.php?title=AppSuite:Configuring_portal_plugins#Disabling_a_tile_completely)
-
-- io.ox/portal/widget/oxdriveclients
-- io.ox/portal/widget/updater
