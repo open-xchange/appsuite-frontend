@@ -31,7 +31,7 @@ define('io.ox/files/actions/save-as-pdf', [
 //      dialog = new Dialogs.SaveAsFileDialog({ title: title, value: newFileName, preselect: app.getFileParameters().folder_id });
 
         var
-            data     = baton.data,
+            //data     = baton.data,
             model    = baton.models[0],
 
         //  filename =     model.getDisplayName() + '.pdf';
