@@ -8769,6 +8769,13 @@ msgstr "差出人が不明です。"
 msgid "Unlock"
 msgstr "ロックを解除"
 
+#. use as a fallback name in case a user enters a empty string as the name of tab
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "unnamed"
+msgid "Unnamed"
+msgstr "無題"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Unnamed subscription"
 msgstr "新規の登録"
@@ -17784,9 +17791,6 @@ msgstr "yyyy"
 
 #~ msgid "unkown"
 #~ msgstr "不明"
-
-#~ msgid "unnamed"
-#~ msgstr "無題"
 
 #~ msgid "unread"
 #~ msgstr "未読にする"

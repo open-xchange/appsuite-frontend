@@ -8950,6 +8950,13 @@ msgstr "Remitent desconegut"
 msgid "Unlock"
 msgstr "Desbloqueja"
 
+#. use as a fallback name in case a user enters a empty string as the name of tab
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Username"
+msgid "Unnamed"
+msgstr "Nom d'usuari"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #, fuzzy
 msgid "Unnamed subscription"

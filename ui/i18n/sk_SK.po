@@ -8883,6 +8883,13 @@ msgstr "Neznámy odosielateľ"
 msgid "Unlock"
 msgstr "Odomknúť"
 
+#. use as a fallback name in case a user enters a empty string as the name of tab
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "unnamed"
+msgid "Unnamed"
+msgstr "bez názvu"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Unnamed subscription"
 msgstr "Nepomenovaný odber"
@@ -16530,9 +16537,6 @@ msgstr "RRRR"
 
 #~ msgid "unkown"
 #~ msgstr "neznáme"
-
-#~ msgid "unnamed"
-#~ msgstr "bez názvu"
 
 #~ msgid "unread"
 #~ msgstr "neprečítané"

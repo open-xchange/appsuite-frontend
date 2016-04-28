@@ -8933,6 +8933,13 @@ msgstr "Expéditeur inconnu"
 msgid "Unlock"
 msgstr "Déverrouiller"
 
+#. use as a fallback name in case a user enters a empty string as the name of tab
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "unnamed"
+msgid "Unnamed"
+msgstr "sans nom"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Unnamed subscription"
 msgstr "Abonnement sans nom"
@@ -13126,9 +13133,6 @@ msgstr "aaaa"
 
 #~ msgid "total"
 #~ msgstr "total"
-
-#~ msgid "unnamed"
-#~ msgstr "sans nom"
 
 #~ msgid "unread"
 #~ msgstr "non lu"

@@ -8824,6 +8824,13 @@ msgstr "Unknown sender"
 msgid "Unlock"
 msgstr "Unlock"
 
+#. use as a fallback name in case a user enters a empty string as the name of tab
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "unnamed"
+msgid "Unnamed"
+msgstr "unnamed"
+
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Unnamed subscription"
 msgstr "Unnamed subscription"
@@ -12506,9 +12513,6 @@ msgstr "yyyy"
 
 #~ msgid "total"
 #~ msgstr "total"
-
-#~ msgid "unnamed"
-#~ msgstr "unnamed"
 
 #~ msgid "unread"
 #~ msgstr "unread"
