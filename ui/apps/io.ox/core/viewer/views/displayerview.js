@@ -156,7 +156,21 @@ define('io.ox/core/viewer/views/displayerview', [
                 self.handleDuplicatesSlides();
                 // preload selected file and its neighbours initially
                 self.slideViews[self.activeIndex].show();
-                self.blendCaption(gt('%1$d of %2$d', startIndex + 1, self.collection.length));
+                if (self.collection.length > 1) {
+                    //no need to show anything if only one item available
+
+                    //#. information about position of the current item in viewer
+                    //#. this will only be shown for more than one item
+                    //#. %1$d - position of current item
+                    //#. %2$d - total amount of items
+                    self.blendCaption(gt.ngettext(
+                        '%1$d of %2$d item',
+                        '%1$d of %2$d items',
+                        self.collection.length,
+                        startIndex + 1,
+                        self.collection.length
+                    ));
+                }
                 self.blendNavigation();
                 // focus first active slide initially
                 self.focusActiveSlide();
@@ -707,11 +721,17 @@ define('io.ox/core/viewer/views/displayerview', [
                 this.loadSlide(preloadDirection);
             }
 
-            //#. text of a viewer slide caption
-            //#. Example result: "1 of 10"
-            //#. %1$d is the slide index of the current
-            //#. %2$d is the total slide count
-            this.blendCaption(gt('%1$d of %2$d', this.activeIndex + 1, this.collection.length));
+            //#. information about position of the current item in viewer
+            //#. this will only be shown for more than one item
+            //#. %1$d - position of current item
+            //#. %2$d - total amount of item
+            this.blendCaption(gt.ngettext(
+                '%1$d of %2$d item',
+                '%1$d of %2$d items',
+                this.collection.length,
+                this.activeIndex + 1,
+                this.collection.length
+            ));
             this.blendNavigation();
             // a11y
             activeSlideNode.attr('aria-selected', 'true');
