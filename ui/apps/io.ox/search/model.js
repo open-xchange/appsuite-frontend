@@ -403,7 +403,7 @@ define('io.ox/search/model', [
                 return def.then(function (data) {
                     data = data || {};
                     if (!isFolderSet(self)) {
-                        if (self.get('pool').folder && data.id) {
+                        if (self.get('pool').folder && (data.id || data.custom)) {
                             self.update('folder', 'custom', data);
                         } else {
                             self.add('folder', 'custom', data);
