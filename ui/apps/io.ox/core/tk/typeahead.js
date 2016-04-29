@@ -91,6 +91,10 @@ define('io.ox/core/tk/typeahead', [
 
             this.api = new AutocompleteAPI(o.apiOptions);
 
+            this.listenTo(ox, 'refresh^', function () {
+                this.api.cache = {};
+            });
+
             this.typeaheadOptions = [{
                 autoselect: o.autoselect,
                 // The minimum character length needed before suggestions start getting rendered

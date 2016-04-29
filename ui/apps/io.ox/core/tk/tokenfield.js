@@ -170,6 +170,7 @@ define('io.ox/core/tk/tokenfield', [
             this.$el.tokenfield('destroy');
             this.stopListening();
             this.collection = null;
+            this.api = null;
         },
 
         register: function () {
