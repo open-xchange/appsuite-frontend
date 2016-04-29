@@ -1096,10 +1096,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Permet la precàrrega d'imatges externes enllaçades"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1190,11 +1186,6 @@ msgstr "Totes les carpetes"
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "Correu de %1$s: %2$s"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-msgid "Apply move to all mails from a sender"
-msgstr "Totes les carpetes"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1314,10 +1305,6 @@ msgstr "Com a servidor de correu d'entrada"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Ascendent"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -4779,8 +4766,7 @@ msgstr "Adreça de correu electrònic"
 msgid "Mail and Messaging"
 msgstr "Correu i missatgeria"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail address"
 msgid "Mail categories"
@@ -5178,7 +5164,6 @@ msgstr ""
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Mai"
 
@@ -10554,6 +10539,10 @@ msgstr ""
 
 #~ msgid "Advanced options"
 #~ msgstr "Opcions avançades"
+
+#, fuzzy
+#~ msgid "Apply move to all mails from a sender"
+#~ msgstr "Totes les carpetes"
 
 #~ msgid ""
 #~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"

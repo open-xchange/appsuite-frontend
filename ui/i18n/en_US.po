@@ -1034,10 +1034,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1120,10 +1116,6 @@ msgstr ""
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, c-format
 msgid "Apply for mails from %1$s"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Apply move to all mails from a sender"
 msgstr ""
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -1238,10 +1230,6 @@ msgstr ""
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
@@ -4575,8 +4563,7 @@ msgstr ""
 msgid "Mail and Messaging"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Mail categories"
 msgstr ""
 
@@ -4962,7 +4949,6 @@ msgstr ""
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr ""
 

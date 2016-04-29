@@ -1078,10 +1078,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Vooraf laden van externe afbeeldingen toestaan"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1176,12 +1172,6 @@ msgstr "Toepassen op alle sub-mappen"
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "E-mail van %1$s: %2$s"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Toepassen op alle sub-mappen"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1298,10 +1288,6 @@ msgstr "Als ingekomen mailserver"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Oplopend"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -4737,8 +4723,7 @@ msgstr "E-mailadres (verplicht)"
 msgid "Mail and Messaging"
 msgstr "E-mail en Berichtenservice"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail address"
 msgid "Mail categories"
@@ -5127,7 +5112,6 @@ msgstr "Meer ruimte nodig?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nooit"
 
@@ -10477,6 +10461,11 @@ msgstr "yyyy"
 
 #~ msgid "An error occurred"
 #~ msgstr "Er is geen fout opgetreden"
+
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Apply move to all mails from a sender"
+#~ msgstr "Toepassen op alle sub-mappen"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"

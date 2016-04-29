@@ -1094,10 +1094,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Pozwól na wstępne wczytywanie połączonych obrazów zewnętrznych"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1188,12 +1184,6 @@ msgstr "Zastosuj do wszystkich podfolderów"
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "Wiadomość od: %1$s — %2$s"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Zastosuj do wszystkich podfolderów"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1310,10 +1300,6 @@ msgstr "Jako serwer poczty przychodzącej"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Rosnąco"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -4746,8 +4732,7 @@ msgstr "Adres pocztowy (obowiązkowy)"
 msgid "Mail and Messaging"
 msgstr "Poczta i komunikator"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail address"
 msgid "Mail categories"
@@ -5135,7 +5120,6 @@ msgstr "Potrzebujesz więcej miejsca?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nigdy"
 
@@ -10510,6 +10494,11 @@ msgstr "rrrr"
 
 #~ msgid "An error occurred. The message was:"
 #~ msgstr "Wystąpił błąd. Komunikat był następujący:"
+
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Apply move to all mails from a sender"
+#~ msgstr "Zastosuj do wszystkich podfolderów"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"

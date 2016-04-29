@@ -1088,10 +1088,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Atļaut ārēji saistīto attēlu priekš-ielādi"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1181,12 +1177,6 @@ msgstr "Piemērot visam apakšmapēm"
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "E-pasts no %1$s: %2$s"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Piemērot visam apakšmapēm"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1303,10 +1293,6 @@ msgstr "Kā ienākošā pasta serveris"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Augoši"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -4728,8 +4714,7 @@ msgstr "Pasta adrese (obligāta)"
 msgid "Mail and Messaging"
 msgstr "Ziņapmaiņa"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Available Categories:"
 msgid "Mail categories"
@@ -5117,7 +5102,6 @@ msgstr "Vai ir nepieciešama papildus vieta?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nekad"
 
@@ -10776,6 +10760,11 @@ msgstr "yyyy"
 
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigva un Barbuda"
+
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Apply move to all mails from a sender"
+#~ msgstr "Piemērot visam apakšmapēm"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"

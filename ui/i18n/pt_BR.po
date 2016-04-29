@@ -1072,10 +1072,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Permitir o pré-carregamento de imagens lincadas externamente"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1168,12 +1164,6 @@ msgstr "Aplicar a todas as subpastas"
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "E-mail de %1$s: %2$s"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Aplicar a todas as subpastas"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1290,10 +1280,6 @@ msgstr "Como servidor de email recebido"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Crescente"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -4713,8 +4699,7 @@ msgstr "Endereço de e-mail (obrigatório)"
 msgid "Mail and Messaging"
 msgstr "E-mail e mensagem"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Available Categories:"
 msgid "Mail categories"
@@ -5102,7 +5087,6 @@ msgstr "Precisa de mais espaço?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nunca"
 
@@ -10668,6 +10652,11 @@ msgstr "aaaa"
 
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antígua e Barbuda"
+
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Apply move to all mails from a sender"
+#~ msgstr "Aplicar a todas as subpastas"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"

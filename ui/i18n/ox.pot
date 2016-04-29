@@ -4797,8 +4797,6 @@ msgstr ""
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
 msgid "Never"
 msgstr ""
 
@@ -9126,28 +9124,7 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
-msgid "Ask"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
-msgid "Mail categories"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
 msgid "Show Tabs for inbox"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Apply move to all mails from a sender"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
@@ -9293,6 +9270,11 @@ msgstr ""
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Statistics"
+msgstr ""
+
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+msgid "Mail categories"
 msgstr ""
 
 #. (From) email1 via email2. Appears in email detail view.

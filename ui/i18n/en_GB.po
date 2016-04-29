@@ -1066,10 +1066,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Allow pre-loading of externally linked images"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1158,12 +1154,6 @@ msgstr "Apply to all subfolders"
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "E-mail from %1$s: %2$s"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Apply to all subfolders"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1280,10 +1270,6 @@ msgstr "As incoming e-mail server"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Ascending"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -4700,8 +4686,7 @@ msgstr "E-mail address (mandatory)"
 msgid "Mail and Messaging"
 msgstr "Email and Messaging"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail address"
 msgid "Mail categories"
@@ -5089,7 +5074,6 @@ msgstr "Need more space?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Never"
 
@@ -10406,6 +10390,11 @@ msgstr "yyyy"
 
 #~ msgid "An error occurred while loading page %1$d."
 #~ msgstr "An error occurred while loading page %1$d."
+
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Apply move to all mails from a sender"
+#~ msgstr "Apply to all subfolders"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
