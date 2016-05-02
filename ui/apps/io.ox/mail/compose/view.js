@@ -360,7 +360,6 @@ define('io.ox/mail/compose/view', [
         onSendProgress: function (model, value) {
             var csid = this.model.get('csid');
             if (csid !== model.get('id')) return;
-            console.log('Soooo', csid, value);
             if (value >= 0) this.app.getWindow().busy(value);
         },
 
