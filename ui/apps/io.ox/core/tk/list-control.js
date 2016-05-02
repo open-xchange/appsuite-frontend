@@ -33,6 +33,25 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
             'mousedown .resizebar.vertical': 'onVerticalResize'
         },
 
+        applySizeConstraints: function () {
+            var left = this.$el.parent(),
+                right = left.siblings('.rightside'),
+                isVertical = this.$('.resizebar.vertical').length > 0;
+            if (right.length === 0) return;
+            var total = isVertical ? left.width() + right.width() : left.height() + right.height(),
+                max = getLimit(isVertical ? ListViewControl.maxWidth : ListViewControl.maxHeight, total),
+                min = getLimit(isVertical ? ListViewControl.minWidth : ListViewControl.minHeight, total),
+                base = isVertical ? left.width() : left.height(),
+                size = Math.max(min, Math.min(base, max));
+
+            if ((isVertical && left.width() === size) || (!isVertical && left.height() === size)) return;
+
+            left.css(isVertical ? 'width' : 'height', size);
+            right.css(isVertical ? 'left' : 'top', size);
+
+            storeSize(this.listView.app, size, isVertical ? 'width' : 'height');
+        },
+
         onResize: function (e) {
             e.preventDefault();
             var left = this.$el.parent(),
@@ -84,7 +103,10 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
                     right.css('top', height);
                 },
                 'mouseup.resize': function () {
-                    $(this).off('mousemove.resize mouseup.resize');
+                    $(this)
+                        .off('mousemove.resize mouseup.resize')
+                        // trigger generic resize event so that other components can respond to it
+                        .trigger('resize');
                     storeSize(app, height, 'height');
                 }
             });
@@ -95,6 +117,13 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
             if (_.device('touch')) return;
             this.$el.append('<div class="resizebar">');
             this.$el.append('<div class="resizebar vertical">');
+            var win = this.listView.app.getWindow();
+            console.log('adding callback', 'resize.list-control-' + win.id);
+            $(window).on('resize.list-control-' + win.id, _.debounce(this.applySizeConstraints.bind(this), 100));
+            win.one('beforequit', function () {
+                console.log('removing callback', 'resize.list-control-' + win.id);
+                $(window).off('resize.list-control-' + win.id);
+            });
         },
 
         initialize: function (options) {
