@@ -477,6 +477,7 @@ define('io.ox/mail/compose/view', [
             var value = e.target ? $(e.target).val() : e;
             // A11y: focus mailbody on enter in subject field
             if (e.which && e.which === 13) {
+                e.preventDefault();
                 this.editor.focus();
             }
             this.model.set('subject', value, { silent: true }).trigger('keyup:subject', value);
