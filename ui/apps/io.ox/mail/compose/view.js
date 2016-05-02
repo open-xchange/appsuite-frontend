@@ -421,6 +421,13 @@ define('io.ox/mail/compose/view', [
                         });
                         delete data.nested_msgs;
                     }
+
+                    // custom display names
+                    var address = _.first(data.from);
+                    if (_.isArray(address) && settings.get(['customDisplayNames', address[1], 'overwrite'])) {
+                        address[0] = settings.get(['customDisplayNames', address[1], 'name'], address[0]);
+                    }
+
                     self.model.set(data);
 
                     var attachmentCollection = self.model.get('attachments');
