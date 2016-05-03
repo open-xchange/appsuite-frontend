@@ -225,6 +225,12 @@ define('io.ox/core/tk/wizard', [
             return step.hasValue();
         },
 
+        isStepPaused: function () {
+            var num = this.currentStep,
+                disabled = this.options.model.get('paused') || [];
+            return disabled.indexOf(num) > -1;
+        },
+
         start: function () {
             if (_.device('smartphone')) {
                 this.trigger('before:start');
@@ -460,6 +466,9 @@ define('io.ox/core/tk/wizard', [
             if (dir.next) this.addLink(next, { action: 'next', label: this.getLabelNext() });
             // show "Done" button
             if (dir.done) this.addLink(next, { action: 'done', label: this.getLabelDone() });
+
+            // states
+            if (this.parent.isStepPaused()) this.toggleNext(false);
         },
 
         // internal; just add a button
@@ -501,6 +510,12 @@ define('io.ox/core/tk/wizard', [
 
         // enable/disable 'next' button
         toggleNext: function (state) {
+            if (_.device('smartphone')) {
+                return this.parent.container.find('[data-action="next"]').attr({
+                    'disabled': !state,
+                    'aria-disabled': !state
+                });
+            }
             this.$('.btn[data-action="next"]').prop('disabled', !state);
             return this;
         },
@@ -864,6 +879,12 @@ define('io.ox/core/tk/wizard', [
             e.data.parent.trigger('step:' + action);
         });
 
+        // update next buttons disable state
+        this.options.model.on('change:paused', function () {
+            var step = self.getCurrentStep();
+            step.toggleNext(!self.isStepPaused());
+        });
+
         // override shift for animation support
         this.shift = function (num) {
 
@@ -916,12 +937,16 @@ define('io.ox/core/tk/wizard', [
                 }
                 x = Math.min(x, maxX);
                 x = Math.max(x, minX);
+                // paused?
+                if (self.isStepPaused() && ((offset + x) / width * 100) < -100) return;
                 $(this).css('transform', 'translateX(' + ((offset + x) / width * 100) + '%)');
             },
 
             touchend: function () {
                 if (!moved) return;
                 var pct = x / width * 100;
+                // paused?
+                if (self.isStepPaused() && pct < 0) return;
                 /*eslint-disable no-nested-ternary */
                 self.shift(pct < 0 ? (pct > -50 ? 0 : +1) : (pct < +50 ? 0 : -1));
                 /*eslint-enable no-nested-ternary */
