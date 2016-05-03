@@ -8057,7 +8057,6 @@ msgstr ""
 "Filen \"%1$s\" kan ikke lastes opp fordi den overskrider den maksimale "
 "filstørrelsen på %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8066,7 +8065,6 @@ msgstr ""
 "Filen \"%1$s\" kan ikke lastes opp fordi den overskrider vedleggets maksimal "
 "filstørrelse på %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8077,22 +8075,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Filen \"%1$s\" kan ikke lastes opp fordi den overskrider den maksimale "
 "filstørrelsen på %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Filen \"%1$s\" kan ikke lastes opp fordi den overskrider kvotegrense på %2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -10737,6 +10727,13 @@ msgstr "yyyy"
 
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "E-postadressen %1$s er allerede i listen"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Filen \"%1$s\" kan ikke lastes opp fordi den overskrider kvotegrense på "
+#~ "%2$s"
 
 #~ msgid "The following actions apply to all messages (%1$d) in this folder:"
 #~ msgstr ""

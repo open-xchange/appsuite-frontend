@@ -7908,14 +7908,12 @@ msgstr "结束日期必须在开始日期之后。"
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "字段 \"%1$s\" 超出 %2$d 个字符之最大体积。"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
 "publication maximum file size of %2$s"
 msgstr "因为文件 \"%1$s\" 超出附件发布最大文件体积 %2$s，所以未能上载。"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -7924,19 +7922,12 @@ msgstr "因为文件 \"%1$s\" 超出 infostore 限额 %2$s，所以未能上载�
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr "因为文件 \"%1$s\" 超出最大文件体积 %2$s，所以未能上载。"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr "因为文件 \"%1$s\" 超出限额 %2$s，所以未能上载。"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -13311,6 +13302,11 @@ msgstr "年"
 
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "邮件地址 %1$s 已经在列表里"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr "因为文件 \"%1$s\" 超出限额 %2$s，所以未能上载。"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "此文件于 %1$s 可用"

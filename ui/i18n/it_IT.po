@@ -8055,7 +8055,6 @@ msgstr "La data di fine deve essere successiva a quella di inizio."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "Il campo \"%1$s\" supera la dimensione massima di %2$d caratteri."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8064,7 +8063,6 @@ msgstr ""
 "Il file \"%1$s\" non può essere caricato poiché supera la dimensione massima "
 "dei file per la pubblicazione di allegati di %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8075,23 +8073,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Il file \"%1$s\" non può essere caricato poiché supera la dimensione massima "
 "dei file di %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Il file \"%1$s\" non può essere caricato poiché supera il limite di quota di "
-"%2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -13628,6 +13617,13 @@ msgstr "aaaa"
 
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "L&apos;indirizzo di posta %1$s è già nell&apos;elenco"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Il file \"%1$s\" non può essere caricato poiché supera il limite di quota "
+#~ "di %2$s"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Il file è disponibile in %1$s"

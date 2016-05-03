@@ -7999,7 +7999,6 @@ msgstr "Slutdatumet måste vara efter startdatumet."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "Fältet \"%1$s\" överskrider dess maximala storlek på %2$d tecken."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8008,7 +8007,6 @@ msgstr ""
 "Filen \"%1$s\" kan inte laddas upp eftersom dess storlek överskrider den "
 "maximala storleken för publicerade filer på %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8019,22 +8017,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Filen \"%1$s\" kan inte laddas upp eftersom dess storlek överskrider den "
 "maximala filstorleken %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Filen \"%1$s\" kan inte laddas upp eftersom den överskrider kvoten på %2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -14296,6 +14286,12 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Det inlagda värdet för kostnaden är inte inom beviljad gräns. Använd ett "
 #~ "värde från -130000.00 till 130000.00."
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Filen \"%1$s\" kan inte laddas upp eftersom den överskrider kvoten på %2$s"
 
 #~ msgid ""
 #~ "The file cannot be added to filestore. File size: %s Quota: %s Used: %s"

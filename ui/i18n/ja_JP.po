@@ -7964,7 +7964,6 @@ msgstr "終了日を開始日より後に指定しなければなりません。
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "フィールド \"%1$s\" は最大文字数 %2$d を超えています。"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -7973,7 +7972,6 @@ msgstr ""
 "ファイル \"%1$s\" が添付ファイルの最大発行ファイル サイズ %2$s を超えたため、"
 "アップロードできません。"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -7984,22 +7982,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "ファイル \"%1$s\" が最大ファイル サイズ %2$s を超えたため、アップロードできま"
 "せん。"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"ファイル \"%1$s\" が割当量の上限 %2$s を超えたため、アップロードできません。"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -16310,6 +16300,13 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "%s に入力した値は許容範囲を超えています。-130000 から 130000 の範囲の数字"
 #~ "を使用してください。"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "ファイル \"%1$s\" が割当量の上限 %2$s を超えたため、アップロードできませ"
+#~ "ん。"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "このファイルは %1$s にあります。"

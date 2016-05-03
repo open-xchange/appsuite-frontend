@@ -8017,7 +8017,6 @@ msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr ""
 "Feltet »%1$s« overskrider dets største tilladte størrelse på %2$d tegn."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8026,7 +8025,6 @@ msgstr ""
 "Filen \"%1$s\" kan ikke overføres, da dens størrelse overstiger den "
 "maksimale størrelse %2$s som kan udgives"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8037,21 +8035,13 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Filen \"%1$s\" kan ikke overføres, da dens størrelse er over loftet på %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Filen \"%1$s\" kan ikke overføres, da den vil overskride kvoten på %2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -11787,6 +11777,12 @@ msgstr "åååå"
 
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "E-mail-adressen %1$s er allerede på listen"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Filen \"%1$s\" kan ikke overføres, da den vil overskride kvoten på %2$s"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Denne fil er tilgængelig på %1$s"

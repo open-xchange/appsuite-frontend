@@ -8045,7 +8045,6 @@ msgstr "Das Enddatum muss nach dem Startdatum liegen."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "Das Feld \"%1$s\" überschreitet seine maximale Größe von %2$d Zeichen."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8054,7 +8053,6 @@ msgstr ""
 "Die Datei \"%1$s\" kann nicht hochgeladen werden. Sie überschreitet die "
 "maximale Dateigröße von %2$s für veröffentlichte Anhänge."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8065,23 +8063,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Die Datei \"%1$s\" kann nicht hochgeladen werden, da sie die maximale "
 "Dateigröße von %2$s überschreitet."
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Die Datei \"%1$s\" kann nicht hochgeladen werden, da sie das Quota-Limit  "
-"von %2$s überschreitet."
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -13347,6 +13336,13 @@ msgstr "JJJJ"
 
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "Die E-Mail-Adresse %1$s befindet sich bereits in der Liste."
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Die Datei \"%1$s\" kann nicht hochgeladen werden, da sie das Quota-Limit  "
+#~ "von %2$s überschreitet."
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Die Datei ist verfügbar unter %1$s"

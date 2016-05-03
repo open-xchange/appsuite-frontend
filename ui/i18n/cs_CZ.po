@@ -8036,7 +8036,6 @@ msgstr "Datum konce musí být po datu začátku."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "Pole „%1$s“ obsahuje více znaků než povolených %2$d."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8045,7 +8044,6 @@ msgstr ""
 "Soubor „%1$s“ nelze nahrát, protože je větší než maximální povolená velikost "
 "souboru přílohy %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8056,22 +8054,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Soubor „%1$s“ nelze nahrát, protože je větší než maximální povolená velikost "
 "souboru %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Soubor „%1$s“ nelze nahrát, protože je přesahuje dostupný volný prostor %2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -17468,6 +17458,13 @@ msgstr "rrrr"
 
 #~ msgid "The entire day"
 #~ msgstr "Celý den"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Soubor „%1$s“ nelze nahrát, protože je přesahuje dostupný volný prostor "
+#~ "%2$s"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Soubor je k dispozici na %1$s"

@@ -5617,35 +5617,6 @@ msgstr ""
 msgid "Updating subscribed data takes time. Importing 100 contacts for example, may take up to 5 minutes. Please have some patience."
 msgstr ""
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js
-#: module:io.ox/core
-#: apps/io.ox/core/tk/upload.js
-#: apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
-msgid "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file size of %2$s"
-msgstr ""
-
-#: apps/io.ox/core/tk/attachments.js
-#: module:io.ox/core
-msgid "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of %2$s"
-msgstr ""
-
-#: apps/io.ox/core/tk/attachments.js
-#: module:io.ox/core
-#: apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
-msgid "The file \"%1$s\" cannot be uploaded because it exceeds the attachment publication maximum file size of %2$s"
-msgstr ""
-
-#: apps/io.ox/core/tk/attachments.js
-#: module:io.ox/core
-#: apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
-msgid "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota limit of %2$s"
-msgstr ""
-
 #: apps/io.ox/core/tk/attachments.js
 #: module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js
@@ -5945,6 +5916,15 @@ msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
 msgid_plural "The files cannot be uploaded because they exceed the quota limit of %1$s"
 msgstr[0] ""
 msgstr[1] ""
+
+#. %1$s the filename
+#. %2$s the maximum file size
+#: apps/io.ox/core/tk/upload.js
+#: module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js
+#: module:io.ox/mail
+msgid "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file size of %2$s"
+msgstr ""
 
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js
@@ -7996,6 +7976,16 @@ msgstr ""
 #: apps/io.ox/mail/actions/attachmentEmpty.js
 #: module:io.ox/mail
 msgid "Yes, with empty attachment"
+msgstr ""
+
+#: apps/io.ox/mail/actions/attachmentQuota.js
+#: module:io.ox/mail
+msgid "The file \"%1$s\" cannot be uploaded because it exceeds the attachment publication maximum file size of %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/actions/attachmentQuota.js
+#: module:io.ox/mail
+msgid "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota limit of %2$s"
 msgstr ""
 
 #: apps/io.ox/mail/actions/attachmentQuota.js

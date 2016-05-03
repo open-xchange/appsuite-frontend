@@ -8040,7 +8040,6 @@ msgstr "A data de término deve ser após a data de início."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "O campo \"%1$s\" excede o tamanho máximo de %2$d caracteres."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8049,7 +8048,6 @@ msgstr ""
 "O arquivo \"%1$s\" não pôde ser enviado porque excede o tamanho máximo de "
 "arquivo de anexo de %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8060,22 +8058,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "O arquivo \"%1$s\" não pode ser enviado porque excede o tamanho máximo de "
 "arquivo de %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"O arquivo \"%1$s\" não pode ser enviado porque excede a cota limite de %2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -14528,6 +14518,13 @@ msgstr "aaaa"
 #~ msgstr ""
 #~ "O valor introduzido para %s não está dentro do intervalo permitido. Por "
 #~ "favor, use um valor entre -130000 e 130000."
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "O arquivo \"%1$s\" não pode ser enviado porque excede a cota limite de "
+#~ "%2$s"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "O arquivo está disponível em %1$s"

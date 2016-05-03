@@ -8059,7 +8059,6 @@ msgstr "Beigu datumam jābūt pēc sākuma datuma."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "Lauka \"%1$s\" izmērs pārsniedz maksimāli atļauto %2$d simbolu skaitu."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8068,7 +8067,6 @@ msgstr ""
 "Fails \"%1$s\" nevar tikt augšupielādēts, jo tas pārsniedz maksimālie "
 "pieļaujamo %2$s publikācijas izmēra limitu"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8079,22 +8077,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Fails \"%1$s\" nevar tikt augšupielādēts, jo tas pārsniedz maksimālie "
 "pieļaujamo %2$s izmēra limitu"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Fails \"%1$s\" nevar tikt augšupielādēts, jo tas pārsniedz %2$s kvotas limitu"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -15196,6 +15186,13 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Ievadītā %s vērtība nav atļautajā diapazonā. Lūdzu ievadiet vērtību "
 #~ "diapazonā no -130000 līdz 130000."
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Fails \"%1$s\" nevar tikt augšupielādēts, jo tas pārsniedz %2$s kvotas "
+#~ "limitu"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Fails ir pieejams iekš %1$s"

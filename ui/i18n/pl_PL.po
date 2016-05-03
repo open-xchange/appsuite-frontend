@@ -8081,7 +8081,6 @@ msgstr "Data końcowa musi być po dacie początkowej."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "Rozmiar pola \"%1$s\" przekracza maksymalny rozmiar: %2$d znaków."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8090,7 +8089,6 @@ msgstr ""
 "Nie można przesłać pliku %1$s, ponieważ rozmiar załącznika przekracza "
 "wartość maksymalną wynoszącą%2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8101,23 +8099,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza wartość "
 "maksymalną wynoszącą %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza limit "
-"przydziału miejsca wynoszący %2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -11957,6 +11946,13 @@ msgstr "rrrr"
 
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "Adres e-mai %1$s jest już na liście"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza limit "
+#~ "przydziału miejsca wynoszący %2$s"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Plik jest dostępny tutaj: %1$s"

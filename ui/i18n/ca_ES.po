@@ -8153,7 +8153,6 @@ msgstr ""
 "El fitxer \"%1$s\" no s'ha pogut carregar perquè supera la mida màxima de "
 "fitxer de %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8162,7 +8161,6 @@ msgstr ""
 "El fitxer \"%1$s\" no s'ha pogut pujar perquè supera la mida màxima de "
 "publicació d'adjunts de %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8173,23 +8171,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "El fitxer \"%1$s\" no s'ha pogut carregar perquè supera la mida màxima de "
 "fitxer de %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"El fitxer \"%1$s\" no s'ha pogut pujar perquè supera el límit de quota de "
-"%2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -10976,6 +10965,13 @@ msgstr ""
 
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "L'adreça de correu electrònic %1$s ja existeix a la llista"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "El fitxer \"%1$s\" no s'ha pogut pujar perquè supera el límit de quota de "
+#~ "%2$s"
 
 #~ msgid "The folder has been emptied."
 #~ msgstr "La carpeta s'ha buidat."

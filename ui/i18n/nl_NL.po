@@ -8073,7 +8073,6 @@ msgstr "De einddatum moet na de startdatum vallen."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "Het veld \"%1$s\" overschrijd het maximumaantal van %2$d tekens."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8082,7 +8081,6 @@ msgstr ""
 "Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
 "maximale bestandsgrootte voor publiceerbare bijlage van %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8093,23 +8091,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
 "maximale bestandsgrootte van %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
-"overgebleven quota van %2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -11652,6 +11641,13 @@ msgstr "yyyy"
 
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "Het e-mailadres %1$s bestaat reeds in de lijst"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
+#~ "overgebleven quota van %2$s"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Het bestand is beschikbaar vanaf %1$s"

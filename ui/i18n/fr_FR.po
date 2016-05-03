@@ -8093,7 +8093,6 @@ msgstr "La date de fin doit se trouver après la date de départ."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "Le champ « %1$s » dépasse sa taille maximale de %2$d caractères."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8102,7 +8101,6 @@ msgstr ""
 "Le fichier « %1$s » ne peut pas être téléchargé car sa taille excède la "
 "taille maximale de publication d'une pièce jointe %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8113,23 +8111,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Le fichier « %1$s » ne peut pas être téléchargé car sa taille excède la "
 "taille maximale d'un fichier %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Le fichier « %1$s » ne peut pas être téléchargé car il excède le quota de "
-"%2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -12372,6 +12361,13 @@ msgstr "aaaa"
 
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "L'adresse de courrier électronique %1$s figure déjà dans la liste"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Le fichier « %1$s » ne peut pas être téléchargé car il excède le quota de "
+#~ "%2$s"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Le fichier est disponible à l'adresse %1$s"

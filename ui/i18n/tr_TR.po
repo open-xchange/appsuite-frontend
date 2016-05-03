@@ -8346,7 +8346,6 @@ msgstr ""
 "\"%1$s\" dosyası maksimum dosya boyutu olan %2$s i geçtiği için "
 "yüklenememektedir"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8355,7 +8354,6 @@ msgstr ""
 "\"%1$s\" dosyası, maksimum eklenti boyutu %2$s rakamının üzerinde olduğu "
 "için yüklenemiyor."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8366,22 +8364,13 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "\"%1$s\" dosyası maksimum dosya boyutu olan %2$s i geçtiği için "
-"yüklenememektedir"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"\"%1$s\" dosyası maksimum dosya kota limiti %2$s i geçtiği için "
 "yüklenememektedir"
 
 #. %1$s quota limit
@@ -10884,6 +10873,13 @@ msgstr "yyyy"
 
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "E-posta adresi %1$s listede bulunmaktadır"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "\"%1$s\" dosyası maksimum dosya kota limiti %2$s i geçtiği için "
+#~ "yüklenememektedir"
 
 #~ msgid "The person %1$s is already in the list"
 #~ msgstr "%1$s kişisi zaten listede yer alıyor"

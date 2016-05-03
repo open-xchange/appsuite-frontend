@@ -8036,7 +8036,6 @@ msgstr "A kezdődátumnak a végdátum előtt kell lennie."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "A(z) \"%1$s\" mező elérte a maximális %2$d karakterszámot."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8045,7 +8044,6 @@ msgstr ""
 "A fájl („%1$s”) nem tölthető fel, mert meghaladja a melléklet-közzétételi "
 "maximális %2$s fájlméretet"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8056,22 +8054,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "A fájl („%1$s”) nem tölthető fel, mert meghaladja a maximális %2$s "
 "fájlméretet"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"A fájl („%1$s”) nem tölthető fel, mert meghaladja a kvótakorlátot (%2$s)"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -10557,6 +10547,12 @@ msgstr "yyyy"
 #~| msgid "Enable"
 #~ msgid "Tablet"
 #~ msgstr "Engedélyezés"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "A fájl („%1$s”) nem tölthető fel, mert meghaladja a kvótakorlátot (%2$s)"
 
 #~ msgid "The following actions apply to all messages (%1$d) in this folder:"
 #~ msgstr ""

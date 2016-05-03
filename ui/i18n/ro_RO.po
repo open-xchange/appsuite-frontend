@@ -8074,7 +8074,6 @@ msgstr "Data de sfârșit trebuie să fie după data de început."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "Câmpul \"%1$s\" depășește limita maximă de %2$d caractere."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8083,7 +8082,6 @@ msgstr ""
 "Fișierul \"%1$s\" nu poate fi încărcat deoarece depășește dimensiunea maximă "
 "pentru publicarea de fișiere atașate de %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8094,22 +8092,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Fișierul \"%1$s\" nu poate fi încărcat deoarece depășește dimensiunea maximă "
 "pentru fișier de %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Fișierul \"%1$s\" nu poate fi încărcat deoarece depășește limita de %2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -15258,6 +15248,12 @@ msgstr "aaaa"
 #~ msgstr ""
 #~ "Valoarea introdusă pentru %s nu se încadrează în limitele permise. "
 #~ "Introduceți o valoare cuprinsă între -130000 și 130000."
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Fișierul \"%1$s\" nu poate fi încărcat deoarece depășește limita de %2$s"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Fișierul este disponibil la %1$s"
