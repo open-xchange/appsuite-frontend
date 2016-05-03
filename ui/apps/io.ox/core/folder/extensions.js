@@ -50,27 +50,13 @@ define('io.ox/core/folder/extensions', [
 
         // myfolders
         api.virtual.add('virtual/myfolders', function () {
-
-            function filter(data) {
-                if (account.isStandardFolder(data.id)) return false;
-                if (api.is('public|shared', data)) return false;
-                return true;
-            }
-
-            function sortByTitle(data) {
-                return String(data.title || '').trim().toLowerCase();
-            }
-
-            if (api.altnamespace) {
-                // alt namespace; merge INBOX and top-level; sort client-side
-                return this.concat(api.list(INBOX), api.list('default0')).then(function (list) {
-                    return _(list).chain().filter(filter).sortBy(sortByTitle).value();
+            var id = api.altnamespace ? 'default0' : INBOX;
+            return api.list(id).then(function (list) {
+                return _(list).filter(function (data) {
+                    if (account.isStandardFolder(data.id)) return false;
+                    if (api.is('public|shared', data)) return false;
+                    return true;
                 });
-            }
-
-            // normal namespace; use INBOX; keep server-side sorting
-            return api.list(INBOX).then(function (list) {
-                return _(list).filter(filter);
             });
         });
 
@@ -187,7 +173,7 @@ define('io.ox/core/folder/extensions', [
             var defaultId = api.altnamespace ? 'default0' : INBOX;
 
             var node = new TreeNodeView({
-                contextmenu: '',
+                contextmenu: 'myfolders',
                 // always show the folder for altnamespace
                 // otherwise the user cannot create folders
                 empty: !!api.altnamespace,
@@ -726,13 +712,6 @@ define('io.ox/core/folder/extensions', [
             }
         }
 
-        function addMailbox(e) {
-            e.preventDefault();
-            ox.load(['io.ox/core/folder/actions/add']).done(function (add) {
-                add(e.data.id, { module: 'mail' });
-            });
-        }
-
         ext.point('io.ox/core/foldertree/node').extend(
             {
                 id: 'shared-by',
@@ -811,24 +790,7 @@ define('io.ox/core/folder/extensions', [
                             .on('click', { view: baton.view, folder: baton.data }, openColorSelection);
                     }
                 }
-            },
-            {
-                id: 'add-folder',
-                index: 500,
-                draw: function (baton) {
-
-                    if (baton.data.id !== 'virtual/myfolders') return;
-                    var id = api.altnamespace ? 'default0' : api.getDefaultFolder('mail');
-
-                    this.find('.folder-add:first').remove();
-
-                    this.find('.folder-node:first').append(
-                        $('<a href="#" class="folder-add" role="button" tabindex="1"><i class="fa fa-plus-square"></i></a>')
-                        .on('click', { id: id }, addMailbox)
-                    );
-                }
             }
-
         );
     });
 

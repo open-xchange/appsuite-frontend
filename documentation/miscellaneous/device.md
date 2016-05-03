@@ -56,9 +56,9 @@ The remaining browser and OS variables can become numbers in the future, too. Th
 
 ## Display metrics
 
-- small (up to 480px)
-- medium (481px to 1024px)
-- large (1025px and more)
+- small
+- medium
+- large
 - landscape
 - portrait
 - retina

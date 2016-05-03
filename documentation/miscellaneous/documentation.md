@@ -3,6 +3,8 @@ title: Documentation
 description: Linting the documentations source files
 ---
 
+<!-- TODO: create a grunt task for this -->
+
 This documetation is based on markdown files that are stored in each components source code repository. We use a linter to ensure a high standard.
 
 # Tool

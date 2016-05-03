@@ -148,15 +148,26 @@ msgid_plural "%1$d minutes"
 msgstr[0] "%1$d minuut"
 msgstr[1] "%1$d minuten"
 
-#. text of a viewer slide caption
+#. text of a presentation slide caption
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#. text of a presentation slide caption
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%1$d van %2$d"
+
+#. information about position of the current item in viewer
+#. this will only be shown for more than one item
+#. %1$d - position of current item
+#. %2$d - total amount of items
+#. %2$d - total amount of item
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d"
+msgid "%1$d of %2$d item"
+msgid_plural "%1$d of %2$d items"
+msgstr[0] "%1$d van %2$d"
+msgstr[1] "%1$d van %2$d"
 
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -1078,10 +1089,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Vooraf laden van externe afbeeldingen toestaan"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1158,30 +1165,24 @@ msgstr ""
 msgid "Applications"
 msgstr "Applicaties"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply role"
 msgid "Apply"
 msgstr "Rol toewijzen"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply to all subfolders"
 msgid "Apply for all mails?"
 msgstr "Toepassen op alle sub-mappen"
 
 #. %1$s single mail address or comma separated list of multiple
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy, c-format
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "E-mail van %1$s: %2$s"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Toepassen op alle sub-mappen"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1298,10 +1299,6 @@ msgstr "Als ingekomen mailserver"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Oplopend"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1605,7 +1602,7 @@ msgstr "Agenda:"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/main.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -3051,6 +3048,13 @@ msgstr "Bewerk Contactpersoon"
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Edit Flickr photo stream"
 msgstr "Bewerk Flickr foto-stream"
+
+#. might be suitable to use 'tabs' rather than translating it
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Edit task"
+msgid "Edit Tabs"
+msgstr "Taak bewerken"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Edit Tumblr feed"
@@ -4730,8 +4734,7 @@ msgstr "E-mailadres (verplicht)"
 msgid "Mail and Messaging"
 msgstr "E-mail en Berichtenservice"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail address"
 msgid "Mail categories"
@@ -5103,6 +5106,7 @@ msgstr "Mijn taken"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -5119,7 +5123,6 @@ msgstr "Meer ruimte nodig?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nooit"
 
@@ -6061,6 +6064,16 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Voer alstublieft uw wachtwoord in."
 
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+msgid ""
+"Please feel free to rename tabs to better match your needs. Use checkboxes "
+"to hide or show specific tabs."
+msgstr ""
+
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+msgid "Please note that some of the tabs can not be disabled."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
@@ -6839,7 +6852,7 @@ msgstr "Geretweet"
 msgid "Retweeted by %s"
 msgstr "Geretweet door %s"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Never"
 msgid "Revert"
@@ -6916,7 +6929,8 @@ msgstr "Verkoopvolume"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/compose/names.js
+#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
@@ -8059,7 +8073,6 @@ msgstr "De einddatum moet na de startdatum vallen."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "Het veld \"%1$s\" overschrijd het maximumaantal van %2$d tekens."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8068,7 +8081,6 @@ msgstr ""
 "Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
 "maximale bestandsgrootte voor publiceerbare bijlage van %2$s"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8079,23 +8091,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
 "maximale bestandsgrootte van %2$s"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
-"overgebleven quota van %2$s"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -8612,7 +8615,7 @@ msgid "This mail has no content"
 msgstr "Dit e-mailbericht heeft geen inhoud"
 
 #. %1$s target mail category
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy, c-format
 #| msgid "This mail has no content"
 msgid "This mail was moved to %1$s."
@@ -8885,6 +8888,13 @@ msgstr "Onbekende verzender"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "Deblokkeren"
+
+#. use as a fallback name in case a user enters a empty string as the name of tab
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Username"
+msgid "Unnamed"
+msgstr "Gebruikersnaam"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Unnamed subscription"
@@ -10452,6 +10462,11 @@ msgstr "yyyy"
 #~ msgid "An error occurred"
 #~ msgstr "Er is geen fout opgetreden"
 
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Apply move to all mails from a sender"
+#~ msgstr "Toepassen op alle sub-mappen"
+
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
 #~ msgstr[0] "De afspraak is gekopieerd"
@@ -11626,6 +11641,13 @@ msgstr "yyyy"
 
 #~ msgid "The email address %1$s is already in the list"
 #~ msgstr "Het e-mailadres %1$s bestaat reeds in de lijst"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Het bestand \"%1$s\" kan niet worden geupload omdat het groter is dan het "
+#~ "overgebleven quota van %2$s"
 
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Het bestand is beschikbaar vanaf %1$s"

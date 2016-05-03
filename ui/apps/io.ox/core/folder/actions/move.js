@@ -23,7 +23,7 @@ define('io.ox/core/folder/actions/move', [
     'use strict';
 
     var virtualMapping = {
-        'virtual/myfolders': 'default0' + mailAPI.separator + 'INBOX'
+        'virtual/myfolders': api.altnamespace ? 'default0' : 'default0' + mailAPI.separator + 'INBOX'
     };
 
     return {

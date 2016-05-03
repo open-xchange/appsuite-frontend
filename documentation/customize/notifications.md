@@ -1,6 +1,7 @@
 ---
 title: Notification Area
 description: Writing a plugin for the notification area
+tested-with: 7.8.0
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Writing_a_notification_area_plugin
 ---
 
@@ -8,7 +9,7 @@ This article is a step by step tutorial to build your own notification plugin. T
 
 **Download**
 
-You can download the full examplecode here:
+You can download the full examplecode here:<br>
 [notification780_tutorial.zip](notification780_tutorial.zip)
 
 # Basic Notification

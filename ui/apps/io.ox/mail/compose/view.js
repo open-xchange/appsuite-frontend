@@ -360,7 +360,6 @@ define('io.ox/mail/compose/view', [
         onSendProgress: function (model, value) {
             var csid = this.model.get('csid');
             if (csid !== model.get('id')) return;
-            console.log('Soooo', csid, value);
             if (value >= 0) this.app.getWindow().busy(value);
         },
 
@@ -430,6 +429,13 @@ define('io.ox/mail/compose/view', [
                         });
                         delete data.nested_msgs;
                     }
+
+                    // custom display names
+                    var address = _.first(data.from);
+                    if (_.isArray(address) && settings.get(['customDisplayNames', address[1], 'overwrite'])) {
+                        address[0] = settings.get(['customDisplayNames', address[1], 'name'], address[0]);
+                    }
+
                     self.model.set(data);
 
                     var attachmentCollection = self.model.get('attachments');
@@ -470,6 +476,7 @@ define('io.ox/mail/compose/view', [
             var value = e.target ? $(e.target).val() : e;
             // A11y: focus mailbody on enter in subject field
             if (e.which && e.which === 13) {
+                e.preventDefault();
                 this.editor.focus();
             }
             this.model.set('subject', value, { silent: true }).trigger('keyup:subject', value);

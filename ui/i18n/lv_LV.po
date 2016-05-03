@@ -157,15 +157,27 @@ msgstr[0] "%1$d minūte"
 msgstr[1] "%1$d minūtes"
 msgstr[2] "%1$d minūtes"
 
-#. text of a viewer slide caption
+#. text of a presentation slide caption
 #. Example result: "1 of 10"
 #. %1$d is the slide index of the current
 #. %2$d is the total slide count
-#. text of a presentation slide caption
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
 msgid "%1$d of %2$d"
 msgstr "%1$d no %2$d"
+
+#. information about position of the current item in viewer
+#. this will only be shown for more than one item
+#. %1$d - position of current item
+#. %2$d - total amount of items
+#. %2$d - total amount of item
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d"
+msgid "%1$d of %2$d item"
+msgid_plural "%1$d of %2$d items"
+msgstr[0] "%1$d no %2$d"
+msgstr[1] "%1$d no %2$d"
+msgstr[2] "%1$d no %2$d"
 
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -1088,10 +1100,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Atļaut ārēji saistīto attēlu priekš-ielādi"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1163,30 +1171,24 @@ msgstr ""
 msgid "Applications"
 msgstr "Aplikācijas"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply role"
 msgid "Apply"
 msgstr "Piešķirt lomu"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply to all subfolders"
 msgid "Apply for all mails?"
 msgstr "Piemērot visam apakšmapēm"
 
 #. %1$s single mail address or comma separated list of multiple
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy, c-format
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "E-pasts no %1$s: %2$s"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Piemērot visam apakšmapēm"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1303,10 +1305,6 @@ msgstr "Kā ienākošā pasta serveris"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Augoši"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1611,7 +1609,7 @@ msgstr "Kalendārs:"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/main.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -3048,6 +3046,13 @@ msgstr "Rediģēt kontaktu"
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Edit Flickr photo stream"
 msgstr "Rediģēt Flickr foto straumi"
+
+#. might be suitable to use 'tabs' rather than translating it
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Edit task"
+msgid "Edit Tabs"
+msgstr "Rediģēt uzdevumu"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Edit Tumblr feed"
@@ -4721,8 +4726,7 @@ msgstr "Pasta adrese (obligāta)"
 msgid "Mail and Messaging"
 msgstr "Ziņapmaiņa"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Available Categories:"
 msgid "Mail categories"
@@ -5093,6 +5097,7 @@ msgstr "Mani uzdevumi"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -5109,7 +5114,6 @@ msgstr "Vai ir nepieciešama papildus vieta?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nekad"
 
@@ -6049,6 +6053,16 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Lūdzu ievadiet paroli."
 
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+msgid ""
+"Please feel free to rename tabs to better match your needs. Use checkboxes "
+"to hide or show specific tabs."
+msgstr ""
+
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+msgid "Please note that some of the tabs can not be disabled."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
@@ -6821,7 +6835,7 @@ msgstr "Atbildēts"
 msgid "Retweeted by %s"
 msgstr "Atbildēja %s"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Never"
 msgid "Revert"
@@ -6898,7 +6912,8 @@ msgstr "Pārdošanas apjoms"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/compose/names.js
+#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
@@ -8044,7 +8059,6 @@ msgstr "Beigu datumam jābūt pēc sākuma datuma."
 msgid "The field \"%1$s\" exceeds its maximum size of %2$d characters."
 msgstr "Lauka \"%1$s\" izmērs pārsniedz maksimāli atļauto %2$d simbolu skaitu."
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the attachment "
@@ -8053,7 +8067,6 @@ msgstr ""
 "Fails \"%1$s\" nevar tikt augšupielādēts, jo tas pārsniedz maksimālie "
 "pieļaujamo %2$s publikācijas izmēra limitu"
 
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
@@ -8064,22 +8077,14 @@ msgstr ""
 
 #. %1$s the filename
 #. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#: apps/io.ox/core/tk/upload.js apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
+#: apps/io.ox/core/tk/upload.js module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr ""
 "Fails \"%1$s\" nevar tikt augšupielādēts, jo tas pārsniedz maksimālie "
 "pieļaujamo %2$s izmēra limitu"
-
-#: apps/io.ox/core/tk/attachments.js module:io.ox/core
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
-"%2$s"
-msgstr ""
-"Fails \"%1$s\" nevar tikt augšupielādēts, jo tas pārsniedz %2$s kvotas limitu"
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -8591,7 +8596,7 @@ msgid "This mail has no content"
 msgstr "Šai vēstulei nav satura"
 
 #. %1$s target mail category
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy, c-format
 #| msgid "This mail has no content"
 msgid "This mail was moved to %1$s."
@@ -8862,6 +8867,13 @@ msgstr "Nezināms nosūtītājs"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "Atslēgt"
+
+#. use as a fallback name in case a user enters a empty string as the name of tab
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "unnamed"
+msgid "Unnamed"
+msgstr "nenosaukts"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Unnamed subscription"
@@ -10750,6 +10762,11 @@ msgstr "yyyy"
 
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigva un Barbuda"
+
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Apply move to all mails from a sender"
+#~ msgstr "Piemērot visam apakšmapēm"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -15170,6 +15187,13 @@ msgstr "yyyy"
 #~ "Ievadītā %s vērtība nav atļautajā diapazonā. Lūdzu ievadiet vērtību "
 #~ "diapazonā no -130000 līdz 130000."
 
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Fails \"%1$s\" nevar tikt augšupielādēts, jo tas pārsniedz %2$s kvotas "
+#~ "limitu"
+
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Fails ir pieejams iekš %1$s"
 
@@ -16566,9 +16590,6 @@ msgstr "yyyy"
 
 #~ msgid "unkown"
 #~ msgstr "nezināms"
-
-#~ msgid "unnamed"
-#~ msgstr "nenosaukts"
 
 #~ msgid "unread"
 #~ msgstr "nelasīts"

@@ -292,7 +292,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/dialogs.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js
 #: apps/io.ox/mail/compose/names.js
@@ -730,6 +730,7 @@ msgstr ""
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js
 #: module:io.ox/mail
+#: apps/io.ox/mail/categories/dialogs.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -2676,6 +2677,8 @@ msgstr ""
 #: apps/io.ox/files/share/view-options.js
 #: module:io.ox/files
 #: apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -4794,8 +4797,6 @@ msgstr ""
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
 msgid "Never"
 msgstr ""
 
@@ -5616,35 +5617,6 @@ msgstr ""
 msgid "Updating subscribed data takes time. Importing 100 contacts for example, may take up to 5 minutes. Please have some patience."
 msgstr ""
 
-#. %1$s the filename
-#. %2$s the maximum file size
-#: apps/io.ox/core/tk/attachments.js
-#: module:io.ox/core
-#: apps/io.ox/core/tk/upload.js
-#: apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
-msgid "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file size of %2$s"
-msgstr ""
-
-#: apps/io.ox/core/tk/attachments.js
-#: module:io.ox/core
-msgid "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of %2$s"
-msgstr ""
-
-#: apps/io.ox/core/tk/attachments.js
-#: module:io.ox/core
-#: apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
-msgid "The file \"%1$s\" cannot be uploaded because it exceeds the attachment publication maximum file size of %2$s"
-msgstr ""
-
-#: apps/io.ox/core/tk/attachments.js
-#: module:io.ox/core
-#: apps/io.ox/mail/actions/attachmentQuota.js
-#: module:io.ox/mail
-msgid "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota limit of %2$s"
-msgstr ""
-
 #: apps/io.ox/core/tk/attachments.js
 #: module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js
@@ -5945,6 +5917,15 @@ msgid_plural "The files cannot be uploaded because they exceed the quota limit o
 msgstr[0] ""
 msgstr[1] ""
 
+#. %1$s the filename
+#. %2$s the maximum file size
+#: apps/io.ox/core/tk/upload.js
+#: module:io.ox/core
+#: apps/io.ox/mail/actions/attachmentQuota.js
+#: module:io.ox/mail
+msgid "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file size of %2$s"
+msgstr ""
+
 #. %1$s the maximum file size
 #: apps/io.ox/core/tk/upload.js
 #: module:io.ox/core
@@ -6050,17 +6031,17 @@ msgstr ""
 msgid "Use left/right arrow keys to navigate and escape key to exit the viewer."
 msgstr ""
 
-#. text of a viewer slide caption
-#. Example result: "1 of 10"
-#. %1$d is the slide index of the current
-#. %2$d is the total slide count
-#. text of a presentation slide caption
+#. information about position of the current item in viewer
+#. this will only be shown for more than one item
+#. %1$d - position of current item
+#. %2$d - total amount of items
+#. %2$d - total amount of item
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: module:io.ox/core
-#: apps/io.ox/presenter/views/presentationview.js
-#: module:io.ox/presenter
-msgid "%1$d of %2$d"
-msgstr ""
+msgid "%1$d of %2$d item"
+msgid_plural "%1$d of %2$d items"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: module:io.ox/core
@@ -7999,6 +7980,16 @@ msgstr ""
 
 #: apps/io.ox/mail/actions/attachmentQuota.js
 #: module:io.ox/mail
+msgid "The file \"%1$s\" cannot be uploaded because it exceeds the attachment publication maximum file size of %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/actions/attachmentQuota.js
+#: module:io.ox/mail
+msgid "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota limit of %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/actions/attachmentQuota.js
+#: module:io.ox/mail
 msgid "One or more attached files exceed the size limit per email. Therefore, the files are not sent as attachments but kept on the server. The email you have sent just contains links to download these files."
 msgstr ""
 
@@ -8145,33 +8136,55 @@ msgstr ""
 msgid "Couldn't load your auto forward."
 msgstr ""
 
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
 msgid "Apply for all mails?"
 msgstr ""
 
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
+msgid "Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs."
+msgstr ""
+
 #. %1$s target mail category
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
 #, c-format
 msgid "This mail was moved to %1$s."
 msgstr ""
 
 #. %1$s single mail address or comma separated list of multiple
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
 #, c-format
 msgid "Apply for mails from %1$s"
 msgstr ""
 
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
+msgid "Revert"
+msgstr ""
+
+#: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
 msgid "Apply"
 msgstr ""
 
+#. might be suitable to use 'tabs' rather than translating it
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
+msgid "Edit Tabs"
+msgstr ""
+
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
+msgid "Please note that some of the tabs can not be disabled."
+msgstr ""
+
+#. use as a fallback name in case a user enters a empty string as the name of tab
 #: apps/io.ox/mail/categories/main.js
 #: module:io.ox/mail
-msgid "Revert"
+msgid "Unnamed"
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
@@ -9101,28 +9114,7 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
-msgid "Ask"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
-msgid "Mail categories"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
 msgid "Show Tabs for inbox"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Apply move to all mails from a sender"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
@@ -9268,6 +9260,11 @@ msgstr ""
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Statistics"
+msgstr ""
+
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+msgid "Mail categories"
 msgstr ""
 
 #. (From) email1 via email2. Appears in email detail view.
@@ -10093,6 +10090,15 @@ msgstr ""
 #: apps/io.ox/presenter/views/presentationview.js
 #: module:io.ox/presenter
 msgid "Leave"
+msgstr ""
+
+#. text of a presentation slide caption
+#. Example result: "1 of 10"
+#. %1$d is the slide index of the current
+#. %2$d is the total slide count
+#: apps/io.ox/presenter/views/presentationview.js
+#: module:io.ox/presenter
+msgid "%1$d of %2$d"
 msgstr ""
 
 #. text of a presentation zoom level caption

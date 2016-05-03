@@ -144,7 +144,12 @@ define('io.ox/find/main', [
             'enable-disable-toggle': function (app) {
                 if (!app.get('inplace')) return;
                 // disable search field for unsupported folders
-                app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.updateState);
+                // hint: see bug #45449 why we have to use treeview events
+                app.listenTo(app.get('parent').treeView, 'selection:action', function (list, index) {
+                    var item = $(list[index]);
+                    if (item.hasClass('selected')) return;
+                    app.updateState(item.attr('data-id'));
+                });
             },
 
             'vgrid': function (app) {
@@ -559,6 +564,12 @@ define('io.ox/find/main', [
                     // inplace: use parents view window
                     app.view.render();
                     app.set('state', 'launched');
+                });
+                // reset cache on contact changes
+                require(['io.ox/contacts/api'], function (contactsAPI) {
+                    contactsAPI.on('refresh.all', function () {
+                        app.getProxy().done(function (proxy) { proxy.resetCache(); });
+                    });
                 });
             });
         };

@@ -75,6 +75,10 @@ RewriteRule v=[^\/]+/(.+) $1 [L]
 RewriteRule ^$ ui [L]
 
 # online help fallback
+RewriteCond %{REQUEST_FILENAME}/index.html -f
+RewriteCond %{REQUEST_URI} help(-.+)?/l10n/
+RewriteRule ^ %{REQUEST_FILENAME}/index.html [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !help(-.+)?/l10n/en_US
 RewriteRule help(-.+)?/l10n/([a-z_A-Z]+)(.+) help$1/l10n/en_US$3 [L]

@@ -1848,7 +1848,8 @@ define('io.ox/core/main', [
         var check = function (code, regex) { return regex.test(code); },
             reCodes = [
                 // sharing warnings
-                /^SHR_NOT-\d{4}$/
+                /^SHR_NOT-\d{4}$/,
+                /^RSS-0007/
             ];
         return function (code) {
             // return true in case at least one regex matched

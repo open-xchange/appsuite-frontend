@@ -406,18 +406,6 @@ Besides waiting for the user to click on such links, it's always a good idea to 
 One option is creating a portal widget that advertises a premium subscription:
 
 ```javascript
-/**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- */
-
 define('plugins/portal/upsell/register',
     ['io.ox/core/extensions',
      'io.ox/files/api',

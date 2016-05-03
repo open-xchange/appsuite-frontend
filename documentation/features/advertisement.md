@@ -1,6 +1,5 @@
 ---
-title: Advertisment
-keywords: monetization
+title: Advertisement
 ---
 
 AppSuite features a basic framework to help implementing ads for monetization.
