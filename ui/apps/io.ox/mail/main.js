@@ -634,7 +634,8 @@ define('io.ox/mail/main', [
 
             // close mail detail view in list-mode on folder selection
             app.folderView.tree.on('selection:action', function () {
-                if (app.props.get('layout') === 'list') {
+                // bug only if detail view is actually visible (see bug 45597)
+                if (app.props.get('layout') === 'list' && app.right.hasClass('preview-visible')) {
                     app.threadView.trigger('back');
                 }
             });
