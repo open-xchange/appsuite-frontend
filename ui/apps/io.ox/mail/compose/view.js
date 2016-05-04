@@ -485,7 +485,7 @@ define('io.ox/mail/compose/view', [
         saveDraft: function () {
             this.model.set('autoDismiss', true);
             var win = this.app.getWindow();
-            win.busy();
+            if (win) win.busy();
             // get mail
             var self = this,
                 model = this.model,
@@ -529,7 +529,7 @@ define('io.ox/mail/compose/view', [
                 notifications.yell('success', gt('Mail saved as draft'));
                 return result;
             }).always(function () {
-                win.idle();
+                if (win) win.idle();
             });
         },
 
