@@ -19,10 +19,11 @@ define('io.ox/mail/categories/main', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
     'io.ox/core/yell',
+    'io.ox/core/extensions',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'less!io.ox/mail/categories/style'
-], function (api, mailAPI, accountAPI, dnd, links, capabilities, yell, settings, gt) {
+], function (api, mailAPI, accountAPI, dnd, links, capabilities, yell, ext, settings, gt) {
 
     'use strict';
 
@@ -317,6 +318,18 @@ define('io.ox/mail/categories/main', [
             //this.listenTo(this.props, 'all', _.partial(debug, 'purple'));
             //this.listenTo(this.view, 'all', _.partial(debug, 'blue'));
             //this.listenTo(this.categories, 'all', _.partial(debug, 'red'));
+
+            // empty state
+            ext.point(this.mail.listView.ref + '/empty').extend({
+                id: 'categories',
+                index: 100,
+                draw: function (baton) {
+                    if (!baton.app.listView.model.get('filter')) return;
+                    // TODO: wording
+                    //#. Helper text for mail tabs without content
+                    this.text(gt('To fill this area please drag and drop mails to the title of this tab.'));
+                }
+            });
         },
         // toggle
         show: function () {

@@ -307,6 +307,12 @@ define('io.ox/mail/listview', [
         }
     );
 
+    ext.point('io.ox/mail/listview/empty').extend({
+        id: 'default',
+        index: 100,
+        draw: extensions.empty
+    });
+
     var MailListView = ListView.extend({
 
         ref: 'io.ox/mail/listview',
