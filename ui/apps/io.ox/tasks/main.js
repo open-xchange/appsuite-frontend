@@ -137,12 +137,6 @@ define('io.ox/tasks/main', [
                 classes: 'rightside'
             });
 
-            app.getTour = function () {
-                //no tours for guests, yet. See bug 41542
-                if (capabilities.has('guest')) return;
-
-                return { id: 'default/io.ox/tasks', path: 'io.ox/tours/tasks' };
-            };
         },
         /*
          * Init all nav- and toolbar labels for mobile

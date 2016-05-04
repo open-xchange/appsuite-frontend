@@ -9,5 +9,26 @@
     "index": 100,
     "package": "open-xchange-guidedtours",
     "path": "io.ox/tours/main"
+},{
+    "namespace": "default/io.ox/calendar",
+    "path": "io.ox/tours/calendar"
+},{
+    "namespace": "default/io.ox/contacts",
+    "path": "io.ox/tours/contacts"
+},{
+    "namespace": "default/io.ox/files",
+    "path": "io.ox/tours/files"
+},{
+    "namespace": "default/io.ox/mail",
+    "path": "io.ox/tours/mail"
+},{
+    "namespace": "default/io.ox/portal",
+    "path": "io.ox/tours/portal"
+},{
+    "namespace": "default/io.ox/settings",
+    "path": "io.ox/tours/settings"
+},{
+    "namespace": "default/io.ox/tasks",
+    "path": "io.ox/tours/tasks"
 }
 ]

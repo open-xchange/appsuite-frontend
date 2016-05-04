@@ -540,13 +540,6 @@ define('io.ox/settings/main', [
             }
         });
 
-        app.getTour = function () {
-            //no tours for guests, yet. See bug 41542
-            if (capabilities.has('guest')) return;
-
-            return { id: 'default/io.ox/settings', path: 'io.ox/tours/settings' };
-        };
-
         app.setSettingsPane = function (options) {
             if (options && (options.id || options.folder)) {
                 return paintTree().done(function () {
