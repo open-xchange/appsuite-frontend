@@ -43,7 +43,7 @@ define('io.ox/tours/get-started', ['io.ox/core/extensions', 'io.ox/core/tk/wizar
                     id: 'io.ox/guidedtour'
                 });
                 // track
-                var name = app.get('trackingId') || app.get('id') || app.get('name');
+                var name = app.get('trackingId') || app.get('name') || app.get('id');
                 metrics.trackEvent({
                     app: 'core',
                     target: 'toolbar',
