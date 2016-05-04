@@ -140,12 +140,6 @@ define('io.ox/contacts/main', [
                 classes: 'rightside'
             });
 
-            app.getTour = function () {
-                //no tours for guests, yet. See bug 41542
-                if (capabilities.has('guest')) return;
-
-                return { id: 'default/io.ox/contacts', path: 'io.ox/tours/contacts' };
-            };
         },
 
         'folder-view-mobile': function (app) {
