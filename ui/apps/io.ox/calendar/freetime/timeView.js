@@ -131,10 +131,8 @@ define('io.ox/calendar/freetime/timeView', [
                 cells.push($('<span class="freetime-table-cell">')
                     .addClass(i === worktimeEnd || i === worktimeStart ? 'working-hour' : ''));
             }
-
-            // cells need to lie between the hours of the timeline, so move them by half a cell width
-            // calculate in pixel not %
-            this.append($('<div class="freetime-table">').css('width', baton.view.headerNode.outerWidth() + 'px')
+            // don't use jquerys outerwidth here (rounds to full pixels)
+            this.append($('<div class="freetime-table">').css('width', window.getComputedStyle(baton.view.headerNode[0]).width)
                     .append($('<div class="freetime-time-table">').append(cells)
                 ));
         }
@@ -147,7 +145,7 @@ define('io.ox/calendar/freetime/timeView', [
         draw: function (baton) {
             var table = this.find('.freetime-table');
             if (!baton.view.lassoNode) {
-                baton.view.lassoNode = $('<div class="freetime-lasso">').hide();
+                baton.view.lassoNode = $('<div class="freetime-lasso striped">').hide();
             }
             table.append(baton.view.lassoNode);
         }
@@ -161,6 +159,7 @@ define('io.ox/calendar/freetime/timeView', [
             var table = $('<div class="appointments">').appendTo(this.find('.freetime-table')),
                 start = moment(baton.model.get('currentDay')).add(baton.model.get('startHour'), 'hours').valueOf(),
                 end = moment(start).add(baton.model.get('endHour') - baton.model.get('startHour') + 1, 'hours').valueOf(),
+                tootltipContainer = baton.view.headerNode.parent().parent(),
                 difference = end - start;
 
             _(baton.model.get('participants').models).each(function (participant) {
@@ -180,7 +179,7 @@ define('io.ox/calendar/freetime/timeView', [
                                 'aria-label': appointment.title,
                                 'data-toggle': 'tooltip'
                             })
-                            .tooltip();
+                            .tooltip({ container: tootltipContainer });
                     }
                     if (appointment.full_time) {
                         appointmentNode.addClass('fulltime');
@@ -203,7 +202,7 @@ define('io.ox/calendar/freetime/timeView', [
         initialize: function () {
             var self = this,
                 resize = function () {
-                    self.bodyNode.find('.freetime-table').css('width', self.headerNode.outerWidth() + 'px');
+                    self.bodyNode.find('.freetime-table').css('width', window.getComputedStyle(self.headerNode[0]).width);
                 };
 
             this.pointHeader = pointHeader;
