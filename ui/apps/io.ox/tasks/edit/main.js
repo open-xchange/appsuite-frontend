@@ -142,7 +142,7 @@ define('io.ox/tasks/edit/main', [
                 app.cid = 'io.ox/tasks:edit.' + _.cid(taskData);
 
                 // get fresh data to see if the task changed meanwhile
-                api.get(taskData, false).done(function (task) {
+                api.get({ id: taskData.id, folder_id: taskData.folder_id || taskData.folder }, false).done(function (task) {
                     if (taskData.last_modified !== task.last_modified) {
                         // clear cashes
                         var key = _.cid(taskData);
