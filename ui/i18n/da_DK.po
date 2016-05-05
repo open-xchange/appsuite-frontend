@@ -2226,7 +2226,8 @@ msgid "Create"
 msgstr "Opret"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Opret aftale"
 
@@ -3178,8 +3179,8 @@ msgstr "Medarbejder type"
 msgid "Employment"
 msgstr "Ansættelse"
 
-#. when items list is empty (e.g. search result)
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#. empty message for list view
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Tom"
 
@@ -5301,6 +5302,7 @@ msgstr "Ingen tabte forespørgsler"
 msgid "No mails in your inbox"
 msgstr "Ingen e-mails i din indbakke"
 
+#. search feature returns an empty result
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Ingen passende elementer fundet."
@@ -6871,7 +6873,6 @@ msgid "Sales Volume"
 msgstr "Salgsmængde"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
@@ -8630,6 +8631,11 @@ msgstr ""
 "For at tilføje kontakter manuelt, skal der bare gives en gyldig e-mail-"
 "adresse (for eksempel john.doe@example.com eller \"John Doe\" <jd@example."
 "com>)"
+
+#. Helper text for mail tabs without content
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "To fill this area please drag and drop mails to the title of this tab."
+msgstr ""
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js

@@ -2186,7 +2186,8 @@ msgid "Create"
 msgstr "创建"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "创建约会"
 
@@ -3132,8 +3133,8 @@ msgstr "员工类型"
 msgid "Employment"
 msgstr "雇用"
 
-#. when items list is empty (e.g. search result)
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#. empty message for list view
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "空置"
 
@@ -5225,6 +5226,7 @@ msgstr "没有丢失请求"
 msgid "No mails in your inbox"
 msgstr "您的文件夹中没有邮件"
 
+#. search feature returns an empty result
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "没找到匹配项目。"
@@ -6771,7 +6773,6 @@ msgid "Sales Volume"
 msgstr "销售量"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
@@ -8485,6 +8486,11 @@ msgid ""
 msgstr ""
 "要手动添加参与者，只要提供一个有效电子邮件地址（例如： john.doe@example.com "
 "或 \"John Doe\" <jd@example.com>）"
+
+#. Helper text for mail tabs without content
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "To fill this area please drag and drop mails to the title of this tab."
+msgstr ""
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js

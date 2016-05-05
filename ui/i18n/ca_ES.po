@@ -2259,7 +2259,8 @@ msgid "Create"
 msgstr "Crea"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Crea una cita"
 
@@ -3236,8 +3237,8 @@ msgstr "Tipus d'empleat"
 msgid "Employment"
 msgstr "Ocupació"
 
-#. when items list is empty (e.g. search result)
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#. empty message for list view
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr ""
 
@@ -5399,6 +5400,7 @@ msgstr "No hi ha peticions perdudes"
 msgid "No mails in your inbox"
 msgstr "No hi ha correus a la vostra safata d'entrada"
 
+#. search feature returns an empty result
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr ""
@@ -6984,7 +6986,6 @@ msgid "Sales Volume"
 msgstr "Volum de vendes"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
@@ -8758,6 +8759,11 @@ msgstr ""
 "Per a afegir contactes manualment, senzillament indicau una adreça de correu "
 "electrònic vàlida (per exemple, john.doe@example.com o \"John Doe\" "
 "<jd@example.com>)"
+
+#. Helper text for mail tabs without content
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "To fill this area please drag and drop mails to the title of this tab."
+msgstr ""
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js

@@ -2242,7 +2242,8 @@ msgid "Create"
 msgstr "Vytvoriť"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Vytvoriť schôdzku"
 
@@ -3199,8 +3200,8 @@ msgstr "Typ zamestnanca"
 msgid "Employment"
 msgstr "Zamestnanie"
 
-#. when items list is empty (e.g. search result)
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#. empty message for list view
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Prázdne"
 
@@ -5328,6 +5329,7 @@ msgstr "Žiadne stratené požiadavky"
 msgid "No mails in your inbox"
 msgstr "Žiadne poštové správy v priečinku Prijaté"
 
+#. search feature returns an empty result
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Neboli nájdené žiadne zodpovedajúce položky."
@@ -6902,7 +6904,6 @@ msgid "Sales Volume"
 msgstr "Objem predaja"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
@@ -8688,6 +8689,11 @@ msgid ""
 msgstr ""
 "Ak chcete účastníkov pridať ručne, jednoducho zadajte platnú emailovú adresu "
 "(napr. jan.kovac@example.com alebo \"Ján Kováč\" <jk@example.com>)"
+
+#. Helper text for mail tabs without content
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "To fill this area please drag and drop mails to the title of this tab."
+msgstr ""
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js

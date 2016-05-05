@@ -705,13 +705,13 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/main.js
-#: module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
@@ -7553,6 +7553,7 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
+#. search feature returns an empty result
 #: apps/io.ox/find/main.js
 #: module:io.ox/core
 msgid "No matching items found."
@@ -8187,6 +8188,12 @@ msgstr ""
 msgid "Unnamed"
 msgstr ""
 
+#. Helper text for mail tabs without content
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "To fill this area please drag and drop mails to the title of this tab."
+msgstr ""
+
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
@@ -8196,6 +8203,12 @@ msgstr ""
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
 msgid "has attachments"
+msgstr ""
+
+#. empty message for list view
+#: apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail
+msgid "Empty"
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
@@ -8886,12 +8899,6 @@ msgstr ""
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
 msgid "Mail Details"
-msgstr ""
-
-#. when items list is empty (e.g. search result)
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
-msgid "Empty"
 msgstr ""
 
 #: apps/io.ox/mail/main.js
