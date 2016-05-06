@@ -130,7 +130,7 @@ define('io.ox/core/api/autocomplete', [
          * @return { array }
          */
         processContactResults: function (data, query) {
-            var tmp = [], hash = {}, self = this;
+            var tmp = [], hash = {}, self = this, users = {};
 
             // improve response
             // 1/2: resolve email addresses
@@ -161,25 +161,32 @@ define('io.ox/core/api/autocomplete', [
                             } else {
                                 tmp.push(clone);
                             }
-
+                            // when there is a contact with the same email as a user we prever the user, so we must store them to check
+                            if (obj.type === 'user') {
+                                users[obj[field]] = true;
+                            }
                         }
                     });
                 }
             });
 
-            // check hash for double entries
-            function inHash(obj) {
+            // check hash for double entries, prefer users if we have a double entry
+            function inHash(obj, type) {
+                if (type === 'contact' && users[obj]) {
+                    return false;
+                }
                 return hash[obj] ? false : (hash[obj] = true);
             }
 
-            // 2/2: remove email duplicates
+            // 2/2: remove email duplicates, prefer users over contacts
             tmp = _(tmp).filter(function (obj) {
                 if (obj.mark_as_distributionlist) {
                     return inHash(_.cid(obj));
                 }
-                return inHash(obj[obj.field]);
+                return inHash(obj[obj.field], obj.type);
             });
             hash = null;
+            users = null;
             return tmp;
         }
     };
