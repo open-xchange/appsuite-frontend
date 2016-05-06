@@ -52,7 +52,7 @@ define('io.ox/core/boot/main', [
                 this[type]();
             } else {
                 $('#io-ox-login-container').empty().append(
-                    $('<div class="alert alert-info">').text('Unknown login type "' + type + '"')
+                    $('<div class="alert alert-info">').text('Unknown login type.')
                 );
                 $('#background-loader').fadeOut(250);
             }
