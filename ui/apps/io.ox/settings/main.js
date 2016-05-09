@@ -91,7 +91,7 @@ define('io.ox/settings/main', [
                     case 'changeGrid':
                         if (previousSelection !== null && previousSelection.lazySaveSettings === true && changeStatus === true) {
                             settingsID = previousSelection.id + '/settings';
-                            ext.point(settingsID + '/detail').invoke('save');
+                            ext.point(settingsID + '/detail').invoke('save', null, right);
                             changeStatus = false;
                         }
                         break;
