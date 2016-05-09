@@ -188,8 +188,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
         editMailfilter: function ($node, baton) {
 
             var createExtpointForSelectedFilter = function (node, args, config) {
-                ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
-            };
+                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
+                },
+                self = this;
 
             return $.when(api.getRules(), api.getConfig()).then(function (data, config) {
                 data = data[0];
@@ -199,6 +200,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 collection.comparator = function (model) {
                     return model.get('position');
                 };
+
+                $node.closest('.scrollable-pane').on('refresh:mailfilter', function () {
+                    self.refresh();
+                });
 
                 var FilterSettingsView,
                     MailfilterEdit;
@@ -506,6 +511,24 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                 $node.append(mailFilter.render().$el);
                 return collection;
+            });
+
+        },
+        initialize: function () {
+            var options = {
+                api: api,
+                model: mailfilterModel,
+                filterDefaults: DEFAULTS
+            };
+            return $.when(api.getRules(), api.getConfig(), options);
+        },
+
+        refresh: function () {
+            this.initialize().done(function (data) {
+                _.each(data[0], function (rule) {
+                    collection.add(factory.create(rule), { merge: true });
+                });
+                collection.trigger('add');
             });
 
         }
