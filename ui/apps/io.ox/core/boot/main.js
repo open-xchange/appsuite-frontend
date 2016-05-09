@@ -51,13 +51,8 @@ define('io.ox/core/boot/main', [
                 util.debug('Using login type', type);
                 this[type]();
             } else {
-                // remove everything that doesn't look like a method so pasting the error message still has some information
-                // See Bug 45364, esp. comment 20
-                type = type.replace(/^([a-zA-Z0-9_]*).*/, function (full, firstWord) {
-                    return firstWord;
-                });
                 $('#io-ox-login-container').empty().append(
-                    $('<div class="alert alert-info">').text('Unknown login type: "' + type + '"')
+                    $('<div class="alert alert-info">').text('Unknown login type.')
                 );
                 $('#background-loader').fadeOut(250);
             }
