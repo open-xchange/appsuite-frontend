@@ -173,6 +173,7 @@ define('io.ox/find/main', [
             },
 
             'listview-empty-message': function (app) {
+                if (!app.get('parent').listView) return;
                 var ref = app.get('parent').listView.ref;
                 ext.point(ref + '/empty').extend({
                     id: 'search',
