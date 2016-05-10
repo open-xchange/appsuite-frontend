@@ -118,10 +118,8 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
             this.$el.append('<div class="resizebar">');
             this.$el.append('<div class="resizebar vertical">');
             var win = this.listView.app.getWindow();
-            console.log('adding callback', 'resize.list-control-' + win.id);
             $(window).on('resize.list-control-' + win.id, _.debounce(this.applySizeConstraints.bind(this), 100));
             win.one('beforequit', function () {
-                console.log('removing callback', 'resize.list-control-' + win.id);
                 $(window).off('resize.list-control-' + win.id);
             });
         },
