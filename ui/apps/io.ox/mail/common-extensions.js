@@ -465,8 +465,8 @@ define('io.ox/mail/common-extensions', [
             return function (baton) {
 
                 if (baton.attachments.length === 0) return $.when();
-
-                var headers = baton.model.get('headers') || {};
+                // ensure there's a model when reading headers
+                var headers = baton.model ? baton.model.get('headers') : baton.data.headers || {};
                 // hide attachments for our own share invitations
                 if (headers['X-Open-Xchange-Share-Type']) this.hide();
 
