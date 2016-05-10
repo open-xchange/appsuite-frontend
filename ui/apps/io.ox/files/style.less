@@ -391,9 +391,10 @@
 
 ul.breadcrumb li.prefix { white-space: nowrap; }
 
-// small screens
-
-.width-less-than-480 {
+.smartphone {
+    .toolbar .folder-up {
+         margin-left: 14px;
+    }
 
     .file-list-view .list-item-column.column-2 { width: 100%; padding-right: 0; }
 
@@ -458,10 +459,6 @@ ul.breadcrumb li.prefix { white-space: nowrap; }
             }
         }
     }
-}
-
-@media all and (max-width: 480px), all and (max-device-width: 480px) {
-    .width-less-than-480;
 }
 
 .guidance {
