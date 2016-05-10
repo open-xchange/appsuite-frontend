@@ -104,9 +104,6 @@ define('io.ox/core/folder/selection', [], function () {
             this.resetTabIndex(items, items.eq(index));
             this.uncheck(items);
             this.pick(index, items);
-
-            // specific flexbox/scrolling issue (see bugs 43799, 44938, 45501)
-            $('#io-ox-windowmanager').scrollTop(0);
         },
 
         onKeydown: function (e) {

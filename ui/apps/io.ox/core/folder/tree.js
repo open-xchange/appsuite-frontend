@@ -159,6 +159,9 @@ define('io.ox/core/folder/tree', [
                     // use official method
                     .find('.dropdown-toggle').dropdown('toggle');
 
+                // specific flexbox/scrolling issue (see bugs 43799, 44938, 45501)
+                $('#io-ox-windowmanager').scrollTop(0);
+
             }.bind(this));
         },
 
