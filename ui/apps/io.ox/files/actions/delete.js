@@ -62,7 +62,7 @@ define('io.ox/files/actions/delete', [
 
         function isShared() {
             var result = _.findIndex(list, function (model) {
-                return model.get('object_permissions').length !== 0;
+                return (model.get('object_permissions') || []).length !== 0;
             });
 
             if (result !== -1) return true;
