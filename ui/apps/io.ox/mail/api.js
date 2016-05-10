@@ -486,9 +486,7 @@ define('io.ox/mail/api', [
         // now talk to server
         _(list).map(function (obj) {
             var folder  = obj.folder || obj.folder_id;
-            if (modfolder && modfolder !== folder) {
-                move = true;
-            }
+            if (modfolder && modfolder !== folder) move = true;
             return http.PUT({
                 module: 'mail',
                 params: {
@@ -702,27 +700,38 @@ define('io.ox/mail/api', [
         });
     };
 
+    function handleSpam(list, state) {
+        prepareRemove(list);
+        // reset spam folder; we assume that the spam handler will move the message to the spam folder
+        resetFolderByType('spam');
+        http.pause();
+        _(list).map(function (item) {
+            return http.PUT({
+                module: 'mail',
+                params: {
+                    action: 'update',
+                    id: item.id,
+                    folder: item.folder_id,
+                    timestamp: _.then()
+                },
+                data: { flags: api.FLAGS.SPAM, value: state },
+                appendColumns: false
+            });
+        });
+        return http.resume();
+    }
+
     /**
      * marks list of mails as spam
      * @param {array} list
      * @return {deferred}
      */
     api.markSpam = function (list) {
-
-        prepareRemove(list);
-        // reset spam folder; we assume that the spam handler will move the message to the spam folder
-        resetFolderByType('spam');
-
-        return update(list, { flags: api.FLAGS.SPAM, value: true }).fail(notifications.yell);
+        return handleSpam(list, true);
     };
 
     api.noSpam = function (list) {
-
-        prepareRemove(list);
-        // reset inbox; we assume that the spam handler will move the message (back) to the inbox
-        resetFolderByType('inbox');
-
-        return update(list, { flags: api.FLAGS.SPAM, value: false }).fail(notifications.yell);
+        return handleSpam(list, false);
     };
 
     // combines move & copy
@@ -1647,6 +1656,9 @@ define('io.ox/mail/api', [
     api.collectionLoader.each = function (obj, index, offset, params) {
         if (params.action === 'threadedAll') api.processThreadMessage(obj); else api.pool.add('detail', obj);
     };
+
+    // need this message at several places
+    api.mailServerDownMessage = gt('Unable to connect to mail server. Possible reasons: the mail server is (temporarily) down or there are network connection problems. Please try again in a few minutes.');
 
     return api;
 });

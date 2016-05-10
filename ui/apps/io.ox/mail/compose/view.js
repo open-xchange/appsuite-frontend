@@ -381,11 +381,7 @@ define('io.ox/mail/compose/view', [
 
             var self = this,
                 mode = obj.mode,
-                attachmentMailInfo;
-
-            if (obj.attachment && obj.attachments) {
-                attachmentMailInfo = obj.attachments[1] ? obj.attachments[1].mail : undefined;
-            }
+                mailReference = _(obj).pick('id', 'folder_id');
 
             delete obj.mode;
 
@@ -415,17 +411,18 @@ define('io.ox/mail/compose/view', [
                     data.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                 }
                 data.mode = mode;
+
                 var attachments = _.clone(data.attachments);
                 // to keep the previews working we copy data from the original mail
                 if (mode === 'forward' || mode === 'edit') {
                     attachments.forEach(function (file) {
-                        _.extend(file, { group: 'mail', mail: attachmentMailInfo });
+                        _.extend(file, { group: 'mail', mail: mailReference });
                     });
                 }
 
                 delete data.attachments;
 
-                if (mode === 'forward') {
+                if (mode === 'forward' || mode === 'edit') {
                     // move nested messages into attachment array
                     _(data.nested_msgs).each(function (obj) {
                         attachments.push({
@@ -975,7 +972,9 @@ define('io.ox/mail/compose/view', [
         prependNewLine: function () {
             var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''),
                 nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
-            this.editor.setContent(nl + content);
+
+            // Prepend newline in all modes except when editing draft
+            if (this.model.get('mode') !== 'edit') this.editor.setContent(nl + content);
         },
 
         setMail: function () {
