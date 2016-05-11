@@ -283,7 +283,7 @@ define('io.ox/contacts/util', [
         // @birthday is either a timestamp or a momentjs instance
         getBirthday: function (birthday) {
             // ensure instance of moment
-            birthday = moment(birthday).utc(true);
+            birthday = moment.utc(birthday);
             // Year 0 is special for birthdays without year (backend changes this to 1, however ...)
             // therefore, return full date if year is not 1
             if (birthday.year() !== 1) return birthday.format('l');
