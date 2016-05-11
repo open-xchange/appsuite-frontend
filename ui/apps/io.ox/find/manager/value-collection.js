@@ -37,12 +37,10 @@ define('io.ox/find/manager/value-collection', [
         type: 'value-collection',
 
         initialize: function (models, options, extra) {
-            var self = this;
-
             this.facet = extra.facet;
 
             // custom event mapping
-            this.listenTo(this, 'change:active change:option', function (model) {
+            this.on('change:active change:option', function (model) {
                 // use 'active' when simultaneously
                 var attr = Object.keys(model.changed)[0],
                     mapping = {
@@ -52,8 +50,8 @@ define('io.ox/find/manager/value-collection', [
 
                 // trigger custom event
                 // hint: use 'option' as fallback cause change:option may was triggered manually
-                self.trigger('change:list-of-actives', mapping[attr || 'option'], model.id);
-                self.facet.trigger('change:list-of-actives', mapping[attr || 'option'], model.id, model);
+                this.trigger('change:list-of-actives', mapping[attr || 'option'], model.id);
+                this.facet.trigger('change:list-of-actives', mapping[attr || 'option'], model.id, model);
             });
 
             // custom value models

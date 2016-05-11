@@ -131,7 +131,7 @@ define('io.ox/find/manager/facet-collection', [
             invalid = this.filter(function (facet) {
                 var cid = facet.get('id'),
                     active = !!facet.getActive().length;
-                // remove when missing and inactive
+                // remove when missing or inactive
                 return !(hash[cid] || active);
             });
             self.remove(invalid);
