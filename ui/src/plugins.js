@@ -30,7 +30,8 @@
     fileCache = dummyFileCache;
 
     function runCode(name, code) {
-        eval('//@ sourceURL=' + name + '.js\n' + code);
+        /*eslint no-eval: 0*/
+        eval('//# sourceURL=' + name + '.js\n' + code);
     }
 
     // needs to be reviewed: "force websql for mobile" (July 2013)
