@@ -172,6 +172,9 @@ define('io.ox/mail/inplace-reply', [
             // remember cid
             this.cid = options.cid;
 
+            // store numberOfRecipients to label the button correctly
+            this.numberOfRecipients = options.numberOfRecipients;
+
             this.$send = $();
             this.$textarea = $('<textarea class="inplace-editor form-control" tabindex="1">');
 
@@ -193,7 +196,8 @@ define('io.ox/mail/inplace-reply', [
                 $('<div class="form-group">').append(
                     this.$send = $('<button class="btn btn-primary btn-sm disabled" data-action="send" tabindex="1">')
                         .prop('disabled', true)
-                        .text(gt('Reply to all')),
+                        //#. used in Quick reply function to reply to one or more persons.
+                        .text(gt.ngettext('Reply', 'Reply to all', this.numberOfRecipients || 2)),
                     $.txt(' '),
                     $('<button class="btn btn-default btn-sm" data-action="cancel" tabindex="1">')
                         .text(gt('Cancel'))
