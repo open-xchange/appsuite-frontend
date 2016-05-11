@@ -1502,7 +1502,7 @@ define('io.ox/mail/main', [
         },
 
         'mail-progress': function () {
-
+            if (_.device('smartphone')) return;
             ext.point('io.ox/mail/sidepanel').extend({
                 id: 'progress',
                 index: 300,
@@ -1532,7 +1532,7 @@ define('io.ox/mail/main', [
         },
 
         'sidepanel': function (app) {
-
+            if (_.device('smartphone')) return;
             ext.point('io.ox/mail/sidepanel').extend({
                 id: 'tree',
                 index: 100,
