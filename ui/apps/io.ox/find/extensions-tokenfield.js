@@ -88,7 +88,11 @@ define('io.ox/find/extensions-tokenfield', [
 
             click: function (baton) {
                 baton.data.deferred.done(function (value) {
-                    value.activate();
+                    // WORKAROUND: use value-id to get latest value model instance via manager
+                    // see bug 44818: outdated model in a zombie collection
+                    var manager = baton.data.model.manager,
+                        facet = value.get('facet');
+                    manager.activate(facet.get('id'), value.get('id'), value.get('option'));
                 });
             }
         };
