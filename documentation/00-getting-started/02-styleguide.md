@@ -4,7 +4,7 @@ description: Our set of standards when writing code for open-xchange OX App Suit
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_Development_Style_Guide
 ---
 
-<!-- TODO: Link to eslint rule set -->
+<!-- TODO [Style Guide](https://github.com/Open-Xchange-Frontend/javascript) -->
 
 There lots of stuff we don't need to talk about because ESLint will bug you! (white space, formatting, undefined variables, globals, etc.)
 

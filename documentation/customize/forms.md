@@ -32,7 +32,7 @@ require('io.ox/core/extensions').point('io.ox/contacts/edit/personal').all();
 
 # Modify extension points
 
-As described in [Hands-on introduction](TODO) extension points can be modified in multiple aspects:
+As described in [Hands-on introduction](ui/extension-points/01-introduction.html) extension points can be modified in multiple aspects:
 
 ```javascript
 // disable the display_name field

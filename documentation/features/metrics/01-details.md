@@ -115,4 +115,4 @@ returns boolean that indicates status of the metrics module
 
 # Adapters
 
-Please visit the [Adapters Page](TODO).
+Please visit the [Adapters Page](ui/features/metrics/02-adapters.html).

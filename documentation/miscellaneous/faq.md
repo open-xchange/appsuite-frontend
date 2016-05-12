@@ -4,7 +4,7 @@ description: Frequently asked questions about running the OX App Suite UI
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_FAQ
 ---
 
-If you need a tool set for finding things out about the UI, see [Debugging the UI](TODO). Frequently asked by new developers. And forgetful veterans. Who therefore write documentation pieces like this.
+If you need a tool set for finding things out about the UI, see [Debugging the UI](ui/miscellaneous/debugging.html). Frequently asked by new developers. And forgetful veterans. Who therefore write documentation pieces like this.
 
 # Does show the login screen after logging in
 
