@@ -249,6 +249,7 @@ define('io.ox/mail/toolbar', [
             .option('checkboxes', true, gt('Checkboxes'))
             .option('contactPictures', true, gt('Contact pictures'))
             .option('exactDates', true, gt('Exact dates'))
+            .option('alwaysShowSize', true, gt('Show message size'))
             .divider()
             .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
             .listenTo(baton.app.props, 'change:layout', updateContactPicture);

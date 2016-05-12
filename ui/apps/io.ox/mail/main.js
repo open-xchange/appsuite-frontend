@@ -287,6 +287,7 @@ define('io.ox/mail/main', [
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'contactPictures': _.device('smartphone') ? false : app.settings.get('showContactPictures', false),
                 'exactDates': app.settings.get('showExactDates', false),
+                'alwaysShowSize': app.settings.get('alwaysShowSize', false),
                 'mobileFolderSelectMode': false
             });
         },
@@ -505,7 +506,8 @@ define('io.ox/mail/main', [
                     .set(['viewOptions', folder], _.extend({ sort: data.sort, order: data.order, thread: data.thread }, options.viewOptions || {}))
                     .set('layout', data.layout)
                     .set('showContactPictures', data.contactPictures)
-                    .set('showExactDates', data.exactDates);
+                    .set('showExactDates', data.exactDates)
+                    .set('alwaysShowSize', data.alwaysShowSize);
                 if (_.device('!smartphone')) {
                     app.settings.set('showCheckboxes', data.checkboxes);
                 }
@@ -1350,6 +1352,15 @@ define('io.ox/mail/main', [
          */
         'change:exactDates': function (app) {
             app.props.on('change:exactDates', function () {
+                app.listView.redraw();
+            });
+        },
+
+        /*
+         * Respond to change:alwaysShowSize
+         */
+        'change:alwaysShowSize': function (app) {
+            app.settings.on('change:alwaysShowSize', function () {
                 app.listView.redraw();
             });
         },
