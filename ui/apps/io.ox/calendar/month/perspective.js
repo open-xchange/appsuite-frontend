@@ -221,7 +221,7 @@ define('io.ox/calendar/month/perspective', [
             }
 
             // draw all weeks
-            for (var i = 0; i < weeks; i++, curWeek.tz('utc').add(1, 'week')) {
+            for (var i = 0; i < weeks; i++, curWeek.add(1, 'week')) {
                 var day = curWeek.valueOf(),
                     endDate = moment(curWeek).add(1, 'week'),
                     monthDelimiter = curWeek.date() > endDate.date();
