@@ -468,6 +468,12 @@ define('io.ox/mail/util', [
             return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
         },
 
+        threadFileSize: function (data) {
+            return data.reduce(function (acc, obj) {
+                return acc + (obj.size || 0);
+            }, 0);
+        },
+
         count: function (data) {
             return _(data).reduce(function (memo, obj) {
                 return memo + (obj.thread ? obj.thread.length : 1);

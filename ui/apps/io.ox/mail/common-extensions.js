@@ -147,8 +147,9 @@ define('io.ox/mail/common-extensions', [
         size: function (baton) {
             var data = baton.data;
             if (!_.isNumber(data.size)) return;
+            var size = util.threadFileSize(data.thread || [data]);
             this.append(
-                $('<span class="size">').text(strings.fileSize(data.size, 1))
+                $('<span class="size">').text(strings.fileSize(size, 1))
             );
         },
 
