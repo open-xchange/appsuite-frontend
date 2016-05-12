@@ -280,7 +280,7 @@ define('io.ox/core/viewer/views/displayerview', [
                                 duplicateView.$el.attr('data-swiper-slide-index', swiperIndex);
 
                                 // only load duplicate slides which are not processed by the document converter
-                                if (!model.isOffice() && !model.isPDF()) duplicateView.prefetch(1).show();
+                                if (!model.isOffice() && !model.isPDF() && !view.model.isVideo() && !view.model.isAudio()) duplicateView.prefetch(1).show();
                             }
                         }
                     }
@@ -445,7 +445,7 @@ define('io.ox/core/viewer/views/displayerview', [
                             if (self.delayedRemove[index]) {
                                 self.delayedRemove[index].view.unload(index).dispose();
                                 self.delayedRemove[index].node.remove();
-                            } else {
+                            } else if (!view.model.isVideo() && !view.model.isAudio()) {
                                 view.show();
                             }
 
