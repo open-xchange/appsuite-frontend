@@ -355,7 +355,7 @@
         req.load = function (context, modulename, url) {
             var prefix = context.config.baseUrl;
             if (modulename.slice(0, 5) === 'apps/') {
-                url = ox.apiRoot + '/apps/load/' + ox.version + ',' + url.slice(5);
+                url = ox.apiRoot + '/apps/load/' + ox.version + ',' + modulename.slice(5);
                 return oldload.apply(this, arguments);
             } else if (modulename.slice(0, 7) === 'static/') {
                 fileCache.retrieve(modulename).then(
