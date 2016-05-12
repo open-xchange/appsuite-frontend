@@ -1382,8 +1382,8 @@ define('io.ox/mail/api', [
                 attachment: data.id,
                 user: ox.user_id,
                 context: ox.context_id,
-                // mails don't have a last modified attribute, use now instead
-                sequence: _.now()
+                // mails don't have a last modified attribute, just use 1
+                sequence: 1
             });
         switch (mode) {
             case 'view':

@@ -753,8 +753,8 @@ define('io.ox/contacts/api', [
                 uniq: uniq,
                 user: ox.user_id,
                 context: ox.context_id,
-                // mails don't have a last modified attribute, use now instead
-                sequence: data.last_modified || _.now()
+                // mails don't have a last modified attribute, just use 1
+                sequence: data.last_modified || 1
             });
 
             // remove empty values
