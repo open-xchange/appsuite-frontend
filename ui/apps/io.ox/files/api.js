@@ -321,7 +321,7 @@ define('io.ox/files/api', [
             id = encodeURIComponent(file.id),
             version = file.version !== undefined && options.version !== false ? '&version=' + file.version : '',
             // basic URL
-            query = '?action=document&folder=' + folder + '&id=' + id + version,
+            query = '?action=document&folder=' + folder + '&id=' + id + version + '&user=' + ox.user_id + '&context=' + ox.context_id + '&sequence=' + file.last_modified,
             // file name
             name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
             // scaling options

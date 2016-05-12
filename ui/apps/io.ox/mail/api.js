@@ -1379,7 +1379,11 @@ define('io.ox/mail/api', [
                 action: 'attachment',
                 folder: (data.parent || data.mail).folder_id,
                 id: (data.parent || data.mail).id,
-                attachment: data.id
+                attachment: data.id,
+                user: ox.user_id,
+                context: ox.context_id,
+                // mails don't have a last modified attribute, use now instead
+                sequence: _.now()
             });
         switch (mode) {
             case 'view':
