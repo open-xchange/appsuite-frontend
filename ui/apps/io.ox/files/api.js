@@ -319,9 +319,10 @@ define('io.ox/files/api', [
         var url = ox.apiRoot + '/files',
             folder = encodeURIComponent(file.folder_id),
             id = encodeURIComponent(file.id),
+            sessionData = '&user=' + ox.user_id + '&context=' + ox.context_id + '&sequence=' + file.last_modified,
             version = file.version !== undefined && options.version !== false ? '&version=' + file.version : '',
             // basic URL
-            query = '?action=document&folder=' + folder + '&id=' + id + version + '&user=' + ox.user_id + '&context=' + ox.context_id + '&sequence=' + file.last_modified,
+            query = '?action=document&folder=' + folder + '&id=' + id + version + sessionData,
             // file name
             name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
             // scaling options
@@ -341,7 +342,7 @@ define('io.ox/files/api', [
             case 'preview':
                 return (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
             case 'cover':
-                return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + '&content_type=image/jpeg&' + buster;
+                return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
             case 'play':
                 return url + query + '&delivery=view';
             // open/view
