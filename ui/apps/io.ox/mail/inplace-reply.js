@@ -186,7 +186,7 @@ define('io.ox/mail/inplace-reply', [
         render: function () {
             var replyText;
             // do _not_ use gt.ngettext here, see Bug 45798
-            if (this.numberOfRecipients || 2) {
+            if (this.numberOfRecipients === 1) {
                 //#. Used as a verb to reply to one recipient
                 replyText = gt('Reply');
             } else {
