@@ -1810,6 +1810,12 @@ msgstr "Napsauta avataksesi."
 msgid "Click to open. Drag to your desktop to download."
 msgstr "Napsauta avataksesi. Ladataksesi, siirrä työpöydällesi."
 
+#: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to upload image"
+msgid "Click to play audio file"
+msgstr "Napsauta ladataksesi kuva"
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
 msgstr "Napsauta yrittääksesi uudelleen."
@@ -1829,6 +1835,12 @@ msgid "Click to show or hide actions for advanced users."
 msgstr ""
 "Napauta näyttääksesi tai piilottaaksesi toiminnot edistyneemmille "
 "käyttäjille."
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Click to start video"
+msgstr "Napsauta yrittääksesi uudestaan."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
@@ -6691,8 +6703,10 @@ msgstr "Toista"
 msgid "Repeat new password"
 msgstr "Toista salasana"
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
+#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
 msgid "Reply"
 msgstr "Vastaa"
 
@@ -6706,6 +6720,7 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Vastaa"
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Reply to all"
 msgstr "Vastaa kaikille"
@@ -7088,6 +7103,12 @@ msgstr "Lähetä postia kaikille osallistujille"
 msgid "Send new mail"
 msgstr "Lähetä uusi viesti"
 
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "New notifications"
+msgid "Send notification"
+msgstr "Uudet ilmoitukset"
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Lähetä lomailmoitus vain tänä aikana"
@@ -7342,6 +7363,12 @@ msgstr "Näytä sisäinen linkki"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Näytä luettelo"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show images"
+msgid "Show message size"
+msgstr "Näytä kuvat"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"

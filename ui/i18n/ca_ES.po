@@ -1864,6 +1864,12 @@ msgstr ""
 "Premeu per a obrir-ho. Arrossegau-ho al vostre escriptori per a descarregar-"
 "ho."
 
+#: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to upload image"
+msgid "Click to play audio file"
+msgstr "Premeu per a puja una imatge"
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
 msgstr "Premeu per a tornar-ho a provar"
@@ -1880,6 +1886,12 @@ msgstr "Crea un contacte"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Click to show or hide actions for advanced users."
 msgstr ""
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Click to start video"
+msgstr "Premeu per a provar-ho de nou."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
@@ -6822,8 +6834,10 @@ msgstr "Repeteix"
 msgid "Repeat new password"
 msgstr "Repetiu la nova contrasenya"
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
+#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
 msgid "Reply"
 msgstr "Respon"
 
@@ -6837,6 +6851,7 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr ""
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Reply to all"
 msgstr ""
@@ -7218,6 +7233,11 @@ msgstr "Envia correu electrònic a tots els participants"
 msgid "Send new mail"
 msgstr "Envia un nou correu electrònic"
 
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+msgid "Send notification"
+msgstr "No hi ha notificacions"
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Envia un avís d'absència només durant aquest període de temps"
@@ -7478,6 +7498,12 @@ msgstr "Mostra enllaç intern"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Mostra la llista"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show images"
+msgid "Show message size"
+msgstr "Mostra imatges"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #, fuzzy

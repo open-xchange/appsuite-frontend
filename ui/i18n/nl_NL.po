@@ -1836,6 +1836,12 @@ msgstr "Klik om te openen."
 msgid "Click to open. Drag to your desktop to download."
 msgstr "Klik om te openen. Sleep naar het bureaublad om te downloaden."
 
+#: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to upload image"
+msgid "Click to play audio file"
+msgstr "Klik om de afbeelding te uploaden"
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
 msgstr "Klik om het opnieuw te proberen"
@@ -1854,6 +1860,12 @@ msgstr "Verwijder contactpersoon"
 msgid "Click to show or hide actions for advanced users."
 msgstr ""
 "Klik om de acties voor geavanceerde gebruikers te tonen of te verbergen."
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Click to start video"
+msgstr "Klik om het opnieuw te proberen."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
@@ -6757,8 +6769,10 @@ msgstr "Herhaal"
 msgid "Repeat new password"
 msgstr "Herhaal nieuw wachtwoord"
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
+#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
 msgid "Reply"
 msgstr "Beantwoorden"
 
@@ -6772,6 +6786,7 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Beantwoord naar"
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Reply to all"
 msgstr "Allen beantwoorden"
@@ -7154,6 +7169,12 @@ msgstr "Verstuur een e-mail naar alle deelnemers"
 msgid "Send new mail"
 msgstr "Verzend nieuw e-mailbericht"
 
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "New notifications"
+msgid "Send notification"
+msgstr "Nieuwe kennisgevingen"
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Stuur alleen een afwezigheidsmelding gedurende deze tijd"
@@ -7408,6 +7429,12 @@ msgstr "Toon interne link"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Toon lijst"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show images"
+msgid "Show message size"
+msgstr "Afbeeldingen tonen"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"

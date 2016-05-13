@@ -1825,6 +1825,12 @@ msgid "Click to open. Drag to your desktop to download."
 msgstr ""
 "Zum Öffnen bitte klicken. Zum Herunterladen bitte auf ihren Desktop ziehen."
 
+#: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to upload image"
+msgid "Click to play audio file"
+msgstr "Zum Hochladen des Bildes bitte klicken."
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
 msgstr "Für einen erneuten Versuch bitte klicken."
@@ -1842,6 +1848,12 @@ msgid "Click to show or hide actions for advanced users."
 msgstr ""
 "Zum Ein- oder Ausblenden von Aktionen für fortgeschrittene Benutzer bitte "
 "klicken."
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Click to start video"
+msgstr "Für einen erneuten Versuch bitte klicken"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
@@ -6736,8 +6748,10 @@ msgstr "Wiederholen"
 msgid "Repeat new password"
 msgstr "Neues Passwort wiederholen"
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
+#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
 msgid "Reply"
 msgstr "Antworten"
 
@@ -6751,6 +6765,7 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Antw. an"
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Reply to all"
 msgstr "Allen antworten"
@@ -7128,6 +7143,12 @@ msgstr "E-Mail an alle Teilnehmer senden"
 msgid "Send new mail"
 msgstr "Neue E-Mail versenden"
 
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "New notifications"
+msgid "Send notification"
+msgstr "Neue Benachrichtigungen"
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Abwesenheitsbenachrichtigung nur für diese Dauer versenden"
@@ -7378,6 +7399,12 @@ msgstr "Internen Link anzeigen"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Liste anzeigen"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show images"
+msgid "Show message size"
+msgstr "Bilder anzeigen"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"

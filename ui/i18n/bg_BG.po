@@ -1799,6 +1799,10 @@ msgstr ""
 msgid "Click to open. Drag to your desktop to download."
 msgstr ""
 
+#: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
+msgid "Click to play audio file"
+msgstr ""
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
 msgstr ""
@@ -1813,6 +1817,10 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Click to show or hide actions for advanced users."
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+msgid "Click to start video"
 msgstr ""
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -6605,8 +6613,10 @@ msgstr "Повтори"
 msgid "Repeat new password"
 msgstr ""
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
+#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
 msgid "Reply"
 msgstr "Отговори"
 
@@ -6620,6 +6630,7 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr ""
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 #, fuzzy
 #| msgid "Reply to all recipients"
@@ -6999,6 +7010,12 @@ msgstr "Изпрати мейл до всички участници"
 msgid "Send new mail"
 msgstr "Изпрати нов мейл"
 
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Authentication"
+msgid "Send notification"
+msgstr "Аутентикация"
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr ""
@@ -7256,6 +7273,12 @@ msgstr ""
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr ""
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "No message selected"
+msgid "Show message size"
+msgstr "Не е избрано съобщение"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"

@@ -1816,6 +1816,12 @@ msgstr "Klicka för att öppna."
 msgid "Click to open. Drag to your desktop to download."
 msgstr "Klicka för att öppna. Dra till ditt skrivbord för att ladda ner."
 
+#: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to upload image"
+msgid "Click to play audio file"
+msgstr "Klicka för att ladda upp bild"
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
 msgstr "Klicka för att försöka igen"
@@ -1833,6 +1839,12 @@ msgstr "Ta bort kontakt"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Click to show or hide actions for advanced users."
 msgstr "Klicka för att visa eller dölja åtgärder för avancerade användare."
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Click to start video"
+msgstr "Klicka för att försöka igen."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
@@ -6690,8 +6702,10 @@ msgstr "Upprepa"
 msgid "Repeat new password"
 msgstr "Upprepa nytt lösenord"
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
+#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
 msgid "Reply"
 msgstr "Svara"
 
@@ -6705,6 +6719,7 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Svara till"
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Reply to all"
 msgstr "Svara alla"
@@ -7087,6 +7102,12 @@ msgstr "Skicka e-post till alla deltagare"
 msgid "Send new mail"
 msgstr "Skicka ny e-post"
 
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "New notifications"
+msgid "Send notification"
+msgstr "Nya aviseringar"
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Skicka semesternotis endast vid denna tid"
@@ -7341,6 +7362,12 @@ msgstr "Visa intern länk"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Visa lista"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show images"
+msgid "Show message size"
+msgstr "Visa bilder"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"

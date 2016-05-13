@@ -1850,6 +1850,12 @@ msgstr "Apăsați aici pentru a deschide."
 msgid "Click to open. Drag to your desktop to download."
 msgstr "Apăsați aici pentru a deschide. Glisați pe desktop pentru a descărca."
 
+#: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to upload image"
+msgid "Click to play audio file"
+msgstr "Apăsați aici pentru a încărca imaginea"
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
 msgstr "Apăsați aici pentru a încerca din nou"
@@ -1868,6 +1874,12 @@ msgstr "Șterge contactul"
 msgid "Click to show or hide actions for advanced users."
 msgstr ""
 "Apăsați pentru a afișa sau ascunde acțiunile pentru utilizatorii avansați."
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Click to start video"
+msgstr "Apăsați aici pentru a încerca din nou."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
@@ -6752,8 +6764,10 @@ msgstr "Repetă"
 msgid "Repeat new password"
 msgstr "Introduceți din nou noua parolă"
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
+#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
 msgid "Reply"
 msgstr "Răspunde"
 
@@ -6767,6 +6781,7 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Răsp. la"
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Reply to all"
 msgstr "Răspunde tuturor"
@@ -7151,6 +7166,12 @@ msgstr "Trimite mailul tuturor participanților"
 msgid "Send new mail"
 msgstr "Trimite mail"
 
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "New notifications"
+msgid "Send notification"
+msgstr "Notificări noi"
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Trimite mesajul de absență numai în această perioadă"
@@ -7410,6 +7431,12 @@ msgstr "Afișează legătura internă"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Afișează listă"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show images"
+msgid "Show message size"
+msgstr "Afișează imaginile"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"

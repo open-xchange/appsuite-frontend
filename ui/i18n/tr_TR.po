@@ -1837,6 +1837,12 @@ msgstr "Açmak için tıklayın. "
 msgid "Click to open. Drag to your desktop to download."
 msgstr "Açmak için tıklayın. İndirmek için masaüstünüze sürükleyin."
 
+#: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to upload image"
+msgid "Click to play audio file"
+msgstr "Resim yüklemek için tıklayın"
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
 msgstr "Yeniden denemek için tıklayın"
@@ -1854,6 +1860,12 @@ msgstr "İletişim bilgisini sil"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Click to show or hide actions for advanced users."
 msgstr ""
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Click to start video"
+msgstr "Yeniden denemek için tıklayın."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
@@ -6964,8 +6976,10 @@ msgstr "Tekrar et"
 msgid "Repeat new password"
 msgstr "Yeni şifreyi tekrarlayınız"
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
+#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
 msgid "Reply"
 msgstr "Cevapla"
 
@@ -6981,6 +6995,7 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Cevapla"
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 #, fuzzy
 #| msgid "Reply All"
@@ -7376,6 +7391,12 @@ msgstr "Tüm katılımcılara eposta gönder"
 msgid "Send new mail"
 msgstr "Yeni eposta gönder "
 
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "New notifications"
+msgid "Send notification"
+msgstr "Yeni Uyarılar"
+
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Sadece bu zaman için seyahat bildirimi gönder"
@@ -7651,6 +7672,12 @@ msgstr "Dahili link göster"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Listeyi göster"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show images"
+msgid "Show message size"
+msgstr "Resimleri göster"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
