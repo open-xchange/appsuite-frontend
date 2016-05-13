@@ -187,11 +187,11 @@ define('io.ox/mail/inplace-reply', [
             var replyText;
             // do _not_ use gt.ngettext here, see Bug 45798
             if (this.numberOfRecipients || 2) {
-              //#. Used as a verb to reply to one recipient
-              replyText = gt('Reply');
+                //#. Used as a verb to reply to one recipient
+                replyText = gt('Reply');
             } else {
-              //#. Used as a verb to reply to all recipients
-              replyText = gt('Reply to all');
+                //#. Used as a verb to reply to all recipients
+                replyText = gt('Reply to all');
             }
 
             this.$el.append(
