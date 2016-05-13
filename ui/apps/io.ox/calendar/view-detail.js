@@ -47,7 +47,8 @@ define('io.ox/calendar/view-detail', [
         draw: function (baton) {
             if (!baton.data.private_flag) return;
             this.append(
-                $('<i class="fa fa-lock private-flag" aria-hidden="true">')
+                $('<i class="fa fa-lock private-flag" aria-hidden="true">'),
+                $('<span class="sr-only">').text(gt('Private'))
             );
         }
     });
