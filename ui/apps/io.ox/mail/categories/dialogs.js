@@ -41,7 +41,7 @@ define('io.ox/mail/categories/dialogs', [
             })
             .extend({
                 default: function (baton) {
-                    _.extend(baton, { data: obj.data, target: obj.target, source: obj.source });
+                    _.extend(baton, { data: obj.data, target: obj.target, targetname: obj.targetname, source: obj.source });
                     this.addClass('mail-categopries-dialog');
                 },
                 description: function () {
@@ -54,7 +54,7 @@ define('io.ox/mail/categories/dialogs', [
                         $('<p>').html(
                             //#. %1$s target mail category
                             //#, c-format
-                            gt('This mail was moved to %1$s.', '<i>' + baton.target + '</i>')
+                            gt('This mail was moved to %1$s.', '<i>' + baton.targetname + '</i>')
                         )
                     );
                 },

@@ -163,7 +163,10 @@ define('io.ox/mail/categories/main', [
                                 $('<span class="counter">').text(model.getCount())
                             )
                         )
-                    ).attr('data-id', model.get('id'))
+                    ).attr({
+                        'data-id': model.get('id'),
+                        'data-name': model.get('name')
+                    })
                 );
                 // states
                 this.refresh(model, node);
@@ -200,6 +203,7 @@ define('io.ox/mail/categories/main', [
             // prevent execution of copy/move handler
             e.stopPropagation();
             baton.data = mailAPI.resolve(baton.data);
+            baton.targetname = $(baton.dropzone).attr('data-name');
             this.trigger('drop', baton);
         },
         onKeydown: function (e) {
