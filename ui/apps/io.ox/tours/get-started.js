@@ -68,6 +68,9 @@ define('io.ox/tours/get-started', [
             if (capabilities.has('guest')) return this.hide();
 
             var app = ox.ui.App.getCurrentApp();
+            // there are cases where there is no current app (e.g. restore mail compose, then press cancel)
+            if (app === null) return this.hide();
+
             // deprecated way via app.getTour
             var fn = app && _.isFunction(app.getTour),
                 response = fn && app.getTour();
