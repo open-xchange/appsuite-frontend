@@ -531,10 +531,7 @@ define('io.ox/mail/common-extensions', [
         unreadToggle: (function () {
 
             function getAriaLabel(data) {
-                return util.isUnseen(data) ?
-                    gt('This message is unread, press this button to mark it as read.') :
-                    gt('This message is read, press this button to mark it as unread.');
-
+                return util.isUnseen(data) ? gt('Unread') : gt('Read');
             }
 
             function toggle(e) {
@@ -542,7 +539,10 @@ define('io.ox/mail/common-extensions', [
                 var data = e.data.model.toJSON();
                 // toggle 'unseen' bit
                 if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
-                $(this).attr('aria-label', getAriaLabel(data));
+                $(this).attr({
+                    'aria-label': getAriaLabel(data),
+                    'aria-pressed': util.isUnseen(data)
+                });
             }
 
             return function (baton) {
@@ -551,7 +551,10 @@ define('io.ox/mail/common-extensions', [
 
                 this.append(
                     $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
-                    .attr('aria-label', getAriaLabel(baton.data))
+                    .attr({
+                        'aria-label': getAriaLabel(baton.data),
+                        'aria-pressed': util.isUnseen(baton.data)
+                    })
                     .append('<i class="fa" aria-hidden="true">')
                     .on('click', { model: baton.view.model }, toggle)
                 );
