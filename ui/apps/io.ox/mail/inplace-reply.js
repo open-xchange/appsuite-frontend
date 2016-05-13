@@ -184,6 +184,15 @@ define('io.ox/mail/inplace-reply', [
         },
 
         render: function () {
+            var replyText;
+            // do _not_ use gt.ngettext here, see Bug 45798
+            if (this.numberOfRecipients || 2) {
+              //#. Used as a verb to reply to one recipient
+              replyText = gt('Reply');
+            } else {
+              //#. Used as a verb to reply to all recipients
+              replyText = gt('Reply to all');
+            }
 
             this.$el.append(
                 // editor
@@ -196,8 +205,7 @@ define('io.ox/mail/inplace-reply', [
                 $('<div class="form-group">').append(
                     this.$send = $('<button class="btn btn-primary btn-sm disabled" data-action="send" tabindex="1">')
                         .prop('disabled', true)
-                        //#. used in Quick reply function to reply to one or more persons.
-                        .text(gt.ngettext('Reply', 'Reply to all', this.numberOfRecipients || 2)),
+                        .text(replyText),
                     $.txt(' '),
                     $('<button class="btn btn-default btn-sm" data-action="cancel" tabindex="1">')
                         .text(gt('Cancel'))
