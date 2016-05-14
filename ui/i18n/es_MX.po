@@ -6344,7 +6344,8 @@ msgstr "Prioridad"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6478,6 +6479,14 @@ msgstr ""
 "Puntuación %1$d de %2$d confirmada. Presione Intro para confirmarla o use "
 "las teclas de movimiento del cursor a la izquierda y a la derecha para "
 "ajustar su puntuación."
+
+#
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "to"
+#| msgid "Read"
+msgid "Read"
+msgstr "Leído"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8633,16 +8642,6 @@ msgstr "El fichero está bloqueado por %1$s"
 #: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Este mensaje se ha cortado debido a las limitaciones de tamaño."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-"Este mensaje está leído, presione este botón para marcarlo como no leído."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-"Este mensaje no está leído, presione este botón para marcarlo como leído."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -16391,11 +16390,6 @@ msgstr "yyyy"
 #~ msgid "RUB"
 #~ msgstr "RUB"
 
-#
-#~ msgctxt "to"
-#~ msgid "Read"
-#~ msgstr "Leído"
-
 #~ msgid "Read Acknowledgement"
 #~ msgstr "Notificación de lectura"
 
@@ -18031,6 +18025,14 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Este mensaje contiene actualizaciones de cita que ya fueron aceptadas por "
 #~ "otro usuario. No necesita hacer nada con este mensaje."
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Este mensaje está leído, presione este botón para marcarlo como no leído."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Este mensaje no está leído, presione este botón para marcarlo como leído."
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"

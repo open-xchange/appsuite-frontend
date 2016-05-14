@@ -6539,7 +6539,8 @@ msgstr "Öncelik"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6678,6 +6679,10 @@ msgid ""
 msgstr ""
 "%2$d derecelendirmesi %1$d. Onaylamak için lütfen Giriş'e tıklatın ya da sağ "
 "ve sol ok tuşlarını kullanarak derecelendirmenizi ayarlayın."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr ""
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8936,18 +8941,6 @@ msgstr "Bu e-postanın içeriği boştur"
 msgid "This message has been truncated due to size limitations."
 msgstr "Bu ileti boyut sınırlamaları nedeniyle kesilmiştir."
 
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#, fuzzy
-#| msgid "This E-mail is read, press to mark it as unread."
-msgid "This message is read, press this button to mark it as unread."
-msgstr "Bu E-posta okunmuştur, okunmamış olarak işaretlemek için tıklayınız."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#, fuzzy
-#| msgid "This E-mail is unread, press to mark it as read."
-msgid "This message is unread, press this button to mark it as read."
-msgstr "Bu E-posta okunmamıştır, okunmuş olarak işaretlemek için tıklayınız."
-
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Bu not yazdırılmayacaktır"
@@ -10916,6 +10909,18 @@ msgstr "yyyy"
 
 #~ msgid "The person %1$s is already in the list"
 #~ msgstr "%1$s kişisi zaten listede yer alıyor"
+
+#, fuzzy
+#~| msgid "This E-mail is read, press to mark it as unread."
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Bu E-posta okunmuştur, okunmamış olarak işaretlemek için tıklayınız."
+
+#, fuzzy
+#~| msgid "This E-mail is unread, press to mark it as read."
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Bu E-posta okunmamıştır, okunmuş olarak işaretlemek için tıklayınız."
 
 #~ msgid "Timezone"
 #~ msgstr "Zaman aralığı"

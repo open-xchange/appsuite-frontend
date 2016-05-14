@@ -6275,7 +6275,8 @@ msgstr "優先度"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6407,6 +6408,13 @@ msgid ""
 msgstr ""
 "評価は %1$d/%2$d です。確定するには Enter キー、評価を変更するには左方向キー"
 "と右方向キーを使用してください。"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "to"
+#| msgid "Read"
+msgid "Read"
+msgstr "既読"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8519,16 +8527,6 @@ msgstr "このメールには内容がありません。"
 #: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "サイズ制限のためそれを超えたメッセージの部分は切り捨てられます。"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-"このメールには既読になっています。このボタンを押して、未読にしてください。"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-"このメールは未読になっています。このボタンを押して、既読にしてください。"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -15171,10 +15169,6 @@ msgstr "yyyy"
 #~ msgid "RUB"
 #~ msgstr "RUB"
 
-#~ msgctxt "to"
-#~ msgid "Read"
-#~ msgstr "既読"
-
 #~ msgid "Read Only Mode"
 #~ msgstr "読み取り専用モード"
 
@@ -16542,6 +16536,14 @@ msgstr "yyyy"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "この処理には数秒かかる場合があります。"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "このメールには既読になっています。このボタンを押して、未読にしてください。"
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "このメールは未読になっています。このボタンを押して、既読にしてください。"
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"

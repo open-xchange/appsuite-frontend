@@ -6322,7 +6322,8 @@ msgstr "Приоритет"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6454,6 +6455,10 @@ msgid ""
 msgstr ""
 "Рейтинг %1$d из %2$d. Нажмите Enter, чтобы подтвердить, или используйте "
 "стрелки, чтобы изменить рейтинг."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr ""
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8588,14 +8593,6 @@ msgstr "Пустое сообщение"
 #: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Сообщение урезано, так как его размер превышает допустимый."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr "Сообщение прочитано. Нажмите, чтобы отметить как непрочитанное."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr "Непрочитанное сообщение. Нажмите, чтобы отметить как прочитанное."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -12061,6 +12058,12 @@ msgstr "гггг"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Это может занять несколько секунд"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr "Сообщение прочитано. Нажмите, чтобы отметить как непрочитанное."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr "Непрочитанное сообщение. Нажмите, чтобы отметить как прочитанное."
 
 #~ msgid "Thursday"
 #~ msgstr "Четверг"

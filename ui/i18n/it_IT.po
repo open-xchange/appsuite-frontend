@@ -6339,7 +6339,8 @@ msgstr "Priorità"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6472,6 +6473,10 @@ msgid ""
 msgstr ""
 "Valutazione di %1$d di %2$d. Premi Invio per confermare o utilizza le frecce "
 "direzionali destra e sinistra per modificare la tua valutazione."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr ""
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8636,18 +8641,6 @@ msgstr "Questo messaggio non ha contenuto"
 msgid "This message has been truncated due to size limitations."
 msgstr ""
 "Questo messaggio è stato troncato a causa delle limitazioni sulla dimensione."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-"Questo messaggio di posta è letto, premi questo pulsante per marcarlo come "
-"non letto."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-"Questo messaggio di posta non è letto, premi questo pulsante per marcarlo "
-"come letto."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -13809,6 +13802,16 @@ msgstr "aaaa"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Potrebbe richiedere qualche secondo"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Questo messaggio di posta è letto, premi questo pulsante per marcarlo "
+#~ "come non letto."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Questo messaggio di posta non è letto, premi questo pulsante per marcarlo "
+#~ "come letto."
 
 #~ msgid "Thursday"
 #~ msgstr "Giovedì"

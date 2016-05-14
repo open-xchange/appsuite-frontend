@@ -6332,7 +6332,8 @@ msgstr "Prioritet"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6465,6 +6466,10 @@ msgid ""
 msgstr ""
 "Vurdering %1$d av %2$d. Trykk Enter for å bekrefte eller bruk venstre og "
 "høyre piltast til å justere din vurdering."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr ""
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8633,16 +8638,6 @@ msgstr "Denne filen er låst av %1$s"
 msgid "This message has been truncated due to size limitations."
 msgstr "Meldingen har blitt avkortet på grunn av størrelsesbegrensninger."
 
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-"Denne eposten er lest, trykk denne knappen for å markere den som ulest."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-"Denne e-posten er ulest, trykk denne knappen for å markere den som lest."
-
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Dette notatet vil ikke bli skrevet ut"
@@ -10800,6 +10795,14 @@ msgstr "yyyy"
 
 #~ msgid "This file is locked by you"
 #~ msgstr "Denne filen er låst av deg"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Denne eposten er lest, trykk denne knappen for å markere den som ulest."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Denne e-posten er ulest, trykk denne knappen for å markere den som lest."
 
 #~ msgid "Thursday"
 #~ msgstr "Torsdag"

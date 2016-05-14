@@ -6344,7 +6344,8 @@ msgstr "Priorita"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6477,6 +6478,13 @@ msgid ""
 msgstr ""
 "Hodnotenie %1$d z %2$d. Použite Enter na potvrdenie alebo šípky vľavo a "
 "vpravo na upravenie vášho hodnotenia."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "to"
+#| msgid "Read"
+msgid "Read"
+msgstr "Prečítané"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8634,18 +8642,6 @@ msgstr "Tento email nemá žiadny obsah"
 #: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Táto správa bola skrátená kvôli obmedzeniam veľkosti."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-"Tento email je prečítaný. Stlačením tohto tlačidla ho označíte ako "
-"neprečítaný."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-"Tento email je neprečítaný. Stlačením tohto tlačidla ho označíte ako "
-"prečítaný."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -14172,10 +14168,6 @@ msgstr "RRRR"
 #~ msgid "RUB"
 #~ msgstr "RUB"
 
-#~ msgctxt "to"
-#~ msgid "Read"
-#~ msgstr "Prečítané"
-
 #~ msgid "Read Only Mode"
 #~ msgstr "Režim len na čítanie"
 
@@ -15406,6 +15398,16 @@ msgstr "RRRR"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Môže to trvať niekoľko sekúnd"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Tento email je prečítaný. Stlačením tohto tlačidla ho označíte ako "
+#~ "neprečítaný."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Tento email je neprečítaný. Stlačením tohto tlačidla ho označíte ako "
+#~ "prečítaný."
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"

@@ -6176,7 +6176,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6304,6 +6305,10 @@ msgstr ""
 msgid ""
 "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 "arrowkeys to adjust your rating."
+msgstr ""
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
 msgstr ""
 
 #. object permissions - read
@@ -8324,14 +8329,6 @@ msgstr ""
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
-msgstr ""
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
 msgstr ""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts

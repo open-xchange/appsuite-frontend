@@ -6315,7 +6315,8 @@ msgstr "Prioritet"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6448,6 +6449,10 @@ msgid ""
 msgstr ""
 "Vurdering: %1$d point ud af %2$d mulige.  Tast [enter] for at bekræfte din "
 "vurdering eller brug venstre- og højre-pil til at justere din vurdering."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr ""
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8581,14 +8586,6 @@ msgstr "Denne e-mail har ikke noget indhold"
 #: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Denne besked er blevet forkortet på grund af størrelsesbegrænsninger."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr "Denne besked er læst, klik på denne knap for at markere den som ulæst."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr "Denne besked er ulæst, klik på denne knap for at markere den som læst."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -11933,6 +11930,14 @@ msgstr "åååå"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Dette kan tage nogle sekunder"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Denne besked er læst, klik på denne knap for at markere den som ulæst."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Denne besked er ulæst, klik på denne knap for at markere den som læst."
 
 #~ msgid "Thursday"
 #~ msgstr "Torsdag"

@@ -6295,7 +6295,8 @@ msgstr "Prioritet"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6428,6 +6429,10 @@ msgid ""
 msgstr ""
 "Betyget %1$d av %2$d. Tryck Enter för att bekräfta, eller använd vänster och "
 "höger piltangenter för att justera ditt betyg."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr ""
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8563,18 +8568,6 @@ msgstr "E-brevet har inget innehåll"
 #: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Meddelandet har delats upp på grund av storleksbegränsningar."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-"Det här meddelandet har lästs; tryck på den här knappen för att markera det "
-"som oläst."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-"Det här meddelandet är oläst; tryck på den här knappen för att markera det "
-"som läst."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -14849,6 +14842,16 @@ msgstr "yyyy"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Det här kan ta en liten stund"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Det här meddelandet har lästs; tryck på den här knappen för att markera "
+#~ "det som oläst."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Det här meddelandet är oläst; tryck på den här knappen för att markera "
+#~ "det som läst."
 
 #~ msgid "This method is not applicable to an IMAP permission"
 #~ msgstr "Denna metod är inte passande till en IMAP-rättighet"

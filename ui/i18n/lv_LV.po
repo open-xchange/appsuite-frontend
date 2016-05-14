@@ -6343,7 +6343,8 @@ msgstr "Prioritāte"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6476,6 +6477,13 @@ msgid ""
 msgstr ""
 "Vērtējums %1$d no %2$d. Lai koriģētu vērtējumu, izmantojiet kreiso un labo "
 "bultiņas taustiņu. Lai pastiprinātu, piespiediet 'Enter'."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "to"
+#| msgid "Read"
+msgid "Read"
+msgstr "Izlasīts"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8634,18 +8642,6 @@ msgstr "Šai vēstulei nav satura"
 #: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Ziņojums ir saīsināts saskaņā ar apjoma ierobežojumiem."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-"Šis e-pasts ir izlasīts. Piespiediet šo taustiņu, lai iezīmētu to kā "
-"nelasītu."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-"Šis e-pasts ir nelasīts. Piespiediet šo taustiņu, lai iezīmētu to kā "
-"izlasītu."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -14187,10 +14183,6 @@ msgstr "yyyy"
 #~ msgid "RUB"
 #~ msgstr "RUB"
 
-#~ msgctxt "to"
-#~ msgid "Read"
-#~ msgstr "Izlasīts"
-
 #~ msgid "Read Only Mode"
 #~ msgstr "Tikai lasīšanai"
 
@@ -15436,6 +15428,16 @@ msgstr "yyyy"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Process var aizņemt dažas sekundes"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Šis e-pasts ir izlasīts. Piespiediet šo taustiņu, lai iezīmētu to kā "
+#~ "nelasītu."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Šis e-pasts ir nelasīts. Piespiediet šo taustiņu, lai iezīmētu to kā "
+#~ "izlasītu."
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"

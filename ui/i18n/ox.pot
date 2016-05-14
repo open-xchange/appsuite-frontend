@@ -934,7 +934,10 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js
+#: apps/io.ox/calendar/view-detail.js
 #: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js
 #: module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js
@@ -8259,12 +8262,7 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-
-#: apps/io.ox/mail/common-extensions.js
-#: module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
+msgid "Read"
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js

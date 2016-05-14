@@ -6358,7 +6358,8 @@ msgstr "Prioriteit"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6491,6 +6492,10 @@ msgid ""
 msgstr ""
 "Beoordeling %1$d van %2$d. Gebruik Enter om deze te bevestigen of de linker "
 "en rechter pijltjestoetsen om de beoordeling aan te passen."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr ""
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8653,18 +8658,6 @@ msgstr "Dit e-mailbericht heeft geen inhoud"
 #: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Dit e-mailbericht is ingekort vanwege afmetingsbeperkingen."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-"Dit bericht is gelezen, klik op deze knop om het bericht als ongelezen te "
-"markeren."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-"Dit bericht is ongelezen, klik op deze knop om het bericht als gelezen te "
-"markeren."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -11799,6 +11792,16 @@ msgstr "yyyy"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Dit kan enige tijd in beslag nemen"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Dit bericht is gelezen, klik op deze knop om het bericht als ongelezen te "
+#~ "markeren."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Dit bericht is ongelezen, klik op deze knop om het bericht als gelezen te "
+#~ "markeren."
 
 #~ msgid "Thursday"
 #~ msgstr "Donderdag"

@@ -6223,7 +6223,8 @@ msgstr "優先順序"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6352,6 +6353,10 @@ msgid ""
 "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 "arrowkeys to adjust your rating."
 msgstr "已評分 %1$d / %2$d。請按 Enter 確認或使用左右鍵調整您的評分。"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr ""
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8437,14 +8442,6 @@ msgstr "此郵件沒有內容"
 #: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "因為檔案大小限制，此郵件已被截短。"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr "已閱讀此郵件，點擊此按鈕標示為未讀。"
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr "未閱讀此郵件，點擊此按鈕標示為已讀。"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -13350,6 +13347,12 @@ msgstr "年"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "這可能需要幾秒鐘.."
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr "已閱讀此郵件，點擊此按鈕標示為未讀。"
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr "未閱讀此郵件，點擊此按鈕標示為已讀。"
 
 #~ msgid "Thursday"
 #~ msgstr "星期四"

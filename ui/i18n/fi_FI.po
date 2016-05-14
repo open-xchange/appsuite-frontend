@@ -6295,7 +6295,8 @@ msgstr "Prioriteetti"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6428,6 +6429,10 @@ msgid ""
 msgstr ""
 "Arvio %1$d %2$d mahdollisesta. Paina [Enter] vahvistaaksesi arvio tai käytä "
 "nuolinäppäimiä muuttaaksesi arviotasi."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr ""
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8565,14 +8570,6 @@ msgstr "Tässä viestissä ei ole sisältöä"
 #: apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Tätä viestiä on lyhennetty kokorajoitusten vuoksi."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr "Tämä sähköposti on luettu, paina merkitäksesi se lukemattomaksi."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr "Tätä sähköpostia ei ole luettu, paina merkitäksesi se luetuksi."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
@@ -11678,6 +11675,12 @@ msgstr "vvvv"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Tämä voi kestää muutaman sekunnin"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr "Tämä sähköposti on luettu, paina merkitäksesi se lukemattomaksi."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr "Tätä sähköpostia ei ole luettu, paina merkitäksesi se luetuksi."
 
 #~ msgid "Thursday"
 #~ msgstr "torstai"
