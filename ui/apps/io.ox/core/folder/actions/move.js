@@ -94,7 +94,9 @@ define('io.ox/core/folder/actions/move', [
                             if (isMove && options.vgrid) options.vgrid.idle();
                         }
                     },
-                    notifications.yell
+                    function (e) {
+                        notifications.yell('error', e.error || e);
+                    }
                 );
             }
 
