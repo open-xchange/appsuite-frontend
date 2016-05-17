@@ -90,7 +90,9 @@ define('io.ox/core/folder/actions/move', [
                             }
                         }
                     },
-                    notifications.yell
+                    function (e) {
+                        notifications.yell('error', e.error || e);
+                    }
                 );
             }
 
