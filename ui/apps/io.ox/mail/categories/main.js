@@ -236,6 +236,7 @@ define('io.ox/mail/categories/main', [
                 var config = this.config.get();
                 this.categories.reset(config.list);
                 this.props.set('enabled', config.enabled);
+                this.props.set('initialized', config.initialized);
                 this.trigger('load');
                 // update unread count
                 _.defer(_.bind(this.refresh, this));
@@ -291,7 +292,7 @@ define('io.ox/mail/categories/main', [
             this.listenTo(this.view, 'update', this.update);
             this.listenTo(this.view, 'select', this.select);
             // retrigger as custom value based event (change:enabled -> enabled:true/false)
-            this.listenTo(this.props, 'change:enabled change:visible', retrigger);
+            this.listenTo(this.props, 'change:enabled change:visible change:initialized', retrigger);
             // show & hide
             this.listenTo(this.props, 'change:folder', this.show);
             this.listenTo(this.props, 'change:selected', this.show);
@@ -299,6 +300,9 @@ define('io.ox/mail/categories/main', [
             this.listenTo(this.props, 'enabled:to:false', this.hide);
             this.listenTo(this.props, 'visible:to:false', _.bind(this.view.hide, this.view));
             this.listenTo(this.props, 'visible:to:true', _.bind(this.view.show, this.view));
+            // first start
+            this.listenTo(this.props, 'enabled:to:true', this.checkstate);
+            this.listenTo(this.props, 'initialized:to:finished', this.refresh);
             // view: move and generalize
             this.listenTo(this.view, 'drop', this.move);
             this.listenTo(this.view, 'dialog:generalize', this.generalize);
@@ -374,6 +378,11 @@ define('io.ox/mail/categories/main', [
             var id = (this.categories.get(_.url.hash('category')) || this.categories.first() || {}).id;
             _.url.hash('category', id);
             return id;
+        },
+        checkstate: function () {
+            this.config.load();
+            if (this.props.get('initialized') !== 'running') return;
+            yell('info', gt('It will take some time until mails are assigned to the default tabs'));
         },
         // category-based actions
         select: function (categoryId) {
