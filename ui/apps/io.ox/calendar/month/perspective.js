@@ -183,12 +183,12 @@ define('io.ox/calendar/month/perspective', [
                 }
                 var start = opt.start;
                 for (var i = 0; i < weeks; i++) {
-                    var end = moment(start).tz('utc').add(1, 'week').valueOf(),
+                    var end = moment(start).endOf('week').valueOf(),
                         collection = self.collections[start];
                     if (collection) {
                         collection.reset(appointmentsBetween(start, end));
                     }
-                    start = moment(start).tz('utc').add(1, 'week').valueOf();
+                    start = moment(start).add(8, 'd').startOf('week').valueOf();
                     collection = null;
                 }
             });
@@ -221,10 +221,10 @@ define('io.ox/calendar/month/perspective', [
             }
 
             // draw all weeks
-            for (var i = 0; i < weeks; i++, curWeek.add(1, 'week')) {
+            for (var i = 0; i < weeks; i++, curWeek.add(8, 'd').startOf('week')) {
                 var day = curWeek.valueOf(),
-                    endDate = moment(curWeek).add(1, 'week'),
-                    monthDelimiter = curWeek.date() > endDate.date();
+                    endDate = curWeek.clone().endOf('week'),
+                    monthDelimiter = curWeek.clone().endOf('month').isSameOrBefore(endDate);
 
                 // add collection for week
                 self.collections[day] = new MonthAppointmentCollection([]);
@@ -241,11 +241,13 @@ define('io.ox/calendar/month/perspective', [
 
                 // seperate last days if month before and first days of next month
                 if (monthDelimiter) {
+                    endDate.add(1, 'd').startOf('month');
                     // add an
-                    views.push($('<div class="week month-name">').attr('id', endDate.year() + '-' + endDate.month()).append($('<div>').text(gt.noI18n(endDate.format('MMMM YYYY')))));
+                    views.push($('<div class="week month-name">').attr('id', endDate.format('YYYY-MM')).append($('<div>').text(gt.noI18n(endDate.format('MMMM YYYY')))));
                     view.$el.addClass('no-border');
 
-                    if (endDate.date() !== 1) {
+                    if (!endDate.clone().startOf('week').isSame(endDate)) {
+                        // do not render this, if start of current week is the same as start of current month
                         views.push(createView({
                             collection: self.collections[day],
                             day: day,
