@@ -355,15 +355,16 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 }
 
                 var h = $(window).height(),
-                    top = editor.offset().top;
+                    top = editor.offset().top,
+                    bottomMargin = (el.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 39 : 104);
 
-                editor.css('min-height', h - top - 40 + 'px');
+                editor.css('min-height', h - top - bottomMargin + 'px');
                 if (opt.css) editor.css(opt.css);
 
                 var th = $(fixed_toolbar + ' > div').height(),
                     w = $(fixed_toolbar).next().outerWidth();
 
-                if (th) $(fixed_toolbar).css('height', th + 1);
+                if (th) $(fixed_toolbar).css('height', th);
                 if (w) $(fixed_toolbar).css('width', w);
                 return;
             }, 30),

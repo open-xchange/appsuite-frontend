@@ -196,15 +196,13 @@ define('io.ox/core/tk/text-editor', [], function () {
         };
 
         this.show = function () {
+            function resizeEditor() {
+                var toolbarHeight = (textarea.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 0 : $('[data-extension-id="header"]').parent().outerHeight());
+                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height() - toolbarHeight)));
+            }
             textarea.prop('disabled', false).show();
 
-            _.defer(function () {
-                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
-            });
-
-            function resizeEditor() {
-                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
-            }
+            _.defer(function () { resizeEditor(); });
 
             $(window).on('resize.text-editor', resizeEditor);
         };

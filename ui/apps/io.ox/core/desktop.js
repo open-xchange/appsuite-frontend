@@ -1143,8 +1143,14 @@ define('io.ox/core/desktop', [
                 }
 
                 this.setHeader = function (node) {
-                    this.nodes.header.append(node.addClass('container'));
-                    this.nodes.outer.addClass('header-top');
+                    var position = coreConfig.get('features/windowHeaderPosition', 'bottom');
+                    if (position === 'top') {
+                        this.nodes.header.append(node.addClass('container'));
+                        this.nodes.outer.addClass('header-top');
+                    } else {
+                        this.nodes.footer.append(node.addClass('container'));
+                        this.nodes.outer.addClass('header-bottom');
+                    }
                     considerScrollbarWidth(this.nodes.header);
                     return this.nodes.header;
                 };
@@ -1466,8 +1472,8 @@ define('io.ox/core/desktop', [
                         // blocker
                         win.nodes.blocker = $('<div class="abs window-blocker">').hide().append(
                             $('<div class="abs header">'),
-                            $('<div class="progress progress-striped active first"><div class="progress-bar" style="width: 0%;"></div></div>').hide(),
-                            $('<div class="progress progress-striped progress-warning active second"><div class="progress-bar" style="width: 0%;"></div></div>').hide(),
+                            $('<div class="progress progress-striped active first"><div class="progress-bar" style="width:0"></div></div>').hide(),
+                            $('<div class="progress progress-striped progress-warning active second"><div class="progress-bar" style="width:0"></div></div>').hide(),
                             $('<div class="abs footer">')
                         ),
                         // window HEAD
@@ -1478,7 +1484,9 @@ define('io.ox/core/desktop', [
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body" role="main">').attr('aria-label', gt('Main window'))
+                        win.nodes.body = $('<div class="window-body" role="main">').attr('aria-label', gt('Main window')),
+
+                        win.nodes.footer = $('<div class="window-footer">')
                     )
                     // capture controller events
                     .on('controller:quit', function () {
