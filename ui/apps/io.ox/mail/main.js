@@ -1662,6 +1662,7 @@ define('io.ox/mail/main', [
             // register settings listener
             if (settings.get('categories/enabled')) refresh();
             settings.on('change:categories/enabled', refresh);
+            settings.on('change:categories/generalize', refresh);
 
             var Mapper = function (cat) {
                 var mapper = {

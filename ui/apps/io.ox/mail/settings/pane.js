@@ -271,8 +271,6 @@ define('io.ox/mail/settings/pane', [
         index: 400,
         id: 'display',
         draw: function () {
-            var showCategories = _.device('smartphone') || !capabilities.has('mail_categories') || settings.get('categories/forced');
-
             this.append(fieldset(
                 gt('Display'),
 
@@ -295,48 +293,47 @@ define('io.ox/mail/settings/pane', [
                 checkbox(
                     gt('Show requests for read receipts'),
                     new mini.CheckboxView({ name: 'sendDispositionNotification', model: settings }).render().$el
-                ),
-                showCategories ? $() : checkbox(
-                    gt('Show Tabs for inbox'),
-                    new mini.CheckboxView({ name: 'categories/enabled', model: settings }).render().$el
                 )
             ));
         }
     });
 
     // TODO: mail_categories
-    // ext.point(POINT + '/pane').extend({
-    //     index: 450,
-    //     id: 'mail-categories',
-    //     draw: function () {
+    ext.point(POINT + '/pane').extend({
+        index: 450,
+        id: 'mail-categories',
+        draw: function () {
 
-    //         if (_.device('smartphone')) return;
-    //         if (!capabilities.has('mail_categories')) return;
+            if (_.device('smartphone')) return;
+            if (!capabilities.has('mail_categories')) return;
 
-    //         var list = [
-    //             { label: gt('Ask'), value: 'dialog' },
-    //             { label: gt('Always'), value: 'always' },
-    //             { label: gt('Never'), value: 'never' }
-    //         ];
-    //         this.append(
-    //                 fieldset(
-    //                     gt('Mail categories'),
-    //                     // enable
-    //                     settings.get('categories/forced') ? $() : checkbox(
-    //                         gt('Show Tabs for inbox'),
-    //                         new mini.CheckboxView({ name: 'categories/enabled', model: settings }).render().$el
-    //                     ),
-    //                     // default behavior after move
-    //                     $('<dev class="col-xs-12 col-md-6">').append(
-    //                         $('<div class="row">').append(
-    //                             $('<label>').attr({ 'for': 'categories-generate' }).text(gt('Apply move to all mails from a sender')),
-    //                             new mini.SelectView({ list: list, name: 'categories/generate', model: settings, id: 'categories-generate', className: 'form-control' }).render().$el
-    //                         )
-    //                     )
-    //                 )
-    //             );
-    //     }
-    // });
+            var list = [
+                { label: gt('Ask'), value: 'dialog' },
+                { label: gt('Always'), value: 'always' },
+                { label: gt('Never'), value: 'never' }
+            ];
+            if (!settings.get('categories/generalize')) settings.set('categories/generalize', _.first(list).value);
+
+            this.append(
+                fieldset(
+                    gt('Inbox Tabs'),
+                    // enable
+                    settings.get('categories/forced') ? $() : checkbox(
+                        gt('Show Tabs for inbox'),
+                        new mini.CheckboxView({ name: 'categories/enabled', model: settings }).render().$el
+                    ),
+                    // TODO: middleware has to adjust a logical part so that we can store this prop via jslob
+                    // default behavior after move
+                    $('<dev class="col-xs-12 col-md-6">').append(
+                        $('<div class="row">').append(
+                            $('<label>').attr({ 'for': 'categories-generalize' }).text(gt('Apply move to all mails from a sender')),
+                            new mini.SelectView({ list: list, name: 'categories/generalize', model: settings, id: 'categories-generalize', className: 'form-control' }).render().$el
+                        )
+                    )
+                )
+            );
+        }
+    });
 
     // extension point with index 500 is in 'io.ox/mail/settings/signatures/register'
     // and displays signature settings
