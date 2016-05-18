@@ -752,7 +752,7 @@ define('io.ox/mail/api', [
                 if (e) {
                     // something went wrong; let's kind of rollback
                     api.trigger('refresh.all');
-                    return $.Deferred().reject(error);
+                    return $.Deferred().reject(e);
                 }
             })
         );
