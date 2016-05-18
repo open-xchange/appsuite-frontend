@@ -90,7 +90,7 @@ define('io.ox/mail/categories/dialogs', [
                     e.stopPropagation();
                     // text input
                     var target = $(e.target);
-                    if (target.hasClass('name')) return;
+                    if (target.find('.status').is(':disabled')) return;
                     // visualize disabled state
                     var container = $(this);
                     container.toggleClass('active');
