@@ -46,9 +46,6 @@ The package installs the file `/opt/open-xchange/etc/settings/open-xchange-dynam
 # default: #333
 io.ox/dynamic-theme//frameColor
 
-# default: #bbb
-io.ox/dynamic-theme//iconColor
-
 # default: #39a9e1
 io.ox/dynamic-theme//selectionColor
 
