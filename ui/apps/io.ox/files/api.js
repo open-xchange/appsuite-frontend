@@ -1116,7 +1116,9 @@ define('io.ox/files/api', [
             params: _(options).pick('action', 'columns', 'sort', 'order', 'limit', 'folder'),
             data: api.search.getData(query, options)
         })
-        .done(mergeDetailInPool);
+        .done(function (d) {
+            _(d).each(mergeDetailInPool);
+        });
     };
 
     // make extensible
