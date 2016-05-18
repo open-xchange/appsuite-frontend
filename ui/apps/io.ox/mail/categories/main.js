@@ -162,7 +162,8 @@ define('io.ox/mail/categories/main', [
                             $('<div class="category-counter">').append(
                                 $('<span class="counter">').text(model.getCount())
                             )
-                        )
+                        ),
+                        $('<div class="category-drop-helper">').text(gt('Drop here!'))
                     ).attr({
                         'data-id': model.get('id'),
                         'data-name': model.get('name')
