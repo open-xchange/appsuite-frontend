@@ -129,30 +129,34 @@ define('io.ox/mail/categories/dialogs', [
                 },
                 description: function () {
                     this.append(
-                        $('<p class="description">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs.'))
+                        $('<p class="description-main">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs.'))
                     );
                 },
                 'form-inline': function () {
-                    this.append($('<form class="form-inline">'));
+                    this.append($('<form class="form-inline-container">'));
                 },
                 'form-group': function (baton) {
                     var list = baton.collection.map(function (model) {
-                        var node = $('<div class="form-group category-item">')
-                            .attr('data-id', model.get('id'))
-                            .append(
-                                $('<input type="checkbox" class="status" data-action="toggle">')
-                                    .prop('checked', model.is('active')),
-                                $('<input type="text" class="form-control name">')
-                                    .attr('placeholder', gt('Name'))
-                                    .val(model.get('name'))
-                            );
+                        var node =
+                        $('<form class="form-inline">').append(
+                            $('<div class="form-group category-item">')
+                                .attr('data-id', model.get('id'))
+                                .append(
+                                    $('<input type="checkbox" class="status" data-action="toggle">')
+                                        .prop('checked', model.is('active')),
+                                    $('<input type="text" class="form-control name">')
+                                        .attr('placeholder', gt('Name'))
+                                        .val(model.get('name'))
+                                ),
+                            model.get('description') ? $('<div class="description">').text(model.get('description')) : $()
+                        );
                         // apply states and permissions
-                        if (model.is('active')) node.addClass('active');
+                        if (model.is('active')) node.find('.category-item').addClass('active');
                         if (!model.can('disable')) node.find('.status').attr('disabled', true);
                         if (!model.can('rename')) node.find('.name').attr('disabled', true);
                         return node;
                     });
-                    this.find('.form-inline').append(list);
+                    this.find('.form-inline-container').append(list);
                 },
                 'locked-hint': function (baton) {
                     var locked = baton.collection.filter(function (model) {
@@ -160,7 +164,7 @@ define('io.ox/mail/categories/dialogs', [
                     });
                     if (!locked.length) return;
                     this.append(
-                        $('<p class="description hint">').text(gt('Please note that some of the tabs can not be disabled.'))
+                        $('<p class="description-main hint">').text(gt('Please note that some of the tabs can not be disabled.'))
                     );
                 },
                 register: function (baton) {
