@@ -4800,6 +4800,8 @@ msgstr ""
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
 msgid "Never"
 msgstr ""
 
@@ -8214,6 +8216,11 @@ msgstr ""
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr ""
 
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "It will take some time until mails are assigned to the default tabs"
+msgstr ""
+
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
@@ -9137,7 +9144,27 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
+msgid "Ask"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Inbox Tabs"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
 msgid "Show Tabs for inbox"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Apply move to all mails from a sender"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js

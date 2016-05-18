@@ -1070,6 +1070,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Salli muualta linkitettyjen kuvien ennakoiva lataaminen"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1160,6 +1164,12 @@ msgstr "Käytä kaikkiin alakansioihin"
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "Viesti lähettäjältä %1$s: %2$s"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply move to all mails from a sender"
+msgstr "Käytä kaikkiin alakansioihin"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1276,6 +1286,10 @@ msgstr "Saapuvan postin palvelimena"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Nouseva"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -4207,6 +4221,12 @@ msgstr "Meneillään"
 msgid "Inbox"
 msgstr "Saapuneet"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox Tabs"
+msgstr "Saapuneet"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Sisällytä jakelulistat"
@@ -4354,6 +4374,10 @@ msgstr "On täsmälleen"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "Pienempi kuin"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "It will take some time until mails are assigned to the default tabs"
+msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -5084,6 +5108,7 @@ msgstr "Tarvitsetko lisää tilaa?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Ei koskaan"
 
@@ -10388,11 +10413,6 @@ msgstr "vvvv"
 
 #~ msgid "An error occurred"
 #~ msgstr "Tapahtui virhe"
-
-#, fuzzy
-#~| msgid "Apply to all subfolders"
-#~ msgid "Apply move to all mails from a sender"
-#~ msgstr "Käytä kaikkiin alakansioihin"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"

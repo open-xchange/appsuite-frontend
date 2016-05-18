@@ -1082,6 +1082,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Laden extern verlinkter Bilder erlauben"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr "Immer"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr "Den folgenden Empfänger immer zu Blind Carbon Copy (BCC) hinzufügen"
 
@@ -1172,6 +1176,10 @@ msgstr "Auf alle E-Mails anwenden?"
 #, c-format
 msgid "Apply for mails from %1$s"
 msgstr "Auf E-Mails von %1$s anwenden"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Apply move to all mails from a sender"
+msgstr "Verschiebevorgang auf alle E-Mails eines Senders anwenden"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1286,6 +1294,10 @@ msgstr "Wie eingehender Mailserver"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Aufsteigend"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr "Fragen"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -4239,6 +4251,12 @@ msgstr "In Bearbeitung"
 msgid "Inbox"
 msgstr "Posteingang"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox Tabs"
+msgstr "Posteingang"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Mit Verteilerlisten"
@@ -4384,6 +4402,10 @@ msgstr "stimmt exakt überein mit"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "ist kleiner als"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "It will take some time until mails are assigned to the default tabs"
+msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -5115,6 +5137,7 @@ msgstr "Sie brauchen mehr Speicher?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nie"
 
@@ -10689,9 +10712,6 @@ msgstr "JJJJ"
 #~ msgid "Alternative Email"
 #~ msgstr "Alternative E-Mail-Adresse"
 
-#~ msgid "Always"
-#~ msgstr "Immer"
-
 #~ msgid "An error occurred"
 #~ msgstr "Es trat ein Fehler auf."
 
@@ -10722,9 +10742,6 @@ msgstr "JJJJ"
 
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigua und Barbuda"
-
-#~ msgid "Apply move to all mails from a sender"
-#~ msgstr "Verschiebevorgang auf alle E-Mails eines Senders anwenden"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -10772,9 +10789,6 @@ msgstr "JJJJ"
 
 #~ msgid "Aruba"
 #~ msgstr "Aruba"
-
-#~ msgid "Ask"
-#~ msgstr "Fragen"
 
 #~ msgid "Ask for return receipt"
 #~ msgstr "Lesebestätigung anfordern"

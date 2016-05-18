@@ -1063,6 +1063,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "允許預載外部鏈結圖像"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1151,6 +1155,12 @@ msgstr "套用至所有子資料夾"
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "來自 %1$s 的郵件: %2$d"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply move to all mails from a sender"
+msgstr "套用至所有子資料夾"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1267,6 +1277,10 @@ msgstr "與收件帳密相同"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "昇冪"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -4155,6 +4169,12 @@ msgstr "進行中"
 msgid "Inbox"
 msgstr "收件箱"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox Tabs"
+msgstr "收件箱"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "包含通訊組列表"
@@ -4297,6 +4317,10 @@ msgstr "等於"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "小於"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "It will take some time until mails are assigned to the default tabs"
+msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -5025,6 +5049,7 @@ msgstr "需要更多空間嗎？"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "永不"
 
@@ -10524,11 +10549,6 @@ msgstr "年"
 
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "安地卡及巴布達"
-
-#, fuzzy
-#~| msgid "Apply to all subfolders"
-#~ msgid "Apply move to all mails from a sender"
-#~ msgstr "套用至所有子資料夾"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"

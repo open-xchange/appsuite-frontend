@@ -1091,6 +1091,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Autoriser le préchargement des images externes liées"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1185,6 +1189,12 @@ msgstr "Appliquer à tous les sous-dossiers"
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "Courrier électronique de %1$s : %2$s"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply move to all mails from a sender"
+msgstr "Appliquer à tous les sous-dossiers"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1301,6 +1311,10 @@ msgstr "En tant que serveur de courrier entrant"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Croissant"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -4271,6 +4285,12 @@ msgstr "En cours"
 msgid "Inbox"
 msgstr "Boîte de réception"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox Tabs"
+msgstr "Boîte de réception"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Y compris les listes de distribution"
@@ -4418,6 +4438,10 @@ msgstr "Vaut exactement"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "Est plus petit que"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "It will take some time until mails are assigned to the default tabs"
+msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -5152,6 +5176,7 @@ msgstr "Besoin de davantage d'espace ?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Jamais"
 
@@ -10640,11 +10665,6 @@ msgstr "aaaa"
 
 #~ msgid "Another user"
 #~ msgstr "Un autre utilisateur"
-
-#, fuzzy
-#~| msgid "Apply to all subfolders"
-#~ msgid "Apply move to all mails from a sender"
-#~ msgstr "Appliquer à tous les sous-dossiers"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"

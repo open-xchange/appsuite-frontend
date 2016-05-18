@@ -1065,6 +1065,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "允许外部链接图像的预加载"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1153,6 +1157,12 @@ msgstr "套用到所有子文件夹"
 #| msgid "Email from %1$s: %2$s"
 msgid "Apply for mails from %1$s"
 msgstr "来自 %1$s 的电子邮件：%2$d"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply move to all mails from a sender"
+msgstr "套用到所有子文件夹"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1269,6 +1279,10 @@ msgstr "一个外来邮件服务器"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "升序"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -4157,6 +4171,12 @@ msgstr "进行中"
 msgid "Inbox"
 msgstr "收件箱"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox Tabs"
+msgstr "收件箱"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "包括通讯组列表"
@@ -4300,6 +4320,10 @@ msgstr "正是"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "是小于"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "It will take some time until mails are assigned to the default tabs"
+msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -5028,6 +5052,7 @@ msgstr "需要更多空间？"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "从来没有"
 
@@ -10523,11 +10548,6 @@ msgstr "年"
 
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "安提瓜和巴布达"
-
-#, fuzzy
-#~| msgid "Apply to all subfolders"
-#~ msgid "Apply move to all mails from a sender"
-#~ msgstr "套用到所有子文件夹"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
