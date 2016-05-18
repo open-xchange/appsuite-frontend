@@ -310,6 +310,9 @@ define('io.ox/mail/toolbar', [
 
             var toolbarView = new Toolbar({ title: gt('Mail categories'), tabindex: 1, className: 'categories-toolbar-container' });
 
+            // remove 'cursor keys' hint and tooltip
+            toolbarView.$list.removeAttr('aria-label').tooltip('destroy');
+
             // add categories and action toolbar
             toolbarView.$list = [
                 toolbarView.createToolbar().addClass('categories'),
