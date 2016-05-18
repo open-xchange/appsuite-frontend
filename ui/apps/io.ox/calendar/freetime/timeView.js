@@ -247,7 +247,7 @@ define('io.ox/calendar/freetime/timeView', [
             this.bodyNode.busy(true);
             // get fresh appointments
             var self = this,
-                start = moment(this.model.get('currentDay')),
+                start = moment(this.model.get('currentDay')).add(this.model.get('startHour'), 'hours'),
                 end = moment(start).add(this.model.get('endHour') - this.model.get('startHour'), 'hours'),
                 participants = this.model.get('participants').toJSON(),
                 appointments = {};
