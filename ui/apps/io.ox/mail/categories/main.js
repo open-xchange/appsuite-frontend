@@ -333,7 +333,7 @@ define('io.ox/mail/categories/main', [
             this.listenTo(this.props, 'change:enabled', this.reload);
             this.listenTo(this, 'move:after revert:after generalize:after', this.reload);
             // refresh: unread counter
-            this.listenTo(this.pool, 'change:flags', this.refresh);
+            mailAPI.on('update:after', $.proxy(this.refresh, this));
             this.listenTo(this.props, 'change:enabled', this.refresh);
             this.listenTo(this, 'move:after rever:after generalise:after', this.refresh);
             // toggle visibility

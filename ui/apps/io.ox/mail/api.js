@@ -601,6 +601,7 @@ define('io.ox/mail/api', [
                 //not doing this as a standardaction to prevent errors with functions looking only for the list parameter
                 return { list: list, response: response };
             }
+            api.trigger('update:after');
             // return list
             return list;
         });
