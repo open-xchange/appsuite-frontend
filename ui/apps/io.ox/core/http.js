@@ -989,19 +989,26 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
     var wait = (function () {
 
-        var wait = $.when();
+        var ready = $.when(),
+            block = $.Deferred();
 
-        function reset() {
-            wait = $.when();
+        function release() {
+            block.resolve();
+            block = $.Deferred();
         }
 
-        return function (def) {
-            if (def) {
-                wait = $.Deferred().fail(reset);
-                def.then(wait.resolve, wait.reject);
-            }
-            return wait.promise();
-        };
+        function wait(def) {
+            if (!def) return wait.pending === 0 ? ready : block.promise();
+            wait.pending++;
+            return def.always(function () {
+                wait.pending--;
+                if (wait.pending === 0) release();
+            });
+        }
+
+        wait.pending = 0;
+        return wait;
+
     }());
 
     that = {
