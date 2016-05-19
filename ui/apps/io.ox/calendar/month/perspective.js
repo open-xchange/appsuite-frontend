@@ -365,8 +365,8 @@ define('io.ox/calendar/month/perspective', [
 
             // we cannot use target.month() + 1 or we might get month 13 in 2015 instead of month 1 in 2016
             var nextMonth = moment(target).add(1, 'month'),
-                firstDay = $('#' + target.year() + '-' + target.month(), self.pane),
-                nextFirstDay = $('#' + nextMonth.year() + '-' + (nextMonth.month()), self.pane),
+                firstDay = $('#' + target.format('YYYY-MM'), self.pane),
+                nextFirstDay = $('#' + nextMonth.format('YYYY-MM'), self.pane),
                 scrollToDate = function () {
                     // scroll to position
                     if (firstDay.length === 0) return;
@@ -377,12 +377,12 @@ define('io.ox/calendar/month/perspective', [
                 scrollToDate();
             } else if (target.valueOf() < self.current.valueOf()) {
                 this.drawWeeks({ up: true }).done(function () {
-                    firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
+                    firstDay = $('#' + target.format('YYYY-MM'), self.pane);
                     scrollToDate();
                 });
             } else {
                 this.drawWeeks().done(function () {
-                    firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
+                    firstDay = $('#' + target.format('YYYY-MM'), self.pane);
                     scrollToDate();
                 });
             }
