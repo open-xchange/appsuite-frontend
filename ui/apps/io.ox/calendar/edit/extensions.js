@@ -646,7 +646,14 @@ define('io.ox/calendar/edit/extensions', [
                         e.data.model.set({ full_time: appointment.full_time });
                         e.data.model.set({ start_date: appointment.start_date });
                         // add to participants collection instead of the model attribute to make sure the edit view is redrawn correctly
-                        e.data.model._participants.reset(appointment.participants);
+                        _(appointment.participants).each(function (data) {
+                            //create model
+                            var mod = new e.data.model._participants.model(data);
+                            // wait for fetch, then add to collection
+                            mod.loading.then(function () {
+                                e.data.model._participants.addUniquely(mod);
+                            });
+                        });
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                         e.data.model.set({
                             end_date: appointment.end_date
