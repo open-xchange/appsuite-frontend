@@ -23,6 +23,25 @@
     html.high-contrast & { display: none; }
 }
 
+/**
+ * High res logo for retina screens and mobile devices
+ * The provided icon must have exact twice the size than
+ * the standard icon.
+ */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+    only screen and (-moz-min-device-pixel-ratio: 1.5),
+    only screen and (min-device-pixel-ratio: 1.5),
+    only screen and (min-resolution: 240dppx) {
+
+    #io-ox-top-logo-small {
+        // tell the browser to scale the image down, this will result
+        // in a sharp image on retina screens
+        background-size: 60px 22px;
+        // important, the large icon is 120x44px
+        background-image: url('apps/themes/default/logo-large.png');
+    }
+}
+
 #io-ox-topbar {
     position: absolute;
     top: 0;
@@ -476,17 +495,5 @@ html.ios8-standalone-ipad-fix {
     #io-ox-top-logo-small {
         margin: 6px 8px 0 10px;
         height: 22px;
-    }
-}
-
-/** High res logo for retina screens **/
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-    only screen and (-moz-min-device-pixel-ratio: 1.5),
-    only screen and (min-device-pixel-ratio: 1.5),
-    only screen and (min-resolution: 240dppx) {
-
-    #io-ox-top-logo-small {
-        background-size: 60px 22px;
-        background-image: url('apps/themes/default/logo-large.png');
     }
 }
