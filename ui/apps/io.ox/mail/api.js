@@ -743,16 +743,16 @@ define('io.ox/mail/api', [
         pool.resetFolder(targetFolderId);
 
         return http.wait(
-            update(list, { folder_id: targetFolderId }, type).then(function (response) {
+            update(list, { folder_id: targetFolderId }, type).then(function (data) {
                 // assume success
                 api.trigger(type, list, targetFolderId);
                 folderAPI.reload(targetFolderId, list);
                 // any errors? (debugging code below)
-                var e = _(response).find(function (item) { return !!item.error; });
+                var e = _(data.response).find(function (item) { return !!item.error; });
                 if (e) {
                     // something went wrong; let's kind of rollback
                     api.trigger('refresh.all');
-                    return $.Deferred().reject(e);
+                    return $.Deferred().reject(e.error);
                 }
             })
         );
