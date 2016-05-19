@@ -13,9 +13,10 @@
 
 define('io.ox/mail/categories/dialogs', [
     'io.ox/backbone/views/modal',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'less!io.ox/mail/categories/style'
-], function (Modal, gt) {
+], function (Modal, settings, gt) {
 
     'use strict';
 
@@ -29,8 +30,9 @@ define('io.ox/mail/categories/dialogs', [
     return {
         Generalize: function (parent, obj) {
             // preferred setting for generation (never, always, ask[default])
-            if (parent.props.get('generalize') === 'never') return;
-            if (parent.props.get('generalize') === 'always') return parent.trigger('dialog:generalize', obj);
+            var userpref = settings.get('categories-extra/generalize');
+            if (userpref === 'never') return;
+            if (userpref === 'always') return parent.trigger('dialog:generalize', obj);
 
             return new Modal({
                 title: gt('Apply for all mails?'),

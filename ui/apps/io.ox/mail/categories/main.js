@@ -247,7 +247,6 @@ define('io.ox/mail/categories/main', [
                 var config = this.config.get(),
                     list = merge(config.list, this.categories.toJSON());
                 settings.set('categories/enabled', this.props.get('enabled'));
-                settings.set('categories/generalize', this.props.get('generalize') || 'ask');
                 settings.set('categories/list', list);
                 settings.save()
                         .fail(yell)

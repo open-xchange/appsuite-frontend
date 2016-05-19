@@ -312,7 +312,7 @@ define('io.ox/mail/settings/pane', [
                 { label: gt('Always'), value: 'always' },
                 { label: gt('Never'), value: 'never' }
             ];
-            if (!settings.get('categories/generalize')) settings.set('categories/generalize', _.first(list).value);
+            if (!settings.get('categories-extra/generalize')) settings.set('categories-extra/generalize', _.first(list).value);
 
             this.append(
                 fieldset(
@@ -326,8 +326,8 @@ define('io.ox/mail/settings/pane', [
                     // default behavior after move
                     $('<dev class="col-xs-12 col-md-6">').append(
                         $('<div class="row">').append(
-                            $('<label>').attr({ 'for': 'categories-generalize' }).text(gt('Apply move to all mails from a sender')),
-                            new mini.SelectView({ list: list, name: 'categories/generalize', model: settings, id: 'categories-generalize', className: 'form-control' }).render().$el
+                            $('<label>').attr({ 'for': 'categories-generalize' }).text(gt('Move all mails from a sender')),
+                            new mini.SelectView({ list: list, name: 'categories-extra/generalize', model: settings, id: 'categories-generalize', className: 'form-control' }).render().$el
                         )
                     )
                 )
