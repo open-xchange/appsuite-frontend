@@ -111,9 +111,24 @@ define('io.ox/mail/categories/main', [
             'selection:drop': 'onDrop',
             'click [data-action="tabbed-inbox-options"]': 'showOptions'
         },
+        skeleton: function () {
+            return [
+                $('<ul>', { class: 'classic-toolbar categories', role: 'toolbar', 'aria-label': gt('Inbox tabs') }),
+                $('<div class="free-space">'),
+                $('<ul>', { class: 'classic-toolbar actions', role: 'toolbar', 'aria-label': gt('Configure you inbox tabs') }).append(
+                    $('<li role="presentation aria-hidden="true">').append(
+                        $('<a class="io-ox-action-link no-underline" href="#" tabindex="-1" data-action="tabbed-inbox-options" draggable="false" role="button" data-section="default" data-prio="hi" title=""">').append(
+                                $('<i class="fa fa-cog">')
+                            )
+                    )
+                )
+            ];
+        },
         initialize: function (options) {
             _.extend(this, options || {});
             this.setElement($('.categories-toolbar-container'));
+            // add skeleton nodes
+            this.$el.append(this.skeleton());
             // helper
             this.ui = {
                 list: this.$el.find('.classic-toolbar.categories'),
@@ -121,9 +136,9 @@ define('io.ox/mail/categories/main', [
                 body: this.$el.closest('.window-body'),
                 container: this.$el.closest('.window-container')
             };
-            this.$el.addClass('categories-container');
+            // dnd
             dnd.enable({ draggable: true, container: this.$el, selection: this.selection, dropzone: true, dropzoneSelector: '.category' });
-
+            // register listeners
             this.register();
         },
         register: function () {
@@ -132,9 +147,9 @@ define('io.ox/mail/categories/main', [
             this.listenTo(this.categories, 'change', _.throttle(this.render, 200));
             // module
             this.listenTo(this.module, 'move:after', this.showDialog);
-            this.listenTo(this.props, 'change:selected', this.refreshSelection);
+            this.listenTo(this.props, 'change:selected', this.onSelectionChange);
         },
-        refreshSelection: function (props, id) {
+        onSelectionChange: function (props, id) {
             this.ui.list.find('.category').removeClass('selected');
             this.refresh(this.categories.get(id));
         },
@@ -233,6 +248,12 @@ define('io.ox/mail/categories/main', [
             get: function () {
                 return settings.get('categories', { enabled: false, list: [] });
             },
+            set: function () {
+                var config = this.config.get(),
+                    list = merge(config.list, this.categories.toJSON());
+                settings.set('categories/enabled', this.props.get('enabled'));
+                settings.set('categories/list', list);
+            },
             load: function () {
                 var config = this.config.get();
                 this.categories.reset(config.list);
@@ -244,10 +265,7 @@ define('io.ox/mail/categories/main', [
             },
             save: function () {
                 this.trigger('save:before');
-                var config = this.config.get(),
-                    list = merge(config.list, this.categories.toJSON());
-                settings.set('categories/enabled', this.props.get('enabled'));
-                settings.set('categories/list', list);
+                this.config.set();
                 settings.save()
                         .fail(yell)
                         .done(function () {

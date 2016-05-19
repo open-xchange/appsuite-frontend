@@ -304,32 +304,12 @@ define('io.ox/mail/toolbar', [
         id: 'categories',
         index: 10000,
         setup: function (app) {
-
             if (_.device('smartphone')) return;
             if (!capabilities.has('mail_categories')) return;
 
-            var toolbarView = new Toolbar({ title: gt('Mail categories'), tabindex: 1, className: 'categories-toolbar-container' });
-
-            // remove 'cursor keys' hint and tooltip
-            toolbarView.$list.removeAttr('aria-label').tooltip('destroy');
-
-            // add categories and action toolbar
-            toolbarView.$list = [
-                toolbarView.createToolbar().addClass('categories'),
-                $('<div class="free-space">'),
-                toolbarView.createToolbar().addClass('actions').append(
-                    $('<li role="presentation aria-hidden="true">')
-                    .append(
-                        $('<a class="io-ox-action-link no-underline" href="#" tabindex="-1" data-action="tabbed-inbox-options" draggable="false" role="button" data-section="default" data-prio="hi" title=""">').append(
-                                $('<i class="fa fa-cog">')
-                            )
-                    )
-                )
-            ];
-            toolbarView.initButtons();
-
+            // add placeholder
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbarView.render().$el
+                 $('<div>', { class: 'categories-toolbar-container categories-container', role: 'menu' })
             );
         }
     });
