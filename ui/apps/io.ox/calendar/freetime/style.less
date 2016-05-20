@@ -30,6 +30,10 @@
     .freetime-participants-view-header {
         min-width: 300px;
 
+        .add-participants-wrapper {
+            padding-left: 0;
+        }
+
         legend {
             margin-bottom: 0;
             padding-top: 16px;
@@ -80,14 +84,18 @@
         padding-top: 8px;
         font-size: 13px;
 
-        .participant-image {
-            margin-top: 8px;
-            width: 38px;
-            height: 38px;
-        }
-
-        .participant-wrapper {
+        .participantsrow {
             padding-left: 0;
+
+            .participant-image {
+                margin-top: 8px;
+                width: 38px;
+                height: 38px;
+            }
+
+            .participant-wrapper {
+                padding-left: 0;
+            }
         }
     }
 
@@ -150,17 +158,19 @@
                 .appointment {
                     height: 100%;
                     position: absolute;
+                    overflow: hidden;
                     cursor: default;
                     border-left: 1px solid rgba(0, 0, 0, 0.2);
                     z-index: 2;
+                    padding: 2px;
 
                     &.fulltime {
                         height: 50%;
                     }
 
                     .title {
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
+                        line-height: 13px;
+                        font-weight: normal;
                         overflow: hidden;
                     }
                 }

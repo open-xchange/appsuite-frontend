@@ -43,7 +43,7 @@ define('io.ox/calendar/freetime/participantsView', [
                 typeahead.$el,
                 $('<legend>').text(gt('Participants')).attr('aria-hidden', true)
             );
-            typeahead.render().$el.addClass('col-md-12');
+            typeahead.render().$el.addClass('add-participants-wrapper col-md-12');
         }
     });
     // participants container
