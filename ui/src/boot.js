@@ -544,31 +544,35 @@ $(window).load(function () {
             manifests.reset();
         }
 
-        function fetchServerConfig(cacheKey) {
-            var haveSession = (cacheKey === 'userconfig'), data;
+        var userConfigFetched = false;
+        function fetchServerConfig(haveSession) {
             // try rampup data
-            if (haveSession && (data = ox.rampup.serverConfig)) {
-                updateServerConfig(data);
-                return $.Deferred().resolve(data);
-            }
-            // fetch fresh manifests
-            return http.GET({
-                module: 'apps/manifests',
-                params: { action: 'config' },
-                appendSession: haveSession
-            })
-            .done(function (data) {
-                updateServerConfig(data);
-            });
+            return $.Deferred().resolve(haveSession && ox.rampup.serverConfig)
+                .then(function (data) {
+                    // fetch fresh manifests
+                    return data || http.GET({
+                        module: 'apps/manifests',
+                        params: { action: 'config' },
+                        appendSession: haveSession
+                    })
+                })
+                .done(function (data) {
+                    // Parallel fetch of general config can take longer than
+                    // the user config.
+                    if (!haveSession && userConfigFetched) return;
+                    userConfigFetched = haveSession;
+
+                    updateServerConfig(data);
+                });
         }
 
         function fetchUserSpecificServerConfig() {
-            return fetchServerConfig('userconfig');
+            return fetchServerConfig(true);
         }
 
-        function fetchGeneralServerConfig() {
-            return fetchServerConfig('generalconfig');
-        }
+        var fetchGeneralServerConfig = _.memoize(function () {
+            return fetchServerConfig(false);
+        });
 
         function gotoSignin(hash) {
             var ref = (location.hash || '').replace(/^#/, ''),
@@ -807,7 +811,9 @@ $(window).load(function () {
                 debug('boot.js: autoLogin > session.autoLogin()');
 
                 // try auto login!?
-                session.autoLogin().then(
+                session.autoLogin({
+                    fetchServerConfig: fetchGeneralServerConfig
+                }).then(
                     function loginSuccess(data) {
                         // now we're sure the server is up
                         serverUp();

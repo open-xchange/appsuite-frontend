@@ -19,7 +19,8 @@ define('io.ox/core/session',
 
     'use strict';
 
-    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000 }, CLIENT = 'open-xchange-appsuite';
+    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000, FETCHCONFIG: 3000 },
+        CLIENT = 'open-xchange-appsuite';
 
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
@@ -52,21 +53,75 @@ define('io.ox/core/session',
 
         set: set,
 
-        autoLogin: function () {
+        autoLogin: function (options) {
             // store
-            var store = false;
+            var store = false,
+                opt = _.extend({}, options);
+
+            // If opt.fetchServerConfig is set, uses it to fetch the timeout
+            // value instead of using the default from TIMEOUTS.
+            function withTimeout(httpCall, options) {
+                var start = _.now(),
+                    // Variables used for synchronization:
+                    xhr,                // cancels timers on completion
+                    configTimer = null, // fetches the serverConfig
+                    xhrTimer = null;    // aborts the HTTP request on timeout
+
+                // Use the default timeout natively if not fetching anything.
+                if (!opt.fetchServerConfig) {
+                    options.timeout = TIMEOUTS.AUTOLOGIN;
+                } else {
+                    configTimer = setTimeout(fetchConfig, TIMEOUTS.FETCHCONFIG);
+                    xhrTimer = setTimeout(abort, TIMEOUTS.AUTOLOGIN);
+                }
+
+                // Execute the HTTP request and cancel the timers if finished
+                // before the timeout.
+                xhr = httpCall(options);
+                return xhr.always(function () {
+                    if (configTimer !== null) {
+                        clearTimeout(configTimer);
+                        configTimer = null;
+                    }
+                    if (xhrTimer !== null) {
+                        clearTimeout(xhrTimer);
+                        xhrTimer = null;
+                    }
+                });
+
+                // Fetch serverConfig manually if the request takes too long.
+                function fetchConfig() {
+                    configTimer = null;
+                    opt.fetchServerConfig().done(function (config) {
+                        if (xhrTimer === null) return; // too late
+                        if (!config || !config.autoLoginTimeout) return; // use default
+
+                        // Restart the abort timer with the configured value,
+                        // adjusting for already elapsed time.
+                        clearTimeout(xhrTimer);
+                        xhrTimer = setTimeout(abort, Math.max(0,
+                            config.autoLoginTimeout - (_.now() - start)));
+                    });
+                }
+
+                // Abort the HTTP request.
+                function abort() {
+                    xhrTimer = null;
+                    xhr.abort();
+                }
+            }
+
             // GET request
             return (
                 _.url.hash('token.autologin') === 'false' && _.url.hash('serverToken') ?
                 // no auto-login for server-token-based logins
                 $.Deferred().reject({}) :
                 // try auto-login
-                http.GET({
+                withTimeout(http.GET, {
                     module: 'login',
                     appendColumns: false,
                     appendSession: false,
                     processResponse: false,
-                    timeout: TIMEOUTS.AUTOLOGIN,
                     params: {
                         action: 'autologin',
                         client: that.client(),
@@ -85,13 +140,12 @@ define('io.ox/core/session',
                 // If autologin fails, try token login
                 function fail(data) {
                     if (!_.url.hash('serverToken')) return data || {};
-                    return http.POST({
+                    return withTimeout(http.POST, {
                         module: 'login',
                         jsessionid: _.url.hash('jsessionid'),
                         appendColumns: false,
                         appendSession: false,
                         processResponse: false,
-                        timeout: TIMEOUTS.AUTOLOGIN,
                         params: {
                             action: 'tokens',
                             client: that.client(),
