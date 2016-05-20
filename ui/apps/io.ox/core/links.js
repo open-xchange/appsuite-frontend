@@ -167,7 +167,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         ox.registry.call('mail-compose', 'compose', {
             to: [[name, address]],
             subject: params.subject || '',
-            attachments: params.body ? [{ content: params.body || '' }] : undefined
+            attachments: [{ content: params.body || '', disp: 'inline' }]
         });
     });
 });
