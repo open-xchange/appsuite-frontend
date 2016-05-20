@@ -1156,12 +1156,6 @@ msgstr "套用至所有子資料夾"
 msgid "Apply for mails from %1$s"
 msgstr "來自 %1$s 的郵件: %2$d"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "套用至所有子資料夾"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "套用腳色"
@@ -1977,6 +1971,12 @@ msgstr "設定郵件"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "立刻設定"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "立刻設定"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2928,6 +2928,10 @@ msgstr "放到此處以上傳 <b class='dndignore'>新版本</b>"
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "放到此處以上傳 <b class='dndignore'>新版本的</b>「%1$s」"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4175,6 +4179,12 @@ msgstr "收件箱"
 msgid "Inbox Tabs"
 msgstr "收件箱"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "收件箱"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "包含通訊組列表"
@@ -4661,12 +4671,6 @@ msgstr "郵件地址（必填）"
 msgid "Mail and Messaging"
 msgstr "郵件與訊息"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Mail categories"
-msgstr "可用類別："
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "郵件數量額度"
@@ -4967,6 +4971,12 @@ msgstr "移動"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "全部移動"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "套用至所有子資料夾"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -12406,6 +12416,11 @@ msgstr "年"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "郵件與社交帳戶"
+
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Mail categories"
+#~ msgstr "可用類別："
 
 #~ msgid "Mail text"
 #~ msgstr "郵件文字"

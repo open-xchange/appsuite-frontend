@@ -1197,12 +1197,6 @@ msgstr "Použiť na všetky podpriečinky"
 msgid "Apply for mails from %1$s"
 msgstr "Email od %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Použiť na všetky podpriečinky"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplikovať rolu"
@@ -2031,6 +2025,12 @@ msgstr "Konfiguračný email"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Nastaviť teraz"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Nastaviť teraz"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2996,6 +2996,10 @@ msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
 "Pretiahnutím súboru sem nahráte <b class=\"dndignore\">novú verziu</b> „%1$s“"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4270,6 +4274,12 @@ msgstr "Prijaté"
 msgid "Inbox Tabs"
 msgstr "Prijaté"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Prijaté"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Pridať distribučné zoznamy"
@@ -4765,12 +4775,6 @@ msgstr "Emailová adresa (povinné)"
 msgid "Mail and Messaging"
 msgstr "Pošta a posielanie správ"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Mail categories"
-msgstr "Dostupné kategórie:"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Kvóta počtu správ emailu"
@@ -5071,6 +5075,12 @@ msgstr "Presunúť"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "Presunúť všetky"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Použiť na všetky podpriečinky"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -13253,6 +13263,11 @@ msgstr "RRRR"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Emailové a sociálne účty"
+
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Mail categories"
+#~ msgstr "Dostupné kategórie:"
 
 #~ msgid "Mail text"
 #~ msgstr "Text správy"

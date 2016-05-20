@@ -1188,12 +1188,6 @@ msgstr "Toepassen op alle sub-mappen"
 msgid "Apply for mails from %1$s"
 msgstr "E-mail van %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Toepassen op alle sub-mappen"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Rol toewijzen"
@@ -2025,6 +2019,12 @@ msgstr "Configuratiebericht"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Configureer nu"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Configureer nu"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2998,6 +2998,10 @@ msgid ""
 msgstr ""
 "Sleep bestand hiernaartoe om als <b class=\"dndignore\">nieuwe versie</b> "
 "van \"%1$s\" toe te voegen"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4278,6 +4282,12 @@ msgstr "Postvak IN"
 msgid "Inbox Tabs"
 msgstr "Postvak IN"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Postvak IN"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Distributielijst insluiten"
@@ -4771,12 +4781,6 @@ msgstr "E-mailadres (verplicht)"
 msgid "Mail and Messaging"
 msgstr "E-mail en Berichtenservice"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Mail categories"
-msgstr "E-mailadres"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Quotum aantal e-mails"
@@ -5078,6 +5082,12 @@ msgstr "Verplaatsen"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "Verplaats alles"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Toepassen op alle sub-mappen"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -11149,6 +11159,11 @@ msgstr "yyyy"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "E-mail en sociale accounts"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Mail categories"
+#~ msgstr "E-mailadres"
 
 #~ msgid "Mail text"
 #~ msgstr "Mailtekst"

@@ -1147,12 +1147,6 @@ msgstr "全てのサブフォルダに適用"
 msgid "Apply for mails from %1$s"
 msgstr "%1$s からのメール: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "全てのサブフォルダに適用"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "ロールを割り当てる"
@@ -1973,6 +1967,12 @@ msgstr "構成メール"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "今構成する"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "今構成する"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2939,6 +2939,10 @@ msgid ""
 msgstr ""
 "\"%1$s\" の <b class=\"dndignore\">新規バージョン</b> をアップロードするに"
 "は、ここにドロップしてください。"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4210,6 +4214,12 @@ msgstr "受信トレイ"
 msgid "Inbox Tabs"
 msgstr "受信トレイ"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "受信トレイ"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "配布リストを追加"
@@ -4703,12 +4713,6 @@ msgstr "メールアドレス（必須）"
 msgid "Mail and Messaging"
 msgstr "メールとメッセージング"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Mail categories"
-msgstr "利用可能なカテゴリ:"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "メール数割当量"
@@ -5011,6 +5015,12 @@ msgstr "移動"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "全て移動"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "全てのサブフォルダに適用"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -14034,6 +14044,11 @@ msgstr "yyyy"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "メール アカウントとソーシャル アカウント"
+
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Mail categories"
+#~ msgstr "利用可能なカテゴリ:"
 
 #~ msgid "Mail text"
 #~ msgstr "メールの本文"

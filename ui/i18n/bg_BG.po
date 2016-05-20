@@ -1158,10 +1158,6 @@ msgstr ""
 msgid "Apply for mails from %1$s"
 msgstr "Мейл от %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Apply move to all mails from a sender"
-msgstr ""
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr ""
@@ -1980,6 +1976,10 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Configure you inbox tabs"
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2934,6 +2934,10 @@ msgstr ""
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
 msgstr ""
 
 #. %1$s is the filename of the current file
@@ -4180,6 +4184,12 @@ msgstr "Входящи"
 msgid "Inbox Tabs"
 msgstr "Входящи"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Входящи"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr ""
@@ -4667,11 +4677,6 @@ msgstr ""
 msgid "Mail and Messaging"
 msgstr ""
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-msgid "Mail categories"
-msgstr "Емейл адрес"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr ""
@@ -4978,6 +4983,11 @@ msgstr "Премести"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+msgid "Move all mails from a sender"
+msgstr "Премести всички %1$d съобщеноя в друга папка"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -10088,6 +10098,10 @@ msgstr ""
 #~ msgid "Delete all messages in this folder"
 #~ msgstr "Изтрий всички съобщение в тази папка"
 
+#, fuzzy
+#~ msgid "Mail categories"
+#~ msgstr "Емейл адрес"
+
 #~ msgid "Mark as"
 #~ msgstr "Маркирай като"
 
@@ -10099,10 +10113,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Move all %1$d messages to another folder"
-#~ msgstr "Премести всички %1$d съобщеноя в друга папка"
-
-#, fuzzy
-#~ msgid "Move all messages to another folder"
 #~ msgstr "Премести всички %1$d съобщеноя в друга папка"
 
 #~ msgid "SMS"

@@ -1202,12 +1202,6 @@ msgstr "Uplatnit na všechny podsložky"
 msgid "Apply for mails from %1$s"
 msgstr "E-mail od %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Uplatnit na všechny podsložky"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplikovat roli"
@@ -2029,6 +2023,12 @@ msgstr "Konfigurační zpráva"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Nastavit"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Nastavit"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2987,6 +2987,10 @@ msgstr "Upusťte zde pro nahrání <b class=\"dndignore\">nové verze</b>"
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "Upusťte zde pro nahrání <b class=\"dndignore\">nové verze</b> „%1$s“"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4254,6 +4258,12 @@ msgstr "Doručená pošta"
 msgid "Inbox Tabs"
 msgstr "Doručená pošta"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Doručená pošta"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Zahrnout distribuční seznamy"
@@ -4747,12 +4757,6 @@ msgstr "Poštovní adresa (povinné)"
 msgid "Mail and Messaging"
 msgstr "Pošta a posílání zpráv"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Mail categories"
-msgstr "Dostupné kategorie:"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Limit počtu zpráv"
@@ -5053,6 +5057,12 @@ msgstr "Přesunout"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "Přesunout vše"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Uplatnit na všechny podsložky"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -15104,6 +15114,11 @@ msgstr "rrrr"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Poštovní a sociální účty"
+
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Mail categories"
+#~ msgstr "Dostupné kategorie:"
 
 #~ msgid "Mail port"
 #~ msgstr "Poštovní port"

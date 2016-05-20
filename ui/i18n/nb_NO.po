@@ -1166,12 +1166,6 @@ msgstr "Bruk for alle undermapper"
 msgid "Apply for mails from %1$s"
 msgstr "E-post fra %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Bruk for alle undermapper"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Legg til rolle"
@@ -2005,6 +1999,12 @@ msgstr "Konfigureringsepost"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Konfigurer nå"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Konfigurer nå"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2967,6 +2967,10 @@ msgid ""
 msgstr ""
 "Slipp her for å laste opp en <b class=\"dndignore\">ny versjon</b> av \"%1$s"
 "\""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4250,6 +4254,12 @@ msgstr "Innboks"
 msgid "Inbox Tabs"
 msgstr "Innboks"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Innboks"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Inkluder distribusjonslister"
@@ -4744,12 +4754,6 @@ msgstr "E-postadresse (påkrevd)"
 msgid "Mail and Messaging"
 msgstr "E-post og meldinger"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Mail categories"
-msgstr "E-postadresse"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Epostkvote, antall eposter"
@@ -5054,6 +5058,12 @@ msgstr "Flytt"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "Flytt alle"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Bruk for alle undermapper"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -10590,6 +10600,11 @@ msgstr "yyyy"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "E-post og sosiale kontoer"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Mail categories"
+#~ msgstr "E-postadresse"
 
 #~ msgid "Mail from %1$s %2$s"
 #~ msgstr "Epost fra %1$s %2$s"

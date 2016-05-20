@@ -1172,12 +1172,6 @@ msgstr "Verkställ för alla underliggande mappar"
 msgid "Apply for mails from %1$s"
 msgstr "E-post från %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Verkställ för alla underliggande mappar"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Tillämpa roll"
@@ -2002,6 +1996,12 @@ msgstr "Konfigurations-ebrev"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Anpassa nu"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Anpassa nu"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2958,6 +2958,10 @@ msgid ""
 msgstr ""
 "Släpp här för att ladda upp en <b class=\"dndignore\">ny version</b> av "
 "\"%1$s\""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4229,6 +4233,12 @@ msgstr "Inkorg"
 msgid "Inbox Tabs"
 msgstr "Inkorg"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Inkorg"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Inkludera distributionslistor"
@@ -4722,12 +4732,6 @@ msgstr "E-postadress (obligatoriskt)"
 msgid "Mail and Messaging"
 msgstr "E-post och snabbmeddelanden"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Mail categories"
-msgstr "E-postadress"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Kvot för e-postmängd"
@@ -5028,6 +5032,12 @@ msgstr "Flytta"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "Flytta alla"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Verkställ för alla underliggande mappar"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -12843,6 +12853,11 @@ msgstr "yyyy"
 
 #~ msgid "Mail cannot be parsed. Invalid or incomplete mail data."
 #~ msgstr "Brev kan inte tolkas. Ogiltig eller ofullständig brevinformation."
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Mail categories"
+#~ msgstr "E-postadress"
 
 #~ msgid ""
 #~ "Mail folder \"%1$s\" could not be created (maybe due to insufficient "

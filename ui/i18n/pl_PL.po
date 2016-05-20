@@ -1201,12 +1201,6 @@ msgstr "Zastosuj do wszystkich podfolderów"
 msgid "Apply for mails from %1$s"
 msgstr "Wiadomość od: %1$s — %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Email from %1$s: %2$s"
-msgid "Apply move to all mails from a sender"
-msgstr "Wiadomość od: %1$s — %2$s"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Zastosuj rolę"
@@ -2038,6 +2032,12 @@ msgstr "E-mail z konfiguracją"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Skonfiguruj teraz"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Skonfiguruj teraz"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -3009,6 +3009,10 @@ msgid ""
 msgstr ""
 "Upuść tutaj, aby przesłać <b class=\"dndignore\">nową wersję</b> pliku \"%1$s"
 "\""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4285,6 +4289,12 @@ msgstr "Skrzynka odbiorcza"
 msgid "Inbox Tabs"
 msgstr "Skrzynka odbiorcza"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Skrzynka odbiorcza"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Dodaj listy dystrybucyjne"
@@ -4781,12 +4791,6 @@ msgstr "Adres pocztowy (obowiązkowy)"
 msgid "Mail and Messaging"
 msgstr "Poczta i komunikator"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Mail categories"
-msgstr "Adres pocztowy"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Ograniczenie liczby wiadomości e-mail"
@@ -5087,6 +5091,12 @@ msgstr "Przenieś"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "Przesuń wszystko"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Move all mails from a sender"
+msgstr "Wiadomość od: %1$s — %2$s"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -11354,6 +11364,11 @@ msgstr "rrrr"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Konta e-mail i społecznościowe"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Mail categories"
+#~ msgstr "Adres pocztowy"
 
 #~ msgid "Mail text"
 #~ msgstr "Tekst wiadomości"

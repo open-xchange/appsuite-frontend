@@ -1185,12 +1185,6 @@ msgstr "Aplicar a todas las subcarpetas"
 msgid "Apply for mails from %1$s"
 msgstr "Correo de %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Aplicar a todas las subcarpetas"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplicar rol"
@@ -2017,6 +2011,12 @@ msgstr "Correo de configuración"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Configurar ahora"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Configurar ahora"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2984,6 +2984,10 @@ msgid ""
 msgstr ""
 "Soltar aquí para subir una <b class=\"dndignore\">nueva versión</b> de \"%1$s"
 "\""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4264,6 +4268,12 @@ msgstr "Bandeja de entrada"
 msgid "Inbox Tabs"
 msgstr "Bandeja de entrada"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Bandeja de entrada"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Incluye listas de distribución"
@@ -4758,12 +4768,6 @@ msgstr "Dirección de correo (obligatoria)"
 msgid "Mail and Messaging"
 msgstr "Correo y mensajería"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Mail categories"
-msgstr "Categorías disponibles:"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Cuota de número de de correos"
@@ -5064,6 +5068,12 @@ msgstr "Mover"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "Mover todo"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Aplicar a todas las subcarpetas"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -15146,6 +15156,11 @@ msgstr "yyyy"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Cuentas de correo electrónico y de redes sociales"
+
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Mail categories"
+#~ msgstr "Categorías disponibles:"
 
 #~ msgid "Mail port"
 #~ msgstr "Puerto de correo"

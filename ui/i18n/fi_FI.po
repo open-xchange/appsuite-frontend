@@ -1165,12 +1165,6 @@ msgstr "Käytä kaikkiin alakansioihin"
 msgid "Apply for mails from %1$s"
 msgstr "Viesti lähettäjältä %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Käytä kaikkiin alakansioihin"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Sovella rooli"
@@ -1998,6 +1992,12 @@ msgstr "Konfiguraatioviesti"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Konfiguroi nyt"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Konfiguroi nyt"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2958,6 +2958,10 @@ msgstr "Tiputa tähän ladataksesi <b class=\"dndignore\">uusi versio</b>"
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "Tiputa tähän ladataksesi %1$s <b class=\"dndignore\">uusi versio</b>"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4227,6 +4231,12 @@ msgstr "Saapuneet"
 msgid "Inbox Tabs"
 msgstr "Saapuneet"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Saapuneet"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Sisällytä jakelulistat"
@@ -4720,12 +4730,6 @@ msgstr "Postiosoite (pakollinen)"
 msgid "Mail and Messaging"
 msgstr "Posti ja viestiminen"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Mail categories"
-msgstr "Postiosoite"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Viestien kappalemäärän kiintiö"
@@ -5026,6 +5030,12 @@ msgstr "Siirrä"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "Siirrä kaikki"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Käytä kaikkiin alakansioihin"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -11053,6 +11063,11 @@ msgstr "vvvv"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Posti ja Some-tilit"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Mail categories"
+#~ msgstr "Postiosoite"
 
 #~ msgid "Mail text"
 #~ msgstr "Viestin teksti"

@@ -1192,12 +1192,6 @@ msgstr "Применить к вложенным папкам"
 msgid "Apply for mails from %1$s"
 msgstr "Сообщение от %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Применить к вложенным папкам"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Назначить роль"
@@ -2024,6 +2018,12 @@ msgstr "Конфигурация по почте"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Настроить"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Настроить"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2987,6 +2987,10 @@ msgid ""
 msgstr ""
 "Перетащите сюда для добавления <b class=\"dndignore\">новой версии</b> "
 "«%1$s»."
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4255,6 +4259,12 @@ msgstr "Входящие"
 msgid "Inbox Tabs"
 msgstr "Входящие"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Входящие"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Включить списки рассылок"
@@ -4748,12 +4758,6 @@ msgstr "Электронный адрес (обязательно)"
 msgid "Mail and Messaging"
 msgstr "Почта и обмен сообщениями"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Mail categories"
-msgstr "Почтовый адрес"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Квота сообщений"
@@ -5054,6 +5058,12 @@ msgstr "Переместить"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "Переместить все"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Применить к вложенным папкам"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -11296,6 +11306,11 @@ msgstr "гггг"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Учетные записи в социальных сетях и почта"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Mail categories"
+#~ msgstr "Почтовый адрес"
 
 #~ msgid "Mail text"
 #~ msgstr "Текст сообщения"

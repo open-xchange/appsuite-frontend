@@ -1173,12 +1173,6 @@ msgstr "Alt klasörlerin tümü için uygula"
 msgid "Apply for mails from %1$s"
 msgstr "%1$s: %2$s dan E-posta "
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Alt klasörlerin tümü için uygula"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Kuralı uygula"
@@ -2025,6 +2019,10 @@ msgstr "Onaylama"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Configure you inbox tabs"
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -3042,6 +3040,10 @@ msgid ""
 msgstr ""
 "\"%1$s\" ın yeni bir versiyonunu yüklemek için <b class=\"dndignore\">buraya "
 "bırakın</b>"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4373,6 +4375,12 @@ msgstr "Gelen kutusu"
 msgid "Inbox Tabs"
 msgstr "Gelen kutusu"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Gelen kutusu"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Dağıtım listesi dahil "
@@ -4894,12 +4902,6 @@ msgstr "E-posta adresi (zorunlu)"
 msgid "Mail and Messaging"
 msgstr "E-posta ve Mesajlaşma"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Mail categories"
-msgstr "E-posta adresi"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "E-posta sayısı kotası"
@@ -5212,6 +5214,12 @@ msgstr "Taşı"
 #| msgid "Move"
 msgid "Move all"
 msgstr "Taşı"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Alt klasörlerin tümü için uygula"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -10850,6 +10858,11 @@ msgstr "yyyy"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "E-posta ve Sosyal Hesaplar"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Mail categories"
+#~ msgstr "E-posta adresi"
 
 #~ msgid "Mark as"
 #~ msgstr "Olarak işaretle"

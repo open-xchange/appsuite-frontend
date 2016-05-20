@@ -1131,10 +1131,6 @@ msgstr ""
 msgid "Apply for mails from %1$s"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Apply move to all mails from a sender"
-msgstr ""
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr ""
@@ -1942,6 +1938,10 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Configure you inbox tabs"
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2886,6 +2886,10 @@ msgstr ""
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
 msgstr ""
 
 #. %1$s is the filename of the current file
@@ -4118,6 +4122,10 @@ msgstr ""
 msgid "Inbox Tabs"
 msgstr ""
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Inbox tabs"
+msgstr ""
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr ""
@@ -4601,10 +4609,6 @@ msgstr ""
 msgid "Mail and Messaging"
 msgstr ""
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Mail categories"
-msgstr ""
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr ""
@@ -4904,6 +4908,10 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Move all mails from a sender"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core

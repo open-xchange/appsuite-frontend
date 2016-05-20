@@ -8204,10 +8204,25 @@ msgstr ""
 msgid "Please note that some of the tabs can not be disabled."
 msgstr ""
 
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "Inbox tabs"
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "Configure you inbox tabs"
+msgstr ""
+
 #. use as a fallback name in case a user enters a empty string as the name of tab
 #: apps/io.ox/mail/categories/main.js
 #: module:io.ox/mail
 msgid "Unnamed"
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "Drop here!"
 msgstr ""
 
 #. Helper text for mail tabs without content
@@ -9164,7 +9179,7 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
-msgid "Apply move to all mails from a sender"
+msgid "Move all mails from a sender"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
@@ -9315,11 +9330,6 @@ msgstr ""
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Statistics"
-msgstr ""
-
-#: apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail
-msgid "Mail categories"
 msgstr ""
 
 #. (From) email1 via email2. Appears in email detail view.

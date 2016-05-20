@@ -1201,12 +1201,6 @@ msgstr "Aplică pentru toate dosarele subordonate"
 msgid "Apply for mails from %1$s"
 msgstr "Mesaj de la %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Aplică pentru toate dosarele subordonate"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplică rolul"
@@ -2037,6 +2031,12 @@ msgstr "E-mail de configurare"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Configurează acum"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Configurează acum"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -3003,6 +3003,10 @@ msgid ""
 msgstr ""
 "Glisați aici pentru a încărca o <b class=\"dndignore\">versiune nouă</b> a "
 "\"%1$s\""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4279,6 +4283,12 @@ msgstr "Mesaje primite"
 msgid "Inbox Tabs"
 msgstr "Mesaje primite"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Mesaje primite"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Include listele de distribuție"
@@ -4774,12 +4784,6 @@ msgstr "Adresă de e-mail (obligatoriu)"
 msgid "Mail and Messaging"
 msgstr "Mail și mesagerie"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Mail categories"
-msgstr "Categorii disponibile:"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Cotă de număr de mailuri"
@@ -5080,6 +5084,12 @@ msgstr "Mută"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "Mută tot"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Aplică pentru toate dosarele subordonate"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -13321,6 +13331,11 @@ msgstr "aaaa"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Conturi de e-mail și sociale"
+
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Mail categories"
+#~ msgstr "Categorii disponibile:"
 
 #~ msgid "Mail text"
 #~ msgstr "Textul mailului"

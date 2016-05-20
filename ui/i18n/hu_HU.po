@@ -1178,12 +1178,6 @@ msgstr "Alkalmazás az összes mappára"
 msgid "Apply for mails from %1$s"
 msgstr "E-mail innen: %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply move to all mails from a sender"
-msgstr "Alkalmazás az összes mappára"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Szerep alkalmazása"
@@ -2015,6 +2009,12 @@ msgstr "Beállító e-mail"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Beállítás"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Beállítás"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2986,6 +2986,10 @@ msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
 "Húzza ide a(z) „%1$s” feltöltendő <b class='dndignore'>új verzióját</b>"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4255,6 +4259,12 @@ msgstr "Beérkezett üzenetek"
 msgid "Inbox Tabs"
 msgstr "Beérkezett üzenetek"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Beérkezett üzenetek"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Disztribúciós lista hozzáadása"
@@ -4748,12 +4758,6 @@ msgstr "Levelezési cím (kötelező)"
 msgid "Mail and Messaging"
 msgstr "Levél és üzenetküldés"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Mail categories"
-msgstr "Levelezési cím"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Levélszámkvóta"
@@ -5054,6 +5058,12 @@ msgstr "Mozgatás"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr "Összes mozgatása"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Alkalmazás az összes mappára"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -10497,6 +10507,11 @@ msgstr "yyyy"
 #~| msgid "March"
 #~ msgid "Mac"
 #~ msgstr "Március"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Mail categories"
+#~ msgstr "Levelezési cím"
 
 #~ msgid "Mark as"
 #~ msgstr "Megjelölés másként"

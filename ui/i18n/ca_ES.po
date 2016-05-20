@@ -1201,11 +1201,6 @@ msgstr "Totes les carpetes"
 msgid "Apply for mails from %1$s"
 msgstr "Correu de %1$s: %2$s"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-msgid "Apply move to all mails from a sender"
-msgstr "Totes les carpetes"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplica rol"
@@ -2048,6 +2043,10 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Configure you inbox tabs"
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -3025,6 +3024,10 @@ msgid ""
 msgstr ""
 "Arrossega aquí per a pujar-ne una <b class=\"dndignore\">nova versió</b> de "
 "\"%1$s\""
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -4316,6 +4319,12 @@ msgstr "Safata d'entrada"
 msgid "Inbox Tabs"
 msgstr "Safata d'entrada"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Safata d'entrada"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Inclou llistes de distribució"
@@ -4812,12 +4821,6 @@ msgstr "Adreça de correu electrònic"
 msgid "Mail and Messaging"
 msgstr "Correu i missatgeria"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Mail categories"
-msgstr "Adreça de correu electrònic"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Quota de nombre de correus"
@@ -5124,6 +5127,11 @@ msgstr "Mou"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
 msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+msgid "Move all mails from a sender"
+msgstr "Totes les carpetes"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -10808,6 +10816,11 @@ msgstr ""
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Comptes de correu electrònic i de xarxes socials"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Mail categories"
+#~ msgstr "Adreça de correu electrònic"
 
 #~ msgid "Mark as"
 #~ msgstr "Marca-ho com"
