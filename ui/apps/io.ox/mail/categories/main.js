@@ -440,10 +440,8 @@ define('io.ox/mail/categories/main', [
         },
         reload: function () {
             // TODO: dirty
-            //this.mail.listView.model.set('filter', this.props.get('selected'));
-            //this.mail.listView.loader.loading = false;
             this.mail.listView.collection.expired = true;
-            this.mail.listView.reload();
+            this.mail.listView.load();
             this.trigger('reload');
         },
         refresh: function () {

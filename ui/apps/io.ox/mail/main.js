@@ -1654,10 +1654,6 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
             if (!capabilities.has('mail_categories')) return;
 
-            //TODO: DEBUG until middleware property is set right
-            // require('settings!io.ox/mail').set('categories/enabled', true).save();
-            // console.log('%c' + 'ACHTUNG!ACHTUNG!', 'color: white; background-color: red');
-
             var mapper;
             // register settings listener
             if (settings.get('categories/enabled')) refresh();
