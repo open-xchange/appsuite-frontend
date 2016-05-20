@@ -173,7 +173,7 @@ define('io.ox/mail/detail/links',
         ox.registry.call('mail-compose', 'compose', {
             to: [[name, address]],
             subject: params.subject || '',
-            attachments: [{ content: params.body || '' }]
+            attachments: [{ content: params.body || '', disp: 'inline' }]
         });
     });
 
