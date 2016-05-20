@@ -49,9 +49,9 @@ define('io.ox/files/actions/delete', [
         });
 
         // delete folders
-        _(folders).each(function (folder) {
-            folderAPI.remove(folder.get('id'));
-        });
+        folderAPI.remove(_(folders).map(function (model) {
+            return model.get('id');
+        }));
     }
 
     return function (list) {
