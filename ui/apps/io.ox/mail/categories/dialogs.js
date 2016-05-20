@@ -39,29 +39,23 @@ define('io.ox/mail/categories/dialogs', [
                 point: 'io.ox/mail/categories/generalize',
                 //focus: '.form-inline',
                 maximize: false,
+                model: new Backbone.Model(obj),
                 enter: 'close'
-            })
-            .extend({
-                default: function (baton) {
-                    _.extend(baton, { data: obj.data, target: obj.target, targetname: obj.targetname, source: obj.source });
-                    this.addClass('mail-categopries-dialog');
-                },
-                description: function () {
-                    this.append(
-                        $('<p class="description">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs.'))
-                    );
+            }).extend({
+                default: function () {
+                    this.addClass('mail-categories-dialog');
                 },
                 'info-target': function (baton) {
                     this.append(
                         $('<p>').html(
                             //#. %1$s target mail category
                             //#, c-format
-                            gt('This mail was moved to %1$s.', '<i>' + baton.targetname + '</i>')
+                            gt('This mail was moved to %1$s.', '<i>' + baton.view.model.get('targetname') + '</i>')
                         )
                     );
                 },
                 'info-addresses': function (baton) {
-                    var list = senderlist(baton.data);
+                    var list = senderlist(baton.view.model.get('data'));
                     this.append(
                         $('<p>').html(
                              //#. %1$s single mail address or comma separated list of multiple
@@ -72,10 +66,12 @@ define('io.ox/mail/categories/dialogs', [
                 },
                 register: function (baton) {
                     baton.view.on('generalize', function () {
-                        parent.trigger('dialog:generalize', baton);
+                        var obj = _.pick(baton.view.model.toJSON(), 'data', 'targetname', 'target', 'source');
+                        parent.trigger('dialog:generalize', obj);
                     });
                     baton.view.on('revert', function () {
-                        parent.trigger('dialog:revert', baton);
+                        var obj = _.pick(baton.view.model.toJSON(), 'data', 'targetname', 'target', 'source');
+                        parent.trigger('dialog:revert', obj);
                     });
                 }
             })
@@ -127,7 +123,7 @@ define('io.ox/mail/categories/dialogs', [
             .extend({
                 default: function (baton) {
                     _.extend(baton, { collection: parent.categories });
-                    this.addClass('mail-categopries-dialog');
+                    this.addClass('mail-categories-dialog');
                 },
                 description: function () {
                     this.append(
