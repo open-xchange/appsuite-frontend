@@ -8164,11 +8164,6 @@ msgstr ""
 msgid "Apply for all mails?"
 msgstr ""
 
-#: apps/io.ox/mail/categories/dialogs.js
-#: module:io.ox/mail
-msgid "Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs."
-msgstr ""
-
 #. %1$s target mail category
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
@@ -8197,6 +8192,11 @@ msgstr ""
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
 msgid "Edit Tabs"
+msgstr ""
+
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
+msgid "Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs."
 msgstr ""
 
 #: apps/io.ox/mail/categories/dialogs.js
