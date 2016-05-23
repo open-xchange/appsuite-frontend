@@ -14,12 +14,14 @@
 define('io.ox/core/session', [
     'io.ox/core/http',
     'io.ox/core/manifests',
-    'io.ox/core/uuids'
-], function (http, manifests, uuids) {
+    'io.ox/core/uuids',
+    'io.ox/core/boot/config'
+], function (http, manifests, uuids, config) {
 
     'use strict';
 
-    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000 }, CLIENT = 'open-xchange-appsuite';
+    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000, FETCHCONFIG: 3000 },
+        CLIENT = 'open-xchange-appsuite';
 
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
@@ -58,18 +60,66 @@ define('io.ox/core/session', [
         autoLogin: function () {
             // store
             var store = false;
+
+            // Fetches the timeout value in parallel with the main HTTP request
+            // if it takes too long. Falls back to values in TIMEOUTS if
+            // fetching the config also takes too long.
+            function withTimeout(httpCall, options) {
+                var start = _.now(),
+                    // Variables used for synchronization:
+                    // configTimer fetches the serverConfig,
+                    configTimer = setTimeout(fetchConfig, TIMEOUTS.FETCHCONFIG),
+                    // xhrTimer aborts the HTTP request on timeout,
+                    xhrTimer = setTimeout(abort, TIMEOUTS.AUTOLOGIN),
+                    // xhr cancels the timers on completion.
+                    xhr = httpCall(options);
+
+                // Cancel the timers if the HTTP request is finished before
+                // the timeout.
+                return xhr.always(function () {
+                    if (configTimer !== null) {
+                        clearTimeout(configTimer);
+                        configTimer = null;
+                    }
+                    if (xhrTimer !== null) {
+                        clearTimeout(xhrTimer);
+                        xhrTimer = null;
+                    }
+                });
+
+                // Fetch serverConfig manually if the request takes too long.
+                function fetchConfig() {
+                    configTimer = null;
+                    config.server().done(function (conf) {
+                        if (xhrTimer === null) return; // too late
+                        if (!conf || !conf.autoLoginTimeout) return; // use default
+
+                        // Restart the abort timer with the configured value,
+                        // adjusting for already elapsed time.
+                        clearTimeout(xhrTimer);
+                        xhrTimer = setTimeout(abort, Math.max(0,
+                            conf.autoLoginTimeout - (_.now() - start)));
+                    });
+                }
+
+                // Abort the HTTP request.
+                function abort() {
+                    xhrTimer = null;
+                    xhr.abort();
+                }
+            }
+
             // GET request
             return (
                 _.url.hash('token.autologin') === 'false' && _.url.hash('serverToken') ?
                 // no auto-login for server-token-based logins
                 $.Deferred().reject({}) :
                 // try auto-login
-                http.GET({
+                withTimeout(http.GET, {
                     module: 'login',
                     appendColumns: false,
                     appendSession: false,
                     processResponse: false,
-                    timeout: TIMEOUTS.AUTOLOGIN,
                     params: {
                         action: 'autologin',
                         client: that.client(),
@@ -88,13 +138,12 @@ define('io.ox/core/session', [
                 // If autologin fails, try token login
                 function fail(data) {
                     if (!_.url.hash('serverToken')) return data || {};
-                    return http.POST({
+                    return withTimeout(http.POST, {
                         module: 'login',
                         jsessionid: _.url.hash('jsessionid'),
                         appendColumns: false,
                         appendSession: false,
                         processResponse: false,
-                        timeout: TIMEOUTS.AUTOLOGIN,
                         params: {
                             action: 'tokens',
                             client: that.client(),
