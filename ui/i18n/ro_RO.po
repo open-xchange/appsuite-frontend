@@ -1105,6 +1105,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Permite preîncărcarea imaginilor cu legături externe"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1312,6 +1316,10 @@ msgstr "Ca pentru serverul de primire de e-mail"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "În ordine crescătoare"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1850,6 +1858,12 @@ msgstr "Apăsați aici pentru a deschide."
 msgid "Click to open. Drag to your desktop to download."
 msgstr "Apăsați aici pentru a deschide. Glisați pe desktop pentru a descărca."
 
+#: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to upload image"
+msgid "Click to play audio file"
+msgstr "Apăsați aici pentru a încărca imaginea"
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
 msgstr "Apăsați aici pentru a încerca din nou"
@@ -1868,6 +1882,12 @@ msgstr "Șterge contactul"
 msgid "Click to show or hide actions for advanced users."
 msgstr ""
 "Apăsați pentru a afișa sau ascunde acțiunile pentru utilizatorii avansați."
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Click to start video"
+msgstr "Apăsați aici pentru a încerca din nou."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
@@ -2011,6 +2031,12 @@ msgstr "E-mail de configurare"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Configurează acum"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Configurează acum"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2248,7 +2274,8 @@ msgid "Create"
 msgstr "Creează"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Creează o întâlnire"
 
@@ -2977,6 +3004,10 @@ msgstr ""
 "Glisați aici pentru a încărca o <b class=\"dndignore\">versiune nouă</b> a "
 "\"%1$s\""
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
+
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
 msgid "Drop new version of \"%1$s\" here"
@@ -3207,8 +3238,8 @@ msgstr "Tip de angajat"
 msgid "Employment"
 msgstr "Loc de muncă"
 
-#. when items list is empty (e.g. search result)
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#. empty message for list view
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Gol"
 
@@ -4246,6 +4277,18 @@ msgstr "În curs"
 msgid "Inbox"
 msgstr "Mesaje primite"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox Tabs"
+msgstr "Mesaje primite"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Mesaje primite"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Include listele de distribuție"
@@ -4393,6 +4436,10 @@ msgstr "Este identic"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "Este mai mic decât"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "It will take some time until mails are assigned to the default tabs"
+msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -4737,12 +4784,6 @@ msgstr "Adresă de e-mail (obligatoriu)"
 msgid "Mail and Messaging"
 msgstr "Mail și mesagerie"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Mail categories"
-msgstr "Categorii disponibile:"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Cotă de număr de mailuri"
@@ -5044,6 +5085,12 @@ msgstr "Mută"
 msgid "Move all"
 msgstr "Mută tot"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Aplică pentru toate dosarele subordonate"
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
 msgid "Move all messages"
@@ -5125,6 +5172,7 @@ msgstr "Necesitați mai mult spațiu?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Niciodată"
 
@@ -5337,6 +5385,7 @@ msgstr "Nicio cerere pierdută"
 msgid "No mails in your inbox"
 msgstr "Niciun mesaj în dosarul dumneavoastră de mesaje primite"
 
+#. search feature returns an empty result
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Nu s-au găsit elemente corespunzătoare."
@@ -6339,7 +6388,8 @@ msgstr "Prioritate"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6472,6 +6522,13 @@ msgid ""
 msgstr ""
 "Evaluare %1$d din %2$d. Apăsați Enter pentru a confirma sau utilizați "
 "săgețile stânga și dreapta pentru a modifica evaluarea."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "to"
+#| msgid "Read"
+msgid "Read"
+msgstr "Citește"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -6750,8 +6807,10 @@ msgstr "Repetă"
 msgid "Repeat new password"
 msgstr "Introduceți din nou noua parolă"
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
+#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
 msgid "Reply"
 msgstr "Răspunde"
 
@@ -6765,6 +6824,7 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Răsp. la"
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Reply to all"
 msgstr "Răspunde tuturor"
@@ -6913,7 +6973,6 @@ msgid "Sales Volume"
 msgstr "Volumul vânzărilor"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
@@ -7149,6 +7208,12 @@ msgstr "Trimite mailul tuturor participanților"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Trimite mail"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "New notifications"
+msgid "Send notification"
+msgstr "Notificări noi"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
@@ -7409,6 +7474,12 @@ msgstr "Afișează legătura internă"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Afișează listă"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show images"
+msgid "Show message size"
+msgstr "Afișează imaginile"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -8632,16 +8703,6 @@ msgstr "Mesajul nu are niciun conținut"
 msgid "This message has been truncated due to size limitations."
 msgstr "Mesajul a fost trunchiat din cauza limitelor pentru dimensiuni."
 
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-"Acest mesaj a fost citit, apăsați acest buton pentru marcare ca necitit."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-"Acest mesaj nu a fost citit, apăsați acest buton pentru marcare ca citit."
-
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Această notiță nu va fi imprimată"
@@ -8711,6 +8772,11 @@ msgid ""
 msgstr ""
 "Pentru a adăuga contacte manual, introduceți o adresă de mail validă (de "
 "exemplu john.doe@example.com sau \"John Doe\" <jd@example.com>) "
+
+#. Helper text for mail tabs without content
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "To fill this area please drag and drop mails to the title of this tab."
+msgstr ""
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -10797,11 +10863,6 @@ msgstr "aaaa"
 
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigua și Barbuda"
-
-#, fuzzy
-#~| msgid "Apply to all subfolders"
-#~ msgid "Apply move to all mails from a sender"
-#~ msgstr "Aplică pentru toate dosarele subordonate"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -13271,6 +13332,11 @@ msgstr "aaaa"
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Conturi de e-mail și sociale"
 
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Mail categories"
+#~ msgstr "Categorii disponibile:"
+
 #~ msgid "Mail text"
 #~ msgstr "Textul mailului"
 
@@ -14213,10 +14279,6 @@ msgstr "aaaa"
 
 #~ msgid "RUB"
 #~ msgstr "RUB"
-
-#~ msgctxt "to"
-#~ msgid "Read"
-#~ msgstr "Citește"
 
 #~ msgid "Read Only Mode"
 #~ msgstr "Mod doar citire"
@@ -15469,6 +15531,14 @@ msgstr "aaaa"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Această operație poate să dureze câteva secunde"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Acest mesaj a fost citit, apăsați acest buton pentru marcare ca necitit."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Acest mesaj nu a fost citit, apăsați acest buton pentru marcare ca citit."
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"

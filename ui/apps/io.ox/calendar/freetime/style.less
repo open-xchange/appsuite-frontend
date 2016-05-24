@@ -34,27 +34,39 @@
             margin-bottom: 0;
             padding-top: 16px;
             padding-left: 15px;
+            border-bottom: 1px solid #ccc;
         }
     }
     .freetime-time-view-header {
         flex: 1;
 
+        .controls-container {
+            width: auto;
+        }
+
         .freetime-timeline {
             display: flex;
             display: -webkit-flex;
             border-bottom: 1px solid #ccc;
-            padding-top: 11px;
+            padding-top: 13px;
+            font-size: 13px;
 
             .freetime-hour {
                 flex: 1;
                 border-left: 1px solid #ccc;
                 text-align: center;
+                cursor: pointer;
 
                 &.working-hour {
                     font-weight: bold;
-                    border-left: #aaa solid 2px;
+                    border-left: #888 solid 1px;
                 }
             }
+        }
+    }
+    @media (max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+        .toolbar {
+            display: block;
         }
     }
 }
@@ -66,17 +78,32 @@
     .freetime-participants-view-body {
         width: 300px;
         padding-top: 8px;
+        font-size: 13px;
 
         .participant-image {
             margin-top: 8px;
             width: 38px;
             height: 38px;
         }
+
+        .participant-wrapper {
+            padding-left: 0;
+        }
     }
+
     .freetime-time-view-body {
         flex: 1;
         position: relative;
         height: 100%;
+
+        // copied from bootstrap; but without own background-color; mixins do not work here; therefore copy/paste
+        .striped {
+            background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255,255,255,.15)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255,255,255,.15)), color-stop(.75, rgba(255,255,255,.15)), color-stop(.75, transparent), to(transparent));
+            background-image: -webkit-linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+            background-image: -moz-linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+            background-image: -o-linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+            background-image: linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+        }
 
         .freetime-table {
 
@@ -86,6 +113,7 @@
                 height: 100%;
                 width: 100%;
                 position: absolute;
+                z-index: 1;
 
                 .freetime-table-cell {
                     border-left: #ccc solid 1px;
@@ -93,33 +121,38 @@
                     flex: 1;
 
                     &.working-hour {
-                        border-left: #aaa solid 2px;
+                        border-left: #888 solid 1px;
                     }
                 }
             }
             .freetime-lasso {
-                background-color: #ccc;
+                background-color: #999;
                 opacity: 0.5;
                 bottom: 0;
                 top: 8px;
                 position: absolute;
-                z-index: 1;
+                z-index: 3;
             }
         }
         .appointments {
             position: relative;
             padding-top: 8px;
+            font-size: 12px;
 
             .appointment-table {
                 height: 54px;
                 margin-bottom: 2px;
                 position: relative;
+                &:not(:last-child) {
+                    border-bottom: #eee solid 1px;
+                }
 
                 .appointment {
                     height: 100%;
                     position: absolute;
                     cursor: default;
                     border-left: 1px solid rgba(0, 0, 0, 0.2);
+                    z-index: 2;
 
                     &.fulltime {
                         height: 50%;

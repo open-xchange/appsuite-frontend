@@ -112,9 +112,10 @@ define('io.ox/mail/common-extensions', [
         dateOrSize: function (baton) {
             // show date or size depending on sort option
             var fn = 'size';
-            if (baton.app && baton.app.props.get('sort') !== 608) {
+            if (baton.app && baton.app.props.get('sort') !== 608 && !baton.app.props.get('alwaysShowSize')) {
                 fn = baton.app.props.get('exactDates') ? 'fulldate' : 'smartdate';
             }
+
             extensions[fn].call(this, baton);
         },
 
@@ -146,8 +147,9 @@ define('io.ox/mail/common-extensions', [
         size: function (baton) {
             var data = baton.data;
             if (!_.isNumber(data.size)) return;
+            var size = util.threadFileSize(data.thread || [data]);
             this.append(
-                $('<span class="size">').text(strings.fileSize(data.size, 1))
+                $('<span class="size">').text(strings.fileSize(size, 1))
             );
         },
 
@@ -279,6 +281,9 @@ define('io.ox/mail/common-extensions', [
                 $('<span class="account-name">').text(baton.data.account_name || '')
             );
         },
+
+        //#. empty message for list view
+        empty: function () { this.text(gt('Empty')); },
 
         // add orignal folder as label to search result items
         folder: function (baton) {
@@ -462,8 +467,8 @@ define('io.ox/mail/common-extensions', [
             return function (baton) {
 
                 if (baton.attachments.length === 0) return $.when();
-
-                var headers = baton.model.get('headers') || {};
+                // ensure there's a model when reading headers
+                var headers = baton.model ? baton.model.get('headers') : baton.data.headers || {};
                 // hide attachments for our own share invitations
                 if (headers['X-Open-Xchange-Share-Type']) this.hide();
 
@@ -526,10 +531,7 @@ define('io.ox/mail/common-extensions', [
         unreadToggle: (function () {
 
             function getAriaLabel(data) {
-                return util.isUnseen(data) ?
-                    gt('This message is unread, press this button to mark it as read.') :
-                    gt('This message is read, press this button to mark it as unread.');
-
+                return util.isUnseen(data) ? gt('Unread') : gt('Read');
             }
 
             function toggle(e) {
@@ -537,7 +539,10 @@ define('io.ox/mail/common-extensions', [
                 var data = e.data.model.toJSON();
                 // toggle 'unseen' bit
                 if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
-                $(this).attr('aria-label', getAriaLabel(data));
+                $(this).attr({
+                    'aria-label': getAriaLabel(data),
+                    'aria-pressed': util.isUnseen(data)
+                });
             }
 
             return function (baton) {
@@ -546,7 +551,10 @@ define('io.ox/mail/common-extensions', [
 
                 this.append(
                     $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
-                    .attr('aria-label', getAriaLabel(baton.data))
+                    .attr({
+                        'aria-label': getAriaLabel(baton.data),
+                        'aria-pressed': util.isUnseen(baton.data)
+                    })
                     .append('<i class="fa" aria-hidden="true">')
                     .on('click', { model: baton.view.model }, toggle)
                 );

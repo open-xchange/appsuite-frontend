@@ -13,9 +13,10 @@
 
 define('io.ox/mail/categories/dialogs', [
     'io.ox/backbone/views/modal',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'less!io.ox/mail/categories/style'
-], function (Modal, gt) {
+], function (Modal, settings, gt) {
 
     'use strict';
 
@@ -29,37 +30,32 @@ define('io.ox/mail/categories/dialogs', [
     return {
         Generalize: function (parent, obj) {
             // preferred setting for generation (never, always, ask[default])
-            if (parent.props.get('generalize') === 'never') return;
-            if (parent.props.get('generalize') === 'always') return parent.trigger('dialog:generalize', obj);
+            var userpref = settings.get('categories-extra/generalize');
+            if (userpref === 'never') return;
+            if (userpref === 'always') return parent.trigger('dialog:generalize', obj);
 
             return new Modal({
                 title: gt('Apply for all mails?'),
                 point: 'io.ox/mail/categories/generalize',
                 //focus: '.form-inline',
                 maximize: false,
+                model: new Backbone.Model(obj),
                 enter: 'close'
-            })
-            .extend({
-                default: function (baton) {
-                    _.extend(baton, { data: obj.data, target: obj.target, source: obj.source });
-                    this.addClass('mail-categopries-dialog');
-                },
-                description: function () {
-                    this.append(
-                        $('<p class="description">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs.'))
-                    );
+            }).extend({
+                default: function () {
+                    this.addClass('mail-categories-dialog');
                 },
                 'info-target': function (baton) {
                     this.append(
                         $('<p>').html(
                             //#. %1$s target mail category
                             //#, c-format
-                            gt('This mail was moved to %1$s.', '<i>' + baton.target + '</i>')
+                            gt('This mail was moved to %1$s.', '<i>' + baton.view.model.get('targetname') + '</i>')
                         )
                     );
                 },
                 'info-addresses': function (baton) {
-                    var list = senderlist(baton.data);
+                    var list = senderlist(baton.view.model.get('data'));
                     this.append(
                         $('<p>').html(
                              //#. %1$s single mail address or comma separated list of multiple
@@ -70,10 +66,12 @@ define('io.ox/mail/categories/dialogs', [
                 },
                 register: function (baton) {
                     baton.view.on('generalize', function () {
-                        parent.trigger('dialog:generalize', baton);
+                        var obj = _.pick(baton.view.model.toJSON(), 'data', 'targetname', 'target', 'source');
+                        parent.trigger('dialog:generalize', obj);
                     });
                     baton.view.on('revert', function () {
-                        parent.trigger('dialog:revert', baton);
+                        var obj = _.pick(baton.view.model.toJSON(), 'data', 'targetname', 'target', 'source');
+                        parent.trigger('dialog:revert', obj);
                     });
                 }
             })
@@ -91,6 +89,7 @@ define('io.ox/mail/categories/dialogs', [
                     // text input
                     var target = $(e.target);
                     if (target.hasClass('name')) return;
+                    if (target.find('.status').is(':disabled')) return;
                     // visualize disabled state
                     var container = $(this);
                     container.toggleClass('active');
@@ -125,34 +124,38 @@ define('io.ox/mail/categories/dialogs', [
             .extend({
                 default: function (baton) {
                     _.extend(baton, { collection: parent.categories });
-                    this.addClass('mail-categopries-dialog');
+                    this.addClass('mail-categories-dialog');
                 },
                 description: function () {
                     this.append(
-                        $('<p class="description">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs.'))
+                        $('<p class="description-main">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs.'))
                     );
                 },
                 'form-inline': function () {
-                    this.append($('<form class="form-inline">'));
+                    this.append($('<form class="form-inline-container">'));
                 },
                 'form-group': function (baton) {
                     var list = baton.collection.map(function (model) {
-                        var node = $('<div class="form-group category-item">')
-                            .attr('data-id', model.get('id'))
-                            .append(
-                                $('<input type="checkbox" class="status" data-action="toggle">')
-                                    .prop('checked', model.is('active')),
-                                $('<input type="text" class="form-control name">')
-                                    .attr('placeholder', gt('Name'))
-                                    .val(model.get('name'))
-                            );
+                        var node =
+                        $('<form class="form-inline">').append(
+                            $('<div class="form-group category-item">')
+                                .attr('data-id', model.get('id'))
+                                .append(
+                                    $('<input type="checkbox" class="status" data-action="toggle">')
+                                        .prop('checked', model.is('active')),
+                                    $('<input type="text" class="form-control name">')
+                                        .attr('placeholder', gt('Name'))
+                                        .val(model.get('name'))
+                                ),
+                            model.get('description') ? $('<div class="description">').text(model.get('description')) : $()
+                        );
                         // apply states and permissions
-                        if (model.is('active')) node.addClass('active');
+                        if (model.is('active')) node.find('.category-item').addClass('active');
                         if (!model.can('disable')) node.find('.status').attr('disabled', true);
                         if (!model.can('rename')) node.find('.name').attr('disabled', true);
                         return node;
                     });
-                    this.find('.form-inline').append(list);
+                    this.find('.form-inline-container').append(list);
                 },
                 'locked-hint': function (baton) {
                     var locked = baton.collection.filter(function (model) {
@@ -160,7 +163,7 @@ define('io.ox/mail/categories/dialogs', [
                     });
                     if (!locked.length) return;
                     this.append(
-                        $('<p class="description hint">').text(gt('Please note that some of the tabs can not be disabled.'))
+                        $('<p class="description-main hint">').text(gt('Please note that some of the tabs can not be disabled.'))
                     );
                 },
                 register: function (baton) {

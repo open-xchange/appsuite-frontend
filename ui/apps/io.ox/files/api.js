@@ -319,9 +319,10 @@ define('io.ox/files/api', [
         var url = ox.apiRoot + '/files',
             folder = encodeURIComponent(file.folder_id),
             id = encodeURIComponent(file.id),
+            sessionData = '&user=' + ox.user_id + '&context=' + ox.context_id + '&sequence=' + file.last_modified,
             version = file.version !== undefined && options.version !== false ? '&version=' + file.version : '',
             // basic URL
-            query = '?action=document&folder=' + folder + '&id=' + id + version,
+            query = '?action=document&folder=' + folder + '&id=' + id + version + sessionData,
             // file name
             name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
             // scaling options
@@ -341,7 +342,7 @@ define('io.ox/files/api', [
             case 'preview':
                 return (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
             case 'cover':
-                return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + '&content_type=image/jpeg&' + buster;
+                return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
             case 'play':
                 return url + query + '&delivery=view';
             // open/view
@@ -448,7 +449,12 @@ define('io.ox/files/api', [
                             new Array(Math.max(0, start - folders.length)),
                             files
                         );
-                        return unified.slice(start, stop);
+
+                        var result = unified.slice(start, stop);
+                        result.forEach(function (el, index) {
+                            result[index] = mergeDetailInPool(el);
+                        });
+                        return result;
                     },
                     function fail(e) {
                         if (e.code === 'IFO-0400' && e.error_params.length === 0) {
@@ -501,6 +507,13 @@ define('io.ox/files/api', [
 
     }());
 
+    // merges assigned data in pool
+    // and return the merged result!
+    function mergeDetailInPool(data) {
+        pool.add('detail', data);
+        return pool.get('detail').get(_.cid(data)).toJSON();
+    }
+
     //
     // GET a single file
     //
@@ -529,8 +542,7 @@ define('io.ox/files/api', [
             params: params
         })
         .then(function (data) {
-            pool.add('detail', data);
-            return data;
+            return mergeDetailInPool(data);
         }, function (error) {
             api.trigger('error error:' + error.code, error);
             return error;
@@ -575,10 +587,6 @@ define('io.ox/files/api', [
             return this.get(_.cid(item)).toJSON();
         }
 
-        function add(item) {
-            pool.add('detail', item);
-        }
-
         return function (ids, options) {
 
             var uncached = ids, collection = pool.get('detail');
@@ -600,7 +608,7 @@ define('io.ox/files/api', [
             }))
             .then(function (array) {
                 // add new items to the pool
-                _(array).each(add);
+                _(array).each(mergeDetailInPool);
                 // reconstruct results
                 return _(ids).map(getter, collection);
             });
@@ -1046,7 +1054,7 @@ define('io.ox/files/api', [
             .then(function (data) {
                 model.set({ versions: data, number_of_versions: data.length });
                 // make sure we always get the same result (just data; not timestamp)
-                return data;
+                return model.toJSON();
             });
         },
 
@@ -1108,9 +1116,8 @@ define('io.ox/files/api', [
             params: _(options).pick('action', 'columns', 'sort', 'order', 'limit', 'folder'),
             data: api.search.getData(query, options)
         })
-        .done(function (data) {
-            pool.add('detail', data);
-            return data;
+        .done(function (d) {
+            _(d).each(mergeDetailInPool);
         });
     };
 

@@ -83,6 +83,8 @@ define('io.ox/calendar/list/view-grid-template', [
                 fields.title
                     .text(a11yLabel = data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
 
+                if (!!data.private_flag) a11yLabel += ', ' + gt('Private');
+
                 if (data.location) {
                     //#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
                     //#. This fragment appears within a long string for screen readers

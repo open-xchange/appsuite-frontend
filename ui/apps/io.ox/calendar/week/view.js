@@ -1078,7 +1078,7 @@ define('io.ox/calendar/week/view', [
                 $.txt(' '),
                 $('<span class="cw">').text(
                     //#. %1$d = Calendar week
-                    gt('CW %1$d', moment(this.startDate).day(1).isoWeek())
+                    gt('CW %1$d', moment(this.startDate).format('w'))
                 ),
                 $('<i>').addClass('fa fa-caret-down fa-fw').attr({ 'aria-hidden': true })
             );
@@ -1996,12 +1996,10 @@ define('io.ox/calendar/week/view', [
                 .attr({ tabindex: 1 })
                 .addClass(classes)
                 .append(
-                    $('<div>')
-                    .addClass('appointment-content')
-                    .append(
-                        a.get('private_flag') ? $('<span class="private-flag"><i class="fa fa-lock" aria-hidden="true"></i></span>') : '',
-                        a.get('title') ? $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
-                        a.get('location') ? $('<div>').addClass('location').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
+                    $('<div class="appointment-content">').append(
+                        a.get('private_flag') ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
+                        a.get('title') ? $('<div class="title">').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
+                        a.get('location') ? $('<div class="location">').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
                     )
                 )
                 .attr({

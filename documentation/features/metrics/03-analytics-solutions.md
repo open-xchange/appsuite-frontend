@@ -5,7 +5,7 @@ description:
 
 # PIWIK
 
-With this easy step-by-step guide it should be quite simple to setup PIWIK and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [here](TODO).
+With this easy step-by-step guide it should be quite simple to setup PIWIK and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [here](ui/features/metrics/02-adapters.html#piwik).
 
 ## Preconditions
 

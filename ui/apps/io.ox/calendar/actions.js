@@ -326,7 +326,18 @@ define('io.ox/calendar/actions', [
         action: function (baton) {
             require(['io.ox/calendar/freetime/main'], function (freetime) {
                 var perspective = baton.app.getWindow().getPerspective(),
-                    startDate = perspective && perspective.getStartDate ? perspective.getStartDate() : _.now();
+                    now = _.now(),
+                    startDate = perspective && perspective.name !== 'month' && perspective.getStartDate ? perspective.getStartDate() : now,
+                    layout = perspective ? perspective.app.props.get('layout') : '';
+
+                // see if the current day is in the displayed week.
+                if (startDate < now && layout.indexOf('week:') === 0) {
+                    // calculate end of week/workweek
+                    var max = startDate + 86400000 * (layout === 'week:workweek' ? 5 : 7);
+                    if (now < max) {
+                        startDate = now;
+                    }
+                }
 
                 freetime.showDialog({ startDate: startDate, participants: [{ id: ox.user_id, type: 1 }] }).done(function (data) {
                     var view = data.view;

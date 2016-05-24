@@ -521,12 +521,36 @@
                 width: @viewer-audio-cover-size;
                 min-height: 34px;
             }
+
+            .play-button {
+                position: absolute;
+                width: 280px;
+                height: 280px;
+                padding-top: 100px;
+                text-align: center;
+                font-size: 56px;
+                color: #eee;
+                cursor: pointer;
+            }
+            .player-text {
+                text-align: center;
+            }
         }
 
         .viewer-displayer-video {
             min-height: 34px;
 
             &.player-hidden { display: none; }
+        }
+
+        .viewer-displayer-audio-video-placeholder {
+            width: 90%;
+            height: 90%;
+
+            i {
+                font-size: 56px;
+                text-align: center;
+            }
         }
 
         .document-container .document-page {

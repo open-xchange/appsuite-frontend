@@ -317,7 +317,7 @@ define('io.ox/mail/detail/view', [
             // add to DOM
             this.idle().append(node);
             // ensure, that the scrollable is a lazyload scrollpane
-            if (this[0].host) {
+            if (this[0] && this[0].host) {
                 // if it is a shadow dom, we must trigger add.lazyload to ensure, that lazyloading is updated at least once
                 $(this[0].host).closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
                 // copy events

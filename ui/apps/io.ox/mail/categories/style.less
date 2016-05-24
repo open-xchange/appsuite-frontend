@@ -15,8 +15,13 @@
     .categories-toolbar-container { display: none; }
 }
 
-.mail-categopries-dialog {
+.mail-categories-dialog {
     i { font-weight: 500; }
+
+    .description {
+        padding-left: 22px;
+        padding-bottom: 6px;
+    }
 
     .category-item {
         display: flex;
@@ -42,6 +47,21 @@
             font-style: italic;
             color: #888;
         }
+    }
+}
+
+// drag and drop helper text
+.categories-toolbar-container {
+    .link { line-height: 40px; }
+    .category-drop-helper { display: none; }
+}
+body.dragging .categories-toolbar-container {
+    .link { line-height: 20px; }
+    .category-drop-helper {
+        display: block;
+        padding: 0 16px;
+        font-size: 12px;
+        font-weight: 300;
     }
 }
 
@@ -89,13 +109,13 @@
             // arrange child
             flex: 1;
             display: flex;
+            flex-direction: column;
             // vertical separation
             max-width: 160px;
 
             &.selected { background: white; }
 
             .link {
-                line-height: 40px;
                 padding: 0 16px;
                 display: flex;
                 width: 100%;
@@ -115,8 +135,10 @@
                     font-weight: 700;
                 }
 
+                .category-icon, .category-name, .category-counter {
+                    display: inline-block;
+                }
 
-                div { display: inline-block; }
                 // hide empty child nodes (like counter)
                 div:empty, span:empty {display: none; }
             }

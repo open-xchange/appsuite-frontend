@@ -11,7 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/tours/get-started', ['io.ox/core/extensions', 'io.ox/core/tk/wizard', 'gettext!io.ox/core'], function (ext, Tour, gt) {
+define('io.ox/tours/get-started', [
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'io.ox/core/tk/wizard',
+    'gettext!io.ox/core'
+], function (ext, capabilities, Tour, gt) {
 
     'use strict';
 
@@ -26,14 +31,15 @@ define('io.ox/tours/get-started', ['io.ox/core/extensions', 'io.ox/core/tk/wizar
 
         onClick: function (e) {
             e.preventDefault();
-            var app = ox.ui.App.getCurrentApp(), description, self = this;
-            if (app && _.isFunction(app.getTour)) {
-                description = app.getTour();
-                require([description.path], function () {
-                    self.$el.trigger('start', app);
-                    Tour.registry.run(description.id);
-                });
-            }
+            var node = $(e.target).closest('li'),
+                path = node.attr('data-path'),
+                dependencies = path && path.split(',');
+            // load and start wizard
+            require(dependencies, function () {
+                var app = ox.ui.App.getCurrentApp();
+                this.$el.trigger('start', app);
+                Tour.registry.run(node.attr('data-id'));
+            }.bind(this));
         },
 
         onStart: function (e, app) {
@@ -43,7 +49,7 @@ define('io.ox/tours/get-started', ['io.ox/core/extensions', 'io.ox/core/tk/wizar
                     id: 'io.ox/guidedtour'
                 });
                 // track
-                var name = app.get('trackingId') || app.get('id') || app.get('name');
+                var name = app.get('trackingId') || app.get('name') || app.get('id');
                 metrics.trackEvent({
                     app: 'core',
                     target: 'toolbar',
@@ -54,11 +60,30 @@ define('io.ox/tours/get-started', ['io.ox/core/extensions', 'io.ox/core/tk/wizar
             });
         },
 
+        hide: function () { return this.$el.toggle(false); },
+        show: function () { return this.$el.toggle(true); },
+
         onAppChange: function () {
-            // check if the current app implements getTour()
-            var app = ox.ui.App.getCurrentApp(),
-                visible = !!app && _.isFunction(app.getTour) && !_.isEmpty(app.getTour());
-            this.$el.toggle(visible);
+            //no tours for guests, yet. See bug 41542
+            if (capabilities.has('guest')) return this.hide();
+
+            var app = ox.ui.App.getCurrentApp();
+            // there are cases where there is no current app (e.g. restore mail compose, then press cancel)
+            if (app === null) return this.hide();
+
+            // deprecated way via app.getTour
+            var fn = app && _.isFunction(app.getTour),
+                response = fn && app.getTour();
+            if (fn && !_.isEmpty(response)) {
+                console.warn('guided tours: getTour is deprecated. Please use a manifest entry instead.');
+                return this.show().attr({ 'data-id': response.id, 'data-path': response.path });
+            }
+            // fresh and shiny new way via manifests
+            var id = 'default/' + app.getName(),
+                list = ox.manifests.pluginsFor(id);
+            if (list.length) return this.show().attr({ 'data-id': id, 'data-path': list });
+
+            this.hide();
         },
 
         initialize: function () {

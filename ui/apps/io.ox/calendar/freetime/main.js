@@ -101,7 +101,7 @@ define('io.ox/calendar/freetime/main', [
                     view = new freetimeView(options);
 
                 popup.addCancelButton();
-                popup.addButton({ label: gt('Save'), action: 'save' });
+                popup.addButton({ label: gt('Create appointment'), action: 'save' });
                 popup.open();
                 // append after header so it does not scroll with the rest of the view
                 popup.$el.find('.modal-header').after(view.renderHeader());

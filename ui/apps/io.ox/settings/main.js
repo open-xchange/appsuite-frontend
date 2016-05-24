@@ -91,7 +91,7 @@ define('io.ox/settings/main', [
                     case 'changeGrid':
                         if (previousSelection !== null && previousSelection.lazySaveSettings === true && changeStatus === true) {
                             settingsID = previousSelection.id + '/settings';
-                            ext.point(settingsID + '/detail').invoke('save');
+                            ext.point(settingsID + '/detail').invoke('save', null, right);
                             changeStatus = false;
                         }
                         break;
@@ -539,13 +539,6 @@ define('io.ox/settings/main', [
                 return saveSettings('logout');
             }
         });
-
-        app.getTour = function () {
-            //no tours for guests, yet. See bug 41542
-            if (capabilities.has('guest')) return;
-
-            return { id: 'default/io.ox/settings', path: 'io.ox/tours/settings' };
-        };
 
         app.setSettingsPane = function (options) {
             if (options && (options.id || options.folder)) {

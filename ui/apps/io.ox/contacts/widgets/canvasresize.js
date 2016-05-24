@@ -167,7 +167,9 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
                 canvas.height = ih;
                 var ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0);
-                var data = ctx.getImageData(0, 0, 1, ih).data;
+                // don't use 0,0,1,ih or you get issues with cropped images when using transparent pngs
+                // see https://github.com/enyo/dropzone/issues/813
+                var data = ctx.getImageData(1, 0, 1, ih).data;
                 // search image edge pixel position in case it is squashed vertically.
                 var sy = 0;
                 var ey = ih;

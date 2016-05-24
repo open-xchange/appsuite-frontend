@@ -1108,6 +1108,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Povolit přednačítání obrázků odkazovaných z externích zdrojů"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1313,6 +1317,10 @@ msgstr "Server příchozí pošty"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Vzestupně"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1843,6 +1851,12 @@ msgstr "Kliknutím otevřete."
 msgid "Click to open. Drag to your desktop to download."
 msgstr "Kliknutím otevřete. Přetažením na plochu stáhnete."
 
+#: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to upload image"
+msgid "Click to play audio file"
+msgstr "Kliknutím nahrajete obrázek"
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
 msgstr "Klikněte, chcete-li to zkusit znovu."
@@ -1860,6 +1874,12 @@ msgstr "Vybrat kontakt"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Click to show or hide actions for advanced users."
 msgstr "Kliknutím zobrazíte nebo skryjete činnosti pro pokročilé uživatele."
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Click to start video"
+msgstr "Klikněte, chcete-li to zkusit znovu."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
@@ -2003,6 +2023,12 @@ msgstr "Konfigurační zpráva"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Nastavit"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Nastavit"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2239,7 +2265,8 @@ msgid "Create"
 msgstr "Vytvořit"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Vytvořit schůzku"
 
@@ -2961,6 +2988,10 @@ msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "Upusťte zde pro nahrání <b class=\"dndignore\">nové verze</b> „%1$s“"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
+
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
 msgid "Drop new version of \"%1$s\" here"
@@ -3190,8 +3221,8 @@ msgstr "Druh zaměstnance"
 msgid "Employment"
 msgstr "Zaměstnání"
 
-#. when items list is empty (e.g. search result)
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#. empty message for list view
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Prázdné"
 
@@ -4221,6 +4252,18 @@ msgstr "Probíhá"
 msgid "Inbox"
 msgstr "Doručená pošta"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox Tabs"
+msgstr "Doručená pošta"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Doručená pošta"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Zahrnout distribuční seznamy"
@@ -4368,6 +4411,10 @@ msgstr "Je přesně"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "Je menší než"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "It will take some time until mails are assigned to the default tabs"
+msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -4710,12 +4757,6 @@ msgstr "Poštovní adresa (povinné)"
 msgid "Mail and Messaging"
 msgstr "Pošta a posílání zpráv"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Mail categories"
-msgstr "Dostupné kategorie:"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Limit počtu zpráv"
@@ -5017,6 +5058,12 @@ msgstr "Přesunout"
 msgid "Move all"
 msgstr "Přesunout vše"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Uplatnit na všechny podsložky"
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
 msgid "Move all messages"
@@ -5098,6 +5145,7 @@ msgstr "Potřebujete víc místa?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nikdy"
 
@@ -5310,6 +5358,7 @@ msgstr "Žádné ztracené požadavky"
 msgid "No mails in your inbox"
 msgstr "Vaše složka příchozích zpráv je prázdná"
 
+#. search feature returns an empty result
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Nepodařilo se nalézt žádné odpovídající položky"
@@ -6312,7 +6361,8 @@ msgstr "Priorita"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6445,6 +6495,14 @@ msgid ""
 msgstr ""
 "Hodnocení %1$d z %2$d. Stiskněte Enter pro potvrzení, nebo použijte šipku "
 "doleva či doprava pro změnu svého hodnocení."
+
+#
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "to"
+#| msgid "Read"
+msgid "Read"
+msgstr "Přečíst"
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -6718,8 +6776,10 @@ msgstr "Opakovat"
 msgid "Repeat new password"
 msgstr "Zopakujte nové heslo"
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
+#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
 msgid "Reply"
 msgstr "Odpovědět"
 
@@ -6733,6 +6793,7 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Komu odpovědět"
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Reply to all"
 msgstr "Odpovědět všem"
@@ -6881,7 +6942,6 @@ msgid "Sales Volume"
 msgstr "Objem prodeje"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
@@ -7116,6 +7176,12 @@ msgstr "Poslat zprávu všem účastníkům"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Poslat novou zprávu"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "New notifications"
+msgid "Send notification"
+msgstr "Nová oznámení"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
@@ -7376,6 +7442,12 @@ msgstr "Zobrazit interní odkaz"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Zobrazit seznam"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show images"
+msgid "Show message size"
+msgstr "Zobrazit obrázky"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -8582,18 +8654,6 @@ msgstr "Tento soubor zamkl(a) %1$s"
 msgid "This message has been truncated due to size limitations."
 msgstr "Tato zpráva byla zkrácena kvůli velikostnímu limitu."
 
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-"Tato zpráva je přečtená. Kliknutím na toto tlačítko ji označíte jako "
-"nepřečtenou."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-"Tato zpráva není přečtená. Kliknutím na toto tlačítko ji označíte jako "
-"přečtenou."
-
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Tato poznámka se nebude tisknout"
@@ -8663,6 +8723,11 @@ msgid ""
 msgstr ""
 "Chcete-li přidat kontakty ručně, zadejte platnou e-mailovou adresu (např. "
 "jan.novak@priklad.cz nebo „Jan Novák\" <jan.novak@priklad.cz>)"
+
+#. Helper text for mail tabs without content
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "To fill this area please drag and drop mails to the title of this tab."
+msgstr ""
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -11830,11 +11895,6 @@ msgstr "rrrr"
 
 #~ msgid "Apply a Template (optional)"
 #~ msgstr "Použít šablonu (volitelné)"
-
-#, fuzzy
-#~| msgid "Apply to all subfolders"
-#~ msgid "Apply move to all mails from a sender"
-#~ msgstr "Uplatnit na všechny podsložky"
 
 #~ msgid "Appointment '%s' not found."
 #~ msgstr "Schůzka ‚%s‘ nebyla nalezena."
@@ -15055,6 +15115,11 @@ msgstr "rrrr"
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Poštovní a sociální účty"
 
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Mail categories"
+#~ msgstr "Dostupné kategorie:"
+
 #~ msgid "Mail port"
 #~ msgstr "Poštovní port"
 
@@ -16299,11 +16364,6 @@ msgstr "rrrr"
 
 #~ msgid "RUB"
 #~ msgstr "RUB"
-
-#
-#~ msgctxt "to"
-#~ msgid "Read"
-#~ msgstr "Přečíst"
 
 #~ msgid "Read Acknowledgement"
 #~ msgstr "Přečíst potvrzení"
@@ -17916,6 +17976,16 @@ msgstr "rrrr"
 #~ msgstr ""
 #~ "Tato zpráva obsahuje aktualizace schůzky, které již přijal jiný uživatel. "
 #~ "Touto zprávou se nemusíte zabývat."
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Tato zpráva je přečtená. Kliknutím na toto tlačítko ji označíte jako "
+#~ "nepřečtenou."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Tato zpráva není přečtená. Kliknutím na toto tlačítko ji označíte jako "
+#~ "přečtenou."
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"

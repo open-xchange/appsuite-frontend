@@ -601,6 +601,7 @@ define('io.ox/mail/api', [
                 //not doing this as a standardaction to prevent errors with functions looking only for the list parameter
                 return { list: list, response: response };
             }
+            api.trigger('update:after');
             // return list
             return list;
         });
@@ -837,13 +838,17 @@ define('io.ox/mail/api', [
                 folderAPI.reload(targetFolderId, list);
                 // any errors? (debugging code below)
                 var e = _(data.response).find(function (item) { return !!item.error; });
-                if (e) return $.Deferred().reject(e.error);
+                if (e) {
+                    // something went wrong; let's kind of rollback
+                    api.trigger('refresh.all');
+                    return $.Deferred().reject(e.error);
+                }
             })
         );
     }
 
     // debugging error
-    // response[0] = {
+    // e = {
     //     error: 'Die zulässige Quota auf dem Mailserver \"dovecot.qa.open-xchange.com\" wurde überschritten.',
     //     error_params: ['dovecot.qa.open-xchange.com ', 'applause40', 42, 26, 'NO [OVERQUOTA] Quota exceeded (mailbox for user is full) (0.000 secs).'],
     //     code: 'MSG-1024'
@@ -1379,7 +1384,11 @@ define('io.ox/mail/api', [
                 action: 'attachment',
                 folder: (data.parent || data.mail).folder_id,
                 id: (data.parent || data.mail).id,
-                attachment: data.id
+                attachment: data.id,
+                user: ox.user_id,
+                context: ox.context_id,
+                // mails don't have a last modified attribute, just use 1
+                sequence: 1
             });
         switch (mode) {
             case 'view':

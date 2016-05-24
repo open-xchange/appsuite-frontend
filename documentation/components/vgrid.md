@@ -1,7 +1,7 @@
 ---
 title: VGrid
 description: The VGrid is a grid used to structure contents in the main viewport.
-deprecated: true
+classes: deprecated
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:VGrid
 ---
 

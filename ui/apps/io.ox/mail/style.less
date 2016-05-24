@@ -541,8 +541,6 @@
         html.high-contrast & { opacity: 1; }
     }
 
-    .size { color: @link-color; }
-
     .actions {
         font-size: 14px;
 
@@ -1007,16 +1005,21 @@ textarea.inplace-editor {
 
         & > h1 {
             font-size: @phone-font-size;
-            padding-bottom: 24px;
+            padding-bottom: 10px;
             background-color: #aaa;
             color: #fff;
             .summary {
                 font-size: @phone-font-size - 2;
                 color: #fff;
-                margin-top: -8px;
+            }
+            .subject {
+                line-height: 20px;
+                margin-bottom: 20px;
             }
         }
-
+        .row-3{
+            display: none;
+        }
         .thread-view header { border-bottom: 1px solid #ccc; }
 
         .from, .recipients, .date {
@@ -1029,7 +1032,7 @@ textarea.inplace-editor {
 
         .from .person-link.person-from { font-weight: 500; }
 
-        .mail-detail:not(.expanded) .recipients { max-height: auto; }
+        .mail-detail:not(.expanded) .recipients { max-height: initial; }
     }
 
     .mail-item  {

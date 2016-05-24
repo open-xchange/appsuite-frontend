@@ -12,13 +12,19 @@
  */
 
 define('io.ox/files/actions/save-as-pdf', [
+
     'io.ox/files/api',
+    'io.ox/files/util',
+
+    'io.ox/presenter/errormessages',
+
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
-    'io.ox/files/util',
     'io.ox/core/tk/doc-converter-utils',
+
     'gettext!io.ox/files'
-], function (FilesApi, ext, dialogs, FilesUtil, ConverterUtils, gt) {
+
+], function (FilesApi, FilesUtil, ErrorMessages, ext, dialogs, ConverterUtils, gt) {
 
     'use strict';
 
@@ -31,7 +37,7 @@ define('io.ox/files/actions/save-as-pdf', [
 //      dialog = new Dialogs.SaveAsFileDialog({ title: title, value: newFileName, preselect: app.getFileParameters().folder_id });
 
         var
-            //data     = baton.data,
+        //  data     = baton.data,
             model    = baton.models[0],
 
         //  filename =     model.getDisplayName() + '.pdf';
@@ -57,9 +63,9 @@ define('io.ox/files/actions/save-as-pdf', [
                 if (('id' in response) && ('filename' in response)) {
 
                     FilesApi.trigger('add:file');
-                }/* else {
-                    // could be used for error handling
-                }*/
+                } else {
+                    notify('error', ErrorMessages.getConversionErrorMessage(response));
+                }
             });
         }
 

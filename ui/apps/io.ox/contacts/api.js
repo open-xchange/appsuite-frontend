@@ -711,7 +711,10 @@ define('io.ox/contacts/api', [
                     // scale
                     width: opt.width,
                     height: opt.height,
-                    scaleType: opt.scaleType
+                    scaleType: opt.scaleType,
+                    user: ox.user_id,
+                    context: ox.context_id,
+                    sequence: data.last_modified
                 });
                 url = data.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
 
@@ -747,7 +750,11 @@ define('io.ox/contacts/api', [
                 width: opt.width,
                 height: opt.height,
                 scaleType: opt.scaleType,
-                uniq: uniq
+                uniq: uniq,
+                user: ox.user_id,
+                context: ox.context_id,
+                // mails don't have a last modified attribute, just use 1
+                sequence: data.last_modified || 1
             });
 
             // remove empty values

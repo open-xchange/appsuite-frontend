@@ -144,6 +144,7 @@ define('io.ox/core/tk/list-dnd', [
         }());
 
         function drag(e) {
+            $('body').addClass('dragging');
             // unbind
             $(document).off('mousemove.dnd', drag);
             // get counter
@@ -183,6 +184,7 @@ define('io.ox/core/tk/list-dnd', [
 
         function remove() {
             if (helper !== null) {
+                $('body').removeClass('dragging');
                 helper.remove();
                 helper = fast = null;
             }
@@ -193,6 +195,7 @@ define('io.ox/core/tk/list-dnd', [
         }
 
         function stop() {
+            $('body').removeClass('dragging');
             // stop auto-scroll
             scroll.out();
             // unbind handlers
@@ -213,6 +216,7 @@ define('io.ox/core/tk/list-dnd', [
         function drop(e) {
             // avoid multiple events on parent tree nodes
             if (e.isDefaultPrevented()) return;
+            $('body').removeClass('dragging');
 
             e.preventDefault();
             // process drop

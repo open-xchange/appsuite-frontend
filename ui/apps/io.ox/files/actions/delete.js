@@ -49,9 +49,9 @@ define('io.ox/files/actions/delete', [
         });
 
         // delete folders
-        _(folders).each(function (folder) {
-            folderAPI.remove(folder.get('id'));
-        });
+        folderAPI.remove(_(folders).map(function (model) {
+            return model.get('id');
+        }));
     }
 
     return function (list) {
@@ -62,7 +62,7 @@ define('io.ox/files/actions/delete', [
 
         function isShared() {
             var result = _.findIndex(list, function (model) {
-                return model.get('object_permissions').length !== 0;
+                return model.get('object_permissions') ? model.get('object_permissions').length !== 0 : model.get('permissions').length > 1;
             });
 
             if (result !== -1) return true;

@@ -1089,6 +1089,10 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Vooraf laden van externe afbeeldingen toestaan"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1299,6 +1303,10 @@ msgstr "Als ingekomen mailserver"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Oplopend"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Ask"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1836,6 +1844,12 @@ msgstr "Klik om te openen."
 msgid "Click to open. Drag to your desktop to download."
 msgstr "Klik om te openen. Sleep naar het bureaublad om te downloaden."
 
+#: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to upload image"
+msgid "Click to play audio file"
+msgstr "Klik om de afbeelding te uploaden"
+
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
 msgstr "Klik om het opnieuw te proberen"
@@ -1854,6 +1868,12 @@ msgstr "Verwijder contactpersoon"
 msgid "Click to show or hide actions for advanced users."
 msgstr ""
 "Klik om de acties voor geavanceerde gebruikers te tonen of te verbergen."
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Click to start video"
+msgstr "Klik om het opnieuw te proberen."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
@@ -1999,6 +2019,12 @@ msgstr "Configuratiebericht"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
+msgstr "Configureer nu"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure you inbox tabs"
 msgstr "Configureer nu"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2235,7 +2261,8 @@ msgid "Create"
 msgstr "Aanmaken"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Afspraak maken"
 
@@ -2972,6 +2999,10 @@ msgstr ""
 "Sleep bestand hiernaartoe om als <b class=\"dndignore\">nieuwe versie</b> "
 "van \"%1$s\" toe te voegen"
 
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
+
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
 msgid "Drop new version of \"%1$s\" here"
@@ -3202,8 +3233,8 @@ msgstr "Type werknemer"
 msgid "Employment"
 msgstr "Werk"
 
-#. when items list is empty (e.g. search result)
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#. empty message for list view
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Leeg"
 
@@ -4245,6 +4276,18 @@ msgstr "Is bezig"
 msgid "Inbox"
 msgstr "Postvak IN"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox Tabs"
+msgstr "Postvak IN"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Inbox"
+msgid "Inbox tabs"
+msgstr "Postvak IN"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Distributielijst insluiten"
@@ -4392,6 +4435,10 @@ msgstr "Is exact"
 #: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "Is kleinder dan"
+
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "It will take some time until mails are assigned to the default tabs"
+msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Item List"
@@ -4734,12 +4781,6 @@ msgstr "E-mailadres (verplicht)"
 msgid "Mail and Messaging"
 msgstr "E-mail en Berichtenservice"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Mail categories"
-msgstr "E-mailadres"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Quotum aantal e-mails"
@@ -5042,6 +5083,12 @@ msgstr "Verplaatsen"
 msgid "Move all"
 msgstr "Verplaats alles"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Move all mails from a sender"
+msgstr "Toepassen op alle sub-mappen"
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
 msgid "Move all messages"
@@ -5123,6 +5170,7 @@ msgstr "Meer ruimte nodig?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nooit"
 
@@ -5335,6 +5383,7 @@ msgstr "Geen verloren verzoeken"
 msgid "No mails in your inbox"
 msgstr "Geen e-mailberichten in uw Postvak IN"
 
+#. search feature returns an empty result
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Geen overeenkomstige elementen gevonden"
@@ -6344,7 +6393,8 @@ msgstr "Prioriteit"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Private"
@@ -6477,6 +6527,10 @@ msgid ""
 msgstr ""
 "Beoordeling %1$d van %2$d. Gebruik Enter om deze te bevestigen of de linker "
 "en rechter pijltjestoetsen om de beoordeling aan te passen."
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Read"
+msgstr ""
 
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -6755,8 +6809,10 @@ msgstr "Herhaal"
 msgid "Repeat new password"
 msgstr "Herhaal nieuw wachtwoord"
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
+#: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
 msgid "Reply"
 msgstr "Beantwoorden"
 
@@ -6770,6 +6826,7 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Beantwoord naar"
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Reply to all"
 msgstr "Allen beantwoorden"
@@ -6918,7 +6975,6 @@ msgid "Sales Volume"
 msgstr "Verkoopvolume"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
@@ -7152,6 +7208,12 @@ msgstr "Verstuur een e-mail naar alle deelnemers"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Verzend nieuw e-mailbericht"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "New notifications"
+msgid "Send notification"
+msgstr "Nieuwe kennisgevingen"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
@@ -7407,6 +7469,12 @@ msgstr "Toon interne link"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Toon lijst"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show images"
+msgid "Show message size"
+msgstr "Afbeeldingen tonen"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -8626,18 +8694,6 @@ msgstr "Dit e-mailbericht heeft geen inhoud"
 msgid "This message has been truncated due to size limitations."
 msgstr "Dit e-mailbericht is ingekort vanwege afmetingsbeperkingen."
 
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
-msgstr ""
-"Dit bericht is gelezen, klik op deze knop om het bericht als ongelezen te "
-"markeren."
-
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-"Dit bericht is ongelezen, klik op deze knop om het bericht als gelezen te "
-"markeren."
-
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Deze notitie zal niet worden afgedrukt."
@@ -8707,6 +8763,11 @@ msgid ""
 msgstr ""
 "Om contacten toe te voegen hoeft u alleen een geldig e-mailadres op te geven "
 "(bijvoorbeeld john.doe@example.com of \"John Doe\" <jd@example.com>)"
+
+#. Helper text for mail tabs without content
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "To fill this area please drag and drop mails to the title of this tab."
+msgstr ""
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -10462,11 +10523,6 @@ msgstr "yyyy"
 #~ msgid "An error occurred"
 #~ msgstr "Er is geen fout opgetreden"
 
-#, fuzzy
-#~| msgid "Apply to all subfolders"
-#~ msgid "Apply move to all mails from a sender"
-#~ msgstr "Toepassen op alle sub-mappen"
-
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
 #~ msgstr[0] "De afspraak is gekopieerd"
@@ -11103,6 +11159,11 @@ msgstr "yyyy"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "E-mail en sociale accounts"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Mail categories"
+#~ msgstr "E-mailadres"
 
 #~ msgid "Mail text"
 #~ msgstr "Mailtekst"
@@ -11766,6 +11827,16 @@ msgstr "yyyy"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Dit kan enige tijd in beslag nemen"
+
+#~ msgid "This message is read, press this button to mark it as unread."
+#~ msgstr ""
+#~ "Dit bericht is gelezen, klik op deze knop om het bericht als ongelezen te "
+#~ "markeren."
+
+#~ msgid "This message is unread, press this button to mark it as read."
+#~ msgstr ""
+#~ "Dit bericht is ongelezen, klik op deze knop om het bericht als gelezen te "
+#~ "markeren."
 
 #~ msgid "Thursday"
 #~ msgstr "Donderdag"

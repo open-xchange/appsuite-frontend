@@ -172,6 +172,9 @@ define('io.ox/mail/inplace-reply', [
             // remember cid
             this.cid = options.cid;
 
+            // store numberOfRecipients to label the button correctly
+            this.numberOfRecipients = options.numberOfRecipients;
+
             this.$send = $();
             this.$textarea = $('<textarea class="inplace-editor form-control" tabindex="1">');
 
@@ -181,6 +184,15 @@ define('io.ox/mail/inplace-reply', [
         },
 
         render: function () {
+            var replyText;
+            // do _not_ use gt.ngettext here, see Bug 45798
+            if (this.numberOfRecipients === 1) {
+                //#. Used as a verb to reply to one recipient
+                replyText = gt('Reply');
+            } else {
+                //#. Used as a verb to reply to all recipients
+                replyText = gt('Reply to all');
+            }
 
             this.$el.append(
                 // editor
@@ -193,7 +205,7 @@ define('io.ox/mail/inplace-reply', [
                 $('<div class="form-group">').append(
                     this.$send = $('<button class="btn btn-primary btn-sm disabled" data-action="send" tabindex="1">')
                         .prop('disabled', true)
-                        .text(gt('Reply to all')),
+                        .text(replyText),
                     $.txt(' '),
                     $('<button class="btn btn-default btn-sm" data-action="cancel" tabindex="1">')
                         .text(gt('Cancel'))

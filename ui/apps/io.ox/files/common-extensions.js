@@ -29,7 +29,7 @@ define('io.ox/files/common-extensions', [
             if (baton.model.isFolder()) parts.push(gt('Folder'));
             parts.push(gt('modified') + ' ' + moment(baton.data.last_modified).format('LLL'));
             parts.push(gt('size') + ' ' + strings.fileSize(baton.data.file_size || 0, 1));
-            this.attr('aria-label', parts.join(', ') + '.');
+            this.closest('li').attr('aria-label', parts.join(', ') + '.');
         },
 
         date: function (baton, options) {

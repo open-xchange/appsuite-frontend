@@ -383,9 +383,9 @@ define('io.ox/calendar/month/view', [
                     .addClass('appointment-content')
                     .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
-                        a.get('private_flag') ? $('<span class="private-flag"><i class="fa fa-lock" aria-hidden="true"></i></span>') : '',
-                        a.get('title') ? $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
-                        a.get('location') ? $('<div>').addClass('location').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
+                        a.get('private_flag') ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
+                        a.get('title') ? $('<div class="title">').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
+                        a.get('location') ? $('<div class="location">').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
                     )
                 )
                 .attr({

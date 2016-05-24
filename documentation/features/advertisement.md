@@ -23,7 +23,7 @@ When using the default implementation, custom modules should return an object co
 - `config` - the configuration is simply stored internally
 
 The `config` object can contain arbitrary data.
-The `changeModule` method of the `io.ox/ads` extension point will be invoked with the app name as first parameter and a [Baton](TODO) containing
+The `changeModule` method of the `io.ox/ads` extension point will be invoked with the app name as first parameter and a [Baton](ui/extension-points/04-baton.html) containing
 a reference to the app and the `config` object.
 
 The default implementation expects the `config` object to contain one key for each [area](advertisment#areas).

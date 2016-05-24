@@ -73,12 +73,14 @@ define('io.ox/mail/actions', [
             var cid = _.cid(baton.data),
                 // needs baton view
                 view = baton.view,
+                // reply to all, so count, to, from, cc and bcc and subtract 1 (you don't sent the mail to yourself)
+                numberOfRecipients = _.union(baton.data.to, baton.data.from, baton.data.cc, baton.data.bcc).length - 1,
                 // hide inline link
                 link = view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').hide();
 
             require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
                 view.$('section.body').before(
-                    new InplaceReplyView({ tagName: 'section', cid: cid })
+                    new InplaceReplyView({ tagName: 'section', cid: cid, numberOfRecipients: numberOfRecipients })
                     .on('send', function (cid) {
                         view.$el.closest('.thread-view-control').data('open', cid);
                     })

@@ -73,6 +73,9 @@ define('io.ox/calendar/view-grid-template', [
 
                 fields.title
                     .text(a11yLabel = isPrivate ? gt('Private') : gt.noI18n(data.title || '\u00A0'));
+
+                if (!!data.private_flag) a11yLabel += ', ' + gt('Private');
+
                 if (data.conflict && !isPrivate) {
                     fields.title
                         .append(

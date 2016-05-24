@@ -61,8 +61,12 @@ define('io.ox/mail/autoforward/settings/register', [
             });
         },
 
-        save: function () {
-            filterModel.save();
+        save: function (node) {
+            filterModel.save().done(
+                function () {
+                    node.trigger('refresh:mailfilter');
+                }
+            );
         }
     });
 });

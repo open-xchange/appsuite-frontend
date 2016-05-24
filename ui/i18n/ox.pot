@@ -705,13 +705,13 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/freetime/main.js
-#: module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
@@ -934,7 +934,10 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js
+#: apps/io.ox/calendar/view-detail.js
 #: apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js
 #: module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js
@@ -4797,6 +4800,8 @@ msgstr ""
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
 msgid "Never"
 msgstr ""
 
@@ -6284,6 +6289,11 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/audioview.js
 #: module:io.ox/core
+msgid "Click to play audio file"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/types/audioview.js
+#: module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
 msgstr ""
 
@@ -6335,6 +6345,11 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/types/videoview.js
 #: module:io.ox/core
 msgid "Error while playing the video. Either your browser does not support the format or you have connection problems."
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/types/videoview.js
+#: module:io.ox/core
+msgid "Click to start video"
 msgstr ""
 
 #. Task: Done like in "Mark as done"
@@ -7098,6 +7113,11 @@ msgstr ""
 
 #: apps/io.ox/files/share/permissions.js
 #: module:io.ox/core
+msgid "Send notification"
+msgstr ""
+
+#: apps/io.ox/files/share/permissions.js
+#: module:io.ox/core
 msgid "Share \"%1$s\""
 msgstr ""
 
@@ -7553,6 +7573,7 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
+#. search feature returns an empty result
 #: apps/io.ox/find/main.js
 #: module:io.ox/core
 msgid "No matching items found."
@@ -7888,8 +7909,10 @@ msgstr ""
 msgid "Quick reply"
 msgstr ""
 
+#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
+#: apps/io.ox/mail/inplace-reply.js
 #: apps/plugins/portal/twitter/util.js
 #: module:plugins/portal
 msgid "Reply"
@@ -8141,11 +8164,6 @@ msgstr ""
 msgid "Apply for all mails?"
 msgstr ""
 
-#: apps/io.ox/mail/categories/dialogs.js
-#: module:io.ox/mail
-msgid "Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs."
-msgstr ""
-
 #. %1$s target mail category
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
@@ -8178,13 +8196,44 @@ msgstr ""
 
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
+msgid "Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs."
+msgstr ""
+
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
 msgid "Please note that some of the tabs can not be disabled."
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "Inbox tabs"
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "Configure you inbox tabs"
 msgstr ""
 
 #. use as a fallback name in case a user enters a empty string as the name of tab
 #: apps/io.ox/mail/categories/main.js
 #: module:io.ox/mail
 msgid "Unnamed"
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "Drop here!"
+msgstr ""
+
+#. Helper text for mail tabs without content
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "To fill this area please drag and drop mails to the title of this tab."
+msgstr ""
+
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "It will take some time until mails are assigned to the default tabs"
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
@@ -8196,6 +8245,12 @@ msgstr ""
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
 msgid "has attachments"
+msgstr ""
+
+#. empty message for list view
+#: apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail
+msgid "Empty"
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
@@ -8229,12 +8284,7 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
-msgid "This message is unread, press this button to mark it as read."
-msgstr ""
-
-#: apps/io.ox/mail/common-extensions.js
-#: module:io.ox/mail
-msgid "This message is read, press this button to mark it as unread."
+msgid "Read"
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
@@ -8600,6 +8650,7 @@ msgstr ""
 msgid "Drop EML file here for import"
 msgstr ""
 
+#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js
 #: module:io.ox/mail
 msgid "Reply to all"
@@ -8888,12 +8939,6 @@ msgstr ""
 msgid "Mail Details"
 msgstr ""
 
-#. when items list is empty (e.g. search result)
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
-msgid "Empty"
-msgstr ""
-
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
 msgid "No message selected"
@@ -9114,7 +9159,27 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
+msgid "Ask"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Always"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Inbox Tabs"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
 msgid "Show Tabs for inbox"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Move all mails from a sender"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
@@ -9259,12 +9324,12 @@ msgstr ""
 
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
-msgid "Statistics"
+msgid "Show message size"
 msgstr ""
 
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
-msgid "Mail categories"
+msgid "Statistics"
 msgstr ""
 
 #. (From) email1 via email2. Appears in email detail view.

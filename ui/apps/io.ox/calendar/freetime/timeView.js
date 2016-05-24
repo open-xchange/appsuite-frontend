@@ -111,7 +111,7 @@ define('io.ox/calendar/freetime/timeView', [
 
             for (var i = baton.model.get('startHour'); i <= baton.model.get('endHour'); i++) {
                 time.hours(i);
-                sections.push($('<span class="freetime-hour">').text(time.format('LT'))
+                sections.push($('<span class="freetime-hour">').text(time.format('LT')).val(i - baton.model.get('startHour'))
                     .addClass(i === worktimeEnd || i === worktimeStart ? 'working-hour' : ''));
             }
             this.append($('<div class="freetime-timeline">').append(sections));
@@ -131,10 +131,8 @@ define('io.ox/calendar/freetime/timeView', [
                 cells.push($('<span class="freetime-table-cell">')
                     .addClass(i === worktimeEnd || i === worktimeStart ? 'working-hour' : ''));
             }
-
-            // cells need to lie between the hours of the timeline, so move them by half a cell width
-            // calculate in pixel not %
-            this.append($('<div class="freetime-table">').css('width', baton.view.headerNode.outerWidth() + 'px')
+            // don't use jquerys outerwidth here (rounds to full pixels)
+            this.append($('<div class="freetime-table">').css('width', window.getComputedStyle(baton.view.headerNode[0]).width)
                     .append($('<div class="freetime-time-table">').append(cells)
                 ));
         }
@@ -147,7 +145,7 @@ define('io.ox/calendar/freetime/timeView', [
         draw: function (baton) {
             var table = this.find('.freetime-table');
             if (!baton.view.lassoNode) {
-                baton.view.lassoNode = $('<div class="freetime-lasso">').hide();
+                baton.view.lassoNode = $('<div class="freetime-lasso striped">').hide();
             }
             table.append(baton.view.lassoNode);
         }
@@ -161,6 +159,7 @@ define('io.ox/calendar/freetime/timeView', [
             var table = $('<div class="appointments">').appendTo(this.find('.freetime-table')),
                 start = moment(baton.model.get('currentDay')).add(baton.model.get('startHour'), 'hours').valueOf(),
                 end = moment(start).add(baton.model.get('endHour') - baton.model.get('startHour') + 1, 'hours').valueOf(),
+                tootltipContainer = baton.view.headerNode.parent().parent(),
                 difference = end - start;
 
             _(baton.model.get('participants').models).each(function (participant) {
@@ -180,7 +179,7 @@ define('io.ox/calendar/freetime/timeView', [
                                 'aria-label': appointment.title,
                                 'data-toggle': 'tooltip'
                             })
-                            .tooltip();
+                            .tooltip({ container: tootltipContainer });
                     }
                     if (appointment.full_time) {
                         appointmentNode.addClass('fulltime');
@@ -203,13 +202,14 @@ define('io.ox/calendar/freetime/timeView', [
         initialize: function () {
             var self = this,
                 resize = function () {
-                    self.bodyNode.find('.freetime-table').css('width', self.headerNode.outerWidth() + 'px');
+                    self.bodyNode.find('.freetime-table').css('width', window.getComputedStyle(self.headerNode[0]).width);
                 };
 
             this.pointHeader = pointHeader;
             this.pointBody = pointBody;
             this.headerNode = $('<div class="freetime-time-view-header">')
-                .delegate('.control.next,.control.prev,.control.today', 'click', self.onControlView.bind(this));
+                .delegate('.control.next,.control.prev,.control.today', 'click', self.onControlView.bind(this))
+                .delegate('.freetime-hour', 'click', self.onSelectHour.bind(this));
             this.bodyNode = $('<div class="freetime-time-view-body">')
                 .delegate('.freetime-table', 'mousedown', self.onMouseDown.bind(this))
                 .delegate('.freetime-table', 'mouseup', self.onMouseUp.bind(this))
@@ -224,6 +224,9 @@ define('io.ox/calendar/freetime/timeView', [
             this.model.get('participants').on('add reset remove', self.getAppointments.bind(this));
             this.model.on('change:currentDay', self.getAppointments.bind(this));
             this.model.on('change:appointments', self.renderBody.bind(this));
+
+            // calculate 15min grid for lasso
+            this.grid = 100 / ((this.model.get('endHour') - this.model.get('startHour') + 1) * 4);
         },
 
         renderHeader: function () {
@@ -248,7 +251,7 @@ define('io.ox/calendar/freetime/timeView', [
             this.bodyNode.busy(true);
             // get fresh appointments
             var self = this,
-                start = moment(this.model.get('currentDay')),
+                start = moment(this.model.get('currentDay')).add(this.model.get('startHour'), 'hours'),
                 end = moment(start).add(this.model.get('endHour') - this.model.get('startHour'), 'hours'),
                 participants = this.model.get('participants').toJSON(),
                 appointments = {};
@@ -263,17 +266,30 @@ define('io.ox/calendar/freetime/timeView', [
             });
         }, 150),
 
+        onSelectHour: function (e) {
+            var index = parseInt($(e.target).val(), 10),
+                width = 100 / (this.model.get('endHour') - this.model.get('startHour') + 1);
+            this.lassoStart = index * width;
+            this.lassoEnd = (index + 1) * width;
+            this.updateLasso();
+        },
+
+        setToGrid: function (coord) {
+            return this.grid * (Math.round(coord / this.grid));
+        },
+
         updateLasso: function () {
             if (this.lassoNode) {
                 if (this.lassoStart !== this.lassoEnd && this.lassoStart !== undefined && this.lassoEnd !== undefined) {
-                    var width;
+                    var width, start;
                     if (this.lassoStart < this.lassoEnd) {
-                        width = this.lassoEnd - this.lassoStart;
-                        this.lassoNode.css({ left: this.lassoStart + '%', width: width + '%' });
+                        start = this.setToGrid(this.lassoStart);
+                        width = this.setToGrid(this.lassoEnd - start);
                     } else {
-                        width = this.lassoStart - this.lassoEnd;
-                        this.lassoNode.css({ left: this.lassoEnd + '%', width: width + '%' });
+                        start = this.setToGrid(this.lassoEnd);
+                        width = this.setToGrid(this.lassoStart - start);
                     }
+                    this.lassoNode.css({ left: start + '%', width: width + '%' });
                     this.lassoNode.show();
                 } else {
                     this.lassoNode.hide();

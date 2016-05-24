@@ -80,7 +80,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         e.preventDefault();
         var data = $(this).data();
         ox.launch('io.ox/contacts/main', { folder: data.folder }).done(function () {
-            var app = this, folder = data.folder, id = data.id;
+            var app = this, folder = data.folder, id = String(data.id || '').replace(/\//, '.');
             if (app.folder.get() === folder) {
                 app.getGrid().selection.set(id);
             } else {
@@ -167,7 +167,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         ox.registry.call('mail-compose', 'compose', {
             to: [[name, address]],
             subject: params.subject || '',
-            attachments: params.body ? [{ content: params.body || '' }] : undefined
+            attachments: [{ content: params.body || '', disp: 'inline' }]
         });
     });
 });

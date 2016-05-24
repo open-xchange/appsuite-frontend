@@ -163,14 +163,21 @@ define('io.ox/core/tk/list', [
             this.$el.scrollTop(0);
         },
 
+        updateEmptyMessage: function () {
+            var baton = ext.Baton({ app: this.app, options: this.options }),
+                point = ext.point(this.ref + '/empty'),
+                isEmpty = !this.collection.length;
+            if (isEmpty && point.keys().length) {
+                point.invoke('draw', this.$('.message-empty'), baton);
+            }
+            this.$('.message-empty-container').toggleClass('hidden', !isEmpty);
+        },
+
         onReset: function () {
             this.empty();
             this.$el.append(
                 this.collection.map(this.renderListItem, this)
             );
-
-            // manage empty message
-            this.$el.find('.message-empty-container').toggleClass('hidden', this.collection.length > 0);
 
             this.trigger('reset', this.collection, this.firstReset);
             if (this.firstReset) {
@@ -185,9 +192,6 @@ define('io.ox/core/tk/list', [
             var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
                 children = this.getItems(),
                 li = this.renderListItem(model);
-
-            // manage the empty message
-            this.$el.find('.message-empty-container').toggleClass('hidden', this.collection.length > 0);
 
             // insert or append
             if (index < children.length) {
@@ -220,9 +224,6 @@ define('io.ox/core/tk/list', [
 
             if (this.selection) this.selection.remove(cid, li);
             li.remove();
-
-            // manage the empty message
-            this.$el.find('.message-empty-container').toggleClass('hidden', this.collection.length > 0);
 
             this.trigger('remove-mobile');
             // selection changes if removed item was selected
@@ -261,7 +262,7 @@ define('io.ox/core/tk/list', [
                 .remove();
 
             // manage the empty message
-            this.$el.find('.message-empty-container').toggleClass('hidden', this.collection.length > 0);
+            this.updateEmptyMessage();
 
             if (!selected) return;
 
@@ -584,6 +585,12 @@ define('io.ox/core/tk/list', [
                 'complete': this.onComplete,
                 // reload
                 'reload': this.idle
+            });
+            this.listenTo(collection, {
+                // backbone
+                'add': this.updateEmptyMessage,
+                'remove': this.updateEmptyMessage,
+                'reset': this.updateEmptyMessage
             });
             if (this.selection) this.selection.reset();
             this.trigger('collection:set');

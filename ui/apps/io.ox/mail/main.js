@@ -214,12 +214,6 @@ define('io.ox/mail/main', [
                 classes: 'rightside'
             });
 
-            app.getTour = function () {
-                //no tours for guests, yet. See bug 41542
-                if (capabilities.has('guest')) return;
-
-                return { id: 'default/io.ox/mail', path: 'io.ox/tours/mail' };
-            };
         },
 
         /*
@@ -293,6 +287,7 @@ define('io.ox/mail/main', [
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'contactPictures': _.device('smartphone') ? false : app.settings.get('showContactPictures', false),
                 'exactDates': app.settings.get('showExactDates', false),
+                'alwaysShowSize': app.settings.get('alwaysShowSize', false),
                 'mobileFolderSelectMode': false
             });
         },
@@ -404,16 +399,6 @@ define('io.ox/mail/main', [
             app.listView.toggleCheckboxes(false);
         },
 
-        'list-view-message-empty': function (app) {
-            // enable 'empty' message
-            app.listView.messageEmpty
-                //.removeClass('hidden')
-                .find('.message-empty')
-                // customize message
-                //#. when items list is empty (e.g. search result)
-                .text(gt('Empty'));
-        },
-
         /*
          * Scroll-o-mat
          * Scroll to top if new unseen messages arrive
@@ -521,7 +506,8 @@ define('io.ox/mail/main', [
                     .set(['viewOptions', folder], _.extend({ sort: data.sort, order: data.order, thread: data.thread }, options.viewOptions || {}))
                     .set('layout', data.layout)
                     .set('showContactPictures', data.contactPictures)
-                    .set('showExactDates', data.exactDates);
+                    .set('showExactDates', data.exactDates)
+                    .set('alwaysShowSize', data.alwaysShowSize);
                 if (_.device('!smartphone')) {
                     app.settings.set('showCheckboxes', data.checkboxes);
                 }
@@ -634,7 +620,8 @@ define('io.ox/mail/main', [
 
             // close mail detail view in list-mode on folder selection
             app.folderView.tree.on('selection:action', function () {
-                if (app.props.get('layout') === 'list') {
+                // bug only if detail view is actually visible (see bug 45597)
+                if (app.props.get('layout') === 'list' && app.right.hasClass('preview-visible')) {
                     app.threadView.trigger('back');
                 }
             });
@@ -1369,6 +1356,15 @@ define('io.ox/mail/main', [
             });
         },
 
+        /*
+         * Respond to change:alwaysShowSize
+         */
+        'change:alwaysShowSize': function (app) {
+            app.settings.on('change:alwaysShowSize', function () {
+                app.listView.redraw();
+            });
+        },
+
         'fix-mobile-lazyload': function (app) {
             if (_.device('!smartphone')) return;
             // force lazyload to load, otherwise the whole pane will stay empty...
@@ -1517,7 +1513,7 @@ define('io.ox/mail/main', [
         },
 
         'mail-progress': function () {
-
+            if (_.device('smartphone')) return;
             ext.point('io.ox/mail/sidepanel').extend({
                 id: 'progress',
                 index: 300,
@@ -1547,7 +1543,7 @@ define('io.ox/mail/main', [
         },
 
         'sidepanel': function (app) {
-
+            if (_.device('smartphone')) return;
             ext.point('io.ox/mail/sidepanel').extend({
                 id: 'tree',
                 index: 100,
@@ -1657,10 +1653,6 @@ define('io.ox/mail/main', [
         'mail-categories': function (app) {
             if (_.device('smartphone')) return;
             if (!capabilities.has('mail_categories')) return;
-
-            //TODO: DEBUG until middleware property is set right
-            // require('settings!io.ox/mail').set('categories/enabled', true).save();
-            // console.log('%c' + 'ACHTUNG!ACHTUNG!', 'color: white; background-color: red');
 
             var mapper;
             // register settings listener
