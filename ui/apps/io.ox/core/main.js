@@ -1372,7 +1372,7 @@ define('io.ox/core/main', [
             _.url.hash({ m: null, f: null, i: null, '!!': undefined, '!': null });
 
             // always use portal on small devices!
-            if (_.device('small')) mobileAutoLaunchArray();
+            if (_.device('smartphone')) mobileAutoLaunchArray();
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
