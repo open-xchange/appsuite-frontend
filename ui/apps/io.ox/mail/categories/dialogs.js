@@ -35,7 +35,7 @@ define('io.ox/mail/categories/dialogs', [
             if (userpref === 'always') return parent.trigger('dialog:generalize', obj);
 
             return new Modal({
-                title: gt('Apply for all mails?'),
+                title: gt('Apply for all messages?'),
                 point: 'io.ox/mail/categories/generalize',
                 //focus: '.form-inline',
                 maximize: false,
@@ -45,22 +45,33 @@ define('io.ox/mail/categories/dialogs', [
                 default: function () {
                     this.addClass('mail-categories-dialog');
                 },
-                'info-target': function (baton) {
+                'info-status': function (baton) {
                     this.append(
                         $('<p>').html(
-                            //#. %1$s target mail category
-                            //#, c-format
-                            gt('This mail was moved to %1$s.', '<i>' + baton.view.model.get('targetname') + '</i>')
+                            gt.format(
+                              //#. %1$d is the number of mails
+                              //#, c-format
+                              gt.ngettext('Selected message was moved successfully.', 'Selected messages has been moved successfully.', baton.view.model.get('data').length)
+                            )
                         )
                     );
                 },
-                'info-addresses': function (baton) {
+                'info-actions': function (baton) {
                     var list = senderlist(baton.view.model.get('data'));
                     this.append(
                         $('<p>').html(
-                             //#. %1$s single mail address or comma separated list of multiple
+                            //#. %1$s single mail address or comma separated list of multiple
+                            //#. %2$s target mail category
                             //#, c-format
-                            gt('Apply for mails from %1$s', '<b>' + list.join(', ') + '</b>')
+                            gt('Should all other past and future messages from %1$s also be moved to %2$s?', '<b>' + list.join(', ') + '</b>', '<i>' + baton.view.model.get('targetname') + '</i>')
+                        )
+                    );
+                },
+                'hint': function () {
+                    this.append(
+                        $('<p>').html(
+                            //#, c-format
+                            gt('Just in case you are unsure - usually you want to have all mails from a specific sender in the same tab.')
                         )
                     );
                 },
@@ -75,9 +86,11 @@ define('io.ox/mail/categories/dialogs', [
                     });
                 }
             })
-            .addAlternativeButton({ label: gt('Revert'), action: 'revert' })
-            .addButton({ label: gt('Cancel'), action: 'cancel', className: 'btn-default' })
-            .addButton({ label: gt('Apply'), action: 'generalize' })
+            .addAlternativeButton({ label: gt('Cancel'), action: 'revert' })
+            //#. button: move only current message from a sender to a tab
+            .addButton({ label: gt('Do not move'), action: 'cancel', className: 'btn-default' })
+            //#. button: move all messages from a sender to a tab
+            .addButton({ label: gt('Move all'), action: 'generalize' })
             .open();
         },
 
@@ -128,7 +141,7 @@ define('io.ox/mail/categories/dialogs', [
                 },
                 description: function () {
                     this.append(
-                        $('<p class="description-main">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs.'))
+                        $('<p class="description-main">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to enable or disable specific tabs.'))
                     );
                 },
                 'form-inline': function () {
