@@ -1,5 +1,5 @@
 ---
-title: Guided tours 
+title: Guided tours
 description: A flexible framework to implement wizards and guided tours
 source: https://oxpedia.org/wiki/index.php?title=AppSuite:Wizard_framework
 ---
@@ -232,3 +232,4 @@ A possible scenario would be a step/screen where the user enters something into 
 
 To do this you have to define a array in the wizards model ('wizard.options.model`) with the key 'paused' that contain the index of the step that should be paused. After the user has done the things he should have done simply remove that index from the array.
 
+Ich
