@@ -426,7 +426,7 @@ define('io.ox/mail/api', [
                         module: 'mail',
                         params: {
                             action: 'delete',
-                            harddelete: force,
+                            harddelete: !!force,
                             returnAffectedFolders: true,
                             timestamp: _.then()
                         },
