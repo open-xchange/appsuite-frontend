@@ -312,6 +312,12 @@ define('io.ox/mail/detail/view', [
                 });
             }
 
+            if (this.find('.shadow-style').length === 1 && /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML)) {
+                var emojiStyles = ext.point('3rd.party/emoji/editor_css').map(function (point) {
+                    return require('css!' + point.css);
+                }).value();
+                this.prepend(emojiStyles);
+            }
             // restore height or set minimum height of 100px
             $(node).css('min-height', baton.model.get('visualHeight') || 100);
             // add to DOM
@@ -397,7 +403,7 @@ define('io.ox/mail/detail/view', [
             // get shadow DOM or body node
             var body = this.$el.find('section.body'),
                 shadowRoot = body.prop('shadowRoot');
-            if (shadowRoot) shadowRoot.innerHTML = '<style>' + shadowStyle + '</style>'; else body.empty();
+            if (shadowRoot) shadowRoot.innerHTML = '<style class="shadow-style">' + shadowStyle + '</style>'; else body.empty();
             return $(shadowRoot || body);
         },
 
