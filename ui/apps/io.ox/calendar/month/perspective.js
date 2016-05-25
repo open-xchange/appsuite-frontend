@@ -170,31 +170,25 @@ define('io.ox/calendar/month/perspective', [
                 apiData.folder = this.folder.id;
             }
 
-            return api.getAll(apiData, useCache).done(function (list) {
+            return api.getAll(apiData, useCache).then(function (list) {
                 // update single week view collections
+                function appointmentsBetween(start, end) {
+                    return list.filter(function (mod) {
+                        var tmpStart = mod.full_time ? moment.utc(mod.start_date).local(true).valueOf() : mod.start_date,
+                            tmpEnd = mod.full_time ? moment.utc(mod.end_date).local(true).valueOf() : mod.end_date;
+                        return (tmpStart >= start && tmpStart < end) || (tmpEnd > start && tmpEnd <= end) || (tmpStart <= start && tmpEnd >= end);
+                    }).map(function (obj) {
+                        return new MonthAppointment(obj);
+                    });
+                }
                 var start = opt.start;
-                for (var i = 1; i <= weeks; i++) {
-                    var end = moment(start).tz('utc').add(1, 'week').valueOf(),
+                for (var i = 0; i < weeks; i++) {
+                    var end = moment(start).endOf('week').valueOf(),
                         collection = self.collections[start];
                     if (collection) {
-                        var retList = [];
-                        if (list.length > 0) {
-                            for (var j = 0; j < list.length; j++) {
-                                var mod = list[j],
-                                    tmpStart = mod.start_date,
-                                    tmpEnd = mod.end_date;
-                                if (mod.full_time) {
-                                    tmpStart = moment.utc(tmpStart).local(true).valueOf();
-                                    tmpEnd = moment.utc(tmpEnd).local(true).valueOf();
-                                }
-                                if ((tmpStart >= start && tmpStart < end) || (tmpEnd > start && tmpEnd <= end) || (tmpStart <= start && tmpEnd >= end)) {
-                                    retList.push(new MonthAppointment(mod));
-                                }
-                            }
-                        }
-                        collection.reset(retList);
+                        collection.reset(appointmentsBetween(start, end));
                     }
-                    start = moment(start).tz('utc').add(1, 'week').valueOf();
+                    start = moment(start).add(8, 'd').startOf('week').valueOf();
                     collection = null;
                 }
             });
@@ -227,10 +221,10 @@ define('io.ox/calendar/month/perspective', [
             }
 
             // draw all weeks
-            for (var i = 1; i <= weeks; i++, curWeek.add(1, 'week')) {
+            for (var i = 0; i < weeks; i++, curWeek.add(8, 'd').startOf('week')) {
                 var day = curWeek.valueOf(),
-                    endDate = moment(curWeek).add(1, 'week'),
-                    monthDelimiter = curWeek.date() > endDate.date();
+                    endDate = curWeek.clone().endOf('week'),
+                    monthDelimiter = curWeek.clone().endOf('month').isBefore(endDate.clone().add(1, 'd'));
 
                 // add collection for week
                 self.collections[day] = new MonthAppointmentCollection([]);
@@ -247,11 +241,13 @@ define('io.ox/calendar/month/perspective', [
 
                 // seperate last days if month before and first days of next month
                 if (monthDelimiter) {
+                    endDate.add(1, 'd').startOf('month');
                     // add an
-                    views.push($('<div class="week month-name">').attr('id', endDate.year() + '-' + endDate.month()).append($('<div>').text(gt.noI18n(endDate.format('MMMM YYYY')))));
+                    views.push($('<div class="week month-name">').attr('id', endDate.format('YYYY-MM')).append($('<div>').text(gt.noI18n(endDate.format('MMMM YYYY')))));
                     view.$el.addClass('no-border');
 
-                    if (endDate.date() !== 1) {
+                    if (!endDate.clone().startOf('week').isSame(endDate)) {
+                        // do not render this, if start of current week is the same as start of current month
                         views.push(createView({
                             collection: self.collections[day],
                             day: day,
@@ -369,8 +365,8 @@ define('io.ox/calendar/month/perspective', [
 
             // we cannot use target.month() + 1 or we might get month 13 in 2015 instead of month 1 in 2016
             var nextMonth = moment(target).add(1, 'month'),
-                firstDay = $('#' + target.year() + '-' + target.month(), self.pane),
-                nextFirstDay = $('#' + nextMonth.year() + '-' + (nextMonth.month()), self.pane),
+                firstDay = $('#' + target.format('YYYY-MM'), self.pane),
+                nextFirstDay = $('#' + nextMonth.format('YYYY-MM'), self.pane),
                 scrollToDate = function () {
                     // scroll to position
                     if (firstDay.length === 0) return;
@@ -381,12 +377,12 @@ define('io.ox/calendar/month/perspective', [
                 scrollToDate();
             } else if (target.valueOf() < self.current.valueOf()) {
                 this.drawWeeks({ up: true }).done(function () {
-                    firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
+                    firstDay = $('#' + target.format('YYYY-MM'), self.pane);
                     scrollToDate();
                 });
             } else {
                 this.drawWeeks().done(function () {
-                    firstDay = $('#' + target.year() + '-' + target.month(), self.pane);
+                    firstDay = $('#' + target.format('YYYY-MM'), self.pane);
                     scrollToDate();
                 });
             }
