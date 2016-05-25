@@ -314,7 +314,7 @@ define('io.ox/mail/detail/view', [
 
             if (this.find('.shadow-style').length === 1 && /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML)) {
                 var emojiStyles = ext.point('3rd.party/emoji/editor_css').map(function (point) {
-                    return require('css!' + point.css);
+                    return require('css!' + point.css).clone();
                 }).value();
                 this.prepend(emojiStyles);
             }
