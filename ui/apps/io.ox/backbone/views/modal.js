@@ -187,8 +187,11 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         },
 
         invokeAction: function (action) {
+            // if async we need to make the dialog busy before we trigger the action
+            // otherwise we cannot idle the dialog in the action listener
+            if (this.options.async && action !== 'cancel') this.busy();
             this.trigger(action);
-            if (this.options.async && action !== 'cancel') this.busy(); else this.close();
+            if (!this.options.async || action === 'cancel') this.close();
         },
 
         onKeypress: function (e) {

@@ -643,6 +643,7 @@ define('io.ox/calendar/edit/extensions', [
                     var appointment = view.createAppointment();
 
                     if (appointment) {
+                        data.dialog.close();
                         e.data.model.set({ full_time: appointment.full_time });
                         e.data.model.set({ start_date: appointment.start_date });
                         // add to participants collection instead of the model attribute to make sure the edit view is redrawn correctly
@@ -658,6 +659,11 @@ define('io.ox/calendar/edit/extensions', [
                         e.data.model.set({
                             end_date: appointment.end_date
                         }, { validate: true });
+                    } else {
+                        data.dialog.idle();
+                        require(['io.ox/core/yell'], function (yell) {
+                            yell('info', gt('Please select a time for the appointment'));
+                        });
                     }
                 });
             });

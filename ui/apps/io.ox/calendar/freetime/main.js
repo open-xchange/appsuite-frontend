@@ -95,7 +95,8 @@ define('io.ox/calendar/freetime/main', [
 
             require(['io.ox/backbone/views/modal'], function (dialog) {
                 var popup = new dialog({
-                        width: '90%',
+                        width: '100%',
+                        async: true,
                         title: options.title || gt('Appointment scheduling')
                     }),
                     view = new freetimeView(options);
@@ -103,6 +104,7 @@ define('io.ox/calendar/freetime/main', [
                 popup.addCancelButton();
                 popup.addButton({ label: gt('Create appointment'), action: 'save' });
                 popup.open();
+                popup.$el.addClass('freetime-popup');
                 // append after header so it does not scroll with the rest of the view
                 popup.$el.find('.modal-header').after(view.renderHeader());
                 popup.$body.css('padding-top', 0).append(view.renderBody());

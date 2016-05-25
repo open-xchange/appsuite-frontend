@@ -345,11 +345,17 @@ define('io.ox/calendar/actions', [
                         var appointment = view.createAppointment();
 
                         if (appointment) {
+                            data.dialog.close();
                             appointment.folder = baton.app.folder.get();
                             ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
                                 edit.getApp().launch().done(function () {
                                     this.create(appointment);
                                 });
+                            });
+                        } else {
+                            data.dialog.idle();
+                            require(['io.ox/core/yell'], function (yell) {
+                                yell('info', gt('Please select a time for the appointment'));
                             });
                         }
                     });
