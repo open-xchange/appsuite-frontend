@@ -6147,6 +6147,13 @@ msgstr "Introduceți parola veche pentru a putea recupera parola contului."
 msgid "Please select a file to import"
 msgstr "Selectați fișierul care trebuie importat"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Please select a file to insert"
+msgid "Please select a time for the appointment"
+msgstr "Selectați fișierul de inserat"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Selectați un fișier iCal de importat"
@@ -14126,9 +14133,6 @@ msgstr "aaaa"
 
 #~ msgid "Please select a country for the start address"
 #~ msgstr "Selectați o țară pentru adresa de pornire"
-
-#~ msgid "Please select a file to insert"
-#~ msgstr "Selectați fișierul de inserat"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "Selectați o singură publicație"

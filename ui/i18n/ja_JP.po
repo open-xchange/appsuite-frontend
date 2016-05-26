@@ -6071,6 +6071,13 @@ msgstr ""
 msgid "Please select a file to import"
 msgstr "インポートするファイルを選択してください。"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Please select a file to insert"
+msgid "Please select a time for the appointment"
+msgstr "挿入するファイルを選択してください。"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "インポートする有効な iCal ファイルを選択してください。"
@@ -14989,9 +14996,6 @@ msgstr "yyyy"
 
 #~ msgid "Please select a country for the start address"
 #~ msgstr "送信元住所の国名を選択ください。"
-
-#~ msgid "Please select a file to insert"
-#~ msgstr "挿入するファイルを選択してください。"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "公開を一つだけ選択してください。"

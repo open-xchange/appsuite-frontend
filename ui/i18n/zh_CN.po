@@ -6022,6 +6022,13 @@ msgstr "请您提供旧密码以复原户口密码。"
 msgid "Please select a file to import"
 msgstr "请选择一个汇入的文件"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Please select a file to import"
+msgid "Please select a time for the appointment"
+msgstr "请选择一个汇入的文件"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "请选择一个有效 iCal 文件作汇入"

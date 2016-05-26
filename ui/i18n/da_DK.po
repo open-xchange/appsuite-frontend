@@ -6109,6 +6109,13 @@ msgstr ""
 msgid "Please select a file to import"
 msgstr "Vælg venligst en fil at importere"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Please select a file to import"
+msgid "Please select a time for the appointment"
+msgstr "Vælg venligst en fil at importere"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Vælg venligst en gyldig \"iCal\"-fil at importere"

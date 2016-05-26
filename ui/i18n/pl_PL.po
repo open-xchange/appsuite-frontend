@@ -6154,6 +6154,13 @@ msgstr "Aby przywrócić hasła do kont, podaj stare hasło."
 msgid "Please select a file to import"
 msgstr "Wybierz plik do importu"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Please select a file to import"
+msgid "Please select a time for the appointment"
+msgstr "Wybierz plik do importu"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Wybierz prawidłowy plik iCal do importu"

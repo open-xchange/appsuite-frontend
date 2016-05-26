@@ -6136,6 +6136,13 @@ msgstr ""
 msgid "Please select a file to import"
 msgstr "Por favor, seleccione un fichero a importar"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Please remove %1$s from the appointment."
+msgid "Please select a time for the appointment"
+msgstr "Por favor, elimine a %1$s de la cita."
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Por favor, seleccione un fichero iCal válido para importar"
@@ -16195,9 +16202,6 @@ msgstr "yyyy"
 
 #~ msgid "Please provide a site name."
 #~ msgstr "Por favor, indique un nombre de sitio."
-
-#~ msgid "Please remove %1$s from the appointment."
-#~ msgstr "Por favor, elimine a %1$s de la cita."
 
 #~ msgid "Please remove the group %1$s from the appointment."
 #~ msgstr "Por favor, elimine el grupo %1$s de la cita."

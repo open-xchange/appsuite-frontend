@@ -6138,6 +6138,13 @@ msgstr "Prosím, zadajte vaše staré heslo, aby bolo možné obnoviť heslá k 
 msgid "Please select a file to import"
 msgstr "Prosím, vyberte súbor, ktorý chcete importovať"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Please select a file to insert"
+msgid "Please select a time for the appointment"
+msgstr "Prosím, vyberte súbor, ktorý chcete vložiť"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Prosím, vyberte platný súbor iCal, ktorý chcete importovať"
@@ -14050,9 +14057,6 @@ msgstr "RRRR"
 
 #~ msgid "Please select a country for the start address"
 #~ msgstr "Prosím, vyberte krajinu počiatočnej adresy"
-
-#~ msgid "Please select a file to insert"
-#~ msgstr "Prosím, vyberte súbor, ktorý chcete vložiť"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "Prosím, vyberte iba jednu publikáciu"

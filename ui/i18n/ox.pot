@@ -375,6 +375,13 @@ msgstr ""
 msgid "Move"
 msgstr ""
 
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
+msgid "Please select a time for the appointment"
+msgstr ""
+
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar

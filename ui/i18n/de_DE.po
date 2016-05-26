@@ -6132,6 +6132,13 @@ msgstr ""
 msgid "Please select a file to import"
 msgstr "Wählen Sie eine zu importierende Datei"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Please select a file to insert"
+msgid "Please select a time for the appointment"
+msgstr "Wählen Sie eine einzufügende Datei"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Wählen Sie bitte eine gültige iCal-Datei für den Import."
@@ -12686,9 +12693,6 @@ msgstr "JJJJ"
 
 #~ msgid "Please enter an feed-url."
 #~ msgstr "Geben Sie eine Feed URL ein."
-
-#~ msgid "Please select a file to insert"
-#~ msgstr "Wählen Sie eine einzufügende Datei"
 
 #~ msgid "Poland"
 #~ msgstr "Polen"

@@ -6133,6 +6133,13 @@ msgstr "Digita la vecchia password per ripristinare la password dell'account."
 msgid "Please select a file to import"
 msgstr "Selezionare un file da importare"
 
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Please select a file to import"
+msgid "Please select a time for the appointment"
+msgstr "Selezionare un file da importare"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Seleziona un file iCal valido da importare"
