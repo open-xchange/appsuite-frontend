@@ -43,6 +43,7 @@ define('io.ox/mail/compose/extensions', [
         header: function (baton) {
             if (!baton.view.app.getWindow()) return;
             var header = $('<div data-extension-id="header">');
+            baton.$header = header;
             ext.point(POINT + '/header').invoke('draw', header, baton);
             baton.view.app.getWindow().setHeader(header);
         },
@@ -55,10 +56,12 @@ define('io.ox/mail/compose/extensions', [
 
         buttons: {
             discard: function (baton) {
-                this.append(
+                return (
                     $('<button type="button" class="btn btn-default" data-action="discard" tabindex="1">')
                         .on('click', function () { baton.view.app.quit(); })
-                        .text(gt('Discard')));
+                        .text(gt('Discard'))
+                        .appendTo(this)
+                );
             },
             save: function (baton) {
                 this.append($('<button type="button" class="btn btn-default" data-action="save" tabindex="1">')
