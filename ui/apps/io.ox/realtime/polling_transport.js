@@ -62,8 +62,47 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
     var intervals = {
         lazy: 10000, // When traffic is low, don't ask for data as often
         eager: 1000, // When traffic is high, ask for data more frequently
-        lazyThreshhold: 5 * 60 * 1000 // Switch from eager to lazy mode when 5 minutes without a message have elapsed
+        lazyThreshhold: 5 * 60 * 1000, // Switch from eager to lazy mode when 5 minutes without a message have elapsed
+        guardClear: 10 * 60 * 1000
     };
+
+    var idGateKeeper = (function () {
+        var seenIDs = {};
+
+        return {
+            shouldPass: function (stanza) {
+                if (seenIDs[stanza.id]) {
+                    if (api.debug) {
+                        console.log('I have already seen uuid ' + stanza.id + ' at ' + seenIDs[stanza.id]);
+                    }
+                    return false;
+                }
+                seenIDs[stanza.id] = _.now();
+                if (api.debug) {
+                    console.log('I have not seen uuid ' + stanza.id + ' yet');
+                }
+                return true;
+            },
+            tick: function () {
+                var now = _.now();
+                if (api.debug) {
+                    console.log('Clearing UUID guards older than ' + now);
+                }
+                var count = 0;
+                _(seenIDs).chain().keys().each(function (id) {
+                    var ts = seenIDs[id];
+                    if (ts + intervals.guardClear >= now) {
+                        count++;
+                        delete seenIDs[id];
+                    }
+                });
+                if (api.debug) {
+                    console.log('I have cleared ' + count + ' uuids at ' + now);
+                }
+            }
+        };
+    })();
+
 
     var damage = {
         value: 0,
@@ -124,6 +163,12 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
     function stop() {
         running = false;
     }
+
+    actions.expireGuards = function (ticks) {
+        if (ticks % 300 === 0) {
+            idGateKeeper.tick();
+        }
+    };
 
     // Keep sending stanzas until buffer is empty
     function purge() {
@@ -363,6 +408,12 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
     function received(stanza) {
         if (api.debug) {
             console.log('Received  Stanza', stanza);
+        }
+        if (!idGateKeeper.shouldPass(stanza)) {
+            if (api.debug) {
+                console.log('Discarding Stanza', stanza.id, stanza.seq, stanza);
+            }
+            return;
         }
         if (stanza.get('atmosphere', 'received')) {
             _(stanza.getAll('atmosphere', 'received')).each(function (receipt) {

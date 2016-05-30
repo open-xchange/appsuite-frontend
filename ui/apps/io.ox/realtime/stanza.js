@@ -63,6 +63,7 @@ define('io.ox/realtime/stanza', function () {
 
     function RealtimeStanza(json) {
         this.selector = json.selector;
+        this.id = json.id;
         this.to = json.to;
         this.from = json.from;
         this.type = json.type;
