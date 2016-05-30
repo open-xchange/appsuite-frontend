@@ -313,7 +313,7 @@ define('io.ox/mail/settings/pane', [
                 //#. possible setting for 'Should only the curret message or all messages of sender be moved'
                 { label: gt('Yes, always move them all'), value: 'always' },
                 //#. possible setting for 'Should only the curret message or all messages of sender be moved'
-                { label: gt('No, only move current message'), value: 'never' }
+                { label: gt('No, only move selected message(s)'), value: 'never' }
             ];
             if (!settings.get('categories-extra/generalize')) settings.set('categories-extra/generalize', _.first(list).value);
 
