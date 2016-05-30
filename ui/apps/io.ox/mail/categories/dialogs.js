@@ -67,14 +67,14 @@ define('io.ox/mail/categories/dialogs', [
                         )
                     );
                 },
-                'hint': function () {
-                    this.append(
-                        $('<p>').html(
-                            //#, c-format
-                            gt('Just in case you are unsure - usually you want to have all mails from a specific sender in the same tab.')
-                        )
-                    );
-                },
+                // 'hint': function () {
+                //     this.append(
+                //         $('<p>').html(
+                //             //#, c-format
+                //             gt('Just in case you are unsure - usually you want to have all mails from a specific sender in the same tab.')
+                //         )
+                //     );
+                // },
                 register: function (baton) {
                     baton.view.on('generalize', function () {
                         var obj = _.pick(baton.view.model.toJSON(), 'data', 'targetname', 'target', 'source');
@@ -86,9 +86,9 @@ define('io.ox/mail/categories/dialogs', [
                     });
                 }
             })
-            .addAlternativeButton({ label: gt('Cancel'), action: 'revert' })
+            //.addAlternativeButton({ label: gt('Cancel'), action: 'revert' })
             //#. button: move only current message from a sender to a tab
-            .addButton({ label: gt('Skip'), action: 'cancel', className: 'btn-default' })
+            .addButton({ label: gt('Cancel'), action: 'cancel', className: 'btn-default' })
             //#. button: move all messages from a sender to a tab
             .addButton({ label: gt('Move all'), action: 'generalize' })
             .open();
