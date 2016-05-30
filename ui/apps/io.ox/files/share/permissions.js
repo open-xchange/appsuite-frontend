@@ -859,13 +859,15 @@ define('io.ox/files/share/permissions', [
 
             });
 
-            dialog.getFooter().prepend(
-                $('<div>').addClass('form-group cascade').append(
-                    $('<label>').addClass('checkbox-inline').text(gt('Send notification')).prepend(
-                        new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el
+            if (folderUtil.can('changepermissions', objModel.attributes)) {
+                dialog.getFooter().prepend(
+                    $('<div>').addClass('form-group cascade').append(
+                        $('<label>').addClass('checkbox-inline').text(gt('Send notification')).prepend(
+                            new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el
+                        )
                     )
-                )
-            );
+                );
+            }
 
             dialogConfig.on('change:disabled', function () {
                 dialog.getFooter().find('[name="sendNotifications"]').attr('disabled', dialogConfig.get('disabled'));
