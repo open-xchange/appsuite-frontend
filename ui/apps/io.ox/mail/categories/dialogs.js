@@ -88,7 +88,7 @@ define('io.ox/mail/categories/dialogs', [
             })
             .addAlternativeButton({ label: gt('Cancel'), action: 'revert' })
             //#. button: move only current message from a sender to a tab
-            .addButton({ label: gt('Do not move'), action: 'cancel', className: 'btn-default' })
+            .addButton({ label: gt('Skip'), action: 'cancel', className: 'btn-default' })
             //#. button: move all messages from a sender to a tab
             .addButton({ label: gt('Move all'), action: 'generalize' })
             .open();
@@ -144,6 +144,15 @@ define('io.ox/mail/categories/dialogs', [
                         $('<p class="description-main">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to enable or disable specific tabs.'))
                     );
                 },
+                'locked-hint': function (baton) {
+                    var locked = baton.collection.filter(function (model) {
+                        return !model.can('disable');
+                    });
+                    if (!locked.length) return;
+                    this.find('.description-main').append(
+                       $.txt(' ' + gt('Note that some of the tabs can not be disabled.'))
+                    );
+                },
                 'form-inline': function () {
                     this.append($('<form class="form-inline-container">'));
                 },
@@ -170,13 +179,9 @@ define('io.ox/mail/categories/dialogs', [
                     });
                     this.find('.form-inline-container').append(list);
                 },
-                'locked-hint': function (baton) {
-                    var locked = baton.collection.filter(function (model) {
-                        return !model.can('disable');
-                    });
-                    if (!locked.length) return;
+                'settings-hint': function () {
                     this.append(
-                        $('<p class="description-main hint">').text(gt('Please note that some of the tabs can not be disabled.'))
+                        $('<p class="description-main hint">').text(gt('The tabbed inbox can be completely disabled in the mail settings.'))
                     );
                 },
                 register: function (baton) {
