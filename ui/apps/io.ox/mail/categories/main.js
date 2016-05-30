@@ -284,6 +284,62 @@ define('io.ox/mail/categories/main', [
         });
     }
 
+     // MODULE: SUBMODULE PROCESS
+    var Process = function (context) {
+        var SECOND = 1000;
+        // hint: proc === module.proc
+        var proc = {
+            // hint: this = module
+            bind: function () {
+                // bind all functions to context (config)
+                _.each(proc, function (func, key) {
+                    if (key === 'bind') return;
+                    this[key] = this[key].bind(context);
+                }.bind(this));
+                return this;
+            },
+            start: function () {
+                proc.off();
+                var status = proc.get();
+                if (_.contains(['notyetstarted', 'finished'], status)) return;
+                // initial hint
+                if (_.contains(['running'], status)) {
+                    //#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
+                    yell('info', gt('It will take some time until common mails are assigned to the default tabs.'));
+                }
+                // maybe an error occured?
+                proc.notify();
+                proc.on();
+            },
+            get: function () {
+                this.config.load();
+                // notyetstarted, running, finished
+                return this.props.get('initialized');
+            },
+            on: function () {
+                proc.id = setInterval(proc.notify, 20 * SECOND);
+            },
+            off: function () {
+                clearInterval(proc.id);
+            },
+            notify: function () {
+                var status = proc.get();
+                if (status === 'finished') {
+                    proc.off();
+                    this.reload();
+                }
+                if (status === 'error') {
+                    //#. tabbed inbox feature: in case the long running update job fails
+                    yell('error', gt("Sorry, common mails couldn't be assigned automatically."));
+                    proc.off();
+                }
+                // fallback
+                if (_.contains(['notyetstarted'], status)) return proc.off();
+            }
+        };
+        return proc.bind(context);
+    };
+
     // CONTROLL
     module = {
         api: api,
@@ -292,6 +348,7 @@ define('io.ox/mail/categories/main', [
             _.extend(module, Backbone.Events, options);
             // subs
             this.config = new Config(this);
+            this.proc = new Process(this);
             this.props = new Backbone.Model();
             module.categories = new Collection();
             module.view = new View({ module: this, categories: module.categories, props: module.props });
@@ -399,8 +456,7 @@ define('io.ox/mail/categories/main', [
         },
         checkstate: function () {
             this.config.load();
-            if (this.props.get('initialized') !== 'running') return;
-            yell('info', gt('It will take some time until mails are assigned to the default tabs'));
+            this.proc.start();
         },
         // category-based actions
         select: function (categoryId) {
