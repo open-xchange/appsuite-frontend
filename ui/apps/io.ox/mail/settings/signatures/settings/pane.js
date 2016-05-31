@@ -41,7 +41,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         index: 200,
         draw: function (baton) {
             this.append(
-                baton.$.error = $('<div>').addClass('help-block error')
+                baton.$.error = $('<div>').addClass('help-block error').attr('id', _.uniqueId('error-help-'))
             );
         }
     });
@@ -126,10 +126,13 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         function validateField(field, target) {
             if ($.trim(field.val()) === '') {
                 //trim here because backend does not allow names containing only spaces
-                field.addClass('error');
+                field.addClass('error').attr({
+                    'aria-invalid': true,
+                    'aria-describedby': target.attr('id')
+                });
                 target.text(gt('Please enter a valid name'));
             } else {
-                field.removeClass('error');
+                field.removeClass('error').removeAttr('aria-invalid aria-describedby');
                 target.empty();
             }
         }

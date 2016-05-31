@@ -51,14 +51,19 @@ define('io.ox/mail/accounts/settings', [
         myModel.on('validated', function (valid, model, error) {
             var $form = myView.$el;
             $form.find('.error').removeClass('error');
+            $form.find('.help-block').prev().removeAttr('aria-invalid aria-describedby');
             $form.find('.help-block').remove();
 
             _.each(error, function (message, key) {
                 var $field = myView.$el.find('#' + key).parent(),
                     $row = $field.closest('.form-group'),
-                    helpBlock = $('<div class="help-block error">');
+                    helpBlock = $('<div class="help-block error">').attr('id', _.uniqueId('error-help-'));
                 helpBlock.append($.txt(message));
                 $field.append(helpBlock);
+                helpBlock.prev().attr({
+                    'aria-invalid': true,
+                    'aria-describedby': helpBlock.attr('id')
+                });
                 $row.addClass('error');
             });
         });
