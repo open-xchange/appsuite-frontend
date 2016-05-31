@@ -1171,6 +1171,7 @@ define('io.ox/mail/api', [
                 contactsAPI.trigger('maybyNewContact');
                 api.trigger('send', { data: data, files: files, form: form });
                 ox.trigger('mail:send:stop', data, files);
+                if (data.share_attachments) ox.trigger('please:refresh refresh^');
             })
             .fail(function () {
                 ox.trigger('mail:send:fail');

@@ -546,6 +546,26 @@ define('io.ox/mail/actions', [
         }
     });
 
+    new Action('io.ox/mail/compose/attachment/shareAttachmentsEnable', {
+        capabilities: 'infostore',
+        requires: function (options) {
+            return !options.baton.view.shareAttachmentsIsActive();
+        },
+        multiple: function (list, baton) {
+            baton.model.set('enable', true);
+        }
+    });
+
+    new Action('io.ox/mail/compose/attachment/shareAttachmentsDisable', {
+        capabilities: 'infostore',
+        requires: function (options) {
+            return options.baton.view.shareAttachmentsIsActive();
+        },
+        multiple: function (list, baton) {
+            baton.model.set('enable', false);
+        }
+    });
+
     // inline links
     var INDEX = 0;
 
@@ -819,6 +839,22 @@ define('io.ox/mail/actions', [
         mobile: 'high',
         label: gt('View attachment'),
         ref: 'io.ox/mail/actions/viewer'
+    }));
+
+    ext.point('io.ox/mail/attachment/shareAttachments').extend(new links.Link({
+        id: 'shareAttachmentsEnable',
+        index: 100,
+        // mobile: 'high',
+        label: gt('Use') + ' ' + settings.get('compose/shareAttachments/name'),
+        ref: 'io.ox/mail/compose/attachment/shareAttachmentsEnable'
+    }));
+
+    ext.point('io.ox/mail/attachment/shareAttachments').extend(new links.Link({
+        id: 'shareAttachmentseDisable',
+        index: 110,
+        // mobile: 'high',
+        label: gt('Use') + ' ' + settings.get('compose/shareAttachments/name'),
+        ref: 'io.ox/mail/compose/attachment/shareAttachmentsDisable'
     }));
 
     // DND actions

@@ -25,8 +25,10 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/core/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
+    'io.ox/core/extPatterns/links',
+    'settings!io.ox/core',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt, links, settingsCore) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -423,10 +425,139 @@ define('io.ox/mail/compose/extensions', [
 
             require(['io.ox/core/attachments/view'], function (Attachments) {
                 var view = new Attachments.List({
+                    point: 'io.ox/mail/compose/attachment/header',
                     collection: baton.model.get('attachments'),
                     editable: true,
                     mode: settings.get('attachments/layout/compose/' + _.display(), 'preview')
                 });
+
+                if (settings.get('compose/shareAttachments/enabled', false)) {
+                    var SettingsModel = Backbone.Model.extend({});
+
+                    view.settingsModel = new SettingsModel({
+                        'instruction_language': settingsCore.get('language'),
+                        'enable':  false,
+                        'autodelete': settings.get('compose/shareAttachments/forceAutoDelete', false),
+                        'requiredExpiration':  settings.get('compose/shareAttachments/requiredExpiration', false)
+
+                    });
+
+                    view.notificationModel = new SettingsModel({});
+
+                    view.shareAttachmentsIsActive = function () {
+                        var actualAttachmentSize = 0,
+                            threshold = settings.get('compose/shareAttachments/threshold', 0),
+                            thresholdExceeded;
+
+                        _.each(baton.model.get('attachments').models, function (model) {
+                            actualAttachmentSize = actualAttachmentSize + model.getSize();
+                        });
+
+                        thresholdExceeded = threshold === 0 ? false : actualAttachmentSize > threshold;
+                        return thresholdExceeded || view.settingsModel.get('enable');
+                    };
+
+                    view.toggleShareAttachments = function () {
+
+                        _.each(view.point.keys(), function (id) {
+                            if (view.shareAttachmentsIsActive()) {
+                                view.point.enable(id);
+                                view.$el.addClass('show-share-attachments');
+                            } else if (id !== 'renderSwitch') {
+                                view.point.disable(id);
+                                view.$el.removeClass('show-share-attachments');
+                            }
+                        });
+
+                        view.$header.empty();
+                        this.renderHeader();
+                        view.invoke('render');
+                    };
+
+                    view.extend({
+                        renderSwitch: function (baton) {
+
+                            function drawInlineLinks(node, data, view) {
+                                var extension = new links.InlineLinks({
+                                    dropdown: false,
+                                    ref: 'io.ox/mail/attachment/shareAttachments'
+                                });
+                                view.shareAttachmentsIsActive();
+                                return extension.draw.call(node, ext.Baton({ model: view.settingsModel, data: data, view: view }));
+                            }
+
+                            var models = baton.view.getValidModels(), $links = baton.view.$header.find('.links').empty().addClass('shareAttachments');
+                            if (models.length >= 1) drawInlineLinks($links, _(models).invoke('toJSON'), baton.view);
+
+                            if (baton.view.shareAttachmentsIsActive()) {
+                                $links.find('li').prepend($('<i class="fa fa-check" aria-hidden="true">'));
+                            }
+                        },
+                        renderOptions: function (baton) {
+                            var $links = baton.view.$header.find('.links'),
+                                dropdown = new Dropdown({ model: baton.view.settingsModel, label: gt('Expiration'), tagName: 'div', caret: true })
+                                .option('expiry_date', moment(_.now()).add(1, 'd').format('x'), gt('1 day'))
+                                .option('expiry_date', moment(_.now()).add(1, 'w').format('x'), gt('1 week'))
+                                .option('expiry_date', moment(_.now()).add(1, 'M').format('x'), gt('1 month'))
+                                .option('expiry_date', moment(_.now()).add(3, 'M').format('x'), gt('3 months'))
+                                .option('expiry_date', moment(_.now()).add(6, 'M').format('x'), gt('6 months'))
+                                .option('expiry_date', moment(_.now()).add(1, 'y').format('x'), gt('1 year'));
+
+                            $links.append(dropdown.render().$el);
+                        },
+                        renderNotifications: function (baton) {
+                            var $links = baton.view.$header.find('.links'),
+                                dropdown = new Dropdown({ model: baton.view.notificationModel, label: gt('Notification'), tagName: 'div', caret: true })
+                                .option('download', true, gt('when the receivers have finished downloading the files'))
+                                .option('expired', true, gt('when the link is expired'))
+                                .option('visit', true, gt('when the receivers have accessed the files'));
+
+                            // if (!/^en_/.test(settingsCore.get('language'))) dropdown.option('translated', true, gt('translate notifications to english'));
+
+                            $links.append(dropdown.render().$el);
+                        },
+                        renderPassword: function (baton) {
+                            var $links = baton.view.$header.find('.links'),
+                                passwordField = new mini.PasswordView({ name: 'password', model: baton.view.settingsModel, placeholder: gt('optional password') });
+
+                            $links.append(
+                                $('<div class="input-group">').append(
+                                    $('<span class="input-group-addon">').append(
+                                        new mini.CheckboxView({ name: 'usepassword', model: baton.view.settingsModel }).render().$el
+                                    ),
+                                    passwordField.render().$el
+                                )
+                            );
+
+                            if (!baton.view.settingsModel.get('usepassword')) passwordField.$el.attr('disabled', 'disabled');
+
+                            baton.view.settingsModel.on('change:usepassword', function () {
+                                if (baton.view.settingsModel.get('usepassword')) {
+                                    passwordField.$el.removeAttr('disabled');
+                                } else {
+                                    passwordField.$el.attr('disabled', 'disabled');
+                                }
+                            });
+                        }
+                    });
+
+                    view.listenTo(view.notificationModel, 'change', function () {
+                        this.settingsModel.set('notifications', _.allKeys(this.notificationModel.attributes));
+                    });
+
+                    view.listenTo(view.settingsModel, 'change', function () {
+                        baton.model.set('share_attachments', _.omit(this.settingsModel.attributes, 'usepassword'));
+                    });
+
+                    view.listenTo(view.settingsModel, 'change:enable', function () {
+                        this.toggleShareAttachments();
+                    });
+
+                    view.listenTo(view.collection, 'update', function () {
+                        this.toggleShareAttachments();
+                    });
+
+                }
 
                 // dropzone
                 var zone = new dropzone.Inplace({
@@ -474,6 +605,7 @@ define('io.ox/mail/compose/extensions', [
                 if (view.getValidModels().length > 0) {
                     view.renderList();
                     view.$el.addClass('open');
+                    if (settings.get('compose/shareAttachments/enabled', false)) view.toggleShareAttachments();
                 }
                 $el.append(
                     zone.render().$el.addClass('abs'),

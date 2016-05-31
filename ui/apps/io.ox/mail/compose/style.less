@@ -28,6 +28,10 @@
             &.signatures { margin-right: 15px; }
         }
 
+        .shareAttachments div.dropdown {
+            margin-bottom: 0px;
+        }
+
         &.subject input { font-weight: bold; }
 
         &.attachments {
@@ -226,6 +230,76 @@
             outline: 0;
         }
     }
+
+    .shareAttachments {
+
+        > ul {
+            margin-left: 16px;
+        }
+
+        > div {
+            margin-right: 16px;
+        }
+
+        .input-group {
+            width: 25%;
+            display: inline-table;
+            top: 10px;
+        }
+
+        .io-ox-inline-links {
+            display: inline;
+            font-family: @normal-font-family;
+            font-size: 13px;
+
+            li {
+                padding-top: 3px;
+            }
+
+            a {
+                text-decoration: underline;
+            }
+
+            a[data-action="shareAttachmentseDisable"] {
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+            .fa-check, a[data-action="shareAttachmentseDisable"] {
+                color: #FF6E00;
+            }
+
+            .fa-check {
+                margin-right: 5px;
+            }
+        }
+
+        .dropdownlink {
+            display: inline;
+            position: relative;
+
+            a:hover {
+                text-decoration: none;
+            }
+
+            a i.fa-caret-down {
+                color: inherit;
+                display: inline-block;
+                margin-left: 5px;
+            }
+
+        }
+
+    }
+
+    .show-share-attachments .toggle-mode {
+        padding-top: 16px;
+    }
+
+    .mail-attachment-list header .toggle-details {
+            padding-top: 3px;
+        }
+
 }
 
 .smartphone {

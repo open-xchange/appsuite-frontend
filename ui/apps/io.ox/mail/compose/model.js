@@ -288,9 +288,9 @@ define.async('io.ox/mail/compose/model', [
                 'csid',
                 'initial',
                 'msgref',
-                'disp_notification_to'
+                'disp_notification_to',
+                'share_attachments'
             );
-
             result = _.extend(result, {
                 attachments:    _(attachmentCollection.mailAttachments()).reject(function (o) { return o.source === 'drive'; }),  // get all attachments without files from drive
                 contacts_ids:   attachmentCollection.contactsIds(),      // flat cids for contacts_ids
