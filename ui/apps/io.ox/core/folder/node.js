@@ -462,7 +462,6 @@ define('io.ox/core/folder/node', [
             summary = summary.join(', ');
             if (summary) summary = ' (' + summary + ')';
             this.$el.attr({
-                'title': this.model.get('title') + summary,
                 'aria-label': this.model.get('title') + summary
             });
         },
@@ -473,14 +472,16 @@ define('io.ox/core/folder/node', [
                 .addClass('folder-options contextmenu-control')
                 .attr({
                     'data-contextmenu': this.options.contextmenu || 'default',
-                    'aria-label': gt('Folder-specific actions'),
+                    'aria-label': this.options.title || !this.model.has('title') ?
+                        gt('Folder-specific actions') :
+                        //#. %1$s is the name of the folder
+                        gt('Folder-specific actions for %1$s', this.model.get('title')),
                     href: '#',
                     role: 'button',
                     tabindex: 1
                 })
                 .append(
-                    $('<i class="fa fa-bars" aria-hidden="true">'),
-                    $('<span class="sr-only">').text(gt('Folder-specific actions'))
+                    $('<i class="fa fa-bars" aria-hidden="true">')
                 )
             );
         },
