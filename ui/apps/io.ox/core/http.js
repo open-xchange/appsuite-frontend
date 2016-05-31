@@ -376,7 +376,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             }
         },
         // extended permissions
-        idMappingExcludes = ['3060', '7010'];
+        idMappingExcludes = ['3060', '7010'],
+        // list of error codes, which are not logged
+        errorBlacklist = ['SVL-0003', 'LGI-0006'];
 
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
@@ -780,6 +782,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     that.trigger('reachable');
                     ox.trigger('connection:online connection:up');
                 }
+                if (error.code && errorBlacklist.indexOf(error.code) >= 0) return;
                 error = _.extend({ status: status, took: took }, error);
                 log.add(error, r.o);
             });
