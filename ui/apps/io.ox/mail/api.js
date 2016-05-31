@@ -1164,7 +1164,7 @@ define('io.ox/mail/api', [
             isSaveDraft = data.flags === api.FLAGS.DRAFT,
             csid = data.csid;
 
-        api.queue.add(csid);
+        api.queue.add(csid, deferred.abort);
 
         return deferred
             .done(function () {
@@ -1272,16 +1272,17 @@ define('io.ox/mail/api', [
         return {
 
             collection: new Backbone.Collection().on('add remove change:pct', function () {
-                var loaded = 0, total = 0;
+                var loaded = 0, total = 0, abort;
                 this.each(function (model) {
                     loaded += model.get('loaded');
                     total += model.get('total');
+                    abort = model.get('abort');
                 });
-                this.trigger('progress', { count: this.length, loaded: loaded, pct: pct(loaded, total), total: total });
+                this.trigger('progress', { count: this.length, loaded: loaded, pct: pct(loaded, total), total: total, abort: abort });
             }),
 
-            add: function (csid) {
-                this.collection.add(new Backbone.Model({ id: csid, loaded: 0, pct: 0, total: 0 }));
+            add: function (csid, abort) {
+                this.collection.add(new Backbone.Model({ id: csid, loaded: 0, pct: 0, total: 0, abort: abort }));
             },
 
             remove: function (csid) {

@@ -1523,9 +1523,11 @@ define('io.ox/mail/main', [
                         .hide()
                         .append(
                             $('<div class="progress"><div class="progress-bar"></div></div>'),
-                            $('<div class="caption">')
-                        );
-
+                            $('<div class="caption">').append(
+                                $('<span>'),
+                                $('<a href="#" class="close" data-action="close" role="button" tabindex="1"><i class="fa fa-times"></i></a>')
+                            )
+                       );
                     api.queue.collection.on('progress', function (data) {
                         if (!data.count) return $el.hide();
                         var n = data.count,
@@ -1533,7 +1535,11 @@ define('io.ox/mail/main', [
                             //#. %1$d is number of messages; %2$d is progress in percent
                             caption = gt.ngettext('Sending 1 message ... %2$d%', 'Sending %1$d messages ... %2$d%', n, n, pct);
                         $el.find('.progress-bar').css('width', pct + '%');
-                        $el.find('.caption').text(caption);
+                        $el.find('.caption span').text(caption);
+                        $el.find('[data-action="close"]').off();
+                        $el.find('[data-action="close"]').on('click', function () {
+                            if (_.isFunction(data.abort)) data.abort(gt('The sending of the message has been canceled.'));
+                        });
                         $el.show();
                     });
 
