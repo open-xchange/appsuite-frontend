@@ -104,3 +104,71 @@ Finally you need to enable tracking in general and PIWIK in particular.
 ## Continue
 
 Please continue with the PIWIK Installation wizard.
+
+# Google Analytics
+
+With this easy step-by-step guide it should be quite simple to setup PIWIK and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [here](ui/features/metrics/02-adapters.html#piwik).
+
+## Preconditions
+
+## adblockers
+
+hint: in case you consider to bypass adblockier mechanisms please avoid suspicious strings for any part of the url (for example ‘analytics’).
+
+## OX App Suite properties
+
+Now we have to that tracking id. Use the following file to adjust/add the properties:
+
+```
+  /opt/open-xchange/etc/settings/metrics.properties
+```
+
+
+### tracking id
+
+Please visit the admin page and open the 'tracking code' pane. At the very top of this pane there is a text block captioned as 'tracking id' with an identifier starting with 'UA-'.
+
+_appsuite property_
+
+```javascript
+    io.ox/core//tracking/analytics/id=UA-xxxxxxxx-xx
+```
+
+### base url
+
+You can optionally adjust the url where the `analytics.js` is provided. As a default value we use `https://www.google-analytics.com/analytics.js` which should work out of the box for most uses cases.
+
+_appsuite property_
+
+```javascript
+    io.ox/core//tracking/analytics/url=https://www.google-analytics.com/analytics.js
+```
+
+### custom dimensions
+
+As a default the metrics framework tracks three values for each session:
+
+- language: the one defined in the user setting of OX App Suite
+- version: the current version of OX App Suite
+- capabilities: the current version of OX App Suite
+
+To submit this data to Google Analytics you have to setup corresponding [custom dimensons](https://support.google.com/analytics/answer/2709828) and specifiy mappings in the OX App Suite property file.
+
+_appsuite property_
+
+```javascript
+    io.ox/core//tracking/analytics/mapping/language=dimension1
+    io.ox/core//tracking/analytics/mapping/version=dimension2
+    io.ox/core//tracking/analytics/mapping/capabilities=dimension3
+```
+
+
+## Enabling and disabling
+
+_appsuite property_
+Finally you need to enable tracking in general and Google Analytics in particular.
+
+```javascript
+  io.ox/core//tracking/enabled=true
+  io.ox/core//tracking/analytics/enabled=true
+```
