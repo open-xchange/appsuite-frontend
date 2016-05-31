@@ -48,15 +48,15 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/rename',
                 title: gt('File name'),
                 customize: function (baton) {
-
+                    var displayName = baton.model.getDisplayName();
                     this.append(
                         // icon
                         !baton.context.standalone ?
                             $('<i class="fa" aria-hidden="true">').addClass(Util.getIconClass(baton.model)) :
                             null,
                         // filename
-                        $('<span class="filename-label">').text(baton.model.getDisplayName())
-                    );
+                        $('<span class="filename-label">').text(displayName)
+                    ).attr('aria-label', displayName);
 
                     this.addClass('viewer-toolbar-filename').parent().addClass('pull-left');
 
