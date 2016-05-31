@@ -1077,10 +1077,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Tillåt laddning i förväg av externt länkade bilder"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1155,22 +1151,9 @@ msgstr "Program"
 
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
-#| msgid "Apply role"
-msgid "Apply"
-msgstr "Tillämpa roll"
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
 #| msgid "Apply to all subfolders"
-msgid "Apply for all mails?"
+msgid "Apply for all messages?"
 msgstr "Verkställ för alla underliggande mappar"
-
-#. %1$s single mail address or comma separated list of multiple
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy, c-format
-#| msgid "Email from %1$s: %2$s"
-msgid "Apply for mails from %1$s"
-msgstr "E-post från %1$s: %2$s"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1287,10 +1270,6 @@ msgstr "Som inkommande e-postserver"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Stigande"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1556,6 +1535,7 @@ msgstr "Kalendervy"
 msgid "Calendar:"
 msgstr "Kalender:"
 
+#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -4387,8 +4367,10 @@ msgstr "Är exakt"
 msgid "Is smaller than"
 msgstr "Är mindre än"
 
+#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
 #: apps/io.ox/mail/categories/main.js module:io.ox/mail
-msgid "It will take some time until mails are assigned to the default tabs"
+msgid ""
+"It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
@@ -5029,15 +5011,11 @@ msgstr "Fler än de nu visade %1$s objekten hittades"
 msgid "Move"
 msgstr "Flytta"
 
+#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 msgid "Move all"
 msgstr "Flytta alla"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Move all mails from a sender"
-msgstr "Verkställ för alla underliggande mappar"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -5120,7 +5098,6 @@ msgstr "Behöver du mer utrymme?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Aldrig"
 
@@ -5386,6 +5363,14 @@ msgstr "Inga prenumerationstjänster tillgängliga för den här modulen"
 msgid "No title."
 msgstr "Ingen titel."
 
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "folder"
+#| msgid "Deleted messages"
+msgid "No, only move selected message(s)"
+msgstr "Raderade meddelanden"
+
 #. object permissions - read
 #. object permissions - edit/modify
 #. object permissions - delete
@@ -5422,6 +5407,12 @@ msgstr "Anteckning"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "OBS rörande CSV-filer:"
+
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Items without a file can not be downloaded."
+msgid "Note that some of the tabs can not be disabled."
+msgstr "Objekt utan fil kan inte laddas ned."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -5938,6 +5929,11 @@ msgstr "Spela upp ljudfiler"
 msgid "Play video files"
 msgstr "Spela upp videofiler"
 
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Please ask me every time"
+msgstr ""
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please check your inbox for a confirmation email.\n"
@@ -6055,11 +6051,7 @@ msgstr "Skriv ditt lösenord."
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 msgid ""
 "Please feel free to rename tabs to better match your needs. Use checkboxes "
-"to hide or show specific tabs."
-msgstr ""
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Please note that some of the tabs can not be disabled."
+"to enable or disable specific tabs."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6849,12 +6841,6 @@ msgstr "Retweetad"
 msgid "Retweeted by %s"
 msgstr "Retweetad av %s"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
-#| msgid "Never"
-msgid "Revert"
-msgstr "Aldrig"
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "Gå igenom dina inköp"
@@ -7098,6 +7084,15 @@ msgstr "Välj fil"
 msgid "Select folder"
 msgstr "Välj mapp"
 
+#. %1$d is the number of mails
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Data imported successfully"
+msgid "Selected message was moved successfully."
+msgid_plural "Selected messages has been moved successfully."
+msgstr[0] "Data importerades"
+msgstr[1] "Data importerades"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Detaljer om markering"
@@ -7334,6 +7329,20 @@ msgstr "Delar"
 msgid "Shopping cart"
 msgstr "Shoppingvagn"
 
+#. %1$s single mail address or comma separated list of multiple
+#. %2$s target mail category
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid ""
+"Should all other past and future messages from %1$s also be moved to %2$s?"
+msgstr "Alla meddelanden äldre än %1$d dagar kommer flyttas till arkivmappen"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Should only the curret message or all messages of sender be moved"
+msgstr ""
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Visa"
@@ -7546,6 +7555,11 @@ msgstr "Något gick fel när kontot kontrollerades."
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Something went wrong saving your changes."
 msgstr "Något gick fel när ändringarna skulle sparas."
+
+#. tabbed inbox feature: in case the long running update job fails
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Sorry, common mails couldn't be assigned automatically."
+msgstr ""
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
@@ -8307,6 +8321,10 @@ msgstr "Startdatumet måste vara innan slutdatumet."
 msgid "The subscription could not be created."
 msgstr "Prenumerationen kunde inte skapas."
 
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+msgid "The tabbed inbox can be completely disabled in the mail settings."
+msgstr ""
+
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
@@ -8597,13 +8615,6 @@ msgstr "E-brevet har lagts till i portalen"
 
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
-msgstr "E-brevet har inget innehåll"
-
-#. %1$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy, c-format
-#| msgid "This mail has no content"
-msgid "This mail was moved to %1$s."
 msgstr "E-brevet har inget innehåll"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
@@ -9303,6 +9314,11 @@ msgstr "Gult"
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Yes"
 msgstr "Ja"
+
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Yes, always move them all"
+msgstr ""
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Yes, send without subject"
@@ -10998,6 +11014,16 @@ msgstr "yyyy"
 
 #~ msgid "Another group with same identifier name exists: %1$d."
 #~ msgstr "En annan grupp med samma namn finns redan: %1$d."
+
+#, fuzzy
+#~| msgid "Apply role"
+#~ msgid "Apply"
+#~ msgstr "Tillämpa roll"
+
+#, fuzzy
+#~| msgid "Email from %1$s: %2$s"
+#~ msgid "Apply for mails from %1$s"
+#~ msgstr "E-post från %1$s: %2$s"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -13139,6 +13165,11 @@ msgstr "yyyy"
 #~ msgid "More zoom settings"
 #~ msgstr "Fler zoom-inställningar"
 
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Move all mails from a sender"
+#~ msgstr "Verkställ för alla underliggande mappar"
+
 #~ msgid "Move all messages to another folder"
 #~ msgstr "Flytta alla meddelanden till en annan mapp"
 
@@ -13791,6 +13822,11 @@ msgstr "yyyy"
 
 #~ msgid "Response package exceeds max package size value of 8192k: %1$s"
 #~ msgstr "Svarspaketet överskrider maximala paketstorleken som är 8192k: %1$s"
+
+#, fuzzy
+#~| msgid "Never"
+#~ msgid "Revert"
+#~ msgstr "Aldrig"
 
 #, fuzzy
 #~| msgid "Text"
@@ -14881,6 +14917,11 @@ msgstr "yyyy"
 #~ "Notera: Detta returkvitto bekräftar bara att meddelandet visats på "
 #~ "mottagarens dator. Det finns ingen garanti att mottagaren har läst eller "
 #~ "förstått meddelandets innehåll."
+
+#, fuzzy
+#~| msgid "This mail has no content"
+#~ msgid "This mail was moved to %1$s."
+#~ msgstr "E-brevet har inget innehåll"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Det här kan ta en liten stund"

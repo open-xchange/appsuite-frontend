@@ -1088,10 +1088,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "Permitir la precarga de imágenes externas enlazadas"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1168,22 +1164,9 @@ msgstr "Aplicaciones"
 
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
-#| msgid "Apply role"
-msgid "Apply"
-msgstr "Aplicar rol"
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
 #| msgid "Apply to all subfolders"
-msgid "Apply for all mails?"
+msgid "Apply for all messages?"
 msgstr "Aplicar a todas las subcarpetas"
-
-#. %1$s single mail address or comma separated list of multiple
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy, c-format
-#| msgid "Email from %1$s: %2$s"
-msgid "Apply for mails from %1$s"
-msgstr "Correo de %1$s: %2$s"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1300,10 +1283,6 @@ msgstr "Como servidor de correo entrante"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "Ascendente"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1571,6 +1550,7 @@ msgstr "Vista de calendario"
 msgid "Calendar:"
 msgstr "Calendario:"
 
+#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -4422,8 +4402,10 @@ msgstr "Es exactamente"
 msgid "Is smaller than"
 msgstr "Es menor que"
 
+#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
 #: apps/io.ox/mail/categories/main.js module:io.ox/mail
-msgid "It will take some time until mails are assigned to the default tabs"
+msgid ""
+"It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
@@ -5065,15 +5047,11 @@ msgstr "Se encontraron más elementos que los %1$s que se muestran actualmente"
 msgid "Move"
 msgstr "Mover"
 
+#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 msgid "Move all"
 msgstr "Mover todo"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Move all mails from a sender"
-msgstr "Aplicar a todas las subcarpetas"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -5156,7 +5134,6 @@ msgstr "¿Necesita más espacio?"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nunca"
 
@@ -5422,6 +5399,14 @@ msgstr "No hay servicios de suscripción disponibles para este módulo"
 msgid "No title."
 msgstr "Sin título."
 
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "folder"
+#| msgid "Deleted messages"
+msgid "No, only move selected message(s)"
+msgstr "Mensajes borrados"
+
 #. object permissions - read
 #. object permissions - edit/modify
 #. object permissions - delete
@@ -5458,6 +5443,12 @@ msgstr "Nota"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Nota sobre archivos CSV:"
+
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Items without a file can not be downloaded."
+msgid "Note that some of the tabs can not be disabled."
+msgstr "No se pueden descargar elementos sin archivo."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -5980,6 +5971,11 @@ msgstr "Reproducir archivos de audio"
 msgid "Play video files"
 msgstr "Reproducir archivos de vídeo"
 
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Please ask me every time"
+msgstr ""
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please check your inbox for a confirmation email.\n"
@@ -6102,11 +6098,7 @@ msgstr "Por favor, introduzca su contraseña."
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 msgid ""
 "Please feel free to rename tabs to better match your needs. Use checkboxes "
-"to hide or show specific tabs."
-msgstr ""
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Please note that some of the tabs can not be disabled."
+"to enable or disable specific tabs."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6905,12 +6897,6 @@ msgstr "Retuiteado"
 msgid "Retweeted by %s"
 msgstr "Retuiteado por %s"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
-#| msgid "Never"
-msgid "Revert"
-msgstr "Nunca"
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "Revise sus compras"
@@ -7158,6 +7144,15 @@ msgstr "Seleccionar archivo"
 msgid "Select folder"
 msgstr "Seleccionar carpeta"
 
+#. %1$d is the number of mails
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Data imported successfully"
+msgid "Selected message was moved successfully."
+msgid_plural "Selected messages has been moved successfully."
+msgstr[0] "Datos importados satisfactoriamente"
+msgstr[1] "Datos importados satisfactoriamente"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Detalles de la selección"
@@ -7394,6 +7389,22 @@ msgstr "Compartición"
 msgid "Shopping cart"
 msgstr "Cesta de la compra"
 
+#. %1$s single mail address or comma separated list of multiple
+#. %2$s target mail category
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid ""
+"Should all other past and future messages from %1$s also be moved to %2$s?"
+msgstr ""
+"Todos los mensajes con una antigüedad mayor de %1$s días serán trasladados a "
+"la carpeta de archivo"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Should only the curret message or all messages of sender be moved"
+msgstr ""
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Mostrar"
@@ -7606,6 +7617,11 @@ msgstr "Se produjo un error al volver a autorizar la cuenta."
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Something went wrong saving your changes."
 msgstr "Se produjo un error al guardar sus cambios."
+
+#. tabbed inbox feature: in case the long running update job fails
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Sorry, common mails couldn't be assigned automatically."
+msgstr ""
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
@@ -8376,6 +8392,10 @@ msgstr "La fecha de comienzo debe ser anterior a la de fin."
 msgid "The subscription could not be created."
 msgstr "No se pudo crear la suscripción."
 
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+msgid "The tabbed inbox can be completely disabled in the mail settings."
+msgstr ""
+
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
@@ -8672,13 +8692,6 @@ msgstr "Este correo se ha añadido al portal"
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Este correo no tiene contenido"
-
-#. %1$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy, c-format
-#| msgid "This file is locked by %1$s"
-msgid "This mail was moved to %1$s."
-msgstr "El fichero está bloqueado por %1$s"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js
@@ -9379,6 +9392,11 @@ msgstr "Amarillo"
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Yes"
 msgstr "Sí"
+
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Yes, always move them all"
+msgstr ""
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Yes, send without subject"
@@ -11934,8 +11952,18 @@ msgstr "yyyy"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigua y Barbuda"
 
+#, fuzzy
+#~| msgid "Apply role"
+#~ msgid "Apply"
+#~ msgstr "Aplicar rol"
+
 #~ msgid "Apply a Template (optional)"
 #~ msgstr "Aplicar una plantilla (opcional)"
+
+#, fuzzy
+#~| msgid "Email from %1$s: %2$s"
+#~ msgid "Apply for mails from %1$s"
+#~ msgstr "Correo de %1$s: %2$s"
 
 #~ msgid "Appointment '%s' not found."
 #~ msgstr "No se ha encontrado la cita '%s'."
@@ -15383,6 +15411,11 @@ msgstr "yyyy"
 #~ msgid "Morocco"
 #~ msgstr "Marruecos"
 
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Move all mails from a sender"
+#~ msgstr "Aplicar a todas las subcarpetas"
+
 #~ msgid "Move all messages to another folder"
 #~ msgstr "Mover todos los mensajes a otra carpeta"
 
@@ -16550,6 +16583,11 @@ msgstr "yyyy"
 
 #~ msgid "Reunion"
 #~ msgstr "Reunión"
+
+#, fuzzy
+#~| msgid "Never"
+#~ msgid "Revert"
+#~ msgstr "Nunca"
 
 #~ msgid "Revert Last Operation"
 #~ msgstr "Deshacer última operación"
@@ -18047,6 +18085,11 @@ msgstr "yyyy"
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Este correo contiene una URL de una publicación."
+
+#, fuzzy
+#~| msgid "This file is locked by %1$s"
+#~ msgid "This mail was moved to %1$s."
+#~ msgstr "El fichero está bloqueado por %1$s"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "Esto puede tardar unos segundos"

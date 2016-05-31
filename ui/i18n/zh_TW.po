@@ -1063,10 +1063,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "允許預載外部鏈結圖像"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1139,22 +1135,9 @@ msgstr "應用程式"
 
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
-#| msgid "Apply role"
-msgid "Apply"
-msgstr "套用腳色"
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
 #| msgid "Apply to all subfolders"
-msgid "Apply for all mails?"
+msgid "Apply for all messages?"
 msgstr "套用至所有子資料夾"
-
-#. %1$s single mail address or comma separated list of multiple
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy, c-format
-#| msgid "Email from %1$s: %2$s"
-msgid "Apply for mails from %1$s"
-msgstr "來自 %1$s 的郵件: %2$d"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1271,10 +1254,6 @@ msgstr "與收件帳密相同"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "昇冪"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1532,6 +1511,7 @@ msgstr "日曆視圖"
 msgid "Calendar:"
 msgstr "行事曆:"
 
+#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -4328,8 +4308,10 @@ msgstr "等於"
 msgid "Is smaller than"
 msgstr "小於"
 
+#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
 #: apps/io.ox/mail/categories/main.js module:io.ox/mail
-msgid "It will take some time until mails are assigned to the default tabs"
+msgid ""
+"It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
@@ -4968,15 +4950,11 @@ msgstr "找到超過目前顯示的 %1$s 個項目"
 msgid "Move"
 msgstr "移動"
 
+#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 msgid "Move all"
 msgstr "全部移動"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Move all mails from a sender"
-msgstr "套用至所有子資料夾"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -5059,7 +5037,6 @@ msgstr "需要更多空間嗎？"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "永不"
 
@@ -5323,6 +5300,14 @@ msgstr "無此模組的訂閱服務"
 msgid "No title."
 msgstr "無標題。"
 
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "folder"
+#| msgid "Deleted messages"
+msgid "No, only move selected message(s)"
+msgstr "已刪除訊息"
+
 #. object permissions - read
 #. object permissions - edit/modify
 #. object permissions - delete
@@ -5359,6 +5344,12 @@ msgstr "備註"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "CSV 檔案注意事項:"
+
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Items without a file can not be downloaded."
+msgid "Note that some of the tabs can not be disabled."
+msgstr "無法下載沒有檔案的項目。"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -5873,6 +5864,11 @@ msgstr "撥放聲音檔案"
 msgid "Play video files"
 msgstr "撥放影片檔案"
 
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Please ask me every time"
+msgstr ""
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please check your inbox for a confirmation email.\n"
@@ -5988,11 +5984,7 @@ msgstr "請輸入您的密碼。"
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 msgid ""
 "Please feel free to rename tabs to better match your needs. Use checkboxes "
-"to hide or show specific tabs."
-msgstr ""
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Please note that some of the tabs can not be disabled."
+"to enable or disable specific tabs."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6765,12 +6757,6 @@ msgstr "轉推"
 msgid "Retweeted by %s"
 msgstr "由 %s 轉推"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
-#| msgid "Never"
-msgid "Revert"
-msgstr "永不"
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "確認您的購買"
@@ -7012,6 +6998,15 @@ msgstr "選擇檔案"
 msgid "Select folder"
 msgstr "選擇資料夾"
 
+#. %1$d is the number of mails
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Data imported successfully"
+msgid "Selected message was moved successfully."
+msgid_plural "Selected messages has been moved successfully."
+msgstr[0] "成功匯入資料"
+msgstr[1] "成功匯入資料"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "選擇範圍詳情"
@@ -7248,6 +7243,20 @@ msgstr "共享"
 msgid "Shopping cart"
 msgstr "購物車"
 
+#. %1$s single mail address or comma separated list of multiple
+#. %2$s target mail category
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid ""
+"Should all other past and future messages from %1$s also be moved to %2$s?"
+msgstr "超過 %1$d 天的訊息將被移動至封存信件匣"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Should only the curret message or all messages of sender be moved"
+msgstr ""
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "顯示"
@@ -7456,6 +7465,11 @@ msgstr "重新授權帳號時發生某些錯誤。"
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Something went wrong saving your changes."
 msgstr "儲存您的更改時發生某些錯誤。"
+
+#. tabbed inbox feature: in case the long running update job fails
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Sorry, common mails couldn't be assigned automatically."
+msgstr ""
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
@@ -8194,6 +8208,10 @@ msgstr "起始日期必須在結束日期前。"
 msgid "The subscription could not be created."
 msgstr "無法建立訂閱。"
 
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+msgid "The tabbed inbox can be completely disabled in the mail settings."
+msgstr ""
+
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
@@ -8471,13 +8489,6 @@ msgstr "此郵件已被加入入口畫面"
 
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
-msgstr "此郵件沒有內容"
-
-#. %1$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy, c-format
-#| msgid "This mail has no content"
-msgid "This mail was moved to %1$s."
 msgstr "此郵件沒有內容"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
@@ -9162,6 +9173,11 @@ msgstr "黃色"
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Yes"
 msgstr "是"
+
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Yes, always move them all"
+msgstr ""
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Yes, send without subject"
@@ -10566,6 +10582,16 @@ msgstr "年"
 
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "安地卡及巴布達"
+
+#, fuzzy
+#~| msgid "Apply role"
+#~ msgid "Apply"
+#~ msgstr "套用腳色"
+
+#, fuzzy
+#~| msgid "Email from %1$s: %2$s"
+#~ msgid "Apply for mails from %1$s"
+#~ msgstr "來自 %1$s 的郵件: %2$d"
 
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
@@ -12493,6 +12519,11 @@ msgstr "年"
 #~ msgid "More zoom settings"
 #~ msgstr "更多縮放設定"
 
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Move all mails from a sender"
+#~ msgstr "套用至所有子資料夾"
+
 #~ msgid "Move all messages to another folder"
 #~ msgstr "移動所有訊息到其他資料夾"
 
@@ -12845,6 +12876,11 @@ msgstr "年"
 
 #~ msgid "Restore Last Operation"
 #~ msgstr "還原上個操作"
+
+#, fuzzy
+#~| msgid "Never"
+#~ msgid "Revert"
+#~ msgstr "永不"
 
 #~ msgid "Revert Last Operation"
 #~ msgstr "還原上個操作"
@@ -13386,6 +13422,11 @@ msgstr "年"
 
 #~ msgid "This file is locked by you"
 #~ msgstr "此檔案已被您鎖定"
+
+#, fuzzy
+#~| msgid "This mail has no content"
+#~ msgid "This mail was moved to %1$s."
+#~ msgstr "此郵件沒有內容"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "這可能需要幾秒鐘.."

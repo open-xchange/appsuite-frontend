@@ -1054,10 +1054,6 @@ msgid "Allow pre-loading of externally linked images"
 msgstr "外部リンク先の画像の事前読み込みを許可"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Always"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1131,21 +1127,10 @@ msgid "Applications"
 msgstr "アプリケーション"
 
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Apply"
-msgstr "ロールを割り当てる"
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply to all subfolders"
-msgid "Apply for all mails?"
+msgid "Apply for all messages?"
 msgstr "全てのサブフォルダに適用"
-
-#. %1$s single mail address or comma separated list of multiple
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy, c-format
-#| msgid "Email from %1$s: %2$s"
-msgid "Apply for mails from %1$s"
-msgstr "%1$s からのメール: %2$s"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1262,10 +1247,6 @@ msgstr "受信メール サーバ"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Ascending"
 msgstr "昇順"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Ask"
-msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -1526,6 +1507,7 @@ msgstr "予定表ビュー"
 msgid "Calendar:"
 msgstr "予定表："
 
+#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -4368,8 +4350,10 @@ msgstr "次の文字列と完全に一致"
 msgid "Is smaller than"
 msgstr "次の数より小さい"
 
+#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
 #: apps/io.ox/mail/categories/main.js module:io.ox/mail
-msgid "It will take some time until mails are assigned to the default tabs"
+msgid ""
+"It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
@@ -5012,15 +4996,11 @@ msgstr ""
 msgid "Move"
 msgstr "移動"
 
+#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 msgid "Move all"
 msgstr "全て移動"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Move all mails from a sender"
-msgstr "全てのサブフォルダに適用"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -5103,7 +5083,6 @@ msgstr "容量が必要ですか？"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "期限なし"
 
@@ -5369,6 +5348,14 @@ msgstr "このモジュールに利用できる登録サービスがありませ
 msgid "No title."
 msgstr "タイトルなし"
 
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "folder"
+#| msgid "Deleted messages"
+msgid "No, only move selected message(s)"
+msgstr "削除済みメッセージ"
+
 #. object permissions - read
 #. object permissions - edit/modify
 #. object permissions - delete
@@ -5405,6 +5392,12 @@ msgstr "通知内容"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "CSVファイルについての注意："
+
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Items without a file can not be downloaded."
+msgid "Note that some of the tabs can not be disabled."
+msgstr "ファイルがないアイテムはダウンロードできません。"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -5921,6 +5914,11 @@ msgstr "オーディオ ファイルの再生"
 msgid "Play video files"
 msgstr "動画ファイルを再生"
 
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Please ask me every time"
+msgstr ""
+
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please check your inbox for a confirmation email.\n"
@@ -6037,11 +6035,7 @@ msgstr "パスワードを入力してください。"
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 msgid ""
 "Please feel free to rename tabs to better match your needs. Use checkboxes "
-"to hide or show specific tabs."
-msgstr ""
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Please note that some of the tabs can not be disabled."
+"to enable or disable specific tabs."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6825,12 +6819,6 @@ msgstr "リツイートの取り消し"
 msgid "Retweeted by %s"
 msgstr "%s さんがリツイート"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
-#| msgid "Never"
-msgid "Revert"
-msgstr "期限なし"
-
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Review your purchases"
 msgstr "購入品を確認"
@@ -7073,6 +7061,14 @@ msgstr "ファイルを選択"
 msgid "Select folder"
 msgstr "フォルダを選択"
 
+#. %1$d is the number of mails
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Retweet sent successfully"
+msgid "Selected message was moved successfully."
+msgid_plural "Selected messages has been moved successfully."
+msgstr[0] "リツイートが正しく送信されました。"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "選択オプションの詳細"
@@ -7304,6 +7300,20 @@ msgstr "共有"
 msgid "Shopping cart"
 msgstr "ショッピング カート"
 
+#. %1$s single mail address or comma separated list of multiple
+#. %2$s target mail category
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid ""
+#| "All messages older than %1$d days will be moved to the archive folder"
+msgid ""
+"Should all other past and future messages from %1$s also be moved to %2$s?"
+msgstr "%1$d 日以上経過したメッセージは、アーカイブ フォルダに移動されます。"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Should only the curret message or all messages of sender be moved"
+msgstr ""
+
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "表示"
@@ -7516,6 +7526,11 @@ msgstr "このアカウントの再認証中にエラーが発生しました。
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Something went wrong saving your changes."
 msgstr "変更の保存中にエラーが発生しました。"
+
+#. tabbed inbox feature: in case the long running update job fails
+#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+msgid "Sorry, common mails couldn't be assigned automatically."
+msgstr ""
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
@@ -8273,6 +8288,10 @@ msgstr "開始日は終了日より前の日付でなければなりません。
 msgid "The subscription could not be created."
 msgstr "登録できませんでした。"
 
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+msgid "The tabbed inbox can be completely disabled in the mail settings."
+msgstr ""
+
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
@@ -8556,13 +8575,6 @@ msgstr "このメールをポータルに追加しました。"
 
 #: apps/io.ox/mail/detail/content.js module:io.ox/mail
 msgid "This mail has no content"
-msgstr "このメールには内容がありません。"
-
-#. %1$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy, c-format
-#| msgid "This mail has no content"
-msgid "This mail was moved to %1$s."
 msgstr "このメールには内容がありません。"
 
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
@@ -9262,6 +9274,11 @@ msgstr "黄"
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Yes"
 msgstr "はい"
+
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Yes, always move them all"
+msgstr ""
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Yes, send without subject"
@@ -11091,6 +11108,14 @@ msgstr "yyyy"
 
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "アンティグア‐バルブダ"
+
+#~ msgid "Apply"
+#~ msgstr "ロールを割り当てる"
+
+#, fuzzy
+#~| msgid "Email from %1$s: %2$s"
+#~ msgid "Apply for mails from %1$s"
+#~ msgstr "%1$s からのメール: %2$s"
 
 #~ msgid "Appointment '%s' not found."
 #~ msgstr "アポイント '%s' が見つかりません。"
@@ -14244,6 +14269,11 @@ msgstr "yyyy"
 #~ msgid "Morocco"
 #~ msgstr "モロッコ"
 
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Move all mails from a sender"
+#~ msgstr "全てのサブフォルダに適用"
+
 #~ msgid "Move all messages to another folder"
 #~ msgstr "メッセージを別のフォルダへ移動"
 
@@ -15312,11 +15342,13 @@ msgstr "yyyy"
 #~ msgid "Retweet new"
 #~ msgstr "今すぐリツイート"
 
-#~ msgid "Retweet sent successfully"
-#~ msgstr "リツイートが正しく送信されました。"
-
 #~ msgid "Reunion"
 #~ msgstr "レユニオン島"
+
+#, fuzzy
+#~| msgid "Never"
+#~ msgid "Revert"
+#~ msgstr "期限なし"
 
 #~ msgid "Revert Last Operation"
 #~ msgstr "前の操作に戻る"
@@ -16572,6 +16604,11 @@ msgstr "yyyy"
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "このメールには公開への URL があります。"
+
+#, fuzzy
+#~| msgid "This mail has no content"
+#~ msgid "This mail was moved to %1$s."
+#~ msgstr "このメールには内容がありません。"
 
 #~ msgid "This may take some seconds"
 #~ msgstr "この処理には数秒かかる場合があります。"

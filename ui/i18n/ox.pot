@@ -230,6 +230,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
+#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js
 #: module:io.ox/core
 #: apps/io.ox/calendar/actions.js
@@ -4088,8 +4089,11 @@ msgctxt "verb"
 msgid "Archive"
 msgstr ""
 
+#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js
 #: module:io.ox/core
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
 msgid "Move all"
 msgstr ""
 
@@ -4807,8 +4811,6 @@ msgstr ""
 #. declines the use of desktop notifications
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
 msgid "Never"
 msgstr ""
 
@@ -8168,31 +8170,24 @@ msgstr ""
 
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
-msgid "Apply for all mails?"
+msgid "Apply for all messages?"
 msgstr ""
 
-#. %1$s target mail category
+#. %1$d is the number of mails
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
 #, c-format
-msgid "This mail was moved to %1$s."
-msgstr ""
+msgid "Selected message was moved successfully."
+msgid_plural "Selected messages has been moved successfully."
+msgstr[0] ""
+msgstr[1] ""
 
 #. %1$s single mail address or comma separated list of multiple
+#. %2$s target mail category
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
 #, c-format
-msgid "Apply for mails from %1$s"
-msgstr ""
-
-#: apps/io.ox/mail/categories/dialogs.js
-#: module:io.ox/mail
-msgid "Revert"
-msgstr ""
-
-#: apps/io.ox/mail/categories/dialogs.js
-#: module:io.ox/mail
-msgid "Apply"
+msgid "Should all other past and future messages from %1$s also be moved to %2$s?"
 msgstr ""
 
 #. might be suitable to use 'tabs' rather than translating it
@@ -8203,12 +8198,17 @@ msgstr ""
 
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
-msgid "Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs."
+msgid "Please feel free to rename tabs to better match your needs. Use checkboxes to enable or disable specific tabs."
 msgstr ""
 
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
-msgid "Please note that some of the tabs can not be disabled."
+msgid "Note that some of the tabs can not be disabled."
+msgstr ""
+
+#: apps/io.ox/mail/categories/dialogs.js
+#: module:io.ox/mail
+msgid "The tabbed inbox can be completely disabled in the mail settings."
 msgstr ""
 
 #: apps/io.ox/mail/categories/main.js
@@ -8232,15 +8232,22 @@ msgstr ""
 msgid "Drop here!"
 msgstr ""
 
+#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "It will take some time until common mails are assigned to the default tabs."
+msgstr ""
+
+#. tabbed inbox feature: in case the long running update job fails
+#: apps/io.ox/mail/categories/main.js
+#: module:io.ox/mail
+msgid "Sorry, common mails couldn't be assigned automatically."
+msgstr ""
+
 #. Helper text for mail tabs without content
 #: apps/io.ox/mail/categories/main.js
 #: module:io.ox/mail
 msgid "To fill this area please drag and drop mails to the title of this tab."
-msgstr ""
-
-#: apps/io.ox/mail/categories/main.js
-#: module:io.ox/mail
-msgid "It will take some time until mails are assigned to the default tabs"
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
@@ -9164,14 +9171,22 @@ msgstr ""
 msgid "Show requests for read receipts"
 msgstr ""
 
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
-msgid "Ask"
+msgid "Please ask me every time"
 msgstr ""
 
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
-msgid "Always"
+msgid "Yes, always move them all"
+msgstr ""
+
+#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "No, only move selected message(s)"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
@@ -9186,7 +9201,7 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
-msgid "Move all mails from a sender"
+msgid "Should only the curret message or all messages of sender be moved"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
