@@ -166,7 +166,8 @@ define('io.ox/portal/settings/pane', [
                         tabindex: 1,
                         'data-toggle': 'dropdown',
                         'aria-haspopup': 'true',
-                        'aria-label': title + ', ' + gt('Color')
+                        //#. %1$s is the title of the item, which should be colored
+                        'aria-label': gt('Color %1$s', title)
                     }).addClass('dropdown-toggle'),
                     gt('Color'),
                     'color',
@@ -276,7 +277,7 @@ define('io.ox/portal/settings/pane', [
                 if (baton.view.options.editable) {
                     $controls.append(
                         listUtils.appendIconText(
-                            listUtils.controlsEdit(title, gt('Edit')),
+                            listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
                             gt('Edit'),
                             'edit'
                         )
@@ -297,17 +298,21 @@ define('io.ox/portal/settings/pane', [
 
                 if (_.device('!smartphone')) {
                     $controls.append(
-                        listUtils.appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Disable') }), gt('Disable'), 'disable')
+                        listUtils.appendIconText($link.attr({
+                            'aria-label': gt('Disable %1$s', title)
+                        }), gt('Disable'), 'disable')
                     );
                 }
             } else {
                 $controls.append(
-                    listUtils.appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Enable') }), gt('Enable'), 'enable')
+                    listUtils.appendIconText($link.attr({
+                        'aria-label': gt('Enable %1$s', title)
+                    }), gt('Enable'), 'enable')
                 );
             }
 
             $controls.append(
-                listUtils.controlsDelete(title, gt('remove'))
+                listUtils.controlsDelete({ title: gt('Remove %1$s', title) })
             );
 
             this.append($controls);

@@ -109,9 +109,9 @@ define('io.ox/settings/accounts/settings/pane', [
                     listUtils.widgetIcon(self.model.get('accountType')),
                     listUtils.widgetTitle(title),
                     listUtils.widgetControlls().append(
-                        listUtils.controlsDelete(title, gt('Delete'), self.model.get('id')),
+                        self.model.get('id') !== 0 ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : '',
                         listUtils.appendIconText(
-                                listUtils.controlsEdit(title, gt('Edit')),
+                                listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
                                 gt('Edit'),
                                 'edit'
                             )

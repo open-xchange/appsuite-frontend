@@ -11,7 +11,9 @@
 * @author Christoph Kopp <christoph.kopp@open-xchange.com>
 */
 
-define('io.ox/backbone/mini-views/listutils', [], function () {
+define('io.ox/backbone/mini-views/listutils', [
+    'gettext!io.ox/core'
+], function (gt) {
 
     'use strict';
 
@@ -82,41 +84,28 @@ define('io.ox/backbone/mini-views/listutils', [], function () {
         widgetControlls: function () {
             return $('<div class="widget-controls">');
         },
-        controlsDelete: function (title, label, id) {
-            var control;
-            if (id !== 0) {
-                // trash icon
-                control = $('<a class="remove">').attr({
-                    href: '#',
-                    tabindex: 1,
-                    role: 'button',
-                    title: title,
-                    'data-action': 'delete',
-                    'aria-label': title + ', ' + label
-                })
-                .append($('<i class="fa fa-trash-o" aria-hidden="true">'));
-            } else {
-                // empty dummy
-                control = $('<a class="remove" style="display: none">').attr({
-                    href: '#',
-                    tabindex: -1,
-                    role: 'button',
-                    title: title,
-                    'aria-label': title + ', ' + label
-                })
-                .append($('<i class="fa fa-trash-o" aria-hidden="true">'));
-            }
-            return control;
-        },
-        controlsEdit: function (title, label, action) {
-            return $('<a class="action">').text(label).attr({
+        controlsDelete: function (opt) {
+            opt = _.extend({
                 href: '#',
                 tabindex: 1,
                 role: 'button',
-                title: label,
-                'data-action': action ? action : 'edit',
-                'aria-label': title + ', ' + label
-            });
+                'data-action': 'delete',
+                title: gt('Delete')
+            }, opt);
+            return $('<a class="remove">')
+                .attr(opt)
+                .append($('<i class="fa fa-trash-o" aria-hidden="true">'));
+        },
+        controlsEdit: function (opt) {
+            opt = _.extend({
+                href: '#',
+                tabindex: 1,
+                role: 'button',
+                label: gt('Edit'),
+                'data-action': 'edit',
+                'aria-label': gt('Edit')
+            }, opt);
+            return $('<a class="action">').text(opt.label).attr(_.omit(opt, 'label'));
         },
         controlsToggle: function (label) {
             label = label ? label : '';
@@ -139,15 +128,15 @@ define('io.ox/backbone/mini-views/listutils', [], function () {
             .append($('<i class="fa fa-bars" aria-hidden="true">'))
             .on('click', $.preventDefault);
         },
-        controlProcessSub: function (title, label, faClass) {
-            return $('<a>').append($('<i/>').addClass('fa ' + faClass)).attr({
-                title: label,
+        controlProcessSub: function (opt) {
+            opt = _.extend({
                 href: '#',
                 role: 'button',
                 'data-action': 'toggle-process-subsequent',
                 tabindex: 1,
-                'aria-label': title + ', ' + label
-            });
+                title: gt('Process subsequent rules')
+            }, opt);
+            return $('<a>').append($('<i>').addClass('fa ' + opt.faClass)).attr(_.omit(opt, 'faClass'));
         },
         drawError: function (account) {
             if (!account || !account.get('hasError')) {
