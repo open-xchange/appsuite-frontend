@@ -108,7 +108,7 @@ define('io.ox/mail/vacationnotice/settings/register', [
         save: function (node) {
             return filterModel.save().done(
                 function () {
-                    node.trigger('refresh:mailfilter');
+                    if (node) node.trigger('refresh:mailfilter');
                     touchAttributes(filterModel);
                     //notifications.yell('success', gt('Your vacation notice has been saved'));
                 }
