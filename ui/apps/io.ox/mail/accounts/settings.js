@@ -38,7 +38,9 @@ define('io.ox/mail/accounts/settings', [
         //TOOD: hack to avoid horizontal scrollbar
         myView.dialog.getBody().css('padding-right', '15px');
 
-        myView.dialog.append(
+        myView.dialog.header(
+            $('<h2>').text(myModel.get('id') ? gt('Edit mail account') : gt('Add mail account'))
+        ).append(
             myView.render().el
         )
         .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })

@@ -84,6 +84,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
             this.$el.modal({ keyboard: false }).modal('show');
+            this.$el.siblings().attr('aria-hidden', true);
             this.trigger('open');
             // set initial focus
             this.previousFocus = $(document.activeElement);
@@ -99,6 +100,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         close: function () {
             this.trigger('before:close');
             this.$el.modal('hide');
+            this.$el.siblings().removeAttr('aria-hidden');
             this.trigger('close');
             if (this.previousFocus) this.previousFocus.focus();
             this.$el.remove();
