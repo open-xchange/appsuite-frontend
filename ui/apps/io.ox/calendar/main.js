@@ -279,6 +279,10 @@ define('io.ox/calendar/main', [
             };
 
             app.grid = new VGrid(app.left, gridOptions);
+            app.left.attr({
+                role: 'navigation',
+                'aria-label': 'Appointment list'
+            });
 
             app.getGrid = function () {
                 return this.grid;
@@ -300,6 +304,7 @@ define('io.ox/calendar/main', [
             app.treeView = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'calendar' });
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
+            app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
         },
 
         'premium-area': function (app) {

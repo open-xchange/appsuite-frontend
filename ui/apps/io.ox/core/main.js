@@ -227,10 +227,6 @@ define('io.ox/core/main', [
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
     topbar
-        .attr({
-            'aria-label': gt('Applications'),
-            'role': 'banner'
-        })
         // prevent dragging links
         .on('dragstart', false)
         // make system drop-down accessible
@@ -241,6 +237,12 @@ define('io.ox/core/main', [
         })
         .end()
         .find('i.fa-bars').removeClass('fa-bars').addClass('fa-angle-double-right ');
+
+    launchers
+        .attr({
+            'role': 'banner',
+            'aria-label': gt('Apps')
+        });
 
     // whatever ...
     gt.pgettext('app', 'Portal');
@@ -1167,7 +1169,7 @@ define('io.ox/core/main', [
             id: 'default',
             draw: function () {
 
-                var rightbar = $('<ul class="launchers-secondary">');
+                var rightbar = $('<ul class="launchers-secondary" role="banner">').attr('aria-label', gt('Actions'));
 
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', rightbar);

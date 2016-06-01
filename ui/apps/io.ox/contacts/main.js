@@ -173,7 +173,7 @@ define('io.ox/contacts/main', [
             app.right = right.addClass('default-content-padding f6-target')
                 .attr({
                     'tabindex': 1,
-                    'role': 'complementary',
+                    'role': 'main',
                     'aria-label': gt('Contact Details')
                 }).scrollable();
         },
@@ -964,7 +964,7 @@ define('io.ox/contacts/main', [
         app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">')
             .attr({
                 role: 'navigation',
-                'aria-label': gt('Item List')
+                'aria-label': gt('Contacts')
             });
 
         app.grid = new VGrid(app.gridContainer, {

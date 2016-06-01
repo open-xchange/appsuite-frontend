@@ -288,7 +288,10 @@ define('io.ox/files/main', [
             node.append(
                 app.listControl.render().$el
                 //#. items list (e.g. mails)
-                .attr('aria-label', gt('Item list'))
+                .attr({
+                    role: 'main',
+                    'aria-label': gt('Files')
+                })
                 .find('.toolbar')
                 //#. toolbar with 'select all' and 'sort by'
                 .attr('aria-label', gt('Item list options'))

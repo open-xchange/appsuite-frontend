@@ -1484,7 +1484,7 @@ define('io.ox/core/desktop', [
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body" role="main">').attr('aria-label', gt('Main window')),
+                        win.nodes.body = $('<div class="window-body">'),
 
                         win.nodes.footer = $('<div class="window-footer">')
                     )
@@ -1524,7 +1524,7 @@ define('io.ox/core/desktop', [
                     id: 'view',
                     index: 100,
                     draw: function (baton) {
-                        baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find">');
+                        baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find" role="search">');
 
                         // add nodes
                         this.nodes.sidepanel

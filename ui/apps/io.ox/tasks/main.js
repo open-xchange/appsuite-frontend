@@ -231,7 +231,7 @@ define('io.ox/tasks/main', [
             app.right = right.addClass('default-content-padding f6-target task-detail-container')
             .attr({
                 'tabindex': 1,
-                'role': 'complementary',
+                'role': 'main',
                 'aria-label': gt('Task Details')
             })
             .scrollable();
@@ -244,6 +244,10 @@ define('io.ox/tasks/main', [
                 listRequest;
 
             app.left.append(app.gridContainer);
+            app.left.attr({
+                role: 'navigation',
+                'aria-label': 'Task list'
+            });
 
             grid.addTemplate(template.main);
 

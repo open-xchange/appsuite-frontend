@@ -639,7 +639,9 @@ define('io.ox/portal/main', [
         }));
 
         win.nodes.main.addClass('io-ox-portal f6-target').attr({
-            'tabindex': '1'
+            'tabindex': '1',
+            role: 'main',
+            'aria-label': gt('Portal widgets')
         });
 
         win.setTitle(gt('Portal'));

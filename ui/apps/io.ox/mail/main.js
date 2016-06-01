@@ -369,10 +369,7 @@ define('io.ox/mail/main', [
                 right = app.pages.getPage('detailView');
 
             app.left = left.addClass('border-right');
-            app.right = right.addClass('mail-detail-pane').attr({
-                'role': 'complementary',
-                'aria-label': gt('Mail Details')
-            });
+            app.right = right.addClass('mail-detail-pane');
         },
 
         /*
@@ -533,8 +530,7 @@ define('io.ox/mail/main', [
             app.listControl = new ListViewControl({ id: 'io.ox/mail', listView: app.listView, app: app });
             app.left.append(
                 app.listControl.render().$el
-                    //#. items list (e.g. mails)
-                    .attr('aria-label', gt('Item list'))
+                    .attr('aria-label', gt('Messages'))
                     .find('.toolbar')
                     //#. toolbar with 'select all' and 'sort by'
                     .attr('aria-label', gt('Item list options'))

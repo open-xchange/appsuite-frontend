@@ -290,7 +290,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          */
         render: function (model) {
             // a11y
-            this.$el.attr({ tabindex: -1, role: 'complementary' }); // TODO: check if we need to set role 'tablist' now instead
+            this.$el.attr({ tabindex: -1, role: 'complementary', 'aria-label': gt('Details') }); // TODO: check if we need to set role 'tablist' now instead
             // set device type
             Util.setDeviceClass(this.$el);
             // attach the touch handlers

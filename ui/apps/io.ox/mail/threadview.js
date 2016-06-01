@@ -60,8 +60,8 @@ define('io.ox/mail/threadview', [
         draw: function () {
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
-                    $('<div class="thread-view-header">'),
-                    this.$messages = $('<div class="thread-view list-view">')
+                    $('<div class="thread-view-header" role="banner">').attr('aria-label', gt('Conversation')),
+                    this.$messages = $('<div class="thread-view list-view" role="region">')
                 )
             );
         }
@@ -141,14 +141,17 @@ define('io.ox/mail/threadview', [
         updateHeader: function () {
 
             var baton = new ext.Baton({ view: this }),
-                node = this.$el.find('.thread-view-list > .thread-view-header').empty();
+                node = this.$el.find('.thread-view-list > .thread-view-header').empty(),
+                keepFirstPrefix = baton.view.collection.length === 1,
+                subject = util.getSubject(baton.view.model.toJSON(), keepFirstPrefix);
 
             if (this.collection.length > 0) {
                 ext.point('io.ox/mail/thread-view/header').invoke('draw', node, baton);
             }
 
-            this.$el.find('.thread-view').toggleClass('multiple-messages', this.collection.length > 1);
-
+            this.$el.find('.thread-view')
+                .toggleClass('multiple-messages', this.collection.length > 1)
+                .attr('aria-label', subject);
         },
 
         updatePosition: function (position) {
@@ -450,8 +453,8 @@ define('io.ox/mail/threadview', [
         draw: function () {
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
-                    $('<div class="thread-view-header">'),
-                    this.$messages = $('<ul class="thread-view list-view">')
+                    $('<div class="thread-view-header" role="banner">').attr('aria-label', gt('Conversation')),
+                    this.$messages = $('<ul class="thread-view list-view" role="main">')
                 )
             );
         }
