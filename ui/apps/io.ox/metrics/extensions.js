@@ -35,14 +35,22 @@ define('io.ox/metrics/extensions', [
     point.extend({
         id: 'app',
         register: function () {
-            var metrics = this;
-            ox.on('app:start', function (app) {
+            var metrics = this,
+                lastTracked;
+            // inital
+            trackPage(ox.ui.App.getCurrentApp());
+            ox.on('app:start app:resume', trackPage);
+            // track
+            function trackPage(app) {
+                // do not track resume on curent active app
+                if (lastTracked === app.id) return;
+                lastTracked = app.id;
                 metrics.trackPage({
                     name: app.get('name'),
                     id: app.get('id'),
                     trackingId: app.get('trackingId')
                 });
-            });
+            }
         }
     });
 
