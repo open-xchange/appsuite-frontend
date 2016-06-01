@@ -514,6 +514,11 @@ msgstr "(Само четене)"
 msgid "(Read, write, and delete)"
 msgstr "(Четене, писане и триене)"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+msgid "1 day"
+msgstr "%1$d ден"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "1 файл е бил променен скоро"
@@ -527,6 +532,23 @@ msgstr[0] ""
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "1 minute"
 msgstr "1 минута"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "monthly"
+msgid "1 month"
+msgstr "месечно"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+msgid "1 week"
+msgstr "%1$d седмица"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "yearly"
+msgid "1 year"
+msgstr "годишно"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
@@ -546,6 +568,11 @@ msgstr "15 минути"
 msgid "3 minutes"
 msgstr "3 минути"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+msgid "3 months"
+msgstr "Месец"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "30 minutes"
 msgstr "30 минути"
@@ -554,6 +581,11 @@ msgstr "30 минути"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 минути"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+msgid "6 months"
+msgstr "Месец"
 
 #: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
 msgid ""
@@ -1876,6 +1908,13 @@ msgstr ""
 msgid "Color"
 msgstr "Цвят"
 
+#. %1$s is the title of the item, which should be colored
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "Color"
+msgid "Color %1$s"
+msgstr "Цвят"
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Color quoted lines"
 msgstr ""
@@ -2406,6 +2445,7 @@ msgid "Deferred"
 msgstr ""
 
 #. Really delete portal widget - in contrast to "just disable"
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
@@ -2414,10 +2454,10 @@ msgstr ""
 #: module:io.ox/contacts apps/io.ox/contacts/actions/delete.js
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/actions/remove.js
-#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
-#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/actions/delete.js
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
+#: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -2425,10 +2465,8 @@ msgstr ""
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/mail/toolbar.js apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts apps/io.ox/settings/apps/settings/pane.js
-#: apps/io.ox/tasks/actions.js module:io.ox/tasks
-#: apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/toolbar.js
@@ -2436,6 +2474,13 @@ msgstr ""
 #: apps/plugins/portal/xing/actions.js
 msgid "Delete"
 msgstr "Изтрий"
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid "Delete task"
+msgid "Delete %1$s"
+msgstr "Изтрий задача"
 
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
@@ -2575,6 +2620,12 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Disable"
+msgstr "Изключи"
+
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "Disable"
+msgid "Disable %1$s"
 msgstr "Изключи"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -2973,15 +3024,15 @@ msgid "EB"
 msgstr "ЕБ"
 
 #. Used as a button label to enter the "edit mode"
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/io.ox/settings/accounts/settings/pane.js
@@ -2992,6 +3043,15 @@ msgstr "ЕБ"
 #: apps/plugins/administration/resources/settings/toolbar.js
 msgid "Edit"
 msgstr "Редактирай"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid "%1$s at %2$s"
+msgid "Edit %1$s"
+msgstr "%1$s в %2$s"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Edit Contact"
@@ -3184,6 +3244,12 @@ msgstr "Празно"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
 msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "%1$s at %2$s"
+msgid "Enable %1$s"
+msgstr "%1$s в %2$s"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Enable for the following addresses"
@@ -3386,6 +3452,12 @@ msgstr ""
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Expert user?"
 msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Applications"
+msgid "Expiration"
+msgstr "Приложения"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
@@ -3700,6 +3772,11 @@ msgstr ""
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Folder-specific actions"
+msgstr ""
+
+#. %1$s is the name of the folder
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "Folder-specific actions for %1$s"
 msgstr ""
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
@@ -5395,6 +5472,12 @@ msgid ""
 "content. Therefore you must create a new folder for this subscription."
 msgstr ""
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Authentication"
+msgid "Notification"
+msgstr "Аутентикация"
+
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notifications"
 msgstr ""
@@ -6284,9 +6367,14 @@ msgstr ""
 msgid "Private address"
 msgstr ""
 
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "Process subsequent rules of %1$s"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -6618,6 +6706,8 @@ msgid "Remove"
 msgstr "премахни"
 
 #. %1$s is the user name of the group member
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove %1$s"
 msgstr ""
@@ -8128,6 +8218,10 @@ msgstr ""
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The sending of the message has been canceled."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -8797,6 +8891,10 @@ msgstr ""
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Urgency"
+msgstr ""
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+msgid "Use"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9940,6 +10038,12 @@ msgstr ""
 msgid "one year"
 msgstr ""
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Change password"
+msgid "optional password"
+msgstr "Промени парола"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "orange"
 msgstr "оранжев"
@@ -9950,10 +10054,6 @@ msgstr ""
 
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
 msgid "private"
-msgstr ""
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-msgid "process subsequent rules"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -9973,11 +10073,6 @@ msgstr ""
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
 msgstr "червен"
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "remove"
-msgstr "премахни"
 
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
@@ -10093,6 +10188,18 @@ msgstr ""
 msgid "weekly"
 msgstr "седмично"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "when the link is expired"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "when the receivers have accessed the files"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "when the receivers have finished downloading the files"
+msgstr ""
+
 #. recurrence string
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "work days"
@@ -10162,3 +10269,6 @@ msgstr ""
 #~| msgid "This mail has no content"
 #~ msgid "This mail was moved to %1$s."
 #~ msgstr "Този мейл няма съдържание"
+
+#~ msgid "remove"
+#~ msgstr "премахни"

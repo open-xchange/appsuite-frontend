@@ -514,6 +514,10 @@ msgstr "(Alleen-lezen)"
 msgid "(Read, write, and delete)"
 msgstr "(Lezen, schrijven en verwijderen)"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "1 day"
+msgstr "1 dag"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "1 bestand is recent aangepast"
@@ -528,6 +532,22 @@ msgstr[1] "%1$d items"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "1 minute"
 msgstr "1 minuut"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "one month"
+msgid "1 month"
+msgstr "één maand"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "1 week"
+msgstr "1 week"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "one year"
+msgid "1 year"
+msgstr "één jaar"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
@@ -547,6 +567,12 @@ msgstr "15 minuten"
 msgid "3 minutes"
 msgstr "3 minuten"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "six months"
+msgid "3 months"
+msgstr "zes maanden"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "30 minutes"
 msgstr "30 minuten"
@@ -555,6 +581,12 @@ msgstr "30 minuten"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minuten"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "six months"
+msgid "6 months"
+msgstr "zes maanden"
 
 #: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
 msgid ""
@@ -1914,6 +1946,13 @@ msgstr "Formulier inklappen"
 msgid "Color"
 msgstr "Kleur"
 
+#. %1$s is the title of the item, which should be colored
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "close for %1$s"
+msgid "Color %1$s"
+msgstr "sluiten voor %1$s"
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Geciteerde regels kleuren"
@@ -2448,6 +2487,7 @@ msgid "Deferred"
 msgstr "Uitgesteld"
 
 #. Really delete portal widget - in contrast to "just disable"
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
@@ -2456,10 +2496,10 @@ msgstr "Uitgesteld"
 #: module:io.ox/contacts apps/io.ox/contacts/actions/delete.js
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/actions/remove.js
-#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
-#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/actions/delete.js
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
+#: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -2467,10 +2507,8 @@ msgstr "Uitgesteld"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/mail/toolbar.js apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts apps/io.ox/settings/apps/settings/pane.js
-#: apps/io.ox/tasks/actions.js module:io.ox/tasks
-#: apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/toolbar.js
@@ -2478,6 +2516,13 @@ msgstr "Uitgesteld"
 #: apps/plugins/portal/xing/actions.js
 msgid "Delete"
 msgstr "Verwijderen"
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid "Due %1$s"
+msgid "Delete %1$s"
+msgstr "Vervalt %1$s"
 
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
@@ -2614,6 +2659,12 @@ msgstr "Directe link: %1$s"
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Disable"
+msgstr "Uitschakelen"
+
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "Disable"
+msgid "Disable %1$s"
 msgstr "Uitschakelen"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -3032,15 +3083,15 @@ msgid "EB"
 msgstr "EB"
 
 #. Used as a button label to enter the "edit mode"
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/io.ox/settings/accounts/settings/pane.js
@@ -3051,6 +3102,15 @@ msgstr "EB"
 #: apps/plugins/administration/resources/settings/toolbar.js
 msgid "Edit"
 msgstr "Bewerken"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid "next %1$s"
+msgid "Edit %1$s"
+msgstr "volgende %1$s"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Edit Contact"
@@ -3242,6 +3302,12 @@ msgstr "Prullenbak legen"
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
+msgstr "Inschakelen"
+
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "Enable"
+msgid "Enable %1$s"
 msgstr "Inschakelen"
 
 # (Reinout) Portal = portaal, niet portable
@@ -3451,6 +3517,12 @@ msgstr "De periode uitbreiden met één maand"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Expert user?"
 msgstr "Geavanceerde gebruiker?"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Expires in"
+msgid "Expiration"
+msgstr "Verloopt op"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
@@ -3775,6 +3847,13 @@ msgstr ""
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Folder-specific actions"
+msgstr "Mapspecifieke acties"
+
+#. %1$s is the name of the folder
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+#, fuzzy
+#| msgid "Folder-specific actions"
+msgid "Folder-specific actions for %1$s"
 msgstr "Mapspecifieke acties"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
@@ -5496,6 +5575,12 @@ msgstr ""
 "Opmerking: Dit abonnement vervangt de inhoud van de agenda met de externe "
 "inhoud. U moet daarom een nieuwe map maken voor dit abonnement."
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notification"
+msgstr "Kennisgevingen"
+
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notifications"
 msgstr "Kennisgevingen"
@@ -6403,9 +6488,16 @@ msgstr "Privé"
 msgid "Private address"
 msgstr "Privéadressen"
 
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
+msgstr "Verwerk ook de andere regels"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Process subsequent rules"
+msgid "Process subsequent rules of %1$s"
 msgstr "Verwerk ook de andere regels"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -6750,6 +6842,8 @@ msgid "Remove"
 msgstr "Verwijderen"
 
 #. %1$s is the user name of the group member
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove %1$s"
 msgstr "Verwijder %1$s"
@@ -8340,6 +8434,10 @@ msgstr ""
 "De verzender wil een bevestiging ontvangen als u dit e-mailbericht heeft "
 "gelezen"
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "The sending of the message has been canceled."
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -9072,6 +9170,12 @@ msgstr "Uptime: %1$s minuten"
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Urgency"
 msgstr "Urgentie"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "User"
+msgid "Use"
+msgstr "Gebruiker"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use SSL connection"
@@ -10240,6 +10344,12 @@ msgstr "één week"
 msgid "one year"
 msgstr "één jaar"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Your old password"
+msgid "optional password"
+msgstr "Uw oude wachtwoord"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "orange"
 msgstr "oranje"
@@ -10251,10 +10361,6 @@ msgstr "roze"
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
 msgid "private"
 msgstr "privé"
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-msgid "process subsequent rules"
-msgstr "verwerk de volgende regels"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
@@ -10273,11 +10379,6 @@ msgstr "Lees alleen eigen objecten"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
 msgstr "rood"
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "remove"
-msgstr "verwijderen"
 
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
@@ -10392,6 +10493,20 @@ msgstr "toon de map"
 msgid "weekly"
 msgstr "wekelijks"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Your session is expired"
+msgid "when the link is expired"
+msgstr "Uw sessie is verlopen"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "when the receivers have accessed the files"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "when the receivers have finished downloading the files"
+msgstr ""
+
 #. recurrence string
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "work days"
@@ -10438,14 +10553,8 @@ msgstr "yyyy"
 #~ msgid "0 minutes"
 #~ msgstr "0 minuten"
 
-#~ msgid "1 day"
-#~ msgstr "1 dag"
-
 #~ msgid "1 hour"
 #~ msgstr "1 uur"
-
-#~ msgid "1 week"
-#~ msgstr "1 week"
 
 #~ msgid "12 hour"
 #~ msgstr "12 uur"
@@ -12341,6 +12450,12 @@ msgstr "yyyy"
 
 #~ msgid "open"
 #~ msgstr "openen"
+
+#~ msgid "process subsequent rules"
+#~ msgstr "verwerk de volgende regels"
+
+#~ msgid "remove"
+#~ msgstr "verwijderen"
 
 #, fuzzy
 #~| msgid "Folder permissions"

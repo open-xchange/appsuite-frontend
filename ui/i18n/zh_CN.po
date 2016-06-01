@@ -506,6 +506,10 @@ msgstr "（唯读）"
 msgid "(Read, write, and delete)"
 msgstr "（读取、写入、删除）"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "1 day"
+msgstr "1 天"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "最近更改了一个文件"
@@ -520,6 +524,22 @@ msgstr[1] "%1$d 项目"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "1 minute"
 msgstr "1 分钟"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "one month"
+msgid "1 month"
+msgstr "1 个月"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "1 week"
+msgstr "1 周"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "one year"
+msgid "1 year"
+msgstr "1 年"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
@@ -539,6 +559,12 @@ msgstr "15 分钟"
 msgid "3 minutes"
 msgstr "3 分钟"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "six months"
+msgid "3 months"
+msgstr "6 个月"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "30 minutes"
 msgstr "30 分钟"
@@ -547,6 +573,12 @@ msgstr "30 分钟"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 分钟"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "six months"
+msgid "6 months"
+msgstr "6 个月"
 
 #: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
 msgid ""
@@ -1870,6 +1902,13 @@ msgstr "折叠表格"
 msgid "Color"
 msgstr "颜色"
 
+#. %1$s is the title of the item, which should be colored
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "close for %1$s"
+msgid "Color %1$s"
+msgstr "按 %1$s 关闭"
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "颜色引用线"
@@ -2399,6 +2438,7 @@ msgid "Deferred"
 msgstr "延迟"
 
 #. Really delete portal widget - in contrast to "just disable"
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
@@ -2407,10 +2447,10 @@ msgstr "延迟"
 #: module:io.ox/contacts apps/io.ox/contacts/actions/delete.js
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/actions/remove.js
-#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
-#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/actions/delete.js
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
+#: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -2418,10 +2458,8 @@ msgstr "延迟"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/mail/toolbar.js apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts apps/io.ox/settings/apps/settings/pane.js
-#: apps/io.ox/tasks/actions.js module:io.ox/tasks
-#: apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/toolbar.js
@@ -2429,6 +2467,13 @@ msgstr "延迟"
 #: apps/plugins/portal/xing/actions.js
 msgid "Delete"
 msgstr "删除"
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid "Due %1$s"
+msgid "Delete %1$s"
+msgstr "%1$s 到期"
 
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
@@ -2565,6 +2610,12 @@ msgstr "直接链接：%1$s"
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Disable"
+msgstr "禁用"
+
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "Disable"
+msgid "Disable %1$s"
 msgstr "禁用"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -2964,15 +3015,15 @@ msgid "EB"
 msgstr "EB"
 
 #. Used as a button label to enter the "edit mode"
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/io.ox/settings/accounts/settings/pane.js
@@ -2983,6 +3034,15 @@ msgstr "EB"
 #: apps/plugins/administration/resources/settings/toolbar.js
 msgid "Edit"
 msgstr "编辑"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid "next %1$s"
+msgid "Edit %1$s"
+msgstr "下 %1$s"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Edit Contact"
@@ -3172,6 +3232,12 @@ msgstr "清空垃圾"
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
+msgstr "启用"
+
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "Enable"
+msgid "Enable %1$s"
 msgstr "启用"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
@@ -3373,6 +3439,12 @@ msgstr "扩张一个月的时段"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Expert user?"
 msgstr "专家用户？"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Expires in"
+msgid "Expiration"
+msgstr "过期于"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
@@ -3685,6 +3757,13 @@ msgstr ""
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Folder-specific actions"
+msgstr "文件夹指定动作"
+
+#. %1$s is the name of the folder
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+#, fuzzy
+#| msgid "Folder-specific actions"
+msgid "Folder-specific actions for %1$s"
 msgstr "文件夹指定动作"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
@@ -5380,6 +5459,12 @@ msgid ""
 msgstr ""
 "备注：此订阅将会以外部内容取代日历内容，因此您必须为此订阅创建一个新文件夹。"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notification"
+msgstr "通知"
+
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notifications"
 msgstr "通知"
@@ -6271,9 +6356,16 @@ msgstr "私人"
 msgid "Private address"
 msgstr "私人地址"
 
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
+msgstr "处理连续规则"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Process subsequent rules"
+msgid "Process subsequent rules of %1$s"
 msgstr "处理连续规则"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -6603,6 +6695,8 @@ msgid "Remove"
 msgstr "移除"
 
 #. %1$s is the user name of the group member
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove %1$s"
 msgstr "移除 %1$s"
@@ -8149,6 +8243,12 @@ msgstr "选中的时区已经为最爱。"
 msgid "The sender wants to get notified when you have read this email"
 msgstr "此发送人想在您阅读此电子邮件时获得一个通知"
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "The setting has been saved."
+msgid "The sending of the message has been canceled."
+msgstr "设定已保存。"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -8848,6 +8948,12 @@ msgstr "正常运行时间：%1$s 分钟"
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Urgency"
 msgstr "紧急"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "User"
+msgid "Use"
+msgstr "用户"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use SSL connection"
@@ -9987,6 +10093,12 @@ msgstr "1 周"
 msgid "one year"
 msgstr "1 年"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Your old password"
+msgid "optional password"
+msgstr "您的旧密码"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "orange"
 msgstr "橙色"
@@ -9998,10 +10110,6 @@ msgstr "粉红"
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
 msgid "private"
 msgstr "私人"
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-msgid "process subsequent rules"
-msgstr "处理连续规则"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
@@ -10020,11 +10128,6 @@ msgstr "读取拥有的对象"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
 msgstr "红色"
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "remove"
-msgstr "移除"
 
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
@@ -10136,6 +10239,20 @@ msgstr "检视文件夹"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "weekly"
 msgstr "每周"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Your session is expired"
+msgid "when the link is expired"
+msgstr "会话已过期"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "when the receivers have accessed the files"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "when the receivers have finished downloading the files"
+msgstr ""
 
 #. recurrence string
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -10273,14 +10390,8 @@ msgstr "年"
 #~ msgid "0 minutes"
 #~ msgstr "0 分钟"
 
-#~ msgid "1 day"
-#~ msgstr "1 天"
-
 #~ msgid "1 hour"
 #~ msgstr "1 小时"
-
-#~ msgid "1 week"
-#~ msgstr "1 周"
 
 #~ msgid "10"
 #~ msgstr "10"
@@ -13471,9 +13582,6 @@ msgstr "年"
 #~ msgid "The requested email no longer exists"
 #~ msgstr "请求的电子邮件不再存在"
 
-#~ msgid "The setting has been saved."
-#~ msgstr "设定已保存。"
-
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
 #~ "e.g Basic settings, E-Mail or My contact data."
@@ -14101,6 +14209,12 @@ msgstr "年"
 
 #~ msgid "open"
 #~ msgstr "打开"
+
+#~ msgid "process subsequent rules"
+#~ msgstr "处理连续规则"
+
+#~ msgid "remove"
+#~ msgstr "移除"
 
 #, fuzzy
 #~| msgid "Folder permissions"

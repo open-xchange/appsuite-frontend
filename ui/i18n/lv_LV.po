@@ -531,6 +531,10 @@ msgstr "(Tikai lasīt)"
 msgid "(Read, write, and delete)"
 msgstr "(Lasīt, rakstīt un dzēst)"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "1 day"
+msgstr "1 diena"
+
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "1 fails ir nesen izmainīts"
@@ -546,6 +550,22 @@ msgstr[2] "%1$d vienības"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "1 minute"
 msgstr "1 minūte"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "one month"
+msgid "1 month"
+msgstr "viens mēnesis"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "1 week"
+msgstr "1 nedēļa"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "one year"
+msgid "1 year"
+msgstr "viens gads"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
@@ -565,6 +585,12 @@ msgstr "15 minūtes"
 msgid "3 minutes"
 msgstr "3 minūtes"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "six months"
+msgid "3 months"
+msgstr "seši mēneši"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "30 minutes"
 msgstr "30 minūtes"
@@ -573,6 +599,12 @@ msgstr "30 minūtes"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minūtes"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "six months"
+msgid "6 months"
+msgstr "seši mēneši"
 
 #: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
 msgid ""
@@ -1920,6 +1952,13 @@ msgstr "Sakļaut formu"
 msgid "Color"
 msgstr "Krāsa"
 
+#. %1$s is the title of the item, which should be colored
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "close for %1$s"
+msgid "Color %1$s"
+msgstr "slēgts priekš %1$s"
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Krāsaini iezīmētas rindas"
@@ -2453,6 +2492,7 @@ msgid "Deferred"
 msgstr "Atlikts"
 
 #. Really delete portal widget - in contrast to "just disable"
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
@@ -2461,10 +2501,10 @@ msgstr "Atlikts"
 #: module:io.ox/contacts apps/io.ox/contacts/actions/delete.js
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/actions/remove.js
-#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
-#: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/actions/delete.js
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
+#: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -2472,10 +2512,8 @@ msgstr "Atlikts"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/mail/toolbar.js apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts apps/io.ox/settings/apps/settings/pane.js
-#: apps/io.ox/tasks/actions.js module:io.ox/tasks
-#: apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/toolbar.js
@@ -2483,6 +2521,13 @@ msgstr "Atlikts"
 #: apps/plugins/portal/xing/actions.js
 msgid "Delete"
 msgstr "Dzēst"
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid "Due %1$s"
+msgid "Delete %1$s"
+msgstr "Termiņš %1$s; "
 
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
@@ -2619,6 +2664,12 @@ msgstr "Tiešā saite: %1$s"
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Disable"
+msgstr "Atspējot"
+
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "Disable"
+msgid "Disable %1$s"
 msgstr "Atspējot"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -3030,15 +3081,15 @@ msgid "EB"
 msgstr "EB"
 
 #. Used as a button label to enter the "edit mode"
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/io.ox/settings/accounts/settings/pane.js
@@ -3049,6 +3100,15 @@ msgstr "EB"
 #: apps/plugins/administration/resources/settings/toolbar.js
 msgid "Edit"
 msgstr "Rediģēt"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid "next %1$s"
+msgid "Edit %1$s"
+msgstr "nākošā %1$s"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 msgid "Edit Contact"
@@ -3240,6 +3300,12 @@ msgstr "Tukšot atkritni"
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
+msgstr "Iespējot"
+
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#, fuzzy
+#| msgid "Enable"
+msgid "Enable %1$s"
 msgstr "Iespējot"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
@@ -3447,6 +3513,12 @@ msgstr "Palielināt laika grafiku par vienu mēnesiP"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Expert user?"
 msgstr "Eksperts?"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Expires in"
+msgid "Expiration"
+msgstr "Derīga līdz"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
@@ -3767,6 +3839,13 @@ msgstr ""
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Folder-specific actions"
+msgstr "Mapes darbības"
+
+#. %1$s is the name of the folder
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+#, fuzzy
+#| msgid "Folder-specific actions"
+msgid "Folder-specific actions for %1$s"
 msgstr "Mapes darbības"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
@@ -5490,6 +5569,12 @@ msgstr ""
 "Ievērojiet: Šis abonements aizvietos esošo kalendāra saturu ar ārējā "
 "kalendāra saturu. Tāpēc ir ieteicams šim abonementam izveidot jaunu mapi."
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notification"
+msgstr "Paziņojumi"
+
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notifications"
 msgstr "Paziņojumi"
@@ -6388,9 +6473,16 @@ msgstr "Privāts"
 msgid "Private address"
 msgstr "Pivātā adrese"
 
+#: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
+msgstr "Apstrādāt nākamos noteikumus"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Process subsequent rules"
+msgid "Process subsequent rules of %1$s"
 msgstr "Apstrādāt nākamos noteikumus"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -6736,6 +6828,8 @@ msgid "Remove"
 msgstr "Noņemt"
 
 #. %1$s is the user name of the group member
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid "Remove %1$s"
 msgstr "Noņemt %1$s"
@@ -8326,6 +8420,12 @@ msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "Nosūtītājs vēlas saņemt paziņojumu par to, ka jūs esat izlasījis šo vēstuli"
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "The setting has been saved."
+msgid "The sending of the message has been canceled."
+msgstr "Iestatījums ir saglabāts"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -9054,6 +9154,12 @@ msgstr "Darbības laiks: %1$s minūtes"
 #: apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Urgency"
 msgstr "Svarīgums"
+
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#, fuzzy
+#| msgid "User"
+msgid "Use"
+msgstr "Lietotājs"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use SSL connection"
@@ -10233,6 +10339,12 @@ msgstr "viena nedēļa"
 msgid "one year"
 msgstr "viens gads"
 
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Your old password"
+msgid "optional password"
+msgstr "Jūsu vecā parole"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "orange"
 msgstr "oranžs"
@@ -10244,10 +10356,6 @@ msgstr "sārta"
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
 msgid "private"
 msgstr "privāts"
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-msgid "process subsequent rules"
-msgstr "apstrādāt nākamos noteikumus"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "purple"
@@ -10266,11 +10374,6 @@ msgstr "lasīt paša objektus"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "red"
 msgstr "sarkans"
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "remove"
-msgstr "noņemt"
 
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
@@ -10382,6 +10485,20 @@ msgstr "skatīt mapi"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "weekly"
 msgstr "ik-nedēļas"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Your session is expired"
+msgid "when the link is expired"
+msgstr "Jūsu sesijas derīgums ir beidzies"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "when the receivers have accessed the files"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "when the receivers have finished downloading the files"
+msgstr ""
 
 #. recurrence string
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -10534,14 +10651,8 @@ msgstr "yyyy"
 #~ msgid "0 minutes"
 #~ msgstr "0 minūtes"
 
-#~ msgid "1 day"
-#~ msgstr "1 diena"
-
 #~ msgid "1 hour"
 #~ msgstr "1 stunda"
-
-#~ msgid "1 week"
-#~ msgstr "1 nedēļa"
 
 #~ msgid "10"
 #~ msgstr "10"
@@ -15389,9 +15500,6 @@ msgstr "yyyy"
 #~ msgid "The server didn't respond!"
 #~ msgstr "Nav atbildes no servera!"
 
-#~ msgid "The setting has been saved."
-#~ msgstr "Iestatījums ir saglabāts"
-
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
 #~ "e.g Basic settings, E-Mail or My contact data."
@@ -16646,6 +16754,12 @@ msgstr "yyyy"
 
 #~ msgid "predefined"
 #~ msgstr "pre-definēts"
+
+#~ msgid "process subsequent rules"
+#~ msgstr "apstrādāt nākamos noteikumus"
+
+#~ msgid "remove"
+#~ msgstr "noņemt"
 
 #, fuzzy
 #~| msgid "Folder permissions"

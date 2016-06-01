@@ -93,6 +93,97 @@ msgstr ""
 msgid "Online help"
 msgstr ""
 
+#. Really delete portal widget - in contrast to "just disable"
+#: apps/io.ox/backbone/mini-views/listutils.js
+#: module:io.ox/core
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/actions/delete.js
+#: apps/io.ox/calendar/invitations/register.js
+#: module:io.ox/calendar/main
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/actions/delete.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js
+#: apps/io.ox/core/folder/actions/remove.js
+#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/core/sub/settings/pane.js
+#: module:io.ox/core/sub
+#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js
+#: module:io.ox/files
+#: apps/io.ox/files/actions/delete.js
+#: apps/io.ox/files/actions/versions-delete.js
+#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js
+#: apps/io.ox/mail/actions/delete.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/mobile-toolbar-actions.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/portal/main.js
+#: module:io.ox/portal
+#: apps/io.ox/portal/settings/widgetview.js
+#: apps/io.ox/settings/apps/settings/pane.js
+#: apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks
+#: apps/io.ox/tasks/actions/delete.js
+#: apps/io.ox/tasks/mobile-toolbar-actions.js
+#: apps/io.ox/tasks/toolbar.js
+#: apps/plugins/administration/groups/settings/toolbar.js
+#: apps/plugins/administration/resources/settings/toolbar.js
+#: apps/plugins/portal/twitter/util.js
+#: module:plugins/portal
+#: apps/plugins/portal/xing/actions.js
+msgid "Delete"
+msgstr ""
+
+#. Used as a button label to enter the "edit mode"
+#: apps/io.ox/backbone/mini-views/listutils.js
+#: module:io.ox/core
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/main.js
+#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/main.js
+#: apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js
+#: apps/io.ox/files/actions.js
+#: module:io.ox/files
+#: apps/io.ox/files/main.js
+#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/toolbar.js
+#: apps/io.ox/mail/actions.js
+#: apps/io.ox/mail/main.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+#: apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks
+#: apps/io.ox/tasks/main.js
+#: apps/io.ox/tasks/mobile-toolbar-actions.js
+#: apps/io.ox/tasks/toolbar.js
+#: apps/plugins/administration/groups/settings/toolbar.js
+#: apps/plugins/administration/resources/settings/toolbar.js
+msgid "Edit"
+msgstr ""
+
+#: apps/io.ox/backbone/mini-views/listutils.js
+#: module:io.ox/core
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Process subsequent rules"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/quota.js
 #: module:io.ox/core
 msgid "unlimited"
@@ -383,41 +474,6 @@ msgstr ""
 msgid "Please select a time for the appointment"
 msgstr ""
 
-#. Used as a button label to enter the "edit mode"
-#: apps/io.ox/calendar/actions.js
-#: module:io.ox/calendar
-#: apps/io.ox/calendar/main.js
-#: apps/io.ox/calendar/toolbar.js
-#: apps/io.ox/contacts/actions.js
-#: module:io.ox/contacts
-#: apps/io.ox/contacts/main.js
-#: apps/io.ox/contacts/mobile-toolbar-actions.js
-#: module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/files/actions.js
-#: module:io.ox/files
-#: apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
-#: module:io.ox/core
-#: apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: apps/io.ox/mail/main.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-#: apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks
-#: apps/io.ox/tasks/main.js
-#: apps/io.ox/tasks/mobile-toolbar-actions.js
-#: apps/io.ox/tasks/toolbar.js
-#: apps/plugins/administration/groups/settings/toolbar.js
-#: apps/plugins/administration/resources/settings/toolbar.js
-msgid "Edit"
-msgstr ""
-
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
@@ -428,56 +484,6 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
 msgid "Follow-up"
-msgstr ""
-
-#. Really delete portal widget - in contrast to "just disable"
-#: apps/io.ox/calendar/actions.js
-#: module:io.ox/calendar
-#: apps/io.ox/calendar/actions/delete.js
-#: apps/io.ox/calendar/invitations/register.js
-#: module:io.ox/calendar/main
-#: apps/io.ox/calendar/mobile-toolbar-actions.js
-#: apps/io.ox/calendar/toolbar.js
-#: apps/io.ox/contacts/actions.js
-#: module:io.ox/contacts
-#: apps/io.ox/contacts/actions/delete.js
-#: apps/io.ox/contacts/mobile-toolbar-actions.js
-#: module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/folder/actions/remove.js
-#: module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
-#: apps/io.ox/core/sub/settings/pane.js
-#: module:io.ox/core/sub
-#: apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/actions.js
-#: module:io.ox/files
-#: apps/io.ox/files/actions/delete.js
-#: apps/io.ox/files/actions/versions-delete.js
-#: apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/actions/delete.js
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/mail/toolbar.js
-#: apps/io.ox/portal/main.js
-#: module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-#: apps/io.ox/settings/apps/settings/pane.js
-#: apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks
-#: apps/io.ox/tasks/actions/delete.js
-#: apps/io.ox/tasks/mobile-toolbar-actions.js
-#: apps/io.ox/tasks/toolbar.js
-#: apps/plugins/administration/groups/settings/toolbar.js
-#: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/portal/twitter/util.js
-#: module:plugins/portal
-#: apps/plugins/portal/xing/actions.js
-msgid "Delete"
 msgstr ""
 
 #: apps/io.ox/calendar/actions.js
@@ -4463,6 +4469,12 @@ msgstr ""
 msgid "Folder-specific actions"
 msgstr ""
 
+#. %1$s is the name of the folder
+#: apps/io.ox/core/folder/node.js
+#: module:io.ox/core
+msgid "Folder-specific actions for %1$s"
+msgstr ""
+
 #: apps/io.ox/core/folder/picker.js
 #: module:io.ox/core
 #: apps/io.ox/core/relogin.js
@@ -7987,6 +7999,11 @@ msgstr ""
 
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
+msgid "Use"
+msgstr ""
+
+#: apps/io.ox/mail/actions.js
+#: module:io.ox/mail
 msgid "Drop here to import this mail"
 msgstr ""
 
@@ -8439,6 +8456,66 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
+msgid "Expiration"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "1 day"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "1 week"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "1 month"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "3 months"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "6 months"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "1 year"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "Notification"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "when the receivers have finished downloading the files"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "when the link is expired"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "when the receivers have accessed the files"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "optional password"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
 msgid "Drop attachments here"
 msgstr ""
 
@@ -8687,14 +8764,26 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: module:io.ox/mail
-msgid "process subsequent rules"
+#: apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Edit %1$s"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: module:io.ox/mail
+msgid "Process subsequent rules of %1$s"
+msgstr ""
+
+#. %1$s is the user name of the group member
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
-msgid "remove"
+#: apps/plugins/administration/groups/settings/members.js
+#: module:io.ox/core
+msgid "Remove %1$s"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -8906,11 +8995,6 @@ msgstr ""
 msgid "Apply rule if any condition is met."
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Process subsequent rules"
-msgstr ""
-
 #: apps/io.ox/mail/mailfilter/settings/model.js
 #: module:io.ox/mail
 msgid "New rule"
@@ -8981,6 +9065,11 @@ msgid "Sending 1 message ... %2$d%"
 msgid_plural "Sending %1$d messages ... %2$d%"
 msgstr[0] ""
 msgstr[1] ""
+
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "The sending of the message has been canceled."
+msgstr ""
 
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
@@ -9903,9 +9992,25 @@ msgstr ""
 msgid "Black"
 msgstr ""
 
+#. %1$s is the title of the item, which should be colored
+#: apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+msgid "Color %1$s"
+msgstr ""
+
 #: apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Drag to reorder widget"
+msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+msgid "Disable %1$s"
+msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js
+#: module:io.ox/portal
+msgid "Enable %1$s"
 msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js
@@ -10309,6 +10414,11 @@ msgstr ""
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "For security reasons, all credentials are encrypted with your primary account password. If you change your primary password, your external accounts might stop working. In this case, you can use your old password to recover all account passwords:"
+msgstr ""
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Delete %1$s"
 msgstr ""
 
 #: apps/io.ox/settings/accounts/settings/pane.js
@@ -10983,12 +11093,6 @@ msgstr ""
 #: apps/plugins/administration/groups/settings/members.js
 #: module:io.ox/core
 msgid "Remove member"
-msgstr ""
-
-#. %1$s is the user name of the group member
-#: apps/plugins/administration/groups/settings/members.js
-#: module:io.ox/core
-msgid "Remove %1$s"
 msgstr ""
 
 #. %1$d is the number of members
