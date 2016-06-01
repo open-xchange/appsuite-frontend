@@ -57,15 +57,14 @@ define.async('io.ox/mail/accounts/view-form', [
             { value: 'none', label: gt('None') }
         ],
 
-        // already for 7.8.0
-        // optionsConnectionSecurity = [
-        //     //#. Connection security. None.
-        //     { value: 'none',     label: gt('None') },
-        //     //#. Connection security. StartTLS.
-        //     { value: 'starttls', label: gt('StartTLS') },
-        //     //#. Connection security. SSL/TLS.
-        //     { value: 'ssl',      label: gt('SSL/TLS') },
-        // ],
+        optionsConnectionSecurity = [
+            //#. Connection security. None.
+            { value: 'none', label: gt('None') },
+            //#. Connection security. StartTLS.
+            { value: 'starttls', label: gt('StartTLS') },
+            //#. Connection security. SSL/TLS.
+            { value: 'ssl', label: gt('SSL/TLS') }
+        ],
 
         portDefaults = {
             mail_port: '143',
@@ -99,6 +98,12 @@ define.async('io.ox/mail/accounts/view-form', [
             return serverTypePorts[protocol][secure ? 'secure' : 'common'];
         },
 
+        returnSecurityValue = function (model, ssl, starttls) {
+            if (model.get(ssl)) return 'ssl';
+            if (model.get(starttls)) return 'starttls';
+            return 'none';
+        },
+
         defaultDisplayName = '',
 
         AccountDetailView = Backbone.View.extend({
@@ -120,6 +125,14 @@ define.async('io.ox/mail/accounts/view-form', [
                 } else if (personal === ' ') {
                     this.model.set('personal', '');
                 }
+
+                // create model for selections
+                this.selectionModel = new Backbone.Model({
+                    mail_secure: returnSecurityValue(this.model, 'mail_secure', 'mail_starttls'),
+                    transport_secure: returnSecurityValue(this.model, 'transport_secure', 'transport_starttls')
+                });
+                this.listenTo(this.selectionModel, 'change:mail_secure', this.onMailSecureChange.bind(this));
+                this.listenTo(this.selectionModel, 'change:transport_secure', this.onTransportSecureChange.bind(this));
 
                 // store original model to determine changes
                 originalModel = _.copy(this.model.toJSON(), true);
@@ -216,9 +229,7 @@ define.async('io.ox/mail/accounts/view-form', [
             events: {
                 'save': 'onSave',
                 'click .folderselect': 'onFolderSelect',
-                'change [name="mail_protocol"]': 'onMailProtocolChange',
-                'change [name="mail_secure"]': 'onMailSecureChange',
-                'change [name="transport_secure"]': 'onTransportSecureChange'
+                'change [name="mail_protocol"]': 'onMailProtocolChange'
             },
 
             onMailProtocolChange: function () {
@@ -226,11 +237,16 @@ define.async('io.ox/mail/accounts/view-form', [
             },
 
             onMailSecureChange: function () {
+                model.set('mail_secure', this.selectionModel.get('mail_secure') === 'ssl');
+                model.set('mail_starttls', this.selectionModel.get('mail_secure') === 'starttls');
                 model.set('mail_port', returnPortMail());
             },
 
             onTransportSecureChange: function () {
-                var value = this.model.get('transport_secure') ? '465' : '587';
+                model.set('transport_secure', this.selectionModel.get('transport_secure') === 'ssl');
+                model.set('transport_starttls', this.selectionModel.get('transport_secure') === 'starttls');
+
+                var value = this.selectionModel.get('transport_secure') === 'ssl' ? '465' : '587';
                 this.model.set('transport_port', value);
             },
 
@@ -420,13 +436,6 @@ define.async('io.ox/mail/accounts/view-form', [
                             new mini.SelectView({ list: optionsServerType, model: model, id: 'mail_protocol' }).render().$el
                         )
                     ),
-                    // secure
-                    group(
-                        checkbox(
-                            gt('Use SSL connection'),
-                            new mini.CheckboxView({ id: 'mail_secure', model: model }).render().$el
-                        )
-                    ),
                     // mail_server
                     group(
                         label('mail_server', gt('Server name')),
@@ -434,13 +443,13 @@ define.async('io.ox/mail/accounts/view-form', [
                             new InputView({ model: model, id: 'mail_server' }).render().$el
                         )
                     ),
-                    // secure - for 7.8.0
-                    // group(
-                    //     label('mail_secure', gt('Connection security')),
-                    //     $('<div class="col-sm-3">').append(
-                    //         new mini.SelectView({ list: optionsConnectionSecurity, model: model, id: 'mail_secure' }).render().$el
-                    //     )
-                    // ),
+                    // secure
+                    group(
+                        label('mail_secure', gt('Connection security')),
+                        $('<div class="col-sm-3">').append(
+                            new mini.SelectView({ list: optionsConnectionSecurity, model: view.selectionModel, id: 'mail_secure' }).render().$el
+                        )
+                    ),
                     // mail_port
                     group(
                         label('mail_port', gt('Server port')),
@@ -492,13 +501,6 @@ define.async('io.ox/mail/accounts/view-form', [
             var serverSettingsOut = $('<fieldset>').append(
                 $('<legend class="sectiontitle">').text(gt('Outgoing server (SMTP)')),
                 $('<form class="form-horizontal" role="form">').append(
-                    // secure
-                    group(
-                        checkbox(
-                            gt('Use SSL connection'),
-                            new mini.CheckboxView({ id: 'transport_secure', model: model }).render().$el
-                        )
-                    ),
                     // server
                     group(
                         label('transport_server', gt('Server name')),
@@ -506,13 +508,13 @@ define.async('io.ox/mail/accounts/view-form', [
                             new InputView({ model: model, id: 'transport_server' }).render().$el
                         )
                     ),
-                    // secure - for 7.8.0
-                    // group(
-                    //     label('transport_secure', gt('Connection security')),
-                    //     $('<div class="col-sm-3">').append(
-                    //         new mini.SelectView({ list: optionsConnectionSecurity, model: model, id: 'transport_secure' }).render().$el
-                    //     )
-                    // ),
+                    // secure
+                    group(
+                        label('transport_secure', gt('Connection security')),
+                        $('<div class="col-sm-3">').append(
+                            new mini.SelectView({ list: optionsConnectionSecurity, model: view.selectionModel, id: 'transport_secure' }).render().$el
+                        )
+                    ),
                     // port
                     group(
                         label('transport_port', gt('Server port')),

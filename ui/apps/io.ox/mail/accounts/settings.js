@@ -132,6 +132,15 @@ define('io.ox/mail/accounts/settings', [
     });
 
     ext.point('io.ox/mail/add-account/wizard').extend({
+        id: 'security-hint',
+        index: 300,
+        draw: function () {
+            if (window.location.protocol !== 'https:') return;
+            this.append($('<div class="help-block">').text('Your credentials will be sent over a secure connection only'));
+        }
+    });
+
+    ext.point('io.ox/mail/add-account/wizard').extend({
         id: 'feedback',
         index: 1000000000000,
         draw: function () {
@@ -221,11 +230,12 @@ define('io.ox/mail/accounts/settings', [
             );
         },
 
-        autoconfigApiCall = function (args, newMailaddress, newPassword, popup, def) {
+        autoconfigApiCall = function (args, newMailaddress, newPassword, popup, def, forceSecure) {
 
             api.autoconfig({
                 'email': newMailaddress,
-                'password': newPassword
+                'password': newPassword,
+                'force_secure': !!forceSecure
             })
             .done(function (data) {
                 if (data.login) {
@@ -235,6 +245,19 @@ define('io.ox/mail/accounts/settings', [
                     delete data.transport_login;
                     delete data.transport_password;
                     validateMailaccount(data, popup, def);
+                } else if (forceSecure) {
+                    new dialogs.ModalDialog({ width: 400 })
+                        .text(gt('Cannot establish secure connection. Do you want to proceed anyway?'))
+                        .addPrimaryButton('yes', gt('Yes'), 'yes', { tabIndex: 1 })
+                        .addButton('no', gt('No'), 'no', { tabIndex: 1 })
+                        .on('yes', function () {
+                            autoconfigApiCall(args, newMailaddress, newPassword, popup, def, false);
+                        })
+                        .on('no', function () {
+                            popup.close();
+                            def.reject();
+                        })
+                        .show();
                 } else {
                     data = {};
                     data.primary_address = newMailaddress;
@@ -290,7 +313,7 @@ define('io.ox/mail/accounts/settings', [
 
                     if (myModel.isMailAddress(newMailaddress) === undefined) {
                         drawBusy(alertPlaceholder);
-                        autoconfigApiCall(args, newMailaddress, newPassword, this, def);
+                        autoconfigApiCall(args, newMailaddress, newPassword, this, def, true);
                     } else {
                         var message = gt('This is not a valid mail address');
                         drawAlert(alertPlaceholder, message);

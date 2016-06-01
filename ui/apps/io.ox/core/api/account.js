@@ -641,7 +641,8 @@ define('io.ox/core/api/account', [
             params: {
                 action: 'get',
                 email: data.email,
-                password: data.password
+                password: data.password,
+                force_secure: data.force_secure
             }
         });
     };
