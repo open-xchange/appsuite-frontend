@@ -405,7 +405,7 @@ define('io.ox/contacts/view-detail', [
             //#. %3$s is the city
             //#. %4$s is the state
             //#. %5$s is the country
-            gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', data);
+            gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', data[0], data[1], data[2], data[3], data[4]);
 
         var services = {
             google: { label: gt('Google Maps'), url: 'https://www.google.com/maps?q=' },
