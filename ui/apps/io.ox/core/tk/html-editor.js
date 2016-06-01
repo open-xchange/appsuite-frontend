@@ -322,6 +322,29 @@ define.async('io.ox/core/tk/html-editor',
                     var url = ed.convertURL(require.toUrl(point.css));
                     ed.contentCSS.push(url);
                 });
+
+                ed.on('PreInit', function(e) {
+                    $(e.target.iframeElement.contentDocument).find('html').on('drop', function (e) {
+
+                        // prevent dropping of dangerous html
+                        var dt = e.originalEvent.dataTransfer;
+
+                        if (_(dt.types).contains('text/html')) {
+                            e.preventDefault();
+                            // stopPropagation is not enough here
+                            e.stopImmediatePropagation();
+
+                            var markupString = dt.getData('text/html');
+                            // remove event handlers to prevent script injection
+                            markupString = markupString.replace(/\s+on\w+\s*=\s*".*?"/gi, '');
+                            // remove script tags
+                            markupString = markupString.replace(/<script>.*?<\/script>/gi, '');
+                            // insert contend at cursor position
+                            tinyMCE.execCommand('mceInsertContent', false, markupString);
+
+                        }
+                    });
+                });
             }
         });
 

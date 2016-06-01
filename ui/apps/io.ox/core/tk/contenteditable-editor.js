@@ -229,7 +229,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
 
             browser_spellcheck: true,
 
-            plugins: 'autolink oximage link paste textcolor emoji',
+            plugins: 'autolink oximage link paste textcolor emoji oxdrop',
 
             //link plugin settings
             link_title: false,
