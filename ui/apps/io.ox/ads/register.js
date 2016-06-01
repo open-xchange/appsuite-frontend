@@ -32,6 +32,9 @@ define('io.ox/ads/register', [
         changeModule: function (module, baton) {
             var allAds = baton.data.config,
                 activeAds = _(baton.data.config).chain().pairs()
+                .filter(function activeFilter(conf) {
+                    return typeof conf[1].active === 'undefined' || conf[1].active === true;
+                })
                 .filter(function moduleFilter(conf) {
                     return _.isEmpty(conf[1].showInModules) || _.contains(conf[1].showInModules, module);
                 }).filter(function capabilityFilter(conf) {
