@@ -105,6 +105,16 @@ Finally you need to enable tracking in general and PIWIK in particular.
 
 Please continue with the PIWIK Installation wizard.
 
+### custom variables
+
+As a default the metrics framework tracks three values for each session:
+
+- language: the one defined in the user setting of OX App Suite
+- version: the current version of OX App Suite
+- capabilities: a list of active capablities
+
+Unfortunatly PIWIK limits the maximal length of custom variable values to [200 chars](http://piwik.org/docs/custom-variables/). Usually the list of capabilites has more than 800 chars. For this reason the capabilites are split into smaller chunks (id: capabilities-1, id: capabilities-2, ...). As default PIWIK only supports 5 custom variables so you have to [increase the number](http://piwik.org/faq/how-to/faq_17931/) to at least 7.
+
 # Google Analytics
 
 With this easy step-by-step guide it should be quite simple to setup PIWIK and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [here](ui/features/metrics/02-adapters.html#piwik).
@@ -150,7 +160,7 @@ As a default the metrics framework tracks three values for each session:
 
 - language: the one defined in the user setting of OX App Suite
 - version: the current version of OX App Suite
-- capabilities: the current version of OX App Suite
+- capabilities: a list of active capablities
 
 To submit this data to Google Analytics you have to setup corresponding [custom dimensons](https://support.google.com/analytics/answer/2709828) and specifiy mappings in the OX App Suite property file.
 

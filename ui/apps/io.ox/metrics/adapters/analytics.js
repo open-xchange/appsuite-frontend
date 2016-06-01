@@ -87,7 +87,7 @@ define('io.ox/metrics/adapters/analytics', [
                 if (ox.debug) console.log("Missing mapping for custom dimension '" + data.id + "'.");
                 return;
             }
-            // set dimension
+            // set dimension (max 150 Bytes)
             window.ga('set', mapping[data.id], String(data.value));
         }
     });
