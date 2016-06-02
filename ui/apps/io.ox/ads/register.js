@@ -19,7 +19,7 @@ define('io.ox/ads/register', [
 ], function (ext, capabilities) {
     'use strict';
 
-    var config = {},
+    var config = [],
         reloadTimers = [];
 
     ext.point('io.ox/ads').extend({
@@ -31,33 +31,31 @@ define('io.ox/ads/register', [
         },
         changeModule: function (module, baton) {
             var allAds = baton.data.config,
-                activeAds = _(baton.data.config).chain().pairs()
-                .filter(function activeFilter(conf) {
-                    return typeof conf[1].active === 'undefined' || conf[1].active === true;
+                activeAds = allAds.filter(function activeFilter(conf) {
+                    return typeof conf.active === 'undefined' || conf.active === true;
                 })
                 .filter(function moduleFilter(conf) {
-                    return _.isEmpty(conf[1].showInModules) || _.contains(conf[1].showInModules, module);
+                    return _.isEmpty(conf.showInModules) || _.contains(conf.showInModules, module);
                 }).filter(function capabilityFilter(conf) {
-                    return _.isEmpty(conf[1].capabilities) || capabilities.has(conf[1].capabilities);
-                })
-                .object().value();
+                    return _.isEmpty(conf.capabilities) || capabilities.has(conf.capabilities);
+                });
 
-            _.each(allAds, function (obj, point) {
-                var baton = ext.Baton.ensure(obj);
-                ext.point(point).invoke('cleanup', undefined, baton);
+            allAds.forEach(function (ad) {
+                var baton = ext.Baton.ensure(ad);
+                ext.point(ad.space).invoke('cleanup', undefined, baton);
             });
 
             reloadTimers.forEach(clearInterval);
             reloadTimers = [];
 
-            _.each(activeAds, function (obj, point) {
-                var baton = ext.Baton.ensure(obj);
-                ext.point(point).invoke('draw', undefined, baton);
+            activeAds.forEach(function (ad) {
+                var baton = ext.Baton.ensure(ad);
+                ext.point(ad.space).invoke('draw', undefined, baton);
 
-                if (obj.reloadAfter) {
+                if (ad.reloadAfter) {
                     reloadTimers.push(setInterval(function () {
-                        ext.point(point).invoke('reload', undefined, baton);
-                    }, obj.reloadAfter));
+                        ext.point(ad.space).invoke('reload', undefined, baton);
+                    }, ad.reloadAfter));
                 }
             });
         }
@@ -74,7 +72,9 @@ define('io.ox/ads/register', [
 
         //handle configuration
         ext.point('io.ox/ads').invoke('config', undefined, baton);
-        _.extend(config, baton.data.config, {});
+        config = baton.data.config.map(function (conf, index) {
+            return _.extend({ id: index }, conf);
+        });
     }
 
     ox.manifests.loadPluginsFor('io.ox/ads/config').then(function () {
