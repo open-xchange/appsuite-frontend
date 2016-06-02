@@ -8,7 +8,7 @@ define('io.ox/ads/util', function () {
         var timer = {};
         function touchCooldown(area) {
             if (!timer[area] || timer[area] < _.now()) {
-                timer[area] = (Number(config[area].cooldown) || 0) + _.now();
+                timer[area] = (config[area] && Number(config[area].cooldown) || 0) + _.now();
                 return $.Deferred().resolve();
             }
             return $.Deferred().reject();
