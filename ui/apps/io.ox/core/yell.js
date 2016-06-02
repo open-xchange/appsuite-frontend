@@ -188,7 +188,13 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
                     $('<span class="sr-only">').text(gt('Click to close this notification')))
             );
 
-            $('#io-ox-core').append(node);
+            // yell would be behind modal dialogs, because those are attached to the body node
+            // this also applies for the wizard
+            if ($(document.body).hasClass('modal-open') || $('.wizard-container').length > 0) {
+                $(document.body).append(node);
+            } else {
+                $('#io-ox-core').append(node);
+            }
 
             // put at end of stack not to run into opening click
             setTimeout(function () {
