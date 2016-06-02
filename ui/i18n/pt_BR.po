@@ -1909,6 +1909,13 @@ msgstr "Cliente onboarding"
 msgid "Close"
 msgstr "Fechar"
 
+#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+#| msgid "Job description"
+msgid "Close description panel"
+msgstr "Descrição do trabalho"
+
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
@@ -3144,6 +3151,12 @@ msgstr "Editar rascunho"
 #: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
 msgid "Edit group"
 msgstr "Editar grupo"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#, fuzzy
+#| msgid "Add mail account"
+msgid "Edit mail account"
+msgstr "Adicionar conta de e-mail"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Edit names"
@@ -5655,6 +5668,13 @@ msgstr "Abrir"
 #: apps/io.ox/contacts/view-detail.js
 msgid "Open Street Map"
 msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+#| msgid "Job description"
+msgid "Open description panel"
+msgstr "Descrição do trabalho"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"

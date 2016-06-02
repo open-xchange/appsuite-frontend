@@ -6140,6 +6140,16 @@ msgstr ""
 msgid "Toggle panel"
 msgstr ""
 
+#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
+#: module:io.ox/core/viewer
+msgid "Open description panel"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
+#: module:io.ox/core/viewer
+msgid "Close description panel"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
 msgid "Version Comment"
@@ -7694,6 +7704,11 @@ msgstr ""
 #: apps/io.ox/mail/accounts/model.js
 #: module:io.ox/keychain
 msgid "This is not a valid email address"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+msgid "Edit mail account"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js
