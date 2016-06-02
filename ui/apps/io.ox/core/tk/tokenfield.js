@@ -464,8 +464,15 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
-            // Remove on cut
-            this.$el.closest('div.tokenfield').on('keydown', function (e) {
+            this.$el.closest('div.tokenfield').on('copy', function (e) {
+                // copy actual email adress instead of model cid to clipboard
+                var model = self.collection.get(e.target.value);
+                if (model) {
+                    e.originalEvent.clipboardData.setData('text/plain', model.value);
+                    e.preventDefault();
+                }
+            }).on('keydown', function (e) {
+                //Remove on cut
                 if ((e.ctrlKey || e.metaKey) && e.keyCode === 88) {
                     $(this).find('.token.active').each(function () {
                         self.collection.remove($(this).data().attrs.model);
