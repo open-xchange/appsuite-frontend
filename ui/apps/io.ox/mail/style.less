@@ -757,15 +757,34 @@
 
     &.scrollable { overflow: auto; }
 
-    & > h1 {
+    & > .thread-view-header {
 
-        .subject-base();
+        .flex-display(flex);
+        .flex-direction(row);
+
+        & > * {
+            .subject-base();
+        }
+
         padding-bottom: 0;
         background-color: white;
 
         .subject {
             word-break: break-word;
-            margin-bottom: 4px;
+            padding-bottom: 0;
+            .flex(1);
+
+            .summary {
+                color: #777;
+                font-size: 13px;
+                line-height: 16px;
+                font-weight: 300;
+                position: relative;
+                top: -5px;
+                margin: 0;
+                padding-top: 4px;
+                html.high-contrast & { color: @hc-gray; }
+            }
         }
 
         .toggle-all {
@@ -774,16 +793,10 @@
             outline: 0;
             &:hover { color: #aaa; }
             &:focus { color: @link-color; }
-        }
-
-        .summary {
-            color: #777;
-            font-size: 13px;
-            line-height: 16px;
-            font-weight: 300;
-            position: relative;
-            top: -5px;
-            html.high-contrast & { color: @hc-gray; }
+            padding: 0;
+            margin: 12px @default-padding 4px 0;
+            .flex(0 0 auto);
+            .align-self(flex-start);
         }
     }
 }
@@ -1008,18 +1021,23 @@ textarea.inplace-editor {
 
         padding: 0;
 
-        & > h1 {
-            font-size: @phone-font-size;
+        & > .thread-view-header {
             padding-bottom: 10px;
             background-color: #aaa;
             color: #fff;
-            .summary {
-                font-size: @phone-font-size - 2;
-                color: #fff;
+
+            & > * {
+                font-size: @phone-font-size;
             }
+
             .subject {
                 line-height: 20px;
-                margin-bottom: 20px;
+
+                .summary {
+                    padding-top: 20px;
+                    font-size: @phone-font-size - 2;
+                    color: #fff;
+                }
             }
         }
         .row-3{

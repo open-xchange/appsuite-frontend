@@ -60,7 +60,7 @@ define('io.ox/mail/threadview', [
         draw: function () {
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
-                    $('<h1>'),
+                    $('<div class="thread-view-header">'),
                     this.$messages = $('<div class="thread-view list-view">')
                 )
             );
@@ -68,32 +68,12 @@ define('io.ox/mail/threadview', [
     });
 
     ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'toggle-all',
-        index: 100,
-        draw: function (baton) {
-            if (baton.view.collection.length <= 1) return;
-            this.append(
-                $('<a href="#" role="button" class="toggle-all" tabindex="1">')
-                .append('<i class="fa fa-angle-double-down">')
-                .attr({
-                    'data-toggle': 'tooltip',
-                    'data-placement': 'left',
-                    'data-animation': 'false',
-                    'data-container': 'body',
-                    'title': gt('Open/close all messages')
-                })
-                .tooltip()
-            );
-        }
-    });
-
-    ext.point('io.ox/mail/thread-view/header').extend({
         id: 'subject',
-        index: 200,
+        index: 100,
         draw: function (baton) {
             var keepFirstPrefix = baton.view.collection.length === 1,
                 subject = util.getSubject(baton.view.model.toJSON(), keepFirstPrefix),
-                node = $('<div class="subject">').text(subject);
+                node = $('<h1 class="subject">').text(subject);
 
             this.append(node);
             emoji.processEmoji(node.html(), function (text) {
@@ -104,15 +84,34 @@ define('io.ox/mail/threadview', [
 
     ext.point('io.ox/mail/thread-view/header').extend({
         id: 'summary',
-        index: 300,
+        index: 200,
         draw: function (baton) {
 
             var length = baton.view.collection.length;
 
-            this.append(
-                $('<div class="summary">').text(
+            this.find('.subject').append(
+                $('<h4 class="summary">').text(
                     length > 1 ? gt('%1$d messages in this conversation', length) : '\u00A0'
                 )
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/thread-view/header').extend({
+        id: 'toggle-all',
+        index: 300,
+        draw: function (baton) {
+            if (baton.view.collection.length <= 1) return;
+            this.append(
+                $('<a href="#" role="button" class="toggle-all" tabindex="1">')
+                .append('<i class="fa fa-angle-double-down">')
+                .attr('aria-label', gt('Open all messages'))
+                .tooltip({
+                    animation: false,
+                    container: 'body',
+                    placement: 'left',
+                    title: gt('Open/close all messages')
+                })
             );
         }
     });
@@ -142,7 +141,7 @@ define('io.ox/mail/threadview', [
         updateHeader: function () {
 
             var baton = new ext.Baton({ view: this }),
-                node = this.$el.find('.thread-view-list > h1').empty();
+                node = this.$el.find('.thread-view-list > .thread-view-header').empty();
 
             if (this.collection.length > 0) {
                 ext.point('io.ox/mail/thread-view/header').invoke('draw', node, baton);
@@ -176,8 +175,10 @@ define('io.ox/mail/threadview', [
             var items = this.getItems(),
                 open = items.filter('.expanded'),
                 state = open.length === 0,
-                icon = state ? 'fa-angle-double-down' : 'fa-angle-double-up';
-            this.$el.find('.toggle-all i').attr('class', 'fa ' + icon);
+                icon = state ? 'fa-angle-double-down' : 'fa-angle-double-up',
+                toggleButton = this.$el.find('.toggle-all');
+            toggleButton.attr('aria-label', state ? gt('Open all messages') : gt('Close all messages'));
+            toggleButton.find('i').attr('class', 'fa ' + icon);
         }, 10),
 
         onToggleAll: function (e) {
@@ -449,7 +450,7 @@ define('io.ox/mail/threadview', [
         draw: function () {
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
-                    $('<h1>'),
+                    $('<div class="thread-view-header">'),
                     this.$messages = $('<ul class="thread-view list-view">')
                 )
             );
