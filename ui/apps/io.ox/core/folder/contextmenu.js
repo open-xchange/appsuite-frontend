@@ -494,7 +494,7 @@ define('io.ox/core/folder/contextmenu', [
 
                 var tempLink, node, self = this;
 
-                node = $('<li>').append(
+                node = $('<li role="presentation">').append(
                     tempLink = a('subscriptions', gt('New subscription'))
                 );
 
