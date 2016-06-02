@@ -189,7 +189,8 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             );
 
             // yell would be behind modal dialogs, because those are attached to the body node
-            if ($(document.body).hasClass('modal-open')) {
+            // this also applies for the wizard
+            if ($(document.body).hasClass('modal-open') || $('.wizard-container').length > 0) {
                 $(document.body).append(node);
             } else {
                 $('#io-ox-core').append(node);
