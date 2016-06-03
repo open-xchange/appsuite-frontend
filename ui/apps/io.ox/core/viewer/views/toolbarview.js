@@ -184,7 +184,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.addClass('viewer-toolbar-close')
                         .attr({
                             tabindex: '1',
-                            'aria-label': gt('Close')
+                            'aria-label': gt('Close viewer')
                         })
                         .parent().addClass('pull-right');
                 }

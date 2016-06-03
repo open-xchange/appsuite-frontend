@@ -158,7 +158,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             if (this.closable && this.$('.sidebar-panel-heading .close').length === 0) {
                 this.$('.sidebar-panel-heading').prepend(
                     $('<button type="button" class="close pull-right" tabindex="1">')
-                    .attr('aria-label', gt('Close'))
+                    .attr('aria-label', gt('Hide details'))
                     .append('<span aria-hidden="true">&times;</span></button>')
                 );
             }
