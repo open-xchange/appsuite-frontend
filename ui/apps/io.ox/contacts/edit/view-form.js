@@ -279,6 +279,37 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
 
+        ext.point(ref + '/edit/buttons').extend({
+            index: 100,
+            id: 'metrics',
+            draw: function () {
+                var self = this;
+                require(['io.ox/metrics/main'], function (metrics) {
+                    if (!metrics.isEnabled()) return;
+                    // buttons
+                    self.delegate('[data-action]', 'mousedown', function (e) {
+                        var node =  $(e.target);
+                        metrics.trackEvent({
+                            app: 'calendar',
+                            target: 'edit/contact/toolbar',
+                            type: 'click',
+                            action: node.attr('data-action') || node.attr('data-name'),
+                            detail: node.attr('data-value')
+                        });
+                    });
+                    // toggle
+                    self.delegate('.checkbox-inline', 'mousedown', function () {
+                        metrics.trackEvent({
+                            app: 'calendar',
+                            target: 'edit/contact/toolbar',
+                            type: 'click',
+                            action: 'show-all-fields'
+                        });
+                    });
+                });
+            }
+        });
+
         point.basicExtend({
             id: 'autoExpand',
             index: 1000000000000,
@@ -382,6 +413,27 @@ define('io.ox/contacts/edit/view-form', [
                 }
             }
         });
+
+        point.basicExtend({
+            id: 'final_metrics',
+            index: 1000000000001,
+            draw: function (baton) {
+                require(['io.ox/metrics/main'], function (metrics) {
+                    if (!metrics.isEnabled()) return;
+                    baton.$.form.find('.file-input')
+                        .on('change', function track() {
+                        // metrics
+                            metrics.trackEvent({
+                                app: 'contacts',
+                                target: 'edit/contacts',
+                                type: 'click',
+                                action: 'add-attachment'
+                            });
+                        });
+                });
+            }
+        });
+
 
         // attachment Drag & Drop
         ext.point('io.ox/contacts/edit/dnd/actions').extend({

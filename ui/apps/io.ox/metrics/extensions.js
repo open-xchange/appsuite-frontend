@@ -42,6 +42,7 @@ define('io.ox/metrics/extensions', [
             ox.on('app:start app:resume', trackPage);
             // track
             function trackPage(app) {
+                if (!app) return;
                 // do not track resume on curent active app
                 if (lastTracked === app.id) return;
                 lastTracked = app.id;

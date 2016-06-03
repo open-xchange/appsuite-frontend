@@ -716,6 +716,40 @@ define('io.ox/tasks/edit/view-template', [
         }
     }, { row: '20' });
 
+    // metrics
+    point.extend({
+        id: 'metrics',
+        index: 3000,
+        render: function () {
+            var self = this;
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                self.baton.app.getWindow().nodes.footer.delegate('[data-action]', 'mousedown', function (e) {
+                    var node =  $(e.target);
+                    metrics.trackEvent({
+                        app: 'task',
+                        target: 'edit/toolbar',
+                        type: 'click',
+                        action: node.attr('data-action') || node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
+                self.baton.app.getWindow().nodes.main.find('.file-input')
+                    .on('change', function track() {
+                        // metrics
+                        require(['io.ox/metrics/main'], function (metrics) {
+                            metrics.trackEvent({
+                                app: 'task',
+                                target: 'edit',
+                                type: 'click',
+                                action: 'add-attachment'
+                            });
+                        });
+                    });
+            });
+        }
+    });
+
     ext.point('io.ox/tasks/edit/dnd/actions').extend({
         id: 'attachment',
         index: 100,

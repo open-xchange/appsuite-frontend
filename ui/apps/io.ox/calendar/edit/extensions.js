@@ -104,6 +104,26 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
+    ext.point('io.ox/calendar/edit/section/buttons').extend({
+        id: 'metrics',
+        draw: function () {
+            var self = this;
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                self.delegate('[data-action]', 'mousedown', function (e) {
+                    var node =  $(e.target);
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'edit/toolbar',
+                        type: 'click',
+                        action: node.attr('data-action') || node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
+            });
+        }
+    });
+
     var CalendarSelectionView = mini.AbstractView.extend({
         tagName: 'div',
         className: 'header-right',
@@ -621,6 +641,27 @@ define('io.ox/calendar/edit/extensions', [
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
             $node.append($('<div>').addClass('col-md-12').append($inputWrap));
+        }
+    });
+
+    point.basicExtend({
+        id: 'attachments_upload_metrics',
+        draw: function () {
+            var self = this;
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                self.parent()
+                    .find('.file-input')
+                    .on('change', function track() {
+                        // metrics
+                        metrics.trackEvent({
+                            app: 'calendar',
+                            target: 'edit',
+                            type: 'click',
+                            action: 'add-attachment'
+                        });
+                    });
+            });
         }
     });
 
