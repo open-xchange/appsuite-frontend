@@ -115,7 +115,7 @@ define('io.ox/mail/categories/main', [
             return [
                 $('<ul>', { class: 'classic-toolbar categories', role: 'toolbar', 'aria-label': gt('Inbox tabs') }),
                 $('<div class="free-space">'),
-                $('<ul>', { class: 'classic-toolbar actions', role: 'toolbar', 'aria-label': gt('Configure you inbox tabs') }).append(
+                $('<ul>', { class: 'classic-toolbar actions', role: 'toolbar', 'aria-label': gt('Configure your inbox tabs') }).append(
                     $('<li role="presentation aria-hidden="true">').append(
                         $('<a class="io-ox-action-link no-underline" href="#" tabindex="-1" data-action="tabbed-inbox-options" draggable="false" role="button" data-section="default" data-prio="hi" title=""">').append(
                                 $('<i class="fa fa-cog">')

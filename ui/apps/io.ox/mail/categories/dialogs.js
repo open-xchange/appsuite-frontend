@@ -35,7 +35,7 @@ define('io.ox/mail/categories/dialogs', [
             if (userpref === 'always') return parent.trigger('dialog:generalize', obj);
 
             return new Modal({
-                title: gt('Apply for all messages?'),
+                title: gt('Apply to all messages?'),
                 point: 'io.ox/mail/categories/generalize',
                 //focus: '.form-inline',
                 maximize: false,
