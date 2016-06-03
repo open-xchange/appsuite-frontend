@@ -101,22 +101,16 @@ define('io.ox/mail/common-extensions', [
 
         date: function (baton, options) {
             var data = baton.data, t = data.received_date;
+            options = _.extend({
+                fulldate: baton.app && baton.app.props.get('excactDates'),
+                smart: !(baton.app && baton.app.props.get('excactDates'))
+            }, options);
             if (!_.isNumber(t)) return;
             this.append(
                 $('<time class="date">')
                 .attr('datetime', moment(t).toISOString())
                 .text(_.noI18n(util.getDateTime(t, options)))
             );
-        },
-
-        dateOrSize: function (baton) {
-            // show date or size depending on sort option
-            var fn = 'size';
-            if (baton.app && baton.app.props.get('sort') !== 608 && !baton.app.props.get('alwaysShowSize')) {
-                fn = baton.app.props.get('exactDates') ? 'fulldate' : 'smartdate';
-            }
-
-            extensions[fn].call(this, baton);
         },
 
         smartdate: function (baton) {
@@ -145,6 +139,9 @@ define('io.ox/mail/common-extensions', [
         },
 
         size: function (baton) {
+            //show size if option is enabled or sorting by size
+            if (baton.app && (baton.app.props.get('sort') !== 608 && !baton.app.props.get('alwaysShowSize'))) return;
+
             var data = baton.data;
             if (!_.isNumber(data.size)) return;
             var size = util.threadFileSize(data.thread || [data]);

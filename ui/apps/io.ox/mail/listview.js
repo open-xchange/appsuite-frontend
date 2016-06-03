@@ -161,6 +161,11 @@ define('io.ox/mail/listview', [
             draw: extensions.flag
         },
         {
+            id: 'optionalSize',
+            index: 250,
+            draw: extensions.size
+        },
+        {
             id: 'thread-size',
             index: 300,
             draw: extensions.threadSize
@@ -188,9 +193,9 @@ define('io.ox/mail/listview', [
     );
 
     ext.point('io.ox/mail/listview/item/small/col6').extend({
-        id: 'date/size',
+        id: 'date',
         index: 100,
-        draw: extensions.dateOrSize
+        draw: extensions.date
     });
 
     /* default */
@@ -237,9 +242,9 @@ define('io.ox/mail/listview', [
 
     ext.point('io.ox/mail/listview/item/default/row1').extend(
         {
-            id: 'date/size',
+            id: 'date',
             index: 100,
-            draw: extensions.dateOrSize
+            draw: extensions.date
         },
         {
             id: 'from',
@@ -268,6 +273,11 @@ define('io.ox/mail/listview', [
             id: 'flag',
             index: 200,
             draw: extensions.flag
+        },
+        {
+            id: 'optionalSize',
+            index: 250,
+            draw: extensions.size
         },
         {
             id: 'thread-size',
