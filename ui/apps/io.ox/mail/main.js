@@ -533,7 +533,7 @@ define('io.ox/mail/main', [
                     .attr('aria-label', gt('Messages'))
                     .find('.toolbar')
                     //#. toolbar with 'select all' and 'sort by'
-                    .attr('aria-label', gt('Item list options'))
+                    .attr('aria-label', gt('Messages options'))
                     .end()
             );
             // make resizable

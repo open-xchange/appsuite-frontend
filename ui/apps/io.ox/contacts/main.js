@@ -974,6 +974,8 @@ define('io.ox/contacts/main', [
             //swipeRightHandler: swipeRightHandler,
         });
 
+        app.gridContainer.find('.vgrid-toolbar').attr('aria-label', gt('Contacts toolbar'));
+
         commons.wireGridAndWindow(app.grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(app.grid, api, win);

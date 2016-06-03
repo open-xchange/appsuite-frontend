@@ -807,6 +807,7 @@ define('io.ox/tasks/main', [
             toolbarPlacement: 'top',
             templateOptions: { tagName: 'li', defaultClassName: 'vgrid-cell list-unstyled' }
         });
+        app.gridContainer.find('.vgrid-toolbar').attr('aria-label', gt('Tasks toolbar'));
 
         app.grid = grid;
 
