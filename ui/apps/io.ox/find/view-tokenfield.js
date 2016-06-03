@@ -222,7 +222,7 @@ define('io.ox/find/view-tokenfield', [
             // some shortcuts (available after render)
             this.hiddenapi = this.ui.view.hiddenapi;
             this.ui.container = this.ui.field.parent();
-            this.ui.tokeninput = this.ui.container.find('.token-input');
+            this.ui.tokeninput = this.ui.container.find('.token-input').attr('role', 'search');
 
             if (hasFocus) this.setFocus();
 

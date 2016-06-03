@@ -1524,7 +1524,7 @@ define('io.ox/core/desktop', [
                     id: 'view',
                     index: 100,
                     draw: function (baton) {
-                        baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find" role="search">');
+                        baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find">');
 
                         // add nodes
                         this.nodes.sidepanel
