@@ -291,6 +291,12 @@ msgstr "%1$s %2$s."
 msgid "%1$s (Tentative)"
 msgstr "%1$s (předběžně)"
 
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+msgid "%1$s Toolbar"
+msgstr "Nástrojová lišta editoru"
+
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js module:plugins/portal
@@ -761,7 +767,7 @@ msgstr "Účty"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-#: apps/io.ox/files/mobile-toolbar-actions.js
+#: apps/io.ox/core/main.js apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js
@@ -1207,10 +1213,6 @@ msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Aplikace nemusí pracovat podle očekávání, dokud nebude tento problém vyřešen."
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Applications"
-msgstr "Aplikace"
-
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply to all subfolders"
@@ -1238,14 +1240,13 @@ msgstr "Uplatnit na všechny podsložky"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/calendar/week/perspective.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Schůzka"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/list/perspective.js
 #: apps/io.ox/calendar/month/perspective.js
 #: apps/io.ox/calendar/week/perspective.js
 msgid "Appointment Details"
@@ -1257,8 +1258,7 @@ msgstr "Podrobnosti o schůzce"
 msgid "Appointment invitations"
 msgstr "Pozvánky na schůzku"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 msgid "Appointment list"
 msgstr "Seznam schůzek"
 
@@ -1289,6 +1289,10 @@ msgstr "Schváleno:"
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Approximate Duration for Subscriptions"
 msgstr "Přibližná doba trvání u odběrů"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Apps"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "April"
@@ -1585,6 +1589,30 @@ msgctxt "app"
 msgid "Calendar"
 msgstr "Kalendář"
 
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Day View"
+msgstr "Kalendář"
+
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Month View"
+msgstr "Kalendář"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar workweek view"
+msgid "Calendar Week View"
+msgstr "Zobrazení kalendáře pracovních dní"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar workweek view"
+msgid "Calendar Workweek View"
+msgstr "Zobrazení kalendáře pracovních dní"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Kalendář"
@@ -1592,6 +1620,12 @@ msgstr "Kalendář"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Kalendář:"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar"
+msgid "Calendars"
+msgstr "Kalendář"
 
 #. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
@@ -1927,6 +1961,12 @@ msgstr "Úvodní nastavení klienta"
 msgid "Close"
 msgstr "Zavřít"
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move all messages"
+msgid "Close all messages"
+msgstr "Přesunout všechny zprávy"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -2122,6 +2162,10 @@ msgstr "Obrázky kontaktů"
 msgid "Contact request sent"
 msgstr "Odeslán požadavek na kontakt"
 
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts"
+msgstr "Kontakty"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
 msgstr "Kontakty byly zkopírovány"
@@ -2157,6 +2201,12 @@ msgstr "Pokračovat v prezentaci"
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue the presentation"
 msgstr "Pokračovat v prezentaci"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Conversations"
+msgid "Conversation"
+msgstr "Konverzace"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Conversations"
@@ -2428,10 +2478,6 @@ msgstr "Datum narození"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
 msgstr "Den"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Day View"
-msgstr "Pohled: den"
 
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
@@ -3725,7 +3771,7 @@ msgstr "Tabulka verzí souboru. Aktuální verze je v prvním řádku."
 msgid "File: %1$s"
 msgstr "Soubor: %1$s"
 
-#: apps/io.ox/files/filepicker.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
 msgstr "Soubory"
 
@@ -3848,10 +3894,10 @@ msgstr "Činnosti týkající se složky"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "Složky"
 
@@ -4378,8 +4424,7 @@ msgid "Inline"
 msgstr "Vložené"
 
 #. %1$s inline menu title for better accessibility
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 msgid "Inline menu %1$s"
 msgstr "Vložené menu %1$s"
 
@@ -4490,13 +4535,7 @@ msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js module:io.ox/contacts
-msgid "Item List"
-msgstr "Seznam položek"
-
-#. items list (e.g. mails)
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
 msgstr "Seznam položek"
 
@@ -4807,10 +4846,6 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Pošta"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Mail Details"
-msgstr "Podrobnosti o zprávě"
-
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "Pravidla pro filtr zpráv"
@@ -4912,10 +4947,6 @@ msgstr "Zpráv za hodinu (%)"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per week-day (%)"
 msgstr "Zpráv za den (%)"
-
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid "Main window"
-msgstr "Hlavní okno"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
@@ -5033,6 +5064,12 @@ msgstr "Členové"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Message (optional)"
 msgstr "Zpráva (volitelné)"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messaging"
+msgid "Messages"
+msgstr "Posílání zpráv"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -5671,6 +5708,12 @@ msgstr "Otevřít"
 msgid "Open Street Map"
 msgstr ""
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Open/close all messages"
+msgid "Open all messages"
+msgstr "Otevřít/zavřít všechny zprávy"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -6286,6 +6329,12 @@ msgstr "Portál"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Portal settings"
 msgstr "Nastavení portálu"
+
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Portal Widgets"
+msgid "Portal widgets"
+msgstr "Widgety portálu"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Position"
@@ -9347,10 +9396,6 @@ msgstr "Počasí • Roční doba"
 msgid "Week"
 msgstr "Týden"
 
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Week View"
-msgstr "Pohled: týden"
-
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -9427,10 +9472,6 @@ msgstr "Celý den"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Workweek"
 msgstr "Pracovní týden"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Workweek View"
-msgstr "Pohled: pracovní týden"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Would you like to enable desktop notifications?"
@@ -12049,6 +12090,9 @@ msgstr "rrrr"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigua a Barbuda"
 
+#~ msgid "Applications"
+#~ msgstr "Aplikace"
+
 #, fuzzy
 #~| msgid "Apply role"
 #~ msgid "Apply"
@@ -12867,9 +12911,6 @@ msgstr "rrrr"
 #~ msgid "Calendar custom view"
 #~ msgstr "Vlastní zobrazení kalendáře"
 
-#~ msgid "Calendar workweek view"
-#~ msgstr "Zobrazení kalendáře pracovních dní"
-
 #~ msgid "Cambodia"
 #~ msgstr "Kambodža"
 
@@ -13181,9 +13222,6 @@ msgstr "rrrr"
 #~ msgid "Contact overview"
 #~ msgstr "Přehled kontaktu"
 
-#~ msgid "Contacts"
-#~ msgstr "Kontakty"
-
 #~ msgid "Content-Type:"
 #~ msgstr "Druh obsahu:"
 
@@ -13399,6 +13437,9 @@ msgstr "rrrr"
 
 #~ msgid "Date:"
 #~ msgstr "Datum:"
+
+#~ msgid "Day View"
+#~ msgstr "Pohled: den"
 
 #~ msgid "Dear Sir or Madam"
 #~ msgstr "Vážená paní nebo pane"
@@ -15055,6 +15096,9 @@ msgstr "rrrr"
 #~ msgid "Italy"
 #~ msgstr "Kurzíva"
 
+#~ msgid "Item List"
+#~ msgstr "Seznam položek"
+
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "Položky bez souboru nelze otevřít."
 
@@ -15275,6 +15319,9 @@ msgstr "rrrr"
 #~ msgid "Madagascar"
 #~ msgstr "Madagaskar"
 
+#~ msgid "Mail Details"
+#~ msgstr "Podrobnosti o zprávě"
+
 #~ msgid "Mail Thread Details"
 #~ msgstr "Podrobnosti o vláknu zpráv"
 
@@ -15309,6 +15356,9 @@ msgstr "rrrr"
 
 #~ msgid "Mailing list %s"
 #~ msgstr "Poštovní konference %s"
+
+#~ msgid "Main window"
+#~ msgstr "Hlavní okno"
 
 #~ msgid "Malawi"
 #~ msgstr "Malawi"
@@ -16374,9 +16424,6 @@ msgstr "rrrr"
 #~ msgid "Portal Squares"
 #~ msgstr "Čtverce portálu"
 
-#~ msgid "Portal Widgets"
-#~ msgstr "Widgety portálu"
-
 #~ msgid "Portugal"
 #~ msgstr "Portugalsko"
 
@@ -16395,10 +16442,6 @@ msgstr "rrrr"
 #, fuzzy
 #~ msgid "Presenter Navigation"
 #~ msgstr "Cíl"
-
-#, fuzzy
-#~ msgid "Presenter Toolbar"
-#~ msgstr "Nástrojová lišta editoru"
 
 #~ msgid "Press [enter] to close this alertbox."
 #~ msgstr "Stisknutím [enter] toto upozornění zavřete."
@@ -18961,6 +19004,9 @@ msgstr "rrrr"
 #~ msgid "Wednesday"
 #~ msgstr "Středa"
 
+#~ msgid "Week View"
+#~ msgstr "Pohled: týden"
+
 #~ msgid "Week(s) on"
 #~ msgstr "Týden/týdny"
 
@@ -19068,6 +19114,9 @@ msgstr "rrrr"
 
 #~ msgid "Work week starts on"
 #~ msgstr "Pracovní týden začíná v"
+
+#~ msgid "Workweek View"
+#~ msgstr "Pohled: pracovní týden"
 
 #~ msgid "Would you like to create the following birthday series appointment?"
 #~ msgstr "Přejete si vytvořit následující sériovou narozeninovou schůzku?"

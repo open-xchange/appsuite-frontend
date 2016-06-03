@@ -274,6 +274,13 @@ msgstr "%1$s %2$s."
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Feltételes)"
 
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "Viewer Toolbar"
+msgid "%1$s Toolbar"
+msgstr "Megjelenítő eszköztár"
+
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js module:plugins/portal
@@ -741,7 +748,7 @@ msgstr "Felhasználói fiókok"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-#: apps/io.ox/files/mobile-toolbar-actions.js
+#: apps/io.ox/core/main.js apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js
@@ -1189,10 +1196,6 @@ msgstr ""
 "Az alkalmazás nem feltétlenül fog az elvárható módon működni a probléma "
 "megoldásáig."
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Applications"
-msgstr "Alkalmazások"
-
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply to all subfolders"
@@ -1220,14 +1223,13 @@ msgstr "Alkalmazás az összes mappára"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/calendar/week/perspective.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Találkozó"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/list/perspective.js
 #: apps/io.ox/calendar/month/perspective.js
 #: apps/io.ox/calendar/week/perspective.js
 msgid "Appointment Details"
@@ -1239,8 +1241,7 @@ msgstr "Találkozó részletei"
 msgid "Appointment invitations"
 msgstr "Találkozómeghívók"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 msgid "Appointment list"
 msgstr "Találkozólista"
 
@@ -1271,6 +1272,10 @@ msgstr "Jóváhagyva:"
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Approximate Duration for Subscriptions"
 msgstr "Feliratkozások hozzávetőleges időtartama"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Apps"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "April"
@@ -1573,6 +1578,30 @@ msgctxt "app"
 msgid "Calendar"
 msgstr "Naptár"
 
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Day View"
+msgstr "Naptár nézet"
+
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Month View"
+msgstr "Naptár nézet"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Week View"
+msgstr "Naptár nézet"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Workweek View"
+msgid "Calendar Workweek View"
+msgstr "Munkahét nézet"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Naptár nézet"
@@ -1580,6 +1609,12 @@ msgstr "Naptár nézet"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Naptár:"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar"
+msgid "Calendars"
+msgstr "Naptár"
 
 #. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
@@ -1919,6 +1954,12 @@ msgstr "Bemutatás"
 msgid "Close"
 msgstr "Bezárás"
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move all messages"
+msgid "Close all messages"
+msgstr "Összes üzenet mozgatása"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -2114,6 +2155,12 @@ msgstr "Névjegy képei"
 msgid "Contact request sent"
 msgstr "Kapcsolatkérés elküldve"
 
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contact"
+msgid "Contacts"
+msgstr "Névjegy"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
 msgstr "A névjegyek átmásolásra kerültek"
@@ -2149,6 +2196,12 @@ msgstr "Bemutató folytatása"
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue the presentation"
 msgstr "Bemutató folytatása"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Conversations"
+msgid "Conversation"
+msgstr "Társalgások"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Conversations"
@@ -2421,10 +2474,6 @@ msgstr "Születési idő"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
 msgstr "Nap"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Day View"
-msgstr "Napnézet"
 
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
@@ -3731,7 +3780,7 @@ msgstr "Fájlverzió táblázata, az első sor mutatja a jelenlegi verziót."
 msgid "File: %1$s"
 msgstr "Fájl: %1$s"
 
-#: apps/io.ox/files/filepicker.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
 msgstr "Fájlok"
 
@@ -3854,10 +3903,10 @@ msgstr "Mappaspecifikus műveletek"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "Mappák"
 
@@ -4385,8 +4434,7 @@ msgid "Inline"
 msgstr "Beágyazott"
 
 #. %1$s inline menu title for better accessibility
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 msgid "Inline menu %1$s"
 msgstr "%1$s beágyazott menü"
 
@@ -4497,13 +4545,7 @@ msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js module:io.ox/contacts
-msgid "Item List"
-msgstr "Elemlista"
-
-#. items list (e.g. mails)
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
 msgstr "Elemlista"
 
@@ -4814,10 +4856,6 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Levelek"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Mail Details"
-msgstr "Levél részletei"
-
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "Levélszűrő szabályok"
@@ -4919,10 +4957,6 @@ msgstr "Levelek óránként (%)"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per week-day (%)"
 msgstr "Levelek naponként (%)"
-
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid "Main window"
-msgstr "Főablak"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
@@ -5040,6 +5074,12 @@ msgstr "Tagok"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Message (optional)"
 msgstr "Üzenet (opcionális)"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messaging"
+msgid "Messages"
+msgstr "Üzenetküldés"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -5675,6 +5715,12 @@ msgstr "Megnyitás"
 msgid "Open Street Map"
 msgstr ""
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Open/close all messages"
+msgid "Open all messages"
+msgstr "Összes üzenet megnyitása/bezárása"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -6290,6 +6336,12 @@ msgstr "Portál"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Portal settings"
+msgstr "Portálbeállítások"
+
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Portal settings"
+msgid "Portal widgets"
 msgstr "Portálbeállítások"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -9341,10 +9393,6 @@ msgstr "Időjárás • Évszak"
 msgid "Week"
 msgstr "Hét"
 
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Week View"
-msgstr "Hét nézet"
-
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -9420,10 +9468,6 @@ msgstr "Egész nap"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Workweek"
 msgstr "Munkahét"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Workweek View"
-msgstr "Munkahét nézet"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Would you like to enable desktop notifications?"
@@ -10509,6 +10553,9 @@ msgstr "yyyy"
 #~ msgid "Afghanistan"
 #~ msgstr "Asszisztens"
 
+#~ msgid "Applications"
+#~ msgstr "Alkalmazások"
+
 #, fuzzy
 #~| msgid "Apply role"
 #~ msgid "Apply"
@@ -10555,10 +10602,8 @@ msgstr "yyyy"
 #~ msgid "Comoros"
 #~ msgstr "Holnap"
 
-#, fuzzy
-#~| msgid "Contact"
-#~ msgid "Contacts"
-#~ msgstr "Névjegy"
+#~ msgid "Day View"
+#~ msgstr "Napnézet"
 
 #~ msgid "Delete all messages in this folder"
 #~ msgstr "Összes üzenet törlése ebben a mappában"
@@ -10670,6 +10715,9 @@ msgstr "yyyy"
 #~ msgid "Invalid data"
 #~ msgstr "Érvénytelen adatok"
 
+#~ msgid "Item List"
+#~ msgstr "Elemlista"
+
 #, fuzzy
 #~| msgid "Due on %1$s"
 #~ msgid "Just open %1$s"
@@ -10683,10 +10731,16 @@ msgstr "yyyy"
 #~ msgid "Mac"
 #~ msgstr "Március"
 
+#~ msgid "Mail Details"
+#~ msgstr "Levél részletei"
+
 #, fuzzy
 #~| msgid "Mail address"
 #~ msgid "Mail categories"
 #~ msgstr "Levelezési cím"
+
+#~ msgid "Main window"
+#~ msgstr "Főablak"
 
 #~ msgid "Mark as"
 #~ msgstr "Megjelölés másként"
@@ -10842,6 +10896,9 @@ msgstr "yyyy"
 #~| msgid "Vertical"
 #~ msgid "Vatican"
 #~ msgstr "Függőleges"
+
+#~ msgid "Week View"
+#~ msgstr "Hét nézet"
 
 #, fuzzy
 #~| msgid "Do you really want to discard your changes?"

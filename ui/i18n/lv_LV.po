@@ -289,6 +289,12 @@ msgstr "%1$s %2$s."
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Pagaidu)"
 
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+msgid "%1$s Toolbar"
+msgstr "Redaktora rīkjosla"
+
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js module:plugins/portal
@@ -756,7 +762,7 @@ msgstr "Konti"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-#: apps/io.ox/files/mobile-toolbar-actions.js
+#: apps/io.ox/core/main.js apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js
@@ -1199,10 +1205,6 @@ msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Aplikācija var nestrādāt kā paredzēts kamēr šī problēma nav atrisināta."
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Applications"
-msgstr "Aplikācijas"
-
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply to all subfolders"
@@ -1230,14 +1232,13 @@ msgstr "Piemērot visam apakšmapēm"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/calendar/week/perspective.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Mītiņš"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/list/perspective.js
 #: apps/io.ox/calendar/month/perspective.js
 #: apps/io.ox/calendar/week/perspective.js
 msgid "Appointment Details"
@@ -1249,8 +1250,7 @@ msgstr "Mītiņa detaļas"
 msgid "Appointment invitations"
 msgstr "Mītiņu uzaicinājumi"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 msgid "Appointment list"
 msgstr "Mītiņu saraksts"
 
@@ -1281,6 +1281,10 @@ msgstr "Akceptēts:"
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Approximate Duration for Subscriptions"
 msgstr "Aptuvenais abonēšanas laiks"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Apps"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "April"
@@ -1584,6 +1588,30 @@ msgctxt "app"
 msgid "Calendar"
 msgstr "Kalendārs"
 
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Day View"
+msgstr "Kalendāra skats"
+
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Month View"
+msgstr "Kalendāra skats"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar workweek view"
+msgid "Calendar Week View"
+msgstr "Kalendāra nedēļas skats"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar workweek view"
+msgid "Calendar Workweek View"
+msgstr "Kalendāra nedēļas skats"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Kalendāra skats"
@@ -1591,6 +1619,12 @@ msgstr "Kalendāra skats"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Kalendārs:"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar"
+msgid "Calendars"
+msgstr "Kalendārs"
 
 #. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
@@ -1927,6 +1961,12 @@ msgstr "Klienta informācija"
 msgid "Close"
 msgstr "Aizvērt"
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move all messages"
+msgid "Close all messages"
+msgstr "Pārvietot visus ziņojumus"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -2122,6 +2162,10 @@ msgstr "Kontaktu attēli"
 msgid "Contact request sent"
 msgstr "Kontakta pieprasījums ir nosūtīts"
 
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts"
+msgstr "Kontakti"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
 msgstr "Kontakts ir nokopēts"
@@ -2157,6 +2201,12 @@ msgstr "Turpināt prezentāciju"
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue the presentation"
 msgstr "Turpināt prezentāciju"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Conversations"
+msgid "Conversation"
+msgstr "Sarunas"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Conversations"
@@ -2429,10 +2479,6 @@ msgstr "Dzimšanas datums"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
 msgstr "Diena"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Day View"
-msgstr "Dienas skats"
 
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
@@ -3740,7 +3786,7 @@ msgstr "Faila versiju tabula. Pirmajā rindā ir uzrādīta pašreizējā versij
 msgid "File: %1$s"
 msgstr "Fails: %1$s"
 
-#: apps/io.ox/files/filepicker.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
 msgstr "Faili"
 
@@ -3863,10 +3909,10 @@ msgstr "Mapes darbības"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "Mapes"
 
@@ -4394,8 +4440,7 @@ msgid "Inline"
 msgstr "Iekšrindas"
 
 #. %1$s inline menu title for better accessibility
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 msgid "Inline menu %1$s"
 msgstr "Ietvertā izvēlne %1$s"
 
@@ -4506,13 +4551,7 @@ msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js module:io.ox/contacts
-msgid "Item List"
-msgstr "Vienību saraksts"
-
-#. items list (e.g. mails)
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
 msgstr "Vienību saraksts"
 
@@ -4823,10 +4862,6 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Pasts"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Mail Details"
-msgstr "Pasta detaļas"
-
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "Pasta filtra noteikumi"
@@ -4928,10 +4963,6 @@ msgstr "Vēstules stundā (%)"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per week-day (%)"
 msgstr "Vēstules dienā (%)"
-
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid "Main window"
-msgstr "Pasta logs"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
@@ -5049,6 +5080,12 @@ msgstr "Locekļi"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Message (optional)"
 msgstr "Ziņojums (neobligāts)"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messaging"
+msgid "Messages"
+msgstr "Ziņapmaiņa"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -5689,6 +5726,12 @@ msgstr "Atvērt"
 msgid "Open Street Map"
 msgstr ""
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Open/close all messages"
+msgid "Open all messages"
+msgstr "Atvērt/aizvērt visus ziņojumus"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -6303,6 +6346,12 @@ msgstr "Portāls"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Portal settings"
 msgstr "Portāla iestatījumi"
+
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Portal Widgets"
+msgid "Portal widgets"
+msgstr "Portāla logrīki"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Position"
@@ -9375,10 +9424,6 @@ msgstr "Laika apstākļi • Sezona"
 msgid "Week"
 msgstr "Nedēļa"
 
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Week View"
-msgstr "Nedēļas skats"
-
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -9455,10 +9500,6 @@ msgstr "Visa diena"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Workweek"
 msgstr "Darba nedēļa"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Workweek View"
-msgstr "Darba nedēļas skats"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Would you like to enable desktop notifications?"
@@ -10982,6 +11023,9 @@ msgstr "yyyy"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigva un Barbuda"
 
+#~ msgid "Applications"
+#~ msgstr "Aplikācijas"
+
 #, fuzzy
 #~| msgid "Apply role"
 #~ msgid "Apply"
@@ -11388,9 +11432,6 @@ msgstr "yyyy"
 #~ msgid "Calendar custom view"
 #~ msgstr "Kalendāra pielāgotais skats"
 
-#~ msgid "Calendar workweek view"
-#~ msgstr "Kalendāra nedēļas skats"
-
 #~ msgid "Cambodia"
 #~ msgstr "Kambodža"
 
@@ -11631,9 +11672,6 @@ msgstr "yyyy"
 #~ msgid "Contact overview"
 #~ msgstr "Kontaktu pārskats"
 
-#~ msgid "Contacts"
-#~ msgstr "Kontakti"
-
 #~ msgid "Content-Type:"
 #~ msgstr "Satura tips:"
 
@@ -11838,6 +11876,9 @@ msgstr "yyyy"
 
 #~ msgid "Date:"
 #~ msgstr "Datums:"
+
+#~ msgid "Day View"
+#~ msgstr "Dienas skats"
 
 #~ msgid "Debug"
 #~ msgstr "Atblusot"
@@ -13227,6 +13268,9 @@ msgstr "yyyy"
 #~ msgid "Italy"
 #~ msgstr "Slīpraksts"
 
+#~ msgid "Item List"
+#~ msgstr "Vienību saraksts"
+
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "Vienības bez failiem nevar tikt atvērtas."
 
@@ -13434,6 +13478,9 @@ msgstr "yyyy"
 #~ msgid "Madagascar"
 #~ msgstr "Madagaskara"
 
+#~ msgid "Mail Details"
+#~ msgstr "Pasta detaļas"
+
 #~ msgid "Mail Thread Details"
 #~ msgstr "Pasta sarakstes detaļas"
 
@@ -13459,6 +13506,9 @@ msgstr "yyyy"
 
 #~ msgid "Mailing list %s"
 #~ msgstr "Adresātu saraksts %s"
+
+#~ msgid "Main window"
+#~ msgstr "Pasta logs"
 
 #~ msgid "Malawi"
 #~ msgstr "Malāvija"
@@ -14268,9 +14318,6 @@ msgstr "yyyy"
 #~ msgid "Portal Squares"
 #~ msgstr "Portāls"
 
-#~ msgid "Portal Widgets"
-#~ msgstr "Portāla logrīki"
-
 #~ msgid "Portugal"
 #~ msgstr "Portugāle"
 
@@ -14289,10 +14336,6 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Presenter Navigation"
 #~ msgstr "Saņēmējs"
-
-#, fuzzy
-#~ msgid "Presenter Toolbar"
-#~ msgstr "Redaktora rīkjosla"
 
 #~ msgid "Press [enter] to close this alertbox."
 #~ msgstr "Lai aizvērtu šo brīdinājumu apgabalu, piespiediet [enter]."
@@ -16235,6 +16278,9 @@ msgstr "yyyy"
 #~ msgid "Wednesday"
 #~ msgstr "Trešdiena"
 
+#~ msgid "Week View"
+#~ msgstr "Nedēļas skats"
+
 #~ msgid "Week(s) on"
 #~ msgstr "Nedēļa"
 
@@ -16335,6 +16381,9 @@ msgstr "yyyy"
 
 #~ msgid "Work week starts on"
 #~ msgstr "Darba nedēļa sākas"
+
+#~ msgid "Workweek View"
+#~ msgstr "Darba nedēļas skats"
 
 #~ msgid "Would you like to create the following birthday series appointment?"
 #~ msgstr "Vai vēlaties izveidot sekojošu dzimšanas dienu tikšanos sēriju?"

@@ -258,6 +258,13 @@ msgstr "%1$s %2$s."
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Geçici)"
 
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "Viewer Toolbar"
+msgid "%1$s Toolbar"
+msgstr "Araç çubuğu görüntüleyicisi"
+
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js module:plugins/portal
@@ -725,7 +732,7 @@ msgstr "Hesap"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-#: apps/io.ox/files/mobile-toolbar-actions.js
+#: apps/io.ox/core/main.js apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js
@@ -1184,10 +1191,6 @@ msgstr "Uygulama araç çubuğu"
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Bu sorun çözülene kadar uygulama çalışmayabilir"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Applications"
-msgstr "Uygulamalar"
-
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply to all subfolders"
@@ -1215,14 +1218,13 @@ msgstr "Alt klasörlerin tümü için uygula"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/calendar/week/perspective.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Randevu"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/list/perspective.js
 #: apps/io.ox/calendar/month/perspective.js
 #: apps/io.ox/calendar/week/perspective.js
 msgid "Appointment Details"
@@ -1234,8 +1236,7 @@ msgstr "Randevu Ayrıntıları"
 msgid "Appointment invitations"
 msgstr "Randevu davetleri"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 msgid "Appointment list"
 msgstr "Randevu Listesi"
 
@@ -1266,6 +1267,10 @@ msgstr ""
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Approximate Duration for Subscriptions"
 msgstr "Üyelikler için tahmini süre"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Apps"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "April"
@@ -1574,6 +1579,30 @@ msgctxt "app"
 msgid "Calendar"
 msgstr "Takvim"
 
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Day View"
+msgstr "Takvim görünüşü"
+
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Month View"
+msgstr "Takvim görünüşü"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Week View"
+msgstr "Takvim görünüşü"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Workweek View"
+msgid "Calendar Workweek View"
+msgstr "İş haftası görüntüleyicisi"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Takvim görünüşü"
@@ -1582,6 +1611,12 @@ msgstr "Takvim görünüşü"
 #, fuzzy
 #| msgid "Calendar"
 msgid "Calendar:"
+msgstr "Takvim"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar"
+msgid "Calendars"
 msgstr "Takvim"
 
 #. button: move only current message from a sender to a tab
@@ -1927,6 +1962,12 @@ msgstr ""
 msgid "Close"
 msgstr "Kapat"
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move all messages"
+msgid "Close all messages"
+msgstr "Bütün mesajları taşı"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -2124,6 +2165,10 @@ msgstr "Kişi resimleri"
 msgid "Contact request sent"
 msgstr "Kişi isteği gönderildi"
 
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts"
+msgstr "Kişiler"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
 msgstr "Kişiler kopyalandı"
@@ -2163,6 +2208,12 @@ msgstr "Sunumlar"
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue the presentation"
 msgstr ""
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Conversations"
+msgid "Conversation"
+msgstr "Konuşmalar"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Conversations"
@@ -2443,10 +2494,6 @@ msgstr "Doğum tarihi"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
 msgstr "Gün"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Day View"
-msgstr "Gün Görüntüle"
 
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
@@ -3822,7 +3869,7 @@ msgstr "Dosya sürüm masasında, ilk satır şuanki sürümü temsil eder."
 msgid "File: %1$s"
 msgstr "Dosya: %1$s"
 
-#: apps/io.ox/files/filepicker.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 #, fuzzy
 #| msgid "File"
 msgid "Files"
@@ -3962,10 +4009,10 @@ msgstr "Klasör-özellikli hareketler"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "Klasörler"
 
@@ -4507,8 +4554,7 @@ msgid "Inline"
 msgstr " Satıriçi"
 
 #. %1$s inline menu title for better accessibility
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 msgid "Inline menu %1$s"
 msgstr "Satıriçi menü %1$s"
 
@@ -4619,13 +4665,7 @@ msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js module:io.ox/contacts
-msgid "Item List"
-msgstr "Nesne listesi"
-
-#. items list (e.g. mails)
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
 msgstr "Nesne listesi"
 
@@ -4958,10 +4998,6 @@ msgctxt "app"
 msgid "Mail"
 msgstr "E posta"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Mail Details"
-msgstr "E posta detayları"
-
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "E-posta Filtre Kuralları"
@@ -5063,10 +5099,6 @@ msgstr "Saat başına e-posta (%)"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per week-day (%)"
 msgstr "Hafta içi başına e-posta (%)"
-
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid "Main window"
-msgstr "E posta penceresi"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
@@ -5192,6 +5224,12 @@ msgstr "Üyeler"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Message (optional)"
 msgstr "Mesaj (tercihi)"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messaging"
+msgid "Messages"
+msgstr "Mesajlaşma"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -5843,6 +5881,12 @@ msgstr "Açık"
 msgid "Open Street Map"
 msgstr ""
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Open/close all messages"
+msgid "Open all messages"
+msgstr "Tüm mesajları Aç/Kapa"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -6472,6 +6516,12 @@ msgstr "Portal"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Portal settings"
+msgstr "Portal ayarları"
+
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Portal settings"
+msgid "Portal widgets"
 msgstr "Portal ayarları"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -9696,10 +9746,6 @@ msgstr "Hava • Mevsim"
 msgid "Week"
 msgstr "Hafta"
 
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Week View"
-msgstr "Hafta Görünümü"
-
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -9779,10 +9825,6 @@ msgstr "Tüm gün"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Workweek"
 msgstr "İş haftası"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Workweek View"
-msgstr "İş haftası görüntüleyicisi"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 #, fuzzy
@@ -10949,6 +10991,9 @@ msgstr "yyyy"
 #~ msgid "Advanced options"
 #~ msgstr "Gelişmiş Seçenekler"
 
+#~ msgid "Applications"
+#~ msgstr "Uygulamalar"
+
 #, fuzzy
 #~| msgid "Apply role"
 #~ msgid "Apply"
@@ -10971,8 +11016,8 @@ msgstr "yyyy"
 #~ msgid "Click here for free trial."
 #~ msgstr "Bedava deneme için tıklayınız"
 
-#~ msgid "Contacts"
-#~ msgstr "Kişiler"
+#~ msgid "Day View"
+#~ msgstr "Gün Görüntüle"
 
 #~ msgid "Double click to rename"
 #~ msgstr "Yeniden adlandırmak için çift tıkla"
@@ -11025,11 +11070,17 @@ msgstr "yyyy"
 #~ msgid "Invalid data"
 #~ msgstr "Geçersiz bilgi"
 
+#~ msgid "Item List"
+#~ msgstr "Nesne listesi"
+
 #~ msgid "Keep start and end time"
 #~ msgstr "Başlangıç ve bitiş zamanını sakla"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Bir link beğenildi: %s"
+
+#~ msgid "Mail Details"
+#~ msgstr "E posta detayları"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "E-posta ve Sosyal Hesaplar"
@@ -11038,6 +11089,9 @@ msgstr "yyyy"
 #~| msgid "Mail address"
 #~ msgid "Mail categories"
 #~ msgstr "E-posta adresi"
+
+#~ msgid "Main window"
+#~ msgstr "E posta penceresi"
 
 #~ msgid "Mark as"
 #~ msgstr "Olarak işaretle"
@@ -11154,6 +11208,9 @@ msgstr "yyyy"
 
 #~ msgid "View (New)"
 #~ msgstr "Görüntü (Yeni)"
+
+#~ msgid "Week View"
+#~ msgstr "Hafta Görünümü"
 
 #~ msgid ""
 #~ "When you select different timezones the timezone of the end date will not "

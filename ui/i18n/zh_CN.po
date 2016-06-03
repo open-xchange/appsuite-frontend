@@ -273,6 +273,12 @@ msgstr "%1$s %2$s"
 msgid "%1$s (Tentative)"
 msgstr "%1$s （暂定）"
 
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+msgid "%1$s Toolbar"
+msgstr "编辑器工具栏"
+
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js module:plugins/portal
@@ -725,7 +731,7 @@ msgstr "账户"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-#: apps/io.ox/files/mobile-toolbar-actions.js
+#: apps/io.ox/core/main.js apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js
@@ -1163,10 +1169,6 @@ msgstr "应用程序工具条"
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此问题被修复前，应用程序可能未能如常工作。"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Applications"
-msgstr "应用程序"
-
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply to all subfolders"
@@ -1194,14 +1196,13 @@ msgstr "套用到所有子文件夹"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/calendar/week/perspective.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "约会"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/list/perspective.js
 #: apps/io.ox/calendar/month/perspective.js
 #: apps/io.ox/calendar/week/perspective.js
 msgid "Appointment Details"
@@ -1213,8 +1214,7 @@ msgstr "约会详情"
 msgid "Appointment invitations"
 msgstr "约会邀请"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 msgid "Appointment list"
 msgstr "约会列表"
 
@@ -1245,6 +1245,10 @@ msgstr "已批准："
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Approximate Duration for Subscriptions"
 msgstr "大致订阅持续时间"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Apps"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "April"
@@ -1537,6 +1541,30 @@ msgctxt "app"
 msgid "Calendar"
 msgstr "日历"
 
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Day View"
+msgstr "日历视图"
+
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Month View"
+msgstr "日历视图"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar workweek view"
+msgid "Calendar Week View"
+msgstr "日历工作周视图"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar workweek view"
+msgid "Calendar Workweek View"
+msgstr "日历工作周视图"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "日历视图"
@@ -1544,6 +1572,12 @@ msgstr "日历视图"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "日历："
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar"
+msgid "Calendars"
+msgstr "日历"
 
 #. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
@@ -1877,6 +1911,12 @@ msgstr "客户登上中"
 msgid "Close"
 msgstr "关闭"
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move all messages"
+msgid "Close all messages"
+msgstr "移动所有消息"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -2072,6 +2112,10 @@ msgstr "联系人图像"
 msgid "Contact request sent"
 msgstr "已发送联系人请求"
 
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts"
+msgstr "成员"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
 msgstr "联系人已复制"
@@ -2107,6 +2151,12 @@ msgstr "继续演讲"
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue the presentation"
 msgstr "继续演讲"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Conversations"
+msgid "Conversation"
+msgstr "交谈"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Conversations"
@@ -2375,10 +2425,6 @@ msgstr "出生日期"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
 msgstr "日"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Day View"
-msgstr "日视图"
 
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
@@ -3658,7 +3704,7 @@ msgstr "文件版本表格，第一行代表当前版本。"
 msgid "File: %1$s"
 msgstr "文件：%1$s"
 
-#: apps/io.ox/files/filepicker.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
 msgstr "文件"
 
@@ -3781,10 +3827,10 @@ msgstr "文件夹指定动作"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "文件夹"
 
@@ -4300,8 +4346,7 @@ msgid "Inline"
 msgstr "内联"
 
 #. %1$s inline menu title for better accessibility
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 msgid "Inline menu %1$s"
 msgstr "直列的菜单 %1$s"
 
@@ -4409,13 +4454,7 @@ msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js module:io.ox/contacts
-msgid "Item List"
-msgstr "项目列表"
-
-#. items list (e.g. mails)
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
 msgstr "项目列表"
 
@@ -4724,10 +4763,6 @@ msgctxt "app"
 msgid "Mail"
 msgstr "邮件"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Mail Details"
-msgstr "邮件信息"
-
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "邮件过滤器规则"
@@ -4829,10 +4864,6 @@ msgstr "每小时邮件数（%）"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per week-day (%)"
 msgstr "每工作日邮件数（%）"
-
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid "Main window"
-msgstr "主窗口"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
@@ -4950,6 +4981,12 @@ msgstr "成员"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Message (optional)"
 msgstr "消息（选填）"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messaging"
+msgid "Messages"
+msgstr "消息"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -5578,6 +5615,12 @@ msgstr "打开"
 msgid "Open Street Map"
 msgstr ""
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Open/close all messages"
+msgid "Open all messages"
+msgstr "打开/关闭所有信息"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -6186,6 +6229,12 @@ msgstr "门户"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Portal settings"
 msgstr "门户设定"
+
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Portal Widgets"
+msgid "Portal widgets"
+msgstr "门户小部件"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Position"
@@ -9162,10 +9211,6 @@ msgstr "天气：季节"
 msgid "Week"
 msgstr "周"
 
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Week View"
-msgstr "周视图"
-
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -9239,10 +9284,6 @@ msgstr "全天"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Workweek"
 msgstr "工作周"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Workweek View"
-msgstr "工作周视图"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Would you like to enable desktop notifications?"
@@ -10713,6 +10754,9 @@ msgstr "年"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "安提瓜和巴布达"
 
+#~ msgid "Applications"
+#~ msgstr "应用程序"
+
 #, fuzzy
 #~| msgid "Apply role"
 #~ msgid "Apply"
@@ -11080,9 +11124,6 @@ msgstr "年"
 #~ msgid "Calendar custom view"
 #~ msgstr "日历自定义视图"
 
-#~ msgid "Calendar workweek view"
-#~ msgstr "日历工作周视图"
-
 #~ msgid "Cambodia"
 #~ msgstr "柬埔寨"
 
@@ -11314,9 +11355,6 @@ msgstr "年"
 #~ msgid "Contact overview"
 #~ msgstr "联系人概览"
 
-#~ msgid "Contacts"
-#~ msgstr "成员"
-
 #~ msgid "Content-Type:"
 #~ msgstr "内容类型："
 
@@ -11514,6 +11552,9 @@ msgstr "年"
 
 #~ msgid "Date:"
 #~ msgstr "日期："
+
+#~ msgid "Day View"
+#~ msgstr "日视图"
 
 #~ msgid "Debug"
 #~ msgstr "调试"
@@ -12593,6 +12634,9 @@ msgstr "年"
 #~ msgid "Italy"
 #~ msgstr "斜体"
 
+#~ msgid "Item List"
+#~ msgstr "项目列表"
+
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "没有一个文件的项目无法打开。"
 
@@ -12669,6 +12713,9 @@ msgstr "年"
 #~ msgid "Mac"
 #~ msgstr "三月"
 
+#~ msgid "Mail Details"
+#~ msgstr "邮件信息"
+
 #~ msgid "Mail Thread Details"
 #~ msgstr "邮件帖子详情"
 
@@ -12691,6 +12738,9 @@ msgstr "年"
 
 #~ msgid "Mailfilter updated"
 #~ msgstr "邮件过滤器已更新"
+
+#~ msgid "Main window"
+#~ msgstr "主窗口"
 
 #~ msgctxt "help"
 #~ msgid "Managing E-Mail messages"
@@ -13009,9 +13059,6 @@ msgstr "年"
 #~ msgid "Portal Squares"
 #~ msgstr "门户"
 
-#~ msgid "Portal Widgets"
-#~ msgstr "门户小部件"
-
 #, fuzzy
 #~| msgid "Portal"
 #~ msgid "Portugal"
@@ -13023,10 +13070,6 @@ msgstr "年"
 #, fuzzy
 #~ msgid "Presenter Navigation"
 #~ msgstr "目的地"
-
-#, fuzzy
-#~ msgid "Presenter Toolbar"
-#~ msgstr "编辑器工具栏"
 
 #~ msgid "Press [enter] to close this alertbox."
 #~ msgstr "请按 [enter] 关闭此示警框。"
@@ -13976,6 +14019,9 @@ msgstr "年"
 #~ msgid "Wednesday"
 #~ msgstr "星期三"
 
+#~ msgid "Week View"
+#~ msgstr "周视图"
+
 #~ msgid "Weekend Day"
 #~ msgstr "周末"
 
@@ -14046,6 +14092,9 @@ msgstr "年"
 #~ msgctxt "address"
 #~ msgid "Work"
 #~ msgstr "工作"
+
+#~ msgid "Workweek View"
+#~ msgstr "工作周视图"
 
 #~ msgid "You already accepted this invitation"
 #~ msgstr "您已接受此邀请"

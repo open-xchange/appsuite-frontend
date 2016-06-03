@@ -234,6 +234,12 @@ msgstr ""
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js
 #: module:io.ox/core
+msgid "%1$s Toolbar"
+msgstr ""
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js
+#: module:io.ox/core
 msgid "Actions. Use cursor keys to navigate."
 msgstr ""
 
@@ -241,13 +247,6 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/toolbar.js
 #: module:io.ox/core
 msgid "Use cursor keys to navigate"
-msgstr ""
-
-#. %1$s inline menu title for better accessibility
-#: apps/io.ox/backbone/mini-views/toolbar.js
-#: module:io.ox/core
-#: apps/io.ox/core/extPatterns/links.js
-msgid "Inline menu %1$s"
 msgstr ""
 
 #: apps/io.ox/backbone/validation.js
@@ -625,6 +624,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions/edit.js
 #: apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/perspective.js
 #: apps/io.ox/calendar/view-detail.js
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/mail/detail/links.js
@@ -696,7 +696,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/detail/main.js
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/list/perspective.js
 #: apps/io.ox/calendar/month/perspective.js
 #: apps/io.ox/calendar/week/perspective.js
 msgid "Appointment Details"
@@ -1653,8 +1652,9 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/main.js
 #: module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js
+#: apps/io.ox/core/folder/tree.js
 #: module:io.ox/core
+#: apps/io.ox/core/folder/view.js
 #: apps/io.ox/files/filepicker.js
 #: module:io.ox/files
 #: apps/io.ox/files/main.js
@@ -1689,6 +1689,11 @@ msgstr ""
 msgid "Expand timeframe by one month"
 msgstr ""
 
+#: apps/io.ox/calendar/main.js
+#: module:io.ox/calendar
+msgid "Calendars"
+msgstr ""
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: module:io.ox/calendar
 msgid "Listview"
@@ -1715,6 +1720,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js
 #: module:io.ox/core
+#: apps/io.ox/core/main.js
 #: apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/mail/detail/view.js
@@ -1769,8 +1775,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/month/perspective.js
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
-msgid "Appointment list"
+msgid "Calendar Month View"
 msgstr ""
 
 #. add confirmation status behind appointment title
@@ -2430,17 +2435,22 @@ msgstr ""
 
 #: apps/io.ox/calendar/week/perspective.js
 #: module:io.ox/calendar
-msgid "Day View"
+msgid "Calendar Day View"
 msgstr ""
 
 #: apps/io.ox/calendar/week/perspective.js
 #: module:io.ox/calendar
-msgid "Workweek View"
+msgid "Calendar Workweek View"
 msgstr ""
 
 #: apps/io.ox/calendar/week/perspective.js
 #: module:io.ox/calendar
-msgid "Week View"
+msgid "Calendar Week View"
+msgstr ""
+
+#: apps/io.ox/calendar/week/perspective.js
+#: module:io.ox/calendar
+msgid "Appointment list"
 msgstr ""
 
 #: apps/io.ox/calendar/week/view.js
@@ -2837,7 +2847,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/main.js
 #: module:io.ox/contacts
-msgid "Item List"
+msgid "Contacts"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js
@@ -3738,13 +3748,8 @@ msgstr ""
 msgid "Results"
 msgstr ""
 
-#. items list (e.g. mails)
 #: apps/io.ox/core/commons.js
 #: module:io.ox/core
-#: apps/io.ox/files/main.js
-#: module:io.ox/files
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
 msgid "Item list"
 msgstr ""
 
@@ -3947,11 +3952,6 @@ msgstr ""
 
 #: apps/io.ox/core/desktop.js
 #: module:io.ox/core
-msgid "Main window"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js
-#: module:io.ox/core
 msgid "Start search"
 msgstr ""
 
@@ -4007,6 +4007,12 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
 msgid "Export"
+msgstr ""
+
+#. %1$s inline menu title for better accessibility
+#: apps/io.ox/core/extPatterns/links.js
+#: module:io.ox/core
+msgid "Inline menu %1$s"
 msgstr ""
 
 #: apps/io.ox/core/extPatterns/links.js
@@ -4601,12 +4607,12 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-msgid "Applications"
+msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
+msgid "Apps"
 msgstr ""
 
 #: apps/io.ox/core/main.js
@@ -6853,6 +6859,7 @@ msgstr ""
 
 #: apps/io.ox/files/filepicker.js
 #: module:io.ox/files
+#: apps/io.ox/files/main.js
 msgid "Files"
 msgstr ""
 
@@ -9049,7 +9056,7 @@ msgstr ""
 
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
-msgid "Mail Details"
+msgid "Messages"
 msgstr ""
 
 #: apps/io.ox/mail/main.js
@@ -9415,12 +9422,27 @@ msgstr ""
 
 #: apps/io.ox/mail/threadview.js
 #: module:io.ox/mail
-msgid "Open/close all messages"
+msgid "Conversation"
 msgstr ""
 
 #: apps/io.ox/mail/threadview.js
 #: module:io.ox/mail
 msgid "%1$d messages in this conversation"
+msgstr ""
+
+#: apps/io.ox/mail/threadview.js
+#: module:io.ox/mail
+msgid "Open all messages"
+msgstr ""
+
+#: apps/io.ox/mail/threadview.js
+#: module:io.ox/mail
+msgid "Open/close all messages"
+msgstr ""
+
+#: apps/io.ox/mail/threadview.js
+#: module:io.ox/mail
+msgid "Close all messages"
 msgstr ""
 
 #: apps/io.ox/mail/toolbar.js
@@ -9966,6 +9988,11 @@ msgstr ""
 #: apps/io.ox/portal/main.js
 #: module:io.ox/portal
 msgid "Click to try again."
+msgstr ""
+
+#: apps/io.ox/portal/main.js
+#: module:io.ox/portal
+msgid "Portal widgets"
 msgstr ""
 
 #: apps/io.ox/portal/main.js

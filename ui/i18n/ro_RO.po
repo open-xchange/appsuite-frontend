@@ -291,6 +291,12 @@ msgstr "%1$s %2$s."
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Tentativă)"
 
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+msgid "%1$s Toolbar"
+msgstr "Bară de unelte editor"
+
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js module:plugins/portal
@@ -758,7 +764,7 @@ msgstr "Conturi"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-#: apps/io.ox/files/mobile-toolbar-actions.js
+#: apps/io.ox/core/main.js apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js
@@ -1206,10 +1212,6 @@ msgstr ""
 "S-ar putea ca aplicația să nu funcționeze conform așteptărilor până când "
 "această problemă va fi rezolvată."
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Applications"
-msgstr "Aplicații"
-
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply to all subfolders"
@@ -1237,14 +1239,13 @@ msgstr "Aplică pentru toate dosarele subordonate"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/calendar/week/perspective.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Întâlnire"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/list/perspective.js
 #: apps/io.ox/calendar/month/perspective.js
 #: apps/io.ox/calendar/week/perspective.js
 msgid "Appointment Details"
@@ -1256,8 +1257,7 @@ msgstr "Detalii întâlnire"
 msgid "Appointment invitations"
 msgstr "Invitații la întâlniri"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 msgid "Appointment list"
 msgstr "Listă întâlniri"
 
@@ -1288,6 +1288,10 @@ msgstr "Aprobat:"
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Approximate Duration for Subscriptions"
 msgstr "Durata aproximativă de abonare"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Apps"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "April"
@@ -1589,6 +1593,30 @@ msgctxt "app"
 msgid "Calendar"
 msgstr "Calendar"
 
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Day View"
+msgstr "Vedere calendar"
+
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Month View"
+msgstr "Vedere calendar"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar workweek view"
+msgid "Calendar Week View"
+msgstr "Calendar vedere pe săptămâni de lucru"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar workweek view"
+msgid "Calendar Workweek View"
+msgstr "Calendar vedere pe săptămâni de lucru"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Vedere calendar"
@@ -1596,6 +1624,12 @@ msgstr "Vedere calendar"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Calendar:"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar"
+msgid "Calendars"
+msgstr "Calendar"
 
 #. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
@@ -1935,6 +1969,12 @@ msgstr "Introducere pentru client"
 msgid "Close"
 msgstr "Închide"
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move all messages"
+msgid "Close all messages"
+msgstr "Mută toate mesajele"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -2130,6 +2170,10 @@ msgstr "Imagini contact"
 msgid "Contact request sent"
 msgstr "Cerere de contact trimisă"
 
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts"
+msgstr "Contacte"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
 msgstr "Contactele au fost copiate"
@@ -2165,6 +2209,12 @@ msgstr "Continuă prezentarea"
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue the presentation"
 msgstr "Continuă prezentarea"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Conversations"
+msgid "Conversation"
+msgstr "Conversații"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Conversations"
@@ -2437,10 +2487,6 @@ msgstr "Data nașterii"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
 msgstr "Zi"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Day View"
-msgstr "Vedere pe zile"
 
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
@@ -3747,7 +3793,7 @@ msgstr "Tabel de versiuni de fișiere, prima linie conține versiunea curentă."
 msgid "File: %1$s"
 msgstr "Fișier: %1$s"
 
-#: apps/io.ox/files/filepicker.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
 msgstr "Fișiere"
 
@@ -3872,10 +3918,10 @@ msgstr "Acțiuni specifice dosarului"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "Dosare"
 
@@ -4403,8 +4449,7 @@ msgid "Inline"
 msgstr "Inclus"
 
 #. %1$s inline menu title for better accessibility
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 msgid "Inline menu %1$s"
 msgstr "Meniu inclus %1$s"
 
@@ -4515,13 +4560,7 @@ msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js module:io.ox/contacts
-msgid "Item List"
-msgstr "Listă elemente"
-
-#. items list (e.g. mails)
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
 msgstr "Listă elemente"
 
@@ -4834,10 +4873,6 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Mail"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Mail Details"
-msgstr "Detalii e-mail"
-
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "Reguli de filtrare a mesajelor"
@@ -4939,10 +4974,6 @@ msgstr "Mesaje pe oră (%)"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per week-day (%)"
 msgstr "Mesaje pe zi din săptămână (%)"
-
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid "Main window"
-msgstr "Fereastră principală"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
@@ -5060,6 +5091,12 @@ msgstr "Membri"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Message (optional)"
 msgstr "Mesaj (opțional)"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messaging"
+msgid "Messages"
+msgstr "Mesagerie"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -5697,6 +5734,12 @@ msgstr "Deschide"
 msgid "Open Street Map"
 msgstr ""
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Open/close all messages"
+msgid "Open all messages"
+msgstr "Deschide/închide toate mesajele"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -6313,6 +6356,12 @@ msgstr "Portal"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Portal settings"
 msgstr "Setări portal"
+
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Portal Widgets"
+msgid "Portal widgets"
+msgstr "Portal aplicații"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Position"
@@ -9404,10 +9453,6 @@ msgstr "Vreme • Anotimp"
 msgid "Week"
 msgstr "Săptămână"
 
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Week View"
-msgstr "Vedere pe săptămâni"
-
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -9484,10 +9529,6 @@ msgstr "Toată ziua"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Workweek"
 msgstr "Săptămână de lucru"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Workweek View"
-msgstr "Vedere pe săptămâni de lucru"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Would you like to enable desktop notifications?"
@@ -11020,6 +11061,9 @@ msgstr "aaaa"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigua și Barbuda"
 
+#~ msgid "Applications"
+#~ msgstr "Aplicații"
+
 #, fuzzy
 #~| msgid "Apply role"
 #~ msgid "Apply"
@@ -11424,9 +11468,6 @@ msgstr "aaaa"
 #~ msgid "Calendar custom view"
 #~ msgstr "Calendar vedere personalizată"
 
-#~ msgid "Calendar workweek view"
-#~ msgstr "Calendar vedere pe săptămâni de lucru"
-
 #~ msgid "Cambodia"
 #~ msgstr "Cambodgia"
 
@@ -11673,9 +11714,6 @@ msgstr "aaaa"
 #~ msgid "Contact overview"
 #~ msgstr "Prezentare generală a contactului"
 
-#~ msgid "Contacts"
-#~ msgstr "Contacte"
-
 #~ msgid "Content-Type:"
 #~ msgstr "Content-Type:"
 
@@ -11882,6 +11920,9 @@ msgstr "aaaa"
 
 #~ msgid "Date:"
 #~ msgstr "Dată:"
+
+#~ msgid "Day View"
+#~ msgstr "Vedere pe zile"
 
 #~ msgid "Debug"
 #~ msgstr "Depanare"
@@ -13280,6 +13321,9 @@ msgstr "aaaa"
 #~ msgid "Italy"
 #~ msgstr "Cursiv"
 
+#~ msgid "Item List"
+#~ msgstr "Listă elemente"
+
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "Elementele fără niciun fișier nu pot fi deschise."
 
@@ -13492,6 +13536,9 @@ msgstr "aaaa"
 #~ msgid "Madagascar"
 #~ msgstr "Madagascar"
 
+#~ msgid "Mail Details"
+#~ msgstr "Detalii e-mail"
+
 #~ msgid "Mail Thread Details"
 #~ msgstr "Detalii conversație"
 
@@ -13517,6 +13564,9 @@ msgstr "aaaa"
 
 #~ msgid "Mailing list %s"
 #~ msgstr "Listă de discuții %s"
+
+#~ msgid "Main window"
+#~ msgstr "Fereastră principală"
 
 #~ msgid "Malawi"
 #~ msgstr "Malawi"
@@ -14331,9 +14381,6 @@ msgstr "aaaa"
 #~ msgid "Portal Squares"
 #~ msgstr "Pătrate portal"
 
-#~ msgid "Portal Widgets"
-#~ msgstr "Portal aplicații"
-
 #~ msgid "Portugal"
 #~ msgstr "Portugalia"
 
@@ -14352,10 +14399,6 @@ msgstr "aaaa"
 #, fuzzy
 #~ msgid "Presenter Navigation"
 #~ msgstr "Destinație"
-
-#, fuzzy
-#~ msgid "Presenter Toolbar"
-#~ msgstr "Bară de unelte editor"
 
 #~ msgid "Press [enter] to close this alertbox."
 #~ msgstr "Apăsați [Enter] pentru a închide această casetă de avertizare."
@@ -16307,6 +16350,9 @@ msgstr "aaaa"
 #~ msgid "Wednesday"
 #~ msgstr "Miercuri"
 
+#~ msgid "Week View"
+#~ msgstr "Vedere pe săptămâni"
+
 #~ msgid "Week(s) on"
 #~ msgstr "săptămâni în ziua de"
 
@@ -16411,6 +16457,9 @@ msgstr "aaaa"
 
 #~ msgid "Work week starts on"
 #~ msgstr "Săptămâna de lucru începe"
+
+#~ msgid "Workweek View"
+#~ msgstr "Vedere pe săptămâni de lucru"
 
 #~ msgid "Would you like to create the following birthday series appointment?"
 #~ msgstr "Doriți să creați următoarea serie de întâlniri aniversare?"

@@ -290,6 +290,13 @@ msgstr "%1$s %2$s"
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Provisional)"
 
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+#, fuzzy
+#| msgid "1 hour"
+msgid "%1$s Toolbar"
+msgstr "1 hora"
+
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js module:plugins/portal
@@ -744,7 +751,7 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js module:io.ox/core
-#: apps/io.ox/files/mobile-toolbar-actions.js
+#: apps/io.ox/core/main.js apps/io.ox/files/mobile-toolbar-actions.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/mobile-toolbar-actions.js
@@ -1207,10 +1214,6 @@ msgstr ""
 "L'aplicació pot no funcionar correctament fins que es resolgui aquest "
 "problema."
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Applications"
-msgstr "Aplicacions"
-
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
 #, fuzzy
 msgid "Apply for all messages?"
@@ -1238,14 +1241,13 @@ msgstr "Totes les carpetes"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/calendar/week/perspective.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Cita"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
-#: apps/io.ox/calendar/list/perspective.js
 #: apps/io.ox/calendar/month/perspective.js
 #: apps/io.ox/calendar/week/perspective.js
 msgid "Appointment Details"
@@ -1257,8 +1259,7 @@ msgstr "Detalls de la cita"
 msgid "Appointment invitations"
 msgstr "Convits a cites"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 #, fuzzy
 msgid "Appointment list"
 msgstr "Cites"
@@ -1290,6 +1291,10 @@ msgstr ""
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Approximate Duration for Subscriptions"
 msgstr "Durada aproximada de les subscripcions"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Apps"
+msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "April"
@@ -1593,6 +1598,30 @@ msgctxt "app"
 msgid "Calendar"
 msgstr "Calendari"
 
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Day View"
+msgstr "Vista de calendari"
+
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Month View"
+msgstr "Vista de calendari"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar Week View"
+msgstr "Vista de calendari"
+
+#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Workweek View"
+msgid "Calendar Workweek View"
+msgstr "Vista de setmana laboral"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Vista de calendari"
@@ -1600,6 +1629,12 @@ msgstr "Vista de calendari"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr ""
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar"
+msgid "Calendars"
+msgstr "Calendari"
 
 #. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
@@ -1947,6 +1982,11 @@ msgstr ""
 msgid "Close"
 msgstr "Tanca"
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+msgid "Close all messages"
+msgstr "Obre/tanca tots els missatges"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -2140,6 +2180,10 @@ msgstr "Imatges dels contactes"
 msgid "Contact request sent"
 msgstr "Sol·licitud de contacte enviada"
 
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts"
+msgstr "Contactes"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been copied"
 msgstr "Els contactes s'han copiat"
@@ -2175,6 +2219,12 @@ msgstr ""
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue the presentation"
 msgstr ""
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Conversations"
+msgid "Conversation"
+msgstr "Converses"
 
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Conversations"
@@ -2450,10 +2500,6 @@ msgstr "Data de naixement"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Day"
 msgstr "Dia"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Day View"
-msgstr "Vista de dia"
 
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
@@ -3774,7 +3820,7 @@ msgstr ""
 msgid "File: %1$s"
 msgstr "Fitxer: %1$s"
 
-#: apps/io.ox/files/filepicker.js module:io.ox/files
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
 msgstr ""
 
@@ -3903,10 +3949,10 @@ msgstr "Accions específiques de carpeta"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/view.js module:io.ox/core
-#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
-#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
+#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Folders"
 msgstr "Carpetes"
 
@@ -4436,8 +4482,7 @@ msgid "Inline"
 msgstr "Incrustat"
 
 #. %1$s inline menu title for better accessibility
-#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
-#: apps/io.ox/core/extPatterns/links.js
+#: apps/io.ox/core/extPatterns/links.js module:io.ox/core
 msgid "Inline menu %1$s"
 msgstr "Menú incrustat %1$s"
 
@@ -4549,14 +4594,7 @@ msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js module:io.ox/contacts
-#, fuzzy
-msgid "Item List"
-msgstr "Ítems"
-
-#. items list (e.g. mails)
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 msgid "Item list"
 msgstr "Ítems"
@@ -4869,10 +4907,6 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Correu"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Mail Details"
-msgstr "Detalls del correu"
-
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "Regles del filtre de correu"
@@ -4975,10 +5009,6 @@ msgstr "Correus per hora (%)"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per week-day (%)"
 msgstr "Correus per dia de la setmana (%)"
-
-#: apps/io.ox/core/desktop.js module:io.ox/core
-msgid "Main window"
-msgstr ""
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
@@ -5100,6 +5130,12 @@ msgstr "desembre"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Message (optional)"
 msgstr "Missatge (opcional)"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messaging"
+msgid "Messages"
+msgstr "Missatgeria"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -5754,6 +5790,12 @@ msgstr "Obre"
 msgid "Open Street Map"
 msgstr ""
 
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+#, fuzzy
+#| msgid "Open/close all messages"
+msgid "Open all messages"
+msgstr "Obre/tanca tots els missatges"
+
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
 #, fuzzy
@@ -6375,6 +6417,12 @@ msgstr "Portal"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Portal settings"
 msgstr "Preferències del portal"
+
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Portal Widgets"
+msgid "Portal widgets"
+msgstr "Widgets del portal"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Position"
@@ -9439,10 +9487,6 @@ msgstr "Temps • Estació"
 msgid "Week"
 msgstr "Setmana"
 
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Week View"
-msgstr "Vista de setmana"
-
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -9520,10 +9564,6 @@ msgstr "Tot el dia"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Workweek"
 msgstr "Setmana laboral"
-
-#: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
-msgid "Workweek View"
-msgstr "Vista de setmana laboral"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Would you like to enable desktop notifications?"
@@ -10645,11 +10685,6 @@ msgstr ""
 
 #, fuzzy
 #~| msgid "1 hour"
-#~ msgid "%1$s hour"
-#~ msgstr "1 hora"
-
-#, fuzzy
-#~| msgid "1 hour"
 #~ msgid "%1$s hours"
 #~ msgstr "1 hora"
 
@@ -10751,6 +10786,9 @@ msgstr ""
 #~ msgid "Advanced options"
 #~ msgstr "Opcions avançades"
 
+#~ msgid "Applications"
+#~ msgstr "Aplicacions"
+
 #, fuzzy
 #~| msgid "Apply role"
 #~ msgid "Apply"
@@ -10815,9 +10853,6 @@ msgstr ""
 #~ msgid "Compact view"
 #~ msgstr "Vista compacta"
 
-#~ msgid "Contacts"
-#~ msgstr "Contactes"
-
 #~ msgid "Couldn't load folders."
 #~ msgstr "No s'han pogut carregar les carpetes."
 
@@ -10837,6 +10872,9 @@ msgstr ""
 
 #~ msgid "Data only partially imported ( %1$s of %2$s records)"
 #~ msgstr "Dades importades només parcialment (%1$s de %2$s registres)"
+
+#~ msgid "Day View"
+#~ msgstr "Vista de dia"
 
 #~ msgid "Default calendar view"
 #~ msgstr "Vista de calendari predeterminada"
@@ -10969,11 +11007,18 @@ msgstr ""
 #~ msgid "Invalid data"
 #~ msgstr "Dades no vàlides"
 
+#, fuzzy
+#~ msgid "Item List"
+#~ msgstr "Ítems"
+
 #~ msgid "Last Week"
 #~ msgstr "La setmana passada"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Heu marcat \"M'agrada\" en un enllaç: %s"
+
+#~ msgid "Mail Details"
+#~ msgstr "Detalls del correu"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Comptes de correu electrònic i de xarxes socials"
@@ -11041,9 +11086,6 @@ msgstr ""
 
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Tasca endarrerida. %1$s %2$s. Premeu [Intro] per a obrir-la"
-
-#~ msgid "Portal Widgets"
-#~ msgstr "Widgets del portal"
 
 #~ msgid "Press [enter] to jump to the facebook stream."
 #~ msgstr "Premeu [Intro] per a anar al flux de Facebook."
@@ -11325,6 +11367,9 @@ msgstr ""
 
 #~ msgid "Wednesday"
 #~ msgstr "dimecres"
+
+#~ msgid "Week View"
+#~ msgstr "Vista de setmana"
 
 #~ msgid ""
 #~ "You can drag and drop files from your computer to upload either a new "
