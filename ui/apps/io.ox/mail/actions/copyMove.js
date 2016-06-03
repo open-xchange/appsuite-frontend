@@ -17,8 +17,9 @@ define('io.ox/mail/actions/copyMove', [
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail'
-], function (api, folderAPI, ext, settings, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/core/capabilities'
+], function (api, folderAPI, ext, settings, gt, capabilities) {
 
     'use strict';
 
@@ -75,22 +76,40 @@ define('io.ox/mail/actions/copyMove', [
                         var notification = $('<div class="help-block">'),
                             singleSenderText = gt('All future messages from %1$s will be moved to the selected folder.', senderList[0]),
                             multipleSenderText = gt('All future messages from the senders of the selected mails will be moved to the selected folder.'),
-                            infoText = senderList.length <= 1 ? singleSenderText : multipleSenderText;
+                            infoText = senderList.length <= 1 ? singleSenderText : multipleSenderText,
+                            checkbox;
 
-                        dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
+                        if (capabilities.has('mailfilter')) {
+                            dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
 
-                        dialog.getFooter().find('[data-action="create-rule"]').on('change', function () {
-                            createRule = $(this).prop('checked');
+                            checkbox = dialog.getFooter().find('[data-action="create-rule"]');
+                            tree.on('change', function (id) {
+                                if (id.split('/')[0] !== 'default0') {
+                                    checkbox.prop({ 'checked': false, 'disabled': true });
+                                    notification.empty();
+                                } else {
+                                    checkbox.prop('disabled', false);
+                                }
+                            });
 
-                            if (createRule) notification.text(infoText);
-                        });
+                            checkbox.on('change', function () {
+                                createRule = $(this).prop('checked');
+
+                                if (createRule) {
+                                    notification.text(infoText);
+                                } else {
+                                    notification.empty();
+                                }
+                            });
+                        }
+
                         dialog.getFooter().prepend(notification);
                         dialog.on('ok', function () {
                             folderId = tree.selection.get();
                         });
                     },
                     pickerClose: function () {
-                        if (o.type === 'move' && createRule) {
+                        if (o.type === 'move' && createRule && folderId) {
                             generateRule();
                         }
                     }
