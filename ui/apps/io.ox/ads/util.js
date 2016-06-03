@@ -26,11 +26,17 @@ define('io.ox/ads/util', function () {
             /**
              * Reset the cooldown timer.
              *
-             * @param id - {String|Number} id of the ad space to cool down (default implementation injects it into the config)
+             * @param id - {String|Number|undefined}
+             *              + the id of the ad space to cool down (default implementation injects it into the config)
+             *              + if undefined, reset _all_ timers
              * @returns {Object} - `this`, for chaining: `cooldown.reset(id).touch(id).then(always_called);`
              */
             reset: function (id) {
-                delete timer[id];
+                if (typeof id === 'undefined') {
+                    timer = {};
+                } else {
+                    delete timer[id];
+                }
                 return this;
             }
         };
