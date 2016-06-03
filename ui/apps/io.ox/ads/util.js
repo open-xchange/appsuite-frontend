@@ -6,9 +6,9 @@ define('io.ox/ads/util', function () {
      */
     function Cooldown(config) {
         var timer = {};
-        function touchCooldown(area) {
-            if (!timer[area] || timer[area] < _.now()) {
-                timer[area] = (config[area] && Number(config[area].cooldown) || 0) + _.now();
+        function touchCooldown(id) {
+            if (!timer[id] || timer[id] < _.now()) {
+                timer[id] = (config[id] && Number(config[id].cooldown) || 0) + _.now();
                 return $.Deferred().resolve();
             }
             return $.Deferred().reject();
@@ -18,7 +18,7 @@ define('io.ox/ads/util', function () {
             /**
              * Touch the cooldown timer.
              *
-             * @param area - {String} the name of the area to cool down
+             * @param id - {String|Number} the id of the ad space to cool down (default implementation injects it into the config)
              * @returns {Promise} - resolves if cooldown was updated -> a refresh should happen
              *                    - rejects if area is still hot
              */
@@ -26,11 +26,11 @@ define('io.ox/ads/util', function () {
             /**
              * Reset the cooldown timer.
              *
-             * @param area - {String} the name of the area to cool down
-             * @returns {Object} - `this`, for chaining: `cooldown.reset(area).touch(area).then(always_called);`
+             * @param id - {String|Number} id of the ad space to cool down (default implementation injects it into the config)
+             * @returns {Object} - `this`, for chaining: `cooldown.reset(id).touch(id).then(always_called);`
              */
-            reset: function (area) {
-                delete timer[area];
+            reset: function (id) {
+                delete timer[id];
                 return this;
             }
         };
