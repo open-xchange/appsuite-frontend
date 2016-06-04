@@ -86,9 +86,11 @@ define('io.ox/mail/actions/copyMove', [
                             tree.on('change', function (id) {
                                 if (id.split('/')[0] !== 'default0') {
                                     checkbox.prop({ 'checked': false, 'disabled': true });
+                                    checkbox.closest('.checkbox').addClass('disabled');
                                     notification.empty();
                                 } else {
                                     checkbox.prop('disabled', false);
+                                    checkbox.closest('.checkbox').removeClass('disabled');
                                 }
                             });
 
