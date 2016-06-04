@@ -294,8 +294,6 @@ msgstr ""
 #: apps/io.ox/core/main.js
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js
 #: module:io.ox/core/wizard
@@ -1760,6 +1758,8 @@ msgstr ""
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/files/util.js
 #: module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
 msgid "Yes"
 msgstr ""
 
@@ -1770,6 +1770,8 @@ msgstr ""
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
 msgid "No"
 msgstr ""
 
@@ -5357,6 +5359,7 @@ msgstr ""
 #. object permissions - edit/modify
 #. object permissions - delete
 #. Auth type. None. No authentication
+#. Connection security. None.
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js
@@ -6122,6 +6125,13 @@ msgstr ""
 msgid "This folder is shared with others"
 msgstr ""
 
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#: apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
+msgid "Hide details"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
@@ -6256,6 +6266,11 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core
 msgid "Pop out standalone viewer"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/toolbarview.js
+#: module:io.ox/core
+msgid "Close viewer"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -7750,6 +7765,11 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
+msgid "Cannot establish secure connection. Do you want to proceed anyway?"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
 msgid "Manual"
 msgstr ""
 
@@ -7775,6 +7795,18 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
 msgid "Use separate username and password"
+msgstr ""
+
+#. Connection security. StartTLS.
+#: apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
+msgid "StartTLS"
+msgstr ""
+
+#. Connection security. SSL/TLS.
+#: apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
+msgid "SSL/TLS"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js
@@ -7816,12 +7848,12 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
-msgid "Use SSL connection"
+msgid "Server name"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
-msgid "Server name"
+msgid "Connection security"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js
@@ -8209,7 +8241,7 @@ msgstr ""
 
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
-msgid "Apply for all messages?"
+msgid "Apply to all messages?"
 msgstr ""
 
 #. %1$d is the number of mails
@@ -8257,7 +8289,7 @@ msgstr ""
 
 #: apps/io.ox/mail/categories/main.js
 #: module:io.ox/mail
-msgid "Configure you inbox tabs"
+msgid "Configure your inbox tabs"
 msgstr ""
 
 #. use as a fallback name in case a user enters a empty string as the name of tab
@@ -9282,19 +9314,19 @@ msgstr ""
 msgid "Show requests for read receipts"
 msgstr ""
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Please ask me every time"
 msgstr ""
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Yes, always move them all"
 msgstr ""
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "No, only move selected message(s)"
@@ -9312,7 +9344,7 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
-msgid "Should only the curret message or all messages of sender be moved"
+msgid "Should only the current message or all messages of the sender be moved"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js
@@ -10732,11 +10764,6 @@ msgstr ""
 #: apps/io.ox/tasks/print.js
 #: module:io.ox/tasks
 msgid "Medium"
-msgstr ""
-
-#: apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit
-msgid "Hide details"
 msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js

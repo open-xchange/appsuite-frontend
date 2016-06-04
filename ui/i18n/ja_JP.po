@@ -1161,12 +1161,6 @@ msgstr ""
 "この問題が解決されない場合、アプリケーションは正常に動作しない可能性がありま"
 "す。"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply for all messages?"
-msgstr "全てのサブフォルダに適用"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "ロールを割り当てる"
@@ -1180,6 +1174,12 @@ msgstr "すべての条件を満たす場合にルールを適用"
 #: module:io.ox/settings
 msgid "Apply rule if any condition is met."
 msgstr "いずれかの条件を満たす場合にルールを適用"
+
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply to all messages?"
+msgstr "全てのサブフォルダに適用"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -1652,6 +1652,10 @@ msgstr "キャンセルされました。"
 msgid "Cannot connect to server. Please check your connection."
 msgstr "サーバへ接続できません。接続を確認してください。"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Cannot establish secure connection. Do you want to proceed anyway?"
+msgstr ""
+
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "この連絡先があなたに送信したメッセージが見つかりません。"
@@ -1892,8 +1896,7 @@ msgstr "クライアントオンボーディング"
 #: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
 #: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
 #: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -1934,6 +1937,12 @@ msgstr "プレミアム機能を閉じます"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close this reminder"
 msgstr "このアラームを閉じる"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Reviewer"
+msgid "Close viewer"
+msgstr "レビューア"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -2041,7 +2050,7 @@ msgstr "今構成する"
 #: apps/io.ox/mail/categories/main.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
-msgid "Configure you inbox tabs"
+msgid "Configure your inbox tabs"
 msgstr "今構成する"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2078,6 +2087,10 @@ msgstr "接続します"
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "デバイスの接続"
+
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+msgid "Connection security"
+msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -4133,7 +4146,9 @@ msgstr "仕事への出席依頼をすべて隠す。"
 msgid "Hide all task reminders."
 msgstr "仕事のアラームをすべて隠す。"
 
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "詳細を隠す"
 
@@ -5368,6 +5383,7 @@ msgstr "ニックネーム"
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "No"
 msgstr "いいえ"
 
@@ -5478,7 +5494,7 @@ msgstr "このモジュールに利用できる登録サービスがありませ
 msgid "No title."
 msgstr "タイトルなし"
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
@@ -5490,6 +5506,7 @@ msgstr "削除済みメッセージ"
 #. object permissions - edit/modify
 #. object permissions - delete
 #. Auth type. None. No authentication
+#. Connection security. None.
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
@@ -6063,7 +6080,7 @@ msgstr "オーディオ ファイルの再生"
 msgid "Play video files"
 msgstr "動画ファイルを再生"
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Please ask me every time"
 msgstr ""
@@ -7038,6 +7055,11 @@ msgstr "安全な SMTP"
 msgid "SMTP Server"
 msgstr "SMTP サーバ"
 
+#. Connection security. SSL/TLS.
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+msgid "SSL/TLS"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "売上規模"
@@ -7475,7 +7497,7 @@ msgid ""
 msgstr "%1$d 日以上経過したメッセージは、アーカイブ フォルダに移動されます。"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Should only the curret message or all messages of sender be moved"
+msgid "Should only the current message or all messages of the sender be moved"
 msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
@@ -7821,6 +7843,13 @@ msgstr "ツアーを開始"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "ユーザー名を検索するために入力を開始してください"
+
+#. Connection security. StartTLS.
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#, fuzzy
+#| msgid "Start"
+msgid "StartTLS"
+msgstr "開始"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Starts on"
@@ -9119,10 +9148,6 @@ msgstr "緊急度"
 msgid "Use"
 msgstr "ユーザ"
 
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-msgid "Use SSL connection"
-msgstr "SSL 接続を使用"
-
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
@@ -9440,10 +9465,11 @@ msgstr "黄"
 #: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/files/util.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Yes"
 msgstr "はい"
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Yes, always move them all"
 msgstr ""
@@ -17277,6 +17303,9 @@ msgstr "yyyy"
 
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "\"Standalone\" モードを使用してください:"
+
+#~ msgid "Use SSL connection"
+#~ msgstr "SSL 接続を使用"
 
 #~ msgid "Use for appointment"
 #~ msgstr "アポイントに戻る"

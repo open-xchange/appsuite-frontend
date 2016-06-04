@@ -1204,12 +1204,6 @@ msgstr "Панель приложений"
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Надо исправить ошибку, иначе работа приложения может быть нарушена."
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply for all messages?"
-msgstr "Применить к вложенным папкам"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Назначить роль"
@@ -1223,6 +1217,12 @@ msgstr "Применить правило, если все условия удо
 #: module:io.ox/settings
 msgid "Apply rule if any condition is met."
 msgstr "Применить правило, если удовлетворено любое условие"
+
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply to all messages?"
+msgstr "Применить к вложенным папкам"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -1700,6 +1700,10 @@ msgstr "Отменено"
 msgid "Cannot connect to server. Please check your connection."
 msgstr "Не удалось подключиться к серверу. Проверьте подключение."
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Cannot establish secure connection. Do you want to proceed anyway?"
+msgstr ""
+
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "Нет сообщений от этого контакта."
@@ -1941,8 +1945,7 @@ msgstr "Ориентирование клиентов"
 #: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
 #: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
 #: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -1983,6 +1986,12 @@ msgstr "Закрыть возможности Premium"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close this reminder"
 msgstr "Закрыть напоминание"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Reviewer"
+msgid "Close viewer"
+msgstr "Рецензент"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -2090,7 +2099,7 @@ msgstr "Настроить"
 #: apps/io.ox/mail/categories/main.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
-msgid "Configure you inbox tabs"
+msgid "Configure your inbox tabs"
 msgstr "Настроить"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2127,6 +2136,10 @@ msgstr "Подключиться"
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Подключите устройство"
+
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+msgid "Connection security"
+msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -4176,7 +4189,9 @@ msgstr "Скрыть все приглашения задач."
 msgid "Hide all task reminders."
 msgstr "Скрыть напоминания задач."
 
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "Скрыть подробности"
 
@@ -5409,6 +5424,7 @@ msgstr "Псевдоним"
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "No"
 msgstr "Нет"
 
@@ -5519,7 +5535,7 @@ msgstr "Сервис подписки для этого модуля недос�
 msgid "No title."
 msgstr "Нет заголовка."
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
@@ -5531,6 +5547,7 @@ msgstr "Удаленные"
 #. object permissions - edit/modify
 #. object permissions - delete
 #. Auth type. None. No authentication
+#. Connection security. None.
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
@@ -6109,7 +6126,7 @@ msgstr "Проигрывать аудиофайлы"
 msgid "Play video files"
 msgstr "Проигрывать видеофайлы"
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Please ask me every time"
 msgstr ""
@@ -7085,6 +7102,11 @@ msgstr "Защита SMTP"
 msgid "SMTP Server"
 msgstr "Сервер SMTP"
 
+#. Connection security. SSL/TLS.
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+msgid "SSL/TLS"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "Объем продаж"
@@ -7534,7 +7556,7 @@ msgid ""
 msgstr "Сообщения старше %1$d дня(ей) будут перенесены в архив"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Should only the curret message or all messages of sender be moved"
+msgid "Should only the current message or all messages of the sender be moved"
 msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
@@ -7878,6 +7900,13 @@ msgstr "Начать знакомство"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Начните вводить имя пользователя для быстрого поиска"
+
+#. Connection security. StartTLS.
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#, fuzzy
+#| msgid "Start"
+msgid "StartTLS"
+msgstr "Начало"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Starts on"
@@ -9182,10 +9211,6 @@ msgstr "Срочность"
 msgid "Use"
 msgstr "Пользователь"
 
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-msgid "Use SSL connection"
-msgstr "SSL-подключение"
-
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
@@ -9502,10 +9527,11 @@ msgstr "Желтый"
 #: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/files/util.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Yes"
 msgstr "Да"
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Yes, always move them all"
 msgstr ""
@@ -12604,6 +12630,9 @@ msgstr "гггг"
 
 #~ msgid "Upload new files"
 #~ msgstr "Отправить новые файлы"
+
+#~ msgid "Use SSL connection"
+#~ msgstr "SSL-подключение"
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

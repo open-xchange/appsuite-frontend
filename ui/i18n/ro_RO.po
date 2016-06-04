@@ -1212,12 +1212,6 @@ msgstr ""
 "S-ar putea ca aplicația să nu funcționeze conform așteptărilor până când "
 "această problemă va fi rezolvată."
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply for all messages?"
-msgstr "Aplică pentru toate dosarele subordonate"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplică rolul"
@@ -1231,6 +1225,12 @@ msgstr "Aplică regula dacă toate condițiile sunt respectate"
 #: module:io.ox/settings
 msgid "Apply rule if any condition is met."
 msgstr "Aplică regula dacă oricare din condiții este respectată."
+
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply to all messages?"
+msgstr "Aplică pentru toate dosarele subordonate"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -1710,6 +1710,10 @@ msgid "Cannot connect to server. Please check your connection."
 msgstr ""
 "Nu s-a putut realiza conexiunea cu serverul. Verificați conectivitatea."
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Cannot establish secure connection. Do you want to proceed anyway?"
+msgstr ""
+
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "Nu a fost găsit niciun mesaj de la acest contact."
@@ -1953,8 +1957,7 @@ msgstr "Introducere pentru client"
 #: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
 #: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
 #: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -1995,6 +1998,12 @@ msgstr "Închide funcționalitățile premium"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close this reminder"
 msgstr "Închide memento"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Reviewer"
+msgid "Close viewer"
+msgstr "Analiză"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -2102,7 +2111,7 @@ msgstr "Configurează acum"
 #: apps/io.ox/mail/categories/main.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
-msgid "Configure you inbox tabs"
+msgid "Configure your inbox tabs"
 msgstr "Configurează acum"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2139,6 +2148,10 @@ msgstr "Conectare"
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Conectare dispozitiv"
+
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+msgid "Connection security"
+msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -4199,7 +4212,9 @@ msgstr "Ascunde toate invitațiile pentru sarcini."
 msgid "Hide all task reminders."
 msgstr "Ascunde toate mementourile pentru sarcini."
 
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "Ascunde detaliile"
 
@@ -5434,6 +5449,7 @@ msgstr "Pseudonim"
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "No"
 msgstr "Nu"
 
@@ -5544,7 +5560,7 @@ msgstr "Nu există servicii de abonare pentru acest modul"
 msgid "No title."
 msgstr "Niciun titlu."
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
@@ -5556,6 +5572,7 @@ msgstr "Coș de gunoi"
 #. object permissions - edit/modify
 #. object permissions - delete
 #. Auth type. None. No authentication
+#. Connection security. None.
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
@@ -6134,7 +6151,7 @@ msgstr "Redă fișierele audio"
 msgid "Play video files"
 msgstr "Redă fișierele video"
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Please ask me every time"
 msgstr ""
@@ -7124,6 +7141,11 @@ msgstr "SMTP securizat"
 msgid "SMTP Server"
 msgstr "Server SMTP"
 
+#. Connection security. SSL/TLS.
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+msgid "SSL/TLS"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "Volumul vânzărilor"
@@ -7577,7 +7599,7 @@ msgstr ""
 "Toate mesajele mai vechi de %1$d zile vor fi mutate în dosarul de arhive"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Should only the curret message or all messages of sender be moved"
+msgid "Should only the current message or all messages of the sender be moved"
 msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
@@ -7923,6 +7945,13 @@ msgstr "Incepe vizita ghidată"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Începeți să tastați pentru a căuta nume de utilizatori"
+
+#. Connection security. StartTLS.
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#, fuzzy
+#| msgid "Start"
+msgid "StartTLS"
+msgstr "Începe"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Starts on"
@@ -9258,10 +9287,6 @@ msgstr "Urgență"
 msgid "Use"
 msgstr "Utilizator"
 
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-msgid "Use SSL connection"
-msgstr "Folosește conexiunea SSL"
-
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
@@ -9582,10 +9607,11 @@ msgstr "Galben"
 #: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/files/util.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Yes"
 msgstr "Da"
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Yes, always move them all"
 msgstr ""
@@ -16227,6 +16253,9 @@ msgstr "aaaa"
 
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "Folosește modul \"Autonom\":"
+
+#~ msgid "Use SSL connection"
+#~ msgstr "Folosește conexiunea SSL"
 
 #~ msgid "Use for appointment"
 #~ msgstr "Folosește pentru întâlnire"

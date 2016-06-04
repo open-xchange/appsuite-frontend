@@ -1169,12 +1169,6 @@ msgstr "应用程序工具条"
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此问题被修复前，应用程序可能未能如常工作。"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
-msgid "Apply for all messages?"
-msgstr "套用到所有子文件夹"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "套用角色"
@@ -1188,6 +1182,12 @@ msgstr "如果达到所有条件套用规则"
 #: module:io.ox/settings
 msgid "Apply rule if any condition is met."
 msgstr "如果达到其中一个条件套用规则。"
+
+#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Apply to all messages?"
+msgstr "套用到所有子文件夹"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -1657,6 +1657,10 @@ msgstr "已取消"
 msgid "Cannot connect to server. Please check your connection."
 msgstr "不能连接服务器，请检查您的连接。"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Cannot establish secure connection. Do you want to proceed anyway?"
+msgstr ""
+
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "找不到此联系人向您发送的任何消息。"
@@ -1895,8 +1899,7 @@ msgstr "客户登上中"
 #: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
 #: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
 #: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -1937,6 +1940,12 @@ msgstr "关闭优质功能"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close this reminder"
 msgstr "关闭此提醒"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Reviewer"
+msgid "Close viewer"
+msgstr "审核者"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -2044,7 +2053,7 @@ msgstr "现在设置"
 #: apps/io.ox/mail/categories/main.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
-msgid "Configure you inbox tabs"
+msgid "Configure your inbox tabs"
 msgstr "现在设置"
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2081,6 +2090,10 @@ msgstr "连接"
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "连接您的装置"
+
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+msgid "Connection security"
+msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -4103,7 +4116,9 @@ msgstr "隐藏所有任务邀请。"
 msgid "Hide all task reminders."
 msgstr "隐藏所有任务提醒。"
 
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "隐藏详情"
 
@@ -5324,6 +5339,7 @@ msgstr "别名"
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "No"
 msgstr "否"
 
@@ -5432,7 +5448,7 @@ msgstr "此模组没有订阅服务可用"
 msgid "No title."
 msgstr "无标题。"
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #, fuzzy
 #| msgctxt "folder"
@@ -5444,6 +5460,7 @@ msgstr "已删除消息"
 #. object permissions - edit/modify
 #. object permissions - delete
 #. Auth type. None. No authentication
+#. Connection security. None.
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js apps/io.ox/core/tk/flag-picker.js
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
@@ -6014,7 +6031,7 @@ msgstr "播放音效档"
 msgid "Play video files"
 msgstr "播放视象档"
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Please ask me every time"
 msgstr ""
@@ -6979,6 +6996,11 @@ msgstr "SMTP 安全"
 msgid "SMTP Server"
 msgstr "SMTP 服务器"
 
+#. Connection security. SSL/TLS.
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+msgid "SSL/TLS"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "销售量"
@@ -7420,7 +7442,7 @@ msgid ""
 msgstr "所有超过 %1$d 天的消息将会移到归档文件夹"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Should only the curret message or all messages of sender be moved"
+msgid "Should only the current message or all messages of the sender be moved"
 msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
@@ -7762,6 +7784,13 @@ msgstr "开始向导"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "开始输入以搜寻用户名称"
+
+#. Connection security. StartTLS.
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#, fuzzy
+#| msgid "Start"
+msgid "StartTLS"
+msgstr "开始于"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Starts on"
@@ -9024,10 +9053,6 @@ msgstr "紧急"
 msgid "Use"
 msgstr "用户"
 
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-msgid "Use SSL connection"
-msgstr "使用 SSL 连接"
-
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
@@ -9337,10 +9362,11 @@ msgstr "黄色"
 #: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
 #: module:io.ox/core apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/files/util.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Yes"
 msgstr "是"
 
-#. possible setting for 'Should only the curret message or all messages of sender be moved'
+#. possible setting for 'Should only the current message or all messages of the sender be moved'
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Yes, always move them all"
 msgstr ""
@@ -13980,6 +14006,9 @@ msgstr "年"
 
 #~ msgid "Upload new files"
 #~ msgstr "上载新文件"
+
+#~ msgid "Use SSL connection"
+#~ msgstr "使用 SSL 连接"
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "
