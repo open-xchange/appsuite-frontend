@@ -1767,6 +1767,7 @@ define('io.ox/mail/api', [
     api.collectionLoader = new CollectionLoader({
         module: 'mail',
         getQueryParams: function (params) {
+            var shareAttachmentsString = settings.get('compose/shareAttachments/enabled', false) ? ',X-Open-Xchange-Share-Reference' : '';
             // is all unseen?
             if (params.folder === 'virtual/all-unseen') {
                 return {
@@ -1795,7 +1796,7 @@ define('io.ox/mail/api', [
             return {
                 action: 'all',
                 folder: params.folder,
-                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656' + shareAttachmentsString,
                 sort: params.sort || '610',
                 order: params.order || 'desc',
                 timezone: 'utc',
@@ -1814,6 +1815,15 @@ define('io.ox/mail/api', [
             var isAllUnseen = params.folder === 'default0/virtual/all' && params.sort === '651';
             if (isAllUnseen) params.limit = '0,250';
             return http.GET({ module: module, params: params }).then(function (data) {
+                _.each(data, function (obj) {
+                    if (settings.get('compose/shareAttachments/enabled', false)) {
+                        if (obj['X-Open-Xchange-Share-Reference']) {
+                            if (!obj.headers) obj.headers = {};
+                            obj.headers['X-Open-Xchange-Share-Reference'] = obj['X-Open-Xchange-Share-Reference'];
+                        }
+                        delete obj['X-Open-Xchange-Share-Reference'];
+                    }
+                });
                 // drop all seen messages for all-unseen
                 return isAllUnseen ? _(data).filter(filterAllSeen) : data;
             });
