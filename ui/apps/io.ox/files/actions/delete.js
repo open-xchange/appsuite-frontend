@@ -56,7 +56,16 @@ define('io.ox/files/actions/delete', [
 
     return function (list) {
 
-        var dialog = new dialogs.ModalDialog();
+        var dialog = new dialogs.ModalDialog(),
+            deleteNotice = gt.ngettext(
+            'Do you really want to delete this item?',
+            'Do you really want to delete these items?',
+            list.length
+        ),
+            shareNotice = gt.ngettext('This file (or folder) is shared with others. It won\'t be available for them any more.',
+                'Some files/folder are shared with others. They won\'t be available for them any more.',
+                list.length
+            );
 
         list = _.isArray(list) ? list : [list];
 
@@ -68,21 +77,8 @@ define('io.ox/files/actions/delete', [
             if (result !== -1) return true;
         }
 
-        function assembleText() {
-            var deleteNotice = gt.ngettext(
-                'Do you really want to delete this item?',
-                'Do you really want to delete these items?',
-                list.length
-            ),
-                shareNotice = gt.ngettext('This file (or folder) is shared with others. It won\'t be available for the invited guests any more.',
-                    'Some files/folder are shared with others. They won\'t be available for the invited guests any more.',
-                    list.length
-                );
-
-            return isShared() ? deleteNotice + '\n' + shareNotice : deleteNotice;
-        }
-
-        dialog.text(assembleText())
+        dialog.text(deleteNotice)
+            .append($('<p>').text(isShared() ? shareNotice : ''))
             .addPrimaryButton('delete', gt('Delete'), 'delete', { 'tabIndex': '1' })
             .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
             .on('delete', function () {
