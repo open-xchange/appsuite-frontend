@@ -979,7 +979,7 @@ define('io.ox/files/share/permissions', [
                     guid = _.uniqueId('form-control-label-');
 
                 if (objModel.isFolder() && options.nested) {
-                    dialog.getFooter().prepend(
+                    dialog.getFooter().append(
                         $('<div>').addClass('form-group cascade').append(
                             $('<label>').addClass('checkbox-inline').text(gt('Apply to all subfolders')).prepend(
                                 new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogConfig }).render().$el
@@ -1025,20 +1025,18 @@ define('io.ox/files/share/permissions', [
                             })
                         ),
                         // add message - not available for mail
-                        module !== 'mail' ?
-                            $('<div>').addClass('form-group').append(
-                                $('<label>').addClass('control-label sr-only').text(gt('Enter a Message to inform users')).attr({ for: guid = _.uniqueId('form-control-label-') }),
-                                new miniViews.TextView({
-                                    name: 'message',
-                                    model: dialogConfig
-                                }).render().$el.addClass('message-text').attr({
-                                    id: guid,
-                                    rows: 3,
-                                    //#. placeholder text in share dialog
-                                    placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
-                                })
-                            ) :
-                            $()
+                        $('<div>').addClass('form-group').append(
+                            $('<label>').addClass('control-label sr-only').text(gt('Enter a Message to inform users')).attr({ for: guid = _.uniqueId('form-control-label-') }),
+                            new miniViews.TextView({
+                                name: 'message',
+                                model: dialogConfig
+                            }).render().$el.addClass('message-text').attr({
+                                id: guid,
+                                rows: 3,
+                                //#. placeholder text in share dialog
+                                placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
+                            })
+                        )
                     )
                 );
 
