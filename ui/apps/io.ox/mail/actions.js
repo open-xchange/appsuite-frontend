@@ -844,16 +844,16 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/attachment/shareAttachments').extend(new links.Link({
         id: 'shareAttachmentsEnable',
         index: 100,
-        // mobile: 'high',
-        label: gt('Use') + ' ' + settings.get('compose/shareAttachments/name'),
+        //#. %1$s is usually "Drive Mail" (product name; might be customized)
+        label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
         ref: 'io.ox/mail/compose/attachment/shareAttachmentsEnable'
     }));
 
     ext.point('io.ox/mail/attachment/shareAttachments').extend(new links.Link({
         id: 'shareAttachmentseDisable',
         index: 110,
-        // mobile: 'high',
-        label: gt('Use') + ' ' + settings.get('compose/shareAttachments/name'),
+        //#. %1$s is usually "Drive Mail" (product name; might be customized)
+        label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
         ref: 'io.ox/mail/compose/attachment/shareAttachmentsDisable'
     }));
 
