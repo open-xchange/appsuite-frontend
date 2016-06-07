@@ -849,7 +849,7 @@ define('io.ox/files/share/permissions', [
                 dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel, share: options.share });
 
-            permissionsView.collection.on('remove add reset', function () {
+            permissionsView.collection.on('remove add', function () {
                 if (permissionsView.collection.where({ type: 'guest' }).length !== 0) {
                     dialogConfig.set('sendNotifications', true);
                     dialogConfig.set('disabled', true);
