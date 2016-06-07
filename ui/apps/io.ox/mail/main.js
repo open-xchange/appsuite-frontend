@@ -1474,6 +1474,12 @@ define('io.ox/mail/main', [
                 });
             }, 300);
 
+            // will be thrown if the external mail account server somehow does not support starttls anymore
+            folderAPI.on('error:MSG-0092', function (error) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                });
+            });
             folderAPI.on('error:FLD-0008', handleError);
             api.on('error:FLD-0008', handleError);
             api.on('error:IMAP-2041', function (e, error) {
