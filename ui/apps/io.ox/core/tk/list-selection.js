@@ -456,7 +456,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             switch (e.which) {
 
                 // [enter] > action
+                // [space] > action
                 case 13:
+                case 32:
                     this.triggerAction(e);
                     break;
 

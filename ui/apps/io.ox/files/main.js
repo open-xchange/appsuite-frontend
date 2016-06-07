@@ -31,6 +31,7 @@ define('io.ox/files/main', [
     'io.ox/files/api',
     'io.ox/core/tk/sidebar',
     'io.ox/core/viewer/views/sidebarview',
+    'io.ox/backbone/mini-views/quota',
     // prefetch
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
@@ -42,7 +43,7 @@ define('io.ox/files/main', [
     'io.ox/files/upload/dropzone',
     'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/core/viewer'
-], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview) {
+], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
 
     'use strict';
 
@@ -195,6 +196,25 @@ define('io.ox/files/main', [
             app.treeView = new TreeView({ app: app, module: 'infostore', root: settings.get('rootFolderId', 9), contextmenu: true });
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
+        },
+
+        'files-quota': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            var quota = new QuotaView({
+                title: gt('File quota'),
+                renderUnlimited: false,
+                module: 'file'
+            });
+            // add some listeners
+            folderAPI.on('cleared-trash', function () {
+                quota.getQuota(true);
+            });
+
+            app.treeView.$el.append(
+                quota.render().$el
+            );
         },
 
         /*

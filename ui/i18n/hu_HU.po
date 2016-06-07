@@ -1374,6 +1374,11 @@ msgstr "Szerző"
 msgid "Auto Forward"
 msgstr "Automatikus továbbítás"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "E-mail vázlatok automatikus mentése"
@@ -2181,6 +2186,12 @@ msgstr "A névjegyek átmásolásra kerültek"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "A névjegyek áthelyezésre kerültek"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contact"
+msgid "Contacts toolbar"
+msgstr "Névjegy"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -3780,6 +3791,7 @@ msgstr "Fájlnév"
 msgid "File name, click to rename"
 msgstr "Fájlnév, kattintson ide az átnevezéshez"
 
+#: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
 msgstr "Fájlkvóta"
@@ -3814,6 +3826,13 @@ msgstr "A fájlok átmásolásra kerültek"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been moved"
 msgstr "A fájlok áthelyezésre kerültek"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Item list options"
+msgid "Files options"
+msgstr "Elemlista beállításai"
 
 #. Verb: (to) filter documents by file type
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -4565,8 +4584,7 @@ msgid "Item list"
 msgstr "Elemlista"
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
 msgstr "Elemlista beállításai"
 
@@ -5095,6 +5113,13 @@ msgstr "Üzenet (opcionális)"
 #| msgid "Messaging"
 msgid "Messages"
 msgstr "Üzenetküldés"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Message (optional)"
+msgid "Messages options"
+msgstr "Üzenet (opcionális)"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -8122,6 +8147,12 @@ msgstr "Feladatok"
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr "A feladatok nem mozgathatók megosztott mappákba vagy azokból ki"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Viewer Toolbar"
+msgid "Tasks toolbar"
+msgstr "Megjelenítő eszköztár"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "Telefon (ISDN)"
@@ -8748,11 +8779,11 @@ msgstr "Ezt a mezőt ki kell tölteni"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid ""
-"This file (or folder) is shared with others. It won't be available for the "
-"invited guests any more."
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
 msgid_plural ""
-"Some files/folder are shared with others. They won't be available for the "
-"invited guests any more."
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -8822,10 +8853,11 @@ msgid "This folder is shared with others"
 msgstr "Ez a mappa meg van osztva másokkal"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+#, fuzzy
+#| msgid "This folder is shared with others"
 msgid ""
-"This folder is shared with others. It won't be available for the invited "
-"guests any more."
-msgstr ""
+"This folder is shared with others. It won't be available for them any more."
+msgstr "Ez a mappa meg van osztva másokkal"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."

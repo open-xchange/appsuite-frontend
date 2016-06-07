@@ -1408,6 +1408,15 @@ msgstr "Ați acceptat această sarcină"
 msgid "You declined this appointment"
 msgstr "Ați respins această întâlnire"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Auto-save email drafts"
+msgstr "Salvare automată a schițelor de mesaje"
+
 #: apps/io.ox/calendar/invitations/register.js:162 module:io.ox/calendar/main
 msgid "You declined this task"
 msgstr "Ați respins această sarcină"
@@ -2172,6 +2181,22 @@ msgstr "Contactele au fost mutate"
 #: apps/io.ox/contacts/actions.js:126 module:io.ox/contacts
 msgid "Contact has been moved"
 msgstr "Contactul a fost mutat"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contacts"
+msgid "Contacts toolbar"
+msgstr "Contacte"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Contains"
+msgstr "Conține"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Content"
+msgstr "Conținut"
 
 #: apps/io.ox/contacts/actions.js:127 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:472
@@ -3671,6 +3696,11 @@ msgstr "Ascunde"
 msgid "My shares"
 msgstr "Partajările mele"
 
+#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/plugins/portal/quota/register.js module:plugins/portal
+msgid "File quota"
+msgstr "Cotă de fișier"
+
 #: apps/io.ox/core/folder/extensions.js:187 module:io.ox/core
 msgid "My folders"
 msgstr "Dosarele mele"
@@ -3706,6 +3736,19 @@ msgstr "Agende de contacte partajate"
 #: apps/io.ox/core/folder/extensions.js:562 module:io.ox/core
 msgid "Hidden address books"
 msgstr "Agende de contacte ascunse"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Toggle options"
+msgid "Files options"
+msgstr "Comutare opțiuni"
+
+#. Verb: (to) filter documents by file type
+#: apps/io.ox/files/view-options.js module:io.ox/files
+msgctxt "verb"
+msgid "Filter"
+msgstr "Filtrează"
 
 #: apps/io.ox/core/folder/extensions.js:565 module:io.ox/core
 msgid "My calendars"
@@ -4510,6 +4553,11 @@ msgstr "Reîncarcă pagina"
 msgid "Language"
 msgstr "Limbă"
 
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
+msgid "Item list options"
+msgstr "Opțiuni listă elemente"
+
 #: apps/io.ox/core/settings/pane.js:175 module:io.ox/core
 msgid "Time zone"
 msgstr "Fus orar"
@@ -5184,6 +5232,17 @@ msgstr "Următorul"
 #: apps/io.ox/core/tk/wizard.js:859 module:io.ox/core
 msgid "Welcome"
 msgstr "Bine ați venit"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Message (optional)"
+msgid "Messages options"
+msgstr "Mesaj (opțional)"
+
+#: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+msgid "Messaging"
+msgstr "Mesagerie"
 
 #: apps/io.ox/core/upsell.js:28 module:io.ox/core
 msgid "Upgrade required"
@@ -8160,6 +8219,15 @@ msgstr "E-mail de configurare"
 msgid "Get your device configured by email."
 msgstr "Configurați-vă dispozitivul via e-mail"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#, fuzzy
+msgid "Tasks toolbar"
+msgstr "Bară de unelte editor"
+
+#: apps/io.ox/contacts/model.js module:io.ox/contacts
+msgid "Telephone (ISDN)"
+msgstr "Telefon (ISDN)"
+
 #: apps/io.ox/onboarding/clients/extensions.js:500 module:io.ox/core/onboarding
 msgid "Automatic Configuration"
 msgstr "Configurare automată"
@@ -8729,6 +8797,17 @@ msgstr "Încheie prezentarea"
 msgid "Join presentation"
 msgstr "Participă la prezentare"
 
+#: apps/io.ox/files/actions/delete.js module:io.ox/files
+msgid ""
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
+msgid_plural ""
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 #. button tooltip for joining the presentation
 #: apps/io.ox/presenter/views/toolbarview.js:124 module:io.ox/presenter
 msgid "Join the presentation"
@@ -8824,6 +8903,13 @@ msgstr "Aplicații externe"
 #: apps/io.ox/settings/apps/settings/pane.js:52 module:io.ox/core
 msgid "Do you want to revoke the access of this application?"
 msgstr "Doriți să revocați accesul acestei aplicații?"
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+#, fuzzy
+#| msgid "This folder is shared with others"
+msgid ""
+"This folder is shared with others. It won't be available for them any more."
+msgstr "Dosarul este partajat cu alți utilizatori"
 
 #: apps/io.ox/settings/apps/settings/pane.js:53 module:io.ox/core
 msgid "Revoke"

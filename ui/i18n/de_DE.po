@@ -1360,6 +1360,11 @@ msgstr "Autor"
 msgid "Auto Forward"
 msgstr "Automatische Weiterleitung"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "E-Mail-Entwürfe automatisch speichern"
@@ -2158,6 +2163,12 @@ msgstr "Kontakte wurden kopiert"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Kontakte wurden verschoben"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contacts"
+msgid "Contacts toolbar"
+msgstr "Mitglieder"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -3755,6 +3766,7 @@ msgstr "Dateiname"
 msgid "File name, click to rename"
 msgstr "Dateiname. Zum Umbenennen klicken."
 
+#: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
 msgstr "Datei-Speicherplatz"
@@ -3792,6 +3804,13 @@ msgstr "Dateien wurden kopiert"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been moved"
 msgstr "Dateien wurden verschoben"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Toggle options"
+msgid "Files options"
+msgstr "Optionen an/aus"
 
 #. Verb: (to) filter documents by file type
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -4538,8 +4557,7 @@ msgid "Item list"
 msgstr "Objektliste"
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
 msgstr "Optionen für Objektliste"
 
@@ -5071,6 +5089,13 @@ msgstr "Nachricht (optional)"
 #| msgid "Messaging"
 msgid "Messages"
 msgstr "Messaging"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Message (optional)"
+msgid "Messages options"
+msgstr "Nachricht (optional)"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -8085,6 +8110,12 @@ msgid "Tasks can not be moved to or out of shared folders"
 msgstr ""
 "Aufgaben können nicht in freigegebene Ordner oder daraus verschoben werden"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#, fuzzy
+#| msgid "%1$s hour"
+msgid "Tasks toolbar"
+msgstr "%1$s Stunde"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "Telefon (ISDN)"
@@ -8730,12 +8761,19 @@ msgid "This field has to be filled"
 msgstr "Dieses Feld muss ausgefüllt werden"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
+#, fuzzy
+#| msgid ""
+#| "This file (or folder) is shared with others. It won't be available for "
+#| "the invited guests any more."
+#| msgid_plural ""
+#| "Some files/folder are shared with others. They won't be available for the "
+#| "invited guests any more."
 msgid ""
-"This file (or folder) is shared with others. It won't be available for the "
-"invited guests any more."
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
 msgid_plural ""
-"Some files/folder are shared with others. They won't be available for the "
-"invited guests any more."
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
 msgstr[0] ""
 "Diese Datei/dieser Ordner wird mit anderen geteilt. Sie/er wird nicht mehr "
 "für die eingeladenen Gäste verfügbar sein."
@@ -8815,9 +8853,12 @@ msgid "This folder is shared with others"
 msgstr "Dieser Ordner wird mit anderen geteilt"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "This folder is shared with others. It won't be available for the invited "
+#| "guests any more."
 msgid ""
-"This folder is shared with others. It won't be available for the invited "
-"guests any more."
+"This folder is shared with others. It won't be available for them any more."
 msgstr ""
 "Dieser Ordner wird mit anderen geteilt. Er wird nicht mehr für die "
 "eingeladenen Gäste verfügbar sein."
@@ -14072,9 +14113,6 @@ msgstr "JJJJ"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Ordner an/aus"
-
-#~ msgid "Toggle options"
-#~ msgstr "Optionen an/aus"
 
 #~ msgid "Toggle search"
 #~ msgstr "Suche an/aus"

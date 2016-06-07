@@ -1384,6 +1384,11 @@ msgstr "Autors"
 msgid "Auto Forward"
 msgstr "Automātiski pārsūtīt"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Automātiski saglabāt e-pasta melnrakstus"
@@ -2186,6 +2191,12 @@ msgstr "Kontakts ir nokopēts"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Kontakts ir pārvietots"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contacts"
+msgid "Contacts toolbar"
+msgstr "Kontakti"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -3786,6 +3797,7 @@ msgstr "Faila vārds"
 msgid "File name, click to rename"
 msgstr "Faila nosaukumu, noklikšķiniet lai pārdēvētu"
 
+#: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
 msgstr "Failu kvota"
@@ -3820,6 +3832,13 @@ msgstr "Faili ir nokopēti"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been moved"
 msgstr "Faili ir pārvietotai"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Toggle options"
+msgid "Files options"
+msgstr "Pārslēgt opcijas"
 
 #. Verb: (to) filter documents by file type
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -4571,8 +4590,7 @@ msgid "Item list"
 msgstr "Vienību saraksts"
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
 msgstr "Sarakstra opcijas"
 
@@ -5101,6 +5119,13 @@ msgstr "Ziņojums (neobligāts)"
 #| msgid "Messaging"
 msgid "Messages"
 msgstr "Ziņapmaiņa"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Message (optional)"
+msgid "Messages options"
+msgstr "Ziņojums (neobligāts)"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -8141,6 +8166,11 @@ msgstr "Uzdevumi"
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr "Uzdevumus nevar pārvietot uz vai no koplietojuma mapēm"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#, fuzzy
+msgid "Tasks toolbar"
+msgstr "Redaktora rīkjosla"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "Telefons (ISDN)"
@@ -8780,11 +8810,11 @@ msgstr "Šis lauks ir oligāti jāaizpilda"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid ""
-"This file (or folder) is shared with others. It won't be available for the "
-"invited guests any more."
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
 msgid_plural ""
-"Some files/folder are shared with others. They won't be available for the "
-"invited guests any more."
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -8854,10 +8884,11 @@ msgid "This folder is shared with others"
 msgstr "Šī mape tiek koplietota ar citiem"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+#, fuzzy
+#| msgid "This folder is shared with others"
 msgid ""
-"This folder is shared with others. It won't be available for the invited "
-"guests any more."
-msgstr ""
+"This folder is shared with others. It won't be available for them any more."
+msgstr "Šī mape tiek koplietota ar citiem"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -16003,9 +16034,6 @@ msgstr "yyyy"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Pārslēgt mapi"
-
-#~ msgid "Toggle options"
-#~ msgstr "Pārslēgt opcijas"
 
 #~ msgid "Toggle search"
 #~ msgstr "Pārslēgt meklēšanu"

@@ -39,7 +39,7 @@ define('io.ox/mail/accounts/settings', [
         myView.dialog.getBody().css('padding-right', '15px');
 
         myView.dialog.header(
-            $('<h2>').text(myModel.get('id') ? gt('Edit mail account') : gt('Add mail account'))
+            $('<h2>').text(myModel.get('id') || myModel.get('id') === 0 ? gt('Edit mail account') : gt('Add mail account'))
         ).append(
             myView.render().el
         )
@@ -230,6 +230,22 @@ define('io.ox/mail/accounts/settings', [
             );
         },
 
+        configureManuallyDialog = function (args, newMailaddress) {
+            new dialogs.ModalDialog({ width: 400 })
+                .text(gt('Auto-configuration failed. Do you want to configure your account manually?'))
+                .addPrimaryButton('yes', gt('Yes'), 'yes', { tabIndex: 1 })
+                .addButton('no', gt('No'), 'no', { tabIndex: 1 })
+                .on('yes', function () {
+                    var data = {};
+                    data.primary_address = newMailaddress;
+                    if (args) {
+                        args.data = data;
+                        createExtpointForNewAccount(args);
+                    }
+                })
+                .show();
+        },
+
         autoconfigApiCall = function (args, newMailaddress, newPassword, popup, def, forceSecure) {
 
             api.autoconfig({
@@ -246,36 +262,27 @@ define('io.ox/mail/accounts/settings', [
                     delete data.transport_password;
                     validateMailaccount(data, popup, def);
                 } else if (forceSecure) {
-                    new dialogs.ModalDialog({ width: 400 })
+                    new dialogs.ModalDialog({ async: true, width: 400 })
                         .text(gt('Cannot establish secure connection. Do you want to proceed anyway?'))
                         .addPrimaryButton('yes', gt('Yes'), 'yes', { tabIndex: 1 })
                         .addButton('no', gt('No'), 'no', { tabIndex: 1 })
                         .on('yes', function () {
-                            autoconfigApiCall(args, newMailaddress, newPassword, popup, def, false);
+                            autoconfigApiCall(args, newMailaddress, newPassword, this, def, false);
                         })
                         .on('no', function () {
-                            popup.close();
                             def.reject();
+                            this.close();
                         })
                         .show();
+                    popup.close();
                 } else {
-                    data = {};
-                    data.primary_address = newMailaddress;
-                    if (args) {
-                        args.data = data;
-                        createExtpointForNewAccount(args);
-                    }
+                    configureManuallyDialog(args, newMailaddress);
                     popup.close();
                     def.reject();
                 }
             })
             .fail(function () {
-                var data = {};
-                data.primary_address = newMailaddress;
-                if (args) {
-                    args.data = data;
-                    createExtpointForNewAccount(args);
-                }
+                configureManuallyDialog(args, newMailaddress);
                 popup.close();
                 def.reject();
             });

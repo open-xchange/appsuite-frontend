@@ -1355,6 +1355,11 @@ msgstr "Tekijä"
 msgid "Auto Forward"
 msgstr "Automaattinen välitys"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Luonnosten automaattinen tallennus"
@@ -2156,6 +2161,12 @@ msgstr "Yhteystiedot kopioitu"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Yhteystiedot siirretty"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contacts"
+msgid "Contacts toolbar"
+msgstr "Yhteystiedot"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -3745,6 +3756,7 @@ msgstr "Tiedoston nimi"
 msgid "File name, click to rename"
 msgstr "Tiedoston nimi, napsauta nimetäksesi uudelleen"
 
+#: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
 msgstr "Tiedostokiintiö"
@@ -3779,6 +3791,13 @@ msgstr "Tiedostot on kopioitu"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been moved"
 msgstr "Tiedostot on siirretty"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Toggle options"
+msgid "Files options"
+msgstr "Vaihteluvaihtoehdot"
 
 #. Verb: (to) filter documents by file type
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -4529,8 +4548,7 @@ msgid "Item list"
 msgstr "Kohteet"
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
 msgstr "Kohdeluettelovaihtoehdot"
 
@@ -5059,6 +5077,13 @@ msgstr "Viesti (valinnainen)"
 #| msgid "Messaging"
 msgid "Messages"
 msgstr "Viestimet"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Message (optional)"
+msgid "Messages options"
+msgstr "Viesti (valinnainen)"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -8078,6 +8103,12 @@ msgstr "Tehtävät"
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr "Tehtäviä ei voi siirtää yhteisiin kansiohin eikä niistä pois"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Press [enter] to open"
+msgid "Tasks toolbar"
+msgstr "Paina [enter] avataksesi "
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "Puhelin (ISDN)"
@@ -8704,11 +8735,11 @@ msgstr "Tämä kenttä pitää täyttää"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid ""
-"This file (or folder) is shared with others. It won't be available for the "
-"invited guests any more."
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
 msgid_plural ""
-"Some files/folder are shared with others. They won't be available for the "
-"invited guests any more."
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -8780,10 +8811,11 @@ msgid "This folder is shared with others"
 msgstr "Tämä kansio on jaettu muiden kanssa"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+#, fuzzy
+#| msgid "This folder is shared with others"
 msgid ""
-"This folder is shared with others. It won't be available for the invited "
-"guests any more."
-msgstr ""
+"This folder is shared with others. It won't be available for them any more."
+msgstr "Tämä kansio on jaettu muiden kanssa"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -12207,9 +12239,6 @@ msgstr "vvvv"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Vaihda kansiota"
-
-#~ msgid "Toggle options"
-#~ msgstr "Vaihteluvaihtoehdot"
 
 #~ msgid "Toggle search"
 #~ msgstr "Vaihtele hakua"

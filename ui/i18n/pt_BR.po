@@ -1369,6 +1369,11 @@ msgstr "Autor"
 msgid "Auto Forward"
 msgstr "Encaminhar automaticamente"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Salvar automaticamente rascunhos de e-mail"
@@ -2168,6 +2173,12 @@ msgstr "Os contatos foram copiados"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Os contatos foram movidos"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contacts"
+msgid "Contacts toolbar"
+msgstr "Contatos"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -3767,6 +3778,7 @@ msgstr "Nome do arquivo"
 msgid "File name, click to rename"
 msgstr "Nome do arquivo, clique para renomear"
 
+#: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
 msgstr "Cota de arquivo"
@@ -3803,6 +3815,13 @@ msgstr "Os arquivos foram copiados"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been moved"
 msgstr "Os arquivos foram movidos"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Toggle options"
+msgid "Files options"
+msgstr "Alternar opções"
 
 #. Verb: (to) filter documents by file type
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -4554,8 +4573,7 @@ msgid "Item list"
 msgstr "lista de itens"
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
 msgstr "Opções da lista de itens"
 
@@ -5085,6 +5103,13 @@ msgstr "Mensagem (opcional)"
 #| msgid "Messaging"
 msgid "Messages"
 msgstr "Mensagens"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Message (optional)"
+msgid "Messages options"
+msgstr "Mensagem (opcional)"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -8118,6 +8143,11 @@ msgid "Tasks can not be moved to or out of shared folders"
 msgstr ""
 "As tarefas não podem ser movidas para ou fora das pastas compartilhadas"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#, fuzzy
+msgid "Tasks toolbar"
+msgstr "Barra de ferramentas do editor"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "Telefone (ISDN)"
@@ -8759,11 +8789,11 @@ msgstr "Este campo tem que ser preenchido"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid ""
-"This file (or folder) is shared with others. It won't be available for the "
-"invited guests any more."
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
 msgid_plural ""
-"Some files/folder are shared with others. They won't be available for the "
-"invited guests any more."
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -8834,10 +8864,11 @@ msgid "This folder is shared with others"
 msgstr "Esta pasta é compartilhada com outros"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+#, fuzzy
+#| msgid "This folder is shared with others"
 msgid ""
-"This folder is shared with others. It won't be available for the invited "
-"guests any more."
-msgstr ""
+"This folder is shared with others. It won't be available for them any more."
+msgstr "Esta pasta é compartilhada com outros"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -15295,9 +15326,6 @@ msgstr "aaaa"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Alternar pasta"
-
-#~ msgid "Toggle options"
-#~ msgstr "Alternar opções"
 
 #~ msgid "Toggle search"
 #~ msgstr "Alternar pesquisa"

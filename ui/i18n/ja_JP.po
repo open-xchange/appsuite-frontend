@@ -1338,6 +1338,11 @@ msgstr "作成者"
 msgid "Auto Forward"
 msgstr "自動転送"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "下書きの自動保存"
@@ -2133,6 +2138,12 @@ msgstr "連絡先をコピーしました。"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "連絡先を移動しました。"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contacts"
+msgid "Contacts toolbar"
+msgstr "メンバ"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -3729,6 +3740,7 @@ msgstr "ファイル名"
 msgid "File name, click to rename"
 msgstr "ファイル名、クリックして名前を変更"
 
+#: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
 msgstr "ファイル割当量"
@@ -3764,6 +3776,13 @@ msgstr "ファイルをコピーしました。"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been moved"
 msgstr "ファイルを移動しました。"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Toggle options"
+msgid "Files options"
+msgstr "オプションを表示"
 
 #. Verb: (to) filter documents by file type
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -4514,8 +4533,7 @@ msgid "Item list"
 msgstr "アイテムのリスト"
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
 msgstr "アイテムのリスト設定"
 
@@ -5045,6 +5063,13 @@ msgstr "メッセージ（オプション）"
 #| msgid "Messaging"
 msgid "Messages"
 msgstr "メッセージング"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Message (optional)"
+msgid "Messages options"
+msgstr "メッセージ（オプション）"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -8046,6 +8071,12 @@ msgstr "仕事"
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr "共有フォルダへの、または共有フォルダからの仕事の移動はできません。"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Presenter Toolbar"
+msgid "Tasks toolbar"
+msgstr "エディタ用ツールバー"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "ISDN"
@@ -8671,11 +8702,11 @@ msgstr "このフィールドには、値を入力する必要があります。
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid ""
-"This file (or folder) is shared with others. It won't be available for the "
-"invited guests any more."
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
 msgid_plural ""
-"Some files/folder are shared with others. They won't be available for the "
-"invited guests any more."
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
 msgstr[0] ""
 
 #: apps/io.ox/files/api.js module:io.ox/files apps/io.ox/files/legacy_api.js
@@ -8740,10 +8771,11 @@ msgid "This folder is shared with others"
 msgstr "このフォルダは他のユーザと共有されています。"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+#, fuzzy
+#| msgid "This folder is shared with others"
 msgid ""
-"This folder is shared with others. It won't be available for the invited "
-"guests any more."
-msgstr ""
+"This folder is shared with others. It won't be available for them any more."
+msgstr "このフォルダは他のユーザと共有されています。"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -17110,9 +17142,6 @@ msgstr "yyyy"
 
 #~ msgid "Toggle folder"
 #~ msgstr "フォルダを表示"
-
-#~ msgid "Toggle options"
-#~ msgstr "オプションを表示"
 
 #~ msgid "Toggle search"
 #~ msgstr "検索フィールドを表示"

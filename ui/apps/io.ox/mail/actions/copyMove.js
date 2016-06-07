@@ -79,13 +79,13 @@ define('io.ox/mail/actions/copyMove', [
                             infoText = senderList.length <= 1 ? singleSenderText : multipleSenderText,
                             checkbox;
 
-                        if (capabilities.has('mailfilter')) {
+                        if (capabilities.has('mailfilter') && o.type === 'move') {
                             dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
 
                             checkbox = dialog.getFooter().find('[data-action="create-rule"]');
                             tree.on('change', function (id) {
                                 if (id.split('/')[0] !== 'default0') {
-                                    checkbox.prop({ 'checked': false, 'disabled': true });
+                                    checkbox.prop({ 'checked': false, 'disabled': true }).trigger('change');
                                     checkbox.closest('.checkbox').addClass('disabled');
                                     notification.empty();
                                 } else {

@@ -1362,6 +1362,11 @@ msgstr "Författare"
 msgid "Auto Forward"
 msgstr "Vidarebefordra automatiskt"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Autospara e-postutkast"
@@ -2160,6 +2165,12 @@ msgstr "Kontakter har kopierats"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Kontakter har flyttats"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contacts"
+msgid "Contacts toolbar"
+msgstr "Medlemmar"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -3746,6 +3757,7 @@ msgstr "Filnamn"
 msgid "File name, click to rename"
 msgstr "Filnamn, klicka för att döpa om"
 
+#: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
 msgstr "Filkvot"
@@ -3782,6 +3794,13 @@ msgstr "Filer har kopierats"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been moved"
 msgstr "Filerna har flyttats"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Toggle options"
+msgid "Files options"
+msgstr "Växla alternativ"
 
 #. Verb: (to) filter documents by file type
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -4531,8 +4550,7 @@ msgid "Item list"
 msgstr "Objekt"
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
 msgstr "Alternativ för objektlista"
 
@@ -5061,6 +5079,13 @@ msgstr "Meddelande (valfritt)"
 #| msgid "Messaging"
 msgid "Messages"
 msgstr "Snabbmeddelanden"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Message (optional)"
+msgid "Messages options"
+msgstr "Meddelande (valfritt)"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -8079,6 +8104,12 @@ msgstr "Uppgifter"
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr "Uppgifter kan inte flyttas till eller från delade mappar"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Press [enter] to open"
+msgid "Tasks toolbar"
+msgstr "Tryck [enter] för att öppna"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "Telefon (ISDN)"
@@ -8705,11 +8736,11 @@ msgstr "Detta fält måste fyllas i"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid ""
-"This file (or folder) is shared with others. It won't be available for the "
-"invited guests any more."
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
 msgid_plural ""
-"Some files/folder are shared with others. They won't be available for the "
-"invited guests any more."
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -8780,10 +8811,11 @@ msgid "This folder is shared with others"
 msgstr "Den här mappen delas med andra"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+#, fuzzy
+#| msgid "This folder is shared with others"
 msgid ""
-"This folder is shared with others. It won't be available for the invited "
-"guests any more."
-msgstr ""
+"This folder is shared with others. It won't be available for them any more."
+msgstr "Den här mappen delas med andra"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -15543,9 +15575,6 @@ msgstr "yyyy"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Växla mapp"
-
-#~ msgid "Toggle options"
-#~ msgstr "Växla alternativ"
 
 #~ msgid "Toggle search"
 #~ msgstr "Växla sökning"
