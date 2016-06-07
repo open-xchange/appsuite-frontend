@@ -222,7 +222,12 @@ define('io.ox/core/tk/list', [
             // simulate scroll event because the list might need to paginate.
             // Unless it's the last one! If we did scroll for the last one, we would
             // trigger a paginate call that probably overtakes the delete request
-            if (children.length > 1) this.$el.trigger('scroll');
+            if (children.length > 1) {
+                // see bug #46319 : handle 'select all' -> 'move'
+                _.defer(function () {
+                    this.$el.trigger('scroll');
+                }.bind(this));
+            }
 
             // forward event
             this.trigger('remove', model);
