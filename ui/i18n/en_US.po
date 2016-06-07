@@ -1312,6 +1312,11 @@ msgstr ""
 msgid "Auto Forward"
 msgstr ""
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr ""
@@ -2074,6 +2079,10 @@ msgstr ""
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
+msgstr ""
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+msgid "Contacts toolbar"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -3619,6 +3628,7 @@ msgstr ""
 msgid "File name, click to rename"
 msgstr ""
 
+#: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
 msgstr ""
@@ -3652,6 +3662,11 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been moved"
+msgstr ""
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid "Files options"
 msgstr ""
 
 #. Verb: (to) filter documents by file type
@@ -4369,8 +4384,7 @@ msgid "Item list"
 msgstr ""
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
 msgstr ""
 
@@ -4894,6 +4908,11 @@ msgstr ""
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
+msgstr ""
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Messages options"
 msgstr ""
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
@@ -7818,6 +7837,10 @@ msgstr ""
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr ""
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+msgid "Tasks toolbar"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr ""
@@ -8371,11 +8394,11 @@ msgstr ""
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid ""
-"This file (or folder) is shared with others. It won't be available for the "
-"invited guests any more."
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
 msgid_plural ""
-"Some files/folder are shared with others. They won't be available for the "
-"invited guests any more."
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -8442,8 +8465,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid ""
-"This folder is shared with others. It won't be available for the invited "
-"guests any more."
+"This folder is shared with others. It won't be available for them any more."
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core

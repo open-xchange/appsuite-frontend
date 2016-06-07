@@ -2852,6 +2852,11 @@ msgstr ""
 msgid "Contacts"
 msgstr ""
 
+#: apps/io.ox/contacts/main.js
+#: module:io.ox/contacts
+msgid "Contacts toolbar"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js
 #: module:io.ox/contacts
 msgid "Files can not be uploaded, because quota exceeded."
@@ -4210,7 +4215,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/remove.js
 #: module:io.ox/core
-msgid "This folder is shared with others. It won't be available for the invited guests any more."
+msgid "This folder is shared with others. It won't be available for them any more."
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/rename.js
@@ -5981,10 +5986,6 @@ msgstr ""
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/core/tk/vgrid.js
 #: module:io.ox/core
-#: apps/io.ox/files/main.js
-#: module:io.ox/files
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
 msgid "Item list options"
 msgstr ""
 
@@ -6762,8 +6763,8 @@ msgstr[1] ""
 
 #: apps/io.ox/files/actions/delete.js
 #: module:io.ox/files
-msgid "This file (or folder) is shared with others. It won't be available for the invited guests any more."
-msgid_plural "Some files/folder are shared with others. They won't be available for the invited guests any more."
+msgid "This file (or folder) is shared with others. It won't be available for them any more."
+msgid_plural "Some files/folder are shared with others. They won't be available for them any more."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -6965,6 +6966,19 @@ msgstr ""
 #: apps/io.ox/files/legacy_api.js
 #: module:io.ox/files
 msgid "Please specify these missing variables: "
+msgstr ""
+
+#: apps/io.ox/files/main.js
+#: module:io.ox/files
+#: apps/plugins/portal/quota/register.js
+#: module:plugins/portal
+msgid "File quota"
+msgstr ""
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js
+#: module:io.ox/files
+msgid "Files options"
 msgstr ""
 
 #: apps/io.ox/files/main.js
@@ -7761,6 +7775,11 @@ msgstr ""
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 msgid "Failed to connect."
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+msgid "Auto-configuration failed. Do you want to configure your account manually?"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js
@@ -9089,6 +9108,12 @@ msgstr ""
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
 msgid "Messages"
+msgstr ""
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "Messages options"
 msgstr ""
 
 #: apps/io.ox/mail/main.js
@@ -10839,6 +10864,11 @@ msgstr ""
 
 #: apps/io.ox/tasks/main.js
 #: module:io.ox/tasks
+msgid "Tasks toolbar"
+msgstr ""
+
+#: apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Sort options"
 msgstr ""
 
@@ -11839,11 +11869,6 @@ msgstr ""
 #: apps/plugins/portal/oxdriveclients/register.js
 #: module:plugins/portal
 msgid "%s is also available for other platforms:"
-msgstr ""
-
-#: apps/plugins/portal/quota/register.js
-#: module:plugins/portal
-msgid "File quota"
 msgstr ""
 
 #: apps/plugins/portal/quota/register.js

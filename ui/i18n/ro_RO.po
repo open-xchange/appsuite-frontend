@@ -1391,6 +1391,11 @@ msgstr "Autor"
 msgid "Auto Forward"
 msgstr "Redirecționare automată"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Salvare automată a schițelor de mesaje"
@@ -2194,6 +2199,12 @@ msgstr "Contactele au fost copiate"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Contactele au fost mutate"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contacts"
+msgid "Contacts toolbar"
+msgstr "Contacte"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -3793,6 +3804,7 @@ msgstr "Nume fișier"
 msgid "File name, click to rename"
 msgstr "Nume fișier, apăsați pentru redenumire"
 
+#: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
 msgstr "Cotă de fișier"
@@ -3829,6 +3841,13 @@ msgstr "Fișierele au fost copiate"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been moved"
 msgstr "Fișierele au fost mutate"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Toggle options"
+msgid "Files options"
+msgstr "Comutare opțiuni"
 
 #. Verb: (to) filter documents by file type
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -4580,8 +4599,7 @@ msgid "Item list"
 msgstr "Listă elemente"
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
 msgstr "Opțiuni listă elemente"
 
@@ -5112,6 +5130,13 @@ msgstr "Mesaj (opțional)"
 #| msgid "Messaging"
 msgid "Messages"
 msgstr "Mesagerie"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Message (optional)"
+msgid "Messages options"
+msgstr "Mesaj (opțional)"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -8157,6 +8182,11 @@ msgstr "Sarcini"
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr "Sarcinile nu pot fi mutate din sau în dosare partajate"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#, fuzzy
+msgid "Tasks toolbar"
+msgstr "Bară de unelte editor"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "Telefon (ISDN)"
@@ -8798,11 +8828,11 @@ msgstr "Acest câmp trebuie să fie completat"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid ""
-"This file (or folder) is shared with others. It won't be available for the "
-"invited guests any more."
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
 msgid_plural ""
-"Some files/folder are shared with others. They won't be available for the "
-"invited guests any more."
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -8880,10 +8910,11 @@ msgid "This folder is shared with others"
 msgstr "Dosarul este partajat cu alți utilizatori"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+#, fuzzy
+#| msgid "This folder is shared with others"
 msgid ""
-"This folder is shared with others. It won't be available for the invited "
-"guests any more."
-msgstr ""
+"This folder is shared with others. It won't be available for them any more."
+msgstr "Dosarul este partajat cu alți utilizatori"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -16071,9 +16102,6 @@ msgstr "aaaa"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Comutare dosar"
-
-#~ msgid "Toggle options"
-#~ msgstr "Comutare opțiuni"
 
 #~ msgid "Toggle search"
 #~ msgstr "Comutare căutare"

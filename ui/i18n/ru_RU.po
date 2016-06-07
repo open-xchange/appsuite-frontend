@@ -1383,6 +1383,11 @@ msgstr "Автор"
 msgid "Auto Forward"
 msgstr "Автопересылка"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Автосохранение черновиков"
@@ -2182,6 +2187,12 @@ msgstr "Контакты скопированы"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Контакты перенесены"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contacts"
+msgid "Contacts toolbar"
+msgstr "Контакты"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -3772,6 +3783,7 @@ msgstr "Файл"
 msgid "File name, click to rename"
 msgstr "Имя файла; нажмите, чтобы переименовать"
 
+#: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
 msgstr "Квота файлов"
@@ -3808,6 +3820,13 @@ msgstr "Файлы скопированы"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been moved"
 msgstr "Файлы перенесены"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Toggle options"
+msgid "Files options"
+msgstr "Настроить параметры"
 
 #. Verb: (to) filter documents by file type
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -4557,8 +4576,7 @@ msgid "Item list"
 msgstr "Объекты"
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
 msgstr "Параметры списка"
 
@@ -5087,6 +5105,13 @@ msgstr "Сообщение (дополнительно)"
 #| msgid "Messaging"
 msgid "Messages"
 msgstr "Обмен сообщениями"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Message (optional)"
+msgid "Messages options"
+msgstr "Сообщение (дополнительно)"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -8111,6 +8136,12 @@ msgstr "Задачи"
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr "Нельзя перемещать задачи между общими папками"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#, fuzzy
+#| msgid "Press [enter] to open"
+msgid "Tasks toolbar"
+msgstr "Нажмите [Enter], чтобы открыть"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "Телефон (ISDN)"
@@ -8729,11 +8760,11 @@ msgstr "Заполните поле"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid ""
-"This file (or folder) is shared with others. It won't be available for the "
-"invited guests any more."
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
 msgid_plural ""
-"Some files/folder are shared with others. They won't be available for the "
-"invited guests any more."
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -8806,10 +8837,11 @@ msgid "This folder is shared with others"
 msgstr "Открыт совместный доступ к папке"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+#, fuzzy
+#| msgid "This folder is shared with others"
 msgid ""
-"This folder is shared with others. It won't be available for the invited "
-"guests any more."
-msgstr ""
+"This folder is shared with others. It won't be available for them any more."
+msgstr "Открыт совместный доступ к папке"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -12582,9 +12614,6 @@ msgstr "гггг"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Перейти в папку"
-
-#~ msgid "Toggle options"
-#~ msgstr "Настроить параметры"
 
 #~ msgid "Toggle search"
 #~ msgstr "Включить режим поиска"

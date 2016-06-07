@@ -1389,6 +1389,11 @@ msgstr "Autor"
 msgid "Auto Forward"
 msgstr "Automatické preposielanie"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid ""
+"Auto-configuration failed. Do you want to configure your account manually?"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Automaticky ukladať rozpísané správy"
@@ -2190,6 +2195,12 @@ msgstr "Kontakty boli skopírované"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Kontakty boli presunuté"
+
+#: apps/io.ox/contacts/main.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Contacts"
+msgid "Contacts toolbar"
+msgstr "Členovia"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -3788,6 +3799,7 @@ msgstr "Názov súboru"
 msgid "File name, click to rename"
 msgstr "Názov súboru; premenujte kliknutím"
 
+#: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
 msgstr "Kvóta súborov"
@@ -3823,6 +3835,13 @@ msgstr "Súbory boli skopírované"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been moved"
 msgstr "Súbory boli presunuté"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/files/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Toggle options"
+msgid "Files options"
+msgstr "Prepnúť možnosti"
 
 #. Verb: (to) filter documents by file type
 #: apps/io.ox/files/view-options.js module:io.ox/files
@@ -4573,8 +4592,7 @@ msgid "Item list"
 msgstr "Zoznam položiek"
 
 #. toolbar with 'select all' and 'sort by'
-#: apps/io.ox/core/tk/vgrid.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Item list options"
 msgstr "Možnosti zoznamu položiek"
 
@@ -5105,6 +5123,13 @@ msgstr "Správa (nepovinná)"
 #| msgid "Messaging"
 msgid "Messages"
 msgstr "Posielanie správ"
+
+#. toolbar with 'select all' and 'sort by'
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "Message (optional)"
+msgid "Messages options"
+msgstr "Správa (nepovinná)"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Messaging"
@@ -8145,6 +8170,11 @@ msgstr "Úlohy"
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr "Úlohy nie je možné presunúť zo zdieľaných priečinkov"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks
+#, fuzzy
+msgid "Tasks toolbar"
+msgstr "Panel nástrojov editora"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Telephone (ISDN)"
 msgstr "Telefón (ISDN)"
@@ -8780,11 +8810,11 @@ msgstr "Toto pole musí byť vyplnené"
 
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 msgid ""
-"This file (or folder) is shared with others. It won't be available for the "
-"invited guests any more."
+"This file (or folder) is shared with others. It won't be available for them "
+"any more."
 msgid_plural ""
-"Some files/folder are shared with others. They won't be available for the "
-"invited guests any more."
+"Some files/folder are shared with others. They won't be available for them "
+"any more."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -8856,10 +8886,11 @@ msgid "This folder is shared with others"
 msgstr "Tento priečinok je zdieľaný s ostatnými"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+#, fuzzy
+#| msgid "This folder is shared with others"
 msgid ""
-"This folder is shared with others. It won't be available for the invited "
-"guests any more."
-msgstr ""
+"This folder is shared with others. It won't be available for them any more."
+msgstr "Tento priečinok je zdieľaný s ostatnými"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
@@ -15957,9 +15988,6 @@ msgstr "RRRR"
 
 #~ msgid "Toggle folder"
 #~ msgstr "Prepnúť priečinok"
-
-#~ msgid "Toggle options"
-#~ msgstr "Prepnúť možnosti"
 
 #~ msgid "Toggle search"
 #~ msgstr "Prepnúť vyhľadávanie"
