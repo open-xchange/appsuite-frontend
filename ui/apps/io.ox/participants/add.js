@@ -42,6 +42,41 @@ define('io.ox/participants/add', [
         }
     });
 
+    var validation = {
+
+        validate: function (list, options) {
+            if (!this.options.blacklist) return;
+            var opt = _.extend({ yell: true }, options),
+                invalid = this.getInvalid(list);
+            // process
+            if (invalid.length === 0) return;
+            // yell warning
+            if (opt.yell) this.yell(list, invalid);
+            return invalid;
+        },
+
+        getInvalid: function (list) {
+            var invalid = [],
+                blacklist = this.options.blacklist;
+            _.each(list, function (obj) {
+                // string, data or model
+                var value = _.isString(obj) ? obj : obj.email1 || (obj.get && obj.getEmail());
+                if (blacklist.indexOf(value) > -1) invalid.push(value);
+            });
+            return invalid;
+        },
+
+        yell: function (list, invalid) {
+            var message = gt.format(
+              //#. %1$d a list of email addresses
+              //#, c-format
+              gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
+              gt.noI18n(invalid.join(', '))
+            );
+            require('io.ox/core/yell')('warning', message);
+        }
+    };
+
     var AddParticipantView = Backbone.View.extend({
 
         tagName: 'div',
@@ -63,6 +98,7 @@ define('io.ox/participants/add', [
             this.options = $.extend({}, this.options, o || {});
             if (this.options.blacklist) {
                 this.options.blacklist = this.options.blacklist.split(',');
+                _.extend(this, validation);
             }
             this.options.click = _.bind(this.addParticipant, this);
             this.options.harmonize = _.bind(function (data) {
@@ -78,33 +114,32 @@ define('io.ox/participants/add', [
         },
 
         keyDown: function (e) {
-            // enter
-            if (e.which === 13) {
-                var val = this.typeahead.$el.typeahead('val');
-                if (!_.isEmpty(val)) {
-                    this.addParticipant(e, {
-                        display_name: util.parseRecipient(val)[0],
-                        email1: util.parseRecipient(val)[1],
-                        field: 'email1', type: 5
-                    }, val);
-                }
-            }
+            if (e.which !== 13) return;
+            var val = this.typeahead.$el.typeahead('val'),
+                list = val.match(/('[^']*'|"[^"]*"|[^"',;]+)+/g),
+                participants = [];
+            // split based on comma or semi-colon as delimiter
+            _.each(list, function (value) {
+                if (_.isEmpty(value)) return;
+                participants.push({
+                    display_name: util.parseRecipient(value)[0],
+                    email1: util.parseRecipient(value)[1],
+                    field: 'email1', type: 5
+                });
+            });
+            this.addParticipant(e, participants, val);
         },
 
         setFocus: function () {
             if (this.typeahead) this.typeahead.$el.focus();
         },
 
-        addParticipant: function (e, model, value) {
-            // check blacklist
-            var inBlackList = this.options.blacklist && this.options.blacklist.indexOf(value) > -1;
-
-            if (inBlackList) {
-                require('io.ox/core/yell')('warning', gt('This email address cannot be used'));
-            } else {
-                this.collection.add(model);
-            }
-
+        addParticipant: function (e, data, value) {
+            var list = [].concat(data),
+                error = this.validate ? this.validate(list) : false;
+            // abort when blacklisted where found
+            if (error) return;
+            this.collection.add(list);
             // clean typeahad input
             if (value) this.typeahead.$el.typeahead('val', '');
         },
