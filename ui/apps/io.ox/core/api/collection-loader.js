@@ -52,7 +52,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
         function process(params, type) {
             // get offset
-            var offset = type === 'paginate' ? this.collection.length - 1 : 0;
+            var offset = type === 'paginate' ? Math.max(this.collection.length - 1, 0) : 0;
             // trigger proper event
             this.collection.trigger('before:' + type);
             // create callbacks
