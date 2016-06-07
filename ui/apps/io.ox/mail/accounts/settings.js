@@ -39,7 +39,7 @@ define('io.ox/mail/accounts/settings', [
         myView.dialog.getBody().css('padding-right', '15px');
 
         myView.dialog.header(
-            $('<h2>').text(myModel.get('id') ? gt('Edit mail account') : gt('Add mail account'))
+            $('<h2>').text(myModel.get('id') || myModel.get('id') === 0 ? gt('Edit mail account') : gt('Add mail account'))
         ).append(
             myView.render().el
         )
