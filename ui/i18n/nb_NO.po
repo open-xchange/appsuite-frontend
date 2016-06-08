@@ -9277,11 +9277,12 @@ msgstr "Oppetid: %1$s minutter"
 msgid "Urgency"
 msgstr "Haster"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
-#| msgid "User"
-msgid "Use"
-msgstr "Bruker"
+#| msgid "Due %1$s"
+msgid "Use %1$s"
+msgstr "Forfaller den %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -11157,6 +11158,11 @@ msgstr "yyyy"
 
 #~ msgid "Uploading..."
 #~ msgstr "Laster opp..."
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Use"
+#~ msgstr "Bruker"
 
 #~ msgid "Use SSL connection"
 #~ msgstr "Bruk SSL-tilkobling"

@@ -9174,11 +9174,12 @@ msgstr "動作時間: %1$s 分"
 msgid "Urgency"
 msgstr "緊急度"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
-#| msgid "User"
-msgid "Use"
-msgstr "ユーザ"
+#| msgid "Due %1$s"
+msgid "Use %1$s"
+msgstr "期限 %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -17329,6 +17330,11 @@ msgstr "yyyy"
 
 #~ msgid "Uruguay"
 #~ msgstr "ウルグアイ"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Use"
+#~ msgstr "ユーザ"
 
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "\"Standalone\" モードを使用してください:"

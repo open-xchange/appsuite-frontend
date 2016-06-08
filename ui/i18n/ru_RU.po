@@ -9237,11 +9237,12 @@ msgstr "Время выполнения: %1$s мин."
 msgid "Urgency"
 msgstr "Срочность"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
-#| msgid "User"
-msgid "Use"
-msgstr "Пользователь"
+#| msgid "Due %1$s"
+msgid "Use %1$s"
+msgstr "Заканчивается %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -12659,6 +12660,11 @@ msgstr "гггг"
 
 #~ msgid "Upload new files"
 #~ msgstr "Отправить новые файлы"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Use"
+#~ msgstr "Пользователь"
 
 #~ msgid "Use SSL connection"
 #~ msgstr "SSL-подключение"

@@ -9593,11 +9593,12 @@ msgstr "Çalışma zamanı: %1$s dakika"
 msgid "Urgency"
 msgstr "Aciliyet"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
-#| msgid "Username"
-msgid "Use"
-msgstr "Kullanıcı adı"
+#| msgid "Due %1$s"
+msgid "Use %1$s"
+msgstr "Sona erme tarihi %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -11260,6 +11261,11 @@ msgstr "yyyy"
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Premium'a yükseltin"
+
+#, fuzzy
+#~| msgid "Username"
+#~ msgid "Use"
+#~ msgstr "Kullanıcı adı"
 
 #~ msgid "Use SSL connection"
 #~ msgstr "SSL bağlantısını kullan"

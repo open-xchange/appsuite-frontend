@@ -9302,11 +9302,12 @@ msgstr "Uptime: %1$s minuten"
 msgid "Urgency"
 msgstr "Urgentie"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
-#| msgid "User"
-msgid "Use"
-msgstr "Gebruiker"
+#| msgid "Due %1$s"
+msgid "Use %1$s"
+msgstr "Vervalt %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -12389,6 +12390,11 @@ msgstr "yyyy"
 
 #~ msgid "Upload new files"
 #~ msgstr "Nieuw bestanden uploaden"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Use"
+#~ msgstr "Gebruiker"
 
 #~ msgid "Use SSL connection"
 #~ msgstr "SSL-verbinding gebruiken"

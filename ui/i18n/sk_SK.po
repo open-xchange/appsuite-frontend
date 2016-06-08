@@ -9287,11 +9287,12 @@ msgstr "Čas behu: %1$s minút"
 msgid "Urgency"
 msgstr "Naliehavosť"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
-#| msgid "User"
-msgid "Use"
-msgstr "Používateľ"
+#| msgid "Due %1$s"
+msgid "Use %1$s"
+msgstr "Termín %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -16161,6 +16162,11 @@ msgstr "RRRR"
 
 #~ msgid "Uruguay"
 #~ msgstr "Uruguaj"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Use"
+#~ msgstr "Používateľ"
 
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "Použiť „samostatný“ režim:"

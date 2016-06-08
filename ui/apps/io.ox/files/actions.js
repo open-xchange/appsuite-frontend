@@ -12,15 +12,19 @@
  */
 
 define('io.ox/files/actions', [
+
+    'io.ox/core/folder/api',
     'io.ox/files/api',
+    'io.ox/files/util',
+
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
-    'io.ox/files/util',
-    'io.ox/core/folder/api',
+
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (api, ext, links, capabilities, util, folderAPI, settings, gt) {
+
+], function (folderAPI, api, util, ext, links, capabilities, settings, gt) {
 
     'use strict';
 
@@ -435,8 +439,14 @@ define('io.ox/files/actions', [
             // is folder?
             if (e.collection.has('folders')) return false;
 
-            var model = e.baton.models[0];
-            return (model.isFile() && (model.isOffice() || model.isText())); // preferred variant over >> return (model.isFile() && !model.isPDF()); <<
+            var
+                model         = e.baton.models[0];
+          //    isAccessWrite = folderAPI.can('create', folderAPI.pool.models[model.get('folder_id')].toJSON());
+          //
+          //if (!isAccessWrite(e)) return false;
+
+            // preferred variant over >> return (model.isFile() && !model.isPDF()); <<
+            return (model.isFile() && (model.isOffice() || model.isText()));
         },
         action: function (baton) {
             // files use the file rename action
