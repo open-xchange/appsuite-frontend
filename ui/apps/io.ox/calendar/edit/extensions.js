@@ -678,7 +678,8 @@ define('io.ox/calendar/edit/extensions', [
 
     function openFreeBusyView(e) {
         require(['io.ox/calendar/freetime/main'], function (freetime) {
-            freetime.showDialog({ parentModel: e.data.model }).done(function (data) {
+            //#. Applies changes to an existing appointment, used in scheduling view
+            freetime.showDialog({ label: gt('Apply changes'), parentModel: e.data.model }).done(function (data) {
                 var view = data.view;
                 data.dialog.on('save', function () {
                     var appointment = view.createAppointment();
@@ -687,14 +688,20 @@ define('io.ox/calendar/edit/extensions', [
                         data.dialog.close();
                         e.data.model.set({ full_time: appointment.full_time });
                         e.data.model.set({ start_date: appointment.start_date });
+                        var models = [],
+                            defs = [];
                         // add to participants collection instead of the model attribute to make sure the edit view is redrawn correctly
                         _(appointment.participants).each(function (data) {
                             //create model
                             var mod = new e.data.model._participants.model(data);
+                            models.push(mod);
                             // wait for fetch, then add to collection
-                            mod.loading.then(function () {
-                                e.data.model._participants.addUniquely(mod);
-                            });
+                            defs.push(mod.loading);
+                        });
+                        $.when.apply($, defs).done(function () {
+                            // first reset then addUniquely collection might not reraw correctly otherwise in some cases
+                            e.data.model._participants.reset([]);
+                            e.data.model._participants.addUniquely(models);
                         });
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                         e.data.model.set({

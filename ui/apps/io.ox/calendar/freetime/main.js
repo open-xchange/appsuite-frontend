@@ -47,7 +47,7 @@ define('io.ox/calendar/freetime/main', [
                 }
 
                 this.participantsSubview = new ParticipantsView({ model: this.model });
-                this.timeSubview = new TimeView({ model: this.model });
+                this.timeSubview = new TimeView({ model: this.model, parentModel: options.parentModel });
                 this.on('dispose', function () {
                     self.timeSubview.dispose();
                     self.participantsSubview.dispose();
@@ -56,7 +56,8 @@ define('io.ox/calendar/freetime/main', [
 
             render: function () {
                 this.$el.empty();
-                this.$el.append($('<div class="freetime-view-header">').append(this.participantsSubview.headerNode, this.timeSubview.headerNode),
+                this.$el.append($('<div class="freetime-view-header">').append($('<div class="header-row1">').append(this.participantsSubview.headerNodeRow1, this.timeSubview.headerNodeRow1),
+                                                                               $('<div class="header-row2">').append(this.participantsSubview.headerNodeRow2, this.timeSubview.headerNodeRow2)),
                                 $('<div class="freetime-view-body scrollable-pane">').append(this.participantsSubview.bodyNode, this.timeSubview.bodyNode));
                 this.participantsSubview.renderHeader();
                 this.timeSubview.renderHeader();
@@ -67,7 +68,8 @@ define('io.ox/calendar/freetime/main', [
             renderHeader: function () {
                 this.header = this.header || $('<div class="freetime-view freetime-view-header">');
                 this.header.empty();
-                this.header.append(this.participantsSubview.headerNode, this.timeSubview.headerNode);
+                this.header.append($('<div class="header-row1">').append(this.participantsSubview.headerNodeRow1, this.timeSubview.headerNodeRow1),
+                                   $('<div class="header-row2">').append(this.participantsSubview.headerNodeRow2, this.timeSubview.headerNodeRow2));
                 this.participantsSubview.renderHeader();
                 this.timeSubview.renderHeader();
                 return this.header;
@@ -102,7 +104,7 @@ define('io.ox/calendar/freetime/main', [
                     view = new freetimeView(options);
 
                 popup.addCancelButton();
-                popup.addButton({ label: gt('Create appointment'), action: 'save' });
+                popup.addButton({ label: options.label || gt('Create appointment'), action: 'save' });
                 popup.open();
                 popup.$el.addClass('freetime-popup');
                 // append after header so it does not scroll with the rest of the view
