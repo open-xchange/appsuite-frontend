@@ -187,21 +187,6 @@ define('io.ox/ads/register', [
         }
     });
 
-    ext.point('io.ox/ads/skyscraper').extend({
-        id: 'default',
-        draw: function (baton) {
-            $('#io-ox-windowmanager').addClass('show-ad');
-            $('#io-ox-ad-skyscraper').append(
-                baton.data.html
-            );
-
-        },
-        cleanup: function () {
-            $('#io-ox-windowmanager').removeClass('show-ad');
-            $('#io-ox-ad-skyscraper').empty();
-        }
-    });
-
     ext.point('io.ox/ads/leaderboard').extend({
         id: 'default',
         draw: function (baton) {
