@@ -331,7 +331,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         var stripDataAttributes = function (content) {
             var tags = content.match(/(<\/?[\S][^>]*>)/gi);
             tags.forEach(function (tag) {
-                content = content.replace(tag, tag.replace(/\sdata-\S+=["']?(?:.(?!["']?\s+(?:\S+)=|[>"']))+.["']?/g, ''));
+                // replace all data-mce-* attributes which are written with single or double quotes
+                content = content.replace(tag, tag.replace(/\sdata-mce-\S+=("[^"]*"|'[^']*')/g, ''));
             });
             return content;
         };
