@@ -9254,11 +9254,12 @@ msgstr "Futási idő: %1$s perc"
 msgid "Urgency"
 msgstr "Sürgősség"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
-#| msgid "User"
-msgid "Use"
-msgstr "Felhasználó"
+#| msgid "Due %1$s"
+msgid "Use %1$s"
+msgstr "Határidő: %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -10944,6 +10945,11 @@ msgstr "yyyy"
 
 #~ msgid "Toggle checkboxes"
 #~ msgstr "Kijelölések átváltása"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Use"
+#~ msgstr "Felhasználó"
 
 #~ msgid "Use SSL connection"
 #~ msgstr "SSL-kapcsolat használata"

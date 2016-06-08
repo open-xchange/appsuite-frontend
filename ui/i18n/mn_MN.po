@@ -8920,9 +8920,12 @@ msgstr ""
 msgid "Urgency"
 msgstr ""
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Use"
-msgstr ""
+#, fuzzy
+#| msgid "Location"
+msgid "Use %1$s"
+msgstr "Байршил"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar

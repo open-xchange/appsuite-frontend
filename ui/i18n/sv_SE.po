@@ -9213,11 +9213,12 @@ msgstr "Ansluten: %1$s minuter"
 msgid "Urgency"
 msgstr "Angelägenhet"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
-#| msgid "User"
-msgid "Use"
-msgstr "Användare"
+#| msgid "Due %1$s"
+msgid "Use %1$s"
+msgstr "Deadline %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -16049,6 +16050,11 @@ msgstr "yyyy"
 
 #~ msgid "Uploaded file is of type %s, cannot handle that"
 #~ msgstr "Överförd fil är av typen %s, kan inte hantera det"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Use"
+#~ msgstr "Användare"
 
 #~ msgid "Use SSL connection"
 #~ msgstr "Använd SSL-anslutning"

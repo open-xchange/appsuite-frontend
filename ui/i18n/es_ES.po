@@ -9286,11 +9286,12 @@ msgstr "Tiempo en funcionamiento: %1$s minutos"
 msgid "Urgency"
 msgstr "Urgencia"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
-#| msgid "User"
-msgid "Use"
-msgstr "Usuario"
+#| msgid "Due %1$s"
+msgid "Use %1$s"
+msgstr "Vencimiento %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -19013,6 +19014,11 @@ msgstr "yyyy"
 
 #~ msgid "Uruguay"
 #~ msgstr "Uruguay"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Use"
+#~ msgstr "Usuario"
 
 #~ msgid "Use \"Standalone\" Mode:"
 #~ msgstr "Usar modo \"independiente\":"

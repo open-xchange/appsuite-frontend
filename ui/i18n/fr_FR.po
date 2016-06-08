@@ -9338,11 +9338,12 @@ msgstr "Fonctionne depuis : $1$s minutes"
 msgid "Urgency"
 msgstr "Urgence"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #, fuzzy
-#| msgid "User"
-msgid "Use"
-msgstr "Utilisateur"
+#| msgid "Due %1$s"
+msgid "Use %1$s"
+msgstr "Échéance au %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -13165,6 +13166,11 @@ msgstr "aaaa"
 
 #~ msgid "Upload new files"
 #~ msgstr "Télécharger de nouveaux fichiers"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "Use"
+#~ msgstr "Utilisateur"
 
 #~ msgid "Use SSL connection"
 #~ msgstr "Utiliser la connexion SSL"

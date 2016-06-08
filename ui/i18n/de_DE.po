@@ -9256,9 +9256,12 @@ msgstr "Laufzeit: %1$s Minuten"
 msgid "Urgency"
 msgstr "Dringlichkeit"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Use"
-msgstr ""
+#, fuzzy
+#| msgid "Due %1$s"
+msgid "Use %1$s"
+msgstr "Fällig am %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar

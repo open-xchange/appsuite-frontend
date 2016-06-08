@@ -8070,9 +8070,10 @@ msgstr ""
 msgid "View attachment"
 msgstr ""
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
-msgid "Use"
+msgid "Use %1$s"
 msgstr ""
 
 #: apps/io.ox/mail/actions.js
