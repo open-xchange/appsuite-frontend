@@ -22,7 +22,7 @@ io.ox/core//upsell/enabled/portal=true
 io.ox/core//upsell/enabled/tasks=true
 ```
 
-Each line enables a specific [capability](ui/customize/manifests.html#capabilities) for upsell.
+Each line enables a specific [capability](../customize/manifests.html#capabilities) for upsell.
 That means whenever a feature misses one these capabilities a special upsell-related event is triggered.
 
 **Hint**

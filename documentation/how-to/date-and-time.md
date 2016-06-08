@@ -9,7 +9,7 @@ The handling of date and time is a complicated mess of historical conventions, w
 To keep this away from day-to-day activities of developers, the OX App Suite platform provides the module date, which performs conversion between different time zones, formatting and parsing of date and time values.
 
 The examples in this article use some global variables. 
-For the examples to work the way they are intended, you will first need to load the [gettext module](ui/how-to/i18n.html) and the date module and store them in variables gettext and date.
+For the examples to work the way they are intended, you will first need to load the [gettext module](i18n.html) and the date module and store them in variables gettext and date.
 
 ```javascript
 var gettext, date;

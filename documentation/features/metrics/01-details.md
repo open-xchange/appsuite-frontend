@@ -37,39 +37,39 @@ The metrics module provide some simple API that enables you to track events.
 
 ## trackEvent()
 
-\###app
+### app
 
 - application name
 - _example: ‘mail’_
 
-\###target
+### target
 
 - container/area
 - _example: ‘detail/toolbar’_
 
-\###type
+### type
 
 - type of event
 - _example: ‘click’_
 
-\###action
+ ### action
 
 - name/id of the action
 - _example: ‘delete’_
 
 ## trackPage()
 
-\###name
+### name
 
 - name of the page. for OX App Suite this is the name of the application
 - _example: ‘mail’_
 
-\###id
+### id
 
 - id of the page.
 - _example: ‘io.ox/mail’_
 
-\###name
+### name
 
 - name of the page
 - _example: ‘Mail’_
@@ -115,4 +115,4 @@ returns boolean that indicates status of the metrics module
 
 # Adapters
 
-Please visit the [Adapters Page](ui/features/metrics/02-adapters.html).
+Please visit the [Adapters Page](02-adapters.html).
