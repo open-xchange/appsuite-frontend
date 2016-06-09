@@ -1540,7 +1540,7 @@ define('io.ox/mail/main', [
                         $el.find('.caption span').text(caption);
                         $el.find('[data-action="close"]').off();
                         $el.find('[data-action="close"]').on('click', function () {
-                            if (_.isFunction(data.abort)) data.abort(gt('The sending of the message has been canceled.'));
+                            if (_.isFunction(data.abort)) data.abort();
                         });
                         $el.show();
                     });

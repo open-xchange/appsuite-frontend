@@ -757,7 +757,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             ajax = $.ajax(ajaxOptions);
 
             // add an 'abort()' method to the Deferred and all Promises it creates
-            var abortFunc = function (message) { ajax.abort(message); },
+            var abortFunc = function () { ajax.abort(); },
                 promiseFunc = _.bind(r.def.promise, r.def);
 
             _.extend(r.def, {
