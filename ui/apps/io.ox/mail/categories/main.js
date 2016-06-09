@@ -15,6 +15,7 @@ define('io.ox/mail/categories/main', [
     'io.ox/mail/categories/api',
     'io.ox/mail/api',
     'io.ox/core/api/account',
+    'io.ox/core/folder/api',
     'io.ox/core/tk/list-dnd',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
@@ -23,7 +24,7 @@ define('io.ox/mail/categories/main', [
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'less!io.ox/mail/categories/style'
-], function (api, mailAPI, accountAPI, dnd, links, capabilities, yell, ext, settings, gt) {
+], function (api, mailAPI, accountAPI, folderAPI, dnd, links, capabilities, yell, ext, settings, gt) {
 
     'use strict';
 
@@ -390,7 +391,8 @@ define('io.ox/mail/categories/main', [
             this.listenTo(this.props, 'change:enabled', this.reload);
             this.listenTo(this, 'move:after revert:after generalize:after', this.reload);
             // refresh: unread counter
-            mailAPI.on('update:after', $.proxy(this.refresh, this));
+            mailAPI.on('delete refresh.all', $.proxy(this.refresh, this));
+            folderAPI.on('reload:' + accountAPI.getInbox(), $.proxy(this.refresh, this));
             this.listenTo(this.props, 'change:enabled', this.refresh);
             this.listenTo(this, 'move:after rever:after generalise:after', this.refresh);
             // toggle visibility
@@ -500,10 +502,10 @@ define('io.ox/mail/categories/main', [
             this.mail.listView.load();
             this.trigger('reload');
         },
-        refresh: function () {
+        refresh: _.throttle(function () {
             return this.categories.refresh()
                 .done(_.bind(trigger, this, 'refresh'));
-        }
+        }, 500, { leading: false })
     };
 
     // hint: settings at io.ox/mail/settings/pane
