@@ -438,7 +438,7 @@ define('io.ox/mail/listview', [
             }, 0);
             data.color_label = color;
             // set subject to first message in thread so a Thread has a constant subject
-            data.subject = thread[thread.length - 1].subject;
+            data.subject = api.threads.subject(data);
             // done
             return data;
         },

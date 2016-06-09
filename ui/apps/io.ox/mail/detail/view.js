@@ -42,6 +42,7 @@ define('io.ox/mail/detail/view', [
         id: 'subject',
         index: INDEX += 100,
         draw: function (baton) {
+
             var subject = util.getSubject(baton.data),
                 node = $('<h1 class="subject">').text(subject);
 

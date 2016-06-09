@@ -1736,7 +1736,14 @@ define('io.ox/mail/api', [
 
         subject: function (cid) {
             cid = _.isString(cid) ? cid : _.cid(cid);
-            var top = this.reverse[cid], model = this.collection.get(top);
+            var base, newest, model;
+            // get newest message
+            base = this.reverse[cid];
+            newest = _(this.hash[base]).first();
+            model = this.collection.get(newest);
+            if (model && model.get('subject')) return model.get('subject');
+            // get base message
+            model = this.collection.get(base);
             return model ? model.get('subject') : '';
         },
 
