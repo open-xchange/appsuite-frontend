@@ -127,7 +127,6 @@ define('io.ox/core/viewer/views/mainview', [
 
         // handler for keyboard events on the viewer
         onKeydown: function (event) {
-            event.stopPropagation();
             var viewerRootEl = this.$el,
                 self = this,
                 handleChangeSlide = _.throttle(function (direction) {
@@ -164,7 +163,7 @@ define('io.ox/core/viewer/views/mainview', [
                 case 27: // ESC key
                     var escTarget = $(event.target),
                         isDropdownMenuItem = escTarget.parents('.dropdown-menu').length > 0,
-                        isDropdownToggler = escTarget.attr('data-toggle') === 'dropdown';
+                        isDropdownToggler = escTarget.attr('data-toggle') === 'dropdown' && escTarget.attr('aria-expanded') === 'true';
                     // close the viewer only if user is not on a dropdown menu, or a dropdown menu item
                     if (!isDropdownMenuItem && !isDropdownToggler) {
                         this.closeViewer();
