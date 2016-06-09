@@ -368,12 +368,10 @@ define('io.ox/files/share/wizard', [
         },
 
         removeLink: function () {
-            var self = this,
-                model = this.model;
+            var model = this.model;
             require(['io.ox/files/share/api'], function (api) {
                 api.deleteLink(model.toJSON(), model.get('lastModified')).fail(yell);
                 model.destroy();
-                self.remove();
             });
         }
     });
