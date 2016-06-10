@@ -67,6 +67,31 @@ define('io.ox/files/common-extensions', [
             );
         },
 
+        mailSubject: function (baton, ellipsis) {
+            if (!baton.data.meta || !_.has(baton.data.meta, 'mail')) return;
+            var subject = baton.data.meta.mail.subject || '';
+            // fix long names
+            if (ellipsis) subject = _.ellipsis(subject, ellipsis);
+            // make underscore wrap as well
+            subject = subject.replace(/_/g, '_\u200B');
+            this.append(
+                $('<div class="subject">').text(subject)
+            );
+        },
+
+        mailFrom: function (baton, ellipsis) {
+            if (!baton.data.meta || !_.has(baton.data.meta, 'mail')) return;
+            var from = baton.data.meta.mail.from[0] || baton.data.meta.mail.to[0];
+            from = util.getDisplayName(from);
+            // fix long names
+            if (ellipsis) from = _.ellipsis(from, ellipsis);
+            // make underscore wrap as well
+            from = from.replace(/_/g, '_\u200B');
+            this.append(
+                $('<div class="from">').text(from)
+            );
+        },
+
         size: function (baton) {
             var size = baton.data.file_size;
             this.append(

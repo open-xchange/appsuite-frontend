@@ -16,8 +16,9 @@ define('io.ox/core/folder/node', [
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'io.ox/core/api/account',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (DisposableView, api, ext, account, gt) {
+], function (DisposableView, api, ext, account, settings, gt) {
 
     'use strict';
 
@@ -514,11 +515,16 @@ define('io.ox/core/folder/node', [
             }
 
             var iconClass = '',
-                infostoreDefaultFolder = String(api.getDefaultFolder('infostore'));
+                infostoreDefaultFolder = String(api.getDefaultFolder('infostore')),
+                driveMail = settings.get('folder/mailattachments', {}),
+                allAttachmentsFolder = String(driveMail.all);
 
             switch (this.folder) {
                 case 'virtual/myshares':
                     iconClass = 'visible myshares';
+                    break;
+                case allAttachmentsFolder:
+                    iconClass = 'visible attachments';
                     break;
                 case infostoreDefaultFolder:
                     iconClass = 'visible myfiles';

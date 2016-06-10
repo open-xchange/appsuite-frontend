@@ -20,11 +20,12 @@ define('io.ox/mail/toolbar', [
     'io.ox/core/capabilities',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/toolbar',
+    'settings!io.ox/core',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, gt) {
+], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, gt) {
 
     'use strict';
 
@@ -227,6 +228,14 @@ define('io.ox/mail/toolbar', [
         });
     }
 
+    function allAttachments(app, e) {
+        e.preventDefault();
+        var driveMail = settings.get('folder/mailattachments', {});
+        ox.launch('io.ox/files/main', { folder: driveMail.all }).done(function () {
+            this.folder.set(driveMail.all);
+        });
+    }
+
     // view dropdown
     ext.point('io.ox/mail/classic-toolbar').extend({
         id: 'view-dropdown',
@@ -253,6 +262,10 @@ define('io.ox/mail/toolbar', [
             .divider()
             .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
             .listenTo(baton.app.props, 'change:layout', updateContactPicture);
+
+            if (settings.get('folder/mailattachments', {}).all) {
+                dropdown.link('attachments', gt('All attachments'), allAttachments.bind(null, baton.app));
+            }
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
