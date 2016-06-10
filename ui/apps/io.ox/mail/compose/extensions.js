@@ -428,6 +428,7 @@ define('io.ox/mail/compose/extensions', [
                     point: 'io.ox/mail/compose/attachment/header',
                     collection: baton.model.get('attachments'),
                     editable: true,
+                    model: baton.model,
                     mode: settings.get('attachments/layout/compose/' + _.display(), 'preview')
                 });
 
