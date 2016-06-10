@@ -294,7 +294,10 @@
          * Redirect
          */
         redirect: function (path) {
+            var current = location.pathname;
             location.href = (/^http/i).test(path) ? path : _.url.get(path);
+            // enforce page reload if path is still the same
+            if (location.pathname === current) location.reload();
         },
 
         get: function (path) {
