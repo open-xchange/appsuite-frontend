@@ -182,6 +182,7 @@ define('io.ox/core/folder/tree', [
             if (e.type === 'keydown') {
                 var shiftF10 = (e.shiftKey && e.keyCode === 121),
                     menuKey = (_.device('windows') && e.keyCode === 93);
+                if (e.keyCode === 32 || e.keyCode === 13 || shiftF10 || menuKey) this.focusFirst = true;
                 if (shiftF10 || menuKey) {
                     // e.preventDefault() is needed here to surpress browser menu
                     e.preventDefault();
@@ -255,6 +256,10 @@ define('io.ox/core/folder/tree', [
                 // check if menu exceeds viewport
                 if (!_.device('smartphone') && ul.offset().top + ul.outerHeight() > $(window).height() - 20) {
                     ul.css({ top: 'auto', bottom: '20px' });
+                }
+                if (view.focusFirst) {
+                    ul.find('li:first > a').focus();
+                    view.focusFirst = false;
                 }
             });
         },
