@@ -283,6 +283,15 @@ define('io.ox/core/folder/tree', [
                 if (node) node.parent().focus();
             }
 
+            function trapFocus(e) {
+                // a11y - trap focus in context menu - prevent tabbing out of context menu
+                if ((!e.shiftKey && e.which === 9 && $(e.target).parent().next().length === 0) ||
+                    (e.shiftKey && e.which === 9 && $(e.target).parent().prev().length === 0)) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                }
+            }
+
             return function () {
 
                 this.$el.after(
@@ -293,6 +302,7 @@ define('io.ox/core/folder/tree', [
                     )
                     .on('show.bs.dropdown', show.bind(this))
                     .on('hidden.bs.dropdown', hide)
+                    .on('keydown.bs.dropdown.data-api', trapFocus)
                 );
                 this.$dropdownToggle.dropdown();
             };
