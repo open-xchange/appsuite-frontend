@@ -2549,8 +2549,7 @@ msgstr "Verschoben"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete.js
-#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/actions/delete.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js
@@ -2621,6 +2620,7 @@ msgid "Delete task"
 msgstr "Aufgabe löschen"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Version löschen"
 
@@ -2847,11 +2847,6 @@ msgstr "Wollen Sie diesen Kontakt wirklich löschen?"
 msgid "Do you really want to delete this distribution list?"
 msgstr "Wollen Sie diese Verteilerliste wirklich löschen?"
 
-#: apps/io.ox/files/actions/versions-delete.js module:io.ox/files
-msgctxt "One file only"
-msgid "Do you really want to delete this file?"
-msgstr "Wollen Sie diese Datei wirklich löschen?"
-
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Do you really want to delete this filter rule?"
 msgstr "Wollen Sie diese Filterregel wirklich löschen?"
@@ -2867,6 +2862,14 @@ msgid "Do you really want to delete this task?"
 msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "Wollen Sie diese Aufgabe wirklich löschen?"
 msgstr[1] "Wollen Sie diese Aufgaben wirklich löschen?"
+
+#: apps/io.ox/files/actions/versions-delete.js module:io.ox/files
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this file?"
+msgctxt "One file only"
+msgid "Do you really want to delete this version?"
+msgstr "Wollen Sie diese Datei wirklich löschen?"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js

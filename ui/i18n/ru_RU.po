@@ -2576,8 +2576,7 @@ msgstr "Отложено"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete.js
-#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/actions/delete.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js
@@ -2650,6 +2649,7 @@ msgid "Delete task"
 msgstr "Удалить задачу"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Удалить версию"
 
@@ -2872,11 +2872,6 @@ msgstr "Удалить контакт?"
 msgid "Do you really want to delete this distribution list?"
 msgstr "Удалить список рассылки?"
 
-#: apps/io.ox/files/actions/versions-delete.js module:io.ox/files
-msgctxt "One file only"
-msgid "Do you really want to delete this file?"
-msgstr "Удалить файл?"
-
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Do you really want to delete this filter rule?"
 msgstr "Вы действительно хотите удалить это правило фильтрации?"
@@ -2894,6 +2889,14 @@ msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "Удалить эту задачу?"
 msgstr[1] "Удалить задачи?"
 msgstr[2] "Удалить задачи?"
+
+#: apps/io.ox/files/actions/versions-delete.js module:io.ox/files
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this file?"
+msgctxt "One file only"
+msgid "Do you really want to delete this version?"
+msgstr "Удалить файл?"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js

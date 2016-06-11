@@ -117,7 +117,6 @@ msgstr ""
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
-#: apps/io.ox/files/actions/versions-delete.js
 #: apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js
 #: apps/io.ox/mail/actions/delete.js
@@ -6686,6 +6685,7 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
+#: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr ""
 
@@ -6827,7 +6827,7 @@ msgstr ""
 #: apps/io.ox/files/actions/versions-delete.js
 #: module:io.ox/files
 msgctxt "One file only"
-msgid "Do you really want to delete this file?"
+msgid "Do you really want to delete this version?"
 msgstr ""
 
 #: apps/io.ox/files/api.js
