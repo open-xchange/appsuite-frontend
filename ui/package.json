@@ -7,7 +7,7 @@
   },
   "license": "CC-BY-NC-SA-2.5",
   "scripts": {
-    "test": "node -e \"require('grunt').cli();\" -- '' build copy:specs karma:continuous"
+    "test": "grunt copy:specs karma:continuous"
   },
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
