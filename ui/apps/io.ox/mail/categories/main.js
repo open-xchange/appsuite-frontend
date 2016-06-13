@@ -360,7 +360,7 @@ define('io.ox/mail/categories/main', [
             // load config
             this.config.load();
             // props
-            this.props.set('selected', this.preselected());
+            this.props.set('selected', this.restoreSelection());
             // inital refresh
             //_.defer(_.bind(this.refresh, this));
         },
@@ -429,11 +429,13 @@ define('io.ox/mail/categories/main', [
             this.mail.listView.model.set('filter', this.props.get('selected'));
             // state
             this.props.set('visible', true);
+            this.restoreSelection();
             this.mail.left.find('[data-name="thread"]').addClass('disabled');
             this.trigger('show');
         },
         hide: function () {
             // restore state
+            _.url.hash('category', null);
             this.mail.listView.model.unset('filter');
             if (this.props.get('thread')) {
                 this.mail.props.set('thread', this.props.get('thread'));
@@ -451,8 +453,8 @@ define('io.ox/mail/categories/main', [
             this.props.set('enabled', false);
             this.trigger('disable');
         },
-        preselected: function () {
-            var id = (this.categories.get(_.url.hash('category')) || this.categories.first() || {}).id;
+        restoreSelection: function () {
+            var id = (this.categories.get(_.url.hash('category') || this.props.get('selected')) || this.categories.first() || {}).id;
             _.url.hash('category', id);
             return id;
         },
