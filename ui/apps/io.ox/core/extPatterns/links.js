@@ -246,7 +246,8 @@ define('io.ox/core/extPatterns/links', [
             $('<ul class="list-unstyled" role="menubar">')
             .addClass(extension.classes || '')
             .attr(extension.attributes || {})
-            .appendTo(node);
+            .appendTo(node),
+            $li = $('<li role="presentation">');
 
         return getLinks(extension, collection, baton, args)
             .always(function (items) {
@@ -257,11 +258,11 @@ define('io.ox/core/extPatterns/links', [
                     var link = item.link;
                     if (item.state === false) {
                         if (_.isFunction(link.drawDisabled)) {
-                            link.drawDisabled.call(bootstrapMode ? $('<li role="presentation">').appendTo(nav) : nav, baton);
+                            link.drawDisabled.call(bootstrapMode ? $li.clone().appendTo(nav) : nav, baton);
                             count++;
                         }
                     } else if (_.isFunction(link.draw)) {
-                        link.draw.call(bootstrapMode ? $('<li role="presentation">').appendTo(nav) : nav, baton);
+                        link.draw.call(bootstrapMode ? $li.clone().appendTo(nav) : nav, baton);
                         count++;
                     }
                 });
@@ -360,13 +361,14 @@ define('io.ox/core/extPatterns/links', [
 
     function injectDividers(node) {
         // loop over all items and visually group by "section"
-        var currentSection = '';
+        var currentSection = '',
+            $li = $('<li class="divider" role="presentation">');
         node.children('li').each(function () {
             var node = $(this), section = node.children('a').attr('data-section');
             // add divider?
             if (section === undefined) return;
             if (currentSection !== '' && currentSection !== section) {
-                node.before('<li class="divider" role="presentation">');
+                node.before($li);
             }
             currentSection = section;
         });
