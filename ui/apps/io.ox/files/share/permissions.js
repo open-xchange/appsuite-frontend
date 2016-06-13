@@ -849,20 +849,22 @@ define('io.ox/files/share/permissions', [
                 dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel, share: options.share });
 
-            function isEqual() {
-                return _.isEqual(permissionsView.collection.models, dialogConfig.get('oldCollection'));
+            function hasNewGuests() {
+                var knownGuests = [];
+                _.each(dialogConfig.get('oldGuests'), function (model) {
+                    if (permissionsView.collection.get(model)) {
+                        knownGuests.push(model);
+                    }
+                });
+                return permissionsView.collection.where({ type: 'guest' }).length > knownGuests.length;
             }
 
             permissionsView.collection.on('reset', function () {
-                dialogConfig.set('oldCollection', _.copy(permissionsView.collection.models));
+                dialogConfig.set('oldGuests', _.copy(permissionsView.collection.where({ type: 'guest' })));
             });
 
             permissionsView.collection.on('add remove', function () {
-
-                if (isEqual()) {
-                    dialogConfig.set('sendNotifications', false);
-                    dialogConfig.set('disabled', false);
-                } else if (permissionsView.collection.where({ type: 'guest' }).length !== 0) {
+                if (permissionsView.collection.where({ type: 'guest' }).length !== 0 && hasNewGuests()) {
                     dialogConfig.set('sendNotifications', true);
                     dialogConfig.set('disabled', true);
                 } else {
