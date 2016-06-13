@@ -1407,7 +1407,9 @@ define('io.ox/mail/api',
                 }
             })
             .then(function (result) {
-                if (result.data) {
+                if (result.error) {
+                    return $.Deferred().reject(result).promise();
+                } else if (result.data) {
                     var base = _(result.data.toString().split(api.separator)),
                         id = base.last(),
                         folder = base.without(id).join(api.separator);
