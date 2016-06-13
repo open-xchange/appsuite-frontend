@@ -849,12 +849,29 @@ define('io.ox/files/share/permissions', [
                 dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel, share: options.share });
 
-            permissionsView.collection.on('remove add', function () {
-                if (permissionsView.collection.where({ type: 'guest' }).length !== 0) {
+            function isEqual() {
+                return _.isEqual(permissionsView.collection.models, dialogConfig.get('oldCollection'));
+            }
+
+            permissionsView.collection.on('reset', function () {
+                dialogConfig.set('oldCollection', _.copy(permissionsView.collection.models));
+            });
+
+            permissionsView.collection.on('add remove', function () {
+
+                if (isEqual()) {
+                    dialogConfig.set('sendNotifications', false);
+                    dialogConfig.set('disabled', false);
+                } else if (permissionsView.collection.where({ type: 'guest' }).length !== 0) {
                     dialogConfig.set('sendNotifications', true);
                     dialogConfig.set('disabled', true);
                 } else {
+                    dialogConfig.set('sendNotifications', false);
                     dialogConfig.set('disabled', false);
+                }
+
+                if (dialogConfig.get('byHand')) {
+                    dialogConfig.set('sendNotifications', true);
                 }
 
             });
@@ -863,7 +880,9 @@ define('io.ox/files/share/permissions', [
                 dialog.getFooter().prepend(
                     $('<div>').addClass('form-group cascade').append(
                         $('<label>').addClass('checkbox-inline').text(gt('Send notification')).prepend(
-                            new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el
+                            new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el.on('click', function (e) {
+                                dialogConfig.set('byHand', e.currentTarget.checked);
+                            })
                         )
                     )
                 );
