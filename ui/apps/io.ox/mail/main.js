@@ -1531,7 +1531,11 @@ define('io.ox/mail/main', [
                             )
                        );
                     api.queue.collection.on('progress', function (data) {
-                        if (!data.count) return $el.hide();
+                        if (!data.count) {
+                            // Workaround for Safari flex layout issue (see bug 46496)
+                            if (_.device('safari')) $el.closest('.window-sidepanel').find('.folder-tree')[0].scrollTop += 1;
+                            return $el.hide();
+                        }
                         var n = data.count,
                             pct = Math.round(data.pct * 100),
                             //#. %1$d is number of messages; %2$d is progress in percent

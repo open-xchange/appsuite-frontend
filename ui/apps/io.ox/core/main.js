@@ -588,7 +588,8 @@ define('io.ox/core/main', [
             start: start,
             stop: stop,
             restart: restart,
-            debug: debug
+            debug: debug,
+            logout: logout.bind(null, { autologout: true })
         };
 
         start();

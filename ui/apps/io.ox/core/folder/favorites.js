@@ -48,7 +48,8 @@ define('io.ox/core/folder/favorites', [
                 var list = _(response).filter(function (item) {
                     // FLD-0008 -> not found
                     // FLD-0003 -> permission denied
-                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003')) {
+                    // ACC-0002 -> account not found (see bug 46481)
+                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003' || item.code === 'ACC-0002')) {
                         invalid[item.id] = true;
                         return false;
                     }

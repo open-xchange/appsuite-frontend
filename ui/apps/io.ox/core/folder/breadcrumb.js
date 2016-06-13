@@ -89,14 +89,14 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
             this.$el.empty().append(
                 // ellipsis
-                $('<span class="breadcrumb-ellipsis" aria-hidden="true">&hellip;</span>'),
+                $('<span class="breadcrumb-ellipsis" aria-hidden="true">&hellip;</span>').hide(),
                 // label
                 this.label ? $('<span class="breadcrumb-label">').text(this.label) : [],
                 // path
                 _(path).map(this.renderLink, this)
             );
 
-            this.computeWidth();
+            if (this.app) this.computeWidth();
         },
 
         computeWidth: _.throttle(function () {
