@@ -209,7 +209,7 @@ define.async('io.ox/mail/compose/model', [
 
             if (settings.get('mobileSignatureType') === 'custom') {
                 this.set('defaultSignatureId', '0', { silent: true });
-            } else {
+            } else if (!this.get('defaultSignatureId')) {
                 this.set('defaultSignatureId', '1', { silent: true });
             }
 
