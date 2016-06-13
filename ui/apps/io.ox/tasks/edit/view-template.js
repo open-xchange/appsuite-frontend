@@ -384,16 +384,16 @@ define('io.ox/tasks/edit/view-template', [
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
                 options = [
-                    { label: gt('None'), value: 'null' },
-                    { label: gt('Low'), value: 1 },
-                    { label: gt('Medium'), value: 2 },
-                    { label: gt('High'), value: 3 }
+                    { label: gt.pgettext('Tasks priority', 'None'), value: 'null' },
+                    { label: gt.pgettext('Tasks priority', 'Low'), value: 1 },
+                    { label: gt.pgettext('Tasks priority', 'Medium'), value: 2 },
+                    { label: gt.pgettext('Tasks priority', 'High'), value: 3 }
                 ];
             this.$el.append(
                 $('<label>').attr({
                     class: 'control-label',
                     for: guid
-                }).text(gt('Priority')),
+                }).text(gt.pgettext('Tasks', 'Priority')),
                 $('<div>').append(
                     new mini.SelectView({
                         list: options,

@@ -221,13 +221,13 @@ define('io.ox/mail/compose/view', [
             index: 200,
             draw: function () {
                 this.data('view')
-                    .header(gt('Priority'))
+                    .header(gt.pgettext('E-Mail', 'Priority'))
                     //#. E-Mail priority
-                    .option('priority', 0, gt('High'), gt('Priority'))
+                    .option('priority', 0, gt.pgettext('E-Mail priority', 'High'), gt.pgettext('E-Mail', 'Priority'))
                     //#. E-Mail priority
-                    .option('priority', 3, gt('Normal'), gt('Priority'))
+                    .option('priority', 3, gt.pgettext('E-Mail priority', 'Normal'), gt.pgettext('E-Mail', 'Priority'))
                     //#. E-Mail priority
-                    .option('priority', 5, gt('Low'), gt('Priority'));
+                    .option('priority', 5, gt.pgettext('E-Mail priority', 'Low'), gt.pgettext('E-Mail', 'Priority'));
             }
         },
         {

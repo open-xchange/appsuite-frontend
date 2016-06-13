@@ -411,8 +411,8 @@ define('io.ox/mail/util', [
         getPriority: function (data) {
             // normal?
             if (data && data.priority === 3) return $();
-            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation"/></span>').attr('title', gt('High priority'));
-            return $('<span class="low"><i class="fa fa-minus"/></span>').attr('title', gt('Low priority'));
+            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation"/></span>').attr('title', gt.pgettext('E-Mail', 'High priority'));
+            return $('<span class="low"><i class="fa fa-minus"/></span>').attr('title', gt.pgettext('E-Mail', 'Low priority'));
         },
 
         getAccountName: function (data) {
