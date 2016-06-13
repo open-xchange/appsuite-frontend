@@ -1079,6 +1079,7 @@ msgstr "Všetky priečinky"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "All attachments"
 msgstr "Všetky prílohy"
@@ -1209,6 +1210,13 @@ msgstr "Panel nástrojov aplikácie"
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Aplikácia nemusí fungovať podľa očakávania, kým tento problém nevyriešite."
+
+#. Applies changes to an existing appointment, used in scheduling view
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Accept changes"
+msgid "Apply changes"
+msgstr "Prijať zmeny"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -2585,8 +2593,7 @@ msgstr "Odložené"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete.js
-#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/actions/delete.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js
@@ -2659,6 +2666,7 @@ msgid "Delete task"
 msgstr "Zmazať úlohu"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Zmazať verziu"
 
@@ -2883,11 +2891,6 @@ msgstr "Ste si istý, že chcete tento kontakt zmazať?"
 msgid "Do you really want to delete this distribution list?"
 msgstr "Ste si istý, že chcete tento distribučný zoznam zmazať?"
 
-#: apps/io.ox/files/actions/versions-delete.js module:io.ox/files
-msgctxt "One file only"
-msgid "Do you really want to delete this file?"
-msgstr "Ste si istý, že chcete tento súbor zmazať?"
-
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Do you really want to delete this filter rule?"
 msgstr "Ste si istý, že chcete zmazať toto pravidlo filtra?"
@@ -2905,6 +2908,14 @@ msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "Ste si istý, že chcete túto úlohu zmazať?"
 msgstr[1] "Ste si istý, že chcete tieto úlohy zmazať?"
 msgstr[2] "Ste si istý, že chcete tieto úlohy zmazať?"
+
+#: apps/io.ox/files/actions/versions-delete.js module:io.ox/files
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this file?"
+msgctxt "One file only"
+msgid "Do you really want to delete this version?"
+msgstr "Ste si istý, že chcete tento súbor zmazať?"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -3224,8 +3235,10 @@ msgstr "Upraviť schôdzku"
 msgid "Edit contact"
 msgstr "Upraviť Kontakt"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
+#: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js
 msgid "Edit description"
 msgstr "Upraviť popis"
 
@@ -4026,9 +4039,10 @@ msgstr "Zadarmo"
 msgid "Freelancer"
 msgstr "Na voľnej nohe"
 
-#: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
-#: apps/io.ox/mail/view-options.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
+#: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/main.js apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "Od"
 
@@ -4250,10 +4264,22 @@ msgstr "Skryť trasovanie zásobníka"
 msgid "Hide this notification"
 msgstr "Skryť toto oznámenie"
 
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+msgid "High"
+msgstr "Vysoká"
+
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "High"
+msgctxt "E-Mail priority"
+msgid "High"
+msgstr "Vysoká"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#, fuzzy
+#| msgid "High"
+msgctxt "Tasks priority"
 msgid "High"
 msgstr "Vysoká"
 
@@ -4261,8 +4287,14 @@ msgstr "Vysoká"
 msgid "High contrast theme"
 msgstr "Téma vzhľadu s vysokým kontrastom"
 
-#: apps/io.ox/mail/util.js module:io.ox/core apps/io.ox/tasks/util.js
-#: module:io.ox/tasks
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "High priority"
+msgstr "Vysoká priorita"
+
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "High priority"
+msgctxt "E-Mail"
 msgid "High priority"
 msgstr "Vysoká priorita"
 
@@ -4863,15 +4895,33 @@ msgstr "Strata"
 msgid "Loss: %1$s %"
 msgstr "Strata: %1$s %"
 
-#. E-Mail priority
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Low"
 msgstr "Nízka"
 
-#: apps/io.ox/mail/util.js module:io.ox/core apps/io.ox/tasks/util.js
-#: module:io.ox/tasks
+#. E-Mail priority
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Low"
+msgctxt "E-Mail priority"
+msgid "Low"
+msgstr "Nízka"
+
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#, fuzzy
+#| msgid "Low"
+msgctxt "Tasks priority"
+msgid "Low"
+msgstr "Nízka"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "Low priority"
+msgstr "Nízka priorita"
+
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Low priority"
+msgctxt "E-Mail"
 msgid "Low priority"
 msgstr "Nízka priorita"
 
@@ -5100,8 +5150,14 @@ msgstr "Zodpovedá"
 msgid "May"
 msgstr "máj"
 
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
+msgid "Medium"
+msgstr "Stredné"
+
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#, fuzzy
+#| msgid "Medium"
+msgctxt "Tasks priority"
 msgid "Medium"
 msgstr "Stredné"
 
@@ -5597,12 +5653,21 @@ msgstr "Zmazané správy"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+msgid "None"
+msgstr "Žiadne"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#, fuzzy
+#| msgid "None"
+msgctxt "Tasks priority"
 msgid "None"
 msgstr "Žiadne"
 
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Normal"
+msgctxt "E-Mail priority"
 msgid "Normal"
 msgstr "Normálna"
 
@@ -6567,10 +6632,22 @@ msgstr "Tlačové úlohy"
 msgid "Printout"
 msgstr "Výtlačok"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
+msgid "Priority"
+msgstr "Priorita"
+
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Priority"
+msgctxt "E-Mail"
+msgid "Priority"
+msgstr "Priorita"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
+#, fuzzy
+#| msgid "Priority"
+msgctxt "Tasks"
 msgid "Priority"
 msgstr "Priorita"
 
@@ -6790,6 +6867,13 @@ msgid ""
 msgstr ""
 "Dostávať upozornenia pri vytvorení zmenení alebo odstránení úlohy, ktorej sa "
 "zúčastňujete"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+#| msgid "Received:"
+msgid "Received"
+msgstr "Prijaté:"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Received mails"
@@ -7437,6 +7521,11 @@ msgstr[0] "Archivujú sa správy..."
 msgstr[1] "Archivujú sa správy..."
 msgstr[2] "Archivujú sa správy..."
 
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Sent"
+msgstr "Odoslané"
+
 #. %s is the product name
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Sent from %s via mobile"
@@ -7999,8 +8088,10 @@ msgstr "Študent"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/detail/view.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
+#: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
@@ -8549,7 +8640,7 @@ msgstr "Vybrané časové pásmo je už medzi obľúbenými."
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Odosielateľ chce dostať oznámenie, keď si prečítate tento email"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 #, fuzzy
 #| msgid "The setting has been saved."
 msgid "The sending of the message has been canceled."
@@ -8982,8 +9073,9 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Titul"
 
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/main.js apps/io.ox/mail/print.js
 #: apps/io.ox/mail/view-options.js
@@ -9409,6 +9501,12 @@ msgstr "Videá"
 msgid "View"
 msgstr "Zobraziť"
 
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "View attachment"
+msgid "View all attachments"
+msgstr "Zobraziť prílohu"
+
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "View attachment"
 msgstr "Zobraziť prílohu"
@@ -9416,6 +9514,13 @@ msgstr "Zobraziť prílohu"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "View details"
 msgstr "Zobraziť podrobnosti"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+#| msgid "Next message"
+msgid "View message"
+msgstr "Ďalšia správa"
 
 #. the dropdown button tooltip for the participants dropdown.
 #. button label for toggling participants view
@@ -10401,12 +10506,6 @@ msgstr "mesačne"
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "never ends"
 msgstr "nikdy nekončí"
-
-#. reminder date selection
-#. %1$s is a weekday, like 'next Monday'
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-msgid "next %1$s"
-msgstr "ďalší/-ia %1$s"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "no color"
@@ -14492,9 +14591,6 @@ msgstr "RRRR"
 #~ msgid "Rebuild Tree..."
 #~ msgstr "Znovu zostaviť strom..."
 
-#~ msgid "Received:"
-#~ msgstr "Prijaté:"
-
 #~ msgid "Recurrence"
 #~ msgstr "Opakovanie"
 
@@ -14835,9 +14931,6 @@ msgstr "RRRR"
 
 #~ msgid "Senegal"
 #~ msgstr "Senegal"
-
-#~ msgid "Sent"
-#~ msgstr "Odoslané"
 
 #~ msgid "Sep"
 #~ msgstr "Sep"
@@ -16782,6 +16875,9 @@ msgstr "RRRR"
 
 #~ msgid "new"
 #~ msgstr "nové"
+
+#~ msgid "next %1$s"
+#~ msgstr "ďalší/-ia %1$s"
 
 #~ msgid "next Friday"
 #~ msgstr "ďalší piatok"

@@ -1054,6 +1054,7 @@ msgstr "Tüm Klasörler"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "All attachments"
 msgstr "Tüm ekler "
@@ -1190,6 +1191,13 @@ msgstr "Uygulama araç çubuğu"
 #: module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Bu sorun çözülene kadar uygulama çalışmayabilir"
+
+#. Applies changes to an existing appointment, used in scheduling view
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Accept changes"
+msgid "Apply changes"
+msgstr "Değişiklikleri kabul et"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -2600,8 +2608,7 @@ msgstr "Ertelenmiş"
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files
-#: apps/io.ox/files/actions/delete.js
-#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/toolbar.js
+#: apps/io.ox/files/actions/delete.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js
@@ -2683,6 +2690,7 @@ msgid "Delete task"
 msgstr "Görevi sil"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Sürümü sil"
 
@@ -2914,11 +2922,6 @@ msgstr "Bu bağlantıyı gerçekten silmek istiyor musnuz?"
 msgid "Do you really want to delete this distribution list?"
 msgstr "Bu dağıtım listesini gerçekten silmek istiyor musunuz?"
 
-#: apps/io.ox/files/actions/versions-delete.js module:io.ox/files
-msgctxt "One file only"
-msgid "Do you really want to delete this file?"
-msgstr "Bu dosyayı silmek istediğinize emin misiniz?"
-
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #, fuzzy
 #| msgctxt "One file only"
@@ -2935,6 +2938,14 @@ msgstr[0] "Bu ögeyi/ögeleri silmek istediğinize emin misiniz?"
 msgid "Do you really want to delete this task?"
 msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "Bu görevi/görevleri silmek istediğinize emin misiniz?"
+
+#: apps/io.ox/files/actions/versions-delete.js module:io.ox/files
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this file?"
+msgctxt "One file only"
+msgid "Do you really want to delete this version?"
+msgstr "Bu dosyayı silmek istediğinize emin misiniz?"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -3275,8 +3286,10 @@ msgstr "Görüşmeyi düzenle"
 msgid "Edit contact"
 msgstr "İletişim bilgisini düzenle"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
+#: module:io.ox/core/viewer apps/io.ox/core/viewer/views/toolbarview.js
+#: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js
 msgid "Edit description"
 msgstr "Tanımı düzenle"
 
@@ -4131,9 +4144,10 @@ msgstr "Ücretsiz"
 msgid "Freelancer"
 msgstr "Freelancer "
 
-#: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
-#: apps/io.ox/mail/view-options.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
+#: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/main.js apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "dan"
 
@@ -4357,10 +4371,22 @@ msgstr "Yığın izlemeyi gizle"
 msgid "Hide this notification"
 msgstr "Bu bildirimi gizle"
 
+#: apps/io.ox/tasks/print.js module:io.ox/tasks
+msgid "High"
+msgstr "Yüksek"
+
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "High"
+msgctxt "E-Mail priority"
+msgid "High"
+msgstr "Yüksek"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js module:io.ox/tasks
+#, fuzzy
+#| msgid "High"
+msgctxt "Tasks priority"
 msgid "High"
 msgstr "Yüksek"
 
@@ -4368,8 +4394,14 @@ msgstr "Yüksek"
 msgid "High contrast theme"
 msgstr "Yüksek kontrastlı tema"
 
-#: apps/io.ox/mail/util.js module:io.ox/core apps/io.ox/tasks/util.js
-#: module:io.ox/tasks
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "High priority"
+msgstr "Yüksek öncelik"
+
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "High priority"
+msgctxt "E-Mail"
 msgid "High priority"
 msgstr "Yüksek öncelik"
 
@@ -4995,15 +5027,33 @@ msgstr "Kayıp"
 msgid "Loss: %1$s %"
 msgstr "Kayıp: %1$s %"
 
-#. E-Mail priority
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Low"
 msgstr "Düşük"
 
-#: apps/io.ox/mail/util.js module:io.ox/core apps/io.ox/tasks/util.js
-#: module:io.ox/tasks
+#. E-Mail priority
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Low"
+msgctxt "E-Mail priority"
+msgid "Low"
+msgstr "Düşük"
+
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#, fuzzy
+#| msgid "Low"
+msgctxt "Tasks priority"
+msgid "Low"
+msgstr "Düşük"
+
+#: apps/io.ox/tasks/util.js module:io.ox/tasks
+msgid "Low priority"
+msgstr "Düşük öncelikli"
+
+#: apps/io.ox/mail/util.js module:io.ox/core
+#, fuzzy
+#| msgid "Low priority"
+msgctxt "E-Mail"
 msgid "Low priority"
 msgstr "Düşük öncelikli"
 
@@ -5240,8 +5290,14 @@ msgstr "Eşleşmeler"
 msgid "May"
 msgstr "Mayıs"
 
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
+msgid "Medium"
+msgstr "Orta"
+
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#, fuzzy
+#| msgid "Medium"
+msgctxt "Tasks priority"
 msgid "Medium"
 msgstr "Orta"
 
@@ -5750,12 +5806,21 @@ msgstr "Silinmiş mesajlar"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+msgid "None"
+msgstr "Hiçbiri"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#, fuzzy
+#| msgid "None"
+msgctxt "Tasks priority"
 msgid "None"
 msgstr "Hiçbiri"
 
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Normal"
+msgctxt "E-Mail priority"
 msgid "Normal"
 msgstr "Normal"
 
@@ -6765,10 +6830,22 @@ msgstr "Görevleri yazdırın"
 msgid "Printout"
 msgstr "Yazdır"
 
+#: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
+msgid "Priority"
+msgstr "Öncelik"
+
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Priority"
+msgctxt "E-Mail"
+msgid "Priority"
+msgstr "Öncelik"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
+#, fuzzy
+#| msgid "Priority"
+msgctxt "Tasks"
 msgid "Priority"
 msgstr "Öncelik"
 
@@ -7009,6 +7086,13 @@ msgid ""
 msgstr ""
 "Diğer katılımcılar kabul veya ret ettiğinde görüşme katılımcısı olarak "
 "bildirim alın"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+#| msgid "Received mails"
+msgid "Received"
+msgstr "Alınan epostalar"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Received mails"
@@ -7672,6 +7756,11 @@ msgid "Sending 1 message ... %2$d%"
 msgid_plural "Sending %1$d messages ... %2$d%"
 msgstr[0] "Mesajlar arşivleniyor ..."
 
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Sent"
+msgstr ""
+
 #. %s is the product name
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Sent from %s via mobile"
@@ -8268,8 +8357,10 @@ msgstr "Öğrenci"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/detail/view.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
+#: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
@@ -8844,7 +8935,7 @@ msgstr "Seçilen zaman dilimi halihazırda favorilerdedir"
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Bu e-postayı okuduğunuzda gönderen kişi bildirim almak istiyor. "
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The sending of the message has been canceled."
 msgstr ""
 
@@ -9280,8 +9371,9 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Başlık"
 
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/mail/main.js apps/io.ox/mail/print.js
 #: apps/io.ox/mail/view-options.js
@@ -9722,6 +9814,12 @@ msgstr "Videolar"
 msgid "View"
 msgstr "Görüntü"
 
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "View attachment"
+msgid "View all attachments"
+msgstr "Görüntü eki"
+
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "View attachment"
 msgstr "Görüntü eki"
@@ -9729,6 +9827,14 @@ msgstr "Görüntü eki"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "View details"
 msgstr "Görüntü ayrıntıları"
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+#| msgctxt "folder"
+#| msgid "Sent messages"
+msgid "View message"
+msgstr "Gönderilen Epostalar"
 
 #. the dropdown button tooltip for the participants dropdown.
 #. button label for toggling participants view
@@ -10781,12 +10887,6 @@ msgstr "aylık"
 msgid "never ends"
 msgstr "asla bitmez"
 
-#. reminder date selection
-#. %1$s is a weekday, like 'next Monday'
-#: apps/io.ox/tasks/util.js module:io.ox/tasks
-msgid "next %1$s"
-msgstr "sıradaki %1$s"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "no color"
 msgstr "renk yok"
@@ -11291,6 +11391,9 @@ msgstr "yyyy"
 
 #~ msgid "expand"
 #~ msgstr "genişlemek"
+
+#~ msgid "next %1$s"
+#~ msgstr "sıradaki %1$s"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "takip eden kurallar işlemi"

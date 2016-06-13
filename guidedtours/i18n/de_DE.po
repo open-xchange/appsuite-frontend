@@ -199,8 +199,13 @@ msgid "Editing settings"
 msgstr "Die Einstellungen bearbeiten"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "Enter the E-Mail text into the main area. If the text format was set to "
+#| "HTMl in the options, you can format the E-Mail text. To do so select a "
+#| "text part and then click an icon in the formatting bar."
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
@@ -331,7 +336,9 @@ msgstr ""
 "eigenen Fenster."
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
+#, fuzzy
+#| msgid "If you no longer want to display a square, click the cross."
+msgid "If you no longer want to display a square, click the delete icon."
 msgstr "Um eine Kachel zu schließen, klicken Sie auf das Kreuz."
 
 #: apps/io.ox/tours/intro.js:66 module:io.ox/tours

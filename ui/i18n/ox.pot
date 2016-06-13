@@ -117,7 +117,6 @@ msgstr ""
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
 #: apps/io.ox/files/actions/delete.js
-#: apps/io.ox/files/actions/versions-delete.js
 #: apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js
 #: apps/io.ox/mail/actions/delete.js
@@ -806,6 +805,8 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
 #: apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js
@@ -983,6 +984,12 @@ msgstr ""
 #: apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
+msgstr ""
+
+#. Applies changes to an existing appointment, used in scheduling view
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
+msgid "Apply changes"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
@@ -3472,6 +3479,8 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js
 #: module:io.ox/core
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
 #: apps/io.ox/tasks/view-detail.js
 #: module:io.ox/tasks
 msgid "All attachments"
@@ -4383,6 +4392,11 @@ msgstr ""
 #: apps/io.ox/mail/folderview-extensions.js
 #: module:io.ox/mail
 msgid "Add mail account"
+msgstr ""
+
+#: apps/io.ox/core/folder/extensions.js
+#: module:io.ox/core
+msgid "View all attachments"
 msgstr ""
 
 #: apps/io.ox/core/folder/extensions.js
@@ -5376,8 +5390,6 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit
 msgid "None"
 msgstr ""
 
@@ -6091,6 +6103,16 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
+#: apps/io.ox/core/viewer/views/toolbarview.js
+#: module:io.ox/core
+#: apps/io.ox/files/actions.js
+#: module:io.ox/files
+#: apps/io.ox/files/toolbar.js
+msgid "Edit description"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
+#: module:io.ox/core/viewer
 msgid "Add a description"
 msgstr ""
 
@@ -6124,6 +6146,44 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
 msgid "This folder is shared with others"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#: apps/io.ox/mail/actions/reminder.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/main.js
+#: apps/io.ox/mail/view-options.js
+msgid "From"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#: apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+#: apps/io.ox/mail/main.js
+#: apps/io.ox/mail/print.js
+#: apps/io.ox/mail/view-options.js
+msgid "To"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Received"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "Sent"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+msgid "View message"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -6272,14 +6332,6 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core
 msgid "Close viewer"
-msgstr ""
-
-#: apps/io.ox/core/viewer/views/toolbarview.js
-#: module:io.ox/core
-#: apps/io.ox/files/actions.js
-#: module:io.ox/files
-#: apps/io.ox/files/toolbar.js
-msgid "Edit description"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -6686,6 +6738,7 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
+#: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr ""
 
@@ -6827,7 +6880,7 @@ msgstr ""
 #: apps/io.ox/files/actions/versions-delete.js
 #: module:io.ox/files
 msgctxt "One file only"
-msgid "Do you really want to delete this file?"
+msgid "Do you really want to delete this version?"
 msgstr ""
 
 #: apps/io.ox/files/api.js
@@ -8194,14 +8247,6 @@ msgstr ""
 
 #: apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/main.js
-#: apps/io.ox/mail/view-options.js
-msgid "From"
-msgstr ""
-
-#: apps/io.ox/mail/actions/reminder.js
-#: module:io.ox/mail
 msgid "Reminder has been created"
 msgstr ""
 
@@ -8360,17 +8405,6 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-#: apps/io.ox/mail/main.js
-#: apps/io.ox/mail/print.js
-#: apps/io.ox/mail/view-options.js
-msgid "To"
-msgstr ""
-
-#: apps/io.ox/mail/common-extensions.js
-#: module:io.ox/mail
 #: apps/io.ox/mail/print.js
 msgctxt "CC"
 msgid "Copy"
@@ -8442,6 +8476,11 @@ msgstr ""
 #: apps/io.ox/mail/compose/actions/send.js
 #: module:io.ox/mail
 msgid "Add subject"
+msgstr ""
+
+#: apps/io.ox/mail/compose/actions/send.js
+#: module:io.ox/mail
+msgid "The sending of the message has been canceled."
 msgstr ""
 
 #: apps/io.ox/mail/compose/actions/send.js
@@ -8681,37 +8720,28 @@ msgstr ""
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
-#: apps/io.ox/tasks/print.js
+msgctxt "E-Mail"
 msgid "Priority"
 msgstr ""
 
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
+msgctxt "E-Mail priority"
 msgid "High"
 msgstr ""
 
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
+msgctxt "E-Mail priority"
 msgid "Normal"
 msgstr ""
 
 #. E-Mail priority
 #: apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js
-#: module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
+msgctxt "E-Mail priority"
 msgid "Low"
 msgstr ""
 
@@ -9148,11 +9178,6 @@ msgstr[1] ""
 
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
-msgid "The sending of the message has been canceled."
-msgstr ""
-
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
 #: apps/io.ox/settings/main.js
 #: module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
@@ -9556,15 +9581,13 @@ msgstr ""
 
 #: apps/io.ox/mail/util.js
 #: module:io.ox/core
-#: apps/io.ox/tasks/util.js
-#: module:io.ox/tasks
+msgctxt "E-Mail"
 msgid "High priority"
 msgstr ""
 
 #: apps/io.ox/mail/util.js
 #: module:io.ox/core
-#: apps/io.ox/tasks/util.js
-#: module:io.ox/tasks
+msgctxt "E-Mail"
 msgid "Low priority"
 msgstr ""
 
@@ -10787,9 +10810,32 @@ msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
-#: apps/io.ox/tasks/print.js
-#: module:io.ox/tasks
+msgctxt "Tasks priority"
+msgid "None"
+msgstr ""
+
+#: apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
+msgctxt "Tasks priority"
+msgid "Low"
+msgstr ""
+
+#: apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
+msgctxt "Tasks priority"
 msgid "Medium"
+msgstr ""
+
+#: apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
+msgctxt "Tasks priority"
+msgid "High"
+msgstr ""
+
+#: apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit
+msgctxt "Tasks"
+msgid "Priority"
 msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js
@@ -10880,6 +10926,12 @@ msgstr ""
 
 #: apps/io.ox/tasks/main.js
 #: module:io.ox/tasks
+#: apps/io.ox/tasks/print.js
+msgid "Priority"
+msgstr ""
+
+#: apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Order"
 msgstr ""
 
@@ -10921,6 +10973,21 @@ msgstr ""
 #: apps/io.ox/tasks/model.js
 #: module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
+msgstr ""
+
+#: apps/io.ox/tasks/print.js
+#: module:io.ox/tasks
+msgid "Low"
+msgstr ""
+
+#: apps/io.ox/tasks/print.js
+#: module:io.ox/tasks
+msgid "Medium"
+msgstr ""
+
+#: apps/io.ox/tasks/print.js
+#: module:io.ox/tasks
+msgid "High"
 msgstr ""
 
 #. Task: "Due" like in "Change due date"
@@ -11024,13 +11091,6 @@ msgstr ""
 msgid "tomorrow"
 msgstr ""
 
-#. reminder date selection
-#. %1$s is a weekday, like 'next Monday'
-#: apps/io.ox/tasks/util.js
-#: module:io.ox/tasks
-msgid "next %1$s"
-msgstr ""
-
 #: apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
 msgid "in one week"
@@ -11053,7 +11113,17 @@ msgstr ""
 
 #: apps/io.ox/tasks/util.js
 #: module:io.ox/tasks
+msgid "Low priority"
+msgstr ""
+
+#: apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
 msgid "Medium priority"
+msgstr ""
+
+#: apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
+msgid "High priority"
 msgstr ""
 
 #. %1$s due date of a task
