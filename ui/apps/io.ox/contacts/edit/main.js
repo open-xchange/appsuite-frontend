@@ -102,7 +102,8 @@ define('io.ox/contacts/edit/main', [
                             if (invalid) {
                                 notifications.yell('error', gt('Some fields contain invalid data'));
                                 // set error marker and scroll
-                                field.addClass('has-error').get(0).scrollIntoView();
+                                field = field.addClass('has-error').get(0);
+                                if (field) field.scrollIntoView();
                                 field = null;
                             } else {
                                 notifications.yell(error);
