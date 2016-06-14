@@ -83,6 +83,14 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
                         vacationData.activateTimeFrame = true;
 
+                    } else if (data[0].test.id === 'currentdate') {
+                        if (data[0].test.comparison === 'ge') {
+                            vacationData.dateFrom = data[0].test.datevalue[0];
+                        } else {
+                            vacationData.dateUntil = data[0].test.datevalue[0];
+                        }
+
+                        vacationData.activateTimeFrame = true;
                     } else {
                         createDateDefaults(vacationData);
                     }

@@ -82,7 +82,9 @@ define('io.ox/mail/vacationnotice/settings/model', [
             );
         }
 
-        if (testForTimeframe.tests.length === 0 || attributes.activateTimeFrame === false) {
+        if (testForTimeframe.tests.length === 1 && attributes.activateTimeFrame) {
+            testForTimeframe = testForTimeframe.tests[0];
+        } else if (testForTimeframe.tests.length === 0 || attributes.activateTimeFrame === false) {
             testForTimeframe = { id: 'true' };
         }
 
