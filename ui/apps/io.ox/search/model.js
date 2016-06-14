@@ -201,7 +201,8 @@ define('io.ox/search/model', [
             add: function (facet, value, option, silent) {
                 var pool = this.get('pool'),
                     list = this.get('poollist'),
-                    autocomplete = this.get('autocomplete');
+                    autocomplete = this.get('autocomplete'),
+                    isGlobal = facet === 'global' || facet === value;
 
                 // in case folder is man
                 if (!autocomplete.length) {
@@ -220,6 +221,12 @@ define('io.ox/search/model', [
                             return data.id === value || !!item.custom;
                         });
 
+                        // workaround: race condition
+                        if (!isGlobal && !itemvalue) {
+                            if (ox.debug) console.error('missing value for facet');
+                            return;
+                        }
+
                         // overwrite
                         if (!!item.custom) {
                             itemvalue.custom = option.custom;
@@ -235,7 +242,7 @@ define('io.ox/search/model', [
                         // add value
 
                         // we have to create custom ids here to support 'globals'
-                        if (facet === 'global' || facet === value) {
+                        if (isGlobal) {
                             // pseudo uuid
                             value = Date.now();
                             data.id = value;
