@@ -118,6 +118,12 @@ module.exports = function (grunt) {
                         src: ['**/*', '!pdf.combined.js'],
                         cwd: 'bower_components/pdfjs-dist',
                         dest: 'build/apps/3rd.party/pdfjs'
+                    },
+                    {
+                        expand: true,
+                        src: ['unorm.js'],
+                        cwd: 'bower_components/unorm/lib/',
+                        dest: 'build/static/3rd.party/unorm'
                     }
                 ]
             }
