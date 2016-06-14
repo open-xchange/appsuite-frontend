@@ -234,6 +234,14 @@ define('io.ox/contacts/api', [
                 }
                 return response;
             },
+            list: function (data) {
+                _(data).each(function (obj) {
+                    // drop certain null fields (see bug 46574)
+                    if (obj.birthday === null) delete obj.birthday;
+                    if (obj.distribution_list === null) delete obj.distribution_list;
+                });
+                return data;
+            },
             listPost: function (data) {
                 _(data).each(function (obj) {
                     // remove from cache if get cache is outdated
