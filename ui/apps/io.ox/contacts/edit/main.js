@@ -99,7 +99,7 @@ define('io.ox/contacts/edit/main', [
 
                             if (invalid) {
                                 notifications.yell('error', gt('Some fields contain invalid data'));
-                                field.get(0).scrollIntoView();
+                                if (field.length) field.get(0).scrollIntoView();
                                 field = null;
                             } else {
                                 notifications.yell(error);
