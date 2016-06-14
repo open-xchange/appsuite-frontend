@@ -194,7 +194,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         sharedAttachement: function (baton) {
-            if (!_.has(baton.model.get('headers'), 'X-Open-Xchange-Share-Reference')) return;
+            if (!baton.model || !_.has(baton.model.get('headers'), 'X-Open-Xchange-Share-Reference')) return;
             this.append(
                 $('<i class="fa fa-cloud-download is-shared-attachement" aria-hidden="true">')
             );
