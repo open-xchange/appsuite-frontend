@@ -648,6 +648,19 @@ define('io.ox/mail/main', [
         },
 
         /*
+         * Auto subscribe mail folders
+         */
+        'auto:subscribe': function (app) {
+
+            app.folder.getData().done(function (data) {
+                if (data.module !== 'mail' || data.subscribed) return;
+                folderAPI.update(data.id, { subscribed: true }, { silent: true }).done(function () {
+                    folderAPI.refresh();
+                });
+            });
+        },
+
+        /*
          * Change foldername on mobiles in navbar
          */
         'folder:change-mobile': function (app) {
