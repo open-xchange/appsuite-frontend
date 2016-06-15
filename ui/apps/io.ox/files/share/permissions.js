@@ -868,12 +868,13 @@ define('io.ox/files/share/permissions', [
                     dialogConfig.set('sendNotifications', true);
                     dialogConfig.set('disabled', true);
                 } else {
-                    dialogConfig.set('sendNotifications', false);
+                    dialogConfig.set('sendNotifications', notificationDefault);
                     dialogConfig.set('disabled', false);
                 }
 
-                if (dialogConfig.get('byHand')) {
-                    dialogConfig.set('sendNotifications', true);
+                if (dialogConfig.get('byHand') !== undefined) {
+                    dialogConfig.set('sendNotifications', dialogConfig.get('byHand'));
+                    dialogConfig.set('disabled', false);
                 }
 
             });
