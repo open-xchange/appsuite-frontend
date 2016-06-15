@@ -1143,7 +1143,7 @@ define('io.ox/core/desktop', [
                 }
 
                 this.setHeader = function (node) {
-                    var position = coreConfig.get('features/windowHeaderPosition', 'bottom');
+                    var position = _.device('!desktop') ? 'top' : coreConfig.get('features/windowHeaderPosition', 'bottom');
                     if (position === 'top') {
                         this.nodes.header.append(node.addClass('container'));
                         this.nodes.outer.addClass('header-top');
