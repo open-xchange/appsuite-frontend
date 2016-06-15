@@ -320,7 +320,7 @@ define('io.ox/files/api', [
             folder = encodeURIComponent(file.folder_id),
             id = encodeURIComponent(file.id),
             sessionData = '&user=' + ox.user_id + '&context=' + ox.context_id + '&sequence=' + file.last_modified,
-            version = file.version !== undefined && options.version !== false ? '&version=' + file.version : '',
+            version = file.version !== undefined && options.version !== false && options.version !== null ? '&version=' + file.version : '',
             // basic URL
             query = '?action=document&folder=' + folder + '&id=' + id + version + sessionData,
             // file name
