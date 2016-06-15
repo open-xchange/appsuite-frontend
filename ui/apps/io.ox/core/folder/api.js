@@ -1233,7 +1233,7 @@ define('io.ox/core/folder/api', [
             flat({ module: module, cache: false });
         });
         // go!
-        http.resume().done(function () {
+        return http.resume().done(function () {
             virtual.refresh();
         });
     }

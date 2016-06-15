@@ -650,14 +650,23 @@ define('io.ox/mail/main', [
         /*
          * Auto subscribe mail folders
          */
-        'auto:subscribe': function (app) {
+        'auto-subscribe': function (app) {
 
-            app.folder.getData().done(function (data) {
-                if (data.module !== 'mail' || data.subscribed) return;
-                folderAPI.update(data.id, { subscribed: true }, { silent: true }).done(function () {
-                    folderAPI.refresh();
-                });
-            });
+            function subscribe(data) {
+                if (data.module !== 'mail') return;
+                if (data.subscribed) {
+                    app.folderView.tree.select(data.id);
+                } else {
+                    folderAPI.update(data.id, { subscribed: true }, { silent: true }).done(function () {
+                        folderAPI.refresh().done(function () {
+                            app.folderView.tree.select(data.id);
+                        });
+                    });
+                }
+            }
+
+            app.folder.getData().done(subscribe);
+            app.on('folder:change', function (id, data) { subscribe(data); });
         },
 
         /*

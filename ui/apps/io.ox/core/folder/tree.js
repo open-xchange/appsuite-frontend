@@ -102,6 +102,30 @@ define('io.ox/core/folder/tree', [
             });
         },
 
+        select: function (id) {
+
+            var ids = [], tree = this;
+
+            function open() {
+                // get next id and the corresponding node
+                var id = ids.shift(), node = tree.getNodeView(id);
+                // select the final folder?
+                if (!ids.length) return tree.selection.set(id);
+                if (!node) return;
+                node.once('reset', open);
+                node.toggle(true);
+            }
+
+            api.path(id).done(function (path) {
+                ids = _(path).pluck('id');
+                open();
+            });
+        },
+
+        getNodeView: function (id) {
+            return this.$('.folder[data-id="' + $.escape(id) + '"]').data('view');
+        },
+
         filter: function (folder, model) {
             // .hideTrashfolder hides the trashfolder, used when saving attachments to drive see Bug 38280
             if (this.options.hideTrashfolder && api.is('trash', model.attributes)) { return false; }
