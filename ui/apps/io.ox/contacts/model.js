@@ -193,7 +193,10 @@ define('io.ox/contacts/model', [
         ext.point(ref + '/validation').extend({
             id: 'birthday',
             validate: function (attributes) {
-                if ('birthday' in attributes && !_.isNumber(attributes.birthday)) {
+                // null is valid because this is the value to remove a birthday
+                // undefined means the user has a month but no day selected or the other way round.
+                // This way we can see if the input is incomplete or the birthday should be removed
+                if ('birthday' in attributes && attributes.birthday !== null && !_.isNumber(attributes.birthday)) {
                     this.add('birthday', gt('Please set day and month properly'));
                 }
             }
