@@ -245,7 +245,18 @@ define('io.ox/calendar/edit/extensions', [
                     timezoneAttribute: 'timezone'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
-                }).on('click:timezone', openTimezoneDialog, baton).render().$el
+                }).on('click:timezone', openTimezoneDialog, baton)
+                    .on('click:time', function () {
+                        var target = this.$el.find('.dropdown-menu.calendaredit'),
+                            container = target.scrollParent(),
+                            pos = target.offset().top - container.offset().top;
+
+                        if ((pos < 0) || (pos + target.height() > container.height())) {
+                            // scroll to Node, leave 16px offset
+                            container.scrollTop(container.scrollTop() + pos - 16);
+                        }
+
+                    }).render().$el
             );
         }
     });
@@ -267,7 +278,18 @@ define('io.ox/calendar/edit/extensions', [
                     timezoneAttribute: 'endTimezone'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
-                }).on('click:timezone', openTimezoneDialog, baton).render().$el
+                }).on('click:timezone', openTimezoneDialog, baton)
+                    .on('click:time', function () {
+                        var target = this.$el.find('.dropdown-menu.calendaredit'),
+                            container = target.scrollParent(),
+                            pos = target.offset().top - container.offset().top;
+
+                        if ((pos < 0) || (pos + target.height() > container.height())) {
+                            // scroll to Node, leave 16px offset
+                            container.scrollTop(container.scrollTop() + pos - 16);
+                        }
+
+                    }).render().$el
             );
         }
     });
@@ -535,6 +557,22 @@ define('io.ox/calendar/edit/extensions', [
                 typeahead.$el
             );
             typeahead.render().$el.addClass('col-md-6');
+
+            typeahead.typeahead.on('typeahead-custom:dropdown-rendered', function () {
+
+                var target = typeahead.$el.find('.tt-dropdown-menu'),
+                    container = target.scrollParent(),
+                    pos = target.offset().top - container.offset().top;
+
+                if (!target.is(':visible')) {
+                    return;
+                }
+
+                if ((pos < 0) || (pos + target.height() > container.height())) {
+                    // scroll to Node, leave 16px offset
+                    container.scrollTop(container.scrollTop() + pos - 16);
+                }
+            });
         }
     });
 

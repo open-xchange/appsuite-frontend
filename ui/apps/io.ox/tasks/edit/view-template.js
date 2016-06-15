@@ -177,6 +177,16 @@ define('io.ox/tasks/edit/view-template', [
                         // trigger change to update input fields on mobile
                         baton.model.trigger('change:start_time change:end_time');
                     }
+                }).on('click:time', function () {
+                    var target = this.$el.find('.dropdown-menu.calendaredit'),
+                        container = target.scrollParent(),
+                        pos = target.offset().top - container.offset().top;
+
+                    if ((pos < 0) || (pos + target.height() > container.height())) {
+                        // scroll to Node, leave 16px offset
+                        container.scrollTop(container.scrollTop() + pos - 16);
+                    }
+
                 }).render().$el.attr('data-extension-id', 'start_time')
             );
         }
@@ -201,6 +211,16 @@ define('io.ox/tasks/edit/view-template', [
                         // trigger change to update input fields on mobile
                         baton.model.trigger('change:start_time change:end_time');
                     }
+                }).on('click:time', function () {
+                    var target = this.$el.find('.dropdown-menu.calendaredit'),
+                        container = target.scrollParent(),
+                        pos = target.offset().top - container.offset().top;
+
+                    if ((pos < 0) || (pos + target.height() > container.height())) {
+                        // scroll to Node, leave 16px offset
+                        container.scrollTop(container.scrollTop() + pos - 16);
+                    }
+
                 }).render().$el.attr('data-extension-id', 'end_time')
             );
         }
@@ -291,6 +311,16 @@ define('io.ox/tasks/edit/view-template', [
                     attribute: 'alarm',
                     label: gt('Reminder date'),
                     clearButton: true
+                }).on('click:time', function () {
+                    var target = this.$el.find('.dropdown-menu.calendaredit'),
+                        container = target.scrollParent(),
+                        pos = target.offset().top - container.offset().top;
+
+                    if ((pos < 0) || (pos + target.height() > container.height())) {
+                        // scroll to Node, leave 16px offset
+                        container.scrollTop(container.scrollTop() + pos - 16);
+                    }
+
                 }).render().$el.attr('data-extension-id', 'alarm')
             );
         }
@@ -464,6 +494,22 @@ define('io.ox/tasks/edit/view-template', [
             );
             view.render().$el.addClass('col-xs-12 collapsed');
             view.$el.find('input.add-participant').addClass('task-participant-input-field');
+
+            view.typeahead.on('typeahead-custom:dropdown-rendered', function () {
+
+                var target = view.$el.find('.tt-dropdown-menu'),
+                    container = target.scrollParent(),
+                    pos = target.offset().top - container.offset().top;
+
+                if (!target.is(':visible')) {
+                    return;
+                }
+
+                if ((pos < 0) || (pos + target.height() > container.height())) {
+                    // scroll to Node, leave 16px offset
+                    container.scrollTop(container.scrollTop() + pos - 16);
+                }
+            });
         }
     });
 
