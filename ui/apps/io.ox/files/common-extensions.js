@@ -15,8 +15,9 @@ define('io.ox/files/common-extensions', [
     'io.ox/mail/util',
     'io.ox/files/api',
     'io.ox/core/strings',
-    'gettext!io.ox/files'
-], function (util, api, strings, gt) {
+    'gettext!io.ox/files',
+    'settings!io.ox/core'
+], function (util, api, strings, gt, settings) {
 
     'use strict';
 
@@ -68,8 +69,8 @@ define('io.ox/files/common-extensions', [
         },
 
         mailSubject: function (baton, ellipsis) {
-            if (!baton.data.meta || !_.has(baton.data.meta, 'mail')) return;
-            var subject = baton.data.meta.mail.subject || '';
+            if (!baton.data.virtual || !_.has(baton.data.virtual, 'subject')) return;
+            var subject = baton.data.virtual.subject || '';
             // fix long names
             if (ellipsis) subject = _.ellipsis(subject, ellipsis);
             // make underscore wrap as well
@@ -80,8 +81,9 @@ define('io.ox/files/common-extensions', [
         },
 
         mailFrom: function (baton, ellipsis) {
-            if (!baton.data.meta || !_.has(baton.data.meta, 'mail')) return;
-            var from = baton.data.meta.mail.from[0] || baton.data.meta.mail.to[0];
+            var driveMail = settings.get('folder/mailattachments', {});
+            if (!baton.data.virtual) return;
+            var from = (baton.app.folder.get() === driveMail.sent) ? baton.data.virtual.to[0] : baton.data.virtual.from[0];
             from = util.getDisplayName(from);
             // fix long names
             if (ellipsis) from = _.ellipsis(from, ellipsis);

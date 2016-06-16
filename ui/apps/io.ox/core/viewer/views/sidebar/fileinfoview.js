@@ -18,8 +18,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/util',
     'io.ox/mail/util',
     'io.ox/core/capabilities',
+    'settings!io.ox/core',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, folderAPI, UserAPI, util, mailUtil, capabilities, gt) {
+], function (PanelBaseView, Ext, folderAPI, UserAPI, util, mailUtil, capabilities, settings, gt) {
 
     'use strict';
 
@@ -58,7 +59,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 folder_id = model.get('folder_id'),
                 link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id')),
                 dl = $('<dl>'),
-                isAttachmentView = _.has(model.get('meta'), 'mail');
+                isAttachmentView = !_.isEmpty(model.get('virtual'));
 
             dl.append(
                 // filename
@@ -129,7 +130,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 }
             } else {
                 // All Attachment View
-                var mail = model.get('meta').mail;
+                var mail = model.get('virtual');
+                var driveMail = settings.get('folder/mailattachments', {});
                 dl.append(
                     $('<dt>').text(gt('Folder')),
                     $('<dd class="mail-folder">').append(
@@ -143,15 +145,15 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     ),
                     $('<dt>').text(gt('Subject')),
                     $('<dd class="subject">').append(
-                        $.txt(mail.subject)
+                        $.txt(mailUtil.getSubject(mail.subject || ''))
                     ),
-                    $('<dt>').text(_.has(mail, 'from') ? gt('From') : gt('To')),
+                    $('<dt>').text(folder_id === driveMail.sent ? gt('To') : gt('From')),
                     $('<dd class="from">').append(
-                        $.txt(mailUtil.getDisplayName(_.has(mail, 'from') ? mail.from[0] : mail.to[0]))
+                        $.txt(mailUtil.getDisplayName(folder_id === driveMail.sent ? mail.to[0] : mail.from[0]))
                     ),
-                    $('<dt>').text(_.has(mail, 'from') ? gt('Received') : gt('Sent')),
+                    $('<dt>').text(folder_id === driveMail.sent ? gt('Sent') : gt('Received')),
                     $('<dd class="received">').append(
-                        $.txt('00:00 PM')
+                        $.txt(dateString)
                     ),
                     $('<dt>'),
                     $('<dd class="link">').append(
