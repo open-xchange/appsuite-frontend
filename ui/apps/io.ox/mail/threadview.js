@@ -273,6 +273,9 @@ define('io.ox/mail/threadview', [
             var messages = this.$messages;
             var self = this;
             var threadId = this.collection.first().get('cid');
+            var autoOpenIndex = this.collection.reduce(function (acc, model, index) {
+                return util.isUnseen(model.toJSON()) ? index : acc;
+            }, 0);
             this.collection.reduce(function (acc, model, index) {
                 return acc.then(function (id) {
                     var def = $.Deferred();
@@ -281,7 +284,7 @@ define('io.ox/mail/threadview', [
                         messages.append(
                             self.renderListItem.bind(self)(model)
                         );
-                        if (index === 0) self.autoSelectMail.bind(self)();
+                        if (autoOpenIndex === index) self.autoSelectMail.bind(self)();
                         def.resolve(id);
                     });
                     return def;
