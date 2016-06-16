@@ -270,12 +270,26 @@ define('io.ox/mail/threadview', [
             this.$el.find('.thread-view-list').show();
 
             // draw thread list
-            this.$messages.append(
-                this.collection.chain().map(this.renderListItem, this).value()
-            );
-
-            this.zIndex();
-            this.autoSelectMail();
+            var messages = this.$messages;
+            var self = this;
+            var threadId = this.collection.first().get('cid');
+            this.collection.reduce(function (acc, model, index) {
+                return acc.then(function (id) {
+                    var def = $.Deferred();
+                    _.defer(function () {
+                        if (self.collection.first().get('cid') !== id) return def.reject();
+                        messages.append(
+                            self.renderListItem.bind(self)(model)
+                        );
+                        if (index === 0) self.autoSelectMail.bind(self)();
+                        def.resolve(id);
+                    });
+                    return def;
+                });
+            }, $.when(threadId)).then(function (id) {
+                if (self.collection.first().get('cid') !== id) return;
+                self.zIndex.bind(self)();
+            });
         },
 
         onAdd: function (model) {

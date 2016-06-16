@@ -30,6 +30,10 @@ define('io.ox/core/extPatterns/links', [
         _.extend(this, options);
 
         var self = this,
+            preRendered = {
+                a: $('<a>'),
+                i: $('<i>')
+            },
             click = function (e) {
                 e.preventDefault();
                 var node = $(this),
@@ -43,38 +47,38 @@ define('io.ox/core/extPatterns/links', [
                 var prio = _.device('smartphone') ? self.mobile : self.prio;
                 var icons = self.icon && baton.options.icons !== false;
                 var title = self.title || self.label;
-                var a = $('<a>')
-                    .addClass(self.cssClasses || 'io-ox-action-link')
-                    .attr({
-                        href: '#',
-                        tabindex: 1,
-                        'data-action': self.id,
-                        'draggable': options.draggable || false,
-                        'role': 'menuitem',
-                        'data-section': self.section || 'default',
-                        'data-prio': _.device('smartphone') ? (self.mobile || 'none') : (self.prio || 'lo'),
-                        'data-ref': self.ref
-                    });
+                var attr = {
+                    href: '#',
+                    tabindex: 1,
+                    'data-action': self.id,
+                    'draggable': options.draggable || false,
+                    'role': 'menuitem',
+                    'data-section': self.section || 'default',
+                    'data-prio': _.device('smartphone') ? (self.mobile || 'none') : (self.prio || 'lo'),
+                    'data-ref': self.ref
+                };
+                var a = preRendered.a.clone()
+                    .addClass(self.cssClasses || 'io-ox-action-link');
                 //in firefox draggable=false is not enough to prevent dragging...
                 if (!options.draggable && _.device('firefox')) {
-                    a.attr('ondragstart', 'return false;');
+                    attr.ondragstart = 'return false;';
                 }
 
                 // add icon or text? (icons are prefered over labels)
                 if (icons && prio === 'hi') {
                     // add icon and title attribut
-                    a.append($('<i>').addClass(self.icon));
-                    a.attr('title', self.title || self.label || '');
+                    a.append(preRendered.i.clone().addClass(self.icon));
+                    attr.title = self.title || self.label || '';
                 } else if (self.label) {
                     // add text. add title unless it matches content
                     a.append($.txt(self.label));
-                    if (self.label !== title) a.attr('title', title);
+                    if (self.label !== title) attr.title = title;
                 }
                 // has icon?
                 if (icons) a.addClass('no-underline');
                 // use tooltip?
                 if (!_.device('smartphone') && (icons && self.label) || self.title) {
-                    a.attr({
+                    attr = _.extend(attr, {
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
                         'data-animation': 'false',
@@ -82,13 +86,13 @@ define('io.ox/core/extPatterns/links', [
                         // tooltip removes title attribute
                         // therefore we always add arial-label to maintain screen reader support
                         'aria-label': self.title || self.label || null
-                    })
-                    .tooltip({ trigger: 'hover' })
-                    .on('dispose', function () {
-                        $(this).tooltip('hide');
                     });
+                    a.tooltip({ trigger: 'hover' })
+                        .on('dispose', function () {
+                            $(this).tooltip('hide');
+                        });
                 }
-                return a;
+                return a.attr(attr);
             };
 
         this.draw = this.draw || function (baton) {
@@ -246,7 +250,8 @@ define('io.ox/core/extPatterns/links', [
             $('<ul class="list-unstyled" role="menubar">')
             .addClass(extension.classes || '')
             .attr(extension.attributes || {})
-            .appendTo(node);
+            .appendTo(node),
+            $li = $('<li role="presentation">');
 
         return getLinks(extension, collection, baton, args)
             .always(function (items) {
@@ -257,11 +262,11 @@ define('io.ox/core/extPatterns/links', [
                     var link = item.link;
                     if (item.state === false) {
                         if (_.isFunction(link.drawDisabled)) {
-                            link.drawDisabled.call(bootstrapMode ? $('<li role="presentation">').appendTo(nav) : nav, baton);
+                            link.drawDisabled.call(bootstrapMode ? $li.clone().appendTo(nav) : nav, baton);
                             count++;
                         }
                     } else if (_.isFunction(link.draw)) {
-                        link.draw.call(bootstrapMode ? $('<li role="presentation">').appendTo(nav) : nav, baton);
+                        link.draw.call(bootstrapMode ? $li.clone().appendTo(nav) : nav, baton);
                         count++;
                     }
                 });
@@ -360,13 +365,14 @@ define('io.ox/core/extPatterns/links', [
 
     function injectDividers(node) {
         // loop over all items and visually group by "section"
-        var currentSection = '';
+        var currentSection = '',
+            $li = $('<li class="divider" role="presentation">');
         node.children('li').each(function () {
             var node = $(this), section = node.children('a').attr('data-section');
             // add divider?
             if (section === undefined) return;
             if (currentSection !== '' && currentSection !== section) {
-                node.before('<li class="divider" role="presentation">');
+                node.before($li);
             }
             currentSection = section;
         });
