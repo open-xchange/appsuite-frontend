@@ -23,8 +23,9 @@ define('io.ox/settings/accounts/settings/pane', [
     'io.ox/backbone/disposable',
     'io.ox/core/api/filestorage',
     'gettext!io.ox/settings/accounts',
+    'io.ox/backbone/mini-views/settings-list-view',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, listUtils, DisposableView, filestorageApi, gt) {
+], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, listUtils, DisposableView, filestorageApi, gt, ListView) {
 
     'use strict';
 
@@ -36,13 +37,40 @@ define('io.ox/settings/accounts/settings/pane', [
             }
         },
 
+        onAddSubmodule = function (e) {
+            e.preventDefault();
+            var submodule = e.data.submodule;
+            // looks like oauth?
+            if ('reauthorize' in submodule) {
+                var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
+                submodule.createInteractively(win);
+            } else {
+                submodule.createInteractively(e);
+            }
+        },
+
         drawAddButton = function () {
+            var submodules = _(api.submodules).filter(function (submodule) {
+                return !submodule.canAdd || submodule.canAdd.apply(this);
+            });
+
+            if (submodules.length === 0) return;
+
             return $('<div class="btn-group col-md-4 col-xs-12">').append(
                 $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
                     $.txt(gt('Add account')), $.txt(' '),
                     $('<span class="caret">')
                 ),
-                $('<ul class="dropdown-menu" role="menu">')
+                $('<ul class="dropdown-menu" role="menu">').append(
+                   _(submodules).map(function (submodule) {
+                       return $('<li role="presentation">').append(
+                           $('<a href="#" role="menuitem" tabindex="1">')
+                           .attr('data-actionname', submodule.actionName || submodule.id || '')
+                           .text(submodule.displayName)
+                           .on('click', { submodule: submodule }, onAddSubmodule)
+                       );
+                   })
+               )
             );
         },
 
@@ -82,11 +110,41 @@ define('io.ox/settings/accounts/settings/pane', [
             );
         },
 
+        drawIcon = (function () {
+            var icons = {
+                mail: 'fa-envelope',
+                xing: 'fa-xing',
+                twitter: 'fa-twitter',
+                google: 'fa-google',
+                yahoo: 'fa-yahoo',
+                linkedin: 'fa-linkedin',
+                dropbox: 'fa-dropbox',
+                msliveconnect: 'fa-windows'
+            };
+            return function (type) {
+                var icon = $('<i class="account-icon fa" aria-hidden="true">');
+                if (type === 'boxcom') {
+                    // there is no fitting icon forbox in fontawesome
+                    return icon
+                        .removeClass('fa')
+                        .css({
+                            'background-image': 'url(apps/themes/default/box_logo36.png)',
+                            'background-size': 'cover',
+                            height: '14px',
+                            width: '14px',
+                            'margin-top': '3px'
+                        });
+                }
+                icon.addClass(icons[type] || 'fa-circle');
+                return icon;
+            };
+        })(),
+
         AccountSelectView = DisposableView.extend({
 
             tagName: 'li',
 
-            className: 'widget-settings-view',
+            className: 'settings-list-item',
 
             events: {
                 'click [data-action="edit"]': 'onEdit',
@@ -106,15 +164,15 @@ define('io.ox/settings/accounts/settings/pane', [
                 });
 
                 self.$el.append(
-                    listUtils.widgetIcon(self.model.get('accountType')),
-                    listUtils.widgetTitle(title),
-                    listUtils.widgetControlls().append(
-                        self.model.get('id') !== 0 ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : '',
+                    drawIcon(self.model.get('accountType')),
+                    listUtils.makeTitle(title),
+                    listUtils.makeControls().append(
                         listUtils.appendIconText(
-                                listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
-                                gt('Edit'),
-                                'edit'
-                            )
+                            listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
+                            gt('Edit'),
+                            'edit'
+                        ),
+                        self.model.get('id') !== 0 ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : $('<div class="remove-placeholder">')
                     ),
                     // some Filestorage accounts may contain errors, if thats the case show them
                     // support for standard and oauth accounts
@@ -202,80 +260,24 @@ define('io.ox/settings/accounts/settings/pane', [
 
             function redraw() {
 
-                that.empty();
                 var allAccounts = api.getAll();
 
                 collection = keychainModel.wrap(allAccounts);
 
-                var AccountsView = Backbone.View.extend({
+                var $pane = drawPane(),
+                    accountsList = new ListView({
+                        tagName: 'ul',
+                        childView: AccountSelectView,
+                        collection: collection
+                    });
 
-                    initialize: function () {
-                        _.bindAll(this, 'render', 'onAdd');
-                        this.collection = collection;
+                $pane.append(accountsList.render().$el);
 
-                        this.collection.bind('add', this.render);
-                        this.collection.bind('remove', this.render);
-                    },
+                if (collection.length > 1) {
+                    $pane.append(drawRecoveryButtonHeadline(), drawRecoveryButton());
+                }
 
-                    render: function () {
-
-                        this.$el.empty().append(drawPane);
-
-                        if (this.collection.length > 1) {
-                            this.$el.find('.io-ox-accounts-settings').append(drawRecoveryButtonHeadline(), drawRecoveryButton());
-                        }
-
-                        this.$el.find('.widget-list').append(
-                            this.collection.map(function (item) {
-                                return new AccountSelectView({ model: item }).render().el;
-                            })
-                        );
-
-                        var submodules = _(api.submodules).filter(function (submodule) {
-                            return !submodule.canAdd || submodule.canAdd.apply(this);
-                        });
-
-                        // Enhance Add... options
-
-                        function add(e) {
-                            e.preventDefault();
-                            var submodule = e.data.submodule;
-                            // looks like oauth?
-                            if ('reauthorize' in submodule) {
-                                var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
-                                submodule.createInteractively(win);
-                            } else {
-                                submodule.createInteractively(e);
-                            }
-                        }
-
-                        this.$el.find('.dropdown-menu').append(
-                            _(submodules).map(function (submodule) {
-                                return $('<li role="presentation">').append(
-                                    $('<a href="#" role="menuitem" tabindex="1">')
-                                    .attr('data-actionname', submodule.actionName || submodule.id || '')
-                                    .text(submodule.displayName)
-                                    .on('click', { submodule: submodule }, add)
-                                );
-                            })
-                        );
-
-                        var toggle = this.$el.find('.dropdown-toggle').dropdown();
-                        if (submodules.length === 0) toggle.hide();
-
-                        return this;
-                    },
-
-                    onAdd: function (args) {
-                        require(['io.ox/settings/accounts/settings/createAccountDialog'], function (accountDialog) {
-                            accountDialog.createAccountInteractively(args);
-                        });
-                    }
-                });
-
-                var accountsList = new AccountsView();
-
-                that.append(accountsList.render().el);
+                that.empty().append($pane);
             }
 
             redraw();

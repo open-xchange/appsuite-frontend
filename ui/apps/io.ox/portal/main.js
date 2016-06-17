@@ -324,7 +324,6 @@ define('io.ox/portal/main', [
             }
         })
         .on('sort', function () {
-            this.sort({ silent: true });
             // loop over collection for resorting DOM tree
             this.each(function (model) {
                 // just re-append all in proper order

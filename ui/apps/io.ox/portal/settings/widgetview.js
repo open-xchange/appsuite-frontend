@@ -28,7 +28,7 @@ define('io.ox/portal/settings/widgetview', [
 
         tagName: 'li',
 
-        className: 'widget-settings-view',
+        className: 'settings-list-item',
 
         events: {
             'click [data-action="edit"]': 'onEdit',

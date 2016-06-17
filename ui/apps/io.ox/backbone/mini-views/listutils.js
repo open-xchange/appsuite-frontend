@@ -34,55 +34,19 @@ define('io.ox/backbone/mini-views/listutils', [
             }
             return target.text(text);
         },
-        widgetIcon: function (type) {
-            var icon = $('<i class="widget-icon fa" aria-hidden="true">');
-            switch (type) {
-                case 'mail':
-                    icon.addClass('fa-envelope');
-                    break;
-                case 'xing':
-                    icon.addClass('fa-xing');
-                    break;
-                case 'twitter':
-                    icon.addClass('fa-twitter');
-                    break;
-                case 'google':
-                    icon.addClass('fa-google');
-                    break;
-                case 'yahoo':
-                    icon.addClass('fa-yahoo');
-                    break;
-                case 'linkedin':
-                    icon.addClass('fa-linkedin');
-                    break;
-                case 'dropbox':
-                    icon.addClass('fa-dropbox');
-                    break;
-                case 'msliveconnect':
-                    icon.addClass('fa-windows');
-                    break;
-                case 'boxcom':
-                    // there is no fitting icon for box in fontawesome
-                    icon.removeClass('fa');
-                    icon.css({
-                        'background-image': 'url(apps/themes/default/box_logo36.png)',
-                        'background-size': 'cover',
-                        height: '14px',
-                        width: '14px',
-                        'margin-top': '3px'
-                    });
-                    break;
-                default:
-                    icon.addClass('fa-circle');
-                    break;
-            }
-            return icon;
-        },
         widgetTitle: function (title) {
+            console.warn('This is only user for old lists. Please use "io.ox/backbone/mini-views/settings-list-view" or "listutils.makeTitle" instead.');
             return $('<span class="widget-title pull-left">').text(title);
         },
+        makeTitle: function (title) {
+            return $('<span class="list-item-title">').text(title);
+        },
         widgetControlls: function () {
+            console.warn('This is only user for old lists. Please use "io.ox/backbone/mini-views/settings-list-view" or "listutils.makeControls" instead.');
             return $('<div class="widget-controls">');
+        },
+        makeControls: function () {
+            return $('<div class="list-item-controls">');
         },
         controlsDelete: function (opt) {
             opt = _.extend({

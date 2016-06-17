@@ -22,10 +22,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'gettext!io.ox/mail',
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'io.ox/backbone/mini-views/listutils',
+    'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/backbone/disposable',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/mail/mailfilter/settings/style'
-], function (ext, api, mailfilterModel, dialogs, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS, listUtils, DisposableView) {
+], function (ext, api, mailfilterModel, dialogs, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS, listUtils, ListView, DisposableView) {
 
     'use strict';
 
@@ -218,7 +219,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 FilterSettingsView = DisposableView.extend({
                     tagName: 'li',
 
-                    className: 'widget-settings-view',
+                    className: 'settings-list-item',
 
                     saveTimeout: 0,
 
@@ -253,11 +254,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             'data-id': self.model.get('id')
                         })
                         .addClass('draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
-                        .append(
+                        .empty().append(
 
                             listUtils.dragHandle(title, gt('Use cursor keys to change the item position. Virtual cursor mode has to be disabled.'), this.model.collection.length <= 1 ? 'hidden' : ''),
-                            titleNode = listUtils.widgetTitle(title),
-                            listUtils.widgetControlls().append(function () {
+                            titleNode = listUtils.makeTitle(title),
+                            listUtils.makeControls().append(function () {
                                 var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
                                 point.invoke('draw', $(this), self.model);
                             })
@@ -297,7 +298,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         //yell on reject
                         settingsUtil.yellOnReject(
                             api.update(self.model).done(function () {
-                                self.$el.toggleClass('active disabled');
+                                self.$el.toggleClass('active', self.model.get('active'));
+                                self.$el.toggleClass('disabled', !self.model.get('active'));
                                 $(e.target).text(self.model.get('active') ? gt('Disable') : gt('Enable'));
                             })
                         );
@@ -437,8 +439,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 MailfilterEdit = Backbone.View.extend({
 
                     initialize: function () {
-                        _.bindAll(this, 'render', 'onAdd', 'renderFilter');
-                        this.collection = collection.bind('add remove', this.renderFilter);
+                        this.collection = collection;
                     },
 
                     render: function () {
@@ -451,8 +452,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 })
                             ),
                             $('<div class="clearfix">'),
-                            $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId),
-                            $('<ol>').addClass('list-group list-unstyled widget-list ui-sortable')
+                            $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId)
                         );
                         this.renderFilter();
                         return this;
@@ -464,12 +464,25 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         if (this.collection.length === 0) {
                             list.append($('<div>').text(gt('There is no rule defined')));
                         } else {
-                            this.collection.each(function (item) {
-                                list.append(
-                                    new FilterSettingsView({ model: item }).render().el
-                                );
-                            });
-                            this.makeSortable();
+                            this.$el.append(new ListView({
+                                collection: this.collection,
+                                sortable: true,
+                                containment: this.$el,
+                                notification: this.$('#' + notificationId),
+                                childView: FilterSettingsView,
+                                update: function () {
+                                    var arrayOfFilters = $node.find('li[data-id]'),
+                                        data = _.map(arrayOfFilters, function (single) {
+                                            return parseInt($(single).attr('data-id'), 10);
+                                        });
+
+                                    //yell on reject
+                                    settingsUtil.yellOnReject(
+                                        api.reorder(data)
+                                    );
+                                    updatePositionInCollection(collection, data);
+                                }
+                            }).render().$el);
                         }
                     },
 
@@ -483,33 +496,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             obj: factory.create(mailfilterModel.protectedMethods.provideEmptyModel())
                         };
                         createExtpointForSelectedFilter(this.el, args, config);
-                    },
-
-                    makeSortable: function () {
-                        var list = this.$el.find('ol');
-                        list.sortable({
-                            containment: list,
-                            axis: 'y',
-                            handle: '.drag-handle',
-                            scroll: true,
-                            delay: 150,
-                            start: function (e, ui) {
-                                ui.item.attr('aria-grabbed', 'true');
-                            },
-                            stop: function (e, ui) {
-                                ui.item.attr('aria-grabbed', 'false');
-                                var arrayOfFilters = $node.find('li[data-id]'),
-                                    data = _.map(arrayOfFilters, function (single) {
-                                        return parseInt($(single).attr('data-id'), 10);
-                                    });
-
-                                //yell on reject
-                                settingsUtil.yellOnReject(
-                                    api.reorder(data)
-                                );
-                                updatePositionInCollection(collection, data);
-                            }
-                        });
                     }
 
                 });
