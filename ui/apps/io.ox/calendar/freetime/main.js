@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/calendar/freetime/main', [
+/*define('io.ox/calendar/freetime/main', [
     'io.ox/backbone/disposable',
     'io.ox/calendar/freetime/model',
     'io.ox/calendar/freetime/participantsView',
@@ -124,4 +124,4 @@ define('io.ox/calendar/freetime/main', [
         // just for convenience purposes
         FreetimeModel:  FreetimeModel
     };
-});
+});*/

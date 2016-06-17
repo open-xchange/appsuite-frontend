@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/calendar/freetime/timeView', [
+/*define('io.ox/calendar/freetime/timeView', [
     'io.ox/backbone/disposable',
     'io.ox/core/extensions',
     'gettext!io.ox/calendar',
@@ -430,13 +430,13 @@ define('io.ox/calendar/freetime/timeView', [
             }
             day.startOf('day');
             this.model.set('currentDay', day);
-        },
+        },*/
 
          /**
          * handler for clickevents in toolbar
          * @param  { MouseEvent } e Clickevent
          */
-        onControlView: function (e) {
+        /*onControlView: function (e) {
             e.preventDefault();
             var currentTarget = $(e.currentTarget);
 
@@ -452,4 +452,4 @@ define('io.ox/calendar/freetime/timeView', [
             this.trigger('onRefresh');
         }
     });
-});
+});*/

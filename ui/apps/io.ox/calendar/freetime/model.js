@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar', 'io.ox/participants/model'], function (settings, participantsModel) {
+/*define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar', 'io.ox/participants/model'], function (settings, participantsModel) {
 
     'use strict';
 
@@ -30,4 +30,4 @@ define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar', 'io.ox/parti
     });
 
     return model;
-});
+});*/

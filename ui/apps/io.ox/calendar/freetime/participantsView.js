@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/calendar/freetime/participantsView', [
+/*define('io.ox/calendar/freetime/participantsView', [
     'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/core/extensions',
@@ -98,4 +98,4 @@ define('io.ox/calendar/freetime/participantsView', [
             this.pointBody.invoke('draw', this.bodyNode, baton);
         }
     });
-});
+});*/
