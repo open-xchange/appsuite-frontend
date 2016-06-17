@@ -59,7 +59,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 folder_id = model.get('folder_id'),
                 link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id')),
                 dl = $('<dl>'),
-                isAttachmentView = !_.isEmpty(model.get('virtual'));
+                isAttachmentView = !_.isEmpty(model.get('com.openexchange.file.storage.mail.mailMetadata'));
 
             dl.append(
                 // filename
@@ -130,7 +130,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 }
             } else {
                 // All Attachment View
-                var mail = model.get('virtual');
+                var mail = model.get('com.openexchange.file.storage.mail.mailMetadata');
                 var driveMail = settings.get('folder/mailattachments', {});
                 dl.append(
                     $('<dt>').text(gt('Folder')),

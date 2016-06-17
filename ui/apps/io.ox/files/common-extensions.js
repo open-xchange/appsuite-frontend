@@ -69,8 +69,9 @@ define('io.ox/files/common-extensions', [
         },
 
         mailSubject: function (baton, ellipsis) {
-            if (!baton.data.virtual || !_.has(baton.data.virtual, 'subject')) return;
-            var subject = baton.data.virtual.subject || '';
+            if (!_.has(baton.data, 'com.openexchange.file.storage.mail.mailMetadata')) return;
+            var data = baton.data['com.openexchange.file.storage.mail.mailMetadata'],
+                subject = util.getSubject(data.subject || '');
             // fix long names
             if (ellipsis) subject = _.ellipsis(subject, ellipsis);
             // make underscore wrap as well
@@ -81,9 +82,10 @@ define('io.ox/files/common-extensions', [
         },
 
         mailFrom: function (baton, ellipsis) {
-            var driveMail = settings.get('folder/mailattachments', {});
-            if (!baton.data.virtual) return;
-            var from = (baton.app.folder.get() === driveMail.sent) ? baton.data.virtual.to[0] : baton.data.virtual.from[0];
+            if (!_.has(baton.data, 'com.openexchange.file.storage.mail.mailMetadata')) return;
+            var data = baton.data['com.openexchange.file.storage.mail.mailMetadata'],
+                driveMail = settings.get('folder/mailattachments', {}),
+                from = (baton.app.folder.get() === driveMail.sent) ? data.to[0] : data.from[0];
             from = util.getDisplayName(from);
             // fix long names
             if (ellipsis) from = _.ellipsis(from, ellipsis);
