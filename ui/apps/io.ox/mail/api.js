@@ -1895,6 +1895,8 @@ define('io.ox/mail/api', [
     api.collectionLoader.noSelect = function (options) {
         // special handling for top-level mail account folders (e.g. bug 34818)
         if (/^default\d+$/.test(options.folder)) return true;
+        // allow virtual/all
+        if (options.folder === 'default0/virtual/all') return false;
         // check read access
         var model = folderAPI.pool.getModel(options.folder);
         return !model.can('read');
