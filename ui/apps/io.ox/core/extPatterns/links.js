@@ -372,7 +372,7 @@ define('io.ox/core/extPatterns/links', [
             // add divider?
             if (section === undefined) return;
             if (currentSection !== '' && currentSection !== section) {
-                node.before($li);
+                node.before($li.clone());
             }
             currentSection = section;
         });
