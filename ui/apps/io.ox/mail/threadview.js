@@ -270,29 +270,25 @@ define('io.ox/mail/threadview', [
             this.$el.find('.thread-view-list').show();
 
             // draw thread list
-            var messages = this.$messages;
-            var self = this;
-            var threadId = this.collection.first().get('cid');
-            var autoOpenIndex = this.collection.reduce(function (acc, model, index) {
-                return util.isUnseen(model.toJSON()) ? index : acc;
-            }, 0);
-            this.collection.reduce(function (acc, model, index) {
-                return acc.then(function (id) {
-                    var def = $.Deferred();
-                    _.defer(function () {
-                        if (self.collection.first().get('cid') !== id) return def.reject();
-                        messages.append(
-                            self.renderListItem.bind(self)(model)
-                        );
-                        if (autoOpenIndex === index) self.autoSelectMail.bind(self)();
-                        def.resolve(id);
-                    });
-                    return def;
-                });
-            }, $.when(threadId)).then(function (id) {
-                if (self.collection.first().get('cid') !== id) return;
-                self.zIndex.bind(self)();
-            });
+            var self = this,
+                threadId = this.collection.first().get('cid'),
+                autoOpenModel = this.collection.reduce(function (acc, model) {
+                    return util.isUnseen(model.toJSON()) ? model : acc;
+                }, this.collection.first());
+
+            function renderItem(list, finalCallback) {
+                var model = list.shift();
+                if (threadChanged()) return;
+                self.$messages.append(self.renderListItem(model));
+                if (autoOpenModel === model) self.autoSelectMail();
+                if (list.length) setTimeout(renderItem, 0, list, finalCallback); else finalCallback();
+            }
+
+            function threadChanged() {
+                return self.collection.first().get('cid') !== threadId;
+            }
+
+            renderItem(this.collection.toArray(), this.zIndex.bind(this));
         },
 
         onAdd: function (model) {
