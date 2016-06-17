@@ -879,7 +879,7 @@ define('io.ox/files/share/permissions', [
 
             });
 
-            if (folderUtil.can('changepermissions', objModel.attributes)) {
+            if (objModel.isAdmin()) {
                 dialog.getFooter().prepend(
                     $('<div>').addClass('form-group cascade').append(
                         $('<label>').addClass('checkbox-inline').text(gt('Send notification')).prepend(
