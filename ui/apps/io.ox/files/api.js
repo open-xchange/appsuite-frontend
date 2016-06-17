@@ -360,7 +360,7 @@ define('io.ox/files/api', [
     // guess 23 is "meta"
     var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707';
 
-    var driveMail = settings.get('folder/mailattachments', {});
+    var driveMail = coreSettings.get('folder/mailattachments', {});
     if (!_.isEmpty(driveMail)) allColumns = allColumns + ',7030';
     /**
      * map error codes and text phrases for user feedback
