@@ -80,14 +80,14 @@ define('io.ox/backbone/mini-views/listutils', [
                 'data-action': 'toggle'
             });
         },
-        dragHandle: function (title, label, statusClass) {
+        dragHandle: function (title, statusClass) {
             return $('<a>').addClass('drag-handle ' + statusClass)
             .attr({
                 href: '#',
                 'title': title,
-                'aria-label': label,
-                role: 'button',
-                tabindex: 1
+                'aria-hidden': true,
+                tabindex: -1,
+                role: 'button'
             })
             .append($('<i class="fa fa-bars" aria-hidden="true">'))
             .on('click', $.preventDefault);

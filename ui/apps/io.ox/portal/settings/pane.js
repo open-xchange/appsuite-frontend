@@ -189,14 +189,12 @@ define('io.ox/portal/settings/pane', [
         draw: function (baton) {
             if (_.device('smartphone')) return;
 
-            var data = baton.model.toJSON(),
-                point = ext.point(baton.view.point),
-                title = widgets.getTitle(data, point.prop('title'));
+            var data = baton.model.toJSON();
             this
                 .addClass(data.protectedWidget && data.protectedWidget === true ? ' protected' : ' draggable')
                 .append(
                     data.protectedWidget && data.protectedWidget === true ? $() :
-                    listUtils.dragHandle(gt('Drag to reorder widget'), title + ', ' + gt('Use cursor keys to change the item position. Virtual cursor mode has to be disabled.'), baton.model.collection.length <= 1 ? 'hidden' : '')
+                    listUtils.dragHandle(gt('Drag to reorder widget'), baton.model.collection.length <= 1 ? 'hidden' : '')
                 );
         }
     });

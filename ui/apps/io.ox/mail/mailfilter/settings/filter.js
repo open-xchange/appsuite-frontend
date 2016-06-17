@@ -256,7 +256,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         .addClass('draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
                         .empty().append(
 
-                            listUtils.dragHandle(title, gt('Use cursor keys to change the item position. Virtual cursor mode has to be disabled.'), this.model.collection.length <= 1 ? 'hidden' : ''),
+                            listUtils.dragHandle(gt('Drag to reorder filter rules'), this.model.collection.length <= 1 ? 'hidden' : ''),
                             titleNode = listUtils.makeTitle(title),
                             listUtils.makeControls().append(function () {
                                 var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
@@ -286,8 +286,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         'click [data-action="edit"]': 'onEdit',
                         'click [data-action="toggle-process-subsequent"]': 'onToggleProcessSub',
                         'click [data-action="edit-vacation"]': 'onEditVacation',
-                        'click [data-action="edit-autoforward"]': 'onEditAutoforward',
-                        'keydown .drag-handle': 'dragViaKeyboard'
+                        'click [data-action="edit-autoforward"]': 'onEditAutoforward'
                     },
 
                     onToggle: function (e) {
@@ -390,49 +389,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     onEditAutoforward: function (e) {
                         e.preventDefault();
                         baton.tree.trigger('virtual', 'virtual/settings/' + 'io.ox/autoforward', {});
-                    },
-
-                    dragViaKeyboard: function (e) {
-                        var self = this,
-                            list = this.$el.closest('.widget-list'),
-                            items = list.children(),
-                            index = items.index(this.$el),
-                            notification = $node.find('#' + notificationId);
-
-                        function keyHandle(dir) {
-                            e.preventDefault();
-                            if (dir === 'up') {
-                                self.$el.insertBefore(self.$el.prev());
-                            } else {
-                                self.$el.insertAfter(self.$el.next());
-                            }
-                            clearTimeout(self.saveTimeout);
-                            self.saveTimeout = setTimeout(saveOrder, 500);
-                            self.$el.find('.drag-handle').focus();
-                            notification.text(gt('the item has been moved'));
-                        }
-
-                        function saveOrder() {
-                            var data = _.map(list.children(), function (single) {
-                                return parseInt($(single).attr('data-id'), 10);
-                            });
-                            //yell on reject
-                            settingsUtil.yellOnReject(
-                                api.reorder(data)
-                            );
-                            updatePositionInCollection(collection, data);
-                        }
-
-                        switch (e.which) {
-                            case 38:
-                                if (index > 0) keyHandle('up');
-                                break;
-                            case 40:
-                                if (index < items.length) keyHandle('down');
-                                break;
-                            default:
-                                break;
-                        }
                     }
                 });
 

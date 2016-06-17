@@ -52,7 +52,7 @@ define('io.ox/backbone/mini-views/settings-list-view', [
 
         events: {
             'click *[data-action]': 'onClickAction',
-            'keydown .drag-handle': 'onKeydownDragHandle'
+            'keydown .settings-list-item': 'onKeydownDragHandle'
         },
 
         initialize: function (opt) {
@@ -129,7 +129,19 @@ define('io.ox/backbone/mini-views/settings-list-view', [
                         sortable: self.opt.sortable
                     }, self.getChildOptions(model)));
 
-                self.$el.append(view.render().$el.attr(self.opt.dataIdAttribute, id));
+                self.$el.append(
+                    view.render().$el.attr(self.opt.dataIdAttribute, id).attr({
+                        title: view.$('.list-item-title').text()
+                    })
+                );
+
+                if (self.opt.sortable) {
+                    var descriptionId = _.uniqueId('aria-description-');
+                    view.$el.attr({
+                        'tabindex': 1,
+                        'aria-describedby': descriptionId
+                    }).prepend($('<div class="sr-only">').attr('id', descriptionId).text(gt('Use cursor keys to reorder items')));
+                }
             });
         },
 
@@ -168,9 +180,8 @@ define('io.ox/backbone/mini-views/settings-list-view', [
 
         onKeydownDragHandle: function (e) {
             var self = this,
-                node = $(e.currentTarget),
+                current = $(e.currentTarget),
                 items = self.$el.children('.draggable'),
-                current = node.parent(),
                 index = items.index(current),
                 id = current.attr(this.opt.dataIdAttribute);
 
@@ -178,7 +189,7 @@ define('io.ox/backbone/mini-views/settings-list-view', [
                 var newText = gt('%1$s moved to position %2$s of %3$s', current.find('.list-item-title').text(), curIndex + 1, items.length),
                     oldText = self.opt.notification.text();
                 self.opt.update.call(self);
-                self.$el.find('[' + self.opt.dataIdAttribute + '="' + id + '"] .drag-handle').focus();
+                self.$el.find('[' + self.opt.dataIdAttribute + '="' + id + '"]').focus();
                 // the selection of aria-relevant is important, because if the same text should be read to the user, aria-relevant="all" is required
                 // if other text will be inserted in the notification, "all" would cause the screenreader to read the old and the new text
                 self.opt.notification
