@@ -11,36 +11,33 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], function (filter, gt) {
+define(['io.ox/mail/autoforward/settings/filter'], function (filter) {
 
     'use strict';
 
-    var resultWithFlag = { timestamp: 1378223251586,
-        'data': [{
-            'position': 1,
-            'id': 1,
-            'flags': ['autoforward'],
-            'test': {
-                'id': 'true'
-            },
-            'actioncmds': [{
-                'to': 'tester@open-xchange.com',
-                'id': 'redirect'
-            },
-            {
-                'id': 'keep'
-            }],
-            'rulename': 'autoforward',
-            'active': false
-        }]
-    },
-    filtermodel = { id: 1,
-        active: false,
-        forwardmail: 'tester@open-xchange.com',
-        userMainEmail: 'tester@open-xchange.com'
-    },
-    multiValues = {},
-    model;
+    var resultWithFlag = {
+            timestamp: 1378223251586,
+            'data': [
+                {
+                    'position': 1,
+                    'id': 1,
+                    'flags': ['autoforward'],
+                    'test': {
+                        'id': 'true'
+                    },
+                    'actioncmds': [{
+                        'to': 'tester@open-xchange.com',
+                        'id': 'redirect'
+                    }, {
+                        'id': 'keep'
+                    }],
+                    'rulename': 'autoforward',
+                    'active': false
+                }
+            ]
+        },
+        multiValues = {},
+        model;
 
     describe('Mailfilter Autoforward', function () {
 

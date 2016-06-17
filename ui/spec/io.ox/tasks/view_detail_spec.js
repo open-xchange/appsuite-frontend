@@ -31,7 +31,7 @@ define([
             var node;
             beforeEach(function () {
                 this.server.responses = this.server.responses.filter(function (r) {
-                    return !(r.method === 'PUT' &&  String(r.url) === '/api\\/multiple\\?/');
+                    return !(r.method === 'PUT' && String(r.url) === '/api\\/multiple\\?/');
                 });
                 this.server.respondWith('PUT', /api\/multiple\?/, function (xhr) {
                     var actions = JSON.parse(xhr.requestBody),
@@ -66,11 +66,11 @@ define([
                 expect(node.find('.task-progress')).to.have.length(1);
                 expect(node.find('.state')).to.have.length(1);
                 expect(node.find('.note')).to.have.length(1);
-                //recurrence/datecompleted, start_date, target_duration, actual_duration, target_costs, actual_costs, trip_meter, billing_information, companies
+                // recurrence/datecompleted, start_date, target_duration, actual_duration, target_costs, actual_costs, trip_meter, billing_information, companies
                 expect(node.find('.task-details').children()).to.have.length(16);
             });
 
-            it('should draw every participant', function (done) {//find out why this fails in phantom, chrome is fine
+            it('should draw every participant', function (done) { // find out why this fails in phantom, chrome is fine
 
                 var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
@@ -89,7 +89,7 @@ define([
                 waitsFor(function () {
                     return node.find('.attachments-container').children().length === 4;
                 }).then(function () {
-                    expect(node.find('.attachments-container').children().length).to.equal(4);//one label, two attachments, one all dropdown
+                    expect(node.find('.attachments-container').children().length).to.equal(4); // one label, two attachments, one all dropdown
                     done();
                 });
             });

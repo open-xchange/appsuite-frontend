@@ -23,7 +23,7 @@ define(['io.ox/portal/util', 'settings!io.ox/portal'], function (util, settings)
                 expect(util.getWidgets().length).to.equal(0);
                 settings.set('widgets/user', {
                     dummyWidget: { props: {} }
-                }),
+                });
                 expect(util.getWidgets().length).to.equal(1);
             });
         });

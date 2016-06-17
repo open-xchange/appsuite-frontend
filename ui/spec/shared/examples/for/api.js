@@ -62,8 +62,8 @@ define('shared/examples/for/api', [], function () {
                 describe.skip('with default events', function () {
                     beforeEach(function () {
                         this.server.autoRespond = false;
-                        this.server.respondWith("PUT", /.*action=new&/, function (xhr) {
-                            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data": 1337}');
+                        this.server.respondWith('PUT', /.*action=new&/, function (xhr) {
+                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"data": 1337}');
                         });
                     });
 

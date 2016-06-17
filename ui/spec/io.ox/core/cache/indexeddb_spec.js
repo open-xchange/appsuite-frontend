@@ -13,8 +13,7 @@
 define(['io.ox/core/cache/indexeddb'], function (indexeddb) {
     describe('The IndexedDB', function () {
         //FIXME: indexeddb does return undefined, if browser doesn’t support it
-        if (!indexeddb)
-            return;
+        if (!indexeddb) return;
         beforeEach(function (done) {
             indexeddb.clear().done(done);
         });

@@ -14,19 +14,19 @@
 //contains matchers for comparing numbers
 if (jasmine) {
     var mathMatchers = {
-            //used to compare to numbers
-            toBeGreaterOrEqualTo: function (number) {
-                var notText = this.isNot ? ' not' : '';
-                this.message = function () { return 'Expected ' + JSON.stringify(this.actual) + notText + ' to be greater or equal to ' + key + ' .'; };
-                return (this.actual >= number);
-            },
-            //used to compare to numbers
-            toBeLessOrEqualTo: function (number) {
-                var notText = this.isNot ? ' not' : '';
-                this.message = function () { return 'Expected ' + JSON.stringify(this.actual) + notText + ' to be less or equal to ' + key + ' .'; };
-                return (this.actual <= number);
-            }
-        };
+        //used to compare to numbers
+        toBeGreaterOrEqualTo: function (number) {
+            var notText = this.isNot ? ' not' : '';
+            this.message = function () { return 'Expected ' + JSON.stringify(this.actual) + notText + ' to be greater or equal to ' + number + ' .'; };
+            return (this.actual >= number);
+        },
+        //used to compare to numbers
+        toBeLessOrEqualTo: function (number) {
+            var notText = this.isNot ? ' not' : '';
+            this.message = function () { return 'Expected ' + JSON.stringify(this.actual) + notText + ' to be less or equal to ' + number + ' .'; };
+            return (this.actual <= number);
+        }
+    };
 
     beforeEach(function () {
         this.addMatchers(mathMatchers);

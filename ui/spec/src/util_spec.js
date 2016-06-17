@@ -204,9 +204,9 @@ define([], function () {
 
         it.skip('_.mythrottle', function (done) {
             //TODO: implement using fake timer
-            var finished,
+            var // finished,
                 //now = new Date(),
-                counter = 0,
+                //counter = 0,
                 counterrepaint = 0,
                 debounced = _.mythrottle(function () {
                     //console.warn((new Date() - now), 'repaint: debounced at ', counter);
@@ -352,10 +352,11 @@ define([], function () {
 
         describe('_.toHash', function () {
             var list = [
-                { id: 'A1', value: 'V1' },
-                { id: 'A1', value: 'V2' },
-                { id: 'A2', value: 'V3' }
-            ], hashmap = _.toHash(list, 'id');
+                    { id: 'A1', value: 'V1' },
+                    { id: 'A1', value: 'V2' },
+                    { id: 'A2', value: 'V3' }
+                ],
+                hashmap = _.toHash(list, 'id');
             it('should always return a array', function () {
                 expect(_.toHash()).to.be.a('object');
             });

@@ -42,7 +42,7 @@ define([
                     expect(util.getChannel('(01701) 23456-78')).to.equal('phone');
                 });
 
-                it('should correctly remove "' + util.getChannelSuffixes().msisdn +  '" typesuffix from data', function () {
+                it('should correctly remove "' + util.getChannelSuffixes().msisdn + '" typesuffix from data', function () {
 
                     var suffix = util.getChannelSuffixes().msisdn,
                         mail = {

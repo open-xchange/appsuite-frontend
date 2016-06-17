@@ -74,12 +74,7 @@ define([
 
                     //beforeEach(util.openDropdown);
 
-                    function getDropdown () {
-                        return $('.autocomplete-popup>.scrollable-pane').children();
-                    }
-
                     it('is referenced', function () {
-                        debugger;
                         expect(!!this.vars.nodes.container).to.equal(true);
                     });
                     it('is part of the dom', function () {

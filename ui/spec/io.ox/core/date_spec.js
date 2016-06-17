@@ -11,11 +11,11 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-
+/* global D:true */
+/* eslint no-multi-spaces: off */
 /* jshint ignore:start */
 
-define(['io.ox/core/date', 'io.ox/core/extensions'],
-function (date, ext) {
+define(['io.ox/core/date'], function (date) {
 
     'use strict';
 

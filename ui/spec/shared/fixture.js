@@ -12,7 +12,7 @@
  */
 
 define('fixture', {
-    load: function (name, parentRequire, load, config) {
+    load: function (name, parentRequire, load) {
         if (name.substr(-5, 5) === '.json') {
             return $.getJSON('/base/spec/fixtures/' + name).then(
                 load,

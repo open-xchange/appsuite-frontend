@@ -18,37 +18,37 @@ define('spec/shared/io.ox/search/util', [
 ], function (autocompleteFixture, queryFixture, caputil, waitsFor) {
 
     // inject logger function for test object
-    var log = function (test) {
-        test.logdata = [{
-            label: 'start',
-            time: new Date().getTime()
-        }];
-        test.log = function (id) {
-            var tmp = {};
-            this.logdata.push({
-                label: (id || 'step'),
-                time: new Date().getTime() - (_.last(this.logdata).time)
-            });
-        }
-    };
+    // var log = function (test) {
+    //     test.logdata = [{
+    //         label: 'start',
+    //         time: new Date().getTime()
+    //     }];
+    //     test.log = function (id) {
+    //         var tmp = {};
+    //         this.logdata.push({
+    //             label: (id || 'step'),
+    //             time: new Date().getTime() - (_.last(this.logdata).time)
+    //         });
+    //     }
+    // };
 
     var setupFakeServer = function () {
         var server = this.server;
         server.respondWith('PUT', /api\/find\?action=autocomplete/, function (xhr) {
-            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                JSON.stringify({timestamp: 1378223251586, data: autocompleteFixture.data})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                JSON.stringify({ timestamp: 1378223251586, data: autocompleteFixture.data })
             );
         });
         server.respondWith('PUT', /api\/find\?action=query/, function (xhr) {
-            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                JSON.stringify({timestamp: 1378223251586, data: queryFixture.data})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                JSON.stringify({ timestamp: 1378223251586, data: queryFixture.data })
             );
         });
     };
 
     // async setup loads app and and add some variables to test context
     // should be called with 'beforeEachEnsure'
-    var startApp = function (context) {
+    var startApp = function () {
         var def = $.Deferred(),
             self = this;
         // disabled: timeout
@@ -82,7 +82,6 @@ define('spec/shared/io.ox/search/util', [
         return def;
     };
 
-
     // DOM helpers
 
     var dropdownLoaded = function (done) {
@@ -100,8 +99,8 @@ define('spec/shared/io.ox/search/util', [
     };
 
     var openDropdown = function (done) {
-        var def = $.Deferred(),
-            self = this;
+        // var def = $.Deferred(),
+        //     self = this;
         // in case already opened
         // if ($('.autocomplete-popup>.scrollable-pane').children().length)
         //     return def.resolve();
@@ -110,7 +109,7 @@ define('spec/shared/io.ox/search/util', [
         var field = this.vars.nodes.toolbar.find('.search-field');
         field.val('t');
         field.trigger(
-            $.Event('keyup', { keyCode: 80})
+            $.Event('keyup', { keyCode: 80 })
         );
 
         //done.call(this);
@@ -118,10 +117,10 @@ define('spec/shared/io.ox/search/util', [
     };
 
     var closeDropdown = function () {
-            $().find('.search-field')
-            .trigger(
-                $.Event('keydown', { which: 27, keyCode: 27})
-            );
+        $().find('.search-field')
+        .trigger(
+            $.Event('keydown', { which: 27, keyCode: 27 })
+        );
     };
 
     var selectFilter = function () {
@@ -137,7 +136,6 @@ define('spec/shared/io.ox/search/util', [
         openDropdown: openDropdown,
         closeDropdown: closeDropdown,
         selectFilter: selectFilter
-
-    }
+    };
 
 });
