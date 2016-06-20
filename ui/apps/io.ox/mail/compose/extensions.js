@@ -444,6 +444,7 @@ define('io.ox/mail/compose/extensions', [
 
                     view.notificationModel = new ShareModel({});
                     view.shareAttachmentsIsActive = function () {
+                        if (_.isEmpty(view.getValidModels())) return false;
                         var actualAttachmentSize = 0,
                             threshold = settings.get('compose/shareAttachments/threshold', 0),
                             thresholdExceeded;
@@ -460,9 +461,11 @@ define('io.ox/mail/compose/extensions', [
 
                         _.each(view.point.keys(), function (id) {
                             if (view.shareAttachmentsIsActive()) {
+                                view.settingsModel.set('enable', true);
                                 view.point.enable(id);
                                 view.$el.addClass('show-share-attachments');
                             } else if (id !== 'renderSwitch') {
+                                view.settingsModel.set('enable', false);
                                 view.point.disable(id);
                                 view.$el.removeClass('show-share-attachments');
                             }
