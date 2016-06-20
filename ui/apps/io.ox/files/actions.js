@@ -767,6 +767,15 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'open',
         index: index += 100,
+        prio: 'lo',
+        mobile: 'hi',
+        label: gt('Open in browser'),
+        ref: 'io.ox/files/actions/open'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'openviewer',
+        index: index += 100,
         prio: 'hi',
         mobile: 'hi',
         label: gt('View'),

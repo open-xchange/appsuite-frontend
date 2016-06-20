@@ -215,6 +215,14 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'export',
                     ref: 'io.ox/files/actions/download'
                 },
+                'open': {
+                    prio: 'lo',
+                    mobile: 'hi',
+                    icon: 'fa fa-download',
+                    label: gt('Open attachment'),
+                    section: 'export',
+                    ref: 'io.ox/files/actions/open'
+                },
                 'print': {
                     prio: 'lo',
                     mobile: 'lo',
