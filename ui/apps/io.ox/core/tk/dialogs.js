@@ -202,7 +202,7 @@ define('io.ox/core/tk/dialogs',
                         if (items.length) {
                             e.preventDefault();
                             focus = $(document.activeElement);
-                            index = (items.index(focus) >= 0) ? items.index(focus) : 0;
+                            index = items.index(focus);
                             index += (e.shiftKey) ? -1 : 1;
 
                             if (index >= items.length) {
