@@ -84,7 +84,7 @@ define('io.ox/core/pdf/pdfdocument', [
         /**
          * Path for image resources, mainly for annotation icons. Include trailing slash.
          */
-        PDFJS.imageResourcesPath = ox.base + '/apps/3rd.party/pdfjs/web/images/';
+        PDFJS.imageResourcesPath = ox.base + '/apps/pdfjs-dist/web/images/';
 
         // ---------------------------------------------------------------------
 
