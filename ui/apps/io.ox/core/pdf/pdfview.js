@@ -635,7 +635,7 @@ define('io.ox/core/pdf/pdfview', [
                                     linkService: globalOptions.linkService
                                 });
 
-                                pdfAnnotationsBuilder.setupAnnotations(viewport);
+                                pdfAnnotationsBuilder.render(viewport, 'display');
                             }
 
                             var canvasCtx = canvasNode[0].getContext('2d');
