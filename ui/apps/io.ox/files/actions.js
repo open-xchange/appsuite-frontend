@@ -542,7 +542,7 @@ define('io.ox/files/actions', [
                                 }
                             } else {
                                 require(['io.ox/core/yell'], function (yell) {
-                                    yell(response);
+                                    yell('error', response);
                                 });
                             }
                         }
