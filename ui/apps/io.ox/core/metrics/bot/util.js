@@ -58,7 +58,7 @@ define('io.ox/core/metrics/bot/util', [], function () {
                 id = hub;
                 hub = ox;
             }
-            hub.one(id, handler);
+            hub.once(id, handler);
             return def.promise().done(callback);
         },
 
@@ -83,7 +83,7 @@ define('io.ox/core/metrics/bot/util', [], function () {
                 def.reject();
             }, that.TIMEOUT);
             // look for related resume or ready event
-            var handler = function (e, app) {
+            var handler = function (app) {
                 var name = app.getName();
                 if (name === id) {
                     clearTimeout(timeout);
@@ -91,7 +91,7 @@ define('io.ox/core/metrics/bot/util', [], function () {
                     def.resolve(app);
                 }
             };
-            ox.one('app:resume app:ready', handler.bind(this));
+            ox.once('app:resume app:ready', handler.bind(this));
             return def.promise().done(callback);
         },
 
