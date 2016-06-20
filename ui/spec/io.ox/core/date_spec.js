@@ -12,7 +12,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 /* global D:true */
-/* eslint no-multi-spaces: off */
+/* eslint no-multi-spaces: "off" */
 /* jshint ignore:start */
 
 define(['io.ox/core/date'], function (date) {
