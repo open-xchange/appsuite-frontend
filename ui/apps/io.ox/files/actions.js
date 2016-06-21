@@ -224,6 +224,7 @@ define('io.ox/files/actions', [
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some', 'items'),
                 e.baton.openedBy !== 'io.ox/mail/compose',
+                util.isFolderType('!driveMail', e.baton),
                 util.isFolderType('!trash', e.baton)
             );
         },
@@ -265,6 +266,7 @@ define('io.ox/files/actions', [
                 _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some', 'items'),
+                util.isFolderType('!driveMail', e.baton),
                 util.isFolderType('!trash', e.baton)
             );
         },

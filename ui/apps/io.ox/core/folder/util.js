@@ -129,6 +129,10 @@ define('io.ox/core/folder/util', [
                 var hash = coreSettings.get(['folder/hidden'], {});
                 id = _.isObject(data) ? data.id : data;
                 return hash[id] === true;
+            case 'driveMail':
+                var driveMail = coreSettings.get('folder/mailattachments', {});
+
+                return _.isEmpty(driveMail) ? false : (_.values(driveMail).indexOf(data.id) > -1);
             default:
                 return false;
         }
