@@ -107,7 +107,16 @@ define('io.ox/core/session', [
                     })
                     .then(function (response) {
                         store = _.url.hash('store') === 'true';
-                        return response.data;
+                        // make sure we have rampupdata
+                        if (response.data.rampup) {
+                            return response.data;
+                        }
+                        //session needed for rampup call
+                        ox.session = response.data.session;
+                        return that.rampup().then(function (rampupData) {
+                            response.data.rampup = rampupData;
+                            return response.data;
+                        });
                     });
                 }
             )
