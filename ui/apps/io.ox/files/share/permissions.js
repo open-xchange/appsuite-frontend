@@ -808,7 +808,7 @@ define('io.ox/files/share/permissions', [
                 top: 40,
                 center: false,
                 async: true,
-                help: 'ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles',
+                help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html#ox.appsuite.user.concept.sharing.invitation',
                 share: false,
                 nested: nested
             }, options);
