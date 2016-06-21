@@ -224,7 +224,7 @@ define('io.ox/files/actions', [
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some', 'items'),
                 e.baton.openedBy !== 'io.ox/mail/compose',
-                util.isFolderType('!driveMail', e.baton),
+                util.isFolderType('!attachmentView', e.baton),
                 util.isFolderType('!trash', e.baton)
             );
         },
