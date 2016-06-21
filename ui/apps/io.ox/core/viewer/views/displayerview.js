@@ -513,17 +513,11 @@ define('io.ox/core/viewer/views/displayerview', [
 
                     self.updatePriorities();
                     self.isBusy = false;
-
+                    self.slideViews[self.activeIndex].show();
                     self.handleDuplicatesSlides.bind(self);
 
                     self.loadDummy();
                 };
-
-            if (this.slideViews[this.activeIndex].model.isOffice() && this.slideViews[this.activeIndex].$el.find('.document-page').length && this.slideViews[this.activeIndex].numberOfPages !== _(this.slideViews[this.activeIndex].loadedPageNodes).keys().length) {
-                //remove not loaded pdf to force true reload
-                this.slideViews[this.activeIndex].$el.find('.document-page').remove();
-            }
-            this.slideViews[this.activeIndex].show();
 
             // we do not have to load any slides if the slide to insert already exists
             if (this.slideViews[insertIndex]) {
@@ -534,7 +528,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 swiper.update(true);
 
                 this.updatePriorities();
-
+                this.slideViews[this.activeIndex].show();
                 return $.when();
             }
 

@@ -122,7 +122,7 @@ define('io.ox/files/api', [
         },
 
         isOffice: function (type) {
-            return /^application\/(msword|vnd.ms-word|vnd.ms-excel|vnd.ms-powerpoint|vnd.oasis|vnd.openxmlformats)/.test(type || this.getMimeType());
+            return /^application\/(msword|excel|powerpoint|vnd\.(ms-word|ms-excel|ms-powerpoint|oasis|openxmlformats))/.test(type || this.getMimeType());
         },
 
         isPDF: function (type) {
@@ -134,7 +134,7 @@ define('io.ox/files/api', [
         },
 
         isPresentation: function (type) {
-            return /^application\/vnd.(ms-powerpoint|openxmlformats-officedocument.presentationml|oasis.opendocument.presentation)/.test(type || this.getMimeType());
+            return /^application\/(powerpoint|vnd.(ms-powerpoint|openxmlformats-officedocument.presentationml|oasis.opendocument.presentation))/.test(type || this.getMimeType());
         },
 
         isGuard: function () {

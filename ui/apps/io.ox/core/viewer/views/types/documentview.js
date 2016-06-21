@@ -556,6 +556,11 @@ define('io.ox/core/viewer/views/types/documentview', [
         show: function () {
             // ignore already loaded documents
             if (this.$el.find('.document-page').length > 0) {
+                // document pages are drawn, but there is no visible page rendered yet
+                // may happen if pdfDocumentLoadSuccess returns when the slide is already skipped (isVisible() === false => initial loadVisiblePages() did not run)
+                if (_.isEmpty(this.loadedPageNodes)) {
+                    this.loadVisiblePages();
+                }
                 return;
             }
 
