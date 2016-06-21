@@ -865,7 +865,7 @@ define('io.ox/files/actions', [
         id: 'add-to-portal',
         index: index += 100,
         prio: 'lo',
-        mobile: 'lo',
+        mobile: 'none',
         label: gt('Add to portal'),
         ref: 'io.ox/files/actions/add-to-portal',
         section: 'share'
