@@ -329,12 +329,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         }
 
         var stripDataAttributes = function (content) {
-            var tags = content.match(/(<\/?[\S][^>]*>)/gi);
-            tags.forEach(function (tag) {
+            return content.replace(/<\/?[\S][^>]*>/g, function (match) {
                 // replace all data-mce-* attributes which are written with single or double quotes
-                content = content.replace(tag, tag.replace(/\sdata-mce-\S+=("[^"]*"|'[^']*')/g, ''));
+                return match.replace(/\sdata-mce-\S+=("[^"]*"|'[^']*')/g, '');
             });
-            return content;
         };
 
         var resizeEditor = _.debounce(function () {
