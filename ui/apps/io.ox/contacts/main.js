@@ -827,6 +827,13 @@ define('io.ox/contacts/main', [
             });
         },
 
+        'import': function () {
+            api.on('import', function () {
+                //update current detailview
+                api.trigger('update:' + _.ecid(app.currentContact));
+            });
+        },
+
         'api-create-event': function (app) {
             if (_.device('smartphone')) return;
 

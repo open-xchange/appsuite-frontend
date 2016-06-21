@@ -256,7 +256,8 @@ define('io.ox/core/import/import', [
                             // todo: clean that up; fails for calendar
                             if (baton.api.caches.all.grepRemove) {
                                 baton.api.caches.all.grepRemove(id + baton.api.DELIM).done(function () {
-                                    baton.api.trigger('refresh.all');
+                                    // use named refresh.all so apis can differenciate if they wish
+                                    baton.api.trigger('refresh.all:import');
                                 });
                             } else if (baton.api.refresh) {
                                 baton.api.refresh();
@@ -281,13 +282,13 @@ define('io.ox/core/import/import', [
                             custom = { error: gt('Data only partially imported (%1$s of %2$s records)', (data.length - failed.length), data.length) };
                             failHandler([].concat(custom, failed));
                         }
-
+                        baton = null;
                         popup.close();
                     })
                     .fail(failHandler);
                 })
                 .on('close', function () {
-                    this.form = baton = baton.nodes = null;
+                    this.form = baton.nodes = null;
                 })
                 .show(function () {
                     //focus

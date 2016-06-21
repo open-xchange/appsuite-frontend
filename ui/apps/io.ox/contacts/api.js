@@ -543,6 +543,14 @@ define('io.ox/contacts/api', [
         api.caches.get.clear();
     });
 
+    // refresh.all caused by import
+    api.on('refresh.all:import', function () {
+        api.caches.list.clear();
+        fetchCache.clear();
+        api.caches.get.clear();
+        api.trigger('import');
+    });
+
     /** @define {object} simple contact cache */
     var fetchCache = new cache.SimpleCache('contacts-fetching');
 
