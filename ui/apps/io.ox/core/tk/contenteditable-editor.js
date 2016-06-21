@@ -563,7 +563,11 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         // allow jQuery access
         this.find = function (selector) {
-            return $(ed.getDoc()).find(selector);
+            return $(ed.getBody()).find(selector);
+        };
+
+        this.children = function (selector) {
+            return $(ed.getBody()).children(selector);
         };
 
         this.replaceContent = function (str, rep) {
