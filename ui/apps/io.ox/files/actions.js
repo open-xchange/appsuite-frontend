@@ -266,7 +266,7 @@ define('io.ox/files/actions', [
                 _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some', 'items'),
-                util.isFolderType('!driveMail', e.baton),
+                util.isFolderType('!attachmentView', e.baton),
                 util.isFolderType('!trash', e.baton)
             );
         },
