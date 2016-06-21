@@ -1089,6 +1089,7 @@ define('io.ox/files/main', [
         },
 
         'sidepanel': function (app) {
+            if (_.device('smartphone')) return;
 
             ext.point('io.ox/files/sidepanel').extend({
                 id: 'tree',
