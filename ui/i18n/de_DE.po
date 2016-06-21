@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-14 11:42+0100\n"
+"PO-Revision-Date: 2016-06-21 10:00+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -7821,7 +7821,7 @@ msgstr "Posteingangs-Tabs"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show Tabs for inbox"
-msgstr "Registerkarten für Posteingang anzeigen"
+msgstr "Tabs für Posteingang anzeigen"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Should only the current message or all messages of the sender be moved"
