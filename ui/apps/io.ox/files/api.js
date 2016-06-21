@@ -358,10 +358,18 @@ define('io.ox/files/api', [
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
     // guess 23 is "meta"
-    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707';
+    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707',
+        allVersionColumns = http.getAllColumns('files', true);
 
     var driveMail = coreSettings.get('folder/mailattachments', {});
-    if (!_.isEmpty(driveMail)) allColumns = allColumns + ',7030';
+    if (!_.isEmpty(driveMail)) {
+        // add 7030 if attachment view is active
+        allColumns = allColumns + ',7030';
+    } else {
+        // remove from version columns
+        allVersionColumns = allVersionColumns.replace(',7030', '');
+    }
+
     /**
      * map error codes and text phrases for user feedback
      * @param  {event} e
@@ -1047,6 +1055,7 @@ define('io.ox/files/api', [
                 module: 'files',
                 params: {
                     action: 'versions',
+                    columns: allVersionColumns,
                     folder: file.folder_id,
                     id: file.id,
                     timezone: 'utc'
