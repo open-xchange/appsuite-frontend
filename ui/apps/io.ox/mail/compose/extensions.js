@@ -322,25 +322,7 @@ define('io.ox/mail/compose/extensions', [
 
         signature: function (baton) {
             if (_.device('smartphone')) return;
-            var self = this;
-            baton.view.signaturesLoading = $.Deferred();
-            require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                snippetAPI.getAll('signature').always(function (signatures) {
-                    var oldSignatures = baton.model.get('signatures') || [],
-                        allSignatures = _.uniq(signatures.concat(oldSignatures), false, function (o) { return o.id; });
-                    baton.model.set('signatures', allSignatures);
-                    var sa = _.map(signatures, function (o) {
-                        return { 'id': o.id, 'displayName': o.displayname };
-                    });
-
-                    if (sa.length >= 1) {
-                        _.each(sa, function (item) {
-                            self.data('view').option('defaultSignatureId', item.id, item.displayName);
-                        });
-                    }
-                    baton.view.signaturesLoading.resolve(allSignatures);
-                });
-            });
+            baton.view.signaturesLoading = baton.model.initializeSignatures(this);
         },
 
         signaturemenu: function (baton) {
@@ -349,9 +331,11 @@ define('io.ox/mail/compose/extensions', [
             var self = this,
                 container = $('<div class="dropdown signatures text-left">');
 
+            // IEDA: move to view to have a reference or trigger a refresh?!
+
             function draw() {
                 var dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true, el: container })
-                    .option('defaultSignatureId', '', gt('No signature'));
+                    .option('signatureId', '', gt('No signature'));
 
                 ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
                 dropdown.$ul.addClass('pull-right');

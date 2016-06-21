@@ -17,9 +17,10 @@ define.async('io.ox/mail/compose/model', [
     'io.ox/core/capabilities',
     'io.ox/core/api/account',
     'io.ox/core/attachments/backbone',
+    'io.ox/mail/compose/signatures',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (mailAPI, mailUtil, capabilities, accountAPI, Attachments, settings, gt) {
+], function (mailAPI, mailUtil, capabilities, accountAPI, Attachments, signatureUtil, settings, gt) {
 
     'use strict';
 
@@ -47,7 +48,9 @@ define.async('io.ox/mail/compose/model', [
                 priority: 3,
                 sendDisplayName: !!settings.get('sendDisplayName', true),
                 sendtype: mailAPI.SENDTYPE.NORMAL,
-                defaultSignatureId: settings.get('defaultSignature'),
+                defaultSignatureId: settings.get('defaultSignature', ''),
+                // identifier for empty signature (dropdown)
+                signatureId: '',
                 csid: mailAPI.csid(),
                 vcard: settings.get('appendVcard', false) ? 1 : 0,
                 infostore_ids_saved: []
@@ -55,6 +58,7 @@ define.async('io.ox/mail/compose/model', [
         },
 
         initialize: function () {
+            _.extend(this, signatureUtil.model, this);
             var self = this,
                 attachmentsCollection = this.get('attachments');
 
@@ -99,7 +103,6 @@ define.async('io.ox/mail/compose/model', [
                     this.set('editorMode', 'text', { silent: true });
                 }
             }
-
             if (!this.get('from') || this.get('from').length === 0) {
                 accountAPI.getPrimaryAddressFromFolder(this.get('folder_id')).then(function (address) {
                     // custom display names
@@ -108,11 +111,6 @@ define.async('io.ox/mail/compose/model', [
                     }
                     this.set('from', [address]);
                 }.bind(this));
-            }
-
-            // Set default signature dependant on mode, there are settings that correspond to this
-            if (this.get('mode') !== 'compose') {
-                this.set('defaultSignatureId', settings.get('defaultReplyForwardSignature'));
             }
 
             this.set('autoDismiss', this.get('mode') === 'edit');
@@ -193,30 +191,6 @@ define.async('io.ox/mail/compose/model', [
             content = this.convertAllToUnified(content);
 
             return content;
-        },
-
-        getSignatures: function () {
-            if (this.get('mode') === 'edit') {
-                this.set('defaultSignatureId', '', { silent: true });
-            }
-
-            if (_.device('!smartphone') || this.get('mode') === 'edit') return [];
-
-            if (settings.get('mobileSignatureType') === 'custom') {
-                this.set('defaultSignatureId', '0', { silent: true });
-            } else {
-                this.set('defaultSignatureId', '1', { silent: true });
-            }
-
-            var value = settings.get('mobileSignature');
-
-            if (value === undefined) {
-                value =
-                    //#. %s is the product name
-                    gt('Sent from %s via mobile', ox.serverConfig.productName);
-            }
-
-            return [{ id: '0', content: value, misc: { insertion: 'below' } }];
         },
 
         parse: function (list) {
