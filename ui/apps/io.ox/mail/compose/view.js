@@ -995,7 +995,8 @@ define('io.ox/mail/compose/view', [
                 }
                 if (!_.isEmpty(self.model.get('bcc'))) self.toggleTokenfield('bcc');
                 self.setBody(self.model.getContent());
-                self.model.dirty(false);
+                // Set model as dirty only when attaching infostore ids initially (Send as pdf from text)
+                self.model.dirty(self.model.get('mode') === 'compose' && !_.isEmpty(self.model.get('infostore_ids')));
             });
         },
 

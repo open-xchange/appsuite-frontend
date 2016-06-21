@@ -591,7 +591,7 @@ define('io.ox/mail/api', [
             });
         });
         // resume & trigger refresh
-        return http.resume().pipe(function (response) {
+        return http.resume().then(function (response) {
             // trigger update events
             _(list).each(function (obj) {
                 api.trigger('update:' + _.ecid(obj), obj);
@@ -843,6 +843,7 @@ define('io.ox/mail/api', [
                     api.trigger('refresh.all');
                     return $.Deferred().reject(e.error);
                 }
+                return list;
             })
         );
     }

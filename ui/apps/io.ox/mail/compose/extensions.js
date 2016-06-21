@@ -444,6 +444,7 @@ define('io.ox/mail/compose/extensions', [
 
                     view.notificationModel = new ShareModel({});
                     view.shareAttachmentsIsActive = function () {
+                        if (_.isEmpty(view.getValidModels())) return false;
                         var actualAttachmentSize = 0,
                             threshold = settings.get('compose/shareAttachments/threshold', 0),
                             thresholdExceeded;
@@ -460,9 +461,11 @@ define('io.ox/mail/compose/extensions', [
 
                         _.each(view.point.keys(), function (id) {
                             if (view.shareAttachmentsIsActive()) {
+                                view.settingsModel.set('enable', true);
                                 view.point.enable(id);
                                 view.$el.addClass('show-share-attachments');
                             } else if (id !== 'renderSwitch') {
+                                view.settingsModel.set('enable', false);
                                 view.point.disable(id);
                                 view.$el.removeClass('show-share-attachments');
                             }
@@ -516,15 +519,17 @@ define('io.ox/mail/compose/extensions', [
                             $links.append(dropdown.render().$el);
                         },
                         renderNotifications: function (baton) {
-                            var $links = baton.view.$header.find('.links'),
-                                dropdown = new Dropdown({ model: baton.view.notificationModel, label: gt('Notification'), tagName: 'div', caret: true })
-                                .option('download', true, gt('when the receivers have finished downloading the files'))
-                                .option('expired', true, gt('when the link is expired'))
-                                .option('visit', true, gt('when the receivers have accessed the files'));
+                            if (settings.get('compose/shareAttachments/enableNotifications', false)) {
+                                var $links = baton.view.$header.find('.links'),
+                                    dropdown = new Dropdown({ model: baton.view.notificationModel, label: gt('Notification'), tagName: 'div', caret: true })
+                                    .option('download', true, gt('when the receivers have finished downloading the files'))
+                                    .option('expired', true, gt('when the link is expired'))
+                                    .option('visit', true, gt('when the receivers have accessed the files'));
 
-                            // if (!/^en_/.test(settingsCore.get('language'))) dropdown.option('translated', true, gt('translate notifications to english'));
+                                // if (!/^en_/.test(settingsCore.get('language'))) dropdown.option('translated', true, gt('translate notifications to english'));
 
-                            $links.append(dropdown.render().$el);
+                                $links.append(dropdown.render().$el);
+                            }
                         },
                         renderPassword: function (baton) {
                             var $links = baton.view.$header.find('.links'),

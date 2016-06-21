@@ -89,7 +89,7 @@ define('io.ox/core/extPatterns/links', [
                     });
                     a.tooltip({ trigger: 'hover' })
                         .on('dispose', function () {
-                            $(this).tooltip('hide');
+                            $(this).tooltip('destroy');
                         });
                 }
                 return a.attr(attr);
@@ -449,7 +449,7 @@ define('io.ox/core/extPatterns/links', [
                     .tooltip({ trigger: 'hover' })
                     .parent()
                     .on('shown.bs.dropdown dispose', function () {
-                        $(this).children('a').tooltip('hide');
+                        $(this).children('a').tooltip('destroy');
                     });
                 }
 
