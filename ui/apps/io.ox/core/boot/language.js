@@ -137,7 +137,8 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                                 _(languageArray).map(function (value) {
                                     return $('<option>').attr({
                                         'lang': languageToTag(value),
-                                        'data-value': value
+                                        'data-value': value,
+                                        'value': value
                                     }).text(lang[value]);
                                 })
                             )
