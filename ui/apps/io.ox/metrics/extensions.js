@@ -38,7 +38,10 @@ define('io.ox/metrics/extensions', [
             var metrics = this,
                 lastTracked;
             // inital
-            trackPage(ox.ui.App.getCurrentApp());
+            _.defer(function () {
+                if (!ox.ui.App) return;
+                trackPage(ox.ui.App.getCurrentApp());
+            });
             ox.on('app:start app:resume', trackPage);
             // track
             function trackPage(app) {
