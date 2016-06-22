@@ -42,7 +42,7 @@ define('plugins/administration/resources/settings/edit', [
             this.$el.append(
                 // display name
                 $('<div class="form-group">').append(
-                    $('<label>', { 'for': guid = _.uniqueId('input') }).text(gt('Resource name')),
+                    $('<label>', { 'for': guid = _.uniqueId('input') }).text(gt('Resource name (mandatory)')),
                     new common.InputView({ name: 'display_name', id: guid, model: this.model }).render().$el
                 ),
                 // description
