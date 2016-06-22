@@ -117,7 +117,7 @@ define('plugins/administration/groups/settings/edit', [
 
             options = options || {};
 
-            var model = groupAPI.getModel(options.id),
+            var model = groupAPI.getModel(options.id).clone(),
                 edit = model.has('id');
 
             new dialogs.ModalDialog({ async: true })
