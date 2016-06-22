@@ -20,7 +20,8 @@ define('io.ox/core/desktopNotifications', [
     'use strict';
 
     var desktopNotifications,
-        supported = !!window.Notification;
+        // no support for smartphones
+        supported = _.device('smartphone') ? false : !!window.Notification;
 
     //actually draws the message
     function draw(message) {
