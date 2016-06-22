@@ -74,7 +74,7 @@ define('plugins/administration/resources/settings/edit', [
 
             options = options || {};
 
-            var model = resourceAPI.getModel(options.id),
+            var model = resourceAPI.getModel(options.id).clone(),
                 edit = model.has('id');
 
             new dialogs.ModalDialog({ async: true })
