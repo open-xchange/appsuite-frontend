@@ -208,7 +208,11 @@ define('io.ox/files/main', [
                 module: 'file'
             });
             // add some listeners
-            folderAPI.on('cleared-trash', function () {
+            folderAPI.on('clear', function () {
+                quota.getQuota(true);
+            });
+
+            api.on('add:file', function () {
                 quota.getQuota(true);
             });
 
