@@ -361,8 +361,8 @@ define('io.ox/files/api', [
     var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707',
         allVersionColumns = http.getAllColumns('files', true);
 
-    var driveMail = coreSettings.get('folder/mailattachments', {});
-    if (!_.isEmpty(driveMail)) {
+    var attachmentView = coreSettings.get('folder/mailattachments', {});
+    if (!_.isEmpty(attachmentView)) {
         // add 7030 if attachment view is active
         allColumns = allColumns + ',7030';
     } else {

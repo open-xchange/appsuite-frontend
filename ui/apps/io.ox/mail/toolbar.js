@@ -230,9 +230,9 @@ define('io.ox/mail/toolbar', [
 
     function allAttachments(app, e) {
         e.preventDefault();
-        var driveMail = settings.get('folder/mailattachments', {});
-        ox.launch('io.ox/files/main', { folder: driveMail.all }).done(function () {
-            this.folder.set(driveMail.all);
+        var attachmentView = settings.get('folder/mailattachments', {});
+        ox.launch('io.ox/files/main', { folder: attachmentView.all }).done(function () {
+            this.folder.set(attachmentView.all);
         });
     }
 

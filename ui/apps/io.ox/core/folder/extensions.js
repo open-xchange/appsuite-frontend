@@ -104,12 +104,12 @@ define('io.ox/core/folder/extensions', [
         });
     }
 
-    var driveMail = settings.get('folder/mailattachments', {});
+    var attachmentView = settings.get('folder/mailattachments', {});
 
-    blacklist.add('maildrive://0/');
+    if (attachmentView.all) blacklist.add(attachmentView.all);
 
     function getAllAttachmentsFolder() {
-        var id = driveMail.all;
+        var id = attachmentView.all;
         return id ? api.get(id) : null;
     }
 
@@ -302,15 +302,15 @@ define('io.ox/core/folder/extensions', [
         },
 
         allAttachments: function () {
-            if (!driveMail.all) return;
+            if (!attachmentView.all) return;
             this.append(
                 $('<div class="links">').append(
                     $('<a href="#" data-action="all-attachments" tabindex="1" role="button">')
                     .text(gt('View all attachments'))
                     .on('click', function (e) {
                         e.preventDefault();
-                        ox.launch('io.ox/files/main', { folder: driveMail.all }).done(function () {
-                            this.folder.set(driveMail.all);
+                        ox.launch('io.ox/files/main', { folder: attachmentView.all }).done(function () {
+                            this.folder.set(attachmentView.all);
                         });
                     })
                 )

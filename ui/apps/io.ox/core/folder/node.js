@@ -519,8 +519,8 @@ define('io.ox/core/folder/node', [
 
             var iconClass = '',
                 infostoreDefaultFolder = String(api.getDefaultFolder('infostore')),
-                driveMail = settings.get('folder/mailattachments', {}),
-                allAttachmentsFolder = String(driveMail.all);
+                attachmentView = settings.get('folder/mailattachments', {}),
+                allAttachmentsFolder = String(attachmentView.all);
 
             switch (this.folder) {
                 case 'virtual/myshares':

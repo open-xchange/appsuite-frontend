@@ -90,8 +90,8 @@ define('io.ox/files/listview', [
     );
 
     var isAttachmentView = function (baton) {
-        var driveMail = settings.get('folder/mailattachments', {});
-        return (_.values(driveMail).indexOf(baton.app.folder.get()) > -1);
+        var attachmentView = settings.get('folder/mailattachments', {});
+        return (_.values(attachmentView).indexOf(baton.app.folder.get()) > -1);
     };
 
     // list layout

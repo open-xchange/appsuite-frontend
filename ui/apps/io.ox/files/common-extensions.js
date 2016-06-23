@@ -84,8 +84,8 @@ define('io.ox/files/common-extensions', [
         mailFrom: function (baton, ellipsis) {
             if (!_.has(baton.data, 'com.openexchange.file.storage.mail.mailMetadata')) return;
             var data = baton.data['com.openexchange.file.storage.mail.mailMetadata'],
-                driveMail = settings.get('folder/mailattachments', {}),
-                from = (baton.app.folder.get() === driveMail.sent) ? data.to[0] : data.from[0];
+                attachmentView = settings.get('folder/mailattachments', {}),
+                from = (baton.app.folder.get() === attachmentView.sent) ? data.to[0] : data.from[0];
             from = util.getDisplayName(from);
             // fix long names
             if (ellipsis) from = _.ellipsis(from, ellipsis);

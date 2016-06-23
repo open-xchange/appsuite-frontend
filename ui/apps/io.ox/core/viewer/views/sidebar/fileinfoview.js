@@ -131,7 +131,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             } else {
                 // All Attachment View
                 var mail = model.get('com.openexchange.file.storage.mail.mailMetadata');
-                var driveMail = settings.get('folder/mailattachments', {});
+                var attachmentView = settings.get('folder/mailattachments', {});
                 dl.append(
                     $('<dt>').text(gt('Folder')),
                     $('<dd class="mail-folder">').append(
@@ -147,11 +147,11 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     $('<dd class="subject">').append(
                         $.txt(mailUtil.getSubject(mail.subject || ''))
                     ),
-                    $('<dt>').text(folder_id === driveMail.sent ? gt('To') : gt('From')),
+                    $('<dt>').text(folder_id === attachmentView.sent ? gt('To') : gt('From')),
                     $('<dd class="from">').append(
-                        $.txt(mailUtil.getDisplayName(folder_id === driveMail.sent ? mail.to[0] : mail.from[0]))
+                        $.txt(mailUtil.getDisplayName(folder_id === attachmentView.sent ? mail.to[0] : mail.from[0]))
                     ),
-                    $('<dt>').text(folder_id === driveMail.sent ? gt('Sent') : gt('Received')),
+                    $('<dt>').text(folder_id === attachmentView.sent ? gt('Sent') : gt('Received')),
                     $('<dd class="received">').append(
                         $.txt(dateString)
                     ),
