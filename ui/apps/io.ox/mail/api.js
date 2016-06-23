@@ -511,6 +511,7 @@ define('io.ox/mail/api', [
                 } else {
                     folderAPI.reload(data.id);
                 }
+                api.trigger('archive', ids);
             })
         );
     };
@@ -530,6 +531,7 @@ define('io.ox/mail/api', [
             folderAPI.refresh();
             // reload mail views
             api.trigger('refresh.all');
+            api.trigger('archive-folder', id);
         });
     };
 

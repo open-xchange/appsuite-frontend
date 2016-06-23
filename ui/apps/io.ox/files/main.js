@@ -16,6 +16,7 @@ define('io.ox/files/main', [
     'io.ox/core/commons',
     'gettext!io.ox/files',
     'settings!io.ox/files',
+    'settings!io.ox/core',
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
     'io.ox/core/folder/tree',
@@ -43,7 +44,7 @@ define('io.ox/files/main', [
     'io.ox/files/upload/dropzone',
     'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/core/viewer'
-], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
+], function (commons, gt, settings, coreSettings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
 
     'use strict';
 
@@ -465,6 +466,26 @@ define('io.ox/files/main', [
                 app.folderView.tree.selection.getItems().removeClass('selected');
                 app.folderView.tree.selection.set(folderAPI.getDefaultFolder('infostore'));
                 app.mysharesListViewControl.$el.hide().siblings().show();
+            });
+        },
+
+        'attachmentViewUpdater': function (app) {
+            var attachmentView = coreSettings.get('folder/mailattachments', {});
+            if (_.isEmpty(attachmentView)) return;
+
+            function expireAttachmentView() {
+                _(attachmentView).each(function (folder) {
+                    _(api.pool.getByFolder(folder)).each(function (collection) {
+                        collection.expired = true;
+                    });
+                    if (app.folder.get() === folder) app.listView.reload();
+                });
+            }
+
+            app.folderView.tree.on('change', expireAttachmentView);
+
+            require(['io.ox/mail/api'], function (mailAPI) {
+                mailAPI.on('delete new-mail copy update archive archive-folder', expireAttachmentView);
             });
         },
 
