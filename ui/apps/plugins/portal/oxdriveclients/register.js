@@ -91,9 +91,7 @@ define('plugins/portal/oxdriveclients/register', [
     }
 
     function createAppIcon() {
-        var platform = getPlatform(),
-            icon = settings.get('appIcon/' + platform) || settings.get('appIconAsBase64');
-        return $('<div class="appicon">').css('background-image', icon);
+        return $('<div class="appicon">').css('background-image', settings.get('appIconAsBase64'));
     }
 
     ext.point('io.ox/portal/widget/oxdriveclients').extend({
