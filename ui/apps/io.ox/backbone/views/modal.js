@@ -37,8 +37,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         events: {
             'click [data-action]': 'onAction',
             'keydown input:text, input:password': 'onKeypress',
-            // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
-            'hidden.bs.modal': 'close',
             'keydown': 'onEscape'
         },
 
@@ -49,7 +47,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             // the original constructor will call initialize()
             ExtensibleView.prototype.constructor.apply(this, arguments);
             // add structure now
-            var title_id = _.uniqueId('title');
+            var title_id = _.uniqueId('title'),
+                self = this;
             this.$el
                 .toggleClass('maximize', options.maximize)
                 .attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id })
@@ -64,6 +63,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
                         )
                     )
                 );
+            // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
+            this.$el.on('hidden.bs.modal', this.close.bind(self));
             // apply max height if maximize is given as number
             if (_.isNumber(options.maximize)) this.$('.modal-dialog').css('max-height', options.maximize);
             // add help icon?
@@ -101,8 +102,9 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
         close: function (e) {
             this.trigger('before:close');
-            // no need to hide when triggered by a hidden event (avoid infinite loops)
-            if (e.type !== 'hidden') {
+            // stop listening to hidden event (avoid infinite loops)
+            this.$el.off('hidden.bs.modal');
+            if (!e || e.type !== 'hidden') {
                 this.$el.modal('hide');
             }
             this.$el.siblings().removeAttr('aria-hidden');
