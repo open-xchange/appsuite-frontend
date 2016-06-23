@@ -37,6 +37,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         events: {
             'click [data-action]': 'onAction',
             'keydown input:text, input:password': 'onKeypress',
+            // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
+            'hidden.bs.modal': 'close',
             'keydown': 'onEscape'
         },
 
@@ -97,9 +99,12 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             return this;
         },
 
-        close: function () {
+        close: function (e) {
             this.trigger('before:close');
-            this.$el.modal('hide');
+            // no need to hide when triggered by a hidden event (avoid infinite loops)
+            if (e.type !== 'hidden') {
+                this.$el.modal('hide');
+            }
             this.$el.siblings().removeAttr('aria-hidden');
             this.trigger('close');
             if (this.previousFocus) this.previousFocus.focus();
