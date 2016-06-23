@@ -73,6 +73,19 @@ define('io.ox/core/pdf/pdfview', [
             };
         }());
 
+    /**
+     * Returns true if the given size object has valid width and height attributes.
+     *
+     * @param {Object} size
+     *  The size object to check.
+     *
+     * @return {Boolean}
+     *  Whether the size object is valid.
+     */
+    function isValidSize(size) {
+        return (_.isObject(size) && _.isNumber(size.width) && _.isNumber(size.height));
+    }
+
     // - class PDFView ---------------------------------------------------------
 
     /**
@@ -437,16 +450,16 @@ define('io.ox/core/pdf/pdfview', [
             var pageNumer = opt.pageNumer;
             var pageZoom = opt.pageZoom;
 
-            if (!(_.isObject(pageSize) && _.isNumber(pageSize.width) && _.isNumber(pageSize.height))) {
+            if (!isValidSize(pageSize)) {
                 pageSize = _.isNumber(pageNumer) ? pdfDocument.getOriginalPageSize(pageNumer) : pdfDocument.getDefaultPageSize();
             }
 
-            if (_.isNumber(pageZoom)) {
+            if (_.isNumber(pageZoom) && isValidSize(pageSize)) {
                 pageSize = PDFView.getNormalizedSize({ width: pageSize.width * pageZoom, height: pageSize.height * pageZoom });
             }
 
             // set retrieved PDF page size as page node data and append correctly initialized canvas to given page node
-            if (_.isObject(pageSize) && _.isNumber(pageSize.width) && _.isNumber(pageSize.height)) {
+            if (isValidSize(pageSize)) {
                 var extentAttr = 'width="' + pageSize.width + '" height="' + pageSize.height + '" style="width:' + pageSize.width + 'px; height:' + pageSize.height + 'px"',
                     pageNode = $('<div class="pdf-page" ' + extentAttr + '>'),
                     canvasWrapper = $('<div class="canvas-wrapper" ' + extentAttr + '>');
@@ -686,9 +699,7 @@ define('io.ox/core/pdf/pdfview', [
     // ---------------------------------------------------------------------
 
     PDFView.getNormalizedSize = function (size) {
-        return (size && _.isNumber(size.width) && _.isNumber(size.height)) ?
-                { width: Math.ceil(size.width), height: Math.ceil(size.height) } :
-                    null;
+        return isValidSize(size) ? { width: Math.ceil(size.width), height: Math.ceil(size.height) } : null;
     };
 
     // ---------------------------------------------------------------------
