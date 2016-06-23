@@ -212,7 +212,7 @@ define('io.ox/files/main', [
                 quota.getQuota(true);
             });
 
-            api.on('add:file', function () {
+            api.on('add:file remove:file', function () {
                 quota.getQuota(true);
             });
 
