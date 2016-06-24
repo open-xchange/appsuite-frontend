@@ -511,8 +511,6 @@ define('io.ox/mail/categories/main', [
     };
 
     // hint: settings at io.ox/mail/settings/pane
-
-    window.horst = module;
     return module;
 
 });

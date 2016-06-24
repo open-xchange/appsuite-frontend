@@ -799,6 +799,8 @@ define('io.ox/mail/main', [
 
                 // defer so that all selection events are triggered (e.g. selection:all)
                 _.defer(function () {
+                    // tabbed inbox / mail categories: absolute tab count is unknown
+                    var inTab = app.categories && app.categories.props.get('enabled') && app.categories.props.get('visible');
                     app.right.find('.multi-selection-message .message')
                         .empty()
                         .attr('id', 'mail-multi-selection-message')
@@ -808,7 +810,7 @@ define('io.ox/mail/main', [
                                 gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
                             ),
                             // inline actions
-                            id && total > list.length && !search && !settings.get('categories/enabled') && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
+                            id && total > list.length && !search && !inTab && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
                                 $('<div class="inline-actions">').append(
                                     gt(
                                         'There are %1$d messages in this folder; not all messages are displayed in the list. ' +
@@ -1715,6 +1717,7 @@ define('io.ox/mail/main', [
                 mapper = { refresh: $.noop };
                 // init on first call of 'apply'
                 require(['io.ox/mail/categories/main'], function (cat) {
+                    app.categories = cat;
                     mapper = new Mapper(cat);
                 });
             }
