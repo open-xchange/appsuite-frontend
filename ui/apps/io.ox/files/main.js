@@ -520,8 +520,14 @@ define('io.ox/files/main', [
         'change:sort': function (app) {
             app.props.on('change:sort', function (m, value) {
                 // set proper order first
-                var model = app.listView.model;
-                model.set('order', (/^(5|704)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                var model = app.listView.model,
+                    viewOptions = app.getViewOptions(app.treeView.selection.get());
+                if (viewOptions) {
+                    model.set('order', viewOptions.order, { silent: true });
+                } else {
+                    // set default
+                    model.set('order', (/^(5|704)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                }
                 app.props.set('order', model.get('order'));
                 // now change sort columns
                 model.set('sort', value);
