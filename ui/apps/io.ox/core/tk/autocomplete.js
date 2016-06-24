@@ -604,7 +604,7 @@ define('io.ox/core/tk/autocomplete',
             });
 
             //internet explorer needs this fix too or it closes if you try to scroll
-            if (_.device('!desktop') || _.device('ie') || isModalPopup) {
+            if (_.device('!desktop') || _.device('IE < 10') || isModalPopup) {
                 o.container.on('mousedown', blurOff).on('mouseup', blurOn);
             }
         }
