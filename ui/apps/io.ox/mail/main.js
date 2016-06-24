@@ -808,7 +808,7 @@ define('io.ox/mail/main', [
                                 gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
                             ),
                             // inline actions
-                            id && total > list.length && !search && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
+                            id && total > list.length && !search && !settings.get('categories/enabled') && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
                                 $('<div class="inline-actions">').append(
                                     gt(
                                         'There are %1$d messages in this folder; not all messages are displayed in the list. ' +
