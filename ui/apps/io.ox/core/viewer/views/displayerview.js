@@ -57,8 +57,6 @@ define('io.ox/core/viewer/views/displayerview', [
             this.delayedRemove = {};
             // limit of how much slides are loaded simultaniously
             this.loadingLimit = 3;
-            // limit of how much office slides are loaded simultaniously
-            this.officeLoadingLimit = 1;
             // array to store dummys in use
             this.dummyList = [];
             // listen to blend caption events
@@ -256,16 +254,24 @@ define('io.ox/core/viewer/views/displayerview', [
                         view.$el.attr('data-index', index);
                         var active = false;
                         if (self.swiper) {
+                            var additionalClasses = '';
                             if (self.swiper.wrapper.find('*[data-index=' + index + '].swiper-slide-active').length) {
+                                additionalClasses = 'swiper-slide-active';
                                 active = true;
                             }
                             var slide = self.swiper.wrapper.find('*[data-index=' + index + ']:not(.swiper-slide-duplicate)'),
                                 swiperIndex = slide.data('swiper-slide-index');
-
+                            if (slide.hasClass('swiper-slide-prev')) {
+                                additionalClasses = additionalClasses + 'swiper-slide-prev';
+                            }
+                            if (slide.hasClass('swiper-slide-next')) {
+                                additionalClasses = additionalClasses + 'swiper-slide-next';
+                            }
                             self.swiper.wrapper.find('*[data-index=' + index + ']:not(.swiper-slide-duplicate)').replaceWith(view.$el);
                             view.$el.attr('data-swiper-slide-index', swiperIndex);
+                            view.$el.addClass(additionalClasses);
                             if (active) {
-                                view.$el.addClass('swiper-slide-active').focus();
+                                view.$el.focus();
                             }
 
                             if (self.swiper.wrapper.find('*[data-index=' + index + '].swiper-slide-duplicate').length) {
@@ -280,7 +286,7 @@ define('io.ox/core/viewer/views/displayerview', [
                                 duplicateView.$el.attr('data-swiper-slide-index', swiperIndex);
 
                                 // only load duplicate slides which are not processed by the document converter
-                                if (!model.isOffice() && !model.isPDF() && !view.model.isVideo() && !view.model.isAudio()) duplicateView.prefetch(1).show();
+                                if (!model.isOffice() && !model.isPDF() && !view.model.isVideo() && !view.model.isAudio()) duplicateView.prefetch(1);
                             }
                         }
                     }
@@ -414,45 +420,25 @@ define('io.ox/core/viewer/views/displayerview', [
                 keys = _(this.loadingSlides).keys();
             // free to load a dummy if we still have them
             if (this.dummyList[0] && keys.length <= this.loadingLimit) {
-                var index = null,
-                    officecount = 0,
-                    position = 0;
-                _(keys).each(function (key) {
-                    if ((self.slideViews[key] && self.slideViews[key].model.isOffice()) || (self.delayedRemove[key] && self.delayedRemove[key].view.model.isOffice())) {
-                        officecount++;
-                    }
-                });
+                var index = index = self.dummyList[0].index;
 
-                // find next available
-                for (var i = 0; i < this.dummyList.length; i++) {
-                    if (self.dummyList[i].model.isOffice()) {
-                        if (officecount < self.officeLoadingLimit) {
-                            index = self.dummyList[i].index;
-                            position = i;
-                            break;
-                        }
-                    } else {
-                        index = self.dummyList[i].index;
-                        position = i;
-                        break;
-                    }
-                }
                 if (index !== null) {
                     this.loadingSlides[index] = true;
 
-                    this.dummyList[position].load()
+                    this.dummyList[0].load()
                         .done(function (view) {
                             if (self.delayedRemove[index]) {
                                 self.delayedRemove[index].view.unload(index).dispose();
                                 self.delayedRemove[index].node.remove();
-                            } else if (!view.model.isVideo() && !view.model.isAudio()) {
+                            } else if (view.$el.hasClass('swiper-slide-active')) {
+                                // show if active
                                 view.show();
                             }
 
                             delete self.loadingSlides[index];
                             self.loadDummy();
                         });
-                    this.dummyList.splice(position, 1);
+                    this.dummyList.shift();
                 }
             }
         },
