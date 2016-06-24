@@ -124,7 +124,7 @@ define('io.ox/settings/accounts/settings/pane', [
             return function (type) {
                 var icon = $('<i class="account-icon fa" aria-hidden="true">');
                 if (type === 'boxcom') {
-                    // there is no fitting icon forbox in fontawesome
+                    // there is no fitting icon for box in fontawesome
                     return icon
                         .removeClass('fa')
                         .css({
@@ -132,7 +132,8 @@ define('io.ox/settings/accounts/settings/pane', [
                             'background-size': 'cover',
                             height: '14px',
                             width: '14px',
-                            'margin-top': '3px'
+                            margin: '13px 0 13px 13px',
+                            padding: 0
                         });
                 }
                 icon.addClass(icons[type] || 'fa-circle');
