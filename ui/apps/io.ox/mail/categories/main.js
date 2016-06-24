@@ -473,6 +473,10 @@ define('io.ox/mail/categories/main', [
         },
         update: function (categories) {
             this.categories.set(categories);
+            _.delay(function () {
+                // we have to wait until changes reach middleware
+                this.reload();
+            }.bind(this), 2000);
             this.trigger('update:after');
         },
         move: function (baton, revert) {
