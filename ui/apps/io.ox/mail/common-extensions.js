@@ -553,19 +553,20 @@ define('io.ox/mail/common-extensions', [
 
                 if (util.isEmbedded(baton.data)) return;
                 var self = this;
-                folderAPI.get(baton.data.folder_id).done(function (folderData) {
+                folderAPI.get(baton.data.folder_id).done(function (data) {
                     // see if the user is allowed to modify the read/unread status
-                    if (folderAPI.can('write', folderData)) {
-                        self.append(
-                            $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
-                            .attr({
-                                'aria-label': getAriaLabel(baton.data),
-                                'aria-pressed': util.isUnseen(baton.data)
-                            })
-                            .append('<i class="fa" aria-hidden="true">')
-                            .on('click', { model: baton.view.model }, toggle)
-                        );
-                    }
+                    // always allows for unifeid folder
+                    var showUnreadToggle = folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data);
+                    if (!showUnreadToggle) return;
+                    self.append(
+                        $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
+                        .attr({
+                            'aria-label': getAriaLabel(baton.data),
+                            'aria-pressed': util.isUnseen(baton.data)
+                        })
+                        .append('<i class="fa" aria-hidden="true">')
+                        .on('click', { model: baton.view.model }, toggle)
+                    );
                 });
             };
         }()),
