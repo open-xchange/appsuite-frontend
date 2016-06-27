@@ -552,21 +552,16 @@ define('io.ox/mail/common-extensions', [
             return function (baton) {
 
                 if (util.isEmbedded(baton.data)) return;
-                var self = this;
-                folderAPI.get(baton.data.folder_id).done(function (folderData) {
-                    // see if the user is allowed to modify the read/unread status
-                    if (folderAPI.can('write', folderData)) {
-                        self.append(
-                            $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
-                            .attr({
-                                'aria-label': getAriaLabel(baton.data),
-                                'aria-pressed': util.isUnseen(baton.data)
-                            })
-                            .append('<i class="fa" aria-hidden="true">')
-                            .on('click', { model: baton.view.model }, toggle)
-                        );
-                    }
-                });
+
+                this.append(
+                    $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
+                    .attr({
+                        'aria-label': getAriaLabel(baton.data),
+                        'aria-pressed': util.isUnseen(baton.data)
+                    })
+                    .append('<i class="fa" aria-hidden="true">')
+                    .on('click', { model: baton.view.model }, toggle)
+                );
             };
         }()),
 

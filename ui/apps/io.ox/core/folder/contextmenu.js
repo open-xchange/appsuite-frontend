@@ -125,7 +125,7 @@ define('io.ox/core/folder/contextmenu', [
             addLink(this, {
                 action: 'markfolderread',
                 data: { folder: baton.data.id, app: baton.app },
-                enabled: api.can('write', baton.data),
+                enabled: true,
                 handler: actions.markFolderSeen,
                 text: gt('Mark all messages as read')
             });
@@ -141,7 +141,7 @@ define('io.ox/core/folder/contextmenu', [
             addLink(this, {
                 action: 'move-all-messages',
                 data: { id: baton.data.id },
-                enabled: api.can('delete', baton.data),
+                enabled: true,
                 handler: actions.moveAll.bind(actions, baton.data.id),
                 text: gt('Move all messages')
             });
