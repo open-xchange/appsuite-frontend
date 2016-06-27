@@ -259,6 +259,8 @@ define('io.ox/core/folder/util', [
                 if (!isMail) return false;
                 if (data.standard_folder && /^(7|9|10|11|12)$/.test(data.standard_folder_type)) return false;
                 return Boolean(data.capabilities & Math.pow(2, 4));
+            case 'change:seen':
+                return _(data.supported_capabilities).indexOf('store:seen') > -1;
             default:
                 return false;
         }
