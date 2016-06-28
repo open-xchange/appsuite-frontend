@@ -29,7 +29,11 @@
         top: 15%;
         left: 42px;
     }
-
+    & > li > a:focus {
+        color: @selected-color;
+        background: @selected-background;
+        outline: 0;
+    }
 }
 
 .dropdown-header, .dropdown-footer {
