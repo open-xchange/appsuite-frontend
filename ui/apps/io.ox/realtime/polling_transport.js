@@ -71,6 +71,9 @@ function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
 
         return {
             shouldPass: function (stanza) {
+                if (!stanza.id) {
+                    return true;
+                }
                 if (seenIDs[stanza.id]) {
                     if (api.debug) {
                         console.log('I have already seen uuid ' + stanza.id + ' at ' + seenIDs[stanza.id]);
