@@ -358,7 +358,7 @@ define('io.ox/core/folder/node', [
             // draw scaffold
             this.$el
                 .attr({
-                    id: this.describedbyID,
+                    'aria-describedby': this.describedbyID,
                     'aria-label': '',
                     'aria-level': o.level + 1,
                     'aria-selected': false,
