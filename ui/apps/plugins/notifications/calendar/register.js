@@ -122,7 +122,7 @@ define('plugins/notifications/calendar/register', [
                         _.noI18n(util.getTimeIntervalA11y(model.attributes)), _.noI18n(model.get('location')) || '',
                         _.noI18n(model.get('organizer')))
             }).append(
-                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="sr-only" aria-hidden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
                 $('<span class="span-to-div time">').text(_.noI18n(strings.timeStr)),
                 $('<span class="span-to-div date">').text(_.noI18n(strings.dateStr)),
                 $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),

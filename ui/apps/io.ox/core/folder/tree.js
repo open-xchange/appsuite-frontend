@@ -299,6 +299,8 @@ define('io.ox/core/folder/tree', [
                 // load relevant code on demand
                 var contextmenu = $(e.target).attr('data-contextmenu');
                 require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems.bind(this, contextmenu)));
+                // a11y: The role menu should only be set if there are menuitems in it
+                this.$dropdownMenu.attr('role', 'menu');
             }
 
             function hide() {
@@ -322,13 +324,14 @@ define('io.ox/core/folder/tree', [
                     this.$dropdown = $('<div class="context-dropdown dropdown" data-action="context-menu" data-contextmenu="default">').append(
                         $('<div class="abs context-dropdown-overlay">').on('contextmenu', this.onCloseContextMenu.bind(this)),
                         this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
-                        this.$dropdownMenu = $('<ul class="dropdown-menu" role="menu">')
+                        this.$dropdownMenu = $('<ul class="dropdown-menu">')
                     )
                     .on('show.bs.dropdown', show.bind(this))
-                    .on('hidden.bs.dropdown', hide)
+                    .on('hidden.bs.dropdown', hide.bind(this))
                     .on('keydown.bs.dropdown.data-api', trapFocus)
                 );
                 this.$dropdownToggle.dropdown();
+                this.$dropdownMenu.removeAttr('role');
             };
         }()),
 

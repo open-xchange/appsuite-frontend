@@ -44,15 +44,11 @@ define('io.ox/core/tk/reminder-util', [
                 };
 
             node.append(
-                $('<div>').addClass('dropdown').css({ 'float': 'left' }).append(
-                    toggle = $('<a role="menuitem" tabindex="1" data-action="remind-again">')
-                    .attr({
-                        'data-toggle': 'dropdown',
-                        'aria-haspopup': 'true'
-                    })
+                $('<div class="dropdown">').css({ 'float': 'left' }).append(
+                    toggle = $('<a role="button" tabindex="1" data-action="remind-again" data-toggle="dropdown" aria-haspopup="true">')
                     .text(gt('Remind me again')).addClass('refocus')
                     .append(
-                        $('<i class="fa fa-chevron-down">').css({ paddingLeft: '5px', textDecoration: 'none' })
+                        $('<i class="fa fa-chevron-down" aria-hidden="true">').css({ paddingLeft: '5px', textDecoration: 'none' })
                     ),
                     menu = $('<ul role="menu">').addClass('dropdown-menu dropdown-left').css({ minWidth: 'auto', position: 'fixed' }).append(function () {
                         var ret = [];
@@ -88,7 +84,7 @@ define('io.ox/core/tk/reminder-util', [
         if (taskMode) {
             //task
             info = [
-                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="sr-only" aria-hidden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
                 $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
                 $('<span class="span-to-div info-wrapper">').append($('<span class="end_date">').text(_.noI18n(model.get('end_time'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')))
@@ -110,7 +106,7 @@ define('io.ox/core/tk/reminder-util', [
             var strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' });
             //appointment
             info = [
-                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="sr-only" aria-hidden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
                 $('<span class="span-to-div time">').text(strings.timeStr),
                 $('<span class="span-to-div date">').text(strings.dateStr),
                 $('<span class="span-to-div title">').text(model.get('title')),

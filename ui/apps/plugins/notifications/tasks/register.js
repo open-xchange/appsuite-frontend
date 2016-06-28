@@ -63,7 +63,7 @@ define('plugins/notifications/tasks/register', [
                 'aria-describedby': descriptionId
             })
             .append(
-                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="sr-only" aria-hidden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
                 $('<span class="span-to-div title">').text(_.noI18n(data.title)),
                 $('<div class"clearfix">').append(
                     $('<span class="end_date">').text(_.noI18n(data.end_time)),
@@ -300,7 +300,7 @@ define('plugins/notifications/tasks/register', [
                 'aria-label': label
             })
             .append(
-                $('<span class="sr-only" aria-hiden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
+                $('<span class="sr-only" aria-hidden="true">').text(gt('Press [enter] to open')).attr('id', descriptionId),
                 $('<span class="span-to-div title">').text(_.noI18n(task.title)),
                 $('<div class="clearfix">').append(
                     $('<span class="end_date">').text(_.noI18n(task.end_time)),

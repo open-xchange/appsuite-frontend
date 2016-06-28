@@ -128,6 +128,8 @@ define('io.ox/mail/categories/main', [
         initialize: function (options) {
             _.extend(this, options || {});
             this.setElement($('.categories-toolbar-container'));
+            // A11y: Do not add role to empty element
+            $('.categories-toolbar-container').attr('role', 'menu');
             // add skeleton nodes
             this.$el.append(this.skeleton());
             // helper

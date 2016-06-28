@@ -240,7 +240,6 @@ define('io.ox/core/main', [
 
     launchers
         .attr({
-            'role': 'banner',
             'aria-label': gt('Apps')
         });
 
@@ -300,11 +299,17 @@ define('io.ox/core/main', [
         }
         $('li', launcherDropdown).hide();
 
+
         if (hidden > 0) {
+            // a11y: dropdown menu should only have role menu if it is shown
+            $('.dropdown-menu', launcherDropdown).removeAttr('aria-hidden');
             launcherDropDownIcon.show();
             for (i = hidden; i > 0; i--) {
                 $('li', launcherDropdown).eq(-i).show();
             }
+        } else {
+            // a11y: dropdown menu should only have role menu if it is shown
+            $('.dropdown-menu', launcherDropdown).attr('aria-hidden', true);
         }
     }, 100);
 
@@ -336,7 +341,7 @@ define('io.ox/core/main', [
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(/*#, dynamic*/gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle" tabindex="1">').text(/*#, dynamic*/gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
                 return $('<a>', {
                     href: '#',
@@ -618,7 +623,7 @@ define('io.ox/core/main', [
             });
             // is launcher?
             if (model instanceof ox.ui.AppPlaceholder) {
-                node.addClass('placeholder');
+                node.addClass('placeholder').attr('role', 'presentation');
                 if (!upsell.has(model.get('requires')) && upsell.enabled(model.get('requires'))) {
                     node.addClass('upsell').children('a').first().prepend(
                         _(settings.get('upsell/defaultIcon', 'fa-star').split(/ /)).map(function (icon) {
@@ -1170,7 +1175,7 @@ define('io.ox/core/main', [
             id: 'default',
             draw: function () {
 
-                var rightbar = $('<ul class="launchers-secondary" role="banner">').attr('aria-label', gt('Actions'));
+                var rightbar = $('<ul class="launchers-secondary">').attr('aria-label', gt('Actions'));
 
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', rightbar);

@@ -322,7 +322,7 @@ define('io.ox/mail/toolbar', [
 
             // add placeholder
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                 $('<div>', { class: 'categories-toolbar-container categories-container', role: 'menu' })
+                $('<div class="categories-toolbar-container categories-container">')
             );
         }
     });
