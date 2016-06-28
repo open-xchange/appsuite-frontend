@@ -689,7 +689,7 @@ define('io.ox/core/folder/extensions', [
 
                     this.append(
                         $('<div>').append(
-                            $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                            $('<a href="#" tabindex="1" data-action="add-subfolder" role="button">')
                             .text(title)
                             .on('click', { folder: folder, module: module }, addFolder)
                         )

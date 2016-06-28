@@ -417,12 +417,11 @@ define('io.ox/core/extPatterns/links', [
                             href: '#',
                             tabindex: 1,
                             draggable: false,
-                            role: 'menuitem',
+                            role: 'button',
                             'data-toggle': 'dropdown',
                             'data-action': 'more',
                             'aria-haspopup': true,
-                            'aria-label': isSmartphone ? gt('Actions') : gt('More actions'),
-                            'title': isSmartphone ? gt('Actions') : gt('More actions')
+                            'data-original-title': isSmartphone ? gt('Actions') : gt('More actions')
                         })
                         .append(
                             isSmartphone && !extension.compactDropdown ?
