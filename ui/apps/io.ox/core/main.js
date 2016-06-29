@@ -240,6 +240,7 @@ define('io.ox/core/main', [
 
     launchers
         .attr({
+            'role': 'navigation',
             'aria-label': gt('Apps')
         });
 
@@ -315,7 +316,7 @@ define('io.ox/core/main', [
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
-        var node = $('<li class="launcher" role="presentation">');
+        var node = $('<li class="launcher">');
 
         if (fn) {
             node.on('click', function (e) {
@@ -623,7 +624,7 @@ define('io.ox/core/main', [
             });
             // is launcher?
             if (model instanceof ox.ui.AppPlaceholder) {
-                node.addClass('placeholder').attr('role', 'presentation');
+                node.addClass('placeholder');
                 if (!upsell.has(model.get('requires')) && upsell.enabled(model.get('requires'))) {
                     node.addClass('upsell').children('a').first().prepend(
                         _(settings.get('upsell/defaultIcon', 'fa-star').split(/ /)).map(function (icon) {
@@ -763,8 +764,13 @@ define('io.ox/core/main', [
             }
             launchers.children().removeClass('active-app')
                 .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
+
             launcherDropdown.children().removeClass('active-app')
                 .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
+
+            // A11y: Current app indicator for screen-readers
+            launchers.children().find('a > span.sr-only').remove();
+            launchers.children('.active-app').find('a').append($('<span class="sr-only">').text(gt('(current app)')));
         });
 
         ox.ui.apps.on('change:title', function (model, value) {
@@ -879,10 +885,6 @@ define('io.ox/core/main', [
                     requires: 'active_sync || caldav || carddav',
                     title: 'Upgrade your account',
                     customize: function () {
-                        this.$el.attr({
-                            'role': 'presentation'
-                        });
-
                         $('i', this.$el).css({ 'width': 'auto' });
                     }
                 });
@@ -890,7 +892,7 @@ define('io.ox/core/main', [
                 if (view.visible) {
                     this.append(
                         view.render().$el,
-                        $('<li class="divider" aria-hidden="true" role="presentation">')
+                        $('<li class="divider" aria-hidden="true" role="separator">')
                     );
                 }
             }
