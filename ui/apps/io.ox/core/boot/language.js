@@ -48,7 +48,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                 });
                 // Set Cookie
                 _.setCookie('language', (ox.language = id));
-                ox.trigger('language');
+                ox.trigger('language', id, util.gt);
             });
         },
 
