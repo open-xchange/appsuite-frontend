@@ -1,6 +1,6 @@
 Name:           open-xchange-appsuite-saml
 Version:        @OXVERSION@
-%define         ox_release 1
+%define         ox_release 2
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Francisco Laguna <francisco.laguna@open-xchange.com>
@@ -49,6 +49,8 @@ if [ -x %{update} ]; then %{update} --later; fi
 /opt/open-xchange/appsuite
 
 %changelog
+* Wed Jun 29 2016 Markus Wagner <markus.wagner@open-xchange.com>
+Second preview for 7.8.2 release
 * Tue Jun 14 2016 Markus Wagner <markus.wagner@open-xchange.com>
 First release candidate for 7.8.2
 * Fri Apr 08 2016 Markus Wagner <markus.wagner@open-xchange.com>
