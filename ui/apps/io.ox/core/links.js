@@ -106,9 +106,15 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
                 }
                 sidepopup.show(e, function (popup) {
                     popup.busy();
-                    api.get(data).done(function (data) {
-                        popup.idle().append(view.draw(data));
-                    });
+                    api.get(data).then(
+                        function success(data) {
+                            popup.idle().append(view.draw(data));
+                        },
+                        function fail(e) {
+                            sidepopup.close();
+                            yell(e);
+                        }
+                    );
                 });
             });
         } else {
@@ -123,9 +129,10 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
         e.preventDefault();
         var data = $(this).data();
         ox.launch('io.ox/tasks/main', { folder: data.folder }).done(function () {
-            var app = this, folder = data.folder, id = data.id,
-                cid = id && id.indexOf('.') !== -1 ? id : _.cid({ folder: folder, id: id });
-
+            var app = this,
+                folder = data.folder,
+                id = String(data.id || '').replace(/\//, '.'),
+                cid = id.indexOf('.') > -1 ? id : _.cid({ folder: folder, id: id });
             if (app.folder.get() === folder) {
                 app.getGrid().selection.set(cid);
             } else {
