@@ -465,6 +465,11 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     )
                 )
             );
+
+            // if the collection is already filled trigger reset, so the selectionbox options are drawn
+            if (baton.collection.models.length) {
+                baton.collection.trigger('reset');
+            }
         }
     });
 
