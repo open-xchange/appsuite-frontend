@@ -59,8 +59,18 @@ define('io.ox/files/view-options', [
     });
 
     ext.point('io.ox/files/list-view/toolbar/top').extend({
+        id: 'dropdown-container',
+        index: 900,
+        draw: function (baton) {
+            var dropdownContainer = $('<div class="dropdown-container pull-right">');
+            ext.point('io.ox/files/list-view/toolbar/dropdowns').invoke('draw', dropdownContainer, baton);
+            this.append(dropdownContainer);
+        }
+    });
+
+    ext.point('io.ox/files/list-view/toolbar/dropdowns').extend({
         id: 'dropdown',
-        index: 1000,
+        index: 100,
         draw: function (baton) {
 
             var dropdown = new Dropdown({
@@ -71,7 +81,7 @@ define('io.ox/files/view-options', [
             });
 
             ext.point('io.ox/files/view-options').invoke('draw', dropdown.$el, baton);
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
+            this.append(dropdown.render().$el.addClass('grid-options toolbar-item').on('dblclick', function (e) {
                 e.stopPropagation();
             }));
         }
@@ -127,9 +137,9 @@ define('io.ox/files/view-options', [
         }
     });
 
-    ext.point('io.ox/files/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/list-view/toolbar/dropdowns').extend({
         id: 'select',
-        index: 2000,
+        index: 200,
         draw: function (baton) {
             if (_.device('smartphone')) return;
 

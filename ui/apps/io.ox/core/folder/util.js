@@ -129,6 +129,10 @@ define('io.ox/core/folder/util', [
                 var hash = coreSettings.get(['folder/hidden'], {});
                 id = _.isObject(data) ? data.id : data;
                 return hash[id] === true;
+            case 'attachmentView':
+                var attachmentView = coreSettings.get('folder/mailattachments', {});
+
+                return _.isEmpty(attachmentView) ? false : (_.values(attachmentView).indexOf(data.id) > -1);
             default:
                 return false;
         }
@@ -255,6 +259,8 @@ define('io.ox/core/folder/util', [
                 if (!isMail) return false;
                 if (data.standard_folder && /^(7|9|10|11|12)$/.test(data.standard_folder_type)) return false;
                 return Boolean(data.capabilities & Math.pow(2, 4));
+            case 'change:seen':
+                return _(data.supported_capabilities).indexOf('STORE_SEEN') > -1;
             default:
                 return false;
         }

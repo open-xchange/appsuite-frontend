@@ -175,8 +175,8 @@
     .blockquote(@color) {
         color: @color !important;
         border-left: 2px solid @color;
-        a[href] { color: @color; }
-        a[href]:hover { color: darken(@color, 10%); }
+        a[href]:not(.deep-link) { color: @color; }
+        a[href]:not(.deep-link):hover { color: darken(@color, 10%); }
     }
 
     &.colorQuoted {

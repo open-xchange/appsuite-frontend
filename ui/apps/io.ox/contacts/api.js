@@ -234,6 +234,14 @@ define('io.ox/contacts/api', [
                 }
                 return response;
             },
+            list: function (data) {
+                _(data).each(function (obj) {
+                    // drop certain null fields (see bug 46574)
+                    if (obj.birthday === null) delete obj.birthday;
+                    if (obj.distribution_list === null) delete obj.distribution_list;
+                });
+                return data;
+            },
             listPost: function (data) {
                 _(data).each(function (obj) {
                     // remove from cache if get cache is outdated
@@ -533,6 +541,14 @@ define('io.ox/contacts/api', [
 
     api.on('refresh^', function () {
         api.caches.get.clear();
+    });
+
+    // refresh.all caused by import
+    api.on('refresh.all:import', function () {
+        api.caches.list.clear();
+        fetchCache.clear();
+        api.caches.get.clear();
+        api.trigger('import');
     });
 
     /** @define {object} simple contact cache */

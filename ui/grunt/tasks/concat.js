@@ -291,21 +291,6 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            pdfjs: {
-                options: {
-                    banner: 'define("3rd.party/pdfjs/pdf.combined", function () {\n\n',
-                    footer: 'return PDFJS;\n});\n'
-                },
-                files: [
-                    {
-                        src: [
-                            'bower_components/pdfjs-dist/build/pdf.combined.js'
-                        ],
-                        dest: 'build/apps/3rd.party/pdfjs/pdf.combined.js',
-                        nonull: true
-                    }
-                ]
-            },
             compose: {
                 options: {
                     // jquery-min doesn't work because it messes around with anonymous define()

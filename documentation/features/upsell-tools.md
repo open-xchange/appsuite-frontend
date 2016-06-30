@@ -70,7 +70,7 @@ Text and image are cut off in case they exceed the space.
 
 # The Upsell Bubbles
 
-Upsell bubbles are little popups based on hopscotch, similar to the [guided tours](ui/components/wizards/guided-tours.html).
+Upsell bubbles are little popups based on hopscotch, similar to the [guided tours](../components/wizards/guided-tours.html).
 They show up after a given amount of time and point to a defined UI element to display some text. 
 Clicking on them starts the Upsell Wizard (unless you click "cancel", of course).
 

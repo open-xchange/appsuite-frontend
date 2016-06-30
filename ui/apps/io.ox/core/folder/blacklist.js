@@ -23,6 +23,7 @@ define('io.ox/core/folder/blacklist', [
 
     var point = ext.point('io.ox/core/folder/filter'),
         hash = settings.get('folder/blacklist', {}),
+        localBlacklist = {},
         ids = _(hash).keys().sort();
 
     if (ox.debug && ids.length > 0) console.info('Blacklisted folders:', ids);
@@ -34,7 +35,7 @@ define('io.ox/core/folder/blacklist', [
             visible: function (baton) {
                 var data = baton.data, id = String(data.id);
                 // work with fresh hash (esp. for testing)
-                hash = settings.get('folder/blacklist', {});
+                hash = _.extend(settings.get('folder/blacklist', {}), localBlacklist);
                 return !hash[id];
             }
         },
@@ -80,6 +81,10 @@ define('io.ox/core/folder/blacklist', [
         // filter array of folders
         apply: function (array) {
             return _(array).filter(this.filter, this);
+        },
+
+        add: function (id) {
+            localBlacklist[id] = true;
         }
     };
 });

@@ -240,7 +240,7 @@ define('io.ox/core/main', [
 
     launchers
         .attr({
-            'role': 'banner',
+            'role': 'navigation',
             'aria-label': gt('Apps')
         });
 
@@ -300,17 +300,23 @@ define('io.ox/core/main', [
         }
         $('li', launcherDropdown).hide();
 
+
         if (hidden > 0) {
+            // a11y: dropdown menu should only have role menu if it is shown
+            $('.dropdown-menu', launcherDropdown).removeAttr('aria-hidden');
             launcherDropDownIcon.show();
             for (i = hidden; i > 0; i--) {
                 $('li', launcherDropdown).eq(-i).show();
             }
+        } else {
+            // a11y: dropdown menu should only have role menu if it is shown
+            $('.dropdown-menu', launcherDropdown).attr('aria-hidden', true);
         }
     }, 100);
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
-        var node = $('<li class="launcher" role="presentation">');
+        var node = $('<li class="launcher">');
 
         if (fn) {
             node.on('click', function (e) {
@@ -336,7 +342,7 @@ define('io.ox/core/main', [
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(/*#, dynamic*/gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle" tabindex="1">').text(/*#, dynamic*/gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
                 return $('<a>', {
                     href: '#',
@@ -758,8 +764,13 @@ define('io.ox/core/main', [
             }
             launchers.children().removeClass('active-app')
                 .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
+
             launcherDropdown.children().removeClass('active-app')
                 .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
+
+            // A11y: Current app indicator for screen-readers
+            launchers.children().find('a > span.sr-only').remove();
+            launchers.children('.active-app').find('a').append($('<span class="sr-only">').text(gt('(current app)')));
         });
 
         ox.ui.apps.on('change:title', function (model, value) {
@@ -874,10 +885,6 @@ define('io.ox/core/main', [
                     requires: 'active_sync || caldav || carddav',
                     title: 'Upgrade your account',
                     customize: function () {
-                        this.$el.attr({
-                            'role': 'presentation'
-                        });
-
                         $('i', this.$el).css({ 'width': 'auto' });
                     }
                 });
@@ -885,7 +892,7 @@ define('io.ox/core/main', [
                 if (view.visible) {
                     this.append(
                         view.render().$el,
-                        $('<li class="divider" aria-hidden="true" role="presentation">')
+                        $('<li class="divider" aria-hidden="true" role="separator">')
                     );
                 }
             }
@@ -1170,7 +1177,7 @@ define('io.ox/core/main', [
             id: 'default',
             draw: function () {
 
-                var rightbar = $('<ul class="launchers-secondary" role="banner">').attr('aria-label', gt('Actions'));
+                var rightbar = $('<ul class="launchers-secondary">').attr('aria-label', gt('Actions'));
 
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', rightbar);

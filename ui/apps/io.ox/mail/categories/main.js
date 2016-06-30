@@ -15,6 +15,7 @@ define('io.ox/mail/categories/main', [
     'io.ox/mail/categories/api',
     'io.ox/mail/api',
     'io.ox/core/api/account',
+    'io.ox/core/folder/api',
     'io.ox/core/tk/list-dnd',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
@@ -23,7 +24,7 @@ define('io.ox/mail/categories/main', [
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'less!io.ox/mail/categories/style'
-], function (api, mailAPI, accountAPI, dnd, links, capabilities, yell, ext, settings, gt) {
+], function (api, mailAPI, accountAPI, folderAPI, dnd, links, capabilities, yell, ext, settings, gt) {
 
     'use strict';
 
@@ -127,6 +128,8 @@ define('io.ox/mail/categories/main', [
         initialize: function (options) {
             _.extend(this, options || {});
             this.setElement($('.categories-toolbar-container'));
+            // A11y: Do not add role to empty element
+            $('.categories-toolbar-container').attr('role', 'menu');
             // add skeleton nodes
             this.$el.append(this.skeleton());
             // helper
@@ -359,7 +362,7 @@ define('io.ox/mail/categories/main', [
             // load config
             this.config.load();
             // props
-            this.props.set('selected', this.preselected());
+            this.props.set('selected', this.restoreSelection());
             // inital refresh
             //_.defer(_.bind(this.refresh, this));
         },
@@ -390,7 +393,8 @@ define('io.ox/mail/categories/main', [
             this.listenTo(this.props, 'change:enabled', this.reload);
             this.listenTo(this, 'move:after revert:after generalize:after', this.reload);
             // refresh: unread counter
-            mailAPI.on('update:after', $.proxy(this.refresh, this));
+            mailAPI.on('delete refresh.all', $.proxy(this.refresh, this));
+            folderAPI.on('reload:' + accountAPI.getInbox(), $.proxy(this.refresh, this));
             this.listenTo(this.props, 'change:enabled', this.refresh);
             this.listenTo(this, 'move:after rever:after generalise:after', this.refresh);
             // toggle visibility
@@ -427,11 +431,13 @@ define('io.ox/mail/categories/main', [
             this.mail.listView.model.set('filter', this.props.get('selected'));
             // state
             this.props.set('visible', true);
+            this.restoreSelection();
             this.mail.left.find('[data-name="thread"]').addClass('disabled');
             this.trigger('show');
         },
         hide: function () {
             // restore state
+            _.url.hash('category', null);
             this.mail.listView.model.unset('filter');
             if (this.props.get('thread')) {
                 this.mail.props.set('thread', this.props.get('thread'));
@@ -449,8 +455,8 @@ define('io.ox/mail/categories/main', [
             this.props.set('enabled', false);
             this.trigger('disable');
         },
-        preselected: function () {
-            var id = (this.categories.get(_.url.hash('category')) || this.categories.first() || {}).id;
+        restoreSelection: function () {
+            var id = (this.categories.get(_.url.hash('category') || this.props.get('selected')) || this.categories.first() || {}).id;
             _.url.hash('category', id);
             return id;
         },
@@ -469,6 +475,10 @@ define('io.ox/mail/categories/main', [
         },
         update: function (categories) {
             this.categories.set(categories);
+            _.delay(function () {
+                // we have to wait until changes reach middleware
+                this.reload();
+            }.bind(this), 2000);
             this.trigger('update:after');
         },
         move: function (baton, revert) {
@@ -500,15 +510,13 @@ define('io.ox/mail/categories/main', [
             this.mail.listView.load();
             this.trigger('reload');
         },
-        refresh: function () {
+        refresh: _.throttle(function () {
             return this.categories.refresh()
                 .done(_.bind(trigger, this, 'refresh'));
-        }
+        }, 500, { leading: false })
     };
 
     // hint: settings at io.ox/mail/settings/pane
-
-    window.horst = module;
     return module;
 
 });

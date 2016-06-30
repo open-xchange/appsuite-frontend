@@ -213,7 +213,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '709': 'version_comment',
                 '710': 'current_version',
                 '711': 'number_of_versions',
-                '7010': 'com.openexchange.share.extendedObjectPermissions'
+                '7010': 'com.openexchange.share.extendedObjectPermissions',
+                '7030': 'com.openexchange.file.storage.mail.mailMetadata'
             },
             'tasks': {
                 '200': 'title',
@@ -757,7 +758,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             ajax = $.ajax(ajaxOptions);
 
             // add an 'abort()' method to the Deferred and all Promises it creates
-            var abortFunc = function (message) { ajax.abort(message); },
+            var abortFunc = function () { ajax.abort(); },
                 promiseFunc = _.bind(r.def.promise, r.def);
 
             _.extend(r.def, {

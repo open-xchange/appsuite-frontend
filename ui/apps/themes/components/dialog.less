@@ -317,9 +317,17 @@
         flex-grow: 0;
     }
 
+    .modal-header {
+        // helps against flex grow pushing the headline out of the dialog
+        min-height: 56px;
+    }
+
     .modal-footer {
         .btn.pull-left { margin-right: 8px; }
         .btn.pull-right { margin-left: 8px; }
+
+        // helps against flex grow pushing the buttons out of the dialog
+        min-height: 63px;
     }
 
     &.maximize {

@@ -16,15 +16,15 @@ define(['io.ox/mail/mailfilter/settings/model', 'gettext!io.ox/mail'], function 
     'use strict';
 
     var emptyModel = {
-        'rulename': gt('New rule'),
-        'test': {
-            'id': 'true'
+            'rulename': gt('New rule'),
+            'test': {
+                'id': 'true'
+            },
+            'actioncmds': [],
+            'flags': [],
+            'active': true
         },
-        'actioncmds': [],
-        'flags': [],
-        'active': true
-    },
-    returnedModel = model.protectedMethods.provideEmptyModel();
+        returnedModel = model.protectedMethods.provideEmptyModel();
 
     describe('Mailfilter model provide empty model', function () {
 

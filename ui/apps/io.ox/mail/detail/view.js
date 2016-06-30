@@ -130,17 +130,6 @@ define('io.ox/mail/detail/view', [
     //
     ext.point('io.ox/mail/detail/header/row1').extend(
         {
-            id: 'from',
-            index: INDEX_header += 100,
-            draw: function (baton) {
-                this.append(
-                    $('<div class="from">').append(
-                        util.serializeList(baton.data, 'from')
-                    )
-                );
-            }
-        },
-        {
             id: 'flag-picker',
             index: INDEX_header += 100,
             draw: extensions.flagPicker
@@ -154,6 +143,18 @@ define('io.ox/mail/detail/view', [
             id: 'priority',
             index: INDEX_header += 100,
             draw: extensions.priority
+        },
+        {
+            // from is last one in the list for proper ellipsis effect
+            id: 'from',
+            index: INDEX_header += 100,
+            draw: function (baton) {
+                this.append(
+                    $('<div class="from">').append(
+                        util.serializeList(baton.data, 'from')
+                    )
+                );
+            }
         }
     );
 

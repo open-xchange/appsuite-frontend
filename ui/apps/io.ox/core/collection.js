@@ -61,6 +61,8 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                     'create:folder': true,
                     'rename:folder': true,
                     'delete:folder': true,
+                    // special
+                    'change:seen': true,
                     // quantity
                     'none': $l === 0,
                     'some': $l > 0,
@@ -83,7 +85,7 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
 
             if (folders.length === 0) {
                 props.unknown = true;
-                'read modify delete create:folder rename:folder delete:folder'.split(' ').forEach(function (id) {
+                'read modify delete create:folder rename:folder delete:folder change:seen'.split(' ').forEach(function (id) {
                     props[id] = false;
                 });
                 return $.when(props);
@@ -111,6 +113,7 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                         props['create:folder'] = props['create:folder'] && api.can('create:folder', item);
                         props['rename:folder'] = props['rename:folder'] && api.can('rename:folder', item);
                         props['delete:folder'] = props['delete:folder'] && api.can('delete:folder', item);
+                        props['change:seen'] = props['change:seen'] && api.can('change:seen', item);
                         // we unify delete; otherwise the action checks are too complicated
                         props['delete'] = props['delete'] && api.can('delete:folder', item);
 
@@ -136,7 +139,7 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                     } else {
                         // folder unknown
                         props.unknown = true;
-                        props.read = props.modify = props['delete'] = props.create = false;
+                        props.read = props.modify = props['delete'] = props.create = props['change:seen'] = false;
                         break;
                     }
                 }

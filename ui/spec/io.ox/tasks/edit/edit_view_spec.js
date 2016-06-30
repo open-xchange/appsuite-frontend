@@ -15,9 +15,8 @@ define([
     'io.ox/tasks/edit/main',
     'io.ox/core/moment',
     'gettext!io.ox/tasks/edit',
-    'spec/shared/capabilities',
-    'waitsFor'
-], function (edit, moment, gt, caputil, waitsFor) {
+    'spec/shared/capabilities'
+], function (edit, moment, gt, caputil) {
 
     var app,
         view,

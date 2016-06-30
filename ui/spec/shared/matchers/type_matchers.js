@@ -13,27 +13,27 @@
 if (jasmine) {
 
     var typeMatchers = {
-            toBeBoolean: function () {
-                return this.actual === true || this.actual === false;
-            },
+        toBeBoolean: function () {
+            return this.actual === true || this.actual === false;
+        },
 
-            //functions
-            toBeFunction: function () {
-                return this.actual instanceof Function;
-            },
+        //functions
+        toBeFunction: function () {
+            return this.actual instanceof Function;
+        },
 
-            //special: jQuery
-            toBeJquery: function () {
-                var result = this.actual instanceof $;
-                expect(this.isNot ? !result : result).toBeTruthy();
-                return true;
-            },
-            toBeEmptyJquery: function () {
-                var result = this.actual && this.actual.length === 0;
-                expect(this.isNot ? !result : result).toBeTruthy();
-                return true;
-            }
-        };
+        //special: jQuery
+        toBeJquery: function () {
+            var result = this.actual instanceof $;
+            expect(this.isNot ? !result : result).toBeTruthy();
+            return true;
+        },
+        toBeEmptyJquery: function () {
+            var result = this.actual && this.actual.length === 0;
+            expect(this.isNot ? !result : result).toBeTruthy();
+            return true;
+        }
+    };
 
     beforeEach(function () {
         this.addMatchers(typeMatchers);

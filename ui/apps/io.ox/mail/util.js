@@ -411,8 +411,8 @@ define('io.ox/mail/util', [
         getPriority: function (data) {
             // normal?
             if (data && data.priority === 3) return $();
-            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation"/></span>').attr('title', gt('High priority'));
-            return $('<span class="low"><i class="fa fa-minus"/></span>').attr('title', gt('Low priority'));
+            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation"/></span>').attr('title', gt.pgettext('E-Mail', 'High priority'));
+            return $('<span class="low"><i class="fa fa-minus"/></span>').attr('title', gt.pgettext('E-Mail', 'Low priority'));
         },
 
         getAccountName: function (data) {
@@ -554,80 +554,6 @@ define('io.ox/mail/util', [
                 folder = base.without(id).join(separator);
             return { folder_id: folder, id: id };
         },
-
-        signatures: (function () {
-
-            var looksLikeHTML = function (text) {
-                    return /(<\/?\w+(\s[^<>]*)?>)/.test(text);
-                },
-                general = function (text) {
-                    return String(text || '')
-                        // replace white-space and evil \r
-                        .replace(/(\r\n|\n|\r)/g, '\n')
-                        // replace subsequent white-space (except linebreaks)
-                        .replace(/[\t\f\v ][\t\f\v ]+/g, ' ')
-                        .trim();
-                },
-                add = function (text, isHTML) {
-                    var clean = general(text);
-                    // special entities like '&'/&amp;
-                    var $parsed = $('<dummy>').html(clean);
-                    if (isHTML) {
-                        if (!looksLikeHTML(clean)) {
-                            $parsed.text(clean);
-                        }
-                        return $parsed.html();
-                    }
-                    if (!looksLikeHTML(clean)) {
-                        $parsed.text(clean);
-                    }
-                    $parsed.find('p').replaceWith(function () {
-                        return $(this).html() + '\n\n';
-                    });
-                    $parsed.find('br').replaceWith(function () {
-                        return $(this).html() + '\n';
-                    });
-                    return $parsed.text().trim();
-                },
-                preview = function (text) {
-                    return general(text)
-                        // remove ASCII art (intended to remove separators like '________')
-                        .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
-                        // remove htmltags
-                        .replace(/(<\/?\w+(\s[^<>]*)?>)/g, '')
-                        .trim();
-                };
-
-            return {
-
-                cleanAdd: function (text, isHTML) {
-                    return add(text, !!isHTML);
-                },
-
-                cleanPreview: function (text) {
-                    return preview(text);
-                },
-
-                is: function (text, list, isHTML) {
-                    var signatures = _(list).map(function (signature) {
-                        // consider changes applied by appsuite
-                        var clean = add(signature.content, !!isHTML);
-                        // consider changes applied by tiny
-                        if (clean === '') return '<br>';
-
-                        return clean
-                            // set breaks
-                            .replace(/(\r\n|\n|\r)/g, '<br>')
-                            // replace surrounding white-space (except linebreaks)
-                            .replace(/>[\t\f\v ]+/g, '>')
-                            .replace(/[\t\f\v ]+</g, '<')
-                            // remove empty alt attribute(added by tiny)
-                            .replace(/ alt=""/, '');
-                    });
-                    return _(signatures).indexOf(add(text, !!isHTML)) > -1;
-                }
-            };
-        })(),
 
         getAttachments: (function () {
 

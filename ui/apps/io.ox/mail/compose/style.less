@@ -181,7 +181,7 @@
         padding: 18px 21px;
 
         -webkit-font-feature-settings: "liga" 0;
-        font-feature-settings: "liga" 1;
+        font-feature-settings: "liga" 0;
         text-rendering: optimizeLegibility;
 
         &.monospace { font-family: monospace; }
@@ -274,7 +274,7 @@
             }
         }
 
-        .dropdownlink {
+        .dropdownlink, .checkbox {
             display: inline;
             position: relative;
 
@@ -336,6 +336,9 @@
                     width: 90%;
                     margin-right: -5px;
                 }
+                input::-webkit-input-placeholder {
+                    color: #fff;
+                }
             }
             &[data-extension-id=subject] .col-xs-12 { padding-left: 7px; }
 
@@ -344,7 +347,10 @@
                 padding-bottom:4px;
             }
 
-            .maillabel.col-xs-1 { width: 10%; }
+            .maillabel.col-xs-1 {
+                width: 10%;
+            }
+
 
             &.subject {
                 padding-bottom: 6px;

@@ -385,37 +385,40 @@ define('io.ox/core/settings/pane', [
             index: 800,
             className: 'form-group',
             render: function () {
-                this.baton.model.on('change:showDesktopNotifications', function (e, value) {
-                    if (value === true) {
-                        desktopNotifications.requestPermission(function (result) {
-                            // revert if user denied the permission
-                            if (result === 'denied') {
-                                this.baton.model.set('showDesktopNotifications', false);
-                            }
-                        });
-                    }
-                });
-                this.$el.append(
-                    $('<div class="col-sm-offset-4 col-sm-8">').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label class="control-label">').text(gt('Show desktop notifications')).prepend(
-                                new miniViews.CheckboxView({ name: 'showDesktopNotifications', model: this.baton.model }).render().$el
-                            ),
-                            // add ask now link (by design browsers only allow asking if there was no decision yet)
-                                                                                                               //#. Opens popup to decide if desktop notifications should be shown
-                            desktopNotifications.getPermissionStatus() === 'default' ? $('<a href="#" >').text(gt('Manage permission now')).css('margin-left', '8px').on('click', function (e) {
-                                e.preventDefault();
-                                desktopNotifications.requestPermission(function (result) {
-                                    if (result === 'granted') {
-                                        settings.set('showDesktopNotifications', true).save();
-                                    } else if (result === 'denied') {
-                                        settings.set('showDesktopNotifications', false).save();
-                                    }
-                                });
-                            }) : []
+                // don't show setting if not supported, to not confuse users
+                if (desktopNotifications.isSupported()) {
+                    this.baton.model.on('change:showDesktopNotifications', function (e, value) {
+                        if (value === true) {
+                            desktopNotifications.requestPermission(function (result) {
+                                // revert if user denied the permission
+                                if (result === 'denied') {
+                                    this.baton.model.set('showDesktopNotifications', false);
+                                }
+                            });
+                        }
+                    });
+                    this.$el.append(
+                        $('<div class="col-sm-offset-4 col-sm-8">').append(
+                            $('<div>').addClass('checkbox').append(
+                                $('<label class="control-label">').text(gt('Show desktop notifications')).prepend(
+                                    new miniViews.CheckboxView({ name: 'showDesktopNotifications', model: this.baton.model }).render().$el
+                                ),
+                                // add ask now link (by design browsers only allow asking if there was no decision yet)
+                                                                                                                   //#. Opens popup to decide if desktop notifications should be shown
+                                desktopNotifications.getPermissionStatus() === 'default' ? $('<a href="#" >').text(gt('Manage permission now')).css('margin-left', '8px').on('click', function (e) {
+                                    e.preventDefault();
+                                    desktopNotifications.requestPermission(function (result) {
+                                        if (result === 'granted') {
+                                            settings.set('showDesktopNotifications', true).save();
+                                        } else if (result === 'denied') {
+                                            settings.set('showDesktopNotifications', false).save();
+                                        }
+                                    });
+                                }) : []
+                            )
                         )
-                    )
-                );
+                    );
+                }
             }
         });
     }());

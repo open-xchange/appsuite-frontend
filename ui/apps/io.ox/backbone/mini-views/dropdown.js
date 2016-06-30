@@ -137,7 +137,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         header: function (text) {
-            this.$ul.append($('<li class="dropdown-header" role="sectionhead">').text(text));
+            this.$ul.append($('<li class="dropdown-header" role="separator">').text(text));
             return this;
         },
 

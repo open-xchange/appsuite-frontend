@@ -5,7 +5,7 @@ description:
 
 # PIWIK
 
-With this easy step-by-step guide it should be quite simple to setup PIWIK and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [here](ui/features/metrics/02-adapters.html#piwik).
+With this easy step-by-step guide it should be quite simple to setup PIWIK and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [here](02-adapters.html#piwik).
 
 ## Preconditions
 
@@ -117,7 +117,7 @@ Unfortunatly PIWIK limits the maximal length of custom variable values to [200 c
 
 # Google Analytics
 
-With this easy step-by-step guide it should be quite simple to setup PIWIK and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [here](ui/features/metrics/02-adapters.html#piwik).
+With this easy step-by-step guide it should be quite simple to setup PIWIK and adjust the relevant properties to start tracking. Documentation about the corresponding front end adapter can be found [here](02-adapters.html#piwik).
 
 ## Preconditions
 

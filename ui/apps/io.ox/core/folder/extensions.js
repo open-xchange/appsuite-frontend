@@ -23,10 +23,11 @@ define('io.ox/core/folder/extensions', [
     'gettext!io.ox/core',
     'io.ox/core/folder/folder-color',
     'io.ox/backbone/mini-views/upsell',
+    'io.ox/core/folder/blacklist',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, settings, mailSettings) {
+], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, blacklist, settings, mailSettings) {
 
     'use strict';
 
@@ -103,6 +104,15 @@ define('io.ox/core/folder/extensions', [
         });
     }
 
+    var attachmentView = settings.get('folder/mailattachments', {});
+
+    if (attachmentView.all) blacklist.add(attachmentView.all);
+
+    function getAllAttachmentsFolder() {
+        var id = attachmentView.all;
+        return id ? api.get(id) : null;
+    }
+
     function getTrashFolder() {
         return api.list('9').then(function (list) {
             return _(list).filter(function (data) {
@@ -113,10 +123,10 @@ define('io.ox/core/folder/extensions', [
 
     if (capabilities.has('infostore')) {
         api.virtual.add('virtual/drive/private', function () {
-            return this.concat(getMyFilesFolder(), getMySharesFolder(), getTrashFolder());
+            return this.concat(getMyFilesFolder(), getMySharesFolder(), getAllAttachmentsFolder(), getTrashFolder());
         });
         api.virtual.add('virtual/drive/private-without-myshares', function () {
-            return this.concat(getMyFilesFolder(), getTrashFolder());
+            return this.concat(getMyFilesFolder(), getAllAttachmentsFolder(), getTrashFolder());
         });
         api.virtual.add('virtual/drive/public', function () {
             return api.list('9').then(function (list) {
@@ -291,6 +301,22 @@ define('io.ox/core/folder/extensions', [
             );
         },
 
+        allAttachments: function () {
+            if (!attachmentView.all) return;
+            this.append(
+                $('<div class="links">').append(
+                    $('<a href="#" data-action="all-attachments" tabindex="1" role="button">')
+                    .text(gt('View all attachments'))
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        ox.launch('io.ox/files/main', { folder: attachmentView.all }).done(function () {
+                            this.folder.set(attachmentView.all);
+                        });
+                    })
+                )
+            );
+        },
+
         synchronizeAccount: function () {
             this.append(new UpsellView({
                 id: 'folderview/mail',
@@ -427,6 +453,11 @@ define('io.ox/core/folder/extensions', [
             id: 'other',
             index: INDEX += 100,
             draw: extensions.otherFolders
+        },
+        {
+            id: 'all-attachments',
+            index: INDEX += 100,
+            draw: extensions.allAttachments
         },
         {
             id: 'remote-accounts',
@@ -658,7 +689,7 @@ define('io.ox/core/folder/extensions', [
 
                     this.append(
                         $('<div>').append(
-                            $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                            $('<a href="#" tabindex="1" data-action="add-subfolder" role="button">')
                             .text(title)
                             .on('click', { folder: folder, module: module }, addFolder)
                         )

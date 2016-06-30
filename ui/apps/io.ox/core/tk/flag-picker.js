@@ -171,19 +171,29 @@ define('io.ox/core/tk/flag-picker', [
     var colorLabelIconEmpty = 'fa fa-bookmark-o',
         colorLabelIcon = 'fa fa-bookmark';
 
+    var preParsed = {
+        div: $('<div>'),
+        list: $('<ul class="dropdown-menu" role="menu">'),
+        listItem: $('<li>'),
+        menuItemLink: $('<a href="#" tabindex="1" role="menuitem">'),
+        flag: $('<span class="flag-example">'),
+        setColorLink: $('<a href="#" tabindex="1" title="' + gt('Set color') + '">'),
+        dropdownIcon: $('<i class="flag-dropdown-icon">')
+    };
+
     var that = {
 
         appendDropdown: function (node, data) {
             node.after(
                 // drop down
-                $('<ul class="dropdown-menu" role="menu">')
+                preParsed.list.clone()
                 .on('click', 'a', { data: data }, that.change)
                 .append(
                     _(order).map(function (index, color) {
                         // alternative: api.COLORS for rainbow colors
-                        return $('<li>').append(
-                            $('<a href="#" tabindex="1" role="menuitem">').append(
-                                index > 0 ? $('<span class="flag-example">').addClass('flag_bg_' + index) : $(),
+                        return preParsed.listItem.clone().append(
+                            preParsed.menuItemLink.clone().append(
+                                index > 0 ? preParsed.flag.clone().addClass('flag_bg_' + index) : $(),
                                 $.txt(colorNames[color])
                             )
                             .attr('data-color', index)
@@ -210,11 +220,11 @@ define('io.ox/core/tk/flag-picker', [
                 link;
 
             node.append(
-                $('<div>').append(
-                    link = $('<a href="#" tabindex="1" title="' + gt('Set color') + '">')
+                preParsed.div.clone().append(
+                    link = preParsed.setColorLink.clone()
                     .addClass(overlay ? 'smart-dropdown' : '')
                     .append(
-                        $('<i class="flag-dropdown-icon">').attr({
+                        preParsed.dropdownIcon.clone().attr({
                             'data-color': color,
                             'title': gt('Set color')
                         })

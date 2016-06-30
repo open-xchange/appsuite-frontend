@@ -21,7 +21,7 @@ define([
 
     describe('Portal Birthday plugin', function () {
 
-        function invokeDraw () {
+        function invokeDraw() {
             //FIXME: uuuuugly API
             var def = ext.point('io.ox/portal/widget/birthdays').invoke('load', this.node, this.baton);
             return def._wrapped[0].then(function () {

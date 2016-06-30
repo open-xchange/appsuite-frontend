@@ -1,13 +1,13 @@
 <html lang="pl">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.3.3. Zarządzanie własnymi udostępnieniami</title>
+<title>11.3.4. Zarządzanie własnymi udostępnieniami</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Oprogramowanie do pracy grupowej">
 <link rel="up" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. Udostępnianie">
-<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html" title="11.3.2. Uzyskiwanie dostępu do udostępnionych danych">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.4. Subskrypcje">
+<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html" title="11.3.3. Uzyskiwanie dostępu do udostępnionych danych">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.sharing.view.html" title="11.3.5. Wyświetlanie własnych udostępnień w aplikacji Pliki">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Informacja Prawna">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html">Poprzedni</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Spis treści</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Spis treści</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.pubsub.html">Następny</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.sharing.view.html">Następny</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -33,35 +33,49 @@
 <h2 class="sr-only">Udostępnianie</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.dataorganisation.sharing.manage"></a>11.3.3. Zarządzanie własnymi udostępnieniami</h3></div></div></div>
-<a class="indexterm" name="id-1.12.6.6.2"></a><div class="concept">
+<a name="ox.appsuite.user.sect.dataorganisation.sharing.manage"></a>11.3.4. Zarządzanie własnymi udostępnieniami</h3></div></div></div>
+<a class="indexterm" name="id-1.12.6.7.2"></a><a class="indexterm" name="id-1.12.6.7.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.sharing.manage"></a><p>Aby uporządkować udostępnione obiekty, możesz wykonać następujące czynności:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Edycja udzielonych uprawnień, np. zmiana uprawnienia odczytu wybranych użytkowników na uprawnienie zapisu</p></li>
-<li class="listitem"><p>Dodanie nowych uprawnień przez przydzielenie ich kolejnemu użytkownikowi</p></li>
-<li class="listitem"><p>Usunięcie istniejących uprawnień wybranych użytkowników</p></li>
+<li class="listitem">
+<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.edit" title="Jak edytować istniejące uprawnienia:">Edycja istniejących uprawnień</a>:</p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td>dopasowanie roli lub uprawnień użytkownika,</td></tr>
+<tr><td>dodanie nowej osoby</td></tr>
+<tr><td>zabranie uprawnień danej osobie</td></tr>
+</table>
+</li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.resend" title="Jak ponownie wysłać zaproszenie do osoby:">ponowne wysłanie zaproszenia</a> do osoby</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.removeall" title="Jak usunąć wszystkie uprawnienia do pliku lub folderu w aplikacji Pliki">usunięcie</a> wszystkich istniejących uprawnień do pliku lub folderu w aplikacji <span class="phrase">Pliki</span>.</p></li>
 </ul></div>
-<p>
-      </p>
+<p>Informacje o uprawnieniach można znaleźć w dokumencie <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Uprawnienia">11.2: Uprawnienia</a>. </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.sharing.rights.edit"></a><p class="title">Jak edytować istniejące uprawnienia:</p>
+<a name="ox.appsuite.user.task.sharing.edit"></a><p class="title">Jak edytować istniejące uprawnienia:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Jak otworzyć lub zamknąć folder:">Wybierz</a> folder w drzewie folderów.</p></li>
-<li class="step"><p>Kliknij ikonę <span class="guibutton"><strong>Udostępnione</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.rights.edit"></a><img src="../../images/appsuite_user_icon_folder_shared.png"></span> obok nazwy folderu. Pojawi się okno umożliwiające dostosowanie uprawnień.</p></li>
+<li class="step"><p>W drzewie folderów <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Jak otworzyć lub zamknąć folder:">wybierz</a> udostępniony folder.</p></li>
 <li class="step">
-<p>Użyj następujących metod:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Aby dostosować rolę użytkownika, kliknij pozycję w polu <span class="guibutton"><strong>Bieżąca rola</strong></span>. Wybierz odpowiednią pozycję z menu.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Aby dostosować rolę użytkownika, kliknij pozycję w polu <span class="guibutton"><strong>Bieżąca rola</strong></span>. Wybierz odpowiednią pozycję z menu.</p></li>
-</ul></div>
-<p>
-            </p>
-<p><span class="phrase"><strong>Uwagi:</strong></span></p>
+<p>Kliknij ikonę <span class="guibutton"><strong>Działania specyficzne dla folderu</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.edit.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> obok nazwy folderu. Kliknij przycisk <span class="guibutton"><strong>Uprawnienia / Zaproś osoby</strong></span>.</p>
+<p>Możesz także kliknąć ikonę <span class="guibutton"><strong>Udostępnione</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.edit.sharedfolder"></a><img src="../../images/appsuite_user_icon_folder_shared.png"></span> widoczną obok nazwy folderu.</p>
+<p>W aplikacji <span class="phrase">Pliki</span> możesz też kliknąć dostępną na pasku narzędzi ikonę <span class="guibutton"><strong>Udostępnij</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.edit.share"></a><img src="../../images/appsuite_user_icon_share.png"></span>. Kliknij polecenie <span class="guibutton"><strong>Zaproś osoby</strong></span>.</p>
+<p>Pojawi się okno pozwalające na ustawianie uprawnień.</p>
+</li>
+<li class="step">
+<p>Dostępne są następujące możliwości zmiany uprawnień.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Aby dostosować rolę użytkownika, kliknij pozycję w polu <span class="guibutton"><strong>Bieżąca rola</strong></span>. Wybierz odpowiednią pozycję z menu.</p></li>
+<li class="listitem">
+<p>Aby dostosować szczegółowe uprawnień, kliknij pozycję <span class="guibutton"><strong>Szczegółowe uprawnienia dostępu</strong></span>. Wybierz uprawnienie z menu. <span class="phrase"><strong>Uwagi:</strong></span></p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>Nie możesz zmienić praw administracyjnych do folderu osobistego.</p></li>
 <li class="listitem" style="list-style-type: none"><p>Nie można zmienić uprawnień dla łącz publicznych.</p></li>
 <li class="listitem" style="list-style-type: none"><p>Goście mogą uzyskać tylko uprawnienia do odczytu. Nie można tego zmienić.</p></li>
+</ul></div>
+<p>
+                  </p>
+</li>
+<li class="listitem"><p>Aby dodać nowe uprawnienia, wpisz adres e-mail w polu <span class="guilabel"><strong>Dodaj osoby</strong></span>. Adres e-mail zostanie dodany do listy jako użytkownik wewnętrzny, grupa lub gość.</p></li>
+<li class="listitem"><p>Aby usunąć uprawnienia użytkownika, kliknij ikonę <span class="guibutton"><strong>Działania</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.edit.useractions.removeuser"></a><img src="../../images/appsuite_user_icon_actions.png"></span> widoczną obok jego nazwy. Kliknij w menu polecenie <span class="guibutton"><strong>Cofnij dostęp</strong></span>.</p></li>
 </ul></div>
 <p>
             </p>
@@ -70,44 +84,55 @@
 </ol></div>
 <div class="taskrelated">
           <div class="itemizedlist">
-<a name="ox.appsuite.user.task.sharing.rights.edit.related"></a><p class="title">Podobne działania</p>
+<a name="ox.appsuite.user.task.sharing.edit.related"></a><p class="title">Podobne działania</p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>
-                <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.rights.add" title="Jak dodać nowe uprawnienia:">Jak dodać nowe uprawnienia:</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.rights.removeuser" title="Jak usunąć uprawnienia określonego użytkownika:">Jak usunąć uprawnienia określonego użytkownika:</a></span>
+                <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.resend" title="Jak ponownie wysłać zaproszenie do osoby:">Jak ponownie wysłać zaproszenie do osoby:</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.removeall" title="Jak usunąć wszystkie uprawnienia do pliku lub folderu w aplikacji Pliki">Jak usunąć wszystkie uprawnienia do pliku lub folderu w aplikacji <span class="phrase">Pliki</span></a></span>
               </p></li></ul>
 </div>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.sharing.rights.add"></a><p class="title">Jak dodać nowe uprawnienia:</p>
+<a name="ox.appsuite.user.task.sharing.resend"></a><p class="title">Jak ponownie wysłać zaproszenie do osoby:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Jak otworzyć lub zamknąć folder:">Wybierz</a> folder w drzewie folderów.</p></li>
-<li class="step"><p>Kliknij ikonę <span class="guibutton"><strong>Udostępnione</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.rights.add"></a><img src="../../images/appsuite_user_icon_folder_shared.png"></span> obok nazwy folderu. Pojawi się okno umożliwiające dostosowanie uprawnień.</p></li>
-<li class="step"><p>W polu <span class="guilabel"><strong>Dodaj osoby</strong></span> wprowadź adres e-mail. Adres ten zostanie dodany do listy jako użytkownik wewnętrzny, grupa lub gość. Zostaną nadane predefiniowane uprawnienia.</p></li>
+<li class="step"><p>W drzewie folderów <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Jak otworzyć lub zamknąć folder:">wybierz</a> udostępniony folder.</p></li>
+<li class="step">
+<p>Kliknij ikonę <span class="guibutton"><strong>Działania specyficzne dla folderu</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.resend.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> obok nazwy folderu. Kliknij przycisk <span class="guibutton"><strong>Uprawnienia / Zaproś osoby</strong></span>.</p>
+<p>Możesz także kliknąć ikonę <span class="guibutton"><strong>Udostępnione</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.resend.sharedfolder"></a><img src="../../images/appsuite_user_icon_folder_shared.png"></span> widoczną obok nazwy folderu.</p>
+<p>W aplikacji <span class="phrase">Pliki</span> możesz też kliknąć dostępną na pasku narzędzi ikonę <span class="guibutton"><strong>Udostępnij</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.resend.share"></a><img src="../../images/appsuite_user_icon_share.png"></span>. Kliknij polecenie <span class="guibutton"><strong>Zaproś osoby</strong></span>.</p>
+<p>Pojawi się okno pozwalające na ustawianie uprawnień.</p>
+</li>
+<li class="step"><p>Kliknij ikonę <span class="guibutton"><strong>Działania</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.resend.useractions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> obok nazwy użytkownika. Kliknij pozycję menu <span class="guibutton"><strong>Wyślij ponownie zaproszenie</strong></span>.</p></li>
 <li class="step"><p>Kliknij przycisk <span class="guibutton"><strong>Zapisz</strong></span>.</p></li>
 </ol></div>
 <div class="taskrelated">
           <div class="itemizedlist">
-<a name="ox.appsuite.user.task.sharing.rights.add.related"></a><p class="title">Podobne działania</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>
-                <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.rights.edit" title="Jak edytować istniejące uprawnienia:">Jak edytować istniejące uprawnienia:</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.rights.removeuser" title="Jak usunąć uprawnienia określonego użytkownika:">Jak usunąć uprawnienia określonego użytkownika:</a></span>
-              </p></li></ul>
+<a name="ox.appsuite.user.task.sharing.resend.related"></a><p class="title">Podobne działania</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p>
+                </p>
+<table border="0" summary="Simple list" class="simplelist"><tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.edit" title="Jak edytować istniejące uprawnienia:">Jak edytować istniejące uprawnienia:</a></td></tr></table>
+<p>
+              </p>
+</li></ul>
 </div>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.sharing.rights.removeuser"></a><p class="title">Jak usunąć uprawnienia określonego użytkownika:</p>
+<a name="ox.appsuite.user.task.sharing.removeall"></a><p class="title">Jak usunąć wszystkie uprawnienia do pliku lub folderu w aplikacji <span class="phrase">Pliki</span></p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Jak otworzyć lub zamknąć folder:">Wybierz</a> folder w drzewie folderów.</p></li>
-<li class="step"><p>Kliknij ikonę <span class="guibutton"><strong>Udostępnione</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.rights.removeuser.shared"></a><img src="../../images/appsuite_user_icon_folder_shared.png"></span> obok nazwy folderu. Pojawi się okno umożliwiające dostosowanie uprawnień.</p></li>
-<li class="step"><p>Aby usunąć uprawnienia użytkownika, kliknij ikonę <span class="guibutton"><strong>Działania</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.sharing.rights.removeuser.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> widoczną obok jego nazwy. Kliknij w menu polecenie <span class="guibutton"><strong>Cofnij dostęp</strong></span>.</p></li>
-<li class="step"><p>Kliknij przycisk <span class="guibutton"><strong>Zapisz</strong></span>.</p></li>
+<li class="step"><p>W aplikacji <span class="phrase">Pliki</span>, w drzewie folderów kliknij polecenie <span class="guibutton"><strong>Moje udostępnienia</strong></span>.</p></li>
+<li class="step"><p>Wybierz udział w widoku szczegółów. Kliknij na pasku narzędzi polecenie <span class="guibutton"><strong>Cofnij dostęp</strong></span>.</p></li>
 </ol></div>
 <div class="taskrelated">
           <div class="itemizedlist">
-<a name="ox.appsuite.user.task.sharing.rights.removeuser.related"></a><p class="title">Podobne działania</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>
-                <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.rights.edit" title="Jak edytować istniejące uprawnienia:">Jak edytować istniejące uprawnienia:</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.rights.add" title="Jak dodać nowe uprawnienia:">Jak dodać nowe uprawnienia:</a></span>
-              </p></li></ul>
+<a name="ox.appsuite.user.task.sharing.removeall.related"></a><p class="title">Podobne działania</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p>
+                </p>
+<table border="0" summary="Simple list" class="simplelist"><tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html#ox.appsuite.user.task.sharing.edit" title="Jak edytować istniejące uprawnienia:">Jak edytować istniejące uprawnienia:</a></td></tr></table>
+<p>
+              </p>
+</li></ul>
 </div>
         </div>
 </div>

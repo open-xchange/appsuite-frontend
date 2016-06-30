@@ -318,7 +318,7 @@ define('io.ox/calendar/actions', [
         }
     });
 
-    new Action('io.ox/calendar/actions/freebusy', {
+    /*new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone !guest',
         requires: function () {
             return _.device('!smartphone');
@@ -360,6 +360,23 @@ define('io.ox/calendar/actions', [
                         }
                     });
                 });
+            });
+        }
+    });*/
+
+    new Action('io.ox/calendar/actions/freebusy', {
+        capabilities: 'freebusy !alone !guest',
+        requires: function () {
+            return _.device('!smartphone');
+        },
+        action: function (baton) {
+            var perspective = baton.app.getWindow().getPerspective(),
+                start_date = perspective && perspective.getStartDate ? perspective.getStartDate() : _.now();
+            ox.launch('io.ox/calendar/freebusy/main', {
+                baton: baton,
+                folder: baton.app.folder.get(),
+                participants: [{ id: ox.user_id, type: 1 }],
+                start_date: start_date
             });
         }
     });

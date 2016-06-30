@@ -511,6 +511,7 @@ define('io.ox/mail/api', [
                 } else {
                     folderAPI.reload(data.id);
                 }
+                api.trigger('archive', ids);
             })
         );
     };
@@ -530,6 +531,7 @@ define('io.ox/mail/api', [
             folderAPI.refresh();
             // reload mail views
             api.trigger('refresh.all');
+            api.trigger('archive-folder', id);
         });
     };
 
@@ -591,7 +593,7 @@ define('io.ox/mail/api', [
             });
         });
         // resume & trigger refresh
-        return http.resume().pipe(function (response) {
+        return http.resume().then(function (response) {
             // trigger update events
             _(list).each(function (obj) {
                 api.trigger('update:' + _.ecid(obj), obj);
@@ -843,6 +845,7 @@ define('io.ox/mail/api', [
                     api.trigger('refresh.all');
                     return $.Deferred().reject(e.error);
                 }
+                return list;
             })
         );
     }
@@ -1776,7 +1779,7 @@ define('io.ox/mail/api', [
     api.collectionLoader = new CollectionLoader({
         module: 'mail',
         getQueryParams: function (params) {
-            var shareAttachmentsString = settings.get('compose/shareAttachments/enabled', false) ? ',X-Open-Xchange-Share-Reference' : '';
+            var shareAttachmentsString = settings.get('compose/shareAttachments/enabled', false) ? ',X-Open-Xchange-Share-URL' : '';
             // is all unseen?
             if (params.folder === 'virtual/all-unseen') {
                 return {
@@ -1826,11 +1829,11 @@ define('io.ox/mail/api', [
             return http.GET({ module: module, params: params }).then(function (data) {
                 _.each(data, function (obj) {
                     if (settings.get('compose/shareAttachments/enabled', false)) {
-                        if (obj['X-Open-Xchange-Share-Reference']) {
+                        if (obj['X-Open-Xchange-Share-URL']) {
                             if (!obj.headers) obj.headers = {};
-                            obj.headers['X-Open-Xchange-Share-Reference'] = obj['X-Open-Xchange-Share-Reference'];
+                            obj.headers['X-Open-Xchange-Share-URL'] = obj['X-Open-Xchange-Share-URL'];
                         }
-                        delete obj['X-Open-Xchange-Share-Reference'];
+                        delete obj['X-Open-Xchange-Share-URL'];
                     }
                 });
                 // drop all seen messages for all-unseen
@@ -1897,6 +1900,8 @@ define('io.ox/mail/api', [
     api.collectionLoader.noSelect = function (options) {
         // special handling for top-level mail account folders (e.g. bug 34818)
         if (/^default\d+$/.test(options.folder)) return true;
+        // allow virtual/all
+        if (options.folder === 'default0/virtual/all') return false;
         // check read access
         var model = folderAPI.pool.getModel(options.folder);
         return !model.can('read');

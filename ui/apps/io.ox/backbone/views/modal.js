@@ -47,7 +47,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             // the original constructor will call initialize()
             ExtensibleView.prototype.constructor.apply(this, arguments);
             // add structure now
-            var title_id = _.uniqueId('title');
+            var title_id = _.uniqueId('title'),
+                self = this;
             this.$el
                 .toggleClass('maximize', options.maximize)
                 .attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id })
@@ -62,6 +63,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
                         )
                     )
                 );
+            // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
+            this.$el.on('hidden.bs.modal', this.close.bind(self));
             // apply max height if maximize is given as number
             if (_.isNumber(options.maximize)) this.$('.modal-dialog').css('max-height', options.maximize);
             // add help icon?
@@ -97,9 +100,13 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             return this;
         },
 
-        close: function () {
+        close: function (e) {
             this.trigger('before:close');
-            this.$el.modal('hide');
+            // stop listening to hidden event (avoid infinite loops)
+            this.$el.off('hidden.bs.modal');
+            if (!e || e.type !== 'hidden') {
+                this.$el.modal('hide');
+            }
             this.$el.siblings().removeAttr('aria-hidden');
             this.trigger('close');
             if (this.previousFocus) this.previousFocus.focus();
@@ -193,7 +200,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             // otherwise we cannot idle the dialog in the action listener
             if (this.options.async && action !== 'cancel') this.busy();
             this.trigger(action);
-            if (!this.options.async || action === 'cancel') this.close();
+            // check if this.options is there, if the dialog was closed in the handling of the action this.options is empty and we run into a js error otherwise
+            if ((this.options && !this.options.async) || action === 'cancel') this.close();
         },
 
         onKeypress: function (e) {

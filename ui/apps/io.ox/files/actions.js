@@ -224,6 +224,7 @@ define('io.ox/files/actions', [
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some', 'items'),
                 e.baton.openedBy !== 'io.ox/mail/compose',
+                util.isFolderType('!attachmentView', e.baton),
                 util.isFolderType('!trash', e.baton)
             );
         },
@@ -265,6 +266,7 @@ define('io.ox/files/actions', [
                 _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some', 'items'),
+                util.isFolderType('!attachmentView', e.baton),
                 util.isFolderType('!trash', e.baton)
             );
         },
@@ -542,7 +544,7 @@ define('io.ox/files/actions', [
                                 }
                             } else {
                                 require(['io.ox/core/yell'], function (yell) {
-                                    yell(response);
+                                    yell('error', response);
                                 });
                             }
                         }
@@ -767,6 +769,15 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'open',
         index: index += 100,
+        prio: 'lo',
+        mobile: 'hi',
+        label: gt('Open in browser'),
+        ref: 'io.ox/files/actions/open'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'openviewer',
+        index: index += 100,
         prio: 'hi',
         mobile: 'hi',
         label: gt('View'),
@@ -854,7 +865,7 @@ define('io.ox/files/actions', [
         id: 'add-to-portal',
         index: index += 100,
         prio: 'lo',
-        mobile: 'lo',
+        mobile: 'none',
         label: gt('Add to portal'),
         ref: 'io.ox/files/actions/add-to-portal',
         section: 'share'

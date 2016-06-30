@@ -379,10 +379,13 @@ define('io.ox/mail/detail/content', [
     }
 
     var explandBlockquote = function (e) {
-        e.preventDefault();
-        $(this).hide().prev().slideDown('fast', function () {
-            $(e.delegateTarget).trigger('resize');
-        });
+        if (e.which === 13 || e.which === 23 || e.type === 'click') {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).hide().prev().slideDown('fast', function () {
+                $(e.delegateTarget).trigger('resize');
+            });
+        }
     };
 
     ext.point('io.ox/mail/detail/content').extend({
@@ -399,11 +402,15 @@ define('io.ox/mail/detail/content', [
                 if (hasParent(node, 'blockquote')) return;
                 var text = getText(node);
                 if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
-                $(node).addClass('collapsed-blockquote').after(
+                var blockquoteId = _.uniqueId('collapsed-blockquote-');
+                $(node).addClass('collapsed-blockquote').attr('id', blockquoteId).after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
-                        $('<i class="fa fa-ellipsis-h" tabindex="1">')
-                        .attr('title', gt('Show quoted text')),
+                        $('<i class="fa fa-ellipsis-h" tabindex="1" role="button" aria-expanded="false">').attr({
+                            'aria-controls': blockquoteId,
+                            'aria-expanded': false,
+                            title: gt('Show quoted text')
+                        }),
                         $.txt(
                             text.replace(/<\s/g, '<')
                                 .replace(/\s>/g, '>')
@@ -414,7 +421,7 @@ define('io.ox/mail/detail/content', [
                 );
             });
             // delegate
-            $(this).on('click', '.blockquote-toggle', explandBlockquote);
+            $(this).on('click keydown', '.blockquote-toggle', explandBlockquote);
         }
     });
 

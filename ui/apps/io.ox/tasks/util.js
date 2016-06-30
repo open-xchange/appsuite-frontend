@@ -154,9 +154,7 @@ define('io.ox/tasks/util', [
                 result.push(['t', gt('tomorrow')]);
 
                 for (i = (now.day() + 2) % 7; i !== now.day(); i = ++i % 7) {
-                    //#. reminder date selection
-                    //#. %1$s is a weekday, like 'next Monday'
-                    result.push(['w' + i, gt('next %1$s', moment.weekdays(i))]);
+                    result.push(['w' + i, moment.weekdays(i)]);
                 }
 
                 result.push(['ww', gt('in one week')]);

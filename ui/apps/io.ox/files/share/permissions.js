@@ -808,7 +808,7 @@ define('io.ox/files/share/permissions', [
                 top: 40,
                 center: false,
                 async: true,
-                help: 'ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles',
+                help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html#ox.appsuite.user.concept.sharing.invitation',
                 share: false,
                 nested: nested
             }, options);
@@ -849,21 +849,43 @@ define('io.ox/files/share/permissions', [
                 dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel, share: options.share });
 
-            permissionsView.collection.on('remove add', function () {
-                if (permissionsView.collection.where({ type: 'guest' }).length !== 0) {
+            function hasNewGuests() {
+                var knownGuests = [];
+                _.each(dialogConfig.get('oldGuests'), function (model) {
+                    if (permissionsView.collection.get(model)) {
+                        knownGuests.push(model);
+                    }
+                });
+                return permissionsView.collection.where({ type: 'guest' }).length > knownGuests.length;
+            }
+
+            permissionsView.collection.on('reset', function () {
+                dialogConfig.set('oldGuests', _.copy(permissionsView.collection.where({ type: 'guest' })));
+            });
+
+            permissionsView.collection.on('add remove', function () {
+                if (permissionsView.collection.where({ type: 'guest' }).length !== 0 && hasNewGuests()) {
                     dialogConfig.set('sendNotifications', true);
                     dialogConfig.set('disabled', true);
                 } else {
+                    dialogConfig.set('sendNotifications', notificationDefault);
+                    dialogConfig.set('disabled', false);
+                }
+
+                if (dialogConfig.get('byHand') !== undefined) {
+                    dialogConfig.set('sendNotifications', dialogConfig.get('byHand'));
                     dialogConfig.set('disabled', false);
                 }
 
             });
 
-            if (folderUtil.can('changepermissions', objModel.attributes)) {
+            if (objModel.isAdmin()) {
                 dialog.getFooter().prepend(
                     $('<div>').addClass('form-group cascade').append(
                         $('<label>').addClass('checkbox-inline').text(gt('Send notification')).prepend(
-                            new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el
+                            new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el.on('click', function (e) {
+                                dialogConfig.set('byHand', e.currentTarget.checked);
+                            })
                         )
                     )
                 );

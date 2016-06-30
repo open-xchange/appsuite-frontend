@@ -648,6 +648,28 @@ define('io.ox/mail/main', [
         },
 
         /*
+         * Auto subscribe mail folders
+         */
+        'auto-subscribe': function (app) {
+
+            function subscribe(data) {
+                if (data.module !== 'mail') return;
+                if (data.subscribed) {
+                    app.folderView.tree.select(data.id);
+                } else {
+                    folderAPI.update(data.id, { subscribed: true }, { silent: true }).done(function () {
+                        folderAPI.refresh().done(function () {
+                            app.folderView.tree.select(data.id);
+                        });
+                    });
+                }
+            }
+
+            app.folder.getData().done(subscribe);
+            app.on('folder:change', function (id, data) { subscribe(data); });
+        },
+
+        /*
          * Change foldername on mobiles in navbar
          */
         'folder:change-mobile': function (app) {
@@ -777,6 +799,8 @@ define('io.ox/mail/main', [
 
                 // defer so that all selection events are triggered (e.g. selection:all)
                 _.defer(function () {
+                    // tabbed inbox / mail categories: absolute tab count is unknown
+                    var inTab = app.categories && app.categories.props.get('enabled') && app.categories.props.get('visible');
                     app.right.find('.multi-selection-message .message')
                         .empty()
                         .attr('id', 'mail-multi-selection-message')
@@ -786,7 +810,7 @@ define('io.ox/mail/main', [
                                 gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
                             ),
                             // inline actions
-                            id && total > list.length && !search && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
+                            id && total > list.length && !search && !inTab && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
                                 $('<div class="inline-actions">').append(
                                     gt(
                                         'There are %1$d messages in this folder; not all messages are displayed in the list. ' +
@@ -1474,6 +1498,12 @@ define('io.ox/mail/main', [
                 });
             }, 300);
 
+            // will be thrown if the external mail account server somehow does not support starttls anymore
+            folderAPI.on('error:MSG-0092', function (error) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                });
+            });
             folderAPI.on('error:FLD-0008', handleError);
             api.on('error:FLD-0008', handleError);
             api.on('error:IMAP-2041', function (e, error) {
@@ -1538,7 +1568,7 @@ define('io.ox/mail/main', [
                         $el.find('.caption span').text(caption);
                         $el.find('[data-action="close"]').off();
                         $el.find('[data-action="close"]').on('click', function () {
-                            if (_.isFunction(data.abort)) data.abort(gt('The sending of the message has been canceled.'));
+                            if (_.isFunction(data.abort)) data.abort();
                         });
                         $el.show();
                     });
@@ -1687,6 +1717,7 @@ define('io.ox/mail/main', [
                 mapper = { refresh: $.noop };
                 // init on first call of 'apply'
                 require(['io.ox/mail/categories/main'], function (cat) {
+                    app.categories = cat;
                     mapper = new Mapper(cat);
                 });
             }

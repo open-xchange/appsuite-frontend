@@ -22,8 +22,6 @@ define('io.ox/mail/categories/api', [
         console.error("mail/categories/api: capababilty 'mail_categories' missing");
     }
 
-    // https://intranet.open-xchange.com/wiki/backend-team:info:mail_categories_http_api
-
     return {
 
         get: function () {

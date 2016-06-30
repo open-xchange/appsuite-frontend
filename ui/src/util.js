@@ -294,10 +294,22 @@
          * Redirect
          */
         redirect: function (path) {
+
             var current = location.pathname;
-            location.href = (/^http/i).test(path) ? path : _.url.get(path);
+
+            if ((/^http/i).test(path)) {
+                location.href = path;
+                return;
+            }
+
+            // clear hash first
+            location.hash = '#';
+            location.replace(_.url.get(path));
+
             // enforce page reload if path is still the same
-            if (location.pathname === current) location.reload();
+            _.defer(function () {
+                if (location.pathname === current) location.reload(true);
+            });
         },
 
         get: function (path) {
@@ -741,20 +753,33 @@
         cid: (function () {
 
             function encode(s) {
-                return String(s).replace(/\./g, '\\.');
+                // escape dots and backslashes
+                return String(s).replace(/([.\\])/g, '\\$1');
             }
 
             function decode(s) {
-                // find first unescaped dot
+                var regex = /(\\\\|\\\.|\.)/g, match, parts = ['', ''], index = 0, p = 0;
+                // ensure we have a string
                 s = String(s);
-                var pos = s.search(/([^\\])\./);
-                if (pos === -1) {
-                    return { id: s };
+                // process string step by step in a loop
+                while ((match = regex.exec(s)) !== null) {
+                    // append substring before the match (use substring; not substr!)
+                    parts[p] += s.substring(index, match.index);
+                    // now handle match
+                    switch (match[0]) {
+                        // escaped backslash
+                        case '\\\\': parts[p] += '\\'; break;
+                        // escaped dot
+                        case '\\.': parts[p] += '.'; break;
+                        // dot
+                        case '.': p = 1; break;
+                        // no default
+                    }
+                    index = match.index + match[0].length;
                 }
-                return {
-                    folder_id: s.substr(0, pos + 1).replace(/\\\./g, '.'),
-                    id: s.substr(pos + 2).replace(/\\\./g, '.')
-                };
+                // add tail (with just 1 parameter substring and substr are identical)
+                parts[p] += s.substring(index);
+                return p === 0 ? { id: parts[0] } : { folder_id: parts[0], id: parts[1] };
             }
 
             return function (o) {

@@ -15,17 +15,32 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
     'io.ox/backbone/mini-views/timezonepicker',
     'settings!io.ox/core',
     'gettext!io.ox/calendar',
-    'io.ox/core/tk/dialogs'
-], function (TimezonePicker, coreSettings, gt, dialogs) {
+    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/mini-views/settings-list-view',
+    'io.ox/backbone/mini-views/listutils'
+], function (TimezonePicker, coreSettings, gt, dialogs, ListView, listutils) {
 
     'use strict';
 
-    var FavoriteViewModel = Backbone.Model.extend({
+    var FavoriteTimezone = Backbone.Model.extend({
+            initialize: function () {
+                this.onChangeTimezone();
+                this.on('change:timezone', this.onChangeTimezone.bind(this));
+            },
             defaults: {
                 timezone: coreSettings.get('timezone')
+            },
+            onChangeTimezone: function () {
+                this.tz = moment.tz(this.get('timezone'));
+                this.set('utcOffset', this.tz.utcOffset());
+                this.set('title', this.get('timezone').replace(/_/g, ' '));
+                this.set('id', this.cid);
             }
         }),
-        model = new FavoriteViewModel();
+        FavoriteCollection = Backbone.Collection.extend({
+            model: FavoriteTimezone,
+            comparator: 'utcOffset'
+        });
 
     var FavoriteView = Backbone.View.extend({
 
@@ -39,31 +54,27 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
         },
 
         initialize: function () {
-            this.node = $('<ul class="list-unstyled list-group settings-list">');
-        },
+            this.collection = new FavoriteCollection(_(this.model.get('favoriteTimezones')).map(function (tz) {
+                return { timezone: tz };
+            }));
 
-        drawFavorites: function () {
-            this.node.empty().append(
-                _(this.model.get('favoriteTimezones')).map(function (timezone) {
-                    var tz = moment.tz(timezone);
+            this.listenTo(this.collection, 'add remove', this.sync.bind(this));
 
-                    return $('<li class="widget-settings-view">').append(
-                        $('<span class="pull-left">').append(
-                            $('<span class="offset">').text(tz.format('Z')),
-                            $('<span class="timezone-abbr">').text(tz.zoneAbbr()),
-                            $.txt(timezone.replace(/_/g, ' '))
-                        ),
-                        $('<div class="widget-controls">').append(
-                            $('<a class="remove" href="#" tabindex="1" role="button" data-action="delete" aria-label="remove">')
-                            .attr({
-                                'data-id': timezone,
-                                'title': timezone
-                            })
-                            .append($('<i class="fa fa-trash-o" aria-hidden="true">'))
-                        )
-                    );
-                })
-            );
+            this.listView = new ListView({
+                tagName: 'ul',
+                collection: this.collection,
+                childOptions: {
+                    customize: function (model) {
+                        this.$('.list-item-title').before(
+                            $('<span class="offset">').text(model.tz.format('Z')),
+                            $('<span class="timezone-abbr">').text(model.tz.zoneAbbr())
+                        );
+                        this.$('.list-item-controls').append(
+                            listutils.controlsDelete()
+                        );
+                    }
+                }
+            });
         },
 
         render: function () {
@@ -76,16 +87,16 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
                     )
                 ),
                 $('<div class="form-group">').append(
-                    this.node
+                    this.listView.render().$el
                 )
             );
-
-            this.drawFavorites();
 
             return this;
         },
 
         openDialog: function () {
+            var self = this,
+                model = new FavoriteTimezone();
             new dialogs.ModalDialog()
                 .header($('<h4>').text(gt('Select favorite timezone')))
                 .addPrimaryButton('add', gt('Add'), 'add', { tabIndex: 1 })
@@ -99,46 +110,30 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
                         }).render().$el
                     );
                 })
-                .on('add', this.addFavorite.bind(this))
+                .on('add', function () {
+                    var sameTimezone = self.collection.findWhere({ timezone: model.get('timezone') });
+                    if (sameTimezone) {
+                        require(['io.ox/core/notifications'], function (notifications) {
+                            notifications.yell('error', gt('The selected timezone is already a favorite.'));
+                        });
+                        return;
+                    }
+                    self.collection.add(model);
+                })
                 .show();
         },
 
-        addFavorite: function () {
-            var list = _.clone(this.model.get('favoriteTimezones')) || [];
-
-            if (list.indexOf(model.get('timezone')) >= 0) {
-                require(['io.ox/core/notifications'], function (notifications) {
-                    notifications.yell('error', gt('The selected timezone is already a favorite.'));
-                });
-
-                return;
-            }
-
-            list.push(model.get('timezone'));
-            list = _(list)
-                .chain()
-                .map(function (name) { return moment.tz(name); })
-                .sortBy(function (tz) {
-                    return tz.utcOffset();
-                })
-                .map(function (tz) {
-                    return tz.tz();
-                })
-                .value();
-            this.model.set('favoriteTimezones', list);
-            this.drawFavorites();
+        removeFavorite: function (e) {
+            var id = $(e.currentTarget).closest('li').attr('data-id');
+            this.collection.remove(id);
+            e.preventDefault();
         },
 
-        removeFavorite: function (e) {
-            var value = $(e.currentTarget).attr('data-id'),
-                list = _.clone(this.model.get('favoriteTimezones'));
-
-            list = _(list).without(value);
+        sync: function () {
+            var list = this.collection.pluck('timezone');
             this.model.set('favoriteTimezones', list);
+            // make sure, that a timezone which is deleted is not rendered in the week view as timezone label anymore
             this.model.set('renderTimezones', _.intersection(list, this.model.get('renderTimezones', [])));
-            this.drawFavorites();
-
-            e.preventDefault();
         }
 
     });

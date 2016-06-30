@@ -160,8 +160,11 @@
 <p>Une ligne rouge sur l'agenda met en évidence l'heure actuelle. </p>
 </li>
 <li class="listitem"><p>Dans les vues <span class="guilabel"><strong>Semaine ouvrée</strong></span>, <span class="guilabel"><strong>Semaine</strong></span> et <span class="guilabel"><strong>Mois</strong></span>, le jour actuel est mis en évidence par un fond rouge.</p></li>
-<li class="listitem"><p>Dans la vue <span class="guilabel"><strong>Mois</strong></span>, le mois choisiet l'année sont affichés au-dessus de la page d'agenda. </p></li>
-<li class="listitem"><p>Les rendez-vous sont signalés par différentes <a class="link" href="ox.appsuite.user.sect.calendar.view.appointments.html#ox.appsuite.user.concept.appointments.color">couleurs</a> suivant leur état de confirmation et le jeu de couleurs choisi. </p></li>
+<li class="listitem"><p>Dans la vue <span class="guilabel"><strong>Mois</strong></span>, le mois choisi et l'année sont affichés au-dessus de la page d'agenda. </p></li>
+<li class="listitem">
+<p>Les rendez-vous sont signalés par différentes <a class="link" href="ox.appsuite.user.sect.calendar.view.appointments.html#ox.appsuite.user.concept.appointments.color">couleurs</a> suivant leur état de confirmation et le jeu de couleurs choisi. </p>
+<p>S'il existe d'autres rendez-vous au-dessus ou en-dessous de la page d'agenda visible, des flèches sont affichées en haut ou en bas de celle-ci selon le jour associé.</p>
+</li>
 </ul></div>
 <p> Lorsque l'on clique sur un rendez-vous, une <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="Fenêtre">fenêtre</a> s'ouvre pour en afficher les détails. </p>
 <div class="itemizedlist">
@@ -190,7 +193,7 @@
 <div class="itemizedlist">
 <a name="ox.appsuite.user.reference.calendar.gui.popup.related"></a><p class="title">Sujets liés</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Vous pouvez trouver ici des instructions relatives aux boutons et icônes : <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Modifier un rendez-vous">Modifier un rendez-vous</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Changer l'état d'un rendez-vous">Changer l'état d'un rendez-vous</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.2. Créer des rendez-vous de suivi">Créer des rendez-vous de suivi</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Supprimer des rendez-vous">Supprimer des rendez-vous</a></span>
+<li class="listitem" style="list-style-type: none"><p>Vous pouvez trouver ici des instructions relatives aux boutons et icônes : <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Modifier un rendez-vous">Modifier un rendez-vous</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Changer l'état d'un rendez-vous">Changer l'état d'un rendez-vous</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.2. Créer un rendez-vous de suivi">Créer un rendez-vous de suivi</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Supprimer des rendez-vous">Supprimer des rendez-vous</a></span>
             </p></li>
 <li class="listitem" style="list-style-type: none"><p>Vous pouvez trouver des instructions relatives aux fonctions du menu <span class="guibutton"><strong>Actions</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calebdar.gui.popup.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> ici :<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Imprimer des rendez-vous">Imprimer des rendez-vous</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Déplacer des rendez-vous vers un autre dossier">Déplacer des rendez-vous vers un autre dossier</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Modifier plusieurs rendez-vous à la fois">Modifier plusieurs rendez-vous à la fois</a></span>
             </p></li>
@@ -294,15 +297,22 @@
 <a name="ox.appsuite.user.reference.calendar.gui.create"></a><p class="title"><b>Fenêtre de création ou modification</b></p>
 <p>Lorsque vous créez un nouveau rendez-vous ou modifiez un rendez-vous existant, les éléments suivants apparaissent sur une nouvelle page.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>Suivant la configuration du logiciel de travail collaboratif, les éléments peuvent aussi bien être en haut qu'en bas de l'écran.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p>Bouton <span class="guibutton"><strong>Créer</strong></span>. Cliquer sur ce bouton enregistre les données du rendez-vous en l'état et la page de modification est refermée.</p></li>
 <li class="listitem"><p>Bouton <span class="guibutton"><strong>Abandonner</strong></span>. Pour annuler la création ou la modification, cliquez sur ce bouton.</p></li>
 <li class="listitem"><p>Le bouton à côté de <span class="guibutton"><strong>Agenda</strong></span> indique le dossier d'agenda dans lequel sera créé le rendez-vous. Pour créer un rendez-vous dans un autre dossier d'agenda, cliquez sur ce bouton. </p></li>
+</ul></div>
+<p>
+            </p>
+</li>
 <li class="listitem"><p>Champ de saisie <span class="guibutton"><strong>Sujet</strong></span>. Renseignez le sujet dans ce champ. Le sujet est affiché comme intitulé du rendez-vous dans toutes les vues.</p></li>
 <li class="listitem"><p>Bouton <span class="guibutton"><strong>Lieu</strong></span>. Vous pouvez indiquer ici l'endroit où le rendez-vous doit avoir lieu.</p></li>
 <li class="listitem">
 <p>Champs de saisie <span class="guibutton"><strong>Commence le</strong></span> et <span class="guibutton"><strong>Finit le</strong></span>. Définissez les dates de début et de fin du rendez-vous. Si vous cliquez sur ces champs, une boîte de dialogue de choix de la date s'ouvre. </p>
 <p>Si la case à cocher <span class="guibutton"><strong>Journée entière</strong></span> est désactivée, vous pouvez définir des heures de début et de fin.</p>
-<p>Si vous cliquez sur le bouton de fuseau horaire à côté de l'heure, celle-ci est affichée dans différents fuseaux horaires. Vous pouvez <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. Gérer les fuseaux horaires favoris">définir des fuseaux horaires fréquemment utilisés comme favoris</a> dans les réglages de l'agenda.</p>
+<p>Si vous cliquez sur le bouton de fuseau horaire à côté de l'heure, celle-ci est affichée dans différents fuseaux horaires. Vous pouvez définir des fuseaux horaires fréquemment utilisés <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. Gérer les fuseaux horaires favoris">comme favoris</a> dans les réglages de l'agenda.</p>
 </li>
 <li class="listitem"><p>Case à cocher <span class="guibutton"><strong>Journée entière</strong></span>. Cochez cette case si le rendez-vous doit durer toute la journée.</p></li>
 <li class="listitem"><p>Bouton <span class="guibutton"><strong>Trouver un horaire libre</strong></span>. Ouvre la vue de planification. Lorsque vous planifiez un rendez-vous avec plusieurs participants, cette vue vous permet de trouver un horaire libre pour tous.</p></li>

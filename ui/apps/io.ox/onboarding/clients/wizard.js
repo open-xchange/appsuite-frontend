@@ -265,11 +265,12 @@ define('io.ox/onboarding/clients/wizard', [
         this.$('.options').attr('aria-label', gt('list of available devices'));
         this.$('.actions-scenario').attr('aria-label', gt('list of available actions'));
         this.$('.title.sr-only').text(gt('choose a different scenario'));
-        // autoselect first
-        var id = config.model.get('scenario');
-        if (list.length === 0) return;
-        if (!id) { config.model.set('scenario', id = _.first(list).id); }
-        wizard.trigger('selected', { type: 'scenario', value: id });
+        // autoselect first enabled
+        var id = config.model.get('scenario'),
+            enabled = _.where(list, { enabled: true });
+        if (list.length === 0 || enabled.length === 0) return;
+        if (!id) { config.model.set('scenario', id = _.first(enabled).id); }
+        if (enabled.length) wizard.trigger('selected', { type: 'scenario', value: id });
     }
 
     var OnboardingView = Backbone.View.extend({

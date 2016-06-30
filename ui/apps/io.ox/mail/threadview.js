@@ -74,7 +74,7 @@ define('io.ox/mail/threadview', [
 
             var keepFirstPrefix = baton.view.collection.length === 1,
                 data = baton.view.model.toJSON(),
-                subject = util.getSubject(api.threads.subject(data), keepFirstPrefix),
+                subject = util.getSubject(api.threads.subject(data) || data.subject, keepFirstPrefix),
                 node = $('<h1 class="subject">').text(subject);
 
             this.append(node);
@@ -270,12 +270,25 @@ define('io.ox/mail/threadview', [
             this.$el.find('.thread-view-list').show();
 
             // draw thread list
-            this.$messages.append(
-                this.collection.chain().map(this.renderListItem, this).value()
-            );
+            var self = this,
+                threadId = this.collection.first().get('cid'),
+                autoOpenModel = this.collection.reduce(function (acc, model) {
+                    return util.isUnseen(model.toJSON()) ? model : acc;
+                }, this.collection.first());
 
-            this.zIndex();
-            this.autoSelectMail();
+            function renderItem(list, finalCallback) {
+                var model = list.shift();
+                if (threadChanged()) return;
+                self.$messages.append(self.renderListItem(model));
+                if (autoOpenModel === model) self.autoSelectMail();
+                if (list.length) setTimeout(renderItem, 0, list, finalCallback); else finalCallback();
+            }
+
+            function threadChanged() {
+                return self.collection.first().get('cid') !== threadId;
+            }
+
+            renderItem(this.collection.toArray(), this.zIndex.bind(this));
         },
 
         onAdd: function (model) {

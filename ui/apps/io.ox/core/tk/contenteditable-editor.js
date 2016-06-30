@@ -329,11 +329,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         }
 
         var stripDataAttributes = function (content) {
-            var tags = content.match(/(<\/?[\S][^>]*>)/gi);
-            tags.forEach(function (tag) {
-                content = content.replace(tag, tag.replace(/\sdata-\S+=["']?(?:.(?!["']?\s+(?:\S+)=|[>"']))+.["']?/g, ''));
+            return content.replace(/<[a-z][^>]*\sdata-mce.*?>/gi, function (match) {
+                // replace all data-mce-* attributes which are written with single or double quotes
+                return match.replace(/\sdata-mce-\S+=("[^"]*"|'[^']*')/g, '');
             });
-            return content;
         };
 
         var resizeEditor = _.debounce(function () {
@@ -564,7 +563,11 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         // allow jQuery access
         this.find = function (selector) {
-            return $(ed.getDoc()).find(selector);
+            return $(ed.getBody()).find(selector);
+        };
+
+        this.children = function (selector) {
+            return $(ed.getBody()).children(selector);
         };
 
         this.replaceContent = function (str, rep) {

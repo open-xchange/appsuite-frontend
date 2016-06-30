@@ -16,9 +16,11 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/folder/api',
     'io.ox/core/api/user',
     'io.ox/core/util',
+    'io.ox/mail/util',
     'io.ox/core/capabilities',
+    'settings!io.ox/core',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, folderAPI, UserAPI, util, capabilities, gt) {
+], function (PanelBaseView, Ext, folderAPI, UserAPI, util, mailUtil, capabilities, settings, gt) {
 
     'use strict';
 
@@ -56,7 +58,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-',
                 folder_id = model.get('folder_id'),
                 link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id')),
-                dl = $('<dl>');
+                dl = $('<dl>'),
+                isAttachmentView = !_.isEmpty(model.get('com.openexchange.file.storage.mail.mailMetadata'));
 
             dl.append(
                 // filename
@@ -64,61 +67,114 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 $('<dd class="file-name">').text(name),
                 // size
                 $('<dt>').text(gt('Size')),
-                $('<dd class="size">').text(sizeString),
-                // modified
-                $('<dt>').text(gt('Modified')),
-                $('<dd class="modified">').append(
-                    $.txt(dateString), $('<br>'), UserAPI.getTextNode(modifiedBy)
-                )
+                $('<dd class="size">').text(sizeString)
             );
-
-            // folder info block
-            if (!baton.options.disableFolderInfo) {
+            if (!isAttachmentView) {
                 dl.append(
-                    // path; using "Folder" instead of "Save in" because that one
-                    // might get quite long, e.g. "Gespeichert unter"
-                    $('<dt>').text(gt('Folder')),
-                    $('<dd class="saved-in">').append(
-                        $('<a>')
-                        .attr('href', folderAPI.getDeepLink({ module: 'infostore', id: folder_id }))
-                        .append(folderAPI.getTextNode(folder_id))
-                        .on('click', { id: folder_id }, setFolder)
+                     // modified
+                    $('<dt>').text(gt('Modified')),
+                    $('<dd class="modified">').append(
+                        $.txt(dateString), $('<br>'), UserAPI.getTextNode(modifiedBy)
                     )
                 );
-            }
 
-            if (!capabilities.has('alone') && !capabilities.has('guest')) {
-                folderAPI.get(folder_id).done(function (folderData) {
-                    // only show links to infostore files, links to mail attachments would mean broken links, see bug 39752
-                    if (folderAPI.is('infostore', folderData)) {
-                        dl.append(
-                            // deep link
-                            $('<dt>').text(gt('Link')),
-                            $('<dd class="link">').append(
-                                $('<a href="#" target="_blank" style="word-break: break-all">')
-                                .attr('href', link)
-                                .text(link)
-                            )
-                        );
-                    }
-                });
-            }
+                // folder info block
+                if (!baton.options.disableFolderInfo) {
+                    dl.append(
+                        // path; using "Folder" instead of "Save in" because that one
+                        // might get quite long, e.g. "Gespeichert unter"
+                        $('<dt>').text(gt('Folder')),
+                        $('<dd class="saved-in">').append(
+                            $('<a>')
+                            .attr('href', folderAPI.getDeepLink({ module: 'infostore', id: folder_id }))
+                            .append(folderAPI.getTextNode(folder_id))
+                            .on('click', { id: folder_id }, setFolder)
+                        )
+                    );
+                }
 
-            var permissions = model.isFile() ?
-                model.get('object_permissions') || [] :
-                _(model.get('permissions')).filter(function (item) { return item.entity !== ox.user_id; });
+                if (!capabilities.has('alone') && !capabilities.has('guest')) {
+                    folderAPI.get(folder_id).done(function (folderData) {
+                        // only show links to infostore files, links to mail attachments would mean broken links, see bug 39752
+                        if (folderAPI.is('infostore', folderData)) {
+                            dl.append(
+                                // deep link
+                                $('<dt>').text(gt('Link')),
+                                $('<dd class="link">').append(
+                                    $('<a href="#" target="_blank" style="word-break: break-all">')
+                                    .attr('href', link)
+                                    .text(link)
+                                )
+                            );
+                        }
+                    });
+                }
 
-            if (capabilities.has('invite_guests')) {
+                var permissions = model.isFile() ?
+                    model.get('object_permissions') || [] :
+                    _(model.get('permissions')).filter(function (item) { return item.entity !== ox.user_id; });
+
+                if (capabilities.has('invite_guests')) {
+                    dl.append(
+                        //#. "Shares" in terms of "shared with others" ("Freigaben")
+                        $('<dt>').text(gt('Shares')),
+                        $('<dd>').append(
+                            permissions.length ?
+                                $('<a href="#">').text(
+                                    model.isFile() ? gt('This file is shared with others') : gt('This folder is shared with others')
+                                )
+                                .on('click', { model: model }, openShareDialog) :
+                                $.txt('-')
+                        )
+                    );
+                }
+            } else {
+                // All Attachment View
+                var mail = model.get('com.openexchange.file.storage.mail.mailMetadata');
+                var attachmentView = settings.get('folder/mailattachments', {});
                 dl.append(
-                    //#. "Shares" in terms of "shared with others" ("Freigaben")
-                    $('<dt>').text(gt('Shares')),
-                    $('<dd>').append(
-                        permissions.length ?
-                            $('<a href="#">').text(
-                                model.isFile() ? gt('This file is shared with others') : gt('This folder is shared with others')
-                            )
-                            .on('click', { model: model }, openShareDialog) :
-                            $.txt('-')
+                    $('<dt>').text(gt('Folder')),
+                    $('<dd class="mail-folder">').append(
+                        $('<a>')
+                        .attr('href', folderAPI.getDeepLink({ module: 'mail', id: mail.folder }))
+                        .append(folderAPI.getTextNode(mail.folder))
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            ox.launch('io.ox/mail/main', { folder: mail.folder });
+                        })
+                    ),
+                    $('<dt>').text(gt('Subject')),
+                    $('<dd class="subject">').append(
+                        $.txt(mailUtil.getSubject(mail.subject || ''))
+                    ),
+                    $('<dt>').text(folder_id === attachmentView.sent ? gt('To') : gt('From')),
+                    $('<dd class="from">').append(
+                        $.txt(mailUtil.getDisplayName(folder_id === attachmentView.sent ? mail.to[0] : mail.from[0]))
+                    ),
+                    $('<dt>').text(folder_id === attachmentView.sent ? gt('Sent') : gt('Received')),
+                    $('<dd class="received">').append(
+                        $.txt(dateString)
+                    ),
+                    $('<dt>'),
+                    $('<dd class="link">').append(
+                        $('<a>')
+                        .attr('href', folderAPI.getDeepLink({ module: 'mail', id: mail.folder }))
+                        .text(gt('View message'))
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            require(['io.ox/mail/api'], function (api) {
+                                var cid = _.cid({ folder: mail.folder, id: mail.id });
+                                // see if mail is still there. Also loads the mail into the pool. Needed for the app to work
+                                api.get(_.extend({}, { unseen: true }, _.cid(cid))).done(function () {
+                                    ox.launch('io.ox/mail/detail/main', { cid: cid });
+                                }).fail(function (error) {
+                                    //if the mail was moved or the mail was deleted the cid cannot be found, show error
+                                    require(['io.ox/core/yell'], function (yell) {
+                                        yell(error);
+                                    });
+                                });
+                            });
+                        })
                     )
                 );
             }

@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/calendar/freetime/participantsView', [
+/*define('io.ox/calendar/freetime/participantsView', [
     'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/core/extensions',
@@ -40,10 +40,19 @@ define('io.ox/calendar/freetime/participantsView', [
                 collection: baton.model.get('participants')
             });
             this.append(
-                typeahead.$el,
-                $('<legend>').text(gt('Participants')).attr('aria-hidden', true)
+                typeahead.$el
             );
             typeahead.render().$el.addClass('add-participants-wrapper col-md-12');
+        }
+    });
+    // legend
+    pointHeader.extend({
+        id: 'legend',
+        index: 200,
+        draw: function (baton) {
+            baton.view.headerNodeRow2.append(
+                $('<legend>').text(gt('Participants')).attr('aria-hidden', true)
+            );
         }
     });
     // participants container
@@ -71,14 +80,16 @@ define('io.ox/calendar/freetime/participantsView', [
         initialize: function () {
             this.pointHeader = pointHeader;
             this.pointBody = pointBody;
-            this.headerNode = $('<div class="freetime-participants-view-header">');
+            this.headerNodeRow1 = $('<div class="freetime-participants-view-header row1">');
+            this.headerNodeRow2 = $('<div class="freetime-participants-view-header row2">');
             this.bodyNode = $('<div class="freetime-participants-view-body">');
         },
 
         renderHeader: function () {
             var baton = new ext.Baton({ view: this, model: this.model });
-            this.headerNode.empty();
-            this.pointHeader.invoke('draw', this.headerNode, baton);
+            this.headerNodeRow1.empty();
+            this.headerNodeRow2.empty();
+            this.pointHeader.invoke('draw', this.headerNodeRow1, baton);
         },
 
         renderBody: function () {
@@ -87,4 +98,4 @@ define('io.ox/calendar/freetime/participantsView', [
             this.pointBody.invoke('draw', this.bodyNode, baton);
         }
     });
-});
+});*/

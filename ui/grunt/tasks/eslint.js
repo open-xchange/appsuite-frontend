@@ -20,7 +20,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     src: [
-                        'Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js', 'src/*.js'
+                        'Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js', 'src/*.js', 'spec/**/*.js'
                     ],
                     filter: 'isFile'
                 }]

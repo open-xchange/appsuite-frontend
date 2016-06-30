@@ -16,8 +16,9 @@ define('io.ox/core/folder/node', [
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'io.ox/core/api/account',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (DisposableView, api, ext, account, gt) {
+], function (DisposableView, api, ext, account, settings, gt) {
 
     'use strict';
 
@@ -46,7 +47,7 @@ define('io.ox/core/folder/node', [
         },
 
         reset: function () {
-            if (this.isReset) return;
+            if (this.isReset) return this.trigger('reset');
             if (this.collection.fetched) this.onReset(); else this.list();
         },
 
@@ -89,6 +90,7 @@ define('io.ox/core/folder/node', [
             });
 
             this.isReset = true;
+            this.trigger('reset');
         },
 
         onAdd: function (model) {
@@ -165,6 +167,10 @@ define('io.ox/core/folder/node', [
             this.toggle(!this.options.open);
         },
 
+        isOpen: function () {
+            return this.options.open && this.hasSubFolders();
+        },
+
         hasArrow: function () {
             // return true if icon is not fixed-width, i.e. empty
             return this.$.arrow.find('i.fa-fw').length === 0;
@@ -199,9 +205,7 @@ define('io.ox/core/folder/node', [
         // respond to new sub-folders
         onChangeSubFolders: function () {
             // has subfolders?
-            var o = this.options,
-                hasSubFolders = this.hasSubFolders(),
-                isOpen = o.open && hasSubFolders;
+            var hasSubFolders = this.hasSubFolders(), isOpen = this.isOpen();
             // update arrow
             this.$.arrow
             .toggleClass('invisible', !hasSubFolders)
@@ -354,7 +358,7 @@ define('io.ox/core/folder/node', [
             // draw scaffold
             this.$el
                 .attr({
-                    id: this.describedbyID,
+                    'aria-describedby': this.describedbyID,
                     'aria-label': '',
                     'aria-level': o.level + 1,
                     'aria-selected': false,
@@ -514,11 +518,16 @@ define('io.ox/core/folder/node', [
             }
 
             var iconClass = '',
-                infostoreDefaultFolder = String(api.getDefaultFolder('infostore'));
+                infostoreDefaultFolder = String(api.getDefaultFolder('infostore')),
+                attachmentView = settings.get('folder/mailattachments', {}),
+                allAttachmentsFolder = String(attachmentView.all);
 
             switch (this.folder) {
                 case 'virtual/myshares':
                     iconClass = 'visible myshares';
+                    break;
+                case allAttachmentsFolder:
+                    iconClass = 'visible attachments';
                     break;
                 case infostoreDefaultFolder:
                     iconClass = 'visible myfiles';

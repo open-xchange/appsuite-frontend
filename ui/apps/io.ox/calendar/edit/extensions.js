@@ -245,7 +245,18 @@ define('io.ox/calendar/edit/extensions', [
                     timezoneAttribute: 'timezone'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
-                }).on('click:timezone', openTimezoneDialog, baton).render().$el
+                }).on('click:timezone', openTimezoneDialog, baton)
+                    .on('click:time', function () {
+                        var target = this.$el.find('.dropdown-menu.calendaredit'),
+                            container = target.scrollParent(),
+                            pos = target.offset().top - container.offset().top;
+
+                        if ((pos < 0) || (pos + target.height() > container.height())) {
+                            // scroll to Node, leave 16px offset
+                            container.scrollTop(container.scrollTop() + pos - 16);
+                        }
+
+                    }).render().$el
             );
         }
     });
@@ -267,7 +278,18 @@ define('io.ox/calendar/edit/extensions', [
                     timezoneAttribute: 'endTimezone'
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
-                }).on('click:timezone', openTimezoneDialog, baton).render().$el
+                }).on('click:timezone', openTimezoneDialog, baton)
+                    .on('click:time', function () {
+                        var target = this.$el.find('.dropdown-menu.calendaredit'),
+                            container = target.scrollParent(),
+                            pos = target.offset().top - container.offset().top;
+
+                        if ((pos < 0) || (pos + target.height() > container.height())) {
+                            // scroll to Node, leave 16px offset
+                            container.scrollTop(container.scrollTop() + pos - 16);
+                        }
+
+                    }).render().$el
             );
         }
     });
@@ -535,6 +557,22 @@ define('io.ox/calendar/edit/extensions', [
                 typeahead.$el
             );
             typeahead.render().$el.addClass('col-md-6');
+
+            typeahead.typeahead.on('typeahead-custom:dropdown-rendered', function () {
+
+                var target = typeahead.$el.find('.tt-dropdown-menu'),
+                    container = target.scrollParent(),
+                    pos = target.offset().top - container.offset().top;
+
+                if (!target.is(':visible')) {
+                    return;
+                }
+
+                if ((pos < 0) || (pos + target.height() > container.height())) {
+                    // scroll to Node, leave 16px offset
+                    container.scrollTop(container.scrollTop() + pos - 16);
+                }
+            });
         }
     });
 
@@ -676,9 +714,10 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    function openFreeBusyView(e) {
+    /*function openFreeBusyView(e) {
         require(['io.ox/calendar/freetime/main'], function (freetime) {
-            freetime.showDialog({ parentModel: e.data.model }).done(function (data) {
+            //#. Applies changes to an existing appointment, used in scheduling view
+            freetime.showDialog({ label: gt('Apply changes'), parentModel: e.data.model }).done(function (data) {
                 var view = data.view;
                 data.dialog.on('save', function () {
                     var appointment = view.createAppointment();
@@ -687,14 +726,20 @@ define('io.ox/calendar/edit/extensions', [
                         data.dialog.close();
                         e.data.model.set({ full_time: appointment.full_time });
                         e.data.model.set({ start_date: appointment.start_date });
+                        var models = [],
+                            defs = [];
                         // add to participants collection instead of the model attribute to make sure the edit view is redrawn correctly
                         _(appointment.participants).each(function (data) {
                             //create model
                             var mod = new e.data.model._participants.model(data);
+                            models.push(mod);
                             // wait for fetch, then add to collection
-                            mod.loading.then(function () {
-                                e.data.model._participants.addUniquely(mod);
-                            });
+                            defs.push(mod.loading);
+                        });
+                        $.when.apply($, defs).done(function () {
+                            // first reset then addUniquely collection might not reraw correctly otherwise in some cases
+                            e.data.model._participants.reset([]);
+                            e.data.model._participants.addUniquely(models);
                         });
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                         e.data.model.set({
@@ -708,6 +753,34 @@ define('io.ox/calendar/edit/extensions', [
                     }
                 });
             });
+        });
+    }*/
+
+    function openFreeBusyView(e) {
+        var app = e.data.app,
+            model = e.data.model,
+            start = model.get('start_date'),
+            end = model.get('end_date');
+        e.preventDefault();
+
+        //when editing a series we are not interested in the past (see Bug 35492)
+        if (model.get('recurrence_type') !== 0) {
+            start = _.now();
+            //prevent end_date before start_date
+            if (start > end) {
+                //just add an hour
+                end = start + 3600000;
+            }
+        }
+        ox.launch('io.ox/calendar/freebusy/main', {
+            app: app,
+            start_date: start,
+            end_date: end,
+            folder: model.get('folder_id'),
+            participants: model.getParticipants().map(function (p) {
+                return p.toJSON();
+            }),
+            model: model
         });
     }
 

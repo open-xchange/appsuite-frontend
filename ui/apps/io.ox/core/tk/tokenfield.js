@@ -465,10 +465,20 @@ define('io.ox/core/tk/tokenfield', [
             }
 
             this.$el.closest('div.tokenfield').on('copy', function (e) {
+                // value might contain more than one id so split
+                var values = e.target.value.split(', ');
+
                 // copy actual email adress instead of model cid to clipboard
-                var model = self.collection.get(e.target.value);
-                if (model) {
-                    e.originalEvent.clipboardData.setData('text/plain', model.value);
+                var result = '';
+                _(values).each(function (value) {
+                    var model = self.collection.get(value);
+                    if (model) {
+                        result = result + (result === '' ? '' : ', ') + model.value;
+                    }
+                });
+
+                if (result !== '') {
+                    e.originalEvent.clipboardData.setData('text/plain', result);
                     e.preventDefault();
                 }
             }).on('keydown', function (e) {

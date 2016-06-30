@@ -12,41 +12,40 @@
  */
 
 define([
-    'io.ox/core/tk/iframe',
-    'waitsFor'
-], function (main, waitsFor) {
+    'io.ox/core/tk/iframe'
+], function (main) {
 
     'use strict';
 
     var appOptions = {
-        name: 'com.example',
-        title: 'Hallo, World!',
-        pageTitle: 'Hallo, World!',
-        url: 'https://example.com/index.html?test=test',
-        acquireToken: true
-    },
-    appOptionsWithoutToken = {
-        name: 'com.example',
-        title: 'Hallo, World!',
-        pageTitle: 'Hallo, World!',
-        url: 'https://example.com'
-    },
-    appOptionsWithoutParameter = {
-        name: 'com.example',
-        title: 'Hallo, World!',
-        pageTitle: 'Hallo, World!',
-        url: 'https://example.com/index.html',
-        acquireToken: true
-    },
+            name: 'com.example',
+            title: 'Hallo, World!',
+            pageTitle: 'Hallo, World!',
+            url: 'https://example.com/index.html?test=test',
+            acquireToken: true
+        },
+        appOptionsWithoutToken = {
+            name: 'com.example',
+            title: 'Hallo, World!',
+            pageTitle: 'Hallo, World!',
+            url: 'https://example.com'
+        },
+        appOptionsWithoutParameter = {
+            name: 'com.example',
+            title: 'Hallo, World!',
+            pageTitle: 'Hallo, World!',
+            url: 'https://example.com/index.html',
+            acquireToken: true
+        },
 
-    response = {
-        'timestamp': 1379403021960,
-        'data': {
-            'token': 1234567890
-        }
-    },
+        response = {
+            'timestamp': 1379403021960,
+            'data': {
+                'token': 1234567890
+            }
+        },
 
-    app;
+        app;
 
     describe('iframe app', function () {
 

@@ -21,9 +21,7 @@ define([
     ext.point('io.ox/notificationtest/item').extend({
         draw: function (baton) {
             var self = this,
-                endText = '',
                 data = baton.model.attributes,
-                descriptionId = _.uniqueId('notification-description-'),
                 node = self.addClass('testviewNotification');
             node.attr('data-cid', _.cid(data)).append($('<div class="testTitle">').text(data.title));
         }
@@ -54,13 +52,13 @@ define([
             hideAllLabel: 'Hide all test notifications'
         },
         testModel1 = {
-                id: '1337',
-                title: 'Testmodel1'
-            },
+            id: '1337',
+            title: 'Testmodel1'
+        },
         testModel2 = {
-                id: '1338',
-                title: 'Testmodel2'
-            },
+            id: '1338',
+            title: 'Testmodel2'
+        },
         subview = new Subview(options);
 
     describe('The Notification Subview', function () {
@@ -144,7 +142,7 @@ define([
             });
             it(' trigger autoopen', function () {
                 var triggered = false;
-                function test () {
+                function test() {
                     triggered = true;
                 }
                 subview.on('autoopen', test);

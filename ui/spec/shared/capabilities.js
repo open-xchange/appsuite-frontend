@@ -35,100 +35,48 @@ define('spec/shared/capabilities', [
                 capabilities.reset();
 
                 //reload consuming modules
-                ox.testUtils.modules.reload('io.ox/core/capabilities')
-                    .then(function () {
-                        //require original
-                        require(references.ids, function () {
-                            //reset common methods of used references
-                            _.each(arguments, function (arg, index) {
-                                $.extend(references.vars[index], arg || {});
-                            });
-                            def.resolve();
-                        }, def.reject);
+                ox.testUtils.modules.reload('io.ox/core/capabilities').then(function () {
+                    //require original
+                    require(references.ids, function () {
+                        //reset common methods of used references
+                        _.each(arguments, function (arg, index) {
+                            $.extend(references.vars[index], arg || {});
+                        });
+                        def.resolve();
                     }, def.reject);
+                }, def.reject);
 
-                    return def.then(function () {
-                        return data;
-                    });
-                },
-                /**
-                 * enable/disable capabilities
-                 * @param  {array} list
-                 * @param  {string} action [add|remove]
-                 * @return {deferred}
-                 */
-                process = function (list, action) {
-                    var before = [].concat(data);
-                    list = [].concat(list);
+                return def.then(function () {
+                    return data;
+                });
+            },
+            /**
+             * enable/disable capabilities
+             * @param  {array} list
+             * @param  {string} action [add|remove]
+             * @return {deferred}
+             */
+            process = function (list, action) {
+                var before = [].concat(data);
+                list = [].concat(list);
 
-                    if (action === 'add') {
-                        data = _.unique(
-                            data.concat(list)
-                        );
-                    } else {
-                        data = _(data).difference(list);
-                    }
+                if (action === 'add') {
+                    data = _.unique(
+                        data.concat(list)
+                    );
+                } else {
+                    data = _(data).difference(list);
+                }
 
-                    //set
-                    return before.length === data.length ? $.Deferred().resolve(data) : apply();
-                };
-
-            return {
-                /**
-                 * @param  {string|array} ids of used modules
-                 * @param  {object|array} vars of used variables (analogous to 'ids')
-                 * @return {this}
-                 */
-                init: function (ids, vars) {
-                    references = {
-                        ids: [].concat(ids),
-                        vars: [].concat(vars)
-                    };
-                    return this;
-                },
-                /**
-                 * @return {array} capabilites
-                 */
-                get: function () {
-                    return [].concat(data);
-                },
-                /**
-                 * enable capabilities
-                 * @param  {string|array} list of capabilties
-                 * @return {deferred} returns current set of enabled capabilties (array)
-                 */
-                enable: function (list) {
-                    return process([].concat(list), 'add');
-                },
-                /**
-                 * disable capabilities
-                 * @param  {string|array} list of capabilties
-                 * @return {deferred} returns current set of enabled capabilties (array)
-                 */
-                disable: function (list) {
-                    return process([].concat(list), 'remove');
-                },
-                /**
-                 * reset to inital state of enabled caps (common, premium or pim)
-                 * @return {deferred} returns current set of enabled capabilties (array)
-                 */
-                reset: function () {
-                    data = base.slice(0);
-                    return apply();
-                },
-                /**
-                 * apply curret set of capabilities
-                 * @return {deferred} returns current set of enabled capabilties (array)
-                 */
-                apply: apply
-
+                //set
+                return before.length === data.length ? $.Deferred().resolve(data) : apply();
             };
 
         return {
             /**
              * @param  {string|array} ids of used modules
              * @param  {object|array} vars of used variables (analogous to 'ids')
-             * @return { this }
+             * @return {this}
              */
             init: function (ids, vars) {
                 references = {
@@ -138,7 +86,7 @@ define('spec/shared/capabilities', [
                 return this;
             },
             /**
-             * @return { array} capabilites
+             * @return {array} capabilites
              */
             get: function () {
                 return [].concat(data);
@@ -146,7 +94,7 @@ define('spec/shared/capabilities', [
             /**
              * enable capabilities
              * @param  {string|array} list of capabilties
-             * @return { deferred} returns current set of enabled capabilties (array)
+             * @return {deferred} returns current set of enabled capabilties (array)
              */
             enable: function (list) {
                 return process([].concat(list), 'add');
@@ -154,20 +102,26 @@ define('spec/shared/capabilities', [
             /**
              * disable capabilities
              * @param  {string|array} list of capabilties
-             * @return { deferred} returns current set of enabled capabilties (array)
+             * @return {deferred} returns current set of enabled capabilties (array)
              */
             disable: function (list) {
                 return process([].concat(list), 'remove');
             },
             /**
              * reset to inital state of enabled caps (common, premium or pim)
-             * @return { deferred} returns current set of enabled capabilties (array)
+             * @return {deferred} returns current set of enabled capabilties (array)
              */
             reset: function () {
                 data = base.slice(0);
                 return apply();
-            }
+            },
+            /**
+             * apply curret set of capabilities
+             * @return {deferred} returns current set of enabled capabilties (array)
+             */
+            apply: apply
         };
+
     };
 
     return {

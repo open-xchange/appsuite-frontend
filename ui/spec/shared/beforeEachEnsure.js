@@ -19,15 +19,13 @@ define('beforeEachEnsure', function () {
     //callback is executed only once
     //hint: context is passed through
     //hint: for async callbacks simply return a deferred
-    function ensure (cb) {
+    function ensure(cb) {
         var def;
         beforeEach.call(this, function (done) {
             def = (def || cb.call(this) || $.Deferred().resolve());
             //async vs. sync
-            if (!!def.done)
-                def.done(done);
-            else
-                done();
+            if (!!def.done) def.done(done);
+            else done();
         });
     }
 

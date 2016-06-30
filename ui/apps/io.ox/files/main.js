@@ -16,6 +16,7 @@ define('io.ox/files/main', [
     'io.ox/core/commons',
     'gettext!io.ox/files',
     'settings!io.ox/files',
+    'settings!io.ox/core',
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
     'io.ox/core/folder/tree',
@@ -43,7 +44,7 @@ define('io.ox/files/main', [
     'io.ox/files/upload/dropzone',
     'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/core/viewer'
-], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
+], function (commons, gt, settings, coreSettings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
 
     'use strict';
 
@@ -208,7 +209,11 @@ define('io.ox/files/main', [
                 module: 'file'
             });
             // add some listeners
-            folderAPI.on('cleared-trash', function () {
+            folderAPI.on('clear', function () {
+                quota.getQuota(true);
+            });
+
+            api.on('add:file remove:file', function () {
                 quota.getQuota(true);
             });
 
@@ -350,6 +355,11 @@ define('io.ox/files/main', [
                 app.listView.empty();
                 var options = app.getViewOptions(id);
                 app.props.set(options);
+
+                app.listView.model.set(options);
+                app.listView.model.set('folder', null, { silent: true });
+                app.listView.model.set('folder', id);
+
             });
         },
         /*
@@ -459,6 +469,26 @@ define('io.ox/files/main', [
             });
         },
 
+        'attachmentViewUpdater': function (app) {
+            var attachmentView = coreSettings.get('folder/mailattachments', {});
+            if (_.isEmpty(attachmentView)) return;
+
+            function expireAttachmentView() {
+                _(attachmentView).each(function (folder) {
+                    _(api.pool.getByFolder(folder)).each(function (collection) {
+                        collection.expired = true;
+                    });
+                    if (app.folder.get() === folder) app.listView.reload();
+                });
+            }
+
+            app.folderView.tree.on('change', expireAttachmentView);
+
+            require(['io.ox/mail/api'], function (mailAPI) {
+                mailAPI.on('delete new-mail copy update archive archive-folder', expireAttachmentView);
+            });
+        },
+
         /*
          * Store view options
          */
@@ -490,8 +520,14 @@ define('io.ox/files/main', [
         'change:sort': function (app) {
             app.props.on('change:sort', function (m, value) {
                 // set proper order first
-                var model = app.listView.model;
-                model.set('order', (/^(5|704)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                var model = app.listView.model,
+                    viewOptions = app.getViewOptions(app.treeView.selection.get());
+                if (viewOptions) {
+                    model.set('order', viewOptions.order, { silent: true });
+                } else {
+                    // set default
+                    model.set('order', (/^(5|704)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                }
                 app.props.set('order', model.get('order'));
                 // now change sort columns
                 model.set('sort', value);
@@ -1084,6 +1120,7 @@ define('io.ox/files/main', [
         },
 
         'sidepanel': function (app) {
+            if (_.device('smartphone')) return;
 
             ext.point('io.ox/files/sidepanel').extend({
                 id: 'tree',
