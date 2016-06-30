@@ -35,8 +35,14 @@ define('io.ox/mail/compose/extensions', [
     //make strings accessible to translators
     var tokenfieldTranslations = {
         to: gt('To'),
+        //#. %1$s is the name of the inputfield (To, CC, BCC)
+        ariato: gt('%1$s autocomplete input field', gt('To')),
         cc: gt('CC'),
+        //#. %1$s is the name of the inputfield (To, CC, BCC)
+        ariacc: gt('%1$s autocomplete input field', gt('CC')),
         bcc: gt('BCC'),
+        //#. %1$s is the name of the inputfield (To, CC, BCC)
+        ariabcc: gt('%1$s autocomplete input field', gt('BCC')),
         reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
     };
 
@@ -271,7 +277,8 @@ define('io.ox/mail/compose/extensions', [
                             emailAutoComplete: true
                         },
                         maxResults: 20,
-                        placeholder: tokenfieldTranslations[attr] // for a11y and easy access for custom dev when they want to display placeholders (these are made transparent via less)
+                        placeholder: tokenfieldTranslations[attr], // for a11y and easy access for custom dev when they want to display placeholders (these are made transparent via less)
+                        ariaLabel: tokenfieldTranslations['aria' + attr]
                     });
 
                 var node = $('<div class="col-xs-11">').append(

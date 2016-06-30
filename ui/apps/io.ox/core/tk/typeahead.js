@@ -161,7 +161,8 @@ define('io.ox/core/tk/typeahead', [
 
             this.$el.attr({
                 tabindex: this.options.tabindex,
-                placeholder: this.options.placeholder
+                placeholder: this.options.placeholder,
+                'aria-label': this.options.ariaLabel
             }).on({
                 // dirty hack to get a reliable info about open/close state
                 'typeahead:closed': function () {
