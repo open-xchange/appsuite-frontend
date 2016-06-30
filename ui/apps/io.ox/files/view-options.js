@@ -41,9 +41,9 @@ define('io.ox/files/view-options', [
         index: 100,
         draw: function () {
             this.data('view')
-                .option('sort', 702, gt('Name'))
-                .option('sort', 5, gt('Date'))
-                .option('sort', 704, gt('Size'));
+                .option('sort', 702, gt('Name'), { radio: true })
+                .option('sort', 5, gt('Date'), { radio: true })
+                .option('sort', 704, gt('Size'), { radio: true });
         }
     });
 
@@ -53,8 +53,8 @@ define('io.ox/files/view-options', [
         draw: function () {
             this.data('view')
                 .divider()
-                .option('order', 'asc', gt('Ascending'))
-                .option('order', 'desc', gt('Descending'));
+                .option('order', 'asc', gt('Ascending'), { radio: true })
+                .option('order', 'desc', gt('Descending'), { radio: true });
         }
     });
 
@@ -124,14 +124,14 @@ define('io.ox/files/view-options', [
                 .divider()
                 //#. Verb: (to) filter documents by file type
                 .header(gt.pgettext('verb', 'Filter'))
-                .option('filter', 'pdf', gt('PDFs'))
-                .option('filter', 'doc', gt('Documents'))
-                .option('filter', 'xls', gt('Spreadsheets'))
-                .option('filter', 'ppt', gt('Presentations'))
-                .option('filter', 'image', gt('Images'))
-                .option('filter', 'audio', gt('Music'))
-                .option('filter', 'video', gt('Videos'))
-                .option('filter', 'none', gt('None'));
+                .option('filter', 'pdf', gt('PDFs'), { radio: true })
+                .option('filter', 'doc', gt('Documents'), { radio: true })
+                .option('filter', 'xls', gt('Spreadsheets'), { radio: true })
+                .option('filter', 'ppt', gt('Presentations'), { radio: true })
+                .option('filter', 'image', gt('Images'), { radio: true })
+                .option('filter', 'audio', gt('Music'), { radio: true })
+                .option('filter', 'video', gt('Videos'), { radio: true })
+                .option('filter', 'none', gt('None'), { radio: true });
 
             this.data('view').$ul.on('click', 'a', { list: baton.app.listView }, changeSelection);
         }

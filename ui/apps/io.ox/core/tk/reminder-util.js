@@ -52,13 +52,23 @@ define('io.ox/core/tk/reminder-util', [
                     .append(
                         $('<i class="fa fa-chevron-down" aria-hidden="true">').css({ paddingLeft: '5px', textDecoration: 'none' })
                     ),
-                    menu = $('<ul role="menu">').addClass('dropdown-menu dropdown-left').css({ minWidth: 'auto', position: 'fixed' }).append(function () {
-                        var ret = [];
-                        for (var i = 0; i < values.length; i++) {
-                            ret.push('<li role="presentation"><a  tabindex="1" role="menuitem" aria-label="' + gt('Remind me again ') + values[i][1] + '" href="#" data-action="reminder" data-value="' + values[i][0] + '">' + values[i][1] + '</a></li>');
-                        }
-                        return ret;
-                    })
+                    menu = $('<ul class="dropdown-menu dropdown-left" role="menu">')
+                        .css({ minWidth: 'auto', position: 'fixed' })
+                        .append(function () {
+                            return _(values).map(function (value) {
+                                return $('<li role="presentation">').append(
+                                    $('<a href="#" tabindex="1" role="menuitem" data-action="reminder">')
+                                    .attr({
+                                        //#. %1$s is something like "in 5 minutes"
+                                        //#. don't know if that works for all languages but it has been
+                                        //#. a string concatenation before; at least now it's documented
+                                        'aria-label': gt('Remind me again %1$s', value[1]),
+                                        'data-value': value[0]
+                                    })
+                                    .text(value[1])
+                                );
+                            });
+                        })
                 ),
                 $('<button type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK'))
                     //#. %1$s appointment or task title
