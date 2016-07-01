@@ -135,8 +135,7 @@ define('io.ox/core/tk/typeahead', [
                             if (dropdown.is(':visible')) {
                                 self.model.set('dropdown', 'opened');
                             }
-
-                            self.trigger('typeahead-custom:dropdown-rendered', dropdown);
+                            if (query) self.trigger('typeahead-custom:dropdown-rendered', dropdown);
                         });
                         self.registered = true;
                     }
