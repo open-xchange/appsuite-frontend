@@ -23,6 +23,8 @@ Please refer to the [metrics article](http://oxpedia.org/wiki/index.php?title=Ap
 
 Please refer to the [upsell documentaion](http://oxpedia.org/wiki/index.php?title=AppSuite:Upsell#Custom_upsell_links) for more details.
 
+hint: upsell event is only triggered for clicks on disabled (`enabled=false`) scenarios that have a valid *missing_capabilities* array property. Also the stated missing capability has to be enabeled for upsell (`io.ox/core/upsell/enabled/`).
+
 ```
 io.ox/core//features/upsell/client.onboarding/enabled
 io.ox/core//features/upsell/client.onboarding/color
