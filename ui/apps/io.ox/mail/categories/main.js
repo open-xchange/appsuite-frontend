@@ -89,7 +89,7 @@ define('io.ox/mail/categories/main', [
         refresh: function () {
             var def = $.Deferred(),
                 self = this;
-            // defer to ensure mail multiple requests first
+            // defer to ensure mail requests multiple first
             _.defer(function () {
                 api.get().then(function (data) {
                     data = _.map(data, function (value, key) {
@@ -140,7 +140,7 @@ define('io.ox/mail/categories/main', [
                 container: this.$el.closest('.window-container')
             };
             // dnd
-            dnd.enable({ draggable: true, container: this.$el, selection: this.selection, dropzone: true, dropzoneSelector: '.category' });
+            dnd.enable({ draggable: true, container: this.ui.list, selection: this.selection, delegate: true, dropzone: true, dropzoneSelector: '.category' });
             // register listeners
             this.register();
         },
@@ -516,7 +516,7 @@ define('io.ox/mail/categories/main', [
         }, 500, { leading: false })
     };
 
-    // hint: settings at io.ox/mail/settings/pane
+    // hint: settings in io.ox/mail/settings/pane
     return module;
 
 });
