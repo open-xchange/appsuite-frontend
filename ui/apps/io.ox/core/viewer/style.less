@@ -47,9 +47,11 @@
     @viewer-control-color: @viewer-toolbar-color;
     @viewer-sidebar-bgcolor: rgba(0, 0, 0, 0.40);
     @viewer-sidebar-border-color: #000000;
+    @viewer-sidebar-active-color: #FFFFFF;
     @viewer-sidebar-active-bgcolor: #333333;
+    @viewer-sidebar-active-bordercolor: #444444;
     @viewer-sidebar-label-text-color: #999999;
-    @viewer-sidebar-uploadnewversion-bgcolor: #333;
+    @viewer-sidebar-uploadnewversion-bgcolor: #222;
     @viewer-sidebar-uploadnewversion-bordercolor: #444;
     @viewer-sidebar-uploadnewversion-hovercolor: #777777;
     @viewer-sidebar-versions-text-color: #CCCCCC;
@@ -86,7 +88,7 @@
     @viewer-toolbar-hover-color: #284d71;
     @viewer-toolbar-hover-bgcolor: #EEEEEE;
     @viewer-toolbar-focus-color: #FFFFFF;
-    @viewer-toolbar-focus-bgcolor: #DDDDDD;
+    @viewer-toolbar-focus-bgcolor: #3c73aa;
     @viewer-toolbar-active-color: #284d71;
     @viewer-toolbar-active-bgcolor: #AAAAAA;
     @viewer-displayer-navigation-color: rgba(255, 255, 255, 0.5);
@@ -97,7 +99,9 @@
     @viewer-control-color: @viewer-toolbar-color;
     @viewer-sidebar-bgcolor: #f5f5f5;
     @viewer-sidebar-border-color: #DDDDDD;
-    @viewer-sidebar-active-bgcolor: rgba(0,0,0, 0.2);
+    @viewer-sidebar-active-color: #ffffff;
+    @viewer-sidebar-active-bgcolor: #3c73aa;
+    @viewer-sidebar-active-bordercolor: #ffffff;
     @viewer-sidebar-label-text-color: #999999;
     @viewer-sidebar-uploadnewversion-bgcolor: rgba(0,0,0,.1);
     @viewer-sidebar-uploadnewversion-bordercolor: rgba(0,0,0,0.1);
@@ -239,6 +243,10 @@
 
             .version-content {
                 padding: 0 0 8px 0;
+
+                .createdby, .last_modified, .size {
+                    padding: 2px;
+                }
 
                 .last_modified { float: right; }
 
@@ -442,8 +450,10 @@
     }
 
     // show active sidebar button in toolbar when sidebar is open
-    .viewer-sidebar.open ~ .viewer-toolbar a.viewer-toolbar-togglesidebar {
-        color: @viewer-toolbar-color;
+    .viewer-sidebar:not(.open) ~ .viewer-toolbar a.viewer-toolbar-togglesidebar {
+        &:focus {
+            color: rgba(255, 255, 255, 0.3);
+        }
     }
 
     .viewer-displayer {
@@ -668,7 +678,15 @@
             border-color: @viewer-sidebar-uploadnewversion-bordercolor;
 
             &:active,
-            &:hover { border-color: @viewer-sidebar-uploadnewversion-hovercolor; }
+            &:hover {
+                border-color: @viewer-sidebar-uploadnewversion-hovercolor;
+            }
+            &:focus {
+                outline: 0;
+                color: @viewer-sidebar-active-color;
+                background: @viewer-sidebar-active-bgcolor;
+                border-color: @viewer-sidebar-active-bordercolor;
+            }
         }
 
 
@@ -778,11 +796,25 @@
             color: @viewer-sidebar-label-text-color;
 
             .panel-toggle-btn {
+                outline: 0;
                 color: @viewer-control-color;
+                border: 1px solid transparent;
+                border-radius: 3px;
+                width: 20px;
+                text-align:center;
+
+                i.fa-chevron-right {
+                    padding-top: 3px;
+                    padding-left: 1px;
+                }
 
                 &:active,
                 &:focus,
-                &:hover { background-color: @viewer-sidebar-active-bgcolor }
+                &:hover {
+                    border-color: @viewer-sidebar-active-bordercolor;
+                    color: @viewer-sidebar-active-color;
+                    background-color: @viewer-sidebar-active-bgcolor;
+                }
             }
 
             h3 {
@@ -808,11 +840,18 @@
 
                 .dropdown > a {
                     color: @viewer-sidebar-versions-dropdown-color;
+                    border: 1px solid transparent;
+                    padding: 2px;
 
                     &:hover { color: @viewer-sidebar-versions-dropdown-color; }
 
                     &:active,
-                    &:focus { background-color: @viewer-sidebar-versions-dropdown-active-bgcolor; }
+                    &:focus {
+                        border-radius: 3px;
+                        border-color: @viewer-sidebar-active-bordercolor;
+                        color: @viewer-sidebar-active-color;
+                        background-color: @viewer-sidebar-active-bgcolor;
+                    }
                 }
             }
 
@@ -835,8 +874,10 @@
         .viewer-styles();
 
         .viewer-sidebar {
-            a:link, a:visited { color: lighten(@link-color, 20%); }
-            a:hover, a:focus { color: @link-color; }
+            dd {
+                a:link, a:visited { color: lighten(@link-color, 20%); }
+                a:hover, a:focus { color: @link-color; }
+            }
         }
 
         .breadcrumb-tail { color: white; }
