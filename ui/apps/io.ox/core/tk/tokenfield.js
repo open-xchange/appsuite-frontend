@@ -204,6 +204,13 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
+            this.on('typeahead-custom:dropdown-rendered', function (query, dropdown) {
+                var numberOfResults = dropdown.find('.tt-suggestions').children().length;
+                                                     //#. %1$d is the number of search results in the autocomplete field
+                                                     //#, c-format
+                self.$el.trigger('aria-live-update', gt.ngettext('%1$d result found for this query', '%1$d results found for this query', numberOfResults));
+            });
+
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
                     if (self.redrawLock) return;
@@ -311,26 +318,21 @@ define('io.ox/core/tk/tokenfield', [
                         var model = e.attrs.model || self.getModelByCID(e.attrs.value),
                             node = $(e.relatedTarget),
                             label = node.find('.token-label'),
-                            closeButton = node.find('.close');
+                            token = model.get('token'),
+                            title = token.label;
+
+                        if (token.label !== token.value) {
+                            title = token.label ? token.label + ' <' + token.value + '>' : token.value;
+                        }
+
                         // remove wrongly calculated max-width
                         if (label.css('max-width') === '0px') label.css('max-width', 'none');
-                        // a11y: set label (title is not read on div elements)
-                        node.attr('aria-label', function () {
-                            var token = model.get('token'),
-                                title = token.label;
-                            if (token.label !== token.value) {
-                                title = token.label ? token.label + ' <' + token.value + '>' : token.value;
-                            }
-                            return title;
+                        // a11y: set label (title is not read on div elements but needed for tooltip to function)
+                        node.attr({
+                            'aria-label': title + gt(' press backspace to remove this token'),
+                            'title': title
                         });
-                        label.attr('aria-hidden', true);
-                        // a11y: make close button accessible
-                        closeButton.attr({
-                            //#. %1$s is the label of the token (display name + email adress if available). used in the (to, cc, bcc input fields)
-                            'aria-label': gt('Remove %1$s from list', node.attr('aria-label')),
-                            'role': 'button',
-                            'tabindex': 1
-                        });
+
                         // customize token
                         ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e);
                     }

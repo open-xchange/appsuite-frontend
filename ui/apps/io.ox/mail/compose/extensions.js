@@ -36,13 +36,13 @@ define('io.ox/mail/compose/extensions', [
     var tokenfieldTranslations = {
         to: gt('To'),
         //#. %1$s is the name of the inputfield (To, CC, BCC)
-        ariato: gt('%1$s autocomplete input field', gt('To')),
+        ariato: gt('%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens', gt('To')),
         cc: gt('CC'),
         //#. %1$s is the name of the inputfield (To, CC, BCC)
-        ariacc: gt('%1$s autocomplete input field', gt('CC')),
+        ariacc: gt('%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens', gt('CC')),
         bcc: gt('BCC'),
         //#. %1$s is the name of the inputfield (To, CC, BCC)
-        ariabcc: gt('%1$s autocomplete input field', gt('BCC')),
+        ariabcc: gt('%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens', gt('BCC')),
         reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
     };
 
