@@ -204,7 +204,7 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
-            this.on('typeahead-custom:dropdown-rendered', function (query, dropdown) {
+            this.on('typeahead-custom:dropdown-rendered', function (dropdown) {
                 var numberOfResults = dropdown.find('.tt-suggestions').children().length;
                                                      //#. %1$d is the number of search results in the autocomplete field
                                                      //#, c-format
