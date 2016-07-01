@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-22 14:53+0100\n"
+"PO-Revision-Date: 2016-07-01 14:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -164,12 +164,10 @@ msgid "100%"
 msgstr "100%"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
-#, fuzzy
 msgid "Use cursor keys to reorder items"
 msgstr "Verwenden Sie die Pfeiltasten zum Neusortieren von Elementen"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
-#, fuzzy
 msgid "%1$s moved to position %2$s of %3$s"
 msgstr "%1$s an Position %2$s von %3$s verschoben"
 
@@ -7401,9 +7399,8 @@ msgid "Remove %1$s"
 msgstr "%1$s entfernen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
 msgid "Drag to reorder filter rules"
-msgstr "Zum Ändern der Reihenfolge der Filterregeln ziehen"
+msgstr "Zum Neusortieren der Filterregeln ziehen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Do you really want to delete this filter rule?"
@@ -9404,8 +9401,9 @@ msgid "Delete group"
 msgstr "Gruppe löschen"
 
 #: apps/plugins/administration/resources/settings/edit.js module:io.ox/core
-msgid "Resource name"
-msgstr "Ressourcenname"
+#, fuzzy
+msgid "Resource name (mandatory)"
+msgstr "Ressourcenname (obligatorisch)"
 
 #: apps/plugins/administration/resources/settings/edit.js module:io.ox/core
 msgid "Mail address (mandatory)"
@@ -10449,6 +10447,9 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Resource name"
+#~ msgstr "Ressourcenname"
 
 #~ msgid "Please select a time for the appointment"
 #~ msgstr "Bitte wählen Sie eine Uhrzeit für den Termin"
