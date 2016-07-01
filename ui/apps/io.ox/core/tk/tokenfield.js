@@ -208,7 +208,7 @@ define('io.ox/core/tk/tokenfield', [
                 var numberOfResults = dropdown.find('.tt-suggestions').children().length;
                                                      //#. %1$d is the number of search results in the autocomplete field
                                                      //#, c-format
-                self.$el.trigger('aria-live-update', gt.ngettext('%1$d result found for this query', '%1$d results found for this query', numberOfResults));
+                self.$el.trigger('aria-live-update', gt.ngettext('There is %1$d matching autocomplete entry for this query', 'There are %1$d matching autocomplete entries for this query', numberOfResults));
             });
 
             this.$el.tokenfield().on({
