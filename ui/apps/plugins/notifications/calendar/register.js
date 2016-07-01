@@ -110,21 +110,18 @@ define('plugins/notifications/calendar/register', [
                 'data-cid': cid,
                 'focus-id': 'calendar-invite-' + cid,
                 //#. %1$s Appointment title
-                //#. %2$s Appointment date
-                //#. %3$s Appointment time
-                //#. %4$s Appointment location
-                //#. %5$s Appointment Organizer
                 //#, c-format
-                'aria-label': gt('%1$s %2$s %3$s %4$s %5$s.',
-                        _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.attributes)),
-                        _.noI18n(util.getTimeIntervalA11y(model.attributes)), _.noI18n(model.get('location')) || '',
-                        _.noI18n(model.get('organizer'))) + ' ' + gt('Press [enter] to open')
+                'aria-label': gt('Invitation for %1$s.',
+                        _.noI18n(model.get('title')))
             }).append(
-                $('<span class="span-to-div time">').text(_.noI18n(strings.timeStr)),
-                $('<span class="span-to-div date">').text(_.noI18n(strings.dateStr)),
-                $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
-                $('<span class="span-to-div location">').text(_.noI18n(model.get('location'))),
-                $('<span class="span-to-div organizer">').text(_.noI18n(model.get('organizer'))),
+                $('<a class="notification-info" role="button" tabindex="1">').append(
+                    $('<span class="span-to-div time">').text(_.noI18n(strings.timeStr)).attr('aria-label', util.getTimeIntervalA11y(model.attributes)),
+                    $('<span class="span-to-div date">').text(_.noI18n(strings.dateStr)).attr('aria-label', util.getDateIntervalA11y(model.attributes)),
+                    $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
+                    $('<span class="span-to-div location">').text(_.noI18n(model.get('location'))),
+                    $('<span class="span-to-div organizer">').text(_.noI18n(model.get('organizer'))),
+                    $('<span class="sr-only">').text(gt('Press to open Details'))
+                ),
                 $('<div class="actions">').append(
                     $('<button type="button" tabindex="1" class="refocus btn btn-default" data-action="accept_decline">')
                         .attr({

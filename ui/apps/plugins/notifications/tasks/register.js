@@ -45,26 +45,22 @@ define('plugins/notifications/tasks/register', [
     ext.point('io.ox/core/notifications/due-tasks/item').extend({
         draw: function (baton) {
             var self = this,
-                endText = '',
                 data = util.interpretTask(baton.model.attributes),
                 node = self.addClass('taskNotification');
-            if (_.noI18n(data.end_time)) {
-                endText = gt('end date ') + _.noI18n(data.end_time);
-            }
-            //#. %1$s task title
-            //#. %2$s task end date
-            //#, c-format
-            var label = gt('%1$s %2$s.', _.noI18n(baton.model.get('title')), endText) + ' ' + gt('Press [enter] to open');
 
             node.attr({
                 'data-cid': _.cid(data),
-                'aria-label': label
+                //#. %1$s task title
+                //#, c-format
+                'aria-label': gt('Invitation for %1$s.', _.noI18n(data.title))
             })
-            .append(
-                $('<span class="span-to-div title">').text(_.noI18n(data.title)),
-                $('<div class"clearfix">').append(
-                    $('<span class="end_date">').text(_.noI18n(data.end_time)),
-                    $('<span class="status pull-right">').text(data.status).addClass(data.badge)
+            .append($('<a class="notification-info" role="button" tabindex="1">').append(
+                    $('<span class="span-to-div title">').text(_.noI18n(data.title)),
+                    $('<div class"clearfix">').append(
+                        $('<span class="end_date">').text(_.noI18n(data.end_time)),
+                        $('<span class="status pull-right">').text(data.status).addClass(data.badge),
+                        $('<span class="sr-only">').text(gt('Press to open Details'))
+                    )
                 ),
                 $('<div class="actions">').append(
                     $('<button type="button" tabindex="1" class="btn btn-default" data-action="done">').attr('aria-label', gt('Mark as done') + ' ' + _.noI18n(baton.model.get('title')))
@@ -277,29 +273,24 @@ define('plugins/notifications/tasks/register', [
                     });
                 };
 
-            var task = util.interpretTask(baton.model.toJSON()),
-                endText = '';
-
-            if (baton.model.get('end_time')) {
-                endText = gt('end date ') + _.noI18n(baton.model.get('end_time'));
-            }
-            //#. %1$s task title
-            //#. %2$s task end date
-            //#. %3$s task status
-            //#, c-format
-            var label = gt('%1$s %2$s %3$s.', _.noI18n(baton.model.get('title')), endText, baton.model.get('status')) + ' ' + gt('Press [enter] to open');
+            var task = util.interpretTask(baton.model.toJSON());
             node.attr({
                 role: 'listitem',
                 'data-cid': _.cid(baton.model.attributes),
                 'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
-                tabindex: 1,
-                'aria-label': label
+                //#. %1$s task title
+                //#, c-format
+                'aria-label': gt('Invitation for %1$s.', _.noI18n(task.title)),
+                tabindex: 1
             })
             .append(
-                $('<span class="span-to-div title">').text(_.noI18n(task.title)),
-                $('<div class="clearfix">').append(
-                    $('<span class="end_date">').text(_.noI18n(task.end_time)),
-                    $('<span class="status">').text(task.status).addClass(task.badge)),
+                $('<a class="notification-info" role="button" tabindex="1">').append(
+                    $('<span class="span-to-div title">').text(_.noI18n(task.title)),
+                    $('<div class="clearfix">').append(
+                        $('<span class="end_date">').text(_.noI18n(task.end_time)),
+                        $('<span class="status">').text(task.status).addClass(task.badge)),
+                        $('<span class="sr-only">').text(gt('Press to open Details'))
+                ),
                 $('<div class="actions">').append(
                     $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-default" data-action="change_state">')
                     .attr({
