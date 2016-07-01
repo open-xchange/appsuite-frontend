@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-22 13:02+0100\n"
+"PO-Revision-Date: 2016-07-01 09:29+0100\n"
 "Last-Translator: \n"
 "Language-Team: Danish <da@bureau-cornavin.com>\n"
 "Language: da_DK\n"
@@ -6365,6 +6365,10 @@ msgstr "E-mail fra %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js:253 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "Denne besked er blevet forkortet på grund af størrelsesbegrænsninger."
+
+#: apps/io.ox/mail/detail/view.js:254 module:io.ox/mail
+msgid "Show entire message"
+msgstr "Vis komplet besked"
 
 #: apps/io.ox/mail/detail/view.js:365 module:io.ox/mail
 msgid "Error while loading message content"

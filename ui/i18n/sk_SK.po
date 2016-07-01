@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-22 13:04+0100\n"
+"PO-Revision-Date: 2016-07-01 09:38+0100\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -6402,6 +6402,10 @@ msgstr "Email od %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js:253 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "Táto správa bola skrátená kvôli obmedzeniam veľkosti."
+
+#: apps/io.ox/mail/detail/view.js:254 module:io.ox/mail
+msgid "Show entire message"
+msgstr "Zobraziť celú správu"
 
 #: apps/io.ox/mail/detail/view.js:365 module:io.ox/mail
 msgid "Error while loading message content"

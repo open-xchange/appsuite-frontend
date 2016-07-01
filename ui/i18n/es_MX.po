@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-22 13:03+0100\n"
+"PO-Revision-Date: 2016-07-01 09:33+0100\n"
 "Last-Translator: \n"
 "Language-Team: Spanish <es@bureau-cornavin.com>\n"
 "Language: es_MX\n"
@@ -6303,6 +6303,10 @@ msgstr "Correo de %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js:253 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "Este mensaje se ha cortado debido a las limitaciones de tamaño."
+
+#: apps/io.ox/mail/detail/view.js:254 module:io.ox/mail
+msgid "Show entire message"
+msgstr "Mostrar mensaje completo"
 
 #: apps/io.ox/mail/detail/view.js:365 module:io.ox/mail
 msgid "Error while loading message content"

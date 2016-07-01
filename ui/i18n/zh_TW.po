@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-22 13:04+0100\n"
+"PO-Revision-Date: 2016-07-01 09:39+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -6267,6 +6267,10 @@ msgstr "來自 %1$s 的郵件: %2$d"
 #: apps/io.ox/mail/detail/view.js:253 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "因為檔案大小限制，此郵件已被截短。"
+
+#: apps/io.ox/mail/detail/view.js:254 module:io.ox/mail
+msgid "Show entire message"
+msgstr "顯示完整訊息"
 
 #: apps/io.ox/mail/detail/view.js:365 module:io.ox/mail
 msgid "Error while loading message content"

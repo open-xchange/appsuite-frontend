@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-22 13:04+0100\n"
+"PO-Revision-Date: 2016-07-01 09:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: Romanian <ro@bureau-cornavin.com>\n"
 "Language: ro_RO\n"
@@ -6431,6 +6431,10 @@ msgstr "Mesaj de la %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js:253 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "Mesajul a fost trunchiat din cauza limitelor pentru dimensiuni."
+
+#: apps/io.ox/mail/detail/view.js:254 module:io.ox/mail
+msgid "Show entire message"
+msgstr "Afișează întregul mesaj"
 
 #: apps/io.ox/mail/detail/view.js:365 module:io.ox/mail
 msgid "Error while loading message content"

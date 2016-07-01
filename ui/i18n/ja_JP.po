@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-22 13:03+0100\n"
+"PO-Revision-Date: 2016-07-01 09:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -6329,6 +6329,10 @@ msgstr "%1$s からのメール: %2$s"
 #: apps/io.ox/mail/detail/view.js:253 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "サイズ制限のためそれを超えたメッセージの部分は切り捨てられます。"
+
+#: apps/io.ox/mail/detail/view.js:254 module:io.ox/mail
+msgid "Show entire message"
+msgstr "全メッセージを表示する"
 
 #: apps/io.ox/mail/detail/view.js:365 module:io.ox/mail
 msgid "Error while loading message content"

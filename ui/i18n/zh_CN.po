@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-22 13:04+0100\n"
+"PO-Revision-Date: 2016-07-01 09:39+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -6264,6 +6264,10 @@ msgstr "来自 %1$s 的电子邮件：%2$d"
 #: apps/io.ox/mail/detail/view.js:253 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "此消息已因体积限制而被截短。"
+
+#: apps/io.ox/mail/detail/view.js:254 module:io.ox/mail
+msgid "Show entire message"
+msgstr "显示整篇消息"
 
 #: apps/io.ox/mail/detail/view.js:365 module:io.ox/mail
 msgid "Error while loading message content"

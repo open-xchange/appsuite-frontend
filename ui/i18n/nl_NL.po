@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-22 13:03+0100\n"
+"PO-Revision-Date: 2016-07-01 09:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch <kde-i18n-doc@kde.org>\n"
 "Language: nl_NL\n"
@@ -6419,6 +6419,10 @@ msgstr "E-mail van %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js:253 module:io.ox/mail
 msgid "This message has been truncated due to size limitations."
 msgstr "Dit e-mailbericht is ingekort vanwege afmetingsbeperkingen."
+
+#: apps/io.ox/mail/detail/view.js:254 module:io.ox/mail
+msgid "Show entire message"
+msgstr "Toon geheel bericht"
 
 #: apps/io.ox/mail/detail/view.js:365 module:io.ox/mail
 msgid "Error while loading message content"
