@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-22 14:46+0000\n"
+"POT-Creation-Date: 2016-07-04 10:35+0000\n"
 "PO-Revision-Date: 2016-07-04 09:35+0000\n"
 "Last-Translator: hv@webhuset.no <hv@webhuset.no>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -8523,6 +8523,7 @@ msgstr "Bruk for alle meldinger?"
 #. %1$d is the number of mails
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
+#, c-format
 #, c-format, c-format
 msgid "Selected message was moved successfully."
 msgid_plural "Selected messages has been moved successfully."
@@ -8533,6 +8534,7 @@ msgstr[1] "De valgte meldingene ble flyttet."
 #. %2$s target mail category
 #: apps/io.ox/mail/categories/dialogs.js
 #: module:io.ox/mail
+#, c-format
 #, c-format, c-format
 msgid "Should all other past and future messages from %1$s also be moved to %2$s?"
 msgstr ""
@@ -10173,6 +10175,7 @@ msgstr "Ufullstendig konfigurering."
 #. %1$d a list of email addresses
 #: apps/io.ox/participants/add.js
 #: module:io.ox/core
+#, c-format
 #, c-format, c-format
 msgid "This email address cannot be used"
 msgid_plural "The following email addresses cannot be used: %1$d"
