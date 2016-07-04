@@ -202,7 +202,12 @@ define('io.ox/core/tk/list-dnd', [
             // unbind handlers
             $(document).off('mousemove.dnd mouseup.dnd mouseover.dnd mouseout.dnd keyup.dnd');
             $('.dropzone').each(function () {
-                var node = $(this), selector = node.attr('data-dropzones');
+                var node = $(this),
+                    selector = node.attr('data-dropzones'),
+                    delegate = node.attr('data-delegate');
+                if (delegate && selector) {
+                    return node.off('mouseup.dnd', selector);
+                }
                 (selector ? node.find(selector) : node).off('mouseup.dnd');
             });
             $('.dnd-over').removeClass('dnd-over');
