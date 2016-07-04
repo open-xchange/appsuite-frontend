@@ -213,7 +213,7 @@ define('io.ox/mail/compose/view', [
 
                 ext.point(POINT + '/editors').each(function (point) {
                     if (!point.mode && !point.label) return;
-                    menu.option('editorMode', point.mode, point.label, gt('Editor'));
+                    menu.option('editorMode', point.mode, point.label, { prefix: gt('Editor'), radio: true });
                 });
             }
         },
@@ -224,11 +224,11 @@ define('io.ox/mail/compose/view', [
                 this.data('view')
                     .header(gt.pgettext('E-Mail', 'Priority'))
                     //#. E-Mail priority
-                    .option('priority', 0, gt.pgettext('E-Mail priority', 'High'), gt.pgettext('E-Mail', 'Priority'))
+                    .option('priority', 0, gt.pgettext('E-Mail priority', 'High'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true })
                     //#. E-Mail priority
-                    .option('priority', 3, gt.pgettext('E-Mail priority', 'Normal'), gt.pgettext('E-Mail', 'Priority'))
+                    .option('priority', 3, gt.pgettext('E-Mail priority', 'Normal'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true })
                     //#. E-Mail priority
-                    .option('priority', 5, gt.pgettext('E-Mail priority', 'Low'), gt.pgettext('E-Mail', 'Priority'));
+                    .option('priority', 5, gt.pgettext('E-Mail priority', 'Low'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true });
             }
         },
         {
@@ -238,7 +238,7 @@ define('io.ox/mail/compose/view', [
                 this.data('view')
                     .header(gt('Options'))
                     .option('vcard', 1, gt('Attach Vcard'), gt('Options'), 0)
-                    .option('disp_notification_to', true, gt('Request read receipt'), gt('Options'));
+                    .option('disp_notification_to', true, gt('Request read receipt'), { prefix: gt('Options') });
             }
         }
     );

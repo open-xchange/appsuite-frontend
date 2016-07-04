@@ -52,13 +52,23 @@ define('io.ox/core/tk/reminder-util', [
                     .append(
                         $('<i class="fa fa-chevron-down" aria-hidden="true">').css({ paddingLeft: '5px', textDecoration: 'none' })
                     ),
-                    menu = $('<ul role="menu">').addClass('dropdown-menu dropdown-left').css({ minWidth: 'auto', position: 'fixed' }).append(function () {
-                        var ret = [];
-                        for (var i = 0; i < values.length; i++) {
-                            ret.push('<li role="presentation"><a  tabindex="1" role="menuitem" aria-label="' + gt('Remind me again ') + values[i][1] + '" href="#" data-action="reminder" data-value="' + values[i][0] + '">' + values[i][1] + '</a></li>');
-                        }
-                        return ret;
-                    })
+                    menu = $('<ul class="dropdown-menu dropdown-left" role="menu">')
+                        .css({ minWidth: 'auto', position: 'fixed' })
+                        .append(function () {
+                            return _(values).map(function (value) {
+                                return $('<li role="presentation">').append(
+                                    $('<a href="#" tabindex="1" role="menuitem" data-action="reminder">')
+                                    .attr({
+                                        //#. %1$s is something like "in 5 minutes"
+                                        //#. don't know if that works for all languages but it has been
+                                        //#. a string concatenation before; at least now it's documented
+                                        'aria-label': gt('Remind me again %1$s', value[1]),
+                                        'data-value': value[0]
+                                    })
+                                    .text(value[1])
+                                );
+                            });
+                        })
                 ),
                 $('<button type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK'))
                     //#. %1$s appointment or task title
@@ -85,46 +95,35 @@ define('io.ox/core/tk/reminder-util', [
         //find out remindertype
         if (taskMode) {
             //task
-            info = [
+            info = $('<a class="notification-info" role="button" tabindex="1">').append(
                 $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
                 $('<span class="span-to-div info-wrapper">').append($('<span class="end_date">').text(_.noI18n(model.get('end_time'))),
-                $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')))
-            ];
-            var endText = '',
-                statusText = '';
-            if (_.noI18n(model.get('end_time'))) {
-                endText = gt('end date ') + _.noI18n(model.get('end_time'));
-            }
-            if (_.noI18n(model.get('status'))) {
-                statusText = gt('status ') + _.noI18n(model.get('status'));
-            }
+                $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge'))),
+                $('<span class="sr-only">').text(gt('Press to open Details'))
+            );
+
             //#. %1$s task title
-            //#. %2$s task end date
-            //#. %3$s task status
             //#, c-format
-            label = gt('%1$s %2$s %3$s.', _.noI18n(model.get('title')), endText, statusText);
+            label = gt('Reminder for task %1$s.', _.noI18n(model.get('title')));
         } else {
             var strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' });
             //appointment
-            info = [
+            info = $('<a class="notification-info" role="button" tabindex="1">').append(
                 $('<span class="span-to-div time">').text(strings.timeStr),
                 $('<span class="span-to-div date">').text(strings.dateStr),
                 $('<span class="span-to-div title">').text(model.get('title')),
-                $('<span class="span-to-div location">').text(model.get('location'))
-            ];
-            //#. %1$s Appointment title
-            //#. %2$s Appointment date
-            //#. %3$s Appointment time
-            //#. %4$s Appointment location
+                $('<span class="span-to-div location">').text(model.get('location')),
+                $('<span class="sr-only">').text(gt('Press to open Details'))
+            );
+            //#. %1$s appointment title
             //#, c-format
-            label = gt('%1$s %2$s %3$s %4$s.',
-                    _.noI18n(model.get('title')), _.noI18n(util.getDateIntervalA11y(model.attributes)), _.noI18n(util.getTimeIntervalA11y(model.attributes)), _.noI18n(model.get('location')) || '');
+            label = gt('Reminder for appointment %1$s.', _.noI18n(model.get('title')));
         }
 
         node.attr({
             'data-cid': model.get('cid'),
             'model-cid': model.cid,
-            'aria-label': label + ' ' + gt('Press [enter] to open'),
+            'aria-label': label,
             role: 'listitem',
             'tabindex': 1
         }).addClass('reminder-item clearfix');

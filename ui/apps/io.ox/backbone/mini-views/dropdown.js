@@ -33,7 +33,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             var node = $(e.currentTarget),
                 name = node.attr('data-name'),
                 value = node.data('value'),
-                toggleValue = node.data('togglevalue'),
+                toggleValue = node.data('toggle-value'),
                 toggle = node.data('toggle'),
                 keep = this.options.keep || node.attr('data-keep-open') === 'true';
             // keep drop-down open?
@@ -94,45 +94,47 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             return this;
         },
 
-        option: function (name, value, text, header, toggleValue) {
-            var link, currentValue = this.model ? this.model.get(name) : undefined;
-            this.append(
-                link = $('<a href="#">')
+        option: function (name, value, text, options) {
+
+            options = _.extend({ prefix: '', toggleValue: undefined, radio: false }, options);
+
+            var currentValue = this.model ? this.model.get(name) : undefined,
+                checked = _.isEqual(currentValue, value),
+                role = options.radio ? 'menuitemradio' : 'menuitemcheckbox',
+                plainText = _.isFunction(text) ? $('<div>').append(text()).text() : text,
+                ariaLabel = options.prefix ? [options.prefix, plainText].join(' ') : undefined;
+
+            return this.append(
+                $('<a href="#">')
                 .attr({
-                    role: 'menuitemcheckbox',
-                    'aria-checked': _.isEqual(currentValue, value),
+                    'role': role,
+                    'aria-checked': checked,
                     'data-name': name,
                     'draggable': false,
                     'data-value': this.stringify(value),
                     // you may use toggle with boolean values or provide a toggleValue ('togglevalue' is the option not checked value, 'value' is the option checked value)
-                    'data-toggle': _.isBoolean(value) || toggleValue !== undefined,
-                    'data-togglevalue': toggleValue,
-                    'aria-label': _.isFunction(text) ? $('<div>').append(text()).text() : [header, text].join(' ')
+                    'data-toggle': _.isBoolean(value) || options.toggleValue !== undefined,
+                    'data-toggle-value': options.toggleValue,
+                    'aria-label': ariaLabel
                 })
+                // in firefox draggable=false is not enough to prevent dragging...
+                .on('dragstart', false)
                 // store original value
                 .data('value', value)
                 .append(
-                    $('<i class="fa fa-fw" aria-hidden="true">')
-                        .addClass(_.isEqual(currentValue, value) ? 'fa-check' : 'fa-none'),
-                    _.isFunction(text) ? text() : $('<span>').text(text)
+                    $('<i class="fa fa-fw" aria-hidden="true">').addClass(checked ? 'fa-check' : 'fa-none'),
+                    _.isFunction(text) ? text() : $.txt(text)
                 )
             );
-            // in firefox draggable=false is not enough to prevent dragging...
-            if (_.device('firefox')) {
-                link.attr('ondragstart', 'return false;');
-            }
-            return this;
         },
 
         link: function (name, text, callback) {
             var link = $('<a href="#" draggable="false">')
                 .attr('data-name', name)
+                // in firefox draggable=false is not enough to prevent dragging...
+                .on('dragstart', false)
                 .text(text);
-            if (callback) link.on('click', callback);
-            // in firefox draggable=false is not enough to prevent dragging...
-            if (_.device('firefox')) {
-                link.attr('ondragstart', 'return false;');
-            }
+            if (callback) link.on('click', {}, callback);
             return this.append(link);
         },
 

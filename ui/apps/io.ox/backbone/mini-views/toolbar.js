@@ -69,7 +69,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         replaceToolbar: function (toolbar) {
             // A11y: This is needed to maintain source order, otherwise the focus order is not correct
             // TODO: Extensionpoints should be rendered in source order so this is unnecessary
-            toolbar.append(toolbar.find('.pull-right'));
+            toolbar.append(toolbar.children('.pull-right'));
             this.$el.find('ul.classic-toolbar').tooltip('hide').replaceWith(toolbar);
             return this;
         },

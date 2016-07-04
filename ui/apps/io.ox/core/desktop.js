@@ -1538,6 +1538,7 @@ define('io.ox/core/desktop', [
                     index: 200,
                     draw: function (baton) {
                         baton.$.viewnode.append(
+                            $('<div class="sr-only arialive" role="status" aria-live="polite">'),
                             baton.$.box = $('<form class="search-box">'),
                             baton.$.boxfilter = $('<div class="search-box-filter">')
                         );

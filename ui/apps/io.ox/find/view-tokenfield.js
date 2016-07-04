@@ -245,8 +245,8 @@ define('io.ox/find/view-tokenfield', [
             return this;
         },
 
-        retrigger: function (e) {
-            this.trigger(e.type, e);
+        retrigger: function (e, data) {
+            this.trigger(e.type, e, data);
         },
 
         reopenDropdown: function () {
@@ -278,7 +278,8 @@ define('io.ox/find/view-tokenfield', [
                 'tokenfield:createtoken',
                 'tokenfield:createdtoken',
                 'tokenfield:removetoken',
-                'tokenfield:removedtoken'
+                'tokenfield:removedtoken',
+                'aria-live-update'
             ].join(' '), _.bind(this.retrigger, this));
             // listen for tokenfield:events
             this.on({
@@ -287,7 +288,8 @@ define('io.ox/find/view-tokenfield', [
                 // show placeholder only when search box is empty
                 'tokenfield:createdtoken tokenfield:removedtoken': _.bind(this.setPlaceholder, this),
                 // try to contract each time a token is removed
-                'tokenfield:removedtoken': _.bind(this.removedToken, this)
+                'tokenfield:removedtoken': _.bind(this.removedToken, this),
+                'aria-live-update': _.bind(this.updateAriaLive, this)
             });
             // list for custom typeahead events
             this.ui.view.on({
@@ -302,6 +304,10 @@ define('io.ox/find/view-tokenfield', [
                 'view:disable': _.bind(self.disable, self),
                 'view:enable': _.bind(self.enable, self)
             });
+        },
+
+        updateAriaLive: function (e, message) {
+            $('.io-ox-find .arialive').text(message);
         },
 
         updateSelection: function (action, e, item) {
