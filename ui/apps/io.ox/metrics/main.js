@@ -20,13 +20,13 @@ define('io.ox/metrics/main', [
     'io.ox/metrics/extensions',
     'io.ox/metrics/adapters/default',
     'io.ox/metrics/adapters/analytics',
-    'io.ox/metrics/adapters/console'
+    'io.ox/metrics/adapters/console',
+    'io.ox/metrics/adapters/context'
 ], function (ext, settings, util, caps, http) {
 
     'use strict';
 
     var point = ext.point('io.ox/metrics/adapter'),
-        // TODO: salt?
         userhash = util.getUserHash(),
         metrics;
 
