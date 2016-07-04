@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-27 21:09+0200\n"
+"PO-Revision-Date: 2016-07-01 16:50+0200\n"
 "Last-Translator: Arve Eriksson\n"
 "Language-Team: sv <ox@bureau-cornavin.com>\n"
 "Language: sv_SE\n"
@@ -367,7 +367,7 @@ msgstr "Skriv ut"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Send mail to all participants"
-msgstr "Skicka e-post till alla deltagare"
+msgstr "Skicka meddelande till alla deltagare"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Invite to new appointment"
@@ -1226,11 +1226,11 @@ msgstr "Du har avstått mötet"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
-msgstr "E-brevet innehåller ett möte"
+msgstr "Meddelandet innehåller ett möte"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains a task"
-msgstr "E-brevet innehåller en uppgift"
+msgstr "Meddelandet innehåller en uppgift"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Show appointment details"
@@ -4177,7 +4177,8 @@ msgid ""
 "Synchronization of Emails, Calendar, Contacts and Tasks, along with Public, "
 "Shared and System Folders to Microsoft Outlook® clients."
 msgstr ""
-"Synkronisering av e-post, kalender, kontakter och uppgifter, tillsammans med "
+"Synkronisering av meddelanden, kalender, kontakter och uppgifter, tillsammans "
+"med "
 "offentliga, delade och systemmappar till Microsoft Outlook®-klienter."
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -4189,7 +4190,8 @@ msgid ""
 "Informs about the current status of Emails and appointments without having "
 "to display the user interface or another Windows® client."
 msgstr ""
-"Informerar om aktuellt tillstånd för e-post och möten utan att behöva visa "
+"Informerar om aktuellt tillstånd för meddelanden och möten utan att behöva "
+"visa "
 "användargränssnittet eller en annan Windows®-klient."
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -4869,7 +4871,7 @@ msgstr "Inget stöd för att ladda upp mappar."
 #: apps/io.ox/core/tk/upload.js module:io.ox/core apps/io.ox/mail/import.js
 #: module:io.ox/mail
 msgid "Mail was not imported. Only .eml files are supported."
-msgstr "E-post importerades inte. Endast .eml-filer stöds."
+msgstr "Meddelandet importerades inte. Endast .eml-filer stöds."
 
 #. %1$s quota limit
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
@@ -6031,7 +6033,8 @@ msgid ""
 "You can copy and paste this link in an email, instant messenger or social "
 "network. Please note that anyone with this link can access the share."
 msgstr ""
-"Du kan kopiera och klistra in den här länken i e-post, snabbmeddelanden "
+"Du kan kopiera och klistra in den här länken i ett meddelande, "
+"snabbmeddelanden "
 "eller sociala nätverk. Observera att alla som kommer åt länken kan komma åt "
 "delningen."
 
@@ -6638,19 +6641,19 @@ msgstr "Använd enhetlig e-post för det här kontot"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Mails have been moved"
-msgstr "E-post har flyttats"
+msgstr "Meddelandena har flyttats"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Mail has been moved"
-msgstr "E-post har flyttats"
+msgstr "Meddelandet har flyttats"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Mails have been copied"
-msgstr "E-post har kopierats"
+msgstr "Meddelandena har kopierats"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Mail has been copied"
-msgstr "E-post har kopierats"
+msgstr "Meddelandet har kopierats"
 
 #. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
 #: apps/io.ox/mail/actions.js module:io.ox/mail
@@ -6683,7 +6686,7 @@ msgstr "Inte skräppost"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
-msgstr "Skicka ny e-post"
+msgstr "Skicka nytt meddelande"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Save as file"
@@ -6714,7 +6717,7 @@ msgstr "Använd %1$s"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Drop here to import this mail"
-msgstr "Släpp här för att importera e-brevet"
+msgstr "Släpp här för att importera meddelandet"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Synchronize with Outlook"
@@ -6722,7 +6725,7 @@ msgstr "Synkronisera med Outlook"
 
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
-msgstr "E-brevet har lagts till i portalen"
+msgstr "Meddelandet har lagts till i portalen"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 msgid ""
@@ -6758,8 +6761,8 @@ msgid ""
 "files are not sent as attachments but kept on the server. The email you have "
 "sent just contains links to download these files."
 msgstr ""
-"En eller flera bilagor överskrider storleksgränser per e-brev. Därför "
-"skickas inte filerna som bilagor, men finns kvar på servern. E-brevet du "
+"En eller flera bilagor överskrider storleksgränser per meddelande. Därför "
+"skickas inte filerna som bilagor, men finns kvar på servern. Meddelandet du "
 "skickade innehåller bara länkar till filerna för manuell nedladdning."
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
@@ -6793,18 +6796,19 @@ msgstr ""
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Do you want to permanently delete this mail?"
 msgid_plural "Do you want to permanently delete these mails?"
-msgstr[0] "Vill du verkligen ta bort e-brevet permanent?"
-msgstr[1] "Vill du verkligen ta bort e-breven permanent?"
+msgstr[0] "Vill du verkligen ta bort meddelandet permanent?"
+msgstr[1] "Vill du verkligen ta bort meddelandena permanent?"
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Mail quota exceeded"
-msgstr "E-postserverns kvot överskriden"
+msgstr "Meddelandekvot överskriden"
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid ""
 "Emails cannot be put into trash folder while your mail quota is exceeded."
 msgstr ""
-"E-post kan inte flyttas till papperskorgen när e-postkvoten överskrids."
+"Meddelanden kan inte flyttas till papperskorgen när meddelandekvoten "
+"överskrids."
 
 #: apps/io.ox/mail/actions/ical.js module:io.ox/mail
 msgid "The appointment has been added to your calendar"
@@ -6836,7 +6840,7 @@ msgstr "Påminnelsen har skapats"
 
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
 msgid "Mail source"
-msgstr "E-postkälla"
+msgstr "Meddelandekälla"
 
 #: apps/io.ox/mail/actions/vcard.js module:io.ox/mail
 msgid "Failed to add. Maybe the vCard attachment is invalid."
@@ -6848,7 +6852,7 @@ msgstr "Sparade e-postbilaga"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
 msgid "New Mail"
-msgstr "Ny e-post"
+msgstr "Nytt meddelande"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
 msgid ""
@@ -6877,7 +6881,7 @@ msgstr "Behåll kopia av meddelandet"
 #: apps/io.ox/mail/vacationnotice/settings/register.js
 #: apps/io.ox/settings/util.js module:io.ox/core
 msgid "Unable to load mail filter settings."
-msgstr "Kan inte få kontakt med mailfilter-bakgrundsprogrammet."
+msgstr "Kunde inte läsa in inställningar för e-postfilter."
 
 #: apps/io.ox/mail/autoforward/settings/register.js module:io.ox/mail
 msgid "Couldn't load your auto forward."
@@ -7027,7 +7031,7 @@ msgstr "Meddelandet har ingen mottagare."
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
-msgstr "Meddelandet har inget ämne. Skicka ändå?"
+msgstr "Meddelandet har ingen rubrik. Skicka ändå?"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Yes, send without subject"
@@ -7333,7 +7337,7 @@ msgstr "Visa hela meddelandet"
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js
 msgid "Email from %1$s: %2$s"
-msgstr "E-post från %1$s: %2$s"
+msgstr "Meddelande från %1$s: %2$s"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error while loading message content"
@@ -7341,7 +7345,7 @@ msgstr "Fel när meddelandets innehåll laddades"
 
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Mail has been imported"
-msgstr "E-posten har importerats"
+msgstr "Meddelandet har importerats"
 
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Drop EML file here for import"
@@ -7470,7 +7474,7 @@ msgstr "Alla mottagare"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Mailing list"
-msgstr "E-postlista"
+msgstr "Sändlista"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7520,17 +7524,17 @@ msgstr "Neka med anledning"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Mark mail as"
-msgstr "Märk e-post som"
+msgstr "Märk meddelande som"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Tag mail with"
-msgstr "Etikettera e-post med"
+msgstr "Etikettera meddelande med"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Flag mail with"
-msgstr "Flagga e-post med"
+msgstr "Flagga meddelande med"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7604,7 +7608,7 @@ msgstr "Tråd"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
-msgstr "E-postkvot"
+msgstr "Meddelandekvot"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Need more space?"
@@ -7723,7 +7727,7 @@ msgstr "Gemensam"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Permanently remove deleted emails"
-msgstr "Ta bort borttagen e-post permanent"
+msgstr "Ta bort borttagna meddelanden permanent"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid ""
@@ -7741,11 +7745,11 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
-msgstr "Använd teckensnitt med fast bredd för text-e-post"
+msgstr "Använd teckensnitt med fast bredd för textmeddelanden"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
-msgstr "Beom mailto-länkregistrering"
+msgstr "Be om mailto-länkregistrering"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Register now"
@@ -7757,15 +7761,15 @@ msgstr "Lägg till vCard"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Insert the original email text to a reply"
-msgstr "Infoga det ursprungliga e-brevets text i svaret"
+msgstr "Infoga det ursprungliga meddelandets text i svaret"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Forward emails as"
-msgstr "Vidarebefordra e-post som"
+msgstr "Vidarebefordra meddelande som"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Format emails as"
-msgstr "Formatera e-post som"
+msgstr "Formatera meddelande som"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -7777,7 +7781,7 @@ msgstr "Förvald avsändaradress"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
-msgstr "Autospara e-postutkast"
+msgstr "Autospara meddelandeutkast"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
@@ -7789,7 +7793,7 @@ msgstr "Visa"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Allow html formatted emails"
-msgstr "Tillåt HTML-formaterad e-post"
+msgstr "Tillåt HTML-formaterade meddelanden"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
@@ -7797,7 +7801,7 @@ msgstr "Tillåt laddning i förväg av externt länkade bilder"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
-msgstr "Visa smileys som grafik i text-e-post"
+msgstr "Visa smileys som grafik i textmeddelanden"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Color quoted lines"
@@ -7899,11 +7903,11 @@ msgstr "De 10 du oftast får e-post från"
 
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per week-day (%)"
-msgstr "E-brev per veckodag (%)"
+msgstr "Meddelanden per veckodag (%)"
 
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Mails per hour (%)"
-msgstr "E-brev per timme (%)"
+msgstr "Meddelanden per timme (%)"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Back to list"
@@ -8164,7 +8168,7 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configuration Email"
-msgstr "Konfigurations-ebrev"
+msgstr "Konfigurationsmeddelande"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
@@ -9252,7 +9256,7 @@ msgstr "om en vecka"
 
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
-msgstr "Ursprungligt e-brev"
+msgstr "Ursprungligt meddelande"
 
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
@@ -9501,7 +9505,7 @@ msgstr "Senaste konversationer"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Received mails"
-msgstr "Mottagen e-post"
+msgstr "Mottagna meddelanden"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
@@ -9509,7 +9513,7 @@ msgstr "Kan inte hitta meddelanden som den här kontakten skickade till dig."
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Sent mails"
-msgstr "Skickad e-post"
+msgstr "Skickade meddelanden"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
@@ -9690,11 +9694,11 @@ msgstr "Dölj alla mötesinbjudningar."
 #. %1$d number of notifications
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread mails"
-msgstr "%1$d olästa e-brev"
+msgstr "%1$d olästa meddelanden"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New mails"
-msgstr "Ny e-post"
+msgstr "Nya meddelanden"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "You have new mail"
@@ -9705,11 +9709,11 @@ msgstr "Du har ny e-post"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, c-format
 msgid "Mail from %1$s, %2$s"
-msgstr "E-post från %1$s, %2$s"
+msgstr "Meddelande från %1$s, %2$s"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New mail"
-msgstr "Ny e-post"
+msgstr "Nytt meddelande"
 
 #. %1$s task title
 #. %2$s task end date
@@ -9941,7 +9945,7 @@ msgstr "Lägg till ditt konto"
 
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 msgid "No mails in your inbox"
-msgstr "Ingen e-post i din inkorg"
+msgstr "Inga meddelanden i din inkorg"
 
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 msgid "You have no unread messages"
@@ -9991,7 +9995,7 @@ msgstr "%s finns också för andra plattformar:"
 
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
-msgstr "Kvot för e-postmängd"
+msgstr "Kvot för antal meddelanden"
 
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Quota"
@@ -10384,9 +10388,10 @@ msgid ""
 "Follow the instructions in the email and then return to the widget to "
 "complete account setup."
 msgstr ""
-"Leta i din inkorg efter ett bekräftelsemail.\n"
+"Leta i din inkorg efter ett bekräftelsemeddelande.\n"
 "\n"
-"Följ instruktionerna i e-brevet och återvänd sedan till komponenten för att "
+"Följ instruktionerna i meddelandet och återvänd sedan till komponenten för "
+"att "
 "slutföra kontoinställningen."
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
