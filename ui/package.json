@@ -22,7 +22,7 @@
     "grunt-jsonlint": "^1.0.1",
     "grunt-newer": "^1.1.0",
     "grunt-require-gettext": "^0.8.0",
-    "open-xchange-shared-grunt-config": "^0.12.3",
+    "open-xchange-shared-grunt-config": "^0.13.0",
     "underscore": "^1.8.0"
   },
   "devDependencies": {
