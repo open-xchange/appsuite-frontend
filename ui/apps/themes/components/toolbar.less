@@ -201,6 +201,10 @@
             &.disabled {
                 color: #aaa;
             }
+            @media (max-width: 580px) {
+                // fix for phablets
+                padding: @toolbar-vertical-padding @default-padding - 2;
+            }
         }
     }
 

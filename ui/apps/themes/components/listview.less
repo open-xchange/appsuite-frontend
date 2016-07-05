@@ -47,6 +47,11 @@
             display: block;
             padding-left: 16px;
             padding-right: 16px;
+
+            @media (max-width: 900px) {
+                padding-left: 0px;
+                padding-right: 8px;
+            }
         }
 
         a:not(.breadcrumb-link) {
@@ -68,6 +73,10 @@
                 font-size: 18px;
                 position: relative;
                 top: 2px;
+            }
+            @media (max-width: 900px) {
+
+                padding-right: 0px;
             }
         }
 
