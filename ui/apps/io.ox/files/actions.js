@@ -49,7 +49,7 @@ define('io.ox/files/actions', [
             elem.siblings('input').remove();
 
             elem.after(
-                input = $('<input type="file" name="file" capture="camera" multiple>')
+                input = $('<input type="file" name="file" multiple>')
                 .css('display', 'none')
                 .on('change', function (e) {
                     var app = baton.app;
