@@ -321,7 +321,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         //yell on reject
                         settingsUtil.yellOnReject(
                             api.update(self.model).done(function () {
-                                var target = $(e.target).closest('.widget-controls').find('[data-action="toggle-process-subsequent"] i');
+                                var target = $(e.target).closest('.list-item-controls').find('[data-action="toggle-process-subsequent"] i');
                                 if (containsStop(actioncmds)) {
                                     target.removeClass('fa-arrow-down').addClass('fa-ban');
                                 } else {
