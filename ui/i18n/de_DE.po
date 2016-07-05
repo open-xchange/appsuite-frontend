@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-07-01 14:37+0100\n"
+"PO-Revision-Date: 2016-07-05 10:48+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -9401,9 +9401,8 @@ msgid "Delete group"
 msgstr "Gruppe löschen"
 
 #: apps/plugins/administration/resources/settings/edit.js module:io.ox/core
-#, fuzzy
 msgid "Resource name (mandatory)"
-msgstr "Ressourcenname (obligatorisch)"
+msgstr "Ressourcenname (Pflichtfeld)"
 
 #: apps/plugins/administration/resources/settings/edit.js module:io.ox/core
 msgid "Mail address (mandatory)"
