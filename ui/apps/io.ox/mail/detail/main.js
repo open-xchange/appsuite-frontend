@@ -65,6 +65,15 @@ define('io.ox/mail/detail/main', [
             app.threadView = null;
         });
 
+        function cont(cid) {
+            api.get(_.cid(cid)).then(
+                function success() {
+                    app.showMail(cid);
+                },
+                notifications.yell
+            );
+        }
+
         // launcher
         return app.setLauncher(function (options) {
 
@@ -84,22 +93,14 @@ define('io.ox/mail/detail/main', [
                 // called from mail app
                 obj = _.cid(String(cid).replace(/^thread\./, ''));
                 app.setState({ folder: obj.folder_id, id: obj.id });
-                app.showMail(cid);
-                return;
+                return cont(cid);
             }
 
             // deep-link
             obj = app.getState();
             cid = _.cid(obj);
 
-            if (obj.folder && obj.id) {
-                api.get(obj).then(
-                    function success() {
-                        app.showMail(cid);
-                    },
-                    notifications.yell
-                );
-            }
+            if (obj.folder && obj.id) cont(cid);
         });
     }
 

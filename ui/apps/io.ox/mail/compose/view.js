@@ -812,7 +812,7 @@ define('io.ox/mail/compose/view', [
             var content;
 
             if (this.editor) {
-                this.removeSignature();
+                // this.removeSignature();
                 content = this.editor.getPlainText();
                 this.editor.hide();
             }

@@ -49,7 +49,8 @@ define('io.ox/core/folder/favorites', [
                     // FLD-0008 -> not found
                     // FLD-0003 -> permission denied
                     // ACC-0002 -> account not found (see bug 46481)
-                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003' || item.code === 'ACC-0002')) {
+                    // FLD-1004 -> folder storage service no longer available (see bug 47089)
+                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003' || item.code === 'ACC-0002' || item.code === 'FLD-1004')) {
                         invalid[item.id] = true;
                         return false;
                     }
