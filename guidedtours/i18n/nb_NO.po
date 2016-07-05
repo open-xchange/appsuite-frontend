@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: open-xchange-guidedtours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-07-04 10:35+0000\n"
-"PO-Revision-Date: 2016-03-07 12:02+0000\n"
+"PO-Revision-Date: 2016-07-04 18:33+0000\n"
 "Last-Translator: hv@webhuset.no <hv@webhuset.no>\n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: nb_NO\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1457352140.000000\n"
+"X-POOTLE-MTIME: 1467657196.000000\n"
 
 #: apps/io.ox/tours/calendar.js:34
 #: module:io.ox/tours
@@ -575,12 +575,11 @@ msgstr "Skrive inn epostteksten"
 
 #: apps/io.ox/tours/mail.js:69
 #: module:io.ox/tours
-#, fuzzy
 msgid "Enter the E-Mail text into the main area. If the text format was set to HTML in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar."
 msgstr ""
 "Skriv inn en eposttekst i hovedområdet. Hvis tekstformatet er satt til HTML "
 "i epostinnstillingene kan du også formatere teksten din. For å gjøre det, "
-"velg deler av teksten din og klikk et ikon i formateringslinjen."
+"velg deler av teksten din og klikk et ikon i formateringsverktøylinjen."
 
 #: apps/io.ox/tours/mail.js:74
 #: module:io.ox/tours
@@ -714,7 +713,6 @@ msgstr "Fjerne en widget"
 
 #: apps/io.ox/tours/portal.js:46
 #: module:io.ox/tours
-#, fuzzy
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr "Hvis du ønsker å fjerne en widget, klikk på krysset."
 
