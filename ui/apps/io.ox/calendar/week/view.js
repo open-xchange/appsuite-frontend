@@ -803,6 +803,7 @@ define('io.ox/calendar/week/view', [
                     self.timeLabelBar.css('width', ((list.length + 1) * 80) + 'px');
                     self.fulltimeCon.css('margin-left', ((list.length + 1) * 80) + 'px');
                     self.dayLabel.css('left', ((list.length + 1) * 80) + 'px');
+                    self.moreAppointmentsIndicators.css('left', ((list.length + 1) * 80) + 'px');
                 } else {
                     self.timeLabelBar.css('width', '');
                     self.fulltimeCon.css('margin-left', '');
