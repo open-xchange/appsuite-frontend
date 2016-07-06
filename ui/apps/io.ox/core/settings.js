@@ -117,7 +117,8 @@ define('io.ox/core/settings', [
                     } else {
                         tmp[key] = value;
                     }
-                    self.trigger('change:' + path, value).trigger('change', path, value, previous);
+                    // TODO: 'change' currently triggered also when 'value' and 'previous' are identically
+                    self.trigger('change:' + path, value, previous).trigger('change', path, value, previous);
                 }, true);
             }
             return this;
