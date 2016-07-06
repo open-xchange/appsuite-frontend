@@ -204,6 +204,29 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
+            // aria live: reset message
+            var tokenfield = this.$el.parent();
+            tokenfield.find('.token-input').on('typeahead:close typeahead:closed', function () {
+                self.$el.trigger('aria-live-update', '');
+            });
+            // aria live: set message
+            this.on('typeahead-custom:dropdown-rendered', function (dropdown) {
+                var numberOfResults = dropdown.find('.tt-suggestions').children().length,
+                    message;
+
+                if (numberOfResults === 0) message = gt('There are no matching autocomplete entries for this query.');
+                if (!message) {
+                    message = gt.format(
+                        //#. %1$d is the number of search results in the autocomplete field
+                        //#, c-format
+                        gt.ngettext('There is one matching autocomplete entry for this query.', 'There are %1$d matching autocomplete entries for this query.', numberOfResults),
+                        gt.noI18n(numberOfResults)
+                    );
+                }
+
+                self.$el.trigger('aria-live-update', message);
+            });
+
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
                     if (self.redrawLock) return;
