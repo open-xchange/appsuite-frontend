@@ -103,6 +103,10 @@ define('io.ox/mail/categories/main', [
         }
     });
 
+    function exists(container, model) {
+        return container.find('[data-id="' + model.get('id') + '"]').length;
+    }
+
     // VIEW: knows module, collection, module.props
     View = Backbone.View.extend({
         dialog: undefined,
@@ -156,40 +160,54 @@ define('io.ox/mail/categories/main', [
             this.ui.list.find('.category').removeClass('selected');
             this.refresh(this.categories.get(id));
         },
-        refresh: function (model, node) {
-            node = (node || {}).addClass ? node : this.ui.list.find('[data-id="' + model.get('id') + '"]');
-            if (model.is('disabled')) { node.addClass('hidden'); } else { node.removeClass('hidden'); }
-            if (model.id === this.props.get('selected')) {
-                node.addClass('selected');
-            } else {
-                node.removeClass('selected');
-            }
-            if (model.getCount()) { node.find('.counter').text(model.getCount()); }
-            //#. use as a fallback name in case a user enters a empty string as the name of tab
-            node.find('.category-name').text(model.get('name').trim() || gt('Unnamed'));
-        },
-        render: function () {
-            this.trigger('render');
-            var container = this.ui.list.empty(), node;
-            this.categories.forEach(function (model) {
-                container.append(
-                    node = $('<li class="category">').append(
-                        $('<a class="link" tabindex="1" role="button">').append(
-                            $('<div class="category-icon">'),
-                            $('<div class="category-name truncate">').text(model.get('name')),
-                            $('<div class="category-counter">').append(
-                                $('<span class="counter">').text(model.getCount())
-                            )
-                        ),
-                        $('<div class="category-drop-helper">').text(gt('Drop here!'))
-                    ).attr({
-                        'data-id': model.get('id'),
-                        'data-name': model.get('name')
-                    })
-                );
-                // states
-                this.refresh(model, node);
+        refresh: function (list) {
+            // ensure array
+            list = list ? [].concat(list) : this.categories.models;
+            _.each(list, function (model) {
+                var node = this.ui.list.find('[data-id="' + model.get('id') + '"]');
+                if (model.is('disabled')) { node.addClass('hidden'); } else { node.removeClass('hidden'); }
+                if (model.id === this.props.get('selected')) {
+                    node.addClass('selected');
+                } else {
+                    node.removeClass('selected');
+                }
+                if (model.getCount()) { node.find('.counter').text(model.getCount()); }
+                //#. use as a fallback name in case a user enters a empty string as the name of tab
+                node.find('.category-name').text(model.get('name').trim() || gt('Unnamed'));
             }.bind(this));
+        },
+        render: function (obj) {
+            // full redraw
+            if (!this.ui.list.children().length) return this.redraw();
+            // duck checks: collection vs. single model
+            var list = obj && obj.models ? obj.models : [obj];
+            // simple update
+            this.refresh(list);
+        },
+        redraw: function () {
+            this.trigger('redraw');
+            var container = this.ui.list;
+            this.categories.forEach(function (model) {
+                if (!exists(container, model)) {
+                    container.append(
+                        $('<li class="category">').append(
+                            $('<a class="link" tabindex="1" role="button">').append(
+                                $('<div class="category-icon">'),
+                                $('<div class="category-name truncate">').text(model.get('name')),
+                                $('<div class="category-counter">').append(
+                                    $('<span class="counter">').text(model.getCount())
+                                )
+                            ),
+                            $('<div class="category-drop-helper">').text(gt('Drop here!'))
+                        ).attr({
+                            'data-id': model.get('id'),
+                            'data-name': model.get('name')
+                        })
+                    );
+                }
+                // states
+            });
+            this.refresh();
             container.append($('<li class="free-space" aria-hidden="true">'));
         },
         showDialog: function (baton) {
