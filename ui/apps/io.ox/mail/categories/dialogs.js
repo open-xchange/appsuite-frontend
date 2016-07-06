@@ -112,7 +112,7 @@ define('io.ox/mail/categories/dialogs', [
                     checkbox.prop('checked', !checkbox.prop('checked'));
                 },
                 onSave: function () {
-                    var list = this.$('.category-item input'),
+                    var list = this.$('.category-item input.name'),
                         categories = [];
                     _.each(list, function (target) {
                         var input = $(target),
