@@ -277,7 +277,7 @@ define('io.ox/mail/categories/main', [
             },
             load: function () {
                 var config = this.config.get();
-                this.categories.reset(config.list);
+                this.categories.set(config.list);
                 this.props.set('enabled', config.enabled);
                 this.props.set('initialized', config.initialized);
                 this.trigger('load');
