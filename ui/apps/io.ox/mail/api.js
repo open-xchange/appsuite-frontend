@@ -1408,6 +1408,23 @@ define('io.ox/mail/api', [
         }
     };
 
+    /**
+    * some nested mails do not have the full data. Use this request to get the mail (see Bug 46443)
+    */
+    api.getNestedMail = function (data) {
+        return http.GET({
+            module: 'mail',
+            params: {
+                action: 'attachment',
+                folder: (data.parent || data.mail).folder_id,
+                id: (data.parent || data.mail).id,
+                attachment: data.id,
+                // special parameter to get the json data from a nested mail
+                as_json: true
+            }
+        });
+    };
+
     var lastUnseenMail = 0;
 
     /**

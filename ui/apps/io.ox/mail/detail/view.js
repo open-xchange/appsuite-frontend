@@ -409,6 +409,12 @@ define('io.ox/mail/detail/view', [
             return $(shadowRoot || body);
         },
 
+        onChangeSubject: function () {
+            var subject = this.$el.find('h1.subject');
+            subject.text(this.model.get('subject'));
+            return subject;
+        },
+
         onChangeContent: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({
@@ -473,6 +479,9 @@ define('io.ox/mail/detail/view', [
             // as an indicator whether this view has been destroyed meanwhile
             if (this.model === null) return;
 
+            // merge data (API updates the model in most cases, but we need this for nested mails)
+            if (data) this.model.set(data);
+
             var unseen = this.model.get('unseen') || util.isUnseen(this.model.get('flags'));
 
             // done
@@ -480,11 +489,10 @@ define('io.ox/mail/detail/view', [
             this.trigger('load:done');
 
             // draw
+            // nested mails do not have a subject before loading, so trigger change as well
+            this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
-
-            // merge data (probably unnecessary here since API updates the model)
-            if (data) this.model.set(data);
 
             // process unseen flag
             if (unseen) {
@@ -533,10 +541,19 @@ define('io.ox/mail/detail/view', [
                 if (this.loaded) {
                     this.onLoad();
                 } else {
-                    api.get(_.cid(this.model.cid)).then(
-                        this.onLoad.bind(this),
-                        this.onLoadFail.bind(this)
-                    );
+                    var cid = _.cid(this.model.cid);
+                    // check if we have a nested email here, those are requested differently
+                    if (_(cid).size() === 1 && cid.id !== undefined && this.model.has('parent')) {
+                        api.getNestedMail(this.model.attributes).then(
+                            this.onLoad.bind(this),
+                            this.onLoadFail.bind(this)
+                        );
+                    } else {
+                        api.get(cid).then(
+                            this.onLoad.bind(this),
+                            this.onLoadFail.bind(this)
+                        );
+                    }
                 }
             }
 
