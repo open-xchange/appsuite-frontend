@@ -214,12 +214,12 @@ define('io.ox/core/tk/tokenfield', [
                 var numberOfResults = dropdown.find('.tt-suggestions').children().length,
                     message;
 
-                if (numberOfResults === 0) message = gt('There are no matching autocomplete entries for this query.');
+                if (numberOfResults === 0) message = gt('No autocomplete entries found');
                 if (!message) {
                     message = gt.format(
                         //#. %1$d is the number of search results in the autocomplete field
                         //#, c-format
-                        gt.ngettext('There is one matching autocomplete entry for this query.', 'There are %1$d matching autocomplete entries for this query.', numberOfResults),
+                        gt.ngettext('One autocomplete entry found', '%1$d autocomplete entries found', numberOfResults),
                         gt.noI18n(numberOfResults)
                     );
                 }
