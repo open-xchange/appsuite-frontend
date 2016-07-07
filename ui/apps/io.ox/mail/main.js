@@ -1693,10 +1693,7 @@ define('io.ox/mail/main', [
             var mapper;
             // register settings listener
             if (settings.get('categories/enabled')) refresh();
-            settings.on('change:categories/enabled', function (e, value, previous) {
-                if (String(value) === String(previous)) return;
-                refresh();
-            });
+            settings.on('change:categories/enabled', refresh);
 
             var Mapper = function (cat) {
                 var mapper = {
