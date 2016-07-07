@@ -287,7 +287,8 @@ define('io.ox/mail/compose/view', [
 
         events: {
             'click [data-action="add"]': 'toggleTokenfield',
-            'keydown [data-extension-id="subject"] input': 'setSubject',
+            'keydown [data-extension-id="subject"]': 'flagSubjectField',
+            'keyup [data-extension-id="subject"] input': 'setSubject',
             'keydown': 'focusSendButton',
             'aria-live-update': 'ariaLiveUpdate'
         },
@@ -482,11 +483,14 @@ define('io.ox/mail/compose/view', [
         },
 
         setSubject: function (e) {
-            var value = e.target ? $(e.target).val() : e;
+            var node = e.target ? $(e.target) : undefined,
+                value = node ? node.val() : e;
             // A11y: focus mailbody on enter in subject field
-            if (e.which && e.which === 13) {
+            // 'data-enter-keydown' indicates that enter was pressed when subject had focus
+            if (e.which && e.which === 13 && node.attr('data-enter-keydown')) {
                 e.preventDefault();
                 this.editor.focus();
+                node.removeAttr('data-enter-keydown');
             }
             this.model.set('subject', value, { silent: true }).trigger('keyup:subject', value);
         },
@@ -921,6 +925,14 @@ define('io.ox/mail/compose/view', [
 
         focusEditor: function () {
             this.editor.focus();
+        },
+
+        flagSubjectField: function (e) {
+            var node = $(e.target);
+            // required for custom focus handling within inputs on enter
+            if ((e.keyCode || e.which) === 13) {
+                return node.attr('data-enter-keydown', true);
+            }
         },
 
         focusSendButton: function (e) {
