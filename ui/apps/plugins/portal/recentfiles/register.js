@@ -110,7 +110,7 @@ define('plugins/portal/recentfiles/register', [
                                         // show WHO changed it
                                         _.noI18n(file.modified_by.display_name) :
                                         // show WHEN it was changed
-                                        moment(file.last_modified).format('l LT')
+                                        moment.utc(file.last_modified).format('l LT')
                                 )
                             );
                     })

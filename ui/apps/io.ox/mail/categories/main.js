@@ -15,6 +15,7 @@ define('io.ox/mail/categories/main', [
     'io.ox/mail/categories/api',
     'io.ox/mail/api',
     'io.ox/core/api/account',
+    'io.ox/core/folder/api',
     'io.ox/core/tk/list-dnd',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
@@ -23,7 +24,7 @@ define('io.ox/mail/categories/main', [
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'less!io.ox/mail/categories/style'
-], function (api, mailAPI, accountAPI, dnd, links, capabilities, yell, ext, settings, gt) {
+], function (api, mailAPI, accountAPI, folderAPI, dnd, links, capabilities, yell, ext, settings, gt) {
 
     'use strict';
 
@@ -88,7 +89,7 @@ define('io.ox/mail/categories/main', [
         refresh: function () {
             var def = $.Deferred(),
                 self = this;
-            // defer to ensure mail multiple requests first
+            // defer to ensure mail requests multiple first
             _.defer(function () {
                 api.get().then(function (data) {
                     data = _.map(data, function (value, key) {
@@ -101,6 +102,10 @@ define('io.ox/mail/categories/main', [
             return def;
         }
     });
+
+    function exists(container, model) {
+        return container.find('[data-id="' + model.get('id') + '"]').length;
+    }
 
     // VIEW: knows module, collection, module.props
     View = Backbone.View.extend({
@@ -115,7 +120,7 @@ define('io.ox/mail/categories/main', [
             return [
                 $('<ul>', { class: 'classic-toolbar categories', role: 'toolbar', 'aria-label': gt('Inbox tabs') }),
                 $('<div class="free-space">'),
-                $('<ul>', { class: 'classic-toolbar actions', role: 'toolbar', 'aria-label': gt('Configure you inbox tabs') }).append(
+                $('<ul>', { class: 'classic-toolbar actions', role: 'toolbar', 'aria-label': gt('Configure your inbox tabs') }).append(
                     $('<li role="presentation aria-hidden="true">').append(
                         $('<a class="io-ox-action-link no-underline" href="#" tabindex="-1" data-action="tabbed-inbox-options" draggable="false" role="button" data-section="default" data-prio="hi" title=""">').append(
                                 $('<i class="fa fa-cog">')
@@ -127,6 +132,8 @@ define('io.ox/mail/categories/main', [
         initialize: function (options) {
             _.extend(this, options || {});
             this.setElement($('.categories-toolbar-container'));
+            // A11y: Do not add role to empty element
+            $('.categories-toolbar-container').attr('role', 'menu');
             // add skeleton nodes
             this.$el.append(this.skeleton());
             // helper
@@ -137,7 +144,7 @@ define('io.ox/mail/categories/main', [
                 container: this.$el.closest('.window-container')
             };
             // dnd
-            dnd.enable({ draggable: true, container: this.$el, selection: this.selection, dropzone: true, dropzoneSelector: '.category' });
+            dnd.enable({ draggable: true, container: this.ui.list, selection: this.selection, delegate: true, dropzone: true, dropzoneSelector: '.category' });
             // register listeners
             this.register();
         },
@@ -153,40 +160,54 @@ define('io.ox/mail/categories/main', [
             this.ui.list.find('.category').removeClass('selected');
             this.refresh(this.categories.get(id));
         },
-        refresh: function (model, node) {
-            node = (node || {}).addClass ? node : this.ui.list.find('[data-id="' + model.get('id') + '"]');
-            if (model.is('disabled')) { node.addClass('hidden'); } else { node.removeClass('hidden'); }
-            if (model.id === this.props.get('selected')) {
-                node.addClass('selected');
-            } else {
-                node.removeClass('selected');
-            }
-            if (model.getCount()) { node.find('.counter').text(model.getCount()); }
-            //#. use as a fallback name in case a user enters a empty string as the name of tab
-            node.find('.category-name').text(model.get('name').trim() || gt('Unnamed'));
-        },
-        render: function () {
-            this.trigger('render');
-            var container = this.ui.list.empty(), node;
-            this.categories.forEach(function (model) {
-                container.append(
-                    node = $('<li class="category">').append(
-                        $('<a class="link" tabindex="1" role="button">').append(
-                            $('<div class="category-icon">'),
-                            $('<div class="category-name truncate">').text(model.get('name')),
-                            $('<div class="category-counter">').append(
-                                $('<span class="counter">').text(model.getCount())
-                            )
-                        ),
-                        $('<div class="category-drop-helper">').text(gt('Drop here!'))
-                    ).attr({
-                        'data-id': model.get('id'),
-                        'data-name': model.get('name')
-                    })
-                );
-                // states
-                this.refresh(model, node);
+        refresh: function (list) {
+            // ensure array
+            list = list ? [].concat(list) : this.categories.models;
+            _.each(list, function (model) {
+                var node = this.ui.list.find('[data-id="' + model.get('id') + '"]');
+                if (model.is('disabled')) { node.addClass('hidden'); } else { node.removeClass('hidden'); }
+                if (model.id === this.props.get('selected')) {
+                    node.addClass('selected');
+                } else {
+                    node.removeClass('selected');
+                }
+                if (model.getCount()) { node.find('.counter').text(model.getCount()); }
+                //#. use as a fallback name in case a user enters a empty string as the name of tab
+                node.find('.category-name').text(model.get('name').trim() || gt('Unnamed'));
             }.bind(this));
+        },
+        render: function (obj) {
+            // full redraw
+            if (!this.ui.list.children().length) return this.redraw();
+            // duck checks: collection vs. single model
+            var list = obj && obj.models ? obj.models : [obj];
+            // simple update
+            this.refresh(list);
+        },
+        redraw: function () {
+            this.trigger('redraw');
+            var container = this.ui.list;
+            this.categories.forEach(function (model) {
+                if (!exists(container, model)) {
+                    container.append(
+                        $('<li class="category">').append(
+                            $('<a class="link" tabindex="1" role="button">').append(
+                                $('<div class="category-icon">'),
+                                $('<div class="category-name truncate">').text(model.get('name')),
+                                $('<div class="category-counter">').append(
+                                    $('<span class="counter">').text(model.getCount())
+                                )
+                            ),
+                            $('<div class="category-drop-helper">').text(gt('Drop here!'))
+                        ).attr({
+                            'data-id': model.get('id'),
+                            'data-name': model.get('name')
+                        })
+                    );
+                }
+                // states
+            });
+            this.refresh();
             container.append($('<li class="free-space" aria-hidden="true">'));
         },
         showDialog: function (baton) {
@@ -256,7 +277,7 @@ define('io.ox/mail/categories/main', [
             },
             load: function () {
                 var config = this.config.get();
-                this.categories.reset(config.list);
+                this.categories.set(config.list);
                 this.props.set('enabled', config.enabled);
                 this.props.set('initialized', config.initialized);
                 this.trigger('load');
@@ -284,6 +305,62 @@ define('io.ox/mail/categories/main', [
         });
     }
 
+     // MODULE: SUBMODULE PROCESS
+    var Process = function (context) {
+        var SECOND = 1000;
+        // hint: proc === module.proc
+        var proc = {
+            // hint: this = module
+            bind: function () {
+                // bind all functions to context (config)
+                _.each(proc, function (func, key) {
+                    if (key === 'bind') return;
+                    this[key] = this[key].bind(context);
+                }.bind(this));
+                return this;
+            },
+            start: function () {
+                proc.off();
+                var status = proc.get();
+                if (_.contains(['notyetstarted', 'finished'], status)) return;
+                // initial hint
+                if (_.contains(['running'], status)) {
+                    //#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
+                    yell('info', gt('It will take some time until common mails are assigned to the default tabs.'));
+                }
+                // maybe an error occured?
+                proc.notify();
+                proc.on();
+            },
+            get: function () {
+                this.config.load();
+                // notyetstarted, running, finished
+                return this.props.get('initialized');
+            },
+            on: function () {
+                proc.id = setInterval(proc.notify, 20 * SECOND);
+            },
+            off: function () {
+                clearInterval(proc.id);
+            },
+            notify: function () {
+                var status = proc.get();
+                if (status === 'finished') {
+                    proc.off();
+                    this.reload();
+                }
+                if (status === 'error') {
+                    //#. tabbed inbox feature: in case the long running update job fails
+                    yell('error', gt("Sorry, common mails couldn't be assigned automatically."));
+                    proc.off();
+                }
+                // fallback
+                if (_.contains(['notyetstarted'], status)) return proc.off();
+            }
+        };
+        return proc.bind(context);
+    };
+
     // CONTROLL
     module = {
         api: api,
@@ -292,6 +369,7 @@ define('io.ox/mail/categories/main', [
             _.extend(module, Backbone.Events, options);
             // subs
             this.config = new Config(this);
+            this.proc = new Process(this);
             this.props = new Backbone.Model();
             module.categories = new Collection();
             module.view = new View({ module: this, categories: module.categories, props: module.props });
@@ -302,7 +380,7 @@ define('io.ox/mail/categories/main', [
             // load config
             this.config.load();
             // props
-            this.props.set('selected', this.preselected());
+            this.props.set('selected', this.restoreSelection());
             // inital refresh
             //_.defer(_.bind(this.refresh, this));
         },
@@ -333,7 +411,8 @@ define('io.ox/mail/categories/main', [
             this.listenTo(this.props, 'change:enabled', this.reload);
             this.listenTo(this, 'move:after revert:after generalize:after', this.reload);
             // refresh: unread counter
-            mailAPI.on('update:after', $.proxy(this.refresh, this));
+            mailAPI.on('delete refresh.all', $.proxy(this.refresh, this));
+            folderAPI.on('reload:' + accountAPI.getInbox(), $.proxy(this.refresh, this));
             this.listenTo(this.props, 'change:enabled', this.refresh);
             this.listenTo(this, 'move:after rever:after generalise:after', this.refresh);
             // toggle visibility
@@ -370,11 +449,13 @@ define('io.ox/mail/categories/main', [
             this.mail.listView.model.set('filter', this.props.get('selected'));
             // state
             this.props.set('visible', true);
+            this.restoreSelection();
             this.mail.left.find('[data-name="thread"]').addClass('disabled');
             this.trigger('show');
         },
         hide: function () {
             // restore state
+            _.url.hash('category', null);
             this.mail.listView.model.unset('filter');
             if (this.props.get('thread')) {
                 this.mail.props.set('thread', this.props.get('thread'));
@@ -392,15 +473,14 @@ define('io.ox/mail/categories/main', [
             this.props.set('enabled', false);
             this.trigger('disable');
         },
-        preselected: function () {
-            var id = (this.categories.get(_.url.hash('category')) || this.categories.first() || {}).id;
+        restoreSelection: function () {
+            var id = (this.categories.get(_.url.hash('category') || this.props.get('selected')) || this.categories.first() || {}).id;
             _.url.hash('category', id);
             return id;
         },
         checkstate: function () {
             this.config.load();
-            if (this.props.get('initialized') !== 'running') return;
-            yell('info', gt('It will take some time until mails are assigned to the default tabs'));
+            this.proc.start();
         },
         // category-based actions
         select: function (categoryId) {
@@ -413,6 +493,10 @@ define('io.ox/mail/categories/main', [
         },
         update: function (categories) {
             this.categories.set(categories);
+            _.delay(function () {
+                // we have to wait until changes reach middleware
+                this.reload();
+            }.bind(this), 2000);
             this.trigger('update:after');
         },
         move: function (baton, revert) {
@@ -444,15 +528,13 @@ define('io.ox/mail/categories/main', [
             this.mail.listView.load();
             this.trigger('reload');
         },
-        refresh: function () {
+        refresh: _.throttle(function () {
             return this.categories.refresh()
                 .done(_.bind(trigger, this, 'refresh'));
-        }
+        }, 500, { leading: false })
     };
 
-    // hint: settings at io.ox/mail/settings/pane
-
-    window.horst = module;
+    // hint: settings in io.ox/mail/settings/pane
     return module;
 
 });

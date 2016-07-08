@@ -113,7 +113,7 @@ define([
 
             it('adding array of new data ', function (done) {
                 testStorage.add([testData1, testDataA, testDataB, testDataC], currentTimeStamp).done(function (data) {
-                    expect(data).to.deep.equal([ 'A.ABC', 'A.ABD', 'A.ABE', 'A.ABF' ]);
+                    expect(data).to.deep.equal(['A.ABC', 'A.ABD', 'A.ABE', 'A.ABF']);
                     done();
                 }).fail(function (e) {
                     expect(e).not.to.exist;

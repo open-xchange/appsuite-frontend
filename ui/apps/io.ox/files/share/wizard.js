@@ -63,7 +63,11 @@ define('io.ox/files/share/wizard', [
                 linkNode = $('<div class="form-group">').append(
                     $('<label>').attr({ for: formID }).text(),
                     $('<div class="input-group link-group">').append(
-                        $('<input class="form-control">').attr({ id: formID, type: 'text', tabindex: 1, readonly: 'readonly' }).val(link)
+                        $('<input class="form-control">').attr({ id: formID, type: 'text', tabindex: 1, readonly: 'readonly' })
+                        .val(link)
+                        .on('focus', function () {
+                            _.defer(function () { $(this).select(); }.bind(this));
+                        })
                     )
                 )
             );
@@ -364,12 +368,10 @@ define('io.ox/files/share/wizard', [
         },
 
         removeLink: function () {
-            var self = this,
-                model = this.model;
+            var model = this.model;
             require(['io.ox/files/share/api'], function (api) {
                 api.deleteLink(model.toJSON(), model.get('lastModified')).fail(yell);
                 model.destroy();
-                self.remove();
             });
         }
     });

@@ -5,8 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-04-04 12:37+0100\n"
+"PO-Revision-Date: 2016-06-29 15:46+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -22,7 +23,7 @@ msgstr "Anderes Konto hinzufügen"
 
 #: apps/io.ox/tours/calendar.js:72 module:io.ox/tours
 msgid "Adding attachments"
-msgstr "Anhänge hinzufügen"
+msgstr "Anlagen hinzufügen"
 
 #: apps/io.ox/tours/tasks.js:54 module:io.ox/tours
 msgid "Adding further details"
@@ -200,7 +201,7 @@ msgstr "Die Einstellungen bearbeiten"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
@@ -282,7 +283,7 @@ msgstr ""
 
 #: apps/io.ox/tours/calendar.js:73 module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
-msgstr "Weiter unten können Sie dem Termin Dokumente als Anhänge hinzufügen."
+msgstr "Weiter unten können Sie dem Termin Dokumente als Anlagen hinzufügen."
 
 #: apps/io.ox/tours/mail.js:63 module:io.ox/tours
 msgid "Further functions"
@@ -331,8 +332,8 @@ msgstr ""
 "eigenen Fenster."
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "Um eine Kachel zu schließen, klicken Sie auf das Kreuz."
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "Um eine Kachel auszublenden, klicken Sie auf das Löschsymbol."
 
 #: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""
@@ -358,7 +359,7 @@ msgid ""
 "In this area you can find further functions, e.g. for adding attachments."
 msgstr ""
 "In diesem Bereich finden Sie weitere Funktionen, z.B. für das Hinzufügen von "
-"Anhängen."
+"Anlagen."
 
 #: apps/io.ox/tours/calendar.js:67 module:io.ox/tours
 #: apps/io.ox/tours/tasks.js:77
@@ -721,7 +722,7 @@ msgid ""
 "Participants. You can add documents as attachment to the task."
 msgstr ""
 "Um andere Teilnehmer einzuladen, geben Sie ihre Namen in das Feld unterhalb "
-"von Teilnehmer ein. Sie können der Aufgabe Dokumente als Anhänge hinzufügen."
+"von Teilnehmer ein. Sie können der Aufgabe Dokumente als Anlagen hinzufügen."
 
 #: apps/io.ox/tours/intro.js:39 module:io.ox/tours
 msgid "To launch an app, click on an entry on the left side of the menu bar."
@@ -3093,6 +3094,16 @@ msgstr ""
 #~ "anschließend auf ein Symbol in der Formatierleiste."
 
 #~ msgid ""
+#~ "Enter the E-Mail text into the main area. If the text format was set to "
+#~ "HTMl in the options, you can format the E-Mail text. To do so select a "
+#~ "text part and then click an icon in the formatting bar."
+#~ msgstr ""
+#~ "Geben Sie den E-Mail-Text in den Hauptbereich ein. Wenn das Textformat in "
+#~ "den Optionen auf HTML eingestellt wurde, können Sie den E-Mail-Text "
+#~ "formatieren. Markieren Sie dazu einen Textteil und klicken Sie dann auf "
+#~ "ein Symbol in der Formatierleiste."
+
+#~ msgid ""
 #~ "Enter the recipient's name on the top left side. As soon as you typed the "
 #~ "first letters, suggestions from the address books are displayed. To "
 #~ "accept a recipient suggestion, click on it."
@@ -3670,6 +3681,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Wenn Sie eine Kachel nicht mehr sehen möchten, klicken Sie rechts oben "
 #~ "auf das Kreuz."
+
+#~ msgid "If you no longer want to display a square, click the cross."
+#~ msgstr "Um eine Kachel zu schließen, klicken Sie auf das Kreuz."
 
 #~ msgid ""
 #~ "If you spot a free time, just select this area. To do this, move the "

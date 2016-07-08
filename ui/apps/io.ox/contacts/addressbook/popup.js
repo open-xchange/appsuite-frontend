@@ -300,7 +300,7 @@ define('io.ox/contacts/addressbook/popup', [
                     var count = 0;
                     $dropdown.append(
                         _(folders).map(function (section, id) {
-                            if (!sections[id]) return $();
+                            if (!sections[id] || !section.length) return $();
                             return $('<optgroup>').attr('label', sections[id]).append(
                                 _(section).map(function (folder) {
                                     count++;

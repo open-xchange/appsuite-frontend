@@ -50,6 +50,7 @@ define('io.ox/core/boot/login/standard', [
                 if (!util.isAnonymous()) storeCredentials(form);
                 // clear URL hash
                 _.url.hash({
+                    autologout: null,
                     share: null,
                     target: null,
                     login_type: null,

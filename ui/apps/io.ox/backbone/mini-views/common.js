@@ -75,7 +75,8 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
                 autocomplete: 'off',
                 autocorrect: 'off',
                 name: this.name,
-                tabindex: this.options.tabindex || 1
+                tabindex: this.options.tabindex || 1,
+                placeholder: this.options.placeholder
             });
             if (this.id) this.$el.attr('id', this.id);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);

@@ -171,7 +171,7 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
                         model.setSource(sub, { 'account': parseInt(account.id, 10) });
 
                         model.save().then(function saveSucess(id) {
-                            subAPI.subscriptions.refresh({ id: id, folder: folder }).fail(notifications.yell);
+                            subAPI.subscriptions.refresh({ id: id, folder: folder.id }).fail(notifications.yell);
                         }, notifications.yell);
                     });
                 }

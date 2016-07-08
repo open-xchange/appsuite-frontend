@@ -51,17 +51,17 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
                 // dynamic variant
                 this.$el.append(
                     // header
-                    $('<div class="sidebar-panel-heading" role="tab" aria-expanded="false">').append(
+                    $('<div class="sidebar-panel-heading">').append(
                         // title
                         $('<h3 class="sidebar-panel-title">').text('\u00a0'),
                         // button
-                        $('<a href="#" class="panel-toggle-btn" role="button" tabindex="1" aria-expanded="false">', { 'title': gt('Toggle panel'), 'aria-controls': panelId }).append(
-                            $('<span class="sr-only">').text(gt('Toggle panel')),
+                        $('<a href="#" class="panel-toggle-btn" role="button" tabindex="1" aria-expanded="false">').attr({ 'title': gt('Toggle panel'), 'aria-controls': panelId }).append(
+                            $('<span class="sr-only">').text(gt('Open description panel')),
                             $('<i class="fa fa-chevron-right toggle-icon" aria-hidden="true">')
                         )
                     ),
                     // body
-                    $('<div class="sidebar-panel-body panel-collapsed" role="tabpanel" aria-label="" aria-hidden="true">', { id: panelId })
+                    $('<div class="sidebar-panel-body panel-collapsed" aria-hidden="true">').attr({ id: panelId })
                 );
 
                 this.$el.on('click', '.sidebar-panel-heading', this.onTogglePanel.bind(this));
@@ -76,7 +76,6 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
          */
         setPanelHeader: function (title) {
             this.$('.sidebar-panel-title').text(title || '\u00a0');
-            this.$('.sidebar-panel-body').attr('aria-label', title || '');
             return this;
         },
 
@@ -119,8 +118,8 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
             }
             // toggle state
             this.$('.sidebar-panel-body').toggleClass('panel-collapsed', !state).attr('aria-hidden', !state);
-            this.$('.sidebar-panel-heading').attr('aria-expanded', state);
             this.$('.panel-toggle-btn').attr('aria-expanded', state);
+            this.$('.panel-toggle-btn > .sr-only').text(state ? gt('Close description panel') : gt('Open description panel'));
             this.$('.toggle-icon').toggleClass('fa-chevron-right', !state).toggleClass('fa-chevron-down', state);
             this.$el.trigger(state ? 'open' : 'close');
             return this;

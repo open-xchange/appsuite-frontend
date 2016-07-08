@@ -16,7 +16,7 @@ define([
 
     'use strict';
 
-    function initialize  () {
+    function initialize() {
         var data = {
             'cid': 'date.custom',
             'id': 'date.custom',

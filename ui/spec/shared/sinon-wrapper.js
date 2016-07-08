@@ -27,7 +27,7 @@ define('sinon-wrapper', {
                     var spy = sinon.spy(obj, property),
                         restore = spy.restore,
                         id = counter + 1;
-                        counter = id;
+                    counter = id;
                     spy.restore = function () {
                         delete spies[id];
                         restore.apply(spy, arguments);
@@ -42,11 +42,11 @@ define('sinon-wrapper', {
                 var stub = sinon.stub(obj, method, fn),
                     restore = stub.restore,
                     id = counter + 1;
-                    counter = id;
-                    stub.restore = function () {
-                        delete stubs[id];
-                        restore.apply(stub, arguments);
-                    };
+                counter = id;
+                stub.restore = function () {
+                    delete stubs[id];
+                    restore.apply(stub, arguments);
+                };
                 stubs[id] = stub;
                 return stub;
             },
@@ -66,7 +66,7 @@ define('sinon-wrapper', {
                 });
             },
             list: function () {
-                return  {
+                return {
                     spies: spies,
                     stubs: stubs
                 };

@@ -4,7 +4,7 @@ description: To add an action to the files app detail area the extensionpoint io
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Files_App_Actions
 ---
 
-For details about actions and links please refer to the main [action article](ui/components/actions-and-links.html).
+For details about actions and links please refer to the main [action article](../components/actions-and-links.html).
 
 # Adding actions to the files detail area
 

@@ -115,7 +115,7 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        src: ['**/*', '!pdf.combined.js'],
+                        src: ['**/*'],
                         cwd: 'bower_components/pdfjs-dist',
                         dest: 'build/apps/3rd.party/pdfjs'
                     },
@@ -125,6 +125,14 @@ module.exports = function (grunt) {
                         src: ['requirejs/require.js'],
                         cwd: 'bower_components/',
                         dest: 'build/static/3rd.party/requirejs'
+                        dest: 'build/apps/pdfjs-dist/'
+                        // pdfjs now has it's own define: define('pdfjs-dist/build/pdf.combined', ...)
+                    },
+                    {
+                        expand: true,
+                        src: ['unorm.js'],
+                        cwd: 'bower_components/unorm/lib/',
+                        dest: 'build/static/3rd.party/unorm'
                     }
                 ]
             }

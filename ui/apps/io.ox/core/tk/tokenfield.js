@@ -204,6 +204,29 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
+            // aria live: reset message
+            var tokenfield = this.$el.parent();
+            tokenfield.find('.token-input').on('typeahead:close typeahead:closed', function () {
+                self.$el.trigger('aria-live-update', '');
+            });
+            // aria live: set message
+            this.on('typeahead-custom:dropdown-rendered', function (dropdown) {
+                var numberOfResults = dropdown.find('.tt-suggestions').children().length,
+                    message;
+
+                if (numberOfResults === 0) message = gt('No autocomplete entries found');
+                if (!message) {
+                    message = gt.format(
+                        //#. %1$d is the number of search results in the autocomplete field
+                        //#, c-format
+                        gt.ngettext('One autocomplete entry found', '%1$d autocomplete entries found', numberOfResults),
+                        gt.noI18n(numberOfResults)
+                    );
+                }
+
+                self.$el.trigger('aria-live-update', message);
+            });
+
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
                     if (self.redrawLock) return;
@@ -313,6 +336,11 @@ define('io.ox/core/tk/tokenfield', [
                             label = node.find('.token-label');
                         // remove wrongly calculated max-width
                         if (label.css('max-width') === '0px') label.css('max-width', 'none');
+
+                        if (_.device('smartphone') && label.css('max-width') !== 'none') {
+                            // subtract size of right-aligned control (mail compose).
+                            label.css('max-width', label.width() - 16 + 'px');
+                        }
                         // a11y: set title
                         node.attr('title', function () {
                             var token = model.get('token'),
@@ -464,8 +492,25 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
-            // Remove on cut
-            this.$el.closest('div.tokenfield').on('keydown', function (e) {
+            this.$el.closest('div.tokenfield').on('copy', function (e) {
+                // value might contain more than one id so split
+                var values = e.target.value.split(', ');
+
+                // copy actual email adress instead of model cid to clipboard
+                var result = '';
+                _(values).each(function (value) {
+                    var model = self.collection.get(value);
+                    if (model) {
+                        result = result + (result === '' ? '' : ', ') + model.value;
+                    }
+                });
+
+                if (result !== '') {
+                    e.originalEvent.clipboardData.setData('text/plain', result);
+                    e.preventDefault();
+                }
+            }).on('keydown', function (e) {
+                //Remove on cut
                 if ((e.ctrlKey || e.metaKey) && e.keyCode === 88) {
                     $(this).find('.token.active').each(function () {
                         self.collection.remove($(this).data().attrs.model);

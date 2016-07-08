@@ -426,7 +426,7 @@ define('io.ox/mail/api', [
                         module: 'mail',
                         params: {
                             action: 'delete',
-                            harddelete: force,
+                            harddelete: !!force,
                             returnAffectedFolders: true,
                             timestamp: _.then()
                         },
@@ -511,6 +511,7 @@ define('io.ox/mail/api', [
                 } else {
                     folderAPI.reload(data.id);
                 }
+                api.trigger('archive', ids);
             })
         );
     };
@@ -530,6 +531,7 @@ define('io.ox/mail/api', [
             folderAPI.refresh();
             // reload mail views
             api.trigger('refresh.all');
+            api.trigger('archive-folder', id);
         });
     };
 
@@ -591,7 +593,7 @@ define('io.ox/mail/api', [
             });
         });
         // resume & trigger refresh
-        return http.resume().pipe(function (response) {
+        return http.resume().then(function (response) {
             // trigger update events
             _(list).each(function (obj) {
                 api.trigger('update:' + _.ecid(obj), obj);
@@ -843,6 +845,7 @@ define('io.ox/mail/api', [
                     api.trigger('refresh.all');
                     return $.Deferred().reject(e.error);
                 }
+                return list;
             })
         );
     }
@@ -1164,13 +1167,14 @@ define('io.ox/mail/api', [
             isSaveDraft = data.flags === api.FLAGS.DRAFT,
             csid = data.csid;
 
-        api.queue.add(csid);
+        api.queue.add(csid, deferred.abort);
 
         return deferred
             .done(function () {
                 contactsAPI.trigger('maybyNewContact');
                 api.trigger('send', { data: data, files: files, form: form });
                 ox.trigger('mail:send:stop', data, files);
+                if (data.share_attachments) ox.trigger('please:refresh refresh^');
             })
             .fail(function () {
                 ox.trigger('mail:send:fail');
@@ -1202,7 +1206,9 @@ define('io.ox/mail/api', [
                 return {};
             })
             .then(function (result) {
-                if (result.data) {
+                if (result.error) {
+                    return $.Deferred().reject(result).promise();
+                } else if (result.data) {
                     var base = _(result.data.toString().split(api.separator)),
                         id = base.last(),
                         folder = base.without(id).join(api.separator);
@@ -1272,16 +1278,17 @@ define('io.ox/mail/api', [
         return {
 
             collection: new Backbone.Collection().on('add remove change:pct', function () {
-                var loaded = 0, total = 0;
+                var loaded = 0, total = 0, abort;
                 this.each(function (model) {
                     loaded += model.get('loaded');
                     total += model.get('total');
+                    abort = model.get('abort');
                 });
-                this.trigger('progress', { count: this.length, loaded: loaded, pct: pct(loaded, total), total: total });
+                this.trigger('progress', { count: this.length, loaded: loaded, pct: pct(loaded, total), total: total, abort: abort });
             }),
 
-            add: function (csid) {
-                this.collection.add(new Backbone.Model({ id: csid, loaded: 0, pct: 0, total: 0 }));
+            add: function (csid, abort) {
+                this.collection.add(new Backbone.Model({ id: csid, loaded: 0, pct: 0, total: 0, abort: abort }));
             },
 
             remove: function (csid) {
@@ -1399,6 +1406,23 @@ define('io.ox/mail/api', [
             default:
                 return url;
         }
+    };
+
+    /**
+    * some nested mails do not have the full data. Use this request to get the mail (see Bug 46443)
+    */
+    api.getNestedMail = function (data) {
+        return http.GET({
+            module: 'mail',
+            params: {
+                action: 'attachment',
+                folder: (data.parent || data.mail).folder_id,
+                id: (data.parent || data.mail).id,
+                attachment: data.id,
+                // special parameter to get the json data from a nested mail
+                as_json: true
+            }
+        });
     };
 
     var lastUnseenMail = 0;
@@ -1734,7 +1758,14 @@ define('io.ox/mail/api', [
 
         subject: function (cid) {
             cid = _.isString(cid) ? cid : _.cid(cid);
-            var top = this.reverse[cid], model = this.collection.get(top);
+            var base, newest, model;
+            // get newest message
+            base = this.reverse[cid];
+            newest = _(this.hash[base]).first();
+            model = this.collection.get(newest);
+            if (model && model.get('subject')) return model.get('subject');
+            // get base message
+            model = this.collection.get(base);
             return model ? model.get('subject') : '';
         },
 
@@ -1765,6 +1796,7 @@ define('io.ox/mail/api', [
     api.collectionLoader = new CollectionLoader({
         module: 'mail',
         getQueryParams: function (params) {
+            var shareAttachmentsString = settings.get('compose/shareAttachments/enabled', false) ? ',X-Open-Xchange-Share-URL' : '';
             // is all unseen?
             if (params.folder === 'virtual/all-unseen') {
                 return {
@@ -1793,7 +1825,7 @@ define('io.ox/mail/api', [
             return {
                 action: 'all',
                 folder: params.folder,
-                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656' + shareAttachmentsString,
                 sort: params.sort || '610',
                 order: params.order || 'desc',
                 timezone: 'utc',
@@ -1812,6 +1844,15 @@ define('io.ox/mail/api', [
             var isAllUnseen = params.folder === 'default0/virtual/all' && params.sort === '651';
             if (isAllUnseen) params.limit = '0,250';
             return http.GET({ module: module, params: params }).then(function (data) {
+                _.each(data, function (obj) {
+                    if (settings.get('compose/shareAttachments/enabled', false)) {
+                        if (obj['X-Open-Xchange-Share-URL']) {
+                            if (!obj.headers) obj.headers = {};
+                            obj.headers['X-Open-Xchange-Share-URL'] = obj['X-Open-Xchange-Share-URL'];
+                        }
+                        delete obj['X-Open-Xchange-Share-URL'];
+                    }
+                });
                 // drop all seen messages for all-unseen
                 return isAllUnseen ? _(data).filter(filterAllSeen) : data;
             });
@@ -1876,6 +1917,8 @@ define('io.ox/mail/api', [
     api.collectionLoader.noSelect = function (options) {
         // special handling for top-level mail account folders (e.g. bug 34818)
         if (/^default\d+$/.test(options.folder)) return true;
+        // allow virtual/all
+        if (options.folder === 'default0/virtual/all') return false;
         // check read access
         var model = folderAPI.pool.getModel(options.folder);
         return !model.can('read');

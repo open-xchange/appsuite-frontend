@@ -173,7 +173,7 @@ define('io.ox/contacts/main', [
             app.right = right.addClass('default-content-padding f6-target')
                 .attr({
                     'tabindex': 1,
-                    'role': 'complementary',
+                    'role': 'main',
                     'aria-label': gt('Contact Details')
                 }).scrollable();
         },
@@ -827,6 +827,13 @@ define('io.ox/contacts/main', [
             });
         },
 
+        'import': function () {
+            api.on('import', function () {
+                //update current detailview
+                api.trigger('update:' + _.ecid(app.currentContact));
+            });
+        },
+
         'api-create-event': function (app) {
             if (_.device('smartphone')) return;
 
@@ -964,7 +971,7 @@ define('io.ox/contacts/main', [
         app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">')
             .attr({
                 role: 'navigation',
-                'aria-label': gt('Item List')
+                'aria-label': gt('Contacts')
             });
 
         app.grid = new VGrid(app.gridContainer, {
@@ -973,6 +980,8 @@ define('io.ox/contacts/main', [
             hideToolbar: _.device('smartphone')
             //swipeRightHandler: swipeRightHandler,
         });
+
+        app.gridContainer.find('.vgrid-toolbar').attr('aria-label', gt('Contacts toolbar'));
 
         commons.wireGridAndWindow(app.grid, win);
         commons.wireFirstRefresh(app, api);

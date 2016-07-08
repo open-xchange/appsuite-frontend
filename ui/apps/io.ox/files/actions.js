@@ -12,15 +12,19 @@
  */
 
 define('io.ox/files/actions', [
+
+    'io.ox/core/folder/api',
     'io.ox/files/api',
+    'io.ox/files/util',
+
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
-    'io.ox/files/util',
-    'io.ox/core/folder/api',
+
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (api, ext, links, capabilities, util, folderAPI, settings, gt) {
+
+], function (folderAPI, api, util, ext, links, capabilities, settings, gt) {
 
     'use strict';
 
@@ -45,7 +49,7 @@ define('io.ox/files/actions', [
             elem.siblings('input').remove();
 
             elem.after(
-                input = $('<input type="file" name="file" capture="camera" multiple>')
+                input = $('<input type="file" name="file" multiple>')
                 .css('display', 'none')
                 .on('change', function (e) {
                     var app = baton.app;
@@ -220,6 +224,7 @@ define('io.ox/files/actions', [
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some', 'items'),
                 e.baton.openedBy !== 'io.ox/mail/compose',
+                util.isFolderType('!attachmentView', e.baton),
                 util.isFolderType('!trash', e.baton)
             );
         },
@@ -261,6 +266,7 @@ define('io.ox/files/actions', [
                 _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some', 'items'),
+                util.isFolderType('!attachmentView', e.baton),
                 util.isFolderType('!trash', e.baton)
             );
         },
@@ -435,8 +441,14 @@ define('io.ox/files/actions', [
             // is folder?
             if (e.collection.has('folders')) return false;
 
-            var model = e.baton.models[0];
-            return (model.isFile() && (model.isOffice() || model.isText())); // preferred variant over >> return (model.isFile() && !model.isPDF()); <<
+            var
+                model         = e.baton.models[0];
+          //    isAccessWrite = folderAPI.can('create', folderAPI.pool.models[model.get('folder_id')].toJSON());
+          //
+          //if (!isAccessWrite(e)) return false;
+
+            // preferred variant over >> return (model.isFile() && !model.isPDF()); <<
+            return (model.isFile() && (model.isOffice() || model.isText()));
         },
         action: function (baton) {
             // files use the file rename action
@@ -532,7 +544,7 @@ define('io.ox/files/actions', [
                                 }
                             } else {
                                 require(['io.ox/core/yell'], function (yell) {
-                                    yell(response);
+                                    yell('error', response);
                                 });
                             }
                         }
@@ -757,6 +769,15 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'open',
         index: index += 100,
+        prio: 'lo',
+        mobile: 'hi',
+        label: gt('Open in browser'),
+        ref: 'io.ox/files/actions/open'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'openviewer',
+        index: index += 100,
         prio: 'hi',
         mobile: 'hi',
         label: gt('View'),
@@ -844,7 +865,7 @@ define('io.ox/files/actions', [
         id: 'add-to-portal',
         index: index += 100,
         prio: 'lo',
-        mobile: 'lo',
+        mobile: 'none',
         label: gt('Add to portal'),
         ref: 'io.ox/files/actions/add-to-portal',
         section: 'share'

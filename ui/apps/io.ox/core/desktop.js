@@ -1143,7 +1143,7 @@ define('io.ox/core/desktop', [
                 }
 
                 this.setHeader = function (node) {
-                    var position = coreConfig.get('features/windowHeaderPosition', 'bottom');
+                    var position = _.device('!desktop') ? 'top' : coreConfig.get('features/windowHeaderPosition', 'bottom');
                     if (position === 'top') {
                         this.nodes.header.append(node.addClass('container'));
                         this.nodes.outer.addClass('header-top');
@@ -1484,7 +1484,7 @@ define('io.ox/core/desktop', [
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body" role="main">').attr('aria-label', gt('Main window')),
+                        win.nodes.body = $('<div class="window-body">'),
 
                         win.nodes.footer = $('<div class="window-footer">')
                     )
@@ -1538,6 +1538,7 @@ define('io.ox/core/desktop', [
                     index: 200,
                     draw: function (baton) {
                         baton.$.viewnode.append(
+                            $('<div class="sr-only arialive" role="status" aria-live="polite">'),
                             baton.$.box = $('<form class="search-box">'),
                             baton.$.boxfilter = $('<div class="search-box-filter">')
                         );

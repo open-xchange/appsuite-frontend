@@ -38,7 +38,8 @@ define('io.ox/core/viewer/views/types/mailview', [
         show: function () {
 
             var data = this.model.get('origData').nested_message,
-                view = new detail.View({ data: data, loaded: true });
+                // nested mails may not have full data, use attachments attribute to determine
+                view = new detail.View({ data: data, loaded: !!data.attachments });
 
             this.$el.append(
                 $('<div class="white-page">').append(

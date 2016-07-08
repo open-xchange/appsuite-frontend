@@ -4,8 +4,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-07 10:14+0100\n"
+"PO-Revision-Date: 2016-07-01 16:39+0100\n"
 "Last-Translator: Robert Kratky <kratky@rob.cz>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -192,7 +193,7 @@ msgstr "Úprava nastavení"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
@@ -317,8 +318,8 @@ msgstr ""
 "okně."
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "Nechcete-li již pole zobrazovat pole, klikněte na křížek."
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "Nechcete-li již pole zobrazovat, klikněte na ikonu pro mazání."
 
 #: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""

@@ -62,7 +62,6 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
         });
 
         describe('buildOptionArray', function () {
-            var stub;
             it('should return an array', function () {
                 var result = util.buildOptionArray();
                 expect(result).to.be.an('Array');

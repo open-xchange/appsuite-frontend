@@ -2,8 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-05 04:45+0800\n"
+"PO-Revision-Date: 2016-06-30 23:41+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -11,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.8\n"
 
 #: apps/io.ox/tours/files.js:221 module:io.ox/tours
 msgid "Add another account"
@@ -177,12 +178,12 @@ msgstr "編輯選項"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
-"在主要區域輸入郵件內文，若設定中的文字格式設定為 HTML，您將可以套用格式。若要"
-"這麼做請選擇文字，然後點擊格式列中的圖示。"
+"在主要區域輸入郵件內文，若文字格式設定為 HTML，您將可以套用格式。若要這麼做請"
+"選擇一段文字，然後點擊格式列中的圖示。"
 
 #: apps/io.ox/tours/mail.js:48 module:io.ox/tours
 msgid ""
@@ -295,8 +296,8 @@ msgid ""
 msgstr "若雙擊清單中的郵件，將於不同視窗中開啟該郵件。"
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "若您不想要顯示方塊，點擊叉叉。"
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "若您不想要顯示方塊，點擊刪除圖示。"
 
 #: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""

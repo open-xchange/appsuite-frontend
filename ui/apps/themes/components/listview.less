@@ -40,16 +40,29 @@
         &.top { .top-toolbar(); }
         &.bottom { .bottom-toolbar(); }
 
-        .grid-options {
-            padding: 0 16px 0 0;
-        }
+        .grid-options { padding: 0; }
 
         .grid-options > a {
             color: #777;
+            display: block;
+            padding-left: 16px;
+            padding-right: 16px;
+
+            @media (max-width: 900px) {
+                padding-left: 0px;
+                padding-right: 8px;
+            }
+        }
+
+        a:not(.breadcrumb-link) {
+            &:focus, &:focus i {
+                color: @selected-color;
+                background: @selected-background;
+                outline: 0;
+            }
         }
 
         .select-all {
-            padding-right: 5px;
             color: #777;
             cursor: pointer;
             white-space: nowrap;
@@ -60,6 +73,10 @@
                 font-size: 18px;
                 position: relative;
                 top: 2px;
+            }
+            @media (max-width: 900px) {
+
+                padding-right: 0px;
             }
         }
 

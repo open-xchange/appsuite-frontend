@@ -178,7 +178,8 @@ define('io.ox/core/boot/form', [
                 break;
         }
 
-        $('#io-ox-login-feedback').hide();
+
+        $('#io-ox-login-feedback');
 
         // handle message params
         if (_.url.hash('token')) {

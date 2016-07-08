@@ -79,10 +79,6 @@ define('io.ox/contacts/view-detail', [
         );
     }
 
-    function looksLikeHTML(str) {
-        return (/<\w/).test(str);
-    }
-
     function buildDropdown(container, label, data) {
         return new links.Dropdown({
             label: label,
@@ -405,7 +401,7 @@ define('io.ox/contacts/view-detail', [
             //#. %3$s is the city
             //#. %4$s is the state
             //#. %5$s is the country
-            gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', data);
+            gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', data[0], data[1], data[2], data[3], data[4]);
 
         var services = {
             google: { label: gt('Google Maps'), url: 'https://www.google.com/maps?q=' },
@@ -701,33 +697,28 @@ define('io.ox/contacts/view-detail', [
         id: 'description',
         draw: function (baton) {
 
-            var str = $.trim(baton.data.description || ''), isHTML;
-            if (str !== '') {
+            var str = _.escape($.trim(baton.data.description || ''));
+            if (str === '') return;
 
-                isHTML = looksLikeHTML(str);
+            // find phone numbers & links
+            str = str.replace(regPhone, function (match) {
+                var number = match.replace(regClean, '');
+                return '<a href="callto:' + number + '">' + match + '</a>';
+            });
 
-                // find phone numbers & links
-                str = str.replace(regPhone, function (match) {
-                    var number = match.replace(regClean, '');
-                    return '<a href="callto:' + number + '">' + match + '</a>';
-                });
+            // fix missing newlines
+            str = str.replace(/\n/g, '<br>');
 
-                // fix missing newlines
-                if (!isHTML) {
-                    str = str.replace(/\n/g, '<br>');
-                }
-
-                this.append(
-                    $('<div class="description">').append(
-                        $('<div>').html(str),
-                        // add callback?
-                        baton.data.callbacks && 'extendDescription' in baton.data.callbacks ?
-                            $('<a href="#">').text(gt('Copy to description'))
-                            .on('click', { description: $('<div>').html(str.replace(/[ \t]+/g, ' ').replace(/<br>/g, '\n')).text() }, baton.data.callbacks.extendDescription)
-                            : []
-                    )
-                );
-            }
+            this.append(
+                $('<div class="description">').append(
+                    $('<div>').html(str),
+                    // add callback?
+                    baton.data.callbacks && 'extendDescription' in baton.data.callbacks ?
+                        $('<a href="#">').text(gt('Copy to description'))
+                        .on('click', { description: $('<div>').html(str.replace(/[ \t]+/g, ' ').replace(/<br>/g, '\n')).text() }, baton.data.callbacks.extendDescription)
+                        : []
+                )
+            );
         }
     });
 

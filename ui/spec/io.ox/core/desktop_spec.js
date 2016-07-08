@@ -11,7 +11,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define(['io.ox/core/desktop'], function (desktop) {
+define(['io.ox/core/desktop'], function () {
     'use strict';
 
     describe('Core', function () {
@@ -67,14 +67,14 @@ define(['io.ox/core/desktop'], function (desktop) {
 
                 describe('should allow to customize the launch method', function () {
                     var launcher = function (options) {
-                        var def = $.Deferred();
+                            var def = $.Deferred();
 
-                        options.callback();
-                        _.defer(function () {
-                            def.resolve();
-                        });
-                        return def;
-                    }, callback;
+                            options.callback();
+                            _.defer(function () {
+                                def.resolve();
+                            });
+                            return def;
+                        }, callback;
 
                     beforeEach(function () {
                         app = new ox.ui.App({

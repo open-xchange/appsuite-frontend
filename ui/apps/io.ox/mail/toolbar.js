@@ -20,11 +20,12 @@ define('io.ox/mail/toolbar', [
     'io.ox/core/capabilities',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/toolbar',
+    'settings!io.ox/core',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, gt) {
+], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, gt) {
 
     'use strict';
 
@@ -227,6 +228,14 @@ define('io.ox/mail/toolbar', [
         });
     }
 
+    function allAttachments(app, e) {
+        e.preventDefault();
+        var attachmentView = settings.get('folder/mailattachments', {});
+        ox.launch('io.ox/files/main', { folder: attachmentView.all }).done(function () {
+            this.folder.set(attachmentView.all);
+        });
+    }
+
     // view dropdown
     ext.point('io.ox/mail/classic-toolbar').extend({
         id: 'view-dropdown',
@@ -238,11 +247,11 @@ define('io.ox/mail/toolbar', [
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
             .header(gt('Layout'))
-            .option('layout', 'vertical', gt('Vertical'));
+            .option('layout', 'vertical', gt('Vertical'), { radio: true });
             // offer compact view only on desktop
-            if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'));
-            dropdown.option('layout', 'horizontal', gt('Horizontal'))
-            .option('layout', 'list', gt('List'))
+            if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'), { radio: true });
+            dropdown.option('layout', 'horizontal', gt('Horizontal'), { radio: true })
+            .option('layout', 'list', gt('List'), { radio: true })
             .divider()
             .header(gt('Options'))
             .option('folderview', true, gt('Folder view'))
@@ -253,6 +262,10 @@ define('io.ox/mail/toolbar', [
             .divider()
             .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
             .listenTo(baton.app.props, 'change:layout', updateContactPicture);
+
+            if (settings.get('folder/mailattachments', {}).all) {
+                dropdown.link('attachments', gt('All attachments'), allAttachments.bind(null, baton.app));
+            }
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
@@ -309,7 +322,7 @@ define('io.ox/mail/toolbar', [
 
             // add placeholder
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                 $('<div>', { class: 'categories-toolbar-container categories-container', role: 'menu' })
+                $('<div class="categories-toolbar-container categories-container">')
             );
         }
     });

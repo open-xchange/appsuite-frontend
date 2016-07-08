@@ -275,8 +275,10 @@ define('io.ox/core/folder/view', [
                 api.path(id).done(function (path) {
                     // get all ids except the folder itself, therefore slice(0, -1);
                     var ids = _(path).pluck('id').slice(0, -1),
+                        folder = _(path).where({ 'id': id })[0],
                         // in our apps folders are organized in virtual folders, we need to open the matching section too (private, shared, public)
-                        section = api.getSection(_(path).where({ 'id': id })[0].type);
+                        // folder 6 is special, it's the global addressbook and the only system folder under public section. Folderdata alone does not give this info.
+                        section = folder.id === '6' ? 'public' : api.getSection(folder.type, folder.id);
 
                     if (section && _(['mail', 'contacts', 'calendar', 'tasks', 'infostore']).contains(tree.module) && tree.flat && tree.context === 'app') {
                         ids.push('virtual/flat/' + tree.module + '/' + section);

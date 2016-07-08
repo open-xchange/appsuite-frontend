@@ -204,9 +204,9 @@ define([], function () {
 
         it.skip('_.mythrottle', function (done) {
             //TODO: implement using fake timer
-            var finished,
+            var // finished,
                 //now = new Date(),
-                counter = 0,
+                //counter = 0,
                 counterrepaint = 0,
                 debounced = _.mythrottle(function () {
                     //console.warn((new Date() - now), 'repaint: debounced at ', counter);
@@ -235,28 +235,75 @@ define([], function () {
         });
 
         describe('_.cid', function () {
-            var str = '1.2.3', result,
-                obj = { id: '4711', folder: '0815', folder_id: '007' };
+
+            var str = '1.2.3', obj = { id: '4711', folder: '0815', folder_id: '007' };
+
             it('should use dots as separator', function () {
                 expect(_.cid(obj)).to.equals('007.4711');
             });
+
             it('should prefer folder_id', function () {
                 expect(_.cid(obj)).to.equals('007.4711');
             });
+
             it('should return an object if a dot separated string is used', function () {
-                result = _.cid(str);
+                var result = _.cid(str);
                 expect(result).to.be.an('object');
                 expect(result.folder_id).to.equals('1');
                 expect(result.id).to.equals('2');
             });
+
             it('should return identify recurrence_position', function () {
-                result = _.cid(str);
+                var result = _.cid(str);
                 expect(result).to.be.an('object');
                 expect(result.folder_id).to.equal('1');
                 expect(result.id).to.equal('2');
                 expect(result.recurrence_position).to.equal(3);
-
             });
+
+            it('should escape dots', function () {
+                var result = _.cid({ folder: 'fol.der', id: '.1337.' });
+                expect(result).to.equals('fol\\.der.\\.1337\\.');
+                result = _.cid({ folder: '...', id: '.' });
+                expect(result).to.equals('\\.\\.\\..\\.');
+            });
+
+            it('should escape backslashes (middle)', function () {
+                var result = _.cid({ folder: 'fol\\der', id: '13\\37' });
+                expect(result).to.equals('fol\\\\der.13\\\\37');
+            });
+
+            it('should escape backslashes (end)', function () {
+                var result = _.cid({ folder: 'folder\\', id: '1337\\' });
+                expect(result).to.equals('folder\\\\.1337\\\\');
+            });
+
+            it('should escape backslashes (start)', function () {
+                var result = _.cid({ folder: '\\folder', id: '\\1337' });
+                expect(result).to.equals('\\\\folder.\\\\1337');
+            });
+
+            it('should unescape backslashes and dots', function () {
+                var result = _.cid(_.cid({ folder: '\\start...\\middle\\', id: '.\\1337\\.' }));
+                expect(result.folder_id).to.equal('\\start...\\middle\\');
+                expect(result.id).to.equal('.\\1337\\.');
+            });
+
+            // manual tests since karma is broken atm
+            // var result = _.cid({ folder: 'fol.der', id: '.1337.' });
+            // console.log(result === 'fol\\.der.\\.1337\\.');
+            // result = _.cid({ folder: '...', id: '.' });
+            // console.log(result === '\\.\\.\\..\\.');
+            // var result = _.cid({ folder: 'fol\\der', id: '13\\37' });
+            // console.log(result === 'fol\\\\der.13\\\\37');
+            // var result = _.cid({ folder: 'folder\\', id: '1337\\' });
+            // console.log(result === 'folder\\\\.1337\\\\');
+            // var result = _.cid({ folder: '\\folder', id: '\\1337' });
+            // console.log(result === '\\\\folder.\\\\1337');
+            // var result = _.cid(_.cid({ folder: '\\start...\\middle\\', id: '.\\1337\\.' }));
+            // console.log(result.folder_id === '\\start...\\middle\\');
+            // console.log(result.id === '.\\1337\\.');
+
         });
 
         describe('_.ecid', function () {
@@ -305,10 +352,11 @@ define([], function () {
 
         describe('_.toHash', function () {
             var list = [
-                { id: 'A1', value: 'V1' },
-                { id: 'A1', value: 'V2' },
-                { id: 'A2', value: 'V3' }
-            ], hashmap = _.toHash(list, 'id');
+                    { id: 'A1', value: 'V1' },
+                    { id: 'A1', value: 'V2' },
+                    { id: 'A2', value: 'V3' }
+                ],
+                hashmap = _.toHash(list, 'id');
             it('should always return a array', function () {
                 expect(_.toHash()).to.be.a('object');
             });

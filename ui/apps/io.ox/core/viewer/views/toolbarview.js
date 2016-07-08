@@ -48,15 +48,15 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/rename',
                 title: gt('File name'),
                 customize: function (baton) {
-
+                    var displayName = baton.model.getDisplayName();
                     this.append(
                         // icon
                         !baton.context.standalone ?
                             $('<i class="fa" aria-hidden="true">').addClass(Util.getIconClass(baton.model)) :
                             null,
                         // filename
-                        $('<span class="filename-label">').text(baton.model.getDisplayName())
-                    );
+                        $('<span class="filename-label">').text(displayName)
+                    ).attr('aria-label', displayName);
 
                     this.addClass('viewer-toolbar-filename').parent().addClass('pull-left');
 
@@ -184,7 +184,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.addClass('viewer-toolbar-close')
                         .attr({
                             tabindex: '1',
-                            'aria-label': gt('Close')
+                            'aria-label': gt('Close viewer')
                         })
                         .parent().addClass('pull-right');
                 }
@@ -214,6 +214,14 @@ define('io.ox/core/viewer/views/toolbarview', [
                     label: gt('Download'),
                     section: 'export',
                     ref: 'io.ox/files/actions/download'
+                },
+                'open': {
+                    prio: 'lo',
+                    mobile: 'hi',
+                    icon: 'fa fa-download',
+                    label: gt('Open attachment'),
+                    section: 'export',
+                    ref: 'io.ox/files/actions/open'
                 },
                 'print': {
                     prio: 'lo',

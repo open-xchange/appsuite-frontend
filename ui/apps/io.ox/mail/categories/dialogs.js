@@ -35,7 +35,7 @@ define('io.ox/mail/categories/dialogs', [
             if (userpref === 'always') return parent.trigger('dialog:generalize', obj);
 
             return new Modal({
-                title: gt('Apply for all mails?'),
+                title: gt('Apply to all messages?'),
                 point: 'io.ox/mail/categories/generalize',
                 //focus: '.form-inline',
                 maximize: false,
@@ -45,25 +45,36 @@ define('io.ox/mail/categories/dialogs', [
                 default: function () {
                     this.addClass('mail-categories-dialog');
                 },
-                'info-target': function (baton) {
+                'info-status': function (baton) {
                     this.append(
                         $('<p>').html(
-                            //#. %1$s target mail category
-                            //#, c-format
-                            gt('This mail was moved to %1$s.', '<i>' + baton.view.model.get('targetname') + '</i>')
+                            gt.format(
+                              //#. %1$d is the number of mails
+                              //#, c-format
+                              gt.ngettext('Selected message was moved successfully.', 'Selected messages has been moved successfully.', baton.view.model.get('data').length)
+                            )
                         )
                     );
                 },
-                'info-addresses': function (baton) {
+                'info-actions': function (baton) {
                     var list = senderlist(baton.view.model.get('data'));
                     this.append(
                         $('<p>').html(
-                             //#. %1$s single mail address or comma separated list of multiple
+                            //#. %1$s single mail address or comma separated list of multiple
+                            //#. %2$s target mail category
                             //#, c-format
-                            gt('Apply for mails from %1$s', '<b>' + list.join(', ') + '</b>')
+                            gt('Should all other past and future messages from %1$s also be moved to %2$s?', '<b>' + list.join(', ') + '</b>', '<i>' + baton.view.model.get('targetname') + '</i>')
                         )
                     );
                 },
+                // 'hint': function () {
+                //     this.append(
+                //         $('<p>').html(
+                //             //#, c-format
+                //             gt('Just in case you are unsure - usually you want to have all mails from a specific sender in the same tab.')
+                //         )
+                //     );
+                // },
                 register: function (baton) {
                     baton.view.on('generalize', function () {
                         var obj = _.pick(baton.view.model.toJSON(), 'data', 'targetname', 'target', 'source');
@@ -75,9 +86,11 @@ define('io.ox/mail/categories/dialogs', [
                     });
                 }
             })
-            .addAlternativeButton({ label: gt('Revert'), action: 'revert' })
+            //.addAlternativeButton({ label: gt('Cancel'), action: 'revert' })
+            //#. button: move only current message from a sender to a tab
             .addButton({ label: gt('Cancel'), action: 'cancel', className: 'btn-default' })
-            .addButton({ label: gt('Apply'), action: 'generalize' })
+            //#. button: move all messages from a sender to a tab
+            .addButton({ label: gt('Move all'), action: 'generalize' })
             .open();
         },
 
@@ -99,7 +112,7 @@ define('io.ox/mail/categories/dialogs', [
                     checkbox.prop('checked', !checkbox.prop('checked'));
                 },
                 onSave: function () {
-                    var list = this.$('.category-item input'),
+                    var list = this.$('.category-item input.name'),
                         categories = [];
                     _.each(list, function (target) {
                         var input = $(target),
@@ -128,7 +141,16 @@ define('io.ox/mail/categories/dialogs', [
                 },
                 description: function () {
                     this.append(
-                        $('<p class="description-main">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to hide or show specific tabs.'))
+                        $('<p class="description-main">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to enable or disable specific tabs.'))
+                    );
+                },
+                'locked-hint': function (baton) {
+                    var locked = baton.collection.filter(function (model) {
+                        return !model.can('disable');
+                    });
+                    if (!locked.length) return;
+                    this.find('.description-main').append(
+                       $.txt(' ' + gt('Note that some of the tabs can not be disabled.'))
                     );
                 },
                 'form-inline': function () {
@@ -157,13 +179,9 @@ define('io.ox/mail/categories/dialogs', [
                     });
                     this.find('.form-inline-container').append(list);
                 },
-                'locked-hint': function (baton) {
-                    var locked = baton.collection.filter(function (model) {
-                        return !model.can('disable');
-                    });
-                    if (!locked.length) return;
+                'settings-hint': function () {
                     this.append(
-                        $('<p class="description-main hint">').text(gt('Please note that some of the tabs can not be disabled.'))
+                        $('<p class="description-main hint">').text(gt('The tabbed inbox can be completely disabled in the mail settings.'))
                     );
                 },
                 register: function (baton) {

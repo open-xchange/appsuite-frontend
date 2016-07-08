@@ -101,22 +101,16 @@ define('io.ox/mail/common-extensions', [
 
         date: function (baton, options) {
             var data = baton.data, t = data.received_date;
+            options = _.extend({
+                fulldate: baton.app && baton.app.props.get('excactDates'),
+                smart: !(baton.app && baton.app.props.get('excactDates'))
+            }, options);
             if (!_.isNumber(t)) return;
             this.append(
                 $('<time class="date">')
                 .attr('datetime', moment(t).toISOString())
                 .text(_.noI18n(util.getDateTime(t, options)))
             );
-        },
-
-        dateOrSize: function (baton) {
-            // show date or size depending on sort option
-            var fn = 'size';
-            if (baton.app && baton.app.props.get('sort') !== 608 && !baton.app.props.get('alwaysShowSize')) {
-                fn = baton.app.props.get('exactDates') ? 'fulldate' : 'smartdate';
-            }
-
-            extensions[fn].call(this, baton);
         },
 
         smartdate: function (baton) {
@@ -145,6 +139,9 @@ define('io.ox/mail/common-extensions', [
         },
 
         size: function (baton) {
+            //show size if option is enabled or sorting by size
+            if (baton.app && (baton.app.props.get('sort') !== 608 && !baton.app.props.get('alwaysShowSize'))) return;
+
             var data = baton.data;
             if (!_.isNumber(data.size)) return;
             var size = util.threadFileSize(data.thread || [data]);
@@ -193,6 +190,13 @@ define('io.ox/mail/common-extensions', [
             if (!baton.data.attachment) return;
             this.append(
                 $('<i class="fa fa-paperclip has-attachments" aria-hidden="true">')
+            );
+        },
+
+        sharedAttachement: function (baton) {
+            if (!baton.model || !_.has(baton.model.get('headers'), 'X-Open-Xchange-Share-URL')) return;
+            this.append(
+                $('<i class="fa fa-cloud-download is-shared-attachement" aria-hidden="true">')
             );
         },
 
@@ -548,16 +552,22 @@ define('io.ox/mail/common-extensions', [
             return function (baton) {
 
                 if (util.isEmbedded(baton.data)) return;
-
-                this.append(
-                    $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
-                    .attr({
-                        'aria-label': getAriaLabel(baton.data),
-                        'aria-pressed': util.isUnseen(baton.data)
-                    })
-                    .append('<i class="fa" aria-hidden="true">')
-                    .on('click', { model: baton.view.model }, toggle)
-                );
+                var self = this;
+                folderAPI.get(baton.data.folder_id).done(function (data) {
+                    // see if the user is allowed to modify the read/unread status
+                    // always allows for unifeid folder
+                    var showUnreadToggle = folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data);
+                    if (!showUnreadToggle) return;
+                    self.append(
+                        $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
+                        .attr({
+                            'aria-label': getAriaLabel(baton.data),
+                            'aria-pressed': util.isUnseen(baton.data)
+                        })
+                        .append('<i class="fa" aria-hidden="true">')
+                        .on('click', { model: baton.view.model }, toggle)
+                    );
+                });
             };
         }()),
 

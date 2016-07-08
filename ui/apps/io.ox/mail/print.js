@@ -75,7 +75,7 @@ define('io.ox/mail/print', [
                     // is an embedded email?
                     if (util.isEmbedded(selection[0])) return $.Deferred().resolve(selection[0]);
                     // fetch normal message
-                    return api.get(_.extend({ view: type }, obj));
+                    return api.get(_.extend({ view: type, unseen: true }, obj));
                 },
 
                 title: selection.length === 1 ? selection[0].subject : undefined,

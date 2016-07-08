@@ -412,7 +412,6 @@
     }
 
     .detail-view-row {
-        .from { float: left; }
         .date { float: right; margin-left: 16px; }
         .recipients { float: left; }
         .priority { font-size: 14px; }
@@ -572,7 +571,7 @@
             text-overflow: ellipsis;
         }
 
-        .drag-title { opacity: 0.70; }
+        .drag-title {opacity: 0.75; }
 
         i.flag {
             font-size: 18px;
@@ -603,7 +602,7 @@
         color: rgba(255, 255, 255, 0.50);
     }
 
-    .fa-paperclip.has-attachments, i.fa.signed, i.fa.encrypted {
+    .fa-paperclip.has-attachments, .fa-cloud-download.is-shared-attachement, i.fa.signed, i.fa.encrypted {
         font-size: @icon-size;
         margin: 0 0 0 8px;
         float: right;
@@ -757,33 +756,46 @@
 
     &.scrollable { overflow: auto; }
 
-    & > h1 {
+    & > .thread-view-header {
 
-        .subject-base();
+        .flex-display(flex);
+        .flex-direction(row);
+
+        & > * {
+            .subject-base();
+        }
+
         padding-bottom: 0;
         background-color: white;
 
         .subject {
             word-break: break-word;
-            margin-bottom: 4px;
+            padding-bottom: 0;
+            .flex(1);
+
+            .summary {
+                color: #777;
+                font-size: 13px;
+                line-height: 16px;
+                font-weight: 300;
+                position: relative;
+                top: -5px;
+                margin: 0;
+                padding-top: 4px;
+                html.high-contrast & { color: @hc-gray; }
+            }
         }
 
         .toggle-all {
-            color: #ccc;
+            color: #767676;
             float: right;
             outline: 0;
-            &:hover { color: #aaa; }
+            &:hover { color: #595959; }
             &:focus { color: @link-color; }
-        }
-
-        .summary {
-            color: #777;
-            font-size: 13px;
-            line-height: 16px;
-            font-weight: 300;
-            position: relative;
-            top: -5px;
-            html.high-contrast & { color: @hc-gray; }
+            padding: 0;
+            margin: 12px @default-padding 4px 0;
+            .flex(0 0 auto);
+            .align-self(flex-start);
         }
     }
 }
@@ -804,6 +816,11 @@
         font-size: 12px;
         line-height: 16px;
         text-align: center;
+    }
+
+    a {
+        display: inline-block;
+        padding-right: 10px;
     }
 }
 
@@ -876,7 +893,7 @@ textarea.inplace-editor {
         }
 
         .position {
-            color: #888;
+            color: #767676;
             display: table-cell;
             text-align: center;
             width: 20%;
@@ -1003,18 +1020,23 @@ textarea.inplace-editor {
 
         padding: 0;
 
-        & > h1 {
-            font-size: @phone-font-size;
+        & > .thread-view-header {
             padding-bottom: 10px;
             background-color: #aaa;
             color: #fff;
-            .summary {
-                font-size: @phone-font-size - 2;
-                color: #fff;
+
+            & > * {
+                font-size: @phone-font-size;
             }
+
             .subject {
                 line-height: 20px;
-                margin-bottom: 20px;
+
+                .summary {
+                    padding-top: 20px;
+                    font-size: @phone-font-size - 2;
+                    color: #fff;
+                }
             }
         }
         .row-3{

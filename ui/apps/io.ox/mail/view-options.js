@@ -29,12 +29,12 @@ define('io.ox/mail/view-options', [
         index: 100,
         draw: function (batton) {
             this.data('view')
-                .option('sort', 610, gt('Date'))
-                .option('sort', 'from-to', account.is('sent|drafts', batton.app.folder.get()) ? gt('To') : gt('From'))
-                .option('sort', 651, gt('Unread'))
-                .option('sort', 608, gt('Size'))
-                .option('sort', 607, gt('Subject'))
-                .option('sort', 102, gt('Color'));
+                .option('sort', 610, gt('Date'), { radio: true })
+                .option('sort', 'from-to', account.is('sent|drafts', batton.app.folder.get()) ? gt('To') : gt('From'), { radio: true })
+                .option('sort', 651, gt('Unread'), { radio: true })
+                .option('sort', 608, gt('Size'), { radio: true })
+                .option('sort', 607, gt('Subject'), { radio: true })
+                .option('sort', 102, gt('Color'), { radio: true });
         }
     });
 
@@ -44,8 +44,8 @@ define('io.ox/mail/view-options', [
         draw: function () {
             this.data('view')
                 .divider()
-                .option('order', 'asc', gt('Ascending'))
-                .option('order', 'desc', gt('Descending'));
+                .option('order', 'asc', gt('Ascending'), { radio: true })
+                .option('order', 'desc', gt('Descending'), { radio: true });
         }
     });
 

@@ -9,7 +9,7 @@ A common set of events is tracked by default. Out of the box PIWIK is supported 
 
 # Setup Metrics within OX App Suite
 
-Please follow [theses steps](ui/features/metrics/03-analytics-solutions.html#install-piwik) to configure OX App Suite metrics + PIWIK.
+Please follow [theses steps](metrics/03-analytics-solutions.html#install-piwik) to configure OX App Suite metrics + PIWIK.
 
 # Basics
 
@@ -71,7 +71,7 @@ Use the following setting properties to enhance/adjust usage. Please be aware of
 
 ### Adapterspecific
 
-For more details visit the [adapter article](ui/features/metrics/02-adapters.html).
+For more details visit the [adapter article](metrics/02-adapters.html).
 
 ```
   # ADAPTER BLOCK PIWIK: START 

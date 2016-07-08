@@ -20,7 +20,7 @@ define('io.ox/core/session', [
 
     'use strict';
 
-    var TIMEOUTS = { AUTOLOGIN: 5000, LOGIN: 10000, FETCHCONFIG: 3000 },
+    var TIMEOUTS = { AUTOLOGIN: 7000, LOGIN: 10000, FETCHCONFIG: 2000 },
         CLIENT = 'open-xchange-appsuite';
 
     var getBrowserLanguage = function () {
@@ -156,7 +156,16 @@ define('io.ox/core/session', [
                     })
                     .then(function (response) {
                         store = _.url.hash('store') === 'true';
-                        return response.data;
+                        // make sure we have rampupdata
+                        if (response.data.rampup) {
+                            return response.data;
+                        }
+                        //session needed for rampup call
+                        ox.session = response.data.session;
+                        return that.rampup().then(function (rampupData) {
+                            response.data.rampup = rampupData;
+                            return response.data;
+                        });
                     });
                 }
             )

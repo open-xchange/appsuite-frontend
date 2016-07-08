@@ -55,10 +55,13 @@
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.compose.format" title="Formatear correos como">Formatear correos como</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.compose.sender" title="Dirección de remite predeterminada">Dirección de remite predeterminada</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.compose.autosave" title="Guardar automáticamente borradores de correo">Guardar automáticamente borradores de correo</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.compose.alwaysbcc" title="Añadir siempre el siguiente destinatario a la copia oculta (CCO)">Añadir siempre el siguiente destinatario a la copia oculta (CCO)</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.display.html" title="¿Permitir correos con formato HTML?">¿Permitir correos con formato HTML?</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.display.preview" title="Permitir la precarga de imágenes externas enlazadas">Permitir la precarga de imágenes externas enlazadas</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.display.quoting" title="Líneas citadas con colores">Líneas citadas con colores</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.display.deliveryreceipt" title="Mostrar las solicitudes de confirmación de lectura">Mostrar las solicitudes de confirmación de lectura</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.categories.showtabs" title="Mostrar pestañas de la bandeja de entrada">Mostrar pestañas de la bandeja de entrada</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.categories.applymove" title="aplicar el traslado a todos los correos de un remitente">aplicar el traslado a todos los correos de un remitente</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.imapfolders" title="Cambiar suscripciones IMAP">Cambiar suscripciones IMAP</a></p></li>
 </ul></div>
 <p>
@@ -120,12 +123,16 @@
 <p><a class="indexterm" name="id-1.6.16.15.2"></a>Especifica el intervalo de tiempo tras el que se guarda el texto del correo que se está escribiendo en la carpeta <span class="guilabel"><strong>Borradores</strong></span>. La opción <span class="guibutton"><strong>desactivado</strong></span> anula esta función.</p>
 </div>
 <div class="reference">
+<a name="ox.appsuite.user.reference.email.settings.compose.alwaysbcc"></a><p class="title"><b>Añadir siempre el siguiente destinatario a la copia oculta (CCO)</b></p>
+<p><a class="indexterm" name="id-1.6.16.16.2"></a>Para enviar todos los correos salientes como copias ocultas (CCO) a una dirección de correo, indique la dirección deseada en este campo.</p>
+</div>
+<div class="reference">
 <a name="ox.appsuite.user.reference.email.settings.display.html"></a><p class="title"><b>¿Permitir correos con formato HTML?</b></p>
-<p><a class="indexterm" name="id-1.6.16.16.2"></a>Establece si se permite mostrar o no los mensajes en HTML. En términos de ancho de banda, los mensajes en HTML tienen un gran impacto y pueden ser un riesgo de seguridad, ya que pueden contener scripts peligrosos.</p>
+<p><a class="indexterm" name="id-1.6.16.17.2"></a>Establece si se permite mostrar o no los mensajes en HTML. En términos de ancho de banda, los mensajes en HTML tienen un gran impacto y pueden ser un riesgo de seguridad, ya que pueden contener scripts peligrosos.</p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.email.settings.display.preview"></a><p class="title"><b>Permitir la precarga de imágenes externas enlazadas</b></p>
-<p><a class="indexterm" name="id-1.6.16.17.2"></a>Especifica si se permite o no la previsualización de gráficos externos enlazados en mensajes de correo con formato HTML: </p>
+<p><a class="indexterm" name="id-1.6.16.18.2"></a>Especifica si se permite o no la previsualización de gráficos externos enlazados en mensajes de correo con formato HTML: </p>
 <div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>Si esta opción está activada, las imágenes externas no se muestran directamente. Este ajuste protege su privacidad.</p></li>
 <li class="listitem" style="list-style-type: none"><p>Si esta opción está activada, las imágenes externas se cargan y muestran al ver un mensaje en formato HTML.</p></li>
@@ -133,15 +140,23 @@
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.email.settings.display.quoting"></a><p class="title"><b>Líneas citadas con colores</b></p>
-<p><a class="indexterm" name="id-1.6.16.18.2"></a>Indica si el mensaje original se resalta y se precede con una línea vertical. Los mensajes o respuestas se mostrarán incrustados. Esta opción asume que el texto del correo original no se ha adjuntado al correo sino que se le ha añadido.</p>
+<p><a class="indexterm" name="id-1.6.16.19.2"></a>Indica si el mensaje original se resalta y se precede con una línea vertical. Los mensajes o respuestas se mostrarán incrustados. Esta opción asume que el texto del correo original no se ha adjuntado al correo sino que se le ha añadido.</p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.email.settings.display.deliveryreceipt"></a><p class="title"><b>Mostrar las solicitudes de confirmación de lectura</b></p>
-<p><a class="indexterm" name="id-1.6.16.19.2"></a>Define si se muestra una confirmación de entrega si un correo recibido incluye una solicitud de confirmación de recepción.</p>
+<p><a class="indexterm" name="id-1.6.16.20.2"></a>Define si se muestra una confirmación de entrega si un correo recibido incluye una solicitud de confirmación de recepción.</p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.email.settings.categories.showtabs"></a><p class="title"><b>Mostrar pestañas de la bandeja de entrada</b></p>
+<p><a class="indexterm" name="id-1.6.16.21.2"></a>Determina si se muestran las pestañas de categorías de correo para la bandeja de entrada.</p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.email.settings.categories.applymove"></a><p class="title"><b>aplicar el traslado a todos los correos de un remitente</b></p>
+<p><a class="indexterm" name="id-1.6.16.22.2"></a>Determina si todos los correos de un remitente se mueven a la categoría correspondiente.</p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.email.settings.imapfolders"></a><p class="title"><b>Cambiar suscripciones IMAP</b></p>
-<p><a class="indexterm" name="id-1.6.16.20.2"></a><a class="indexterm" name="id-1.6.16.20.3"></a>Contiene funciones para <a class="link" href="ox.appsuite.user.sect.email.share.subscribe.html#ox.appsuite.user.concept.email.subscribe.emailfolder">suscribirse</a> a carpetas de correo electrónico. </p>
+<p><a class="indexterm" name="id-1.6.16.23.2"></a><a class="indexterm" name="id-1.6.16.23.3"></a>Contiene funciones para <a class="link" href="ox.appsuite.user.sect.email.share.subscribe.html#ox.appsuite.user.concept.email.subscribe.emailfolder">suscribirse</a> a carpetas de correo electrónico. </p>
 </div>
 </div>
           </div>

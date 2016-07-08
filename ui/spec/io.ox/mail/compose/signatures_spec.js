@@ -39,9 +39,8 @@ define([
         beforeEach(function () {
             return require([
                 'io.ox/contacts/api',
-                'io.ox/core/api/account',
-                'settings!io.ox/mail'
-            ], function (contactsAPI, accountAPI, settings) {
+                'io.ox/core/api/account'
+            ], function (contactsAPI, accountAPI) {
                 pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
                 getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
             }).then(function () {

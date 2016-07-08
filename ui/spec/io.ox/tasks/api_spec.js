@@ -51,14 +51,14 @@ define(['shared/examples/for/api',
             });
             it('should remove temporary attributes', function () {
                 //make copy of testData
-                var testCopy = _.copy(apiTestData.tempTestData, true),
-                    result = api.create(testCopy);
+                var testCopy = _.copy(apiTestData.tempTestData, true);
+                api.create(testCopy);
                 expect(testCopy).not.to.contain.key('tempAttachmentIndicator');
             });
             it('should remove alarm if it\'s null', function () {
                 //make copy of testData
-                var testCopy = _.copy(apiTestData.tempTestData, true),
-                    result = api.create(testCopy);
+                var testCopy = _.copy(apiTestData.tempTestData, true);
+                api.create(testCopy);
                 expect(testCopy).not.to.contain.key('alarm');
             });
             it('should be added to \"Attachment upload in progress\" list if attachments are present', function (done) {
@@ -126,8 +126,8 @@ define(['shared/examples/for/api',
             });
             it('should remove temporary attributes', function () {
                 //make copy of testData
-                var testCopy = _.copy(apiTestData.tempTestDataUpdate, true),
-                    result = api.update(testCopy);
+                var testCopy = _.copy(apiTestData.tempTestDataUpdate, true);
+                api.update(testCopy);
                 expect(testCopy).not.to.contain.key('tempAttachmentIndicator');
             });
             it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
@@ -146,14 +146,14 @@ define(['shared/examples/for/api',
             });
             it('should add date_completed if status = 3', function () {
                 //make copy of testData
-                var testCopy = _.copy(apiTestData.testDataUpdate, true),
-                    result = api.update(testCopy);
+                var testCopy = _.copy(apiTestData.testDataUpdate, true);
+                api.update(testCopy);
                 expect(testCopy).to.contain.key('date_completed');
             });
             it('should set date_completed to null if status != 3', function () {
                 //make copy of testData
-                var testCopy = _.copy(apiTestData.tempTestDataUpdate, true),
-                    result = api.update(testCopy);
+                var testCopy = _.copy(apiTestData.tempTestDataUpdate, true);
+                api.update(testCopy);
                 expect(testCopy.date_completed).to.be.null;
             });
         });

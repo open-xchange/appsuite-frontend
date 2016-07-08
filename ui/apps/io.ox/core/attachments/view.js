@@ -16,8 +16,9 @@ define('io.ox/core/attachments/view', [
     'io.ox/core/attachments/backbone',
     'io.ox/core/strings',
     'gettext!io.ox/core',
+    'io.ox/backbone/views/extensible',
     'less!io.ox/core/attachments/style'
-], function (backbone, strings, gt) {
+], function (backbone, strings, gt, ExtensibleView) {
 
     'use strict';
 
@@ -25,7 +26,7 @@ define('io.ox/core/attachments/view', [
     // New attachment list (combines a flat list and a preview)
     //
 
-    var List = Backbone.View.extend({
+    var List = ExtensibleView.extend({
 
         scrollStep: 120,
         openByDefault: false,

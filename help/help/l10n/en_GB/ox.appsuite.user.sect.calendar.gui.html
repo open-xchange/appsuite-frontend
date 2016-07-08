@@ -160,7 +160,10 @@
 </li>
 <li class="listitem"><p>In the <span class="guilabel"><strong>Work week</strong></span>, <span class="guilabel"><strong>Week</strong></span> and <span class="guilabel"><strong>Month</strong></span> views the current day in the calendar sheet is highlighted with a red background.</p></li>
 <li class="listitem"><p>In the <span class="guilabel"><strong>Month</strong></span> view, the selected month and the year are displayed above calendar sheet.</p></li>
-<li class="listitem"><p> Depending on the confirmation status and the color theme, the appointments are highlighted with different <a class="link" href="ox.appsuite.user.sect.calendar.view.appointments.html#ox.appsuite.user.concept.appointments.color">colours</a>.</p></li>
+<li class="listitem">
+<p> Depending on the confirmation status and the colour theme, the appointments are highlighted with different <a class="link" href="ox.appsuite.user.sect.calendar.view.appointments.html#ox.appsuite.user.concept.appointments.color">colours</a>.</p>
+<p>If there are additional appointments above or below the visible calendar sheet, arrows are displayed at the top or the bottom of the calendar sheet for the respective day.</p>
+</li>
 </ul></div>
 <p> If clicking on an appointment, the data is shown in the <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="Pop-up">pop-up</a>.</p>
 <div class="itemizedlist">
@@ -189,7 +192,7 @@
 <div class="itemizedlist">
 <a name="ox.appsuite.user.reference.calendar.gui.popup.related"></a><p class="title">Related topics</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Instructions for the buttons and icons can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Editing appointments">Editing appointments</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Changing the appointment status">Changing the appointment status</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.2. Creating follow-up appointments">Creating follow-up appointments</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Deleting appointments">Deleting appointments</a></span>
+<li class="listitem" style="list-style-type: none"><p>Instructions for the buttons and icons can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Editing appointments">Editing appointments</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Changing the appointment status">Changing the appointment status</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.2. Creating a follow-up appointment">Creating a follow-up appointment</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Deleting appointments">Deleting appointments</a></span>
             </p></li>
 <li class="listitem" style="list-style-type: none"><p>Instructions for the functions in the <span class="guibutton"><strong>Actions</strong></span> menu<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calebdar.gui.popup.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> can be found here:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Printing appointments">Printing appointments</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Moving appointments to another folder">Moving appointments to another folder</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Editing multiple appointments at once">Editing multiple appointments at once</a></span>
             </p></li>
@@ -293,15 +296,22 @@
 <a name="ox.appsuite.user.reference.calendar.gui.create"></a><p class="title"><b>View for creating or editing</b></p>
 <p>When composing a new appointment or editing an existing appointment, the following elements are displayed on a new page.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>Depending on the groupware configuration, elements that can be either at the top or at the bottom of the screen.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><span class="guibutton"><strong>Create</strong></span> button. If clicking on this button, the current appointment data are saved and the editing page is closed.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Discard</strong></span> button. In order to cancel the creation or editing, click on this button.</p></li>
 <li class="listitem"><p>The button next to <span class="guibutton"><strong>Calendar</strong></span> shows the calendar folder in which the appointment will be created. To create the appointment in another calendar folder, click on this button.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
 <li class="listitem"><p><span class="guibutton"><strong>Subject</strong></span> input field. Enter the subject in this field. The subject is displayed as appointment title in the views.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Location</strong></span> button. Here, you can enter the location where the appointment is to take place.</p></li>
 <li class="listitem">
 <p><span class="guibutton"><strong>Starts on</strong></span> and <span class="guibutton"><strong>Ends on</strong></span> input fields. Set the start and end date of the appointment. If clicking on it, a dialogue for selecting the date opens. </p>
 <p>If the <span class="guibutton"><strong>All day</strong></span> checkbox is disabled, you can set start and end times.</p>
-<p>If clicking on the timezone button next to the time, the time is displayed in different time zones. You can <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. Managing favourite timezones">set frequently used time zones as favourites</a> in the calendar settings.</p>
+<p>If clicking on the timezone button next to the time, the time is displayed in different time zones. You can set frequently used time zones <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. Managing favourite timezones">as favourites</a> in the calendar settings.</p>
 </li>
 <li class="listitem"><p><span class="guibutton"><strong>All day</strong></span> checkbox. Enable this checkbox if the appointment is to last the whole day.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Find a free time</strong></span> button. Opens the scheduling view. In this view, you can find a free time when scheduling an appointment with several participants.</p></li>

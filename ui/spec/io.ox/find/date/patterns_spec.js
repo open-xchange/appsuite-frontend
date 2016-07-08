@@ -50,7 +50,7 @@ define([
                 });
                 it('months (min)', function () {
                     window.moment.months().forEach(function (val) {
-                        val = val.slice(0,2);
+                        val = val.slice(0, 2);
                         expect(_.first(patterns.getMatches(val))).to.have.property('id')
                                                                  .to.have.string(val.toLowerCase());
                     });
@@ -63,25 +63,25 @@ define([
                     expect(_.first(patterns.getMatches(val))).to.have.property('id', val.toLowerCase());
                 });
                 it('yesterday', function () {
-                    var values = [ gt('Yesterday'), gt('Last day') ];
+                    var values = [gt('Yesterday'), gt('Last day')];
                     values.forEach(function (val) {
                         expect(_.first(patterns.getMatches(val))).to.have.property('id', val.toLowerCase());
                     });
                 });
                 it('last week', function () {
-                    var values = [ gt('Last week'), gt('Previous week') ];
+                    var values = [gt('Last week'), gt('Previous week')];
                     values.forEach(function (val) {
                         expect(_.first(patterns.getMatches(val))).to.have.property('id', val.toLowerCase());
                     });
                 });
                 it('last month', function () {
-                    var values = [ gt('Last month'), gt('Previous month') ];
+                    var values = [gt('Last month'), gt('Previous month')];
                     values.forEach(function (val) {
                         expect(_.first(patterns.getMatches(val))).to.have.property('id', val.toLowerCase());
                     });
                 });
                 it('last year', function () {
-                    var values = [ gt('Last year'), gt('Previous year') ];
+                    var values = [gt('Last year'), gt('Previous year')];
                     values.forEach(function (val) {
                         expect(_.first(patterns.getMatches(val))).to.have.property('id', val.toLowerCase());
                     });
@@ -111,7 +111,7 @@ define([
             });
 
             describe('format', function () {
-                function validate (val) {
+                function validate(val) {
                     var match = _.first(patterns.getMatches(val));
                     expect(match).to.exist;
                     expect(match).to.have.property('id', 'format-full-date');
@@ -169,7 +169,7 @@ define([
             });
 
             describe('range', function () {
-                function validate (val) {
+                function validate(val) {
                     var match = _.first(patterns.getMatches(val));
                     expect(match).to.exist;
                     expect(match).to.have.property('id', 'range');
@@ -235,7 +235,7 @@ define([
 
         describe('ignores', function () {
             describe('format', function () {
-                function validate (val) {
+                function validate(val) {
                     var match = _.first(patterns.getMatches(val));
                     expect(match).to.not.exist;
                 }

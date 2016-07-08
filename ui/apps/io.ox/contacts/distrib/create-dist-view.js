@@ -143,6 +143,26 @@ define('io.ox/contacts/distrib/create-dist-view', [
         }
     });
 
+    point.extend({
+        id: 'metrics',
+        render: function () {
+            var self = this;
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                self.baton.app.getWindow().nodes.footer.delegate('[data-action]', 'mousedown', function (e) {
+                    var node =  $(e.target);
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'edit/distribution-list/toolbar',
+                        type: 'click',
+                        action: node.attr('data-action') || node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
+            });
+        }
+    });
+
     return ContactCreateDistView;
 
 });

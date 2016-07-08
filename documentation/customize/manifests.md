@@ -21,22 +21,20 @@ The minimal declaration for an app looks like this:
 It consists of a title for the app and the path to the main entry file, by convention always called _main.js_. This declaration is usually found in the file _manifest.json_ right next to the app in question, but could theoretically be located anywhere. If the file is located in the same directory as the main entry file and the file is, as is the convention, called _main.js_ you can leave out the path as it will be added automatically by the buildsystem, so the minimal definition then becomes:
 
 ```json
-    {
-        "title": "My App"
-    }
+{
+    "title": "My App"
+}
 ```
 
 # Declaring a plugin
 
-```
 In turn, this is the definition of a plugin file:
-```
 
 ```json
-    {
-        "namespace": "io.ox/contacts/view-detail",
-        "path": "com.example/myapp/contacts/register"
-    }
+{
+    "namespace": "io.ox/contacts/view-detail",
+    "path": "com.example/myapp/contacts/register"
+}
 ```
 
 The _namespace_ contains the name of a frontend module for which the plugin is relevant. 
@@ -46,7 +44,10 @@ A plugin may be associated with more than one namespace, in that case, just use 
 
 ```json
 {
-    "namespace": ["io.ox/contacts/view-detail", "io.ox/contacts/edit/view-form"]
+    "namespace": [
+        "io.ox/contacts/view-detail",
+        "io.ox/contacts/edit/view-form"
+    ]
 }
 ```
 

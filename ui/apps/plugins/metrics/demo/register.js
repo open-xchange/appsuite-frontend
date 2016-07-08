@@ -78,7 +78,7 @@ define('plugins/metrics/demo/register', [
                 });
 
                 this.step('Wait for editor and write 100 words', function (done) {
-                    ox.one('mail:reply:ready', function (e, data, app) {
+                    ox.once('mail:reply:ready', function (data, app) {
                         app.view.getEditor().done(function (editor) {
                             editor.prependContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
                         });
@@ -96,7 +96,7 @@ define('plugins/metrics/demo/register', [
                     // send
                     this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
-                    ox.one('mail:send:stop', done);
+                    ox.once('mail:send:stop', done);
                 });
 
                 this.step('Switch back to mail app', function (done) {
@@ -177,7 +177,7 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Open compose dialog', function (done) {
 
-                    ox.one('mail:compose:ready', function (e, data, app) {
+                    ox.once('mail:compose:ready', function (data, app) {
                         this.app = app;
                         done();
                     }.bind(this));
@@ -187,7 +187,8 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
                     this.app.view.model.set('subject', SUBJECT);
-                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input').trigger('keydown');
+                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS)
+                        .trigger('input').trigger($.Event('keydown.tt', { keyCode: 13, which: 13 }));
                     done();
                 });
 
@@ -213,7 +214,7 @@ define('plugins/metrics/demo/register', [
                     // send
                     this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
-                    ox.one('mail:send:stop', done);
+                    ox.once('mail:send:stop', done);
                 });
 
                 this.step('Switch back to mail app', function (done) {
@@ -229,7 +230,7 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Open compose dialog', function (done) {
 
-                    ox.one('mail:compose:ready', function (e, data, app) {
+                    ox.once('mail:compose:ready', function (data, app) {
                         this.app = app;
                         done();
                     }.bind(this));
@@ -247,7 +248,8 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
                     this.app.view.model.set('subject', SUBJECT + ' (local attachment)');
-                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input').trigger('keydown');
+                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS)
+                        .trigger('input').trigger($.Event('keydown.tt', { keyCode: 13, which: 13 }));
                     done();
                 });
 
@@ -273,7 +275,7 @@ define('plugins/metrics/demo/register', [
                     // send
                     this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
-                    ox.one('mail:send:stop', done);
+                    ox.once('mail:send:stop', done);
                 });
 
                 this.step('Switch back to mail app', function (done) {
@@ -289,7 +291,7 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Open compose dialog with attachment from cloud', function (done) {
 
-                    ox.one('mail:compose:ready', function (e, data, app) {
+                    ox.once('mail:compose:ready', function (data, app) {
                         this.app = app;
                         done();
                     }.bind(this));
@@ -300,7 +302,8 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
                     this.app.view.model.set('subject', SUBJECT + ' (cloud attachment)');
-                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input').trigger('keydown');
+                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS)
+                        .trigger('input').trigger($.Event('keydown.tt', { keyCode: 13, which: 13 }));
                     done();
                 });
 
@@ -326,7 +329,7 @@ define('plugins/metrics/demo/register', [
                     // send
                     this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
-                    ox.one('mail:send:stop', done);
+                    ox.once('mail:send:stop', done);
                 });
 
                 this.step('Switch back to mail app', function (done) {
