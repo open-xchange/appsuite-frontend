@@ -34,6 +34,11 @@ define('io.ox/mail/categories/main', [
         console.error("mail/categories/main: capababilty 'mail_categories' missing");
     }
 
+    // do not clutter hash
+    ox.on('app:start app:resume', function (app) {
+        if (app && app.id !== 'io.ox/mail') _.url.hash('category', null);
+    });
+
     var DEBUG = false,
         // category config propertys that should be synced
         SYNCED = ['id', 'name', 'active'],
