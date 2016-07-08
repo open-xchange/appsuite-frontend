@@ -102,8 +102,8 @@ define('io.ox/mail/common-extensions', [
         date: function (baton, options) {
             var data = baton.data, t = data.received_date;
             options = _.extend({
-                fulldate: baton.app && baton.app.props.get('excactDates'),
-                smart: !(baton.app && baton.app.props.get('excactDates'))
+                fulldate: baton.app && baton.app.props.get('exactDates'),
+                smart: !(baton.app && baton.app.props.get('exactDates'))
             }, options);
             if (!_.isNumber(t)) return;
             this.append(
