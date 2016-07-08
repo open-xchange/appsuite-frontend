@@ -708,11 +708,13 @@ define('io.ox/calendar/util', [
                 switch (participant.type) {
                     // internal user
                     case 1:
+                        // user API expects array of integer [1337]
                         IDs.user.push(participant.id);
                         break;
                     // user group
                     case 2:
-                        IDs.group.push(participant.id);
+                        // group expects array of object [{ id: 1337 }], yay (see bug 47207)
+                        IDs.group.push({ id: participant.id });
                         break;
                     // resource or rescource group
                     case 3:
