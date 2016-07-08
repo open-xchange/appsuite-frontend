@@ -379,10 +379,17 @@ define('io.ox/editor/main', [
 
         app.failSave = function () {
             if (!app || !app.view) return false;
-            app.view.updateModel();
+            // don't use update model here otherwise we modify the filename, when saving the restore point (add .txt whyle typing)
+            // use getTitle instead of getFilename for the same reason
+            var filename = app.view.getTitle();
+            model.set({
+                title: filename,
+                filename: filename,
+                content: app.view.getContent()
+            });
             var data = model.toJSON();
             return {
-                description: gt('File') + (data.title ? ': ' + data.title : ''),
+                description: gt('File') + (filename ? ': ' + filename : ''),
                 module: 'io.ox/editor',
                 point: data
             };

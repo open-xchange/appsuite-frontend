@@ -411,7 +411,7 @@ define('io.ox/portal/widgets', [
             });
 
             self.update(obj);
-            collection.trigger('sort');
+            collection.sort();
             return settings.set('widgets/user', self.toJSON()).set('settings' + widgetSet, self.extraSettingsToJSON()).save().fail(
                 // don't say anything if successful
                 function () {

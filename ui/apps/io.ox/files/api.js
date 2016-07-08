@@ -122,7 +122,7 @@ define('io.ox/files/api', [
         },
 
         isOffice: function (type) {
-            return /^application\/(msword|vnd.ms-word|vnd.ms-excel|vnd.ms-powerpoint|vnd.oasis|vnd.openxmlformats)/.test(type || this.getMimeType());
+            return /^application\/(msword|excel|powerpoint|vnd\.(ms-word|ms-excel|ms-powerpoint|oasis|openxmlformats))/.test(type || this.getMimeType());
         },
 
         isPDF: function (type) {
@@ -134,7 +134,7 @@ define('io.ox/files/api', [
         },
 
         isPresentation: function (type) {
-            return /^application\/vnd.(ms-powerpoint|openxmlformats-officedocument.presentationml|oasis.opendocument.presentation)/.test(type || this.getMimeType());
+            return /^application\/(powerpoint|vnd.(ms-powerpoint|openxmlformats-officedocument.presentationml|oasis.opendocument.presentation))/.test(type || this.getMimeType());
         },
 
         isGuard: function () {
@@ -320,7 +320,7 @@ define('io.ox/files/api', [
             folder = encodeURIComponent(file.folder_id),
             id = encodeURIComponent(file.id),
             sessionData = '&user=' + ox.user_id + '&context=' + ox.context_id + '&sequence=' + file.last_modified,
-            version = file.version !== undefined && options.version !== false ? '&version=' + file.version : '',
+            version = file.version !== undefined && options.version !== false && options.version !== null ? '&version=' + file.version : '',
             // basic URL
             query = '?action=document&folder=' + folder + '&id=' + id + version + sessionData,
             // file name
@@ -358,7 +358,17 @@ define('io.ox/files/api', [
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
     // guess 23 is "meta"
-    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707';
+    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707',
+        allVersionColumns = http.getAllColumns('files', true);
+
+    var attachmentView = coreSettings.get('folder/mailattachments', {});
+    if (!_.isEmpty(attachmentView)) {
+        // add 7030 if attachment view is active
+        allColumns = allColumns + ',7030';
+    } else {
+        // remove from version columns
+        allVersionColumns = allVersionColumns.replace(',7030', '');
+    }
 
     /**
      * map error codes and text phrases for user feedback
@@ -1045,6 +1055,7 @@ define('io.ox/files/api', [
                 module: 'files',
                 params: {
                     action: 'versions',
+                    columns: allVersionColumns,
                     folder: file.folder_id,
                     id: file.id,
                     timezone: 'utc'

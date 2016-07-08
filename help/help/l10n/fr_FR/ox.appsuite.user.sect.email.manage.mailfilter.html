@@ -1,12 +1,12 @@
 <html lang="fr">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.5.18. Utiliser les filtres de courriel</title>
+<title>5.5.19. Utiliser les filtres de courriel</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Collecticiel">
 <link rel="up" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Organisation des courriels">
-<link rel="prev" href="ox.appsuite.user.sect.email.manage.unifiedmail.html" title="5.5.17. Utiliser la messagerie unifiée">
+<link rel="prev" href="ox.appsuite.user.sect.email.manage.unifiedmail.html" title="5.5.18. Utiliser la messagerie unifiée">
 <link rel="next" href="ox.appsuite.user.sect.email.search.html" title="5.6. Chercher des courriels">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -33,8 +33,8 @@
 <h2 class="sr-only">Organisation des courriels</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.email.manage.mailfilter"></a>5.5.18. Utiliser les filtres de courriel</h3></div></div></div>
-<a class="indexterm" name="id-1.6.12.23.2"></a><a class="indexterm" name="id-1.6.12.23.3"></a><div class="concept">
+<a name="ox.appsuite.user.sect.email.manage.mailfilter"></a>5.5.19. Utiliser les filtres de courriel</h3></div></div></div>
+<a class="indexterm" name="id-1.6.12.24.2"></a><a class="indexterm" name="id-1.6.12.24.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.email.mailfilter"></a><p>Les filtres de courriel vous aident à organiser le courrier électronique entrant. Un filtre de courriel consiste en une ou plusieurs règles. En définissant des règles, vous pouvez par exemple déclencher les actions suivantes :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Le message est déplacé dans un certain dossier ;</p></li>
@@ -57,7 +57,8 @@
 <p> Vous pouvez : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.manage.mailfilter.html#ox.appsuite.user.task.email.mailfilter.create" title="Pour créer une nouvelle règle :">Créer</a> une nouvelle règle.</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.manage.mailfilter.html#ox.appsuite.user.task.email.mailfilter.create" title="Pour créer une nouvelle règle :">Changer</a> les règles existantes.</p></li>
+<li class="listitem"><p>Pour déplacer les courriels d'un expéditeur spécifique vers un dossier, vous pouvez <a class="link" href="ox.appsuite.user.sect.email.manage.mailfilter.html#ox.appsuite.user.task.email.mailfilter.create.move" title="Pour créer une nouvelle règle lors du déplacement d'un courriel">créer une nouvelle règle lors du déplacement de courriels</a>.</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.manage.mailfilter.html#ox.appsuite.user.task.email.mailfilter.create" title="Pour créer une nouvelle règle :">Modifier</a> les règles existantes.</p></li>
 </ul></div>
 <p> Certaines fonctionnalités de courrier électronique mettent en place automatiquement des filtres de courrier, par exemple celle des <a class="link" href="ox.appsuite.user.sect.email.send.vacationnotice.html#ox.appsuite.user.concept.email.vacationnotice">messages d'absence</a>.</p>
 </div>
@@ -73,11 +74,11 @@
 <li class="step"><p>Saisissez le nom que vous souhaitez donner à la règle.</p></li>
 <li class="step">
 <p>Pour ajouter une condition, cliquez sur <span class="guibutton"><strong>Ajouter une condition</strong></span>. Choisissez-en une dans la liste déroulante. Veuillez noter les points suivants :</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Pour utiliser une partie du courriel qui n'est pas présente dans la liste, choisissez <span class="guibutton"><strong>En-tête</strong></span>. Saisissez un champ d'en-tête dans la zone de saisie <span class="guilabel"><strong>Nom</strong></span>. Vous pouvez afficher l'entête d'un courriel en <a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">affichant le code source</a>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Pour inclure les destinataires en <span class="guilabel"><strong>CCC</strong></span>, choisissez <span class="guibutton"><strong>Enveloppe - À</strong></span>. L'enveloppe comporte les destinataires du courriel apparaissant dans les champs <span class="guilabel"><strong>À</strong></span>, <span class="guilabel"><strong>CC</strong></span> ou <span class="guilabel"><strong>CCC</strong></span>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Pour utiliser une partie du contenu du courriel dans la condition, choisissez<span class="guibutton"><strong>Contenu</strong></span>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Pour utiliser la date de réception dans la condition, choisissez<span class="guibutton"><strong>Date actuelle</strong></span>.</p></li>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Pour utiliser une partie du courriel qui n'est pas présente dans la liste, choisissez <span class="guibutton"><strong>En-tête</strong></span>. Saisissez un champ d'en-tête dans la zone de saisie <span class="guilabel"><strong>Nom</strong></span>. Vous pouvez afficher l'entête d'un courriel en <a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source">affichant le code source</a>.</p></li>
+<li class="listitem"><p>Pour inclure les destinataires en <span class="guilabel"><strong>CCI</strong></span>, choisissez <span class="guibutton"><strong>Enveloppe - À</strong></span>. L'enveloppe comporte les destinataires du courriel apparaissant dans les champs <span class="guilabel"><strong>À</strong></span>, <span class="guilabel"><strong>CC</strong></span> ou <span class="guilabel"><strong>CCI</strong></span>.</p></li>
+<li class="listitem"><p>Pour utiliser une partie du contenu du courriel dans la condition, choisissez<span class="guibutton"><strong>Contenu</strong></span>.</p></li>
+<li class="listitem"><p>Pour utiliser la date de réception dans la condition, choisissez<span class="guibutton"><strong>Date actuelle</strong></span>.</p></li>
 </ul></div>
 <p>
             </p>
@@ -92,6 +93,25 @@
 </li>
 <li class="step"><p>Vous pouvez indiquer si les règles suivantes doivent être traitées si cette règle a été exécutée. Pour cela, cochez ou décochez <span class="guibutton"><strong>Traiter les règles suivantes</strong></span>.</p></li>
 <li class="step"><p>Cliquez sur <span class="guibutton"><strong>Enregistrer</strong></span>.</p></li>
+</ol></div>
+</div>
+<div class="task">
+<a name="ox.appsuite.user.task.email.mailfilter.create.move"></a><p class="title">Pour créer une nouvelle règle lors du déplacement d'un courriel</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>Sélectionnez un courriel.</p></li>
+<li class="step">
+<p>Cliquez sur l'icône <span class="guibutton"><strong>Actions</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.move"></a><img src="../../images/appsuite_user_icon_actions.png"></span> dans la barre d'outils. Sélectionnez <span class="guibutton"><strong>Déplacer</strong></span> depuis le menu.</p>
+<p>Vous pouvez aussi utiliser l'icône <span class="guibutton"><strong>Actions</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.mailfilter.create.move.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> dans la vue détaillée.</p>
+<p>Sélectionnez un dossier dans la fenêtre <span class="guilabel"><strong>Déplacer</strong></span>. Cliquez sur le bouton <span class="guibutton"><strong>Déplacer</strong></span>.</p>
+</li>
+<li class="step">
+<p>Activer <span class="guibutton"><strong>Créer une règle de filtrage</strong></span>. Une remarque détaillant le filtre est affichée.</p>
+<p>Cliquez sur le bouton <span class="guibutton"><strong>Déplacer</strong></span>. La fenêtre <span class="guilabel"><strong>Création d'une nouvelle règle</strong></span> s'ouvre.</p>
+</li>
+<li class="step">
+<p>Saisissez un nom de règle. Vous pouvez ajuster les conditions ou les actions. Cliquez sur <span class="guibutton"><strong>Enregistrer</strong></span>.</p>
+<p>Le courriel sera déplacé. Une nouvelle règle sera créée.</p>
+</li>
 </ol></div>
 </div>
 <div class="task">

@@ -257,7 +257,7 @@
         },
 
         // combination of browser & display
-        device: function (condition, debug) {
+        device: _.memoize(function (condition, debug) {
             // add support for language checks
             var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
@@ -286,7 +286,7 @@
                 console.error('_.device()', condition, e);
                 return false;
             }
-        }
+        })
     };
     underscoreExtends.device.loadUA = function (nav) {
         detectBrowser(nav);

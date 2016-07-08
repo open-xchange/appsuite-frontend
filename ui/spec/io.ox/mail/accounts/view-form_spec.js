@@ -28,7 +28,7 @@ define([
             });
 
             require(['io.ox/mail/accounts/settings']).then(function () {
-                ext.point('io.ox/settings/accounts/mail/settings/detail').invoke('draw', $node, { data: { 'primary_address': '' }});
+                ext.point('io.ox/settings/accounts/mail/settings/detail').invoke('draw', $node, { data: { 'primary_address': '' } });
 
                 $popup = $('body').find('.io-ox-dialog-popup');
                 done();

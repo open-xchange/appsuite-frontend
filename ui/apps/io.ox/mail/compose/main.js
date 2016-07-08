@@ -43,7 +43,8 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
 
         app.failSave = function () {
             if (!app.view) return;
-            return _.extend({ module: 'io.ox/mail/compose' }, app.model.getFailSave());
+            var failSaveData = app.model.getFailSave();
+            return failSaveData ? _.extend({ module: 'io.ox/mail/compose' }, failSaveData) : false;
         };
 
         app.failRestore = function (point) {

@@ -1138,6 +1138,7 @@ define('io.ox/core/folder/api', [
         _.chain(arguments).flatten().map(getFolderId).compact().uniq().each(function (id) {
             // register function call once
             if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false }), reload.wait);
+            api.trigger('reload:' + id);
             reload.hash[id]();
         });
     }
@@ -1232,7 +1233,7 @@ define('io.ox/core/folder/api', [
             flat({ module: module, cache: false });
         });
         // go!
-        http.resume().done(function () {
+        return http.resume().done(function () {
             virtual.refresh();
         });
     }

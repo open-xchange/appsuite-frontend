@@ -16,69 +16,69 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
     'use strict';
 
     var resultWithFlag = {
-        timestamp: 1378223251586,
-        'data': [{
-            'position': 1,
-            'id': 1,
-            'flags': ['vacation'],
-            'test': { 'id': 'true' },
-            'actioncmds': [{
-                'id': 'vacation',
-                'text': 'text',
-                'days': '7',
-                'subject': 'subject',
-                'addresses': ['tester@open-xchange.com']
-            }],
-            'rulename': 'Abwesenheitsnotiz',
-            'active': true
-        }]
-    },
+            timestamp: 1378223251586,
+            'data': [{
+                'position': 1,
+                'id': 1,
+                'flags': ['vacation'],
+                'test': { 'id': 'true' },
+                'actioncmds': [{
+                    'id': 'vacation',
+                    'text': 'text',
+                    'days': '7',
+                    'subject': 'subject',
+                    'addresses': ['tester@open-xchange.com']
+                }],
+                'rulename': 'Abwesenheitsnotiz',
+                'active': true
+            }]
+        },
 
-    resultWithFlagTwoMails = {
-        timestamp: 1378223251586,
-        'data': [{
-            'position': 1,
-            'id': 1,
-            'flags': ['vacation'],
-            'test': { 'id': 'true' },
-            'actioncmds': [{
-                'id': 'vacation',
-                'text': 'text',
-                'days': '7',
-                'subject': 'subject',
-                'addresses': ['tester@open-xchange.com', 'tester2@open-xchange.com']
-            }],
-            'rulename': 'Abwesenheitsnotiz',
-            'active': true
-        }]
-    },
-    expextedModel = {
-        id: 1,
-        text: 'text',
-        days: '7',
-        subject: 'subject',
-        addresses: ['tester@open-xchange.com', 'tester2@open-xchange.com'],
-        internal_id: 'vacation',
-        activateTimeFrame: false,
-        primaryMail: 'tester@open-xchange.com',
-        'tester@open-xchange.com': true,
-        'tester2@open-xchange.com': true
-    },
+        resultWithFlagTwoMails = {
+            timestamp: 1378223251586,
+            'data': [{
+                'position': 1,
+                'id': 1,
+                'flags': ['vacation'],
+                'test': { 'id': 'true' },
+                'actioncmds': [{
+                    'id': 'vacation',
+                    'text': 'text',
+                    'days': '7',
+                    'subject': 'subject',
+                    'addresses': ['tester@open-xchange.com', 'tester2@open-xchange.com']
+                }],
+                'rulename': 'Abwesenheitsnotiz',
+                'active': true
+            }]
+        },
+        expextedModel = {
+            id: 1,
+            text: 'text',
+            days: '7',
+            subject: 'subject',
+            addresses: ['tester@open-xchange.com', 'tester2@open-xchange.com'],
+            internal_id: 'vacation',
+            activateTimeFrame: false,
+            primaryMail: 'tester@open-xchange.com',
+            'tester@open-xchange.com': true,
+            'tester2@open-xchange.com': true
+        },
 
-    createDaysObject = function (from, to) {
-        var objectOfValues = {};
-        for (var i = from; i <= to; i += 1) {
-            objectOfValues[i] = i;
-        }
-        return objectOfValues;
-    },
+        createDaysObject = function (from, to) {
+            var objectOfValues = {};
+            for (var i = from; i <= to; i += 1) {
+                objectOfValues[i] = i;
+            }
+            return objectOfValues;
+        },
 
-    multiValues = {
-        aliases: _.object(['tester@open-xchange.com', 'tester2@open-xchange.com'], ['tester@open-xchange.com', 'tester2@open-xchange.com']),
-        days: createDaysObject(1, 31)
-    },
+        multiValues = {
+            aliases: _.object(['tester@open-xchange.com', 'tester2@open-xchange.com'], ['tester@open-xchange.com', 'tester2@open-xchange.com']),
+            days: createDaysObject(1, 31)
+        },
 
-    node;
+        node;
 
     describe('Mailfilter Vacationnotice with one active mail', function () {
 

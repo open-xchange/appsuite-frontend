@@ -97,7 +97,10 @@ A event triggers when an app started. The measure time is between the click on t
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
 | contacts/list/select/one <br>  contacts/list/select/multiple | Select contact by click on the list/grid                                             |
 | contacts/folder/select/[type]                                | Clicks on a folder in the contact folder tree (folder-type: private, public, shared) |
-| contacts/toolbar/[action]                                    | Clicks on a a contact action                                                         |
+| contacts/toolbar/[action]                                    | Clicks on a contact action                                                           |
+| contacts/edit/contact/toolbar/[action]                       | Clicks on a action in the create/edit dialog                                         |
+| contacts/edit/distribution-list/toolbar/[action]             | Clicks on a action in the create/edit dialog                                         |
+| contacts/edit/contact/add-attachment                         | Successfully adding a attachment                                                     |
 
 ## Calendar
 
@@ -110,6 +113,8 @@ A event triggers when an app started. The measure time is between the click on t
 | calendar/folder/permissions           | Clicks on the “cloud” icon and the “User” icon next to the folder name                           |
 | calendar/folder/context-menu/[action] | Clicks within the context menu, which pops up, when you click on a folder name and its menu icon |
 | calendar/detail/toolbar/[action]      | Clicks on calendar detail view toolbar action                                                    |
+| calendar/edit/toolbar/[action]        | Clicks on a action in the create/edit dialog                                                     |
+| calendar/edit/add-attachment          | Successfully adding a attachment                                                                 |
 
 ## Tasks
 
@@ -119,6 +124,8 @@ A event triggers when an app started. The measure time is between the click on t
 | tasks/folder/context-menu/[action] | Clicks within the context menu, which pops up, when you click on a folder name and its menu icon |
 | tasks/toolbar/[action]             | Clicks on tasks toolbar action                                                                   |
 | tasks/detail/[action]              | Clicks on task detail view toolbar action                                                        |
+| tasks/edit/toolbar/[action]        | Clicks on a action in the create/edit dialog                                                     |
+| tasks/edit/add-attachment          | Successfully adding a attachment                                                                 |
 
 ## Drive
 

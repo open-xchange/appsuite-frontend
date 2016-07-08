@@ -72,9 +72,9 @@ define('io.ox/core/boot/main', [
                 }
 
                 // set page title now
-                util.setPageTitle(
-                    ox.serverConfig.pageTitle + (_.device('smartphone') ? ' Login' : '')
-                );
+                ox.on('language', function (lang, gt) {
+                    util.setPageTitle(ox.serverConfig.pageTitle + ' ' + gt.pgettext('word', 'Sign in'));
+                });
 
                 gettext.setLanguage('en_US');
 

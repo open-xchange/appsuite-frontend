@@ -14,7 +14,7 @@
 define([
     'io.ox/core/wizard/registry',
     'fixture!io.ox/core/wizard/welcomeWizard.js'
-], function (wizard, welcomeWizard, test) {
+], function (wizard, welcomeWizard) {
     'use strict';
 
     describe('Wizard API', function () {

@@ -13,11 +13,6 @@
 define(['io.ox/mail/compose/main', 'settings!io.ox/mail'], function (compose, settings) {
     'use strict';
 
-    var editors = {
-        text: 'io.ox/core/tk/text-editor',
-        html: 'io.ox/core/tk/contenteditable-editor'
-    };
-
     describe('Mail Compose', function () {
 
         describe('forward a message', function () {

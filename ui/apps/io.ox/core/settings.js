@@ -111,13 +111,15 @@ define('io.ox/core/settings', [
                 self.trigger('reset', tree);
             } else {
                 resolve(path, function (tmp, key) {
-                    var previous = tmp[key];
+                    var previous = tmp[key],
+                        isChange = JSON.stringify(value) !== JSON.stringify(previous);
                     if (value === undefined) {
                         delete tmp[key];
                     } else {
                         tmp[key] = value;
                     }
-                    self.trigger('change:' + path, value).trigger('change', path, value, previous);
+                    if (!isChange) return;
+                    self.trigger('change:' + path, value, previous).trigger('change', path, value, previous);
                 }, true);
             }
             return this;

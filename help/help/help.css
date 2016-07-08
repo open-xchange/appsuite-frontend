@@ -18,6 +18,20 @@
 	padding-left: 30px;
 }
 
+.oxhelp-content a {
+	color: #007cc0;
+}
+
+.oxhelp-content a:focus {
+	outline: 5px auto -webkit-focus-ring-color;
+	outline-offset: -2px;
+}
+
+.oxhelp-content a:focus, .oxhelp-content a:hover {
+	color: #284d71;
+	text-decoration: underline;
+}
+
 .oxhelp-navigation-top .navbar-fixed-top .navbar-inner, .oxhelp-navigation-bottom {
 	padding-left: 30px;
 }

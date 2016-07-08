@@ -10,6 +10,7 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
+ /* eslint no-throw-literal:0 */
 define([
     'io.ox/files/api',
     'settings!io.ox/core'
@@ -79,7 +80,7 @@ define([
                 coreSettings.set('folder/infostore', '4711');
                 var c = api.collectionLoader.load();
                 ox.fakeServer.instance = this.server;
-                c.on('load', function (m) {
+                c.on('load', function () {
                     expect(c).to.have.length(3);
                     done();
                 });
@@ -90,7 +91,7 @@ define([
                     id: '1337',
                     folder: '4711'
                 });
-                c.on('load', function (m) {
+                c.on('load', function () {
                     expect(c).to.have.length(3);
                     done();
                 });

@@ -324,7 +324,6 @@ define('io.ox/portal/main', [
             }
         })
         .on('sort', function () {
-            this.sort({ silent: true });
             // loop over collection for resorting DOM tree
             this.each(function (model) {
                 // just re-append all in proper order
@@ -639,7 +638,9 @@ define('io.ox/portal/main', [
         }));
 
         win.nodes.main.addClass('io-ox-portal f6-target').attr({
-            'tabindex': '1'
+            'tabindex': '1',
+            role: 'main',
+            'aria-label': gt('Portal widgets')
         });
 
         win.setTitle(gt('Portal'));

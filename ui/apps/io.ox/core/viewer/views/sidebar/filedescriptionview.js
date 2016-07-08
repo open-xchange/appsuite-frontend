@@ -38,18 +38,14 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 panelBody.append(
                     $('<div class="description">', { title: gt('Description text') }).text(description)
                 );
-            } else {
-                baton.view.hasWritePermissions().then(
-                    function yep() {
-                        panelBody.append(
-                            $('<a href="#" class="description" role="button" tabindex="1">').text(gt('Add a description'))
-                        );
-                    },
-                    function nope() {
-                        panelBody.parent().hide();
-                    }
-                );
             }
+            baton.view.hasWritePermissions().then(function () {
+                panelBody.append(
+                    $('<button href="#" class="btn btn-link description-button" tabindex="1">').text(description.length > 0 ? gt('Edit description') : gt('Add a description'))
+                );
+            }).fail(function () {
+                panelBody.parent().hide();
+            });
         }
     });
 
@@ -63,31 +59,18 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
         events: {
             'click .description': 'onEdit',
-            'dblclick .description': 'onEdit',
-            'keyup .description': 'onKeyUp'
+            'dblclick .description': 'editDescription',
+            'click button.description-button': 'editDescription'
         },
 
         onEdit: function (e) {
 
             var touchDevice = _.device('smartphone || tablet'),
-                empty = !this.model.get('description'),
-                doubleClick = e.type === 'dblclick';
+                empty = !this.model.get('description');
 
             e.preventDefault();
 
-            if (touchDevice || empty || doubleClick) this.editDescription();
-        },
-
-        onKeyUp: function (event) {
-            //console.info('event type: ', event.type, 'keyCode: ', event.keyCode, 'charCode: ', event.charCode);
-            switch (event.which || event.keyCode) {
-                case 13:
-                case 32:
-                    this.editDescription();
-                    event.preventDefault();
-                    break;
-                // no default
-            }
+            if (touchDevice || empty) this.editDescription();
         },
 
         initialize: function () {

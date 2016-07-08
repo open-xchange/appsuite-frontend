@@ -162,11 +162,13 @@ define('io.ox/mail/compose/actions/send', [
             index: 2000,
             perform: function (baton) {
                 if (baton.error && !baton.warning) {
-                    var win = baton.app.getWindow();
+                    var win = baton.app.getWindow(),
+                    // check if abort is triggered by the ui
+                        text = baton.error === 'abort' ? gt('The sending of the message has been canceled.') : baton.error;
                     if (win) { win.idle().show(); }
                     baton.app.launch();
                     // TODO: check if backend just says "A severe error occurred"
-                    notifications.yell('error', baton.error);
+                    notifications.yell('error', text);
                     return;
                 }
             }

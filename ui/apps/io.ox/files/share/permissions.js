@@ -808,7 +808,7 @@ define('io.ox/files/share/permissions', [
                 top: 40,
                 center: false,
                 async: true,
-                help: 'ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles',
+                help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html#ox.appsuite.user.concept.sharing.invitation',
                 share: false,
                 nested: nested
             }, options);
@@ -849,23 +849,47 @@ define('io.ox/files/share/permissions', [
                 dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel, share: options.share });
 
-            permissionsView.collection.on('remove add reset', function () {
-                if (permissionsView.collection.where({ type: 'guest' }).length !== 0) {
+            function hasNewGuests() {
+                var knownGuests = [];
+                _.each(dialogConfig.get('oldGuests'), function (model) {
+                    if (permissionsView.collection.get(model)) {
+                        knownGuests.push(model);
+                    }
+                });
+                return permissionsView.collection.where({ type: 'guest' }).length > knownGuests.length;
+            }
+
+            permissionsView.collection.on('reset', function () {
+                dialogConfig.set('oldGuests', _.copy(permissionsView.collection.where({ type: 'guest' })));
+            });
+
+            permissionsView.collection.on('add remove', function () {
+                if (permissionsView.collection.where({ type: 'guest' }).length !== 0 && hasNewGuests()) {
                     dialogConfig.set('sendNotifications', true);
                     dialogConfig.set('disabled', true);
                 } else {
+                    dialogConfig.set('sendNotifications', notificationDefault);
+                    dialogConfig.set('disabled', false);
+                }
+
+                if (dialogConfig.get('byHand') !== undefined) {
+                    dialogConfig.set('sendNotifications', dialogConfig.get('byHand'));
                     dialogConfig.set('disabled', false);
                 }
 
             });
 
-            dialog.getFooter().prepend(
-                $('<div>').addClass('form-group cascade').append(
-                    $('<label>').addClass('checkbox-inline').text(gt('Send notification')).prepend(
-                        new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el
+            if (objModel.isAdmin()) {
+                dialog.getFooter().prepend(
+                    $('<div>').addClass('form-group cascade').append(
+                        $('<label>').addClass('checkbox-inline').text(gt('Send notification')).prepend(
+                            new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el.on('click', function (e) {
+                                dialogConfig.set('byHand', e.currentTarget.checked);
+                            })
+                        )
                     )
-                )
-            );
+                );
+            }
 
             dialogConfig.on('change:disabled', function () {
                 dialog.getFooter().find('[name="sendNotifications"]').attr('disabled', dialogConfig.get('disabled'));
@@ -977,7 +1001,7 @@ define('io.ox/files/share/permissions', [
                     guid = _.uniqueId('form-control-label-');
 
                 if (objModel.isFolder() && options.nested) {
-                    dialog.getFooter().prepend(
+                    dialog.getFooter().append(
                         $('<div>').addClass('form-group cascade').append(
                             $('<label>').addClass('checkbox-inline').text(gt('Apply to all subfolders')).prepend(
                                 new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogConfig }).render().$el
@@ -1023,20 +1047,18 @@ define('io.ox/files/share/permissions', [
                             })
                         ),
                         // add message - not available for mail
-                        module !== 'mail' ?
-                            $('<div>').addClass('form-group').append(
-                                $('<label>').addClass('control-label sr-only').text(gt('Enter a Message to inform users')).attr({ for: guid = _.uniqueId('form-control-label-') }),
-                                new miniViews.TextView({
-                                    name: 'message',
-                                    model: dialogConfig
-                                }).render().$el.addClass('message-text').attr({
-                                    id: guid,
-                                    rows: 3,
-                                    //#. placeholder text in share dialog
-                                    placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
-                                })
-                            ) :
-                            $()
+                        $('<div>').addClass('form-group').append(
+                            $('<label>').addClass('control-label sr-only').text(gt('Enter a Message to inform users')).attr({ for: guid = _.uniqueId('form-control-label-') }),
+                            new miniViews.TextView({
+                                name: 'message',
+                                model: dialogConfig
+                            }).render().$el.addClass('message-text').attr({
+                                id: guid,
+                                rows: 3,
+                                //#. placeholder text in share dialog
+                                placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
+                            })
+                        )
                     )
                 );
 

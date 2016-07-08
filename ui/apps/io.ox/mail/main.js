@@ -369,10 +369,7 @@ define('io.ox/mail/main', [
                 right = app.pages.getPage('detailView');
 
             app.left = left.addClass('border-right');
-            app.right = right.addClass('mail-detail-pane').attr({
-                'role': 'complementary',
-                'aria-label': gt('Mail Details')
-            });
+            app.right = right.addClass('mail-detail-pane');
         },
 
         /*
@@ -533,11 +530,10 @@ define('io.ox/mail/main', [
             app.listControl = new ListViewControl({ id: 'io.ox/mail', listView: app.listView, app: app });
             app.left.append(
                 app.listControl.render().$el
-                    //#. items list (e.g. mails)
-                    .attr('aria-label', gt('Item list'))
+                    .attr('aria-label', gt('Messages'))
                     .find('.toolbar')
                     //#. toolbar with 'select all' and 'sort by'
-                    .attr('aria-label', gt('Item list options'))
+                    .attr('aria-label', gt('Messages options'))
                     .end()
             );
             // make resizable
@@ -649,6 +645,28 @@ define('io.ox/mail/main', [
                 fromTo.text(showTo ? gt('To') : gt('From'));
                 app.changingFolders = false;
             });
+        },
+
+        /*
+         * Auto subscribe mail folders
+         */
+        'auto-subscribe': function (app) {
+
+            function subscribe(data) {
+                if (data.module !== 'mail') return;
+                if (data.subscribed) {
+                    app.folderView.tree.select(data.id);
+                } else {
+                    folderAPI.update(data.id, { subscribed: true }, { silent: true }).done(function () {
+                        folderAPI.refresh().done(function () {
+                            app.folderView.tree.select(data.id);
+                        });
+                    });
+                }
+            }
+
+            app.folder.getData().done(subscribe);
+            app.on('folder:change', function (id, data) { subscribe(data); });
         },
 
         /*
@@ -781,6 +799,8 @@ define('io.ox/mail/main', [
 
                 // defer so that all selection events are triggered (e.g. selection:all)
                 _.defer(function () {
+                    // tabbed inbox / mail categories: absolute tab count is unknown
+                    var inTab = app.categories && app.categories.props.get('enabled') && app.categories.props.get('visible');
                     app.right.find('.multi-selection-message .message')
                         .empty()
                         .attr('id', 'mail-multi-selection-message')
@@ -790,7 +810,7 @@ define('io.ox/mail/main', [
                                 gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
                             ),
                             // inline actions
-                            id && total > list.length && !search && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
+                            id && total > list.length && !search && !inTab && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
                                 $('<div class="inline-actions">').append(
                                     gt(
                                         'There are %1$d messages in this folder; not all messages are displayed in the list. ' +
@@ -1478,6 +1498,12 @@ define('io.ox/mail/main', [
                 });
             }, 300);
 
+            // will be thrown if the external mail account server somehow does not support starttls anymore
+            folderAPI.on('error:MSG-0092', function (error) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                });
+            });
             folderAPI.on('error:FLD-0008', handleError);
             api.on('error:FLD-0008', handleError);
             api.on('error:IMAP-2041', function (e, error) {
@@ -1523,17 +1549,27 @@ define('io.ox/mail/main', [
                         .hide()
                         .append(
                             $('<div class="progress"><div class="progress-bar"></div></div>'),
-                            $('<div class="caption">')
-                        );
-
+                            $('<div class="caption">').append(
+                                $('<span>'),
+                                $('<a href="#" class="close" data-action="close" role="button" tabindex="1"><i class="fa fa-times"></i></a>')
+                            )
+                       );
                     api.queue.collection.on('progress', function (data) {
-                        if (!data.count) return $el.hide();
+                        if (!data.count) {
+                            // Workaround for Safari flex layout issue (see bug 46496)
+                            if (_.device('safari')) $el.closest('.window-sidepanel').find('.folder-tree')[0].scrollTop += 1;
+                            return $el.hide();
+                        }
                         var n = data.count,
                             pct = Math.round(data.pct * 100),
                             //#. %1$d is number of messages; %2$d is progress in percent
                             caption = gt.ngettext('Sending 1 message ... %2$d%', 'Sending %1$d messages ... %2$d%', n, n, pct);
                         $el.find('.progress-bar').css('width', pct + '%');
-                        $el.find('.caption').text(caption);
+                        $el.find('.caption span').text(caption);
+                        $el.find('[data-action="close"]').off();
+                        $el.find('[data-action="close"]').on('click', function () {
+                            if (_.isFunction(data.abort)) data.abort();
+                        });
                         $el.show();
                     });
 
@@ -1681,6 +1717,7 @@ define('io.ox/mail/main', [
                 mapper = { refresh: $.noop };
                 // init on first call of 'apply'
                 require(['io.ox/mail/categories/main'], function (cat) {
+                    app.categories = cat;
                     mapper = new Mapper(cat);
                 });
             }

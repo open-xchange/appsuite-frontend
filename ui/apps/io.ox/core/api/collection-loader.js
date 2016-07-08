@@ -83,7 +83,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
         function process(params, type) {
             // get offset
-            var offset = type === 'paginate' ? this.collection.length - 1 : 0;
+            var offset = type === 'paginate' ? Math.max(this.collection.length - 1, 0) : 0;
             // trigger proper event
             this.collection.trigger('before:' + type);
             // create callbacks
@@ -115,7 +115,11 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
             if (this.isBad(params.folder) || (collection.length > 0 && !collection.expired && collection.sorted && !collection.preserve)) {
                 // reduce too large collections
-                collection.reset(collection.first(collection.CUSTOM_PAGE_SIZE || this.PRIMARY_PAGE_SIZE), { silent: true });
+                var pageSize = collection.CUSTOM_PAGE_SIZE || this.PRIMARY_PAGE_SIZE;
+                if (collection.length > pageSize) {
+                    collection.reset(collection.first(pageSize), { silent: true });
+                    collection.complete = false;
+                }
                 _.defer(function () {
                     collection.trigger(collection.complete ? 'reset load cache complete' : 'reset load cache');
                 });

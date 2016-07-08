@@ -13,6 +13,7 @@
 
 define('io.ox/files/actions/save-as-pdf', [
 
+    'io.ox/core/folder/api',
     'io.ox/files/api',
     'io.ox/files/util',
 
@@ -24,7 +25,7 @@ define('io.ox/files/actions/save-as-pdf', [
 
     'gettext!io.ox/files'
 
-], function (FilesApi, FilesUtil, ErrorMessages, ext, dialogs, ConverterUtils, gt) {
+], function (FolderApi, FilesApi, FilesUtil, ErrorMessages, ext, dialogs, ConverterUtils, gt) {
 
     'use strict';
 
@@ -40,7 +41,9 @@ define('io.ox/files/actions/save-as-pdf', [
         //  data     = baton.data,
             model    = baton.models[0],
 
-        //  filename =     model.getDisplayName() + '.pdf';
+            isAccessWrite = FolderApi.can('create', FolderApi.pool.models[model.get('folder_id')].toJSON()),
+
+        //  filename = model.getDisplayName() + '.pdf';
             filename = model.getDisplayName(),
 
             len      = filename.length,
@@ -49,13 +52,15 @@ define('io.ox/files/actions/save-as-pdf', [
         filename = filename.substring(0, ((idx >= 0) ? idx : len)) + '.pdf';
 
       //console.log('+++ io.ox/files/actions/save-as-pdf :: data, model, filename : ', data, model, filename);
+      //console.log('+++ io.ox/files/actions/save-as-pdf :: isAccessWrite : ', isAccessWrite);
 
         function save(name) {
             return ConverterUtils.sendConverterRequest(model, {
 
                 documentformat: 'pdf',
                 saveas_filename: name,
-                saveas_folder_id: model.get('folder_id')
+              //saveas_folder_id: model.get('folder_id')
+                saveas_folder_id: (isAccessWrite ? model.get('folder_id') : require('settings!io.ox/files').get('folder/documents'))
 
             }).done(function (response) {
               //console.log('+++ save as pdf :: done - response : ', response);
@@ -63,6 +68,10 @@ define('io.ox/files/actions/save-as-pdf', [
                 if (('id' in response) && ('filename' in response)) {
 
                     FilesApi.trigger('add:file');
+
+                    if (!isAccessWrite) {
+                        notify('info', 'The PDF has been saved to "/drive/myfiles/documents" due to not having write access for the current folder.');
+                    }
                 } else {
                     notify('error', ErrorMessages.getConversionErrorMessage(response));
                 }

@@ -25,19 +25,20 @@
     "marked": "0.3.5",
     "mediaelement": "2.19.0",
     "mobiscroll": "2.16.1",
-    "moment": "^2.13.0",
+    "moment": "2.13.0",
     "moment-interval": "https://github.com/Open-Xchange-Frontend/moment-interval.git",
-    "moment-timezone": "^0.5.3",
+    "moment-timezone": "0.5.4",
     "open-sans-fontface": "1.2.1",
-    "pdfjs-dist": "1.1.366",
+    "pdfjs-dist": "1.4.20",
     "requirejs": "2.1.22",
     "swiper": "3.0.6",
     "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
-    "tinymce-dist": "4.3.11",
+    "tinymce-dist": "4.3.13",
     "typeahead.js": "0.10.5",
     "underscore": "1.8.3",
     "velocity": "1.2.2",
-    "clipboard": "1.5.10"
+    "clipboard": "1.5.10",
+    "unorm": "1.4.1"
   },
   "resolutions": {
     "backbone": "fda02db428c464badb12010c990622ee91f28a48"

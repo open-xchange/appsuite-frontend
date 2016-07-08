@@ -1,3 +1,4 @@
+/* eslint block-scoped-var:0 */
 var tests = [];
 for (var file in window.__karma__.files) {
     if (window.__karma__.files.hasOwnProperty(file)) {
@@ -18,7 +19,7 @@ require(['io.ox/core/extPatterns/stage'], function (Stage) {
     new Stage('io.ox/core/stages', {
         id: 'run_tests',
         index: 99999,
-        run: function (baton) {
+        run: function () {
             requirejs.config({
                 // Karma serves files from '/base/apps'
                 baseUrl: '/base/apps',
@@ -51,7 +52,7 @@ if (sinon) {
         'use strict';
 
         var modules = {}, usedby = {}, tree = {},
-            traverse, update, getConsumers, self;
+            traverse, getConsumers, self;
 
         /**
          * remember loaded modules/dependencies

@@ -52,7 +52,7 @@ define('io.ox/files/actions/add-storage-account', [
 
     function onClick(e) {
         e.preventDefault();
-        $(this).tooltip('hide');
+        $(this).tooltip('destroy');
         e.data.dialog.close();
         var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
         e.data.service.createInteractively(win);

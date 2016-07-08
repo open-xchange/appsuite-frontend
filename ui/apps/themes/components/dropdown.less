@@ -29,7 +29,11 @@
         top: 15%;
         left: 42px;
     }
-
+    & > li > a:focus {
+        color: @selected-color;
+        background: @selected-background;
+        outline: 0;
+    }
 }
 
 .dropdown-header, .dropdown-footer {
@@ -44,7 +48,7 @@
     padding: 3px 20px;
     font-size: 12px;
     line-height: 1.42857143;
-    color: #999;
+    color: #767676;
 
     // allow line breaks for dropdown description (using bs dropdown-header style)
     &.dropdown-description {

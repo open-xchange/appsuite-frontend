@@ -81,7 +81,7 @@ define('io.ox/core/api/attachment', [
          */
         create: function (options, data) {
             var self = this;
-            var params = { action: 'attach' },
+            var params = { action: 'attach', force_json_response: true },
                 json = {
                     module: options.module,
                     attached: options.id,

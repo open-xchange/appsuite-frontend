@@ -72,6 +72,12 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
                 //#. %1$d is the number
                 //#. %2$s is the unit (B, KB, MB etc.)
                 gt('%1$d %2$s', (Math.round(size * dp, 1) / dp), n_size[i]));
+        },
+
+        // String size in bytes
+        size: function (string, kBmode) {
+            var size = (encodeURI(string).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1);
+            return kBmode ? (size / 1024).toFixed() : size;
         }
 
     };

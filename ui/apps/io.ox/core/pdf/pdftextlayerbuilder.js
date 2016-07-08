@@ -17,8 +17,8 @@
 define('io.ox/core/pdf/pdftextlayerbuilder', [
     'io.ox/core/pdf/pdfpolyfill',
     'io.ox/core/pdf/pdfcustomstyle',
-    '3rd.party/pdfjs/pdf.combined'
-], function (Polyfill, CustomStyle, PDFJS) {
+    'pdfjs-dist/build/pdf.combined'
+], function (Polyfill, CustomStyle, PDFJSCombined) {
     'use strict';
 
     /*
@@ -207,6 +207,8 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
     // --------------------------
     // - PDFTextLayerBuilder.js -
     // --------------------------
+    var PDFJS = PDFJSCombined.PDFJS;
+
     var MAX_TEXT_DIVS_TO_RENDER = 100000;
 
     var NonWhitespaceRegexp = /\S/;

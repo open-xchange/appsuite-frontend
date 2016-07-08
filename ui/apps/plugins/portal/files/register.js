@@ -88,11 +88,15 @@ define('plugins/portal/files/register', [
                 if (e.type === 'keypress' && e.which !== 13) return;
                 // stop propagation to avoid side-popup
                 e.stopPropagation();
-                // open viewer
-                require(['io.ox/core/viewer/main'], function (Viewer) {
-                    var viewer = new Viewer();
-                    viewer.launch({ files: [e.data.file] });
+
+                require(['io.ox/files/actions'], function () {
+                    api.get(e.data.file).then(function (file) {
+                        var model = api.pool.get('detail').get(_.cid(file));
+                        var baton = new ext.Baton({ data: e.data.file, model: model, collection: model.collection });
+                        ext.point('io.ox/files/actions/viewer').invoke('action', this, baton);
+                    });
                 });
+
             });
 
             this.append(content);

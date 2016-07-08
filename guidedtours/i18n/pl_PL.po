@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-06 12:11-0800\n"
+"PO-Revision-Date: 2016-07-02 22:45+0200\n"
 "Last-Translator: jolanta <kontekst@kontekst.biz>\n"
 "Language-Team: Polish <>\n"
 "Language: pl_PL\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.7.7\n"
 
 #: apps/io.ox/tours/files.js:221 module:io.ox/tours
 msgid "Add another account"
@@ -200,13 +200,13 @@ msgstr "Zmiana ustawień"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
-"Wpisz treść wiadomości e-mail w obszarze głównym. Jeśli w opcjach został "
-"ustawiony format tekstu HTML, możesz sformatować tekst wiadomości. W tym "
-"celu zaznacz część tekstu i kliknij odpowiednią ikonę na pasku formatowania."
+"Do głównego obszaru wpisz treści wiadomości e-mail. Jeśli w opcjach wybrano "
+"format HTML, możesz wprowadzić formatowanie tekstu. Aby to zrobić, zaznacz "
+"część tekstu i kliknij ikonę na pasku formatowania."
 
 #: apps/io.ox/tours/mail.js:48 module:io.ox/tours
 msgid ""
@@ -329,8 +329,8 @@ msgstr ""
 "liście."
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "Jeśli kwadrat już nie ma być wyświetlany, kliknij krzyżyk."
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "Jeśli chcesz ukryć kwadrat, kliknij ikonę usuwania."
 
 #: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""

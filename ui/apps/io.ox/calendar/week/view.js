@@ -803,6 +803,7 @@ define('io.ox/calendar/week/view', [
                     self.timeLabelBar.css('width', ((list.length + 1) * 80) + 'px');
                     self.fulltimeCon.css('margin-left', ((list.length + 1) * 80) + 'px');
                     self.dayLabel.css('left', ((list.length + 1) * 80) + 'px');
+                    self.moreAppointmentsIndicators.css('left', ((list.length + 1) * 80) + 'px');
                 } else {
                     self.timeLabelBar.css('width', '');
                     self.fulltimeCon.css('margin-left', '');
@@ -1039,11 +1040,10 @@ define('io.ox/calendar/week/view', [
                     .addClass('weekday')
                     .attr({
                         date: d,
-                        title: tmpDate.format('l') + ', ' + gt('Click for whole day appointment'),
+                        title: gt('Create all-day appointment'),
                         role: 'button',
                         tabindex: 1,
-                        href: '#',
-                        'aria-label': tmpDate.format('l') + ', ' + gt('Click for whole day appointment')
+                        href: '#'
                     })
                     .text(gt.noI18n(tmpDate.format('ddd D')))
                     .width(100 / this.columns + '%');
@@ -1056,7 +1056,9 @@ define('io.ox/calendar/week/view', [
                         todayContainer.addClass(this.options.todayClass);
                     }
 
-                    day.addClass(this.options.todayClass);
+                    day
+                        .prepend($('<span class="sr-only">').text(gt('Today')))
+                        .addClass(this.options.todayClass);
 
                     todayContainer.append(this.timeline);
                     this.timeline.show();

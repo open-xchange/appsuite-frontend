@@ -42,12 +42,14 @@ define('io.ox/backbone/mini-views/quota', [
             this.$el.addClass('io-ox-quota-view');
             // react to update events
             quotaAPI.mailQuota.on('change', this.updateQuota.bind(this));
+            quotaAPI.fileQuota.on('change', this.updateQuota.bind(this));
             // hide element until data has been loaded
             this.$el.hide();
         },
 
         close: function () {
             quotaAPI.mailQuota.off('change', this.updateQuota);
+            quotaAPI.fileQuota.off('change', this.updateQuota);
         },
 
         getQuota: function (forceReload) {
@@ -65,6 +67,11 @@ define('io.ox/backbone/mini-views/quota', [
                     usage: o.usage
                 });
             }
+            if (forceReload && o.module === 'file') {
+                quotaAPI.requestFileQuotaUpdates();
+                quotaAPI.reload();
+            }
+
             return quotaAPI.load().then(function (result) {
                 return {
                     quota: result[module][quotaField],
@@ -76,7 +83,7 @@ define('io.ox/backbone/mini-views/quota', [
         updateQuota: function () {
             var o = this.options;
             var data = quotaAPI.getModel(o.module).toJSON();
-            if (!data[o.quotaField] || !data[o.usageField]) return;
+            if (data[o.quotaField] === undefined || data[o.usageField] === undefined) return;
             o.quota = data[o.quotaField];
             o.usage = data[o.usageField];
             this.render();

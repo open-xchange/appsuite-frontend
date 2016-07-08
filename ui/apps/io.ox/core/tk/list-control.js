@@ -34,6 +34,9 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
         },
 
         applySizeConstraints: function () {
+            // do nothing, if element is not visible, can't calculate sizes in this case
+            if (!this.$el.is(':visible')) return;
+
             var left = this.$el.parent(),
                 right = left.siblings('.rightside'),
                 isVertical = this.$('.resizebar.vertical').length > 0;

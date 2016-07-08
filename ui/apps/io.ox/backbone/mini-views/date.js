@@ -75,7 +75,7 @@ define('io.ox/backbone/mini-views/date', [
 
         onChange: function () {
             var d = this.getDate();
-            if (d !== null) {
+            if (d !== null && d !== undefined) {
                 // check if date is invalid (like feb 30) and prevent month jump
                 // phantomjs doesn't handle invalid dates in YYYY-MM-DD so we use MM/DD/YYYY
                 if (!d.isValid()) {
@@ -88,7 +88,7 @@ define('io.ox/backbone/mini-views/date', [
                 }
                 this.model.set(this.name, d.valueOf());
             } else {
-                this.model.set(this.name, null);
+                this.model.set(this.name, d);
                 //enable all
                 this.$el.find('.date').children().prop('disabled', false);
             }
@@ -100,7 +100,10 @@ define('io.ox/backbone/mini-views/date', [
                 date = this.$el.find('.date').val();
 
             // look for month and date; year doesn't matter, it's always set
-            if (month === '' || month === null || date === '' || date === null) return null;
+            // if one is set and the other is not we set to undefined, if both are not set we set to null
+            // this way we can see if a user added an incomplete date or wants to remove the date entirely (used in validation functions)
+            if ((month === '' || month === null) && (date === '' || date === null)) return null;
+            if ((month === '' || month === null) || (date === '' || date === null)) return undefined;
             return moment.utc({
                 year: parseInt(year, 10),
                 month: parseInt(month, 10),

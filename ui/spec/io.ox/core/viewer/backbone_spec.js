@@ -13,9 +13,8 @@
 
 define([
     'io.ox/core/viewer/backbone',
-    'io.ox/files/api',
-    'io.ox/core/moment'
-], function (backbone, FilesAPI, moment) {
+    'io.ox/files/api'
+], function (backbone, FilesAPI) {
 
     'use strict';
 

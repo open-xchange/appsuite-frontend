@@ -1,12 +1,13 @@
 # Antje Faber, 2011, 2013.
 # Daniele Ricciulli <daniele@bureau-cornavin.com>, 2009.
 # Monica Raggioli <monica@bureau-cornavin.com>, 2011, 2012.
-# Vincenzo Reale <vincenzo@bureau-cornavin.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015.
+# Vincenzo Reale <vincenzo@bureau-cornavin.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-06 14:19+0100\n"
+"PO-Revision-Date: 2016-07-01 11:11+0100\n"
 "Last-Translator: Vincenzo Reale <vincenzo@bureau-cornavin.com>\n"
 "Language-Team: Italian <it@bureau-cornavin.com>\n"
 "Language: it_IT\n"
@@ -198,7 +199,7 @@ msgstr "Modificare le impostazioni"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
@@ -219,7 +220,7 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js:59 module:io.ox/tours
 msgid "Enter the subject into the subject field."
-msgstr "Digita l'oggetto nel campo oggetto."
+msgstr "Digitare l'oggetto nel campo oggetto."
 
 #: apps/io.ox/tours/calendar.js:52 module:io.ox/tours
 msgid ""
@@ -330,9 +331,10 @@ msgstr ""
 "aperto in una finestra separata."
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
+msgid "If you no longer want to display a square, click the delete icon."
 msgstr ""
-"Se non si desidera visualizzare più un riquadro, fare clic sulla croce."
+"Se non si desidera visualizzare più un riquadro, fare clic sull'icona "
+"Elimina."
 
 #: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""

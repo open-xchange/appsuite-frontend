@@ -11,16 +11,16 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define([
-    'io.ox/tasks/edit/util',
-    'io.ox/core/extensions',
-    'io.ox/tasks/model',
-    'io.ox/core/tk/dialogs',
-    'fixture!io.ox/tasks/defaultTestData.json',
-    'io.ox/tasks/edit/view-template'
-], function (util, ext, model, dialogs, testData, template) {
+    'io.ox/tasks/edit/util'
+    // 'io.ox/core/extensions',
+    // 'io.ox/tasks/model',
+    // 'io.ox/core/tk/dialogs',
+    // 'fixture!io.ox/tasks/defaultTestData.json',
+    // 'io.ox/tasks/edit/view-template'
+], function (util /*, ext, model, dialogs, testData, template*/) {
     'use strict';
 
-    var extensionPoints = ext.point('io.ox/tasks/edit/view').list();
+    // var extensionPoints = ext.point('io.ox/tasks/edit/view').list();
 
     describe('Tasks edit utilities', function () {
         // describe('splitExtensionsByRow', function () {

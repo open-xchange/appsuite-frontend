@@ -318,7 +318,7 @@ define('io.ox/calendar/actions', [
         }
     });
 
-    new Action('io.ox/calendar/actions/freebusy', {
+    /*new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone !guest',
         requires: function () {
             return _.device('!smartphone');
@@ -345,15 +345,38 @@ define('io.ox/calendar/actions', [
                         var appointment = view.createAppointment();
 
                         if (appointment) {
+                            data.dialog.close();
                             appointment.folder = baton.app.folder.get();
                             ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
                                 edit.getApp().launch().done(function () {
                                     this.create(appointment);
                                 });
                             });
+                        } else {
+                            data.dialog.idle();
+                            require(['io.ox/core/yell'], function (yell) {
+                                yell('info', gt('Please select a time for the appointment'));
+                            });
                         }
                     });
                 });
+            });
+        }
+    });*/
+
+    new Action('io.ox/calendar/actions/freebusy', {
+        capabilities: 'freebusy !alone !guest',
+        requires: function () {
+            return _.device('!smartphone');
+        },
+        action: function (baton) {
+            var perspective = baton.app.getWindow().getPerspective(),
+                start_date = perspective && perspective.getStartDate ? perspective.getStartDate() : _.now();
+            ox.launch('io.ox/calendar/freebusy/main', {
+                baton: baton,
+                folder: baton.app.folder.get(),
+                participants: [{ id: ox.user_id, type: 1 }],
+                start_date: start_date
             });
         }
     });

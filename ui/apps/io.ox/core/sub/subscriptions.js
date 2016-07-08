@@ -257,7 +257,7 @@ define('io.ox/core/sub/subscriptions', [
         }
 
         function oauth(accountType) {
-            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
+            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600, resizable=yes, scrollbars=yes');
             return keychainAPI.createInteractively(accountType, win);
         }
 

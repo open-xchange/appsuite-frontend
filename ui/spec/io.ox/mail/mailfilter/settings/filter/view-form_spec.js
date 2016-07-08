@@ -92,10 +92,10 @@ define([
                 { test: 'allof', comparison: [] },
                 { test: 'anyof', comparison: [] },
                 { test: 'body', comparison: ['regex', 'is', 'contains', 'matches'] },
-                { test: 'currentdate', comparison: ['ge', 'le', 'is', 'contains','matches'] }
+                { test: 'currentdate', comparison: ['ge', 'le', 'is', 'contains', 'matches'] }
             ],
             actioncommands: ['keep', 'discard', 'redirect', 'move', 'reject', 'stop', 'vacation', 'notify', 'addflags', 'set']
-        }},
+        } },
         resultConfigLimited = { timestamp: 1378223251586, data: {
             tests: [
                 { test: 'address', comparison: ['user', 'detail'] },
@@ -111,13 +111,12 @@ define([
                 { test: 'body', comparison: ['regex', 'is', 'contains', 'matches'] }
             ],
             actioncommands: ['keep', 'discard', 'redirect', 'move', 'reject', 'stop', 'vacation', 'notify', 'set']
-        }},
+        } },
         model;
 
     describe('Mailfilter detailview without filters', function () {
 
         var $container = $('<div id="testNode">'),
-            addButton,
             $popup,
             collection;
 
@@ -136,7 +135,7 @@ define([
 
             filters.editMailfilter($container.empty()).done(function (filtercollection) {
                 collection = filtercollection;
-                addButton = $container.find('.btn-primary[data-action="add"]');
+                var addButton = $container.find('.btn-primary[data-action="add"]');
                 addButton.click();
                 $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
                 done();
@@ -939,7 +938,7 @@ define([
 
         it('should save the Move to folder action', function (done) {
 
-            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Move to folder') +')').click();
+            $popup.find('a[data-action="change-dropdown-value"]:contains(' + gt('Move to folder') + ')').click();
 
             setTimeout(function () {
                 $popup.find('li input[name="into"]').val('INBOX').change();
@@ -1109,9 +1108,7 @@ define([
     describe('Mailfilter detailview without filters and limited configuration', function () {
 
         var $container = $('<div id="testNode">'),
-            addButton,
-            $popup,
-            collection;
+            $popup;
 
         beforeEach(function (done) {
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
@@ -1126,9 +1123,8 @@ define([
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultConfigLimited));
             });
 
-            filters.editMailfilter($container.empty()).done(function (filtercollection) {
-                collection = filtercollection;
-                addButton = $container.find('.btn-primary[data-action="add"]');
+            filters.editMailfilter($container.empty()).done(function () {
+                var addButton = $container.find('.btn-primary[data-action="add"]');
                 addButton.click();
                 $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
                 done();
@@ -1183,7 +1179,6 @@ define([
     describe('Mailfilter detailview with filters', function () {
 
         var $container = $('<div id="testNode">'),
-            addButton,
             collection,
             $popup;
 

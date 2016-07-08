@@ -10,7 +10,7 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
+define(['io.ox/mail/compose/main'], function (compose) {
     'use strict';
 
     describe('Mail Compose', function () {

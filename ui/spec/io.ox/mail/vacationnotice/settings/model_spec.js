@@ -16,32 +16,32 @@ define(['io.ox/mail/vacationnotice/settings/model'], function (model) {
     'use strict';
 
     var dataViaModel = {
-        'activateTimeFrame': false,
-        'addresses': ['tester@open-xchange.com'],
-        'dateFrom': 1385655152016,
-        'dateUntil': 1386259952016,
-        'days': '7',
-        'id': 1,
-        'internal_id': 'vacation',
-        'primaryMail': 'tester@open-xchange.com',
-        'subject': 'subject',
-        'text': 'text',
-        'tester@open-xchange.com': true
-    },
-    dataPrepared = {
-        'actioncmds': [{
+            'activateTimeFrame': false,
             'addresses': ['tester@open-xchange.com'],
+            'dateFrom': 1385655152016,
+            'dateUntil': 1386259952016,
             'days': '7',
-            'id': 'vacation',
+            'id': 1,
+            'internal_id': 'vacation',
+            'primaryMail': 'tester@open-xchange.com',
             'subject': 'subject',
-            'text': 'text'
-        }],
-        'active': true,
-        'id': 1,
-        'test': {
-            'id': 'true'
-        }
-    };
+            'text': 'text',
+            'tester@open-xchange.com': true
+        },
+        dataPrepared = {
+            'actioncmds': [{
+                'addresses': ['tester@open-xchange.com'],
+                'days': '7',
+                'id': 'vacation',
+                'subject': 'subject',
+                'text': 'text'
+            }],
+            'active': true,
+            'id': 1,
+            'test': {
+                'id': 'true'
+            }
+        };
 
     describe('Mailfilter Vacationnotice', function () {
 

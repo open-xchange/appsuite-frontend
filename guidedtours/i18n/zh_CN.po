@@ -2,8 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-09 22:21+1000\n"
+"PO-Revision-Date: 2016-07-02 18:59+1000\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -11,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.8\n"
 
 #: apps/io.ox/tours/files.js:221 module:io.ox/tours
 msgid "Add another account"
@@ -177,12 +178,12 @@ msgstr "编辑设定"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
 "在主要区域里输入电子邮件文本。如果文本格式在选项里设置成 HTML，您能格式化电子"
-"邮件文本。如此选择一个文本部分后在格式化条里单击一个图标。"
+"邮件文本。为此选择一个文本部分后在格式化条里单击一个图标。"
 
 #: apps/io.ox/tours/mail.js:48 module:io.ox/tours
 msgid ""
@@ -295,8 +296,8 @@ msgid ""
 msgstr "如果在列表里的一个电子邮件上单击，会在一个分离的窗口里打开电子邮件。"
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "如果您不再要显示一个方块，单击交叉。"
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "如果您不再要显示一个方块，单击删除图标。"
 
 #: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""

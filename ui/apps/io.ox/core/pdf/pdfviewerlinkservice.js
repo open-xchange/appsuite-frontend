@@ -91,6 +91,9 @@ define('io.ox/core/pdf/pdfviewerlinkservice', [
                             self._pagesRefCache[destRef.num + ' ' + destRef.gen + ' R'] : (destRef + 1);
 
                     if (pageNumber) {
+                        if (pageNumber > self.pagesCount) {
+                            pageNumber = self.pagesCount;
+                        }
                         self.scrollPageIntoView(pageNumber, dest);
 
                         if (self.pdfHistory) {
@@ -161,7 +164,7 @@ define('io.ox/core/pdf/pdfviewerlinkservice', [
                         return pdfOpenParams;
                     }
                 }
-                return '';
+                return this.getAnchorUrl('');
             },
 
             /**
@@ -230,12 +233,8 @@ define('io.ox/core/pdf/pdfviewerlinkservice', [
                     }
 
                     if ('pagemode' in params) {
-                        if (params.pagemode === 'thumbs' || params.pagemode === 'bookmarks' ||
-                                params.pagemode === 'attachments') {
-                            this.switchSidebarView((params.pagemode === 'bookmarks' ? 'outline' : params.pagemode), true);
-                        } else if (params.pagemode === 'none' && this.sidebarOpen) {
-                            document.getElementById('sidebarToggle').click();
-                        }
+                        // trigger page mode event (bookmarks, outline, thumbs, attachments or none)
+                        this.eventHub.trigger('viewer:sidebar:pagemode', params.pagemode);
                     }
                 } else if (/^\d+$/.test(hash)) { // page number
                     this.scrollPageIntoView(hash);

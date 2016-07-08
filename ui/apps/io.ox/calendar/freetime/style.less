@@ -11,10 +11,18 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
+/*.freetime-popup {
+    padding: 16px;
+}
+
 .freetime-view-header {
-    display: flex;
-    display: -webkit-flex;
+
     padding: 16px 16px 0px 16px;
+
+    .header-row1,.header-row2 {
+        display: flex;
+        display: -webkit-flex;
+    }
     // use min height or flex grow produces overlap when participant list is large
     min-height: 83px;
 
@@ -28,12 +36,41 @@
     }
 
     .freetime-participants-view-header {
-        min-width: 300px;
+
+        &.row2 {
+            min-width: 255px;
+            max-width: 255px;
+
+            @media all and (max-width: 850px) {
+                min-width: 185px;
+                max-width: 185px;
+            }
+        }
+        &.row1 {
+            min-width: 350px;
+            max-width: 350px;
+        }
+
+
+        .add-participants-wrapper {
+            padding-left: 0;
+
+            // maximize content
+            .tt-suggestion {
+                padding: 3px;
+                font-size: 13px;
+
+                .participant-image {
+                    margin-top: 8px;
+                    width: 38px;
+                    height: 38px;
+                }
+            }
+        }
 
         legend {
             margin-bottom: 0;
             padding-top: 16px;
-            padding-left: 15px;
             border-bottom: 1px solid #ccc;
         }
     }
@@ -48,7 +85,7 @@
             display: flex;
             display: -webkit-flex;
             border-bottom: 1px solid #ccc;
-            padding-top: 13px;
+            padding-top: 18px;
             font-size: 13px;
 
             .freetime-hour {
@@ -56,6 +93,9 @@
                 border-left: 1px solid #ccc;
                 text-align: center;
                 cursor: pointer;
+                &.hover {
+                    text-decoration: underline;
+                }
 
                 &.working-hour {
                     font-weight: bold;
@@ -76,33 +116,43 @@
     display: -webkit-flex;
 
     .freetime-participants-view-body {
-        width: 300px;
-        padding-top: 8px;
+        width: 255px;
+        padding: 8px 0;
         font-size: 13px;
 
-        .participant-image {
-            margin-top: 8px;
-            width: 38px;
-            height: 38px;
+        @media all and (max-width: 850px) {
+            width: 185px;
         }
 
-        .participant-wrapper {
+        .participantsrow {
             padding-left: 0;
+            margin-bottom: 0;
+
+            .participant-image {
+                margin-top: 8px;
+                width: 38px;
+                height: 38px;
+            }
+
+            .participant-wrapper {
+                padding-left: 0;
+            }
         }
     }
 
     .freetime-time-view-body {
         flex: 1;
         position: relative;
-        height: 100%;
 
         // copied from bootstrap; but without own background-color; mixins do not work here; therefore copy/paste
         .striped {
-            background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255,255,255,.15)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255,255,255,.15)), color-stop(.75, rgba(255,255,255,.15)), color-stop(.75, transparent), to(transparent));
-            background-image: -webkit-linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
-            background-image: -moz-linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
-            background-image: -o-linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
-            background-image: linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+            background-image: -webkit-repeating-linear-gradient(45deg, transparent, transparent 25px, rgba(255,255,255,0.15) 25px, rgba(255,255,255,0.15) 50px);
+            background-image: -moz-repeating-linear-gradient(45deg, transparent, transparent 25px, rgba(255,255,255,0.15) 25px, rgba(255,255,255,0.15) 50px);
+            background-image: -o-repeating-linear-gradient(45deg, transparent, transparent 25px, rgba(255,255,255,0.15) 25px, rgba(255,255,255,0.15) 50px);
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 25px, rgba(255,255,255,0.15) 25px, rgba(255,255,255,0.15) 50px);
+            background-repeat: repeat;
+            background-size: 141px 141px;
+
         }
 
         .freetime-table {
@@ -128,10 +178,10 @@
             .freetime-lasso {
                 background-color: #999;
                 opacity: 0.5;
-                bottom: 0;
-                top: 8px;
+                bottom: 0px;
+                top: 0px;
                 position: absolute;
-                z-index: 3;
+                z-index: 2;
             }
         }
         .appointments {
@@ -150,21 +200,24 @@
                 .appointment {
                     height: 100%;
                     position: absolute;
+                    overflow: hidden;
                     cursor: default;
                     border-left: 1px solid rgba(0, 0, 0, 0.2);
-                    z-index: 2;
+                    z-index: 3;
+                    padding: 2px;
 
                     &.fulltime {
                         height: 50%;
                     }
 
                     .title {
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
+                        line-height: 13px;
+                        font-weight: normal;
                         overflow: hidden;
+                        word-break: break-word;
                     }
                 }
             }
         }
     }
-}
+}*/

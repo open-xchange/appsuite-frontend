@@ -156,12 +156,15 @@
 <p>Nelle viste di calendario <span class="guilabel"><strong>Giorno</strong></span>, <span class="guilabel"><strong>Settimana lavorativa</strong></span> e <span class="guilabel"><strong>Settimana</strong></span> la data e la settimana di calendario sono visualizzate accanto all'icona <span class="guibutton"><strong>Sfoglia</strong></span>.</p>
 <p>Facendo clic su una data, si aprirà un mini calendario che aiuta a selezionare un'altra data.</p>
 <p>L'area tra la data e il foglio di calendario può essere utilizzata per <a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">creare</a> appuntamenti di un giorno intero.</p>
-<p>A sinistra del foglio di calendario, il fuso orario è visualizzato sopra le date. Per aggiungere un colonna ulteriore con le date in altri fusi orari, fare clic sul fuso orario.</p>
+<p>A sinistra del foglio di calendario, il fuso orario è visualizzato sopra le date. Per aggiungere un colonna ulteriore con date in altri fusi orari, fare clic sul fuso orario.</p>
 <p>La riga rossa nel fogli di calendario visualizza l'ora corrente.</p>
 </li>
 <li class="listitem"><p>Nelle viste <span class="guilabel"><strong>Settimana lavorativa</strong></span> e <span class="guilabel"><strong>Settimana</strong></span> e <span class="guilabel"><strong>Mese</strong></span>, il giorno corrente nel foglio di calendario è evidenziato con uno sfondo rosso.</p></li>
 <li class="listitem"><p>Nella vista <span class="guilabel"><strong>Mese</strong></span>, il mese e l'anno selezionati sono visualizzati sopra il foglio di calendario.</p></li>
-<li class="listitem"><p> In base allo stato di conferma, gli appuntamenti sono evidenziati con <a class="link" href="ox.appsuite.user.sect.calendar.view.appointments.html#ox.appsuite.user.concept.appointments.color">colori</a> diversi.</p></li>
+<li class="listitem">
+<p> In base allo stato di conferma e al colore del tema, gli appuntamenti sono evidenziati con <a class="link" href="ox.appsuite.user.sect.calendar.view.appointments.html#ox.appsuite.user.concept.appointments.color">colori</a> diversi.</p>
+<p>Se ci sono ulteriori appuntamenti sopra o sotto il foglio di calendario visibile, delle frecce sono visualizzate nella parte superiore o in quella inferiore del foglio di calendario per il relativo giorno.</p>
+</li>
 </ul></div>
 <p>Facendo clic su un appuntamento, i dati sono mostrati nella <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="Finestra a comparsa">finestra a comparsa</a>.</p>
 <div class="itemizedlist">
@@ -190,7 +193,7 @@
 <div class="itemizedlist">
 <a name="ox.appsuite.user.reference.calendar.gui.popup.related"></a><p class="title">Argomenti correlati</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Istruzioni per i pulsanti e per le icone sono disponibili qui:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Modificare gli appuntamenti">Modificare gli appuntamenti</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Cambiare lo stato di un appuntamento">Cambiare lo stato di un appuntamento</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.2. Creare appuntamenti con seguito">Creare appuntamenti con seguito</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Eliminare gli appuntamenti">Eliminare gli appuntamenti</a></span>
+<li class="listitem" style="list-style-type: none"><p>Istruzioni per i pulsanti e per le icone sono disponibili qui:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Modificare gli appuntamenti">Modificare gli appuntamenti</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Cambiare lo stato di un appuntamento">Cambiare lo stato di un appuntamento</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.2. Creare un appuntamento con seguito">Creare un appuntamento con seguito</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Eliminare gli appuntamenti">Eliminare gli appuntamenti</a></span>
             </p></li>
 <li class="listitem" style="list-style-type: none"><p>Le istruzioni per le funzioni nel menu <span class="guibutton"><strong>Azioni</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calebdar.gui.popup.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> sono disponibili qui:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Stampare gli appuntamenti">Stampare gli appuntamenti</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Spostare gli appuntamenti in un'altra cartella">Spostare gli appuntamenti in un'altra cartella</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Modificare più appuntamenti contemporaneamente">Modificare più appuntamenti contemporaneamente</a></span>
             </p></li>
@@ -294,15 +297,22 @@
 <a name="ox.appsuite.user.reference.calendar.gui.create"></a><p class="title"><b>Vista per creare o modificare</b></p>
 <p>Quando si compone un nuovo appuntamento o si modifica un appuntamento esistente, i seguenti elementi sono visualizzati in una nuova pagina.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>In base alla configurazione del groupware, gli elementi che possono essere sia nella parte alta che in quella bassa dello schermo.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p>Il pulsante <span class="guibutton"><strong>Crea</strong></span>. Facendo clic su questo pulsante, i dati dell'appuntamento corrente sono salvati e la pagina di modifica viene chiusa.</p></li>
 <li class="listitem"><p>Il pulsante <span class="guibutton"><strong>Scarta</strong></span>. Per annullare la creazione o la modifica, fare clic su questo pulsante.</p></li>
 <li class="listitem"><p>Il pulsante accanto a <span class="guibutton"><strong>Calendario</strong></span> mostra la cartella di calendario in cui sarà creato l'appuntamento. Per creare l'appuntamento in un'altra cartella di calendario, fare clic su questo pulsante.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
 <li class="listitem"><p>Il campo di inserimento <span class="guibutton"><strong>Oggetto</strong></span>. Digitare l'oggetto in questo campo. L'oggetto viene visualizzato come titolo dell'appuntamento nelle viste.</p></li>
 <li class="listitem"><p>Il pulsante <span class="guibutton"><strong>Posizione</strong></span>. Qui, è possibile digitare la posizione in cui avrà luogo l'appuntamento.</p></li>
 <li class="listitem">
 <p>I campi di inserimento <span class="guibutton"><strong>Inizia il</strong></span> e <span class="guibutton"><strong>Finisce il</strong></span>. Impostare le date di inizio e di fine dell'appuntamento. Facendo clic su di essi, si aprirà una finestra per selezionare la data. </p>
 <p>Se la casella di selezione <span class="guibutton"><strong>Tutto il giorno</strong></span> è disabilitata, è possibile impostare l'ora di inizio e di fine.</p>
-<p>Facendo clic sul pulsante del fuso orario accanto all'ora, l'orario è visualizzato in diversi fusi orari. È possibile <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. Gestire i fusi orari preferiti">impostare i fusi orari utilizzati con frequenza come preferiti</a> nelle impostazioni del calendario.</p>
+<p>Facendo clic sul pulsante del fuso orario accanto all'ora, l'orario è visualizzato in diversi fusi orari. È possibile impostare i fusi orari utilizzati con frequenza <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. Gestire i fusi orari preferiti">come preferiti</a> nelle impostazioni del calendario.</p>
 </li>
 <li class="listitem"><p>La casella di selezione <span class="guibutton"><strong>Tutto il giorno</strong></span>. Abilitare questa casella se l'appuntamento durerà tutta la giornata.</p></li>
 <li class="listitem"><p>Il pulsante <span class="guibutton"><strong>Trova tempo libero</strong></span>. Apre la vista di pianificazione. In questa vista, è possibile trovare tempo libero quando si pianifica un appuntamento con diversi partecipanti.</p></li>

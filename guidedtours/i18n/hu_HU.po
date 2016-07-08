@@ -1,10 +1,11 @@
 # Gabor Kelemen <gabor@bureau-cornavin.com>, 2012, 2013, 2014.
-# Kálmán Kéménczy <kalman@bureau-cornavin.com>, 2013, 2014.
+# Kálmán Kéménczy <kalman@bureau-cornavin.com>, 2013, 2014, 2015, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-07 13:17+0100\n"
+"PO-Revision-Date: 2016-07-01 20:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu_HU\n"
@@ -78,7 +79,7 @@ msgstr "Csoportmunka"
 
 #: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
-msgstr "Új levél szerkesztése"
+msgstr "Új levél írása"
 
 #: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
@@ -193,7 +194,7 @@ msgstr "Beállítások szerkesztése"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
@@ -319,10 +320,10 @@ msgstr ""
 "ablakban nyílik meg."
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
+msgid "If you no longer want to display a square, click the delete icon."
 msgstr ""
 "Ha nem akarja továbbiakban megjeleníteni a négyzetet, akkor kattintson a "
-"keresztre."
+"törlés ikonra."
 
 #: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""
@@ -601,13 +602,12 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js:34 module:io.ox/tours
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
-msgstr "Új levél írásához kattintson felül az Új levél szerkesztése ikonra."
+msgstr "Új levél írásához kattintson felül az Új levél írása ikonra."
 
 #: apps/io.ox/tours/intro.js:73 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
-"Új levél írásához kattintson az eszköztárban található Új levél szerkesztése "
-"ikonra."
+"Új levél írásához kattintson az eszköztárban található Új levél írása ikonra."
 
 #: apps/io.ox/tours/calendar.js:35 module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."

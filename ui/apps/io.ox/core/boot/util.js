@@ -27,7 +27,8 @@ define('io.ox/core/boot/util', [], function () {
             $('<div role="alert" class="selectable-text alert alert-info">').append(
                 node
             )
-        ).show();
+        );
+
     }
     var feedbackNode = null;
     // var feedbackType = null;

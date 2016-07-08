@@ -125,7 +125,7 @@ define('io.ox/core/folder/contextmenu', [
             addLink(this, {
                 action: 'markfolderread',
                 data: { folder: baton.data.id, app: baton.app },
-                enabled: true,
+                enabled: api.can('write', baton.data),
                 handler: actions.markFolderSeen,
                 text: gt('Mark all messages as read')
             });
@@ -141,7 +141,7 @@ define('io.ox/core/folder/contextmenu', [
             addLink(this, {
                 action: 'move-all-messages',
                 data: { id: baton.data.id },
-                enabled: true,
+                enabled: api.can('delete', baton.data),
                 handler: actions.moveAll.bind(actions, baton.data.id),
                 text: gt('Move all messages')
             });
@@ -494,7 +494,7 @@ define('io.ox/core/folder/contextmenu', [
 
                 var tempLink, node, self = this;
 
-                node = $('<li>').append(
+                node = $('<li role="presentation">').append(
                     tempLink = a('subscriptions', gt('New subscription'))
                 );
 

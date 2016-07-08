@@ -27,7 +27,7 @@ define('plugins/notifications/mail/register', [
     function filter(model) {
         // ignore virtual/all (used by search, for example) and unsubscribed folders
         if (!model.get('subscribed') || (/^default0\/virtual/.test(model.id))) return false;
-        return /^default0\D/.test(model.id) && !account.is('spam|trash|unseen', model.id) && folderApi.getSection(model.get('type') === 'private');
+        return /^default0\D/.test(model.id) && !account.is('spam|trash|unseen', model.id) && (folderApi.getSection(model.get('type')) === 'private');
     }
 
     var lastCount = -1;

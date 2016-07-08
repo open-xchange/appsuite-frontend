@@ -14,13 +14,13 @@
 //contains matchers to be used with objects
 if (jasmine) {
     var objectMatchers = {
-            //used to see if a key is present. undefined, null or false do still pass this test
-            toHaveKey: function (key) {
-                var notText = this.isNot ? ' not' : '';
-                this.message = function () { return 'Expected ' + JSON.stringify(this.actual) + ' to' + notText + ' contain ' + key + ' .'; };
-                return key in this.actual;
-            }
-        };
+        //used to see if a key is present. undefined, null or false do still pass this test
+        toHaveKey: function (key) {
+            var notText = this.isNot ? ' not' : '';
+            this.message = function () { return 'Expected ' + JSON.stringify(this.actual) + ' to' + notText + ' contain ' + key + ' .'; };
+            return key in this.actual;
+        }
+    };
 
     beforeEach(function () {
         this.addMatchers(objectMatchers);

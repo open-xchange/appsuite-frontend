@@ -2,8 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-07 20:02+1100\n"
+"PO-Revision-Date: 2016-07-01 16:43+1000\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -193,13 +194,13 @@ msgstr "Изменение настроек"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
-"В главной области введите текст письма. Если выбран формат HTML, текст может "
-"быть отформатирован: выделите фрагмент и выберите функцию в панели "
-"форматирования."
+"Введите текст письма в главной области. Если в настройках письма выбран "
+"формат HTML, вы сможете отформатировать текст сообщения. Для этого выделите "
+"фрагмент и выберите значок на панели форматирования."
 
 #: apps/io.ox/tours/mail.js:48 module:io.ox/tours
 msgid ""
@@ -319,8 +320,8 @@ msgstr ""
 "в списке."
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "Чтобы закрыть секцию, нажмите крестик."
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "Если вы больше не хотите видеть секцию, нажмите на значок удаления."
 
 #: apps/io.ox/tours/intro.js:66 module:io.ox/tours
 msgid ""

@@ -308,9 +308,12 @@ define('io.ox/mail/settings/pane', [
             if (!capabilities.has('mail_categories')) return;
 
             var list = [
-                { label: gt('Ask'), value: 'dialog' },
-                { label: gt('Always'), value: 'always' },
-                { label: gt('Never'), value: 'never' }
+                //#. possible setting for 'Should only the current message or all messages of the sender be moved'
+                { label: gt('Please ask me every time'), value: 'dialog' },
+                //#. possible setting for 'Should only the current message or all messages of the sender be moved'
+                { label: gt('Yes, always move them all'), value: 'always' },
+                //#. possible setting for 'Should only the current message or all messages of the sender be moved'
+                { label: gt('No, only move selected message(s)'), value: 'never' }
             ];
             if (!settings.get('categories-extra/generalize')) settings.set('categories-extra/generalize', _.first(list).value);
 
@@ -318,15 +321,15 @@ define('io.ox/mail/settings/pane', [
                 fieldset(
                     gt('Inbox Tabs'),
                     // enable
+                    $('<div class="help-block">').text('Please note that conversations are not available when tabbed inbox is activated.'),
                     settings.get('categories/forced') ? $() : checkbox(
                         gt('Show Tabs for inbox'),
                         new mini.CheckboxView({ name: 'categories/enabled', model: settings }).render().$el
                     ),
-                    // TODO: middleware has to adjust a logical part so that we can store this prop via jslob
                     // default behavior after move
-                    $('<dev class="col-xs-12 col-md-6">').append(
+                    $('<div class="col-xs-12 col-md-6">').append(
                         $('<div class="row">').append(
-                            $('<label>').attr({ 'for': 'categories-generalize' }).text(gt('Move all mails from a sender')),
+                            $('<label>').attr({ 'for': 'categories-generalize' }).text(gt('Should only the current message or all messages of the sender be moved')),
                             new mini.SelectView({ list: list, name: 'categories-extra/generalize', model: settings, id: 'categories-generalize', className: 'form-control' }).render().$el
                         )
                     )

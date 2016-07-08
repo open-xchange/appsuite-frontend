@@ -38,7 +38,9 @@ define('io.ox/mail/accounts/settings', [
         //TOOD: hack to avoid horizontal scrollbar
         myView.dialog.getBody().css('padding-right', '15px');
 
-        myView.dialog.append(
+        myView.dialog.header(
+            $('<h2>').text(myModel.get('id') || myModel.get('id') === 0 ? gt('Edit mail account') : gt('Add mail account'))
+        ).append(
             myView.render().el
         )
         .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
@@ -51,14 +53,19 @@ define('io.ox/mail/accounts/settings', [
         myModel.on('validated', function (valid, model, error) {
             var $form = myView.$el;
             $form.find('.error').removeClass('error');
+            $form.find('.help-block').prev().removeAttr('aria-invalid aria-describedby');
             $form.find('.help-block').remove();
 
             _.each(error, function (message, key) {
                 var $field = myView.$el.find('#' + key).parent(),
                     $row = $field.closest('.form-group'),
-                    helpBlock = $('<div class="help-block error">');
+                    helpBlock = $('<div class="help-block error">').attr('id', _.uniqueId('error-help-'));
                 helpBlock.append($.txt(message));
                 $field.append(helpBlock);
+                helpBlock.prev().attr({
+                    'aria-invalid': true,
+                    'aria-describedby': helpBlock.attr('id')
+                });
                 $row.addClass('error');
             });
         });
@@ -121,6 +128,15 @@ define('io.ox/mail/accounts/settings', [
                     $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password" tabindex="1">')
                 )
             );
+        }
+    });
+
+    ext.point('io.ox/mail/add-account/wizard').extend({
+        id: 'security-hint',
+        index: 300,
+        draw: function () {
+            if (window.location.protocol !== 'https:') return;
+            this.append($('<div class="help-block">').text('Your credentials will be sent over a secure connection only'));
         }
     });
 
@@ -214,11 +230,28 @@ define('io.ox/mail/accounts/settings', [
             );
         },
 
-        autoconfigApiCall = function (args, newMailaddress, newPassword, popup, def) {
+        configureManuallyDialog = function (args, newMailaddress) {
+            new dialogs.ModalDialog({ width: 400 })
+                .text(gt('Auto-configuration failed. Do you want to configure your account manually?'))
+                .addPrimaryButton('yes', gt('Yes'), 'yes', { tabIndex: 1 })
+                .addButton('no', gt('No'), 'no', { tabIndex: 1 })
+                .on('yes', function () {
+                    var data = {};
+                    data.primary_address = newMailaddress;
+                    if (args) {
+                        args.data = data;
+                        createExtpointForNewAccount(args);
+                    }
+                })
+                .show();
+        },
+
+        autoconfigApiCall = function (args, newMailaddress, newPassword, popup, def, forceSecure) {
 
             api.autoconfig({
                 'email': newMailaddress,
-                'password': newPassword
+                'password': newPassword,
+                'force_secure': !!forceSecure
             })
             .done(function (data) {
                 if (data.login) {
@@ -228,24 +261,28 @@ define('io.ox/mail/accounts/settings', [
                     delete data.transport_login;
                     delete data.transport_password;
                     validateMailaccount(data, popup, def);
+                } else if (forceSecure) {
+                    new dialogs.ModalDialog({ async: true, width: 400 })
+                        .text(gt('Cannot establish secure connection. Do you want to proceed anyway?'))
+                        .addPrimaryButton('yes', gt('Yes'), 'yes', { tabIndex: 1 })
+                        .addButton('no', gt('No'), 'no', { tabIndex: 1 })
+                        .on('yes', function () {
+                            autoconfigApiCall(args, newMailaddress, newPassword, this, def, false);
+                        })
+                        .on('no', function () {
+                            def.reject();
+                            this.close();
+                        })
+                        .show();
+                    popup.close();
                 } else {
-                    data = {};
-                    data.primary_address = newMailaddress;
-                    if (args) {
-                        args.data = data;
-                        createExtpointForNewAccount(args);
-                    }
+                    configureManuallyDialog(args, newMailaddress);
                     popup.close();
                     def.reject();
                 }
             })
             .fail(function () {
-                var data = {};
-                data.primary_address = newMailaddress;
-                if (args) {
-                    args.data = data;
-                    createExtpointForNewAccount(args);
-                }
+                configureManuallyDialog(args, newMailaddress);
                 popup.close();
                 def.reject();
             });
@@ -283,7 +320,7 @@ define('io.ox/mail/accounts/settings', [
 
                     if (myModel.isMailAddress(newMailaddress) === undefined) {
                         drawBusy(alertPlaceholder);
-                        autoconfigApiCall(args, newMailaddress, newPassword, this, def);
+                        autoconfigApiCall(args, newMailaddress, newPassword, this, def, true);
                     } else {
                         var message = gt('This is not a valid mail address');
                         drawAlert(alertPlaceholder, message);

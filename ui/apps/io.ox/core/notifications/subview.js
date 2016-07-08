@@ -167,7 +167,7 @@ define('io.ox/core/notifications/subview', [
     var Subview = Backbone.View.extend({
         tagName: 'div',
         events: {
-            'click .item': 'onClick',
+            'click .notification-info': 'onClick',
             'keydown .item': 'onClick',
             'click [data-action="clear-all"]': 'hideAll'
         },
@@ -380,10 +380,11 @@ define('io.ox/core/notifications/subview', [
         onClick: function (e) {
             if ((!(this.model.get('detailview'))) ||
                 ((e.type !== 'click') && (e.which !== 13)) ||
-                $(e.target).filter('.dropdown, select, a, button, .btn').length > 0) {
+                $(e.target).filter('.dropdown, select, a:not(.notification-info), button, .btn').length > 0) {
                 return;
             }
-            var cid = String($(e.currentTarget).data('cid')),
+
+            var cid = String($(e.currentTarget).parent().data('cid')),
                 api = this.model.get('api'),
                 fullModel = this.model.get('fullModel'),
                 sidepopupNode = notifications.nodes.sidepopup,

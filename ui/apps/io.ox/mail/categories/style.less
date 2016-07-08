@@ -89,6 +89,7 @@ body.dragging .categories-toolbar-container {
             display: flex;
             position: static;
             border-bottom: 0;
+            width: ~"calc(100% - 55px)";
         }
 
         .classic-toolbar.actions {
@@ -112,6 +113,7 @@ body.dragging .categories-toolbar-container {
             flex-direction: column;
             // vertical separation
             max-width: 160px;
+            min-width: 0;
 
             &.selected { background: white; }
 

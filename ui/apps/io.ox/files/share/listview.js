@@ -48,6 +48,7 @@ define('io.ox/files/share/listview', [
             this.listenTo(ox, 'refresh^', this.reload);
             this.listenTo(this.model, 'change:sort change:order', this.sortBy);
 
+            this.sortBy();
             var self = this;
 
             // Doubleclick handler

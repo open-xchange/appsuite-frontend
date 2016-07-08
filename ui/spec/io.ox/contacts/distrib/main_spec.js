@@ -22,11 +22,7 @@ define([
             { display_name: 'otto.xentner', mail: 'otto.xentner@open-xchange.com', mail_field: 0 },
             { display_name: 'Otto Xentner1', mail: 'otto.xentner1@open-xchange.com', mail_field: 0 }
         ],
-        input = [ 'otto.xentner@open-xchange.com', '"Otto Xentner1" <otto.xentner1@open-xchange.com>'],
-        searchResult = {
-            timestamp: 1379403021960,
-            data: []
-        };
+        input = ['otto.xentner@open-xchange.com', '"Otto Xentner1" <otto.xentner1@open-xchange.com>'];
 
     /*
      * Suite: Distributionlist Test

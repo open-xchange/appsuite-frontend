@@ -297,8 +297,8 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/mark-unread', {
         requires: function (e) {
-            // must be top-level
-            if (!e.collection.has('toplevel', 'modify')) return;
+            // must be top-level; change seen flag
+            if (!e.collection.has('toplevel', 'change:seen')) return false;
             // partiallySeen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || !util.isUnseen(obj);
@@ -313,8 +313,8 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/mark-read', {
         requires: function (e) {
-            // must be top-level
-            if (!e.collection.has('toplevel', 'modify')) return;
+            // must be top-level; change seen flag
+            if (!e.collection.has('toplevel', 'change:seen')) return false;
             // partiallyUnseen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || util.isUnseen(obj);
@@ -543,6 +543,26 @@ define('io.ox/mail/actions', [
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
                 wizard.run();
             });
+        }
+    });
+
+    new Action('io.ox/mail/compose/attachment/shareAttachmentsEnable', {
+        capabilities: 'infostore',
+        requires: function (options) {
+            return !options.baton.view.shareAttachmentsIsActive();
+        },
+        multiple: function (list, baton) {
+            baton.model.set('enable', true);
+        }
+    });
+
+    new Action('io.ox/mail/compose/attachment/shareAttachmentsDisable', {
+        capabilities: 'infostore',
+        requires: function (options) {
+            return options.baton.view.shareAttachmentsIsActive();
+        },
+        multiple: function (list, baton) {
+            baton.model.set('enable', false);
         }
     });
 
@@ -819,6 +839,22 @@ define('io.ox/mail/actions', [
         mobile: 'high',
         label: gt('View attachment'),
         ref: 'io.ox/mail/actions/viewer'
+    }));
+
+    ext.point('io.ox/mail/attachment/shareAttachments').extend(new links.Link({
+        id: 'shareAttachmentsEnable',
+        index: 100,
+        //#. %1$s is usually "Drive Mail" (product name; might be customized)
+        label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
+        ref: 'io.ox/mail/compose/attachment/shareAttachmentsEnable'
+    }));
+
+    ext.point('io.ox/mail/attachment/shareAttachments').extend(new links.Link({
+        id: 'shareAttachmentseDisable',
+        index: 110,
+        //#. %1$s is usually "Drive Mail" (product name; might be customized)
+        label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
+        ref: 'io.ox/mail/compose/attachment/shareAttachmentsDisable'
     }));
 
     // DND actions

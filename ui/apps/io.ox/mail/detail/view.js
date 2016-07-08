@@ -42,6 +42,7 @@ define('io.ox/mail/detail/view', [
         id: 'subject',
         index: INDEX += 100,
         draw: function (baton) {
+
             var subject = util.getSubject(baton.data),
                 node = $('<h1 class="subject">').text(subject);
 
@@ -129,17 +130,6 @@ define('io.ox/mail/detail/view', [
     //
     ext.point('io.ox/mail/detail/header/row1').extend(
         {
-            id: 'from',
-            index: INDEX_header += 100,
-            draw: function (baton) {
-                this.append(
-                    $('<div class="from">').append(
-                        util.serializeList(baton.data, 'from')
-                    )
-                );
-            }
-        },
-        {
             id: 'flag-picker',
             index: INDEX_header += 100,
             draw: extensions.flagPicker
@@ -153,6 +143,18 @@ define('io.ox/mail/detail/view', [
             id: 'priority',
             index: INDEX_header += 100,
             draw: extensions.priority
+        },
+        {
+            // from is last one in the list for proper ellipsis effect
+            id: 'from',
+            index: INDEX_header += 100,
+            draw: function (baton) {
+                this.append(
+                    $('<div class="from">').append(
+                        util.serializeList(baton.data, 'from')
+                    )
+                );
+            }
         }
     );
 
@@ -312,6 +314,12 @@ define('io.ox/mail/detail/view', [
                 });
             }
 
+            if (this.find('.shadow-style').length === 1 && /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML)) {
+                var emojiStyles = ext.point('3rd.party/emoji/editor_css').map(function (point) {
+                    return require('css!' + point.css).clone();
+                }).value();
+                this.prepend(emojiStyles);
+            }
             // restore height or set minimum height of 100px
             $(node).css('min-height', baton.model.get('visualHeight') || 100);
             // add to DOM
@@ -397,8 +405,14 @@ define('io.ox/mail/detail/view', [
             // get shadow DOM or body node
             var body = this.$el.find('section.body'),
                 shadowRoot = body.prop('shadowRoot');
-            if (shadowRoot) shadowRoot.innerHTML = '<style>' + shadowStyle + '</style>'; else body.empty();
+            if (shadowRoot) shadowRoot.innerHTML = '<style class="shadow-style">' + shadowStyle + '</style>'; else body.empty();
             return $(shadowRoot || body);
+        },
+
+        onChangeSubject: function () {
+            var subject = this.$el.find('h1.subject');
+            subject.text(this.model.get('subject'));
+            return subject;
         },
 
         onChangeContent: function () {
@@ -465,6 +479,9 @@ define('io.ox/mail/detail/view', [
             // as an indicator whether this view has been destroyed meanwhile
             if (this.model === null) return;
 
+            // merge data (API updates the model in most cases, but we need this for nested mails)
+            if (data) this.model.set(data);
+
             var unseen = this.model.get('unseen') || util.isUnseen(this.model.get('flags'));
 
             // done
@@ -472,11 +489,10 @@ define('io.ox/mail/detail/view', [
             this.trigger('load:done');
 
             // draw
+            // nested mails do not have a subject before loading, so trigger change as well
+            this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
-
-            // merge data (probably unnecessary here since API updates the model)
-            if (data) this.model.set(data);
 
             // process unseen flag
             if (unseen) {
@@ -525,10 +541,19 @@ define('io.ox/mail/detail/view', [
                 if (this.loaded) {
                     this.onLoad();
                 } else {
-                    api.get(_.cid(this.model.cid)).then(
-                        this.onLoad.bind(this),
-                        this.onLoadFail.bind(this)
-                    );
+                    var cid = _.cid(this.model.cid);
+                    // check if we have a nested email here, those are requested differently
+                    if (_(cid).size() === 1 && cid.id !== undefined && this.model.has('parent')) {
+                        api.getNestedMail(this.model.attributes).then(
+                            this.onLoad.bind(this),
+                            this.onLoadFail.bind(this)
+                        );
+                    } else {
+                        api.get(cid).then(
+                            this.onLoad.bind(this),
+                            this.onLoadFail.bind(this)
+                        );
+                    }
                 }
             }
 
@@ -592,7 +617,7 @@ define('io.ox/mail/detail/view', [
                 'data-cid': this.model.cid,
                 'aria-expanded': 'false',
                 'data-loaded': 'false',
-                'role': 'group',
+                'role': 'article',
                 'aria-label': title
             });
 

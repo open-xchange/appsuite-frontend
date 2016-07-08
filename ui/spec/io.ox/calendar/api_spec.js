@@ -17,22 +17,24 @@ define(['io.ox/calendar/api'], function (api) {
             start_date: '1412154498372',
             end_date: '1412158137977'
         },
-        responseData = [{
-            folder_id: '123',
-            id: '456',
-            start_date: '1412154498372',
-            end_date: '1412158137977',
-            users: [{ confirmation: 1,
-            id: 1337 }]
-        },
-    {
-        folder_id: '123',
-        id: '457',
-        start_date: '1412153604659',
-        end_date: '1412157193355',
-        users: [{ confirmation: 2, id: 111 },
-        { confirmation: 1, id: 1337 }]
-    }];
+        responseData = [
+            {
+                folder_id: '123',
+                id: '456',
+                start_date: '1412154498372',
+                end_date: '1412158137977',
+                users: [{ confirmation: 1,
+                id: 1337 }]
+            },
+            {
+                folder_id: '123',
+                id: '457',
+                start_date: '1412153604659',
+                end_date: '1412157193355',
+                users: [{ confirmation: 2, id: 111 },
+                { confirmation: 1, id: 1337 }]
+            }
+        ];
 
     return describe('Calendar API', function () {
         beforeEach(function () {
