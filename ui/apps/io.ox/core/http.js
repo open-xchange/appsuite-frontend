@@ -380,8 +380,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         },
         // extended permissions
         idMappingExcludes = ['3060', '7010'],
-        // list of error codes, which are not logged
-        errorBlacklist = ['SVL-0003', 'LGI-0006'];
+        // list of error codes, which are not logged (see bug 46098)
+        errorBlacklist = ['SVL-0003', 'SVL-0015', 'LGI-0006'];
 
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
