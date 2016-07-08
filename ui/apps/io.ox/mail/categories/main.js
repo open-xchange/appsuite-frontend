@@ -36,7 +36,10 @@ define('io.ox/mail/categories/main', [
 
     // do not clutter hash
     ox.on('app:start app:resume', function (app) {
-        if (app && app.id !== 'io.ox/mail') _.url.hash('category', null);
+        // restore
+        if (app && app.id === 'io.ox/mail') return module.restoreSelection();
+        // reset
+        _.url.hash('category', null);
     });
 
     var DEBUG = false,
