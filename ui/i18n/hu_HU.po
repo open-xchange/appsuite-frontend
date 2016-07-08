@@ -5416,6 +5416,12 @@ msgstr "Még nincsenek tweetek."
 msgid "No appointments found until %s"
 msgstr "Nincsenek találkozó eddig: %s"
 
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "No matching items found."
+msgid "No autocomplete entries found"
+msgstr "Nem találhatók ilyen elemek."
+
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "No birthdays within the next %1$d weeks"
 msgstr "Nincsenek születésnapok a következő %1$d héten"
@@ -5664,6 +5670,14 @@ msgstr "A tulajdonos nevében"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "On work days"
 msgstr "Munkanapokon"
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, c-format
+msgid "One autocomplete entry found"
+msgid_plural "%1$d autocomplete entries found"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -8607,10 +8621,6 @@ msgid ""
 msgstr ""
 "Nincs olyan alaklamzás/szolgáltatás, amely hozzáfér a felhasználói fiókjához."
 
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-msgid "There are no matching autocomplete entries for this query."
-msgstr ""
-
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Mentetlen beállítások vannak."
@@ -8632,14 +8642,6 @@ msgstr "Nem volt legutóbbi tevékenység a Xing hálózatában."
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Nincs megadva szabály"
-
-#. %1$d is the number of search results in the autocomplete field
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, c-format
-msgid "There is one matching autocomplete entry for this query."
-msgid_plural "There are %1$d matching autocomplete entries for this query."
-msgstr[0] ""
-msgstr[1] ""
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/xing/main.js

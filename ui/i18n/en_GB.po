@@ -5401,6 +5401,12 @@ msgstr "No Tweets yet."
 msgid "No appointments found until %s"
 msgstr "No appointments found until %s"
 
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "No matching items found."
+msgid "No autocomplete entries found"
+msgstr "No matching items found."
+
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "No birthdays within the next %1$d weeks"
 msgstr "No birthdays within the next %1$d weeks"
@@ -5646,6 +5652,14 @@ msgstr "On behalf of the owner"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "On work days"
 msgstr "On work days"
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, c-format
+msgid "One autocomplete entry found"
+msgid_plural "%1$d autocomplete entries found"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -8587,10 +8601,6 @@ msgid ""
 msgstr ""
 "There are no external applications/services which can access your account."
 
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-msgid "There are no matching autocomplete entries for this query."
-msgstr ""
-
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "There are unsaved changes."
@@ -8612,14 +8622,6 @@ msgstr "There is no recent activity in your XING network."
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "There is no rule defined"
-
-#. %1$d is the number of search results in the autocomplete field
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, c-format
-msgid "There is one matching autocomplete entry for this query."
-msgid_plural "There are %1$d matching autocomplete entries for this query."
-msgstr[0] ""
-msgstr[1] ""
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/xing/main.js

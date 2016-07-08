@@ -5326,6 +5326,12 @@ msgstr "还没有新推。"
 msgid "No appointments found until %s"
 msgstr "直至 %s 没有找到任何约会"
 
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "No matching items found."
+msgid "No autocomplete entries found"
+msgstr "没找到匹配项目。"
+
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "No birthdays within the next %1$d weeks"
 msgstr "往后 %1$d 星期没有生日"
@@ -5568,6 +5574,14 @@ msgstr "以拥有者之名"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "On work days"
 msgstr "在工作天"
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, c-format
+msgid "One autocomplete entry found"
+msgid_plural "%1$d autocomplete entries found"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -8443,10 +8457,6 @@ msgid ""
 "There are no external applications/services which can access your account."
 msgstr "没有能够访问您户口的外部应用程序/服务。"
 
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-msgid "There are no matching autocomplete entries for this query."
-msgstr ""
-
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "找到未保存更改。"
@@ -8468,14 +8478,6 @@ msgstr "您的 Xing 最近没有活动。"
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "没有定义规则"
-
-#. %1$d is the number of search results in the autocomplete field
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, c-format
-msgid "There is one matching autocomplete entry for this query."
-msgid_plural "There are %1$d matching autocomplete entries for this query."
-msgstr[0] ""
-msgstr[1] ""
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/xing/main.js

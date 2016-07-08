@@ -5458,6 +5458,12 @@ msgstr "Pas de tweets pour le moment."
 msgid "No appointments found until %s"
 msgstr "Aucun rendez-vous trouvé jusqu'à %s"
 
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "No matching items found."
+msgid "No autocomplete entries found"
+msgstr "Aucun élément correspondant trouvé."
+
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "No birthdays within the next %1$d weeks"
 msgstr "Pas d'anniversaires dans les %1$d prochaines semaines"
@@ -5708,6 +5714,14 @@ msgstr "Au nom du propriétaire"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "On work days"
 msgstr "Les jours ouvrés"
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, c-format
+msgid "One autocomplete entry found"
+msgid_plural "%1$d autocomplete entries found"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -8680,10 +8694,6 @@ msgid ""
 "There are no external applications/services which can access your account."
 msgstr "Aucun service ou application externe ne peut accéder à votre compte."
 
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-msgid "There are no matching autocomplete entries for this query."
-msgstr ""
-
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Certaines modifications n'ont pas été enregistrées."
@@ -8705,14 +8715,6 @@ msgstr "Il n'y a pas eu d'activité récente dans votre réseau Xing."
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Pas de règle définie"
-
-#. %1$d is the number of search results in the autocomplete field
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, c-format
-msgid "There is one matching autocomplete entry for this query."
-msgid_plural "There are %1$d matching autocomplete entries for this query."
-msgstr[0] ""
-msgstr[1] ""
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 #: apps/plugins/xing/main.js
