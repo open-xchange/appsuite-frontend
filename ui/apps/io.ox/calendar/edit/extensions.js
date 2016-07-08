@@ -137,7 +137,7 @@ define('io.ox/calendar/edit/extensions', [
             var self = this;
 
             picker({
-                button: 'Select',
+                button: gt('Select'),
                 filter: function (id, model) {
                     return model.id !== 'virtual/all-my-appointments';
                 },
