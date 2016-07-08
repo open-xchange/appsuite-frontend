@@ -583,7 +583,6 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.quit', win);
                     win.destroy();
                 }
-
                 // remove from list
                 ox.ui.apps.remove(self);
                 // mark as not running
@@ -1015,14 +1014,13 @@ define('io.ox/core/desktop', [
                 for (i = 0, $i = windows.length; i < $i; i++) {
                     w = windows[i];
                     if (w !== win && w.state.open) {
-                        w.show();
+                        w.resume();
                         break;
                     }
                 }
-                //remove the window from cache if it's there
+                // remove the window from cache if it's there
                 appCache.get('windows').done(function (winCache) {
                     var index = _.indexOf(winCache, win.name);
-
                     if (index > -1) {
                         winCache.splice(index, 1);
                         appCache.add('windows', winCache || []);
@@ -1155,7 +1153,11 @@ define('io.ox/core/desktop', [
                     return this.nodes.header;
                 };
 
-                this.show = function (cont) {
+                this.resume = function () {
+                    this.show(_.noop, true);
+                };
+
+                this.show = function (cont, resume) {
                     var appchange = false;
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
                     if (currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
@@ -1164,7 +1166,7 @@ define('io.ox/core/desktop', [
                     // get node and its parent node
                     var node = this.nodes.outer, parent = node.parent();
                     // if not current window or if detached (via funny race conditions)
-                    if (!appchange && self && (currentWindow !== this || parent.length === 0)) {
+                    if ((!appchange || resume) && self && (currentWindow !== this || parent.length === 0)) {
                         // show
                         if (node.parent().length === 0) {
                             if (this.simple) {
