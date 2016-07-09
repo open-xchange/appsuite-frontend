@@ -2,7 +2,7 @@
 // Generated on Fri Jun 28 2013 12:45:50 GMT+0200 (CEST)
 
 var fs = require('fs');
-var _ = require('lodash');
+var _ = require('underscore');
 var localConf = {};
 
 if (fs.existsSync('grunt/local.conf.json')) {
