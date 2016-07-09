@@ -15,6 +15,11 @@ require(['io.ox/core/extPatterns/stage'], function (Stage) {
     'use strict';
 
     ox.testUtils.stubAppsuiteBody();
+    var server = ox.fakeServer.create();
+    server.respondWith('GET', /api\/account\?action=all/, function (xhr) {
+        xhr.respond('[]');
+    });
+    server.autoRespond = true;
 
     new Stage('io.ox/core/stages', {
         id: 'run_tests',
@@ -29,6 +34,8 @@ require(['io.ox/core/extPatterns/stage'], function (Stage) {
 
                 // start test run, once Require.js is done
                 callback: function () {
+                    server.restore();
+                    server = null;
                     // make sure, we always start in mail app
                     // this prevents single test runs for apps that quit, ending up with an empty workspace
                     // and launching the default app. This basically is an attempt to minimize
