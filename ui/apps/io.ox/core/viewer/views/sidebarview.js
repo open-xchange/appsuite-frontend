@@ -58,7 +58,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         id: 'file-versions',
         index: 300,
         draw: function (baton) {
-            this.append(new FileVersionsView({ model: baton.model }).render().el);
+            this.append(new FileVersionsView({ model: baton.model, viewerEvents: baton.context.viewerEvents, isViewer: baton.context.isViewer }).render().el);
         }
     });
 
@@ -104,7 +104,8 @@ define('io.ox/core/viewer/views/sidebarview', [
             _.extend(this, {
                 viewerEvents: options.viewerEvents || _.extend({}, Backbone.Events),
                 standalone: options.standalone,
-                options: options
+                options: options,
+                isViewer: options.isViewer
             });
 
             this.model = null;
@@ -275,6 +276,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             }
             ext.point('io.ox/core/viewer/views/sidebarview/detail').invoke('draw', detailPane, ext.Baton({
                 options: this.options,
+                isViewer: this.isViewer,
                 context: this,
                 $el: detailPane,
                 model: this.model,

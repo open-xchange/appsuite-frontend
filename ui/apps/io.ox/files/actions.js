@@ -78,6 +78,7 @@ define('io.ox/files/actions', [
             requires: function (e) {
                 return util.conditionChain(
                     e.collection.has('one', 'modify'),
+                    !!e.baton.data.current_version,
                     !util.hasStatus('lockedByOthers', e),
                     (/\.(csv|txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
                     (e.baton.openedBy !== 'io.ox/mail/compose'),
@@ -206,6 +207,10 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (e.collection.has('multiple')) return false;
             if (e.collection.has('folders')) return false;
+            // no 'open' menu entry for office documents, PDF and plain text
+            if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
+            if (api.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype)) return false;
+            if (api.Model.prototype.isText.call(this, e.baton.data.file_mimetype)) return false;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
@@ -970,6 +975,16 @@ define('io.ox/files/actions', [
         mobile: 'lo',
         label: gt('Open'),
         ref: 'io.ox/files/actions/open'
+    }));
+
+    ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
+        id: 'editor',
+        index: 150,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Edit'),
+        section: 'edit',
+        ref: 'io.ox/files/actions/editor'
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
