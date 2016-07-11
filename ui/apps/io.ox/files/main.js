@@ -380,7 +380,7 @@ define('io.ox/files/main', [
                     if (id !== 'virtual/myshares') return;
 
                     app.folder.unset();
-
+                    app.getWindow().setTitle(gt('My shares'));
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.show().siblings().hide();
                         return;
