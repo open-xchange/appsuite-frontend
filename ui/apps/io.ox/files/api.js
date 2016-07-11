@@ -1124,7 +1124,7 @@ define('io.ox/files/api', [
 
         return http.PUT({
             module: 'files',
-            params: _(options).pick('action', 'columns', 'sort', 'order', 'limit', 'folder'),
+            params: _(options).pick('action', 'columns', 'sort', 'order', 'limit', 'folder', 'includeSubfolders'),
             data: api.search.getData(query, options)
         })
         .done(function (d) {

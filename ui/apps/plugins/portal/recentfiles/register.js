@@ -24,7 +24,7 @@ define('plugins/portal/recentfiles/register', [
 
     _(['recentfiles', 'myfiles']).each(function (type) {
 
-        var searchOptions = { sort: 5, order: 'desc', limit: _.device('smartphone') ? 5 : 10 };
+        var searchOptions = { includeSubfolders: true, limit: _.device('smartphone') ? 5 : 10, order: 'desc', sort: 5 };
 
         if (type === 'myfiles') {
             searchOptions.folder = settings.get('folder/infostore');
