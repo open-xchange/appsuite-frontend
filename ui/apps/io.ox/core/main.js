@@ -598,6 +598,11 @@ define('io.ox/core/main', [
             logout: logout.bind(null, { autologout: true })
         };
 
+        settings.on('change:autoLogout', function (ev, val) {
+            if (parseInt(val, 10) === 0) return ox.autoLogout.stop();
+            ox.autoLogout.start();
+        });
+
         start();
 
     }());
