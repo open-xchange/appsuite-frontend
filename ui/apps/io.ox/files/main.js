@@ -268,9 +268,11 @@ define('io.ox/files/main', [
 
             app.getViewOptions = function (folder) {
                 var options = app.settings.get(['viewOptions', folder], {}),
-                    defaultSort = folder === 'virtual/myshares' ? 5 : 702;
+                    defaultSort = folder === 'virtual/myshares' ? 5 : 702,
+                    defaultOrder = folder === 'virtual/myshares' ? 'desc' : 'asc';
+
                 if (!/^(list|icon|tile)/.test(options.layout)) options.layout = 'list';
-                return _.extend({ sort: defaultSort, order: 'asc', layout: 'list' }, options);
+                return _.extend({ sort: defaultSort, order: defaultOrder, layout: 'list' }, options);
             };
         },
 
