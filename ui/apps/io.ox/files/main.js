@@ -523,6 +523,7 @@ define('io.ox/files/main', [
          */
         'change:sort': function (app) {
             app.props.on('change:sort', function (m, value) {
+                if (!app.treeView) return;
                 // set proper order first
                 var model = app.listView.model,
                     viewOptions = app.getViewOptions(app.treeView.selection.get());
