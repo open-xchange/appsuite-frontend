@@ -644,7 +644,8 @@ define.async('io.ox/mail/accounts/view-form', [
                 this.$el.find('#transport_login, #transport_password').prop('disabled', type !== 'custom');
                 if (type === 'mail') {
                     adoptCredentials.call(this);
-                } else {
+                } else if (this.model.previous('transport_auth') === 'mail') {
+                    //only reset values if switched from 'mail' (Bug #46346)
                     this.model.set({ transport_login: '', transport_password: '' });
                 }
             }
@@ -653,6 +654,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 this.append(serverSettingsIn, serverSettingsOut);
                 view.listenTo(model, 'change:transport_auth', changeTransportAuth);
                 view.listenTo(model, 'change:login', adoptCredentials);
+                //FIXME: is this needed?
                 changeTransportAuth.call(view);
             }
 
