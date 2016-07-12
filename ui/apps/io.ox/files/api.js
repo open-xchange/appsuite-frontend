@@ -1065,7 +1065,7 @@ define('io.ox/files/api', [
             .then(function (data) {
                 model.set({ versions: data, number_of_versions: data.length });
                 // make sure we always get the same result (just data; not timestamp)
-                return model.toJSON();
+                return data;
             });
         },
 
