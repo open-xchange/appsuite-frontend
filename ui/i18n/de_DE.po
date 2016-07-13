@@ -787,7 +787,7 @@ msgstr "Als öffentlichen Ordner hinzufügen"
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add attachments"
-msgstr "Anänge hinzufügen"
+msgstr "Anhänge hinzufügen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
