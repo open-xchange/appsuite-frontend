@@ -142,7 +142,10 @@ define('io.ox/core/folder/api', [
         // system folders don't matter
         // bubble through the tree in parent direction
         if (difference !== 0 && parent && parent.get('module') !== 'system' && pool.collections[parent.get('id')]) {
-            parent.set('subtotal', calculateSubtotal(parent));
+            // unified folders contain the mails of the child folders as duplicates, so we don't need to adjust the subtotal
+            if (!parent.is('unifiedfolder')) {
+                parent.set('subtotal', calculateSubtotal(parent));
+            }
         }
 
         // if this is a subfolder of a virtual folder we must bubble there too
@@ -307,7 +310,8 @@ define('io.ox/core/folder/api', [
             collection[type](models);
             collection.fetched = true;
             // some virtual folders have type undefined. Track subtotal for them too.
-            if (this.models[id] && (this.models[id].get('module') === 'mail' || this.models[id].get('module') === undefined)) {
+            // be carefull with unified folders, we don't track the subtotal for them because the subfolders are the folders from the non unified accounts. This would double the counters as the mails are tracked 2 times
+            if (this.models[id] && (this.models[id].get('module') === 'mail' || this.models[id].get('module') === undefined) && !this.models[id].is('unifiedfolder')) {
                 var subtotal = 0;
                 for (var i = 0; i < models.length; i++) {
                     // use account API so it works with non standard accounts as well
