@@ -68,9 +68,9 @@ define('io.ox/calendar/view-detail', [
     ext.point('io.ox/calendar/detail').extend({
         index: 300,
         id: 'date-time',
-        draw: function (baton) {
+        draw: function (baton, options) {
             var node = $('<div class="date-time-recurrence">');
-            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton);
+            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton, options);
             this.append(node);
         }
     });
@@ -80,9 +80,9 @@ define('io.ox/calendar/view-detail', [
         {
             index: 100,
             id: 'date',
-            draw: function (baton) {
+            draw: function (baton, options) {
                 this.append(
-                    util.getDateTimeIntervalMarkup(baton.data)
+                    util.getDateTimeIntervalMarkup(baton.data, options)
                 );
             }
         },

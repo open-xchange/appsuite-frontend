@@ -112,7 +112,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
                     }
                     api.get(data).then(
                         function success(data) {
-                            popup.idle().append(view.draw(data));
+                            popup.idle().append(view.draw(data, { container: popup }));
                         },
                         function fail(e) {
                             sidepopup.close();
