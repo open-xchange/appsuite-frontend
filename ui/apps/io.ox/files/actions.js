@@ -76,14 +76,21 @@ define('io.ox/files/actions', [
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                return util.conditionChain(
+                if (!util.conditionChain(
                     e.collection.has('one', 'modify'),
-                    !!e.baton.data.current_version,
                     !util.hasStatus('lockedByOthers', e),
                     (/\.(csv|txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
                     (e.baton.openedBy !== 'io.ox/mail/compose'),
                     util.isFolderType('!trash', e.baton)
-                );
+                )) {
+                    return $.when(false);
+                }
+
+                return api.versions.load(e.baton.data, { cache: true }).then(function (versions) {
+                    return $.when(_.some(versions, function (item) {
+                        return item.current_version && item.version === e.baton.data.version;
+                    }));
+                });
             },
             action: function (baton) {
                 if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) {
