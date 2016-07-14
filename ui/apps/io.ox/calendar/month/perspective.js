@@ -386,6 +386,9 @@ define('io.ox/calendar/month/perspective', [
                     scrollToDate();
                 });
             }
+
+            // specific flexbox/scrolling issue (see bugs 43799, 44938, 45501, 46950, 47395)
+            $('#io-ox-windowmanager').scrollTop(0);
         },
 
         /**
