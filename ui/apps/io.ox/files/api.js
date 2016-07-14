@@ -414,6 +414,8 @@ define('io.ox/files/api', [
     api.collectionLoader = new CollectionLoader({
         module: 'files',
         getQueryParams: function (params) {
+            // Exit early on virtual folders
+            if (/^virtual\//.test(params.folder)) return false;
             return {
                 action: 'all',
                 folder: params.folder || coreSettings.get('folder/infostore'),
