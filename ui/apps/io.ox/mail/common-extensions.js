@@ -507,8 +507,11 @@ define('io.ox/mail/common-extensions', [
                 view.renderInlineLinks();
 
                 view.$el.on('click', 'li.item', function (e) {
+                    var node = $(e.currentTarget),
+                        clickTarget = $(e.target), id, data, baton;
 
-                    var node = $(e.currentTarget), id, data, baton;
+                    // skip if click was on the dropdown
+                    if (!clickTarget.attr('data-original')) return;
 
                     // skip attachments without preview
                     if (!node.attr('data-original')) return;
