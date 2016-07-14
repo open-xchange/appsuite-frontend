@@ -467,6 +467,7 @@ define('io.ox/calendar/edit/extensions', [
 
             var currentColor = parseInt(this.model.get('color_label'), 10) || 0;
 
+            // update color palette: different 'no-color' option for private appointents (white vs. dark grey)
             this.listenTo(this.model, 'change:private_flag', function (model, value) {
                 this.$el.find('.no-color').toggleClass('color-label-10', value);
             });
