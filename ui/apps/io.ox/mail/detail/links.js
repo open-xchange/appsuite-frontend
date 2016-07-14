@@ -57,6 +57,11 @@ define('io.ox/mail/detail/links', [
 
     var isDeepLink, isInternalDeepLink, parseDeepLink, processDeepLink;
 
+    // supported apps
+    // all office apps plus contacts, calendar, and tasks
+    // mail doesn't work due to URL obfuscation; file pop-out view doesn't work
+    var deepLinkWhitelist = /^(io.ox\/office\/|io.ox\/(contacts|calendar|tasks)\/detail$)/;
+
     (function () {
 
         var keys = 'all prefix link app params param name suffix'.split(' '),
@@ -105,12 +110,13 @@ define('io.ox/mail/detail/links', [
                 data.className = 'deep-link-files';
             } else if (/^(contacts|calendar|tasks)$/.test(data.app)) {
                 data.className = 'deep-link-' + data.app;
-            } else {
+            } else if (deepLinkWhitelist.test(data.app)) {
                 data.className = 'deep-link-app';
             }
             // add folder, id, perspective (jQuery's extend to skip undefined)
             // share links use "item" instead of "id" (for whatever reason)
-            return $.extend(data, { folder: params.f, id: params.i }, { folder: params.folder, id: params.id || params.item, perspective: params.perspective });
+            var cid = params.folder && params.id && _.cid({ folder: params.folder, id: params.id });
+            return $.extend(data, { folder: params.f, id: params.i }, { cid: cid, folder: params.folder, id: params.id || params.item, perspective: params.perspective });
         };
 
         // node must be a plain text node or a string
@@ -121,6 +127,9 @@ define('io.ox/mail/detail/links', [
                 link = $('<a href="#" target="_blank" class="deep-link" role="button">')
                     .attr('href', data.link)
                     .text(text);
+
+            // no white-liste app?
+            if (!data.className) return null;
 
             // internal document?
             if (isValidHost(data.link)) {
@@ -420,11 +429,13 @@ define('io.ox/mail/detail/links', [
         if (_.isString(node)) node = $.txt(node);
         if (node.nodeType !== 3) return;
 
-        for (var id in handlers) {
-            var handler = handlers[id];
-            if (handler.test(node)) {
-                return replace(handler.process(node));
-            }
+        var id, handler, replacement;
+
+        for (id in handlers) {
+            handler = handlers[id];
+            if (!handler.test(node)) continue;
+            replacement = handler.process(node);
+            if (replacement) return replace(replacement);
         }
 
         return node;
