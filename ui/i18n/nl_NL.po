@@ -6276,6 +6276,12 @@ msgstr ""
 "Hernoem de tabbladen naar behoeven, Gebruik de aankruisvakjes om specifieke "
 "tabbladen aan en uit te zetten."
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "

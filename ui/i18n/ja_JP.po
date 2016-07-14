@@ -6192,6 +6192,12 @@ msgstr ""
 "必要に応じて自由にタブ名を変えてください。チェックボックスを使って特定のタブ"
 "を有効または無効にしてください。"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "

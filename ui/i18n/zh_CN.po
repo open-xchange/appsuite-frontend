@@ -6143,6 +6143,12 @@ msgid ""
 "to enable or disable specific tabs."
 msgstr "请自便更名选项卡以更配合您的需求。使用复选框以启用或请用指定的选项卡。"
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "

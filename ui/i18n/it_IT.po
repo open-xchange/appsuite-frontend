@@ -6255,6 +6255,12 @@ msgstr ""
 "Sei libero di rinominare le schede in base alle tue esigenze. Utilizza le "
 "caselle di selezione per abilitare o disabilitare schede specifiche."
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "

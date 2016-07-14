@@ -6222,6 +6222,12 @@ msgstr ""
 "Endre gjerne navn på fanene for å passe dine ønsker. Bruk avkrysningsboksene "
 "for å aktivere eller deaktivere faner."
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "

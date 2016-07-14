@@ -6298,6 +6298,12 @@ msgstr ""
 "N'hésitez pas à renommer les onglets afin qu'ils satisfassent vos besoins. "
 "Utilisez les cases à cocher pour activer ou désactiver certains onglets."
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "

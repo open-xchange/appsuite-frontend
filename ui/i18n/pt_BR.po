@@ -6243,6 +6243,12 @@ msgstr ""
 "Fique a vontade para renomear as abas para suas necessidades. Use as caixas "
 "de seleção para habilitar ou desabilitar abas específicas."
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
