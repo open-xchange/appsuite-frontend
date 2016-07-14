@@ -12,6 +12,7 @@
  */
 
 define('io.ox/core/tk/attachments', [
+    'io.ox/backbone/disposable',
     'io.ox/core/api/attachment',
     'io.ox/core/folder/title',
     'io.ox/core/strings',
@@ -24,7 +25,7 @@ define('io.ox/core/tk/attachments', [
     'io.ox/core/notifications',
     'gettext!io.ox/core',
     'io.ox/core/pim/actions'
-], function (attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, links, settings, notifications, gt) {
+], function (DisposableView, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, links, settings, notifications, gt) {
 
     'use strict';
 
@@ -326,9 +327,47 @@ define('io.ox/core/tk/attachments', [
         return node;
     };
 
+    var progressView  = DisposableView.extend({
+        className: 'attachments-progress-view',
+        label: gt('Uploading attachments'),
+        initialize: function (options) {
+            var self = this;
+            // cid needed (create with _.ecid)
+            this.objectCid = options.cid;
+            attachmentAPI.on('progress:' + this.objectCid, this.updateProgress.bind(self));
+
+            options = options || {};
+            this.label = options.label || this.label;
+            this.callback = options.callback || $.noop;
+        },
+        render: function () {
+            this.$el.append($('<label>').text(this.label),
+                $('<div class="progress">').append(this.progress = $('<div class="progress-bar">'))
+            );
+            // for chaining
+            return this;
+        },
+        updateProgress: function (e, progressEvent) {
+
+            if (!progressEvent.total || !this.progress) {
+                return;
+            }
+            var width = Math.max(0, Math.min(100, Math.round(progressEvent.loaded / progressEvent.total * 100)));
+
+            this.progress.css('width', width + '%');
+            if (width === 100) {
+                this.callback();
+            }
+        },
+        dispose: function () {
+            attachmentAPI.off('progress: + this.objectCid');
+        }
+    });
+
     return {
         EditableAttachmentList: EditableAttachmentList,
         AttachmentList: AttachmentListOld,
-        fileUploadWidget: fileUploadWidget
+        fileUploadWidget: fileUploadWidget,
+        progressView: progressView
     };
 });

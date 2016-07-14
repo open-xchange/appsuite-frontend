@@ -26,8 +26,9 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/capabilities',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
+    'io.ox/core/tk/attachments',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, attachments) {
 
     'use strict';
 
@@ -143,7 +144,8 @@ define('io.ox/contacts/view-detail', [
             }, baton.data);
 
             var job = createText(getDescription(baton.data), ['position', 'profession', 'type']),
-                company = $.trim(baton.data.company);
+                company = $.trim(baton.data.company),
+                container;
 
             this.append(
                 $('<div class="next-to-picture">').append(
@@ -152,8 +154,7 @@ define('io.ox/contacts/view-detail', [
                     name.children().length ? name.addClass('header-name') : [],
                     company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
                     job.length ? $('<h2 class="header-job">').append(job) : [],
-                    $('<section class="attachments-container clear-both">')
-                        .append($('<span class="attachments-in-progress">').busy())
+                    container = $('<section class="attachments-container clear-both">')
                         .hide()
                 )
             );
@@ -163,9 +164,10 @@ define('io.ox/contacts/view-detail', [
             }
 
             if (api.uploadInProgress(_.ecid(baton.data))) {
-                this.find('.attachments-container').show();
+                var progressview = new attachments.progressView({ cid: _.ecid(baton.data) });
+                container.append(progressview.render().$el).show();
             } else if (baton.data.number_of_attachments > 0) {
-                ext.point('io.ox/contacts/detail/attachments').invoke('draw', this.find('.attachments-container'), baton.data);
+                ext.point('io.ox/contacts/detail/attachments').invoke('draw', container, baton.data);
             }
         }
     });

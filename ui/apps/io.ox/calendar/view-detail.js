@@ -378,8 +378,9 @@ define('io.ox/calendar/view-detail', [
             );
 
             if (calAPI.uploadInProgress(_.ecid(baton.data))) {
+                var progressview = new attachments.progressView({ cid: _.ecid(baton.data) });
                 this.append(
-                    $node.css({ width: '30%', height: '12px' }).busy()
+                    $node.append(progressview.render().$el)
                 );
             } else if (baton.data.number_of_attachments && baton.data.number_of_attachment !== 0) {
                 this.append($node);
