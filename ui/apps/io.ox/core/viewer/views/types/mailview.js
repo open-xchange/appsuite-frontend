@@ -37,13 +37,17 @@ define('io.ox/core/viewer/views/types/mailview', [
 
         show: function () {
 
-            var data = this.model.get('origData').nested_message,
+            var data = this.model.get('origData').nested_message;
+            if (!this.view) {
                 // nested mails may not have full data, use attachments attribute to determine
-                view = new detail.View({ data: data, loaded: !!data.attachments });
+                this.view = new detail.View({ data: data, loaded: !!data.attachments });
+            }
 
-            this.$el.append(
+            // if we want to reuse the view, we must not delete $el by emptiying the slide. Otherwise the view get's disposed
+            this.view.$el.empty().detach();
+            this.$el.empty().append(
                 $('<div class="white-page">').append(
-                    view.render().expand().$el
+                    this.view.render().expand().$el
                 )
             );
 
