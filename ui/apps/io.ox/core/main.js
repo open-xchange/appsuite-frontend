@@ -66,9 +66,7 @@ define('io.ox/core/main', [
     // general fix for flexbox scrolling issue (see bugs 43799, 44938, 45501, 46950, 47395)
     $('#io-ox-windowmanager').on('scroll', function () {
         // no infinite loop here. Only scroll if needed
-        if ($('#io-ox-windowmanager').scrollTop() !== 0) {
-            $('#io-ox-windowmanager').scrollTop(0);
-        }
+        if (this.scrollTop > 0) this.scrollTop = 0;
     });
 
     debug('core: Loaded');
