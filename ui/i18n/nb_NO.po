@@ -9191,6 +9191,12 @@ msgstr "Opplastingsfremdrift"
 msgid "Uploading %1$s"
 msgstr "Laster opp %1$s"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Legg til vedlegg"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Opplasting av mapper støttes ikke."

@@ -9232,6 +9232,12 @@ msgstr "Envio em andamento"
 msgid "Uploading %1$s"
 msgstr "Enviando %1$s"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Adicionar anexos"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "O envio de pastas não é suportado."

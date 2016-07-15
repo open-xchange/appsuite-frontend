@@ -9028,6 +9028,12 @@ msgstr "上载进度"
 msgid "Uploading %1$s"
 msgstr "%1$s 上载中"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "添加附件"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "不支持上载文件夹。"

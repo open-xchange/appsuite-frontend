@@ -9211,6 +9211,12 @@ msgstr "Индикатор выполнения"
 msgid "Uploading %1$s"
 msgstr "Отправляется %1$s"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Добавить вложения"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Передача папок не поддерживается."

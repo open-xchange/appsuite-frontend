@@ -9124,6 +9124,12 @@ msgstr "進行中"
 msgid "Uploading %1$s"
 msgstr "%1$sをアップロードしています..."
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "添付ファイルを追加"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "フォルダのアップロードはサポートされていません。"

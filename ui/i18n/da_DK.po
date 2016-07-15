@@ -9182,6 +9182,12 @@ msgstr "Overførselsstatus"
 msgid "Uploading %1$s"
 msgstr "Overfører %1$s"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Tilføj vedhæftninger"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Overførelse af mapper er ikke understøttet."

@@ -9357,6 +9357,12 @@ msgstr "En progrés"
 msgid "Uploading %1$s"
 msgstr "Pujant..."
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Afegeix-hi adjunts"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "No sestà permesa la pujada de carpetes."

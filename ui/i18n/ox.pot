@@ -5701,6 +5701,11 @@ msgstr ""
 msgid "Add from Drive"
 msgstr ""
 
+#: apps/io.ox/core/tk/attachments.js
+#: module:io.ox/core
+msgid "Uploading attachments"
+msgstr ""
+
 #: apps/io.ox/core/tk/attachmentsUtil.js
 #: module:io.ox/core
 #: apps/io.ox/preview/main.js

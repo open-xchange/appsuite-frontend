@@ -9178,6 +9178,12 @@ msgstr "Latauksen edistyminen"
 msgid "Uploading %1$s"
 msgstr "Ladataan  %1$s."
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Lisää liitteitä"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Kansioiden lataamista ei tueta."

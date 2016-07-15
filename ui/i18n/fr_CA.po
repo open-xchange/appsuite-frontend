@@ -9309,6 +9309,12 @@ msgstr "Avancement du téléversement"
 msgid "Uploading %1$s"
 msgstr "Téléversement de %1$s"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Joindre des pièces"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Le téléversement de dossiers n'est pas pris en charge."

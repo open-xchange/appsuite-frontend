@@ -9191,6 +9191,12 @@ msgstr "Upload progress"
 msgid "Uploading %1$s"
 msgstr "Uploading %1$s"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Add attachments"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Uploading folders is not supported."

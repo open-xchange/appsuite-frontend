@@ -9277,6 +9277,12 @@ msgstr "Progres încărcare"
 msgid "Uploading %1$s"
 msgstr "Se încarcă %1$s"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Adaugă fișiere atașate"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Încărcarea dosarelor nu este suportată."

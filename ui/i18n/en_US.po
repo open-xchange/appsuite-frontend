@@ -8920,6 +8920,10 @@ msgstr ""
 msgid "Uploading %1$s"
 msgstr ""
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+msgid "Uploading attachments"
+msgstr ""
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr ""
