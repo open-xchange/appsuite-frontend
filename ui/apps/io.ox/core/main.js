@@ -63,6 +63,14 @@ define('io.ox/core/main', [
         if (e.which === 13) $('.folder-tree:visible .folder.selected').focus();
     });
 
+    // general fix for flexbox scrolling issue (see bugs 43799, 44938, 45501, 46950, 47395)
+    $('#io-ox-windowmanager').on('scroll', function () {
+        // no infinite loop here. Only scroll if needed
+        if ($('#io-ox-windowmanager').scrollTop() !== 0) {
+            $('#io-ox-windowmanager').scrollTop(0);
+        }
+    });
+
     debug('core: Loaded');
     ox.trigger('core:load');
 
