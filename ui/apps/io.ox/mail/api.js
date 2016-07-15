@@ -44,18 +44,26 @@ define('io.ox/mail/api', [
     // model pool
     var pool = Pool.create('mail');
 
-    // client-side fix for missing to/cc/bcc fields
-    if (settings.get('features/fixtoccbcc')) {
-        pool.map = function (data) {
-            var cid = _.cid(data), model = this.get(cid);
-            if (!model) return data;
+    var fixtoccbcc = settings.get('features/fixtoccbcc');
+
+    pool.map = function (data) {
+        var cid = _.cid(data), model = this.get(cid);
+        // merge specific headers
+        if (data['X-Open-Xchange-Share-URL']) {
+            data.headers = _.extend({}, model && model.get('headers'), data.headers, { 'X-Open-Xchange-Share-URL': data['X-Open-Xchange-Share-URL'] });
+            delete data['X-Open-Xchange-Share-URL'];
+        }
+        // next clean up needs model
+        if (!model) return data;
+        // client-side fix for missing to/cc/bcc fields
+        if (fixtoccbcc) {
             ['to', 'cc', 'bcc'].forEach(function (field) {
                 var list = model.get(field);
                 if (_.isArray(list) && list.length > 0) delete data[field];
             });
-            return data;
-        };
-    }
+        }
+        return data;
+    };
 
     // generate basic API
     var api = apiFactory({
@@ -1816,7 +1824,7 @@ define('io.ox/mail/api', [
                 return {
                     action: 'threadedAll',
                     folder: params.folder,
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656' + shareAttachmentsString,
                     sort: '610',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
@@ -1846,15 +1854,6 @@ define('io.ox/mail/api', [
             var isAllUnseen = params.folder === 'default0/virtual/all' && params.sort === '651';
             if (isAllUnseen) params.limit = '0,250';
             return http.GET({ module: module, params: params }).then(function (data) {
-                _.each(data, function (obj) {
-                    if (settings.get('compose/shareAttachments/enabled', false)) {
-                        if (obj['X-Open-Xchange-Share-URL']) {
-                            if (!obj.headers) obj.headers = {};
-                            obj.headers['X-Open-Xchange-Share-URL'] = obj['X-Open-Xchange-Share-URL'];
-                        }
-                        delete obj['X-Open-Xchange-Share-URL'];
-                    }
-                });
                 // drop all seen messages for all-unseen
                 return isAllUnseen ? _(data).filter(filterAllSeen) : data;
             });
