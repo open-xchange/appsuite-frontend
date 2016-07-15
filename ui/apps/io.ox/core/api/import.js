@@ -49,26 +49,17 @@ define('io.ox/core/api/import', ['io.ox/core/http'], function (http) {
      * @return - a deferred object, containing the response of the import call
      */
     api.importFile = function (data) {
-        var def = $.Deferred();
-        importFileCall(data).then(function (res) {
-            //hint: undefined is usually a filtered warning message
-            var data = res.data || [res],
-                failcount =  _.reduce(res.data, function (count, item) {
-                    return count + item && item.error ? 1 : 0;
-                }, 0);
-
-            //import of all entries failed
-            if (failcount === data.length) {
-                def.reject(data);
-            } else {
-                def.resolve(data);
+        return importFileCall(data).then(
+            function success(result) {
+                // hint: undefined is usually a filtered warning message
+                var data = result.data || [result],
+                    failcount = _.reduce(result.data, function (count, item) {
+                        return count + (item && item.error ? 1 : 0);
+                    }, 0);
+                // import of all entries failed
+                return failcount === data.length ? $.Deferred().reject(data) : data;
             }
-        }).fail(function (res) {
-            //ensure array
-            data = res.data || [res];
-            def.reject(data);
-        });
-        return def;
+        );
     };
 
     return api;

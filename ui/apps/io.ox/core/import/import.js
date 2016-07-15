@@ -193,38 +193,53 @@ define('io.ox/core/import/import', [
 
                     var type = baton.nodes.select.val() || '',
                         file = baton.nodes.file_upload.find('input[type=file]'),
-                        popup = this,
-                        failHandler = function (data) {
-                            var list = _(data)
-                                .chain()
-                                .map(function (item) {
-                                    if (item && item.code === 'CON-0600') {
-                                        //append first value which caused conversion error (csv import)
-                                        item.error = item.error + '\n' + item.error_stack[0];
-                                    }
-                                    return item && item.error;
-                                })
-                                .compact()
-                                .value(),
-                                defaultMessage = //#. Error message if calendar import failed
-                                                 gt('There was no appointment data to import');
-                            if (module === 'contacts') {
-                                defaultMessage = //#. Error message if contact import failed
-                                                 gt('There was no contact data to import');
-                            } else if (module === 'tasks') {
-                                defaultMessage = //#. Error message if task import failed
-                                    gt('There was no task data to import');
-                            }
+                        popup = this;
 
-                            notifications.yell({
-                                type: 'error',
-                                message: list.length ?
-                                    list.join('\n\n') :
-                                    defaultMessage,
-                                duration: -1
-                            });
-                            popup.idle();
-                        };
+                    function getDefautMessage(module) {
+                        switch (module) {
+                            case 'contacts':
+                                //#. Error message if contact import failed
+                                return gt('There was no contact data to import');
+                            case 'tasks':
+                                //#. Error message if task import failed
+                                return gt('There was no task data to import');
+                            default:
+                                //#. Error message if calendar import failed
+                                return gt('There was no appointment data to import');
+                        }
+                    }
+
+                    function failHandler(data) {
+
+                        var message;
+
+                        if (_.isArray(data)) {
+                            data = _(data)
+                            .chain()
+                            .map(function (item) {
+                                if (!item) return false;
+                                var message = item.code === 'CON-0600' ?
+                                    // append first value which caused conversion error (csv import)
+                                    item.error + '\n' + item.error_stack[0] :
+                                    // otherwise use error description (see bug 47378); fallback is still error
+                                    item.error_desc || item.error;
+                                return item.line_number ?
+                                    //#. %1$d is line number, %2$s is an error message
+                                    gt('Line %1$d: %2$s', item.line_number, message) :
+                                    message;
+                            })
+                            .compact()
+                            .value();
+                            message = data.length ? data.join('\n\n') : getDefautMessage(module);
+                        } else {
+                            // we only show "error"; sometimes "error_desc" contains a better
+                            // but untranslated hint, sometimes it contains the same
+                            message = data.error;
+                        }
+
+                        notifications.yell({ type: 'error', message: message, duration: -1 });
+                        popup.idle();
+                    }
 
                     if (file.val() === '') {
                         notifications.yell('error', gt('Please select a file to import'));
