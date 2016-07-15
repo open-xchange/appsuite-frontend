@@ -237,6 +237,8 @@ define('io.ox/core/tk/tokenfield', [
                         });
                         // save cid to token value
                         e.attrs.value = e.attrs.model.cid;
+                        // stop edit mode (see bug 47182)
+                        inputData.edit = false;
                         return;
                     }
 
@@ -341,14 +343,12 @@ define('io.ox/core/tk/tokenfield', [
                             var tokens = self.$el.parent().find('.token'),
                                 cid = self.getInput().data().editModel.cid,
                                 found = false;
-
                             for (var i = 0; i < tokens.length; i++) {
                                 if ($(tokens[i]).data('attrs').value === cid) {
                                     found = true;
                                     return;
                                 }
                             }
-
                             // user tries to remove token by clearing the token in editmode
                             // token was removed but it's still in the collection, so we need to remove it correctly
                             if (!found) {
