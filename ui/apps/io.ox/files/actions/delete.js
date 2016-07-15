@@ -49,26 +49,42 @@ define('io.ox/files/actions/delete', [
         });
 
         // delete folders
-        _(folders).each(function (folder) {
-            folderAPI.remove(folder.get('id'));
-        });
+        folderAPI.remove(_(folders).map(function (model) {
+            return model.get('id');
+        }));
     }
 
     return function (list) {
 
+        var dialog = new dialogs.ModalDialog(),
+            deleteNotice = gt.ngettext(
+            'Do you really want to delete this item?',
+            'Do you really want to delete these items?',
+            list.length
+        ),
+            shareNotice = gt.ngettext('This file (or folder) is shared with others. It won\'t be available for them any more.',
+                'Some files/folder are shared with others. They won\'t be available for them any more.',
+                list.length
+            );
+
         list = _.isArray(list) ? list : [list];
 
-        new dialogs.ModalDialog()
-            .text(gt.ngettext(
-                'Do you really want to delete this item?',
-                'Do you really want to delete these items?',
-                list.length
-            ))
+        function isShared() {
+            var result = _.findIndex(list, function (model) {
+                return model.get('object_permissions') ? model.get('object_permissions').length !== 0 : model.get('permissions').length > 1;
+            });
+
+            if (result !== -1) return true;
+        }
+
+        dialog.text(deleteNotice)
+            .append($('<p>').text(isShared() ? shareNotice : ''))
             .addPrimaryButton('delete', gt('Delete'), 'delete', { 'tabIndex': '1' })
             .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
             .on('delete', function () {
                 _.defer(function () { process(list); });
             })
             .show();
+        dialog.getContentNode().find('h4').addClass('white-space');
     };
 });

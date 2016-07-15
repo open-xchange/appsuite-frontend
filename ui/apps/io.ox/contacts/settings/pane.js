@@ -17,8 +17,9 @@ define('io.ox/contacts/settings/pane', [
     'io.ox/core/extensions',
     'gettext!io.ox/contacts',
     'io.ox/backbone/mini-views',
-    'io.ox/core/notifications'
-], function (settings, contactsSettingsModel, ext, gt, mini, notifications) {
+    'io.ox/core/notifications',
+    'io.ox/core/capabilities'
+], function (settings, contactsSettingsModel, ext, gt, mini, notifications, capabilities) {
 
     'use strict';
 
@@ -66,6 +67,29 @@ define('io.ox/contacts/settings/pane', [
         }
     });
 
+    if (capabilities.has('gab !alone')) {
+        ext.point(POINT + '/pane').extend({
+            index: 150,
+            id: 'startfolder',
+            draw: function () {
+                this.append(
+                    $('<fieldset>').append(
+                        $('<legend>').addClass('sectiontitle').append(
+                            $('<h2>').text(gt('Initial folder'))
+                        ),
+                        $('<div>').addClass('form-group').append(
+                            $('<div>').addClass('checkbox').append(
+                                $('<label>').text(gt('Start in global address book')).prepend(
+                                    new mini.CheckboxView({ name: 'startInGlobalAddressbook', model: contactsModel }).render().$el
+                                )
+                            )
+                        )
+                    )
+                );
+            }
+        });
+    }
+
     ext.point(POINT + '/pane').extend({
         index: 200,
         id: 'displaynames',
@@ -82,6 +106,30 @@ define('io.ox/contacts/settings/pane', [
                         $('<h2>').text(gt('Display of names'))
                     ),
                     new mini.RadioView({ list: preferences, name: 'fullNameFormat', model: contactsModel }).render().$el
+                )
+            );
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 300,
+        id: 'map-service',
+        draw: function () {
+
+            var options = [
+                { label: gt('Google Maps'), value: 'google' },
+                { label: gt('Open Street Map'), value: 'osm' },
+                { label: gt('No link'), value: 'none' }
+            ];
+
+            if (_.device('ios || macos')) options.splice(2, 0, { label: gt('Apple Maps'), value: 'apple' });
+
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend class="sectiontitle">').append(
+                        $('<h2>').text(gt('Link postal addresses with map service'))
+                    ),
+                    new mini.RadioView({ list: options, name: 'mapService', model: contactsModel }).render().$el
                 )
             );
         }

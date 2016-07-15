@@ -14,9 +14,10 @@
 define('io.ox/find/main', [
     'io.ox/find/view-placeholder',
     'io.ox/core/folder/api',
+    'io.ox/core/extensions',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (PlaceholderView, folderAPI, settings, gt) {
+], function (PlaceholderView, folderAPI, ext, settings, gt) {
 
     'use strict';
 
@@ -30,23 +31,6 @@ define('io.ox/find/main', [
             ];
             //toString
             return _.compact(parts).join(':');
-        },
-        // helper object to manage listviews 'empty' message
-        messageEmpty = {
-            original: $(),
-            set: function (parent) {
-                var original = parent.listView.$el.find('.message-empty-container');
-                messageEmpty.original = original.clone();
-                // ensure that node is visible
-                original.removeClass('hidden')
-                    // custom message
-                    .find('.message-empty')
-                    .text(gt('No matching items found.'));
-            },
-            restore: function (parent) {
-                // force to use default 'empty' message again (listView.messageEmpty)
-                parent.listView.$el.find('.message-empty-container').replaceWith(messageEmpty.original);
-            }
         };
 
     // multi instance pattern
@@ -144,7 +128,12 @@ define('io.ox/find/main', [
             'enable-disable-toggle': function (app) {
                 if (!app.get('inplace')) return;
                 // disable search field for unsupported folders
-                app.listenTo(app.get('parent'), 'folder:change folder-virtual:change', app.updateState);
+                // hint: see bug #45449 why we have to use treeview events
+                app.listenTo(app.get('parent').treeView, 'selection:action', function (list, index) {
+                    var item = $(list[index]);
+                    if (item.hasClass('selected')) return;
+                    app.updateState(item.attr('data-id'));
+                });
             },
 
             'vgrid': function (app) {
@@ -179,6 +168,21 @@ define('io.ox/find/main', [
                     },
                     'find:idle': function () {
                         if (grid.getMode() !== 'all') grid.setMode('all');
+                    }
+                });
+            },
+
+            'listview-empty-message': function (app) {
+                if (!app.get('parent').listView) return;
+                var ref = app.get('parent').listView.ref;
+                ext.point(ref + '/empty').extend({
+                    id: 'search',
+                    index: 100,
+                    draw: function (baton) {
+                        if (!baton.app.props.get('find-result')) return;
+                        baton.stopPropagation();
+                        //#. search feature returns an empty result
+                        this.text(gt('No matching items found.'));
                     }
                 });
             },
@@ -264,8 +268,6 @@ define('io.ox/find/main', [
                             parent.listControl.$el.find('.grid-options:first').hide();
                             parent.listView.connect(collectionLoader);
                             mode = 'search';
-                            // activate/adjust 'empty' message
-                            messageEmpty.set(parent);
                             // wrap setCollection
                             parent.listView.setCollection = function (collection) {
                                 view.stopListening();
@@ -280,8 +282,6 @@ define('io.ox/find/main', [
                                 if (mode === 'search') {
                                     // show sort options
                                     parent.listControl.$el.find('.grid-options:first').show();
-                                    // restore old 'empty' message
-                                    messageEmpty.restore(parent);
                                     // reset collection loader
                                     parent.listView.connect(defaultLoader);
                                     parent.listView.load();
@@ -559,6 +559,12 @@ define('io.ox/find/main', [
                     // inplace: use parents view window
                     app.view.render();
                     app.set('state', 'launched');
+                });
+                // reset cache on contact changes
+                require(['io.ox/contacts/api'], function (contactsAPI) {
+                    contactsAPI.on('refresh.all', function () {
+                        app.getProxy().done(function (proxy) { proxy.resetCache(); });
+                    });
                 });
             });
         };

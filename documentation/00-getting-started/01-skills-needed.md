@@ -10,7 +10,7 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:UI_developer_primer
 
 - No surprise there, the OX App Suite frontend is written in JavaScript.
 - [JavaScript: The Good Parts (youtube)](http://www.youtube.com/watch?v=hQVTIJBZook)
-- Our own style is explained here: [Style Guide](TODO)
+- Our own style is explained here: [Style Guide](https://github.com/Open-Xchange-Frontend/javascript)
 
 ## HTML5 & CSS
 

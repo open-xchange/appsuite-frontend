@@ -12,15 +12,19 @@
  */
 
 define('io.ox/files/actions', [
+
+    'io.ox/core/folder/api',
     'io.ox/files/api',
+    'io.ox/files/util',
+
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
-    'io.ox/files/util',
-    'io.ox/core/folder/api',
+
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (api, ext, links, capabilities, util, folderAPI, settings, gt) {
+
+], function (folderAPI, api, util, ext, links, capabilities, settings, gt) {
 
     'use strict';
 
@@ -220,6 +224,7 @@ define('io.ox/files/actions', [
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some', 'items'),
                 e.baton.openedBy !== 'io.ox/mail/compose',
+                util.isFolderType('!attachmentView', e.baton),
                 util.isFolderType('!trash', e.baton)
             );
         },
@@ -261,6 +266,7 @@ define('io.ox/files/actions', [
                 _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some', 'items'),
+                util.isFolderType('!attachmentView', e.baton),
                 util.isFolderType('!trash', e.baton)
             );
         },
@@ -423,6 +429,35 @@ define('io.ox/files/actions', [
         }
     });
 
+    new Action('io.ox/files/actions/save-as-pdf', {
+        capabilities: 'document_preview', // document converter.
+        requires: function (e) {
+            // one?
+            if (!e.collection.has('one')) return false;
+
+            // hide in mail compose preview
+            if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+
+            // is folder?
+            if (e.collection.has('folders')) return false;
+
+            var
+                model         = e.baton.models[0];
+          //    isAccessWrite = folderAPI.can('create', folderAPI.pool.models[model.get('folder_id')].toJSON());
+          //
+          //if (!isAccessWrite(e)) return false;
+
+            // preferred variant over >> return (model.isFile() && !model.isPDF()); <<
+            return (model.isFile() && (model.isOffice() || model.isText()));
+        },
+        action: function (baton) {
+            // files use the file rename action
+            ox.load(['io.ox/files/actions/save-as-pdf']).done(function (action) {
+                action(baton);
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
             if (!e.collection.has('one', 'items')) return false;
@@ -509,7 +544,7 @@ define('io.ox/files/actions', [
                                 }
                             } else {
                                 require(['io.ox/core/yell'], function (yell) {
-                                    yell(response);
+                                    yell('error', response);
                                 });
                             }
                         }
@@ -734,6 +769,15 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'open',
         index: index += 100,
+        prio: 'lo',
+        mobile: 'hi',
+        label: gt('Open in browser'),
+        ref: 'io.ox/files/actions/open'
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: 'openviewer',
+        index: index += 100,
         prio: 'hi',
         mobile: 'hi',
         label: gt('View'),
@@ -821,7 +865,7 @@ define('io.ox/files/actions', [
         id: 'add-to-portal',
         index: index += 100,
         prio: 'lo',
-        mobile: 'lo',
+        mobile: 'none',
         label: gt('Add to portal'),
         ref: 'io.ox/files/actions/add-to-portal',
         section: 'share'
@@ -866,6 +910,16 @@ define('io.ox/files/actions', [
         ref: 'io.ox/files/actions/edit-description',
         section: 'edit'
     }));
+
+    //ext.point('io.ox/files/links/inline').extend(new links.Link({
+    //    id: 'save-as-pdf',
+    //    index: index += 100,
+    //    prio: 'lo',
+    //    mobile: 'lo',
+    //    label: gt('Save as PDF'),
+    //    ref: 'io.ox/files/actions/save-as-pdf',
+    //    section: 'save-as'
+    //}));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'move',

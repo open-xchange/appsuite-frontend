@@ -25,7 +25,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
     // - focus: set initial focus on this element
     // - help: link to online help article
     // - keyboard: close popup on <escape>
-    // - maximize: popup uses full height
+    // - maximize: popup uses full height; if given as number maximize but use that limit (useful on large screens)
     // - point: extension point id to render content
     // - title: dialog title
     // - width: dialog width
@@ -36,7 +36,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
         events: {
             'click [data-action]': 'onAction',
-            'keydown input:text, input:password': 'onKeypress'
+            'keydown input:text, input:password': 'onKeypress',
+            'keydown': 'onEscape'
         },
 
         // we use the constructor here not to collide with initialize()
@@ -46,7 +47,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             // the original constructor will call initialize()
             ExtensibleView.prototype.constructor.apply(this, arguments);
             // add structure now
-            var title_id = _.uniqueId('title');
+            var title_id = _.uniqueId('title'),
+                self = this;
             this.$el
                 .toggleClass('maximize', options.maximize)
                 .attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id })
@@ -61,6 +63,10 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
                         )
                     )
                 );
+            // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
+            this.$el.on('hidden.bs.modal', this.close.bind(self));
+            // apply max height if maximize is given as number
+            if (_.isNumber(options.maximize)) this.$('.modal-dialog').css('max-height', options.maximize);
             // add help icon?
             if (options.help) {
                 require(['io.ox/backbone/mini-views/help'], function (HelpView) {
@@ -78,40 +84,70 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         open: function () {
             var o = this.options;
             this.render().$el.appendTo(o.container);
-            this.$el.modal({ keyboard: o.keyboard }).modal('show');
+            this.trigger('before:open');
+            // keyboard: false to support preventDefault on escape key
+            this.$el.modal({ keyboard: false }).modal('show');
+            this.$el.siblings().attr('aria-hidden', true);
             this.trigger('open');
             // set initial focus
             this.previousFocus = $(document.activeElement);
-            this.$(o.focus).focus();
+            var elem = this.$(o.focus);
+            if (elem.length) {
+                // dialog might be busy, i.e. elements are invisible so focus() might not work
+                this.activeElement = elem[0];
+                elem[0].focus();
+            }
             return this;
         },
 
-        close: function () {
+        close: function (e) {
+            this.trigger('before:close');
+            // stop listening to hidden event (avoid infinite loops)
+            this.$el.off('hidden.bs.modal');
+            if (!e || e.type !== 'hidden') {
+                this.$el.modal('hide');
+            }
+            this.$el.siblings().removeAttr('aria-hidden');
             this.trigger('close');
-            this.$el.modal('hide');
             if (this.previousFocus) this.previousFocus.focus();
             this.$el.remove();
             return this;
         },
 
-        busy: function () {
+        disableFormElements: function () {
             // disable all form elements; mark already disabled elements via CSS class
             this.$(':input').each(function () {
+                if ($(this).attr('data-action') === 'cancel') return;
                 $(this).toggleClass('disabled', $(this).prop('disabled')).prop('disabled', true);
             });
-            this.activeElement = $(document.activeElement);
-            this.$body.css('opacity', 0.50);
+        },
+
+        enableFormElements: function () {
+            // enable all form elements
+            this.$(':input').each(function () {
+                $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
+            });
+        },
+
+        busy: function (withAnimation) {
+            this.disableFormElements();
+            this.activeElement = this.activeElement || document.activeElement;
+            if (withAnimation) {
+                this.$body.addClass('invisible');
+                this.$('.modal-content').busy();
+            } else {
+                this.$body.css('opacity', 0.50);
+            }
             this.$el.focus();
             return this;
         },
 
         idle: function () {
-            // enable all form elements
-            this.$(':input').each(function () {
-                $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
-            });
-            this.$body.css('opacity', '');
-            if (this.activeElement) this.activeElement.focus();
+            this.enableFormElements();
+            this.$('.modal-content').idle();
+            this.$body.removeClass('invisible').css('opacity', '');
+            if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
+            this.activeElement = null;
             return this;
         },
 
@@ -160,8 +196,12 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         },
 
         invokeAction: function (action) {
+            // if async we need to make the dialog busy before we trigger the action
+            // otherwise we cannot idle the dialog in the action listener
+            if (this.options.async && action !== 'cancel') this.busy();
             this.trigger(action);
-            if (this.options.async && action !== 'cancel') this.busy(); else this.close();
+            // check if this.options is there, if the dialog was closed in the handling of the action this.options is empty and we run into a js error otherwise
+            if ((this.options && !this.options.async) || action === 'cancel') this.close();
         },
 
         onKeypress: function (e) {
@@ -169,34 +209,44 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             if (!this.options.enter) return;
             if (!$(e.target).is('input:text, input:password')) return;
             this.invokeAction(this.options.enter);
+        },
+
+        onEscape: function (e) {
+            if (e.which !== 27) return;
+            if (e.isDefaultPrevented()) return;
+            this.close();
         }
     });
 
-    ModalDialogView.foo = function () {
-        require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-            new ModalDialog({ enter: 'woohoo', focus: '.foo', help: 'xmpl', point: 'modal/xmpl', maximize: true, title: 'Example' })
-            .extend({
-                default: function () {
-                    this.append(
-                        $('<div class="form-group">').append(
-                            $('<label>').text('Label'),
-                            $('<input type="text" class="form-control foo" tabindex="1">')
-                        )
-                    );
-                },
-                text: function () {
-                    this.append(
-                        $('<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>')
-                    );
-                }
-            })
-            .addCancelButton()
-            .addCloseButton()
-            .addAlternativeButton()
-            .on('all', _.inspect)
-            .open();
-        });
-    };
+    /*
+
+    Just for debugging:
+
+    require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+        new ModalDialog({ enter: 'woohoo', focus: '.foo', help: 'xmpl', point: 'modal/xmpl', maximize: true, title: 'Example' })
+        .extend({
+            default: function () {
+                this.append(
+                    $('<div class="form-group">').append(
+                        $('<label>').text('Label'),
+                        $('<input type="text" class="form-control foo" tabindex="1">')
+                    )
+                );
+            },
+            text: function () {
+                this.append(
+                    $('<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>')
+                );
+            }
+        })
+        .addCancelButton()
+        .addCloseButton()
+        .addAlternativeButton()
+        .on('all', _.inspect)
+        .open();
+    });
+
+    */
 
     return ModalDialogView;
 });

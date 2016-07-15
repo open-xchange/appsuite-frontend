@@ -52,6 +52,36 @@
     .window-content .rightside > .scrollable-pane {
         max-width: 780px;
 
+        .settings-list-view {
+            .settings-list-item {
+                .flex-wrap(wrap);
+
+                .account-icon {
+                    margin-top: 2px;
+                    padding-right: 0;
+                }
+
+                .account-error-message {
+                    width: 100%;
+                    text-align: right;
+                    color: #FF0000;
+                    padding-top: 0;
+                    padding-right: 63px;
+                    margin-top: -8px;
+                }
+
+                .remove-placeholder {
+                    width: 24px;
+                    margin: 13px 14px;
+                }
+
+                @media (max-width: 480px), (max-device-width: 480px) {
+                    .remove-placeholder {
+                        width: 14px;
+                    }
+                }
+            }
+        }
 
         .io-ox-accounts-settings .widget-settings-view .widget-title {
             font-weight: normal;

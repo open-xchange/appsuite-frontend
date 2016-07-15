@@ -173,7 +173,7 @@ define('io.ox/contacts/main', [
             app.right = right.addClass('default-content-padding f6-target')
                 .attr({
                     'tabindex': 1,
-                    'role': 'complementary',
+                    'role': 'main',
                     'aria-label': gt('Contact Details')
                 }).scrollable();
         },
@@ -608,11 +608,8 @@ define('io.ox/contacts/main', [
          */
         'folder-view': function (app) {
 
-            // tree view
-            var tree = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'contacts' });
-
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
+            app.treeView = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'contacts' });
+            FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
         },
 
@@ -765,9 +762,19 @@ define('io.ox/contacts/main', [
         },
 
         'premium-area': function (app) {
-            commons.addPremiumFeatures(app, {
-                upsellId: 'folderview/contacts/bottom',
-                upsellRequires: 'carddav'
+
+            ext.point('io.ox/contacts/sidepanel').extend({
+                id: 'premium-area',
+                index: 10000,
+                draw: function () {
+                    this.append(
+                        commons.addPremiumFeatures(app, {
+                            append: false,
+                            upsellId: 'folderview/contacts/bottom',
+                            upsellRequires: 'carddav'
+                        })
+                    );
+                }
             });
         },
 
@@ -820,6 +827,13 @@ define('io.ox/contacts/main', [
             });
         },
 
+        'import': function () {
+            api.on('import', function () {
+                //update current detailview
+                api.trigger('update:' + _.ecid(app.currentContact));
+            });
+        },
+
         'api-create-event': function (app) {
             if (_.device('smartphone')) return;
 
@@ -849,6 +863,21 @@ define('io.ox/contacts/main', [
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.sect.contacts.gui';
             };
+        },
+
+        'sidepanel': function (app) {
+
+            ext.point('io.ox/contacts/sidepanel').extend({
+                id: 'tree',
+                index: 100,
+                draw: function (baton) {
+                    // add border & render tree and add to DOM
+                    this.addClass('border-right').append(baton.app.treeView.$el);
+                }
+            });
+
+            var node = app.getWindow().nodes.sidepanel;
+            ext.point('io.ox/contacts/sidepanel').invoke('draw', node, ext.Baton({ app: app }));
         },
 
         'metrics': function (app) {
@@ -942,7 +971,7 @@ define('io.ox/contacts/main', [
         app.gridContainer = $('<div class="abs border-left border-right contact-grid-container">')
             .attr({
                 role: 'navigation',
-                'aria-label': gt('Item List')
+                'aria-label': gt('Contacts')
             });
 
         app.grid = new VGrid(app.gridContainer, {
@@ -951,6 +980,8 @@ define('io.ox/contacts/main', [
             hideToolbar: _.device('smartphone')
             //swipeRightHandler: swipeRightHandler,
         });
+
+        app.gridContainer.find('.vgrid-toolbar').attr('aria-label', gt('Contacts toolbar'));
 
         commons.wireGridAndWindow(app.grid, win);
         commons.wireFirstRefresh(app, api);
@@ -961,12 +992,28 @@ define('io.ox/contacts/main', [
             return app.grid;
         };
 
+        if (capabilities.has('gab !alone') && !options.folder && app.settings.get('startInGlobalAddressbook', true)) options.folder = '6';
+
         // go!
         commons.addFolderSupport(app, app.grid, 'contacts', options.folder)
             .always(function () {
                 app.mediate();
                 win.show();
             });
+    });
+
+    // set what to do if the app is started again
+    // this way we can react to given options, like for example a different folder
+    app.setResume(function (options) {
+        // only consider folder option for now
+        if (options && options.folder && options.folder !== this.folder.get()) {
+            var appNode = this.getWindow();
+            appNode.busy();
+            return this.folder.set(options.folder).always(function () {
+                appNode.idle();
+            });
+        }
+        return $.when();
     });
 
     return {

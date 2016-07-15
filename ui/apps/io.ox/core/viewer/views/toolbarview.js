@@ -48,15 +48,15 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/rename',
                 title: gt('File name'),
                 customize: function (baton) {
-
+                    var displayName = baton.model.getDisplayName();
                     this.append(
                         // icon
                         !baton.context.standalone ?
                             $('<i class="fa" aria-hidden="true">').addClass(Util.getIconClass(baton.model)) :
                             null,
                         // filename
-                        $('<span class="filename-label">').text(baton.model.getDisplayName())
-                    );
+                        $('<span class="filename-label">').text(displayName)
+                    ).attr('aria-label', displayName);
 
                     this.addClass('viewer-toolbar-filename').parent().addClass('pull-left');
 
@@ -184,7 +184,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.addClass('viewer-toolbar-close')
                         .attr({
                             tabindex: '1',
-                            'aria-label': gt('Close')
+                            'aria-label': gt('Close viewer')
                         })
                         .parent().addClass('pull-right');
                 }
@@ -214,6 +214,14 @@ define('io.ox/core/viewer/views/toolbarview', [
                     label: gt('Download'),
                     section: 'export',
                     ref: 'io.ox/files/actions/download'
+                },
+                'open': {
+                    prio: 'lo',
+                    mobile: 'hi',
+                    icon: 'fa fa-download',
+                    label: gt('Open attachment'),
+                    section: 'export',
+                    ref: 'io.ox/files/actions/open'
                 },
                 'print': {
                     prio: 'lo',
@@ -636,62 +644,74 @@ define('io.ox/core/viewer/views/toolbarview', [
         /**
          * Render the DisplayerView in a queued version, because some extensionpoints are rendered asynchronous.
          * And calling toolbar.empty() before the toolbarpoint has not finished rendering may result in a race condition.
+         * will only store the next model to draw, so we can skip models that are no longer valid
          */
-        renderQueued: _.queued(function (model) {
-            // draw toolbar
-            var origData = model.get('origData'),
-                toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
-                pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
-                isDriveFile = model.isFile(),
-                baton = Ext.Baton({
-                    context: this,
-                    $el: toolbar,
-                    model: model,
-                    models: isDriveFile ? [model] : null,
-                    data: isDriveFile ? model.toJSON() : origData
-                }),
-                appName = model.get('source'),
-                self = this,
-                funcName = toolbarPoint.has(appName) ? 'replace' : 'extend';
+        renderQueued: function (model) {
+            if (this.currentlyDrawn) {
+                this.nextToDraw = model;
+            } else {
+                this.currentlyDrawn = model;
+                // draw toolbar
+                var origData = model.get('origData'),
+                    toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
+                    pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
+                    isDriveFile = model.isFile(),
+                    baton = Ext.Baton({
+                        context: this,
+                        $el: toolbar,
+                        model: model,
+                        models: isDriveFile ? [model] : null,
+                        data: isDriveFile ? model.toJSON() : origData
+                    }),
+                    appName = model.get('source'),
+                    self = this,
+                    funcName = toolbarPoint.has(appName) ? 'replace' : 'extend';
 
-            // remove listener from previous model
-            if (this.model) {
-                this.stopListening(this.model, 'change');
+                // remove listener from previous model
+                if (this.model) {
+                    this.stopListening(this.model, 'change');
+                }
+                // save current data as view model
+                this.model = model;
+                this.listenTo(this.model, 'change', this.onModelChange);
+                // set device type
+                Util.setDeviceClass(this.$el);
+                toolbar.empty().append(pageNavigation);
+                // enable only the link set for the current app
+                _.each(toolbarPoint.keys(), function (id) {
+                    if (id === appName) {
+                        toolbarPoint.enable(id);
+                    } else {
+                        toolbarPoint.disable(id);
+                    }
+                });
+                //extend or replace toolbar extension point with the toolbar links
+                toolbarPoint[funcName](new LinksPattern.InlineLinks({
+                    id: appName,
+                    dropdown: true,
+                    compactDropdown: true,
+                    ref: TOOLBAR_LINKS_ID + '/' + appName,
+                    customize: function () {
+                        // workaround for correct TAB traversal order:
+                        // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
+                        if (self.disposed) return;
+                        // using .dropdown would also select other dropdowns, like the sharing dropdown
+                        this.find('[data-action="more"]').parent().after(
+                            this.find('.viewer-toolbar-togglesidebar, .viewer-toolbar-popoutstandalone, .viewer-toolbar-close').parent()
+                        );
+                    }
+                }));
+                var ret = toolbarPoint.invoke('draw', toolbar, baton);
+                $.when.apply(self, ret.value()).done(function () {
+                    self.currentlyDrawn = null;
+                    if (self.nextToDraw) {
+                        var temp = self.nextToDraw;
+                        self.nextToDraw = null;
+                        self.renderQueued.apply(self, temp);
+                    }
+                });
             }
-            // save current data as view model
-            this.model = model;
-            this.listenTo(this.model, 'change', this.onModelChange);
-            // set device type
-            Util.setDeviceClass(this.$el);
-            toolbar.empty().append(pageNavigation);
-            // enable only the link set for the current app
-            _.each(toolbarPoint.keys(), function (id) {
-                if (id === appName) {
-                    toolbarPoint.enable(id);
-                } else {
-                    toolbarPoint.disable(id);
-                }
-            });
-            //extend or replace toolbar extension point with the toolbar links
-            toolbarPoint[funcName](new LinksPattern.InlineLinks({
-                id: appName,
-                dropdown: true,
-                compactDropdown: true,
-                ref: TOOLBAR_LINKS_ID + '/' + appName,
-                customize: function () {
-                    // workaround for correct TAB traversal order:
-                    // move the close button 'InlineLink' to the right of the 'InlineLinks Dropdown' manually.
-                    if (self.disposed) return;
-                    // using .dropdown would also select other dropdowns, like the sharing dropdown
-                    this.find('[data-action="more"]').parent().after(
-                        this.find('.viewer-toolbar-togglesidebar, .viewer-toolbar-popoutstandalone, .viewer-toolbar-close').parent()
-                    );
-                }
-            }));
-
-            var ret = toolbarPoint.invoke('draw', toolbar, baton);
-            return $.when.apply(this, ret.value());
-        }, 1),
+        },
 
         /**
          * Renders the document page navigation controls.

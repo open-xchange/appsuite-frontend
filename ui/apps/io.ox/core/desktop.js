@@ -181,6 +181,7 @@ define('io.ox/core/desktop', [
             state: 'ready',
             saveRestorePointTimer: null,
             launch: function () { return $.when(); },
+            resume: function () { return $.when(); },
             quit: function () { return $.when(); }
         },
 
@@ -358,6 +359,11 @@ define('io.ox/core/desktop', [
             return this;
         },
 
+        setResume: function (fn) {
+            this.set('resume', fn);
+            return this;
+        },
+
         setQuit: function (fn) {
             this.set('quit', fn);
             return this;
@@ -532,6 +538,16 @@ define('io.ox/core/desktop', [
                 this.get('window').show();
                 this.trigger('resume', this);
                 ox.trigger('app:resume', this);
+
+                if (name) {
+                    ext.point(name + '/main').invoke('resume', this, options);
+                }
+                try {
+                    var fnResume = this.get('resume');
+                    deferred = fnResume.call(this, options) || $.when();
+                } catch (e) {
+                    console.error('Error while resuming application:', e.message, e, this);
+                }
                 // if image previews were already displayed in the files app, it might happen that another app (e.g. latest files widget) did some changes to the pool
                 // and the previews were redrawn but not displayed since the 'appear' event has not been triggered
                 $(window).trigger('resize.lazyload');
@@ -1127,8 +1143,14 @@ define('io.ox/core/desktop', [
                 }
 
                 this.setHeader = function (node) {
-                    this.nodes.header.append(node.addClass('container'));
-                    this.nodes.outer.addClass('header-top');
+                    var position = _.device('!desktop') ? 'top' : coreConfig.get('features/windowHeaderPosition', 'bottom');
+                    if (position === 'top') {
+                        this.nodes.header.append(node.addClass('container'));
+                        this.nodes.outer.addClass('header-top');
+                    } else {
+                        this.nodes.footer.append(node.addClass('container'));
+                        this.nodes.outer.addClass('header-bottom');
+                    }
                     considerScrollbarWidth(this.nodes.header);
                     return this.nodes.header;
                 };
@@ -1450,8 +1472,8 @@ define('io.ox/core/desktop', [
                         // blocker
                         win.nodes.blocker = $('<div class="abs window-blocker">').hide().append(
                             $('<div class="abs header">'),
-                            $('<div class="progress progress-striped active first"><div class="progress-bar" style="width: 0%;"></div></div>').hide(),
-                            $('<div class="progress progress-striped progress-warning active second"><div class="progress-bar" style="width: 0%;"></div></div>').hide(),
+                            $('<div class="progress progress-striped active first"><div class="progress-bar" style="width:0"></div></div>').hide(),
+                            $('<div class="progress progress-striped progress-warning active second"><div class="progress-bar" style="width:0"></div></div>').hide(),
                             $('<div class="abs footer">')
                         ),
                         // window HEAD
@@ -1462,7 +1484,9 @@ define('io.ox/core/desktop', [
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body" role="main">').attr('aria-label', gt('Main window'))
+                        win.nodes.body = $('<div class="window-body">'),
+
+                        win.nodes.footer = $('<div class="window-footer">')
                     )
                     // capture controller events
                     .on('controller:quit', function () {
@@ -1514,6 +1538,7 @@ define('io.ox/core/desktop', [
                     index: 200,
                     draw: function (baton) {
                         baton.$.viewnode.append(
+                            $('<div class="sr-only arialive" role="status" aria-live="polite">'),
                             baton.$.box = $('<form class="search-box">'),
                             baton.$.boxfilter = $('<div class="search-box-filter">')
                         );

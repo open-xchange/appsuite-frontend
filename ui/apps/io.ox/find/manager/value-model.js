@@ -141,7 +141,10 @@ define('io.ox/find/manager/value-model', [
             // on missing options property use value instead
             if (!options.length) return this.get('data');
             // use selected option or default (index 0)
-            if (!id) return options[0];
+            if (!id) {
+                // use first not-hidden ('valid') option
+                return _.findWhere(options, { hidden: false }) || options[0];
+            }
             return _.findWhere(options, { id: id }) || {};
         },
 

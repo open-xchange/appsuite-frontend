@@ -224,10 +224,32 @@ define('io.ox/metrics/util', function () {
         return userhash;
     }
 
+    // stringified list to chunks (based on maximal number of chars)
+    // TODO: edge case if first string in list is shorter than maxlength
+    function toChunks(list, max, result) {
+        result = result || [];
+        var str = String(list);
+        // exit condition
+        if (str.length <= max) {
+            result.push(str.split(','));
+            return result;
+        }
+        // recursivley split at delimiter
+        for (var i = max - 1; i >= 0; i--) {
+            if (str[i] !== ',') continue;
+            var head = str.substr(0,i),
+                tail = str.substr(i + 1);
+            // push head-array to result and process string-tail
+            result.push(head.split(','));
+            return toChunks(tail, max, result);
+        }
+    }
+
     return {
         md5: md5,
         doNotTrack: doNotTrack,
-        getUserHash: getUserHash
+        getUserHash: getUserHash,
+        toChunks: toChunks
     };
 
     /*eslint-enable */

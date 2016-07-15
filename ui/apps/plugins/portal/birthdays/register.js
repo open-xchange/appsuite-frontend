@@ -73,7 +73,7 @@ define('plugins/portal/birthdays/register', [
 
         preview: function (baton) {
 
-            var $list = $('<ul class="content list-unstyled" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to complete list of Birthdays.') + '">'),
+            var $list = $('<ul class="content list-unstyled io-ox-portal-birthdays" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to complete list of Birthdays.') + '">'),
                 hash = {},
                 contacts = baton.data,
                 numOfItems = _.device('smartphone') ? 5 : 15;
@@ -113,6 +113,7 @@ define('plugins/portal/birthdays/register', [
                     if (!isDuplicate(name, birthday, hash)) {
                         $list.append(
                             $('<li class="line">').append(
+                                birthday.isSame(today, 'day') ? $('<span class="bold">').append('<i class="cake fa fa-birthday-cake">') : $(),
                                 $('<span class="bold">').text(name), $.txt(' '),
                                 $('<span class="accent">').text(_.noI18n(birthdayText))
                             )

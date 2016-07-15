@@ -48,7 +48,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                 });
                 // Set Cookie
                 _.setCookie('language', (ox.language = id));
-                ox.trigger('language');
+                ox.trigger('language', id, util.gt);
             });
         },
 
@@ -76,7 +76,8 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
             var lang = ox.serverConfig.languages,
                 node = $('#io-ox-languages'),
                 count = _.size(lang),
-                maxCount = 30;
+                maxCount = 30,
+                languageToTag = function (language) { return language.replace(/_/, '-'); };
 
             // show languages if more than one
             if (count > 1) {
@@ -92,7 +93,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                 if (count < maxCount && !_.url.hash('language-select') && _.device('!smartphone')) {
 
                     node.append(
-                        $('<span class="lang-label" data-i18n="Languages" data-i18n-attr="text,aria-label">'),
+                        $('<span class="lang-label" data-i18n="Languages" data-i18n-attr="text">'),
                         $('<div class="dropup">').append(
                             toggle = $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
                                 $('<span class="toggle-text">').text(lang[defaultLanguage]),
@@ -104,19 +105,20 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
 
                     // add to column layout
                     if (count > 15) list.addClass('multi');
-
                     list.append(
                         _(languageArray).map(function (value) {
                             return $('<li role="presentation">').append(
-                                $('<a href="#" role="menuitem">')
-                                    .attr({ 'aria-label': lang[value], 'lang': value })
-                                    .text(lang[value])
+                                $('<a href="#" role="menuitem">').attr({
+                                    'lang': languageToTag(value),
+                                    'data-value': value
+                                })
+                                .text(lang[value])
                             );
                         })
                     );
 
                     list.on('click', 'a', function (e) {
-                        var node = $(e.currentTarget), value = node.attr('lang');
+                        var node = $(e.currentTarget), value = node.attr('data-value');
                         e.preventDefault();
                         self.changeByUser(value);
                         $(e.delegateTarget).parent().find('.toggle-text').text(lang[value]);
@@ -126,19 +128,18 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                     toggle.dropdown();
                 } else {
                     node.append(
-                        $('<label for="language-select" class="lang-label" data-i18n="Languages" data-i18n-attr="text,aria-label">'),
+                        $('<label for="language-select" class="lang-label" data-i18n="Languages" data-i18n-attr="text">'),
                         $('<select id="language-select">')
                             .on('change', function () {
                                 exports.changeByUser($(this).val());
                             })
                             .append(
                                 _(languageArray).map(function (value) {
-                                    return $('<option>')
-                                        .attr({
-                                            'aria-label': lang[value],
-                                            'value': value
-                                        })
-                                        .text(lang[value]);
+                                    return $('<option>').attr({
+                                        'lang': languageToTag(value),
+                                        'data-value': value,
+                                        'value': value
+                                    }).text(lang[value]);
                                 })
                             )
                             .val(defaultLanguage)

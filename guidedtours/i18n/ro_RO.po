@@ -3,8 +3,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-09 21:25+0100\n"
+"PO-Revision-Date: 2016-07-02 09:46+0200\n"
 "Last-Translator: daiana <xdaiana@yahoo.com>\n"
 "Language-Team: Romanian <ro@bureau-cornavin.com>\n"
 "Language: ro_RO\n"
@@ -13,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
@@ -454,7 +455,7 @@ msgstr "Crearea de elemente noi"
 #: apps/io.ox/tours/intro.js:73 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
-"Pentru a crea un e-mail nou, apăsați pe Creează e-mail nou în bara de unelte."
+"Pentru a crea un e-mail nou, apăsați pe Compune e-mail nou în bara de unelte."
 
 #: apps/io.ox/tours/intro.js:81 module:io.ox/tours
 msgid "Opening or closing the folder tree"
@@ -584,14 +585,14 @@ msgstr "Introducerea textului e-mailului"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
-"Introduceți textul mesajului în zona principală. Dacă formatul text a fost "
-"setat din opțiuni pe HTML, puteți formata textul mesajului. Pentru formatare "
-"selectați o parte a textului, apoi apăsați pe o pictogramă din bara de "
-"format."
+"Introduceți textul mesajului în zona principală. Dacă formatul textului a "
+"fost setat din opțiuni pe HTML, puteți formata textul mesajului. Pentru "
+"formatare selectați o parte a textului, apoi apăsați pe o pictogramă din "
+"bara de format."
 
 #: apps/io.ox/tours/mail.js:74 module:io.ox/tours
 msgid "Sending the E-Mail"
@@ -725,8 +726,9 @@ msgid "Closing a square"
 msgstr "Închiderea unui cadru"
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "Dacă nu mai doriți afișarea cadrului, apăsați pe cruce."
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr ""
+"Dacă nu mai doriți afișarea cadrului, apăsați pe pictograma de ștergere."
 
 #: apps/io.ox/tours/portal.js:51 module:io.ox/tours
 msgid "Customizing the Portal"

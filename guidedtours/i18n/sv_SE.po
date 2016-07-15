@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-06 05:28+0100\n"
+"PO-Revision-Date: 2016-07-01 15:22+0200\n"
 "Last-Translator: Arve Eriksson\n"
 "Language-Team: sv <ox@bureau-cornavin.com>\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
@@ -191,9 +191,8 @@ msgid ""
 msgstr ""
 "Välkommen till ditt molnlagringsprogram. Denna guidade rundtur kommer "
 "presentera din nya online-lagringslösning - din central för att komma åt "
-"filer "
-"som lagrats online från alla dina konton. Här kan du ladda upp och spara dina "
-"filer, dela ut dem, och synkronisera dem mellan olika enheter.  "
+"filer som lagrats online från alla dina konton. Här kan du ladda upp och "
+"spara dina filer, dela ut dem, och synkronisera dem mellan olika enheter.  "
 
 #: apps/io.ox/tours/files.js:66 module:io.ox/tours
 msgid "Folder tree"
@@ -207,10 +206,9 @@ msgid ""
 "Pictures and Videos."
 msgstr ""
 "Till vänster ser du mappträdet. Det visar din mappstruktur och låter dig "
-"navigera "
-"till specifika mappar och undermappar. För att underlätta för dig har vi "
-"redan "
-"skapat mappar för dina Dokument, din Musik, dina Bilder och dina Videor."
+"navigera till specifika mappar och undermappar. För att underlätta för dig "
+"har vi redan skapat mappar för dina Dokument, din Musik, dina Bilder och "
+"dina Videor."
 
 #: apps/io.ox/tours/files.js:80 module:io.ox/tours
 msgid "Folder content"
@@ -256,10 +254,9 @@ msgid ""
 "now available in Drive on all your devices."
 msgstr ""
 "För att ladda upp en ny fil från din lokala enhet, klicka på Lägg till lokal "
-"fil "
-"och markera filen du vill ladda upp. Det är ännu enklare om du bara drar "
-"och släpper filerna från din lokala enhet till Drive. Den uppladdade filen är "
-"nu tillgänglig från Drive på alla dina enheter."
+"fil och markera filen du vill ladda upp. Det är ännu enklare om du bara drar "
+"och släpper filerna från din lokala enhet till Drive. Den uppladdade filen "
+"är nu tillgänglig från Drive på alla dina enheter."
 
 #: apps/io.ox/tours/files.js:131 module:io.ox/tours
 msgid "Preview files"
@@ -268,8 +265,8 @@ msgstr "Granska filer"
 #: apps/io.ox/tours/files.js:132 module:io.ox/tours
 msgid "Clicking on the view icon leads you to a preview of the selected file."
 msgstr ""
-"Klicka på visningsikonen för att komma till en granskning av "
-"den markerade filen."
+"Klicka på visningsikonen för att komma till en granskning av den markerade "
+"filen."
 
 #: apps/io.ox/tours/files.js:142 module:io.ox/tours
 msgid "Preview mode"
@@ -281,8 +278,7 @@ msgid ""
 "on your files."
 msgstr ""
 "Från granskningen kan du också välja andra alternativ för att hjälpa dig "
-"hantera och "
-"arbeta med dina filer."
+"hantera och arbeta med dina filer."
 
 #: apps/io.ox/tours/files.js:156 module:io.ox/tours
 msgid "Share files"
@@ -308,12 +304,10 @@ msgid ""
 "files. You can use an expiration date and password protection if you like."
 msgstr ""
 "Välj från två alternativ för att dela ut dina filer och mappar. Använd Bjud "
-"in folk "
-"om du vill hantera åtkomsträttigheter och tillåta mottagare att skapa och "
-"redigera "
-"filer. Eller bara få en länk för att låta andra visa och ladda ner dina "
-"filer. Du kan "
-"använda ett utgångsdatum och lösenordsskydd om du så önskar."
+"in folk om du vill hantera åtkomsträttigheter och tillåta mottagare att "
+"skapa och redigera filer. Eller bara få en länk för att låta andra visa och "
+"ladda ner dina filer. Du kan använda ett utgångsdatum och lösenordsskydd om "
+"du så önskar."
 
 #: apps/io.ox/tours/files.js:182 module:io.ox/tours
 msgid "Collaborating"
@@ -340,10 +334,9 @@ msgid ""
 "will automatically update your edited file, but thanks to versioning the "
 "original file stays available."
 msgstr ""
-"Visste du att du kan redigera textdokument och kalkylark online? Drive kommer "
-"automatiskt uppdatera din redigerade fil, men tack vare versionskontroll "
-"finns "
-"den ursprungliga filen kvar."
+"Visste du att du kan redigera textdokument och kalkylark online? Drive "
+"kommer automatiskt uppdatera din redigerade fil, men tack vare "
+"versionskontroll finns den ursprungliga filen kvar."
 
 #: apps/io.ox/tours/files.js:205 module:io.ox/tours
 msgid "File details"
@@ -356,9 +349,8 @@ msgid ""
 "a file to see the details."
 msgstr ""
 "Sidofliken om fildetaljer visar ytterligare information om dina filer. "
-"Aktivera "
-"fildetaljsalternativet från den utfällbara Visa-menyn och markera en fil för "
-"att se detaljerna."
+"Aktivera fildetaljsalternativet från den utfällbara Visa-menyn och markera "
+"en fil för att se detaljerna."
 
 #: apps/io.ox/tours/files.js:221 module:io.ox/tours
 msgid "Add another account"
@@ -430,7 +422,8 @@ msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
 msgstr ""
-"Nya objekt-ikonen visar mängden oläst e-post, eller andra upplysningar. Om "
+"Nya objekt-ikonen visar antalet olästa meddelanden, eller andra upplysningar. "
+"Om "
 "du klickar på ikonen öppnas informationsområdet."
 
 #: apps/io.ox/tours/intro.js:65 module:io.ox/tours
@@ -452,7 +445,8 @@ msgstr "Skapa nya objekt"
 #: apps/io.ox/tours/intro.js:73 module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
-"För att skapa ny e-post, klicka på ikonen Skriv ny e-post i verktygsraden."
+"För att skapa ett nytt meddelande, klicka på ikonen Skriv nytt meddelande i "
+"verktygsraden."
 
 #: apps/io.ox/tours/intro.js:81 module:io.ox/tours
 msgid "Opening or closing the folder tree"
@@ -534,11 +528,13 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js:33 module:io.ox/tours
 msgid "Composing a new E-Mail"
-msgstr "Skriv ny e-post"
+msgstr "Skriv nytt meddelande"
 
 #: apps/io.ox/tours/mail.js:34 module:io.ox/tours
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
-msgstr "För att skriva ny e-post, klicka på Skriv ny e-post i verktygsraden."
+msgstr ""
+"För att skriva ett nytt meddelande, klicka på Skriv nytt meddelande i "
+"verktygsraden."
 
 #: apps/io.ox/tours/mail.js:47 module:io.ox/tours
 msgid "Entering the recipient's name"
@@ -579,11 +575,11 @@ msgstr "Skriv in meddelandets text"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
-"Skriv e-brevets text i huvudområdet. Om textformatet har ställts in till "
+"Skriv meddelandetexten i huvudområdet. Om textformatet har ställts in till "
 "HTML i inställningarna kan du formatera texten. För att göra det, markera en "
 "del av texten och klicka sedan på en ikon i formateringsfältet."
 
@@ -593,7 +589,7 @@ msgstr "Skicka e-post"
 
 #: apps/io.ox/tours/mail.js:75 module:io.ox/tours
 msgid "To send the E-Mail, click on Send"
-msgstr "För att skicka e-brevet, klicka på Skicka"
+msgstr "För att skicka meddelandet, klicka på Skicka"
 
 #: apps/io.ox/tours/mail.js:79 module:io.ox/tours
 msgid "Sorting your E-Mails"
@@ -614,14 +610,14 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js:91 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
-msgstr "Öppna e-post i ett separat fönster"
+msgstr "Öppna meddelanden i ett separat fönster"
 
 #: apps/io.ox/tours/mail.js:92 module:io.ox/tours
 msgid ""
 "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
 "separate window."
 msgstr ""
-"Om du dubbelklickar på ett e-brev i listan öppnas e-brevet i ett separat "
+"Om du dubbelklickar på ett meddelande i listan öppnas det i ett separat "
 "fönster."
 
 #: apps/io.ox/tours/mail.js:96 module:io.ox/tours
@@ -633,7 +629,8 @@ msgid ""
 "To open or close an E-Mail in a conversation, click on a free area in the "
 "header."
 msgstr ""
-"För att öppna eller stänga e-brev i en konversation, klicka på en ledig yta "
+"För att öppna eller stänga meddelanden i en konversation, klicka på en ledig "
+"yta "
 "i sidhuvudet."
 
 #: apps/io.ox/tours/mail.js:101 module:io.ox/tours
@@ -650,7 +647,7 @@ msgstr ""
 
 #: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid "Editing multiple E-Mails"
-msgstr "Redigera flera e-brev"
+msgstr "Redigera flera meddelanden"
 
 #: apps/io.ox/tours/mail.js:107 module:io.ox/tours
 msgid ""
@@ -658,8 +655,9 @@ msgid ""
 "side of the E-Mails. If the checkboxes are not displayed, click on View > "
 "Checkboxes on the right side of the toolbar."
 msgstr ""
-"För att redigera flera e-brev samtidigt, aktivera kryssrutorna till vänster "
-"om e-breven. Om kryssrutorna inte visas, klicka på Visa > Kryssrutor till "
+"För att redigera flera meddelanden samtidigt, aktivera kryssrutorna till "
+"vänster "
+"om dem. Om kryssrutorna inte visas, klicka på Visa > Kryssrutor till "
 "höger i verktygsraden."
 
 #: apps/io.ox/tours/mail.js:112 module:io.ox/tours
@@ -688,7 +686,8 @@ msgid ""
 "The Portal informs you about current E-Mails, appointments or social network "
 "news."
 msgstr ""
-"Portalen informerar dig om aktuell e-post, möten, eller nyheter från sociala "
+"Portalen informerar dig om aktuella meddelanden, möten, eller nyheter från "
+"sociala "
 "nätverk."
 
 #: apps/io.ox/tours/portal.js:35 module:io.ox/tours
@@ -716,8 +715,8 @@ msgid "Closing a square"
 msgstr "Stäng en ruta"
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "Om du inte längre vill visa en ruta, klicka på krysset."
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "Om du inte längre vill visa en ruta, klicka på borttagningsikonen."
 
 #: apps/io.ox/tours/portal.js:51 module:io.ox/tours
 msgid "Customizing the Portal"

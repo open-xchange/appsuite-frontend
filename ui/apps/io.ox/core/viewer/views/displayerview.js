@@ -51,6 +51,14 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slidesToCache = 7;
             // instance of the swiper plugin
             this.swiper = null;
+            // object to store the currently loading slides.
+            this.loadingSlides = {};
+            // object to store slides that are removed while loading (prevent errors)
+            this.delayedRemove = {};
+            // limit of how much slides are loaded simultaniously
+            this.loadingLimit = 3;
+            // array to store dummys in use
+            this.dummyList = [];
             // listen to blend caption events
             this.listenTo(this.viewerEvents, 'viewer:blendcaption', this.blendCaption);
             this.listenTo(this.viewerEvents, 'viewer:blendnavigation', this.blendNavigation);
@@ -97,7 +105,8 @@ define('io.ox/core/viewer/views/displayerview', [
                     onSlideChangeStart: this.onSlideChangeStart.bind(this)
                 };
 
-            if (startIndex < this.preloadOffset) {
+            // if the index is we want to start with is preloaded, we can use it.
+            if (startIndex < this.preloadOffset || this.collection.length < 2 * this.preloadOffset + 1) {
                 swiperParameter.initialSlide = startIndex;
             } else if (startIndex >= this.collection.length - this.preloadOffset) {
                 swiperParameter.initialSlide = 2 * this.preloadOffset - this.collection.length + startIndex + 1;
@@ -145,7 +154,21 @@ define('io.ox/core/viewer/views/displayerview', [
                 self.handleDuplicatesSlides();
                 // preload selected file and its neighbours initially
                 self.slideViews[self.activeIndex].show();
-                self.blendCaption(gt('%1$d of %2$d', startIndex + 1, self.collection.length));
+                if (self.collection.length > 1) {
+                    //no need to show anything if only one item available
+
+                    //#. information about position of the current item in viewer
+                    //#. this will only be shown for more than one item
+                    //#. %1$d - position of current item
+                    //#. %2$d - total amount of items
+                    self.blendCaption(gt.ngettext(
+                        '%1$d of %2$d item',
+                        '%1$d of %2$d items',
+                        self.collection.length,
+                        startIndex + 1,
+                        self.collection.length
+                    ));
+                }
                 self.blendNavigation();
                 // focus first active slide initially
                 self.focusActiveSlide();
@@ -165,21 +188,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 last = this.$el.find('.swiper-slide-duplicate[data-index="' + (this.collection.length - 1) + '"]');
 
             function handle(el, model) {
-                TypesRegistry.getModelType(model).then(function success(ModelTypeView) {
-                    var view = new ModelTypeView({
-                        el: el.get(0),
-                        model: model,
-                        collection: self.collection,
-                        viewerEvents: self.viewerEvents
-                    }).render();
-
-                    // only load duplicate slides which are not processed by the document converter
-                    if (!model.isOffice() && !model.isPDF()) view.prefetch(1).show();
-                }, function fail() {
-                    return gt('Cannot require a view type for %1$s', model.get('filename'));
-                });
+                self.createDummy(el.get[0], model);
             }
-
             if (first.length > 0) handle(first, this.collection.first());
             if (last.length > 0) handle(last, this.collection.last());
         },
@@ -222,13 +232,14 @@ define('io.ox/core/viewer/views/displayerview', [
          * @ returns {jquery.Promise}
          *  a Promise which is resolved after the view is rendered and prefetched
          */
-        createView: function (index) {
+        createView: function (index, options) {
             var collection = this.collection,
                 self = this,
                 model = collection.at(index);
+            options = options || {};
 
             function get() {
-                if (self.slideViews[index]) return $.when(self.slideViews[index]);
+                if (self.slideViews[index] && !self.slideViews[index].isDummy) return $.when(self.slideViews[index]);
 
                 return TypesRegistry.getModelType(model).then(function success(ModelTypeView) {
                     var view = new ModelTypeView({
@@ -236,17 +247,55 @@ define('io.ox/core/viewer/views/displayerview', [
                         collection: collection,
                         viewerEvents: self.viewerEvents
                     });
+                    // if this function is called to replace a dummy, we need to make sure it is still in use, so we don't add it again accidentally
+                    if (!options.onlyReplace || (options.onlyReplace && self.slideViews[index])) {
+                        // render view and append index
+                        self.slideViews[index] = view.render();
+                        view.$el.attr('data-index', index);
+                        var active = false;
+                        if (self.swiper) {
+                            var additionalClasses = '';
+                            if (self.swiper.wrapper.find('*[data-index=' + index + '].swiper-slide-active').length) {
+                                additionalClasses = 'swiper-slide-active';
+                                active = true;
+                            }
+                            var slide = self.swiper.wrapper.find('*[data-index=' + index + ']:not(.swiper-slide-duplicate)'),
+                                swiperIndex = slide.data('swiper-slide-index');
+                            if (slide.hasClass('swiper-slide-prev')) {
+                                additionalClasses = additionalClasses + 'swiper-slide-prev';
+                            }
+                            if (slide.hasClass('swiper-slide-next')) {
+                                additionalClasses = additionalClasses + 'swiper-slide-next';
+                            }
+                            self.swiper.wrapper.find('*[data-index=' + index + ']:not(.swiper-slide-duplicate)').replaceWith(view.$el);
+                            view.$el.attr('data-swiper-slide-index', swiperIndex);
+                            view.$el.addClass(additionalClasses);
+                            if (active) {
+                                view.$el.focus();
+                            }
 
-                    // render view and append index
-                    self.slideViews[index] = view.render();
-                    view.$el.attr('data-index', index);
+                            if (self.swiper.wrapper.find('*[data-index=' + index + '].swiper-slide-duplicate').length) {
+                                // there is a swiper duplicate of this. let's replace this as well.
+                                var duplicateView = new ModelTypeView({
+                                    el: self.swiper.wrapper.find('*[data-index=' + index + '].swiper-slide-duplicate').removeClass('dummy-slide').get(0),
+                                    model: model,
+                                    collection: collection,
+                                    viewerEvents: self.viewerEvents
+                                }).render();
+
+                                duplicateView.$el.attr('data-swiper-slide-index', swiperIndex);
+
+                                // only load duplicate slides which are not processed by the document converter
+                                if (!model.isOffice() && !model.isPDF() && !view.model.isVideo() && !view.model.isAudio()) duplicateView.prefetch(1);
+                            }
+                        }
+                    }
 
                     return view;
                 }, function fail() {
                     return gt('Cannot require a view type for %1$s', model.get('filename'));
                 });
             }
-
             return get().done(function (view) {
                 // prefetch data according to priority
                 if (!view.isPrefetched) {
@@ -328,6 +377,73 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         /**
+         * creates a dummyslide, that is used if we switch slides too fast.
+         * can be used with 1 argument (index) or 2 arguments, (el and model) this is used for the duplicates
+         */
+        createDummy: function (index) {
+            var self = this,
+                duplicate = arguments.length > 1,
+                dummy = {
+                    $el: duplicate ? arguments[0] : $('<div class="dummy-slide swiper-slide scrollable">').attr('data-index', index).attr('data-index', index),
+                    show: function () {
+                        // allow chaining
+                        return this;
+                    },
+                    prefetch: function () {
+                        return this;
+                    },
+                    unload: function (removeIndex) {
+                        self.dummyList = _(self.dummyList).filter(function (view) { return view.index !== removeIndex; });
+                        return this;
+                    },
+                    load: duplicate ? _.noop : function () {
+                        return self.createView(index, { onlyReplace: true });
+                    },
+                    dispose: function () {
+                        return this;
+                    },
+                    isDummy: true,
+                    index: duplicate ? null : index,
+                    model: duplicate ? arguments[1] : this.collection.at(index),
+                    collection: this.collection
+                };
+            if (!duplicate) {
+                this.slideViews[index] = dummy;
+                this.dummyList.push(dummy);
+            }
+            return dummy;
+        },
+
+        // loads the next dummy
+        loadDummy: function () {
+            var self = this,
+                keys = _(this.loadingSlides).keys();
+            // free to load a dummy if we still have them
+            if (this.dummyList[0] && keys.length <= this.loadingLimit) {
+                var index = index = self.dummyList[0].index;
+
+                if (index !== null) {
+                    this.loadingSlides[index] = true;
+
+                    this.dummyList[0].load()
+                        .done(function (view) {
+                            if (self.delayedRemove[index]) {
+                                self.delayedRemove[index].view.unload(index).dispose();
+                                self.delayedRemove[index].node.remove();
+                            } else if (view.$el.hasClass('swiper-slide-active')) {
+                                // show if active
+                                view.show();
+                            }
+
+                            delete self.loadingSlides[index];
+                            self.loadDummy();
+                        });
+                    this.dummyList.shift();
+                }
+            }
+        },
+
+        /**
          * Load the given slide in the direction of movement. It automatically unloads the first of the loaded slides and apppends a new slide (both according to the direction of movement).
          *
          * @param {String} [direction = 'right']
@@ -338,9 +454,56 @@ define('io.ox/core/viewer/views/displayerview', [
                 insertOffset = direction === 'right' ? this.preloadOffset : -this.preloadOffset,
                 removeOffset = direction === 'right' ? -this.preloadOffset - 1 : this.preloadOffset + 1,
                 insertIndex = this.normalizeSlideIndex(this.activeIndex + insertOffset),
-                removeIndex = this.normalizeSlideIndex(this.activeIndex + removeOffset);
+                removeIndex = this.normalizeSlideIndex(this.activeIndex + removeOffset),
+                insertSlide = function (view) {
+                    var swiper = self.swiper,
+                        neighbour;
 
-            this.slideViews[this.activeIndex].show();
+                    swiper.destroyLoop();
+
+                    // remove old slide
+                    if (self.loadingSlides[removeIndex]) {
+                        //don't remove currently loading files to prevent errors
+                        self.delayedRemove[removeIndex] = { view: self.slideViews[removeIndex], node: swiper.wrapper.find('*[data-index=' + removeIndex + ']') };
+                        swiper.wrapper.find('*[data-index=' + removeIndex + ']').detach();
+                    } else {
+                        self.slideViews[removeIndex].unload(removeIndex).dispose();
+                        swiper.wrapper.find('*[data-index=' + removeIndex + ']').remove();
+                    }
+                    delete self.slideViews[removeIndex];
+
+                    // add new slide at correct position
+                    if (direction === 'right') {
+                        neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex - 1) + ']');
+
+                        if (neighbour.length > 0) {
+                            neighbour.after(view.$el);
+                        } else {
+                            swiper.wrapper.prepend(view.$el);
+                        }
+                    } else if (direction === 'left') {
+                        neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex + 1) + ']');
+
+                        if (neighbour.length > 0) {
+                            neighbour.before(view.$el);
+                        } else {
+                            swiper.wrapper.append(view.$el);
+                        }
+                    }
+
+                    swiper.createLoop();
+
+                    // recalculate swiper index
+                    swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
+                    swiper.update(true);
+
+                    self.updatePriorities();
+                    self.isBusy = false;
+                    self.slideViews[self.activeIndex].show();
+                    self.handleDuplicatesSlides.bind(self);
+
+                    self.loadDummy();
+                };
 
             // we do not have to load any slides if the slide to insert already exists
             if (this.slideViews[insertIndex]) {
@@ -351,47 +514,11 @@ define('io.ox/core/viewer/views/displayerview', [
                 swiper.update(true);
 
                 this.updatePriorities();
-
+                this.slideViews[this.activeIndex].show();
                 return $.when();
             }
 
-            return this.createView(insertIndex).done(function (view) {
-                var swiper = self.swiper,
-                    neighbour;
-                swiper.destroyLoop();
-
-                // remove old slide
-                self.slideViews[removeIndex].unload().dispose();
-                delete self.slideViews[removeIndex];
-                swiper.wrapper.find('*[data-index=' + removeIndex + ']').remove();
-
-                // add new slide at correct position
-                if (direction === 'right') {
-                    neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex - 1) + ']');
-
-                    if (neighbour.length > 0) {
-                        neighbour.after(view.$el);
-                    } else {
-                        swiper.wrapper.prepend(view.$el);
-                    }
-                } else if (direction === 'left') {
-                    neighbour = swiper.wrapper.find('*[data-index=' + (insertIndex + 1) + ']');
-
-                    if (neighbour.length > 0) {
-                        neighbour.before(view.$el);
-                    } else {
-                        swiper.wrapper.append(view.$el);
-                    }
-                }
-
-                swiper.createLoop();
-
-                // recalculate swiper index
-                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
-                swiper.update(true);
-
-                self.updatePriorities();
-            });
+            insertSlide(this.createDummy(insertIndex));
         },
 
         /**
@@ -571,14 +698,20 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 // increment active index
                 this.activeIndex = this.normalizeSlideIndex(this.activeIndex + (preloadDirection === 'right' ? 1 : -1));
-                this.loadSlide(preloadDirection).done(this.handleDuplicatesSlides.bind(this));
+                this.loadSlide(preloadDirection);
             }
 
-            //#. text of a viewer slide caption
-            //#. Example result: "1 of 10"
-            //#. %1$d is the slide index of the current
-            //#. %2$d is the total slide count
-            this.blendCaption(gt('%1$d of %2$d', this.activeIndex + 1, this.collection.length));
+            //#. information about position of the current item in viewer
+            //#. this will only be shown for more than one item
+            //#. %1$d - position of current item
+            //#. %2$d - total amount of item
+            this.blendCaption(gt.ngettext(
+                '%1$d of %2$d item',
+                '%1$d of %2$d items',
+                this.collection.length,
+                this.activeIndex + 1,
+                this.collection.length
+            ));
             this.blendNavigation();
             // a11y
             activeSlideNode.attr('aria-selected', 'true');

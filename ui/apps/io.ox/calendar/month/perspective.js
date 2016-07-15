@@ -224,7 +224,7 @@ define('io.ox/calendar/month/perspective', [
             for (var i = 0; i < weeks; i++, curWeek.add(8, 'd').startOf('week')) {
                 var day = curWeek.valueOf(),
                     endDate = curWeek.clone().endOf('week'),
-                    monthDelimiter = curWeek.clone().endOf('month').isBefore(endDate.clone().add(1, 'd'));
+                    monthDelimiter = curWeek.clone().endOf('month').isSameOrBefore(endDate);
 
                 // add collection for week
                 self.collections[day] = new MonthAppointmentCollection([]);
@@ -464,8 +464,8 @@ define('io.ox/calendar/month/perspective', [
                 .addClass('month-view')
                 .empty()
                 .attr({
-                    'role': 'navigation',
-                    'aria-label': gt('Appointment list')
+                    'role': 'main',
+                    'aria-label': gt('Calendar Month View')
                 })
                 .append(this.scaffold = View.drawScaffold());
 

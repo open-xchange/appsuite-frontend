@@ -34,7 +34,7 @@
 
     function runCode(name, code) {
         /*eslint no-eval: 0*/
-        eval('//@ sourceURL=' + name + '.js\n' + code);
+        eval('//# sourceURL=' + name + '.js\n' + code);
     }
 
     // needs to be reviewed: "force websql for mobile" (July 2013)
@@ -606,7 +606,7 @@
                 var f2 = function () { return f.apply(this, arguments); };
                 // _.each by foot to avoid capturing members of f in closures
                 var f3 = function (i) {
-                    f2[i] = function () { f[i].apply(f, arguments); };
+                    f2[i] = function () { return f[i].apply(f, arguments); };
                 };
                 for (var i in f) {
                     f3(i);

@@ -26,16 +26,10 @@ define('plugins/portal/flickr/register', [
         // order of elements is the crucial factor of presenting the image in the sidepopups
         imagesizes = ['url_l', 'url_c', 'url_z', 'url_o', 'url_n', 'url_m', 'url_q', 'url_s', 'url_sq', 'url_t'],
         sizes = 'l m n o q s sq t z'.split(' '),
-        baseUrl = 'https://www.flickr.com/services/rest/?api_key=' + API_KEY + '&format=json&extras=date_upload,' + imagesizes.join(','),
-        apiUrl = {
-            'flickr.photos.search': baseUrl + '&method=flickr.photos.search&text=',
-            'flickr.people.getPublicPhotos': baseUrl + '&method=flickr.people.getPublicPhotos&user_id='
-        };
+        baseUrl = 'https://www.flickr.com/services/rest/?api_key=' + API_KEY + '&format=json&extras=date_upload,' + imagesizes.join(',');
 
-    if (_.isUndefined(API_KEY)) {
-        // No API key, no extension;
-        return;
-    }
+    // No API key, no extension;
+    if (_.isUndefined(API_KEY)) return;
 
     ext.point('io.ox/portal/widget/flickr').extend({
 
@@ -47,15 +41,19 @@ define('plugins/portal/flickr/register', [
 
             function initFeed() {
 
-                var props = baton.model.get('props'), url;
+                var props = baton.model.get('props'), method = props.method, url;
+                if (!method) return;
 
-                if (props.method) {
-                    url = String((apiUrl[props.method] || '')) + encodeURIComponent(props.query) + '&jsoncallback=';
-                    baton.feed = new Feed({ url: url });
-                    baton.feed.process = function (data) {
-                        return data && data.stat === 'ok' ? data.photos : { error: gt('Could not load data') };
-                    };
+                if (method === 'flickr.photos.search') {
+                    url = baseUrl + '&method=flickr.photos.search&text=' + encodeURIComponent(props.query);
+                } else {
+                    url = baseUrl + '&method=flickr.people.getPublicPhotos&user_id=' + encodeURIComponent(props.nsid);
                 }
+
+                baton.feed = new Feed({ url: url += '&jsoncallback=' });
+                baton.feed.process = function (data) {
+                    return data && data.stat === 'ok' ? data.photos : { error: gt('Could not load data') };
+                };
             }
 
             baton.model.on('change:props', initFeed);

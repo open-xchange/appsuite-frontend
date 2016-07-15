@@ -67,7 +67,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             // a Deferred object indicating the load process of this document view.
             this.documentLoad = $.Deferred();
             // all page nodes with contents, keyed by one-based page number
-            this.loadedPageNodes = {};
+            this.loadedPageNodes = [];
             // the timer that loads more pages above and below the visible ones
             this.loadMorePagesTimerId = null;
             // call view destroyer on viewer global dispose event
@@ -295,44 +295,48 @@ define('io.ox/core/viewer/views/types/documentview', [
          * the non visible pages are loaded with lower priority, if necessary.
          */
         loadVisiblePages: function () {
+            this.documentLoad.done(function () {
 
-            var pagesToRender = this.getPagesToRender(),
-                beginPageNumber = _.first(pagesToRender),
-                endPageNumber = _.last(pagesToRender);
+                var pagesToRender = this.getPagesToRender();
+                var beginPageNumber = _.first(pagesToRender);
+                var endPageNumber = _.last(pagesToRender);
 
-            // fail safety: do nothing if called while view is hidden (e.g. scroll handlers)
-            if (this.isVisible()) {
-                // abort old requests not yet running
-                this.pageLoader.abortQueuedRequests();
-                this.cancelMorePagesTimer();
+                // fail safety: do nothing if called while view is hidden (e.g. scroll handlers)
+                if (this.isVisible()) {
+                    // abort old requests not yet running
+                    this.pageLoader.abortQueuedRequests();
+                    this.cancelMorePagesTimer();
 
-                // load visible pages with high priority
-                _.each(pagesToRender, function (pageNumber) {
-                    this.loadPage(pageNumber, 'high');
-                }, this);
+                    // load visible pages with high priority
+                    _.each(pagesToRender, function (pageNumber) {
+                        this.loadPage(pageNumber, 'high');
+                    }, this);
 
-                // load the invisible pages above and below the visible area with medium priority after a short delay
-                this.loadMorePagesTimerId = window.setTimeout(function () {
-                    for (var i = 1; i <= NON_VISIBLE_PAGES_TO_LOAD_BESIDE; i++) {
-                        // pages before the visible pages
-                        if ((beginPageNumber - i) > 0) {
-                            this.loadPage(beginPageNumber - i, 'medium');
+                    // load the invisible pages above and below the visible area with medium priority after a short delay
+                    this.loadMorePagesTimerId = window.setTimeout(function () {
+                        for (var i = 1; i <= NON_VISIBLE_PAGES_TO_LOAD_BESIDE; i++) {
+                            // pages before the visible pages
+                            if ((beginPageNumber - i) > 0) {
+                                this.loadPage(beginPageNumber - i, 'medium');
+                            }
+                            // pages after the visible pages
+                            if ((endPageNumber + i) <= this.numberOfPages) {
+                                this.loadPage(endPageNumber + i, 'medium');
+                            }
                         }
-                        // pages after the visible pages
-                        if ((endPageNumber + i) <= this.numberOfPages) {
-                            this.loadPage(endPageNumber + i, 'medium');
-                        }
-                    }
-                }.bind(this), 50);
+                    }.bind(this), 50);
 
-                // clear all other pages
-                _.each(this.loadedPageNodes, function (pageNode, pageNumber) {
-                    if ((pageNumber < (beginPageNumber - NON_VISIBLE_PAGES_TO_LOAD_BESIDE)) || (pageNumber > (endPageNumber + NON_VISIBLE_PAGES_TO_LOAD_BESIDE))) {
-                        this.emptyPageNode(pageNode);
-                        delete this.loadedPageNodes[pageNumber];
-                    }
-                }, this);
-            }
+                    // clear all other pages
+                    _.each(this.loadedPageNodes, function (pageNode, pageNumber) {
+                        if ((pageNumber < (beginPageNumber - NON_VISIBLE_PAGES_TO_LOAD_BESIDE)) || (pageNumber > (endPageNumber + NON_VISIBLE_PAGES_TO_LOAD_BESIDE))) {
+                            this.emptyPageNode(pageNode);
+                            delete this.loadedPageNodes[pageNumber];
+                        }
+                    }, this);
+                }
+
+            }.bind(this));
+
         },
 
         /**
@@ -556,6 +560,11 @@ define('io.ox/core/viewer/views/types/documentview', [
         show: function () {
             // ignore already loaded documents
             if (this.$el.find('.document-page').length > 0) {
+                // document pages are drawn, but there is no visible page rendered yet
+                // may happen if pdfDocumentLoadSuccess returns when the slide is already skipped (isVisible() === false => initial loadVisiblePages() did not run)
+                if (_.isEmpty(this.loadedPageNodes)) {
+                    this.loadVisiblePages();
+                }
                 return;
             }
 
@@ -578,7 +587,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                     return;
                 }
                 // forward 'resolved' errors to error handler
-                if (_.isObject(pageCount) && (pageCount.cause.length > 0)) {
+                if (!_.isNumber(pageCount)) {
                     pdfDocumentLoadError.call(this, pageCount);
                     return;
                 }

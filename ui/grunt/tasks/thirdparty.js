@@ -62,6 +62,7 @@ module.exports = function (grunt) {
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'typeahead.js/dist/typeahead.jquery.js',
                             'marked/lib/marked.js',
+                            'clipboard/dist/clipboard.min.js',
                             'velocity/velocity.min.js',
                             'moment/moment.js'
                         ],
@@ -114,9 +115,16 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        src: ['**/*', '!pdf.combined.js'],
+                        src: ['**/*'],
                         cwd: 'bower_components/pdfjs-dist',
-                        dest: 'build/apps/3rd.party/pdfjs'
+                        dest: 'build/apps/pdfjs-dist/'
+                        // pdfjs now has it's own define: define('pdfjs-dist/build/pdf.combined', ...)
+                    },
+                    {
+                        expand: true,
+                        src: ['unorm.js'],
+                        cwd: 'bower_components/unorm/lib/',
+                        dest: 'build/static/3rd.party/unorm'
                     }
                 ]
             }

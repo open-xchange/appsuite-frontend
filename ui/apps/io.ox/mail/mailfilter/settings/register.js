@@ -13,8 +13,7 @@
 
 define('io.ox/mail/mailfilter/settings/register', [
     'io.ox/core/extensions',
-    'gettext!io.ox/mail',
-    'less!io.ox/mail/mailfilter/settings/style'
+    'gettext!io.ox/mail'
 ], function (ext, gt) {
 
     'use strict';

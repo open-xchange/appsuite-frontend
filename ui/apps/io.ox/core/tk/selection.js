@@ -127,7 +127,7 @@ define('io.ox/core/tk/selection', [
         // };
 
         hasMultiple = function () {
-            return _.isArray(selectedItems) && selectedItems.length > 1;
+            return _.size(selectedItems) > 1;
         };
 
         changed = function () {
@@ -399,8 +399,6 @@ define('io.ox/core/tk/selection', [
                     'aria-selected': 'true',
                     'tabindex': options.tabFix !== false ? options.tabFix : null
                 })
-                .find('input.reflect-selection')
-                .prop('checked', true)
                 .end();
         };
 
@@ -427,8 +425,7 @@ define('io.ox/core/tk/selection', [
                 .attr({
                     'aria-selected': 'false',
                     tabindex: options.tabFix !== false ? -1 : null
-                })
-                .find('input.reflect-selection').prop('checked', false);
+                });
             self.trigger('deselect', key);
         };
 
@@ -451,7 +448,7 @@ define('io.ox/core/tk/selection', [
                 i = 0, node = null;
 
             // clear
-            nodes.removeClass(self.classSelected).find('input.reflect-selection').prop('checked', false);
+            nodes.removeClass(self.classSelected);
 
             for (; i < nodes.length; i++) {
 
@@ -462,7 +459,6 @@ define('io.ox/core/tk/selection', [
                     self.addToIndex(objID);
                 }
                 if (isSelected(objID)) {
-                    $('input.reflect-selection', node).prop('checked', true);
                     node.addClass(self.classSelected);
                 }
             }
@@ -476,7 +472,6 @@ define('io.ox/core/tk/selection', [
                 'aria-selected': 'false',
                 'tabindex': options.tabFix !== false ? -1 : null
             });
-            container.find('.selectable input.reflect-selection').prop('checked', false);
         };
 
         // mark option block
@@ -598,7 +593,6 @@ define('io.ox/core/tk/selection', [
                 var node = $(this),
                     cid = node.attr('data-obj-id');
                 if (cid in hash) {
-                    $('input.reflect-selection', node).prop('checked', true);
                     node.addClass(self.classSelected).attr({
                         'aria-selected': 'true',
                         'tabindex': options.tabFix !== false ? options.tabFix : null
@@ -607,7 +601,6 @@ define('io.ox/core/tk/selection', [
                         node.focus();
                     }
                 } else {
-                    $('input.reflect-selection', node).prop('checked', false);
                     node.removeClass(self.classSelected).attr({
                         'aria-selected': 'false',
                         'tabindex': options.tabFix !== false ? -1 : null

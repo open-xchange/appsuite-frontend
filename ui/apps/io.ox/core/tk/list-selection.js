@@ -248,16 +248,19 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         focus: function (index, items) {
             items = items || this.getItems();
-            var node = items.eq(index).attr('tabindex', '1').focus();
+            var node = items.eq(index).attr('tabindex', '1');
+            // call focus deferred due to some issues in internet explorer
+            _.defer(function () {
+                node.focus();
+            });
             // workaround for chrome's CSS bug:
             // styles of "selected" class are not applied if focus triggers scrolling.
             // idea taken from http://forrst.com/posts/jQuery_redraw-BGv
-            if (_.device('chrome')) node.hide(0, function () { $(this).show(); });
+            if (_.device('chrome < 48')) node.hide(0, function () { $(this).show(); });
             return node;
         },
 
         pick: function (index, items, e) {
-
             var node;
 
             items = items || this.getItems();
@@ -456,7 +459,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             switch (e.which) {
 
                 // [enter] > action
+                // [space] > action
                 case 13:
+                case 32:
                     this.triggerAction(e);
                     break;
 

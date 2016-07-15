@@ -178,7 +178,8 @@ define('io.ox/core/boot/form', [
                 break;
         }
 
-        $('#io-ox-login-feedback').hide();
+
+        $('#io-ox-login-feedback');
 
         // handle message params
         if (_.url.hash('token')) {
@@ -230,7 +231,7 @@ define('io.ox/core/boot/form', [
         // set username input type to text in IE
         if (_.device('IE > 9')) {
             // cannot change type with jQuery's attr()
-            $('#io-ox-login-username')[0].type = 'text';
+            ($('#io-ox-login-username')[0] || {}).type = 'text';
         }
 
         // update productname in password reset dialog

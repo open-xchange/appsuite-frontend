@@ -48,7 +48,9 @@ define('io.ox/core/folder/favorites', [
                 var list = _(response).filter(function (item) {
                     // FLD-0008 -> not found
                     // FLD-0003 -> permission denied
-                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003')) {
+                    // ACC-0002 -> account not found (see bug 46481)
+                    // FLD-1004 -> folder storage service no longer available (see bug 47089)
+                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003' || item.code === 'ACC-0002' || item.code === 'FLD-1004')) {
                         invalid[item.id] = true;
                         return false;
                     }
@@ -141,7 +143,7 @@ define('io.ox/core/folder/favorites', [
     function addLink(node, options) {
         var link = a(options.action, options.text);
         if (options.enabled) link.on('click', options.data, options.handler); else disable(link);
-        node.append($('<li>').append(link));
+        node.append($('<li role="presentation">').append(link));
         return link;
     }
 

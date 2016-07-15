@@ -80,7 +80,7 @@ define([
                 this.node = $('<div>');
 
                 var def = ext.point('io.ox/portal/widget/quota').invoke('preview', this.node, {});
-                def._wrapped[0].done(function () {//wait till its actually drawn
+                def._wrapped[0].done(function () { // wait till its actually drawn
                     done();
                 });
             });
@@ -104,7 +104,7 @@ define([
                 this.node = $('<div>');
 
                 var def = ext.point('io.ox/portal/widget/quota').invoke('preview', this.node, {});
-                def._wrapped[0].done(function () {//wait till its actually drawn
+                def._wrapped[0].done(function () { // wait till its actually drawn
                     done();
                 });
             });

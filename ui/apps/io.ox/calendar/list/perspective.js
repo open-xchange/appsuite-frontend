@@ -62,8 +62,8 @@ define('io.ox/calendar/list/perspective', [
             app.right.addClass('default-content-padding calendar-detail-pane f6-target')
                 .attr({
                     'tabindex': 1,
-                    'role': 'complementary',
-                    'aria-label': gt('Appointment Details')
+                    'role': 'main',
+                    'aria-label': gt('Appointment')
                 });
             left = app.left;
             right = app.right;
@@ -73,8 +73,8 @@ define('io.ox/calendar/list/perspective', [
                 app.right.addClass('default-content-padding calendar-detail-pane f6-target')
                 .attr({
                     'tabindex': 1,
-                    'role': 'complementary',
-                    'aria-label': gt('Appointment Details')
+                    'role': 'main',
+                    'aria-label': gt('Appointment')
                 })
             );
             left = app.left;

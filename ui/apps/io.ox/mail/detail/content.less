@@ -64,6 +64,12 @@
 
         max-width: 10000px;
         vertical-align: middle;
+
+        // Visual indicator for blocked images
+        &[src=""] {
+            background-color: rgba(0,0,0,.1);
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.5) 20px, rgba(255,255,255,.5) 40px);
+        }
     }
 
     p {
@@ -169,8 +175,8 @@
     .blockquote(@color) {
         color: @color !important;
         border-left: 2px solid @color;
-        a[href] { color: @color; }
-        a[href]:hover { color: darken(@color, 10%); }
+        a[href]:not(.deep-link) { color: @color; }
+        a[href]:not(.deep-link):hover { color: darken(@color, 10%); }
     }
 
     &.colorQuoted {
@@ -190,6 +196,8 @@
         padding-left: 56px;
         margin: 16px 0;
         min-height: 16px;
+        // fix long links
+        word-break: break-word;
 
         i {
             color: #888;

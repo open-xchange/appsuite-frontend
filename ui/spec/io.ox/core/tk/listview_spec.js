@@ -22,6 +22,8 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
 
             this.collection = new api.Collection();
             this.list = new ListView({
+                // seems that threaded option is used for tests only so
+                // it would be nice to get rid of it (if possible)
                 threaded: true,
                 //mail listview needs a reference to the app.props model to listenTo
                 //changes:thread event (support threaded mails)
@@ -595,7 +597,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
 
             beforeEach(function () {
                 // create thread
-                var N = 10, item = createItem(2, 1), data = item.thread[0], array;
+                var N = 10, item = createItem(2, 1), data = item.thread[0];
                 item.thread = _.range(N + 1, 1, -1).map(function (index) {
                     return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
                 });
@@ -629,7 +631,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
 
             it('should update correctly (keep position)', function () {
                 // update thread
-                var tmp = this.collection.toJSON(), data = tmp[1].thread[0];
+                var tmp = this.collection.toJSON();
                 tmp[1].thread = tmp[1].thread.slice(2);
                 api.threads.clear();
                 tmp[1].thread.forEach(function (m) {

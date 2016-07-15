@@ -116,6 +116,20 @@
           flex-direction: @direction;
 }
 
+.align-self(@align: auto) {
+    -webkit-align-self: @align;
+    -moz-align-self: @align;
+    -ms-align-self: @align;
+    align-self: @align;
+}
+
+.flex-wrap(@wrap: nowrap) {
+    -webkit-flex-wrap: @wrap;
+    -moz-flex-wrap: @wrap;
+    -ms-flex-wrap: @wrap;
+    flex-wrap: @wrap;
+}
+
 // .fontWeight(@weight) when (@weight = 300) {
 //     // automatically inject light font-family, especially for Windows
 //     font-family: @light-font-family;

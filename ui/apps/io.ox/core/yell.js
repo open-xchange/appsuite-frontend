@@ -175,7 +175,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             _.defer(function () {
                 node.append(
                     $('<div role="alert" aria-live="polite" class="message user-select-text">').append(
-                        ariaText[o.type] ? $('<span class="sr-only">').text(/*#, dynamic*/gt(ariaText[o.type])) : [],
+                        ariaText[o.type] && o.headline && o.type !== o.headline.toLowerCase() ? $('<span class="sr-only">').text(/*#, dynamic*/gt(ariaText[o.type])) : [],
                         o.headline ? $('<h2 class="headline">').text(o.headline) : [],
                         $('<div>').css('word-break', wordbreak).html(html)
                     )

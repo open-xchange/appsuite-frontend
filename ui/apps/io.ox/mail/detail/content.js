@@ -225,6 +225,30 @@ define('io.ox/mail/detail/content', [
     });
 
     //
+    // Special
+    //
+
+    ext.point('io.ox/mail/detail/special').extend({
+        id: 'anchor-links',
+        index: 100,
+        process: function (baton) {
+            // see Bug 44637 - Inline links to anchors don't work anymore or shift the viewport
+            if (!baton.isHTML) return;
+            // handle anchor links manually / use native listener to avoid leaks
+            this.addEventListener('click', function (e) {
+                if (!$(e.target).is('a[href^="#"]')) return;
+                // manually scroll to
+                e.preventDefault();
+                var id = $.escape($(e.target).attr('href').substr(1)),
+                    anchor = $(this).find('#' + id + ', [name="' + $.escape(id) + '"]');
+                if (anchor.length) anchor[0].scrollIntoView();
+                // flexbox bug 44637 (related #43799)
+                $('#io-ox-windowmanager').scrollTop(0);
+            }, false);
+        }
+    });
+
+    //
     // Content
     //
 
@@ -355,10 +379,13 @@ define('io.ox/mail/detail/content', [
     }
 
     var explandBlockquote = function (e) {
-        e.preventDefault();
-        $(this).hide().prev().slideDown('fast', function () {
-            $(e.delegateTarget).trigger('resize');
-        });
+        if (e.which === 13 || e.which === 23 || e.type === 'click') {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).hide().prev().slideDown('fast', function () {
+                $(e.delegateTarget).trigger('resize');
+            });
+        }
     };
 
     ext.point('io.ox/mail/detail/content').extend({
@@ -375,11 +402,15 @@ define('io.ox/mail/detail/content', [
                 if (hasParent(node, 'blockquote')) return;
                 var text = getText(node);
                 if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
-                $(node).addClass('collapsed-blockquote').after(
+                var blockquoteId = _.uniqueId('collapsed-blockquote-');
+                $(node).addClass('collapsed-blockquote').attr('id', blockquoteId).after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
-                        $('<i class="fa fa-ellipsis-h" tabindex="1">')
-                        .attr('title', gt('Show quoted text')),
+                        $('<i class="fa fa-ellipsis-h" tabindex="1" role="button" aria-expanded="false">').attr({
+                            'aria-controls': blockquoteId,
+                            'aria-expanded': false,
+                            title: gt('Show quoted text')
+                        }),
                         $.txt(
                             text.replace(/<\s/g, '<')
                                 .replace(/\s>/g, '>')
@@ -390,7 +421,7 @@ define('io.ox/mail/detail/content', [
                 );
             });
             // delegate
-            $(this).on('click', '.blockquote-toggle', explandBlockquote);
+            $(this).on('click keydown', '.blockquote-toggle', explandBlockquote);
         }
     });
 
@@ -524,6 +555,9 @@ define('io.ox/mail/detail/content', [
                         });
                     }
                 }
+
+                // special
+                ext.point('io.ox/mail/detail/special').invoke('process', content, baton);
 
                 // process content unless too large
                 if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);

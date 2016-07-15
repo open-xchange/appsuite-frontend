@@ -20,7 +20,7 @@ define(['io.ox/files/legacy_api',
     'use strict';
 
     function isRejected(def) {
-        return waitsFor( function () {
+        return waitsFor(function () {
             return (def.state() === 'rejected');
         });
     }

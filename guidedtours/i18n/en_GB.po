@@ -3,8 +3,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-05 15:39-0700\n"
+"PO-Revision-Date: 2016-07-01 09:49-0700\n"
 "Last-Translator: Timothy <tjfriese@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -561,11 +562,11 @@ msgstr "Entering the email text"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 
@@ -697,8 +698,8 @@ msgid "Closing a square"
 msgstr "Closing a square"
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "If you no longer want to display a square, click the cross."
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "If you no longer want to display a square, click the delete icon."
 
 #: apps/io.ox/tours/portal.js:51 module:io.ox/tours
 msgid "Customizing the Portal"

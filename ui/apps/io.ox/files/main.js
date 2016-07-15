@@ -16,6 +16,7 @@ define('io.ox/files/main', [
     'io.ox/core/commons',
     'gettext!io.ox/files',
     'settings!io.ox/files',
+    'settings!io.ox/core',
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
     'io.ox/core/folder/tree',
@@ -31,6 +32,7 @@ define('io.ox/files/main', [
     'io.ox/files/api',
     'io.ox/core/tk/sidebar',
     'io.ox/core/viewer/views/sidebarview',
+    'io.ox/backbone/mini-views/quota',
     // prefetch
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
@@ -42,7 +44,7 @@ define('io.ox/files/main', [
     'io.ox/files/upload/dropzone',
     'io.ox/core/folder/breadcrumb',
     'gettext!io.ox/core/viewer'
-], function (commons, gt, settings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview) {
+], function (commons, gt, settings, coreSettings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
 
     'use strict';
 
@@ -192,12 +194,32 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone')) return;
 
-            // tree view
-            var tree = new TreeView({ app: app, module: 'infostore', root: settings.get('rootFolderId', 9), contextmenu: true });
-
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
+            app.treeView = new TreeView({ app: app, module: 'infostore', root: settings.get('rootFolderId', 9), contextmenu: true });
+            FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
+        },
+
+        'files-quota': function (app) {
+
+            if (_.device('smartphone')) return;
+
+            var quota = new QuotaView({
+                title: gt('File quota'),
+                renderUnlimited: false,
+                module: 'file'
+            });
+            // add some listeners
+            folderAPI.on('clear', function () {
+                quota.getQuota(true);
+            });
+
+            api.on('add:file remove:file', function () {
+                quota.getQuota(true);
+            });
+
+            app.treeView.$el.append(
+                quota.render().$el
+            );
         },
 
         /*
@@ -245,9 +267,10 @@ define('io.ox/files/main', [
         'get-view-options': function (app) {
 
             app.getViewOptions = function (folder) {
-                var options = app.settings.get(['viewOptions', folder], {});
+                var options = app.settings.get(['viewOptions', folder], {}),
+                    defaultSort = folder === 'virtual/myshares' ? 5 : 702;
                 if (!/^(list|icon|tile)/.test(options.layout)) options.layout = 'list';
-                return _.extend({ sort: 702, order: 'asc', layout: 'list' }, options);
+                return _.extend({ sort: defaultSort, order: 'asc', layout: 'list' }, options);
             };
         },
 
@@ -290,10 +313,13 @@ define('io.ox/files/main', [
             node.append(
                 app.listControl.render().$el
                 //#. items list (e.g. mails)
-                .attr('aria-label', gt('Item list'))
+                .attr({
+                    role: 'main',
+                    'aria-label': gt('Files')
+                })
                 .find('.toolbar')
                 //#. toolbar with 'select all' and 'sort by'
-                .attr('aria-label', gt('Item list options'))
+                .attr('aria-label', gt('Files options'))
                 .end()
             );
         },
@@ -310,12 +336,10 @@ define('io.ox/files/main', [
          */
         'folder:change': function (app) {
             // see Bug 43512 - Opening a Drive direct link in Safari removes the edit bar
-            if (_.device('safari')) {
-                // hide and show sidepanel for correct layout. Somehow, scroll into view and flexbox-layout have errors in safari
-                app.folderView.tree.selection.view.on('scrollIntoView', function () {
-                    app.getWindow().nodes.sidepanel.hide().show(0);
-                });
-            }
+            // hide and show sidepanel for correct layout. Somehow, scroll into view and flexbox-layout have errors (mostly in safari)
+            app.folderView.tree.selection.view.on('scrollIntoView', function () {
+                app.getWindow().nodes.sidepanel.hide().show(0);
+            });
 
             app.on('folder:change', function (id) {
                 // we clear the list now to avoid flickering due to subsequent layout changes
@@ -326,8 +350,18 @@ define('io.ox/files/main', [
                 app.listView.model.set('folder', null, { silent: true });
                 app.listView.model.set('folder', id);
             });
-        },
 
+            app.on('folder-virtual:change', function (id) {
+                app.listView.empty();
+                var options = app.getViewOptions(id);
+                app.props.set(options);
+
+                app.listView.model.set(options);
+                app.listView.model.set('folder', null, { silent: true });
+                app.listView.model.set('folder', id);
+
+            });
+        },
         /*
          * Respond to virtual myshares
          */
@@ -435,13 +469,33 @@ define('io.ox/files/main', [
             });
         },
 
+        'attachmentViewUpdater': function (app) {
+            var attachmentView = coreSettings.get('folder/mailattachments', {});
+            if (_.isEmpty(attachmentView)) return;
+
+            function expireAttachmentView() {
+                _(attachmentView).each(function (folder) {
+                    _(api.pool.getByFolder(folder)).each(function (collection) {
+                        collection.expired = true;
+                    });
+                    if (app.folder.get() === folder) app.listView.reload();
+                });
+            }
+
+            app.folderView.tree.on('change', expireAttachmentView);
+
+            require(['io.ox/mail/api'], function (mailAPI) {
+                mailAPI.on('delete new-mail copy update archive archive-folder', expireAttachmentView);
+            });
+        },
+
         /*
          * Store view options
          */
         'store-view-options': function (app) {
             app.props.on('change', _.debounce(function () {
                 if (app.props.get('find-result')) return;
-                var folder = app.folder.get(), data = app.props.toJSON();
+                var folder = app.folder.get() || 'virtual/myshares', data = app.props.toJSON();
                 app.settings
                     .set(['viewOptions', folder], { sort: data.sort, order: data.order, layout: data.layout });
                 if (_.device('!smartphone')) {
@@ -466,8 +520,14 @@ define('io.ox/files/main', [
         'change:sort': function (app) {
             app.props.on('change:sort', function (m, value) {
                 // set proper order first
-                var model = app.listView.model;
-                model.set('order', (/^(5|704)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                var model = app.listView.model,
+                    viewOptions = app.getViewOptions(app.treeView.selection.get());
+                if (viewOptions) {
+                    model.set('order', viewOptions.order, { silent: true });
+                } else {
+                    // set default
+                    model.set('order', (/^(5|704)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                }
                 app.props.set('order', model.get('order'));
                 // now change sort columns
                 model.set('sort', value);
@@ -956,10 +1016,20 @@ define('io.ox/files/main', [
             );
         },
 
-        'premium-area': function (app) {
-            commons.addPremiumFeatures(app, {
-                upsellId: 'folderview/infostore/bottom',
-                upsellRequires: 'boxcom || google || msliveconnect'
+        'premium-area': function () {
+
+            ext.point('io.ox/files/sidepanel').extend({
+                id: 'premium-area',
+                index: 10000,
+                draw: function (baton) {
+                    this.append(
+                        commons.addPremiumFeatures(baton.app, {
+                            append: false,
+                            upsellId: 'folderview/infostore/bottom',
+                            upsellRequires: 'boxcom || google || msliveconnect'
+                        })
+                    );
+                }
             });
         },
 
@@ -1047,6 +1117,22 @@ define('io.ox/files/main', [
             app.listView.$el
                 .addClass('dropzone')
                 .attr('data-dropzones', '.selectable.file-type-folder');
+        },
+
+        'sidepanel': function (app) {
+            if (_.device('smartphone')) return;
+
+            ext.point('io.ox/files/sidepanel').extend({
+                id: 'tree',
+                index: 100,
+                draw: function (baton) {
+                    // add border & render tree and add to DOM
+                    this.addClass('border-right').append(baton.app.treeView.$el);
+                }
+            });
+
+            var node = app.getWindow().nodes.sidepanel;
+            ext.point('io.ox/files/sidepanel').invoke('draw', node, ext.Baton({ app: app }));
         },
 
         'metrics': function (app) {
@@ -1248,6 +1334,20 @@ define('io.ox/files/main', [
                     $(window).trigger('resize');
                 });
             });
+    });
+
+    // set what to do if the app is started again
+    // this way we can react to given options, like for example a different folder
+    app.setResume(function (options) {
+        // only consider folder option for now
+        if (options && options.folder && options.folder !== this.folder.get()) {
+            var appNode = this.getWindow();
+            appNode.busy();
+            return this.folder.set(options.folder).always(function () {
+                appNode.idle();
+            });
+        }
+        return $.when();
     });
 
     return {

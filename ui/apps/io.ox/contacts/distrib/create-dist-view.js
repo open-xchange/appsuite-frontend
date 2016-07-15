@@ -20,7 +20,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
     'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/participants/model'
-], function (views, mini, gt, ext, AddParticipant, pViews, pModel) {
+], function (views, mini, gt, ext, AddParticipantView, pViews, pModel) {
 
     'use strict';
 
@@ -120,7 +120,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
         id: 'add-participant',
         index: 400,
         render: function () {
-            var view = new AddParticipant({
+            var view = new AddParticipantView({
                 apiOptions: {
                     contacts: true
                 },
@@ -140,6 +140,26 @@ define('io.ox/contacts/distrib/create-dist-view', [
         index: 400,
         render: function () {
             this.$el.addClass('help-block').text(gt('To add contacts manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)'));
+        }
+    });
+
+    point.extend({
+        id: 'metrics',
+        render: function () {
+            var self = this;
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                self.baton.app.getWindow().nodes.footer.delegate('[data-action]', 'mousedown', function (e) {
+                    var node =  $(e.target);
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'edit/distribution-list/toolbar',
+                        type: 'click',
+                        action: node.attr('data-action') || node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
+            });
         }
     });
 

@@ -294,10 +294,22 @@
          * Redirect
          */
         redirect: function (path) {
+
             var current = location.pathname;
-            location.href = (/^http/i).test(path) ? path : _.url.get(path);
+
+            if ((/^http/i).test(path)) {
+                location.href = path;
+                return;
+            }
+
+            // clear hash first
+            location.hash = '#';
+            location.replace(_.url.get(path));
+
             // enforce page reload if path is still the same
-            if (location.pathname === current) location.reload();
+            _.defer(function () {
+                if (location.pathname === current) location.reload(true);
+            });
         },
 
         get: function (path) {
@@ -835,7 +847,7 @@
     };
 
     _.escapeRegExp = function (s) {
-        return (s || '').replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
+        return (s || '').replace(/([$^*+?!:=.|(){}[\]\\])/g, function () { return ('\\' + arguments[1]); });
     };
 
     window.assert = function (value, message) {

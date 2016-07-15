@@ -137,6 +137,10 @@ define('io.ox/find/api', [
         });
     };
 
+    api.resetCache = function () {
+        simpleCache.clear();
+    };
+
     /**
      * query search result
      * @param  {object}     options

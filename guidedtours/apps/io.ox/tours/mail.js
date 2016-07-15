@@ -66,7 +66,7 @@ define('io.ox/tours/mail', [
             .end()
         .step()
             .title(gt('Entering the E-Mail text'))
-            .content(gt('Enter the E-Mail text into the main area. If the text format was set to HTMl in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar.'))
+            .content(gt('Enter the E-Mail text into the main area. If the text format was set to HTML in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar.'))
             .referTo('.io-ox-mail-compose-container')
             .spotlight('.mail-compose-contenteditable-fields, .io-ox-mail-compose.container textarea')
             .end()

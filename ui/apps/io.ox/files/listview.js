@@ -16,9 +16,10 @@ define('io.ox/files/listview', [
     'io.ox/core/extensions',
     'io.ox/files/common-extensions',
     'io.ox/files/api',
+    'settings!io.ox/core',
     'io.ox/files/view-options',
     'less!io.ox/files/style'
-], function (ListView, ext, extensions, filesAPI) {
+], function (ListView, ext, extensions, filesAPI, settings) {
 
     'use strict';
 
@@ -88,6 +89,11 @@ define('io.ox/files/listview', [
         }
     );
 
+    var isAttachmentView = function (baton) {
+        var attachmentView = settings.get('folder/mailattachments', {});
+        return (_.values(attachmentView).indexOf(baton.app.folder.get()) > -1);
+    };
+
     // list layout
 
     ext.point(ITEM + '/list').extend(
@@ -120,12 +126,33 @@ define('io.ox/files/listview', [
             }
         },
         {
+            id: 'mail-attachment-from',
+            index: 210,
+            draw: function (baton) {
+                if (_.device('smartphone')) return;
+                if (!isAttachmentView(baton)) return;
+                var column = $('<div class="list-item-column column-5">');
+                extensions.mailFrom.call(column, baton);
+                this.addClass('attachment-view').append(column);
+            }
+        },
+        {
+            id: 'mail-attachment-subject',
+            index: 220,
+            draw: function (baton) {
+                if (_.device('smartphone')) return;
+                if (!isAttachmentView(baton)) return;
+                var column = $('<div class="list-item-column column-5">');
+                extensions.mailSubject.call(column, baton);
+                this.append(column);
+            }
+        },
+        {
             id: 'col3',
             index: 300,
             draw: function (baton) {
-                if (_.device('smartphone')) {
-                    return;
-                }
+                if (_.device('smartphone')) return;
+                if (isAttachmentView(baton)) return;
                 var column = $('<div class="list-item-column column-3 gray">');
                 extensions.smartdate.call(column, baton);
                 this.append(column);
@@ -135,9 +162,8 @@ define('io.ox/files/listview', [
             id: 'col4',
             index: 500,
             draw: function (baton) {
-                if (_.device('smartphone')) {
-                    return;
-                }
+                if (_.device('smartphone')) return;
+                if (isAttachmentView(baton)) return;
                 var column = $('<div class="list-item-column column-4 gray">');
                 extensions.size.call(column, baton);
                 this.append(column);

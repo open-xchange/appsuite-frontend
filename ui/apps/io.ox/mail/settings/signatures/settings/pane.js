@@ -7,10 +7,11 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/backbone/mini-views',
     'io.ox/core/http',
     'io.ox/core/config',
-    'io.ox/mail/settings/model',
     'io.ox/core/notifications',
+    'io.ox/backbone/mini-views/listutils',
+    'io.ox/backbone/mini-views/settings-list-view',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, gt, settings, dialogs, snippets, mini, http, config, mailSettings, notifications) {
+], function (ext, gt, settings, dialogs, snippets, mini, http, config, notifications, listutils, ListView) {
 
     'use strict';
 
@@ -42,7 +43,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         index: 200,
         draw: function (baton) {
             this.append(
-                baton.$.error = $('<div>').addClass('help-block error')
+                baton.$.error = $('<div>').addClass('help-block error').attr('id', _.uniqueId('error-help-'))
             );
         }
     });
@@ -65,8 +66,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
 
             require(['io.ox/core/tk/contenteditable-editor'], function (Editor) {
                 new Editor(baton.$.contentEditable, {
-                    toolbar1: 'bold italic | alignleft aligncenter alignright | link | image',
-                    advanced: 'fontselect fontsizeselect | forecolor',
+                    toolbar1: 'bold italic | alignleft aligncenter alignright | link image',
+                    advanced: 'fontselect fontsizeselect forecolor | code',
                     css: {
                         'min-height': '230px', //overwrite min-height of editor
                         'height': '230px',
@@ -127,17 +128,20 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         function validateField(field, target) {
             if ($.trim(field.val()) === '') {
                 //trim here because backend does not allow names containing only spaces
-                field.addClass('error');
+                field.addClass('error').attr({
+                    'aria-invalid': true,
+                    'aria-describedby': target.attr('id')
+                });
                 target.text(gt('Please enter a valid name'));
             } else {
-                field.removeClass('error');
+                field.removeClass('error').removeAttr('aria-invalid aria-describedby');
                 target.empty();
             }
         }
 
         if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
-        var popup = new dialogs.ModalDialog({ async: true, tabTrap: false, width: 600, addClass: 'io-ox-signature-dialog' });
+        var popup = new dialogs.ModalDialog({ async: true, tabTrap: false, width: 640, addClass: 'io-ox-signature-dialog' });
         popup.header($('<h4>').text(signature.id === null ? gt('Add signature') : gt('Edit signature')));
 
         var baton = new ext.Baton({
@@ -300,12 +304,10 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add new signature')).on('click', fnEditSignature)
             );
 
-            this.append(
-                $('<div class="io-ox-signature-settings">').append(
-                    $('<h1 class="pull-left">').text(gt('Signatures')),
-                    !_.device('smartphone') ? buttonContainer : [],
-                    $('<div class="clearfix">')
-                )
+            this.addClass('io-ox-signature-settings').append(
+                $('<h1 class="pull-left">').text(gt('Signatures')),
+                !_.device('smartphone') ? buttonContainer : [],
+                $('<div class="clearfix">')
             );
 
             if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
@@ -318,7 +320,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             }
         },
         save: function () {
-            mailSettings.saveAndYell().done(function () {
+            settings.saveAndYell().done(function () {
                 //update mailapi
                 require(['io.ox/mail/api'], function (mailAPI) {
                     mailAPI.updateViewSettings();
@@ -330,188 +332,190 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     });
 
     ext.point('io.ox/mail/settings/signatures/settings/detail').extend({
-        id: 'signatures',
+        id: 'collection',
         index: 200,
         draw: function (baton) {
-            baton.model = mailSettings;
+            if (_.device('smartphone')) return;
 
-            var $node,
-                $list,
-                signatures,
-                defaultSignatureView,
-                defaultReplyForwardView;
-            this.append($node = $('<div class="io-ox-signature-settings">'));
-            function fnDrawAll() {
-                snippets.getAll('signature').then(function (sigs) {
-                    signatures = {};
-                    $list.empty();
-                    //clear views before rendering
-                    defaultSignatureView.$el.empty();
-                    defaultSignatureView.trigger('appendOption', { value: '', label: gt('No signature'), isDefault: false });
-                    defaultReplyForwardView.$el.empty();
-                    defaultReplyForwardView.trigger('appendOption', { value: '', label: gt('No signature'), isDefault: false });
-
-                    //hide default signature selection, if there are no signatures
-                    $node.children('.form-group').css('display', sigs.length > 0 ? '' : 'none');
-                    _(sigs).each(function (signature) {
-                        //replace div and p elements to br's and remove all other tags.
-                        var content = signature.content
-                            .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
-                            .replace(/<(?:.|\n)*?>/gm, '')
-                            .replace(/(\n)+/g, '<br>');
-
-                        signatures[signature.id] = signature;
-                        var isDefault = settings.get('defaultSignature') === signature.id,
-                            $item = $('<li class="widget-settings-view">')
-                                .attr('data-id', signature.id)
-                                .append(
-                                    $('<div class="selectable deletable-item">')
-                                    .append(
-                                        $('<span class="list-title pull-left" data-property="displayName">').text(gt.noI18n(signature.displayname)),
-                                        $('<div class="widget-controls">').append(
-                                            $('<a class="action" tabindex="1" data-action="edit">').text(gt('Edit')).attr({
-                                                role: 'button',
-                                                'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), gt('Edit'))
-                                            }),
-                                            $('<a class="remove">').attr({
-                                                'data-action': 'delete',
-                                                title: gt('Delete'),
-                                                'aria-label': gt('%1$s, %2$s', gt.noI18n(signature.displayname), gt('Delete')),
-                                                role: 'button',
-                                                tabindex: 1
-                                            }).append($('<i class="fa fa-trash-o" aria-hidden="true">'))
-                                        ),
-                                        // do not add a preview pane with single br-tag or empty string
-                                        (content === '<br>' || content === '') ? '' : $('<div class="signature-preview">').click(clickEdit).append(content)
-                                    )
-                                );
-
-                        if (isDefault) {
-                            $item.addClass('default');
-                        }
-                        $list.append($item);
-                        defaultSignatureView.trigger('appendOption', { value: signature.id, label: signature.displayname, isDefault: settings.get('defaultSignature') === signature.id });
-                        defaultReplyForwardView.trigger('appendOption', { value: signature.id, label: signature.displayname, isDefault: settings.get('defaultReplyForwardSignature') === signature.id });
+            var collection = new Backbone.Collection(),
+                load = function () {
+                    snippets.getAll('signature').then(function (sigs) {
+                        collection.reset(sigs);
                     });
-                }, require('io.ox/core/notifications').yell);
-            }
-            var radioCustom, signatureText;
-            try {
-                if (_.device('smartphone')) {
-                    var type = settings.get('mobileSignatureType');
-                    if (type !== 'custom') type = 'none';
-                    $node.append(
-                        $('<div class="form-group">').append(
-                            $('<div class="radio">').append(
-                                $('<label>').append(
-                                    $('<input type="radio" name="mobileSignature">')
-                                        .prop('checked', type === 'none'),
-                                    gt('No signature')
-                                )
-                                .on('change', radioChange)
-                            ),
-                            $('<div class="radio">').append(
-                                $('<label>').append(
-                                    radioCustom = $('<input type="radio" name="mobileSignature">')
-                                    .prop('checked', type === 'custom')
-                                    .on('change', radioChange),
-                                    signatureText = $('<textarea class="form-control col-xs-12" rows="5">')
-                                    .val(settings.get('mobileSignature'))
-                                    .on('change', textChange)
-                                )
-                            )
-                        )
-                    );
-                } else {
-                    addSignatureList($node);
-                }
-            } catch (e) {
-                console.error(e, e.stack);
-            }
+                };
 
-            function radioChange() {
-                var type = radioCustom.prop('checked') ? 'custom' : 'none';
-                baton.model.set('mobileSignatureType', type);
-            }
+            load();
+            snippets.on('refresh.all', load);
 
-            function textChange() {
-                baton.model.set('mobileSignature', signatureText.val());
-            }
+            baton.collection = collection;
+        }
+    });
+
+    ext.point('io.ox/mail/settings/signatures/settings/detail').extend({
+        id: 'signatures',
+        index: 300,
+        draw: function (baton) {
+            if (_.device('smartphone')) return;
 
             function clickEdit(e) {
                 if ((e.type === 'click') || (e.which === 13)) {
-                    var id = $(this).closest('li').attr('data-id');
-                    fnEditSignature(e, signatures[id]);
+                    var id = $(e.currentTarget).closest('li').attr('data-id'),
+                        model = baton.collection.get(id);
+                    fnEditSignature(e, model.toJSON());
                     e.preventDefault();
                 }
             }
 
-            function addSignatureList($node) {
-                // Register edit and delete events
-                $list = $('<ul class="list-unstyled list-group settings-list">')
-                .on('click keydown', 'a[data-action=edit]', function (e) {
-                    if ((e.type === 'click') || (e.which === 13)) {
-                        var id = $(this).closest('li').attr('data-id');
-                        fnEditSignature(e, signatures[id]);
-                        e.preventDefault();
-                    }
-                })
-                .on('click keydown', 'a[data-action=delete]', function (e) {
-                    if ((e.type === 'click') || (e.which === 13)) {
-                        var id = $(this).closest('li').attr('data-id');
-                        if (settings.get('defaultSignature') === id) settings.set('defaultSignature', '');
-                        if (settings.get('defaultReplyForwardSignature') === id) settings.set('defaultReplyForwardSignature', '');
-                        snippets.destroy(id).fail(require('io.ox/core/notifications').yell);
-                        e.preventDefault();
-                    }
-                })
-                .appendTo($node);
+            var list = new ListView({
+                tagName: 'ul',
+                collection: baton.collection,
+                childOptions: {
+                    titleAttribute: 'displayname',
+                    customize: function (model) {
+                        var content = model.get('content')
+                            .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
+                            .replace(/<(?:.|\n)*?>/gm, '')
+                            .replace(/(\n)+/g, '<br>');
 
-                defaultSignatureView = new mini.SelectView({ list: [], name: 'defaultSignature', model: baton.model, id: 'defaultSignature', className: 'form-control' })
-                .on('appendOption', function (option) {
-                    this.$el.append($('<option>').attr({ 'value': option.value }).text(option.label));
-                    if (option.isDefault) {
-                        this.$el.val(option.value);
+                        this.$('.list-item-controls').append(
+                            listutils.controlsEdit(),
+                            listutils.controlsDelete()
+                        );
+                        this.$el.append($('<div class="signature-preview">').append($('<div>').on('click', clickEdit).append(content)));
+
+                        if (settings.get('defaultSignature') === model.get('id')) this.$el.addClass('default');
                     }
+                }
+            })
+            .on('edit', clickEdit)
+            .on('delete', function (e) {
+                var id = $(e.currentTarget).closest('li').attr('data-id');
+                if (settings.get('defaultSignature') === id) settings.set('defaultSignature', '');
+                if (settings.get('defaultReplyForwardSignature') === id) settings.set('defaultReplyForwardSignature', '');
+                snippets.destroy(id).fail(require('io.ox/core/notifications').yell);
+                e.preventDefault();
+            });
+
+            this.append(list.render().$el);
+
+            function onChangeDefault() {
+                var id = settings.get('defaultSignature');
+                list.$('.default').removeClass('default');
+                list.$('[data-id="' + id + '"]').addClass('default');
+            }
+
+            settings.on('change:defaultSignature', onChangeDefault);
+            list.on('dispose', function () {
+                settings.off('change:defaultSignature', onChangeDefault);
+            });
+        }
+    });
+
+    ext.point('io.ox/mail/settings/signatures/settings/detail').extend({
+        id: 'selection',
+        index: 400,
+        draw: function (baton) {
+            if (_.device('smartphone')) return;
+
+            var defaultSignatureView = new mini.SelectView({
+                    list: [],
+                    name: 'defaultSignature',
+                    model: settings,
+                    id: 'defaultSignature',
+                    className: 'form-control'
+                }),
+                defaultReplyForwardView = new mini.SelectView({
+                    list: [],
+                    name: 'defaultReplyForwardSignature',
+                    model: settings,
+                    id: 'defaultReplyForwardSignature',
+                    className: 'form-control'
                 });
 
-                baton.model.on('change:defaultSignature', function () {
-                    var id = baton.model.get('defaultSignature');
-                    $list.find('.default').removeClass('default');
-                    $list.find('[data-id="' + id + '"]').addClass('default');
-                });
+            function makeOption(model) {
+                return $('<option>').attr({ 'value': model.get('id') }).text(model.get('displayname'));
+            }
 
-                defaultReplyForwardView = new mini.SelectView({ list: [], name: 'defaultReplyForwardSignature', model: baton.model, id: 'defaultReplyForwardSignature', className: 'form-control' })
-                .on('appendOption', function (option) {
-                    this.$el.append($('<option>').attr({ 'value': option.value }).text(option.label));
-                    if (option.isDefault) {
-                        this.$el.val(option.value);
-                    }
-                });
+            baton.collection.on('reset', function () {
+                defaultSignatureView.$el.empty().append(
+                    $('<option value="">').text(gt('No signature')),
+                    baton.collection.map(makeOption)
+                ).val(settings.get('defaultSignature') || '');
+                defaultReplyForwardView.$el.empty().append(
+                    $('<option value="">').text(gt('No signature')),
+                    baton.collection.map(makeOption)
+                ).val(settings.get('defaultReplyForwardSignature') || '');
+            });
 
-                $node.append(
-                    $('<div class="row">').append(
-                        $('<div class="form-group col-xs-12 col-md-6">').append(
-                            $('<label for="defaultSignature" class="control-label">')
-                            .text(gt('Default signature for new messages')),
-                            $('<div>').addClass('controls').append(
-                                defaultSignatureView.render().$el
-                            )
-                        ),
-                        $('<div class="form-group col-xs-12 col-md-6">').append(
-                            $('<label for="defaultSignature" class="control-label">')
-                            .text(gt('Default signature for replies or forwardings')),
-                            $('<div>').addClass('controls').append(
-                                defaultReplyForwardView.render().$el
-                            )
+            this.append(
+                $('<div class="row">').append(
+                    $('<div class="form-group col-xs-12 col-md-6">').append(
+                        $('<label for="defaultSignature" class="control-label">')
+                        .text(gt('Default signature for new messages')),
+                        $('<div>').addClass('controls').append(
+                            defaultSignatureView.render().$el
+                        )
+                    ),
+                    $('<div class="form-group col-xs-12 col-md-6">').append(
+                        $('<label for="defaultSignature" class="control-label">')
+                        .text(gt('Default signature for replies or forwardings')),
+                        $('<div>').addClass('controls').append(
+                            defaultReplyForwardView.render().$el
                         )
                     )
-                );
+                )
+            );
 
-                //draw signatures
-                fnDrawAll();
-                snippets.on('refresh.all', fnDrawAll);
+            // if the collection is already filled trigger reset, so the selectionbox options are drawn
+            if (baton.collection.models.length) {
+                baton.collection.trigger('reset');
             }
+        }
+    });
+
+    ext.point('io.ox/mail/settings/signatures/settings/detail').extend({
+        id: 'signatures-mobile',
+        index: 500,
+        draw: function () {
+            if (_.device('!smartphone')) return;
+
+            var radioCustom,
+                signatureText,
+                type = settings.get('mobileSignatureType');
+
+            function radioChange() {
+                var type = radioCustom.prop('checked') ? 'custom' : 'none';
+                settings.set('mobileSignatureType', type);
+            }
+
+            function textChange() {
+                settings.set('mobileSignature', signatureText.val());
+            }
+
+            if (type !== 'custom') type = 'none';
+
+            this.append(
+                $('<div class="form-group">').append(
+                    $('<div class="radio">').append(
+                        $('<label>').append(
+                            $('<input type="radio" name="mobileSignature">')
+                                .prop('checked', type === 'none'),
+                            gt('No signature')
+                        )
+                        .on('change', radioChange)
+                    ),
+                    $('<div class="radio">').append(
+                        $('<label>').append(
+                            radioCustom = $('<input type="radio" name="mobileSignature">')
+                            .prop('checked', type === 'custom')
+                            .on('change', radioChange),
+                            signatureText = $('<textarea class="form-control col-xs-12" rows="5">')
+                            .val(settings.get('mobileSignature'))
+                            .on('change', textChange)
+                        )
+                    )
+                )
+            );
         }
     });
 });

@@ -30,9 +30,9 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         },
 
         createToolbar: function () {
-            return $('<ul class="classic-toolbar" role="toolbar">')
+            return $('<ul class="classic-toolbar" role="navigation">')
                 //#. screenreader label for main toolbar
-                .attr({ 'aria-label': gt('Actions. Use cursor keys to navigate.') })
+                .attr({ 'aria-label': this.options.title ? gt('%1$s Toolbar', this.options.title) : gt('Actions. Use cursor keys to navigate.') })
                 .tooltip({
                     animation: false,
                     container: 'body',
@@ -44,16 +44,15 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
                 })
                 // make sure it always disappears
                 .on('dispose', function () { $(this).tooltip('destroy'); })
+                .on('hide.bs.dropdown', '.dropdown', function (e) {
+                    $(e.target).closest('ul.classic-toolbar').tooltip('destroy');
+                })
                 // always avoid clearing the URL hash
                 .on('click', 'a', $.preventDefault);
         },
 
         render: function () {
-            this.$el.attr({
-                role: 'navigation',
-                'aria-label': gt('Inline menu %1$s', this.options.title || '')
-            })
-            .append(this.$list);
+            this.$el.append(this.$list);
             return this;
         },
 
@@ -68,6 +67,9 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         },
 
         replaceToolbar: function (toolbar) {
+            // A11y: This is needed to maintain source order, otherwise the focus order is not correct
+            // TODO: Extensionpoints should be rendered in source order so this is unnecessary
+            toolbar.append(toolbar.children('.pull-right'));
             this.$el.find('ul.classic-toolbar').tooltip('hide').replaceWith(toolbar);
             return this;
         },

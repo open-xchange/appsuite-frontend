@@ -101,21 +101,16 @@ define('io.ox/mail/common-extensions', [
 
         date: function (baton, options) {
             var data = baton.data, t = data.received_date;
+            options = _.extend({
+                fulldate: baton.app && baton.app.props.get('excactDates'),
+                smart: !(baton.app && baton.app.props.get('excactDates'))
+            }, options);
             if (!_.isNumber(t)) return;
             this.append(
                 $('<time class="date">')
                 .attr('datetime', moment(t).toISOString())
                 .text(_.noI18n(util.getDateTime(t, options)))
             );
-        },
-
-        dateOrSize: function (baton) {
-            // show date or size depending on sort option
-            var fn = 'size';
-            if (baton.app && baton.app.props.get('sort') !== 608) {
-                fn = baton.app.props.get('exactDates') ? 'fulldate' : 'smartdate';
-            }
-            extensions[fn].call(this, baton);
         },
 
         smartdate: function (baton) {
@@ -144,10 +139,14 @@ define('io.ox/mail/common-extensions', [
         },
 
         size: function (baton) {
+            //show size if option is enabled or sorting by size
+            if (baton.app && (baton.app.props.get('sort') !== 608 && !baton.app.props.get('alwaysShowSize'))) return;
+
             var data = baton.data;
             if (!_.isNumber(data.size)) return;
+            var size = util.threadFileSize(data.thread || [data]);
             this.append(
-                $('<span class="size">').text(strings.fileSize(data.size, 1))
+                $('<span class="size">').text(strings.fileSize(size, 1))
             );
         },
 
@@ -174,8 +173,8 @@ define('io.ox/mail/common-extensions', [
         threadSize: function (baton) {
             // only consider thread-size if app is in thread-mode
             var isThreaded = baton.app && baton.app.isThreaded();
-            if (!isThreaded) return;
-            if (baton.options.threaded !== true && (!baton.app || !baton.app.isThreaded())) return;
+            // seems that threaded option is used for tests only
+            if (!isThreaded && !baton.options.threaded) return;
 
             var size = api.threads.size(baton.data);
             if (size <= 1) return;
@@ -191,6 +190,13 @@ define('io.ox/mail/common-extensions', [
             if (!baton.data.attachment) return;
             this.append(
                 $('<i class="fa fa-paperclip has-attachments" aria-hidden="true">')
+            );
+        },
+
+        sharedAttachement: function (baton) {
+            if (!baton.model || !_.has(baton.model.get('headers'), 'X-Open-Xchange-Share-URL')) return;
+            this.append(
+                $('<i class="fa fa-cloud-download is-shared-attachement" aria-hidden="true">')
             );
         },
 
@@ -279,6 +285,9 @@ define('io.ox/mail/common-extensions', [
                 $('<span class="account-name">').text(baton.data.account_name || '')
             );
         },
+
+        //#. empty message for list view
+        empty: function () { this.text(gt('Empty')); },
 
         // add orignal folder as label to search result items
         folder: function (baton) {
@@ -460,7 +469,12 @@ define('io.ox/mail/common-extensions', [
                 };
 
             return function (baton) {
+
                 if (baton.attachments.length === 0) return $.when();
+                // ensure there's a model when reading headers
+                var headers = baton.model ? baton.model.get('headers') : baton.data.headers || {};
+                // hide attachments for our own share invitations
+                if (headers['X-Open-Xchange-Share-Type']) this.hide();
 
                 var $el = this;
 
@@ -521,10 +535,7 @@ define('io.ox/mail/common-extensions', [
         unreadToggle: (function () {
 
             function getAriaLabel(data) {
-                return util.isUnseen(data) ?
-                    gt('This message is unread, press this button to mark it as read.') :
-                    gt('This message is read, press this button to mark it as unread.');
-
+                return util.isUnseen(data) ? gt('Unread') : gt('Read');
             }
 
             function toggle(e) {
@@ -532,19 +543,31 @@ define('io.ox/mail/common-extensions', [
                 var data = e.data.model.toJSON();
                 // toggle 'unseen' bit
                 if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
-                $(this).attr('aria-label', getAriaLabel(data));
+                $(this).attr({
+                    'aria-label': getAriaLabel(data),
+                    'aria-pressed': util.isUnseen(data)
+                });
             }
 
             return function (baton) {
 
                 if (util.isEmbedded(baton.data)) return;
-
-                this.append(
-                    $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
-                    .attr('aria-label', getAriaLabel(baton.data))
-                    .append('<i class="fa" aria-hidden="true">')
-                    .on('click', { model: baton.view.model }, toggle)
-                );
+                var self = this;
+                folderAPI.get(baton.data.folder_id).done(function (data) {
+                    // see if the user is allowed to modify the read/unread status
+                    // always allows for unifeid folder
+                    var showUnreadToggle = folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data);
+                    if (!showUnreadToggle) return;
+                    self.append(
+                        $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
+                        .attr({
+                            'aria-label': getAriaLabel(baton.data),
+                            'aria-pressed': util.isUnseen(baton.data)
+                        })
+                        .append('<i class="fa" aria-hidden="true">')
+                        .on('click', { model: baton.view.model }, toggle)
+                    );
+                });
             };
         }()),
 

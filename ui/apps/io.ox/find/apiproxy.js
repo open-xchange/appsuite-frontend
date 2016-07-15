@@ -102,6 +102,7 @@ define('io.ox/find/apiproxy', [
         var model = app.model,
             // managing wrapper to keep model up2date and match tokenfields naming conventions
             proxy = {
+                resetCache: api.resetCache,
                 // static facets
                 config: function (options) {
                     var standard = {

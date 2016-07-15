@@ -23,7 +23,8 @@ define('io.ox/core/api/account', [
     var idHash = {},
         typeHash = {},
         // default separator
-        separator = settings.get('defaultseparator', '/');
+        separator = settings.get('defaultseparator', '/'),
+        altnamespace = settings.get('namespace', 'INBOX/') === '';
 
     var process = function (data) {
 
@@ -40,7 +41,8 @@ define('io.ox/core/api/account', [
                     // folder isn't available in config
                     if (!folder) {
                         // educated guess
-                        folder = settings.get('folder/inbox') + separator + (account[id] || title);
+                        folder = altnamespace ? 'default0' : settings.get('folder/inbox');
+                        folder += separator + (account[id] || title);
                     }
                     account[field] = folder;
                 } else if (!account[field]) {
@@ -639,7 +641,8 @@ define('io.ox/core/api/account', [
             params: {
                 action: 'get',
                 email: data.email,
-                password: data.password
+                password: data.password,
+                force_secure: data.force_secure
             }
         });
     };

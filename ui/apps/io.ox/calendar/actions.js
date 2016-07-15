@@ -318,6 +318,52 @@ define('io.ox/calendar/actions', [
         }
     });
 
+    /*new Action('io.ox/calendar/actions/freebusy', {
+        capabilities: 'freebusy !alone !guest',
+        requires: function () {
+            return _.device('!smartphone');
+        },
+        action: function (baton) {
+            require(['io.ox/calendar/freetime/main'], function (freetime) {
+                var perspective = baton.app.getWindow().getPerspective(),
+                    now = _.now(),
+                    startDate = perspective && perspective.name !== 'month' && perspective.getStartDate ? perspective.getStartDate() : now,
+                    layout = perspective ? perspective.app.props.get('layout') : '';
+
+                // see if the current day is in the displayed week.
+                if (startDate < now && layout.indexOf('week:') === 0) {
+                    // calculate end of week/workweek
+                    var max = startDate + 86400000 * (layout === 'week:workweek' ? 5 : 7);
+                    if (now < max) {
+                        startDate = now;
+                    }
+                }
+
+                freetime.showDialog({ startDate: startDate, participants: [{ id: ox.user_id, type: 1 }] }).done(function (data) {
+                    var view = data.view;
+                    data.dialog.on('save', function () {
+                        var appointment = view.createAppointment();
+
+                        if (appointment) {
+                            data.dialog.close();
+                            appointment.folder = baton.app.folder.get();
+                            ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
+                                edit.getApp().launch().done(function () {
+                                    this.create(appointment);
+                                });
+                            });
+                        } else {
+                            data.dialog.idle();
+                            require(['io.ox/core/yell'], function (yell) {
+                                yell('info', gt('Please select a time for the appointment'));
+                            });
+                        }
+                    });
+                });
+            });
+        }
+    });*/
+
     new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone !guest',
         requires: function () {

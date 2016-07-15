@@ -1,6 +1,6 @@
 Name:           open-xchange-dynamic-theme
 Version:        @OXVERSION@
-%define         ox_release 14
+%define         ox_release 4
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -58,20 +58,16 @@ if [ -x %{update} ]; then %{update} --later; fi
 %config(noreplace) /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
 
 %changelog
-* Tue Jun 28 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-07-04 (3400)
-* Wed Jun 15 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-06-20 (3347)
-* Mon May 30 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-06-06 (3317)
-* Thu May 19 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-05-23 (3294)
-* Mon May 09 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-05-09 (3272)
-* Fri Apr 15 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-04-25 (3239)
-* Tue Apr 05 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-04-06 (3222)
+* Tue Jul 12 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
+Second candidate for 7.8.2 release
+* Wed Jul 06 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
+First candidate for 7.8.2 release
+* Wed Jun 29 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
+Second preview for 7.8.2 release
+* Tue Jun 14 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
+First release candidate for 7.8.2
+* Fri Apr 08 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
+prepare for 7.8.2 release
 * Wed Mar 30 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
 Second candidate for 7.8.1 release
 * Fri Mar 25 2016 Viktor Pracht <viktor.pracht@open-xchange.com>

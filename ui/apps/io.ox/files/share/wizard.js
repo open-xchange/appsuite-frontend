@@ -62,7 +62,13 @@ define('io.ox/files/share/wizard', [
             this.append(
                 linkNode = $('<div class="form-group">').append(
                     $('<label>').attr({ for: formID }).text(),
-                    $('<input class="form-control">').attr({ id: formID, type: 'text', tabindex: 1, readonly: 'readonly' }).val(link)
+                    $('<div class="input-group link-group">').append(
+                        $('<input class="form-control">').attr({ id: formID, type: 'text', tabindex: 1, readonly: 'readonly' })
+                        .val(link)
+                        .on('focus', function () {
+                            _.defer(function () { $(this).select(); }.bind(this));
+                        })
+                    )
                 )
             );
             baton.view.listenTo(baton.model, 'change:url', function (model, val) {
@@ -74,6 +80,58 @@ define('io.ox/files/share/wizard', [
             if (link === '') {
                 baton.model.fetch();
             }
+        }
+    });
+
+    /*
+     * extension point for share link
+     */
+    ext.point(POINT + '/fields').extend({
+        id: 'link-to-clipboard',
+        index: INDEX += 100,
+        draw: function (baton) {
+            // unsupported: https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
+            if (_.device('safari')) return;
+            // only available for type link
+            if (baton.model.get('type') !== baton.model.TYPES.LINK) return;
+
+            var group = this.find('.link-group'),
+                target = '#' + group.find('input').attr('id'),
+                //.# tooltip for a button that copies the content of a field to operating sytems clipboard
+                label = gt('Copy to clipboard'),
+                //.# tooltip for a button after it was clicked and a copy action was executed
+                labelpost = gt('Copied'),
+                button;
+
+            // copy-to-clipboard button
+            group.append(
+                $('<span class="input-group-btn">').append(
+                    button = $('<button class="btn btn-default" type="button" disabled="disabled">')
+                    .append($('<i class="fa fa-clipboard clippy">'))
+                    .attr({
+                        'data-clipboard-target': target,
+                        'data-toggle': 'tooltip',
+                        'data-placement': 'bottom',
+                        'data-original-title': label,
+                        'aria-label': label,
+                        'data-container': 'body'
+                    })
+                    .tooltip()
+                )
+            );
+
+            // load lib
+            require(['static/3rd.party/clipboard/dist/clipboard.min.js']).then(function (ClipBoard) {
+                new ClipBoard(button.get(0));
+                button.removeAttr('disabled');
+            });
+
+            // change tooltip after button was clicked
+            button.on('click', function () {
+                button
+                    .attr('data-original-title', labelpost).tooltip('show')
+                    .attr('data-original-title', label);
+            });
         }
     });
 
@@ -310,12 +368,10 @@ define('io.ox/files/share/wizard', [
         },
 
         removeLink: function () {
-            var self = this,
-                model = this.model;
+            var model = this.model;
             require(['io.ox/files/share/api'], function (api) {
                 api.deleteLink(model.toJSON(), model.get('lastModified')).fail(yell);
                 model.destroy();
-                self.remove();
             });
         }
     });

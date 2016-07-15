@@ -13,7 +13,7 @@
 
 define([
     'io.ox/core/tk/attachments'
-], function (attachments) {
+], function () {
 
     'use strict';
 

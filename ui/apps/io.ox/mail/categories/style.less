@@ -1,0 +1,155 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ */
+
+.io-ox-mail-window.io-ox-find-active {
+    .categories-toolbar-container { display: none; }
+}
+
+.mail-categories-dialog {
+    i { font-weight: 500; }
+
+    .description {
+        padding-left: 22px;
+        padding-bottom: 6px;
+    }
+
+    .category-item {
+        display: flex;
+        align-items: center;
+        padding-bottom: 6px;
+        .status {
+            height: 14px;
+            width: 14px;
+            margin: 0;
+            margin-right: 8px;
+        }
+        .name {
+            flex: 1;
+            display: inline-block;
+        }
+
+        .hint {
+            font-style: italic;
+        }
+
+        // disabled state
+        &:not(.active) .name  {
+            font-style: italic;
+            color: #888;
+        }
+    }
+}
+
+// drag and drop helper text
+.categories-toolbar-container {
+    .link { line-height: 40px; }
+    .category-drop-helper { display: none; }
+}
+body.dragging .categories-toolbar-container {
+    .link { line-height: 20px; }
+    .category-drop-helper {
+        display: block;
+        padding: 0 16px;
+        font-size: 12px;
+        font-weight: 300;
+    }
+}
+
+.window-container.mail-categories-enabled:not(.io-ox-find-active) {
+
+    // layout: compact
+    .window-body:not(.classic-toolbar-visible) {
+        .abs.window-content {  top: 40px; }
+    }
+
+    // layout: vertical, horizontal, list
+    .window-body.classic-toolbar-visible {
+        .abs.window-content {  top: 80px; }
+        .classic-toolbar-container:not(.categories-container) .classic-toolbar { top: 40px; }
+
+    }
+
+    .categories-toolbar-container {
+
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        .classic-toolbar {
+            display: flex;
+            position: static;
+            border-bottom: 0;
+            width: ~"calc(100% - 55px)";
+        }
+
+        .classic-toolbar.actions {
+            padding-left: 16px;
+            width: 60px;
+        }
+
+        .free-space { flex: 1; }
+
+        .category:not(.selected), .free-space, .classic-toolbar.actions {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .category {
+            cursor: pointer;
+            background: #f5f5f5;
+            border-right: 1px solid #dddddd;
+            // arrange child
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            // vertical separation
+            max-width: 160px;
+            min-width: 0;
+
+            &.selected { background: white; }
+
+            .link {
+                padding: 0 16px;
+                display: flex;
+                width: 100%;
+                color: inherit;
+
+                &:focus {
+                    background-color: inherit;
+                    font-weight: 700;
+                }
+
+                .category-icon { padding-right: 8px; }
+
+                .category-counter .counter {
+                    padding-left: 8px;
+                    // clone of .folder-counter;
+                    color: #08c;
+                    font-weight: 700;
+                }
+
+                .category-icon, .category-name, .category-counter {
+                    display: inline-block;
+                }
+
+                // hide empty child nodes (like counter)
+                div:empty, span:empty {display: none; }
+            }
+        }
+
+        .truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}

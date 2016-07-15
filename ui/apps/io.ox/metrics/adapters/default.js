@@ -13,8 +13,9 @@
 
 define('io.ox/metrics/adapters/default', [
     'settings!io.ox/core',
-    'io.ox/core/extensions'
-], function (settings, ext) {
+    'io.ox/core/extensions',
+    'io.ox/metrics/util'
+], function (settings, ext, util) {
 
     'use strict';
 
@@ -22,7 +23,8 @@ define('io.ox/metrics/adapters/default', [
 
     var point = ext.point('io.ox/metrics/adapter'),
         url = settings.get('tracking/piwik/url', 'https://metrics.open-xchange.com/piwik/'),
-        id = settings.get('tracking/piwik/id', 1);
+        id = settings.get('tracking/piwik/id', 1),
+        maxlength = 200;
 
     // piwik uses global var to allow pushing before tracker is fully loaded
     window._paq = window._paq || [];
@@ -39,8 +41,23 @@ define('io.ox/metrics/adapters/default', [
             require([url + 'piwik.js']);
         },
         trackVisit: function (list) {
-            var self = this;
-            _.each(list, function (data, index) {
+            var self = this,
+                result = [];
+            // split arrays into little chunks
+            // f.e. capabilities -> capabilities-1, capabilities-2...
+            _.each(list, function (data) {
+                var val = String(data.value);
+                // split only stringified arrays that exceed maxlength
+                if (!_.isArray(data.value) || val.length <= maxlength) return result.push(data);
+                var chunks = util.toChunks(data.value, maxlength);
+                _.each(chunks, function (value, index) {
+                    result.push(
+                        _.extend({}, data, { value: value, id: data.id + '-' + (index + 1) })
+                    );
+                });
+            });
+            // add index
+            _.each(result, function (data, index) {
                 self.trackVariable(_.extend(data, { index: index + 1 }));
             });
         },
@@ -55,14 +72,14 @@ define('io.ox/metrics/adapters/default', [
         },
         trackVariable: function (data) {
             // important: index range in piwiks default settings is 1 to 5
+            // important: 200 chars is max length
             // https://piwik.org/faq/how-to/faq_17931/
             if (!data.index) {
                 if (ox.debug) console.log('Missing/invalid index argument on trackVariable call');
                 return;
             }
             // http://developer.piwik.org/guides/tracking-javascript-guide#custom-variables
-            data.value = _.isString(data.value) ? data.value : JSON.stringify(data.value);
-            _paq.push(['setCustomVariable', data.index, data.id, data.value, data.scope || 'visit']);
+            _paq.push(['setCustomVariable', data.index, data.id, String(data.value), data.scope || 'visit']);
         }
     });
 

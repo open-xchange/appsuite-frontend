@@ -1,15 +1,33 @@
 ---
 title: Configuration
-icon: fa-wrench
-description: A high level view how to change the behaviour of the ui by using capabilities and settings
+icon: fa-cog
+description: Server settings (property files), config cascade and how they affect the ui
 ---
 
-# Distinction
+# Core
 
-**Capabilities**
+## Client onboarding wizard
 
-The covers more global configurations with its simple enabled/disabled states. For example the capability _tasks_ controlls the availability of the task app.
+*capability: client-onboarding*
 
-**Settings**
+With this feature enabled the wizard itself is available and can be started.
+This can be done via a textlink in the topbar dropwon (burger menu) and also via a link in the new premium bar (in case it's activated). Further more a portal widget is available.
 
-Settings in opposite are more flexible (more than true/false) and tend to affect the ui in more subtable ways.
+Please refer to the middleware feature config documentation for more details.
+
+**metrics**
+
+Please refer to the [metrics article](http://oxpedia.org/wiki/index.php?title=AppSuite:Metrics-Events#Client_Onboarding)
+
+**upsell settings**
+
+Please refer to the [upsell documentaion](http://oxpedia.org/wiki/index.php?title=AppSuite:Upsell#Custom_upsell_links) for more details.
+
+hint: upsell event is only triggered for clicks on disabled (`enabled=false`) scenarios that have a valid *missing_capabilities* array property. Also the stated missing capability has to be enabeled for upsell (`io.ox/core/upsell/enabled/`).
+
+```
+io.ox/core//features/upsell/client.onboarding/enabled
+io.ox/core//features/upsell/client.onboarding/color
+io.ox/core//features/upsell/client.onboarding/icon
+io.ox/core//features/upsell/defaultIcon
+```

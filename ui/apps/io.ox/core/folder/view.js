@@ -269,46 +269,42 @@ define('io.ox/core/folder/view', [
                 _.defer(tree.selection.preselect.bind(tree.selection, id));
             }
 
-        } else {
+        } else if (id) {
+            // defer so that favorite folders are drawn already
+            _.defer(function () {
+                api.path(id).done(function (path) {
+                    // get all ids except the folder itself, therefore slice(0, -1);
+                    var ids = _(path).pluck('id').slice(0, -1),
+                        folder = _(path).where({ 'id': id })[0],
+                        // in our apps folders are organized in virtual folders, we need to open the matching section too (private, shared, public)
+                        // folder 6 is special, it's the global addressbook and the only system folder under public section. Folderdata alone does not give this info.
+                        section = folder.id === '6' ? 'public' : api.getSection(folder.type, folder.id);
 
-            // add border & render tree and add to DOM
-            sidepanel.addClass('border-right').append(tree.$el);
-
-            if (id) {
-                // defer so that favorite folders are drawn already
-                _.defer(function () {
-                    api.path(id).done(function (path) {
-                        // get all ids except the folder itself, therefore slice(0, -1);
-                        var ids = _(path).pluck('id').slice(0, -1),
-                            // in our apps folders are organized in virtual folders, we need to open the matching section too (private, shared, public)
-                            section = api.getSection(_(path).where({ 'id': id })[0].type);
-
-                        if (section && _(['mail', 'contacts', 'calendar', 'tasks', 'infostore']).contains(tree.module) && tree.flat && tree.context === 'app') {
-                            ids.push('virtual/flat/' + tree.module + '/' + section);
-                        }
-                        tree.open = _(tree.open.concat(ids)).uniq();
-                    })
-                    .always(function () {
-                        // try now
-                        if (tree.selection.preselect(id)) {
+                    if (section && _(['mail', 'contacts', 'calendar', 'tasks', 'infostore']).contains(tree.module) && tree.flat && tree.context === 'app') {
+                        ids.push('virtual/flat/' + tree.module + '/' + section);
+                    }
+                    tree.open = _(tree.open.concat(ids)).uniq();
+                })
+                .always(function () {
+                    // try now
+                    if (tree.selection.preselect(id)) {
+                        tree.selection.scrollIntoView(id);
+                        return;
+                    }
+                    // and on appear
+                    tree.once('appear:' + id, function () {
+                        // defer selection; might be too fast otherwise
+                        _.defer(function () {
+                            tree.selection.preselect(id);
                             tree.selection.scrollIntoView(id);
-                            return;
-                        }
-                        // and on appear
-                        tree.once('appear:' + id, function () {
-                            // defer selection; might be too fast otherwise
-                            _.defer(function () {
-                                tree.selection.preselect(id);
-                                tree.selection.scrollIntoView(id);
-                            });
                         });
-                        // render now
-                        tree.render();
                     });
+                    // render now
+                    tree.render();
                 });
-            } else {
-                tree.render();
-            }
+            });
+        } else {
+            tree.render();
         }
 
         // a11y adjustments

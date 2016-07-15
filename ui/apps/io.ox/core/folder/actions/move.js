@@ -117,6 +117,9 @@ define('io.ox/core/folder/actions/move', [
                 open: options.open,
                 settings: settings,
                 title: options.title,
+                type: options.type,
+                initialize: options.pickerInit || $.noop,
+                close: options.pickerClose || $.noop,
 
                 done: function (id) {
                     if (type === 'copy' || id !== current) commit(id);

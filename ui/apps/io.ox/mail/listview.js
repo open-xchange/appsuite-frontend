@@ -161,6 +161,11 @@ define('io.ox/mail/listview', [
             draw: extensions.flag
         },
         {
+            id: 'optionalSize',
+            index: 250,
+            draw: extensions.size
+        },
+        {
             id: 'thread-size',
             index: 300,
             draw: extensions.threadSize
@@ -188,9 +193,9 @@ define('io.ox/mail/listview', [
     );
 
     ext.point('io.ox/mail/listview/item/small/col6').extend({
-        id: 'date/size',
+        id: 'date',
         index: 100,
-        draw: extensions.dateOrSize
+        draw: extensions.date
     });
 
     /* default */
@@ -237,9 +242,9 @@ define('io.ox/mail/listview', [
 
     ext.point('io.ox/mail/listview/item/default/row1').extend(
         {
-            id: 'date/size',
+            id: 'date',
             index: 100,
-            draw: extensions.dateOrSize
+            draw: extensions.date
         },
         {
             id: 'from',
@@ -270,6 +275,11 @@ define('io.ox/mail/listview', [
             draw: extensions.flag
         },
         {
+            id: 'optionalSize',
+            index: 250,
+            draw: extensions.size
+        },
+        {
             id: 'thread-size',
             index: 300,
             draw: extensions.threadSize
@@ -278,6 +288,11 @@ define('io.ox/mail/listview', [
             id: 'paper-clip',
             index: 400,
             draw: extensions.paperClip
+        },
+        {
+            id: 'shared-attachement',
+            index: 350,
+            draw: extensions.sharedAttachement
         },
         {
             id: 'pgp-encrypted',
@@ -306,6 +321,12 @@ define('io.ox/mail/listview', [
             }
         }
     );
+
+    ext.point('io.ox/mail/listview/empty').extend({
+        id: 'default',
+        index: 100,
+        draw: extensions.empty
+    });
 
     var MailListView = ListView.extend({
 
@@ -417,12 +438,13 @@ define('io.ox/mail/listview', [
             }, 0);
             data.color_label = color;
             // set subject to first message in thread so a Thread has a constant subject
-            data.subject = thread[thread.length - 1].subject;
+            data.subject = api.threads.subject(data);
             // done
             return data;
         },
 
         getCompositeKey: function (model) {
+            // seems that threaded option is used for tests only
             return this.options.threaded ? 'thread.' + model.cid : model.cid;
         }
     });

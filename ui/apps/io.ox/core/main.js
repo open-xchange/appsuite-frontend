@@ -227,10 +227,6 @@ define('io.ox/core/main', [
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
     topbar
-        .attr({
-            'aria-label': gt('Applications'),
-            'role': 'banner'
-        })
         // prevent dragging links
         .on('dragstart', false)
         // make system drop-down accessible
@@ -241,6 +237,12 @@ define('io.ox/core/main', [
         })
         .end()
         .find('i.fa-bars').removeClass('fa-bars').addClass('fa-angle-double-right ');
+
+    launchers
+        .attr({
+            'role': 'navigation',
+            'aria-label': gt('Apps')
+        });
 
     // whatever ...
     gt.pgettext('app', 'Portal');
@@ -298,17 +300,23 @@ define('io.ox/core/main', [
         }
         $('li', launcherDropdown).hide();
 
+
         if (hidden > 0) {
+            // a11y: dropdown menu should only have role menu if it is shown
+            $('.dropdown-menu', launcherDropdown).removeAttr('aria-hidden');
             launcherDropDownIcon.show();
             for (i = hidden; i > 0; i--) {
                 $('li', launcherDropdown).eq(-i).show();
             }
+        } else {
+            // a11y: dropdown menu should only have role menu if it is shown
+            $('.dropdown-menu', launcherDropdown).attr('aria-hidden', true);
         }
     }, 100);
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
-        var node = $('<li class="launcher" role="presentation">');
+        var node = $('<li class="launcher">');
 
         if (fn) {
             node.on('click', function (e) {
@@ -334,7 +342,7 @@ define('io.ox/core/main', [
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(/*#, dynamic*/gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle" tabindex="1">').text(/*#, dynamic*/gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
                 return $('<a>', {
                     href: '#',
@@ -756,8 +764,13 @@ define('io.ox/core/main', [
             }
             launchers.children().removeClass('active-app')
                 .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
+
             launcherDropdown.children().removeClass('active-app')
                 .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
+
+            // A11y: Current app indicator for screen-readers
+            launchers.children().find('a > span.sr-only').remove();
+            launchers.children('.active-app').find('a').append($('<span class="sr-only">').text(gt('(current app)')));
         });
 
         ox.ui.apps.on('change:title', function (model, value) {
@@ -872,10 +885,6 @@ define('io.ox/core/main', [
                     requires: 'active_sync || caldav || carddav',
                     title: 'Upgrade your account',
                     customize: function () {
-                        this.$el.attr({
-                            'role': 'presentation'
-                        });
-
                         $('i', this.$el).css({ 'width': 'auto' });
                     }
                 });
@@ -883,7 +892,7 @@ define('io.ox/core/main', [
                 if (view.visible) {
                     this.append(
                         view.render().$el,
-                        $('<li class="divider" aria-hidden="true" role="presentation">')
+                        $('<li class="divider" aria-hidden="true" role="separator">')
                     );
                 }
             }
@@ -1168,7 +1177,7 @@ define('io.ox/core/main', [
             id: 'default',
             draw: function () {
 
-                var rightbar = $('<ul class="launchers-secondary">');
+                var rightbar = $('<ul class="launchers-secondary">').attr('aria-label', gt('Actions'));
 
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', rightbar);
@@ -1373,7 +1382,7 @@ define('io.ox/core/main', [
             _.url.hash({ m: null, f: null, i: null, '!!': undefined, '!': null });
 
             // always use portal on small devices!
-            if (_.device('small')) mobileAutoLaunchArray();
+            if (_.device('smartphone')) mobileAutoLaunchArray();
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
@@ -1680,9 +1689,16 @@ define('io.ox/core/main', [
                         // special case: open viewer too?
                         if (hash.app === 'io.ox/files' && hash.id !== undefined) {
                             require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
-                                api.get(hash).done(function (data) {
-                                    new Viewer().launch({ files: [data], folder: hash.folder });
-                                });
+                                folderAPI.get(hash.folder)
+                                    .done(function () {
+                                        api.get(hash).done(function (data) {
+                                            new Viewer().launch({ files: [data], folder: hash.folder });
+                                        });
+                                    })
+                                    .fail(function (error) {
+                                        _.url.hash('id', null);
+                                        notifications.yell(error);
+                                    });
                             });
                         }
                         // explicit call?
@@ -1809,6 +1825,7 @@ define('io.ox/core/main', [
             case 'MSG-1000':
             case 'MSG-1001':
             // INUSE (see bug 37218)
+            // falls through
             case 'MSG-1031':
                 notifications.yell(error);
                 break;
@@ -1841,7 +1858,8 @@ define('io.ox/core/main', [
         var check = function (code, regex) { return regex.test(code); },
             reCodes = [
                 // sharing warnings
-                /^SHR_NOT-\d{4}$/
+                /^SHR_NOT-\d{4}$/,
+                /^RSS-0007/
             ];
         return function (code) {
             // return true in case at least one regex matched

@@ -43,6 +43,7 @@ define('io.ox/core/viewer/views/types/audioview', [
 
             var mimeType = this.model.getMimeType() || '',
                 audioUrl = this.getPreviewUrl() || '',
+                self = this,
                 coverUrl = FilesAPI.getUrl(this.model.toJSON(), 'cover', { width: 280, height: 280 });
 
             // run own disposer function on dispose event from DisposableView
@@ -57,8 +58,9 @@ define('io.ox/core/viewer/views/types/audioview', [
                         .one('error', function () {
                             // we don't know if the cover url is valid or not until we load it from the server
                             $(this).remove();
+                            self.$el.find('.play-button').css({ height: 'auto', position: 'relative' }).after($('<div class="player-text">').text(gt('Click to play audio file')));
                         })
-                        .attr('data-src', _.unescapeHTML(coverUrl)),
+                        .attr('data-src', _.unescapeHTML('aesrgerfcwertvc0' + coverUrl)),
                     // audio element
                     $('<audio controls="true">')
                         // set preload (and do a dance); see https://code.google.com/p/chromium/issues/detail?id=234779
@@ -82,7 +84,8 @@ define('io.ox/core/viewer/views/types/audioview', [
          * Audio data load handler
          */
         onLoadedData: function () {
-            this.$el.idle().find('.viewer-displayer-audio').removeClass('player-hidden');
+            this.$el.find('.play-button,.player-text').remove();
+            this.$el.find('audio').show()[0].play();
         },
 
         /**
@@ -90,7 +93,7 @@ define('io.ox/core/viewer/views/types/audioview', [
          */
         onError: function () {
             this.$el.idle().find('.viewer-displayer-audio').addClass('player-hidden');
-            this.$el.find('div.viewer-displayer-notification').remove();
+            this.$el.find('div.viewer-displayer-notification,play-button,.player-text').remove();
             this.$el.append(
                 this.createNotificationNode(gt('Your browser does not support the audio format of this file.'))
             );
@@ -117,13 +120,19 @@ define('io.ox/core/viewer/views/types/audioview', [
          */
         show: function () {
             var audio = this.$el.find('audio'),
+                wrapper = this.$el.find('.viewer-displayer-item'),
                 cover = this.$el.find('img.cover');
 
             if ((audio.length > 0)) {
-                this.$el.busy().find('div.viewer-displayer-notification').remove();
+                this.$el.find('div.viewer-displayer-notification,.play-button').remove();
+                this.$el.idle().find('.viewer-displayer-audio').removeClass('player-hidden');
+                wrapper.prepend($('<i class="play-button fa fa-play-circle-o">')).one('click', function () {
+                    $(this).find('.play-button').empty().busy();
+                    audio.attr('src', audio.attr('data-src'));
+                    audio[0].load();
+                });
                 cover.attr('src', cover.attr('data-src'));
-                audio.attr('src', audio.attr('data-src'));
-                audio[0].load();
+                audio.hide();
             }
 
             return this;

@@ -121,7 +121,7 @@ msgstr "新規の連絡先を作成するには、ツールバーで、[新規] 
 
 #: apps/io.ox/tours/contacts.js:35 module:io.ox/tours
 msgid "Navigation bar"
-msgstr "ナビゲーション バー"
+msgstr "ナビゲーションバー"
 
 #: apps/io.ox/tours/contacts.js:36 module:io.ox/tours
 msgid ""
@@ -168,7 +168,7 @@ msgstr "クラウドストーレージアプリケーションにようこそ本
 
 #: apps/io.ox/tours/files.js:66 module:io.ox/tours
 msgid "Folder tree"
-msgstr "フォルダ ツリー"
+msgstr "フォルダツリー"
 
 #: apps/io.ox/tours/files.js:67 module:io.ox/tours
 msgid ""
@@ -477,7 +477,7 @@ msgstr "メールの本文の入力"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr "本文エリアにメールの本文を入力します。テキストフォーマットがオプションでHTMLに設定されると、メールテキストのフォーマットができます。テキストをフォーマットするには、テキスト部分を選択して、書式バーのアイコンをクリックします。"
@@ -593,8 +593,8 @@ msgid "Closing a square"
 msgstr "タイルを閉じる"
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "タイルを表示しない場合は、バツをクリックします。"
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "タイルを表示しない場合は、削除アイコンをクリックします。"
 
 #: apps/io.ox/tours/portal.js:51 module:io.ox/tours
 msgid "Customizing the Portal"

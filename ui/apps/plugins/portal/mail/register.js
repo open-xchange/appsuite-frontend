@@ -89,7 +89,8 @@ define('plugins/portal/mail/register', [
         className: 'content list-unstyled',
 
         initialize: function () {
-            this.listenTo(this.collection, 'add remove set reset', this.render);
+            // reset is only triggered by garbage collection and causes wrong "empty inbox" messages under certain conditions
+            this.listenTo(this.collection, 'add remove set', this.render);
         },
 
         render: function (baton) {

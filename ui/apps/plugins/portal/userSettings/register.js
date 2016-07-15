@@ -44,7 +44,7 @@ define('plugins/portal/userSettings/register', [
 
     function changePassword() {
 
-        require(['io.ox/core/tk/dialogs', 'io.ox/core/http', 'io.ox/core/notifications'], function (dialogs, http, notifications) {
+        require(['io.ox/core/tk/dialogs', 'io.ox/core/http', 'io.ox/core/yell'], function (dialogs, http, yell) {
 
             var oldPass, oldScore, newPass, newPass2, strengthBar, strengthLabel, strengthBarWrapper,
                 minLength = settings.get('password/minLength', 4),
@@ -117,6 +117,13 @@ define('plugins/portal/userSettings/register', [
                     newPassword2 = newPass2.val() === '' ? null : newPass2.val(),
                     oldPassword = oldPass.val() === '' ? null : oldPass.val();
 
+                if (!capabilities.has('guest') && newPassword1 === null) {
+                    yell('warning', gt('Your new password may not be empty.'));
+                    dialog.idle();
+                    newPass.focus();
+                    dialog = null;
+                    return;
+                }
                 if (newPassword1 === newPassword2) {
                     http.PUT({
                         module: 'passwordchange',
@@ -134,13 +141,13 @@ define('plugins/portal/userSettings/register', [
                         main.logout();
                     })
                     .fail(function (error) {
-                        notifications.yell(error);
+                        yell(error);
                         dialog.idle();
                         oldPass.focus();
                         dialog = null;
                     });
                 } else {
-                    notifications.yell('warning', gt('The two newly entered passwords do not match.'));
+                    yell('warning', gt('The two newly entered passwords do not match.'));
                     dialog.idle();
                     newPass2.focus();
                     dialog = null;
@@ -167,20 +174,20 @@ define('plugins/portal/userSettings/register', [
 
                     score = Math.min(score, maxScore);
                     if (oldScore !== score) {
-                        notifications.yell('screenreader', pwStrengths[score].label);
+                        yell('screenreader', pwStrengths[score].label);
                     }
                     oldScore = score;
                     return pwStrengths[score];
                 } else if (maxLength === 0) {
                     if (oldScore !== 0) {
-                        notifications.yell('screenreader', pwStrengths[0].label);
+                        yell('screenreader', pwStrengths[0].label);
                     }
                     oldScore = 0;
                     // to short with no maxlength
                     return pwStrengths[0];
                 }
                 if (oldScore !== 1) {
-                    notifications.yell('screenreader', pwStrengths[1].label);
+                    yell('screenreader', pwStrengths[1].label);
                 }
                 oldScore = 1;
                 // to short or to long

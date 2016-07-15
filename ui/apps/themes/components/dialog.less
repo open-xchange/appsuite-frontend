@@ -20,6 +20,12 @@
         overflow-y: auto;
         max-height: 400px;
     }
+
+    .modal-footer .checkbox {
+        float: left;
+        margin-top: 6px;
+        margin-bottom: 0;
+    }
 }
 
 .io-ox-dialog-underlay {
@@ -76,6 +82,7 @@
         &.max-height-250 { max-height: 250px; }
         &.max-height-300 { max-height: 300px; }
         &.max-height-350 { max-height: 350px; }
+
     }
 
     &.zero-padding {
@@ -102,9 +109,12 @@
             color: @text-color;
             padding: 10px;
         }
+
     }
 
     .modal-footer > .btn { min-width: 5em; }
+
+    .modal-footer .help-block { text-align: left; }
 
     .io-ox-sidepopup {
         &.right { .border-radius(0 5px 5px 0); }
@@ -307,9 +317,17 @@
         flex-grow: 0;
     }
 
+    .modal-header {
+        // helps against flex grow pushing the headline out of the dialog
+        min-height: 56px;
+    }
+
     .modal-footer {
         .btn.pull-left { margin-right: 8px; }
         .btn.pull-right { margin-left: 8px; }
+
+        // helps against flex grow pushing the buttons out of the dialog
+        min-height: 63px;
     }
 
     &.maximize {

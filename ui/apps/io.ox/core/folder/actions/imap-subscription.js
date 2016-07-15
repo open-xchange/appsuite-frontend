@@ -29,8 +29,21 @@ define('io.ox/core/folder/actions/imap-subscription', [
             if (state !== previous[id]) changes[id] = state; else delete changes[id];
         }
 
+        function subfolders(node, checked) {
+            var list = node.find('ul input[type="checkbox"]');
+            // toggle state
+            list.prop('disabled', !checked);
+            if (checked) return;
+            // uncheck
+            list.filter(':checked').each(function (index, node) {
+                $(node).prop('checked', false);
+            });
+        }
+
         function change() {
-            check($(this).val(), $(this).prop('checked'));
+            var node = $(this), checked = node.prop('checked');
+            subfolders(node.closest('.folder'), checked);
+            check(node.val(), checked);
         }
 
         function keypress(e) {
@@ -47,6 +60,17 @@ define('io.ox/core/folder/actions/imap-subscription', [
             if (id.indexOf('all/') === 0) delete api.pool.collections[id];
         });
 
+        function getSubscribedSubfolders(model) {
+            var id = model.get('id');
+            // process only subscribed subfolders
+            if (!model.get('subscr_subflds')) return;
+            var models = api.pool.getCollection(id, true).models,
+                children = _.filter(models, function (model) { return model.get('subscribed'); });
+            return _.map(children, function (model) {
+                return model.get('id');
+            });
+        }
+
         picker({
 
             all: true,
@@ -61,6 +85,21 @@ define('io.ox/core/folder/actions/imap-subscription', [
             always: function () {
 
                 http.pause();
+
+                // subfolder handling
+                var list = Object.keys(changes);
+                // hint: for-loop allows manipulating that list within handler
+                for (var i = 0; i < list.length; i++) {
+                    var id = list[i], state = changes[id];
+                    if (state) continue;
+                    var model = api.pool.getModel(id);
+                    /* eslint-disable no-loop-func */
+                    _.each(getSubscribedSubfolders(model), function (id) {
+                        changes[id] = false;
+                        list.push(id);
+                    });
+                    /* eslint-enable no-loop-func */
+                }
 
                 var affectedFolders = _(changes).map(function (state, id) {
                     // update flag

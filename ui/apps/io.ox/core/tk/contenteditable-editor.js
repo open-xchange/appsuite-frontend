@@ -217,7 +217,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             advanced: 'styleselect fontselect fontsizeselect | forecolor backcolor | link image',
             toolbar2: '',
             toolbar3: '',
-            plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists',
+            plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
             theme: 'unobtanium',
             skin: 'lightgray'
         }, opt);
@@ -251,7 +251,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         }
 
         var options = {
-            script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.jquery.min.js',
+            script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
 
             extended_valid_elements: 'blockquote[type]',
 
@@ -354,15 +354,16 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 }
 
                 var h = $(window).height(),
-                    top = editor.offset().top;
+                    top = editor.offset().top,
+                    bottomMargin = (el.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 39 : 104);
 
-                editor.css('min-height', h - top - 40 + 'px');
+                editor.css('min-height', h - top - bottomMargin + 'px');
                 if (opt.css) editor.css(opt.css);
 
                 var th = $(fixed_toolbar + ' > div').height(),
                     w = $(fixed_toolbar).next().outerWidth();
 
-                if (th) $(fixed_toolbar).css('height', th + 1);
+                if (th) $(fixed_toolbar).css('height', th);
                 if (w) $(fixed_toolbar).css('width', w);
                 return;
             }, 30),
@@ -521,6 +522,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.getContentParts = function () {
             var content = this.getContent(),
                 index = content.indexOf('<blockquote type="cite">');
+            // special case: initially replied/forwarded text mail
+            if (content.substring(0, 15) === '<blockquote><p>') index = 0;
+            // special case: switching between signatures in such a mail
+            if (content.substring(0, 23) === '<p><br></p><blockquote>') index = 0;
             if (index < 0) return { content: content };
             return {
                 // content without trailing whitespace
@@ -558,7 +563,11 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         // allow jQuery access
         this.find = function (selector) {
-            return $(ed.getDoc()).find(selector);
+            return $(ed.getBody()).find(selector);
+        };
+
+        this.children = function (selector) {
+            return $(ed.getBody()).children(selector);
         };
 
         this.replaceContent = function (str, rep) {

@@ -23,6 +23,25 @@
     html.high-contrast & { display: none; }
 }
 
+/**
+ * High res logo for retina screens and mobile devices
+ * The provided icon must have exact twice the size than
+ * the standard icon.
+ */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+    only screen and (-moz-min-device-pixel-ratio: 1.5),
+    only screen and (min-device-pixel-ratio: 1.5),
+    only screen and (min-resolution: 240dppx) {
+
+    #io-ox-top-logo-small {
+        // tell the browser to scale the image down, this will result
+        // in a sharp image on retina screens
+        background-size: 60px 22px;
+        // important, the large icon is 120x44px
+        background-image: url('apps/themes/default/logo-large.png');
+    }
+}
+
 #io-ox-topbar {
     position: absolute;
     top: 0;
@@ -64,8 +83,11 @@
         & > a {
 
             color: @topbar-launcher-color;
-            padding: 12px @default-padding;
+            padding: 0 @default-padding;
             line-height: 40px;
+            // strict limit of 40px (see bug 45294)
+            height: 40px;
+            display: inline-block;
 
             html.high-contrast & {
                 color: @black;
@@ -186,7 +208,6 @@
 
                 &.apptitle {
                     float: left;
-                    line-height: 16px;
                 }
             }
 
@@ -200,9 +221,9 @@
                 }
 
                 &.fa-times {
-                    padding: 12px 16px;
+                    padding: 0 16px;
                     margin: 0;
-
+                    vertical-align: top;
                     &:hover { color: #fff; }
                 }
             }
@@ -267,7 +288,6 @@
         @media (max-width: 480px), (max-device-width: 480px) {
             .dropdown-toggle {
                 font-size: @mobile-launcher-icon-size;
-                padding: @mobile-launcher-icon-size - 10px 18px;
             }
         }
 
@@ -374,14 +394,9 @@
             }
         }
 
-        i {
-            vertical-align: top;
-            top: 0px;
-        }
-
         .badge {
             position: relative;
-            top: -7px;
+            top: 7px;
             left: -11px;
             z-index: 1;
             vertical-align: top;
@@ -480,17 +495,5 @@ html.ios8-standalone-ipad-fix {
     #io-ox-top-logo-small {
         margin: 6px 8px 0 10px;
         height: 22px;
-    }
-}
-
-/** High res logo for retina screens **/
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-    only screen and (-moz-min-device-pixel-ratio: 1.5),
-    only screen and (min-device-pixel-ratio: 1.5),
-    only screen and (min-resolution: 240dppx) {
-
-    #io-ox-top-logo-small {
-        background-size: 60px 22px;
-        background-image: url('apps/themes/default/logo-large.png');
     }
 }

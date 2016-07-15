@@ -132,8 +132,9 @@ define('io.ox/mail/util', [
             return phone.replace(rTelephoneCleanup, '');
         },
 
-        parseRecipient: function (s) {
-            var recipient = $.trim(s), match, name, target;
+        parseRecipient: function (s, o) {
+            var recipient = $.trim(s), match, name, target,
+                options = _.extend({ localpart: true }, o);
             if ((match = recipient.match(rRecipient)) !== null) {
                 // case 1: display name plus email address / telephone number
                 if (that.getChannel(match[3]) === 'email') {
@@ -146,6 +147,9 @@ define('io.ox/mail/util', [
                 // case 2: assume plain email address / telephone number
                 target = recipient.replace(rMailCleanup, '').toLowerCase();
                 name = target.split(/@/)[0];
+                // If this is set to false, localpart will be set to null
+                // This is the expected behaviour for tokenfields
+                if (!options.localpart) name = null;
             } else {
                 name = target = that.cleanupPhone(recipient);
             }
@@ -199,14 +203,14 @@ define('io.ox/mail/util', [
          * Parse comma or semicolon separated list of recipients
          * Example: '"Doe, Jon" <jon@doe.foo>, "\'World, Hello\'" <hi@dom.tld>, urbi@orbi.tld'
          */
-        parseRecipients: function (s) {
-            var list = [], match, recipient;
+        parseRecipients: function (s, o) {
+            var list = [], match, recipient, options = o;
             if (!s) return list;
             while ((match = s.match(rRecipientList)) !== null) {
                 // look ahead for next round
                 s = s.substr(match[0].length).replace(rRecipientCleanup, '');
                 // get recipient
-                recipient = this.parseRecipient(match[0]);
+                recipient = this.parseRecipient(match[0], options);
                 //stupid workarround so exchange draft emails without proper mail adresses get displayed correctly (Bug 23983)
                 var msExchange = recipient[0] === recipient[1];
                 // add to list? (stupid check but avoids trash)
@@ -407,8 +411,8 @@ define('io.ox/mail/util', [
         getPriority: function (data) {
             // normal?
             if (data && data.priority === 3) return $();
-            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation"/></span>').attr('title', gt('High priority'));
-            return $('<span class="low"><i class="fa fa-minus"/></span>').attr('title', gt('Low priority'));
+            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation"/></span>').attr('title', gt.pgettext('E-Mail', 'High priority'));
+            return $('<span class="low"><i class="fa fa-minus"/></span>').attr('title', gt.pgettext('E-Mail', 'Low priority'));
         },
 
         getAccountName: function (data) {
@@ -462,6 +466,12 @@ define('io.ox/mail/util', [
                 return 'Yesterday';
             }
             return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
+        },
+
+        threadFileSize: function (data) {
+            return data.reduce(function (acc, obj) {
+                return acc + (obj.size || 0);
+            }, 0);
         },
 
         count: function (data) {
@@ -544,80 +554,6 @@ define('io.ox/mail/util', [
                 folder = base.without(id).join(separator);
             return { folder_id: folder, id: id };
         },
-
-        signatures: (function () {
-
-            var looksLikeHTML = function (text) {
-                    return /(<\/?\w+(\s[^<>]*)?>)/.test(text);
-                },
-                general = function (text) {
-                    return String(text || '')
-                        // replace white-space and evil \r
-                        .replace(/(\r\n|\n|\r)/g, '\n')
-                        // replace subsequent white-space (except linebreaks)
-                        .replace(/[\t\f\v ][\t\f\v ]+/g, ' ')
-                        .trim();
-                },
-                add = function (text, isHTML) {
-                    var clean = general(text);
-                    // special entities like '&'/&amp;
-                    var $parsed = $('<dummy>').html(clean);
-                    if (isHTML) {
-                        if (!looksLikeHTML(clean)) {
-                            $parsed.text(clean);
-                        }
-                        return $parsed.html();
-                    }
-                    if (!looksLikeHTML(clean)) {
-                        $parsed.text(clean);
-                    }
-                    $parsed.find('p').replaceWith(function () {
-                        return $(this).html() + '\n\n';
-                    });
-                    $parsed.find('br').replaceWith(function () {
-                        return $(this).html() + '\n';
-                    });
-                    return $parsed.text().trim();
-                },
-                preview = function (text) {
-                    return general(text)
-                        // remove ASCII art (intended to remove separators like '________')
-                        .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
-                        // remove htmltags
-                        .replace(/(<\/?\w+(\s[^<>]*)?>)/g, '')
-                        .trim();
-                };
-
-            return {
-
-                cleanAdd: function (text, isHTML) {
-                    return add(text, !!isHTML);
-                },
-
-                cleanPreview: function (text) {
-                    return preview(text);
-                },
-
-                is: function (text, list, isHTML) {
-                    var signatures = _(list).map(function (signature) {
-                        // consider changes applied by appsuite
-                        var clean = add(signature.content, !!isHTML);
-                        // consider changes applied by tiny
-                        if (clean === '') return '<br>';
-
-                        return clean
-                            // set breaks
-                            .replace(/(\r\n|\n|\r)/g, '<br>')
-                            // replace surrounding white-space (except linebreaks)
-                            .replace(/>[\t\f\v ]+/g, '>')
-                            .replace(/[\t\f\v ]+</g, '<')
-                            // remove empty alt attribute(added by tiny)
-                            .replace(/ alt=""/, '');
-                    });
-                    return _(signatures).indexOf(add(text, !!isHTML)) > -1;
-                }
-            };
-        })(),
 
         getAttachments: (function () {
 

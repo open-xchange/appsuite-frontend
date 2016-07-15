@@ -18,6 +18,13 @@ define('io.ox/tasks/util', [
 
     'use strict';
 
+    // global handler for cross-app links
+    $(document).on('click', '.ox-internal-mail-link', function (e) {
+        e.preventDefault();
+        var cid = $(this).attr('data-cid');
+        ox.launch('io.ox/mail/detail/main', { cid: cid });
+    });
+
     var lookupDaytimeStrings = [
             gt('this morning'),
             gt('by noon'),
@@ -154,9 +161,7 @@ define('io.ox/tasks/util', [
                 result.push(['t', gt('tomorrow')]);
 
                 for (i = (now.day() + 2) % 7; i !== now.day(); i = ++i % 7) {
-                    //#. reminder date selection
-                    //#. %1$s is a weekday, like 'next Monday'
-                    result.push(['w' + i, gt('next %1$s', moment.weekdays(i))]);
+                    result.push(['w' + i, moment.weekdays(i)]);
                 }
 
                 result.push(['ww', gt('in one week')]);
@@ -198,36 +203,10 @@ define('io.ox/tasks/util', [
                 if (links && links[0] && capabilities.has('webmail')) {
 
                     for (var i = 0; i < links.length; i++) {
-                        link = '<span role="button" cid="' + links[i].replace(/^mail:\/\//, '') + '" class="ox-internal-mail-link label label-primary">' + gt('Original mail') + '</span>';
+                        link = '<a href="#" tabindex="1" role="button" data-cid="' + links[i].replace(/^mail:\/\//, '') + '" class="ox-internal-mail-link label label-primary">' + gt('Original mail') + '</a>';
                         // replace links
                         note = note.replace(links[i], link);
                     }
-
-                    // add function but make sure they are added only once
-                    // code can be moved once we introduce general links for apps
-                    $('.task-detail-container').undelegate('.ox-internal-mail-link', 'click').delegate('.ox-internal-mail-link', 'click', function () {
-                        var self = $(this),
-                            cid = self.attr('cid'),
-                            // save height and width so it doesn't change when the busy animation is drawn
-                            width = self.outerWidth() + 'px',
-                            height = self.outerHeight() + 'px';
-                        if (cid) {
-                            self.css({ width: width, height: height }).busy(true);
-                            require(['io.ox/mail/api'], function (api) {
-                                // see if mail is still there. Also loads the mail into the pool. Needed for the app to work
-                                api.get(_.extend({}, { unseen: true }, _.cid(cid))).done(function () {
-                                    ox.launch('io.ox/mail/detail/main', { cid: cid });
-                                }).fail(function (error) {
-                                    //if the mail was moved or the mail was deleted the cid cannot be found, show error
-                                    require(['io.ox/core/yell'], function (yell) {
-                                        yell(error);
-                                    });
-                                }).always(function () {
-                                    self.idle().css({ width: 'auto', height: 'auto' }).text(gt('Original mail'));
-                                });
-                            });
-                        }
-                    });
                     //remove signature style divider "--" used by tasks created by mail reminder function (if it's at the start remove it entirely)
                     note = note.replace(/(<br>)+-+(<br>)*/, '<br>').replace(/^-+(<br>)*/, '');
                 }

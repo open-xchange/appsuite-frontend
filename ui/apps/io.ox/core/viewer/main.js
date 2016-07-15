@@ -51,9 +51,14 @@ define('io.ox/core/viewer/main', [], function () {
             var self = this,
                 el = $('<div class="io-ox-viewer abs">'),
                 fileList = [].concat(data.files),
-                container = data.container || $('#io-ox-core');
+                container = data.container || $('#io-ox-core'),
+                siblings;
 
             container.append(el);
+            siblings = el.siblings().each(function () {
+                var $this = $(this);
+                $this.data('ox-restore-aria-hidden', el.attr('aria-hidden'));
+            }).attr('aria-hidden', true);
 
             function cont() {
                 // resolve dependencies now for an instant response
@@ -69,6 +74,11 @@ define('io.ox/core/viewer/main', [], function () {
                     self.mainView = new MainView({ collection: self.fileCollection, el: el, app: data.app, standalone: data.standalone, opt: data.opt || {} });
 
                     self.mainView.on('dispose', function () {
+                        siblings.removeAttr('aria-hidden').each(function () {
+                            var el = $(this);
+                            if (el.data('ox-restore-aria-hidden')) el.attr('aria-hidden', el.data('ox-restore-aria-hidden'));
+                            el.removeData('ox-restore-aria-hidden');
+                        });
                         // remove id form URL hash (see bug 43410)
                         // use-case: viewer was opened via deep-link; a page-reload might surprise the user
                         // but don't remove the id from an OX Presenter URL

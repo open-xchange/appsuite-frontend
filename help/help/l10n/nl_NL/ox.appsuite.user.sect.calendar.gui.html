@@ -152,7 +152,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>De <span class="guibutton"><strong>Blader</strong></span> pictogrammen<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.calendarview.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span> in de linkerbovenhoek van het agendablad maken het mogelijk door de agenda te navigeren.</p></li>
 <li class="listitem">
-<p>In het agendaoverzicht <span class="guilabel"><strong>Dag</strong></span>, <span class="guilabel"><strong>Werkweek</strong></span>, en <span class="guilabel"><strong>Week</strong></span>,wordt de datum en kalenderweeg getoond naast het <span class="guibutton"><strong>Blader</strong></span> pictogram.</p>
+<p>In het agendaoverzicht <span class="guilabel"><strong>Dag</strong></span>, <span class="guilabel"><strong>Werkweek</strong></span>, en <span class="guilabel"><strong>Week</strong></span>,wordt de datum getoond naast het <span class="guibutton"><strong>Blader</strong></span> pictogram.</p>
 <p>Als u op een datum klikt wordt een minikalender getoond die helpt bij het kiezen van een andere datum.</p>
 <p>Het gebied tussen dat datum en het agendablad kan gebruikt worden voor het <a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">aanmaken</a> van dagafspraken.</p>
 <p>Aan de linkerkant van het agendablad wordt de tijdzone getoond boven de datums. Om een extra kolom met datums in een andere tijdzone toe te voegen, klikt u op de tijdzone.</p>
@@ -160,7 +160,10 @@
 </li>
 <li class="listitem"><p>In het <span class="guilabel"><strong>Werkweek</strong></span>, <span class="guilabel"><strong>Week</strong></span> en <span class="guilabel"><strong>Maand</strong></span> overzicht wordt de huidige dag gemarkeerd met een rode achtergrond.</p></li>
 <li class="listitem"><p>In het <span class="guilabel"><strong>Maand</strong></span> overzicht wordt de geselecteerde maand en het jaar getoond boven het agendablad.</p></li>
-<li class="listitem"><p> Afhankelijk van de bevestigingsstatus worden afspraken gemarkeerd met verschillende <a class="link" href="ox.appsuite.user.sect.calendar.view.appointments.html#ox.appsuite.user.concept.appointments.color">kleuren</a>.</p></li>
+<li class="listitem">
+<p> Afhankelijk van de bevestigingsstatus worden afspraken gemarkeerd met verschillende <a class="link" href="ox.appsuite.user.sect.calendar.view.appointments.html#ox.appsuite.user.concept.appointments.color">kleuren</a>.</p>
+<p>Als er meer afspraken boven of onder het zichtbare agendablad zijn worden pijltjes getoond aan de boven of onderkant van de agenda voor de betreffende dag.</p>
+</li>
 </ul></div>
 <p>Als u klikt op een afspraak worden de gegevens getoond in de <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="Pop-up">pop-up</a>.</p>
 <div class="itemizedlist">
@@ -189,7 +192,7 @@
 <div class="itemizedlist">
 <a name="ox.appsuite.user.reference.calendar.gui.popup.related"></a><p class="title">Gerelateerde onderwerpen</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Instructies voor de knoppen en pictogrammen kan u hier vinden:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Wijzigen van de afspraakstatus">Wijzigen van de afspraakstatus</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.2. Opvolg-afspraken maken">Opvolg-afspraken maken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Afspraken wissen">Afspraken wissen</a></span>
+<li class="listitem" style="list-style-type: none"><p>Instructies voor de knoppen en pictogrammen kan u hier vinden:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Wijzigen van de afspraakstatus">Wijzigen van de afspraakstatus</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.2. Een nieuwe vervolgafspraak maken">Een nieuwe vervolgafspraak maken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Afspraken wissen">Afspraken wissen</a></span>
             </p></li>
 <li class="listitem" style="list-style-type: none"><p>Instructies voor de functies in het <span class="guibutton"><strong>Acties</strong></span> menu<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calebdar.gui.popup.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> kan u hier vinden:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Afdrukken van afspraken">Afdrukken van afspraken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Afspraken verplaatsen naar een andere map">Afspraken verplaatsen naar een andere map</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Bewerken van meerdere afspraken in één keer">Bewerken van meerdere afspraken in één keer</a></span>
             </p></li>
@@ -293,15 +296,22 @@
 <a name="ox.appsuite.user.reference.calendar.gui.create"></a><p class="title"><b>Tonen voor aanmaken of bewerken</b></p>
 <p>Als u een nieuwe afspraak maakt of een bestaande afspraak bewerkt worden de volgende elementen getoond op een nieuwe pagina.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>Afhankelijk van de instellingen van de groupware kunnen elementen zowel bovenaan als onderaan het scherm staan.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><span class="guibutton"><strong>Aanmaken</strong></span> knop. Als u op deze knop klikt, wordt de huidige afspraak opgeslagen en word het bewerkingsscherm gesloten.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Afbreken</strong></span> knop. Om het aanmaken of wijzigen te stoppen moet u op deze knop drukken.</p></li>
 <li class="listitem"><p>De knop naast <span class="guibutton"><strong>Agenda</strong></span> toont de agendamap waarin de afspraak gemaakt wordt. Om een afspraak in een andere map te maken klikt u op deze knop.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
 <li class="listitem"><p><span class="guibutton"><strong>Onderwerp</strong></span> invoerveld. Geef in dit veld het onderwerp. Het onderwerp wordt getoond als de titel van de afspraak in de overzichten.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Locatie</strong></span> knop. Hier kan u de locatie voor de afspraak opgeven.</p></li>
 <li class="listitem">
 <p><span class="guibutton"><strong>Start op</strong></span> en <span class="guibutton"><strong>Eindigt op</strong></span> invoervelden. Stelt de start- en einddatum in van de afspraak. Als u er op klikt wordt een dialoog voor datumselectie getoond. </p>
 <p>Als het <span class="guibutton"><strong>Gehele dag</strong></span> selectievak  is uitgeschakeld kan u de start- en eindtijd opgeven.</p>
-<p>Als u op de tijdzone knop naast de tijd klikt wordt de tijd getoond in andere tijdzones. U kan <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. Favoriete tijdzones beheren">veelgebruikte tijdzones als favorieten</a> opgeven in de agendainstellingen.</p>
+<p>Als u op de tijdzone knop naast de tijd klikt wordt de tijd getoond in andere tijdzones. U kan veelgebruikte tijdzones <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. Favoriete tijdzones beheren">als favorieten</a> opgeven in de agendainstellingen.</p>
 </li>
 <li class="listitem"><p><span class="guibutton"><strong>Gehele dag</strong></span> selectievak. Dit vak selecteert u as de afspraak de gehele dag duurt.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Zoek een vrij moment</strong></span> knop. Opent het planningsoverzicht. In dit overzicht kan u een vrij moment vinden als u een afspraak organiseert voor meerdere deelnemers.</p></li>

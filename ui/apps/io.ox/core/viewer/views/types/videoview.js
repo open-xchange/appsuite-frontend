@@ -70,6 +70,7 @@ define('io.ox/core/viewer/views/types/videoview', [
          */
         onLoadedData: function () {
             this.$el.idle().find('.viewer-displayer-video').removeClass('player-hidden');
+            this.$el.find('video')[0].play();
         },
 
         /**
@@ -78,6 +79,7 @@ define('io.ox/core/viewer/views/types/videoview', [
         onError: function () {
             this.$el.idle().find('.viewer-displayer-video').addClass('player-hidden');
             this.$el.find('div.viewer-displayer-notification').remove();
+            this.$el.find('.viewer-displayer-audio-video-placeholder').remove();
             this.$el.append(
                 this.createNotificationNode(
                     gt('Error while playing the video. Either your browser does not support the format or you have connection problems.')
@@ -105,12 +107,21 @@ define('io.ox/core/viewer/views/types/videoview', [
          *  the VideoView instance.
          */
         show: function () {
-            var video = this.$el.find('video');
 
-            if ((video.length > 0)) {
-                this.$el.busy().find('div.viewer-displayer-notification').remove();
-                video.attr('src', video.attr('data-src'));
-                video[0].load(); // reset and start selecting and loading a new media resource from scratch
+            var self = this,
+                video = this.$el.find('video'),
+                placeholder = this.$el.find('div.viewer-displayer-notification');
+
+            if (video.length > 0 && placeholder.length < 1) {
+                placeholder = this.createNotificationNode(
+                    gt('Click to start video'),
+                    'fa-play-circle-o'
+                );
+                this.$el.append(placeholder).one('click', function () {
+                    self.$el.busy().find('div.viewer-displayer-notification').remove();
+                    video.attr('src', video.attr('data-src'));
+                    video[0].load(); // reset and start selecting and loading a new media resource from scratch
+                });
             }
 
             return this;
@@ -148,6 +159,8 @@ define('io.ox/core/viewer/views/types/videoview', [
         disposeView: function () {
             // remove event listeners from video element
             this.$el.find('video').off();
+            this.$el.find('viewer-displayer-audio-video-placeholder').off();
+
             this.disposeElement();
         }
 

@@ -26,10 +26,7 @@ define([
 
             describe('reject should trigger a notification', function () {
 
-                var e = {
-                        error: 'test error message',
-                        error_params: []
-                    }, def, text;
+                var def, text;
 
                 // reset deferred
                 beforeEach(function () {
@@ -50,9 +47,7 @@ define([
                 });
 
                 it('with custom error message for MAIL_FILTER-0015', function () {
-                    var e = {
-                            code: 'MAIL_FILTER-0015'
-                        };
+                    var e = { code: 'MAIL_FILTER-0015' };
                     return util.yellOnReject(def.reject(e)).then(_.noop, function () {
                         //yell defers appending of the message, so we need to busy wait
                         return waitsFor(function () {

@@ -17,9 +17,10 @@ define.async('io.ox/mail/compose/model', [
     'io.ox/core/capabilities',
     'io.ox/core/api/account',
     'io.ox/core/attachments/backbone',
+    'io.ox/mail/compose/signatures',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (mailAPI, mailUtil, capabilities, accountAPI, Attachments, settings, gt) {
+], function (mailAPI, mailUtil, capabilities, accountAPI, Attachments, signatureUtil, settings, gt) {
 
     'use strict';
 
@@ -38,6 +39,7 @@ define.async('io.ox/mail/compose/model', [
         defaults: function () {
             return {
                 autosavedAsDraft: false,
+                // Autodismiss confirmation dialog
                 autoDismiss: false,
                 preferredEditorMode: settings.get('messageFormat', 'html'),
                 editorMode: settings.get('messageFormat', 'html'),
@@ -47,7 +49,9 @@ define.async('io.ox/mail/compose/model', [
                 priority: 3,
                 sendDisplayName: !!settings.get('sendDisplayName', true),
                 sendtype: mailAPI.SENDTYPE.NORMAL,
-                defaultSignatureId: settings.get('defaultSignature'),
+                defaultSignatureId: settings.get('defaultSignature', ''),
+                // identifier for empty signature (dropdown)
+                signatureId: '',
                 csid: mailAPI.csid(),
                 vcard: settings.get('appendVcard', false) ? 1 : 0,
                 infostore_ids_saved: []
@@ -55,6 +59,7 @@ define.async('io.ox/mail/compose/model', [
         },
 
         initialize: function () {
+            _.extend(this, signatureUtil.model, this);
             var self = this,
                 attachmentsCollection = this.get('attachments');
 
@@ -99,7 +104,6 @@ define.async('io.ox/mail/compose/model', [
                     this.set('editorMode', 'text', { silent: true });
                 }
             }
-
             if (!this.get('from') || this.get('from').length === 0) {
                 accountAPI.getPrimaryAddressFromFolder(this.get('folder_id')).then(function (address) {
                     // custom display names
@@ -110,16 +114,17 @@ define.async('io.ox/mail/compose/model', [
                 }.bind(this));
             }
 
-            // Set default signature dependant on mode, there are settings that correspond to this
-            if (this.get('mode') !== 'compose') {
-                this.set('defaultSignatureId', settings.get('defaultReplyForwardSignature'));
-            }
-
             this.set('autoDismiss', this.get('mode') === 'edit');
 
             if (!this.get('signatures')) this.set('signatures', this.getSignatures());
 
             this.updateShadow();
+        },
+
+        setAutoBCC: function () {
+            if (settings.get('autobcc') && this.get('mode') !== 'edit') {
+                this.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
+            }
         },
 
         getCopy: function () {
@@ -193,30 +198,6 @@ define.async('io.ox/mail/compose/model', [
             return content;
         },
 
-        getSignatures: function () {
-            if (this.get('mode') === 'edit') {
-                this.set('defaultSignatureId', '', { silent: true });
-            }
-
-            if (_.device('!smartphone') || this.get('mode') === 'edit') return [];
-
-            if (settings.get('mobileSignatureType') === 'custom') {
-                this.set('defaultSignatureId', '0', { silent: true });
-            } else {
-                this.set('defaultSignatureId', '1', { silent: true });
-            }
-
-            var value = settings.get('mobileSignature');
-
-            if (value === undefined) {
-                value =
-                    //#. %s is the product name
-                    gt('Sent from %s via mobile', ox.serverConfig.productName);
-            }
-
-            return [{ id: '0', content: value, misc: { insertion: 'below' } }];
-        },
-
         parse: function (list) {
             return _(mailUtil.parseRecipients([].concat(list).join(', ')))
                 .map(function (recipient) {
@@ -281,9 +262,9 @@ define.async('io.ox/mail/compose/model', [
                 'csid',
                 'initial',
                 'msgref',
-                'disp_notification_to'
+                'disp_notification_to',
+                'share_attachments'
             );
-
             result = _.extend(result, {
                 attachments:    _(attachmentCollection.mailAttachments()).reject(function (o) { return o.source === 'drive'; }),  // get all attachments without files from drive
                 contacts_ids:   attachmentCollection.contactsIds(),      // flat cids for contacts_ids

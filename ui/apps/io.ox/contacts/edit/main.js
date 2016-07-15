@@ -63,6 +63,14 @@ define('io.ox/contacts/edit/main', [
                     var considerSaved = false;
 
                     function cont(contact) {
+
+                        // fix "display_name only" contacts, e.g. in collected addresses folder
+                        var data = contact.toJSON();
+                        if (($.trim(data.first_name) + $.trim(data.yomiFirstName) === '') &&
+                            ($.trim(data.last_name) + $.trim(data.yomiLastName)) === '') {
+                            contact.set('last_name', coreUtil.unescapeDisplayName(contact.get('display_name')), { silent: true });
+                        }
+
                         var appTitle = (contact.get('display_name')) ? contact.get('display_name') : util.getFullName(contact.toJSON());
                         app.setTitle(appTitle || gt('Create contact'));
                         win.setTitle(contact.has('id') ? gt('Edit contact') : gt('Create contact'));
@@ -102,7 +110,8 @@ define('io.ox/contacts/edit/main', [
                             if (invalid) {
                                 notifications.yell('error', gt('Some fields contain invalid data'));
                                 // set error marker and scroll
-                                field.addClass('has-error').get(0).scrollIntoView();
+                                field = field.addClass('has-error').get(0);
+                                if (field) field.scrollIntoView();
                                 field = null;
                             } else {
                                 notifications.yell(error);
@@ -201,12 +210,6 @@ define('io.ox/contacts/edit/main', [
                             folder: data.folder_id
                         })
                         .done(function (model) {
-                            // fix "display_name only" contacts, e.g. in collected addresses folder
-                            var data = model.toJSON();
-                            if (($.trim(data.first_name) + $.trim(data.yomiFirstName) === '' &&
-                                $.trim(data.last_name) + $.trim(data.yomiLastName)) === '') {
-                                model.set('last_name', coreUtil.unescapeDisplayName(model.get('display_name')), { silent: true });
-                            }
                             cont(model);
                         });
                     } else {

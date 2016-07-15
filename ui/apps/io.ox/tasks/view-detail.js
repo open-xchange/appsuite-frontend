@@ -133,7 +133,7 @@ define('io.ox/tasks/view-detail', [
 
             if (task.recurrence_type) {
                 $details.append(
-                    $('<dt class="detail-value">').text(gt('This task recurs')),
+                    $('<dt class="detail-label">').text(gt('This task recurs')),
                     $('<dd class="detail-value">').text(calendarUtil.getRecurrenceString(baton.data)));
                 hasDetails = true;
             }

@@ -42,6 +42,7 @@ define('io.ox/mail/detail/view', [
         id: 'subject',
         index: INDEX += 100,
         draw: function (baton) {
+
             var subject = util.getSubject(baton.data),
                 node = $('<h1 class="subject">').text(subject);
 
@@ -83,7 +84,7 @@ define('io.ox/mail/detail/view', [
     });
 
     /* move the actions menu to the top in sidepanel on smartphones */
-    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header/row3';
+    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header/row4';
 
     ext.point(extPoint).extend(new links.InlineLinks({
         id: 'actions',
@@ -115,7 +116,7 @@ define('io.ox/mail/detail/view', [
             id: 'rows',
             index: INDEX_header += 100,
             draw: function (baton) {
-                for (var i = 1, node; i <= 3; i++) {
+                for (var i = 1, node; i <= 4; i++) {
                     node = $('<div class="detail-view-row row-' + i + ' clearfix">');
                     ext.point('io.ox/mail/detail/header/row' + i).invoke('draw', node, baton);
                     this.append(node);
@@ -128,17 +129,6 @@ define('io.ox/mail/detail/view', [
     // Row 1
     //
     ext.point('io.ox/mail/detail/header/row1').extend(
-        {
-            id: 'from',
-            index: INDEX_header += 100,
-            draw: function (baton) {
-                this.append(
-                    $('<div class="from">').append(
-                        util.serializeList(baton.data, 'from')
-                    )
-                );
-            }
-        },
         {
             id: 'flag-picker',
             index: INDEX_header += 100,
@@ -153,6 +143,18 @@ define('io.ox/mail/detail/view', [
             id: 'priority',
             index: INDEX_header += 100,
             draw: extensions.priority
+        },
+        {
+            // from is last one in the list for proper ellipsis effect
+            id: 'from',
+            index: INDEX_header += 100,
+            draw: function (baton) {
+                this.append(
+                    $('<div class="from">').append(
+                        util.serializeList(baton.data, 'from')
+                    )
+                );
+            }
         }
     );
 
@@ -162,21 +164,46 @@ define('io.ox/mail/detail/view', [
     ext.point('io.ox/mail/detail/header/row2').extend(
         {
             id: 'recipients',
-            index: INDEX_header += 100,
+            index: 100,
             draw: function (baton) {
                 ext.point('io.ox/mail/detail/header/recipients').invoke('draw', this, baton);
             }
         }
     );
 
-    //
-    // Row 3
-    //
     ext.point('io.ox/mail/detail/header/recipients').extend({
         id: 'default',
         index: 100,
         draw: extensions.recipients
     });
+
+    //
+    // Row 3
+    //
+    ext.point('io.ox/mail/detail/header/row3').extend(
+        {
+            id: 'different-subject',
+            index: 100,
+            draw: function (baton) {
+
+                var data = baton.data, baseSubject, threadSubject, mailSubject;
+
+                // no thread?
+                if (data.threadSize === 1) return;
+
+                // identical subject?
+                baseSubject = api.threads.subject(data);
+                threadSubject = util.getSubject(baseSubject, false);
+                mailSubject = util.getSubject(data, false);
+                if (baseSubject === '' || threadSubject === mailSubject) return;
+
+                this.append(
+                    $('<span class="io-ox-label">').text(gt('Subject') + '\u00a0 '),
+                    $('<span class="different-subject">').text(mailSubject)
+                );
+            }
+        }
+    );
 
     // Inplace/quick reply
 
@@ -298,7 +325,7 @@ define('io.ox/mail/detail/view', [
             // add to DOM
             this.idle().append(node);
             // ensure, that the scrollable is a lazyload scrollpane
-            if (this[0].host) {
+            if (this[0] && this[0].host) {
                 // if it is a shadow dom, we must trigger add.lazyload to ensure, that lazyloading is updated at least once
                 $(this[0].host).closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
                 // copy events
@@ -573,7 +600,7 @@ define('io.ox/mail/detail/view', [
                 'data-cid': this.model.cid,
                 'aria-expanded': 'false',
                 'data-loaded': 'false',
-                'role': 'group',
+                'role': 'article',
                 'aria-label': title
             });
 

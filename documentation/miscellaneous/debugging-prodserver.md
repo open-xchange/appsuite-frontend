@@ -95,7 +95,7 @@ openssl req -newkey rsa:4096 -nodes -keyout host.key -out host.csr
 ```
 
 While most data entered for the certificates doesn't matter, the Common Name for the certificate signing request in the second openssl command must match the domain of the "server" setting in local.conf.json.
-Alternatively, it can be a higher domain with a wildcard, e.g. \*.example.com for "server": "<https://my.example.com/appsuite/">.
+Alternatively, it can be a higher domain with a wildcard, e.g. \*.example.com for "server": ``https://my.example.com/appsuite/``.
 
 ```javascript
 openssl x509 -req -in host.csr -CA rootCA.crt -CAkey rootCA.key \

@@ -1005,20 +1005,25 @@ define('io.ox/core/folder/api', [
         _(pool.collections).invoke('remove', model);
     }
 
-    function remove(id) {
+    function remove(ids) {
 
-        // get model
-        var model = pool.getModel(id), data = model.toJSON();
+        // ensure array
+        if (!_.isArray(ids)) ids = [ids];
 
-        // trigger event
-        api.trigger('before:remove', data);
+        // local copy for model data
+        var hash = {};
 
-        //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
-        model.set('unread', 0);
-
-        // update collection (now)
-        removeFromAllCollections(model);
-        model.trigger('destroy');
+        _(ids).each(function (id) {
+            // get model
+            var model = pool.getModel(id), data = hash[id] = model.toJSON();
+            // trigger event
+            api.trigger('before:remove', data);
+            //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
+            model.set('unread', 0);
+            // update collection (now)
+            removeFromAllCollections(model);
+            model.trigger('destroy');
+        });
 
         // delete on server
         return http.PUT({
@@ -1026,22 +1031,25 @@ define('io.ox/core/folder/api', [
             params: {
                 action: 'delete',
                 failOnError: true,
-                tree: tree(id)
+                tree: tree(ids[0])
             },
-            data: [id],
+            data: ids,
             appendColumns: false
         })
         .done(function () {
-            api.trigger('remove', id, data);
-            api.trigger('remove:' + id, data);
-            api.trigger('remove:' + data.module, data);
-            if (account.is('trash', id)) {
+            _(ids).each(function (id) {
+                var data = hash[id];
+                api.trigger('remove', id, data);
+                api.trigger('remove:' + id, data);
+                api.trigger('remove:' + data.module, data);
                 // if this is a trash folder trigger special event (quota updates)
-                api.trigger('cleared-trash');
-            }
+                if (account.is('trash', id)) api.trigger('cleared-trash');
+            });
         })
         .fail(function () {
-            api.trigger('remove:fail', id);
+            _(ids).each(function (id) {
+                api.trigger('remove:fail', id);
+            });
         });
     }
 
@@ -1130,6 +1138,7 @@ define('io.ox/core/folder/api', [
         _.chain(arguments).flatten().map(getFolderId).compact().uniq().each(function (id) {
             // register function call once
             if (!reload.hash[id]) reload.hash[id] = _.debounce(get.bind(null, id, { cache: false }), reload.wait);
+            api.trigger('reload:' + id);
             reload.hash[id]();
         });
     }
@@ -1224,7 +1233,7 @@ define('io.ox/core/folder/api', [
             flat({ module: module, cache: false });
         });
         // go!
-        http.resume().done(function () {
+        return http.resume().done(function () {
             virtual.refresh();
         });
     }

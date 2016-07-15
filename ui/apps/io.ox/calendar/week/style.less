@@ -98,7 +98,7 @@
                     width: 100%;
                     font-size: 12px;
                     font-weight: 200;
-                    color: #aaa;
+                    color: #767676;
                     text-align: right;
                     .ellipsis();
                     .user-select(none);
@@ -171,6 +171,32 @@
 
                 .dark-colors & .appointment-content {
                     padding: 4px 10px;
+                }
+            }
+
+        }
+
+        .more-appointments-container {
+            left: @weekview-time-width;
+            right: 12px; //assume scrollbars are around 12px width. It's not browser independent, but a good guess. Needed to center indicators
+            bottom: 0px;
+            // 0px xor 21px, needs to be "calculated" on in code
+            //top: 0px;
+            width: auto;
+            height: auto;
+            position: absolute;
+            pointer-events: none;
+
+            .more-appointments {
+                position: absolute;
+                text-align: center;
+                opacity: 0.5;
+
+                &.earlier {
+                    top: 0px;
+                }
+                &.later {
+                    bottom: 0px;
                 }
             }
         }
@@ -332,6 +358,8 @@
 
             .fulltime-container,
             .scrollpane .week-container  { margin-left: @adjusted-width; }
+
+            .more-appointments-container { left: @adjusted-width; }
         }
     }
 
@@ -348,6 +376,7 @@
         .week-view-container {
 
             .fulltime-container { margin-left: @weekview-time-widthSmall; }
+            .more-appointments-container { left: @weekview-time-widthSmall; right: 0; }
 
             .scrollpane {
 

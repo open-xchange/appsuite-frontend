@@ -231,7 +231,7 @@ define('io.ox/tasks/main', [
             app.right = right.addClass('default-content-padding f6-target task-detail-container')
             .attr({
                 'tabindex': 1,
-                'role': 'complementary',
+                'role': 'main',
                 'aria-label': gt('Task Details')
             })
             .scrollable();
@@ -244,6 +244,10 @@ define('io.ox/tasks/main', [
                 listRequest;
 
             app.left.append(app.gridContainer);
+            app.left.attr({
+                role: 'navigation',
+                'aria-label': 'Task list'
+            });
 
             grid.addTemplate(template.main);
 
@@ -391,10 +395,8 @@ define('io.ox/tasks/main', [
             if (_.device('smartphone')) return;
 
             // tree view
-            var tree = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'tasks' });
-
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
+            app.treeView = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'tasks' });
+            FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
         },
 
@@ -634,6 +636,21 @@ define('io.ox/tasks/main', [
             };
         },
 
+        'sidepanel': function (app) {
+
+            ext.point('io.ox/tasks/sidepanel').extend({
+                id: 'tree',
+                index: 100,
+                draw: function (baton) {
+                    // add border & render tree and add to DOM
+                    this.addClass('border-right').append(baton.app.treeView.$el);
+                }
+            });
+
+            var node = app.getWindow().nodes.sidepanel;
+            ext.point('io.ox/tasks/sidepanel').invoke('draw', node, ext.Baton({ app: app }));
+        },
+
         'metrics': function (app) {
 
             function getFolderType(folder) {
@@ -790,6 +807,7 @@ define('io.ox/tasks/main', [
             toolbarPlacement: 'top',
             templateOptions: { tagName: 'li', defaultClassName: 'vgrid-cell list-unstyled' }
         });
+        app.gridContainer.find('.vgrid-toolbar').attr('aria-label', gt('Tasks toolbar'));
 
         app.grid = grid;
 
@@ -805,6 +823,20 @@ define('io.ox/tasks/main', [
                 app.mediate();
                 win.show();
             });
+    });
+
+    // set what to do if the app is started again
+    // this way we can react to given options, like for example a different folder
+    app.setResume(function (options) {
+        // only consider folder option for now
+        if (options && options.folder && options.folder !== this.folder.get()) {
+            var appNode = this.getWindow();
+            appNode.busy();
+            return this.folder.set(options.folder).always(function () {
+                appNode.idle();
+            });
+        }
+        return $.when();
     });
 
     //extension points

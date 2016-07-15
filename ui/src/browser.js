@@ -219,6 +219,8 @@
     // define devices as combination of screensize and OS
     display.smartphone = isSmartphone();
     display.tablet = display.medium && mobileOS; // maybe to fuzzy...
+    // as there is no android desktop yet, this must be a tablet
+    if (us.browser.android && display.large) display.tablet = true;
     display.desktop = !mobileOS;
     us.displayInfo = display;
     // extend underscore utilities
@@ -255,7 +257,7 @@
         },
 
         // combination of browser & display
-        device: function (condition, debug) {
+        device: _.memoize(function (condition, debug) {
             // add support for language checks
             var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
@@ -284,7 +286,7 @@
                 console.error('_.device()', condition, e);
                 return false;
             }
-        }
+        })
     };
     underscoreExtends.device.loadUA = function (nav) {
         detectBrowser(nav);

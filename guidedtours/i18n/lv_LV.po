@@ -2,8 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-06 10:56+0200\n"
+"PO-Revision-Date: 2016-07-04 20:26+0300\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.8\n"
 
 #: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
@@ -580,12 +581,12 @@ msgstr "Vēstules teksta ievadīšana"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
 "Galvenajā apgabalā ievadiet e-pasta tekstu. Ja iestatījumos ziņojumiem ir "
-"izvēlēts HTML formāts, jūs varat veikt e-pasta formatēšanu. lai to pveiktu, "
+"izvēlēts HTML formāts, jūs varat veikt e-pasta formatēšanu. Lai to pveiktu, "
 "iezīmējiet teksta apgabalu un noklišķiniet atbilstošo ikonu formatēšanas "
 "apgabalā."
 
@@ -720,9 +721,9 @@ msgid "Closing a square"
 msgstr "Apskatlogu aizvēršana"
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
+msgid "If you no longer want to display a square, click the delete icon."
 msgstr ""
-"Ja vairs nevēlaties, lai objekts tiktu uzrādīts, noklikšķiniet uz krusta."
+"Ja vairs nevēlaties parādīt kvadrātu, noklikšķiniet uz dzēšanas ikonas."
 
 #: apps/io.ox/tours/portal.js:51 module:io.ox/tours
 msgid "Customizing the Portal"

@@ -40,16 +40,24 @@
         &.top { .top-toolbar(); }
         &.bottom { .bottom-toolbar(); }
 
-        .grid-options {
-            padding: 0 16px 0 0;
-        }
+        .grid-options { padding: 0; }
 
         .grid-options > a {
             color: #777;
+            display: block;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        a:not(.breadcrumb-link) {
+            &:focus, &:focus i {
+                color: @selected-color;
+                background: @selected-background;
+                outline: 0;
+            }
         }
 
         .select-all {
-            padding-right: 5px;
             color: #777;
             cursor: pointer;
             white-space: nowrap;
@@ -195,6 +203,8 @@
                 display: table-cell;
                 text-align: center;
                 vertical-align: middle;
+                padding-left: 8px;
+                padding-right: 8px;
             }
         }
     }
@@ -236,7 +246,7 @@
     &.visible-selection.has-focus .list-item.selected {
         color: white;
         background-color: @selected-background;
-
+        i { color: rgba(255, 255, 255, 0.50); }
         html.high-contrast & {
             background-color: @hc-link-color;
         }
@@ -325,7 +335,7 @@
 
     .list-item {
         .bold { font-weight: bold; }
-        .gray { opacity: 0.50; } // 0.50 has enough color contrast
+        .gray { opacity: 0.60; } // 0.50 has enough color contrast
     }
     .pull-to-refresh {
         position: absolute;

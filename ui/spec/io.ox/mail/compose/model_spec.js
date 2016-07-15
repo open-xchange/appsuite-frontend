@@ -15,11 +15,6 @@ define(['io.ox/mail/compose/model',
 ], function (MailModel, settings) {
     'use strict';
 
-    var editors = {
-        text: 'io.ox/core/tk/text-editor',
-        html: 'io.ox/core/tk/contenteditable-editor'
-    };
-
     describe('Mail Compose', function () {
         describe('mail model', function () {
             describe('attachments', function () {

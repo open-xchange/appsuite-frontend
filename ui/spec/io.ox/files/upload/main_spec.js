@@ -12,9 +12,8 @@
  */
 
 define([
-    'io.ox/files/upload/main',
-    'gettext!io.ox/files'
-], function (upload, gt) {
+    'io.ox/files/upload/main'
+], function (upload) {
 
     'use strict';
 

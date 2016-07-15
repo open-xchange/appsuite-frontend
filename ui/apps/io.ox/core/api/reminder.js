@@ -148,7 +148,7 @@ define('io.ox/core/api/reminder', [
         },
 
         /**
-         * get's a task or appointment to a given reminder
+         * get's a task or appointment for a given reminder
          * @param  {reminder} reminder
          * @return {deferred}
          */
@@ -170,7 +170,9 @@ define('io.ox/core/api/reminder', [
                 //task
                 return taskAPI.get(obj);
             }
+
             //appointment
+            obj.recurrence_position = reminder.recurrence_position;
             return calendarAPI.get(obj);
         }
     };

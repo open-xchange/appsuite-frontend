@@ -27,7 +27,8 @@ define('io.ox/core/boot/util', [], function () {
             $('<div role="alert" class="selectable-text alert alert-info">').append(
                 node
             )
-        ).show();
+        );
+
     }
     var feedbackNode = null;
     // var feedbackType = null;
@@ -138,7 +139,7 @@ define('io.ox/core/boot/util', [], function () {
     //
 
     ox.relogin = function () {
-        exports.gotoSignin('login_type=none');
+        exports.gotoSignin('login_type=useForm');
     };
 
     ox.on('relogin:required', ox.relogin);

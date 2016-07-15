@@ -329,7 +329,7 @@ define('io.ox/calendar/week/perspective', [
 
             // init views
             if (this.views[opt.perspective] === undefined) {
-                this.view = new View({
+                this.view = window.weekview = new View({
                     app: app,
                     collection: this.collection,
                     mode: opt.perspective.split(':')[1],
@@ -339,18 +339,18 @@ define('io.ox/calendar/week/perspective', [
                 switch (this.view.mode) {
                     case 'day':
                         this.main.attr({
-                            'aria-label': gt('Day View')
+                            'aria-label': gt('Calendar Day View')
                         });
                         break;
                     case 'workweek':
                         this.main.attr({
-                            'aria-label': gt('Workweek View')
+                            'aria-label': gt('Calendar Workweek View')
                         });
                         break;
                     default:
                     case 'week':
                         this.main.attr({
-                            'aria-label': gt('Week View')
+                            'aria-label': gt('Calendar Week View')
                         });
                         break;
                 }
@@ -415,7 +415,7 @@ define('io.ox/calendar/week/perspective', [
                 .addClass('secondary-time-label')
                 .empty()
                 .attr({
-                    'role': 'navigation',
+                    'role': 'main',
                     'aria-label': gt('Appointment list')
                 });
             this.collection = new WeekAppointmentCollection([]);

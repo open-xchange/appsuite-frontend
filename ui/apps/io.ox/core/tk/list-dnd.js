@@ -40,6 +40,7 @@ define('io.ox/core/tk/list-dnd', [
         options = _.extend({
             container: $(),
             data: null,
+            delegate: false,
             draggable: false,
             dragMessage: defaultMessage,
             dragType: '',
@@ -144,6 +145,7 @@ define('io.ox/core/tk/list-dnd', [
         }());
 
         function drag(e) {
+            $('body').addClass('dragging');
             // unbind
             $(document).off('mousemove.dnd', drag);
             // get counter
@@ -183,6 +185,7 @@ define('io.ox/core/tk/list-dnd', [
 
         function remove() {
             if (helper !== null) {
+                $('body').removeClass('dragging');
                 helper.remove();
                 helper = fast = null;
             }
@@ -193,12 +196,18 @@ define('io.ox/core/tk/list-dnd', [
         }
 
         function stop() {
+            $('body').removeClass('dragging');
             // stop auto-scroll
             scroll.out();
             // unbind handlers
             $(document).off('mousemove.dnd mouseup.dnd mouseover.dnd mouseout.dnd keyup.dnd');
             $('.dropzone').each(function () {
-                var node = $(this), selector = node.attr('data-dropzones');
+                var node = $(this),
+                    selector = node.attr('data-dropzones'),
+                    delegate = node.attr('data-delegate');
+                if (delegate && selector) {
+                    return node.off('mouseup.dnd', selector);
+                }
                 (selector ? node.find(selector) : node).off('mouseup.dnd');
             });
             $('.dnd-over').removeClass('dnd-over');
@@ -213,6 +222,7 @@ define('io.ox/core/tk/list-dnd', [
         function drop(e) {
             // avoid multiple events on parent tree nodes
             if (e.isDefaultPrevented()) return;
+            $('body').removeClass('dragging');
 
             e.preventDefault();
             // process drop
@@ -252,7 +262,13 @@ define('io.ox/core/tk/list-dnd', [
             if (collection.isResolved() && !collection.has('delete')) return;
             // bind events
             $('.dropzone').each(function () {
-                var node = $(this), selector = node.attr('data-dropzones');
+                var node = $(this),
+                    selector = node.attr('data-dropzones'),
+                    delegate = node.attr('data-delegate');
+                // pitfall: re-render after bind
+                if (delegate && selector) {
+                    return node.on('mouseup.dnd', selector, drop);
+                }
                 (selector ? node.find(selector) : node).on('mouseup.dnd', drop);
             });
             $(document)
@@ -264,6 +280,11 @@ define('io.ox/core/tk/list-dnd', [
         // draggable?
         if (options.draggable) {
             container.on('mousedown.dnd', options.selectable, start);
+        }
+
+        // use delegate for drop binding?
+        if (options.delegate) {
+            container.attr('data-delegate', true);
         }
 
         // dropzone?

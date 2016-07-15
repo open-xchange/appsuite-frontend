@@ -170,6 +170,7 @@ define('io.ox/core/tk/tokenfield', [
             this.$el.tokenfield('destroy');
             this.stopListening();
             this.collection = null;
+            this.api = null;
         },
 
         register: function () {
@@ -202,6 +203,29 @@ define('io.ox/core/tk/tokenfield', [
 
                 });
             }
+
+            // aria live: reset message
+            var tokenfield = this.$el.parent();
+            tokenfield.find('.token-input').on('typeahead:close typeahead:closed', function () {
+                self.$el.trigger('aria-live-update', '');
+            });
+            // aria live: set message
+            this.on('typeahead-custom:dropdown-rendered', function (dropdown) {
+                var numberOfResults = dropdown.find('.tt-suggestions').children().length,
+                    message;
+
+                if (numberOfResults === 0) message = gt('There are no matching autocomplete entries for this query.');
+                if (!message) {
+                    message = gt.format(
+                        //#. %1$d is the number of search results in the autocomplete field
+                        //#, c-format
+                        gt.ngettext('There is one matching autocomplete entry for this query.', 'There are %1$d matching autocomplete entries for this query.', numberOfResults),
+                        gt.noI18n(numberOfResults)
+                    );
+                }
+
+                self.$el.trigger('aria-live-update', message);
+            });
 
             this.$el.tokenfield().on({
                 'tokenfield:createtoken': function (e) {
@@ -309,18 +333,22 @@ define('io.ox/core/tk/tokenfield', [
                     if (e.attrs) {
                         var model = e.attrs.model || self.getModelByCID(e.attrs.value),
                             node = $(e.relatedTarget),
-                            label = node.find('.token-label');
+                            label = node.find('.token-label'),
+                            token = model.get('token'),
+                            title = token.label;
+
+                        if (token.label !== token.value) {
+                            title = token.label ? token.label + ' <' + token.value + '>' : token.value;
+                        }
+
                         // remove wrongly calculated max-width
                         if (label.css('max-width') === '0px') label.css('max-width', 'none');
-                        // a11y: set title
-                        node.attr('title', function () {
-                            var token = model.get('token'),
-                                title = token.label;
-                            if (token.label !== token.value) {
-                                title = token.label ? token.label + ' <' + token.value + '>' : token.value;
-                            }
-                            return title;
+                        // a11y: set label (title is not read on div elements but needed for tooltip to function)
+                        node.attr({
+                            'aria-label': title + gt(' press backspace to remove this token'),
+                            'title': title
                         });
+
                         // customize token
                         ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e);
                     }
@@ -360,6 +388,7 @@ define('io.ox/core/tk/tokenfield', [
                 'tokenfield:removetoken': function (e) {
                     _([].concat(e.attrs)).each(function (el) {
                         var model = self.getModelByCID(el.value);
+                        if (!model) return;
                         //#. %1$s is the display name of a removed user or mail recipient
                         //#. %2$s is the email address of the user or mail recipient
                         self.$el.trigger('aria-live-update', gt('Removed %1$s, %2$s.', model.get('display_name'), model.value));
@@ -462,8 +491,25 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
-            // Remove on cut
-            this.$el.closest('div.tokenfield').on('keydown', function (e) {
+            this.$el.closest('div.tokenfield').on('copy', function (e) {
+                // value might contain more than one id so split
+                var values = e.target.value.split(', ');
+
+                // copy actual email adress instead of model cid to clipboard
+                var result = '';
+                _(values).each(function (value) {
+                    var model = self.collection.get(value);
+                    if (model) {
+                        result = result + (result === '' ? '' : ', ') + model.value;
+                    }
+                });
+
+                if (result !== '') {
+                    e.originalEvent.clipboardData.setData('text/plain', result);
+                    e.preventDefault();
+                }
+            }).on('keydown', function (e) {
+                //Remove on cut
                 if ((e.ctrlKey || e.metaKey) && e.keyCode === 88) {
                     $(this).find('.token.active').each(function () {
                         self.collection.remove($(this).data().attrs.model);

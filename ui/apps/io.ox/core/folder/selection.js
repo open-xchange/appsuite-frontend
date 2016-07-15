@@ -57,7 +57,7 @@ define('io.ox/core/folder/selection', [], function () {
             // we use get() to support duplicates!
             if (this.get() === id) return;
             // go!
-            this.resetSelected(items);
+            this.uncheck(items);
             this.pick(index, items, { focus: false });
         },
 
@@ -71,8 +71,8 @@ define('io.ox/core/folder/selection', [], function () {
             var node = this.byId(id);
             if (node.length) {
                 node[0].scrollIntoView(true);
-                // Fix Safari specific flexbox/scrolling (see bug 43799)
-                if (_.device('safari')) $('#io-ox-windowmanager').scrollTop(0);
+                // specific flexbox/scrolling issue (see bugs 43799, 44938)
+                $('#io-ox-windowmanager').scrollTop(0);
                 this.view.trigger('scrollIntoView', id);
             }
         },
@@ -102,7 +102,7 @@ define('io.ox/core/folder/selection', [], function () {
             if (current.hasClass('selected')) return;
 
             this.resetTabIndex(items, items.eq(index));
-            this.resetSelected(items);
+            this.uncheck(items);
             this.pick(index, items);
         },
 
@@ -138,7 +138,7 @@ define('io.ox/core/folder/selection', [], function () {
             }
 
             this.resetTabIndex(items, items.eq(index));
-            this.resetSelected(items);
+            this.uncheck(items);
             this.pick(index, items);
         },
 
@@ -163,7 +163,8 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         resetSelected: function (items) {
-            items.filter('.selected').removeClass('selected').attr('aria-selected', false);
+            if (ox.debug) console.warn('resetSelected() is deprecated and will be removed with 7.10. Please use uncheck()');
+            return this.uncheck(items);
         },
 
         resetTabIndex: function (items, skip) {
@@ -195,10 +196,12 @@ define('io.ox/core/folder/selection', [], function () {
                 .end();
         },
 
-        // TODO: isn't this basically the same as resetSelected?
-        uncheck: function (nodes) {
-            nodes.removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' })
+        uncheck: function (items) {
+            items = items || this.getItems();
+            items.filter('.selected')
+                .removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' })
                 .find('.folder-label').css('max-width', null);
+            return this;
         },
 
         getItems: function () {

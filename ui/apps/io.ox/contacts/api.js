@@ -234,6 +234,14 @@ define('io.ox/contacts/api', [
                 }
                 return response;
             },
+            list: function (data) {
+                _(data).each(function (obj) {
+                    // drop certain null fields (see bug 46574)
+                    if (obj.birthday === null) delete obj.birthday;
+                    if (obj.distribution_list === null) delete obj.distribution_list;
+                });
+                return data;
+            },
             listPost: function (data) {
                 _(data).each(function (obj) {
                     // remove from cache if get cache is outdated
@@ -535,6 +543,14 @@ define('io.ox/contacts/api', [
         api.caches.get.clear();
     });
 
+    // refresh.all caused by import
+    api.on('refresh.all:import', function () {
+        api.caches.list.clear();
+        fetchCache.clear();
+        api.caches.get.clear();
+        api.trigger('import');
+    });
+
     /** @define {object} simple contact cache */
     var fetchCache = new cache.SimpleCache('contacts-fetching');
 
@@ -638,15 +654,6 @@ define('io.ox/contacts/api', [
         });
 
         function load(node, url, opt) {
-            function fail() {
-                node.css('background-image', 'url(' + fallback + ')').off('.lazyload');
-                node = url = opt = null;
-            }
-            function success() {
-                cachesURLs[url] = url;
-                node.css('background-image', 'url(' + url + ')').off('.lazyload');
-                node = url = opt = null;
-            }
             _.defer(function () {
                 // use lazyload?
                 opt.container = opt.container || _.first(node.closest('.scrollpane, .scrollable, .scrollpane-lazyload'));
@@ -654,7 +661,12 @@ define('io.ox/contacts/api', [
                     node.css('background-image', 'url(' + fallback + ')')
                         .attr('data-original', url)
                         .on('load.lazyload error.lazyload', function (e, image) {
-                            (image.width === 1 ? fail : success)();
+                            if (image.width === 1) url = fallback;
+                            else cachesURLs[url] = url;
+                            node.attr('data-original', url)
+                                .css('background-image', 'url(' + url + ')');
+                            node = url = opt = null;
+                            $(this).off('.lazyload');
                         })
                         .lazyload();
                 } else {
@@ -715,7 +727,10 @@ define('io.ox/contacts/api', [
                     // scale
                     width: opt.width,
                     height: opt.height,
-                    scaleType: opt.scaleType
+                    scaleType: opt.scaleType,
+                    user: ox.user_id,
+                    context: ox.context_id,
+                    sequence: data.last_modified
                 });
                 url = data.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
 
@@ -751,7 +766,11 @@ define('io.ox/contacts/api', [
                 width: opt.width,
                 height: opt.height,
                 scaleType: opt.scaleType,
-                uniq: uniq
+                uniq: uniq,
+                user: ox.user_id,
+                context: ox.context_id,
+                // mails don't have a last modified attribute, just use 1
+                sequence: data.last_modified || 1
             });
 
             // remove empty values

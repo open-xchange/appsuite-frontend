@@ -225,8 +225,6 @@ define('io.ox/mail/main', [
 
             // tree view
             app.treeView = new TreeView({ app: app, module: 'mail', contextmenu: true });
-
-            // initialize folder view
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
         },
@@ -289,6 +287,7 @@ define('io.ox/mail/main', [
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'contactPictures': _.device('smartphone') ? false : app.settings.get('showContactPictures', false),
                 'exactDates': app.settings.get('showExactDates', false),
+                'alwaysShowSize': app.settings.get('alwaysShowSize', false),
                 'mobileFolderSelectMode': false
             });
         },
@@ -370,10 +369,7 @@ define('io.ox/mail/main', [
                 right = app.pages.getPage('detailView');
 
             app.left = left.addClass('border-right');
-            app.right = right.addClass('mail-detail-pane').attr({
-                'role': 'complementary',
-                'aria-label': gt('Mail Details')
-            });
+            app.right = right.addClass('mail-detail-pane');
         },
 
         /*
@@ -398,16 +394,6 @@ define('io.ox/mail/main', [
             if (!_.device('smartphone')) return;
             app.props.set('checkboxes', false);
             app.listView.toggleCheckboxes(false);
-        },
-
-        'list-view-message-empty': function (app) {
-            // enable 'empty' message
-            app.listView.messageEmpty
-                //.removeClass('hidden')
-                .find('.message-empty')
-                // customize message
-                //#. when items list is empty (e.g. search result)
-                .text(gt('Empty'));
         },
 
         /*
@@ -517,7 +503,8 @@ define('io.ox/mail/main', [
                     .set(['viewOptions', folder], _.extend({ sort: data.sort, order: data.order, thread: data.thread }, options.viewOptions || {}))
                     .set('layout', data.layout)
                     .set('showContactPictures', data.contactPictures)
-                    .set('showExactDates', data.exactDates);
+                    .set('showExactDates', data.exactDates)
+                    .set('alwaysShowSize', data.alwaysShowSize);
                 if (_.device('!smartphone')) {
                     app.settings.set('showCheckboxes', data.checkboxes);
                 }
@@ -543,11 +530,10 @@ define('io.ox/mail/main', [
             app.listControl = new ListViewControl({ id: 'io.ox/mail', listView: app.listView, app: app });
             app.left.append(
                 app.listControl.render().$el
-                    //#. items list (e.g. mails)
-                    .attr('aria-label', gt('Item list'))
+                    .attr('aria-label', gt('Messages'))
                     .find('.toolbar')
                     //#. toolbar with 'select all' and 'sort by'
-                    .attr('aria-label', gt('Item list options'))
+                    .attr('aria-label', gt('Messages options'))
                     .end()
             );
             // make resizable
@@ -630,7 +616,8 @@ define('io.ox/mail/main', [
 
             // close mail detail view in list-mode on folder selection
             app.folderView.tree.on('selection:action', function () {
-                if (app.props.get('layout') === 'list') {
+                // bug only if detail view is actually visible (see bug 45597)
+                if (app.props.get('layout') === 'list' && app.right.hasClass('preview-visible')) {
                     app.threadView.trigger('back');
                 }
             });
@@ -658,6 +645,28 @@ define('io.ox/mail/main', [
                 fromTo.text(showTo ? gt('To') : gt('From'));
                 app.changingFolders = false;
             });
+        },
+
+        /*
+         * Auto subscribe mail folders
+         */
+        'auto-subscribe': function (app) {
+
+            function subscribe(data) {
+                if (data.module !== 'mail') return;
+                if (data.subscribed) {
+                    app.folderView.tree.select(data.id);
+                } else {
+                    folderAPI.update(data.id, { subscribed: true }, { silent: true }).done(function () {
+                        folderAPI.refresh().done(function () {
+                            app.folderView.tree.select(data.id);
+                        });
+                    });
+                }
+            }
+
+            app.folder.getData().done(subscribe);
+            app.on('folder:change', function (id, data) { subscribe(data); });
         },
 
         /*
@@ -790,6 +799,8 @@ define('io.ox/mail/main', [
 
                 // defer so that all selection events are triggered (e.g. selection:all)
                 _.defer(function () {
+                    // tabbed inbox / mail categories: absolute tab count is unknown
+                    var inTab = app.categories && app.categories.props.get('enabled') && app.categories.props.get('visible');
                     app.right.find('.multi-selection-message .message')
                         .empty()
                         .attr('id', 'mail-multi-selection-message')
@@ -799,7 +810,7 @@ define('io.ox/mail/main', [
                                 gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
                             ),
                             // inline actions
-                            id && total > list.length && !search && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
+                            id && total > list.length && !search && !inTab && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
                                 $('<div class="inline-actions">').append(
                                     gt(
                                         'There are %1$d messages in this folder; not all messages are displayed in the list. ' +
@@ -1002,9 +1013,11 @@ define('io.ox/mail/main', [
                 }
 
                 if (layout !== 'list' && app.props.previousAttributes().layout === 'list' && !app.right.hasClass('preview-visible')) {
-                    //listview did not create a detailview for the last mail, it was only selected, so detailview needs to be triggered manually(see bug 33456)
-                    app.listView.selection.selectEvents(app.listView.selection.getItems());
-
+                    // listview did not create a detailview for the last mail, it was only selected, so detailview needs to be triggered manually(see bug 33456)
+                    // only trigger if we actually have selected mails
+                    if (app.listView.selection.get().length > 0) {
+                        app.listView.selection.selectEvents(app.listView.selection.getItems());
+                    }
                 }
             };
 
@@ -1363,6 +1376,15 @@ define('io.ox/mail/main', [
             });
         },
 
+        /*
+         * Respond to change:alwaysShowSize
+         */
+        'change:alwaysShowSize': function (app) {
+            app.settings.on('change:alwaysShowSize', function () {
+                app.listView.redraw();
+            });
+        },
+
         'fix-mobile-lazyload': function (app) {
             if (_.device('!smartphone')) return;
             // force lazyload to load, otherwise the whole pane will stay empty...
@@ -1476,6 +1498,12 @@ define('io.ox/mail/main', [
                 });
             }, 300);
 
+            // will be thrown if the external mail account server somehow does not support starttls anymore
+            folderAPI.on('error:MSG-0092', function (error) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                });
+            });
             folderAPI.on('error:FLD-0008', handleError);
             api.on('error:FLD-0008', handleError);
             api.on('error:IMAP-2041', function (e, error) {
@@ -1510,13 +1538,68 @@ define('io.ox/mail/main', [
             });
         },
 
+        'mail-progress': function () {
+            if (_.device('smartphone')) return;
+            ext.point('io.ox/mail/sidepanel').extend({
+                id: 'progress',
+                index: 300,
+                draw: function () {
+
+                    var $el = $('<div class="generic-toolbar bottom mail-progress">')
+                        .hide()
+                        .append(
+                            $('<div class="progress"><div class="progress-bar"></div></div>'),
+                            $('<div class="caption">').append(
+                                $('<span>'),
+                                $('<a href="#" class="close" data-action="close" role="button" tabindex="1"><i class="fa fa-times"></i></a>')
+                            )
+                       );
+                    api.queue.collection.on('progress', function (data) {
+                        if (!data.count) {
+                            // Workaround for Safari flex layout issue (see bug 46496)
+                            if (_.device('safari')) $el.closest('.window-sidepanel').find('.folder-tree')[0].scrollTop += 1;
+                            return $el.hide();
+                        }
+                        var n = data.count,
+                            pct = Math.round(data.pct * 100),
+                            //#. %1$d is number of messages; %2$d is progress in percent
+                            caption = gt.ngettext('Sending 1 message ... %2$d%', 'Sending %1$d messages ... %2$d%', n, n, pct);
+                        $el.find('.progress-bar').css('width', pct + '%');
+                        $el.find('.caption span').text(caption);
+                        $el.find('[data-action="close"]').off();
+                        $el.find('[data-action="close"]').on('click', function () {
+                            if (_.isFunction(data.abort)) data.abort();
+                        });
+                        $el.show();
+                    });
+
+                    this.append($el);
+                }
+            });
+        },
+
+        'sidepanel': function (app) {
+            if (_.device('smartphone')) return;
+            ext.point('io.ox/mail/sidepanel').extend({
+                id: 'tree',
+                index: 100,
+                draw: function (baton) {
+                    // add border & render tree and add to DOM
+                    this.addClass('border-right').append(baton.app.treeView.$el);
+                }
+            });
+
+            var node = app.getWindow().nodes.sidepanel;
+            ext.point('io.ox/mail/sidepanel').invoke('draw', node, ext.Baton({ app: app }));
+        },
+
         'metrics': function (app) {
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
                 var nodes = app.getWindow().nodes,
                     node = nodes.outer,
-                    toolbar = nodes.body.find('.classic-toolbar-container'),
+                    toolbar = nodes.body.find('.classic-toolbar-container, .categories-toolbar-container'),
                     sidepanel = nodes.sidepanel;
                 // A/B testing which add mail account button is prefered
                 metrics.watch({
@@ -1546,6 +1629,15 @@ define('io.ox/mail/main', [
                         target: 'toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                toolbar.delegate('.category', 'mousedown', function (e) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'toolbar',
+                        type: 'click',
+                        action: 'select-tab',
+                        detail: $(e.currentTarget).attr('data-id')
                     });
                 });
                 // toolbar options dropfdown
@@ -1592,6 +1684,43 @@ define('io.ox/mail/main', [
                     }
                 });
             });
+        },
+
+        'mail-categories': function (app) {
+            if (_.device('smartphone')) return;
+            if (!capabilities.has('mail_categories')) return;
+
+            var mapper;
+            // register settings listener
+            if (settings.get('categories/enabled')) refresh();
+            settings.on('change:categories/enabled', refresh);
+
+            var Mapper = function (cat) {
+                var mapper = {
+                    initialize: function () {
+                        cat.init({ mail: app, pool: api.pool.get('detail') });
+                        this.categories = cat;
+                        return this;
+                    },
+                    refresh: function () {
+                        this.categories.config.load();
+                    }
+                };
+                return mapper.initialize();
+            };
+
+            // apply settings change (enable/disable)
+            function refresh() {
+                // refresh config (triggers show/hide internally)
+                if (mapper) return mapper.refresh();
+                // in case require not resolved in time
+                mapper = { refresh: $.noop };
+                // init on first call of 'apply'
+                require(['io.ox/mail/categories/main'], function (cat) {
+                    app.categories = cat;
+                    mapper = new Mapper(cat);
+                });
+            }
         }
     });
 
@@ -1625,6 +1754,20 @@ define('io.ox/mail/main', [
                     api.mailServerDownMessage;
                 notifications.yell('error', message);
             });
+    });
+
+    // set what to do if the app is started again
+    // this way we can react to given options, like for example a different folder
+    app.setResume(function (options) {
+        // only consider folder option for now
+        if (options && options.folder && options.folder !== this.folder.get()) {
+            var appNode = this.getWindow();
+            appNode.busy();
+            return this.folder.set(options.folder).always(function () {
+                appNode.idle();
+            });
+        }
+        return $.when();
     });
 
     return {

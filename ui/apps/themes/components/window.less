@@ -148,6 +148,46 @@
         .window-content { overflow-y: scroll !important; }
     }
 
+    &.header-bottom {
+
+        .window-body {
+            bottom: 64px;
+            top: 0;
+        }
+
+        .window-header {
+            display: none;
+        }
+
+        .window-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 64px;
+            background-color: @window-header-color;
+            border-top: 1px solid darken(@window-header-color, 15%);
+            padding: 16px 0;
+            z-index: 2;
+            // yep, a shadow
+            .box-shadow(0 1px 5px rgba(0, 0, 0, 0.10));
+
+            h1.title {
+                margin: 0.2em 0;
+                font-size: 20px;
+                float: left;
+            }
+
+            .btn {
+                min-width: 80px;
+                margin-right: 8px;
+                height: 32px;
+            }
+        }
+
+        // always reserve space for scroll bar
+        .window-content { overflow-y: scroll !important; }
+    }
+
     &.classic {
         color: white;
 

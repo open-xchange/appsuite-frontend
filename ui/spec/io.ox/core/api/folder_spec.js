@@ -95,15 +95,6 @@ define([
 
     describe('folder API', function () {
 
-        var options = {
-                markedPending: {
-                    'folder API a basic API class has some get methods should define a getAll method.': true,
-                    'folder API a basic API class has some get methods should return a deferred object for getAll.': true,
-                    'folder API a basic API class has some get methods should define a getList method.': true,
-                    'folder API a basic API class has some get methods should return a deferred object for getList.': true
-                }
-            };
-
         describe('default folders', function () {
 
             it('should provide the mail folder as default', function () {
@@ -171,7 +162,7 @@ define([
                 var spy = sinon.spy();
                 api.on('create', spy);
 
-                var result = api.create('2').done(function () {
+                api.create('2').done(function () {
                     expect(spy.called).to.be.true;
                     done();
                 });
@@ -300,16 +291,15 @@ define([
         describe('hidden objects', function () {
 
             beforeEach(function () {
-
-                this.server.respondWith('GET', /api\/folders\?action=list.+parent=hidden/, function (xhr, wurst) {
+                this.server.respondWith('GET', /api\/folders\?action=list.+parent=hidden/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                         JSON.stringify({
                             timestamp: 1368791630910,
                             data: [
-                                { id: '3',    folder_id: 'hidden/test', module: 'infostore', title: '.drive' },
-                                { id: '4',    folder_id: 'hidden/test', module: 'infostore', title: 'visible' },
-                                { id: '5',    folder_id: 'hidden/test', module: 'infostore', title: '.hidden' },
-                                { id: '6',    folder_id: 'hidden/test', module: 'infostore', title: 'customHidden' },
+                                { id: '3', folder_id: 'hidden/test', module: 'infostore', title: '.drive' },
+                                { id: '4', folder_id: 'hidden/test', module: 'infostore', title: 'visible' },
+                                { id: '5', folder_id: 'hidden/test', module: 'infostore', title: '.hidden' },
+                                { id: '6', folder_id: 'hidden/test', module: 'infostore', title: 'customHidden' },
                                 { id: '0815', folder_id: 'hidden/test', module: 'infostore', title: 'for general files specs' }
                             ]
                         })

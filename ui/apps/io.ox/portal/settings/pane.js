@@ -20,35 +20,21 @@ define('io.ox/portal/settings/pane', [
     'gettext!io.ox/portal',
     'settings!io.ox/portal',
     'io.ox/backbone/mini-views/listutils',
+    'io.ox/backbone/mini-views/settings-list-view',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/portal/style'
-], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings, listUtils) {
+], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings, listUtils, ListView) {
 
     'use strict';
 
     var POINT = 'io.ox/portal/settings/detail', pane;
 
     var collection = widgets.getCollection(),
-        list = $('<ol class="list-group list-unstyled widget-list">'),
         notificationId = _.uniqueId('notification_');
 
     collection
-        .on('remove', function (model) {
-            var id = model.get('id');
-            if (views[id]) {
-                views[id].remove();
-            }
+        .on('remove', function () {
             repopulateAddButton();
-        })
-        .on('add', function (model) {
-            var view = createView(model).render(),
-                lastProtected = list.find('li.protected').last();
-            if (lastProtected.length) {
-                lastProtected.after(view.el);
-            } else {
-                list.prepend(view.el);
-            }
-            view.edit();
         });
 
     ext.point(POINT).extend({
@@ -107,7 +93,7 @@ define('io.ox/portal/settings/pane', [
                 $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget)
             ),
             $('<div class="clearfix">'),
-            $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId)
+            $('<div class="sr-only" role="log" aria-live="assertive" aria-relevant="additions text">').attr('id', notificationId)
         );
         repopulateAddButton();
         button.dropdown();
@@ -166,7 +152,8 @@ define('io.ox/portal/settings/pane', [
                         tabindex: 1,
                         'data-toggle': 'dropdown',
                         'aria-haspopup': 'true',
-                        'aria-label': title + ', ' + gt('Color')
+                        //#. %1$s is the title of the item, which should be colored
+                        'aria-label': gt('Color %1$s', title)
                     }).addClass('dropdown-toggle'),
                     gt('Color'),
                     'color',
@@ -196,67 +183,40 @@ define('io.ox/portal/settings/pane', [
         }
     });
 
-    function dragViaKeyboard(e) {
-
-        var node = $(this),
-            list = node.closest('.widget-list'),
-            items = list.children('.draggable'),
-            current = node.parent(),
-            index = items.index(current),
-            id = current.attr('data-widget-id'),
-            notification = pane.find('#' + notificationId);
-
-        function cont() {
-            widgets.save(list);
-            list.find('[data-widget-id="' + id + '"] .drag-handle').focus();
-            notification.text(gt('the item has been moved'));
-        }
-
-        switch (e.which) {
-            case 38:
-                if (index > 0) {
-                    // up
-                    e.preventDefault();
-                    current.insertBefore(current.prevAll('.draggable:first'));
-                    cont();
-                }
-                break;
-            case 40:
-                if (index < items.length) {
-                    // down
-                    e.preventDefault();
-                    current.insertAfter(current.nextAll('.draggable:first'));
-                    cont();
-                }
-                break;
-            default:
-                break;
-        }
-
-    }
-
     ext.point(POINT + '/view').extend({
         id: 'drag-handle',
         index: 200,
         draw: function (baton) {
             if (_.device('smartphone')) return;
 
-            var data = baton.model.toJSON(),
-                point = ext.point(baton.view.point),
-                title = widgets.getTitle(data, point.prop('title'));
+            var data = baton.model.toJSON();
             this
                 .addClass(data.protectedWidget && data.protectedWidget === true ? ' protected' : ' draggable')
                 .append(
                     data.protectedWidget && data.protectedWidget === true ? $() :
-                    listUtils.dragHandle(gt('Drag to reorder widget'), title + ', ' + gt('Use cursor keys to change the item position. Virtual cursor mode has to be disabled.'), baton.model.collection.length <= 1 ? 'hidden' : '')
-                    .on('keydown', dragViaKeyboard)
+                    listUtils.dragHandle(gt('Drag to reorder widget'), baton.model.collection.length <= 1 ? 'hidden' : '')
                 );
         }
     });
 
     ext.point(POINT + '/view').extend({
+        id: 'title',
+        index: 400,
+        draw: function (baton) {
+            var data = baton.model.toJSON(),
+                point = ext.point(baton.view.point),
+                title = widgets.getTitle(data, point.prop('title'));
+            this.append(
+                listUtils.makeTitle(title)
+                    .addClass('widget-color-' + (data.color || 'black') + ' widget-' + data.type)
+                    .removeClass('pull-left')
+            );
+        }
+    });
+
+    ext.point(POINT + '/view').extend({
         id: 'controls',
-        index: 300,
+        index: 400,
         draw: function (baton) {
             var data = baton.model.toJSON(),
                 point = ext.point(baton.view.point),
@@ -268,7 +228,7 @@ define('io.ox/portal/settings/pane', [
                 return;
             }
 
-            var $controls = listUtils.widgetControlls(),
+            var $controls = listUtils.makeControls(),
                 $link = listUtils.controlsToggle();
 
             if (data.enabled) {
@@ -276,7 +236,7 @@ define('io.ox/portal/settings/pane', [
                 if (baton.view.options.editable) {
                     $controls.append(
                         listUtils.appendIconText(
-                            listUtils.controlsEdit(title, gt('Edit')),
+                            listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
                             gt('Edit'),
                             'edit'
                         )
@@ -297,96 +257,54 @@ define('io.ox/portal/settings/pane', [
 
                 if (_.device('!smartphone')) {
                     $controls.append(
-                        listUtils.appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Disable') }), gt('Disable'), 'disable')
+                        listUtils.appendIconText($link.attr({
+                            'aria-label': gt('Disable %1$s', title)
+                        }), gt('Disable'), 'disable')
                     );
                 }
             } else {
                 $controls.append(
-                    listUtils.appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Enable') }), gt('Enable'), 'enable')
+                    listUtils.appendIconText($link.attr({
+                        'aria-label': gt('Enable %1$s', title)
+                    }), gt('Enable'), 'enable')
                 );
             }
 
             $controls.append(
-                listUtils.controlsDelete(title, gt('remove'))
+                listUtils.controlsDelete({ title: gt('Remove %1$s', title) })
             );
 
             this.append($controls);
         }
     });
 
-    ext.point(POINT + '/view').extend({
-        id: 'title',
-        index: 400,
-        draw: function (baton) {
-            var data = baton.model.toJSON(),
-                point = ext.point(baton.view.point),
-                title = widgets.getTitle(data, point.prop('title'));
-            this.append(
-                listUtils.widgetTitle(title)
-                    .addClass('widget-color-' + (data.color || 'black') + ' widget-' + data.type)
-                    .removeClass('pull-left')
-            );
-        }
-    });
-
-    var views = {};
-
-    function createView(model) {
-        var id = model.get('id'),
-            point = 'io.ox/portal/widget/' + model.get('type');
-        return (views[id] = new WidgetSettingsView({ model: model, point: point, test: 'test' }));
-    }
-
     ext.point(POINT + '/pane').extend({
         index: 300,
         id: 'list',
         draw: function () {
 
-            this.append(list.empty());
-
-            collection.each(function (model) {
-                if (model.get('protectedWidget') !== true || model.get('enabled') !== false) {
-                    list.append(createView(model).render().el);
-                }
-            });
-
-            // make sortable
-            list.sortable({
-                axis: 'y',
-                containment: list.parent(),
-                delay: 150,
-                handle: '.drag-handle',
-                cancel: 'li.protected',
-                items: '> li.draggable',
-                start: function (e, ui) {
-                    ui.item.attr('aria-grabbed', 'true');
+            this.append(new ListView({
+                collection: collection,
+                sortable: true,
+                containment: this,
+                notification: pane.find('#' + notificationId),
+                childView: WidgetSettingsView,
+                dataIdAttribute: 'data-widget-id',
+                childOptions: function (model) {
+                    return {
+                        point: 'io.ox/portal/widget/' + model.get('type')
+                    };
                 },
-                stop: function (e, ui) {
-                    ui.item.attr('aria-grabbed', 'false');
+                filter: function (model) {
+                    return model.get('protectedWidget') !== true || model.get('enabled') !== false;
                 },
-                scroll: true,
                 update: function () {
                     widgets.getCollection().trigger('order-changed', 'settings');
-                    widgets.save(list);
+                    widgets.save(this.$el);
                 }
-            });
-
-            collection
-                .on('change', function () {
-                    // re-render all views
-                    _(views).each(function (view) {
-                        view.render();
-                    });
-                })
-                .on('sort', function () {
-                    this.sort({ silent: true });
-                    list.empty();
-                    this.each(function (model) {
-                        if (model.get('protectedWidget') !== true || model.get('enabled') !== false) {
-                            list.append(createView(model).render().el);
-                        }
-                    });
-                });
+            }).on('add', function (view) {
+                view.edit();
+            }).render().$el);
         }
     });
 

@@ -5,8 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-03-04 19:05+0200\n"
+"PO-Revision-Date: 2016-06-30 14:29+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -232,8 +233,7 @@ msgstr "Výber zobrazenia"
 #: apps/io.ox/tours/files.js:89 module:io.ox/tours
 msgid "Different views are available. Just select the one you like best."
 msgstr ""
-"Môžete využiť niekoľko zobrazení. Stačí vybrať to, ktoré sa vám najviac "
-"páči."
+"Môžete využiť niekoľko zobrazení. Stačí vybrať to, ktoré sa vám najviac páči."
 
 #: apps/io.ox/tours/files.js:103 module:io.ox/tours
 msgid "Toolbar"
@@ -572,7 +572,7 @@ msgstr "Zadanie textu emailu"
 
 #: apps/io.ox/tours/mail.js:69 module:io.ox/tours
 msgid ""
-"Enter the E-Mail text into the main area. If the text format was set to HTMl "
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
@@ -709,8 +709,8 @@ msgid "Closing a square"
 msgstr "Zatvorenie štvorca"
 
 #: apps/io.ox/tours/portal.js:46 module:io.ox/tours
-msgid "If you no longer want to display a square, click the cross."
-msgstr "Ak už štvorec nechcete zobrazovať, kliknite na tlačidlo krížika."
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "Ak už štvorec nechcete zobrazovať, kliknite na ikonu Zmazať."
 
 #: apps/io.ox/tours/portal.js:51 module:io.ox/tours
 msgid "Customizing the Portal"

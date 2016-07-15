@@ -4,7 +4,7 @@ description: The dynamic theme plugin allows to have custom colors and logo with
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Dynamic_Theme
 ---
 
-The customization information is stored in the [Configuration Cascade](TODO) and applied at runtime, immediately after login.
+The customization information is stored in the [Configuration Cascade](http://oxpedia.org/wiki/index.php?title=ConfigCascade) and applied at runtime, immediately after login.
 
 # Installation
 
@@ -45,9 +45,6 @@ The package installs the file `/opt/open-xchange/etc/settings/open-xchange-dynam
 ```
 # default: #333
 io.ox/dynamic-theme//frameColor
-
-# default: #bbb
-io.ox/dynamic-theme//iconColor
 
 # default: #39a9e1
 io.ox/dynamic-theme//selectionColor

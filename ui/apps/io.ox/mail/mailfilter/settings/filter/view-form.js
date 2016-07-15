@@ -306,9 +306,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 this.model.save().then(function (id) {
                     //first rule gets 0
-                    if (!_.isUndefined(id) && !_.isNull(id)) {
+                    if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.listView)) {
                         self.model.set('id', id);
                         self.listView.collection.add(self.model);
+                    } else if (!_.isUndefined(id) && !_.isNull(id) && !_.isUndefined(self.collection)) {
+                        self.model.set('id', id);
+                        self.collection.add(self.model);
                     }
                     self.dialog.close();
                 }, self.dialog.idle);
@@ -948,13 +951,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             var headlineTest = $('<legend>').addClass('sectiontitle expertmode conditions').text(gt('Conditions')),
                 headlineActions = $('<legend>').addClass('sectiontitle expertmode actions').text(gt('Actions')),
-                notificationConditions = $('<div>'),
-                notificationActions = $('<div>');
+                notificationConditions = $('<div class="notification-for-conditions">'),
+                notificationActions = $('<div class="notification-for-actions">');
 
             if (_.isEqual(appliedConditions[0], { id: 'true' })) {
                 renderWarningForEmptyTests(notificationConditions);
             }
 
+            //disable save button if no action is set
             if (_.isEmpty(baton.model.get('actioncmds'))) {
                 renderWarningForEmptyActions(notificationActions);
             }
@@ -1011,7 +1015,17 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         index: 200,
         id: 'stopaction',
         draw: function (baton) {
-            var checkStopAction = function (e) {
+            var self = this,
+                toggleWarning = function () {
+                    if (baton.model.get('actioncmds').length >= 1) {
+                        self.find('.alert.alert-danger').remove();
+                    } else {
+                        self.find('.alert.alert-danger').remove();
+                        renderWarningForEmptyActions(self.find('.notification-for-actions'));
+                    }
+                    toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
+                },
+                checkStopAction = function (e) {
                     currentState = $(e.currentTarget).find('[type="checkbox"]').prop('checked');
                     var arrayOfActions = baton.model.get('actioncmds');
 
@@ -1032,6 +1046,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         arrayOfActions.push({ id: 'stop' });
                     }
                     baton.model.set('actioncmds', arrayOfActions);
+                    toggleWarning();
                 },
 
                 drawcheckbox = function (value) {
@@ -1063,6 +1078,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 }
                 return stopAction;
             }
+
+            toggleWarning();
 
             if (!target.find('[type="checkbox"]').length) {
                 target.append(drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));

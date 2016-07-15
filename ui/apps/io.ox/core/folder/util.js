@@ -129,6 +129,10 @@ define('io.ox/core/folder/util', [
                 var hash = coreSettings.get(['folder/hidden'], {});
                 id = _.isObject(data) ? data.id : data;
                 return hash[id] === true;
+            case 'attachmentView':
+                var attachmentView = coreSettings.get('folder/mailattachments', {});
+
+                return _.isEmpty(attachmentView) ? false : (_.values(attachmentView).indexOf(data.id) > -1);
             default:
                 return false;
         }
@@ -185,19 +189,19 @@ define('io.ox/core/folder/util', [
         // switch
         switch (action) {
             case 'read':
-                // can read?
-                // 256 = read own, 512 = read all, 8192 = admin
+                // can read objects? (see bug 28379 and 23933 and 44957)
                 // hide folders where your only permission is to see the foldername (rights !== 1)
-                // return (rights & 256 || rights & 512 || rights & 8192) > 0;
-                // 10: shared files folder
-                return perm(rights, 7) > 0 /*|| (!isSystem && is('public', data) && data.folder_id !== '10') // see bug 28379 and 23933 */&& rights !== 1;
-            // please use parantheses properly OR OR AND or OR AND AND?
+                return perm(rights, 7) > 0 && rights !== 1;
             case 'create':
                 // can create objects?
                 // only folder creation is allowed in system folders
-                // even if permission bit is 4 "create objects and subfolders" because ther is no bit for only create subfolders, see Bug 39598
                 // don't use the isSystem variable because it is also true for standard folders
-                return (perm(rights, 0) > 1 && !is('system', data));
+                if (is('system', data)) return false;
+                // mail is special (no-select folder; see bug 44957)
+                if (isMail && !can('read', data)) return false;
+                // even if permission bit is 4 "create objects and subfolders" because
+                // there is no bit for only create subfolders, see Bug 39598
+                return perm(rights, 0) > 1;
             case 'write':
                 // can write objects
                 return perm(rights, 14) > compareValue;
@@ -255,6 +259,8 @@ define('io.ox/core/folder/util', [
                 if (!isMail) return false;
                 if (data.standard_folder && /^(7|9|10|11|12)$/.test(data.standard_folder_type)) return false;
                 return Boolean(data.capabilities & Math.pow(2, 4));
+            case 'change:seen':
+                return _(data.supported_capabilities).indexOf('STORE_SEEN') > -1;
             default:
                 return false;
         }

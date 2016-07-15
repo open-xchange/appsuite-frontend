@@ -118,14 +118,15 @@ define('io.ox/calendar/week/view', [
 
             // initialize main objects
             _.extend(this, {
-                pane:         $('<div>').addClass('scrollpane f6-target').attr({ tabindex: 1 }),
+                pane:         $('<div>').addClass('scrollpane f6-target').attr({ tabindex: 1 }).on('scroll', this.updateHiddenIndicators.bind(this)),
                 fulltimePane: $('<div>').addClass('fulltime'),
                 fulltimeCon:  $('<div>').addClass('fulltime-container'),
                 fulltimeNote: $('<div>').addClass('note'),
                 timeline:     $('<div>').addClass('timeline'),
                 dayLabel:     $('<div>').addClass('footer'),
                 kwInfo:       _.device('smartphone') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info').on('click', $.preventDefault),
-                weekCon:      $('<div>').addClass('week-container')
+                weekCon:      $('<div>').addClass('week-container'),
+                moreAppointmentsIndicators: $('<div>').addClass('more-appointments-container')
             });
 
             this.kwInfo.attr({
@@ -330,6 +331,65 @@ define('io.ox/calendar/week/view', [
             this.trigger('onRefresh');
             return false;
         },
+
+        /**
+         * Get visible edges in time format
+         */
+        getTimeOfVisibleEdges: function () {
+            return {
+                min: this.getTimeFromPos(this.pane.scrollTop()),
+                max: this.getTimeFromPos(this.pane.scrollTop() + this.pane.height())
+            };
+        },
+
+        /**
+         * handler to update indicators for hidden appointments
+         *
+         * this handler is throttled to only run once every 100ms
+         *
+         */
+        updateHiddenIndicators: (function () {
+            function indicatorButton(column, width) {
+                return $('<span>')
+                        .addClass('more-appointments fa')
+                        .css({
+                            left: (column * width) + '%',
+                            width: width + '%'
+                        });
+            }
+
+            return _.throttle(function () {
+                var min = this.pane.scrollTop(),
+                    max = this.pane.scrollTop() + this.pane.height(),
+                    threshold = 3,
+                    columnWidth = 100 / this.columns;
+
+                this.moreAppointmentsIndicators.empty();
+                for (var d = 0; d < this.columns; d++) {
+                    var appointments = this.weekCon.find('.day:nth-child(' + (d + 1) + ') > .appointment');
+                    var earlier = appointments.filter(function (index, el) {
+                        el = $(el);
+                        return el.position().top + el.height() - threshold < min;
+                    }).length;
+                    var later = appointments.filter(function (index, el) {
+                        el = $(el);
+                        return el.position().top + threshold > max;
+                    }).length;
+                    if (earlier > 0) {
+                        this.moreAppointmentsIndicators.append(
+                            indicatorButton(d, columnWidth)
+                                .addClass('earlier fa-caret-up')
+                        );
+                    }
+                    if (later > 0) {
+                        this.moreAppointmentsIndicators.append(
+                            indicatorButton(d, columnWidth)
+                                .addClass('later fa-caret-down')
+                        );
+                    }
+                }
+            }, 100);
+        }()),
 
         /**
          * handler for key events in view
@@ -656,7 +716,7 @@ define('io.ox/calendar/week/view', [
             function drawOption() {
                 var timezone = moment.tz(this);
 
-                return $('<span class="offset">').text(timezone.format('Z')).prop('outerHTML') + $('<span class="timezone-abbr">').text(timezone.zoneAbbr()).prop('outerHTML') + this;
+                return [$('<span class="offset">').text(timezone.format('Z')), $('<span class="timezone-abbr">').text(timezone.zoneAbbr()), this];
             }
 
             function drawDropdown() {
@@ -796,7 +856,12 @@ define('io.ox/calendar/week/view', [
 
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px' });
 
-            // create days
+            // visual indicators for hidden appointmeints
+            this.moreAppointmentsIndicators.css({
+                top: (this.options.showFulltime ? 21 : 1) + 'px'
+            });
+
+             // create days
             for (var d = 0; d < this.columns; d++) {
 
                 var day = $('<div>')
@@ -817,6 +882,7 @@ define('io.ox/calendar/week/view', [
                         .addClass((i === (this.workStart * this.fragmentation) || i === (this.workEnd * this.fragmentation)) ? 'working-time-border' : '')
                     );
                 }
+
                 this.weekCon.append(day);
             }
 
@@ -857,7 +923,8 @@ define('io.ox/calendar/week/view', [
                     this.pane.empty().append(
                         primaryTimeLabel,
                         self.weekCon
-                    )
+                    ),
+                    this.moreAppointmentsIndicators
                 )
             );
 
@@ -972,11 +1039,10 @@ define('io.ox/calendar/week/view', [
                     .addClass('weekday')
                     .attr({
                         date: d,
-                        title: tmpDate.format('l') + ', ' + gt('Click for whole day appointment'),
+                        title: gt('Create all-day appointment'),
                         role: 'button',
                         tabindex: 1,
-                        href: '#',
-                        'aria-label': tmpDate.format('l') + ', ' + gt('Click for whole day appointment')
+                        href: '#'
                     })
                     .text(gt.noI18n(tmpDate.format('ddd D')))
                     .width(100 / this.columns + '%');
@@ -989,7 +1055,9 @@ define('io.ox/calendar/week/view', [
                         todayContainer.addClass(this.options.todayClass);
                     }
 
-                    day.addClass(this.options.todayClass);
+                    day
+                        .prepend($('<span class="sr-only">').text(gt('Today')))
+                        .addClass(this.options.todayClass);
 
                     todayContainer.append(this.timeline);
                     this.timeline.show();
@@ -1011,7 +1079,7 @@ define('io.ox/calendar/week/view', [
                 $.txt(' '),
                 $('<span class="cw">').text(
                     //#. %1$d = Calendar week
-                    gt('CW %1$d', moment(this.startDate).day(1).isoWeek())
+                    gt('CW %1$d', moment(this.startDate).format('w'))
                 ),
                 $('<i>').addClass('fa fa-caret-down fa-fw').attr({ 'aria-hidden': true })
             );
@@ -1676,6 +1744,7 @@ define('io.ox/calendar/week/view', [
                         self.onUpdateAppointment(app);
                     }
                 });
+            this.updateHiddenIndicators();
 
             // global event for tracking purposes
             ox.trigger('calendar:items:render', this);
@@ -1928,12 +1997,10 @@ define('io.ox/calendar/week/view', [
                 .attr({ tabindex: 1 })
                 .addClass(classes)
                 .append(
-                    $('<div>')
-                    .addClass('appointment-content')
-                    .append(
-                        a.get('private_flag') ? $('<span class="private-flag"><i class="fa fa-lock" aria-hidden="true"></i></span>') : '',
-                        a.get('title') ? $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
-                        a.get('location') ? $('<div>').addClass('location').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
+                    $('<div class="appointment-content">').append(
+                        a.get('private_flag') ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
+                        a.get('title') ? $('<div class="title">').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
+                        a.get('location') ? $('<div class="location">').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
                     )
                 )
                 .attr({

@@ -15,7 +15,7 @@ permissions=...,emoji
 
 # Settings
 
-Configuration will be served via [jslob](TODO) service at the following path.
+Configuration will be served via [jslob](../components/settings.html) service at the following path.
 
 ```
 io.ox/mail/emoji

@@ -73,12 +73,14 @@ define('io.ox/mail/actions', [
             var cid = _.cid(baton.data),
                 // needs baton view
                 view = baton.view,
+                // reply to all, so count, to, from, cc and bcc and subtract 1 (you don't sent the mail to yourself)
+                numberOfRecipients = _.union(baton.data.to, baton.data.from, baton.data.cc, baton.data.bcc).length - 1,
                 // hide inline link
                 link = view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').hide();
 
             require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
                 view.$('section.body').before(
-                    new InplaceReplyView({ tagName: 'section', cid: cid })
+                    new InplaceReplyView({ tagName: 'section', cid: cid, numberOfRecipients: numberOfRecipients })
                     .on('send', function (cid) {
                         view.$el.closest('.thread-view-control').data('open', cid);
                     })
@@ -203,6 +205,36 @@ define('io.ox/mail/actions', [
         }
     });
 
+    new Action('io.ox/mail/actions/filter', {
+        requires: function (e) {
+            // must be at least one message and top-level
+            if (!e.collection.has('some') || !e.collection.has('toplevel')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
+            // multiple and not a thread?
+            if (!e.collection.has('one') && !e.baton.isThread) return;
+            return true;
+        },
+        action: function (baton) {
+            require(['io.ox/mail/mailfilter/settings/filter'
+                ], function (filter) {
+
+                filter.initialize().then(function (data, config, opt) {
+                    var factory = opt.model.protectedMethods.buildFactory('io.ox/core/mailfilter/model', opt.api),
+                        args = { data: { obj: factory.create(opt.model.protectedMethods.provideEmptyModel()) } },
+                        preparedTest = { id: 'allof', tests: [opt.filterDefaults.tests.Subject, opt.filterDefaults.tests.From] };
+
+                    preparedTest.tests[0].values = [baton.data.subject];
+                    preparedTest.tests[1].values = [baton.data.from[0][1]];
+
+                    args.data.obj.set('test', preparedTest);
+
+                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config[0]);
+                });
+            });
+        }
+    });
+
     new Action('io.ox/mail/actions/print', {
         requires: function (e) {
             // not on smartphones
@@ -265,8 +297,8 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/mark-unread', {
         requires: function (e) {
-            // must be top-level
-            if (!e.collection.has('toplevel', 'modify')) return;
+            // must be top-level; change seen flag
+            if (!e.collection.has('toplevel', 'change:seen')) return false;
             // partiallySeen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || !util.isUnseen(obj);
@@ -281,8 +313,8 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/mark-read', {
         requires: function (e) {
-            // must be top-level
-            if (!e.collection.has('toplevel', 'modify')) return;
+            // must be top-level; change seen flag
+            if (!e.collection.has('toplevel', 'change:seen')) return false;
             // partiallyUnseen? has at least one email that's seen?
             return _(e.baton.array()).reduce(function (memo, obj) {
                 return memo || util.isUnseen(obj);
@@ -514,6 +546,26 @@ define('io.ox/mail/actions', [
         }
     });
 
+    new Action('io.ox/mail/compose/attachment/shareAttachmentsEnable', {
+        capabilities: 'infostore',
+        requires: function (options) {
+            return !options.baton.view.shareAttachmentsIsActive();
+        },
+        multiple: function (list, baton) {
+            baton.model.set('enable', true);
+        }
+    });
+
+    new Action('io.ox/mail/compose/attachment/shareAttachmentsDisable', {
+        capabilities: 'infostore',
+        requires: function (options) {
+            return options.baton.view.shareAttachmentsIsActive();
+        },
+        multiple: function (list, baton) {
+            baton.model.set('enable', false);
+        }
+    });
+
     // inline links
     var INDEX = 0;
 
@@ -702,6 +754,16 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'lo',
+        mobile: 'none',
+        id: 'filter',
+        label: gt('Create filter rule'),
+        ref: 'io.ox/mail/actions/filter',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'lo',
         mobile: 'lo',
         id: 'reminder',
         label: gt('Reminder'),
@@ -777,6 +839,22 @@ define('io.ox/mail/actions', [
         mobile: 'high',
         label: gt('View attachment'),
         ref: 'io.ox/mail/actions/viewer'
+    }));
+
+    ext.point('io.ox/mail/attachment/shareAttachments').extend(new links.Link({
+        id: 'shareAttachmentsEnable',
+        index: 100,
+        //#. %1$s is usually "Drive Mail" (product name; might be customized)
+        label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
+        ref: 'io.ox/mail/compose/attachment/shareAttachmentsEnable'
+    }));
+
+    ext.point('io.ox/mail/attachment/shareAttachments').extend(new links.Link({
+        id: 'shareAttachmentseDisable',
+        index: 110,
+        //#. %1$s is usually "Drive Mail" (product name; might be customized)
+        label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
+        ref: 'io.ox/mail/compose/attachment/shareAttachmentsDisable'
     }));
 
     // DND actions

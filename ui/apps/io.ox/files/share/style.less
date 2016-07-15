@@ -16,12 +16,16 @@
     .tokenfield {
         .border-radius(@border-radius-small @border-radius-small 0px 0px);
         .twitter-typeahead .tt-dropdown-menu { max-height: 150px; }
+        // ensure all inputs share same blank space on the left
+        &.form-control { padding-left: 7px; }
     }
 
     textarea {
         margin-top: -16px;
         .border-radius(0px 0px @border-radius-small @border-radius-small);
     }
+
+    .link-group { width: 100%; }
 
     .form-group {
 
@@ -120,6 +124,7 @@
             position: relative;
             float: left;
             margin-top: 5px;
+            margin-right: 10px;
             margin-bottom: 0;
         }
 

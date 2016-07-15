@@ -161,6 +161,7 @@
 
 .chromeless-window .window-body:not(.mobile-toolbar-visible) { bottom: 0;}
 .chromeless-window .window-body.mobile-toolbar-visible { bottom: @toolbar-height; }
+.chromeless-window.header-bottom .window-body:not(.mobile-toolbar-visible) { bottom: 64px; }
 
 .classic-toolbar, .inline-toolbar, .mobile-navbar {
 
@@ -322,6 +323,10 @@
 }
 
 .secondary-toolbar { font-size: 13px; }
+
+.window-container:not(.mail-categories-enabled) {
+    .categories-toolbar-container { display: none; }
+}
 
 // landscape fullscreen on iPhone
 // iOS will go fullscreen and show an overaly with own buttons

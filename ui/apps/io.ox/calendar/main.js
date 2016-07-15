@@ -279,6 +279,10 @@ define('io.ox/calendar/main', [
             };
 
             app.grid = new VGrid(app.left, gridOptions);
+            app.left.attr({
+                role: 'navigation',
+                'aria-label': 'Appointment list'
+            });
 
             app.getGrid = function () {
                 return this.grid;
@@ -297,18 +301,26 @@ define('io.ox/calendar/main', [
          */
         'folder-view': function (app) {
 
-            // tree view
-            var tree = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'calendar' });
-
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
+            app.treeView = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'calendar' });
+            FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
+            app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
         },
 
         'premium-area': function (app) {
-            commons.addPremiumFeatures(app, {
-                upsellId: 'folderview/calendar/bottom',
-                upsellRequires: 'caldav'
+
+            ext.point('io.ox/calendar/sidepanel').extend({
+                id: 'premium-area',
+                index: 10000,
+                draw: function () {
+                    this.append(
+                        commons.addPremiumFeatures(app, {
+                            append: false,
+                            upsellId: 'folderview/calendar/bottom',
+                            upsellRequires: 'caldav'
+                        })
+                    );
+                }
             });
         },
 
@@ -475,7 +487,10 @@ define('io.ox/calendar/main', [
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 // no animations on desktop
-                ox.ui.Perspective.show(app, value, { disableAnimations: true });
+                ox.ui.Perspective.show(app, value, { disableAnimations: true }).done(function () {
+                    // specific flexbox/scrolling issue (see bugs 43799, 44938, 45501, 46950)
+                    $('#io-ox-windowmanager').scrollTop(0);
+                });
             });
         },
 
@@ -621,6 +636,21 @@ define('io.ox/calendar/main', [
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.sect.calendar.gui';
             };
+        },
+
+        'sidepanel': function (app) {
+
+            ext.point('io.ox/calendar/sidepanel').extend({
+                id: 'tree',
+                index: 100,
+                draw: function (baton) {
+                    // add border & render tree and add to DOM
+                    this.addClass('border-right').append(baton.app.treeView.$el);
+                }
+            });
+
+            var node = app.getWindow().nodes.sidepanel;
+            ext.point('io.ox/calendar/sidepanel').invoke('draw', node, ext.Baton({ app: app }));
         },
 
         'metrics': function (app) {
@@ -799,6 +829,36 @@ define('io.ox/calendar/main', [
                     app.props.set('layout', lastPerspective);
                 });
         }
+    });
+
+    // set what to do if the app is started again
+    // this way we can react to given options, like for example a different folder
+    app.setResume(function (options) {
+        var ret = $.when();
+        // only consider folder option and persepective option
+        if (options) {
+            var defs = [],
+                appNode = this.getWindow();
+            appNode.busy();
+            if (options.folder && options.folder !== this.folder.get()) {
+                defs.push(this.folder.set(options.folder));
+            }
+            if (options.perspective && options.perspective !== app.props.get('layout')) {
+                var perspective = options.perspective;
+                if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], perspective) >= 0) {
+                    perspective = 'week:day';
+                } else if (perspective === 'calendar') {
+                    // corrupt data fix
+                    perspective = 'week:workweek';
+                }
+                defs.push(app.props.set('layout', perspective));
+            }
+            ret = $.when.apply(this, defs);
+            ret.always(function () {
+                appNode.idle();
+            });
+        }
+        return ret;
     });
 
     return {

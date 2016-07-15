@@ -13,11 +13,13 @@
 
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
-    '3rd.party/pdfjs/pdf.combined',
+    'pdfjs-dist/build/pdf.combined',
     'settings!io.ox/core'
-], function (PDFView, PDFJS, Settings) {
+], function (PDFView, PDFJSCombined, Settings) {
 
     'use strict';
+
+    var PDFJS = PDFJSCombined.PDFJS;
 
     // class PDFDocument =======================================================
 
@@ -82,7 +84,7 @@ define('io.ox/core/pdf/pdfdocument', [
         /**
          * Path for image resources, mainly for annotation icons. Include trailing slash.
          */
-        PDFJS.imageResourcesPath = ox.base + '/apps/3rd.party/pdfjs/web/images/';
+        PDFJS.imageResourcesPath = ox.base + '/apps/pdfjs-dist/web/images/';
 
         // ---------------------------------------------------------------------
 

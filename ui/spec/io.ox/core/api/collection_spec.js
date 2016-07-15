@@ -25,7 +25,7 @@ define([
         );
     }
 
-    function fetchAlternative(params) {
+    function fetchAlternative() {
         return $.Deferred().resolve(
             [{ id: 70 }, { id: 20 }, { id: 40 }, { id: 50 }, { id: 80 }]
         );

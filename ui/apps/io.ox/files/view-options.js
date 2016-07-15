@@ -41,9 +41,9 @@ define('io.ox/files/view-options', [
         index: 100,
         draw: function () {
             this.data('view')
-                .option('sort', 702, gt('Name'))
-                .option('sort', 5, gt('Date'))
-                .option('sort', 704, gt('Size'));
+                .option('sort', 702, gt('Name'), { radio: true })
+                .option('sort', 5, gt('Date'), { radio: true })
+                .option('sort', 704, gt('Size'), { radio: true });
         }
     });
 
@@ -53,14 +53,24 @@ define('io.ox/files/view-options', [
         draw: function () {
             this.data('view')
                 .divider()
-                .option('order', 'asc', gt('Ascending'))
-                .option('order', 'desc', gt('Descending'));
+                .option('order', 'asc', gt('Ascending'), { radio: true })
+                .option('order', 'desc', gt('Descending'), { radio: true });
         }
     });
 
     ext.point('io.ox/files/list-view/toolbar/top').extend({
+        id: 'dropdown-container',
+        index: 900,
+        draw: function (baton) {
+            var dropdownContainer = $('<div class="dropdown-container pull-right">');
+            ext.point('io.ox/files/list-view/toolbar/dropdowns').invoke('draw', dropdownContainer, baton);
+            this.append(dropdownContainer);
+        }
+    });
+
+    ext.point('io.ox/files/list-view/toolbar/dropdowns').extend({
         id: 'dropdown',
-        index: 1000,
+        index: 100,
         draw: function (baton) {
 
             var dropdown = new Dropdown({
@@ -71,7 +81,7 @@ define('io.ox/files/view-options', [
             });
 
             ext.point('io.ox/files/view-options').invoke('draw', dropdown.$el, baton);
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
+            this.append(dropdown.render().$el.addClass('grid-options toolbar-item').on('dblclick', function (e) {
                 e.stopPropagation();
             }));
         }
@@ -114,22 +124,22 @@ define('io.ox/files/view-options', [
                 .divider()
                 //#. Verb: (to) filter documents by file type
                 .header(gt.pgettext('verb', 'Filter'))
-                .option('filter', 'pdf', gt('PDFs'))
-                .option('filter', 'doc', gt('Documents'))
-                .option('filter', 'xls', gt('Spreadsheets'))
-                .option('filter', 'ppt', gt('Presentations'))
-                .option('filter', 'image', gt('Images'))
-                .option('filter', 'audio', gt('Music'))
-                .option('filter', 'video', gt('Videos'))
-                .option('filter', 'none', gt('None'));
+                .option('filter', 'pdf', gt('PDFs'), { radio: true })
+                .option('filter', 'doc', gt('Documents'), { radio: true })
+                .option('filter', 'xls', gt('Spreadsheets'), { radio: true })
+                .option('filter', 'ppt', gt('Presentations'), { radio: true })
+                .option('filter', 'image', gt('Images'), { radio: true })
+                .option('filter', 'audio', gt('Music'), { radio: true })
+                .option('filter', 'video', gt('Videos'), { radio: true })
+                .option('filter', 'none', gt('None'), { radio: true });
 
             this.data('view').$ul.on('click', 'a', { list: baton.app.listView }, changeSelection);
         }
     });
 
-    ext.point('io.ox/files/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/list-view/toolbar/dropdowns').extend({
         id: 'select',
-        index: 2000,
+        index: 200,
         draw: function (baton) {
             if (_.device('smartphone')) return;
 
@@ -228,25 +238,12 @@ define('io.ox/files/view-options', [
         id: 'toggle-folderview',
         index: 200,
         draw: function (baton) {
+
             this.append(
                 $('<a href="#" role="button" class="toolbar-item" tabindex="1">')
                 .attr('title', gt('Open folder view'))
                 .append($('<i class="fa fa-angle-double-right">'))
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
-            );
-
-            var side = baton.app.getWindow().nodes.sidepanel;
-
-            side.addClass('bottom-toolbar');
-            side.append(
-                $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" role="button" class="toolbar-item" tabindex="1">')
-                    .append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
-                        $('<span class="sr-only">').text(gt('Close folder view'))
-                    )
-                    .on('click', { app: baton.app, state: false }, toggleFolderView)
-                )
             );
 
             baton.app.on({
@@ -255,6 +252,23 @@ define('io.ox/files/view-options', [
             });
 
             if (baton.app.folderViewIsVisible()) _.defer(onFolderViewOpen, baton.app);
+        }
+    });
+
+    ext.point('io.ox/files/sidepanel').extend({
+        id: 'toggle-folderview',
+        index: 1000,
+        draw: function (baton) {
+            this.addClass('bottom-toolbar').append(
+                $('<div class="generic-toolbar bottom visual-focus">').append(
+                    $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="close-folder-view">')
+                    .append(
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Close folder view'))
+                    )
+                    .on('click', { app: baton.app, state: false }, toggleFolderView)
+                )
+            );
         }
     });
 });

@@ -1,7 +1,6 @@
 ---
 title: Backbone views
 icon:
-keywords: backbone
 ---
 
 This article introduces a set of special views we use troughout the UI.

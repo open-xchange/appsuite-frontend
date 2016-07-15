@@ -15,8 +15,9 @@ define('io.ox/files/common-extensions', [
     'io.ox/mail/util',
     'io.ox/files/api',
     'io.ox/core/strings',
-    'gettext!io.ox/files'
-], function (util, api, strings, gt) {
+    'gettext!io.ox/files',
+    'settings!io.ox/core'
+], function (util, api, strings, gt, settings) {
 
     'use strict';
 
@@ -29,7 +30,7 @@ define('io.ox/files/common-extensions', [
             if (baton.model.isFolder()) parts.push(gt('Folder'));
             parts.push(gt('modified') + ' ' + moment(baton.data.last_modified).format('LLL'));
             parts.push(gt('size') + ' ' + strings.fileSize(baton.data.file_size || 0, 1));
-            this.attr('aria-label', parts.join(', ') + '.');
+            this.closest('li').attr('aria-label', parts.join(', ') + '.');
         },
 
         date: function (baton, options) {
@@ -64,6 +65,34 @@ define('io.ox/files/common-extensions', [
             name = name.replace(/_/g, '_\u200B');
             this.append(
                 $('<div class="filename">').text(name)
+            );
+        },
+
+        mailSubject: function (baton, ellipsis) {
+            if (!_.has(baton.data, 'com.openexchange.file.storage.mail.mailMetadata')) return;
+            var data = baton.data['com.openexchange.file.storage.mail.mailMetadata'],
+                subject = util.getSubject(data.subject || '');
+            // fix long names
+            if (ellipsis) subject = _.ellipsis(subject, ellipsis);
+            // make underscore wrap as well
+            subject = subject.replace(/_/g, '_\u200B');
+            this.append(
+                $('<div class="subject">').text(subject)
+            );
+        },
+
+        mailFrom: function (baton, ellipsis) {
+            if (!_.has(baton.data, 'com.openexchange.file.storage.mail.mailMetadata')) return;
+            var data = baton.data['com.openexchange.file.storage.mail.mailMetadata'],
+                attachmentView = settings.get('folder/mailattachments', {}),
+                from = (baton.app.folder.get() === attachmentView.sent) ? data.to[0] : data.from[0];
+            from = util.getDisplayName(from);
+            // fix long names
+            if (ellipsis) from = _.ellipsis(from, ellipsis);
+            // make underscore wrap as well
+            from = from.replace(/_/g, '_\u200B');
+            this.append(
+                $('<div class="from">').text(from)
             );
         },
 

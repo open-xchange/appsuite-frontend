@@ -11,7 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/text-editor', [], function () {
+define('io.ox/core/tk/text-editor', [
+    'io.ox/core/tk/textproc'
+], function (textproc) {
 
     'use strict';
 
@@ -183,12 +185,15 @@ define('io.ox/core/tk/text-editor', [], function () {
         };
 
         this.replaceParagraph = function (str, rep) {
-            var content = this.getContent(), pos, top;
-            // exists?
-            if ((pos = content.indexOf(str.trim())) > -1) {
-                // replace content
+            var content = this.getContent(), top,
+                length = content.length,
+                strSanitized = textproc.htmltotext(str);
+            // workaround: compose vs. edit (sanitized signature)
+            content = content.replace(str.trim(), (rep || ''));
+            content = content.replace(strSanitized, (rep || ''));
+            if (content.length !== length) {
                 top = this.scrollTop();
-                this.setContent(content.substr(0, pos) + (rep || '') + content.substr(pos + str.length));
+                this.setContent(content);
                 this.scrollTop(top);
                 return true;
             }
@@ -196,15 +201,13 @@ define('io.ox/core/tk/text-editor', [], function () {
         };
 
         this.show = function () {
+            function resizeEditor() {
+                var toolbarHeight = (textarea.closest('.io-ox-mail-compose-window').hasClass('header-top') ? 0 : $('[data-extension-id="header"]').parent().outerHeight());
+                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height() - toolbarHeight)));
+            }
             textarea.prop('disabled', false).show();
 
-            _.defer(function () {
-                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
-            });
-
-            function resizeEditor() {
-                textarea.css('minHeight', Math.max(300, ($(window).height() - textarea.offset().top - $('#io-ox-topbar').height())));
-            }
+            _.defer(function () { resizeEditor(); });
 
             $(window).on('resize.text-editor', resizeEditor);
         };

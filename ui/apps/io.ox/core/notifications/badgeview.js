@@ -38,10 +38,11 @@ define('io.ox/core/notifications/badgeview', [
                 return;
             }
             var count = this.model.get('count'),
-                //#. %1$d number of notifications
+                //#. %1$d number of notifications in notification area
                 //#, c-format
-                a11y = gt.format(gt.ngettext('You have %1$d notification.', 'You have %1$d notifications.', count), count),
-                a11yState = this.$el.attr('aria-pressed') ? gt('The notification area is open') : gt('The notification area is closed');
+                a11y = gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count),
+                //#. open closed state of the notification area, used in aria label
+                a11yState = this.$el.attr('aria-pressed') !== 'false' ? gt('expanded') : gt('collapsed');
             if (count === 0) {
                 this.$el.addClass('no-notifications');
             } else {
@@ -58,7 +59,8 @@ define('io.ox/core/notifications/badgeview', [
             }
         },
         onToggle: function (open) {
-            var a11yState = open ? gt('The notification area is open') : gt('The notification area is closed');
+            //#. open closed state of the notification area, used in aria label
+            var a11yState = open ? gt('expanded') : gt('collapsed');
 
             this.$el.attr({
                 'aria-pressed': !!open,
