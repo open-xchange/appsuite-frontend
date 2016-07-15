@@ -1673,7 +1673,7 @@ define('io.ox/mail/main', [
                 });
                 // selection in listview
                 app.listView.on({
-                    'selection:multiple selection:one': function (list) {
+                    'selection:multiple selection:one': _.throttle(function (list) {
                         metrics.trackEvent({
                             app: 'mail',
                             target: 'list/' + app.props.get('layout'),
@@ -1681,7 +1681,7 @@ define('io.ox/mail/main', [
                             action: 'select',
                             detail: list.length > 1 ? 'multiple' : 'one'
                         });
-                    }
+                    }, 100, { trailing: false })
                 });
             });
         },

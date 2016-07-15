@@ -1229,7 +1229,7 @@ define('io.ox/files/main', [
                 });
                 // selection in listview
                 app.listView.on({
-                    'selection:multiple selection:one': function (list) {
+                    'selection:multiple selection:one': _.throttle(function (list) {
                         metrics.trackEvent({
                             app: 'drive',
                             target: 'list/' + app.props.get('layout'),
@@ -1237,7 +1237,7 @@ define('io.ox/files/main', [
                             action: 'select',
                             detail: list.length > 1 ? 'multiple' : 'one'
                         });
-                    }
+                    }, 100, { trailing: false })
                 });
                 // default action
                 ext.point('io.ox/files/actions/default').extend({
