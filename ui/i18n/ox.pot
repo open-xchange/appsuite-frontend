@@ -4581,12 +4581,6 @@ msgstr ""
 msgid "Import from file"
 msgstr ""
 
-#. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js
-#: module:io.ox/core
-msgid "There was no appointment data to import"
-msgstr ""
-
 #. Error message if contact import failed
 #: apps/io.ox/core/import/import.js
 #: module:io.ox/core
@@ -4597,6 +4591,18 @@ msgstr ""
 #: apps/io.ox/core/import/import.js
 #: module:io.ox/core
 msgid "There was no task data to import"
+msgstr ""
+
+#. Error message if calendar import failed
+#: apps/io.ox/core/import/import.js
+#: module:io.ox/core
+msgid "There was no appointment data to import"
+msgstr ""
+
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js
+#: module:io.ox/core
+msgid "Line %1$d: %2$s"
 msgstr ""
 
 #: apps/io.ox/core/import/import.js
