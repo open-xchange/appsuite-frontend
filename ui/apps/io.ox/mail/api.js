@@ -50,6 +50,7 @@ define('io.ox/mail/api', [
         var cid = _.cid(data), model = this.get(cid);
         // merge specific headers
         if (model && model.get('headers')) {
+            if (!data.headers) data.headers = {};
             data.headers = _.extend(data.headers, model.get('headers'));
         }
 
