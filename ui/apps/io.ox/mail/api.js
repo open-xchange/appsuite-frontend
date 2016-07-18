@@ -44,18 +44,27 @@ define('io.ox/mail/api', [
     // model pool
     var pool = Pool.create('mail');
 
-    // client-side fix for missing to/cc/bcc fields
-    if (settings.get('features/fixtoccbcc')) {
-        pool.map = function (data) {
-            var cid = _.cid(data), model = this.get(cid);
-            if (!model) return data;
+    var fixtoccbcc = settings.get('features/fixtoccbcc');
+
+    pool.map = function (data) {
+        var cid = _.cid(data), model = this.get(cid);
+        // merge specific headers
+        if (model && model.get('headers')) {
+            data.headers = _.extend(data.headers, model.get('headers'));
+        }
+
+        // next clean up needs model
+        if (!model) return data;
+        // client-side fix for missing to/cc/bcc fields
+        if (fixtoccbcc) {
+
             ['to', 'cc', 'bcc'].forEach(function (field) {
                 var list = model.get(field);
                 if (_.isArray(list) && list.length > 0) delete data[field];
             });
-            return data;
-        };
-    }
+        }
+        return data;
+    };
 
     // generate basic API
     var api = apiFactory({
