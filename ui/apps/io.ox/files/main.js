@@ -609,9 +609,13 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone')) return;
 
+            var resizePending = false;
+
             $(window).on('resize', function () {
 
                 var list = app.listView, width, layout, gridWidth, column;
+
+                resizePending = true;
 
                 // skip recalcucation if invisible
                 if (!list.$el.is(':visible')) return;
@@ -627,9 +631,15 @@ define('io.ox/files/main', [
                 // update class name
                 list.el.className = list.el.className.replace(/\s?grid\-\d+/g, '');
                 list.$el.addClass('grid-' + column).attr('grid-count', column);
+
+                resizePending = false;
             });
 
             $(window).trigger('resize');
+
+            app.on('resume', function () {
+                if (resizePending) $(window).trigger('resize');
+            });
         },
 
         /*
