@@ -169,7 +169,7 @@ define('io.ox/files/share/wizard', [
 
             // bind collection to share model
             tokenfieldView.collection.on('change add remove sort', function () {
-                baton.model.set('recipients', this.toArray(), { silent: true });
+                baton.model.set('recipients', this.toArray());
             });
         }
     });
