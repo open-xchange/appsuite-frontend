@@ -8,26 +8,74 @@ description: Server settings (property files), config cascade and how they affec
 
 ## Client onboarding wizard
 
-*capability: client-onboarding*
+**enrty points**
 
-With this feature enabled the wizard itself is available and can be started.
-This can be done via a textlink in the topbar dropwon (burger menu) and also via a link in the new premium bar (in case it's activated). Further more a portal widget is available.
+The wizard can be started via different entry points.. Further more a portal widget is available.
 
-Please refer to the middleware feature config documentation for more details.
+_textlink in the topbar dropwon (burger menu)_
 
-**metrics**
+```
+point: io.ox/core/topbar/right/dropdown
+extension-id: onboarding
+```
 
-Please refer to the [metrics article](http://oxpedia.org/wiki/index.php?title=AppSuite:Metrics-Events#Client_Onboarding)
+_via a link in the new premium bar (in case it's activated)_
 
-**upsell settings**
+```
+action: io.ox/[action]/premium/actions/synchronize
+```
+
+_via portal widget_
+
+```
+point: io.ox/portal/widget
+extension-id: client-onboarding
+
+point: io.ox/portal/widget/client-onboarding
+point: io.ox/portal/widget/client-onboarding/settings
+```
+
+**platforms, devices and scenarios**
+
+Please refer to the middleware feature [config documentation](https://oxpedia.org/wiki/index.php?title=AppSuite:Client_Onboarding) for more details.
+
+**capability**
+
+```
+client-onboarding
+```
+
+**upsell**
 
 Please refer to the [upsell documentaion](http://oxpedia.org/wiki/index.php?title=AppSuite:Upsell#Custom_upsell_links) for more details.
 
-hint: upsell event is only triggered for clicks on disabled (`enabled=false`) scenarios that have a valid *missing_capabilities* array property. Also the stated missing capability has to be enabeled for upsell (`io.ox/core/upsell/enabled/`).
+_middleware: configuration_
+
+upsell event is only triggered for clicks on disabled (`enabled=false`) scenarios that have a valid *missing_capabilities* array property. Please take a look at the [middleware configuration](https://oxpedia.org/wiki/index.php?title=AppSuite:Client_Onboarding#Onboarding_providers) for more details.
+
+_upsell: configuration_
+
+Also the stated missing capability has to be [enabled for upsell](https://documentation.open-xchange.com/latest/ui/features/upsell.html#enable-upsell).
 
 ```
-io.ox/core//features/upsell/client.onboarding/enabled
+# example: enables upsell for tasks
+io.ox/core//upsell/enabled/tasks=true
+```
+
+_upsell: configuration_
+
+```
+# draw premium boxes (default: true)
+io.ox/core//features/upsell/client.onboarding/enabled=true
+```
+
+```
+# optional: otherwise upsell default appearance is used (default: unset)
 io.ox/core//features/upsell/client.onboarding/color
 io.ox/core//features/upsell/client.onboarding/icon
 io.ox/core//features/upsell/defaultIcon
 ```
+
+**metrics**
+
+Please refer to the [metrics article](http://oxpedia.org/wiki/index.php?title=AppSuite:Metrics-Events#Client_Onboarding)
