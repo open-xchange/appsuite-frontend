@@ -936,7 +936,7 @@ define('io.ox/mail/api', [
                     var draftsFolder = accountAPI.getFoldersByType('drafts');
                     pool.resetFolder(draftsFolder);
                     folderAPI.reload(draftsFolder);
-                    api.trigger('autosave refresh.all');
+                    api.trigger('autosave');
                     return result;
                 })
             );

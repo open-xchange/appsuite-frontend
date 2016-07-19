@@ -1534,7 +1534,7 @@ define('io.ox/mail/main', [
             });
             api.on('autosave send', function () {
                 var folder = app.folder.get();
-                if (folderAPI.is('drafts', folder)) app.listView.reload();
+                if (account.is('drafts', folder)) app.listView.reload();
             });
         },
 
