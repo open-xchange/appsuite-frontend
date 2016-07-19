@@ -20,7 +20,13 @@ define('io.ox/core/boot/config', [
 
     'use strict';
 
-    function propagate(data) {
+    var userConfigFetched = false;
+
+    function propagate(data, isUser) {
+        // Parallel fetch of general config can take longer than
+        // the user config.
+        if (!isUser && userConfigFetched) return;
+        userConfigFetched = isUser;
 
         ox.serverConfig = data || {};
 
@@ -41,7 +47,7 @@ define('io.ox/core/boot/config', [
 
         // try rampup data
         if (type === 'user' && (data = ox.rampup.serverConfig)) {
-            propagate(data);
+            propagate(data, type === 'user');
             return $.when(data);
         }
 
@@ -54,16 +60,16 @@ define('io.ox/core/boot/config', [
             appendSession: type === 'user'
         })
         .done(function (data) {
-            propagate(data);
+            propagate(data, type === 'user');
             util.debug('Load config (' + type + ') DONE', data);
         });
     }
 
     return {
 
-        server: function () {
+        server: _.memoize(function () {
             return fetch('server');
-        },
+        }),
 
         user: function () {
             return fetch('user');
