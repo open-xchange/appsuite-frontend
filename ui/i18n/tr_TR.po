@@ -7513,6 +7513,11 @@ msgstr "Posta ile gönder"
 msgid "Send feedback"
 msgstr "Geri bildirim gönderin"
 
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+msgid "Send link"
+msgstr "Link edinin "
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js

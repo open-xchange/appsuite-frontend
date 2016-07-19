@@ -7369,6 +7369,12 @@ msgstr "Enviar por e-mail"
 msgid "Send feedback"
 msgstr "Enviar comentário"
 
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Get link"
+msgid "Send link"
+msgstr "Obter link"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js

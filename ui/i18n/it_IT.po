@@ -7382,6 +7382,12 @@ msgstr "Invia tramite posta"
 msgid "Send feedback"
 msgstr "Invia un commento"
 
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Get link"
+msgid "Send link"
+msgstr "Ottieni collegamento"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js

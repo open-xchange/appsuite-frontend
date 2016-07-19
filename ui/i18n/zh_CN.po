@@ -7247,6 +7247,12 @@ msgstr "发送电子邮件"
 msgid "Send feedback"
 msgstr "发送回馈"
 
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Get link"
+msgid "Send link"
+msgstr "获得链接"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js

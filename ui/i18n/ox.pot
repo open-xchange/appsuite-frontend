@@ -6905,6 +6905,11 @@ msgstr ""
 
 #: apps/io.ox/files/actions/share.js
 #: module:io.ox/files
+msgid "Send link"
+msgstr ""
+
+#: apps/io.ox/files/actions/share.js
+#: module:io.ox/files
 msgid "The link has been removed"
 msgstr ""
 

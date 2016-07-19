@@ -7394,6 +7394,12 @@ msgstr "Sūtīt ar pastu"
 msgid "Send feedback"
 msgstr "Nosūtīt atsauksmi"
 
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Get link"
+msgid "Send link"
+msgstr "Iegūt saiti"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js

@@ -7500,6 +7500,12 @@ msgstr "Envia per correu electrònic"
 msgid "Send feedback"
 msgstr "Envia el comentari"
 
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Send mail"
+msgid "Send link"
+msgstr "Envia correu"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
