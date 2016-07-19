@@ -214,18 +214,24 @@ define.async('io.ox/mail/compose/model', [
             if (strings.size(content) > 524288) return false;
             this.trigger('needsync');
             var mail = this.toJSON();
+
+            //remove share attachments, since they can not be restored
+            delete mail.share_attachments;
             //remove local files, since they can not be restored
             delete mail.files;
-            mail.attachments = mail.attachments.filter(function (attachment) {
+
+            // Get flat attachments
+            mail.attachments = this.attributes.attachments.toJSON();
+            mail.attachments = _.filter(mail.attachments.models, function (attachment) {
                 return attachment.get('group') !== 'localFile';
             });
+
             _(mail.attachments).each(function (attachment) {
                 if (attachment.get('content')) {
                     attachment.set('content', attachment.get('content').replace(/<img[^>]*src=\\?"data:[^>]*>/gi, ''));
                 }
             });
-            // Get flat attachments
-            mail.attachments = this.attributes.attachments.toJSON();
+
             return {
                 description: gt('Mail') + ': ' + (mail.subject || gt('No subject')),
                 point: mail
