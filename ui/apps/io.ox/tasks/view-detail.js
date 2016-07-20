@@ -65,7 +65,7 @@ define('io.ox/tasks/view-detail', [
                 task = baton.interpretedData,
                 title = $('<h1 class="title clear-title">').append(
                         // lock icon
-                        baton.data.private_flag ? $('<i class="fa fa-lock private-flag">') : [],
+                        baton.data.private_flag ? $('<i class="fa fa-lock private-flag">').attr({ title: gt('Private'), 'data-placement': 'bottom', 'data-animation': 'false' }).tooltip() : [],
                         // priority
                         $('<span class="priority">').append(
                             util.getPriority(task)
