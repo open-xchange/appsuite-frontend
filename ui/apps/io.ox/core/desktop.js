@@ -161,8 +161,9 @@ define('io.ox/core/desktop', [
                     //remove data property
                     data.point.data = {};
                 }
-                //notify user
-                if (!('exceeded' in data)) {
+                //notify user if not mail compose. Mail compose is more likely to be hit,
+                //but are Save as draft and autosave to prevent data loss
+                if (!('exceeded' in data) && data.module !== 'io.ox/mail/compose') {
                     notifications.yell('warning', gt('Failed to automatically save current stage of work. Please save your work to avoid data loss in case the browser closes unexpectedly.'));
                     //flag to yell only once
                     data.exceeded = true;
