@@ -966,7 +966,7 @@ define('io.ox/mail/api', [
         if (view === 'text' && obj.content_type === 'text/plain' && isDraft) view = 'raw';
 
         // attach original message on touch devices?
-        var attachOriginalMessage = view === 'text' && _.device('touch') && settings.get('attachOriginalMessage', false) === true,
+        var attachOriginalMessage = obj.attachOriginalMessage || (view === 'text' && _.device('touch') && settings.get('attachOriginalMessage', false) === true),
             csid = api.csid();
 
         return http.PUT({
