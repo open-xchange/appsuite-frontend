@@ -291,6 +291,12 @@ define('io.ox/core/folder/api', [
         },
 
         addCollection: function (id, list, options) {
+            // drop 'subfolders' attribute unless all=true (see bug 46677)
+            if (options && !options.all) {
+                _(list).each(function (data) {
+                    delete data.subfolders;
+                });
+            }
             // transform list to models
             var models = _(list).map(this.addModel, this);
             // options
@@ -636,7 +642,7 @@ define('io.ox/core/folder/api', [
         })
         .then(function (array) {
             array = processListResponse(id, array);
-            pool.addCollection(collectionId, array);
+            pool.addCollection(collectionId, array, { all: options.all });
             // to make sure we always get the same result (just data; not timestamp)
             return array;
         });
