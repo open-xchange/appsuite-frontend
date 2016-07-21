@@ -116,6 +116,11 @@ define('io.ox/contacts/distrib/main', [
 
                 app.view = new ContactCreateDistView({ model: app.model, app: app });
 
+                // see bug 47576 - sync display_name and last_name
+                app.model.on('change:display_name', function () {
+                    app.model.set('last_name', app.model.get('display_name'));
+                });
+
                 app.model.on({
                     'sync:start': function () {
                         win.busy();
