@@ -643,6 +643,16 @@ define('io.ox/core/desktop', [
         }
     });
 
+    function saveRestoreEnabled() {
+        //no smartphones and feature toggle which is overridable by url parameter
+        var urlForceOff = typeof _.url.hash('restore') !== 'undefined' && /^(0|false)$/i.test(_.url.hash('restore')),
+            urlForceOn = typeof _.url.hash('restore') !== 'undefined' && /^(1|true)$/i.test(_.url.hash('restore'));
+
+        return urlForceOn ||
+            !urlForceOff &&
+            _.device('!smartphone') &&
+            coreConfig.get('features/storeSavePoints', true);
+    }
     // static methods
     _.extend(ox.ui.App, {
 
@@ -667,6 +677,9 @@ define('io.ox/core/desktop', [
         },
 
         getSavePoints: function () {
+
+            if (!saveRestoreEnabled()) return $.when([]);
+
             return appCache.get('savepoints').then(function (list) {
                 if (!list || _.isEmpty(list)) {
                     list = coreConfig.get('savepoints', []);
@@ -681,7 +694,7 @@ define('io.ox/core/desktop', [
 
         storeSavePoints: function (list) {
 
-            if (_.device('smartphone') || !coreConfig.get('features/storeSavePoints', true)) return;
+            if (!saveRestoreEnabled()) return;
 
             function omitMetaData(l) {
                 return JSON.stringify(_.mapObject(l, function (o) { return _.omit(o, ['timestamp', 'version']); }));
