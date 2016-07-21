@@ -77,15 +77,35 @@ define('io.ox/calendar/freebusy/main', [
                             quit();
                             break;
                         case 'update':
-                            options.model.set({
-                                start_date: data.start_date,
-                                participants: data.participants
-                            }, { validate: true });
+                            options.model.set({ start_date: data.start_date });
+                            var models = [],
+                                defs = [];
+
+                            // start loading participants prior to adding them to the collection (causes redraw issues otherwise)
+                            _(data.participants).each(function (participantData) {
+                                //create model
+                                var mod = new options.model._participants.model(participantData);
+                                models.push(mod);
+                                // wait for fetch, then add to collection
+                                defs.push(mod.loading);
+                            });
+
                             // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                             options.model.set({
                                 end_date: data.end_date
                             }, { validate: true });
-                            /* falls through */
+
+                            // when models are loaded add them
+                            $.when.apply($, defs).done(function () {
+                                // first reset then addUniquely collection might not redraw correctly otherwise in some cases
+                                options.model._participants.reset([]);
+                                options.model._participants.addUniquely(models);
+                            }).always(function () {
+                                options.app.getWindow().show();
+                                if (options.callback) options.callback();
+                                quit();
+                            });
+                            break;
                         case 'cancel':
                             options.app.getWindow().show();
                             if (options.callback) options.callback();
