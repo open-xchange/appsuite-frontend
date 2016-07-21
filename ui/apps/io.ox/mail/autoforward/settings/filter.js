@@ -49,15 +49,11 @@ define('io.ox/mail/autoforward/settings/filter', [
                             }
                         });
 
-                    api.getRules().done(function (data) {
-                        var isVacation = false;
-                        _.each(data, function (single) {
-                            isVacation = _.contains(single.flags, 'vacation');
-                        });
+                    api.getRules('vacation').done(function (data) {
 
-                        if (isVacation && data.length > 1) {
-                            autoForward.model.set('position', 1);
-                        } else if (!isVacation && !_.isEmpty(data)) {
+                        if (!_.isEmpty(data)) {
+                            autoForward.model.set('position', data[0].position + 1);
+                        } else {
                             autoForward.model.set('position', 0);
                         }
                         deferred.resolve(autoForward.model);
@@ -92,11 +88,7 @@ define('io.ox/mail/autoforward/settings/filter', [
                                 }
                             }
                         });
-
-                    api.getRules('vacation').done(function (data) {
-                        autoForward.model.set('position', _.isEmpty(data) ? 0 : 1);
-                        deferred.resolve(autoForward.model);
-                    });
+                    deferred.resolve(autoForward.model);
                 }
 
             }).fail(function (error) {

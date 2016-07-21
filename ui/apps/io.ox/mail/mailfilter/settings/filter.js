@@ -198,7 +198,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
             var createExtpointForSelectedFilter = function (node, args, config) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
                 },
-                self = this;
+                self = this,
+                scrollPane =  $node.closest('.scrollable-pane');
 
             return this.initialize().then(function (data, config) {
                 data = data[0];
@@ -209,7 +210,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     return model.get('position');
                 };
 
-                $node.closest('.scrollable-pane').on('refresh:mailfilter', function () {
+                scrollPane.one('refresh:mailfilter', function () {
                     self.refresh();
                 });
 
@@ -253,7 +254,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         this.$el.attr({
                             'data-id': self.model.get('id')
                         })
-                        .addClass('draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
+                        .addClass('draggable ' + getEditableState())
+                        .toggleClass('active', self.model.get('active'))
+                        .toggleClass('disabled', !self.model.get('active'))
                         .empty().append(
 
                             listUtils.dragHandle(gt('Drag to reorder filter rules'), this.model.collection.length <= 1 ? 'hidden' : ''),
@@ -477,7 +480,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 _.each(data[0], function (rule) {
                     collection.add(factory.create(rule), { merge: true });
                 });
-                collection.trigger('add');
             });
 
         }
