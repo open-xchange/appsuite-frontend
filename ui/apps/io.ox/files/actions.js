@@ -77,7 +77,7 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
                 return api.versions.load(e.baton.data).then(function (versions) {
-                    var current = _.some(versions, function (item) {
+                    var current = _.isArray(versions) && _.some(versions, function (item) {
                         return item.current_version && item.version === e.baton.data.version;
                     });
 

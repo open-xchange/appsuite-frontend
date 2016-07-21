@@ -707,7 +707,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     if (self.nextToDraw) {
                         var temp = self.nextToDraw;
                         self.nextToDraw = null;
-                        self.renderQueued.apply(self, temp);
+                        self.renderQueued(temp);
                     }
                 });
             }

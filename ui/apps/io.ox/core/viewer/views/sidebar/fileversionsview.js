@@ -62,7 +62,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             panelBody.empty();
             if (!model || !_.isArray(versions)) { return; }
 
-            table = $('<table>').addClass('versiontable table').attr('data-latest-version', _.last(versions).version).append(
+            table = $('<table>').addClass('versiontable table').attr('data-latest-version', (versions.length > 0) && _.last(versions).version).append(
                         $('<caption>').addClass('sr-only').text(gt('File version table, the first row represents the current version.')),
                         $('<thead>').addClass('sr-only').append(
                             $('<tr>').append(
