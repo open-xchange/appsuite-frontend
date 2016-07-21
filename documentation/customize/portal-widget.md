@@ -10,7 +10,7 @@ It can link a longer view that is opened when the tile is clicked, this we call 
 
 # Where and how to start
 
-Plugins are collected in the folder `ui/apps/plugins`. 
+Portal plugins are collected in the folder `ui/apps/plugins/portal`. 
 Start your new plugin there: Create the following folder `folder ui/apps/plugins/portal/myAd` and in this folder, create two files: `register.js` (where everything happens) and `manifest.json`
 
 # An advertisement widget
