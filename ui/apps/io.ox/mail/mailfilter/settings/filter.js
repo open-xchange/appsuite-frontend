@@ -190,7 +190,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
             var createExtpointForSelectedFilter = function (node, args, config) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
                 },
-                self = this;
+                self = this,
+                scrollPane =  $node.closest('.scrollable-pane');
 
             return $.when(api.getRules(), api.getConfig()).then(function (data, config) {
                 data = data[0];
@@ -201,7 +202,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     return model.get('position');
                 };
 
-                $node.closest('.scrollable-pane').on('refresh:mailfilter', function () {
+                scrollPane.one('refresh:mailfilter', function () {
                     self.refresh();
                 });
 
@@ -245,8 +246,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         this.$el.attr({
                             'data-id': self.model.get('id')
                         })
-                        .addClass('draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
-                        .append(
+
+                        .addClass('draggable ' + getEditableState())
+                        .toggleClass('active', self.model.get('active'))
+                        .toggleClass('disabled', !self.model.get('active'))
+                        .empty().append(
 
                             listUtils.dragHandle(title, gt('Use cursor keys to change the item position. Virtual cursor mode has to be disabled.'), this.model.collection.length <= 1 ? 'hidden' : ''),
                             titleNode = listUtils.widgetTitle(title),
