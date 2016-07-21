@@ -475,9 +475,13 @@ define('io.ox/mail/categories/main', [
         },
         update: function (categories) {
             this.categories.set(categories);
+            // we have to wait until changes reach middleware
             _.delay(function () {
-                // we have to wait until changes reach middleware
-                this.reload();
+                var selected = this.categories.get(this.props.get('selected'));
+                if (selected.is('active')) return this.reload();
+                // current tab disabled? use first active tab...
+                var head = this.categories.findWhere({ active: true });
+                this.select(head.get('id'));
             }.bind(this), 2000);
             this.trigger('update:after');
         },
