@@ -264,7 +264,7 @@ define('io.ox/core/folder/api', [
 
         onRemove: function (model) {
             if (isFlat(model.get('module'))) return;
-            pool.getModel(this.id).set('subfolders', this.length > 0);
+            pool.getModel(this.id).set('subscr_subflds', this.length > 0);
             api.trigger('collection:remove', this.id, model);
         }
     });
@@ -475,7 +475,7 @@ define('io.ox/core/folder/api', [
         return this.getter().done(function (array) {
             _(array).each(injectIndex.bind(null, id));
             pool.addCollection(getCollectionId(id), array);
-            pool.getModel(id).set('subfolders', array.length > 0);
+            pool.getModel(id).set('subscr_subflds', array.length > 0);
         });
     };
 
@@ -490,7 +490,7 @@ define('io.ox/core/folder/api', [
 
         add: function (id, getter) {
             this.hash[id] = new VirtualFolder(id, getter);
-            pool.getModel(id).set('subfolders', true);
+            pool.getModel(id).set('subscr_subflds', true);
         },
 
         concat: function () {
@@ -920,7 +920,7 @@ define('io.ox/core/folder/api', [
         return update(id, { folder_id: target }, { ignoreWarnings: ignoreWarnings }).then(
             function success(newId) {
                 // update new parent folder
-                pool.getModel(target).set('subfolders', true);
+                pool.getModel(target).set('subscr_subflds', true);
                 // update all virtual folders
                 virtual.refresh();
                 // add folder to collection
@@ -930,7 +930,7 @@ define('io.ox/core/folder/api', [
             },
             function fail(error) {
                 // re-add folder
-                pool.getModel(folderId).set('subfolders', true);
+                pool.getModel(folderId).set('subscr_subflds', true);
                 virtual.refresh();
                 pool.getCollection(folderId).add(model);
                 return error;
@@ -990,7 +990,7 @@ define('io.ox/core/folder/api', [
                 if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
             })
             .done(function updateParentFolder(data) {
-                pool.getModel(id).set('subfolders', true);
+                pool.getModel(id).set('subscr_subflds', true);
                 virtual.refresh();
                 api.trigger('create', data);
                 api.trigger('create:' + id.replace(/\s/g, '_'), data);
