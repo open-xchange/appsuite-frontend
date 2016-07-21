@@ -24,6 +24,9 @@ define('plugins/halo/linkedIn/register', ['io.ox/core/extensions'], function (ex
         },
 
         draw: function (baton) {
+            if (!baton.data) {
+                return $.when();
+            }
 
             var node = this, def = $.Deferred();
 
