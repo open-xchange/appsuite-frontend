@@ -79,7 +79,7 @@ define('io.ox/core/folder/node', [
             // see bug 37373
             // This was caused by the filter method of the unified-folders extensionpoint which sets "subfolder = false" for the folder 1 model.
             // Since this folder always has subfolders this is skipped.
-            if (this.folder !== '1' && this.folder !== 'default0') this.model.set('subfolders', models.length > 0);
+            if (this.folder !== '1' && this.folder !== 'default0') this.modelSetSubfolders(models.length > 0);
             this.renderEmpty();
 
             // trigger events
@@ -100,7 +100,7 @@ define('io.ox/core/folder/node', [
             var node = this.getTreeNode(model);
             this.$.subfolders.append(node.render().$el);
             this.options.tree.appear(node);
-            this.model.set('subfolders', true);
+            this.modelSetSubfolders(true);
             this.renderEmpty();
         },
 
@@ -199,7 +199,15 @@ define('io.ox/core/folder/node', [
         // utility functions
         hasSubFolders: function () {
             var isFlat = /^virtual\/flat/.test(this.folder);
-            return this.options.subfolders && (isFlat || this.model.get('subfolders') === true);
+            return this.options.subfolders && (isFlat || this.modelGetSubfolders() === true);
+        },
+
+        modelGetSubfolders: function () {
+            return this.model.get(this.options.tree.all ? 'subfolders' : 'subscr_subflds');
+        },
+
+        modelSetSubfolders: function (value) {
+            return this.model.set(this.options.tree.all ? 'subfolders' : 'subscr_subflds', value);
         },
 
         // respond to new sub-folders
