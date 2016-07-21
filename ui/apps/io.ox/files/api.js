@@ -936,21 +936,25 @@ define('io.ox/files/api', [
         });
     };
 
-    function performUpload(options, data) {
+    function performUpload(action, options, data) {
 
         options = _.extend({
-            // used by api.version.upload to be different from api.upload
-            action: 'new',
             folder: coreSettings.get('folder/infostore'),
             // allow API consumers to override the module (like OX Guard will certainly do)
             module: 'files'
         }, options);
 
         var params = _.extend({
-            action: options.action,
-            filename: options.filename,
+            action: action,
             timestamp: _.then()
         }, options.params);
+
+        if (options.filename) params.filename = options.filename;
+
+        if (action === 'new') {
+            params.extendedResponse = true;
+            params.try_add_version = true;
+        }
 
         var formData = new FormData();
 
@@ -986,18 +990,25 @@ define('io.ox/files/api', [
      *     - promise can be aborted using promise.abort function
      */
     api.upload = function (options) {
-        var folder_id = options.folder_id || options.folder;
-        options.action = 'new';
 
-        var def = performUpload(options, {
+        var folder_id = options.folder_id || options.folder,
+            def = performUpload('new', options, {
                 folder_id: folder_id,
                 description: options.description || ''
             }),
             chain = def.then(function (result) {
-                // result.data just provides the new file id
-                api.propagate('add:file', { id: result.data, folder_id: folder_id });
-                // return id and folder id
-                return { id: result.data, folder_id: folder_id };
+                // return id and folder id only
+                var data = result.data.file, obj = _(data).pick('id', 'folder_id');
+                // trigger proper event
+                if (result.save_action === 'new_version') {
+                    // new version
+                    var model = api.pool.get('detail').get(_.cid(obj));
+                    if (model) model.set('id', data.id);
+                    return api.propagate('add:version', data);
+                }
+                // new file
+                api.propagate('add:file', obj);
+                return obj;
             });
 
         // we need to hand over the abort function to the deferred of the chain.
@@ -1025,19 +1036,20 @@ define('io.ox/files/api', [
          *     - promise can be aborted using promise.abort function
          */
         upload: function (options) {
-            options.action = 'update';
-            return performUpload(options, {
+
+            return performUpload('update', options, {
                 id: options.id,
                 folder_id: options.folder_id || options.folder,
                 version_comment: options.version_comment || ''
             })
-            .then(function (data) {
-                if (options.id !== data.data) {
+            .then(function (result) {
+                var id = result.data;
+                // id changed?
+                if (options.id !== id) {
                     var model = api.pool.get('detail').get(_.cid(options));
-                    model.set('id', data.data);
+                    model.set('id', id);
                     return api.propagate('add:version', model.toJSON());
                 }
-
                 return api.propagate('add:version', options);
             });
         },
