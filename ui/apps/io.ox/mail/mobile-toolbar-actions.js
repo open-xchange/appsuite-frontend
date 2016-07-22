@@ -262,6 +262,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
                 // if there's a thread-mail baton already set, don't overwrite it
                 // Happens becuase the change event occurs later than the "showmail" event
                 if (cp.toolbar && cp.toolbar.baton.threadMember) return;
+                if (app.listView.selection.get().length === 0) return;
                 app.updateToolbar(app.listView.selection.get());
             });
 
