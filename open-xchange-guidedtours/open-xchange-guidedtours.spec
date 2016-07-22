@@ -5,7 +5,7 @@ BuildRequires:  ant-nodeps
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
 Version:        @OXVERSION@
-%define         ox_release 14
+%define         ox_release 15
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -48,6 +48,8 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -DkeepCache=tru
 /opt/open-xchange/etc/settings/guidedtours.properties
 
 %changelog
+* Fri Jul 22 2016 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2016-08-01 (3464)
 * Fri Jul 01 2016 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2016-06-27 (3358)
 * Wed Jun 01 2016 Marcus Klein <marcus.klein@open-xchange.com>
