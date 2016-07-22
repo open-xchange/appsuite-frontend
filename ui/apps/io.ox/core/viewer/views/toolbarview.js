@@ -136,7 +136,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 label: /*#. launch the presenter app */ gt.pgettext('presenter', 'Present'),
-                icon: 'fa fa-picture-o',
+                icon: 'fa fa fa-play-circle-o',
                 ref: TOOLBAR_ACTION_ID + '/launchpresenter',
                 customize: function () {
                     this.addClass('viewer-toolbar-launchpresenter')

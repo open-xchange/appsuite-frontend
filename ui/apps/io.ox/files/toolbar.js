@@ -154,7 +154,7 @@ define('io.ox/files/toolbar', [
             'presenter': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-picture-o',
+                icon: 'fa fa-play-circle-o',
                 label: gt('Present'),
                 ref: 'io.ox/files/actions/launchpresenter'
             },
