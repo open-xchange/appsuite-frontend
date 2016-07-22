@@ -537,8 +537,10 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                         // assigning the value directly leads to a typeerror on ios
                         // like $(listItem).data('velocity').transformCache = {}
                         var c = $(listItem).data('velocity');
-                        c.transformCache = {};
-                        $(listItem).data('velocity', c);
+                        if (c) {
+                            c.transformCache = {};
+                            $(listItem).data('velocity', c);
+                        }
                     });
                     self.view.off('remove-mobile', resetStyle);
                 };
