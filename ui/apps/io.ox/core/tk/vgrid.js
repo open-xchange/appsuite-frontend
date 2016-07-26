@@ -404,7 +404,14 @@ define('io.ox/core/tk/vgrid', [
         if (_.device('IE')) {
             container.on('click', function () {
                 var top = scrollpane.scrollTop();
+                // lock position: prevent ie to scroll to top
+                scrollpane.css('overflow-y', 'hidden');
+                container.css('top', top + 'px');
+                //focus
                 container.focus();
+                // unlock
+                container.css('top', 0);
+                scrollpane.css('overflow-y', 'auto');
                 scrollpane.scrollTop(top);
             });
         }

@@ -127,9 +127,9 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
                 ext.point('io.ox/core/vacationnotice/model').invoke('saveText', vacationNotice, vacationNotice);
 
-                api.getRules().done(function (data) {
-                    if (!_.isEmpty(data)) {
-                        // vacation notice is always on top
+                api.getRules().done(function (rules) {
+                    if (!_.isEmpty(rules) && _.isEmpty(data)) {
+                        // vacation notice is initially on top
                         vacationNotice.model.set('position', 0);
                     }
                     deferred.resolve(vacationNotice.model);

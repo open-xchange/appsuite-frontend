@@ -335,13 +335,18 @@ define('io.ox/core/tk/wizard', [
         },
 
         onKeyUp: function (e) {
+
+            function isInput(e) {
+                return $(e.target).is(':input');
+            }
+
             switch (e.which) {
                 // check if "close" button exists
                 case 27: if (this.$('.wizard-close').length) this.trigger('close'); break;
                 // check if "back" button is enabled and available
-                case 37: if (this.$('[data-action="back"]:enabled').length) this.trigger('back'); break;
+                case 37: if (!isInput(e) && this.$('[data-action="back"]:enabled').length) this.trigger('back'); break;
                 // check if "next" button is enabled and available
-                case 39: if (this.$('[data-action="next"]:enabled').length) this.trigger('next'); break;
+                case 39: if (!isInput(e) && this.$('[data-action="next"]:enabled').length) this.trigger('next'); break;
                 // no default
             }
         },

@@ -142,7 +142,10 @@ define('io.ox/core/folder/api', [
         // system folders don't matter
         // bubble through the tree in parent direction
         if (difference !== 0 && parent && parent.get('module') !== 'system' && pool.collections[parent.get('id')]) {
-            parent.set('subtotal', calculateSubtotal(parent));
+            // unified folders contain the mails of the child folders as duplicates, so we don't need to adjust the subtotal
+            if (!parent.is('unifiedfolder')) {
+                parent.set('subtotal', calculateSubtotal(parent));
+            }
         }
 
         // if this is a subfolder of a virtual folder we must bubble there too
@@ -261,7 +264,7 @@ define('io.ox/core/folder/api', [
 
         onRemove: function (model) {
             if (isFlat(model.get('module'))) return;
-            pool.getModel(this.id).set('subfolders', this.length > 0);
+            pool.getModel(this.id).set('subscr_subflds', this.length > 0);
             api.trigger('collection:remove', this.id, model);
         }
     });
@@ -291,6 +294,12 @@ define('io.ox/core/folder/api', [
         },
 
         addCollection: function (id, list, options) {
+            // drop 'subfolders' attribute unless all=true (see bug 46677)
+            if (options && !options.all) {
+                _(list).each(function (data) {
+                    delete data.subfolders;
+                });
+            }
             // transform list to models
             var models = _(list).map(this.addModel, this);
             // options
@@ -307,7 +316,8 @@ define('io.ox/core/folder/api', [
             collection[type](models);
             collection.fetched = true;
             // some virtual folders have type undefined. Track subtotal for them too.
-            if (this.models[id] && (this.models[id].get('module') === 'mail' || this.models[id].get('module') === undefined)) {
+            // be carefull with unified folders, we don't track the subtotal for them because the subfolders are the folders from the non unified accounts. This would double the counters as the mails are tracked 2 times
+            if (this.models[id] && (this.models[id].get('module') === 'mail' || this.models[id].get('module') === undefined) && !this.models[id].is('unifiedfolder')) {
                 var subtotal = 0;
                 for (var i = 0; i < models.length; i++) {
                     // use account API so it works with non standard accounts as well
@@ -471,7 +481,7 @@ define('io.ox/core/folder/api', [
         return this.getter().done(function (array) {
             _(array).each(injectIndex.bind(null, id));
             pool.addCollection(getCollectionId(id), array);
-            pool.getModel(id).set('subfolders', array.length > 0);
+            pool.getModel(id).set('subscr_subflds', array.length > 0);
         });
     };
 
@@ -486,7 +496,7 @@ define('io.ox/core/folder/api', [
 
         add: function (id, getter) {
             this.hash[id] = new VirtualFolder(id, getter);
-            pool.getModel(id).set('subfolders', true);
+            pool.getModel(id).set('subscr_subflds', true);
         },
 
         concat: function () {
@@ -636,7 +646,7 @@ define('io.ox/core/folder/api', [
         })
         .then(function (array) {
             array = processListResponse(id, array);
-            pool.addCollection(collectionId, array);
+            pool.addCollection(collectionId, array, { all: options.all });
             // to make sure we always get the same result (just data; not timestamp)
             return array;
         });
@@ -916,7 +926,7 @@ define('io.ox/core/folder/api', [
         return update(id, { folder_id: target }, { ignoreWarnings: ignoreWarnings }).then(
             function success(newId) {
                 // update new parent folder
-                pool.getModel(target).set('subfolders', true);
+                pool.getModel(target).set('subscr_subflds', true);
                 // update all virtual folders
                 virtual.refresh();
                 // add folder to collection
@@ -926,7 +936,7 @@ define('io.ox/core/folder/api', [
             },
             function fail(error) {
                 // re-add folder
-                pool.getModel(folderId).set('subfolders', true);
+                pool.getModel(folderId).set('subscr_subflds', true);
                 virtual.refresh();
                 pool.getCollection(folderId).add(model);
                 return error;
@@ -986,7 +996,7 @@ define('io.ox/core/folder/api', [
                 if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
             })
             .done(function updateParentFolder(data) {
-                pool.getModel(id).set('subfolders', true);
+                pool.getModel(id).set('subscr_subflds', true);
                 virtual.refresh();
                 api.trigger('create', data);
                 api.trigger('create:' + id.replace(/\s/g, '_'), data);

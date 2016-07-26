@@ -51,7 +51,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
             point.initial = false;
             // special flag/handling for 'replace' cause we want
             // to keep the attachments that will be removed otherwise
-            if (point.mode === 'reply') point.restored = true;
+            if (/(reply|replyall|forward)/.test(point.mode)) point.restored = true;
             return compose(point.mode)(point);
         };
 
@@ -74,32 +74,31 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 win.nodes.body.addClass('sr-only');
 
                 win.busy().show(function () {
-                    require(['io.ox/mail/compose/bundle'], function () {
-                        require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model'], function (MailComposeView, MailComposeModel) {
-                            var keepdata = /(compose|edit|forward)/.test(obj.mode) || obj.restored,
-                                data = keepdata ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
-                            app.model = new MailComposeModel(data);
-                            app.view = new MailComposeView({ app: app, model: app.model });
-                            win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                            app.view.fetchMail(data).done(function () {
-                                app.view.setMail()
-                                .done(function () {
-                                    // Set window and toolbars visible again
-                                    win.nodes.header.removeClass('sr-only');
-                                    win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
-                                    win.idle();
-                                    win.setTitle(gt('Compose'));
-                                    def.resolve({ app: app });
-                                    ox.trigger('mail:' + type + ':ready', obj, app);
-                                });
-                            })
-                            .fail(function (e) {
-                                require(['io.ox/core/notifications'], function (notifications) {
-                                    notifications.yell(e);
-                                    app.quit();
-                                    def.reject();
-                                });
-                            });
+                    require(['io.ox/mail/compose/bundle']).then(function () {
+                        return require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model']);
+                    }).then(function (MailComposeView, MailComposeModel) {
+                        var keepdata = /(compose|edit)/.test(obj.mode) || obj.restored,
+                            data = keepdata ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
+                        app.model = new MailComposeModel(data);
+                        app.view = new MailComposeView({ app: app, model: app.model });
+                        win.nodes.main.addClass('scrollable').append(app.view.render().$el);
+                        return app.view.fetchMail(data);
+                    }).then(function () {
+                        return app.view.setMail();
+                    }).done(function () {
+                        // Set window and toolbars visible again
+                        win.nodes.header.removeClass('sr-only');
+                        win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
+                        win.idle();
+                        win.setTitle(gt('Compose'));
+                        def.resolve({ app: app });
+                        ox.trigger('mail:' + type + ':ready', obj, app);
+                    })
+                    .fail(function (e) {
+                        require(['io.ox/core/notifications'], function (notifications) {
+                            notifications.yell(e);
+                            app.quit();
+                            def.reject();
                         });
                     });
                 });

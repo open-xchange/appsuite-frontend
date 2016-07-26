@@ -268,9 +268,11 @@ define('io.ox/files/main', [
 
             app.getViewOptions = function (folder) {
                 var options = app.settings.get(['viewOptions', folder], {}),
-                    defaultSort = folder === 'virtual/myshares' ? 5 : 702;
+                    defaultSort = folder === 'virtual/myshares' ? 5 : 702,
+                    defaultOrder = folder === 'virtual/myshares' ? 'desc' : 'asc';
+
                 if (!/^(list|icon|tile)/.test(options.layout)) options.layout = 'list';
-                return _.extend({ sort: defaultSort, order: 'asc', layout: 'list' }, options);
+                return _.extend({ sort: defaultSort, order: defaultOrder, layout: 'list' }, options);
             };
         },
 
@@ -380,7 +382,7 @@ define('io.ox/files/main', [
                     if (id !== 'virtual/myshares') return;
 
                     app.folder.unset();
-
+                    app.getWindow().setTitle(gt('My shares'));
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.show().siblings().hide();
                         return;
@@ -519,6 +521,7 @@ define('io.ox/files/main', [
          */
         'change:sort': function (app) {
             app.props.on('change:sort', function (m, value) {
+                if (!app.treeView) return;
                 // set proper order first
                 var model = app.listView.model,
                     viewOptions = app.getViewOptions(app.treeView.selection.get());
@@ -606,9 +609,13 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone')) return;
 
+            var resizePending = false;
+
             $(window).on('resize', function () {
 
                 var list = app.listView, width, layout, gridWidth, column;
+
+                resizePending = true;
 
                 // skip recalcucation if invisible
                 if (!list.$el.is(':visible')) return;
@@ -624,9 +631,15 @@ define('io.ox/files/main', [
                 // update class name
                 list.el.className = list.el.className.replace(/\s?grid\-\d+/g, '');
                 list.$el.addClass('grid-' + column).attr('grid-count', column);
+
+                resizePending = false;
             });
 
             $(window).trigger('resize');
+
+            app.on('resume', function () {
+                if (resizePending) $(window).trigger('resize');
+            });
         },
 
         /*
@@ -1226,7 +1239,7 @@ define('io.ox/files/main', [
                 });
                 // selection in listview
                 app.listView.on({
-                    'selection:multiple selection:one': function (list) {
+                    'selection:multiple selection:one': _.throttle(function (list) {
                         metrics.trackEvent({
                             app: 'drive',
                             target: 'list/' + app.props.get('layout'),
@@ -1234,7 +1247,7 @@ define('io.ox/files/main', [
                             action: 'select',
                             detail: list.length > 1 ? 'multiple' : 'one'
                         });
-                    }
+                    }, 100, { trailing: false })
                 });
                 // default action
                 ext.point('io.ox/files/actions/default').extend({

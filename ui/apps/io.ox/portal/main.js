@@ -291,6 +291,16 @@ define('io.ox/portal/main', [
         .on('add', function (model) {
             app.drawScaffold(model, true);
             widgets.loadUsedPlugins().done(function () {
+                ext.point('io.ox/portal/widget/' + model.get('type') + '/settings')
+                    .invoke('edit', this, model, {
+                        // WORKAROUND
+                        // This object should be replaced with the actual view if necessary.
+                        // This is in most cases io.ox/portal/settings/widgetview
+                        // which is not exposed atm.
+                        removeWidget: function () {
+                            collection.remove(model);
+                        }
+                    });
                 if (model.has('candidate') !== true) {
                     app.drawWidget(model);
                     widgets.save(appBaton.$.widgets);

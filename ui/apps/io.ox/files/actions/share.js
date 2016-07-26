@@ -51,7 +51,14 @@ define('io.ox/files/actions/share', [
             // get a link (anonymouse)
             dialog
                 .addPrimaryButton('share', gt('Close'), 'share', { tabIndex: 1 })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                 .addAlternativeButton('remove', gt('Remove link'), 'remove', { tabIndex: 1 });
+        }
+
+        function toggleButtons(sendVisible) {
+            var footer = dialog.getFooter();
+            footer.find('.btn[data-action="cancel"]').toggle(sendVisible);
+            footer.find('.btn[data-action="share"]').text(sendVisible ? gt('Send link') : gt('Close'));
         }
 
         dialog.getContentNode().addClass('invisible')
@@ -64,6 +71,13 @@ define('io.ox/files/actions/share', [
                 .parent().idle()
                 .find('.btn-primary').prop('disabled', false);
         });
+
+        view.listenTo(view.model, 'change:recipients', function (model, value) {
+            toggleButtons(value.length);
+        });
+
+        // initial state is "no send"
+        toggleButtons(false);
 
         dialog
             .on('share', function () {

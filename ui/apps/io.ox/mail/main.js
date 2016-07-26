@@ -1534,7 +1534,7 @@ define('io.ox/mail/main', [
             });
             api.on('autosave send', function () {
                 var folder = app.folder.get();
-                if (folderAPI.is('drafts', folder)) app.listView.reload();
+                if (account.is('drafts', folder)) app.listView.reload();
             });
         },
 
@@ -1673,7 +1673,7 @@ define('io.ox/mail/main', [
                 });
                 // selection in listview
                 app.listView.on({
-                    'selection:multiple selection:one': function (list) {
+                    'selection:multiple selection:one': _.throttle(function (list) {
                         metrics.trackEvent({
                             app: 'mail',
                             target: 'list/' + app.props.get('layout'),
@@ -1681,7 +1681,7 @@ define('io.ox/mail/main', [
                             action: 'select',
                             detail: list.length > 1 ? 'multiple' : 'one'
                         });
-                    }
+                    }, 100, { trailing: false })
                 });
             });
         },
@@ -1721,6 +1721,118 @@ define('io.ox/mail/main', [
                     mapper = new Mapper(cat);
                 });
             }
+        },
+
+        'unified-folder-support': function () {
+            // only register if we have a unified mail account
+            account.getUnifiedMailboxName().done(function (unifiedMailboxName) {
+                if (!unifiedMailboxName) {
+                    return;
+                }
+
+                var checkForSync = function (model) {
+                    // check if we need to sync unified folders
+                    var accountId = api.getAccountIDFromFolder(model.get('folder_id')),
+                        folderTypes = {
+                            7: 'INBOX',
+                            9: 'Drafts',
+                            10: 'Sent',
+                            11: 'Spam',
+                            12: 'Trash'
+                        };
+
+                    return account.get(accountId).then(function (accountData) {
+                        var folder, originalFolderId, unifiedFolderId, unifiedSubfolderId;
+                        if (!accountData) {
+                            folder = folderAPI.pool.models[model.get('folder_id')];
+                            // check if we are in the unified folder
+                            if (folder && folder.is('unifiedfolder')) {
+                                originalFolderId = model.get('id').replace(/\/\w*$/, '');
+                                unifiedSubfolderId = model.get('folder_id') + '/' + originalFolderId;
+                                // unified folder has special mail ids
+                                var id = model.get('id').replace(originalFolderId + '/', '');
+
+                                return [{ folder_id: originalFolderId, id: id }, { folder_id: unifiedSubfolderId, id: id }];
+                            }
+                            //check if we are in the unified folder's subfolder
+                            folder = folderAPI.pool.models[folder.get('folder_id')];
+                            if (folder && folder.is('unifiedfolder')) {
+                                unifiedFolderId = folder.id;
+                                originalFolderId = model.get('folder_id').replace(folder.id + '/', '');
+                                // unified folder has special mail ids
+
+                                return [{ folder_id: unifiedFolderId, id: originalFolderId + '/' + model.get('id') }, { folder_id: originalFolderId, id: model.get('id') }];
+                            }
+                            return $.Deferred().reject();
+                        // check if we are in a standard folder that needs to be synced to a unified folder
+                        } else if (accountData.unified_inbox_enabled) {
+                            folder = folderAPI.pool.models[model.get('folder_id')];
+                            var folderType = folderTypes[folder.get('standard_folder_type')];
+
+                            if (folderType) {
+                                unifiedFolderId = unifiedMailboxName + '/' + folderType;
+                                unifiedSubfolderId = unifiedFolderId + '/' + folder.get('id');
+                                // unified folder has special mail ids
+
+                                return [{ folder_id: unifiedFolderId, id: model.get('folder_id') + '/' + model.get('id') }, { folder_id: unifiedSubfolderId, id: model.get('id') }];
+                            }
+
+                            return $.Deferred().reject();
+                        }
+                        return $.Deferred().reject();
+                    });
+                };
+
+                api.pool.get('detail').on('change:flags', function (model, value, options) {
+                    options = options || {};
+
+                    if (!model || options.unifiedSync) return;
+
+                    // get previous and current flags to determine if unseen bit has changed
+                    var previous = util.isUnseen(model.previous('flags')),
+                        current = util.isUnseen(model.get('flags'));
+                    if (previous === current) return;
+                    checkForSync(model).done(function (modelsToSync) {
+                        _(modelsToSync).each(function (mail) {
+                            var obj = api.pool.get('detail').get(_.cid(mail));
+
+                            if (obj) {
+                                var changes = {
+                                    flags: current ? obj.get('flags') & ~32 : obj.get('flags') | 32
+                                };
+                                if (!current) {
+                                    changes.unseen = false;
+                                }
+                                obj.set(changes, { unifiedSync: true });
+
+                                // update thread model
+                                api.threads.touch(obj.attributes);
+                                api.trigger('update:' + _.ecid(obj.attributes), obj.attributes);
+                            } else {
+                                // detail models not loaded yet. Just trigger folder manually
+                                folderAPI.changeUnseenCounter(mail.folder_id, current ? +1 : -1);
+                            }
+                            // mark folder as expired in pool (needed for listviews to draw correct)
+                            api.pool.resetFolder(mail.folder_id);
+                        });
+                    });
+                });
+
+                api.pool.get('detail').on('remove', function (model) {
+                    if (!model) return;
+                    // check if removed message was unseen
+                    var unseen = util.isUnseen(model.get('flags'));
+                    checkForSync(model).done(function (modelsToSync) {
+                        _(modelsToSync).each(function (mail) {
+                            if (unseen) {
+                                folderAPI.changeUnseenCounter(mail.folder_id, -1);
+                            }
+                            // mark folder as expired in pool (needed for listviews to draw correct)
+                            api.pool.resetFolder(mail.folder_id);
+                        });
+                    });
+                });
+            });
         }
     });
 

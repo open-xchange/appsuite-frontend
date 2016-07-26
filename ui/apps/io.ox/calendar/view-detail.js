@@ -47,7 +47,9 @@ define('io.ox/calendar/view-detail', [
         draw: function (baton) {
             if (!baton.data.private_flag) return;
             this.append(
-                $('<i class="fa fa-lock private-flag" aria-hidden="true">'),
+                $('<i class="fa fa-lock private-flag" aria-hidden="true">')
+                .attr({ title: gt('Private'),
+                        'data-animation': 'false' }).tooltip(),
                 $('<span class="sr-only">').text(gt('Private'))
             );
         }
@@ -68,9 +70,9 @@ define('io.ox/calendar/view-detail', [
     ext.point('io.ox/calendar/detail').extend({
         index: 300,
         id: 'date-time',
-        draw: function (baton) {
+        draw: function (baton, options) {
             var node = $('<div class="date-time-recurrence">');
-            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton);
+            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton, options);
             this.append(node);
         }
     });
@@ -80,9 +82,9 @@ define('io.ox/calendar/view-detail', [
         {
             index: 100,
             id: 'date',
-            draw: function (baton) {
+            draw: function (baton, options) {
                 this.append(
-                    util.getDateTimeIntervalMarkup(baton.data)
+                    util.getDateTimeIntervalMarkup(baton.data, options)
                 );
             }
         },
@@ -378,8 +380,9 @@ define('io.ox/calendar/view-detail', [
             );
 
             if (calAPI.uploadInProgress(_.ecid(baton.data))) {
+                var progressview = new attachments.progressView({ cid: _.ecid(baton.data) });
                 this.append(
-                    $node.css({ width: '30%', height: '12px' }).busy()
+                    $node.append(progressview.render().$el)
                 );
             } else if (baton.data.number_of_attachments && baton.data.number_of_attachment !== 0) {
                 this.append($node);

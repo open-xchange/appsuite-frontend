@@ -214,7 +214,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         opt = _.extend({
             toolbar1: 'undo redo | bold italic | emoji | bullist numlist outdent indent',
-            advanced: 'styleselect fontselect fontsizeselect | forecolor backcolor | link image',
+            advanced: 'styleselect | fontselect fontsizeselect | forecolor backcolor | link image',
             toolbar2: '',
             toolbar3: '',
             plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',

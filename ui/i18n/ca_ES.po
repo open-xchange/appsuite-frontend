@@ -1049,6 +1049,12 @@ msgstr "Totes les carpetes"
 msgid "All attachments"
 msgstr "Tots els adjunts"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add contact"
+msgid "All contacts"
+msgstr "Afegeix contacte"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -4808,6 +4814,13 @@ msgstr "M'agrada"
 msgid "Liked comment"
 msgstr "Heu marcat \"M'agrada\" al comentari"
 
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d %2$s"
+msgid "Line %1$d: %2$s"
+msgstr "%1$d %2$s"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
@@ -5310,7 +5323,8 @@ msgid "My password"
 msgstr "La meua contrasenya"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr ""
 
@@ -6353,6 +6367,12 @@ msgid ""
 "to enable or disable specific tabs."
 msgstr ""
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
@@ -6648,6 +6668,7 @@ msgstr "Prioritat"
 #: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privat"
 
@@ -7382,6 +7403,7 @@ msgid ""
 "new ones"
 msgstr ""
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -7478,6 +7500,12 @@ msgstr "Envia per correu electrònic"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send feedback"
 msgstr "Envia el comentari"
+
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Send mail"
+msgid "Send link"
+msgstr "Envia correu"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -9343,6 +9371,12 @@ msgstr "En progrés"
 msgid "Uploading %1$s"
 msgstr "Pujant..."
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Afegeix-hi adjunts"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "No sestà permesa la pujada de carpetes."
@@ -9447,6 +9481,14 @@ msgstr "Avís d'absència"
 msgid "Version Comment"
 msgstr ""
 
+#. information about the currently displayed file version in viewer
+#. %1$d - version date
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Version of %1$s"
+msgstr "Venç el %1$s"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "Versions (%1$d)"
@@ -9464,9 +9506,10 @@ msgstr ""
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
+#: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
 msgid "View"
 msgstr "Vista"
 

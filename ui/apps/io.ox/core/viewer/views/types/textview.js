@@ -35,10 +35,20 @@ define('io.ox/core/viewer/views/types/textview', [
             return this;
         },
 
-        prefetch: function () {
+        /**
+         * "Prefetches" the text file
+         *
+         * @param {Object} options
+         *  @param {Object} options.version
+         *      an alternate version than the current version.
+         *
+         * @returns {TextView}
+         *  the TextView instance.
+         */
+        prefetch: function (options) {
             // simply load the document content via $.ajax
             var $el = this.$el.busy(),
-                previewUrl = this.getPreviewUrl();
+                previewUrl = this.getPreviewUrl(options);
             $.ajax({ url: previewUrl, dataType: 'text' }).done(function (text) {
                 $el.addClass('swiper-no-swiping');
                 $el.idle().append($('<div class="white-page letter plain-text">').text(text));

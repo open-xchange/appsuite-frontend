@@ -40,7 +40,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
             // special handling for text and spreadsheet
             options = /^io.ox\/office\//.test(data.app) ?
                 { action: 'load', file: { folder_id: data.folder, id: data.id } } :
-                _(data).pick('folder', 'folder_id', 'id');
+                _(data).pick('folder', 'folder_id', 'id', 'cid');
 
         ox.launch(data.app + '/main', options).done(function () {
             // special handling for settings (bad, but apparently solved differently)
@@ -112,7 +112,7 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
                     }
                     api.get(data).then(
                         function success(data) {
-                            popup.idle().append(view.draw(data));
+                            popup.idle().append(view.draw(data, { container: popup }));
                         },
                         function fail(e) {
                             sidepopup.close();

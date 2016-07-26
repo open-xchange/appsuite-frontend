@@ -58,7 +58,7 @@ define('io.ox/core/folder/favorites', [
                     return true;
                 });
                 _(list).each(api.injectIndex.bind(api, id));
-                model.set('subfolders', list.length > 0);
+                model.set('subscr_subflds', list.length > 0);
                 // if there was an error we update settings
                 if (list.length !== response.length) _.defer(storeCollection);
                 return list;

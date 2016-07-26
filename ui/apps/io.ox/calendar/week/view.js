@@ -1970,12 +1970,11 @@ define('io.ox/calendar/week/view', [
                 }
             }
 
-            if (String(folder.id) === String(a.get('folder_id'))) {
+            var folder_id = a.get('folder_id');
+            if (String(folder.id) === String(folder_id)) {
                 addColorClasses(folder);
-            } else {
-                folderAPI.get(a.get('folder_id')).done(function (f) {
-                    addColorClasses(f);
-                });
+            } else if (folder_id !== undefined) {
+                folderAPI.get(folder_id).done(addColorClasses);
             }
 
             if (a.get('private_flag') && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {

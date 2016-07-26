@@ -1044,6 +1044,12 @@ msgstr "Tous les dossiers"
 msgid "All attachments"
 msgstr "Toutes les pièces jointes"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add contact"
+msgid "All contacts"
+msgstr "Ajouter un contact"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -4766,6 +4772,13 @@ msgstr "J'aime"
 msgid "Liked comment"
 msgstr "Commentaire passé en « J'aime ça »"
 
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d %2$s"
+msgid "Line %1$d: %2$s"
+msgstr "%1$d %2$s"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
@@ -5255,7 +5268,8 @@ msgid "My password"
 msgstr "Mon mot de passe"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr "Mes partages"
 
@@ -6291,6 +6305,12 @@ msgstr ""
 "N'hésitez pas à renommer les onglets afin qu'ils satisfassent vos besoins. "
 "Utilisez les cases à cocher pour activer ou désactiver certains onglets."
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
@@ -6578,6 +6598,7 @@ msgstr "Priorité"
 #: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privé"
 
@@ -7308,6 +7329,7 @@ msgstr ""
 "affiner la recherche, veuillez ajuster les facettes actives ou en ajouter de "
 "nouvelles."
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -7405,6 +7427,12 @@ msgstr "Envoyer par courriel"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send feedback"
 msgstr "Envoyer mes impressions"
+
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Get link"
+msgid "Send link"
+msgstr "Obtenir le lien"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -9294,6 +9322,12 @@ msgstr "Avancement du téléchargement"
 msgid "Uploading %1$s"
 msgstr "Téléchargement de %1$s"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Joindre des pièces"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Le téléchargement de dossiers n'est pas pris en charge."
@@ -9398,6 +9432,14 @@ msgstr "Message d'absence"
 msgid "Version Comment"
 msgstr "Commentaire de version"
 
+#. information about the currently displayed file version in viewer
+#. %1$d - version date
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+#, fuzzy
+#| msgid "Versions (%1$d)"
+msgid "Version of %1$s"
+msgstr "Versions (%1$d)"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "Versions (%1$d)"
@@ -9415,9 +9457,10 @@ msgstr "Vidéos"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
+#: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
 msgid "View"
 msgstr "Vue"
 

@@ -29,6 +29,8 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         id: 'versions-list',
         draw: function (baton) {
             var model = baton && baton.model,
+                isViewer = Boolean(baton && baton.isViewer),
+                viewerEvents = baton && baton.viewerEvents,
                 versions = model && model.get('versions'),
                 panelHeading = this.find('.sidebar-panel-heading'),
                 panelBody = this.find('.sidebar-panel-body'),
@@ -42,7 +44,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 .each(function (version) {
                     var entryRow = $('<tr class="version">');
 
-                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version }));
+                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer }));
                     table.append(entryRow);
                 });
             }
@@ -60,7 +62,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             panelBody.empty();
             if (!model || !_.isArray(versions)) { return; }
 
-            table = $('<table>').addClass('versiontable table').attr('data-latest-version', _.last(versions).version).append(
+            table = $('<table>').addClass('versiontable table').attr('data-latest-version', (versions.length > 0) && _.last(versions).version).append(
                         $('<caption>').addClass('sr-only').text(gt('File version table, the first row represents the current version.')),
                         $('<thead>').addClass('sr-only').append(
                             $('<tr>').append(
@@ -82,6 +84,33 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         label: '',
         ref: 'io.ox/files/versions/links/inline'
     }));
+
+    // View a specific version
+    Ext.point('io.ox/files/versions/links/inline').extend(new LinksPattern.Link({
+        id: 'display-version',
+        index: 100,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('View'),
+        section: 'view',
+        ref: 'io.ox/files/actions/viewer/display-version'
+    }));
+
+    new LinksPattern.Action('io.ox/files/actions/viewer/display-version', {
+        capabilities: 'infostore',
+        requires: function (e) {
+            var isText = FilesAPI.Model.prototype.isText.call(this, e.baton.data.file_mimetype);
+            var isPDF = FilesAPI.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype);
+            var isOffice = FilesAPI.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype);
+
+            return (e.baton.isViewer && (isText || isPDF || isOffice));
+        },
+        action: function (baton) {
+            if (baton.viewerEvents) {
+                baton.viewerEvents.trigger('viewer:display:version', baton.data);
+            }
+        }
+    });
 
     // Extensions for the version detail table
     Ext.point(POINT + '/version').extend({
@@ -177,8 +206,14 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
         className: 'viewer-fileversions',
 
-        initialize: function () {
+        initialize: function (options) {
             PanelBaseView.prototype.initialize.apply(this, arguments);
+
+            _.extend(this, {
+                isViewer: Boolean(options && options.isViewer),
+                viewerEvents: options && options.viewerEvents || _.extend({}, Backbone.Events)
+            });
+
             // initially hide the panel
             this.$el.hide();
             // attach event handlers
@@ -223,7 +258,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
          */
         renderVersions: function () {
             if (!this.model) return this;
-            Ext.point(POINT + '/list').invoke('draw', this.$el, Ext.Baton({ model: this.model, data: this.model.toJSON() }));
+            Ext.point(POINT + '/list').invoke('draw', this.$el, Ext.Baton({ model: this.model, data: this.model.toJSON(), viewerEvents: this.viewerEvents, isViewer: this.isViewer }));
         },
 
         renderVersionsAsNeeded: function () {

@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities'], function (http, capabilities) {
+define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 'settings!io.ox/core'], function (http, capabilities, settings) {
 
     'use strict';
 
@@ -49,6 +49,10 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities'], f
                 //     data.quota = 50 * 1024 * 1024; // 50mb limit
                 //     data.use = 26 * 1024 * 1024; // 26mb in use
                 // }
+                // update settings (other source to get quota information)
+                if (this.type === 'filestore' && settings.get('properties/infostoreUsage') > 0) {
+                    settings.set('properties/infostoreUsage', data.use);
+                }
                 return this.set(data).toJSON();
             }.bind(this));
         }

@@ -78,7 +78,6 @@ define('io.ox/metrics/adapters/context', [
             store.add('setup');
         },
         trackEvent: function (baton) {
-            debugger;
             store.add('trackEvent', baton);
         },
         trackVisit: function (baton) {

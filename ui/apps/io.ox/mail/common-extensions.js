@@ -102,8 +102,8 @@ define('io.ox/mail/common-extensions', [
         date: function (baton, options) {
             var data = baton.data, t = data.received_date;
             options = _.extend({
-                fulldate: baton.app && baton.app.props.get('excactDates'),
-                smart: !(baton.app && baton.app.props.get('excactDates'))
+                fulldate: baton.app && baton.app.props.get('exactDates'),
+                smart: !(baton.app && baton.app.props.get('exactDates'))
             }, options);
             if (!_.isNumber(t)) return;
             this.append(
@@ -507,8 +507,11 @@ define('io.ox/mail/common-extensions', [
                 view.renderInlineLinks();
 
                 view.$el.on('click', 'li.item', function (e) {
+                    var node = $(e.currentTarget),
+                        clickTarget = $(e.target), id, data, baton;
 
-                    var node = $(e.currentTarget), id, data, baton;
+                    // skip if click was on the dropdown
+                    if (!clickTarget.attr('data-original')) return;
 
                     // skip attachments without preview
                     if (!node.attr('data-original')) return;

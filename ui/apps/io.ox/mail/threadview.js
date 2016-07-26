@@ -513,7 +513,7 @@ define('io.ox/mail/threadview', [
                 data: model.toJSON(),
                 disable: {
                     'io.ox/mail/detail': ['subject', 'actions'],
-                    'io.ox/mail/detail/header': ['unread-toggle', 'paper-clip'],
+                    'io.ox/mail/detail/header': ['paper-clip'],
                     'io.ox/mail/detail/header/row1': ['flag-picker']
                 }
             });

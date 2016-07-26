@@ -87,7 +87,8 @@ define('io.ox/core/api/attachment', [
                     attached: options.id,
                     folder: options.folder || options.folder_id
                 },
-                formData = new FormData();
+                formData = new FormData(),
+                cid = _.ecid(options);
 
             data = data || [];
             data = _.isArray(data) ? data : [data];
@@ -100,6 +101,8 @@ define('io.ox/core/api/attachment', [
                 params: params,
                 data: formData,
                 fixPost: true
+            }).progress(function (e) {
+                api.trigger('progress:' + cid, e);
             }).done(function () {
                 self.trigger('attach', {
                     module: options.module,

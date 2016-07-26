@@ -74,7 +74,11 @@ define('io.ox/core/viewer/views/types/baseview', [
          */
         getPreviewUrl: function (options) {
             if (this.model.isFile()) {
-                return FilesAPI.getUrl(this.model.toJSON(), 'thumbnail', options);
+                var modelJSON = this.model.toJSON();
+                if (options && !_.isEmpty(options.version)) {
+                    modelJSON.version = options.version;
+                }
+                return FilesAPI.getUrl(modelJSON, 'thumbnail', options);
 
             } else if (this.model.isMailAttachment()) {
                 return MailAPI.getUrl(this.model.get('origData'), 'view');

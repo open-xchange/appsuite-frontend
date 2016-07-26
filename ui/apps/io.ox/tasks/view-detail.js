@@ -19,9 +19,10 @@ define('io.ox/tasks/view-detail', [
     'io.ox/core/extPatterns/links',
     'io.ox/tasks/api',
     'io.ox/participants/detail',
+    'io.ox/core/tk/attachments',
     'io.ox/tasks/actions',
     'less!io.ox/tasks/style'
-], function (util, calendarUtil, gt, ext, links, api, ParticipantsView) {
+], function (util, calendarUtil, gt, ext, links, api, ParticipantsView, attachments) {
 
     'use strict';
 
@@ -64,7 +65,7 @@ define('io.ox/tasks/view-detail', [
                 task = baton.interpretedData,
                 title = $('<h1 class="title clear-title">').append(
                         // lock icon
-                        baton.data.private_flag ? $('<i class="fa fa-lock private-flag">') : [],
+                        baton.data.private_flag ? $('<i class="fa fa-lock private-flag">').attr({ title: gt('Private'), 'data-placement': 'bottom', 'data-animation': 'false' }).tooltip() : [],
                         // priority
                         $('<span class="priority">').append(
                             util.getPriority(task)
@@ -87,10 +88,9 @@ define('io.ox/tasks/view-detail', [
         draw: function (baton) {
             var task = baton.interpretedData;
             if (api.uploadInProgress(_.ecid(baton.data))) {
+                var progressview = new attachments.progressView({ cid: _.ecid(task) });
                 this.append($('<div>').addClass('attachments-container')
-                    .append(
-                        $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments'),
-                        $('<div>').css({ width: '70px', height: '12px', display: 'inline-block' }).busy()));
+                    .append(progressview.render().$el));
             } else if (task.number_of_attachments > 0) {
                 ext.point('io.ox/tasks/detail-attach').invoke('draw', this, task);
             }

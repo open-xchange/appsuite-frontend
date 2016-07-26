@@ -1064,6 +1064,12 @@ msgstr "Všechny složky"
 msgid "All attachments"
 msgstr "Všechny přílohy"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "All my contacts"
+msgid "All contacts"
+msgstr "Všechny mé kontakty"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -4722,6 +4728,13 @@ msgstr "To se mi líbí"
 msgid "Liked comment"
 msgstr "Komentář se vám líbí"
 
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d %2$s"
+msgid "Line %1$d: %2$s"
+msgstr "%1$d %2$s"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
@@ -5209,7 +5222,8 @@ msgid "My password"
 msgstr "Moje heslo"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr "Co sdílím"
 
@@ -6236,6 +6250,12 @@ msgstr ""
 "Karty můžete přejmenovat tak, aby se víc hodily vašim potřebám. Pro přidání "
 "nebo odstranění specifických karet použijte zaškrtávací políčka."
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
@@ -6521,6 +6541,7 @@ msgstr "Priorita"
 #: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Soukromé"
 
@@ -7249,6 +7270,7 @@ msgstr ""
 "pokročilá kritéria. Chcete-li vyhledávání zúžit, upravte aktivní kritéria, "
 "nebo přidejte nová"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -7346,6 +7368,12 @@ msgstr "Poslat ve zprávě"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send feedback"
 msgstr "Poslat zpětnou vazbu"
+
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Get link"
+msgid "Send link"
+msgstr "Získat odkaz"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -9205,6 +9233,12 @@ msgstr "Probíhá nahrávání"
 msgid "Uploading %1$s"
 msgstr "Nahrávám %1$s"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Přidat přílohy"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Nahrávání složek není podporované."
@@ -9308,6 +9342,14 @@ msgstr "Oznámení o nepřítomnosti"
 msgid "Version Comment"
 msgstr "Komentář k verzi"
 
+#. information about the currently displayed file version in viewer
+#. %1$d - version date
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+#, fuzzy
+#| msgid "Versions (%1$d)"
+msgid "Version of %1$s"
+msgstr "Verze (%1$d)"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "Versions (%1$d)"
@@ -9325,9 +9367,10 @@ msgstr "Videa"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
+#: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
 msgid "View"
 msgstr "Zobrazit"
 
@@ -11527,9 +11570,6 @@ msgstr "rrrr"
 
 #~ msgid "All changes saved"
 #~ msgstr "Všechny změny uloženy"
-
-#~ msgid "All my contacts"
-#~ msgstr "Všechny mé kontakty"
 
 #~ msgid "All times will be shown in the timezone %1$s"
 #~ msgstr "Všechny časy budou zobrazeny v časové zóně %1$s"

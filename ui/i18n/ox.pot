@@ -787,6 +787,15 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
+#: apps/io.ox/files/view-options.js
+#: module:io.ox/files
+#: apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
+msgid "Select"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js
 #: module:io.ox/core
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -952,6 +961,8 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
+#: apps/io.ox/tasks/view-detail.js
+#: module:io.ox/tasks
 msgid "Private"
 msgstr ""
 
@@ -1964,6 +1975,8 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js
 #: module:io.ox/core
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
+#: module:io.ox/core/viewer
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
 #: apps/io.ox/files/toolbar.js
@@ -2637,6 +2650,11 @@ msgstr ""
 #: apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
 msgid "Search"
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "All contacts"
 msgstr ""
 
 #. %1$d and %2$d are both numbers; usually > 100; never singular
@@ -4360,8 +4378,9 @@ msgstr ""
 
 #: apps/io.ox/core/folder/extensions.js
 #: module:io.ox/core
-#: apps/io.ox/files/share/view-options.js
+#: apps/io.ox/files/main.js
 #: module:io.ox/files
+#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr ""
 
@@ -4564,12 +4583,6 @@ msgstr ""
 msgid "Import from file"
 msgstr ""
 
-#. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js
-#: module:io.ox/core
-msgid "There was no appointment data to import"
-msgstr ""
-
 #. Error message if contact import failed
 #: apps/io.ox/core/import/import.js
 #: module:io.ox/core
@@ -4580,6 +4593,18 @@ msgstr ""
 #: apps/io.ox/core/import/import.js
 #: module:io.ox/core
 msgid "There was no task data to import"
+msgstr ""
+
+#. Error message if calendar import failed
+#: apps/io.ox/core/import/import.js
+#: module:io.ox/core
+msgid "There was no appointment data to import"
+msgstr ""
+
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js
+#: module:io.ox/core
+msgid "Line %1$d: %2$s"
 msgstr ""
 
 #: apps/io.ox/core/import/import.js
@@ -5684,6 +5709,11 @@ msgstr ""
 msgid "Add from Drive"
 msgstr ""
 
+#: apps/io.ox/core/tk/attachments.js
+#: module:io.ox/core
+msgid "Uploading attachments"
+msgstr ""
+
 #: apps/io.ox/core/tk/attachmentsUtil.js
 #: module:io.ox/core
 #: apps/io.ox/preview/main.js
@@ -6094,6 +6124,13 @@ msgstr[1] ""
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: module:io.ox/core
 msgid "Cannot require a view type for %1$s"
+msgstr ""
+
+#. information about the currently displayed file version in viewer
+#. %1$d - version date
+#: apps/io.ox/core/viewer/views/displayerview.js
+#: module:io.ox/core
+msgid "Version of %1$s"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
@@ -6870,6 +6907,11 @@ msgstr ""
 
 #: apps/io.ox/files/actions/share.js
 #: module:io.ox/files
+msgid "Send link"
+msgstr ""
+
+#: apps/io.ox/files/actions/share.js
+#: module:io.ox/files
 msgid "The link has been removed"
 msgstr ""
 
@@ -7545,13 +7587,6 @@ msgstr ""
 #: apps/io.ox/files/util.js
 #: module:io.ox/files
 msgid "Adjust"
-msgstr ""
-
-#: apps/io.ox/files/view-options.js
-#: module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js
-#: module:io.ox/settings
-msgid "Select"
 msgstr ""
 
 #: apps/io.ox/files/view-options.js
@@ -9401,6 +9436,11 @@ msgstr ""
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Inbox Tabs"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail
+msgid "Please note that conversations are not available when tabbed inbox is activated."
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js

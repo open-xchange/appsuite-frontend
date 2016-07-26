@@ -44,18 +44,28 @@ define('io.ox/mail/api', [
     // model pool
     var pool = Pool.create('mail');
 
-    // client-side fix for missing to/cc/bcc fields
-    if (settings.get('features/fixtoccbcc')) {
-        pool.map = function (data) {
-            var cid = _.cid(data), model = this.get(cid);
-            if (!model) return data;
+    var fixtoccbcc = settings.get('features/fixtoccbcc');
+
+    pool.map = function (data) {
+        var cid = _.cid(data), model = this.get(cid);
+        // merge specific headers
+        if (model && model.get('headers')) {
+            if (!data.headers) data.headers = {};
+            data.headers = _.extend(data.headers, model.get('headers'));
+        }
+
+        // next clean up needs model
+        if (!model) return data;
+        // client-side fix for missing to/cc/bcc fields
+        if (fixtoccbcc) {
+
             ['to', 'cc', 'bcc'].forEach(function (field) {
                 var list = model.get(field);
                 if (_.isArray(list) && list.length > 0) delete data[field];
             });
-            return data;
-        };
-    }
+        }
+        return data;
+    };
 
     // generate basic API
     var api = apiFactory({
@@ -279,6 +289,8 @@ define('io.ox/mail/api', [
                     attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
                 }
             });
+            // fixup strange mail ids for unified mail folders (remove when bug 47261 is fixed)
+            data.id = decodeURIComponent(data.id);
             // either update or add model
             if (model) {
                 // if we already have a model we promote changes for threads
@@ -924,7 +936,7 @@ define('io.ox/mail/api', [
                     var draftsFolder = accountAPI.getFoldersByType('drafts');
                     pool.resetFolder(draftsFolder);
                     folderAPI.reload(draftsFolder);
-                    api.trigger('autosave refresh.all');
+                    api.trigger('autosave');
                     return result;
                 })
             );
@@ -1796,7 +1808,6 @@ define('io.ox/mail/api', [
     api.collectionLoader = new CollectionLoader({
         module: 'mail',
         getQueryParams: function (params) {
-            var shareAttachmentsString = settings.get('compose/shareAttachments/enabled', false) ? ',X-Open-Xchange-Share-URL' : '';
             // is all unseen?
             if (params.folder === 'virtual/all-unseen') {
                 return {
@@ -1814,7 +1825,7 @@ define('io.ox/mail/api', [
                 return {
                     action: 'threadedAll',
                     folder: params.folder,
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656',
+                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
                     sort: '610',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
@@ -1825,7 +1836,7 @@ define('io.ox/mail/api', [
             return {
                 action: 'all',
                 folder: params.folder,
-                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656' + shareAttachmentsString,
+                columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
                 sort: params.sort || '610',
                 order: params.order || 'desc',
                 timezone: 'utc',
@@ -1844,15 +1855,6 @@ define('io.ox/mail/api', [
             var isAllUnseen = params.folder === 'default0/virtual/all' && params.sort === '651';
             if (isAllUnseen) params.limit = '0,250';
             return http.GET({ module: module, params: params }).then(function (data) {
-                _.each(data, function (obj) {
-                    if (settings.get('compose/shareAttachments/enabled', false)) {
-                        if (obj['X-Open-Xchange-Share-URL']) {
-                            if (!obj.headers) obj.headers = {};
-                            obj.headers['X-Open-Xchange-Share-URL'] = obj['X-Open-Xchange-Share-URL'];
-                        }
-                        delete obj['X-Open-Xchange-Share-URL'];
-                    }
-                });
                 // drop all seen messages for all-unseen
                 return isAllUnseen ? _(data).filter(filterAllSeen) : data;
             });
@@ -1925,6 +1927,13 @@ define('io.ox/mail/api', [
     };
 
     api.collectionLoader.each = function (obj, index, offset, params) {
+        // copy special header
+        if (obj['X-Open-Xchange-Share-URL'] && !obj.headers) {
+            obj.headers = { 'X-Open-Xchange-Share-URL': obj['X-Open-Xchange-Share-URL'] };
+            delete obj['X-Open-Xchange-Share-URL'];
+        }
+        // fixup strange mail ids for unified mail folders (remove when bug 47261 is fixed)
+        obj.id = decodeURIComponent(obj.id);
         if (params.action === 'threadedAll') api.processThreadMessage(obj); else api.pool.add('detail', obj);
     };
 

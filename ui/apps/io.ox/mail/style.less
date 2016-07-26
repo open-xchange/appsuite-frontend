@@ -1020,6 +1020,12 @@ textarea.inplace-editor {
 
         padding: 0;
 
+        a.unread-toggle {
+            left: 16px;
+            float: left;
+            top: -3px;
+        }
+
         & > .thread-view-header {
             padding-bottom: 10px;
             background-color: #aaa;
@@ -1046,8 +1052,8 @@ textarea.inplace-editor {
 
         .from, .recipients, .date {
             white-space: normal;
-            overflow: visible;
-            text-overflow: clip;
+            overflow: hidden;
+            text-overflow: ellipsis;
             font-size: @phone-font-size;
             line-height: @phone-line-height;
         }
@@ -1087,7 +1093,7 @@ textarea.inplace-editor {
             padding: 0;
             min-height: auto;
 
-            .from { padding: (@default-padding / 2) 8px 0 @default-padding; }
+            .from { padding: (@default-padding / 2) 8px 0 @default-padding + 8; }
 
             time  { padding: (@default-padding / 2) @default-padding 0 0; }
 

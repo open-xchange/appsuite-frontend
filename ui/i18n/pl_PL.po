@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-08 17:16+0200\n"
+"PO-Revision-Date: 2016-06-08 18:41+0200\n"
 "Last-Translator: \n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl_PL\n"
@@ -1062,6 +1062,12 @@ msgstr "Wszystkie foldery"
 #: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "All attachments"
 msgstr "Wszystkie załączniki"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add contact"
+msgid "All contacts"
+msgstr "Dodaj kontakt"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3282,8 +3288,8 @@ msgstr "Powiadomienia e-mail"
 msgid ""
 "Emails cannot be put into trash folder while your mail quota is exceeded."
 msgstr ""
-"W przypadku przekroczenia limitu miejsca na pocztę nie można przenosić "
-"wiadomości e-mail do folderu kosza."
+"Po przekroczeniu limitu miejsca na pocztę nie można przenosić wiadomości e-"
+"mail do folderu kosza."
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Employee"
@@ -4761,6 +4767,13 @@ msgstr "Polub"
 msgid "Liked comment"
 msgstr "Polubiony komentarz"
 
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d %2$s"
+msgid "Line %1$d: %2$s"
+msgstr "%1$d %2$s"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
@@ -4920,7 +4933,7 @@ msgstr "Wiadomość nie ma adresata."
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
-msgstr "Ograniczenie miejsca na pocztę"
+msgstr "Zajętość skrzynki"
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Mail quota exceeded"
@@ -5248,7 +5261,8 @@ msgid "My password"
 msgstr "Moje hasło"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr "Moje udostępnienia"
 
@@ -6275,6 +6289,12 @@ msgstr ""
 "Możesz zmienić nazwy kart stosownie do własnych potrzeb. Aby włączyć lub "
 "wyłączyć określone karty, użyj pól wyboru."
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
@@ -6559,6 +6579,7 @@ msgstr "Priorytet"
 #: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Prywatne"
 
@@ -7290,6 +7311,7 @@ msgstr ""
 "aspektów znajdują się dodatkowe, zaawansowane aspekty. Aby zawęzić wyniki "
 "wyszukiwania, dostosuj aktywne aspekty lub dodaj nowe."
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -7388,6 +7410,12 @@ msgstr "Wyślij w wiadomości e-mail"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send feedback"
 msgstr "Wyślij opinię"
+
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Get link"
+msgid "Send link"
+msgstr "Uzyskaj łącze"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -9271,6 +9299,12 @@ msgstr "Postęp przesyłania"
 msgid "Uploading %1$s"
 msgstr "Przesyłanie %1$s"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Dodaj załączniki"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Przesyłanie folderów nie jest obsługiwane."
@@ -9375,6 +9409,14 @@ msgstr "Zawiadomienie o urlopie"
 msgid "Version Comment"
 msgstr "Komentarz na temat wersji"
 
+#. information about the currently displayed file version in viewer
+#. %1$d - version date
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+#, fuzzy
+#| msgid "Versions (%1$d)"
+msgid "Version of %1$s"
+msgstr "Wersje (%1$d)"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "Versions (%1$d)"
@@ -9392,9 +9434,10 @@ msgstr "Filmy"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
+#: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
 msgid "View"
 msgstr "Widok"
 

@@ -613,7 +613,7 @@ define('io.ox/mail/compose/view', [
 
             var timeout = settings.get('autoSaveDraftsAfter', false),
                 timerScale = {
-                    //60s
+                    seconds: 1000,
                     minute: 60000,
                     minutes: 60000
                 },

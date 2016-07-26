@@ -76,13 +76,20 @@ define('io.ox/files/actions', [
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                return util.conditionChain(
-                    e.collection.has('one', 'modify'),
-                    !util.hasStatus('lockedByOthers', e),
-                    (/\.(csv|txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
-                    (e.baton.openedBy !== 'io.ox/mail/compose'),
-                    util.isFolderType('!trash', e.baton)
-                );
+                return api.versions.load(e.baton.data).then(function (versions) {
+                    var current = _.isArray(versions) && _.some(versions, function (item) {
+                        return item.current_version && item.version === e.baton.data.version;
+                    });
+
+                    return util.conditionChain(
+                        current,
+                        e.collection.has('one', 'modify'),
+                        !util.hasStatus('lockedByOthers', e),
+                        (/\.(csv|txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
+                        (e.baton.openedBy !== 'io.ox/mail/compose'),
+                        util.isFolderType('!trash', e.baton)
+                    );
+                });
             },
             action: function (baton) {
                 if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) {
@@ -206,6 +213,10 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (e.collection.has('multiple')) return false;
             if (e.collection.has('folders')) return false;
+            // no 'open' menu entry for office documents, PDF and plain text
+            if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
+            if (api.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype)) return false;
+            if (api.Model.prototype.isText.call(this, e.baton.data.file_mimetype)) return false;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
@@ -970,6 +981,16 @@ define('io.ox/files/actions', [
         mobile: 'lo',
         label: gt('Open'),
         ref: 'io.ox/files/actions/open'
+    }));
+
+    ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
+        id: 'editor',
+        index: 150,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Edit'),
+        section: 'edit',
+        ref: 'io.ox/files/actions/editor'
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({

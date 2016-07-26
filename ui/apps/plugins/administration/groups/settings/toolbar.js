@@ -41,8 +41,10 @@ define('plugins/administration/groups/settings/toolbar', [
     new Action('administration/groups/edit', {
         requires: function (e) {
             if (!e.collection.has('one')) return false;
-            // not allowed for "All users" (id=0); "Standard group" (id=1) can be edited
-            return _(e.context).pluck('id').indexOf(0) === -1;
+            // not allowed for "All users" (id=0) and "Guests" (id=2147483647)
+            // Standard group" (id=1) can be edited
+            var id = e.context[0].id;
+            return id !== 0 && id !== 2147483647;
         },
         action: function (baton) {
             var data = baton.data[0];
@@ -53,8 +55,9 @@ define('plugins/administration/groups/settings/toolbar', [
     new Action('administration/groups/delete', {
         requires: function (e) {
             if (!e.collection.has('one')) return false;
-            // not allowed for "All users" (id=0) and "Standard group" (id=0)
-            return _(e.context).pluck('id').indexOf(0) === -1 && _(e.context).pluck('id').indexOf(1) === -1;
+            // not allowed for "All users" (id=0), "Standard group" (id=1), and "Guests" (id=2147483647)
+            var id = e.context[0].id;
+            return id !== 0 && id !== 1 && id !== 2147483647;
         },
         action: function (baton) {
             var id = baton.data[0].id, model = groupAPI.getModel(id);

@@ -1062,6 +1062,12 @@ msgstr "Všetky priečinky"
 msgid "All attachments"
 msgstr "Všetky prílohy"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add contact"
+msgid "All contacts"
+msgstr "Pridať člena"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -4746,6 +4752,13 @@ msgstr "Páči sa mi to"
 msgid "Liked comment"
 msgstr "Komentár, ktorý sa páčil"
 
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d %2$s"
+msgid "Line %1$d: %2$s"
+msgstr "%1$d %2$s"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
@@ -5233,7 +5246,8 @@ msgid "My password"
 msgstr "Moje heslo"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr "Moje zdieľania"
 
@@ -6260,6 +6274,12 @@ msgstr ""
 "Prosím, neváhajte premenovať karty, aby lepšie zodpovedali vašim potrebám. "
 "Zaškrtávacím políčkom zapnete alebo vypnete jednotlivé karty."
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid ""
+"Please note that conversations are not available when tabbed inbox is "
+"activated."
+msgstr ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
@@ -6545,6 +6565,7 @@ msgstr "Priorita"
 #: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Súkromné"
 
@@ -7275,6 +7296,7 @@ msgstr ""
 "bežne používané pokročilé filtre. Ak chcete zúžiť výsledky vyhľadávania, "
 "prosím, upravte aktívne filtre alebo pridajte nové."
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Select"
@@ -7372,6 +7394,12 @@ msgstr "Poslať emailom"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send feedback"
 msgstr "Poslať spätnú väzbu"
+
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Get link"
+msgid "Send link"
+msgstr "Získať odkaz"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -9239,6 +9267,12 @@ msgstr "Priebeh nahrávania"
 msgid "Uploading %1$s"
 msgstr "Nahráva sa %1$s"
 
+#: apps/io.ox/core/tk/attachments.js module:io.ox/core
+#, fuzzy
+#| msgid "Add attachments"
+msgid "Uploading attachments"
+msgstr "Pridať prílohy"
+
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
 msgstr "Nahrávanie priečinkov nie je podporované."
@@ -9342,6 +9376,14 @@ msgstr "Oznámenie o dovolenke"
 msgid "Version Comment"
 msgstr "Komentár k verzii"
 
+#. information about the currently displayed file version in viewer
+#. %1$d - version date
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+#, fuzzy
+#| msgid "Versions (%1$d)"
+msgid "Version of %1$s"
+msgstr "Verzie (%1$d)"
+
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "Versions (%1$d)"
@@ -9359,9 +9401,10 @@ msgstr "Videá"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
+#: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
 msgid "View"
 msgstr "Zobraziť"
 

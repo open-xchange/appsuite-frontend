@@ -34,6 +34,14 @@ define('io.ox/mail/categories/main', [
         console.error("mail/categories/main: capababilty 'mail_categories' missing");
     }
 
+    // do not clutter hash
+    ox.on('app:start app:resume', function (app) {
+        // restore
+        if (app && app.id === 'io.ox/mail') return module.restoreSelection();
+        // reset
+        _.url.hash('category', null);
+    });
+
     var DEBUG = false,
         // category config propertys that should be synced
         SYNCED = ['id', 'name', 'active'],
@@ -493,9 +501,13 @@ define('io.ox/mail/categories/main', [
         },
         update: function (categories) {
             this.categories.set(categories);
+            // we have to wait until changes reach middleware
             _.delay(function () {
-                // we have to wait until changes reach middleware
-                this.reload();
+                var selected = this.categories.get(this.props.get('selected'));
+                if (selected.is('active')) return this.reload();
+                // current tab disabled? use first active tab...
+                var head = this.categories.findWhere({ active: true });
+                this.select(head.get('id'));
             }.bind(this), 2000);
             this.trigger('update:after');
         },
