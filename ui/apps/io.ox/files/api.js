@@ -1000,7 +1000,7 @@ define('io.ox/files/api', [
                 // return id and folder id only
                 var data = result.data.file, obj = _(data).pick('id', 'folder_id');
                 // trigger proper event
-                if (result.save_action === 'new_version') {
+                if (result.data.save_action === 'new_version') {
                     // new version
                     var model = api.pool.get('detail').get(_.cid(obj));
                     if (model) model.set('id', data.id);
