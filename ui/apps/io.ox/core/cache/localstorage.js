@@ -231,6 +231,12 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
                 toDelete;
 
             fileList.push('file-toc');
+
+            // This key is used for office replacement web-fonts that are stored in localStorage.
+            // They should never be deleted out of the localStorage when possible
+            // (e.g. do not delete them at logout).
+            fileList.push('appsuite.office-fonts');
+
             toDelete = _.difference(allKeys, fileList);
 
             _(toDelete).each(function (key) {
