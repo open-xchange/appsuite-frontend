@@ -127,12 +127,22 @@ define('io.ox/find/date/patterns',[
     var lookup = (function () {
         var hash = {},
             tree = {},
-            locale = moment.localeData(),
-            weekdays = locale._weekdays,
-            months = locale._months,
+            weekdays = getSingleValueList(moment.weekdays()),
+            months = getSingleValueList(moment.months()),
             currentMonth = moment().month(),
             currentYear = moment().year(),
             year;
+
+        // resolve '(foo|bar)' entries
+        function getSingleValueList(list) {
+            // f.e. polish is special (nominative, subjective)
+            return _.map(list, function (value) {
+                // single value
+                if (value[0] !== '(') return value;
+                // first of multiple value
+                return /\((.+)\|.*\)/.exec(value)[1];
+            });
+        }
 
         // Add to hash
         function add(values, index, obj) {
