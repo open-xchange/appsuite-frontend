@@ -163,34 +163,34 @@ define(['io.ox/core/util'], function (util) {
             });
 
             it('recognizes a simple URL', function () {
-                expect(util.urlify('http://www.foo.com/path')).to.equal('<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>');
+                expect(util.urlify('http://www.foo.com/path')).to.equal('<a href="http://www.foo.com/path" target="_blank" rel="noopener">http://www.foo.com/path</a>');
             });
 
             it('recognizes a simple URL (uppercase)', function () {
-                expect(util.urlify('HTTP://www.foo.com/path')).to.equal('<a href="HTTP://www.foo.com/path" target="_blank">HTTP://www.foo.com/path</a>');
+                expect(util.urlify('HTTP://www.foo.com/path')).to.equal('<a href="HTTP://www.foo.com/path" target="_blank" rel="noopener">HTTP://www.foo.com/path</a>');
             });
 
             it('recognizes a secure URL', function () {
-                expect(util.urlify('https://www.foo.com/path')).to.equal('<a href="https://www.foo.com/path" target="_blank">https://www.foo.com/path</a>');
+                expect(util.urlify('https://www.foo.com/path')).to.equal('<a href="https://www.foo.com/path" target="_blank" rel="noopener">https://www.foo.com/path</a>');
             });
 
             it('recognizes a simple URL within text', function () {
-                expect(util.urlify('Lorem ipsum http://www.foo.com/path Lorem ipsum')).to.equal('Lorem ipsum <a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a> Lorem ipsum');
+                expect(util.urlify('Lorem ipsum http://www.foo.com/path Lorem ipsum')).to.equal('Lorem ipsum <a href="http://www.foo.com/path" target="_blank" rel="noopener">http://www.foo.com/path</a> Lorem ipsum');
             });
 
             it('recognizes multiple simple URL', function () {
-                expect(util.urlify('Lorem ipsum http://www.foo.com/path Lorem ipsum http://www.foo.com/path Lorem ipsum')).to.equal('Lorem ipsum <a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a> Lorem ipsum <a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a> Lorem ipsum');
+                expect(util.urlify('Lorem ipsum http://www.foo.com/path Lorem ipsum http://www.foo.com/path Lorem ipsum')).to.equal('Lorem ipsum <a href="http://www.foo.com/path" target="_blank" rel="noopener">http://www.foo.com/path</a> Lorem ipsum <a href="http://www.foo.com/path" target="_blank" rel="noopener">http://www.foo.com/path</a> Lorem ipsum');
             });
 
             it('recognizes a URLs across newlines', function () {
-                expect(util.urlify('Lorem ipsum\nhttp://www.foo.com/path\nLorem ipsum')).to.equal('Lorem ipsum\n<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>\nLorem ipsum');
+                expect(util.urlify('Lorem ipsum\nhttp://www.foo.com/path\nLorem ipsum')).to.equal('Lorem ipsum\n<a href="http://www.foo.com/path" target="_blank" rel="noopener">http://www.foo.com/path</a>\nLorem ipsum');
             });
 
             it('handles punctuation marks properly', function () {
-                expect(util.urlify('http://www.foo.com/path.')).to.equal('<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>.');
-                expect(util.urlify('http://www.foo.com/path!')).to.equal('<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>!');
-                expect(util.urlify('http://www.foo.com/path?')).to.equal('<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>?');
-                expect(util.urlify('<http://www.foo.com/path>')).to.equal('<<a href="http://www.foo.com/path" target="_blank">http://www.foo.com/path</a>>');
+                expect(util.urlify('http://www.foo.com/path.')).to.equal('<a href="http://www.foo.com/path" target="_blank" rel="noopener">http://www.foo.com/path</a>.');
+                expect(util.urlify('http://www.foo.com/path!')).to.equal('<a href="http://www.foo.com/path" target="_blank" rel="noopener">http://www.foo.com/path</a>!');
+                expect(util.urlify('http://www.foo.com/path?')).to.equal('<a href="http://www.foo.com/path" target="_blank" rel="noopener">http://www.foo.com/path</a>?');
+                expect(util.urlify('<http://www.foo.com/path>')).to.equal('<<a href="http://www.foo.com/path" target="_blank" rel="noopener">http://www.foo.com/path</a>>');
             });
         });
     });
