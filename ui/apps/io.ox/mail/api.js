@@ -1749,7 +1749,7 @@ define('io.ox/mail/api',
             // strip tags
             .replace(/<[^>]+(>|$)/g, '')
             // links
-            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>')
+            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank" rel="noopener">http$2://...</a>')
             // convert to simple white space
             .replace(/&#160;/g, ' ')
             // reduce consecutive white space

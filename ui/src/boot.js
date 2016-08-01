@@ -88,6 +88,16 @@ $(window).load(function () {
         });
     }
 
+    // Prevent Content Spoofing
+    // See: https://mathiasbynens.github.io/rel-noopener/
+    // and: https://github.com/danielstjules/blankshield
+    blankshield.patch();
+    $(document).on('click', 'a[rel="noopener"]', function (e) {
+        e.preventDefault();
+        window.open($(this).attr('href'));
+    });
+
+
     //ugly device hack
     //if device small wait 10ms check again
     //maybe the check was made too early could be wrong

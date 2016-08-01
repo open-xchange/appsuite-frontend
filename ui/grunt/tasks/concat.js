@@ -41,6 +41,7 @@ module.exports = function (grunt) {
                              'src/browser.js',
                              'src/plugins.js',
                              'src/jquery.plugins.js',
+                             'bower_components/blankshield/blankshield.js',
                              // add bootstrap JavaScript
                              'bower_components/bootstrap/js/transition.js',
                              'bower_components/bootstrap/js/alert.js',
