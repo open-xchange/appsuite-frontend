@@ -44,7 +44,7 @@ define('plugins/administration/groups/settings/edit', [
                 id: 'view',
                 index: 100,
                 draw: function (member) {
-                    this.append($('<div>').html(member.getFullName()));
+                    this.append($('<div>').html(member.getFullNameHTML()));
                 }
             });
         },
