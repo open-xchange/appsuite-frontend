@@ -47,6 +47,8 @@ define('io.ox/metrics/adapters/analytics', [
             window.ga('create', id, 'auto');
             // options
             window.ga('set', 'anonymizeIp', true);
+            // we are using the analytics user id here
+            // https://developers.google.com/analytics/devguides/collection/analyticsjs/cookies-user-id
             //window.ga('set', 'userId', this.getUserHash());
             // lazy
             require([url]);
