@@ -405,7 +405,7 @@ define('io.ox/contacts/view-detail', [
 
         return function () {
             $(this).append(
-                $('<a class="google-maps" target="_blank">')
+                $('<a class="google-maps" target="_blank" rel="noopener">')
                     .attr('href', 'http://www.google.com/maps?q=' + encodeURIComponent(text.replace(/\n*/, '\n').trim().replace(/\n/g, ', ')))
                     .attr('data-property', type)
                     .append(

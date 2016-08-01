@@ -331,6 +331,7 @@ define('io.ox/mail/detail/content', [
                         link.text(text);
                     }
                 }
+                if (link.attr('href')) link.attr('rel', 'noopener');
             });
         }
     });
