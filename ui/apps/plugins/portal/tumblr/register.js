@@ -129,7 +129,7 @@ define('plugins/portal/tumblr/register', [
                     postTitle = function () {
                         var title = $('<h2>').text(_.noI18n(post.title));
                         if (post.url || post.post_url) {
-                            return $('<a>', { href: post.url || post.post_url, target: '_blank' }).append(title);
+                            return $('<a target="_blank" rel="noopener">', { href: post.url || post.post_url }).append(title);
                         }
                         return title;
                     },
@@ -142,7 +142,7 @@ define('plugins/portal/tumblr/register', [
                             tagBaseUri = '//' + post.blog_name + '.tumblr.com/tagged/';
                         if (post.tags && post.tags.length > 0) {
                             _(post.tags).each(function (tag) {
-                                tags.push($('<a>', { href: tagBaseUri + tag, target: '_blank' })
+                                tags.push($('<a target="_blank" rel="noopener">').attr('href', tagBaseUri + tag)
                                     .addClass('tag').text(tag).prepend($('<i class="fa fa-tag" aria-hidden="true">')));
                             });
                         }
@@ -164,7 +164,7 @@ define('plugins/portal/tumblr/register', [
                                 'margin-bottom': '13px'
                             });
                             if (post.post_url || post.link_url) {
-                                return $('<a>', { href: post.post_url || post.link_url, target: '_blank' }).append(img);
+                                return $('<a target="_blank" rel="noopener">').attr('href', post.post_url || post.link_url).append(img);
                             }
                             return img;
                         }
@@ -183,10 +183,10 @@ define('plugins/portal/tumblr/register', [
                             .append($('<em>').text(_.escape($.trim(post.source))));
                     },
                     postLink = function () {
-                        return $('<a>', { href: post.post_url, target: '_blank', title: gt('Read article on tumblr.com') }).append($('<i class="icon-tumblr-sign">'));
+                        return $('<a target="_blank" rel="noopener">').attr({ href: post.post_url, title: gt('Read article on tumblr.com') }).append($('<i class="icon-tumblr-sign">'));
                     },
                     postExternalLink = function () {
-                        return $('<a>', { href: post.url, target: '_blank', title: gt('Open external link') }).append($('<i class="fa fa-external-link-square" aria-hidden="true">'));
+                        return $('<a target="_blank" rel="noopener">').attr({ href: post.url, title: gt('Open external link') }).append($('<i class="fa fa-external-link-square" aria-hidden="true">'));
                     },
                     postNav = function () {
                         var nav = $('<div class="post-bar">');
