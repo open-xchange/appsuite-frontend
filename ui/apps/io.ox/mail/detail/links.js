@@ -276,7 +276,7 @@ define('io.ox/mail/detail/links',
             return '';
         });
 
-        var link = $('<a href="#" target="_blank">').attr('href', url).text(url);
+        var link = $('<a href="#" target="_blank" rel="noopener">').attr('href', url).text(url);
 
         return { node: node, prefix: prefix, replacement: link, suffix: suffix };
     }

@@ -1,5 +1,5 @@
 {
-  "name": "OX App Suite",
+  "name": "ox-appsuite",
   "version": "7.6",
   "private": true,
   "ignore": [
@@ -31,7 +31,8 @@
     "jquery.lazyload": "https://github.com/Open-Xchange-Frontend/jquery_lazyload.git#aac4435ac7c09de8f271d82a761ad2442fb37c72",
     "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#b90b45fca2e8c8baea66372154f0ba21c9c615c3",
     "typeahead.js": "0.10.5",
-    "marked": "~0.3.3"
+    "marked": "~0.3.3",
+    "blankshield": "^0.6.0"
   },
   "resolutions": {
     "jquery": "2.1.1",

@@ -107,7 +107,7 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
                     return '';
                 });
                 // soft-break long words (like long URLs)
-                return '<a href="' + $1 + '" target="_blank">' + that.breakableHTML($1) + '</a>' + suffix;
+                return '<a href="' + $1 + '" target="_blank" rel="noopener">' + that.breakableHTML($1) + '</a>' + suffix;
             });
         },
 
