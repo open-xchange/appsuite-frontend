@@ -353,7 +353,9 @@ define('io.ox/core/viewer/views/sidebarview', [
                 file: _.first(files),
                 id: this.model.get('id'),
                 folder: this.model.get('folder_id'),
-                version_comment: ''
+                version_comment: '',
+                // If file already encrypted, update should also be encrypted
+                params: this.model.isEncrypted() ? { 'cryptoAction': 'Encrypt' } : {}
             })
             .fail(notify);
         },
