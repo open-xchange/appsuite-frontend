@@ -332,7 +332,67 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: 'io.ox/core/tk/actions/save-attachment'
                 }
             },
-            guard: {
+            guardDrive: {
+                'rename': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Rename'),
+                    section: 'edit',
+                    ref: 'oxguard/rename'
+                },
+                'editdescription': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Edit description'),
+                    section: 'edit',
+                    ref: 'io.ox/files/actions/edit-description'
+                },
+                'download': {
+                    prio: 'hi',
+                    mobile: 'lo',
+                    icon: 'fa fa-download',
+                    label: gt('Download'),
+                    section: 'export',
+                    ref: 'oxguard/download'
+                },
+                'open': {
+                    prio: 'lo',
+                    mobile: 'hi',
+                    icon: 'fa fa-download',
+                    label: gt('Open attachment'),
+                    section: 'export',
+                    ref: 'oxguard/open'
+                },
+                'sendbymail': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Send by mail'),
+                    section: 'share',
+                    ref: 'oxguard/sendcopy'
+                },
+                'addtoportal': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Add to portal'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/add-to-portal'
+                },
+                'uploadnewversion': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Upload new version'),
+                    section: 'import',
+                    ref: 'io.ox/files/actions/upload-new-version'
+                },
+                'delete': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Delete'),
+                    section: 'delete',
+                    ref: 'io.ox/files/actions/delete'
+                }
+            },
+            guardMail: {
             }
         };
     // create 3 extension points containing each sets of links for Drive, Mail, and PIM apps
