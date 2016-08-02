@@ -73,6 +73,9 @@ define('io.ox/core/viewer/views/types/baseview', [
          * @returns {String} previewURL
          */
         getPreviewUrl: function (options) {
+            if (this.model.get('file_options')) {
+                options = _.extend(options, this.model.get('file_options'));
+            }
             if (this.model.isFile()) {
                 var modelJSON = this.model.toJSON();
                 if (options && !_.isEmpty(options.version)) {
@@ -87,7 +90,8 @@ define('io.ox/core/viewer/views/types/baseview', [
                 return AttachmentAPI.getUrl(this.model.get('origData'), 'view');
 
             } else if (this.model.isEncrypted()) {
-                return (this.model.get('guardUrl'));
+                // Guard
+                return (this.model.get('guardUrl')); // Will eventually be removed
             }
             return null;
         },
