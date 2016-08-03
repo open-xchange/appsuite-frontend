@@ -87,6 +87,7 @@ define('io.ox/metrics/main', [
         getUserHash: function () {
             return userhash;
         },
+        getFolderFlags: util.getFolderFlags,
         isEnabled: isEnabled
     };
 
