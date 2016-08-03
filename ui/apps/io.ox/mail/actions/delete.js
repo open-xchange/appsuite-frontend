@@ -41,8 +41,8 @@ define('io.ox/mail/actions/delete', [
                     $('<div>').text(gt('Emails cannot be put into trash folder while your mail quota is exceeded.')),
                     $('<div>').text(getQuestion(list))
                 )
-                .addPrimaryButton('delete', gt('Delete'), 'delete', { tabIndex: 1 })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                .addPrimaryButton('delete', gt('Delete'), 'delete')
+                .addButton('cancel', gt('Cancel'), 'cancel')
                 .on('delete', function () {
                     // true -> force
                     api.remove(list, list, true);
@@ -86,8 +86,8 @@ define('io.ox/mail/actions/delete', [
                         .append(
                             $('<h4>').text(getQuestion(list))
                         )
-                        .addPrimaryButton('delete', gt('Delete'), 'delete', { tabIndex: 1 })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                        .addPrimaryButton('delete', gt('Delete'), 'delete')
+                        .addButton('cancel', gt('Cancel'), 'cancel')
                         .on('delete', function () {
                             api.remove(list, all).fail(notifications.yell);
                         }).show();

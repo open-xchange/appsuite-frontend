@@ -27,7 +27,7 @@ define('io.ox/core/tk/text-editor', [
         }, opt);
 
         $(textarea).append(
-            textarea = $('<textarea>').attr('tabindex', 1).addClass('plain-text')
+            textarea = $('<textarea class="plain-text">')
         );
         textarea.toggleClass('monospace', opt.useFixedWidthFont);
 

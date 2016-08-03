@@ -131,7 +131,7 @@ define('io.ox/core/folder/favorites', [
     }
 
     function a(action, text) {
-        return $('<a href="#" tabindex="1" role="menuitem">')
+        return $('<a href="#" role="menuitem">')
             .attr('data-action', action).text(text)
             // always prevent default
             .on('click', $.preventDefault);

@@ -134,7 +134,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             // add plain text tail or clickable link
             if (isLast && !this.notail) node = $('<span class="breadcrumb-tail">');
             else if (!this.handler || isDisabled) node = $('<span class="breadcrumb-item">');
-            else node = $('<a href="#" role="button" class="breadcrumb-link" tabindex="1">').attr('href', api.getDeepLink(data));
+            else node = $('<a href="#" role="button" class="breadcrumb-link">').attr('href', api.getDeepLink(data));
 
             node.attr('data-id', data.id).text(
                 isLast ? data.title : _.ellipsis(data.title, { max: 20 })

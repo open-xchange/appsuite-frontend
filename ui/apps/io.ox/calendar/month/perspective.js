@@ -122,8 +122,8 @@ define('io.ox/calendar/month/perspective', [
                         });
 
                         dialog.append(conflictView.drawList(con.conflicts, dialog))
-                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 })
-                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore')
+                            .addButton('cancel', gt('Cancel'), 'cancel')
                             .show()
                             .done(function (action) {
                                 if (action === 'cancel') {
@@ -142,8 +142,8 @@ define('io.ox/calendar/month/perspective', [
             if (obj.recurrence_type > 0) {
                 new dialogs.ModalDialog()
                     .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
-                    .addButton('appointment', gt('Yes'), 'appointment', { tabIndex: 1 })
-                    .addButton('cancel', gt('No'), 'cancel', { tabIndex: 1 })
+                    .addButton('appointment', gt('Yes'), 'appointment')
+                    .addButton('cancel', gt('No'), 'cancel')
                     .show()
                     .done(function (action) {
                         if (action === 'appointment') {
@@ -485,12 +485,12 @@ define('io.ox/calendar/month/perspective', [
                 var toolbarNode = $('<div>')
                     .addClass('controls-container')
                     .append(
-                        $('<a href="#" tabindex="1" role="button">').addClass('control prev').append($('<i class="fa fa-chevron-left" aria-hidden="true">'))
+                        $('<a href="#" role="button">').addClass('control prev').append($('<i class="fa fa-chevron-left" aria-hidden="true">'))
                         .on('click', $.proxy(function (e) {
                             e.preventDefault();
                             this.gotoMonth('prev');
                         }, this)),
-                        $('<a href="#" tabindex="1" role="button">').addClass('control next').append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
+                        $('<a href="#" role="button">').addClass('control next').append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
                         .on('click', $.proxy(function (e) {
                             e.preventDefault();
                             this.gotoMonth('next');

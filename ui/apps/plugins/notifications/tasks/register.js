@@ -54,7 +54,7 @@ define('plugins/notifications/tasks/register', [
                 //#, c-format
                 'aria-label': gt('Invitation for %1$s.', _.noI18n(data.title))
             })
-            .append($('<a class="notification-info" role="button" tabindex="1">').append(
+            .append($('<a class="notification-info" role="button">').append(
                     $('<span class="span-to-div title">').text(_.noI18n(data.title)),
                     $('<div class"clearfix">').append(
                         $('<span class="end_date">').text(_.noI18n(data.end_time)),
@@ -63,7 +63,7 @@ define('plugins/notifications/tasks/register', [
                     )
                 ),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="btn btn-default" data-action="done">').attr('aria-label', gt('Mark as done') + ' ' + _.noI18n(baton.model.get('title')))
+                    $('<button type="button" class="btn btn-default" data-action="done">').attr('aria-label', gt('Mark as done') + ' ' + _.noI18n(baton.model.get('title')))
                     .text(gt('Done'))
                     .on('click', function (e) {
                         e.stopPropagation();
@@ -281,10 +281,10 @@ define('plugins/notifications/tasks/register', [
                 //#. %1$s task title
                 //#, c-format
                 'aria-label': gt('Invitation for %1$s.', _.noI18n(task.title)),
-                tabindex: 1
+                tabindex: 0
             })
             .append(
-                $('<a class="notification-info" role="button" tabindex="1">').append(
+                $('<a class="notification-info" role="button">').append(
                     $('<span class="span-to-div title">').text(_.noI18n(task.title)),
                     $('<div class="clearfix">').append(
                         $('<span class="end_date">').text(_.noI18n(task.end_time)),
@@ -292,7 +292,7 @@ define('plugins/notifications/tasks/register', [
                         $('<span class="sr-only">').text(gt('Press to open Details'))
                 ),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-default" data-action="change_state">')
+                    $('<button type="button" class="accept-decline-button refocus btn btn-default" data-action="change_state">')
                     .attr({
                         'focus-id': 'task-invitation-accept-decline' + _.ecid(baton.model.attributes),
                         // button aria labels need context
@@ -301,7 +301,7 @@ define('plugins/notifications/tasks/register', [
                     .css('margin-right', '14px')
                     .text(gt('Accept/Decline'))
                     .on('click', onChangeState),
-                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                    $('<button type="button" class="refocus btn btn-success" data-action="accept">')
                         .attr({
                             // button aria labels need context
                             'aria-label': gt('Accept invitation') + ' ' + _.noI18n(task.title),

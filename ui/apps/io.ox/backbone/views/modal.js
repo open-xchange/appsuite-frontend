@@ -169,7 +169,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
                 left = o.placement === 'left', fn = left ? 'prepend' : 'append';
             if (left) o.className += ' pull-left';
             this.$('.modal-footer')[fn](
-                $('<button class="btn" tabindex="1">')
+                $('<button class="btn">')
                     .addClass(o.className)
                     .attr('data-action', o.action)
                     .text(o.label)
@@ -229,7 +229,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
                 this.append(
                     $('<div class="form-group">').append(
                         $('<label>').text('Label'),
-                        $('<input type="text" class="form-control foo" tabindex="1">')
+                        $('<input type="text" class="form-control foo">')
                     )
                 );
             },

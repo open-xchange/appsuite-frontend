@@ -69,7 +69,7 @@ define('io.ox/backbone/mini-views/timezonepicker', [
 
         render: function () {
             var self = this;
-            this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+            this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr({ id: this.id });
             _.defer(function () {
                 if (self.options.favorites) {

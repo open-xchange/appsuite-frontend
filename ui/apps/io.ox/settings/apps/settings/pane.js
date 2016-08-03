@@ -50,8 +50,8 @@ define('io.ox/settings/apps/settings/pane', [
 
             new dialogs.ModalDialog()
                 .text(gt('Do you want to revoke the access of this application?'))
-                .addPrimaryButton('ok', gt('Revoke'), 'ok', { tabIndex: 1 })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                .addPrimaryButton('ok', gt('Revoke'), 'ok')
+                .addButton('cancel', gt('Cancel'), 'cancel')
                 .show()
                 .done(function (action) {
                     if (action === 'cancel') return;
@@ -91,7 +91,7 @@ define('io.ox/settings/apps/settings/pane', [
                     )
                 ),
                 $('<div class="widget-controls">').append(
-                    $('<a class="remove" href="#" tabindex="1" role="button" data-action="delete" aria-label="remove">')
+                    $('<a class="remove" href="#" role="button" data-action="delete" aria-label="remove">')
                     .attr({
                         'title': gt('Delete')
                     }).append('<i class="fa fa-trash-o" aria-hidden="true">')

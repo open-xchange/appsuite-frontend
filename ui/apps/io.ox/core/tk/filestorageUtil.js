@@ -34,10 +34,10 @@ define('io.ox/core/tk/filestorageUtil', [
             var popup = new dialogs.ModalDialog(),
                 warnings = [];
             if (!options.callbackCancel && !options.callbackIgnoreConflicts) {
-                popup.addPrimaryButton('ok', gt('Ok'), 'changechange', { tabIndex: 1 });
+                popup.addPrimaryButton('ok', gt('Ok'), 'changechange');
             } else {
-                popup.addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                    .addPrimaryButton('ignorewarnings', gt('Ignore warnings'), 'changechange', { tabIndex: 1 });
+                popup.addButton('cancel', gt('Cancel'), 'cancel')
+                    .addPrimaryButton('ignorewarnings', gt('Ignore warnings'), 'changechange');
             }
             // build a list of warnings
             _(conflicts.warnings).each(function (warning) {

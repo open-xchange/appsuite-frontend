@@ -406,7 +406,7 @@ define('io.ox/mail/detail/content', [
                 $(node).addClass('collapsed-blockquote').attr('id', blockquoteId).after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
-                        $('<i class="fa fa-ellipsis-h" tabindex="1" role="button" aria-expanded="false">').attr({
+                        $('<i class="fa fa-ellipsis-h" tabindex="0" role="button" aria-expanded="false">').attr({
                             'aria-controls': blockquoteId,
                             'aria-expanded': false,
                             title: gt('Show quoted text')

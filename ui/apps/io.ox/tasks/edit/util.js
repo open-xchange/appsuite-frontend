@@ -19,11 +19,11 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
         //build progressField and buttongroup
         buildProgress: function (val) {
             val = val || 0;
-            var progress = $('<input class="form-control progress-field">').attr({ type: 'text', id: 'task-edit-progress-field', tabindex: 1 }).val(val),
+            var progress = $('<input type="text" id="task-edit-progress-field" class="form-control progress-field">').val(val),
                 wrapper = $('<div class="input-group">').append(
                     progress,
                     $('<div class="input-group-btn">').append(
-                        $('<button type="button" tabindex="1" class="btn btn-default" data-action="minus">').append(
+                        $('<button type="button" class="btn btn-default" data-action="minus">').append(
                             $('<i class="fa fa-minus" aria-hidden="true">'),
                             $('<span class="sr-only">').text(gt('Minus'))
                         )
@@ -38,7 +38,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
                                 progress.trigger('change');
                             }
                         }),
-                        $('<button type="button" tabindex="1" class="btn btn-default" data-action="plus">').append(
+                        $('<button type="button" class="btn btn-default" data-action="plus">').append(
                             $('<i class="fa fa-plus" aria-hidden="true">'),
                             $('<span class="sr-only">').text(gt('Plus'))
                         )

@@ -340,8 +340,7 @@ define('io.ox/core/tk/dialogs', [
                 click: options.click || invoke,
                 dataaction: dataaction,
                 purelink: options.purelink,
-                inverse: options.inverse,
-                tabIndex: options.tabIndex || options.tabindex
+                inverse: options.inverse
             };
 
             if (options.type) {
@@ -391,10 +390,10 @@ define('io.ox/core/tk/dialogs', [
 
         this.addCheckbox = function (label, action, status) {
             nodes.footer.prepend(
-                $('<div>').addClass('checkbox').append(
-                    $('<div>').addClass('controls'),
+                $('<div class="checkbox">').append(
+                    $('<div class="controls">'),
                     $('<label>').text(label).prepend(
-                        $('<input type="checkbox" tabindex="1">').attr({ 'data-action': action, 'checked': status })
+                        $('<input type="checkbox">').attr({ 'data-action': action, 'checked': status })
                     )
                 )
             );
@@ -440,13 +439,7 @@ define('io.ox/core/tk/dialogs', [
                 nodes.header.remove();
             }
 
-            if (o.help) {
-                nodes.header.addClass('help');
-                nodes.header.append(new HelpView({
-                    href: o.help,
-                    tabindex: '1'
-                }).render().$el);
-            }
+            if (o.help) nodes.header.addClass('help').append(new HelpView({ href: o.help }).render().$el);
 
             // show but keep invisible
             // this speeds up calculation of dimenstions
@@ -667,10 +660,10 @@ define('io.ox/core/tk/dialogs', [
 
             overlay,
 
-            sidepopuppane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="1">'),
+            sidepopuppane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="0">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<a href="#" class="close" data-action="close" role="button" tabindex="1">').append(
+                    $('<a href="#" class="close" data-action="close" role="button">').append(
                         $('<i class="fa fa-times">')
                     )
                 ),

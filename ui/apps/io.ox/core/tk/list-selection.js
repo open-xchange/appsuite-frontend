@@ -52,7 +52,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     return;
                 }
                 var items = this.getItems(),
-                    first = items.filter('[tabindex="1"]'),
+                    first = items.filter('[tabindex="0"]'),
                     index = items.index(first),
                     selectedItems = this.get();
                 if (selectedItems.length <= 1) {
@@ -158,7 +158,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             });
 
             if (lastIndex > -1) {
-                var node = items.eq(lastIndex).attr('tabindex', '1');
+                var node = items.eq(lastIndex).attr('tabindex', '0');
                 if (focus) node.focus();
             }
         },
@@ -230,7 +230,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         resetTabIndex: function (items, skip) {
-            items = items.filter('[tabindex="1"]');
+            items = items.filter('[tabindex="0"]');
             items.not(skip).attr('tabindex', '-1');
         },
 
@@ -248,7 +248,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         focus: function (index, items) {
             items = items || this.getItems();
-            var node = items.eq(index).attr('tabindex', '1');
+            var node = items.eq(index).attr('tabindex', '0');
             // call focus deferred due to some issues in internet explorer
             _.defer(function () {
                 node.focus();

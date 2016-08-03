@@ -45,7 +45,7 @@
             inverse: false
 
             // other options:
-            // tabIndex, id, mousedown
+            // id, mousedown
         }, options || {});
         // class name
         var className;
@@ -82,11 +82,6 @@
         }
 
         button.attr('data-action', opt.dataaction || opt.data.action);
-
-        // add tabindex?
-        if (opt.tabIndex !== undefined) {
-            button.attr('tabindex', opt.tabIndex);
-        }
 
         return button;
     };

@@ -46,7 +46,7 @@ define('plugins/portal/upsell/register', [
         preview: function () {
             if (options.imageURL) {
                 this.addClass('photo-stream').append(
-                    $('<div class="content" tabindex="1" role="button">')
+                    $('<div class="content" tabindex="0" role="button">')
                         .css('backgroundImage', 'url(' + options.imageURL + ')')
                 );
             } else {

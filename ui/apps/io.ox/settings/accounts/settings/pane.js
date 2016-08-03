@@ -57,14 +57,14 @@ define('io.ox/settings/accounts/settings/pane', [
             if (submodules.length === 0) return;
 
             return $('<div class="btn-group col-md-4 col-xs-12">').append(
-                $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
+                $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true">').append(
                     $.txt(gt('Add account')), $.txt(' '),
                     $('<span class="caret">')
                 ),
                 $('<ul class="dropdown-menu" role="menu">').append(
                    _(submodules).map(function (submodule) {
                        return $('<li role="presentation">').append(
-                           $('<a href="#" role="menuitem" tabindex="1">')
+                           $('<a href="#" role="menuitem">')
                            .attr('data-actionname', submodule.actionName || submodule.id || '')
                            .text(submodule.displayName)
                            .on('click', { submodule: submodule }, onAddSubmodule)
@@ -193,8 +193,8 @@ define('io.ox/settings/accounts/settings/pane', [
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({ async: true })
                     .text(gt('Do you really want to delete this account?'))
-                    .addPrimaryButton('delete', gt('Delete account'), 'delete', { tabIndex: 1 })
-                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                    .addPrimaryButton('delete', gt('Delete account'), 'delete')
+                    .addButton('cancel', gt('Cancel'), 'cancel')
                     .on('delete', function () {
                         var popup = this;
                         settingsUtil.yellOnReject(

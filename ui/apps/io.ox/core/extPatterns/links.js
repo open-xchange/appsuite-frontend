@@ -49,7 +49,6 @@ define('io.ox/core/extPatterns/links', [
                 var title = self.title || self.label;
                 var attr = {
                     href: '#',
-                    tabindex: 1,
                     'data-action': self.id,
                     'draggable': options.draggable || false,
                     'role': 'menuitem',
@@ -115,13 +114,7 @@ define('io.ox/core/extPatterns/links', [
                     link
                     .tooltip('destroy')
                     .addClass('disabled')
-                    .attr({
-                        'aria-disabled': true
-                        // may be, tabindex should be set to 0, to 'hide'
-                        // the link during keyboard navigation. Anyway,
-                        // IMHO a menu should be as static as possible to support
-                        // users to 'learn' the navigation
-                    })
+                    .attr('aria-disabled', true)
                     .removeAttr('href')
                 );
                 // call customize? (call after append; must be self - not this)
@@ -174,14 +167,9 @@ define('io.ox/core/extPatterns/links', [
                 baton = ext.Baton.ensure(baton);
                 // add action
                 this.append(
-                    $('<li>').attr({ role: 'presentation' }).append(
-                        link = $('<a>').attr({
-                            'data-action': extension.ref,
-                            role: 'menuitem',
-                            href: '#',
-                            tabindex: 1
-                        }).text(extension.label)
-                                .on('click', { baton: baton, extension: extension }, actionClick)
+                    $('<li role="presentation">').append(
+                        link = $('<a href="#" role="menuitem">').attr('data-action', extension.ref).text(extension.label)
+                            .on('click', { baton: baton, extension: extension }, actionClick)
                     )
                 );
                 // handle possible
@@ -215,8 +203,7 @@ define('io.ox/core/extPatterns/links', [
                 href: '#',
                 role: 'button',
                 'class': 'btn btn-default',
-                'data-action': self.id,
-                tabindex: self.tabIndex
+                'data-action': self.id
             };
             if (tag === 'button') attr.type = 'button';
             this.append(
@@ -413,20 +400,12 @@ define('io.ox/core/extPatterns/links', [
                 var dd;
                 nav.append(
                     $('<li class="dropdown">').append(
-                        dd = $('<a>').addClass('actionlink ' + (options.smart ? 'smart-dropdown' : '')).attr({
-                            href: '#',
-                            tabindex: 1,
-                            draggable: false,
-                            role: 'button',
-                            'data-toggle': 'dropdown',
-                            'data-action': 'more',
-                            'aria-haspopup': true,
-                            'data-original-title': isSmartphone ? gt('Actions') : gt('More actions')
-                        })
-                        .append(
-                            isSmartphone && !extension.compactDropdown ?
-                                $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
-                                $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
+                        dd = $('<a href="#" class="actionlink" draggable="false" role="button" data-toggle="dropdown" data-action="more" aria-haspopup="true">')
+                            .addClass(options.smart ? 'smart-dropdown' : '')
+                            .attr('data-original-title', isSmartphone ? gt('Actions') : gt('More actions')).append(
+                                isSmartphone && !extension.compactDropdown ?
+                                    $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
+                                    $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
                         )
                         .on(_.device('touch') ? 'touchstart' : 'click', function () {
                             // fix dropdown position on-the-fly
@@ -553,14 +532,12 @@ define('io.ox/core/extPatterns/links', [
         // build dropdown
         this.append(
             node.addClass('dropdown').append(
-                $('<a href="#" role="button" tabindex="1">').attr({
-                    'data-toggle': 'dropdown',
-                    'aria-haspopup': true,
+                $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true">').attr({
                     'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
                 })
                 .addClass(options.smart ? 'smart-dropdown' : '')
                 .append(
-                    options.icon ? $('<i>').addClass(options.icon).attr({ title: label.textContent, 'aria-hidden': true }) : label,
+                    options.icon ? $('<i aria-hidden="true">').addClass(options.icon).attr('title', label.textContent) : label,
                     options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
                 ),
                 ul = $('<ul class="dropdown-menu" role="menu">')
@@ -608,8 +585,7 @@ define('io.ox/core/extPatterns/links', [
 
     var drawButtonGroup = function (options, baton) {
         var args = $.makeArray(arguments),
-            $parent = $('<div>').addClass('btn-group')
-                .addClass(options.classes)
+            $parent = $('<div class="btn-group">').addClass(options.classes)
                 .attr('data-toggle', (options.radio ? 'buttons-radio' : ''))
                 .appendTo(this);
         // create & add node first, since the rest is async
@@ -642,7 +618,7 @@ define('io.ox/core/extPatterns/links', [
             var args = $.makeArray(arguments), a, ul, div, title = [];
             this.append(
                 div = $('<li class="toolbar-button dropdown">').append(
-                    a = $('<a href="#" data-toggle="dropdown" title="" tabindex="1">')
+                    a = $('<a href="#" data-toggle="dropdown" title="">')
                         .attr('data-ref', extension.ref)
                         .addClass(extension.addClass)
                         .append(extension.icon()),
@@ -691,7 +667,6 @@ define('io.ox/core/extPatterns/links', [
                                 'title': links[0].label || '',
                                 'aria-label': links[0].label || '',
                                 'role': 'menuitem',
-                                'tabindex': 1,
                                 // add tooltip
                                 'data-animation': 'false',
                                 'data-placement': 'right',
@@ -702,7 +677,7 @@ define('io.ox/core/extPatterns/links', [
                                 a.tooltip({ trigger: 'hover' });
                             }
                         } else {
-                            a.addClass('disabled').removeAttr('tabindex').attr({ 'aria-disabled': true }).on('click', preventDefault);
+                            a.addClass('disabled').attr({ 'aria-disabled': true }).on('click', preventDefault);
                         }
                     }
                 });

@@ -417,7 +417,7 @@ define('io.ox/files/main', [
                             app.mysharesListView.reload();
                         }), 10);
 
-                        var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+                        var toolbar = new Toolbar({ title: app.getTitle() });
 
                         app.getWindow().nodes.body.prepend(
                             app.mysharesListViewControl.render().$el
@@ -1023,7 +1023,7 @@ define('io.ox/files/main', [
             side.find('.foldertree-container').addClass('bottom-toolbar');
             side.find('.foldertree-sidepanel').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button" tabindex="1">')
+                    $('<a href="#" class="toolbar-item" role="button">')
                     .append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Close folder view'))

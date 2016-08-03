@@ -30,10 +30,10 @@ define('io.ox/files/actions/edit-description', [
         new dialogs.ModalDialog()
             .header($('<h4>').text(gt('Description')))
             .append(
-                $('<textarea rows="10" class="form-control" tabindex="1">')
+                $('<textarea rows="10" class="form-control">')
             )
-            .addPrimaryButton('save', gt('Save'), 'save', { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+            .addPrimaryButton('save', gt('Save'), 'save')
+            .addButton('cancel', gt('Cancel'), 'cancel')
             .on('save', save)
             .show(function () {
                 var node = this.find('textarea').val(data.description);

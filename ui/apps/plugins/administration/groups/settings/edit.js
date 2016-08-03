@@ -129,8 +129,8 @@ define('plugins/administration/groups/settings/edit', [
                         (this.view = new View({ model: model })).render().$el
                     );
                 })
-                .addPrimaryButton('save', edit ? gt('Save') : gt('Create'), 'save', { tabindex: 1 })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabindex: 1 })
+                .addPrimaryButton('save', edit ? gt('Save') : gt('Create'), 'save')
+                .addButton('cancel', gt('Cancel'), 'cancel')
                 .on('save', function () {
                     var self = this;
                     groupAPI[edit ? 'update' : 'create'](this.view.toJSON()).then(

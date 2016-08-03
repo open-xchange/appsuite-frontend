@@ -74,8 +74,8 @@ define('io.ox/tasks/common-extensions', [
                     if (data.start_time && data.start_time > endTime) {
 
                         var popup = new dialogs.ModalDialog()
-                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                            .addPrimaryButton('change', gt('Adjust start date'), 'changechange', { tabIndex: 1 });
+                            .addButton('cancel', gt('Cancel'), 'cancel')
+                            .addPrimaryButton('change', gt('Adjust start date'), 'changechange');
                         //text
                         popup.getBody().append(
                             $('<h4>').text(gt('Inconsistent dates')),
@@ -109,7 +109,7 @@ define('io.ox/tasks/common-extensions', [
                     'aria-haspopup': 'true',
                     'data-action': 'change-due-date',
                     'data-toggle': 'dropdown',
-                    'tabindex': '1'
+                    'tabindex': '0'
                 });
 
                 this.append($('<i class="fa fa-caret-down" aria-hidden="true">'));

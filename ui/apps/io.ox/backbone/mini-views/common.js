@@ -43,7 +43,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
             this.$el.val($.trim(this.model.get(this.name)));
         },
         render: function () {
-            this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+            this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr('id', this.id);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             this.update();
@@ -75,7 +75,6 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
                 autocomplete: 'off',
                 autocorrect: 'off',
                 name: this.name,
-                tabindex: this.options.tabindex || 1,
                 placeholder: this.options.placeholder
             });
             if (this.id) this.$el.attr('id', this.id);
@@ -114,7 +113,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
             this.$el.val(this.model.get(this.name));
         },
         render: function () {
-            this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+            this.$el.attr({ name: this.name });
             if (this.rows) this.$el.attr('rows', this.rows);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             this.update();
@@ -139,7 +138,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
             this.$el.prop('checked', !!this.model.get(this.name));
         },
         render: function () {
-            this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+            this.$el.attr({ name: this.name });
             this.update();
             return this;
         }
@@ -170,7 +169,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
             this.$el.append(_.map(this.options.list, function (option) {
                 return $('<div>').addClass('radio').append(
                     $('<label>').text(option.label).prepend(
-                        $('<input type="radio" name="' + self.name + '">').val(option.value).attr({ tabindex: self.options.tabindex || 1 })
+                        $('<input type="radio" name="' + self.name + '">').val(option.value)
                     )
                 );
             }));
@@ -197,7 +196,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
             this.$el.val(this.model.get(this.name));
         },
         render: function () {
-            this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+            this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr({ id: this.id });
             this.$el.append(_.map(this.options.list, function (option) {
                 return $('<option>').attr({ value: option.value }).text(option.label);
@@ -280,13 +279,11 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         render: function () {
             this.$el.append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').text(this.options.values[this.model.get(this.name)]),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').text(this.options.values[this.model.get(this.name)]),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(this.options.values).map(function (name, value) {
                         return $('<li>').append(
-                            $('<a>', { href: '#', 'data-action': 'change-value', 'data-value': value, 'tabindex': '1' }).append(
-                                $.txt(name)
-                            )
+                            $('<a href="#" data-action="change-value">').attr('data-value', value).text(name)
                         );
                     })
                 )

@@ -130,8 +130,7 @@ define('io.ox/portal/main', [
                     $btn.find('.btn-group-portal')
                         .prepend($('<button type="button" class="btn btn-primary">')
                         .attr({
-                            'data-action': 'customize',
-                            tabindex: 1
+                            'data-action': 'customize'
                         })
                         .text(gt('Customize this page'))
                         .on('click', openSettings));
@@ -243,14 +242,10 @@ define('io.ox/portal/main', [
                     $('<h2>').append(
                         // add remove icon
                         baton.model.get('protectedWidget') ? [] :
-                            $('<a class="disable-widget"><i class="fa fa-times icon-remove"/></a>')
-                            .attr({
-                                href: '#',
-                                role: 'button',
+                            $('<a href="#" role="button" class="disable-widget">').attr({
                                 'title': gt('Disable widget'),
-                                'aria-label': gt('Disable widget'),
-                                tabindex: 1
-                            }),
+                                'aria-label': gt('Disable widget')
+                            }).append($('<i class="fa fa-times icon-remove">')),
                         // title span
                         $('<span class="title">').text('\u00A0')
                     )
@@ -374,9 +369,7 @@ define('io.ox/portal/main', [
     app.drawScaffold = function (model, add) {
         add = add || false;
         var baton = ext.Baton({ model: model, app: app, add: add }),
-            node = $('<li>').attr({
-                tabindex: 1
-            });
+            node = $('<li tabindex="0">');
 
         model.node = node;
         ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
@@ -423,7 +416,7 @@ define('io.ox/portal/main', [
                     $.txt(greeting + '.')
                 ),
                 // link
-                $('<a href="#" tabindex="1" target="_blank" style="white-space: nowrap;" role="button">')
+                $('<a href="#" target="_blank" style="white-space: nowrap;" role="button">')
                 .attr('href', link)
                 .text(gt('Get started here') + '!')
             )
@@ -451,7 +444,7 @@ define('io.ox/portal/main', [
                     )
                 ),
                 // button
-                $('<a href="#" class="action" tabindex="1" role="button">').text(
+                $('<a href="#" class="action" role="button">').text(
                     //#. %1$s is social media name, e.g. Facebook
                     gt('Add your %1$s account', title)
                 )
@@ -645,7 +638,7 @@ define('io.ox/portal/main', [
         }));
 
         win.nodes.main.addClass('io-ox-portal f6-target').attr({
-            'tabindex': '1',
+            'tabindex': '0',
             role: 'main',
             'aria-label': gt('Portal widgets')
         });
@@ -688,13 +681,13 @@ define('io.ox/portal/main', [
                         .append($('<span>').text(gt('Do you really want to delete this widget?')))
                         .addPrimaryButton('delete',
                             //#. Really delete portal widget - in contrast to "just disable"
-                            gt('Delete'), 'delete', { tabIndex: 1 }
+                            gt('Delete'), 'delete'
                         )
-                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
+                        .addButton('cancel', gt('Cancel'), 'cancel');
                         if (model.get('enabled')) {
                             dialog.addAlternativeButton('disable',
                                 //#. Just disable portal widget - in contrast to delete
-                                gt('Just disable widget'), 'disable', { tabIndex: 1 }
+                                gt('Just disable widget'), 'disable'
                             );
                         }
                         dialog.show().done(function (action) {

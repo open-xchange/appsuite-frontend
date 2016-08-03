@@ -283,11 +283,11 @@ define('io.ox/contacts/addressbook/popup', [
                 view.$('.modal-header').append(
                     $('<div class="row">').append(
                         $('<div class="col-xs-6">').append(
-                            $('<input type="text" class="form-control search-field" tabindex="1">')
+                            $('<input type="text" class="form-control search-field">')
                             .attr('placeholder', gt('Search'))
                         ),
                         $('<div class="col-xs-6">').append(
-                            $('<select class="form-control folder-dropdown invisible" tabindex="1">').append(
+                            $('<select class="form-control folder-dropdown invisible">').append(
                                 $('<option value="all">').text(gt('All contacts'))
                             )
                         )

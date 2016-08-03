@@ -47,7 +47,7 @@ define('io.ox/core/export/export', [
                 $('<label>').append(
                     $.txt(gt('Format')),
                     $('<br>'),
-                    baton.$.select = $('<select tabindex="1" aria-label="' + gt('select format') + '">')
+                    baton.$.select = $('<select aria-label="' + gt('select format') + '">')
                 )
             );
 
@@ -100,8 +100,8 @@ define('io.ox/core/export/export', [
         id: 'default',
         draw: function () {
             this
-                .addPrimaryButton('export', gt('Export'), 'export', { 'tabIndex': '1' })
-                .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' });
+                .addPrimaryButton('export', gt('Export'), 'export')
+                .addButton('cancel', gt('Cancel'), 'cancel');
         }
     });
 

@@ -83,7 +83,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Zoom out'),
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomout').attr({
-                        tabindex: '1',
+                        tabindex: '0',
                         'aria-label': gt('Zoom out')
                     });
                 }
@@ -96,7 +96,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/zoomin',
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomin').attr({
-                        tabindex: '1',
+                        tabindex: '0',
                         'aria-label': gt('Zoom in')
                     });
                 }
@@ -113,7 +113,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitwidth')
                         .attr({
-                            tabindex: '1',
+                            tabindex: '0',
                             'aria-label': gt('Fit to screen width')
                         });
                 }
@@ -127,7 +127,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">');
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitheight').attr({
-                            tabindex: '1',
+                            tabindex: '0',
                             'aria-label': gt('Fit to screen size')
                         });
                 }
@@ -141,7 +141,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-launchpresenter')
                     .attr({
-                        tabindex: '1',
+                        tabindex: '0',
                         'aria-label': /*#. launch the presenter app */ gt.pgettext('presenter', 'Present')
                     });
                 }
@@ -155,7 +155,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-togglesidebar')
                         .attr({
-                            tabindex: '1',
+                            tabindex: '0',
                             'aria-label': gt('View details')
                         });
                 }
@@ -169,7 +169,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-popoutstandalone')
                         .attr({
-                            tabindex: '1',
+                            tabindex: '0',
                             'aria-label': gt('Pop out standalone viewer')
                         });
                 }
@@ -183,7 +183,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-close')
                         .attr({
-                            tabindex: '1',
+                            tabindex: '0',
                             'aria-label': gt('Close viewer')
                         })
                         .parent().addClass('pull-right');
@@ -751,13 +751,13 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Renders the document page navigation controls.
          */
         renderPageNavigation: function () {
-            var prev = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
+            var prev = $('<a class="viewer-toolbar-navigation-button" role="menuitem">')
                     .attr({ 'aria-label': gt('Previous page'), 'title': gt('Previous page') })
                     .append($('<i class="fa fa-arrow-up" aria-hidden="true">')),
-                next = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
+                next = $('<a class="viewer-toolbar-navigation-button" role="menuitem">')
                     .attr({ 'aria-label': gt('Next page'), 'title': gt('Next page') })
                     .append($('<i class="fa fa-arrow-down" aria-hidden="true">')),
-                pageInput = $('<input type="text" class="viewer-toolbar-page" tabindex="1" role="textbox">'),
+                pageInput = $('<input type="text" class="viewer-toolbar-page" role="textbox">'),
                 pageInputWrapper = $('<div class="viewer-toolbar-page-wrapper">').append(pageInput),
                 totalPage = $('<div class="viewer-toolbar-page-total">'),
                 group = $('<li class="viewer-toolbar-navigation" role="presentation">'),

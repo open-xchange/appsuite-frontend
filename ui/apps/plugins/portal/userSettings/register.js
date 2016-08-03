@@ -220,7 +220,7 @@ define('plugins/portal/userSettings/register', [
                 this.append(
                     content = $('<div class="content">').append(
                         // user data
-                        $('<div class="action" role="button" tabindex="1">').text(gt('My contact data'))
+                        $('<div class="action" role="button" tabindex="0">').text(gt('My contact data'))
                         .on('click keypress', { fn: changeUserData }, keyClickFilter)
 
                     )
@@ -230,7 +230,7 @@ define('plugins/portal/userSettings/register', [
             // check for capability
             if (passwordEdit) {
                 content.append(
-                    $('<div class="action" role="button" tabindex="1">').text(gt('My password'))
+                    $('<div class="action" role="button" tabindex="0">').text(gt('My password'))
                     .on('click keypress', { fn: changePassword }, keyClickFilter)
                 );
             }

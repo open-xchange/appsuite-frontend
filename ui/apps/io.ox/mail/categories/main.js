@@ -199,7 +199,7 @@ define('io.ox/mail/categories/main', [
                 if (!exists(container, model)) {
                     container.append(
                         $('<li class="category">').append(
-                            $('<a class="link" tabindex="1" role="button">').append(
+                            $('<a class="link" role="button">').append(
                                 $('<div class="category-icon">'),
                                 $('<div class="category-name truncate">').text(model.get('name')),
                                 $('<div class="category-counter">').append(

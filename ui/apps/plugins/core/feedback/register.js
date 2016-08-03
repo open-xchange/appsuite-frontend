@@ -29,7 +29,7 @@ define('plugins/core/feedback/register', [
         number = number || 5;
         //0 on init
         var value = 0,
-            node = $('<div tabindex="1" class="star-wrapper tabindex="1" ' +
+            node = $('<div tabindex="0" class="star-wrapper ' +
                                  //#. %1$d is current raiting
                                  //#. %2$d is the maximum rating
                                  //#, c-format
@@ -136,20 +136,20 @@ define('plugins/core/feedback/register', [
             var guid = _.uniqueId('feedback-note-'),
                 popup = new dialogs.ModalDialog()
                     .header($('<h4>').text(gt('Feedback')))
-                    .addPrimaryButton('send', gt('Send feedback'), 'send', { tabIndex: 1 })
-                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 }),
+                    .addPrimaryButton('send', gt('Send feedback'), 'send')
+                    .addButton('cancel', gt('Cancel'), 'cancel'),
                 stars = buildStarWidget(settings.get('feeback/numberOfStars', 5), settings.get('feeback/showHover', true)),
-                note = $('<textarea tabindex="1" id="' + guid + '" class="feedback-note form-control" rows="5">'),
+                note = $('<textarea class="feedback-note form-control" rows="5">').attr('id', guid),
                 supportlink = settings.get('feedback/supportlink', '');
             if (supportlink !== '') {
-                supportlink = $('<a href="' + supportlink + '" tabindex="1">');
+                supportlink = $('<a>').attr('href', supportlink);
             }
 
             popup.getBody().append(
                 $('<div class="feedback-welcome-text">')
                     .text(gt('Welcome. Please provide your feedback about this product')),
                 stars.node,
-                $('<label class="feedback-label" for="' + guid + '">').text(gt('Comments and suggestions')),
+                $('<label class="feedback-label">').attr('for', guid).text(gt('Comments and suggestions')),
                 note,
                 $('<div class="feedback-info">')
                     .text(gt('Please note, that support requests cannot be handled via the feedback-formular. When you have questions or problems please contact our support directly')),
@@ -186,7 +186,7 @@ define('plugins/core/feedback/register', [
             if (currentSetting === 'both' || currentSetting === 'topbar') {
                 this.append(
                     $('<li>').append(
-                        $('<a href="#" data-action="feedback" role="menuitem" tabindex="1">').text(gt('Give feedback'))
+                        $('<a href="#" data-action="feedback" role="menuitem">').text(gt('Give feedback'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();

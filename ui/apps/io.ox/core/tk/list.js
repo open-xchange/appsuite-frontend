@@ -107,7 +107,7 @@ define('io.ox/core/tk/list', [
             if (this.mousedown) {
                 return;
             }
-            this.$el.attr('tabindex', 1);
+            this.$el.attr('tabindex', 0);
             this.$el.removeClass('has-focus');
         },
 
@@ -700,7 +700,7 @@ define('io.ox/core/tk/list', [
                 this.$el.attr({
                     'aria-multiselectable': true,
                     'role': 'listbox',
-                    'tabindex': 1
+                    'tabindex': 0
                 });
             }
             this.$el.attr('data-ref', this.ref);

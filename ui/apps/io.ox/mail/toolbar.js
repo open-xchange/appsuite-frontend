@@ -283,7 +283,7 @@ define('io.ox/mail/toolbar', [
 
             if (_.device('smartphone')) return;
 
-            var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+            var toolbarView = new Toolbar({ title: app.getTitle() });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbarView.render().$el

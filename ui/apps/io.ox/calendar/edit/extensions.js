@@ -479,7 +479,7 @@ define('io.ox/calendar/edit/extensions', [
                         _.map(_.range(0, 11), function (color_label) {
                             return $('<label>').append(
                                 // radio button
-                                $('<input type="radio" tabindex="1" name="color">')
+                                $('<input type="radio" name="color">')
                                 .attr('aria-label', calendarUtil.getColorLabel(color_label))
                                 .val(color_label)
                                 .prop('checked', color_label === currentColor)
@@ -778,7 +778,7 @@ define('io.ox/calendar/edit/extensions', [
             // because that works
             if (capabilities.has('freebusy !alone')) {
                 this.parent().find('.find-free-time').append(
-                    $('<button type="button" class="btn btn-link" tabindex="1">').text(gt('Find a free time'))
+                    $('<button type="button" class="btn btn-link">').text(gt('Find a free time'))
                         .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
                 );
             }

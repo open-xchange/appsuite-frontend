@@ -73,10 +73,10 @@ define('io.ox/files/actions/upload-new-version', [
                     }
                 }),
                 filename,
-                $('<textarea rows="6" class="form-control" tabindex="1">')
+                $('<textarea rows="6" class="form-control">')
             )
-            .addPrimaryButton('upload', gt('Upload'), 'upload', { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+            .addPrimaryButton('upload', gt('Upload'), 'upload')
+            .addButton('cancel', gt('Cancel'), 'cancel')
             .on('upload', function () {
                 var $node = this.getContentNode(),
                     files = $node.find('input[type="file"]')[0].files,

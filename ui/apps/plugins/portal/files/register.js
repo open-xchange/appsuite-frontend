@@ -44,7 +44,7 @@ define('plugins/portal/files/register', [
 
         preview: function (baton) {
             //#. %1$s is a filename
-            var content = $('<div class="content pointer" tabindex="1" role="button">')
+            var content = $('<div class="content pointer" tabindex="0" role="button">')
                 .attr('aria-label', gt.format('Press [enter] to jump to %1$s', baton.data.filename)),
                 data, options, url;
 

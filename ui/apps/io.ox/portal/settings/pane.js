@@ -85,7 +85,7 @@ define('io.ox/portal/settings/pane', [
         var button;
         this.append(
             $('<div class="btn-group-portal pull-right">').append(
-                button = $('<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" tabindex="1">').append(
+                button = $('<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').append(
                     $.txt(gt('Add widget')),
                     $.txt(' '),
                     $('<i class="fa fa-caret-down" aria-hidden="true">')
@@ -114,7 +114,7 @@ define('io.ox/portal/settings/pane', [
                         // add disabld class if requires upsell
                         .addClass(!upsell.has(options.requires) ? 'requires-upsell' : undefined)
                         .append(
-                            $('<a href="#" role="menu-item" tabindex="1">').attr('data-type', options.type).text(options.title)
+                            $('<a href="#" role="menu-item">').attr('data-type', options.type).text(options.title)
                         );
                 })
             );
@@ -146,7 +146,7 @@ define('io.ox/portal/settings/pane', [
         return function (activeColor, title) {
             return $('<div class="action dropdown colors">').append(
                 listUtils.appendIconText(
-                    $('<a href="#" role="button" tabindex="1" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">').attr({
+                    $('<a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">').attr({
                         //#. %1$s is the title of the item, which should be colored
                         'aria-label': gt('Color %1$s', title)
                     }),
@@ -157,7 +157,7 @@ define('io.ox/portal/settings/pane', [
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(colorNames).map(function (name, color) {
                         return $('<li>').append(
-                            $('<a href="#" data-action="change-color" tabindex="1" role="menuitem">').attr('data-color', color).append(
+                            $('<a href="#" data-action="change-color" role="menuitem">').attr('data-color', color).append(
                                 $('<span class="color-example">').addClass('color-' + color),
                                 $.txt(name)
                             )
@@ -311,7 +311,7 @@ define('io.ox/portal/settings/pane', [
         draw: function () {
 
             var buildCheckbox = function () {
-                return $('<input type="checkbox" tabindex="1" class="input-xlarge">')
+                return $('<input type="checkbox" class="input-xlarge">')
                     .prop('checked', settings.get('mobile/summaryView'))
                     .on('change', function () {
                         settings.set('mobile/summaryView', $(this).prop('checked')).save();

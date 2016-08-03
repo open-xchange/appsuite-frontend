@@ -64,8 +64,8 @@ define('io.ox/core/folder/actions/common', [
                 folderAPI.get(id).done(function (folder) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)))
-                        .addPrimaryButton('delete', gt('Empty folder'), 'delete', { tabIndex: 1 })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                        .addPrimaryButton('delete', gt('Empty folder'), 'delete')
+                        .addButton('cancel', gt('Cancel'), 'cancel')
                         .on('delete', function () {
                             if (account.is('spam', id)) {
                                 http.pause();

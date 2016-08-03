@@ -298,10 +298,10 @@ define('io.ox/files/mediaplayer', [
             }
             this.win.nodes.outer.append(
                 this.container.append(
-                    $('<div id="io-ox-mediaplayer" class="atb mediaplayer_inner" tabindex="1">').append(
+                    $('<div id="io-ox-mediaplayer" class="atb mediaplayer_inner" tabindex="0">').append(
                         $('<div class="mediaplayer_buttons pull-right">').append(
-                            $('<button type="button" class="btn btn-inverse minimizemediaplayer" tabindex="1">').text(gt('Minimize')),
-                            $('<button type="button" class="btn btn-primary closemediaplayer" tabindex="1">')
+                            $('<button type="button" class="btn btn-inverse minimizemediaplayer">').text(gt('Minimize')),
+                            $('<button type="button" class="btn btn-primary closemediaplayer">')
                                 .text(gt('Close'))
                                 .one('click', $.proxy(this.close, this))
                         ),
@@ -339,7 +339,7 @@ define('io.ox/files/mediaplayer', [
             $('#io-ox-topbar > ul.launchers-secondary > .minimizedmediaplayer').remove();
             $('#io-ox-topbar > ul.launchers-secondary').prepend(
                 minimizedPlayerLauncher = $('<li class="launcher minimizedmediaplayer">').append(
-                    $('<a href="#" tabindex="1">').append($('<i>').addClass('fa fa-play'))
+                    $('<a href="#">').append($('<i>').addClass('fa fa-play'))
                 ).one('click', function () {
                     ox.launch('io.ox/files/main');
                     $('.mediaplayer_container').show();

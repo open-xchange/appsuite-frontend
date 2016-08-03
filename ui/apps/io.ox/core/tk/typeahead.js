@@ -46,7 +46,6 @@ define('io.ox/core/tk/typeahead', [
                 return this.api.search(query);
             },
             click: $.noop,
-            tabindex: 1,
             // Max limit for draw operation in dropdown
             maxResults: 25,
             // Select first element on result callback
@@ -160,7 +159,6 @@ define('io.ox/core/tk/typeahead', [
                 self = this;
 
             this.$el.attr({
-                tabindex: this.options.tabindex,
                 placeholder: this.options.placeholder,
                 'aria-label': this.options.ariaLabel
             })

@@ -91,7 +91,7 @@ define('plugins/portal/calendar/register', [
                         var timespan = util.getSmartDate(nextApp, true);
 
                         $content.append(
-                            $('<li class="item" tabindex="1">')
+                            $('<li class="item" tabindex="0">')
                             .css('text-decoration', declined ? 'line-through' : 'none')
                             .data('item', nextApp)
                             .append(

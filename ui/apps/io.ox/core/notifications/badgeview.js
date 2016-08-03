@@ -71,7 +71,6 @@ define('io.ox/core/notifications/badgeview', [
 
             this.$el.attr({
                 href: '#',
-                tabindex: '1',
                 role: 'button',
                 'aria-pressed': false
             })

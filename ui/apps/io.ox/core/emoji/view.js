@@ -105,11 +105,11 @@ define('io.ox/core/emoji/view', [
                 node.addClass('emoji-use-tabs').append(
                     $('<div class="emoji-tabs">').append(
                         // we directly use the Japanese terms; no translation
-                        $('<a href="#" class="emoji-tab left" tabindex="5">')
+                        $('<a href="#" class="emoji-tab left">')
                             .attr('data-collection', 'japan_carrier')
                             // 他社共通絵文字
                             .text(this.emoji.getTitle('commonEmoji')),
-                        $('<a href="#" class="emoji-tab right" tabindex="5">')
+                        $('<a href="#" class="emoji-tab right">')
                             .attr('data-collection', 'softbank')
                             // 全絵文字
                             .text(this.emoji.getTitle('allEmoji'))
@@ -123,7 +123,7 @@ define('io.ox/core/emoji/view', [
                     this.showDropdown ?
                         $('<div class="emoji-options dropdown pull-right">').append(
                             // link
-                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="5">')
+                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">')
                             .attr('arial-label', gt('Options'))
                             .append(
                                 $('<i class="fa fa-cog" aria-hidden="true" role="presentation">')
@@ -180,7 +180,7 @@ define('io.ox/core/emoji/view', [
         drawCategoryIcons: function () {
 
             function draw(category) {
-                return $('<a href="#" class="emoji" tabindex="5">')
+                return $('<a href="#" class="emoji">')
                     .attr('data-category', category.name)
                     .addClass(category.iconClass);
             }
@@ -215,7 +215,7 @@ define('io.ox/core/emoji/view', [
 
             _(list).each(function (icon) {
                 node.append(
-                    $('<a href="#" class="emoji" tabindex="5">')
+                    $('<a href="#" class="emoji">')
                     .addClass(icon.css)
                     .data('icon', icon)
                 );

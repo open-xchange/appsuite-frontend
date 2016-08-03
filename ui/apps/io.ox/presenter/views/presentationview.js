@@ -79,7 +79,7 @@ define('io.ox/presenter/views/presentationview', [
      *  the button node.
      */
     function createNavigationButton(type, id) {
-        var button = $('<a href="#" class="swiper-button-control" tabindex="1" role="button" aria-controls="presenter-carousel">'),
+        var button = $('<a href="#" class="swiper-button-control" role="button" aria-controls="presenter-carousel">'),
             icon = $('<i class="fa" aria-hidden="true">');
 
         button.attr('id', id);
@@ -234,7 +234,7 @@ define('io.ox/presenter/views/presentationview', [
                     //#. Info text that says the presentation is paused.
                     gt('Presentation is paused.')
                 );
-            var leaveButton = $('<button class="btn btn-default pause-leave" role="button" type="button" tabindex="1">')
+            var leaveButton = $('<button type="button" class="btn btn-default pause-leave">')
                 .attr({
                     //#. tooltip for the leave presentation button
                     'title': gt('Leave presentation'),
@@ -243,7 +243,7 @@ define('io.ox/presenter/views/presentationview', [
                 //#. label for the leave presentation button
                 .text(gt('Leave'));
 
-            var pauseButton = $('<a href="#" class="pause-continue" tabindex="1" role="button"><i class="fa fa-pause" aria-hidden="true"></i></a>')
+            var pauseButton = $('<a href="#" class="pause-continue" role="button"><i class="fa fa-pause" aria-hidden="true"></i></a>')
                 .attr({
                     //#. tooltip for the continue presentation button
                     'title': gt('Continue presentation'),

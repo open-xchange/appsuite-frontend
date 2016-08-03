@@ -61,7 +61,7 @@ define('io.ox/participants/views', [
                 this.nodes.$text = $('<div class="participant-name">'),
                 $('<div class="participant-email">').append(this.nodes.$mail = this.options.halo ? $('<a>') : $('<span>')),
                 $('<div class="extra-decorator">').append(this.nodes.$extra = $('<span>')),
-                $('<a href="#" class="remove" role="button" tabindex="1">').append(
+                $('<a href="#" class="remove" role="button">').append(
                     $('<div class="icon">').append(
                         $('<i class="fa fa-trash-o" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Remove contact') + ' ' + this.model.getDisplayName())
@@ -142,7 +142,7 @@ define('io.ox/participants/views', [
 
                     if (mail && this.options.halo) {
                         this.nodes.$mail
-                            .attr({ href: '#', tabindex: '1' })
+                            .attr({ href: '#' })
                             .data({ email1: mail })
                             .addClass('halo-link');
                     }
@@ -154,8 +154,7 @@ define('io.ox/participants/views', [
                         if (this.options.baton && this.options.baton.callbacks) {
                             data.callbacks = this.options.baton.callbacks;
                         }
-                        var link = $('<a>')
-                            .attr({ href: '#', tabindex: '1' })
+                        var link = $('<a href="#">')
                             .data(data)
                             .addClass('halo-resource-link');
                         this.nodes.$extra.replaceWith(link);

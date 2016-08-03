@@ -679,9 +679,9 @@ define('io.ox/mail/compose/view', [
                     .text(gt('Do you really want to discard your message?'))
                     //#. "Discard message" appears in combination with "Cancel" (this action)
                     //#. Translation should be distinguishable for the user
-                    .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', { tabIndex: 1 })
-                    .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', { tabIndex: 1 })
-                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                    .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete')
+                    .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft')
+                    .addButton('cancel', gt('Cancel'), 'cancel')
                     .show()
                     .then(function (action) {
                         if (action === 'delete') {
