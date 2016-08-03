@@ -1250,19 +1250,20 @@ define('io.ox/files/api', [
                     return api.getList(list, { cache: false });
 
                 case 'remove:file':
-                    api.trigger('remove:file', list);
-                    _(list).each(function (obj) {
-                        api.trigger('remove:file:' + _.ecid(obj));
-                    });
                     // file count changed, need to reload folder
                     folderAPI.reload(list);
                     // mark trash folders as expired
-                    var id = coreSettings.get('folder/trash');
+                    var id = settings.get('folder/trash');
+
                     if (id) {
                         _(pool.getByFolder(id)).each(function (collection) {
                             collection.expired = true;
                         });
                     }
+                    api.trigger('remove:file', list);
+                    _(list).each(function (obj) {
+                        api.trigger('remove:file:' + _.ecid(obj));
+                    });
                     break;
 
                 case 'remove:version':

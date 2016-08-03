@@ -1111,6 +1111,13 @@ define('io.ox/files/main', [
             });
         },
 
+        'remove-file': function (app) {
+            api.on('remove:file', function () {
+                // trigger scroll after remove, if files were removed with select all we need to trigger a redraw or we get an empty view
+                app.listView.$el.trigger('scroll');
+            });
+        },
+
         /*
          * Handle delete event based on keyboard shortcut or swipe gesture
          */
