@@ -306,7 +306,7 @@ define('io.ox/calendar/freebusy/controller', [
                         .addClass(model.get('full_time') ? 'fulltime' : '')
                         // temporary
                         .addClass(model.get('shown_as') === 2 ? 'striped' : '')
-                        // no read access: disable (no click handler, default pointer, no hover)
+                        // no read access when in strict mode: disable (no click handler, default pointer, no hover)
                         .addClass(!model.get('folder_id') && settingsCalendar.get('freeBusyStrict', true) ? 'disabled' : '');
                     return $el;
                 };
