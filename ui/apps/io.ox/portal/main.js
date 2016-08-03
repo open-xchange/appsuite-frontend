@@ -21,10 +21,11 @@ define('io.ox/portal/main', [
     'io.ox/portal/widgets',
     'io.ox/portal/util',
     'io.ox/portal/settings/pane',
+    'io.ox/portal/settings/widgetview',
     'gettext!io.ox/portal',
     'settings!io.ox/portal',
     'less!io.ox/portal/style'
-], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, gt, settings) {
+], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, WidgetSettingsView, gt, settings) {
 
     'use strict';
 
@@ -291,16 +292,12 @@ define('io.ox/portal/main', [
         .on('add', function (model) {
             app.drawScaffold(model, true);
             widgets.loadUsedPlugins().done(function () {
-                ext.point('io.ox/portal/widget/' + model.get('type') + '/settings')
-                    .invoke('edit', this, model, {
-                        // WORKAROUND
-                        // This object should be replaced with the actual view if necessary.
-                        // This is in most cases io.ox/portal/settings/widgetview
-                        // which is not exposed atm.
-                        removeWidget: function () {
-                            collection.remove(model);
-                        }
-                    });
+                // See Bugs: 47816 / 47230
+                if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/portal') {
+                    var widgetSettingsView = new WidgetSettingsView({ model: model, collection: model.collection });
+                    ext.point('io.ox/portal/widget/' + model.get('type') + '/settings')
+                        .invoke('edit', this, model, widgetSettingsView);
+                }
                 if (model.has('candidate') !== true) {
                     app.drawWidget(model);
                     widgets.save(appBaton.$.widgets);
