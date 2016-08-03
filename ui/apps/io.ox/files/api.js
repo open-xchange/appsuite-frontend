@@ -829,7 +829,8 @@ define('io.ox/files/api', [
                 appendColumns: false
             });
         });
-        return http.resume();
+        // do not consolidate requests, show pending message instead
+        return http.resume({ consolidate: 'reject' });
     }
 
     function transfer(type, list, targetFolderId, ignoreWarnings) {
