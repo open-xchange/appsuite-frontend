@@ -162,12 +162,20 @@ define('io.ox/find/main', [
                 });
 
                 // events
+                var emptyMessageOriginal;
                 app.on({
                     'find:query': function () {
                         grid.setMode('search');
+                        emptyMessageOriginal = emptyMessageOriginal || grid.getEmptyMessage();
+                        grid.setEmptyMessage(function () {
+                            return gt('No matching items found.');
+                        });
                     },
                     'find:idle': function () {
-                        if (grid.getMode() !== 'all') grid.setMode('all');
+                        if (grid.getMode() !== 'all') {
+                            grid.setMode('all');
+                            grid.setEmptyMessage(emptyMessageOriginal);
+                        }
                     }
                 });
             },
