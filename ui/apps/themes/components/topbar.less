@@ -450,14 +450,14 @@ html.ios8-standalone-ipad-fix {
         left: auto;
     }
 }
-
-@media(max-width: 480px) and (orientation: portrait) {
+// when checking orientation, use max-device-width or keyboard overlay makes problems with some smartphones
+@media(max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
 
     #io-ox-topbar {
 
         .launcher a.notifications-icon {
 
-            padding: 12px 5px;
+            padding: 0 5px;
             width: auto;
             min-width: 40px;
             text-align: center;
