@@ -60,8 +60,9 @@ define('io.ox/files/actions', [
                         _(e.target.files).each(function (file) {
                             list.push(_.extend(file, { group: 'file' }));
                         });
+                        var options = _.extend({ folder: app.folder.get() }, baton.file_options);
                         fileUpload.setWindowNode(app.getWindowNode());
-                        fileUpload.create.offer(list, { folder: app.folder.get() });
+                        fileUpload.create.offer(list, options);
                     });
                     input.remove();
                 })

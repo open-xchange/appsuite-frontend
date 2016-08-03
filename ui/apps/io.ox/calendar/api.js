@@ -35,6 +35,8 @@ define('io.ox/calendar/api', [
             upload: {}
         },
 
+        getInvitesSince: 0,
+
         reduce: factory.reduce,
 
         get: function (o, useCache) {
@@ -573,7 +575,7 @@ define('io.ox/calendar/api', [
                 folder: 'all',
                 start: start,
                 end: end,
-                timestamp: 0,
+                timestamp: api.getInvitesSince || moment().subtract(5, 'years').valueOf(),
                 recurrence_master: true
             })
             .then(function (list) {

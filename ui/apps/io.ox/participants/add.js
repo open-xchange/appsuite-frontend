@@ -18,8 +18,10 @@ define('io.ox/participants/add', [
     'io.ox/core/tk/typeahead',
     'io.ox/mail/util',
     'io.ox/contacts/util',
+    'io.ox/core/util',
+    'io.ox/core/yell',
     'gettext!io.ox/core'
-], function (ext, pModel, pViews, Typeahead, util, contactsUtil, gt) {
+], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, yell, gt) {
 
     'use strict';
 
@@ -57,28 +59,32 @@ define('io.ox/participants/add', [
         },
 
         getInvalid: function (list) {
-
             var blacklist = this.options.blacklist;
-
-            return _(list).filter(function (item) {
-                // string, data, or model
-                if (_.isString(item)) item = { email1: item };
-                else if (item instanceof Backbone.Model) item = item.toJSON();
-                var address = contactsUtil.getMail(item);
+            return _(getAddresses(list)).filter(function (address) {
                 return !!blacklist[address];
             });
         },
 
         yell: function (list, invalid) {
-            var message = gt.format(
-              //#. %1$d a list of email addresses
-              //#, c-format
-              gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
-              gt.noI18n(invalid.join(', '))
-            );
-            require('io.ox/core/yell')('warning', message);
+            yell('warning', gt.format(
+                //#. %1$d a list of email addresses
+                //#, c-format
+                gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
+                gt.noI18n(invalid.join(', '))
+            ));
         }
     };
+
+    function getAddresses(list) {
+        return _(list).map(getAddress);
+    }
+
+    function getAddress(item) {
+        // string, data, or model
+        if (_.isString(item)) item = { email1: item };
+        else if (item instanceof Backbone.Model) item = item.toJSON();
+        return contactsUtil.getMail(item);
+    }
 
     var AddParticipantView = Backbone.View.extend({
 
@@ -144,12 +150,25 @@ define('io.ox/participants/add', [
 
         addParticipant: function (e, data, value) {
             var list = [].concat(data),
+                // validate is just used to check against blacklist
                 error = this.validate ? this.validate(list) : false;
             // abort when blacklisted where found
             if (error) return;
+            // now really validate address
+            list = this.getValidAddresses(list);
             this.collection.add(list);
             // clean typeahad input
             if (value) this.typeahead.$el.typeahead('val', '');
+        },
+
+        getValidAddresses: function (list) {
+            return _(list).filter(function (item) {
+                var address = getAddress(item);
+                if (coreUtil.isValidMailAddress(address)) return true;
+                //#. %1$s is an email address
+                yell('error', gt('Cannot add participant/member with an invalid mail address: %1$s', address));
+                return false;
+            });
         },
 
         render: function () {

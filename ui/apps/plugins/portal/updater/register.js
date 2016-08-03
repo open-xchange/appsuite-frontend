@@ -35,7 +35,7 @@ define('plugins/portal/updater/register', [
                             'You can download the updates from within the Updater.')
                     ),
                     $('<div class="paragraph">').append(
-                        $('<a>', { href: href, target: '_blank', tabindex: '1', 'role': 'button' }).addClass('action').text(gt('Download'))
+                        $('<a class="action" target="_blank" rel="noopener" tabindex="1" role="button">').attr('href', href).text(gt('Download'))
                     )
                 )
             );

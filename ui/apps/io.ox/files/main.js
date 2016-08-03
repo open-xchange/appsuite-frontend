@@ -1215,27 +1215,17 @@ define('io.ox/files/main', [
                     });
                 });
                 // check for clicks in folder trew
-                app.on('folder:change folder-virtual:change', function (folder, data) {
-                    var list = [];
-                    data = data || {};
-                    if (folderAPI.isVirtual(folder)) { list.push('virtual'); }
-                    // add folder types
-                    if (data.standard_folder_type && data.type) {
-                        // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
-                        list.push(data.standard_folder_type, data.type);
-                    }
-                    // add filestorage data
-                    if (data.account_id) {
-                        // simplify: 'dropbox://164' -> ['dropbox', '164']
-                        list = list.concat(data.account_id.split('://'));
-                    }
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'folder',
-                        type: 'click',
-                        action: 'select',
-                        detail: list.join('/')
-                    });
+                app.on('folder:change folder-virtual:change', function (folder) {
+                    metrics.getFolderFlags(folder)
+                        .then(function (list) {
+                            metrics.trackEvent({
+                                app: 'drive',
+                                target: 'folder',
+                                type: 'click',
+                                action: 'select',
+                                detail: list.join('/')
+                            });
+                        });
                 });
                 // selection in listview
                 app.listView.on({

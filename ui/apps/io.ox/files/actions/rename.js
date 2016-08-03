@@ -80,9 +80,11 @@ define('io.ox/files/actions/rename', [
                 });
             })
             .show(function () {
+                // Test for Guard .suffix.pgp such as .jpg.pgp
+                var highlight = (/\.[a-z0-9]+\.pgp/i).test(filename) ? filename.replace('.pgp', '').lastIndexOf('.') : filename.lastIndexOf('.');
                 this.find('input[name="name"]')
                     .focus().val(filename)
-                    .get(0).setSelectionRange(0, filename.lastIndexOf('.'));
+                    .get(0).setSelectionRange(0, highlight > -1 ? highlight : filename.length);
             });
 
     };

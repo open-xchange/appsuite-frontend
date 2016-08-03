@@ -63,7 +63,6 @@ define('io.ox/core/folder/actions/move', [
             }
 
             function commit(target) {
-
                 if (isMove && options.vgrid) options.vgrid.busy();
 
                 if (/^virtual/.test(target)) {
@@ -95,7 +94,12 @@ define('io.ox/core/folder/actions/move', [
                         }
                     },
                     function (e) {
-                        notifications.yell('error', e.error || e);
+                        if (e.code === 'UI_CONSREJECT') {
+                            // inform when a big copy operation is still ongoing, but the user clicked again(thinking it didn't work)
+                            notifications.yell('warning', gt('Please wait for the previous operation to finish'));
+                        } else {
+                            notifications.yell('error', e.error || e);
+                        }
                     }
                 );
             }

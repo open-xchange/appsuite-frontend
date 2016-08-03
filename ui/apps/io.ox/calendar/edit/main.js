@@ -22,7 +22,9 @@ define('io.ox/calendar/edit/main', [
     'io.ox/core/http',
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/calendar',
-    'less!io.ox/calendar/edit/style'
+    'less!io.ox/calendar/edit/style',
+    // need jquery-ui for scrollParent
+    'static/3rd.party/jquery-ui.min.js'
 ], function (AppointmentModel, api, dnd, EditView, notifications, folderAPI, util, http, gt, settings) {
 
     'use strict';

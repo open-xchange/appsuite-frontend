@@ -114,7 +114,7 @@ define('io.ox/portal/settings/pane', [
                         // add disabld class if requires upsell
                         .addClass(!upsell.has(options.requires) ? 'requires-upsell' : undefined)
                         .append(
-                            $('<a>', { href: '#', 'data-type': options.type, role: 'menuitem', tabindex: 1 }).text(options.title)
+                            $('<a href="#" role="menu-item" tabindex="1">').attr('data-type', options.type).text(options.title)
                         );
                 })
             );
@@ -146,15 +146,10 @@ define('io.ox/portal/settings/pane', [
         return function (activeColor, title) {
             return $('<div class="action dropdown colors">').append(
                 listUtils.appendIconText(
-                    $('<a>').attr({
-                        href: '#',
-                        role: 'button',
-                        tabindex: 1,
-                        'data-toggle': 'dropdown',
-                        'aria-haspopup': 'true',
+                    $('<a href="#" role="button" tabindex="1" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">').attr({
                         //#. %1$s is the title of the item, which should be colored
                         'aria-label': gt('Color %1$s', title)
-                    }).addClass('dropdown-toggle'),
+                    }),
                     gt('Color'),
                     'color',
                     activeColor
@@ -162,7 +157,7 @@ define('io.ox/portal/settings/pane', [
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(colorNames).map(function (name, color) {
                         return $('<li>').append(
-                            $('<a>', { href: '#', 'data-action': 'change-color', 'data-color': color, 'tabindex': 1, role: 'menuitem' }).append(
+                            $('<a href="#" data-action="change-color" tabindex="1" role="menuitem">').attr('data-color', color).append(
                                 $('<span class="color-example">').addClass('color-' + color),
                                 $.txt(name)
                             )
@@ -303,6 +298,8 @@ define('io.ox/portal/settings/pane', [
                     widgets.save(this.$el);
                 }
             }).on('add', function (view) {
+                // See Bugs: 47816 / 47230
+                if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/portal') return;
                 view.edit();
             }).render().$el);
         }
@@ -314,21 +311,19 @@ define('io.ox/portal/settings/pane', [
         draw: function () {
 
             var buildCheckbox = function () {
-                var checkbox = $('<input type="checkbox" tabindex="1">')
-                .on('change', function () {
-                    settings.set('mobile/summaryView', checkbox.prop('checked')).save();
-                }).addClass('input-xlarge');
-                checkbox.prop('checked', settings.get('mobile/summaryView'));
-                return checkbox;
-
+                return $('<input type="checkbox" tabindex="1" class="input-xlarge">')
+                    .prop('checked', settings.get('mobile/summaryView'))
+                    .on('change', function () {
+                        settings.set('mobile/summaryView', $(this).prop('checked')).save();
+                    });
             };
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').append(
+                    $('<legend class="sectiontitle">').append(
                         $('<h2>').text(gt('Smartphone settings:'))
                     ),
-                    $('<div>').addClass('form-group').append(
-                        $('<div>').addClass('checkbox').append(
+                    $('<div class="form-group">').append(
+                        $('<div class="checkbox">').append(
                             $('<label>').text(gt('Reduce to widget summary')).prepend(
                                 buildCheckbox('showHidden')
                             )

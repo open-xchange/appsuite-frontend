@@ -894,6 +894,12 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 try { hash = JSON.stringify(r.xhr); } catch (e) { if (ox.debug) console.error(e); }
 
                 if (r.o.consolidate !== false && hash && _.isArray(requests[hash])) {
+
+                    if (r.o.consolidate === 'reject') {
+                        r.def.reject({ error: 'request is already pending and consolidate parameter is set to reject', code: 'UI_CONSREJECT' });
+                        return;
+                    }
+
                     // enqueue callbacks
                     requests[hash].push(r);
                     r = hash = null;
@@ -1251,7 +1257,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         /**
          * Resume HTTP API. Send all queued requests as one multiple
          */
-        resume: function () {
+        resume: function (options) {
+            options = options || {};
             var def = $.Deferred(),
                 q = queue.slice();
             if (paused === true) {
@@ -1281,7 +1288,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                         module: 'multiple',
                         'continue': true,
                         data: tmp,
-                        appendColumns: false
+                        appendColumns: false,
+                        consolidate: options.consolidate
                     })
                     .done(function (data) {
                         // orchestrate callbacks and their data

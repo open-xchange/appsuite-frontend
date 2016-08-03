@@ -76,7 +76,7 @@ define('io.ox/settings/apps/settings/pane', [
                 $('<div class="selectable deletable-item">').append(
                     $('<div class="widget-title">').text(client.name),
                     $('<div>').append(
-                        $('<a target="_blank">')
+                        $('<a target="_blank" rel="noopener">')
                             .attr('href', client.website)
                             .text(client.website)
                     ),

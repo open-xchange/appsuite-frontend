@@ -139,7 +139,9 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
             var data = {
                 file: this.getFile(),
                 id: this.model.get('id'),
-                folder: this.model.get('folder_id')
+                folder: this.model.get('folder_id'),
+                // If file already encrypted, update should also be encrypted
+                params: this.model.isEncrypted() ? { 'cryptoAction': 'Encrypt' } : {}
             };
 
             if (COMMENTS) data.version_comment = comment || '';
