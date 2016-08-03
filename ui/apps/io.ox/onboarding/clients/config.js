@@ -202,19 +202,10 @@ define('io.ox/onboarding/clients/config', [
                 scenarios = this.scenarios;
             if (device) {
                 var scenarioIds = device.scenarios;
-                return _.chain(scenarios)
-                        .filter(function (obj) {
-                            var cid = _cid(device.id, obj.id);
-                            return scenarioIds.indexOf(cid) >= 0;
-                        })
-                        .each(function (obj) {
-                            // WORKAROUND: middleware return missing_capabilites in 'matching' not in 'scenario'
-                            var cid = _cid(device.id, obj.id),
-                                match = _.findWhere(this.hash.matching, { id: cid });
-                            if (!match || !match.missing_capabilities) return;
-                            _.extend(obj, { missing_capabilities: match.missing_capabilities }, obj);
-                        }.bind(this))
-                        .value();
+                return _.filter(scenarios, function (obj) {
+                    var cid = _cid(device.id, obj.id);
+                    return scenarioIds.indexOf(cid) >= 0;
+                });
             }
             return scenarios;
         },
