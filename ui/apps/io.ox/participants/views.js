@@ -73,6 +73,7 @@ define('io.ox/participants/views', [
             this.setDisplayName();
             this.setTypeStyle();
             this.options.customize.call(this);
+            this.trigger('render');
             return this;
         },
 
@@ -212,20 +213,26 @@ define('io.ox/participants/views', [
         },
 
         renderParticipant: function (participant) {
-            var self = this;
+
             var view = new ParticipantEntryView({
                 tagName: 'li',
                 model: participant,
-                baton: self.options.baton,
-                halo: self.options.halo !== undefined ? self.options.halo : true,
+                baton: this.options.baton,
+                halo: this.options.halo !== undefined ? this.options.halo : true,
                 closeButton: true
-            }).render().$el.addClass(self.options.entryClass || 'col-xs-12 col-sm-6');
+            });
+
+            view.on('render', function () {
+                this.collection.trigger('render');
+            }.bind(this));
+
+            view.render().$el.addClass(this.options.entryClass || 'col-xs-12 col-sm-6');
 
             // bring organizer up
-            if (participant.get('id') === self.options.baton.model.get('organizerId')) {
-                self.$ul.prepend(view);
+            if (participant.get('id') === this.options.baton.model.get('organizerId')) {
+                this.$ul.prepend(view.$el);
             } else {
-                self.$ul.append(view);
+                this.$ul.append(view.$el);
             }
         },
 

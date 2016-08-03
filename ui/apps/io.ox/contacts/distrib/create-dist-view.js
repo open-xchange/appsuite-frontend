@@ -126,7 +126,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 },
                 placeholder: gt('Add contact') + ' \u2026',
                 label: gt('Add contact'),
-                collection: this.baton.member
+                collection: this.baton.member,
+                scrollIntoView: true
             });
             this.$el.append(
                 view.$el

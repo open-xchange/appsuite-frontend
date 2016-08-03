@@ -163,7 +163,8 @@ define('io.ox/core/tk/typeahead', [
                 tabindex: this.options.tabindex,
                 placeholder: this.options.placeholder,
                 'aria-label': this.options.ariaLabel
-            }).on({
+            })
+            .on({
                 // dirty hack to get a reliable info about open/close state
                 'typeahead:closed': function () {
                     var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');

@@ -543,6 +543,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 1500,
         rowClass: 'collapsed',
         draw: function (baton) {
+
             var typeahead = new AddParticipantView({
                 apiOptions: {
                     contacts: true,
@@ -552,28 +553,12 @@ define('io.ox/calendar/edit/extensions', [
                     distributionlists: true
                 },
                 collection: baton.model.getParticipants(),
-                blacklist: settings.get('participantBlacklist') || false
+                blacklist: settings.get('participantBlacklist') || false,
+                scrollIntoView: true
             });
-            this.append(
-                typeahead.$el
-            );
+
+            this.append(typeahead.$el);
             typeahead.render().$el.addClass('col-md-6');
-
-            typeahead.typeahead.on('typeahead-custom:dropdown-rendered', function () {
-
-                var target = typeahead.$el.find('.tt-dropdown-menu'),
-                    container = target.scrollParent(),
-                    pos = target.offset().top - container.offset().top;
-
-                if (!target.is(':visible')) {
-                    return;
-                }
-
-                if ((pos < 0) || (pos + target.height() > container.height())) {
-                    // scroll to Node, leave 16px offset
-                    container.scrollTop(container.scrollTop() + pos - 16);
-                }
-            });
         }
     });
 
