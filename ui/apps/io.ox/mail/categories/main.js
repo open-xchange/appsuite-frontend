@@ -427,7 +427,7 @@ define('io.ox/mail/categories/main', [
             this.listenTo(this.mail, 'folder:change', this.setFolder);
             // debug
             //this.listenTo(this.pool, 'all', _.partial(debug, 'green'));
-            //this.listenTo(this, 'all', _.partial(debug, 'green'));
+            this.listenTo(this, 'all', _.partial(debug, 'green'));
             //this.listenTo(this.props, 'all', _.partial(debug, 'purple'));
             //this.listenTo(this.view, 'all', _.partial(debug, 'blue'));
             //this.listenTo(this.categories, 'all', _.partial(debug, 'red'));
