@@ -26,9 +26,10 @@ define('io.ox/calendar/freebusy/controller', [
     'io.ox/calendar/view-detail',
     'gettext!io.ox/calendar/freebusy',
     'settings!io.ox/core',
+    'settings!io.ox/calendar',
     'less!io.ox/calendar/week/style',
     'less!io.ox/calendar/freebusy/style'
-], function (dialogs, WeekView, templates, folderAPI, AddParticipant, pModel, pView, userAPI, contactsUtil, api, notifications, detailView, gt, settings) {
+], function (dialogs, WeekView, templates, folderAPI, AddParticipantView, pModel, pView, userAPI, contactsUtil, api, notifications, detailView, gt, settings, settingsCalendar) {
 
     'use strict';
 
@@ -306,7 +307,7 @@ define('io.ox/calendar/freebusy/controller', [
                         // temporary
                         .addClass(model.get('shown_as') === 2 ? 'striped' : '')
                         // no read access: disable (no click handler, default pointer, no hover)
-                        .addClass(!model.get('folder_id') ? 'disabled' : '');
+                        .addClass(!model.get('folder_id') && settingsCalendar.get('freeBusyStrict', true) ? 'disabled' : '');
                     return $el;
                 };
 
@@ -424,7 +425,7 @@ define('io.ox/calendar/freebusy/controller', [
 
             var drop;
 
-            this.autocomplete = new AddParticipant({
+            this.autocomplete = new AddParticipantView({
                 apiOptions: {
                     contacts: false,
                     users: true,

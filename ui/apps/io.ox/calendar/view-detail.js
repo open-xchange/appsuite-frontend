@@ -23,10 +23,11 @@ define('io.ox/calendar/view-detail', [
     'io.ox/core/extPatterns/links',
     'io.ox/participants/detail',
     'io.ox/core/util',
+    'settings!io.ox/calendar',
     'gettext!io.ox/calendar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, ParticipantsView, coreUtil, gt) {
+], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, ParticipantsView, coreUtil, settings, gt) {
 
     'use strict';
 
@@ -156,7 +157,7 @@ define('io.ox/calendar/view-detail', [
         draw: function (baton, options) {
 
             // we don't show details for private appointments in shared/public folders (see bug 37971)
-            var data = baton.data, folder = folderAPI.pool.getModel(data.folder_id);
+            var data = baton.data, folder = options.minimaldata ? {} : folderAPI.pool.getModel(data.folder_id);
             if (data.private_flag && data.created_by !== ox.user_id && !folderAPI.is('private', folder)) return;
 
             var node = $('<dl class="dl-horizontal expandable-content">');
@@ -171,7 +172,7 @@ define('io.ox/calendar/view-detail', [
                         $('<i class="fa expandable-indicator" aria-hidden="true">')
                     ),
                     node
-                )
+                ).addClass(options.minimaldata ? 'open' : '')
             );
         }
     });
@@ -403,7 +404,7 @@ define('io.ox/calendar/view-detail', [
         draw: function (baton, options) {
             // make sure we have a baton
             baton = ext.Baton.ensure(baton);
-            options = _.extend({}, options);
+            options = _.extend({ minimaldata: !baton.data.folder_id }, options);
             if (_.device('smartphone') && !options.deeplink) {
                 baton.disable('io.ox/calendar/detail/actions', 'inline-links');
             }
