@@ -80,7 +80,7 @@ define('io.ox/mail/categories/main', [
             return _.pick.apply(this, [_.clone(this.attributes)].concat(SYNCED));
         },
         getCount: function () {
-            return this.get('unread');
+            return this.get('unread') || undefined;
         },
         can: function (id) {
             return this.get('permissions').indexOf(id) > -1;
@@ -179,7 +179,7 @@ define('io.ox/mail/categories/main', [
                 } else {
                     node.removeClass('selected');
                 }
-                if (model.getCount() >= 0) { node.find('.counter').text(model.getCount()); }
+                if (model.getCount()) { node.find('.counter').text(model.getCount()); }
                 //#. use as a fallback name in case a user enters a empty string as the name of tab
                 node.find('.category-name').text(model.get('name').trim() || gt('Unnamed'));
             }.bind(this));
@@ -427,7 +427,7 @@ define('io.ox/mail/categories/main', [
             this.listenTo(this.mail, 'folder:change', this.setFolder);
             // debug
             //this.listenTo(this.pool, 'all', _.partial(debug, 'green'));
-            //this.listenTo(this, 'all', _.partial(debug, 'green'));
+            this.listenTo(this, 'all', _.partial(debug, 'green'));
             //this.listenTo(this.props, 'all', _.partial(debug, 'purple'));
             //this.listenTo(this.view, 'all', _.partial(debug, 'blue'));
             //this.listenTo(this.categories, 'all', _.partial(debug, 'red'));
