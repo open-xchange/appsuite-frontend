@@ -36,7 +36,7 @@ define('io.ox/core/notifications', [
         tagName: 'div',
         id: 'io-ox-notifications-display',
         events: {
-            'click .clear-area-button': 'hideAll'
+            'click .clear-area-button': 'hide'
         },
         initialize: function () {
             var self = this;
@@ -111,7 +111,8 @@ define('io.ox/core/notifications', [
                         $('<button class="btn btn-link clear-area-button fa fa-times">')
                             .attr({
                                 tabindex: 1,
-                                'aria-label': gt('Hide all notifications')
+                                //'aria-label': gt('Hide all notifications')
+                                'aria-label': gt('Close notification area')
                             })
                         )
                     );
