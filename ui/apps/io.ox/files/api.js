@@ -726,7 +726,12 @@ define('io.ox/files/api', [
             // clear target folder
             _(pool.getByFolder(id)).each(function (collection) {
                 var files = collection.filter(function (model) { return isTrash || model.isFile(); });
-                collection.remove(files);
+                if (collection.length === files.length) {
+                    // use reset or listview removes files one by one and scrolls after each one (is very slow and blocks UI if there are many files)
+                    collection.reset();
+                } else {
+                    collection.remove(files);
+                }
             });
         },
         'remove:infostore': function () {
