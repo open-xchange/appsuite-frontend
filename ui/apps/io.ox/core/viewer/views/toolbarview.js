@@ -309,13 +309,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     //#. %1$s is usually "Drive" (product name; might be customized)
                     label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
                     ref: 'io.ox/mail/actions/save-attachment'
-                },
-                'sendmailattachmentasmail': {
-                    prio: 'lo',
-                    mobile: 'lo',
-                    section: 'share',
-                    label: gt('Send as mail'),
-                    ref: 'io.ox/core/viewer/actions/toolbar/sendasmail'
                 }
             },
             pim: {
@@ -339,7 +332,67 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: 'io.ox/core/tk/actions/save-attachment'
                 }
             },
-            guard: {
+            guardDrive: {
+                'rename': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Rename'),
+                    section: 'edit',
+                    ref: 'oxguard/rename'
+                },
+                'editdescription': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Edit description'),
+                    section: 'edit',
+                    ref: 'io.ox/files/actions/edit-description'
+                },
+                'download': {
+                    prio: 'hi',
+                    mobile: 'lo',
+                    icon: 'fa fa-download',
+                    label: gt('Download'),
+                    section: 'export',
+                    ref: 'oxguard/download'
+                },
+                'open': {
+                    prio: 'lo',
+                    mobile: 'hi',
+                    icon: 'fa fa-download',
+                    label: gt('Open attachment'),
+                    section: 'export',
+                    ref: 'oxguard/open'
+                },
+                'sendbymail': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Send by mail'),
+                    section: 'share',
+                    ref: 'oxguard/sendcopy'
+                },
+                'addtoportal': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Add to portal'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/add-to-portal'
+                },
+                'uploadnewversion': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Upload new version'),
+                    section: 'import',
+                    ref: 'io.ox/files/actions/upload-new-version'
+                },
+                'delete': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Delete'),
+                    section: 'delete',
+                    ref: 'io.ox/files/actions/delete'
+                }
+            },
+            guardMail: {
             }
         };
     // create 3 extension points containing each sets of links for Drive, Mail, and PIM apps
@@ -472,25 +525,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
             $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitheight');
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/sendasmail', {
-        requires: function (e) {
-            var model = e.baton.model;
-            return model.isOffice() || model.isPDF();
-        },
-        action: function (baton) {
-            var viewedAttachment = baton.data;
-            MailAPI.get({ id: viewedAttachment.mail.id, folder_id: viewedAttachment.mail.folder_id }).done(function (mail) {
-                ox.registry.call('mail-compose', 'replyall', mail).then(function (MailApp) {
-                    // look for currently viewed attachment in the list of attachments of the source email
-                    var attachmentToSend = _.find(mail.attachments, function (attachment) {
-                        return attachment.id === viewedAttachment.id;
-                    });
-                    MailApp.app.model.get('attachments').add(attachmentToSend);
-                });
-            });
         }
     });
 

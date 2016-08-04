@@ -87,7 +87,7 @@ A event triggers when an app started. The measure time is between the click on t
 | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
 | mail/list/[layout]/select/one <br> mail/list/[layout]/select/multiple                      | Select mail by click on the list/grid (layout: vert, horiz, compact, list) |
 | mail/toolbar/[action] <br> mail/detail/toolbar/[action] <br> mail/compose/toolbar/[action] | Clicks on a email action                                                   |
-| mail/folders/folder/select/[type]                                                          | Clicks on a folder in the mail folder tree (type: primary, external)       |
+| mail/folders/folder/select/[list-of-flags]                                                          | Clicks on a folder in the mail folder tree (flags: primary, external, default, virtual, unified, trash, inbox, send, drafts, spam, trash)       |
 | mail/folder/account/add                                                                    | Clicks on “Add new mail account”                                           |
 | mail/settings/account/add                                                                  | Clicks within “Social + Mail Accounts” on “Add account”                    |
 
@@ -96,7 +96,7 @@ A event triggers when an app started. The measure time is between the click on t
 | EventId                                                      | Trigger                                                                              |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
 | contacts/list/select/one <br>  contacts/list/select/multiple | Select contact by click on the list/grid                                             |
-| contacts/folder/select/[type]                                | Clicks on a folder in the contact folder tree (folder-type: private, public, shared) |
+| contacts/folder/select/[list-of-flags]                                 | Clicks on a folder in the contact folder tree (flags: private, public, shared, default, virtual) |
 | contacts/toolbar/[action]                                    | Clicks on a contact action                                                           |
 | contacts/edit/contact/toolbar/[action]                       | Clicks on a action in the create/edit dialog                                         |
 | contacts/edit/distribution-list/toolbar/[action]             | Clicks on a action in the create/edit dialog                                         |
@@ -109,7 +109,7 @@ A event triggers when an app started. The measure time is between the click on t
 | calendar/toolbar/[action]             | Clicks on calendar toolbar action                                                                |
 | calendar/[layout-mode]/select         | Clicks on appointments within non-list layout modes                                              |
 | calendar/[layout-mode]/create         | Clicks on blank space within non-list layout modes to create appointment                         |
-| calendar/folder/select/[type]         | Clicks on a folder in the contact folder tree (folder-type: private, public, shared)             |
+| calendar/folder/select/[list-of-flags]         | Clicks on a folder in the contact folder tree (flags: private, public, shared, default, virtual)             |
 | calendar/folder/permissions           | Clicks on the “cloud” icon and the “User” icon next to the folder name                           |
 | calendar/folder/context-menu/[action] | Clicks within the context menu, which pops up, when you click on a folder name and its menu icon |
 | calendar/detail/toolbar/[action]      | Clicks on calendar detail view toolbar action                                                    |
@@ -120,7 +120,7 @@ A event triggers when an app started. The measure time is between the click on t
 
 | EventId                            | Trigger                                                                                          |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------ |
-| tasks/folder/select/[type]         | Clicks on a folder in the contact folder tree (folder-type: private, public, shared)             |
+| tasks/folder/select/[list-of-flags]         | Clicks on a folder in the contact folder tree (flags: private, public, shared, default, virtual)              |
 | tasks/folder/context-menu/[action] | Clicks within the context menu, which pops up, when you click on a folder name and its menu icon |
 | tasks/toolbar/[action]             | Clicks on tasks toolbar action                                                                   |
 | tasks/detail/[action]              | Clicks on task detail view toolbar action                                                        |
@@ -131,7 +131,7 @@ A event triggers when an app started. The measure time is between the click on t
 
 | EventId                            | Trigger                                                                                                                                        |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| drive/folder/select/[types]        | Clicks on a folder in drive folder tree<br> (folder-type: standard_folder_type + '/' + folder_type + '/' + filestorage + '/' + filestorage_id) |
+| drive/folder/select/[types]        | Clicks on a folder in drive folder tree (flags: default, documents, music, pictures, videos, trash)  |
 | drive/folder/context-menu/[action] | Clicks within the context menu, which pops up, when you click on a folder name and its menu icon                                               |
 | drive/toolbar/[action]             | Clicks on tasks toolbar action                                                                                                                 |
 | drive/folder/account/add/[id]      | Clicks on 'Add account' buttons                                                                                                                |

@@ -62,7 +62,10 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
                 if (options.version) {
                     file = _.extend({}, file, { version: options.version });
                 }
-                var url = api.getUrl(file, 'download');
+                if (options.filename) {
+                    file = _.extend(file, { filename: options.filename });
+                }
+                var url = api.getUrl(file, 'download', { params: options.params });
                 iframe(url);
             });
         },

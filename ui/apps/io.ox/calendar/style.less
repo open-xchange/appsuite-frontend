@@ -464,6 +464,7 @@
     }
 
     .io-ox-inline-links:first-child { margin-top: 0; }
+    .io-ox-inline-links:empty { display: none; }
 
     h1.subject {
         display: inline-block;
@@ -471,6 +472,7 @@
         margin: 0;
         width: 100%;
         word-wrap: break-word;
+        &:empty { display: none; }
     }
 
     .date-time-recurrence, .location {

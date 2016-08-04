@@ -1662,14 +1662,22 @@ define('io.ox/mail/main', [
                     });
                 });
                 // check for clicks in folder trew
-                app.on('folder:change', function (folder) {
-                    metrics.trackEvent({
-                        app: 'mail',
-                        target: 'folder',
-                        type: 'click',
-                        action: 'select',
-                        detail: account.isPrimary(folder) ? 'primary' : 'external'
-                    });
+                app.on('folder:change folder-virtual:change', function (folder, data) {
+                    data = data || {};
+                    metrics.getFolderFlags(folder)
+                        .then(function (list) {
+                            // unfied
+                            if (folderAPI.is('unifiedfolder', data)) list.unshift('unfified');
+                            // primary vs. external
+                            list.unshift(folderAPI.is('external', data) ? 'external' : 'primary');
+                            metrics.trackEvent({
+                                app: 'mail',
+                                target: 'folder',
+                                type: 'click',
+                                action: 'select',
+                                detail: list.join('/')
+                            });
+                        });
                 });
                 // selection in listview
                 app.listView.on({

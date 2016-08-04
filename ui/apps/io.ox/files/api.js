@@ -71,11 +71,8 @@ define('io.ox/files/api', [
                     source: 'pim'
                 };
 
-            } else if (_.isString(attributes.guardUrl)) {
-                // Guard
+            } else if (_.isString(attributes.guardUrl) || (attributes.source === 'guardDrive')) {
                 normalizedAttrs = attributes;
-                normalizedAttrs.source = 'guard';
-
             } else {
                 // drive
                 normalizedAttrs = attributes;
@@ -106,7 +103,7 @@ define('io.ox/files/api', [
         isFile: function () {
             // we cannot check for "filename", because there are files without a file; yep!
             // so we rather check if it's not a folder
-            return !this.isFolder() && this.get('source') === 'drive';
+            return !this.isFolder() && (this.get('source') === 'drive' || this.get('source') === 'guardDrive');
         },
 
         isImage: function (type) {
@@ -138,7 +135,7 @@ define('io.ox/files/api', [
         },
 
         isGuard: function () {
-            return this.get('source') === 'guard';
+            return /guard/.test(this.get('source'));
         },
 
         isEncrypted: function () {
@@ -333,6 +330,8 @@ define('io.ox/files/api', [
             buster = _([ox.user_id, ox.context_id, file.last_modified]).compact().join('.') || '';
 
         if (buster) query += '&' + buster;
+
+        if (options.params) query += '&' + _.serialize(options.params);
 
         switch (type) {
             case 'download':
@@ -540,7 +539,7 @@ define('io.ox/files/api', [
             if (model && !model.get('expired') && model.has('description')) return $.when(model.toJSON());
         }
 
-        var params =  {
+        var params = {
             action: 'get',
             id: file.id,
             folder: file.folder_id || file.folder,
@@ -813,20 +812,25 @@ define('io.ox/files/api', [
     function copy(list, targetFolderId, ignoreWarnings) {
         http.pause();
         _(list).map(function (item) {
+            var params = {
+                action: 'copy',
+                id: item.id,
+                folder: item.folder_id,
+                timestamp: item.timestamp || _.then(),
+                ignoreWarnings: ignoreWarnings
+            };
+            if (item.file_options && item.file_options.params) {
+                params = _.extend(params, item.file_options.params);
+            }
             return http.PUT({
                 module: 'files',
-                params: {
-                    action: 'copy',
-                    id: item.id,
-                    folder: item.folder_id,
-                    timestamp: item.timestamp || _.then(),
-                    ignoreWarnings: ignoreWarnings
-                },
+                params: params,
                 data: { folder_id: targetFolderId },
                 appendColumns: false
             });
         });
-        return http.resume();
+        // do not consolidate requests, show pending message instead
+        return http.resume({ consolidate: 'reject' });
     }
 
     function transfer(type, list, targetFolderId, ignoreWarnings) {

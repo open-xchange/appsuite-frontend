@@ -426,7 +426,7 @@ define('io.ox/contacts/view-detail', [
             var query = encodeURIComponent(text.replace(/\n*/, '\n').trim().replace(/\n/g, ', '));
 
             $(this).append(
-                $('<a class="maps-service" target="_blank">')
+                $('<a class="maps-service" target="_blank" rel="noopener">')
                 .attr('href', services[service].url + query)
                 .append(
                     address,

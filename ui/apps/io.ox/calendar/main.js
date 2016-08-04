@@ -652,13 +652,6 @@ define('io.ox/calendar/main', [
 
         'metrics': function (app) {
 
-            function getFolderType(folder) {
-                if (folderAPI.is('shared', folder)) return 'shared';
-                if (folderAPI.is('private', folder)) return 'private';
-                if (folderAPI.is('public', folder)) return 'public';
-                return 'unknown';
-            }
-
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
@@ -722,16 +715,15 @@ define('io.ox/calendar/main', [
                     });
                 });
                 // check for clicks in folder trew
-                app.on('folder:change', function (folder) {
-                    folderAPI
-                        .get(folder)
-                        .then(function (data) {
+                app.on('folder:change folder-virtual:change', function (folder) {
+                    metrics.getFolderFlags(folder)
+                        .then(function (list) {
                             metrics.trackEvent({
                                 app: 'calendar',
                                 target: 'folder',
                                 type: 'click',
                                 action: 'select',
-                                detail: getFolderType(data)
+                                detail: list.join('/')
                             });
                         });
                 });

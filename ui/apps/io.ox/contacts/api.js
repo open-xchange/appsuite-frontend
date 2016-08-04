@@ -816,7 +816,7 @@ define('io.ox/contacts/api', [
 
         // set node content
         set = function (name) {
-            if (options.halo && /\@/.test(data.email)) {
+            if (options.halo && /\@/.test(data.email) && capabilities.has('contacts')) {
                 node
                 .addClass('halo-link')
                 .attr('href', '#')

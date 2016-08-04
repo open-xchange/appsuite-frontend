@@ -882,14 +882,6 @@ define('io.ox/contacts/main', [
 
         'metrics': function (app) {
 
-            function getFolderType(folder) {
-                if (folderAPI.is('shared', folder)) return 'shared';
-                if (folderAPI.is('private', folder)) return 'private';
-                if (folderAPI.is('public', folder)) return 'public';
-                if (folder.id === '6') return 'gab';
-                return 'unknown';
-            }
-
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
@@ -926,16 +918,15 @@ define('io.ox/contacts/main', [
                     });
                 });
                 // check for clicks in folder trew
-                app.on('folder:change', function (folder) {
-                    folderAPI
-                        .get(folder)
-                        .then(function (data) {
+                app.on('folder:change folder-virtual:change', function (folder) {
+                    metrics.getFolderFlags(folder)
+                        .then(function (list) {
                             metrics.trackEvent({
                                 app: 'contacts',
                                 target: 'folder',
                                 type: 'click',
                                 action: 'select',
-                                detail: getFolderType(data)
+                                detail: list.join('/')
                             });
                         });
                 });

@@ -278,7 +278,7 @@ define('io.ox/mail/api', [
         // never use factory's internal cache, therefore always 'false' at this point
         return get.call(api, obj, false).done(function (data) {
             // don't save raw data in our models. We only want preformated content there
-            if (obj.view === 'raw') return;
+            if (obj.src || obj.view === 'raw') return;
             // delete potential 'cid' attribute (see bug 40136); otherwise the mail gets lost
             delete data.cid;
             // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
@@ -1079,7 +1079,8 @@ define('io.ox/mail/api', [
             id: obj.id,
             src: true,
             folder: obj.folder || obj.folder_id,
-            view: 'html'
+            view: 'html',
+            embedded: false
         }, false);
     };
 
@@ -1543,7 +1544,7 @@ define('io.ox/mail/api', [
             // strip tags
             .replace(/<[^>]+(>|$)/g, '')
             // links
-            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>')
+            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank" rel="noopener">http$2://...</a>')
             // convert to simple white space
             .replace(/&#160;/g, ' ')
             // reduce consecutive white space
