@@ -72,7 +72,7 @@ define('io.ox/mail/categories/main', [
             return _.pick.apply(this, [_.clone(this.attributes)].concat(SYNCED));
         },
         getCount: function () {
-            return this.get('unread') || undefined;
+            return this.get('unread') === 0 ? '' : this.get('unread');
         },
         can: function (id) {
             return this.get('permissions').indexOf(id) > -1;
@@ -164,7 +164,7 @@ define('io.ox/mail/categories/main', [
             } else {
                 node.removeClass('selected');
             }
-            if (model.getCount()) { node.find('.counter').text(model.getCount()); }
+            node.find('.counter').text(model.getCount());
             //#. use as a fallback name in case a user enters a empty string as the name of tab
             node.find('.category-name').text(model.get('name').trim() || gt('Unnamed'));
         },
