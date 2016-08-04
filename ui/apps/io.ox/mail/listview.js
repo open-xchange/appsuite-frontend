@@ -176,6 +176,11 @@ define('io.ox/mail/listview', [
             draw: extensions.paperClip
         },
         {
+            id: 'shared-attachement',
+            index: 450,
+            draw: extensions.sharedAttachement
+        },
+        {
             id: 'pgp-encrypted',
             index: 600,
             draw: extensions.pgp.encrypted
