@@ -711,8 +711,10 @@ define('io.ox/files/main', [
             var ev = _.device('touch') ? 'tap' : 'dblclick';
 
             app.listView.$el.on(ev, '.file-type-folder .list-item-content', function (e) {
-                var obj = _.cid($(e.currentTarget).parent().attr('data-cid'));
-                app.folder.set(obj.id);
+                // simpler id check for folders, prevents errors if folder id contains '.'
+                var id = $(e.currentTarget).parent().attr('data-cid').replace(/^folder./, '');
+
+                app.folder.set(id);
             });
 
             app.listView.$el.on(ev, '.list-item:not(.file-type-folder) .list-item-content', function (e) {
@@ -733,11 +735,13 @@ define('io.ox/files/main', [
             // folders
             app.listView.$el.on('keydown', '.file-type-folder', function (e) {
                 if (e.which === 13) {
-                    var obj = _.cid($(e.currentTarget).attr('data-cid'));
+                    // simpler id check for folders, prevents errors if folder id contains '.'
+                    var id = $(e.currentTarget).attr('data-cid').replace(/^folder./, '');
+
                     app.listView.once('collection:load', function () {
                         app.listView.selection.select(0);
                     });
-                    app.folder.set(obj.id);
+                    app.folder.set(id);
                 }
             });
 
