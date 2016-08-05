@@ -98,14 +98,18 @@ define('io.ox/participants/model', [
 
         magic: function () {
             // It's a kind of magic
-            // convert external user having an internal user id to internal users
+
+            // convert: user-contact -> user
             if (this.is('user-contact')) {
                 this.set({
                     'type': this.TYPE_USER,
                     'contact_id': this.get('id'),
                     'id': this.get('internal_userid')
                 });
-            } else if (this.is('user-extra')) {
+            }
+
+            // convert: user-extra -> user-contact
+            if (this.is('user-extra')) {
                 this.set({
                     'type': this.TYPE_EXTERNAL_USER,
                     'internal_userid': this.get('id'),
