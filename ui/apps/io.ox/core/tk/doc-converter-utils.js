@@ -247,9 +247,14 @@ define('io.ox/core/tk/doc-converter-utils', [
             };
 
         } else if (model.isGuard()) {
+            var file_options = model.get('file_options');
+            var file_options_params = file_options ? file_options.params : null;
             return {
                 source: 'guard',
+                // MT: guardUrl can probably be removed, at least the DocumentConverterAction now uses the cryptoAuth/Action.
                 guardUrl: model.get('guardUrl'),
+                cryptoAuth: file_options_params ? file_options_params.cryptoAuth : null,
+                cryptoAction: file_options_params ? file_options_params.cryptoAction : null,
                 mimetype: model.get('meta').OrigMime || model.get('file_mimetype')
             };
         }
