@@ -120,9 +120,41 @@ define('io.ox/participants/model', [
                 this.set('id', this.getEmail(), { silent: true });
             }
             // set pid
-            this.set('pid', [this.TYPE_LABEL[this.get('type')], this.get('id'), this.get('field')].join('_'), { silent: true });
+            this.setPID();
             // for typeahead hint
             this.value = this.getTarget() || this.getDisplayName();
+        },
+
+        setPID: function () {
+            var pid = [this.TYPE_LABEL[this.get('type')], this.get('id'), this.get('field')].join('_');
+            this.set('pid', pid, { silent: true });
+        },
+
+
+        is: function (type) {
+            switch (type) {
+                // a contact based on a user (f.e. secondary mail address)
+                case 'user':
+                    return this.get('type') === this.TYPE_USER;
+                // a contact without connection to a user
+                case 'contact':
+                    return this.get('type') === this.TYPE_EXTERNAL_USER;
+                case 'group':
+                    return this.get('type') === this.TYPE_USER_GROUP;
+                case 'resource':
+                    return this.get('type') === this.TYPE_RESOURC;
+                case 'list':
+                    return this.get('type') === this.TYPE_DISTLIST;
+                case 'unknown':
+                    return this.get('type') === this.TYPE_UNKNOWN;
+                // USER-CONTACT MAGIC
+                case 'user-contact':
+                    return this.is('contact') && this.has('internal_userid') && this.get('field') === 'email1';
+                case 'user-extra':
+                    return this.is('user') && this.get('contact_id') && this.has('field') && this.get('field') !== 'email1';
+                default:
+                    break;
+            }
         },
 
         getContactID: function () {
