@@ -229,6 +229,12 @@ define('io.ox/participants/model', [
                         // since this update is done on search results
                         data = _(data).omit('first_name', 'last_name', 'display_name');
                     }
+                    // fix wrong mail field (see bug 47874)
+                    if (model.has('mail') && model.get('mail') !== data[model.get('field')]) {
+                        _.each(['email1', 'email2', 'email3'], function (key) {
+                            if (data[key] === model.get('mail')) data.field = key;
+                        });
+                    }
                     model.set(data);
                 };
 
