@@ -100,13 +100,13 @@ define('io.ox/participants/model', [
             // It's a kind of magic
             // convert external user having an internal user id to internal users
             if (this.has('field')) {
-                if (this.get('field') === 'email1' && this.is('contact') && this.get('internal_userid')) {
+                if (this.is('user-contact')) {
                     this.set({
                         'type': this.TYPE_USER,
                         'contact_id': this.get('id'),
                         'id': this.get('internal_userid')
                     });
-                } else if (this.get('field') !== 'email1' && this.is('user') && this.get('contact_id')) {
+                } else if (this.is('user-extra')) {
                     this.set({
                         'type': this.TYPE_EXTERNAL_USER,
                         'internal_userid': this.get('id'),
@@ -149,7 +149,7 @@ define('io.ox/participants/model', [
                     return this.get('type') === this.TYPE_UNKNOWN;
                 // USER-CONTACT MAGIC
                 case 'user-contact':
-                    return this.is('contact') && this.has('internal_userid') && this.get('field') === 'email1';
+                    return this.is('contact') && this.get('internal_userid') && this.get('field') === 'email1';
                 case 'user-extra':
                     return this.is('user') && this.get('contact_id') && this.has('field') && this.get('field') !== 'email1';
                 default:
