@@ -96,27 +96,24 @@ define('io.ox/participants/model', [
             });
         },
 
+        // It's a kind of magic
         magic: function () {
-            // It's a kind of magic
-
-            // convert: user-contact -> user
-            if (this.is('user-contact')) {
+            // convert: special-contact -> user (usually used for distribution list)
+            if (this.is('special-contact')) {
                 this.set({
                     'type': this.TYPE_USER,
                     'contact_id': this.get('id'),
                     'id': this.get('internal_userid')
                 });
             }
-
-            // convert: user-extra -> user-contact
-            if (this.is('user-extra')) {
+            // convert: special-user -> contact (usually used for autocomplete dropdown)
+            if (this.is('special-user')) {
                 this.set({
                     'type': this.TYPE_EXTERNAL_USER,
                     'internal_userid': this.get('id'),
                     'id': this.get('contact_id')
                 });
             }
-
             // add: missing id for unknown external users
             if (this.is('contact') && !this.has('id')) {
                 this.set('id', this.getEmail(), { silent: true });
@@ -149,10 +146,11 @@ define('io.ox/participants/model', [
                     return this.get('type') === this.TYPE_DISTLIST;
                 case 'unknown':
                     return this.get('type') === this.TYPE_UNKNOWN;
-                // USER-CONTACT MAGIC
-                case 'user-contact':
+                // special: a contact but actually a user with it's email2 or email3
+                case 'special-contact':
                     return this.is('contact') && this.get('internal_userid') && this.get('field') === 'email1';
-                case 'user-extra':
+                // special: a user object that referencing it's email2 or email3 field
+                case 'special-user':
                     return this.is('user') && this.get('contact_id') && this.has('field') && this.get('field') !== 'email1';
                 default:
                     break;
