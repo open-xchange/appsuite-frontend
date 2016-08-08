@@ -41,9 +41,11 @@ define('io.ox/onboarding/clients/extensions', [
         },
         disable: function (obj) {
             $(obj.target || obj).addClass('disabled');
+            $(obj.target || obj).prop('disabled', true);
         },
         enable: function (obj) {
             $(obj.target || obj).removeClass('disabled');
+            $(obj.target || obj).prop('disabled', false);
         }
     };
 
@@ -359,6 +361,7 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         _updateState: function (e) {
+            if (e.keyCode === 13) return;
             var value = $(e.target).val().trim(),
                 button = this.$('button.action-call');
             util.removeIcons(button);
@@ -448,6 +451,7 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         _updateState: function (e) {
+            if (e.keyCode === 13) return;
             var value = $(e.target).val().trim(),
                 button = this.$('button.action-call');
             util.removeIcons(button);
