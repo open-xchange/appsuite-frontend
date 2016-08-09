@@ -40,6 +40,7 @@ module.exports = function (grunt) {
                             'lib/require-fix.js',
                             'lib/modernizr.js',
                             'src/lazyload.js',
+                            'lib/socket.io.js',
                             'src/util.js',
                             'src/browser.js',
                             'src/plugins.js',
