@@ -1847,7 +1847,8 @@ define('io.ox/mail/main', [
         'socket.io': function () {
             console.log('settings up socket.io');
             window.io = io;
-            var socket = io.connect(ox.abs + 'socket.io?session=' + ox.session, { transports: ['websocket'] });
+
+            var socket = io.connect('http://localhost:8009/?session=' + ox.session, { transports: ['websocket'] });
 
             socket.on('connect', function () {
                 console.log('connected!');
