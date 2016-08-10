@@ -56,14 +56,7 @@ define('io.ox/mail/main', [
     var openMessageByKeyboard = false;
 
     app.mediator({
-        'socket.io': function () {
-            console.log('settings up socket.io');
-            window.io = io;
-            window.connectSocket = function () {
-                console.log('connecting to socket');
-                io.connect(ox.abs + 'socket.io?session=' + ox.session, { transports: ['websocket'] });
-            };
-        },
+
         /*
          * Init pages for mobile use
          * Each View will get a single page with own
@@ -1850,6 +1843,28 @@ define('io.ox/mail/main', [
                     });
                 });
             });
+        },
+        'socket.io': function () {
+            console.log('settings up socket.io');
+            window.io = io;
+            var socket = io.connect(ox.abs + 'socket.io?session=' + ox.session, { transports: ['websocket'] });
+
+            socket.on('connect', function () {
+                console.log('connected!');
+            });
+            socket.on('connect_error', function (err) {
+                console.log('error during connect!', err);
+            });
+            socket.on('disconnect', function (err) {
+                console.log('disconnect!', err);
+            });
+
+            socket.on('ox:mail:new', function () {
+                console.log('got new mail event via socket');
+                api.refresh();
+            });
+
+            window.socket = app.socket = socket;
         }
     });
 
