@@ -59,6 +59,10 @@ define('io.ox/mail/main', [
         'socket.io': function () {
             console.log('settings up socket.io');
             window.io = io;
+            window.connectSocket = function () {
+                console.log('connecting to socket');
+                io.connect(ox.abs + 'socket.io?session=' + ox.session, { transports: ['websocket'] });
+            };
         },
         /*
          * Init pages for mobile use
