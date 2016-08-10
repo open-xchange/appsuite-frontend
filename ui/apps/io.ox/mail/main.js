@@ -31,6 +31,7 @@ define('io.ox/mail/main', [
     'io.ox/core/folder/view',
     'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
+    'static/3rd.party/socket.io.js',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'io.ox/mail/actions',
@@ -40,7 +41,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, io, gt, settings) {
 
     'use strict';
 
@@ -55,6 +56,10 @@ define('io.ox/mail/main', [
     var openMessageByKeyboard = false;
 
     app.mediator({
+        'socket.io': function () {
+            console.log('settings up socket.io');
+            window.io = io;
+        },
         /*
          * Init pages for mobile use
          * Each View will get a single page with own
