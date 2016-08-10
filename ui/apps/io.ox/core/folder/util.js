@@ -253,6 +253,7 @@ define('io.ox/core/folder/util', [
             case 'subscribe:imap':
                 // subscription works for mail only, not for standard folders, and only if the mail system supports it
                 if (!isMail) return false;
+                if (rights === 0) return false;
                 if (data.standard_folder && /^(7|9|10|11|12)$/.test(data.standard_folder_type)) return false;
                 return Boolean(data.capabilities & Math.pow(2, 4));
             default:
