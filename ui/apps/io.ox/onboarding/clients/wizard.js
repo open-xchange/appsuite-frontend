@@ -25,6 +25,9 @@ define('io.ox/onboarding/clients/wizard', [
 
     'use strict';
 
+    // deeplink example:
+    // &reg=client-onboarding&regopt=platform:apple,device:apple.iphone,scenario:mailappinstall
+
     var POINT = 'io.ox/onboarding/clients/views',
         //#. title for 1st and snd step of the client onboarding wizard
         //#. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
