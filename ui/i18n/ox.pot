@@ -4188,6 +4188,11 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js
 #: module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/move.js
+#: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
 msgid "Move all messages"
 msgstr ""
@@ -4856,7 +4861,7 @@ msgstr ""
 
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
-msgid "Hide all notifications"
+msgid "Close notification area"
 msgstr ""
 
 #: apps/io.ox/core/notifications.js
@@ -6403,11 +6408,6 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core
 msgid "Open in browser tab"
-msgstr ""
-
-#: apps/io.ox/core/viewer/views/toolbarview.js
-#: module:io.ox/core
-msgid "Send as mail"
 msgstr ""
 
 #. text of a presentation slide count display
@@ -10000,6 +10000,12 @@ msgstr[1] ""
 #: apps/io.ox/participants/add.js
 #: module:io.ox/core
 msgid "Add participant/resource"
+msgstr ""
+
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js
+#: module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
 msgstr ""
 
 #: apps/io.ox/participants/detail.js

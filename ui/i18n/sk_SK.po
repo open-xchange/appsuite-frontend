@@ -1672,6 +1672,11 @@ msgstr "Zrušiť hľadanie"
 msgid "Canceled"
 msgstr "Zrušené"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1944,6 +1949,12 @@ msgstr "Zatvoriť panel popisu"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Zavrieť zobrazenie priečinka"
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "Oznamovacia oblasť je otvorená"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -4135,10 +4146,6 @@ msgstr "Skryť všetky pozvania na schôdzky."
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Skryť všetky pripomenutia schôdzok."
-
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Skryť všetky oznámenia"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
@@ -6344,6 +6351,10 @@ msgstr "Prosím, uveďte tieto chýbajúce premenné: "
 msgid "Please update your browser."
 msgstr "Prosím aktualizujte svoj prehliadač."
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Plus"
@@ -7375,10 +7386,6 @@ msgstr "Poslať potvrdenie o prečítaní"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "Poslať ako interný odkaz"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "Poslať ako email"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -12990,6 +12997,9 @@ msgstr "RRRR"
 #~ msgid "Hide advanced filters"
 #~ msgstr "Skryť rozšírené filtre"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Skryť všetky oznámenia"
+
 #~ msgid "Hide all notifications for new mails."
 #~ msgstr "Skryť všetky upozornenia na nové emaily."
 
@@ -14844,6 +14854,9 @@ msgstr "RRRR"
 #~ msgid "Send as E-Mail"
 #~ msgstr "Poslať ako email"
 
+#~ msgid "Send as mail"
+#~ msgstr "Poslať ako email"
+
 #~ msgid "Send email"
 #~ msgstr "Poslať email"
 
@@ -15576,9 +15589,6 @@ msgstr "RRRR"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "Oznamovacia oblasť je zatvorená"
-
-#~ msgid "The notification area is open"
-#~ msgstr "Oznamovacia oblasť je otvorená"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Počet príjemcov je obmedzený na %1$s príjemcov na pole"

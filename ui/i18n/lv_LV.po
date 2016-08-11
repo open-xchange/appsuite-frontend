@@ -1672,6 +1672,11 @@ msgstr "Atcelt meklešanu"
 msgid "Canceled"
 msgstr "Atcelts"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1941,6 +1946,12 @@ msgstr "Aizvērt apraksta paneli"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Aizvērt mapes skatu"
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "Paziņojumu apgabals ir atvērts"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -4133,10 +4144,6 @@ msgstr "Paslēpt visus mītiņu uzaicinājumus."
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Paslēpt visus mītiņu atgādinājumus."
-
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Paslēpt visus paziņojumus"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
@@ -6343,6 +6350,10 @@ msgstr "Lūdzu norādiet iztrūkstošās vērtības: "
 msgid "Please update your browser."
 msgstr "Lūdzu jauniniet savu pārlūkprogrammu."
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Plus"
@@ -7375,10 +7386,6 @@ msgstr "Nosūtīt lasīšanas apstiprinājumu"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "Sūtīt kā iekšēju saiti"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "Sūtīt kā e-pastu"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -13007,6 +13014,9 @@ msgstr "yyyy"
 #~ msgid "Hide advanced filters"
 #~ msgstr "Paslēpt paplašinātu fltru"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Paslēpt visus paziņojumus"
+
 #~ msgid "Hide all notifications for new mails."
 #~ msgstr "Paslēpt visus jauna pasta paziņojumus."
 
@@ -14866,6 +14876,9 @@ msgstr "yyyy"
 #~ msgid "Send as E-Mail"
 #~ msgstr "Sūtīt kā e-pastu"
 
+#~ msgid "Send as mail"
+#~ msgstr "Sūtīt kā e-pastu"
+
 #~ msgid "Send email"
 #~ msgstr "Sūtīt e-pastu"
 
@@ -15607,9 +15620,6 @@ msgstr "yyyy"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "Paziņojumu apgabals ir slēgts"
-
-#~ msgid "The notification area is open"
-#~ msgstr "Paziņojumu apgabals ir atvērts"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Saņēmēju skaits ir ierobežots ar %1$s saņēmējiem vienā laukā"

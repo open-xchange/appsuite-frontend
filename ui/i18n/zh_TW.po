@@ -1617,6 +1617,11 @@ msgstr "取消搜尋"
 msgid "Canceled"
 msgstr "已取消"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1883,6 +1888,12 @@ msgstr "關閉描述面板"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "關閉文件夾面板"
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "通知區域已開啟"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -4039,10 +4050,6 @@ msgstr "隱藏所有約會邀請。"
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "隱藏所有約會提醒。"
-
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "隱藏所有通知"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
@@ -6212,6 +6219,10 @@ msgstr "請指定這些缺少的變數: "
 msgid "Please update your browser."
 msgstr "請更新您的瀏覽器。"
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Plus"
@@ -7225,10 +7236,6 @@ msgstr "傳送送達回執"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "作為內部連結發送"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "以郵件方式寄送"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -12429,6 +12436,9 @@ msgstr "年"
 #~ msgid "Hide advanced filters"
 #~ msgstr "隱藏進階過濾器"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "隱藏所有通知"
+
 #~ msgid "Hide all notifications for new mails."
 #~ msgstr "隱藏所有新郵件通知。"
 
@@ -13215,6 +13225,9 @@ msgstr "年"
 #~ msgid "Select page"
 #~ msgstr "選擇頁面"
 
+#~ msgid "Send as mail"
+#~ msgstr "以郵件方式寄送"
+
 #~ msgid "Sender"
 #~ msgstr "寄件者"
 
@@ -13583,9 +13596,6 @@ msgstr "年"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "通知區域已關閉"
-
-#~ msgid "The notification area is open"
-#~ msgstr "通知區域已開啟"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "收件者數量被限制為每欄位 %1$d 位收件者"

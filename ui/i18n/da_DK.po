@@ -1648,6 +1648,11 @@ msgstr "Afbryd søgning"
 msgid "Canceled"
 msgstr "Annulleret"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1914,6 +1919,12 @@ msgstr "Luk beskrivelsespanel"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Luk mappevisning"
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "Påmindelsesområdet er åbent"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -4095,10 +4106,6 @@ msgstr "Skjul alle invitationer."
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Skjul alle aftalepåmindelser."
-
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Skjul alle underretninger"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
@@ -6300,6 +6307,10 @@ msgstr "Angiv venligst disse manglende variable: "
 msgid "Please update your browser."
 msgstr "Opdater venligst din browser."
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Plus"
@@ -7327,10 +7338,6 @@ msgstr "Send en kvittering for læsning"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "Send som internt link"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "Send som e-mail"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11357,6 +11364,9 @@ msgstr "åååå"
 #~ msgid "Hide advanced filters"
 #~ msgstr "Skjul avanceret filtre"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Skjul alle underretninger"
+
 #~ msgid "Hide all notifications for new mails."
 #~ msgstr "Skjul alle påmindelser om ny e-mail."
 
@@ -11894,6 +11904,9 @@ msgstr "åååå"
 #~ msgid "Select none"
 #~ msgstr "Vælg ingen"
 
+#~ msgid "Send as mail"
+#~ msgstr "Send som e-mail"
+
 #~ msgid "Sender"
 #~ msgstr "Sender"
 
@@ -12190,9 +12203,6 @@ msgstr "åååå"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "Påmindelsesområdet er lukket"
-
-#~ msgid "The notification area is open"
-#~ msgstr "Påmindelsesområdet er åbent"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Antallet af modtagere er begrænset til %1$s per felt"
