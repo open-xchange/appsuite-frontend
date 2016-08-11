@@ -1853,9 +1853,11 @@ define('io.ox/mail/main', [
             socket.on('connect', function () {
                 console.log('connected!');
             });
+
             socket.on('connect_error', function (err) {
                 console.log('error during connect!', err);
             });
+
             socket.on('disconnect', function (err) {
                 console.log('disconnect!', err);
             });
