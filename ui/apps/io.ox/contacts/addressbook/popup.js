@@ -160,6 +160,8 @@ define('io.ox/contacts/addressbook/popup', [
             if (list.length >= options.limit) return $.Deferred().reject('too-many');
 
             list.forEach(function (item) {
+                // remove quotes from display name (common in collected addresses)
+                item.display_name = getDisplayName(item.display_name);
                 // get sort name
                 var sort_name = [], address;
                 names.forEach(function (name) {
@@ -196,8 +198,6 @@ define('io.ox/contacts/addressbook/popup', [
             // skip if empty
             address = $.trim(address);
             if (!address) return;
-            // remove quotes from display name (common in collected addresses)
-            item.display_name = getDisplayName(item.display_name);
             // add to results
             // do all calculations now; during rendering is more expensive
             var initials = util.getInitials(item);
