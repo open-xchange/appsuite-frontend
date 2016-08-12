@@ -206,8 +206,28 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
                     if (ox.debug === true) {
                         console.warn('LocalStorage: Clearing persistent caches due to UI update');
                     }
+
+                    // Docs-392: Temporary save data from the localStorage to restore it later.
+                    // Background:
+                    // (1) The 'permanentCache' contains quite big office web-font data, which will NEVER change and that should not be cleared from localStorage when possible.
+                    // (2) These cached web-fonts should survive a version change to reduce traffic.
+                    // (3) note: This 'clear()' method is not only called at a version change, but also at other circumstances (e.g. logout->login->real browser refresh).
+                    // (4) note: When the key doesn't exists in localStorage, 'getItem' returns 'null' (see w3c spec)
+                    // (5) note: The allocated data for this var is quite big, so it should be assured that the js GC can delete it later
+                    var permanentCache = localStorage.getItem('appsuite.office-fonts');
+
                     localStorage.clear();
                     localStorage.setItem('appsuite-ui', JSON.stringify({ version: ox.version }));
+
+                    // Docs-392: Restore the permanentCache data after the localStorage was cleared. But only when the key existed (!== null) before.
+                    if (permanentCache !== null) {
+                        try {
+                            localStorage.setItem('appsuite.office-fonts', permanentCache);
+                        } catch (e) {
+                            console.warn('localStorage: could not restore permanentCache:', e);
+                        }
+                    }
+
                 }
                 firstRun = false;
             }
@@ -232,8 +252,8 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
 
             fileList.push('file-toc');
 
-            // This key is used for office replacement web-fonts that are stored in localStorage.
-            // They should never be deleted out of the localStorage when possible
+            // Docs-392: This key is used for office web-fonts that are stored in localStorage.
+            // This key should never be deleted out of the localStorage when possible
             // (e.g. do not delete them at logout).
             fileList.push('appsuite.office-fonts');
 
