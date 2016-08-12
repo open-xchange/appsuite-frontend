@@ -782,7 +782,7 @@ define('io.ox/core/main', [
             var node = $('[data-app-guid="' + model.guid + '"]', launchers);
             $('a.apptitle', node).text(_.noI18n(value));
             addUserContent(model, node);
-            launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(_.noI18n(value));
+            launcherDropdown.find('li[data-app-guid="' + model.guid + '"] a:first').text(_.noI18n(value));
             tabManager();
         });
 
