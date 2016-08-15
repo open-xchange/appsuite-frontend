@@ -474,7 +474,6 @@ define('io.ox/core/folder/node', [
             summary = summary.join(', ');
             if (summary) summary = ' (' + summary + ')';
             this.$el.attr({
-                'title': this.model.get('title') + summary,
                 'aria-label': this.model.get('title') + summary
             });
         },
