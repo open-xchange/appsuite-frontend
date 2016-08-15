@@ -438,6 +438,7 @@ define('io.ox/mail/categories/main', [
                 index: 100,
                 draw: function (baton) {
                     if (!baton.app.listView.model.get('categoryid')) return;
+                    if (!baton.app.categories.isFolderSupported()) return;
                     // TODO: wording
                     //#. Helper text for mail tabs without content
                     this.text(gt('To fill this area please drag and drop mails to the title of this tab.'));
