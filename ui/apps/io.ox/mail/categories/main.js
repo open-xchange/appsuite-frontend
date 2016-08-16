@@ -459,7 +459,7 @@ define('io.ox/mail/categories/main', [
         hide: function () {
             // restore state
             _.url.hash('category', null);
-            this.mail.listView.model.set('categoryid', this.props.get('selected'));
+            this.mail.listView.model.unset('categoryid');
             this.props.set('visible', false);
             this.trigger('hide');
         },
