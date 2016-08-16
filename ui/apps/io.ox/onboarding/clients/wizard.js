@@ -206,7 +206,9 @@ define('io.ox/onboarding/clients/wizard', [
             container = node.closest('[data-type]'),
             type = container.attr('data-type'),
             value = node.closest('[data-value]').attr('data-value');
-        // disabled
+        // disabled with upsell
+        if (node.closest('.link').find('.premium').length) return wizard.trigger('scenario:upsell', e);
+        // just disabled
         if (node.closest('.link').hasClass('disabled')) return;
         // back
         if (value === 'back') {
@@ -358,7 +360,7 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         upsell: function (e) {
-            var item = $(e.target.closest('li')),
+            var item = $(e.target).closest('li'),
                 missing = item.attr('data-missing-capabilities');
             if (!missing) return;
             require(['io.ox/core/upsell'], function (upsell) {
@@ -374,10 +376,6 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         register: function () {
-            this.wizard.getContainer().on(
-                'click', '.premium-container', _.bind(this.upsell, this)
-            );
-
             // set max width of description block
             this.wizard.on({
                 // step:before:show, step:ready, step:show, step:next, step:before:hide, step:hide, change:step,
@@ -391,6 +389,8 @@ define('io.ox/onboarding/clients/wizard', [
                 'scenario:select': _.bind(this.track, this, 'scenario/select'),
                 'action:select': _.bind(this.track, this, 'action/select'),
                 'action:execute': _.bind(this.track, this, 'action/execute'),
+                // upsell
+                'scenario:upsell': _.bind(this.upsell, this),
                 'mode:toggle': _.bind(this.track, this, 'mode/toggle')
             });
         },
