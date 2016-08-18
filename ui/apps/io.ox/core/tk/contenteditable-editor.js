@@ -320,6 +320,22 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 ed.on('BeforeRenderUI', function () {
                     rendered.resolve();
                 });
+                if (ed.oxContext && ed.oxContext.signature) {
+                    ed.on('BeforeSetContent', function (e) {
+                        if (!e.content) return;
+                        var tmp = document.createElement('DIV');
+                        tmp.innerHTML = e.content;
+                        var children = tmp.children;
+                        for (var i = 0; i < children.length; i++) {
+                            var child = children[i], ai = 0, attr;
+                            while (attr = child.attributes[ai++]) {
+                                if (/^on/i.test(attr.name)) { child.removeAttribute(attr.name); }
+                            }
+                        }
+                        e.content = tmp.innerHTML;
+                        tmp = null;
+                    });
+                }
             }
         };
 
