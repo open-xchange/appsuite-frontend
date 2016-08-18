@@ -254,6 +254,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
 
             extended_valid_elements: 'blockquote[type]',
+            invalid_elements: 'object,iframe,script',
 
             inline: true,
 
@@ -325,11 +326,11 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                         if (!e.content) return;
                         var tmp = document.createElement('DIV');
                         tmp.innerHTML = e.content;
-                        var children = tmp.children;
-                        for (var i = 0; i < children.length; i++) {
-                            var child = children[i], ai = 0, attr;
-                            while (attr = child.attributes[ai++]) {
-                                if (/^on/i.test(attr.name)) { child.removeAttribute(attr.name); }
+                        var nodes = tmp.querySelectorAll('*');
+                        for (var i = 0; i < nodes.length; i++) {
+                            var node = nodes[i], ai = 0, attr;
+                            while (attr = node.attributes[ai++]) {
+                                if (/^on/i.test(attr.name)) { node.removeAttribute(attr.name); }
                             }
                         }
                         e.content = tmp.innerHTML;
