@@ -350,7 +350,8 @@ define('io.ox/core/tk/dialogs', [
             nodes.buttons.push(button);
             return button.addClass(options.classes).attr({
                 role: 'button',
-                type: 'button'
+                type: 'button',
+                tabindex: 0 // is needed for tab trap selector
             });
         };
 
