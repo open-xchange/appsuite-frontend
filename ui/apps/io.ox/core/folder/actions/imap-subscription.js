@@ -123,7 +123,7 @@ define('io.ox/core/folder/actions/imap-subscription', [
             customize: function (baton) {
 
                 var data = baton.data,
-                    virtual = /^virtual/.test(data.id) || data.id === 'default0/virtual',
+                    virtual = /^virtual/.test(data.id),
                     // top-level folder of external accounts don’t have imap-subscribe capability :\
                     disabled = virtual || !api.can('subscribe:imap', data);
 
