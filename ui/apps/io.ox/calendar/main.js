@@ -273,7 +273,7 @@ define('io.ox/calendar/main', [
                     //#. Label for a button which shows more upcoming
                     //#. appointments in a listview by extending the search
                     //#. by one month in the future
-                    $('<a href="#" tabindex="1">').text(gt('Expand timeframe by one month'))
+                    $('<a href="#">').text(gt('Expand timeframe by one month'))
                 );
                 return link;
             };

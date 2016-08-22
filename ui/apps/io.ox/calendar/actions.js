@@ -213,11 +213,11 @@ define('io.ox/calendar/actions', [
                         .append($('<h4>').text(gt('Do you want the appointments printed in detail or as a compact list?')));
 
                     //#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
-                    dialog.addPrimaryButton('detailed', gt('Detailed'), 'detailed', { tabIndex: '1' });
+                    dialog.addPrimaryButton('detailed', gt('Detailed'), 'detailed');
                     //#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
-                    dialog.addButton('compact', gt('Compact'), 'compact', { tabIndex: '1' });
+                    dialog.addButton('compact', gt('Compact'), 'compact');
 
-                    dialog.addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' })
+                    dialog.addButton('cancel', gt('Cancel'), 'cancel')
                         .show()
                         .done(function (action) {
                             if (action === 'detailed') {

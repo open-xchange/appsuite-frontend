@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-04 10:40+0000\n"
+"POT-Creation-Date: 2016-08-04 07:51+0000\n"
 "PO-Revision-Date: 2015-05-29 13:25+0000\n"
 "Last-Translator: resellerclub <ameya.d@directi.com>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -136,8 +136,6 @@ msgstr[0] "%1$d dakika%1$d dakika"
 #. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, fuzzy, c-format
-#| msgid "You have %1$d notification."
-#| msgid_plural "You have %1$d notifications."
 msgid "%1$d notification."
 msgid_plural "%1$d notifications."
 msgstr[0] "%1$d  adet bildiriminiz var.%1$d  adet bildiriminiz var."
@@ -1020,7 +1018,6 @@ msgstr "Tüm ekler "
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #, fuzzy
-#| msgid "Add contact"
 msgid "All contacts"
 msgstr "Kişi ekle"
 
@@ -1636,6 +1633,11 @@ msgstr "Aramayı iptal et"
 msgid "Canceled"
 msgstr "İptal Edildi"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 #, fuzzy
@@ -1914,6 +1916,12 @@ msgstr "İş tanımı"
 msgid "Close folder view"
 msgstr "Klasör görünümünü kapat"
 
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "Bildirim alanı açıldı"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr ""
@@ -1921,7 +1929,6 @@ msgstr ""
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, fuzzy
-#| msgid "close for %1$s"
 msgid "Close reminder for %1$s"
 msgstr "%1$s için kapat"
 
@@ -2291,7 +2298,6 @@ msgstr "Oluştur"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Create appointment"
 msgid "Create all-day appointment"
 msgstr "Görüşme yarat"
 
@@ -3000,7 +3006,6 @@ msgstr "Taslaklar"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #, fuzzy
-#| msgid "Drag to reorder widget"
 msgid "Drag to reorder filter rules"
 msgstr "Aracı yeniden sipariş etmek için sürükleyiniz"
 
@@ -4175,10 +4180,6 @@ msgstr "Bütün randevu davetlerini gizle"
 msgid "Hide all appointment reminders."
 msgstr "Bütün randevu hatırlatmalarını gizle"
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Bütün bildirimleri gizle"
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
 msgstr "Bütün süresi geçmiş görev bildirimlerini gizle "
@@ -4513,7 +4514,6 @@ msgstr ""
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 #, fuzzy, c-format
-#| msgid "Invitation sent"
 msgid "Invitation for %1$s."
 msgstr "Davetiye gönderildi"
 
@@ -4807,7 +4807,6 @@ msgstr "Yorumu beğendiniz"
 #. %1$d is line number, %2$s is an error message
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
-#| msgid "%1$d %2$s"
 msgid "Line %1$d: %2$s"
 msgstr "%1$d %2$s"
 
@@ -5822,7 +5821,6 @@ msgstr "Tüm mesajları Aç/Kapa"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #, fuzzy
-#| msgid "View attachment"
 msgid "Open attachment"
 msgstr "Görüntü eki"
 
@@ -6420,6 +6418,10 @@ msgstr "Lütfen eksik değişenleri tamamlayınız: "
 msgid "Please update your browser."
 msgstr "Lütfen tarayıcınızı güncelleyin"
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Artı"
@@ -6561,7 +6563,6 @@ msgstr "Twitter'a bağlanmak için [giriş yapın] a tıklayın."
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 #, fuzzy
-#| msgid "Selection Details"
 msgid "Press to open Details"
 msgstr "Seçim ayrıntıları"
 
@@ -7008,7 +7009,6 @@ msgstr "Tekrar hatırlat"
 #. a string concatenation before; at least now it's documented
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, fuzzy
-#| msgid "Remind me again "
 msgid "Remind me again %1$s"
 msgstr "Tekrardan hatırlat"
 
@@ -7034,14 +7034,12 @@ msgstr "Hatırlatma Tarihi %1$s"
 #. %1$s appointment title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, fuzzy, c-format
-#| msgid "Reminder date %1$s"
 msgid "Reminder for appointment %1$s."
 msgstr "Hatırlatma Tarihi %1$s"
 
 #. %1$s task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, fuzzy, c-format
-#| msgid "Reminder date %1$s"
 msgid "Reminder for task %1$s."
 msgstr "Hatırlatma Tarihi %1$s"
 
@@ -7177,7 +7175,6 @@ msgstr "Kaynak Grubu"
 
 #: apps/plugins/administration/resources/settings/edit.js module:io.ox/core
 #, fuzzy
-#| msgid "Resource name"
 msgid "Resource name (mandatory)"
 msgstr "Kaynak Adı"
 
@@ -7493,11 +7490,6 @@ msgstr "Bir okundu bilgisi gönder"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "Dahili link olarak gönder"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#, fuzzy
-msgid "Send as mail"
-msgstr "Eposta gönder"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -7869,7 +7861,6 @@ msgstr "Giriş Yapın"
 #. the word not the verb
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #, fuzzy
-#| msgid "Sign in"
 msgctxt "word"
 msgid "Sign in"
 msgstr "Giriş Yapın"
@@ -9404,7 +9395,6 @@ msgstr "Yükleniyor %1$s"
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #, fuzzy
-#| msgid "Add attachments"
 msgid "Uploading attachments"
 msgstr "Dosya ekle"
 
@@ -9521,7 +9511,6 @@ msgstr "Yorum"
 #. %1$d - version date
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #, fuzzy
-#| msgid "Versions (%1$d)"
 msgid "Version of %1$s"
 msgstr "Sürümler (%1$d)"
 
@@ -10294,7 +10283,6 @@ msgstr "%1$s için kapat"
 #. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, fuzzy
-#| msgid "collapse"
 msgid "collapsed"
 msgstr "daralt"
 
@@ -10447,7 +10435,6 @@ msgstr "her hafta"
 #. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, fuzzy
-#| msgid "expand"
 msgid "expanded"
 msgstr "genişlemek"
 
@@ -10927,6 +10914,9 @@ msgstr "yyyy"
 #~ msgid "Hide advanced filters"
 #~ msgstr "Gelişmiş filitreleri gizle"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Bütün bildirimleri gizle"
+
 #~ msgid "Hide comments"
 #~ msgstr "Yorumları sakla"
 
@@ -11010,6 +11000,10 @@ msgstr "yyyy"
 #~ msgid "Search here"
 #~ msgstr "Buradan arayın"
 
+#, fuzzy
+#~ msgid "Send as mail"
+#~ msgstr "Eposta gönder"
+
 #~ msgid "Show comments"
 #~ msgstr "Yorumları göster"
 
@@ -11049,9 +11043,6 @@ msgstr "yyyy"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "Bildirim alanı kapatıldı"
-
-#~ msgid "The notification area is open"
-#~ msgstr "Bildirim alanı açıldı"
 
 #~ msgid "The person %1$s is already in the list"
 #~ msgstr "%1$s kişisi zaten listede yer alıyor"

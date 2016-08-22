@@ -73,8 +73,8 @@ define('io.ox/mail/compose/actions/send', [
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog({ focus: false })
                         .text(gt('Mail has empty subject. Send it anyway?'))
-                        .addPrimaryButton('send', gt('Yes, send without subject'), 'send', { tabIndex: 1 })
-                        .addButton('subject', gt('Add subject'), 'subject', { tabIndex: 1 })
+                        .addPrimaryButton('send', gt('Yes, send without subject'), 'send')
+                        .addButton('subject', gt('Add subject'), 'subject')
                         .show(function () {
                             def.notify('empty subject');
                         })

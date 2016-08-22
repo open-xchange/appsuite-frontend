@@ -84,10 +84,9 @@ define('io.ox/backbone/mini-views/attachments', [
                 $('<div class="row-2">').append(
                     $('<span class="filesize">').text(size)
                 ),
-                $('<a href="#" class="remove" tabindex="1">')
+                $('<a href="#" class="remove" role="button">')
                 .attr({
                     'title': gt('Remove attachment'),
-                    'role': 'button',
                     'aria-label': gt('Remove attachment') + ' ' + attachment.filename
                 })
                 .data(attachment)
@@ -285,9 +284,6 @@ define('io.ox/backbone/mini-views/attachments', [
                             $input = $('<input type="file">')
                         );
                     }
-                })
-                .on('focus', function () {
-                    $input.attr('tabindex', '1');
                 });
 
             this.$el.append(uploadWidget);

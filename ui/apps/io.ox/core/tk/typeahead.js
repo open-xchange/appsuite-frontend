@@ -46,7 +46,6 @@ define('io.ox/core/tk/typeahead', [
                 return this.api.search(query);
             },
             click: $.noop,
-            tabindex: 1,
             // Max limit for draw operation in dropdown
             maxResults: 25,
             // Select first element on result callback
@@ -160,10 +159,10 @@ define('io.ox/core/tk/typeahead', [
                 self = this;
 
             this.$el.attr({
-                tabindex: this.options.tabindex,
                 placeholder: this.options.placeholder,
                 'aria-label': this.options.ariaLabel
-            }).on({
+            })
+            .on({
                 // dirty hack to get a reliable info about open/close state
                 'typeahead:closed': function () {
                     var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');

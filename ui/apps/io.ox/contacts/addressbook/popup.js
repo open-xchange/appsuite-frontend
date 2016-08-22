@@ -160,6 +160,8 @@ define('io.ox/contacts/addressbook/popup', [
             if (list.length >= options.limit) return $.Deferred().reject('too-many');
 
             list.forEach(function (item) {
+                // remove quotes from display name (common in collected addresses)
+                item.display_name = getDisplayName(item.display_name);
                 // get sort name
                 var sort_name = [], address;
                 names.forEach(function (name) {
@@ -196,8 +198,6 @@ define('io.ox/contacts/addressbook/popup', [
             // skip if empty
             address = $.trim(address);
             if (!address) return;
-            // remove quotes from display name (common in collected addresses)
-            item.display_name = getDisplayName(item.display_name);
             // add to results
             // do all calculations now; during rendering is more expensive
             var initials = util.getInitials(item);
@@ -283,11 +283,11 @@ define('io.ox/contacts/addressbook/popup', [
                 view.$('.modal-header').append(
                     $('<div class="row">').append(
                         $('<div class="col-xs-6">').append(
-                            $('<input type="text" class="form-control search-field" tabindex="1">')
+                            $('<input type="text" class="form-control search-field">')
                             .attr('placeholder', gt('Search'))
                         ),
                         $('<div class="col-xs-6">').append(
-                            $('<select class="form-control folder-dropdown invisible" tabindex="1">').append(
+                            $('<select class="form-control folder-dropdown invisible">').append(
                                 $('<option value="all">').text(gt('All contacts'))
                             )
                         )

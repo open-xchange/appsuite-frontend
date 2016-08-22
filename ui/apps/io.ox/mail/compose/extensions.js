@@ -65,14 +65,14 @@ define('io.ox/mail/compose/extensions', [
         buttons: {
             discard: function (baton) {
                 return (
-                    $('<button type="button" class="btn btn-default" data-action="discard" tabindex="1">')
+                    $('<button type="button" class="btn btn-default" data-action="discard">')
                         .on('click', function () { baton.view.app.quit(); })
                         .text(gt('Discard'))
                         .appendTo(this)
                 );
             },
             save: function (baton) {
-                this.append($('<button type="button" class="btn btn-default" data-action="save" tabindex="1">')
+                this.append($('<button type="button" class="btn btn-default" data-action="save">')
                     .on('click', function () {
                         if (baton.view.isSaving === true) return false;
                         baton.view.isSaving = true;
@@ -83,7 +83,7 @@ define('io.ox/mail/compose/extensions', [
                     .text(gt('Save')));
             },
             send: function (baton) {
-                this.append($('<button type="button" class="btn btn-primary" data-action="send" tabindex="1">')
+                this.append($('<button type="button" class="btn btn-primary" data-action="send">')
                     .on('click', function () { baton.view.send(); })
                     .on('keyup', function (e) {
                         if ((e.keyCode || e.which) === 27) baton.view.focusEditor();
@@ -218,7 +218,7 @@ define('io.ox/mail/compose/extensions', [
 
         recipientActionLink: function (type) {
             return function () {
-                var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">');
+                var node = $('<a href="#" data-action="add" role="checkbox" aria-checked="false">');
                 if (type === 'cc') {
                     node.attr({ 'data-type': 'cc', 'aria-label': gt('Show carbon copy input field') }).text(gt('CC'));
                 } else {
@@ -229,7 +229,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         recipientActionLinkMobile: function () {
-            var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-right">'));
+            var node = $('<a href="#" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-right">'));
             this.append(node);
         },
 
@@ -293,7 +293,7 @@ define('io.ox/mail/compose/extensions', [
                 this.append(
                     extNode = $('<div data-extension-id="' + attr + '">').addClass(cls).append(
                         $('<div class="maillabel col-xs-1">').append(
-                            $('<a href="#" role="button" tabindex="1">')
+                            $('<a href="#" role="button">')
                             .text(tokenfieldTranslations[attr])
                             .attr({
                                 // add aria label since tooltip takes away the title attribute

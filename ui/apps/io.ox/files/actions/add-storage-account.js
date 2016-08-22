@@ -62,7 +62,7 @@ define('io.ox/files/actions/add-storage-account', [
 
         var data = services[service.id];
 
-        return $('<button class="btn btn-default storage-account-item" tabindex="1">')
+        return $('<button class="btn btn-default storage-account-item">')
             .addClass(data.className)
             .append(
                 $('<div class="icon">'),
@@ -103,7 +103,7 @@ define('io.ox/files/actions/add-storage-account', [
 
         dialog = new dialogs.ModalDialog({ width: 506 })
             .header($('<h4>').text(gt('Add storage account')))
-            .addPrimaryButton('close', gt('Close'), 'close', { tabIndex: 1 })
+            .addPrimaryButton('close', gt('Close'), 'close')
             .build(function () {
                 this.getPopup().addClass('select-storage-account-dialog');
                 def = drawContent.call(this, this.getContentNode());

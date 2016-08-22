@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-05 08:05+0000\n"
+"POT-Creation-Date: 2016-08-04 07:48+0000\n"
 "PO-Revision-Date: 2016-07-04 09:35+0000\n"
 "Last-Translator: hv@webhuset.no <hv@webhuset.no>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -148,8 +148,6 @@ msgstr[1] "%1$d minutter"
 #. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, fuzzy, c-format
-#| msgid "You have %1$d notification."
-#| msgid_plural "You have %1$d notifications."
 msgid "%1$d notification."
 msgid_plural "%1$d notifications."
 msgstr[0] "Du har %1$d varsel."
@@ -493,7 +491,6 @@ msgstr "(Lese, skrive og slette)"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 #, fuzzy
-#| msgid "Current Date"
 msgid "(current app)"
 msgstr "Gjeldende dato"
 
@@ -1034,7 +1031,6 @@ msgstr "Alle vedlegg"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #, fuzzy
-#| msgid "Add contact"
 msgid "All contacts"
 msgstr "Legg til kontaktinfo"
 
@@ -1640,6 +1636,11 @@ msgstr "Lukk søk"
 msgid "Canceled"
 msgstr "Avbrutt"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1909,6 +1910,12 @@ msgstr "Lukk beskrivelsespanel"
 msgid "Close folder view"
 msgstr "Lukk mappevisning"
 
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "Varslingsområdet er åpent"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "Lukk premium-funksjoner"
@@ -1916,7 +1923,6 @@ msgstr "Lukk premium-funksjoner"
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, fuzzy
-#| msgid "close for %1$s"
 msgid "Close reminder for %1$s"
 msgstr "lukk for %1$s"
 
@@ -2279,7 +2285,6 @@ msgstr "Opprett"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Create appointment"
 msgid "Create all-day appointment"
 msgstr "Opprett ny avtale"
 
@@ -2952,7 +2957,6 @@ msgstr "Utkast"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #, fuzzy
-#| msgid "Drag to reorder widget"
 msgid "Drag to reorder filter rules"
 msgstr "Dra for å endre rekkefølgen til widget"
 
@@ -4094,10 +4098,6 @@ msgstr "Skjul alle avtaleinvitasjoner."
 msgid "Hide all appointment reminders."
 msgstr "Skjul alle avtalepåminnelser."
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Skjul alle varsler"
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
 msgstr "Skjul varslinger for oppgaver som har forfalt."
@@ -4426,7 +4426,6 @@ msgstr "Interne brukere"
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 #, fuzzy, c-format
-#| msgid "Invitation sent"
 msgid "Invitation for %1$s."
 msgstr "Invitasjon sendt"
 
@@ -4710,7 +4709,6 @@ msgstr "Likte kommentar"
 #. %1$d is line number, %2$s is an error message
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
-#| msgid "%1$d %2$s"
 msgid "Line %1$d: %2$s"
 msgstr "%1$d %2$s"
 
@@ -5406,7 +5404,6 @@ msgstr "Ingen avtaler funnet frem til %s"
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
-#| msgid "No matching items found."
 msgid "No autocomplete entries found"
 msgstr "Ingen treff ble funnet."
 
@@ -5705,7 +5702,6 @@ msgstr "Åpne alle meldinger"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #, fuzzy
-#| msgid "View attachment"
 msgid "Open attachment"
 msgstr "Vis vedlegg"
 
@@ -6298,6 +6294,10 @@ msgstr "Vennligst fyll ut de manglende variablene: "
 msgid "Please update your browser."
 msgstr "Vennligst oppdater nettleseren din."
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Pluss"
@@ -6428,7 +6428,6 @@ msgstr "Trykk [enter] for å hoppe til twitter-strømmen."
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 #, fuzzy
-#| msgid "Selection Details"
 msgid "Press to open Details"
 msgstr "Utvalgsdetaljer"
 
@@ -6852,7 +6851,6 @@ msgstr "Minn meg på dette senere"
 #. a string concatenation before; at least now it's documented
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, fuzzy
-#| msgid "Remind me again "
 msgid "Remind me again %1$s"
 msgstr "Minn meg på dette igjen "
 
@@ -6878,14 +6876,12 @@ msgstr "Påminnelsedato %1$s"
 #. %1$s appointment title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, fuzzy, c-format
-#| msgid "Reminder date %1$s"
 msgid "Reminder for appointment %1$s."
 msgstr "Påminnelsedato %1$s"
 
 #. %1$s task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, fuzzy, c-format
-#| msgid "Reminder date %1$s"
 msgid "Reminder for task %1$s."
 msgstr "Påminnelsedato %1$s"
 
@@ -7016,7 +7012,6 @@ msgstr "Ressursgruppe"
 
 #: apps/plugins/administration/resources/settings/edit.js module:io.ox/core
 #, fuzzy
-#| msgid "Resource name"
 msgid "Resource name (mandatory)"
 msgstr "Ressursnavn"
 
@@ -7327,10 +7322,6 @@ msgstr "Send en lesebekreftelse"
 msgid "Send as internal link"
 msgstr "Send som intern kobling"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "Send som epost"
-
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
@@ -7348,7 +7339,6 @@ msgstr "Send tilbakemelding"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
-#| msgid "Get link"
 msgid "Send link"
 msgstr "Få en link"
 
@@ -7694,7 +7684,6 @@ msgstr "Logg på"
 #. the word not the verb
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #, fuzzy
-#| msgid "Sign in"
 msgctxt "word"
 msgid "Sign in"
 msgstr "Logg på"
@@ -9207,7 +9196,6 @@ msgstr "Laster opp %1$s"
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #, fuzzy
-#| msgid "Add attachments"
 msgid "Uploading attachments"
 msgstr "Legg til vedlegg"
 
@@ -9246,7 +9234,6 @@ msgstr "Bruk piltastene for å navigere"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 #, fuzzy
-#| msgid "Use cursor keys to navigate"
 msgid "Use cursor keys to reorder items"
 msgstr "Bruk piltastene for å navigere"
 
@@ -9321,7 +9308,6 @@ msgstr "Versjonskommentar"
 #. %1$d - version date
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #, fuzzy
-#| msgid "Versions (%1$d)"
 msgid "Version of %1$s"
 msgstr "Versjoner (%1$d)"
 
@@ -10064,7 +10050,6 @@ msgstr "lukk for %1$s"
 #. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, fuzzy
-#| msgid "collapse"
 msgid "collapsed"
 msgstr "minimer"
 
@@ -10119,7 +10104,6 @@ msgstr "slett alle objekter"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #, fuzzy
-#| msgid "when the link is expired"
 msgid "delete if expired"
 msgstr "når lenken har utløpt"
 
@@ -10218,7 +10202,6 @@ msgstr "hver uke"
 #. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, fuzzy
-#| msgid "expand"
 msgid "expanded"
 msgstr "utvid"
 
@@ -10794,6 +10777,9 @@ msgstr "yyyy"
 #~ msgid "Hide advanced filters"
 #~ msgstr "Skjul avanserte filtre"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Skjul alle varsler"
+
 #~ msgid "Hide all notifications for new mails."
 #~ msgstr "Skjul varslinger for uleste eposter."
 
@@ -10967,6 +10953,9 @@ msgstr "yyyy"
 #~ msgid "Select your device"
 #~ msgstr "Velg enheten din"
 
+#~ msgid "Send as mail"
+#~ msgstr "Send som epost"
+
 #~ msgid "Set as default"
 #~ msgstr "Sett som standard"
 
@@ -11058,9 +11047,6 @@ msgstr "yyyy"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "Varslingsområdet er lukket"
-
-#~ msgid "The notification area is open"
-#~ msgstr "Varslingsområdet er åpent"
 
 #~ msgid "The person %1$s is already in the list"
 #~ msgstr "Personen %1$s er allerede i listen"

@@ -28,7 +28,7 @@ define('io.ox/core/folder/contextmenu', [
     //
 
     function a(action, text) {
-        return $('<a href="#" tabindex="1" role="menuitem">')
+        return $('<a href="#" role="menuitem">')
             .attr('data-action', action).text(text)
             // always prevent default
             .on('click', $.preventDefault);
@@ -94,7 +94,7 @@ define('io.ox/core/folder/contextmenu', [
 
             _(_.range(1, 11)).each(function (colorNumber) {
                 self.$el.append(
-                    $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
+                    $('<div class="color-label pull-left" tabindex="0" role="checkbox">')
                     .addClass('color-label-' + colorNumber)
                     .addClass(folderColor === colorNumber ? 'active' : '')
                     .attr({

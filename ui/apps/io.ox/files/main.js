@@ -417,7 +417,7 @@ define('io.ox/files/main', [
                             app.mysharesListView.reload();
                         }), 10);
 
-                        var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+                        var toolbar = new Toolbar({ title: app.getTitle() });
 
                         app.getWindow().nodes.body.prepend(
                             app.mysharesListViewControl.render().$el
@@ -711,8 +711,10 @@ define('io.ox/files/main', [
             var ev = _.device('touch') ? 'tap' : 'dblclick';
 
             app.listView.$el.on(ev, '.file-type-folder .list-item-content', function (e) {
-                var obj = _.cid($(e.currentTarget).parent().attr('data-cid'));
-                app.folder.set(obj.id);
+                // simpler id check for folders, prevents errors if folder id contains '.'
+                var id = $(e.currentTarget).parent().attr('data-cid').replace(/^folder./, '');
+
+                app.folder.set(id);
             });
 
             app.listView.$el.on(ev, '.list-item:not(.file-type-folder) .list-item-content', function (e) {
@@ -733,11 +735,13 @@ define('io.ox/files/main', [
             // folders
             app.listView.$el.on('keydown', '.file-type-folder', function (e) {
                 if (e.which === 13) {
-                    var obj = _.cid($(e.currentTarget).attr('data-cid'));
+                    // simpler id check for folders, prevents errors if folder id contains '.'
+                    var id = $(e.currentTarget).attr('data-cid').replace(/^folder./, '');
+
                     app.listView.once('collection:load', function () {
                         app.listView.selection.select(0);
                     });
-                    app.folder.set(obj.id);
+                    app.folder.set(id);
                 }
             });
 
@@ -1019,7 +1023,7 @@ define('io.ox/files/main', [
             side.find('.foldertree-container').addClass('bottom-toolbar');
             side.find('.foldertree-sidepanel').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button" tabindex="1">')
+                    $('<a href="#" class="toolbar-item" role="button">')
                     .append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Close folder view'))
@@ -1108,6 +1112,13 @@ define('io.ox/files/main', [
                     // remove all DOM elements of current collection; keep the first item
                     app.listView.onBatchRemove(ids.slice(1));
                 }
+            });
+        },
+
+        'remove-file': function (app) {
+            api.on('remove:file', function () {
+                // trigger scroll after remove, if files were removed with select all we need to trigger a redraw or we get an empty view
+                app.listView.$el.trigger('scroll');
             });
         },
 

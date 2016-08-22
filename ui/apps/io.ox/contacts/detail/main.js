@@ -44,11 +44,11 @@ define('io.ox/contacts/detail/main', [
                         });
                     });
 
-                    app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container">').attr({
-                        'tabindex': 1,
-                        'role': 'complementary',
-                        'aria-label': label
-                    }).append(detailView.draw(baton)));
+                    app.getWindowNode().addClass('detail-view-app').append(
+                        $('<div class="f6-target detail-view-container" role="complementary" tabindex="0">').attr('aria-label', label).append(
+                            detailView.draw(baton)
+                        )
+                    );
                 }).fail(yell);
             };
         }

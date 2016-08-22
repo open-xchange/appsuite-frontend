@@ -79,7 +79,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
          * @returns {jQuery} thumbnailLink
          */
         createThumbnailNode: function (pageNumber) {
-            var thumbnailLink = $('<a class="document-thumbnail-link" tabindex="1">'),
+            var thumbnailLink = $('<a class="document-thumbnail-link">'),
                 thumbnail = $('<div class="document-thumbnail">'),
                 thumbnailImage = this.createDocumentThumbnailImage('thumbnail-image'),
                 thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);

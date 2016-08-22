@@ -306,12 +306,8 @@ define('io.ox/core/permissions/permissions', [
             return $('<i>').text(menus[permission][selected]);
         }
         menu = $('<span class="dropdown">').append(
-            $('<a href="#">').attr({
-                'tabindex': 1,
-                'data-type': permission,
-                'aria-haspopup': true,
-                'data-toggle': 'dropdown'
-            }).text(menus[permission][selected]),
+            $('<a href="#" aria-haspopup="true" data-toggle="dropdown">')
+                .attr('data-type', permission).text(menus[permission][selected]),
             ul = $('<ul class="dropdown-menu" role="menu">')
         );
         _(menus[permission]).each(function (item, value) {
@@ -319,7 +315,7 @@ define('io.ox/core/permissions/permissions', [
             if (value === '64') return true;
             ul.append(
                 $('<li>').append(
-                    $('<a>', { href: '#', 'data-value': value, role: 'menuitem' }).addClass('bit').text(item)
+                    $('<a href="#" role="menuitem" class="bit">').attr('data-value', value).text(item)
                 )
             );
         });
@@ -329,12 +325,12 @@ define('io.ox/core/permissions/permissions', [
     addRoles = function (baton) {
         if (!isFolderAdmin) return $();
         return $('<span class="dropdown preset">').append(
-            $('<a href="#" data-type="permission" data-toggle="dropdown" aria-haspopup="true" tabindex="1">'),
+            $('<a href="#" data-type="permission" data-toggle="dropdown" aria-haspopup="true">'),
             $('<ul class="dropdown-menu" role="menu">').append(
                 _(presets).map(function (obj) {
                     if (preventAdminPermissions('admin', baton) && obj.bits === 272662788) return;
                     return $('<li>').append(
-                        $('<a>', { href: '#', 'data-value': obj.bits, role: 'menuitem' }).addClass('role').text(obj.label)
+                        $('<a href="#" role="menuitem" class="role">').attr('data-value', obj.bits).text(obj.label)
                     );
                 })
             )
@@ -402,7 +398,7 @@ define('io.ox/core/permissions/permissions', [
 
                     if (isFolderAdmin) {
                         if (_.device('desktop')) {
-                            dialog.addPrimaryButton('save', gt('Save'), 'save', { tabindex: 1 }).addButton('cancel', gt('Cancel'), 'cancel', { tabindex: 1 });
+                            dialog.addPrimaryButton('save', gt('Save'), 'save').addButton('cancel', gt('Cancel'), 'cancel');
                         }
 
                         /*
@@ -422,7 +418,7 @@ define('io.ox/core/permissions/permissions', [
                         });
 
                         var buildCheckbox = function () {
-                                var checkbox = $('<input type="checkbox" tabindex="1">')
+                                var checkbox = $('<input type="checkbox">')
                                 .on('change', function () {
                                     cascadePermissionsFlag = checkbox.prop('checked');
                                 });
@@ -524,7 +520,7 @@ define('io.ox/core/permissions/permissions', [
                         collection.reset(_(data.permissions).map(function (obj) {
                             return new Permission(obj);
                         }));
-                        dialog.getPopup().find('[tabindex="1"]:first').focus();
+                        dialog.getPopup().find('[tabindex="0"]:first').focus();
                     });
 
                 } catch (e) {

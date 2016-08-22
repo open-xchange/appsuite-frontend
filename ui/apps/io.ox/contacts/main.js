@@ -172,7 +172,7 @@ define('io.ox/contacts/main', [
             app.left = left;
             app.right = right.addClass('default-content-padding f6-target')
                 .attr({
-                    'tabindex': 1,
+                    'tabindex': 0,
                     'role': 'main',
                     'aria-label': gt('Contact Details')
                 }).scrollable();

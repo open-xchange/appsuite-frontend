@@ -1653,6 +1653,11 @@ msgstr "Keresés megszakítása"
 msgid "Canceled"
 msgstr "Megszakítva"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1925,6 +1930,12 @@ msgstr "Leírópanel bezárása"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Mappanézet bezárása"
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "Az értesítési terület nyitva"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -4117,10 +4128,6 @@ msgstr "Összes találkozókra küldött meghívó elrejtése."
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Összes találkozóemlékeztető elrejtése."
-
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Összes értesítés elrejtése"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
@@ -6322,6 +6329,10 @@ msgstr "Adja meg ezeket a hiányzó változókat:"
 msgid "Please update your browser."
 msgstr "Frissítse böngészőjét."
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Plusz"
@@ -7353,10 +7364,6 @@ msgstr "Tértivevény küldése"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "Küldés belső hivatkozásként"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "Küldés e-mailként"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -10746,6 +10753,9 @@ msgstr "yyyy"
 #~ msgid "Haiti"
 #~ msgstr "Várakozás"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Összes értesítés elrejtése"
+
 #~ msgid "Hide comments"
 #~ msgstr "Megjegyzések elrejtése"
 
@@ -10877,6 +10887,9 @@ msgstr "yyyy"
 #~ msgid "Save to Drive"
 #~ msgstr "Mentés a Drive-ra"
 
+#~ msgid "Send as mail"
+#~ msgstr "Küldés e-mailként"
+
 #~ msgid "Show comments"
 #~ msgstr "Megjegyzések megjelenítése"
 
@@ -10917,9 +10930,6 @@ msgstr "yyyy"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "Az értesítési terület zárva"
-
-#~ msgid "The notification area is open"
-#~ msgstr "Az értesítési terület nyitva"
 
 #~ msgid ""
 #~ "This document is password protected and cannot be displayed. Please open "

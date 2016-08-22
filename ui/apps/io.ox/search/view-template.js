@@ -58,21 +58,13 @@ define('io.ox/search/view-template', [
                 $('<div class="col-xs-1 recipient-actions">').append(
 
                     // search icon
-                    $('<a href="#">')
-                    .attr({
-                        'tabindex': '1',
-                        'class': 'btn-search maillabel col-xs-2'
-                    })
-                    .append(
+                    $('<a href="#" class="btn-search maillabel col-xs-2">').append(
                         $('<span class="fa fa-search"></i>')
                     ),
                     // clear icon/button
-                    $('<a href="#">')
+                    $('<a href="#" class="btn-clear" role="button">')
                     .attr({
-                        'tabindex': '1',
-                        'class': 'btn-clear',
-                        'aria-label': gt('Clear field'),
-                        'role': 'button'
+                        'aria-label': gt('Clear field')
                     }).append(
                         $('<i class="fa fa-times"></i>')
                     )

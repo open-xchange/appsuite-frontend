@@ -1644,6 +1644,11 @@ msgstr "Avbryt sökning"
 msgid "Canceled"
 msgstr "Avbruten"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1911,6 +1916,12 @@ msgstr "Stäng beskrivningspanel"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Stäng mappvy"
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "Aviseringsområdet är öppet"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -4091,10 +4102,6 @@ msgstr "Dölj alla mötesinbjudningar."
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Dölj alla mötespåminnelser."
-
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Dölj alla aviseringar"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
@@ -6291,6 +6298,10 @@ msgstr "Definiera dessa saknade variabler: "
 msgid "Please update your browser."
 msgstr "Uppdatera din webbläsare."
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Plus"
@@ -7319,10 +7330,6 @@ msgstr "Skicka ett läskvitto"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "Skicka som intern länk"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "Skicka som e-post"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -12752,6 +12759,9 @@ msgstr "yyyy"
 #~ msgid "Hide advanced filters"
 #~ msgstr "Dölj avancerade filter"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Dölj alla aviseringar"
+
 #~ msgid "Hide all notifications for new mails."
 #~ msgstr "Dölj alla notifieringar om ny e-post."
 
@@ -14205,6 +14215,9 @@ msgstr "yyyy"
 #~ msgid "Select page"
 #~ msgstr "Välj sida"
 
+#~ msgid "Send as mail"
+#~ msgstr "Skicka som e-post"
+
 #~ msgid "Sender"
 #~ msgstr "Avsändare"
 
@@ -14736,9 +14749,6 @@ msgstr "yyyy"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "Aviseringsområdet är stängt"
-
-#~ msgid "The notification area is open"
-#~ msgstr "Aviseringsområdet är öppet"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Antal mottagare är begränsat till %1$s mottagare per fält"

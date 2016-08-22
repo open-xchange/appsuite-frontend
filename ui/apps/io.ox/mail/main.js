@@ -1551,7 +1551,7 @@ define('io.ox/mail/main', [
                             $('<div class="progress"><div class="progress-bar"></div></div>'),
                             $('<div class="caption">').append(
                                 $('<span>'),
-                                $('<a href="#" class="close" data-action="close" role="button" tabindex="1"><i class="fa fa-times"></i></a>')
+                                $('<a href="#" class="close" data-action="close" role="button"><i class="fa fa-times"></i></a>')
                             )
                        );
                     api.queue.collection.on('progress', function (data) {

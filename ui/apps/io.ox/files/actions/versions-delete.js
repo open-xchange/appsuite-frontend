@@ -22,8 +22,8 @@ define('io.ox/files/actions/versions-delete', [
     return function (data) {
         new dialogs.ModalDialog()
             .text(gt.pgettext('One file only', 'Do you really want to delete this version?'))
-            .addPrimaryButton('delete', gt('Delete version'), 'delete', { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+            .addPrimaryButton('delete', gt('Delete version'), 'delete')
+            .addButton('cancel', gt('Cancel'), 'cancel')
             .on('delete', function () {
                 api.versions.remove(data);
             })

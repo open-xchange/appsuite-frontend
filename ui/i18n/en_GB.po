@@ -1644,6 +1644,11 @@ msgstr "Cancel search"
 msgid "Canceled"
 msgstr "Cancelled"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1910,6 +1915,12 @@ msgstr "Close description panel"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Close folder view"
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "The notification area is open"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -4102,10 +4113,6 @@ msgstr "Hide all appointment invitations."
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Hide all appointment reminders."
-
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Hide all notifications"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
@@ -6305,6 +6312,10 @@ msgstr "Please specify these missing variables: "
 msgid "Please update your browser."
 msgstr "Please update your browser."
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Plus"
@@ -7334,10 +7345,6 @@ msgstr "Send a read receipt"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "Send as internal link"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "Send as email"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11370,6 +11377,9 @@ msgstr "yyyy"
 #~ msgid "Hide advanced filters"
 #~ msgstr "Hide advanced filters"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Hide all notifications"
+
 #~ msgid "Hide all notifications for new mails."
 #~ msgstr "Hide all notifications for new e-mail messages."
 
@@ -11931,6 +11941,9 @@ msgstr "yyyy"
 #~ msgid "Select page"
 #~ msgstr "Select page"
 
+#~ msgid "Send as mail"
+#~ msgstr "Send as email"
+
 #~ msgid "Sender"
 #~ msgstr "Sender"
 
@@ -12241,9 +12254,6 @@ msgstr "yyyy"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "The notification area is closed"
-
-#~ msgid "The notification area is open"
-#~ msgstr "The notification area is open"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "The number of recipients is limited to %1$s recipients per field"

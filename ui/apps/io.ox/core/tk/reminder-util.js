@@ -24,14 +24,14 @@ define('io.ox/core/tk/reminder-util', [
             //native style for tablet
             node.append(
                     $('<div>').text(gt('Remind me again')),
-                    $('<select tabindex="1" class="dateselect" data-action="selector">').append(function () {
+                    $('<select class="dateselect" data-action="selector">').append(function () {
                         var ret = '<option value="0">' + gt('Pick a time here') + '</option>';
                         for (var i = 0; i < values.length; i++) {
                             ret += '<option value="' + values[i][0] + '">' + values[i][1] + '</option>';
                         }
                         return ret;
                     }),
-                    $('<button type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK'))
+                    $('<button type="button" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK'))
                     //#. %1$s appointment or task title
                     .attr('aria-label', gt('Close reminder for %1$s', model.get('title')))
                 );
@@ -47,8 +47,8 @@ define('io.ox/core/tk/reminder-util', [
 
             node.append(
                 $('<div class="dropdown">').css({ 'float': 'left' }).append(
-                    toggle = $('<a role="button" tabindex="1" data-action="remind-again" data-toggle="dropdown" aria-haspopup="true">')
-                    .text(gt('Remind me again')).addClass('refocus')
+                    toggle = $('<a role="button" data-action="remind-again" data-toggle="dropdown" aria-haspopup="true" class="refocus">')
+                    .text(gt('Remind me again'))
                     .append(
                         $('<i class="fa fa-chevron-down" aria-hidden="true">').css({ paddingLeft: '5px', textDecoration: 'none' })
                     ),
@@ -57,7 +57,7 @@ define('io.ox/core/tk/reminder-util', [
                         .append(function () {
                             return _(values).map(function (value) {
                                 return $('<li role="presentation">').append(
-                                    $('<a href="#" tabindex="1" role="menuitem" data-action="reminder">')
+                                    $('<a href="#" role="menuitem" data-action="reminder">')
                                     .attr({
                                         //#. %1$s is something like "in 5 minutes"
                                         //#. don't know if that works for all languages but it has been
@@ -70,7 +70,7 @@ define('io.ox/core/tk/reminder-util', [
                             });
                         })
                 ),
-                $('<button type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK'))
+                $('<button type="button" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK'))
                     //#. %1$s appointment or task title
                     .attr('aria-label', gt('Close reminder for %1$s', model.get('title')))
             ).find('after').css('clear', 'both');
@@ -95,7 +95,7 @@ define('io.ox/core/tk/reminder-util', [
         //find out remindertype
         if (taskMode) {
             //task
-            info = $('<a class="notification-info" role="button" tabindex="1">').append(
+            info = $('<a class="notification-info" role="button">').append(
                 $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
                 $('<span class="span-to-div info-wrapper">').append($('<span class="end_date">').text(_.noI18n(model.get('end_time'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge'))),
@@ -108,7 +108,7 @@ define('io.ox/core/tk/reminder-util', [
         } else {
             var strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' });
             //appointment
-            info = $('<a class="notification-info" role="button" tabindex="1">').append(
+            info = $('<a class="notification-info" role="button">').append(
                 $('<span class="span-to-div time">').text(strings.timeStr),
                 $('<span class="span-to-div date">').text(strings.dateStr),
                 $('<span class="span-to-div title">').text(model.get('title')),
@@ -125,7 +125,7 @@ define('io.ox/core/tk/reminder-util', [
             'model-cid': model.cid,
             'aria-label': label,
             role: 'listitem',
-            'tabindex': 1
+            'tabindex': 0
         }).addClass('reminder-item clearfix');
         buildActions(actions, options, model);
 

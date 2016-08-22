@@ -238,18 +238,18 @@ define('plugins/portal/mail/register', [
                     this.getContentNode().append(
                         options.length > 1 ?
                             $('<div class="form-group">').append(
-                                $('<label for="' + accId + '">').text(gt('Account')),
-                                accSelect = $('<select id ="' + accId + '" class="form-control">').append(options)
+                                $('<label>').attr('for', accId).text(gt('Account')),
+                                accSelect = $('<select class="form-control">').attr('id', accId).append(options)
                             ) : $(),
                         $('<div class="form-group">').append(
-                            $('<label for="' + nameId + '">').text(gt('Description')),
-                            nameInput = $('<input id="' + nameId + '" type="text" class="form-control" tabindex="1">').val(props.name || gt('Inbox')),
+                            $('<label>').attr('for', nameId).text(gt('Description')),
+                            nameInput = $('<input type="text" class="form-control">').attr('id', nameId).val(props.name || gt('Inbox')),
                             $('<div class="alert alert-danger">').css('margin-top', '15px').hide()
                         )
                     );
                 })
-                .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                .addPrimaryButton('save', gt('Save'), 'save')
+                .addButton('cancel', gt('Cancel'), 'cancel')
                 .show(function () {
                     if (options.length > 1) {
                         if (!props.name) {

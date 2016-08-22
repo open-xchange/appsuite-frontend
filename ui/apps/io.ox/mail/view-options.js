@@ -110,7 +110,7 @@ define('io.ox/mail/view-options', [
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="toolbar-item select-all" role ="checkbox" aria-checked="false" tabindex="1">').append(
+                $('<a href="#" class="toolbar-item select-all" role ="checkbox" aria-checked="false">').append(
                     $('<i class="fa fa-square-o" aria-hidden="true">'),
                     $.txt(gt('Select all'))
                 )
@@ -158,7 +158,7 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
 
             this.append(
-                $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="open-folder-view">')
+                $('<a href="#" role="button" class="toolbar-item" data-action="open-folder-view">')
                 .attr('title', gt('Open folder view'))
                 .append($('<i class="fa fa-angle-double-right">'))
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
@@ -179,7 +179,7 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
             this.addClass('bottom-toolbar').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="close-folder-view">')
+                    $('<a href="#" role="button" class="toolbar-item" data-action="close-folder-view">')
                     .append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Close folder view'))

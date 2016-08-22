@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-04 10:21+0000\n"
+"POT-Creation-Date: 2016-08-04 07:42+0000\n"
 "PO-Revision-Date: 2016-05-24 23:13+0000\n"
 "Last-Translator: martimarkov <marti.markov@icloud.com>\n"
 "Language-Team: Bulgarian\n"
@@ -501,7 +501,6 @@ msgstr "(Четене, писане и триене)"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 #, fuzzy
-#| msgid "Current Date"
 msgid "(current app)"
 msgstr "Сегашна дата"
 
@@ -1635,6 +1634,11 @@ msgstr "Откажи търсене"
 msgid "Canceled"
 msgstr "Откажи"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1901,6 +1905,10 @@ msgstr ""
 #: module:io.ox/files apps/io.ox/files/view-options.js
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
+msgstr ""
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Close notification area"
 msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
@@ -2274,7 +2282,6 @@ msgstr "Създай"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Create appointment"
 msgid "Create all-day appointment"
 msgstr "Създай среща"
 
@@ -4081,10 +4088,6 @@ msgstr ""
 msgid "Hide all appointment reminders."
 msgstr ""
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr ""
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
 msgstr ""
@@ -4686,7 +4689,6 @@ msgstr ""
 #. %1$d is line number, %2$s is an error message
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
-#| msgid "%1$d %2$s"
 msgid "Line %1$d: %2$s"
 msgstr "%1$d %2$s"
 
@@ -6264,6 +6266,10 @@ msgstr ""
 msgid "Please update your browser."
 msgstr ""
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr ""
@@ -6836,7 +6842,6 @@ msgstr "Покани към нова среща"
 #. %1$s task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, fuzzy, c-format
-#| msgid "Signed in as %1$s"
 msgid "Reminder for task %1$s."
 msgstr "Влязъл като %1$s"
 
@@ -7273,10 +7278,6 @@ msgstr ""
 msgid "Send as internal link"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "Изпрати като мейл"
-
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
@@ -7294,7 +7295,6 @@ msgstr ""
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
-#| msgid "Send mail"
 msgid "Send link"
 msgstr "Изпрати мейл"
 
@@ -7640,7 +7640,6 @@ msgstr "Влез"
 #. the word not the verb
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #, fuzzy
-#| msgid "Sign in"
 msgctxt "word"
 msgid "Sign in"
 msgstr "Влез"
@@ -9052,7 +9051,6 @@ msgstr ""
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #, fuzzy
-#| msgid "Add attachments"
 msgid "Uploading attachments"
 msgstr "Добави прикачен файл"
 
@@ -10436,6 +10434,9 @@ msgstr ""
 
 #~ msgid "Save to Drive"
 #~ msgstr "Запиши в Драйв"
+
+#~ msgid "Send as mail"
+#~ msgstr "Изпрати като мейл"
 
 #~ msgid "remove"
 #~ msgstr "премахни"

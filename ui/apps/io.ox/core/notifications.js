@@ -36,7 +36,7 @@ define('io.ox/core/notifications', [
         tagName: 'div',
         id: 'io-ox-notifications-display',
         events: {
-            'click .clear-area-button': 'hideAll'
+            'click .clear-area-button': 'hide'
         },
         initialize: function () {
             var self = this;
@@ -108,13 +108,9 @@ define('io.ox/core/notifications', [
                 self.$el.prepend(
                     $('<div class=notification-area-header>').append(
                         $('<h1 class="notification-area-title">').text(gt('Notifications')),
-                        $('<button class="btn btn-link clear-area-button fa fa-times">')
-                            .attr({
-                                tabindex: 1,
-                                'aria-label': gt('Hide all notifications')
-                            })
-                        )
-                    );
+                        $('<button class="btn btn-link clear-area-button fa fa-times">').attr('aria-label', gt('Close notification area'))
+                    )
+                );
             }
             // add show desktopNotifications info
             self.drawNotificationInfo();
@@ -312,7 +308,7 @@ define('io.ox/core/notifications', [
             }, this));
 
             // try to focus first item; focus badge otherwise
-            var firstItem = this.nodes.main.find('[tabindex="1"]').first();
+            var firstItem = this.nodes.main.find('[tabindex="0"]').first();
             if (firstItem.length > 0) firstItem.focus(); else this.badgeview.$el.focus();
 
             this.model.set('status', 'open');

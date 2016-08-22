@@ -96,37 +96,69 @@ define('io.ox/participants/model', [
             });
         },
 
+        // It's a kind of magic
         magic: function () {
-            // It's a kind of magic
-            // convert external user having an internal user id to internal users
-            if (this.has('field')) {
-                if (this.get('field') === 'email1' && this.get('type') === this.TYPE_EXTERNAL_USER && this.get('internal_userid')) {
-                    this.set({
-                        'type': this.TYPE_USER,
-                        'contact_id': this.get('id'),
-                        'id': this.get('internal_userid')
-                    });
-                } else if (this.get('field') !== 'email1' && this.get('type') === this.TYPE_USER && this.get('contact_id')) {
-                    this.set({
-                        'type': this.TYPE_EXTERNAL_USER,
-                        'internal_userid': this.get('id'),
-                        'id': this.get('contact_id')
-                    });
-                }
+            // convert: special-contact -> user (usually used for distribution list)
+            if (this.is('special-contact')) {
+                this.set({
+                    'type': this.TYPE_USER,
+                    'contact_id': this.get('id'),
+                    'id': this.get('internal_userid')
+                });
             }
-
-            // Fix id for unknown external users
-            if (this.get('type') === this.TYPE_EXTERNAL_USER && !this.has('id')) {
+            // convert: special-user -> contact (usually used for autocomplete dropdown)
+            if (this.is('special-user')) {
+                this.set({
+                    'type': this.TYPE_EXTERNAL_USER,
+                    'internal_userid': this.get('id'),
+                    'id': this.get('contact_id')
+                });
+            }
+            // add: missing id for unknown external users
+            if (this.is('contact') && !this.has('id')) {
                 this.set('id', this.getEmail(), { silent: true });
             }
             // set pid
-            this.set('pid', [this.TYPE_LABEL[this.get('type')], this.get('id'), this.get('field')].join('_'), { silent: true });
+            this.setPID();
             // for typeahead hint
             this.value = this.getTarget() || this.getDisplayName();
         },
 
+        setPID: function () {
+            var pid = [this.TYPE_LABEL[this.get('type')], this.get('id'), this.get('field')].join('_');
+            this.set('pid', pid, { silent: true });
+        },
+
+
+        is: function (type) {
+            switch (type) {
+                // a contact based on a user (f.e. secondary mail address)
+                case 'user':
+                    return this.get('type') === this.TYPE_USER;
+                // a contact without connection to a user
+                case 'contact':
+                    return this.get('type') === this.TYPE_EXTERNAL_USER;
+                case 'group':
+                    return this.get('type') === this.TYPE_USER_GROUP;
+                case 'resource':
+                    return this.get('type') === this.TYPE_RESOURC;
+                case 'list':
+                    return this.get('type') === this.TYPE_DISTLIST;
+                case 'unknown':
+                    return this.get('type') === this.TYPE_UNKNOWN;
+                // special: a contact but actually a user with it's email2 or email3
+                case 'special-contact':
+                    return this.is('contact') && this.get('internal_userid') && this.get('field') === 'email1';
+                // special: a user object that referencing it's email2 or email3 field
+                case 'special-user':
+                    return this.is('user') && this.get('contact_id') && this.has('field') && this.get('field') !== 'email1';
+                default:
+                    break;
+            }
+        },
+
         getContactID: function () {
-            if (this.get('type') === this.TYPE_USER && this.get('contact_id')) {
+            if (this.is('user') && this.get('contact_id')) {
                 return this.get('contact_id');
             }
             return this.get('id');
@@ -144,7 +176,7 @@ define('io.ox/participants/model', [
 
         getTarget: function (opt) {
             opt = _.extend({ fallback: false }, opt);
-            if (opt.fallback && this.get('type') === this.TYPE_DISTLIST) return 'distribution_list';
+            if (opt.fallback && this.is('list')) return 'distribution_list';
             return this.get(this.get('field')) || this.getEmail();
         },
 
@@ -196,6 +228,12 @@ define('io.ox/participants/model', [
                         // if we have a display name we drop other names to keep it
                         // since this update is done on search results
                         data = _(data).omit('first_name', 'last_name', 'display_name');
+                    }
+                    // fix wrong mail field (see bug 47874)
+                    if (model.has('mail') && model.get('mail') !== data[model.get('field')]) {
+                        _.each(['email1', 'email2', 'email3'], function (key) {
+                            if (data[key] === model.get('mail')) data.field = key;
+                        });
                     }
                     model.set(data);
                 };

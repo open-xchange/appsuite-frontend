@@ -34,8 +34,8 @@ define('io.ox/contacts/actions/delete', [
 
         new dialogs.ModalDialog()
             .text(question)
-            .addPrimaryButton('delete', gt('Delete'), 'delete', { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+            .addPrimaryButton('delete', gt('Delete'), 'delete')
+            .addButton('cancel', gt('Cancel'), 'cancel')
             .show()
             .done(function (action) {
                 if (action === 'delete') {

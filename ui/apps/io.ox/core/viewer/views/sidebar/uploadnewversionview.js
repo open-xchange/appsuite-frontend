@@ -57,7 +57,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         id: 'body',
         draw: function (baton) {
             baton.$.append(
-                $('<textarea rows="6" class="form-control comment" tabindex="1">')
+                $('<textarea rows="6" class="form-control comment">')
             );
         }
     });
@@ -67,7 +67,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         id: 'primary',
         draw: function (baton) {
             var self = this;
-            baton.$.addPrimaryButton('upload', gt('Upload'), 'upload', { 'tabIndex': '1' })
+            baton.$.addPrimaryButton('upload', gt('Upload'), 'upload')
                 .on('upload', function () {
                     var comment = baton.$.getContentNode().find('textarea.comment').val() || '';
                     // upload file
@@ -81,7 +81,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         id: 'cancel',
         draw: function (baton) {
             var self = this;
-            baton.$.addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+            baton.$.addButton('cancel', gt('Cancel'), 'cancel')
                 .on('cancel', function () {
                     // reset file input
                     _.first(self.$('input[type="file"]')).value = '';

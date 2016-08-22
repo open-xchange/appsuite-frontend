@@ -59,14 +59,12 @@ define('io.ox/core/notifications/subview', [
                         desktopNotifications.show(specific(model));
                     });
                 }
-                var node = $('<li class="item" tabindex="1" role="listitem">');
+                var node = $('<li class="item" tabindex="0" role="listitem">');
                 if (view.model.get('showHideSingleButton')) {
                     node.append(
                         $('<div class="notification-item-actions">').append(
-                            $('<button type="button" class="btn btn-link clear-single-button fa fa-times">')
+                            $('<button type="button" class="btn btn-link clear-single-button fa fa-times" data-action="clear-single">')
                                 .attr({
-                                    tabindex: 1,
-                                    'data-action': 'clear-single',
                                     'aria-label': gt('Hide this notification')
                                 }).on('click', function () {
                                     view.hide(requestedModel);
@@ -120,10 +118,9 @@ define('io.ox/core/notifications/subview', [
             var title =  baton.view.model.get('title');
             this.append(
                 $('<h1 class="section-title">').text(title),
-                baton.view.model.get('showHideAllButton') ? $('<button type="button" class="btn btn-link clear-button fa fa-times">')
+                baton.view.model.get('showHideAllButton') ?
+                    $('<button type="button" class="btn btn-link clear-button fa fa-times" data-action="clear-all">')
                         .attr({
-                            tabindex: 1,
-                            'data-action': 'clear-all',
                             'aria-label': baton.view.model.attributes.hideAllLabel
                         })
                     : ''

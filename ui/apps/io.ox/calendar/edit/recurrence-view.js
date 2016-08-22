@@ -127,7 +127,7 @@ define('io.ox/calendar/edit/recurrence-view', [
             $anchor.on('click', function (e) {
                 e.preventDefault();
                 var type = (Modernizr.inputtypes.number && _.device('smartphone')) ? 'number' : 'text',
-                    $numberInput = $('<input type="' + type + '" size="4" tabindex="1">').css({
+                    $numberInput = $('<input size="4">').attr('type', type).css({
                         width: (Modernizr.inputtypes.number && _.device('smartphone')) ? '2em' : '1em',
                         marginBottom: 0,
                         padding: 0
@@ -280,9 +280,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                         return (nodes[day] = $('<li>').attr({
                             role: 'presentation'
                         }).append(
-                            $('<a>').attr({
-                                href: '#',
-                                role: 'menuitem',
+                            $('<a href="#" role="menuitem">').attr({
                                 tabindex: $anchor.attr('tabindex')
                             }).append(
                                 $('<i class="fa fa-check" aria-hidden="true">'),
@@ -470,12 +468,12 @@ define('io.ox/calendar/edit/recurrence-view', [
 
     var RecurrenceView = function (options) {
         _.extend(this, {
-            tabindex: 1,
+            tabindex: 0,
             init: function () {
                 var self = this;
                 // Construct the UI
                 this.controls = {
-                    checkbox: $('<input tabindex="1" type="checkbox">'),
+                    checkbox: $('<input type="checkbox">'),
                     checkboxLabel: $('<label class="control-label">'),
                     detailToggle: $('<a href="#" class="recurrence-detail-toggle">').attr({
                         'role': 'button',
@@ -943,7 +941,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                     .empty()
                     .append(
                         $('<span>&nbsp;</span>'),
-                        sum = $('<a href="#" tabindex="' + this.tabindex + '">')
+                        sum = $('<a href="#">').attr('tabindex', this.tabindex)
                     );
                 if (this.model.get('recurrence_type') !== RECURRENCE_TYPES.NO_RECURRENCE) {
                     this.nodes.wrapper.css({ 'display': 'inline-block' });
@@ -1071,7 +1069,7 @@ define('io.ox/calendar/edit/recurrence-view', [
             },
             createGhost: function (sentence) {
                 var self = this;
-                return $('<span class="text-muted" tabindex="' + self.tabindex + '">')
+                return $('<span class="text-muted">').attr('tabindex', self.tabindex)
                     .append(sentence.ghost())
                     .on('click keydown', function (e) {
                         // hit space or enter

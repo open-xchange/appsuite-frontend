@@ -67,8 +67,7 @@ define('plugins/portal/client-onboarding/register', [
                                 $('<i class="fa fa-fw fa-laptop">')
                             ),
                         $('<div class="paragraph">').append(
-                            $('<a>', { tabindex: '1', 'role': 'button' })
-                                .addClass('action')
+                            $('<a role="button" class="action">')
                                 //#. button label within the client-onboarding widget
                                 //#. button opens the wizard to configure your device
                                 .text(gt('Connect'))

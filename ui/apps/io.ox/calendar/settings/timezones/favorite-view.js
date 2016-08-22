@@ -82,7 +82,7 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
                 $('<div class="form-group">').append(
                     $('<div class="row">').append(
                         $('<div class="col-sm-8">').append(
-                            $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add timezone'))
+                            $('<button type="button" class="btn btn-primary">').text(gt('Add timezone'))
                         )
                     )
                 ),
@@ -99,8 +99,8 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
                 model = new FavoriteTimezone();
             new dialogs.ModalDialog()
                 .header($('<h4>').text(gt('Select favorite timezone')))
-                .addPrimaryButton('add', gt('Add'), 'add', { tabIndex: 1 })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                .addPrimaryButton('add', gt('Add'), 'add')
+                .addButton('cancel', gt('Cancel'), 'cancel')
                 .build(function () {
                     this.getContentNode().append(
                         new TimezonePicker({

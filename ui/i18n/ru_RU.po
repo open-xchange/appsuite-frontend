@@ -1667,6 +1667,11 @@ msgstr "Остановить поиск"
 msgid "Canceled"
 msgstr "Отменено"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1937,6 +1942,12 @@ msgstr "Закрыть панель описания"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Закрыть просмотр папок"
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "Область уведомлений открыта"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -4120,10 +4131,6 @@ msgstr "Скрыть все приглашения на встречи."
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Скрыть напоминания о встречах."
-
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Скрыть все уведомления"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
@@ -6323,6 +6330,10 @@ msgstr "Укажите недостающие переменные: "
 msgid "Please update your browser."
 msgstr "Обновите браузер."
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Плюс"
@@ -7348,10 +7359,6 @@ msgstr "Отправить уведомление о прочтении"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "Отправить как внутреннюю ссылку"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "Отправить по почте"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11434,6 +11441,9 @@ msgstr "гггг"
 #~ msgid "Hide advanced filters"
 #~ msgstr "Скрыть дополнительные фильтры"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Скрыть все уведомления"
+
 #~ msgid "Hide all notifications for new mails."
 #~ msgstr "Скрыть уведомления о новых сообщениях."
 
@@ -12005,6 +12015,9 @@ msgstr "гггг"
 #~ msgid "Select page"
 #~ msgstr "Выберите страницу"
 
+#~ msgid "Send as mail"
+#~ msgstr "Отправить по почте"
+
 #~ msgid "Sender"
 #~ msgstr "Отправитель"
 
@@ -12312,9 +12325,6 @@ msgstr "гггг"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "Область уведомлений закрыта"
-
-#~ msgid "The notification area is open"
-#~ msgstr "Область уведомлений открыта"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Максимальное число получателей в поле: %1$s"

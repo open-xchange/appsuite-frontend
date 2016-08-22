@@ -43,8 +43,8 @@ define('io.ox/mail/accounts/settings', [
         ).append(
             myView.render().el
         )
-        .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
-        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+        .addPrimaryButton('save', gt('Save'), 'save')
+        .addButton('cancel', gt('Cancel'), 'cancel')
         .show(function () {
             this.find('input[type=text]:first').focus();
         });
@@ -112,7 +112,7 @@ define('io.ox/mail/accounts/settings', [
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="add-mail-account-address">').text(gt('Your mail address')),
-                    $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address" tabindex="1">')
+                    $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address">')
                 )
             );
         }
@@ -125,7 +125,7 @@ define('io.ox/mail/accounts/settings', [
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="add-mail-account-password">').text(gt('Your password')),
-                    $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password" tabindex="1">')
+                    $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password">')
                 )
             );
         }
@@ -233,8 +233,8 @@ define('io.ox/mail/accounts/settings', [
         configureManuallyDialog = function (args, newMailaddress) {
             new dialogs.ModalDialog({ width: 400 })
                 .text(gt('Auto-configuration failed. Do you want to configure your account manually?'))
-                .addPrimaryButton('yes', gt('Yes'), 'yes', { tabIndex: 1 })
-                .addButton('no', gt('No'), 'no', { tabIndex: 1 })
+                .addPrimaryButton('yes', gt('Yes'), 'yes')
+                .addButton('no', gt('No'), 'no')
                 .on('yes', function () {
                     var data = {};
                     data.primary_address = newMailaddress;
@@ -264,8 +264,8 @@ define('io.ox/mail/accounts/settings', [
                 } else if (forceSecure) {
                     new dialogs.ModalDialog({ async: true, width: 400 })
                         .text(gt('Cannot establish secure connection. Do you want to proceed anyway?'))
-                        .addPrimaryButton('yes', gt('Yes'), 'yes', { tabIndex: 1 })
-                        .addButton('no', gt('No'), 'no', { tabIndex: 1 })
+                        .addPrimaryButton('yes', gt('Yes'), 'yes')
+                        .addButton('no', gt('No'), 'no')
                         .on('yes', function () {
                             autoconfigApiCall(args, newMailaddress, newPassword, this, def, false);
                         })
@@ -308,9 +308,9 @@ define('io.ox/mail/accounts/settings', [
                     // invoke extensions
                     ext.point('io.ox/mail/add-account/wizard').invoke('draw', this.getContentNode());
                 })
-                .addPrimaryButton('add', gt('Add'), 'add', { tabIndex: 1 })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                .addAlternativeButton('skip', gt('Manual'), 'skip', { tabIndex: 1 })
+                .addPrimaryButton('add', gt('Add'), 'add')
+                .addButton('cancel', gt('Cancel'), 'cancel')
+                .addAlternativeButton('skip', gt('Manual'), 'skip')
                 .on('add', function () {
 
                     var content = this.getContentNode(),
@@ -363,7 +363,7 @@ define('io.ox/mail/accounts/settings', [
                 .append(
                     alertPlaceholder
                 )
-                .addButton('cancel', gt('Close'), 'cancel', { tabIndex: 1 })
+                .addButton('cancel', gt('Close'), 'cancel')
                 .show(function () {
                     failDialogbox.getFooter().find('.btn').addClass('closebutton');
                     drawMessageWarning(alertPlaceholder, message);

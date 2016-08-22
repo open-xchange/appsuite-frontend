@@ -181,11 +181,7 @@ define('io.ox/core/sub/settings/pane', [
 
             if (data.source && (baton.model.refreshState() === 'ready')) {
                 // this is a subscription
-                dynamicAction = $('<a>').attr({
-                    href: '#',
-                    tabindex: '1',
-                    class: 'action',
-                    'data-action': 'refresh',
+                dynamicAction = $('<a href="#" class="action" data-action="refresh">').attr({
                     'aria-label': displayName + ', ' + gt('Refresh')
                 }).text(gt('Refresh'));
                 if (isDestructiveRefresh(data)) {
@@ -201,19 +197,11 @@ define('io.ox/core/sub/settings/pane', [
             this.addClass('widget-settings-view').append(
                 $('<div class="widget-controls">').append(
                     enabled ? dynamicAction : '',
-                    data.source ? $('<a>').attr({
-                        href: '#',
-                        tabindex: '1',
-                        class: 'action',
-                        'data-action': 'toggle',
+                    data.source ? $('<a href="#" class="action" data-action="toggle">').attr({
                         'aria-label': displayName + ', ' + (enabled ? gt('Disable') : gt('Enable'))
                     }).text(enabled ? gt('Disable') : gt('Enable')) : '',
-                    $('<a class="remove">').attr({
-                        href: '#',
-                        tabindex: 1,
-                        role: 'button',
+                    $('<a href="#" role="button" class="remove" data-action="remove">').attr({
                         title: gt('Delete'),
-                        'data-action': 'remove',
                         'aria-label': displayName + ', ' + gt('Delete')
                     })
                     .append($('<i class="fa fa-trash-o" aria-hidden="true">'))
@@ -223,7 +211,7 @@ define('io.ox/core/sub/settings/pane', [
                     .text(displayName),
                     $('<div class="url">').append(
                         enabled ?
-                            $('<a tabindex="1" target="_blank">').attr('href', url).text(getShortUrl(url) || '\u00A0') :
+                            $('<a target="_blank">').attr('href', url).text(getShortUrl(url) || '\u00A0') :
                             $('<i>').text(getShortUrl(url))
                     ),
                     createPathInformation(baton.model),

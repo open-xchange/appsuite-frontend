@@ -35,7 +35,7 @@ define('io.ox/mail/folderview-extensions', [
             draw: function () {
                 if (_.device('!smartphone')) {
                     this.append($('<div>').append(
-                        $('<a href="#" data-action="add-mail-account" tabindex="1" role="button">')
+                        $('<a href="#" data-action="add-mail-account" role="button">')
                         .text(gt('Add mail account'))
                         .on('click', addAccount)
                     ));

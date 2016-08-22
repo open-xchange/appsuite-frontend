@@ -20,8 +20,8 @@ define(['io.ox/core/tk/dialogs'], function (dialogs) {
             $('body', document).append(this.node = $('<div id="testNode">'));
             this.dialog = new dialogs.ModalDialog({ container: this.node })
                 .text(dialogTitle)
-                .addButton('cancel', 'Cancel', 'cancel', { tabIndex: 1 })
-                .addPrimaryButton('delete', 'Delete', 'delete', { tabIndex: 1 })
+                .addButton('cancel', 'Cancel', 'cancel')
+                .addPrimaryButton('delete', 'Delete', 'delete')
                 .show();
         });
 

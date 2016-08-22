@@ -30,11 +30,8 @@ define('io.ox/calendar/detail/main', [
 
                 api.get(appointment).then(
                     function success(data) {
-                        var title = data.title;
-                        app.setTitle(title);
-                        app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container">').attr({
-                            'tabindex': 1,
-                            'role': 'complementary',
+                        app.setTitle(data.title);
+                        app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container" tabindex="0" role="complementary">').attr({
                             'aria-label': gt('Appointment Details')
                         }).append(detailView.draw(data)));
 
@@ -81,15 +78,11 @@ define('io.ox/calendar/detail/main', [
             }
 
             // deep-link
-            if (options.folder && options.id) {
-                app.setState({ folder: options.folder, id: options.id });
-            }
+            if (options.folder && options.id) app.setState({ folder: options.folder, id: options.id });
 
             obj = app.getState();
 
-            if (obj.folder && obj.id) {
-                app.showAppointment(obj);
-            }
+            if (obj.folder && obj.id) app.showAppointment(obj);
         });
     }
 

@@ -97,8 +97,8 @@ define('io.ox/core/folder/picker', [
                     _.isString(o.title) ? $.txt(o.title) : o.title
                 )
             )
-            .addPrimaryButton('ok', o.button, 'ok', { tabIndex: 1 })
-            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
+            .addPrimaryButton('ok', o.button, 'ok')
+            .addButton('cancel', gt('Cancel'), 'cancel');
 
         if (o.alternativeButton) {
             dialog.addAlternativeButton('alternative', o.alternativeButton);

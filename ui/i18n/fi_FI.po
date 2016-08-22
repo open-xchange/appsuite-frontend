@@ -1640,6 +1640,11 @@ msgstr "Sulje haku"
 msgid "Canceled"
 msgstr "Peruttu"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1909,6 +1914,12 @@ msgstr "Sulje kuvauspaneeli"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Sulje kansionäkymä"
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "Ilmoitusalue on avoinna"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -4090,10 +4101,6 @@ msgstr "Paina piilottaaksesi kaikki tapaamiskutsut."
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Paina piilottaaksesi kaikki tapaamismuistutukset."
-
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Piilota kaikki ilmoitukset"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
@@ -6291,6 +6298,10 @@ msgstr "Määrittele nämä puuttuvat muuttujat:"
 msgid "Please update your browser."
 msgstr "Ole hyvä ja päivitä selaimesi."
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Plus"
@@ -7319,10 +7330,6 @@ msgstr "Lähetä ilmoitus viestin lukemisesta"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "Lähetä sisäisenä linkkinä"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "Lähetä viestinä"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11229,6 +11236,9 @@ msgstr "vvvv"
 #~ msgid "Hide advanced filters"
 #~ msgstr "Piilota laajat suodattimet"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Piilota kaikki ilmoitukset"
+
 #~ msgid "Hide all notifications for new mails."
 #~ msgstr "Paina piilottaaksesi ilmoitukset uusista posteista."
 
@@ -11672,6 +11682,9 @@ msgstr "vvvv"
 #~ msgid "Select none"
 #~ msgstr "Poista valinta"
 
+#~ msgid "Send as mail"
+#~ msgstr "Lähetä viestinä"
+
 #~ msgid "Sender"
 #~ msgstr "Lähettäjä"
 
@@ -11934,9 +11947,6 @@ msgstr "vvvv"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "Ilmoitusalue on suljettu"
-
-#~ msgid "The notification area is open"
-#~ msgstr "Ilmoitusalue on avoinna"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr ""

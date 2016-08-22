@@ -101,7 +101,7 @@ define('plugins/portal/recentfiles/register', [
                                 .replace(/^[0-9_\-\.]{5,}(\D)/i, '\u2026$1')
                                 .replace(/[0-9_\-\.]{5,}(\.\w+)?$/, '\u2026$1');
                         }
-                        return $('<li class="item" tabindex="1">')
+                        return $('<li class="item" tabindex="0">')
                             .data('item', file)
                             .append(
                                 $('<b>').text(_.noI18n(filename)), $.txt(' '),

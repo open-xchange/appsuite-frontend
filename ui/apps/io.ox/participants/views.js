@@ -61,7 +61,7 @@ define('io.ox/participants/views', [
                 this.nodes.$text = $('<div class="participant-name">'),
                 $('<div class="participant-email">').append(this.nodes.$mail = this.options.halo ? $('<a>') : $('<span>')),
                 $('<div class="extra-decorator">').append(this.nodes.$extra = $('<span>')),
-                $('<a href="#" class="remove" role="button" tabindex="1">').append(
+                $('<a href="#" class="remove" role="button">').append(
                     $('<div class="icon">').append(
                         $('<i class="fa fa-trash-o" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Remove contact') + ' ' + this.model.getDisplayName())
@@ -73,6 +73,7 @@ define('io.ox/participants/views', [
             this.setDisplayName();
             this.setTypeStyle();
             this.options.customize.call(this);
+            this.trigger('render');
             return this;
         },
 
@@ -141,7 +142,7 @@ define('io.ox/participants/views', [
 
                     if (mail && this.options.halo) {
                         this.nodes.$mail
-                            .attr({ href: '#', tabindex: '1' })
+                            .attr({ href: '#' })
                             .data({ email1: mail })
                             .addClass('halo-link');
                     }
@@ -153,8 +154,7 @@ define('io.ox/participants/views', [
                         if (this.options.baton && this.options.baton.callbacks) {
                             data.callbacks = this.options.baton.callbacks;
                         }
-                        var link = $('<a>')
-                            .attr({ href: '#', tabindex: '1' })
+                        var link = $('<a href="#">')
                             .data(data)
                             .addClass('halo-resource-link');
                         this.nodes.$extra.replaceWith(link);
@@ -212,20 +212,26 @@ define('io.ox/participants/views', [
         },
 
         renderParticipant: function (participant) {
-            var self = this;
+
             var view = new ParticipantEntryView({
                 tagName: 'li',
                 model: participant,
-                baton: self.options.baton,
-                halo: self.options.halo !== undefined ? self.options.halo : true,
+                baton: this.options.baton,
+                halo: this.options.halo !== undefined ? this.options.halo : true,
                 closeButton: true
-            }).render().$el.addClass(self.options.entryClass || 'col-xs-12 col-sm-6');
+            });
+
+            view.on('render', function () {
+                this.collection.trigger('render');
+            }.bind(this));
+
+            view.render().$el.addClass(this.options.entryClass || 'col-xs-12 col-sm-6');
 
             // bring organizer up
-            if (participant.get('id') === self.options.baton.model.get('organizerId')) {
-                self.$ul.prepend(view);
+            if (participant.get('id') === this.options.baton.model.get('organizerId')) {
+                this.$ul.prepend(view.$el);
             } else {
-                self.$ul.append(view);
+                this.$ul.append(view.$el);
             }
         },
 

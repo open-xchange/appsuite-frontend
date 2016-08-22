@@ -109,7 +109,7 @@ A event triggers when an app started. The measure time is between the click on t
 | calendar/toolbar/[action]             | Clicks on calendar toolbar action                                                                |
 | calendar/[layout-mode]/select         | Clicks on appointments within non-list layout modes                                              |
 | calendar/[layout-mode]/create         | Clicks on blank space within non-list layout modes to create appointment                         |
-| calendar/folder/select/[list-of-flags]         | Clicks on a folder in the contact folder tree (flags: private, public, shared, default, virtual)             |
+| calendar/folder/select/[list-of-flags]         | Clicks on a folder in the calendar folder tree (flags: private, public, shared, default, virtual)             |
 | calendar/folder/permissions           | Clicks on the “cloud” icon and the “User” icon next to the folder name                           |
 | calendar/folder/context-menu/[action] | Clicks within the context menu, which pops up, when you click on a folder name and its menu icon |
 | calendar/detail/toolbar/[action]      | Clicks on calendar detail view toolbar action                                                    |
@@ -120,7 +120,7 @@ A event triggers when an app started. The measure time is between the click on t
 
 | EventId                            | Trigger                                                                                          |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------ |
-| tasks/folder/select/[list-of-flags]         | Clicks on a folder in the contact folder tree (flags: private, public, shared, default, virtual)              |
+| tasks/folder/select/[list-of-flags]         | Clicks on a folder in the tasks folder tree (flags: private, public, shared, default, virtual)              |
 | tasks/folder/context-menu/[action] | Clicks within the context menu, which pops up, when you click on a folder name and its menu icon |
 | tasks/toolbar/[action]             | Clicks on tasks toolbar action                                                                   |
 | tasks/detail/[action]              | Clicks on task detail view toolbar action                                                        |
@@ -133,7 +133,7 @@ A event triggers when an app started. The measure time is between the click on t
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | drive/folder/select/[types]        | Clicks on a folder in drive folder tree (flags: default, documents, music, pictures, videos, trash)  |
 | drive/folder/context-menu/[action] | Clicks within the context menu, which pops up, when you click on a folder name and its menu icon                                               |
-| drive/toolbar/[action]             | Clicks on tasks toolbar action                                                                                                                 |
+| drive/toolbar/[action]             | Clicks on drive toolbar action                                                                                                                 |
 | drive/folder/account/add/[id]      | Clicks on 'Add account' buttons                                                                                                                |
 
 ## Text App (aka Text Portal)

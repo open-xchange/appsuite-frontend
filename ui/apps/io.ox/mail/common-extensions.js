@@ -562,7 +562,7 @@ define('io.ox/mail/common-extensions', [
                     var showUnreadToggle = folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data);
                     if (!showUnreadToggle) return;
                     self.append(
-                        $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
+                        $('<a href="#" role="button" class="unread-toggle">')
                         .attr({
                             'aria-label': getAriaLabel(baton.data),
                             'aria-pressed': util.isUnseen(baton.data)
@@ -599,7 +599,7 @@ define('io.ox/mail/common-extensions', [
 
                 this.append(
                     $('<div class="notification-item external-images">').append(
-                        $('<button type="button" class="btn btn-default btn-sm" tabindex="1">').text(gt('Show images')),
+                        $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show images')),
                         $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
                     )
                 );
@@ -681,7 +681,7 @@ define('io.ox/mail/common-extensions', [
                 this.append(
                     $('<div class="alert alert-info disposition-notification">').append(
                         $('<button type="button" class="close" data-dismiss="alert">&times;</button>'),
-                        $('<button type="button" class="btn btn-primary btn-sm" tabindex="1">').text(
+                        $('<button type="button" class="btn btn-primary btn-sm">').text(
                             //#. Respond to a read receipt request; German "Lesebestätigung senden"
                             gt('Send a read receipt')
                         ),

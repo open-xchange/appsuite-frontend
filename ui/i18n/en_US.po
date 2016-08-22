@@ -1601,6 +1601,11 @@ msgstr ""
 msgid "Canceled"
 msgstr ""
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1866,6 +1871,10 @@ msgstr ""
 #: module:io.ox/files apps/io.ox/files/view-options.js
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
+msgstr ""
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Close notification area"
 msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
@@ -4014,10 +4023,6 @@ msgstr ""
 msgid "Hide all appointment reminders."
 msgstr ""
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr ""
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
 msgstr ""
@@ -6164,6 +6169,10 @@ msgstr ""
 msgid "Please update your browser."
 msgstr ""
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr ""
@@ -7165,10 +7174,6 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
-msgstr ""
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
 msgstr ""
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts

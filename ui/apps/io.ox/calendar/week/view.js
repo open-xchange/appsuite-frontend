@@ -118,15 +118,15 @@ define('io.ox/calendar/week/view', [
 
             // initialize main objects
             _.extend(this, {
-                pane:         $('<div>').addClass('scrollpane f6-target').attr({ tabindex: 1 }).on('scroll', this.updateHiddenIndicators.bind(this)),
-                fulltimePane: $('<div>').addClass('fulltime'),
-                fulltimeCon:  $('<div>').addClass('fulltime-container'),
-                fulltimeNote: $('<div>').addClass('note'),
-                timeline:     $('<div>').addClass('timeline'),
-                dayLabel:     $('<div>').addClass('footer'),
-                kwInfo:       _.device('smartphone') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info').on('click', $.preventDefault),
-                weekCon:      $('<div>').addClass('week-container'),
-                moreAppointmentsIndicators: $('<div>').addClass('more-appointments-container')
+                pane:         $('<div class="scrollpane f6-target" tabindex="0">').on('scroll', this.updateHiddenIndicators.bind(this)),
+                fulltimePane: $('<div class="fulltime">'),
+                fulltimeCon:  $('<div class="fulltime-container">'),
+                fulltimeNote: $('<div class="node">'),
+                timeline:     $('<div class="timeline">'),
+                dayLabel:     $('<div class="footer">'),
+                kwInfo:       _.device('smartphone') ? $('<div class="info">') : $('<a href="#" class="info">').on('click', $.preventDefault),
+                weekCon:      $('<div class="week-container">'),
+                moreAppointmentsIndicators: $('<div class="more-appointments-container">')
             });
 
             this.kwInfo.attr({
@@ -894,23 +894,15 @@ define('io.ox/calendar/week/view', [
             this.$el.empty().append(
                 $('<div class="toolbar">').append(
                     $('<div class="controls-container">').append(
-                        $('<a>').attr({
-                            href: '#',
-                            tabindex: 1,
-                            role: 'button',
-                            title: prevStr,
+                        $('<a href="#" role="button" class="control prev">').attr({
+                            title: prevStr, // TODO: Aria title vs. aria-label
                             'aria-label': prevStr
                         })
-                        .addClass('control prev')
                         .append($('<i class="fa fa-chevron-left" aria-hidden="true">')),
-                        $('<a>').attr({
-                            href: '#',
-                            tabindex: 1,
-                            role: 'button',
-                            title: nextStr,
+                        $('<a href="#" role="button" class="control next">').attr({
+                            title: nextStr, // TODO: Aria title vs. aria-label
                             'aria-label': nextStr
                         })
-                        .addClass('control next')
                         .append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
                     ),
                     this.kwInfo
@@ -1036,14 +1028,10 @@ define('io.ox/calendar/week/view', [
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
             for (var d = 0; d < this.columns; d++) {
-                var day = $('<a>')
-                    .addClass('weekday')
+                var day = $('<a href="#" class="weekday" role="button">')
                     .attr({
                         date: d,
-                        title: gt('Create all-day appointment'),
-                        role: 'button',
-                        tabindex: 1,
-                        href: '#'
+                        title: gt('Create all-day appointment')
                     })
                     .text(gt.noI18n(tmpDate.format('ddd D')))
                     .width(100 / this.columns + '%');
@@ -1994,7 +1982,7 @@ define('io.ox/calendar/week/view', [
             }
 
             this
-                .attr({ tabindex: 1 })
+                .attr('tabindex', 0)
                 .addClass(classes)
                 .append(
                     $('<div class="appointment-content">').append(

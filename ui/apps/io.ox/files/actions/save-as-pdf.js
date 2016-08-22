@@ -118,10 +118,10 @@ define('io.ox/files/actions/save-as-pdf', [
                 $('<h4>').text(gt('Save as PDF'))
             )
             .append(
-                $('<input type="text" name="name" class="form-control" tabindex="1">')
+                $('<input type="text" name="name" class="form-control">')
             )
-            .addPrimaryButton('save', gt('Save'), 'save', { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+            .addPrimaryButton('save', gt('Save'), 'save')
+            .addButton('cancel', gt('Cancel'), 'cancel')
             .on('save', function () {
                 var node = this.getContentNode(),
                     name = node.find('input[name="name"]').val();

@@ -24,7 +24,6 @@ define('io.ox/backbone/mini-views/help', ['gettext!io.ox/core'], function (gt) {
     //  href            {string or function} The target id of the help site or a function, which should return the help site. If it is a function, it can also return an object containing base and target.
     //  base            {string} The base of the help site
     //  iconClass       {string} These classes are added to the i-tag
-    //  tabindex        {string} The tabindex of the link
     //  content         {object or string} The object to display. If unset, the help icon will be displayed
 
     var HelpView = Backbone.View.extend({
@@ -75,7 +74,6 @@ define('io.ox/backbone/mini-views/help', ['gettext!io.ox/core'], function (gt) {
         initialize: function (options) {
             this.options = _.extend({
                 href: 'index.html',
-                tabindex: '1',
                 content: $('<i class="fa fa-question-circle" aria-hidden="true">'),
                 base: 'help'
             }, options);
@@ -91,7 +89,6 @@ define('io.ox/backbone/mini-views/help', ['gettext!io.ox/core'], function (gt) {
                 .attr({
                     href: '#',
                     role: 'button',
-                    tabindex: this.options.tabindex,
                     target: '_blank',
                     'aria-label': gt('Online help')
                 });

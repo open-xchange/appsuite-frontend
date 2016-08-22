@@ -131,8 +131,8 @@ define('io.ox/calendar/week/perspective', [
                             .append(
                                 conflictView.drawList(error.conflicts, dialog).addClass('additional-info')
                             )
-                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 })
-                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore')
+                            .addButton('cancel', gt('Cancel'), 'cancel')
                             .show()
                             .done(function (action) {
                                 if (action === 'cancel') {
@@ -169,15 +169,15 @@ define('io.ox/calendar/week/perspective', [
                 if (obj.drag_move && obj.drag_move !== 0) {
                     dialog
                         .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
-                        .addButton('appointment', gt('Yes'), 'appointment', { tabIndex: 1 })
-                        .addButton('cancel', gt('No'), 'cancel', { tabIndex: 1 });
+                        .addButton('appointment', gt('Yes'), 'appointment')
+                        .addButton('cancel', gt('No'), 'cancel');
                 } else {
                     dialog
                         .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
                         //#. Use singular in this context
-                        .addPrimaryButton('series', gt('Series'), 'series', { tabIndex: 1 })
-                        .addButton('appointment', gt('Appointment'), 'appointment', { tabIndex: 1 })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
+                        .addPrimaryButton('series', gt('Series'), 'series')
+                        .addButton('appointment', gt('Appointment'), 'appointment')
+                        .addButton('cancel', gt('Cancel'), 'cancel');
                 }
                 dialog
                     .show()

@@ -61,10 +61,9 @@ define('io.ox/files/share/wizard', [
                 formID = _.uniqueId('form-control-label-');
             this.append(
                 linkNode = $('<div class="form-group">').append(
-                    $('<label>').attr({ for: formID }).text(),
+                    $('<label>').attr('for', formID).text(),
                     $('<div class="input-group link-group">').append(
-                        $('<input class="form-control">').attr({ id: formID, type: 'text', tabindex: 1, readonly: 'readonly' })
-                        .val(link)
+                        $('<input type="text" class="form-control" readonly>').attr('id', formID).val(link)
                         .on('focus', function () {
                             _.defer(function () { $(this).select(); }.bind(this));
                         })

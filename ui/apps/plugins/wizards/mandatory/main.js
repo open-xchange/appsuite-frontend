@@ -52,7 +52,7 @@ define.async('plugins/wizards/mandatory/main', [
                 .mandatory()
                 .title(gt.format(gt('Welcome to %s'), ox.serverConfig.productName))
                 .content(gt('Before you can continue using the product, you have to enter some basic information. It will take less than a minute.'))
-                .footer($('<button class="btn wizard-close pull-left" tabindex="1">')
+                .footer($('<button class="btn wizard-close pull-left">')
                     .text(gt('Back to sign in'))
                     .on('click', function () {
                         def.reject();

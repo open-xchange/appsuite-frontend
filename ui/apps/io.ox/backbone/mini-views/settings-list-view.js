@@ -138,7 +138,7 @@ define('io.ox/backbone/mini-views/settings-list-view', [
                 if (self.opt.sortable) {
                     var descriptionId = _.uniqueId('aria-description-');
                     view.$el.attr({
-                        'tabindex': 1,
+                        'tabindex': 0,
                         'aria-describedby': descriptionId
                     }).prepend($('<div class="sr-only">').attr('id', descriptionId).text(gt('Use cursor keys to reorder items')));
                 }

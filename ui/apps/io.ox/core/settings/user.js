@@ -42,8 +42,8 @@ define('io.ox/core/settings/user', [
                 maximize: true,
                 async: true
             })
-            .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
-            .addButton('discard', gt('Discard'), 'discard', { tabIndex: 1 });
+            .addPrimaryButton('save', gt('Save'), 'save')
+            .addButton('discard', gt('Discard'), 'discard');
 
             dialog.getContentControls()
                 .prepend(

@@ -25,6 +25,9 @@ define('io.ox/onboarding/clients/wizard', [
 
     'use strict';
 
+    // deeplink example:
+    // &reg=client-onboarding&regopt=platform:apple,device:apple.iphone,scenario:mailappinstall
+
     var POINT = 'io.ox/onboarding/clients/views',
         //#. title for 1st and snd step of the client onboarding wizard
         //#. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
@@ -60,10 +63,8 @@ define('io.ox/onboarding/clients/wizard', [
         _getListItemBack: function (type) {
             if (!_.contains(['device', 'scenario'], type)) return;
             // tabindex needed (wizard tabtrap)
-            return $('<li class="option centered" data-value="back">')
-                    .append(
-                        $('<button tabindex="1" class="link box" role="menuitem">')
-                        .append(
+            return $('<li class="option centered" data-value="back">').append(
+                        $('<button class="link box" role="menuitem">').append(
                             $('<div class="icon-list">').append(options._getIcons('fa-angle-left')),
                             // a11y
                             options._getTitle({ title: gt('back') }).addClass('sr-only')
@@ -73,7 +74,7 @@ define('io.ox/onboarding/clients/wizard', [
 
         _getLink: function (obj) {
             // tabindex needed (wizard tabtrap)
-            return $('<button tabindex="1" class="link box" role="menuitem">')
+            return $('<button class="link box" role="menuitem">')
                 .addClass(obj.enabled ? '' : 'disabled')
                 .append(
                     options._getPremium(obj),
@@ -206,7 +207,9 @@ define('io.ox/onboarding/clients/wizard', [
             container = node.closest('[data-type]'),
             type = container.attr('data-type'),
             value = node.closest('[data-value]').attr('data-value');
-        // disabled
+        // disabled with upsell
+        if (node.closest('.link').find('.premium').length) return wizard.trigger('scenario:upsell', e);
+        // just disabled
         if (node.closest('.link').hasClass('disabled')) return;
         // back
         if (value === 'back') {
@@ -358,7 +361,7 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         upsell: function (e) {
-            var item = $(e.target.closest('li')),
+            var item = $(e.target).closest('li'),
                 missing = item.attr('data-missing-capabilities');
             if (!missing) return;
             require(['io.ox/core/upsell'], function (upsell) {
@@ -374,10 +377,6 @@ define('io.ox/onboarding/clients/wizard', [
         },
 
         register: function () {
-            this.wizard.getContainer().on(
-                'click', '.premium-container', _.bind(this.upsell, this)
-            );
-
             // set max width of description block
             this.wizard.on({
                 // step:before:show, step:ready, step:show, step:next, step:before:hide, step:hide, change:step,
@@ -391,6 +390,8 @@ define('io.ox/onboarding/clients/wizard', [
                 'scenario:select': _.bind(this.track, this, 'scenario/select'),
                 'action:select': _.bind(this.track, this, 'action/select'),
                 'action:execute': _.bind(this.track, this, 'action/execute'),
+                // upsell
+                'scenario:upsell': _.bind(this.upsell, this),
                 'mode:toggle': _.bind(this.track, this, 'mode/toggle')
             });
         },

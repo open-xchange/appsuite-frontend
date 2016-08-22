@@ -223,7 +223,7 @@ define('io.ox/calendar/invitations/register', [
                     return _(actions).contains(action);
                 })
                 .map(function (action) {
-                    return $('<button type="button" class="btn btn-default" tabindex="1">')
+                    return $('<button type="button" class="btn btn-default">')
                         .attr('data-action', action)
                         .addClass(buttonClasses[action])
                         .text(i18n[action]);
@@ -261,7 +261,7 @@ define('io.ox/calendar/invitations/register', [
         renderComment: function () {
             if (!this.supportsComment()) return;
             this.$el.find('.itip-comment').append(
-                $('<input type="text" class="form-control" data-property="comment" tabindex="1">')
+                $('<input type="text" class="form-control" data-property="comment">')
                 .attr('placeholder', gt('Comment'))
                 .val(util.getConfirmationMessage(this.appointment))
             );
@@ -606,7 +606,7 @@ define('io.ox/calendar/invitations/register', [
                 $('<div class="itip-reminder">').append(
                     $('<label class="control-label" for="reminderSelect">').text(gt('Reminder')),
                     $('<div class="controls">').append(
-                        $('<select id="reminderSelect" class="reminder-select form-control" data-property="reminder" tabindex="1">')
+                        $('<select id="reminderSelect" class="reminder-select form-control" data-property="reminder">')
                         .append(function () {
                             var self = $(this),
                                 options = util.getReminderOptions();

@@ -176,7 +176,7 @@ define('io.ox/mail/inplace-reply', [
             this.numberOfRecipients = options.numberOfRecipients;
 
             this.$send = $();
-            this.$textarea = $('<textarea class="inplace-editor form-control" tabindex="1">');
+            this.$textarea = $('<textarea class="inplace-editor form-control">');
 
             // prefill?
             var content = drafts[this.cid] || '';
@@ -203,11 +203,11 @@ define('io.ox/mail/inplace-reply', [
                     .hide(),
                 // buttons
                 $('<div class="form-group">').append(
-                    this.$send = $('<button class="btn btn-primary btn-sm disabled" data-action="send" tabindex="1">')
+                    this.$send = $('<button class="btn btn-primary btn-sm disabled" data-action="send">')
                         .prop('disabled', true)
                         .text(replyText),
                     $.txt(' '),
-                    $('<button class="btn btn-default btn-sm" data-action="cancel" tabindex="1">')
+                    $('<button class="btn btn-default btn-sm" data-action="cancel">')
                         .text(gt('Cancel'))
                 )
             );

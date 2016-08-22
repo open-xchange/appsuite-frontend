@@ -45,14 +45,14 @@ define('io.ox/files/actions/share', [
         if (type === 'invite') {
             // invite guests
             dialog
-                .addPrimaryButton('share', gt('Invite'), 'share', { tabIndex: 1 })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
+                .addPrimaryButton('share', gt('Invite'), 'share')
+                .addButton('cancel', gt('Cancel'), 'cancel');
         } else {
             // get a link (anonymouse)
             dialog
-                .addPrimaryButton('share', gt('Close'), 'share', { tabIndex: 1 })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
-                .addAlternativeButton('remove', gt('Remove link'), 'remove', { tabIndex: 1 });
+                .addPrimaryButton('share', gt('Close'), 'share')
+                .addButton('cancel', gt('Cancel'), 'cancel')
+                .addAlternativeButton('remove', gt('Remove link'), 'remove');
         }
 
         function toggleButtons(sendVisible) {

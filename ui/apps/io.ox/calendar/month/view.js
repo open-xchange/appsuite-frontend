@@ -329,7 +329,7 @@ define('io.ox/calendar/month/view', [
                         return tmp;
                     })
                 ),
-                $('<div class="scrollpane f6-target" tabindex="1">')
+                $('<div class="scrollpane f6-target" tabindex="0">')
             );
     };
 
@@ -375,7 +375,7 @@ define('io.ox/calendar/month/view', [
             }
 
             this
-                .attr({ tabindex: 1 })
+                .attr({ tabindex: 0 })
                 .addClass(classes)
                 .append(
                     $('<div>')

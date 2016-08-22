@@ -97,15 +97,15 @@ define('io.ox/calendar/actions/acceptdeny', [
                                 $('<label class="control-label">').attr('for', inputid).text(gt('Comment')).append(
                                     $('<span class="sr-only">').text(data.title + ' ' + gt('Please comment your confirmation status.'))
                                 ),
-                                $('<input type="text" class="form-control" data-property="comment">').attr({ id: inputid, tabindex: 1 }).val(message),
+                                $('<input type="text" class="form-control" data-property="comment">').attr('id', inputid).val(message),
                                 reminderSelect
                             )
                         );
                     })
-                    .addSuccessButton('accepted', gt('Accept'), 'accepted', { tabIndex: 1 })
-                    .addWarningButton('tentative', gt('Tentative'), 'tentative', { tabIndex: 1 })
-                    .addDangerButton('declined', gt('Decline'), 'declined', { tabIndex: 1 })
-                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                    .addSuccessButton('accepted', gt('Accept'), 'accepted')
+                    .addWarningButton('tentative', gt('Tentative'), 'tentative')
+                    .addDangerButton('declined', gt('Decline'), 'declined')
+                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel')
                     .show(function () {
                         // do not focus on mobiles. No, never, please. It does simply not work!
                         if (_.device('!smartphone')) $(this).find('[data-property="comment"]').focus();
@@ -189,9 +189,9 @@ define('io.ox/calendar/actions/acceptdeny', [
                                                 .header(conflictView.drawHeader());
 
                                             dialog.append(conflictView.drawList(conflicts, dialog).addClass('additional-info'));
-                                            dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: '1' });
+                                            dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore');
 
-                                            dialog.addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' })
+                                            dialog.addButton('cancel', gt('Cancel'), 'cancel')
                                                 .show()
                                                 .done(function (action) {
                                                     if (action === 'cancel') {
@@ -222,9 +222,9 @@ define('io.ox/calendar/actions/acceptdeny', [
                 .text(gt('Do you want to confirm the whole series or just one appointment within the series?'))
                 .addPrimaryButton('series',
                     //#. Use singular in this context
-                    gt('Series'), 'series', { tabIndex: 1 })
-                .addButton('appointment', gt('Appointment'), 'appointment', { tabIndex: 1 })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                    gt('Series'), 'series')
+                .addButton('appointment', gt('Appointment'), 'appointment')
+                .addButton('cancel', gt('Cancel'), 'cancel')
                 .show()
                 .then(function (action) {
                     if (action === 'cancel') {

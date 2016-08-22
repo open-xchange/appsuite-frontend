@@ -351,7 +351,7 @@ define('io.ox/mail/settings/pane', [
             this.append(
                 $('<fieldset>').append(
                     $('<div class="sectioncontent">').append(
-                        $('<button type="button" class="btn btn-primary" tabindex="1">')
+                        $('<button type="button" class="btn btn-primary">')
                         .on('click', changeIMAPSubscription)
                         .text(gt('Change IMAP subscriptions'))
                     )

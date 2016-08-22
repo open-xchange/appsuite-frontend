@@ -74,26 +74,22 @@ define('io.ox/calendar/actions/delete', [
                     if (hasRec) {
                         new dialogs.ModalDialog()
                             .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
-                            .addPrimaryButton('appointment', gt('Delete appointment'), 'appointment', { tabIndex: 1 })
-                            .addPrimaryButton('series', gt('Delete whole series'), 'series', { tabIndex: 1 })
-                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                            .addPrimaryButton('appointment', gt('Delete appointment'), 'appointment')
+                            .addPrimaryButton('series', gt('Delete whole series'), 'series')
+                            .addButton('cancel', gt('Cancel'), 'cancel')
                             .show()
                             .done(function (action) {
-                                if (action === 'cancel') {
-                                    return;
-                                }
+                                if (action === 'cancel') return;
                                 cont(action === 'series');
                             });
                     } else {
                         new dialogs.ModalDialog()
                             .text(gt('Do you want to delete this appointment?'))
-                            .addPrimaryButton('ok', gt('Delete'), 'ok', { tabIndex: 1 })
-                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                            .addPrimaryButton('ok', gt('Delete'), 'ok')
+                            .addButton('cancel', gt('Cancel'), 'cancel')
                             .show()
                             .done(function (action) {
-                                if (action === 'cancel') {
-                                    return;
-                                }
+                                if (action === 'cancel') return;
                                 cont();
                             });
                     }
