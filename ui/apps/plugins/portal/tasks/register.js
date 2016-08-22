@@ -62,7 +62,7 @@ define('plugins/portal/tasks/register', [
                 var task = util.interpretTask(_(tasks).first());
 
                 sum.append(
-                    $('<li class="item" tabindex="1">').data('item', task).append(
+                    $('<li class="item" tabindex="0">').data('item', task).append(
                             $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, { max: 50 }))), $.txt(' '),
                             task.end_time === '' ? $() :
                                 $('<span class="accent">').text(
@@ -105,7 +105,7 @@ define('plugins/portal/tasks/register', [
             _(tasks.slice(0, 10)).each(function (task) {
                 task = util.interpretTask(task);
                 content.append(
-                    $('<li class="item" tabindex="1">').data('item', task).append(
+                    $('<li class="item" tabindex="0">').data('item', task).append(
                         $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, { max: 50 }))), $.txt(' '),
                         task.end_time === '' ? $() :
                             $('<span class="accent">').text(

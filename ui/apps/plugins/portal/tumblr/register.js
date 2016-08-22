@@ -89,9 +89,7 @@ define('plugins/portal/tumblr/register', [
                     }
                 });
                 this.addClass('photo-stream').append(
-                    $('<div class="content pointer decoration list-unstyled">').css('backgroundImage', 'url(' + url + ')').attr({
-                        'tabindex': '1',
-                        'role': 'button',
+                    $('<div class="content pointer decoration list-unstyled" tabindex="0" role="button">').css('backgroundImage', 'url(' + url + ')').attr({
                         'aria-label': gt('Press [enter] to jump to the tumblr feed.')
                     })
                 );
@@ -110,9 +108,7 @@ define('plugins/portal/tumblr/register', [
 
                 if (titles.length > 0) {
                     this.append(
-                        $('<ul class="content pointer">').attr({
-                            'tabindex': '1',
-                            'role': 'button',
+                        $('<ul class="content pointer" tabindex="0" role="button">').attr({
                             'aria-label': gt('Press [enter] to jump to the tumblr feed.')
                         }).append(titles)
                     );

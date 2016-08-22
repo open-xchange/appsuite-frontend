@@ -206,7 +206,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 'data-editor-id': editorId
             }).append(
                 toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId),
-                editor = $('<div class="editable" tabindex="1" role="textbox" aria-multiline="true">')
+                editor = $('<div class="editable" tabindex="0" role="textbox" aria-multiline="true">')
                     .attr({ 'aria-label': gt('Rich Text Area. Press ALT-F10 for toolbar') })
                     .css('margin-bottom', '32px')
             )
@@ -254,6 +254,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             script_url: (window.cordova ? ox.localFileRoot : ox.base) + '/apps/3rd.party/tinymce/tinymce.min.js',
 
             extended_valid_elements: 'blockquote[type]',
+            invalid_elements: 'object,iframe,script',
 
             inline: true,
 
@@ -320,6 +321,22 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 ed.on('BeforeRenderUI', function () {
                     rendered.resolve();
                 });
+                if (ed.oxContext && ed.oxContext.signature) {
+                    ed.on('BeforeSetContent', function (e) {
+                        if (!e.content) return;
+                        var tmp = document.createElement('DIV');
+                        tmp.innerHTML = e.content;
+                        var nodes = tmp.querySelectorAll('*');
+                        for (var i = 0; i < nodes.length; i++) {
+                            var node = nodes[i], ai = 0, attr;
+                            while (attr = node.attributes[ai++]) {
+                                if (/^on/i.test(attr.name)) { node.removeAttribute(attr.name); }
+                            }
+                        }
+                        e.content = tmp.innerHTML;
+                        tmp = null;
+                    });
+                }
             }
         };
 

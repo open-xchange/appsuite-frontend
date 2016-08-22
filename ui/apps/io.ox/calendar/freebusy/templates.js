@@ -70,7 +70,7 @@ define('io.ox/calendar/freebusy/templates', [
 
         getIntervalDropdown: function () {
             return $('<div class="view-dropdown dropdown pull-right">').append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" tabindex="4">').append(
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').append(
                     $.txt(gt('Change view')),
                     $.txt(' '),
                     $('<i class="fa fa-caret-down" aria-hidden="true">')
@@ -94,7 +94,7 @@ define('io.ox/calendar/freebusy/templates', [
                 part2 = gt('You will automatically return to the appointment dialog. ' +
                     'The selected start and end time as well as the current participant list will be applied.');
 
-            return $('<a href="#" class="hint pull-left" tabindex="2">')
+            return $('<a href="#" class="hint pull-left">')
                 .text(gt('How does this work?'))
                 .click($.preventDefault)
                 .popover({
@@ -108,14 +108,14 @@ define('io.ox/calendar/freebusy/templates', [
 
         getBackControl: function () {
             return $('<div class="close-control">').append(
-                $('<a href="#" tabindex="3" data-action="cancel">').text(gt('Back to appointment')),
+                $('<a href="#" data-action="cancel">').text(gt('Back to appointment')),
                 $('<i class="fa fa-reply" aria-hidden="true">')
             );
         },
 
         getQuitControl: function () {
             return $('<div class="close-control">').append(
-                $('<a href="#" tabindex="3" data-action="quit">').text(gt('Quit')).append($('<i class="fa fa-times" aria-hidden="true">'))
+                $('<a href="#" data-action="quit">').text(gt('Quit')).append($('<i class="fa fa-times" aria-hidden="true">'))
             );
         },
 

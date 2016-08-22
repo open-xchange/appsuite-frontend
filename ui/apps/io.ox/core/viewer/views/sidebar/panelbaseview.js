@@ -55,7 +55,7 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
                         // title
                         $('<h3 class="sidebar-panel-title">').text('\u00a0'),
                         // button
-                        $('<a href="#" class="panel-toggle-btn" role="button" tabindex="1" aria-expanded="false">').attr({ 'title': gt('Toggle panel'), 'aria-controls': panelId }).append(
+                        $('<a href="#" class="panel-toggle-btn" role="button" aria-expanded="false">').attr({ 'title': gt('Toggle panel'), 'aria-controls': panelId }).append(
                             $('<span class="sr-only">').text(gt('Open description panel')),
                             $('<i class="fa fa-chevron-right toggle-icon" aria-hidden="true">')
                         )

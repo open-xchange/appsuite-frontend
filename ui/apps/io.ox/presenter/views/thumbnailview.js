@@ -94,7 +94,7 @@ define('io.ox/presenter/views/thumbnailview', [
          * @returns {jQuery} thumbnailLink
          */
         createThumbnailNode: function (pageNumber) {
-            var thumbnailLink = '<a class="presenter-thumbnail-link" tabindex="1" role="button" aria-selected="false" data-page="' + pageNumber + '">';
+            var thumbnailLink = '<a class="presenter-thumbnail-link" role="button" aria-selected="false" data-page="' + pageNumber + '">';
             var thumbnailWrapper = '<div class="wrapper">';
             var thumbnail = '<div class="presenter-thumbnail"></div>';
             var thumbnailPageNumber = '<div class="page-number">' + pageNumber + '</div>';
@@ -102,7 +102,7 @@ define('io.ox/presenter/views/thumbnailview', [
 
             // create DOM from strings to optimize performance for presentations with lots of slides
             //
-            // <a class="presenter-thumbnail-link" tabindex="1" role="button" aria-selected="false" data-page="1">
+            // <a class="presenter-thumbnail-link" role="button" aria-selected="false" data-page="1">
             //     <div class="wrapper">
             //         <div class="presenter-thumbnail">
             //             <img class="thumbnail-image">

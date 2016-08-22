@@ -41,9 +41,11 @@ define('io.ox/onboarding/clients/extensions', [
         },
         disable: function (obj) {
             $(obj.target || obj).addClass('disabled');
+            $(obj.target || obj).prop('disabled', true);
         },
         enable: function (obj) {
             $(obj.target || obj).removeClass('disabled');
+            $(obj.target || obj).prop('disabled', false);
         }
     };
 
@@ -76,8 +78,8 @@ define('io.ox/onboarding/clients/extensions', [
             var id = _.uniqueId('description');
             return [
                 $('<div class="sr-only">').attr('id', id).text(gt('Click to show or hide actions for advanced users.')),
-                $('<a href="#" class="toggle-link" data-value="to-advanced" tabindex="1">').attr('aria-describedby', id).text(gt('Expert user?')),
-                $('<a href="#" class="toggle-link" data-value="to-simple" tabindex="1">').attr('aria-describedby', id).text(gt('Hide options for expert users.'))
+                $('<a href="#" class="toggle-link" data-value="to-advanced">').attr('aria-describedby', id).text(gt('Expert user?')),
+                $('<a href="#" class="toggle-link" data-value="to-simple">').attr('aria-describedby', id).text(gt('Hide options for expert users.'))
             ];
         },
 
@@ -219,7 +221,7 @@ define('io.ox/onboarding/clients/extensions', [
             this.$el.empty()
                 .append(
                     // title
-                    $('<button class="title section-title" tabindex="1" role="tab">')
+                    $('<button class="title section-title" role="tab">')
                         .attr('aria-controls', id)
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
@@ -248,7 +250,7 @@ define('io.ox/onboarding/clients/extensions', [
                         .attr('id', id)
                         .text(self.labels[key] || key),
                     $('<div class="col-sm-9">').append(
-                        $('<input class="form-control" readonly tabindex="1">')
+                        $('<input class="form-control" readonly>')
                             .attr('aria-labelledby', id)
                             .val(value)
                             .on('click', function () {
@@ -313,7 +315,7 @@ define('io.ox/onboarding/clients/extensions', [
             this.$el.empty()
                 .append(
                     // title
-                    $('<button class="title section-title" tabindex="1" role="tab">')
+                    $('<button class="title section-title" role="tab">')
                         .attr('aria-describedby', id)
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
@@ -332,7 +334,7 @@ define('io.ox/onboarding/clients/extensions', [
                                     //$('<label class="control-label">').text(gt('Phone Number')),
                                     this._select().$el,
                                     this._input(),
-                                    $('<button class="btn btn-primary action-call" tabindex="1">').attr('role', 'button').text(gt('Send'))
+                                    $('<button class="btn btn-primary action-call">').text(gt('Send'))
                                 )
                             )
                         )
@@ -359,6 +361,7 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         _updateState: function (e) {
+            if (e.keyCode === 13) return;
             var value = $(e.target).val().trim(),
                 button = this.$('button.action-call');
             util.removeIcons(button);
@@ -418,7 +421,7 @@ define('io.ox/onboarding/clients/extensions', [
             this.$el.empty()
                 .append(
                     // title
-                    $('<button class="title section-title" tabindex="1" role="tab">')
+                    $('<button class="title section-title" role="tab">')
                         .attr('aria-describedby', id)
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
@@ -436,9 +439,7 @@ define('io.ox/onboarding/clients/extensions', [
                                 $('<div class="row">').append(
                                     this._input(),
                                     // action
-                                    $('<button class="btn btn-primary action-call" tabindex="1">')
-                                        .attr('role', 'button')
-                                        .text(gt('Send'))
+                                    $('<button class="btn btn-primary action-call">').text(gt('Send'))
                                 )
                             )
                         )
@@ -448,6 +449,7 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         _updateState: function (e) {
+            if (e.keyCode === 13) return;
             var value = $(e.target).val().trim(),
                 button = this.$('button.action-call');
             util.removeIcons(button);
@@ -493,7 +495,7 @@ define('io.ox/onboarding/clients/extensions', [
             this.$el.empty()
                 .append(
                     // title
-                    $('<button class="title section-title" tabindex="1" role="tab">')
+                    $('<button class="title section-title" role="tab">')
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
                             $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
@@ -505,8 +507,7 @@ define('io.ox/onboarding/clients/extensions', [
                             .attr('id', ref)
                             .text(gt('Let´s automatically configure your device, by clicking the button below. It´s that simple!')),
                         // action
-                        $('<button class="btn btn-primary action-call" tabindex="1">')
-                            .attr('role', 'button')
+                        $('<button class="btn btn-primary action-call">')
                             .attr('aria-describedby', ref)
                             .text(gt('Configure now'))
                     )
@@ -562,19 +563,14 @@ define('io.ox/onboarding/clients/extensions', [
             // badge
             if (badgeurl) {
                 return $('<a href="#" class="store">').append(
-                    $('<img class="store-icon action-call">')
-                    .attr({
-                        'role': 'button',
-                        'tabindex': 1,
+                    $('<img class="store-icon action-call" role="button">').attr({
                         'data-detail': this.hash[this.type],
                         'src': this.getBadgeUrl()
                     })
                 );
             }
             // simple button
-            return $('<button class="btn btn-primary action-call" tabindex="1">')
-                .attr('role', 'button')
-                .text(gt('Download'));
+            return $('<button class="btn btn-primary action-call">').text(gt('Download'));
         },
 
         getBadgeUrl: function () {
@@ -594,7 +590,7 @@ define('io.ox/onboarding/clients/extensions', [
             this.$el.empty()
                 .append(
                     // title
-                    $('<button class="title section-title" tabindex="1" role="tab">')
+                    $('<button class="title section-title" role="tab">')
                         .attr('aria-describedby', id)
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),

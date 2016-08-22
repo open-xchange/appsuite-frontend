@@ -273,7 +273,7 @@ define('io.ox/mail/statistics', [
                     ext.point('io.ox/mail/statistics').invoke('draw', node, baton);
                 });
             })
-            .addPrimaryButton('cancel', gt('Close'), 'cancel', { 'tabIndex': '1' })
+            .addPrimaryButton('cancel', gt('Close'), 'cancel')
             .show();
         }
     };

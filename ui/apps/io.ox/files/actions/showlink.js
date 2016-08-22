@@ -37,7 +37,7 @@ define('io.ox/files/actions/showlink', [
                         return $('<p>').append(
                             $('<div>').text(file.filename || file.title || ''),
                             $('<div>').append(
-                                $('<a class="direct-link" target="_blank" tabindex="1">')
+                                $('<a class="direct-link" target="_blank">')
                                 .attr('href', url)
                                 .html(util.breakableHTML(url))
                             )
@@ -45,7 +45,7 @@ define('io.ox/files/actions/showlink', [
                     })
                 );
             })
-            .addPrimaryButton('cancel', gt('Close'), 'cancel', { 'tabIndex': '1' })
+            .addPrimaryButton('cancel', gt('Close'), 'cancel')
             .show(function () {
                 this.find('a.direct-link').focus();
             });

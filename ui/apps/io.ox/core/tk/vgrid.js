@@ -295,7 +295,7 @@ define('io.ox/core/tk/vgrid', [
                     // show checkbox
                     options.showCheckbox === false ?
                         [] :
-                        $('<a href="#" class="select-all" role ="checkbox" aria-checked="false" tabindex="1">').append(
+                        $('<a href="#" class="select-all" role ="checkbox" aria-checked="false">').append(
                             $('<i class="fa fa-square-o" aria-hidden="true">')
                         )
                         .attr('title', gt('Select all'))
@@ -1238,6 +1238,10 @@ define('io.ox/core/tk/vgrid', [
 
         this.setEmptyMessage = function (fn) {
             emptyMessage = fn;
+        };
+
+        this.getEmptyMessage = function () {
+            return emptyMessage;
         };
 
         this.updateTemplates = function () {

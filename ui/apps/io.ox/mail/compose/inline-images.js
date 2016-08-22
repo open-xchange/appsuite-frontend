@@ -65,7 +65,7 @@ define('io.ox/mail/compose/inline-images', [
     ext.point(POINT + 'file_upload').extend({
         id: 'default',
         draw: function (baton) {
-            baton.$.file_upload = attachments.fileUploadWidget({ tabindex: 0 });
+            baton.$.file_upload = attachments.fileUploadWidget();
             this.append(
                 baton.$.file_upload
             );
@@ -75,8 +75,8 @@ define('io.ox/mail/compose/inline-images', [
     ext.point(POINT + 'buttons').extend({
         id: 'default',
         draw: function () {
-            this.addPrimaryButton('insert', gt('Insert'), 'insert', { 'tabIndex': '1' })
-                .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' });
+            this.addPrimaryButton('insert', gt('Insert'), 'insert')
+                .addButton('cancel', gt('Cancel'), 'cancel');
         }
     });
 

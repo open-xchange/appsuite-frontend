@@ -64,7 +64,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 expect(node.children(), 'children').to.have.length(0);
                 expect(node.is('ul'), '<ul> tag').to.be.true;
                 expect(node.attr('role'), 'role').to.equal('listbox');
-                expect(node.attr('tabindex'), 'tabindex').to.equal('1');
+                expect(node.attr('tabindex'), 'tabindex').to.equal('0');
                 // no-transition class is only set for phantomjs
                 expect(node.hasClass('no-transition'), 'no transition').to.equal(_.device('phantomjs'));
             });
@@ -186,7 +186,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 this.list.$el.focus().trigger(e);
 
                 expect(this.list.selection.get().length).to.equal(1);
-                expect(nodes.eq(0).is('[tabindex="1"]')).to.be.true;
+                expect(nodes.eq(0).is('[tabindex="0"]')).to.be.true;
                 expect(nodes.filter('.selected').length).to.equal(1);
                 expect(nodes.filter('[tabindex="-1"]').length).to.equal(2);
 
@@ -197,27 +197,27 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 e = $.Event('keydown', { which: 40 });
                 $(document.activeElement).trigger(e);
 
-                expect(nodes.eq(1).is('[tabindex="1"]')).to.be.true;
+                expect(nodes.eq(1).is('[tabindex="0"]')).to.be.true;
 
                 // cursor down again
                 e = $.Event('keydown', { which: 40 });
                 $(document.activeElement).trigger(e);
-                expect(nodes.eq(2).is('[tabindex="1"]')).to.be.true;
+                expect(nodes.eq(2).is('[tabindex="0"]')).to.be.true;
 
                 // cursor down again to check boundary
                 e = $.Event('keydown', { which: 40 });
                 $(document.activeElement).trigger(e);
-                expect(nodes.eq(2).is('[tabindex="1"]')).to.be.true;
+                expect(nodes.eq(2).is('[tabindex="0"]')).to.be.true;
 
                 // cmd + cursor up
                 e = $.Event('keydown', { which: 38, metaKey: true });
                 $(document.activeElement).trigger(e);
-                expect(nodes.eq(0).is('[tabindex="1"]')).to.be.true;
+                expect(nodes.eq(0).is('[tabindex="0"]')).to.be.true;
 
                 // cursor up again to check boundary
                 e = $.Event('keydown', { which: 38 });
                 $(document.activeElement).trigger(e);
-                expect(nodes.eq(0).is('[tabindex="1"]')).to.be.true;
+                expect(nodes.eq(0).is('[tabindex="0"]')).to.be.true;
             });
 
             it('should handle click events correctly', function () {

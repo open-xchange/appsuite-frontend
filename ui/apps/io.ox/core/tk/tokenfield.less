@@ -67,17 +67,14 @@
         .tt-dropdown-menu {
             width: @tokenfield-menu-width;
             min-width: @tokenfield-menu-width;
-
-            @media all and (min-width: 320px) and (max-width: 480px) {
-
-            }
         }
     }
 }
 
 .smartphone {
     .tokenfield .twitter-typeahead {
-        & > .token-input.tt-hint, > .token-input.tt-input { min-width: inherit !important; }
+        & > .token-input.tt-hint,
+        & > .token-input.tt-input { min-width: inherit !important; }
         .tt-dropdown-menu {
             border-radius: 0;
             border: 1px solid #fff;

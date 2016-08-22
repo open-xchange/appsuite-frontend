@@ -36,16 +36,16 @@ define('io.ox/mail/threadview', [
             this.$el.append(
                 $('<nav class="back-navigation generic-toolbar">').append(
                     $('<div class="button">').append(
-                        $('<a href="#" role="button" class="back" tabindex="1">')
+                        $('<a href="#" role="button" class="back">')
                         .attr('aria-label', gt('Back to list'))
                         .append($('<i class="fa fa-chevron-left" aria-hidden="true">'), $.txt(' '), $.txt(gt('Back')))
                     ),
                     $('<div class="position">'),
                     $('<div class="prev-next">').append(
-                        $('<a href="#" role="button" class="previous-mail" tabindex="1">')
+                        $('<a href="#" role="button" class="previous-mail">')
                             .attr('aria-label', gt('Previous message'))
                             .append('<i class="fa fa-chevron-up" aria-hidden="true">'),
-                        $('<a href="#" role="button" class="next-mail" tabindex="1">')
+                        $('<a href="#" role="button" class="next-mail">')
                             .attr('aria-label', gt('Next message'))
                             .append('<i class="fa fa-chevron-down" aria-hidden="true">')
                     )
@@ -106,7 +106,7 @@ define('io.ox/mail/threadview', [
         draw: function (baton) {
             if (baton.view.collection.length <= 1) return;
             this.append(
-                $('<a href="#" role="button" class="toggle-all" tabindex="1">')
+                $('<a href="#" role="button" class="toggle-all">')
                 .append('<i class="fa fa-angle-double-down">')
                 .attr('aria-label', gt('Open all messages'))
                 .tooltip({
@@ -450,7 +450,7 @@ define('io.ox/mail/threadview', [
         // render an email
         renderListItem: function (model) {
             var view = new detail.View({ tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
-            return view.render().$el.attr({ tabindex: '1' });
+            return view.render().$el.attr({ tabindex: '0' });
         },
 
         // update zIndex for all list-items (descending)
@@ -518,7 +518,7 @@ define('io.ox/mail/threadview', [
                 }
             });
 
-            view.render().$el.attr({ role: 'listitem', tabindex: '1' });
+            view.render().$el.attr({ role: 'listitem', tabindex: '0' });
 
             ext.point('io.ox/mail/mobile').invoke('customize', view);
 
@@ -537,7 +537,7 @@ define('io.ox/mail/threadview', [
                 data: model.toJSON()
             });
             this.mail = model.toJSON();
-            return view.render().toggle().$el.attr({ role: 'listitem', tabindex: '1' });
+            return view.render().toggle().$el.attr({ role: 'listitem', tabindex: '0' });
 
         },
         // render scaffold

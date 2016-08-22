@@ -73,7 +73,7 @@ define('plugins/portal/birthdays/register', [
 
         preview: function (baton) {
 
-            var $list = $('<ul class="content list-unstyled io-ox-portal-birthdays" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to complete list of Birthdays.') + '">'),
+            var $list = $('<ul class="content list-unstyled io-ox-portal-birthdays" tabindex="0" role="button" aria-label="' + gt('Press [enter] to jump to complete list of Birthdays.') + '">'),
                 hash = {},
                 contacts = baton.data,
                 numOfItems = _.device('smartphone') ? 5 : 15;
@@ -172,7 +172,7 @@ define('plugins/portal/birthdays/register', [
                         delta = delta === 0 ? gt('Today') : delta === 1 ? gt('Tomorrow') : delta === -1 ? gt('Yesterday') : gt('In %1$d days', Math.ceil(delta));
 
                         $list.append(
-                            $('<div class="birthday" tabindex="1">').data('contact', contact).append(
+                            $('<div class="birthday" tabindex="0">').data('contact', contact).append(
                                 api.pictureHalo(
                                     $('<div class="picture">'),
                                     contact,

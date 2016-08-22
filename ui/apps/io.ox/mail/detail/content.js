@@ -346,9 +346,8 @@ define('io.ox/mail/detail/content', [
                     // fix ID, i.e. replace the DOT (old notation) by a SLASH (new notation, 7.8.0)
                     if (/^\d+\./.test(data.id)) data.id = data.id.replace(/\./, '/');
                     link.addClass(data.className).data(data);
-                }
-                // mailto
-                if (href.indexOf('mailto') > -1) {
+                } else if (href.indexOf('mailto') > -1) {
+                    // mailto:
                     link.addClass('mailto-link').attr('target', '_blank');
                     text = link.text();
                     if (text.search(/^mailto:/) > -1) {
@@ -358,8 +357,10 @@ define('io.ox/mail/detail/content', [
                         text = text.split(/\?/, 2)[0];
                         link.text(text);
                     }
+                } else if (link.attr('href')) {
+                    // other links
+                    link.attr('rel', 'noopener');
                 }
-                if (link.attr('href')) link.attr('rel', 'noopener');
             });
         }
     });
@@ -405,7 +406,7 @@ define('io.ox/mail/detail/content', [
                 $(node).addClass('collapsed-blockquote').attr('id', blockquoteId).after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
-                        $('<i class="fa fa-ellipsis-h" tabindex="1" role="button" aria-expanded="false">').attr({
+                        $('<i class="fa fa-ellipsis-h" tabindex="0" role="button" aria-expanded="false">').attr({
                             'aria-controls': blockquoteId,
                             'aria-expanded': false,
                             title: gt('Show quoted text')

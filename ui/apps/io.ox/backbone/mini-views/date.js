@@ -40,7 +40,7 @@ define('io.ox/backbone/mini-views/date', [
     // helper
     function createSelect(name, from, to, setter, format) {
 
-        var node = $('<select tabindex="1">').attr({ name: name, title: titles[name] }).addClass('form-control'),
+        var node = $('<select class="form-control">').attr({ name: name, title: titles[name] }),
             i = Math.min(from, to),
             $i = Math.max(from, to),
             // see bug 41106 - the initial date is set to 1.1.1970 so the options can always be filled with 31 days

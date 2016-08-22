@@ -183,7 +183,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             });
 
             node.append(
-                $('<a href="#" role="button" class="close" tabindex="1">').append(
+                $('<a href="#" role="button" class="close">').append(
                     $('<i class="fa fa-times" aria-hidden="true">'),
                     $('<span class="sr-only">').text(gt('Click to close this notification')))
             );
@@ -200,7 +200,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             setTimeout(function () {
                 // might be already added
                 node.trigger('notification:appear').addClass('appear');
-                if (o.focus) node.attr('tabindex', 1).focus();
+                if (o.focus) node.attr('tabindex', 0).focus();
 
             }, _.device('touch') ? 300 : 2); // _.defer uses setTimeout(..., 1) internally so use at least 2ms
 

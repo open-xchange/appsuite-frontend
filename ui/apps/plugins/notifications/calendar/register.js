@@ -79,9 +79,9 @@ define('plugins/notifications/calendar/register', [
                                             .header(conflictView.drawHeader());
 
                                         dialog.append(conflictView.drawList(conflicts, dialog).addClass('additional-info'));
-                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: '1' });
+                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore');
 
-                                        dialog.addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' })
+                                        dialog.addButton('cancel', gt('Cancel'), 'cancel')
                                             .show()
                                             .done(function (action) {
                                                 if (action === 'cancel') {
@@ -114,7 +114,7 @@ define('plugins/notifications/calendar/register', [
                 'aria-label': gt('Invitation for %1$s.',
                         _.noI18n(model.get('title')))
             }).append(
-                $('<a class="notification-info" role="button" tabindex="1">').append(
+                $('<a class="notification-info" role="button">').append(
                     $('<span class="span-to-div time">').text(_.noI18n(strings.timeStr)).attr('aria-label', util.getTimeIntervalA11y(model.attributes)),
                     $('<span class="span-to-div date">').text(_.noI18n(strings.dateStr)).attr('aria-label', util.getDateIntervalA11y(model.attributes)),
                     $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
@@ -123,7 +123,7 @@ define('plugins/notifications/calendar/register', [
                     $('<span class="sr-only">').text(gt('Press to open Details'))
                 ),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="refocus btn btn-default" data-action="accept_decline">')
+                    $('<button type="button" class="refocus btn btn-default" data-action="accept_decline">')
                         .attr({
                             'focus-id': 'calendar-invite-' + cid + '-accept-decline',
                             // button aria labels need context
@@ -132,7 +132,7 @@ define('plugins/notifications/calendar/register', [
                         .css('margin-right', '14px')
                         .text(gt('Accept / Decline'))
                         .on('click', onClickChangeStatus),
-                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                    $('<button type="button" class="refocus btn btn-success" data-action="accept">')
                         .attr({
                             // button aria labels need context
                             'aria-label': gt('Accept invitation') + ' ' + model.get('title'),

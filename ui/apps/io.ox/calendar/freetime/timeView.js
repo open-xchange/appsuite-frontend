@@ -36,7 +36,7 @@
         id: 'toolbar',
         index: 100,
         draw: function (baton) {
-            var info  = $('<a href="#" tabindex="1" class="info">').on('click', $.preventDefault).attr({
+            var info  = $('<a href="#" class="info">').on('click', $.preventDefault).attr({
                     'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
                 }),
                 fillInfo = function () {
@@ -70,7 +70,6 @@
                 $('<div class="controls-container">').append(
                     $('<a class="control prev" >').attr({
                         href: '#',
-                        tabindex: 1,
                         role: 'button',
                         title: gt('Previous Day'),
                         'aria-label': gt('Previous Day')
@@ -78,7 +77,6 @@
                     .append($('<i class="fa fa-chevron-left" aria-hidden="true">')),
                     $('<a class="control today" >').attr({
                         href: '#',
-                        tabindex: 1,
                         role: 'button',
                         title: gt('Today'),
                         'aria-label': gt('Today')
@@ -86,7 +84,6 @@
                     .append($('<i class="fa fa-circle" aria-hidden="true">')),
                     $('<a class="control next" >').attr({
                         href: '#',
-                        tabindex: 1,
                         role: 'button',
                         title: gt('Next Day'),
                         'aria-label': gt('Next Day')

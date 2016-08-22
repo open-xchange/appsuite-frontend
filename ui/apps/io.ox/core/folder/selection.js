@@ -166,13 +166,13 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         resetTabIndex: function (items, skip) {
-            items = items.filter('[tabindex="1"]');
+            items = items.filter('[tabindex="0"]');
             items.not(skip).attr('tabindex', '-1');
         },
 
         focus: function (index, items) {
             items = items || this.getItems();
-            var node = items.eq(index).attr('tabindex', '1').focus();
+            var node = items.eq(index).attr('tabindex', '0').focus();
             // workaround for chrome's CSS bug:
             // styles of "selected" class are not applied if focus triggers scrolling.
             // idea taken from http://forrst.com/posts/jQuery_redraw-BGv
@@ -184,7 +184,7 @@ define('io.ox/core/folder/selection', [], function () {
             if (this.view.disposed) return $();
             var width = this.view.$el.width();
             return nodes.addClass('selected')
-                .attr({ 'aria-selected': true, tabindex: 1 })
+                .attr({ 'aria-selected': true, tabindex: 0 })
                 .find('.folder-label').each(function () {
                     // special handling for settings for now
                     if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;

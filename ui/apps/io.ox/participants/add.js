@@ -125,6 +125,13 @@ define('io.ox/participants/add', [
                     return !col.get(model);
                 });
             }, this);
+
+            // ensure a fixed scroll position when adding participants/members
+            var scrollIntoView = _.debounce(function () {
+                this.typeahead.el.scrollIntoView();
+            }.bind(this), 0);
+
+            this.collection.on('render', scrollIntoView);
         },
 
         keyDown: function (e) {
@@ -179,6 +186,19 @@ define('io.ox/participants/add', [
                 this.typeahead.$el.attr({ id: guid }).addClass('add-participant')
             );
             this.typeahead.render();
+            if (this.options.scrollIntoView) {
+                var $el = this.$el;
+                this.typeahead.on('typeahead-custom:dropdown-rendered', function () {
+                    var target = $el.find('.tt-dropdown-menu'),
+                        container = target.scrollParent(),
+                        pos = target.offset().top - container.offset().top;
+                    if (!target.is(':visible')) return;
+                    if ((pos < 0) || (pos + target.height() > container.height())) {
+                        // scroll to Node, leave 16px offset
+                        container.scrollTop(container.scrollTop() + pos - 16);
+                    }
+                });
+            }
             return this;
         }
     });

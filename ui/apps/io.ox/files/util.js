@@ -251,8 +251,8 @@ define('io.ox/files/util', [
                 new dialogs.ModalDialog(opt)
                             .header($('<h4>').text(gt('Confirmation')))
                             .append(message, $hint)
-                            .addPrimaryButton('rename', gt('Yes'), 'rename', { 'tabIndex': '1' })
-                            .addButton('change', gt('Adjust'), 'change', { 'tabIndex': '1' })
+                            .addPrimaryButton('rename', gt('Yes'), 'rename')
+                            .addButton('change', gt('Adjust'), 'change')
                             .show()
                             .done(function (action) {
                                 if (action === 'rename') {

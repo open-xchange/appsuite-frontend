@@ -32,7 +32,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         draw: function (baton) {
             this.append(
                 $('<div class="form-group">').append(
-                    baton.$.name = $('<input type="text" class="form-control">').attr({ 'id': 'signature-name', 'tabindex': 1, 'placeholder': gt('Signature name') })
+                    baton.$.name = $('<input id="signature-name" type="text" class="form-control">').attr('placeholder', gt('Signature name'))
                 )
             );
         }
@@ -43,7 +43,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         index: 200,
         draw: function (baton) {
             this.append(
-                baton.$.error = $('<div>').addClass('help-block error').attr('id', _.uniqueId('error-help-'))
+                baton.$.error = $('<div class="help-block error">').attr('id', _.uniqueId('error-help-'))
             );
         }
     });
@@ -57,10 +57,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     'min-height': '266px',
                     height: '266px'
                 }).append(
-                    baton.$.contentEditable = $('<div>')
-                    .attr({
-                        'data-editor-id': baton.editorId
-                    })
+                    baton.$.contentEditable = $('<div>').attr('data-editor-id', baton.editorId)
                 )
             );
 
@@ -100,7 +97,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         draw: function (baton) {
             this.append(
                 $('<div class="form-group">').append(
-                    baton.$.insertion = $('<select id="signature-position" class="form-control" tabindex="1">')
+                    baton.$.insertion = $('<select id="signature-position" class="form-control">')
                         .append(
                             $('<option value="above">').text(gt('Add signature above quoted text')),
                             $('<option value="below">').text(gt('Add signature below quoted text'))
@@ -150,8 +147,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         });
         ext.point('io.ox/mail/settings/signature-dialog').invoke('draw', popup.getContentNode(), baton);
 
-        popup.addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
-        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+        popup.addPrimaryButton('save', gt('Save'), 'save')
+        .addButton('cancel', gt('Cancel'), 'cancel')
         .on('save', function () {
             if (baton.$.name.val() !== '') {
                 var update = signature.id ? {} : { type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: { insertion: 'below', 'content-type': 'text/html' } },
@@ -301,7 +298,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         index: 100,
         draw: function () {
             var buttonContainer = $('<div class="btn-group pull-right">').append(
-                $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add new signature')).on('click', fnEditSignature)
+                $('<button type="button" class="btn btn-primary">').text(gt('Add new signature')).on('click', fnEditSignature)
             );
 
             this.addClass('io-ox-signature-settings').append(
@@ -312,7 +309,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
 
             if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
                 buttonContainer.append(
-                    $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
+                    $('<button type="button" class="btn btn-default">').text(gt('Import signatures')).on('click', function (e) {
                         fnImportSignatures(e, config.get('gui.mail.signatures'));
                         return false;
                     })

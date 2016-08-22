@@ -1672,6 +1672,11 @@ msgstr "Anulează căutarea"
 msgid "Canceled"
 msgstr "Anulat"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1945,6 +1950,12 @@ msgstr "Închide panoul descriere"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr "Închide vederea dosar"
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid "The notification area is open"
+msgid "Close notification area"
+msgstr "Zona de notificare este deschisă"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -4139,10 +4150,6 @@ msgstr "Ascunde toate invitațiile la întâlniri."
 #: module:plugins/notifications
 msgid "Hide all appointment reminders."
 msgstr "Ascunde toate mementourile pentru întâlniri."
-
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Ascunde toate notificările"
 
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
@@ -6349,6 +6356,10 @@ msgstr "Specificați următoarele variabile care lipsesc: "
 msgid "Please update your browser."
 msgstr "Actualizați navigatorul."
 
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
 msgstr "Plus"
@@ -7383,10 +7394,6 @@ msgstr "Trimite o confirmare de citire"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "Trimite ca legătură internă"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr "Trimite ca mail"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -13057,6 +13064,9 @@ msgstr "aaaa"
 #~ msgid "Hide advanced filters"
 #~ msgstr "Ascunde filtrele avansate"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Ascunde toate notificările"
+
 #~ msgid "Hide all notifications for new mails."
 #~ msgstr "Ascunde toate notificările pentru e-mailuri noi."
 
@@ -14929,6 +14939,9 @@ msgstr "aaaa"
 #~ msgid "Send as E-Mail"
 #~ msgstr "Trimite ca e-mail"
 
+#~ msgid "Send as mail"
+#~ msgstr "Trimite ca mail"
+
 #~ msgid "Sender"
 #~ msgstr "Expeditor"
 
@@ -15679,9 +15692,6 @@ msgstr "aaaa"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "Zona de notificare este închisă"
-
-#~ msgid "The notification area is open"
-#~ msgstr "Zona de notificare este deschisă"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr ""

@@ -45,7 +45,7 @@ define('io.ox/launchpad/main', [
 
         // app template
         appTmpl = _.template(
-            '<a href="#" class="app" tabindex="1" data-app-name="<%= id %>">' +
+            '<a href="#" class="app" data-app-name="<%= id %>">' +
             '  <img src="<%= icon %>" class="icon" alt="">' +
             '  <div class="title ellipsis"><%= title %></div>' +
             '  <div class="lock abs"><i class="fa fa-lock"></i></div>' +
@@ -190,12 +190,9 @@ define('io.ox/launchpad/main', [
                 secInstalled.empty();
                 if (fnHasAppStore()) {
                     secInstalled.append(
-                        $('<div>').addClass('manage-apps')
-                        .append(
-                            $('<a>', { href: '#', tabindex: '1' })
-                            .addClass('btn btn-primary')
-                            .text(gt('Manage applications'))
-                            .on('click', fnOpenAppStore)
+                        $('<div class="manage-apps">').append(
+                            $('<a href="#" class="btn btn-primary">').text(gt('Manage applications'))
+                                .on('click', fnOpenAppStore)
                         )
                     );
                 }

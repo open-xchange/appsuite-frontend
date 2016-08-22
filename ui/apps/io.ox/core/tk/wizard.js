@@ -426,12 +426,12 @@ define('io.ox/core/tk/wizard', [
             this.$el.attr({
                 role: 'dialog',
                 // as we have a focus trap (modal dialog) we use tabindex=1 in this case
-                tabindex: 1,
+                tabindex: 0,
                 'aria-labelledby': 'dialog-title'
             })
             .append(
                 $('<div class="wizard-header">').append(
-                    $('<button class="wizard-close close pull-right" tabindex="1" data-action="close">').append(
+                    $('<button class="wizard-close close pull-right" data-action="close">').append(
                         $('<span aria-hidden="true">&times;</span>'),
                         $('<span class="sr-only">').text(gt('Close'))
                     ),
@@ -477,10 +477,10 @@ define('io.ox/core/tk/wizard', [
         },
 
         // internal; just add a button
-        addButton: addControl('<button class="btn" tabindex="1">'),
+        addButton: addControl('<button class="btn">'),
 
         // internal; just add a link
-        addLink: addControl('<a href="#" role="button" tabindex="1">'),
+        addLink: addControl('<a href="#" role="button">'),
 
         getLabelNext: function () {
             // determine this button label at run-time

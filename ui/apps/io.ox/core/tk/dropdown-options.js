@@ -186,8 +186,8 @@ define('io.ox/core/tk/dropdown-options', [
             //create nodes
             _(data).each(function (item) {
                 $menu.append(
-                     nodes[item.name] = $('<li>').append($('<a href="#">')
-                        .attr({ tabindex: $anchor.attr('tabindex') })
+                     nodes[item.name] = $('<li>').append(
+                        $('<a href="#">')
                         .append(
                             $('<i class="fa fa-fw" aria-hidden="true">'),
                             $.txt(item.label)

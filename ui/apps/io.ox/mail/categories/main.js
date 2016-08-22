@@ -80,7 +80,7 @@ define('io.ox/mail/categories/main', [
             return _.pick.apply(this, [_.clone(this.attributes)].concat(SYNCED));
         },
         getCount: function () {
-            return this.get('unread') || undefined;
+            return this.get('unread') === 0 ? '' : this.get('unread');
         },
         can: function (id) {
             return this.get('permissions').indexOf(id) > -1;
@@ -179,7 +179,7 @@ define('io.ox/mail/categories/main', [
                 } else {
                     node.removeClass('selected');
                 }
-                if (model.getCount()) { node.find('.counter').text(model.getCount()); }
+                node.find('.counter').text(model.getCount());
                 //#. use as a fallback name in case a user enters a empty string as the name of tab
                 node.find('.category-name').text(model.get('name').trim() || gt('Unnamed'));
             }.bind(this));
@@ -199,7 +199,7 @@ define('io.ox/mail/categories/main', [
                 if (!exists(container, model)) {
                     container.append(
                         $('<li class="category">').append(
-                            $('<a class="link" tabindex="1" role="button">').append(
+                            $('<a class="link" role="button">').append(
                                 $('<div class="category-icon">'),
                                 $('<div class="category-name truncate">').text(model.get('name')),
                                 $('<div class="category-counter">').append(
@@ -437,7 +437,8 @@ define('io.ox/mail/categories/main', [
                 id: 'categories',
                 index: 100,
                 draw: function (baton) {
-                    if (!baton.app.listView.model.get('filter')) return;
+                    if (!baton.app.listView.model.get('categoryid')) return;
+                    if (!baton.app.categories.isFolderSupported()) return;
                     // TODO: wording
                     //#. Helper text for mail tabs without content
                     this.text(gt('To fill this area please drag and drop mails to the title of this tab.'));
@@ -448,28 +449,17 @@ define('io.ox/mail/categories/main', [
         show: function () {
             if (!this.props.get('enabled')) return;
             if (!this.isFolderSupported()) return this.hide();
-            // thread restore
-            if (this.props.get('thread') === undefined) {
-                this.props.set('thread', this.mail.props.get('thread'));
-            }
-            this.mail.props.set('thread', false);
-            // request param
-            this.mail.listView.model.set('filter', this.props.get('selected'));
+            this.mail.listView.model.set('categoryid', this.props.get('selected'));
             // state
             this.props.set('visible', true);
             this.restoreSelection();
-            this.mail.left.find('[data-name="thread"]').addClass('disabled');
+            //this.mail.left.find('[data-name="thread"]').addClass('disabled');
             this.trigger('show');
         },
         hide: function () {
             // restore state
             _.url.hash('category', null);
-            this.mail.listView.model.unset('filter');
-            if (this.props.get('thread')) {
-                this.mail.props.set('thread', this.props.get('thread'));
-            }
-            this.props.unset('thread');
-            this.mail.left.find('[data-name="thread"]').removeClass('disabled');
+            this.mail.listView.model.unset('categoryid');
             this.props.set('visible', false);
             this.trigger('hide');
         },

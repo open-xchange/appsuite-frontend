@@ -1571,18 +1571,13 @@ define('io.ox/core/desktop', [
                             guid:  _.uniqueId('form-control-description-')
                         });
                         // search box form
-                        baton.$.group = $('<div class="form-group has-feedback">')
-                            .append(
-                                $('<input type="text">')
-                                .attr({
-                                    class: 'form-control has-feedback search-field tokenfield-placeholder f6-target',
-                                    tabindex: 1,
-                                    role: 'search',
-                                    id: baton.data.id,
-                                    placeholder: baton.data.label + '...',
-                                    'aria-describedby': baton.data.guid
-                                })
-                            );
+                        baton.$.group = $('<div class="form-group has-feedback">').append(
+                            $('<input type="text" role="search" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
+                                id: baton.data.id,
+                                placeholder: baton.data.label + '...',
+                                'aria-describedby': baton.data.guid
+                            })
+                        );
                         // add to searchbox area
                         baton.$.box.append(
                             baton.$.group

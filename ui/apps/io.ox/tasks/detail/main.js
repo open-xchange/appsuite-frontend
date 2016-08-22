@@ -43,7 +43,7 @@ define('io.ox/tasks/detail/main', [
                     });
 
                     app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container">').attr({
-                        'tabindex': 1,
+                        'tabindex': 0,
                         'role': 'complementary',
                         'aria-label': gt('Task Details')
                     }).append(detailView.draw(baton)));

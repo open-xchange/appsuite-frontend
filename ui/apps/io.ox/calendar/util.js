@@ -183,7 +183,7 @@ define('io.ox/calendar/util', [
                     // time
                     $('<span class="time">').append(
                         timeStr ? $.txt(timeStr) : '',
-                        this.addTimezonePopover($('<span class="label label-default pointer" tabindex="1">').text(timeZoneStr), data, options.timeZoneLabel)
+                        this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(timeZoneStr), data, options.timeZoneLabel)
                     )
                 );
             }
@@ -351,7 +351,7 @@ define('io.ox/calendar/util', [
 
             parent.append(
                 $.txt(gt.noI18n(this.getTimeInterval(data))),
-                this.addTimezonePopover($('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.zoneAbbr())), data, options)
+                this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(gt.noI18n(current.zoneAbbr())), data, options)
             );
 
             return parent;

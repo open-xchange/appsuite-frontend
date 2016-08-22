@@ -63,7 +63,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                             dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date') + ' (' + moment.localeData().longDateFormat('l') + ')'),
                             timezoneContainer;
 
-                        self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">').attr({
+                        self.nodes.dayField = $('<input type="text" class="form-control datepicker-day-field">').attr({
                             id: guid,
                             'aria-describedby': ariaID
                         });
@@ -78,9 +78,7 @@ define('io.ox/backbone/mini-views/datepicker', [
 
                         // render time input
                         guid = _.uniqueId('form-control-label-');
-                        self.nodes.timeField = $('<input class="form-control time-field">').attr({
-                            type: 'text',
-                            tabindex: 1,
+                        self.nodes.timeField = $('<input type="text" class="form-control time-field">').attr({
                             id: guid,
                             'aria-describedby': guid + '-aria'
                         });
@@ -93,7 +91,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         if (!self.options.timezoneButton && !self.mobileMode) {
                             timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                         } else {
-                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon btn" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
+                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon btn" data-toggle="popover">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                             if (self.model.has('start_date') && self.model.has('end_date')) {
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
                                     calendarUtil.addTimezonePopover(
@@ -109,13 +107,9 @@ define('io.ox/backbone/mini-views/datepicker', [
                         }
 
                         // add a11y
-                        self.nodes.a11yDate = $('<p>')
-                            .attr({ id: ariaID })
-                            .addClass('sr-only')
+                        self.nodes.a11yDate = $('<p class="sr-only">').attr('id', ariaID)
                             .text(gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.'));
-                        self.nodes.a11yTime = $('<p>')
-                            .attr({ id: guid + '-aria' })
-                            .addClass('sr-only')
+                        self.nodes.a11yTime = $('<p class="sr-only">').attr('id', guid + '-aria')
                             .text(gt('Use up and down keys to change the time. Close selection by pressing ESC key.'));
 
                         return [

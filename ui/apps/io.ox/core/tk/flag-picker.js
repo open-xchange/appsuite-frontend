@@ -175,9 +175,9 @@ define('io.ox/core/tk/flag-picker', [
         div: $('<div>'),
         list: $('<ul class="dropdown-menu" role="menu">'),
         listItem: $('<li>'),
-        menuItemLink: $('<a href="#" tabindex="1" role="menuitem">'),
+        menuItemLink: $('<a href="#" role="menuitem">'),
         flag: $('<span class="flag-example">'),
-        setColorLink: $('<a href="#" tabindex="1" title="' + gt('Set color') + '">'),
+        setColorLink: $('<a href="#" title="' + gt('Set color') + '">'),
         dropdownIcon: $('<i class="flag-dropdown-icon">')
     };
 

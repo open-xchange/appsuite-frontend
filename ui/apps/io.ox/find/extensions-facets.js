@@ -26,7 +26,7 @@ define('io.ox/find/extensions-facets', [
         toolbar: function (baton) {
             if (_.device('smartphone')) return;
             // rightside place for dropdowns
-            var toolbar = new Toolbar({ title: gt('Search'), tabindex: 1 }),
+            var toolbar = new Toolbar({ title: gt('Search') }),
                 // clone empty toolbar
                 $list = toolbar.render().$list.clone();
             this.append($list);

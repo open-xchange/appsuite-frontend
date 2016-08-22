@@ -112,7 +112,7 @@ define('io.ox/presenter/views/notification', [
                     // the message node as target for additional contents
                     messageNode = yellNode.find('.message'),
                     // the button node to add to the message
-                    button = $('<a role="button" class="presenter-notification-btn" tabindex="1">').attr('title', label).text(label);
+                    button = $('<a role="button" class="presenter-notification-btn">').attr('title', label).text(label);
 
                 button.on('click', function () {
                     ActionsPattern.invoke(ref, null, baton);

@@ -726,7 +726,12 @@ define('io.ox/files/api', [
             // clear target folder
             _(pool.getByFolder(id)).each(function (collection) {
                 var files = collection.filter(function (model) { return isTrash || model.isFile(); });
-                collection.remove(files);
+                if (collection.length === files.length) {
+                    // use reset or listview removes files one by one and scrolls after each one (is very slow and blocks UI if there are many files)
+                    collection.reset();
+                } else {
+                    collection.remove(files);
+                }
             });
         },
         'remove:infostore': function () {
@@ -1250,19 +1255,20 @@ define('io.ox/files/api', [
                     return api.getList(list, { cache: false });
 
                 case 'remove:file':
-                    api.trigger('remove:file', list);
-                    _(list).each(function (obj) {
-                        api.trigger('remove:file:' + _.ecid(obj));
-                    });
                     // file count changed, need to reload folder
                     folderAPI.reload(list);
                     // mark trash folders as expired
-                    var id = coreSettings.get('folder/trash');
+                    var id = settings.get('folder/trash');
+
                     if (id) {
                         _(pool.getByFolder(id)).each(function (collection) {
                             collection.expired = true;
                         });
                     }
+                    api.trigger('remove:file', list);
+                    _(list).each(function (obj) {
+                        api.trigger('remove:file:' + _.ecid(obj));
+                    });
                     break;
 
                 case 'remove:version':

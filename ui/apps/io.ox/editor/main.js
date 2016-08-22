@@ -158,27 +158,24 @@ define('io.ox/editor/main', [
                         // title
                         $('<div class="form-group col-xs-12 col-sm-8">').append(
                             $('<label class="sr-only">').attr('for', guid).text(gt('Enter document title here')),
-                            $('<input class="title form-control">').attr({
+                            $('<input type="text" maxlength="350" class="title form-control">').attr({
                                 id: guid,
-                                placeholder: gt('Enter document title here'),
-                                maxlength: 350,
-                                tabindex: 1,
-                                type: 'text'
+                                placeholder: gt('Enter document title here')
                             })
                         ),
 
                         // save & close buttons
                         $('<div class="form-group col-xs-6 col-sm-2">').append(
-                            $('<button type="button" class="save btn btn-primary btn-block" tabindex="3">').text(gt('Save'))
+                            $('<button type="button" class="save btn btn-primary btn-block">').text(gt('Save'))
                         ),
                         $('<div class="form-group col-xs-6 col-sm-2">').append(
-                            $('<button type="button" class="quit btn btn-default btn-block" tabindex="4">').text(gt('Close'))
+                            $('<button type="button" class="quit btn btn-default btn-block">').text(gt('Close'))
                         )
                     ),
                     $('<div class="body row">').append(
                         $('<div class="col-md-12">').append(
                             // editor
-                            $('<textarea class="content form-control" tabindex="2">').val('')
+                            $('<textarea class="content form-control">').val('')
                                 .attr('placeholder', _.device('ios || android') ? '' : gt('You can quick-save your changes via Ctrl+Enter.'))
                         )
                     )

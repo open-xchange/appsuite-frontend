@@ -137,8 +137,8 @@ define('io.ox/calendar/edit/timezone-dialog', [
 
         new dialogs.ModalDialog()
             .header($('<h4>').text(gt('Change timezone')))
-            .addPrimaryButton('change', gt('Change'), 'change', { tabIndex: 1 })
-            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+            .addPrimaryButton('change', gt('Change'), 'change')
+            .addButton('cancel', gt('Cancel'), 'cancel')
             .build(function () {
                 ext.point('io.ox/calendar/edit/timezone-dialog').invoke('draw', this.getContentNode(), { model: model });
             })

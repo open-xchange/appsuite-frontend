@@ -41,7 +41,7 @@ define('io.ox/presenter/views/navigationview', [
      *  the button node.
      */
     function createNavigationButton(type) {
-        var button = $('<a href="#" class="presenter-navigation-slide-button" tabindex="1" role="menuitem" aria-disabled="false">'),
+        var button = $('<a href="#" class="presenter-navigation-slide-button" role="menuitem" aria-disabled="false">'),
             icon = $('<i class="fa" aria-hidden="true">');
 
         button.attr({ 'aria-label': (type === 'next') ? gt('Next slide') : gt('Previous slide') });
@@ -282,7 +282,7 @@ define('io.ox/presenter/views/navigationview', [
                 prev = createNavigationButton('prev'),
                 next = createNavigationButton('next'),
                 // slide input field
-                slideInput = $('<input type="text" class="presenter-navigation-slide" tabindex="1" role="textbox">'),
+                slideInput = $('<input type="text" class="presenter-navigation-slide" role="textbox">'),
                 slideInputWrapper = $('<div class="presenter-navigation-slide-wrapper">').append(slideInput),
                 // slide count display
                 slideCountDisplay = $('<div class="presenter-navigation-slide-total">'),

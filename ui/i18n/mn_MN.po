@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-04 10:30+0000\n"
+"POT-Creation-Date: 2016-08-04 07:46+0000\n"
 "PO-Revision-Date: 2015-04-13 10:00+0000\n"
 "Last-Translator: batuyanga <batuyanga@gmail.com>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -1612,6 +1612,11 @@ msgstr ""
 msgid "Canceled"
 msgstr ""
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "Cannot connect to server. Please check your connection."
@@ -1882,6 +1887,11 @@ msgstr "Тайлбар руу хуулах"
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Close folder view"
 msgstr ""
+
+#: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+msgid "Close notification area"
+msgstr "Байршил"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -2253,7 +2263,6 @@ msgstr "Үүсгэх"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #, fuzzy
-#| msgid "Create appointment"
 msgid "Create all-day appointment"
 msgstr "Ууулзалт үүсгэх"
 
@@ -4044,10 +4053,6 @@ msgstr ""
 msgid "Hide all appointment reminders."
 msgstr ""
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Hide all notifications"
-msgstr ""
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all notifications for overdue tasks."
 msgstr ""
@@ -5624,7 +5629,6 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #, fuzzy
-#| msgid "All attachments"
 msgid "Open attachment"
 msgstr "Бүх хавсралтууд"
 
@@ -6202,6 +6206,10 @@ msgstr ""
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Хөтөчийн хувилбараа дээшлүүлнэ үү."
+
+#: apps/io.ox/core/folder/actions/move.js module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
 
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
@@ -7207,10 +7215,6 @@ msgstr ""
 msgid "Send as internal link"
 msgstr ""
 
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Send as mail"
-msgstr ""
-
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
@@ -7569,7 +7573,6 @@ msgstr "Нэвтрэх"
 #. the word not the verb
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #, fuzzy
-#| msgid "Sign in"
 msgctxt "word"
 msgid "Sign in"
 msgstr "Нэвтрэх"
@@ -8978,7 +8981,6 @@ msgstr ""
 
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #, fuzzy
-#| msgid "All attachments"
 msgid "Uploading attachments"
 msgstr "Бүх хавсралтууд"
 

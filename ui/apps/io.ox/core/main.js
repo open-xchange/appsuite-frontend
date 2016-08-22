@@ -348,15 +348,9 @@ define('io.ox/core/main', [
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" class="apptitle" tabindex="1">').text(/*#, dynamic*/gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle">').text(/*#, dynamic*/gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
-                return $('<a>', {
-                    href: '#',
-                    'class': 'apptitle',
-                    tabindex: 1,
-                    role: 'button',
-                    'aria-label': arialabel ? _.escape(arialabel) : null
-                }).append(label);
+                return $('<a href="#" class="apptitle" role="button">').attr('aria-label', arialabel ? _.escape(arialabel) : null).append(label);
             }
             return label;
         });
@@ -521,6 +515,9 @@ define('io.ox/core/main', [
                             node = $('<span>').text(getString(countdown)),
                             countdownTimer = setInterval(function () {
                                 if (countdown <= 0) {
+                                    //make sure, this does not run again in a second
+                                    clearInterval(countdownTimer);
+
                                     logout({ autologout: true });
                                 } else {
                                     countdown--;
@@ -660,7 +657,7 @@ define('io.ox/core/main', [
             var ariaBasicLabel =
                     //#. %1$s is app title/name
                     _.escape(gt('close for %1$s', model.get('title'))),
-                quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel + '">')
+                quitApp = $('<a href="#" class="closelink" role="button" aria-label="' + ariaBasicLabel + '">')
                     .append($('<i class="fa fa-times" aria-hidden="true">'))
                     .on('click', function (e) {
                         e.preventDefault();
@@ -732,12 +729,9 @@ define('io.ox/core/main', [
 
             // add list item
             node = $('<li>').append(
-                $('<a>', {
-                    href: '#',
+                $('<a href="#" role="menuitem">', {
                     'data-app-name': name,
-                    'data-app-guid': model.guid,
-                    tabindex: 1,
-                    'role': 'menuitem'
+                    'data-app-guid': model.guid
                 })
                 .addClass(closable ? 'closable' : '')
                 .text(/*#, dynamic*/gt.pgettext('app', title))
@@ -788,7 +782,7 @@ define('io.ox/core/main', [
             var node = $('[data-app-guid="' + model.guid + '"]', launchers);
             $('a.apptitle', node).text(_.noI18n(value));
             addUserContent(model, node);
-            launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(_.noI18n(value));
+            launcherDropdown.find('li[data-app-guid="' + model.guid + '"] a:first').text(_.noI18n(value));
             tabManager();
         });
 
@@ -879,7 +873,7 @@ define('io.ox/core/main', [
                 this.append(
                     addLauncher('right', new HelpView({
                         iconClass: 'launcher-icon',
-                        tabindex: '1',
+                        tabindex: '0',
                         href: getHelp
                     }).render().$el)
                 );
@@ -1066,7 +1060,7 @@ define('io.ox/core/main', [
                 var ul, a;
                 this.append(
                     $('<li id="io-ox-topbar-dropdown-icon" class="launcher dropdown" role="presentation">').append(
-                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="1">')
+                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">')
                         .append(
                             $('<i class="fa fa-bars launcher-icon" aria-hidden="true">'),
                             $('<span class="sr-only">').text(gt('Settings'))
@@ -1236,7 +1230,7 @@ define('io.ox/core/main', [
                 }
 
                 content.append(
-                    $('<a href="#" class="banner-action" data-action="logout" role="button" tabindex="1">')
+                    $('<a href="#" class="banner-action" data-action="logout" role="button">')
                     .attr('title', gt('Sign out'))
                     .append('<i class="fa fa-sign-out" aria-hidden="true">')
                     .on('click', function (e) {

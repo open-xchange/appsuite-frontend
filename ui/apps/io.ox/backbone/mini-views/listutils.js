@@ -51,7 +51,6 @@ define('io.ox/backbone/mini-views/listutils', [
         controlsDelete: function (opt) {
             opt = _.extend({
                 href: '#',
-                tabindex: 1,
                 role: 'button',
                 'data-action': 'delete',
                 title: gt('Delete')
@@ -63,7 +62,6 @@ define('io.ox/backbone/mini-views/listutils', [
         controlsEdit: function (opt) {
             opt = _.extend({
                 href: '#',
-                tabindex: 1,
                 role: 'button',
                 label: gt('Edit'),
                 'data-action': 'edit',
@@ -73,39 +71,25 @@ define('io.ox/backbone/mini-views/listutils', [
         },
         controlsToggle: function (label) {
             label = label ? label : '';
-            return $('<a class="action">').text(label).attr({
-                href: '#',
-                tabindex: 1,
-                role: 'button',
-                'data-action': 'toggle'
-            });
+            return $('<a href="#" role="button" data-action="toggle" class="action">').text(label);
         },
         dragHandle: function (title, statusClass) {
-            return $('<a>').addClass('drag-handle ' + statusClass)
-            .attr({
-                href: '#',
-                'title': title,
-                'aria-hidden': true,
-                tabindex: -1,
-                role: 'button'
-            })
-            .append($('<i class="fa fa-bars" aria-hidden="true">'))
-            .on('click', $.preventDefault);
+            return $('<a href="#" tabindex="-1" role="button" aria-hidden="true">').addClass('drag-handle ' + statusClass).attr('title', title).append(
+                    $('<i class="fa fa-bars" aria-hidden="true">')
+                ).on('click', $.preventDefault);
         },
         controlProcessSub: function (opt) {
             opt = _.extend({
                 href: '#',
                 role: 'button',
                 'data-action': 'toggle-process-subsequent',
-                tabindex: 1,
                 title: gt('Process subsequent rules')
             }, opt);
             return $('<a>').append($('<i>').addClass('fa ' + opt.faClass)).attr(_.omit(opt, 'faClass'));
         },
         drawError: function (account) {
-            if (!account || !account.get('hasError')) {
-                return '';
-            }
+            if (!account || !account.get('hasError')) return '';
+
             return $('<div class="account-error-message">').text(account.get('error'));
         }
     };

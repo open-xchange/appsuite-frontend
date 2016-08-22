@@ -167,9 +167,9 @@ define('io.ox/calendar/edit/main', [
                                                 .text(gt('Conflicts with resources cannot be ignored'))
                                         );
                                     } else {
-                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 });
+                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore');
                                     }
-                                    dialog.addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                                    dialog.addButton('cancel', gt('Cancel'), 'cancel')
                                         .show()
                                         .done(function (action) {
                                             if (action === 'cancel') {
@@ -421,8 +421,8 @@ define('io.ox/calendar/edit/main', [
                         .text(gt('Do you really want to discard your changes?'))
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { 'tabIndex': '1' })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete')
+                        .addButton('cancel', gt('Cancel'), 'cancel')
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

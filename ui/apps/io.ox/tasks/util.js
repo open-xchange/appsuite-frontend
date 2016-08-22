@@ -113,7 +113,7 @@ define('io.ox/tasks/util', [
                 //put the values in nodes
                 if (o.bootstrapDropdown) {
                     _(options).each(function (obj) {
-                        result.push($('<li>').append($('<a tabindex="1" role="menuitem" href="#">').val(obj[0]).text(obj[1])));
+                        result.push($('<li>').append($('<a href="#" role="menuitem">').val(obj[0]).text(obj[1])));
                     });
                 } else {
                     _(options).each(function (obj) {
@@ -203,7 +203,7 @@ define('io.ox/tasks/util', [
                 if (links && links[0] && capabilities.has('webmail')) {
 
                     for (var i = 0; i < links.length; i++) {
-                        link = '<a href="#" tabindex="1" role="button" data-cid="' + links[i].replace(/^mail:\/\//, '') + '" class="ox-internal-mail-link label label-primary">' + gt('Original mail') + '</a>';
+                        link = '<a href="#" role="button" data-cid="' + links[i].replace(/^mail:\/\//, '') + '" class="ox-internal-mail-link label label-primary">' + gt('Original mail') + '</a>';
                         // replace links
                         note = note.replace(links[i], link);
                     }

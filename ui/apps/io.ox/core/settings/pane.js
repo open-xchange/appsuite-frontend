@@ -67,7 +67,7 @@ define('io.ox/core/settings/pane', [
                 .text(gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') + ' ')
                 .css('margin-bottom', '24px')
                 .append(
-                    $('<a href="#" role="button" tabindex="1" data-action="reload">')
+                    $('<a href="#" role="button" data-action="reload">')
                     .text(gt('Reload page'))
                     .on('click', function (e) { e.preventDefault(); location.reload(); })
                 )
@@ -94,7 +94,7 @@ define('io.ox/core/settings/pane', [
                     $('<div class="form-group">').append(
                         $('<label class="control-label col-sm-4">'),
                         $('<div class="col-sm-6">').append(
-                            $('<button type="button" class="btn btn-default" tabindex="1">')
+                            $('<button type="button" class="btn btn-default">')
                             .text(gt('My contact data') + ' ...')
                             .on('click', function () {
                                 require(['io.ox/core/settings/user'], function (userSettings) {
@@ -122,7 +122,7 @@ define('io.ox/core/settings/pane', [
                         $('<div class="form-group">').append(
                             $('<label class="control-label col-sm-4">'),
                             $('<div class="col-sm-6">').append(
-                                $('<button type="button" class="btn btn-default" tabindex="1">')
+                                $('<button type="button" class="btn btn-default">')
                                 .text(gt('Change password') + ' ...')
                                 .on('click', userSettings.changePassword)
                             )
