@@ -56,10 +56,9 @@ define('io.ox/core/boot/fixes', [], function () {
     // Prevent Content Spoofing
     // See: https://mathiasbynens.github.io/rel-noopener/
     // and: https://github.com/danielstjules/blankshield
-    blankshield.patch();
     $(document).on('click', 'a[rel="noopener"]', function (e) {
         e.preventDefault();
-        window.open($(this).attr('href'));
+        blankshield.open($(this).attr('href'));
     });
 
     //
