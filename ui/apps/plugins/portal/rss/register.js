@@ -105,7 +105,7 @@ define('plugins/portal/rss/register',
                         $('<h4>').text(_.noI18n(item.subject)),
                         $body,
                         $('<div class="rss-url">').append(
-                            $('<a>').attr({ href: item.url, target: '_blank', rel: 'noopener' }).text(_.noI18n(item.feedTitle + ' - ' + moment(item.date).format('l')))
+                            $('<a>').attr({ href: item.url, target: '_blank', rel: 'noopener' }).text(_.noI18n(item.feedTitle + ' - ' + publishedDate))
                         )
                     )
                 );
