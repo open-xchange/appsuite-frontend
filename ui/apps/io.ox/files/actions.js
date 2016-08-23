@@ -10,7 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-
+/* global blankshield */
 define('io.ox/files/actions', [
 
     'io.ox/core/folder/api',
@@ -223,7 +223,7 @@ define('io.ox/files/actions', [
         },
         multiple: function (list) {
             _(list).each(function (file) {
-                window.open(api.getUrl(file, 'open'));
+                blankshield.open(api.getUrl(file, 'open'));
             });
         }
     });

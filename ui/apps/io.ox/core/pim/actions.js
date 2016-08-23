@@ -10,6 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
+ /* global blankshield */
 
 define('io.ox/core/pim/actions', [
     'io.ox/core/api/attachment',
@@ -41,7 +42,7 @@ define('io.ox/core/pim/actions', [
             requires: 'one',
             action: function (baton) {
                 var url = attachmentAPI.getUrl(baton.data, 'view');
-                window.open(url);
+                blankshield.open(url);
             }
         },
 
