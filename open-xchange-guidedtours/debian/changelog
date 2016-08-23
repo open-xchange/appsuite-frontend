@@ -1,3 +1,9 @@
+open-xchange-guidedtours (7.6.2-47) stable; urgency=medium
+
+  * Build for patch 2016-08-29 (3518)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 23 Aug 2016 16:31:54 +0000
+
 open-xchange-guidedtours (7.6.2-46) stable; urgency=medium
 
   * Build for patch 2016-08-01 (3463)
