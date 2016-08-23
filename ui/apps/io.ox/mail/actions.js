@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-
+/* global blankshield */
 define('io.ox/mail/actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
@@ -391,7 +391,7 @@ define('io.ox/mail/actions', [
         multiple: function (list) {
             _(list).each(function (data) {
                 var url = api.getUrl(data, 'view');
-                window.open(url);
+                blankshield.open(url);
             });
         }
     });
