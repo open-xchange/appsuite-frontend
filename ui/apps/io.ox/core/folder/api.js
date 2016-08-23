@@ -506,6 +506,12 @@ define('io.ox/core/folder/api', [
             });
         },
 
+        // reload single collection
+        reload: function (id) {
+            pool.getCollection(getCollectionId(id)).fetched = false;
+            this.list(id);
+        },
+
         refresh: function () {
             _(this.hash).invoke('list');
         },
@@ -884,6 +890,7 @@ define('io.ox/core/folder/api', [
                     return list(model.get('folder_id'), { cache: false })
                             .then(function () {
                                 pool.getCollection(model.get('folder_id')).sort();
+                                if ('title' in changes) api.trigger('after:rename', id, model.toJSON());
                                 return newId;
                             });
                 }

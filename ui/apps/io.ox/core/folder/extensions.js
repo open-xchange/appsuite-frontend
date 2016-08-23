@@ -61,6 +61,11 @@ define('io.ox/core/folder/extensions', [
             });
         });
 
+        api.on('after:rename', function (id, data) {
+            if (data.folder_id !== INBOX) return;
+            api.virtual.reload('virtual/myfolders');
+        });
+
         // remote folders
         api.virtual.add('virtual/remote', function () {
             return api.list('1').then(function (list) {
