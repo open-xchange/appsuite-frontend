@@ -125,21 +125,28 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         check: function (nodes) {
             nodes.addClass('selected').attr('aria-selected', true);
+            this.triggerSelectEvent('add', nodes);
         },
 
         uncheck: function (nodes) {
             nodes.removeClass('selected no-checkbox').attr({ 'aria-selected': false, tabindex: '-1' });
+            this.triggerSelectEvent('remove', nodes);
         },
 
         toggle: function (node) {
             if (node.hasClass('selected')) this.uncheck(node); else this.check(node);
         },
 
+        triggerSelectEvent: function (type, nodes) {
+            var ids = nodes.map(function () { return $(this).attr('data-cid'); }).toArray();
+            this.view.trigger('selection:' + type, ids);
+        },
+
         set: function (list, focus) {
 
             if (!_.isArray(list)) return;
 
-            var items = this.getItems(), hash = {}, self = this, lastIndex = -1;
+            var items = this.getItems(), hash = {};
 
             this.clear();
 
@@ -149,16 +156,15 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 hash[cid] = true;
             });
 
-            items.each(function (index) {
-                var node = $(this), cid = node.attr('data-cid');
-                if (cid in hash) {
-                    self.check(node);
-                    lastIndex = index;
-                }
+            items = items.filter(function () {
+                var cid = $(this).attr('data-cid');
+                return (cid in hash);
             });
 
-            if (lastIndex > -1) {
-                var node = items.eq(lastIndex).attr('tabindex', '0');
+            this.check(items);
+
+            if (items.length) {
+                var node = items.last().attr('tabindex', '0');
                 if (focus) node.focus();
             }
         },
@@ -235,7 +241,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         resetCheckmark: function (items) {
-            items.filter('.selected').removeClass('selected no-checkbox').attr('aria-selected', false);
+            items = items.filter('.selected').removeClass('selected no-checkbox').attr('aria-selected', false);
+            this.triggerSelectEvent('remove', items);
         },
 
         // resets all (usually one) items with swipe-left class

@@ -47,8 +47,7 @@
     .limit {
         color: #777;
         background-color: #eee;
-        padding: 8px;
-        text-align: center;
+        padding: 8px 8px 8px 48px;
     }
 
     .contact-picture {
@@ -94,5 +93,23 @@
         font-size: 14px;
         color: #fff;
         background-color: #555;
+    }
+
+    .list-item .display_name {
+        font-weight: 500;
+    }
+
+    .selection-summary {
+        font-size: 13px;
+        padding: 8px 16px;
+        border-top: 1px solid #e5e5e5;
+        .count {
+            color: #777;
+        }
+        .addresses {
+            font-weight: bold;
+            clear: both;
+            .ellipsis();
+        }
     }
 }
