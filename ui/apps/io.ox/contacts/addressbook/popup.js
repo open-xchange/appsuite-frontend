@@ -32,9 +32,9 @@ define('io.ox/contacts/addressbook/popup', [
     // limits
     var LIMITS = {
         fetch: settings.get('picker/limits/fetch', 10000),
-        render: settings.get('picker/limits/list', 200),
+        render: settings.get('picker/limits/list', 100),
         search: settings.get('picker/limits/search', 50),
-        more: settings.get('picker/limits/more', 400)
+        more: settings.get('picker/limits/more', 100)
     };
 
     // special folder id
@@ -300,7 +300,8 @@ define('io.ox/contacts/addressbook/popup', [
                         ),
                         $('<div class="col-xs-6">').append(
                             $('<select class="form-control folder-dropdown invisible">').append(
-                                $('<option value="all">').text(gt('All contacts'))
+                                $('<option value="all">').text(gt('All contacts')),
+                                $('<option value="all_lists">').text(gt('All distribution lists'))
                             )
                         )
                     )
@@ -405,6 +406,7 @@ define('io.ox/contacts/addressbook/popup', [
                     var folder = this.folder;
                     result = _(result).filter(function (item) {
                         if (folder === 'all') return item.folder_id !== collected_id;
+                        if (folder === 'all_lists') return item.list;
                         return item.folder_id === folder;
                     });
                     // render
@@ -463,13 +465,16 @@ define('io.ox/contacts/addressbook/popup', [
                 }
 
                 baton.view.listenTo(baton.view.listView, 'selection:change', function () {
-                    var array = _(selection).keys(),
+
+                    var array = this.flattenItems(_(selection).keys()),
+                        summary = this.$('.selection-summary').empty(),
                         n = array.length,
-                        hasItems = !!n,
-                        summary = this.$('.selection-summary').empty();
+                        hasItems = !!n;
+
                     summary.toggle(hasItems);
                     if (!hasItems) return;
-                    var addresses = _(this.resolveItems(array)).pluck('email').join(', ');
+
+                    var addresses = _(array).pluck('email').join(', ');
                     summary.append(
                         $('<div>').append(
                             $('<span class="count pull-left">').text(
@@ -528,30 +533,17 @@ define('io.ox/contacts/addressbook/popup', [
                 }, {});
                 // get defaults
                 options = _.extend({
-                    offset: 0,
-                    limit: options.isSearch ? LIMITS.search : LIMITS.render
+                    limit: options.isSearch ? LIMITS.search : LIMITS.render,
+                    offset: 0
                 }, options);
                 // get subset; don't draw more than n items by default
                 var subset = list.slice(options.offset, options.limit),
                     $el = this.$('.list-view');
                 // clear if offset is zero
-                if (options.offset === 0) $el[0].innerHTML = ''; else $el.find('.limit').remove();
+                if (options.offset === 0) $el[0].innerHTML = '';
                 $el[0].innerHTML += template({ list: subset });
-                if (list.length > options.limit) {
-                    $el.append(
-                        $('<li class="limit">').text(
-                            //#. %1$d and %2$d are both numbers; usually > 100; never singular
-                            gt('%1$d contacts found. This list is limited to %2$d items.', list.length, options.limit)
-                        )
-                        .append(
-                            $('<br>'),
-                            $('<a href="#" role="button">')
-                            .on('click', { list: list, options: options }, $.proxy(showMoreItems, this))
-                            .text(gt('Show more'))
-                        )
-                    );
-                }
                 if (options.offset === 0) $el.scrollTop(0);
+                $el.data({ list: list, options: options });
                 this.$('.contact-picture[data-original]').each(function () {
                     // appeared before? show now; no lazyload; better experience
                     var node = $(this), url = node.attr('data-original');
@@ -562,16 +554,35 @@ define('io.ox/contacts/addressbook/popup', [
                 this.listView.selection.set(ids);
             };
 
-            function showMoreItems(e) {
-                e.preventDefault();
-                var options = e.data.options;
-                this.$('.list-view .limit').addClass('invisible');
-                setTimeout(function () {
-                    options.offset = options.limit;
-                    options.limit = options.limit + LIMITS.more;
-                    this.renderItems(e.data.list, options);
-                }.bind(this), 0);
-            }
+            this.renderMoreItems = function () {
+                var data = $list.data(), options = data.options;
+                if (options.limit >= data.list.length) return;
+                options.offset = options.limit;
+                options.limit = options.limit + LIMITS.more;
+                this.renderItems(data.list, options);
+            };
+
+            var $list = $();
+
+            // use throttle instead of debounce in order to respond during scroll momentum
+            var onScroll = _.throttle(function () {
+
+                var height = $list.outerHeight(),
+                    scrollTop = $list[0].scrollTop,
+                    scrollHeight = $list[0].scrollHeight,
+                    bottom = scrollTop + height;
+
+                if (bottom / scrollHeight < 0.80) return;
+
+                var defer = window.requestAnimationFrame || window.setTimeout;
+                defer(this.renderMoreItems.bind(this));
+
+            }, 20);
+
+            this.on('open', function () {
+                $list = this.$('.list-view');
+                $list.on('scroll', $.proxy(onScroll, this));
+            });
 
             this.resolveItems = function (ids) {
                 return _(ids)
@@ -580,6 +591,29 @@ define('io.ox/contacts/addressbook/popup', [
                     .compact()
                     .value();
             };
+
+            this.flattenItems = function (ids) {
+                return flatten(this.resolveItems(ids));
+            };
+
+            function flatten(list) {
+                return _(list)
+                    .chain()
+                    .map(function (item) {
+                        if (item.list) return flatten(item.list);
+                        var name = item.display_name, mail = item.mail || item.email;
+                        return {
+                            array: [name || null, mail || null],
+                            display_name: name,
+                            id: item.id,
+                            folder_id: item.folder_id,
+                            email: mail
+                        };
+                    }, this)
+                    .flatten()
+                    .uniq(function (item) { return item.email; })
+                    .value();
+            }
         })
         .on({
             'close': function () {
@@ -590,31 +624,13 @@ define('io.ox/contacts/addressbook/popup', [
             },
             'select': function () {
                 var ids = _(this.selection).keys();
-                if (_.isFunction(callback)) callback(reduce(this.resolveItems(ids)));
+                if (_.isFunction(callback)) callback(this.flattenItems(ids));
             }
         })
         .addCancelButton()
         //#. Context: Add selected contacts; German "Auswählen", for example
         .addButton({ label: gt.pgettext('select-contacts', 'Select'), action: 'select' })
         .open();
-    }
-
-    function reduce(list) {
-        return _(list)
-            .chain()
-            .map(function (item) {
-                if (item.list) return reduce(item.list);
-                var name = item.display_name, mail = item.mail || item.email;
-                return {
-                    array: [name || null, mail || null],
-                    display_name: name,
-                    id: item.id,
-                    folder_id: item.folder_id,
-                    email: mail
-                };
-            })
-            .flatten()
-            .value();
     }
 
     /* Debug lines
