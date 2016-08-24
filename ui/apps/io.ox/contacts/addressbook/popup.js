@@ -565,8 +565,7 @@ define('io.ox/contacts/addressbook/popup', [
 
             var $list = $();
 
-            // use throttle instead of debounce in order to respond during scroll momentum
-            var onScroll = _.throttle(function () {
+            var onScroll = _.debounce(function () {
 
                 var height = $list.outerHeight(),
                     scrollTop = $list[0].scrollTop,
@@ -578,7 +577,7 @@ define('io.ox/contacts/addressbook/popup', [
                 var defer = window.requestAnimationFrame || window.setTimeout;
                 defer(this.renderMoreItems.bind(this));
 
-            }, 20);
+            }, 50);
 
             this.on('open', function () {
                 $list = this.$('.list-view');
