@@ -42,7 +42,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 collection[method](data);
             });
             var isComplete = (type === 'load' && data.length < limit) || (type === 'paginate' && data.length <= 1);
-            if (isComplete) collection.trigger('complete');
+            collection.trigger('complete', isComplete);
             collection.trigger(type);
         }
 

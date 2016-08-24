@@ -101,8 +101,8 @@ define('io.ox/core/tk/list',
 
         }, 50),
 
-        onComplete: function () {
-            this.toggleComplete(true);
+        onComplete: function (complete) {
+            this.toggleComplete(complete !== false); // default: true
         },
 
         // load more data (wraps paginate call)
