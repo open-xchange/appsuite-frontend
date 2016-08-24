@@ -244,9 +244,8 @@ define('io.ox/contacts/addressbook/popup', [
     function sorter(a, b) {
         if (a.list && !b.list) return +1;
         if (b.list && !a.list) return -1;
-        // asc
-        if (a.sort_name === b.sort_name) return 0;
-        return b.sort_name < a.sort_name ? +1 : -1;
+        // asc with locale compare
+        return a.sort_name.localeCompare(b.sort_name);
     }
 
     //
@@ -316,6 +315,8 @@ define('io.ox/contacts/addressbook/popup', [
                             if (!sections[id] || !section.length) return $();
                             return $('<optgroup>').attr('label', sections[id]).append(
                                 _(section).map(function (folder) {
+                                    // skip strange broken folders
+                                    if (!folder.id || !folder.title) return $();
                                     count++;
                                     return $('<option>').val(folder.id).text(folder.title);
                                 })
@@ -347,7 +348,7 @@ define('io.ox/contacts/addressbook/popup', [
                 this.append(view.listView.render().$el);
             },
             footer: function (baton) {
-                baton.view.$('.modal-footer').before(
+                baton.view.$('.modal-footer').prepend(
                     $('<div class="selection-summary">').hide()
                 );
             },

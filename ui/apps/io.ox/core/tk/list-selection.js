@@ -167,6 +167,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 var node = items.last().attr('tabindex', '0');
                 if (focus) node.focus();
             }
+
+            this.triggerChange();
         },
 
         triggerAction: function (e) {
