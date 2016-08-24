@@ -172,8 +172,8 @@ define('io.ox/core/tk/list', [
             if (!this.complete) this.onScroll();
         },
 
-        onComplete: function () {
-            this.toggleComplete(true);
+        onComplete: function (complete) {
+            this.toggleComplete(complete !== false); // default: true
         },
 
         // load more data (wraps paginate call)
