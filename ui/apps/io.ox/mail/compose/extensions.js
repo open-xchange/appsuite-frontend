@@ -289,7 +289,8 @@ define('io.ox/mail/compose/extensions', [
 
                 if (!_.device('smartphone')) {
                     node.append(
-                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-plus"></i></a>')
+                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-plus" aria-hidden="true"></i></a>')
+                        .attr('aria-label', gt('Click to select contacts'))
                         .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
                     );
                 }
