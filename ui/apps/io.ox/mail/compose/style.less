@@ -77,19 +77,26 @@
 
     .recipient-actions {
         position: absolute;
-        top: 0;
-        right: 0;
-        padding-right: 15px;
-        margin-top: 5px;
+        top: 7px;
+        right: 44px;
 
         a {
-            margin-right: 3px;
+            margin-right: 4px;
             padding: 2px;
             color: @label-default-bg;
             text-decoration: none;
         }
 
-        @media (max-width: 767px) { padding-right: 10px; }
+        @media (max-width: 767px) { right: 10px; }
+    }
+
+    .open-addressbook-popup {
+        position: absolute;
+        top: 5px;
+        right: 24px;
+        padding: 2px;
+        color: @label-default-bg;
+        text-decoration: none;
     }
 
     .contenteditable-editor {
@@ -189,7 +196,8 @@
 
     // Bootstrap Tokenfield overrides
     // space for cc/bcc toggle
-    .tokenfield.form-control.to { padding-right: 65px; }
+    .tokenfield.form-control { padding-right: 40px; }
+    .tokenfield.form-control.to { padding-right: 100px; }
 
     .hidden-file-picker {
         // same as .dropdown-menu > li > a

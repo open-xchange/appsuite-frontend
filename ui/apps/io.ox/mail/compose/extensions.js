@@ -248,7 +248,7 @@ define('io.ox/mail/compose/extensions', [
 
             if (attr === 'reply_to' && settings.get('showReplyTo/configurable', false) === false) return;
 
-            function onClickLabel(e) {
+            function openAddressBookPicker(e) {
                 e.preventDefault();
                 var attr = e.data.attr, model = e.data.model;
                 require(['io.ox/contacts/addressbook/popup'], function (popup) {
@@ -281,11 +281,17 @@ define('io.ox/mail/compose/extensions', [
                         ariaLabel: tokenfieldTranslations['aria' + attr]
                     });
 
-                var node = $('<div class="col-xs-11">').append(
-                    tokenfieldView.$el
-                );
+                var node = $('<div class="col-xs-11">').append(tokenfieldView.$el);
+
                 if (attr === 'to') {
                     ext.point(POINT + '/recipientActions').invoke('draw', node);
+                }
+
+                if (!_.device('smartphone')) {
+                    node.append(
+                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-plus"></i></a>')
+                        .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
+                    );
                 }
 
                 var title = gt('Click to select contacts');
@@ -300,7 +306,7 @@ define('io.ox/mail/compose/extensions', [
                                 'aria-label': title,
                                 'title': title
                             })
-                            .on('click', { attr: attr, model: baton.model }, onClickLabel)
+                            .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
                             .tooltip({ animation: false, delay: 0, placement: 'bottom' })
                         ),
                         node
