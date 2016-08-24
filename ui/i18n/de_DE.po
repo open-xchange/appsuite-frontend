@@ -55,6 +55,15 @@ msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d Woche"
 msgstr[1] "%1$d Wochen"
 
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$d messages selected"
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d Nachrichten markiert"
+msgstr[1] "%1$d Nachrichten markiert"
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -1822,6 +1831,12 @@ msgstr "Löschen"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Feldeintrag löschen"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Folder actions"
+msgid "Clear selection"
+msgstr "Ordner-Aktionen"
 
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
@@ -7708,6 +7723,10 @@ msgstr "Liste anzeigen"
 msgid "Show message size"
 msgstr "Nachrichtengröße anzeigen"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Show more"
+msgstr "Weitere anzeigen"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Namen anzeigen"
@@ -9057,10 +9076,6 @@ msgstr "Panel an/aus"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Morgen"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Zu viele Kontakte in Ihrem Adressbuch."
 
 #. Emoji category
 #. Japanese: ツール
@@ -12068,9 +12083,6 @@ msgstr "JJJJ"
 #~ msgid "Float Right"
 #~ msgstr "Rechts im Text"
 
-#~ msgid "Folder actions"
-#~ msgstr "Ordner-Aktionen"
-
 #~ msgid "Folder admin: "
 #~ msgstr "Ordneradministrator: "
 
@@ -13442,9 +13454,6 @@ msgstr "JJJJ"
 #~ msgid "Show legal information"
 #~ msgstr "Rechtliche Informationen anzeigen"
 
-#~ msgid "Show more"
-#~ msgstr "Weitere anzeigen"
-
 #~ msgid "Show more comments"
 #~ msgstr "Weitere Kommentare anzeigen"
 
@@ -14271,6 +14280,9 @@ msgstr "JJJJ"
 
 #~ msgid "Tonga"
 #~ msgstr "Tonga"
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Zu viele Kontakte in Ihrem Adressbuch."
 
 #~ msgid "Top and bottom borders"
 #~ msgstr "Oberer und unterer Rand"

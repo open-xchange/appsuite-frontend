@@ -58,6 +58,16 @@ msgstr[0] "%1$d týždeň"
 msgstr[1] "%1$d týždne"
 msgstr[2] "%1$d týždňov"
 
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$d messages selected"
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d správ vybraných"
+msgstr[1] "%1$d správ vybraných"
+msgstr[2] "%1$d správ vybraných"
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -1838,6 +1848,12 @@ msgstr "Vyčistiť"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Vyprázdniť pole"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "please select"
+msgid "Clear selection"
+msgstr "prosím, vyberte"
 
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
@@ -7705,6 +7721,10 @@ msgstr "Zobraziť zoznam"
 msgid "Show message size"
 msgstr "Zobraziť veľkosť správy"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Show more"
+msgstr "Zobraziť ďalšie"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Zobraziť mená"
@@ -9036,10 +9056,6 @@ msgstr "Prepnúť panel"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Zajtra"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Príliš veľa kontaktov vo vašom adresári."
 
 #. Emoji category
 #. Japanese: ツール
@@ -14965,9 +14981,6 @@ msgstr "RRRR"
 #~ msgid "Show legal information"
 #~ msgstr "Zobraziť právne informácie"
 
-#~ msgid "Show more"
-#~ msgstr "Zobraziť ďalšie"
-
 #~ msgid "Show more comments"
 #~ msgstr "Zobraziť ďalšie komentáre"
 
@@ -16064,6 +16077,9 @@ msgstr "RRRR"
 #~ msgid "Tonga"
 #~ msgstr "Tonga"
 
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Príliš veľa kontaktov vo vašom adresári."
+
 #~ msgid "Too short"
 #~ msgstr "Príliš krátke"
 
@@ -16894,9 +16910,6 @@ msgstr "RRRR"
 
 #~ msgid "organized by %s"
 #~ msgstr "organizuje %s"
-
-#~ msgid "please select"
-#~ msgstr "prosím, vyberte"
 
 #~ msgid "predefined"
 #~ msgstr "preddefinované"

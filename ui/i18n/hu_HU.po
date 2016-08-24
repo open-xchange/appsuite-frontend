@@ -52,6 +52,15 @@ msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d hét"
 msgstr[1] "%1$d hét"
 
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$d messages selected"
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d üzenet kijelölve"
+msgstr[1] "%1$d üzenet kijelölve"
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -1815,6 +1824,12 @@ msgstr "Törlés"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
+msgstr "Mező törlése"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Clear field"
+msgid "Clear selection"
 msgstr "Mező törlése"
 
 #: apps/io.ox/help/center.js module:io.ox/help
@@ -7678,6 +7693,12 @@ msgstr "Lista megjelenítése"
 msgid "Show message size"
 msgstr "Üzenet méretének megjelenítése"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Show names"
+msgid "Show more"
+msgstr "Nevek megjelenítése"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Nevek megjelenítése"
@@ -8996,10 +9017,6 @@ msgstr "Panel átváltása"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Holnap"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Túl sok névjegy van a címjegyzékben."
 
 #. Emoji category
 #. Japanese: ツール
@@ -10971,6 +10988,9 @@ msgstr "yyyy"
 
 #~ msgid "Toggle checkboxes"
 #~ msgstr "Kijelölések átváltása"
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Túl sok névjegy van a címjegyzékben."
 
 #~ msgid ""
 #~ "Unable to connect to mail server. Possible reasons: the mail server is "

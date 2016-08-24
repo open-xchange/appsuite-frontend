@@ -50,6 +50,15 @@ msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d viikko"
 msgstr[1] "%1$d viikkoa"
 
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$d messages selected"
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d viestiä valittuna"
+msgstr[1] "%1$d viestiä valittuna"
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -1801,6 +1810,12 @@ msgstr "tyhjennä"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
+msgstr "Tyhjennä kenttä"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Clear field"
+msgid "Clear selection"
 msgstr "Tyhjennä kenttä"
 
 #: apps/io.ox/help/center.js module:io.ox/help
@@ -7644,6 +7659,10 @@ msgstr "Näytä luettelo"
 msgid "Show message size"
 msgstr "Näytä viestin koko"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Show more"
+msgstr "Näytä enemmän"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Näytä nimet"
@@ -8961,10 +8980,6 @@ msgstr "Vaihteluvaihtoehdot"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Huomenna"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Osoitekirjassasi on liian monta yhteystietoa."
 
 #. Emoji category
 #. Japanese: ツール
@@ -11731,9 +11746,6 @@ msgstr "vvvv"
 #~ msgid "Show legal information"
 #~ msgstr "Näytä oikeudellinen tiedote"
 
-#~ msgid "Show more"
-#~ msgstr "Näytä enemmän"
-
 #~ msgid "Show more comments"
 #~ msgstr "Näytä lisää kommentteja"
 
@@ -12311,6 +12323,9 @@ msgstr "vvvv"
 
 #~ msgid "Toggle search"
 #~ msgstr "Vaihtele hakua"
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Osoitekirjassasi on liian monta yhteystietoa."
 
 #~ msgid "Tour: Coming from OX6"
 #~ msgstr "Esittely: Tulossa OX6"

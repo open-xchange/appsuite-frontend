@@ -52,6 +52,15 @@ msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d uge"
 msgstr[1] "%1$d uger"
 
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$d messages selected"
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d beskeder valgt"
+msgstr[1] "%1$d beskeder valgt"
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -1809,6 +1818,12 @@ msgstr "Ryd"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
+msgstr "Ryd felt"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Clear field"
+msgid "Clear selection"
 msgstr "Ryd felt"
 
 #: apps/io.ox/help/center.js module:io.ox/help
@@ -7653,6 +7668,10 @@ msgstr "Vis liste"
 msgid "Show message size"
 msgstr "Vis beskedestørrelse"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Show more"
+msgstr "Vis mere"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Vis navne"
@@ -8965,10 +8984,6 @@ msgstr "Slå panel til/fra"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "I morgen"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "For mange kontakter i din adressebog."
 
 #. Emoji category
 #. Japanese: ツール
@@ -11962,9 +11977,6 @@ msgstr "åååå"
 #~ msgid "Show legal information"
 #~ msgstr "Vis juridisk information"
 
-#~ msgid "Show more"
-#~ msgstr "Vis mere"
-
 #~ msgid "Show more comments"
 #~ msgstr "Vis flere kommentarer"
 
@@ -12554,6 +12566,9 @@ msgstr "åååå"
 
 #~ msgid "Toggle search"
 #~ msgstr "Slå søgning til/fra"
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "For mange kontakter i din adressebog."
 
 #~ msgid "Touchselect on/off"
 #~ msgstr "Pegevalg til/fra"

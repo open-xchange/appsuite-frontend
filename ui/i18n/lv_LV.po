@@ -55,6 +55,16 @@ msgstr[0] "%1$d nedēļa"
 msgstr[1] "%1$d nedēļas"
 msgstr[2] "%1$d nedēļas"
 
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$d messages selected"
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "Iezīmēti %1$d ziņojumi"
+msgstr[1] "Iezīmēti %1$d ziņojumi"
+msgstr[2] "Iezīmēti %1$d ziņojumi"
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -1835,6 +1845,12 @@ msgstr "Tīrīt"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Tīrīt lauku"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "please select"
+msgid "Clear selection"
+msgstr "lūdzu izvēlieties"
 
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
@@ -7706,6 +7722,10 @@ msgstr "Rādīt sarakstu"
 msgid "Show message size"
 msgstr "Rādīt ziņojuma izmēru"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Show more"
+msgstr "Rādīt vairāk"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Rādīt vārdus"
@@ -9035,10 +9055,6 @@ msgstr "Pārslēgt paneli"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Rītdien"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Pārāk daudz kontaktpersonu adrešu grāmatā."
 
 #. Emoji category
 #. Japanese: ツール
@@ -14987,9 +15003,6 @@ msgstr "yyyy"
 #~ msgid "Show legal information"
 #~ msgstr "Rādīt juridisko informāciju"
 
-#~ msgid "Show more"
-#~ msgstr "Rādīt vairāk"
-
 #~ msgid "Show more comments"
 #~ msgstr "Rādīt vairāk komentārus"
 
@@ -16113,6 +16126,9 @@ msgstr "yyyy"
 #~ msgid "Tonga"
 #~ msgstr "Tonga"
 
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Pārāk daudz kontaktpersonu adrešu grāmatā."
+
 #~ msgid "Too short"
 #~ msgstr "Pārāk īss"
 
@@ -16953,9 +16969,6 @@ msgstr "yyyy"
 
 #~ msgid "organized by %s"
 #~ msgstr "Organizē %s"
-
-#~ msgid "please select"
-#~ msgstr "lūdzu izvēlieties"
 
 #~ msgid "predefined"
 #~ msgstr "pre-definēts"

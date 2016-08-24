@@ -55,6 +55,15 @@ msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d semaine"
 msgstr[1] "%1$d semaines"
 
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$d messages selected"
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d messages sélectionnés"
+msgstr[1] "%1$d messages sélectionnés"
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -1828,6 +1837,12 @@ msgstr "Réinitialiser"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
+msgstr "Réinitialiser le champ"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Clear field"
+msgid "Clear selection"
 msgstr "Réinitialiser le champ"
 
 #: apps/io.ox/help/center.js module:io.ox/help
@@ -7735,6 +7750,10 @@ msgstr "Afficher la liste"
 msgid "Show message size"
 msgstr "Afficher la taille du message"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Show more"
+msgstr "Afficher plus"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Afficher les noms"
@@ -9088,10 +9107,6 @@ msgstr "Afficher/cacher le panneau"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Demain"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Trop de contacts dans votre carnet d'adresses."
 
 #. Emoji category
 #. Japanese: ツール
@@ -12485,9 +12500,6 @@ msgstr "aaaa"
 #~ msgid "Show legal information"
 #~ msgstr "Afficher les informations légales"
 
-#~ msgid "Show more"
-#~ msgstr "Afficher plus"
-
 #~ msgid "Show more comments"
 #~ msgstr "Afficher plus de commentaires"
 
@@ -13185,6 +13197,9 @@ msgstr "aaaa"
 
 #~ msgid "Toggle search"
 #~ msgstr "Recherche oui/non"
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Trop de contacts dans votre carnet d'adresses."
 
 #~ msgid "Touchselect on/off"
 #~ msgstr "Sélection par toucher activée/désactivée"

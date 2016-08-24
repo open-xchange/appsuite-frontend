@@ -2657,6 +2657,19 @@ msgstr ""
 msgid "All contacts"
 msgstr ""
 
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "Clear selection"
+msgstr ""
+
 #. %1$d and %2$d are both numbers; usually > 100; never singular
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
@@ -2665,7 +2678,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
-msgid "Too many contacts in your address book."
+msgid "Show more"
 msgstr ""
 
 #. Context: Add selected contacts; German "Auswählen", for example

@@ -56,6 +56,16 @@ msgstr[0] "%1$d неделя"
 msgstr[1] "%1$d недели"
 msgstr[2] "%1$d недель"
 
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$d messages selected"
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d выбрано"
+msgstr[1] "%1$d выбрано"
+msgstr[2] "%1$d выбрано"
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -1830,6 +1840,12 @@ msgstr "Очистить"
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
+msgstr "Очистить поле"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Clear field"
+msgid "Clear selection"
 msgstr "Очистить поле"
 
 #: apps/io.ox/help/center.js module:io.ox/help
@@ -7678,6 +7694,10 @@ msgstr "Показать список"
 msgid "Show message size"
 msgstr "Показать размер сообщения"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Show more"
+msgstr "Больше..."
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Показать имена"
@@ -8994,10 +9014,6 @@ msgstr "Переключить панель"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Завтра"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Ваша адресная книга содержит слишком много контактов."
 
 #. Emoji category
 #. Japanese: ツール
@@ -12077,9 +12093,6 @@ msgstr "гггг"
 #~ msgid "Show legal information"
 #~ msgstr "Показать юридическое уведомление"
 
-#~ msgid "Show more"
-#~ msgstr "Больше..."
-
 #~ msgid "Show more comments"
 #~ msgstr "Развернуть комментарии"
 
@@ -12694,6 +12707,9 @@ msgstr "гггг"
 
 #~ msgid "Toggle search"
 #~ msgstr "Включить режим поиска"
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Ваша адресная книга содержит слишком много контактов."
 
 #~ msgid "Touchselect on/off"
 #~ msgstr "Сенсорный выбор вкл/выкл"

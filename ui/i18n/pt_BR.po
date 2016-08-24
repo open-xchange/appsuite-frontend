@@ -53,6 +53,15 @@ msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d semana"
 msgstr[1] "%1$d semanas"
 
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$d messages selected"
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d mensagens selecionadas"
+msgstr[1] "%1$d mensagens selecionadas"
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -1815,6 +1824,12 @@ msgstr "Limpar"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Limpar campo"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "please select"
+msgid "Clear selection"
+msgstr "por favor, selecione"
 
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
@@ -7677,6 +7692,10 @@ msgstr "Exibir lista"
 msgid "Show message size"
 msgstr "Exibir tamanho da mensagem"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Show more"
+msgstr "Exibir mais"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Exibir nomes"
@@ -9014,10 +9033,6 @@ msgstr "Alternar painel"
 #: module:plugins/portal
 msgid "Tomorrow"
 msgstr "Amanhã"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Muitos contatos em seu catálogo de endereços."
 
 #. Emoji category
 #. Japanese: ツール
@@ -14371,9 +14386,6 @@ msgstr "aaaa"
 #~ msgid "Show legal information"
 #~ msgstr "Exibir informações legais"
 
-#~ msgid "Show more"
-#~ msgstr "Exibir mais"
-
 #~ msgid "Show more comments"
 #~ msgstr "Exibir mais comentários"
 
@@ -15400,6 +15412,9 @@ msgstr "aaaa"
 #~ msgid "Tonga"
 #~ msgstr "Tonga"
 
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Muitos contatos em seu catálogo de endereços."
+
 #~ msgid "Too short"
 #~ msgstr "Muito curto"
 
@@ -16139,9 +16154,6 @@ msgstr "aaaa"
 
 #~ msgid "organized by %s"
 #~ msgstr "organizado por %s"
-
-#~ msgid "please select"
-#~ msgstr "por favor, selecione"
 
 #~ msgid "predefined"
 #~ msgstr "predefinido"
