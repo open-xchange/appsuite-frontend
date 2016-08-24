@@ -72,8 +72,11 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             });
 
             // track completeness
-            collection.complete = (type === 'load' && data.length < PAGE_SIZE) || (type === 'paginate' && data.length <= 1);
-            if (collection.complete) collection.trigger('complete');
+            var complete = (type === 'load' && data.length < PAGE_SIZE) || (type === 'paginate' && data.length <= 1);
+            if (complete !== collection.complete) {
+                collection.complete = complete;
+                collection.trigger('complete', complete);
+            }
             collection.trigger(type);
         }
 
