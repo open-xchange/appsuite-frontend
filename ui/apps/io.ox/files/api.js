@@ -1241,6 +1241,10 @@ define('io.ox/files/api', [
 
                 case 'copy':
                 case 'move':
+                    // cleanup folder
+                    list = _.reject(list, function (item) {
+                        return item.folder_id === 'folder';
+                    });
                     var targetFolderId = arguments[2];
                     // propagate proper event
                     api.trigger(type, list, targetFolderId);
