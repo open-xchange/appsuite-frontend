@@ -67,11 +67,6 @@ msgid_plural "%1$d attachments"
 msgstr[0] "%1$d adjunt"
 msgstr[1] "%1$d adjunts"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr ""
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
@@ -875,6 +870,10 @@ msgstr "Afegeix nota"
 msgid "Add on %s"
 msgstr "Afegeix %s"
 
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Add original message as attachment"
+msgstr ""
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Afegeix participant/recurs"
@@ -1065,6 +1064,12 @@ msgstr "Afegeix contacte"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
 msgstr "Tot el dia"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "All distribution lists"
+msgstr "Afegeix llista de distribució"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #, fuzzy
@@ -2202,7 +2207,8 @@ msgstr "Conté"
 msgid "Content"
 msgstr ""
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Continue"
 msgstr "Continua"
 
@@ -4868,6 +4874,14 @@ msgstr "Llista"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
 msgstr "Vista de llista"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Load full mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Loading the full mail might lead to performance problems."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
@@ -7819,11 +7833,6 @@ msgstr "Mostra la llista"
 msgid "Show message size"
 msgstr "Mostra imatges"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-msgid "Show more"
-msgstr "Mostra com a"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #, fuzzy
 msgid "Show names"
@@ -9031,8 +9040,8 @@ msgstr "Aquest correu s'ha afegit al portal"
 msgid "This mail has no content"
 msgstr "Aquest correu no té contingut"
 
-#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
 #, fuzzy
 msgid "This message has been truncated due to size limitations."
 msgstr "Aquest correu s'ha afegit al portal"
@@ -11317,6 +11326,10 @@ msgstr ""
 #~| msgid "Show tiles"
 #~ msgid "Show file"
 #~ msgstr "Mostra els títols"
+
+#, fuzzy
+#~ msgid "Show more"
+#~ msgstr "Mostra com a"
 
 #~ msgid "Show more comments"
 #~ msgstr "Mostra'n més comentaris"

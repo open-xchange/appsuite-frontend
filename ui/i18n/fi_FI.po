@@ -65,11 +65,6 @@ msgid_plural "%1$d attachments"
 msgstr[0] "%1$d liite"
 msgstr[1] "%1$d liitteet"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr "%1$d yhteystietoa löydetty. Luettelo on rajattu  %2$d kohteeseen."
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -861,6 +856,12 @@ msgstr "Lisää merkintä"
 msgid "Add on %s"
 msgstr "%s lisää"
 
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show original message"
+msgid "Add original message as attachment"
+msgstr "Näytä alkuperäinen viesti"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Lisää osallistuja/resurssi"
@@ -1047,6 +1048,12 @@ msgstr "Lisää yhteystieto"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
 msgstr "Koko päivän"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "All distribution lists"
+msgstr "Lisää jakelulista"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -2151,7 +2158,8 @@ msgstr "Sisältää merkkejä"
 msgid "Content"
 msgstr "Sisältö"
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Continue"
 msgstr "Jatka"
 
@@ -4767,6 +4775,14 @@ msgstr "Lista"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
 msgstr "Listanäkymä"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Load full mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Loading the full mail might lead to performance problems."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
@@ -7659,10 +7675,6 @@ msgstr "Näytä luettelo"
 msgid "Show message size"
 msgstr "Näytä viestin koko"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Show more"
-msgstr "Näytä enemmän"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Näytä nimet"
@@ -8872,8 +8884,8 @@ msgstr "Tämä viesti on lisätty portaaliin"
 msgid "This mail has no content"
 msgstr "Tässä viestissä ei ole sisältöä"
 
-#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Tätä viestiä on lyhennetty kokorajoitusten vuoksi."
 
@@ -10571,6 +10583,9 @@ msgstr "vvvv"
 #~ msgid " is not a valid user or group."
 #~ msgstr "ei ole käypä käyttäjä tai ryhmä."
 
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr "%1$d yhteystietoa löydetty. Luettelo on rajattu  %2$d kohteeseen."
+
 #~ msgid "%1$s %2$s %3$s %4$s %5$s."
 #~ msgstr "%1$s %2$s %3$s %4$s %5$s."
 
@@ -11746,11 +11761,11 @@ msgstr "vvvv"
 #~ msgid "Show legal information"
 #~ msgstr "Näytä oikeudellinen tiedote"
 
+#~ msgid "Show more"
+#~ msgstr "Näytä enemmän"
+
 #~ msgid "Show more comments"
 #~ msgstr "Näytä lisää kommentteja"
-
-#~ msgid "Show original message"
-#~ msgstr "Näytä alkuperäinen viesti"
 
 #~ msgid "Show original publication"
 #~ msgstr "Näytä alkuperäinen julkaisu"

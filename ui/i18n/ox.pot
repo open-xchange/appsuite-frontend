@@ -2657,6 +2657,11 @@ msgstr ""
 msgid "All contacts"
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "All distribution lists"
+msgstr ""
+
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
@@ -2668,17 +2673,6 @@ msgstr[1] ""
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
 msgid "Clear selection"
-msgstr ""
-
-#. %1$d and %2$d are both numbers; usually > 100; never singular
-#: apps/io.ox/contacts/addressbook/popup.js
-#: module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr ""
-
-#: apps/io.ox/contacts/addressbook/popup.js
-#: module:io.ox/contacts
-msgid "Show more"
 msgstr ""
 
 #. Context: Add selected contacts; German "Auswählen", for example
@@ -4853,6 +4847,8 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
+#: apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Continue"
 msgstr ""
 
@@ -8829,6 +8825,28 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js
+#: apps/io.ox/mail/detail/view.js
+msgid "This message has been truncated due to size limitations."
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+msgid "Loading the full mail might lead to performance problems."
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+msgid "Load full mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+msgid "Add original message as attachment"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Mail saved as draft"
 msgstr ""
 
@@ -8880,12 +8898,6 @@ msgstr ""
 #: apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
 msgid "Tasks"
-msgstr ""
-
-#: apps/io.ox/mail/detail/mobileView.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js
-msgid "This message has been truncated due to size limitations."
 msgstr ""
 
 #: apps/io.ox/mail/detail/mobileView.js

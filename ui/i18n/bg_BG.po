@@ -68,11 +68,6 @@ msgid_plural "%1$d attachments"
 msgstr[0] "%1$d прикачен файл"
 msgstr[1] "%1$d прикачен файлове"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr ""
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
@@ -861,6 +856,10 @@ msgstr ""
 msgid "Add on %s"
 msgstr ""
 
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Add original message as attachment"
+msgstr ""
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr ""
@@ -1048,6 +1047,10 @@ msgstr "Добави прикачен файл"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
 msgstr "Цял ден"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "All distribution lists"
+msgstr ""
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #, fuzzy
@@ -2142,7 +2145,8 @@ msgstr "Съдържа"
 msgid "Content"
 msgstr "Съдържание"
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Continue"
 msgstr "Продължи"
 
@@ -4739,6 +4743,14 @@ msgstr "Лист"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Load full mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Loading the full mail might lead to performance problems."
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -7604,12 +7616,6 @@ msgstr "Покажи лист"
 msgid "Show message size"
 msgstr ""
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Show names"
-msgid "Show more"
-msgstr "Покажи имената"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Покажи имената"
@@ -8734,8 +8740,8 @@ msgstr ""
 msgid "This mail has no content"
 msgstr "Този мейл няма съдържание"
 
-#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr ""
 
@@ -10452,6 +10458,11 @@ msgstr ""
 
 #~ msgid "Send as mail"
 #~ msgstr "Изпрати като мейл"
+
+#, fuzzy
+#~| msgid "Show names"
+#~ msgid "Show more"
+#~ msgstr "Покажи имената"
 
 #~ msgid "remove"
 #~ msgstr "премахни"

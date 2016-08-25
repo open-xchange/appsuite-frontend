@@ -74,11 +74,6 @@ msgstr[0] "%1$d příloha"
 msgstr[1] "%1$d přílohy"
 msgstr[2] "%1$d příloh"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr "Nalezeno %1$d kontaktů. Tento seznam je omezen na %2$d položek."
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -896,6 +891,12 @@ msgstr "Přidat poznámku"
 msgid "Add on %s"
 msgstr "Přidat do %s"
 
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show original message"
+msgid "Add original message as attachment"
+msgstr "Zobrazit původní zprávu"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Přidat účastníka/zdroj"
@@ -1084,6 +1085,12 @@ msgstr "Všechny mé kontakty"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
 msgstr "Celý den"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "All distribution lists"
+msgstr "Přidat distribuční seznam"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -2179,7 +2186,8 @@ msgstr "Obsahuje"
 msgid "Content"
 msgstr "Obsah"
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Continue"
 msgstr "Pokračovat"
 
@@ -4792,6 +4800,14 @@ msgstr "Seznam"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
 msgstr "Seznam"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Load full mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Loading the full mail might lead to performance problems."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
@@ -7696,10 +7712,6 @@ msgstr "Zobrazit seznam"
 msgid "Show message size"
 msgstr "Zobrazit velikost zprávy"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Show more"
-msgstr "Zobrazit více"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Zobrazit jména"
@@ -8914,8 +8926,8 @@ msgstr "Tato zpráva byla přidána do portálu"
 msgid "This mail has no content"
 msgstr "Tato zpráva nemá žádný obsah"
 
-#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Tato zpráva byla zkrácena kvůli velikostnímu limitu."
 
@@ -10642,6 +10654,9 @@ msgstr "rrrr"
 #~ msgstr[0] "%1$d sloupec"
 #~ msgstr[1] "%1$d sloupce"
 #~ msgstr[2] "%1$d sloupců"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr "Nalezeno %1$d kontaktů. Tento seznam je omezen na %2$d položek."
 
 #~ msgid "%1$d row"
 #~ msgid_plural "%1$d rows"
@@ -17203,6 +17218,9 @@ msgstr "rrrr"
 #~ msgid "Show legal information"
 #~ msgstr "Zobrazit právní informace"
 
+#~ msgid "Show more"
+#~ msgstr "Zobrazit více"
+
 #~ msgid "Show more comments"
 #~ msgstr "Zobrazit více komentářů"
 
@@ -17211,9 +17229,6 @@ msgstr "rrrr"
 
 #~ msgid "Show name instead of E-Mail address in To and Cc fields:"
 #~ msgstr "Zobrazit jméno místo e-mailové adresy v polích Pro a Cc:"
-
-#~ msgid "Show original message"
-#~ msgstr "Zobrazit původní zprávu"
 
 #~ msgid "Show original publication"
 #~ msgstr "Zobrazit původní publikaci"

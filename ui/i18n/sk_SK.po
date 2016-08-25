@@ -75,11 +75,6 @@ msgstr[0] "%1$d príloha"
 msgstr[1] "%1$d prílohy"
 msgstr[2] "%1$d príloh"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr "Našlo sa %1$d kontaktov. Tento zoznam je obmedzený na %2$d položky."
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -894,6 +889,12 @@ msgstr "Pridať poznámku"
 msgid "Add on %s"
 msgstr "Pridať na %s"
 
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show original message"
+msgid "Add original message as attachment"
+msgstr "Zobraziť pôvodnú správu"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Pridať účastníkov/zdroje"
@@ -1082,6 +1083,12 @@ msgstr "Pridať člena"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
 msgstr "Celý deň"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "All distribution lists"
+msgstr "Pridať distribučný zoznam"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -2187,7 +2194,8 @@ msgstr "Obsahuje"
 msgid "Content"
 msgstr "Obsah"
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Continue"
 msgstr "Pokračovať"
 
@@ -4816,6 +4824,14 @@ msgstr "Zoznam"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
 msgstr "Zobrazenie zoznamu"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Load full mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Loading the full mail might lead to performance problems."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
@@ -7721,10 +7737,6 @@ msgstr "Zobraziť zoznam"
 msgid "Show message size"
 msgstr "Zobraziť veľkosť správy"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Show more"
-msgstr "Zobraziť ďalšie"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Zobraziť mená"
@@ -8948,8 +8960,8 @@ msgstr "Tento email bol pridaný do portálu"
 msgid "This mail has no content"
 msgstr "Tento email nemá žiadny obsah"
 
-#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Táto správa bola skrátená kvôli obmedzeniam veľkosti."
 
@@ -10680,6 +10692,9 @@ msgstr "RRRR"
 #~ msgstr[0] "%1$d stĺpec"
 #~ msgstr[1] "%1$d stĺpce"
 #~ msgstr[2] "%1$d stĺpcov"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr "Našlo sa %1$d kontaktov. Tento zoznam je obmedzený na %2$d položky."
 
 #~ msgid "%1$d row"
 #~ msgid_plural "%1$d rows"
@@ -14981,6 +14996,9 @@ msgstr "RRRR"
 #~ msgid "Show legal information"
 #~ msgstr "Zobraziť právne informácie"
 
+#~ msgid "Show more"
+#~ msgstr "Zobraziť ďalšie"
+
 #~ msgid "Show more comments"
 #~ msgstr "Zobraziť ďalšie komentáre"
 
@@ -14989,9 +15007,6 @@ msgstr "RRRR"
 
 #~ msgid "Show name instead of E-Mail address in To and Cc fields:"
 #~ msgstr "Zobraziť meno namiesto emailovej adresy v poliach Komu a Kópia:"
-
-#~ msgid "Show original message"
-#~ msgstr "Zobraziť pôvodnú správu"
 
 #~ msgid "Show original publication"
 #~ msgstr "Zobraziť pôvodnú publikáciu"

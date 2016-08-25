@@ -67,11 +67,6 @@ msgid_plural "%1$d attachments"
 msgstr[0] "%1$d 個附件"
 msgstr[1] "(%1$s) 附件"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr "找到 %1$d 位聯絡人，此清單僅能顯示 %2$d 個項目。"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -856,6 +851,12 @@ msgstr "新增筆記"
 msgid "Add on %s"
 msgstr "新增至 %s"
 
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show original message"
+msgid "Add original message as attachment"
+msgstr "顯示原始訊息"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "添加參與者/資源"
@@ -1040,6 +1041,12 @@ msgstr "新增號碼..."
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
 msgstr "整天"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "All distribution lists"
+msgstr "新增通訊組列表"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -2125,7 +2132,8 @@ msgstr "包含"
 msgid "Content"
 msgstr "內容"
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Continue"
 msgstr "繼續"
 
@@ -4703,6 +4711,14 @@ msgstr "列表"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
 msgstr "清單視圖"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Load full mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Loading the full mail might lead to performance problems."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
@@ -7563,10 +7579,6 @@ msgstr "顯示清單"
 msgid "Show message size"
 msgstr "顯示訊息大小"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Show more"
-msgstr "顯示更多"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "顯示名稱"
@@ -8728,8 +8740,8 @@ msgstr "此郵件已被加入入口畫面"
 msgid "This mail has no content"
 msgstr "此郵件沒有內容"
 
-#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "因為檔案大小限制，此郵件已被截短。"
 
@@ -10421,6 +10433,9 @@ msgstr "年"
 #~ msgid_plural "%1$d columns"
 #~ msgstr[0] "%1$d 欄"
 #~ msgstr[1] "%1$d 欄"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr "找到 %1$d 位聯絡人，此清單僅能顯示 %2$d 個項目。"
 
 #~ msgid "%1$d row"
 #~ msgid_plural "%1$d rows"
@@ -13304,14 +13319,14 @@ msgstr "年"
 #~ msgid "Show legal information"
 #~ msgstr "顯示法律資訊"
 
+#~ msgid "Show more"
+#~ msgstr "顯示更多"
+
 #~ msgid "Show more comments"
 #~ msgstr "顯示更多註解"
 
 #~ msgid "Show more..."
 #~ msgstr "顯示更多..."
-
-#~ msgid "Show original message"
-#~ msgstr "顯示原始訊息"
 
 #~ msgid "Show original publication"
 #~ msgstr "顯示原始發佈"

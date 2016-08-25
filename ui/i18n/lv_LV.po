@@ -72,12 +72,6 @@ msgstr[0] "%1$d pievienojums"
 msgstr[1] "%1$d pievienojumi"
 msgstr[2] "%1$d pievienojumi"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr ""
-"Atrastas %1$d kontaktpersonas. Šis saraksts ir ierobežots līdz %2$d vienībām."
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -892,6 +886,12 @@ msgstr "Pievienot piezīmi"
 msgid "Add on %s"
 msgstr "Pievienot %s"
 
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show original message"
+msgid "Add original message as attachment"
+msgstr "Rādīt sākotnējo ziņojumu"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Pievienot dalībnieku/resursu"
@@ -1080,6 +1080,12 @@ msgstr "Pievienot kontaktu"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
 msgstr "Visa diena"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "All distribution lists"
+msgstr "Pievienot izplatīšanas sarakstu"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -2184,7 +2190,8 @@ msgstr "Satur"
 msgid "Content"
 msgstr "Saturs"
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Continue"
 msgstr "Turpināt"
 
@@ -4814,6 +4821,14 @@ msgstr "Saraksts"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
 msgstr "Saraksta skats"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Load full mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Loading the full mail might lead to performance problems."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
@@ -7722,10 +7737,6 @@ msgstr "Rādīt sarakstu"
 msgid "Show message size"
 msgstr "Rādīt ziņojuma izmēru"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Show more"
-msgstr "Rādīt vairāk"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Rādīt vārdus"
@@ -8947,8 +8958,8 @@ msgstr "Šī vēstule ir pievienota portālam"
 msgid "This mail has no content"
 msgstr "Šai vēstulei nav satura"
 
-#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "Ziņojums ir saīsināts saskaņā ar apjoma ierobežojumiem."
 
@@ -10684,6 +10695,11 @@ msgstr "yyyy"
 #~ msgstr[0] "%1$d kolonna"
 #~ msgstr[1] "%1$d kolonnas"
 #~ msgstr[2] "%1$d kolonnas"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr ""
+#~ "Atrastas %1$d kontaktpersonas. Šis saraksts ir ierobežots līdz %2$d "
+#~ "vienībām."
 
 #~ msgid "%1$d row"
 #~ msgid_plural "%1$d rows"
@@ -15003,6 +15019,9 @@ msgstr "yyyy"
 #~ msgid "Show legal information"
 #~ msgstr "Rādīt juridisko informāciju"
 
+#~ msgid "Show more"
+#~ msgstr "Rādīt vairāk"
+
 #~ msgid "Show more comments"
 #~ msgstr "Rādīt vairāk komentārus"
 
@@ -15011,9 +15030,6 @@ msgstr "yyyy"
 
 #~ msgid "Show name instead of E-Mail address in To and Cc fields:"
 #~ msgstr "Rādīt vārdu e-pasta pasta adreses vietā Kam un CC laukos:"
-
-#~ msgid "Show original message"
-#~ msgstr "Rādīt sākotnējo ziņojumu"
 
 #~ msgid "Show original publication"
 #~ msgstr "Rādīt sākotnējo publikāciju"

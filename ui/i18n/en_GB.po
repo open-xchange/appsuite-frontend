@@ -68,11 +68,6 @@ msgid_plural "%1$d attachments"
 msgstr[0] "%1$d attachment"
 msgstr[1] "%1$d attachments"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr "%1$d contacts found. This list is limited to %2$d items."
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -866,6 +861,12 @@ msgstr "Add note"
 msgid "Add on %s"
 msgstr "Add on %s"
 
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show original message"
+msgid "Add original message as attachment"
+msgstr "Show original message"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Add participant/resource"
@@ -1054,6 +1055,12 @@ msgstr "Add contact"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
 msgstr "All day"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "All distribution lists"
+msgstr "Add distribution list"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -2152,7 +2159,8 @@ msgstr "Contains"
 msgid "Content"
 msgstr "Content"
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Continue"
 msgstr "Continue"
 
@@ -4781,6 +4789,14 @@ msgstr "List"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
 msgstr "List view"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Load full mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Loading the full mail might lead to performance problems."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
@@ -7673,10 +7689,6 @@ msgstr "Show list"
 msgid "Show message size"
 msgstr "Show message size"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Show more"
-msgstr "Show more"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Show names"
@@ -8884,8 +8896,8 @@ msgstr "This email has been added to the portal"
 msgid "This mail has no content"
 msgstr "This email has no content"
 
-#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "This message has been truncated due to size limitations."
 
@@ -10582,6 +10594,9 @@ msgstr "yyyy"
 #~ msgid " is not a valid user or group."
 #~ msgstr "is not a valid user or group."
 
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr "%1$d contacts found. This list is limited to %2$d items."
+
 #~ msgid "%1$s %2$s %3$s %4$s %5$s."
 #~ msgstr "%1$s %2$s %3$s %4$s %5$s."
 
@@ -12016,11 +12031,11 @@ msgstr "yyyy"
 #~ msgid "Show legal information"
 #~ msgstr "Show legal information"
 
+#~ msgid "Show more"
+#~ msgstr "Show more"
+
 #~ msgid "Show more comments"
 #~ msgstr "Show more comments"
-
-#~ msgid "Show original message"
-#~ msgstr "Show original message"
 
 #~ msgid "Show original publication"
 #~ msgstr "Show original publication"

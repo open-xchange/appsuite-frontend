@@ -62,11 +62,6 @@ msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
 msgstr[0] "%1$d 個の添付ファイル"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr "見つかった連絡先は %1$dこのリストは %2$d に制限されます。"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d day"
@@ -841,6 +836,12 @@ msgstr "メモを追加"
 msgid "Add on %s"
 msgstr "%s に追加"
 
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Show original message"
+msgid "Add original message as attachment"
+msgstr "元のメッセージを表示"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "出席者/設備を追加"
@@ -1029,6 +1030,12 @@ msgstr "メンバを追加する"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
 msgstr "終日"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "All distribution lists"
+msgstr "配布リストを追加"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -2123,7 +2130,8 @@ msgstr "次の文字列を含む"
 msgid "Content"
 msgstr "コンテンツ"
 
-#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
 msgid "Continue"
 msgstr "続行"
 
@@ -4745,6 +4753,14 @@ msgstr "リスト"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Listview"
 msgstr "リストビュー"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Load full mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Loading the full mail might lead to performance problems."
+msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
@@ -7617,10 +7633,6 @@ msgstr "リストを表示"
 msgid "Show message size"
 msgstr "メッセージのサイズを表示"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Show more"
-msgstr "詳細表示"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "名前を表示する"
@@ -8815,8 +8827,8 @@ msgstr "このメールをポータルに追加しました。"
 msgid "This mail has no content"
 msgstr "このメールには内容がありません。"
 
-#: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js apps/io.ox/mail/detail/view.js
 msgid "This message has been truncated due to size limitations."
 msgstr "サイズ制限のためそれを超えたメッセージの部分は切り捨てられます。"
 
@@ -10537,6 +10549,9 @@ msgstr "yyyy"
 #~ msgid_plural "%1$d columns"
 #~ msgstr[0] "%1$d 列"
 #~ msgstr[1] "%1$d 列"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr "見つかった連絡先は %1$dこのリストは %2$d に制限されます。"
 
 #~ msgid "%1$d row"
 #~ msgid_plural "%1$d rows"
@@ -16007,6 +16022,9 @@ msgstr "yyyy"
 #~ msgid "Show legal information"
 #~ msgstr "法的情報を表示"
 
+#~ msgid "Show more"
+#~ msgstr "詳細表示"
+
 #~ msgid "Show more comments"
 #~ msgstr "さらにコメントを表示"
 
@@ -16015,9 +16033,6 @@ msgstr "yyyy"
 
 #~ msgid "Show name instead of E-Mail address in To and Cc fields:"
 #~ msgstr "宛先と Cc の各フィールドでメール アドレスの代わりに名前を表示:"
-
-#~ msgid "Show original message"
-#~ msgstr "元のメッセージを表示"
 
 #~ msgid "Show original publication"
 #~ msgstr "元の公開を表示"
