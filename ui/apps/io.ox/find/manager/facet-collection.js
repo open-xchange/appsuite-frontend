@@ -120,7 +120,7 @@ define('io.ox/find/manager/facet-collection', [
                     // use cid here to keep server side id
                     // after model is created cid is mapped to model id
                     obj.cid = id;
-                    obj.index = index;
+                    obj.index = obj.index || index * 100;
                     valid.push(obj);
                 }
                 hash[id] = model ? 'update' : 'add';
