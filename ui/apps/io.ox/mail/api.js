@@ -1203,9 +1203,17 @@ define('io.ox/mail/api', [
             .then(function (text) {
                 // wait a moment, then update mail index
                 setTimeout(function () {
-                    resetFolderByType('inbox');
-                    resetFolderByType('sent');
-                    resetFolderByType('drafts');
+                    // reset collections and folder (to update total count)
+                    var affectedFolders = _(['inbox', 'sent', 'drafts'])
+                        .chain()
+                        .map(function (type) {
+                            var folders = accountAPI.getFoldersByType(type);
+                            pool.resetFolder(folders);
+                            return folders;
+                        })
+                        .flatten()
+                        .value();
+                    folderAPI.multiple(affectedFolders, { cache: false });
                     api.trigger('refresh.all');
                 }, DELAY);
                 // IE9
