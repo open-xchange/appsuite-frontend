@@ -35,43 +35,6 @@ define('io.ox/core/tk/list', [
         PTR_MAX_PULLDOWM =  300,    // max distance where the PTR node can be dragged to
         PTR_ROTATE_ANGLE =  360;    // total rotation angle of the spinner while pulled down
 
-    var queueRender = {
-
-        list: [],
-
-        mode: 'fastlane',
-
-        add: function (item) {
-            this.list.push(item);
-        },
-
-        hasNext: function () {
-            return this.list.length > 0;
-        },
-
-        next: function () {
-            return this.list.shift();
-        },
-
-        iterate: function (fn) {
-            var args = Array.prototype.slice.call(arguments, 1);
-            while (this.hasNext()) {
-                fn.apply(undefined, [].concat(this.next(), args));
-            }
-        },
-
-        fastlane: function (quantity, fn) {
-            if (this.mode === 'default') return;
-            if (this.list.length !== quantity) return;
-            fn.call();
-            this.mode = 'default';
-        },
-
-        reset: function () {
-            this.mode = 'fastlane';
-        }
-    };
-
     // helper
     function NOOP() { return $.when(); }
 
@@ -223,12 +186,26 @@ define('io.ox/core/tk/list', [
             }
         },
 
-        // bundle draws
         onAdd: function (model) {
-            queueRender.add(model);
-            // draw first 10 items immediately
-            queueRender.fastlane(10, this.renderListItems.bind(this));
-            this.renderListItemsDebounced();
+            this.idle();
+
+            var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
+                children = this.getItems(),
+                li = this.renderListItem(model);
+
+            // insert or append
+            if (index < children.length) {
+                children.eq(index).before(li);
+                // scroll position might have changed due to insertion
+                if (li[0].offsetTop <= this.el.scrollTop) {
+                    this.el.scrollTop += li.outerHeight(true);
+                }
+            } else {
+                this.$el.append(li);
+            }
+
+            // forward event
+            this.trigger('add', model, index);
         },
 
         onRemove: function (model) {
@@ -533,9 +510,6 @@ define('io.ox/core/tk/list', [
                 dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
             }
 
-            // add debouced version
-            this.renderListItemsDebounced = _.debounce(this.renderListItems, 200);
-
             this.ref = this.ref || options.ref;
             this.app = options.app;
             this.model = new Backbone.Model();
@@ -739,36 +713,6 @@ define('io.ox/core/tk/list', [
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
-        },
-
-        renderListItems: function () {
-            this.idle();
-
-            var list = this.getItems();
-
-            queueRender.iterate(function (model, children) {
-
-                var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
-                    li = this.renderListItem(model);
-
-                // insert or append
-                if (index < children.length) {
-                    children.eq(index).before(li);
-                    // scroll position might have changed due to insertion
-                    if (li[0].offsetTop <= this.el.scrollTop) {
-                        this.el.scrollTop += li.outerHeight(true);
-                    }
-                } else {
-                    this.$el.append(li);
-                }
-
-                // forward event
-                this.trigger('add', model, index);
-
-            }.bind(this), list);
-
-            // enable 'fastlane' for next chunk again
-            queueRender.reset();
         },
 
         getBaton: function (model) {
