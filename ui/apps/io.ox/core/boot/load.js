@@ -19,8 +19,9 @@ define('io.ox/core/boot/load', [
     'settings!io.ox/mail',
     'io.ox/core/capabilities',
     'io.ox/core/manifests',
+    'io.ox/core/sockets',
     'io.ox/core/moment'
-], function (themes, util, http, coreSettings, mailSettings, capabilities, manifests) {
+], function (themes, util, http, coreSettings, mailSettings, capabilities, manifests, socket) {
 
     'use strict';
 
@@ -30,6 +31,7 @@ define('io.ox/core/boot/load', [
         util.cleanUp();
 
         prefetch();
+        socketSetup();
         applyHighContrast();
         loadUserTheme();
 
@@ -127,6 +129,12 @@ define('io.ox/core/boot/load', [
                 ox.rampup['mail/' + _.param(params)] = data;
             });
         }
+    }
+
+    function socketSetup() {
+        socket.getSocket().done(function (socket) {
+            console.log('got a socket!', socket);
+        });
     }
 
     function applyHighContrast() {

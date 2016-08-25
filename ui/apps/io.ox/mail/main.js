@@ -31,7 +31,7 @@ define('io.ox/mail/main', [
     'io.ox/core/folder/view',
     'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
-    'static/3rd.party/socket.io.js',
+    'io.ox/core/sockets',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'io.ox/mail/actions',
@@ -41,7 +41,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, io, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, sockets, gt, settings) {
 
     'use strict';
 
@@ -1844,30 +1844,15 @@ define('io.ox/mail/main', [
                 });
             });
         },
-        'socket.io': function () {
-            console.log('settings up socket.io');
-            window.io = io;
-
-            var socket = io.connect('http://localhost:8009/?session=' + ox.session, { transports: ['websocket'] });
-
-            socket.on('connect', function () {
-                console.log('connected!');
+        'socket.io': function (app) {
+            sockets.getSocket().done(function (socket) {
+                socket.on('ox:mail:new', function () {
+                    console.info('New mail!');
+                    api.refresh();
+                });
+                window.socket = app.socket = socket;
             });
 
-            socket.on('connect_error', function (err) {
-                console.log('error during connect!', err);
-            });
-
-            socket.on('disconnect', function (err) {
-                console.log('disconnect!', err);
-            });
-
-            socket.on('ox:mail:new', function () {
-                console.log('got new mail event via socket');
-                api.refresh();
-            });
-
-            window.socket = app.socket = socket;
         }
     });
 
