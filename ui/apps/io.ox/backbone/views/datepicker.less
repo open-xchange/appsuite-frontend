@@ -1,0 +1,115 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.date-picker {
+
+    @black: #333;
+    @gray: #707070;
+    @hover: #eee;
+    @focus: #555;
+    @red:   #a00;
+
+    display: none;
+    position: absolute;
+    width: 258px;
+    min-height: 160px;
+    padding: 16px;
+    line-height: 16px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    outline: 0;
+    cursor: default;
+    .border-radius(3px);
+
+    .navigation {
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 8px;
+        a.btn-prev, a.btn-next {
+            width: 32px;
+        }
+    }
+
+    .control {
+        color: @black;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        display: inline-block;
+        text-decoration: none;
+        outline: 0;
+    }
+
+    a.control:hover { background-color: @hover; }
+    a.control:focus { background-color: @focus; color: white; }
+
+    .control.switch-mode {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .grid {
+        clear: both;
+        outline: 0;
+    }
+
+    .date, .weekday {
+        color: @gray;
+        display: inline-block;
+        padding: 4px 8px 4px 0;
+        width: 32px;
+        text-align: right;
+        line-height: 24px;
+        font-weight: 300;
+        text-decoration: none;
+        .border-radius(2px);
+    }
+
+    .date.inside {
+        color: @black;
+        font-weight: normal;
+    }
+
+    .date.today {
+        color: white;
+        background-color: @red;
+    }
+
+    .weekday {
+        color: @black;
+        font-weight: bold;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+
+    .weekend {
+        color: @red;
+    }
+
+    .btn-today {
+        color: @black;
+        font-size: 13px;
+        text-align: center;
+        display: block;
+        margin: 8px 0 0 0;
+    }
+
+    .control.month, .control.year {
+        width: 74px;
+        text-align: center;
+        padding: 16px 0;
+    }
+
+    .grid .control[aria-selected="true"] { background-color: #ccc; color: @black; }
+    .grid:focus .control[aria-selected="true"] { background-color: @focus; color: white; }
+}
