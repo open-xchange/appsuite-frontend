@@ -1846,13 +1846,20 @@ define('io.ox/mail/main', [
         },
         'socket.io': function (app) {
             sockets.getSocket().done(function (socket) {
-                socket.on('ox:mail:new', function () {
-                    console.info('New mail!');
-                    api.refresh();
+                socket.on('ox:mail:new', function (data) {
+                    folderAPI.reload(data.folder);
+                    // push arrvies, other folder selected
+                    if (data.folder !== app.folder.get(data.folder)) {
+                        _(api.pool.getByFolder(data.folder)).each(function (collection) {
+                            collection.expired = true;
+                        });
+                    } else {
+                        app.listView.reload();
+                    }
+
                 });
                 window.socket = app.socket = socket;
             });
-
         }
     });
 
