@@ -21,7 +21,7 @@
 
     display: none;
     position: absolute;
-    width: 258px;
+    width: 290px;
     min-height: 160px;
     padding: 16px;
     line-height: 16px;
@@ -41,26 +41,31 @@
         }
     }
 
-    .control {
+    button {
         color: @black;
-        padding-top: 8px;
-        padding-bottom: 8px;
-        display: inline-block;
-        text-decoration: none;
+        background-color: white;
+        padding: 8px;
         outline: 0;
+        border: 0;
+        margin: 0;
+        .border-radius(3px);
     }
 
-    a.control:hover { background-color: @hover; }
-    a.control:focus { background-color: @focus; color: white; }
+    button:hover { background-color: @hover; }
+    button:focus { background-color: @focus; color: white; }
 
-    .control.switch-mode {
-        padding-left: 8px;
-        padding-right: 8px;
-    }
+    caption { display: inline-block; }
 
     .grid {
         clear: both;
         outline: 0;
+    }
+
+    th.cw {
+        color: @gray;
+        font-size: 10px;
+        font-weight: 300;
+        text-align: left;
     }
 
     .date, .weekday {
@@ -72,7 +77,7 @@
         line-height: 24px;
         font-weight: 300;
         text-decoration: none;
-        .border-radius(2px);
+        .border-radius(3px);
     }
 
     .date.inside {
@@ -102,14 +107,15 @@
         text-align: center;
         display: block;
         margin: 8px 0 0 0;
+        width: 100%;
     }
 
-    .control.month, .control.year {
-        width: 74px;
+    td.month, td.year {
+        width: 84px;
         text-align: center;
         padding: 16px 0;
     }
 
-    .grid .control[aria-selected="true"] { background-color: #ccc; color: @black; }
-    .grid:focus .control[aria-selected="true"] { background-color: @focus; color: white; }
+    .grid td[aria-selected="true"] { background-color: #ccc; color: @black; }
+    .grid:focus td[aria-selected="true"] { background-color: @focus; color: white; }
 }
