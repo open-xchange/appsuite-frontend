@@ -202,13 +202,17 @@ define('io.ox/core/tk/doc-converter-utils', [
                 id: model.get('id'),
                 folder_id: model.get('folder_id'),
                 mimetype: model.get('file_mimetype'),
-                version: model.get('version'),
                 nocache: _.uniqueId() // needed to trick the browser
             };
 
         // add application UID
         if (ox.ui.App.getCurrentApp()) {
             defaultParams.uid = ox.ui.App.getCurrentApp().get('uniqueID');
+        }
+
+        // add version
+        if (model.has('version')) {
+            defaultParams.version = model.get('version');
         }
 
         // return the combined parameters
