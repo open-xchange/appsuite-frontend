@@ -32,6 +32,7 @@ define('io.ox/backbone/views/datepicker', [
             'click .btn-prev, .btn-next': 'onNavigate',
             'click .btn-today': 'onToday',
             'click .switch-mode': 'onSwitchMode',
+            'click .date': 'onSelectDate',
             'keydown': 'onKeydown',
             'keydown .grid': 'onGridKeydown'
         },
@@ -40,10 +41,7 @@ define('io.ox/backbone/views/datepicker', [
         constructor: function (options) {
             this.options = options || {};
             this.target = $(this.options.target);
-            this.dates = {
-                current: moment(this.options.date),
-                display: moment(this.options.date).date(1)
-            };
+            this.date = moment(this.options.date);
             this.mode = 'month';
             // the original constructor will call initialize()
             DisposableView.prototype.constructor.apply(this, arguments);
@@ -59,10 +57,13 @@ define('io.ox/backbone/views/datepicker', [
         open: function () {
             var offset = this.target.offset() || { top: '30%', left: '40%' };
             this.render().$el.appendTo('body').css({ top: offset.top, left: offset.left }).show();
+            this.trigger('open');
+            return this;
         },
 
         close: function () {
             this.$el.hide();
+            this.trigger('close');
         },
 
         render: function () {
@@ -113,8 +114,8 @@ define('io.ox/backbone/views/datepicker', [
 
         renderMonth: function () {
 
-            var current = this.dates.current.clone().startOf('day'),
-                m = this.dates.display.clone();
+            var current = this.date.clone().startOf('day'),
+                m = current.clone();
 
             this.renderHeader(
                 $('<button role="button" class="switch-mode">')
@@ -158,9 +159,9 @@ define('io.ox/backbone/views/datepicker', [
                                                 .attr({
                                                     'id': 'date_' + m.format('l'),
                                                     'aria-label': m.format('l, dddd'),
-                                                    'aria-selected': isSame(m, current)
+                                                    'aria-selected': isSame(m, current),
+                                                    'date-date': m.valueOf()
                                                 })
-                                                .data('date', m.valueOf())
                                                 .toggleClass('inside', m.month() === month)
                                                 .toggleClass('today', isToday(m))
                                                 .text(m.format('D'));
@@ -179,8 +180,8 @@ define('io.ox/backbone/views/datepicker', [
 
         renderYear: function () {
 
-            var current = this.dates.current.month(),
-                m = this.dates.display.clone().month(0);
+            var current = this.date.month(),
+                m = this.date.clone().month(0);
 
             this.renderHeader(
                 $('<button role="button" class="switch-mode">')
@@ -220,8 +221,8 @@ define('io.ox/backbone/views/datepicker', [
 
         renderDecade: function () {
 
-            var current = this.dates.current.year(),
-                m = this.dates.display.clone();
+            var current = this.date.year(),
+                m = this.date.clone();
 
             m.year(Math.floor(m.year() / 10) * 10);
 
@@ -256,41 +257,43 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onNavigate: function (e) {
-            e.preventDefault();
             var fn = $(e.currentTarget).hasClass('btn-prev') ? 'subtract' : 'add',
-                date = this.dates.current;
+                date = this.date.clone();
             switch (this.mode) {
                 case 'decade': date[fn](10, 'years'); break;
                 case 'year': date[fn](1, 'year'); break;
                 default: date[fn](1, 'month'); break;
             }
-            this.dates.display = this.dates.current.clone().date(1);
-            this.render();
+            this.setDate(date);
         },
 
-        onToday: function (e) {
-            e.preventDefault();
+        onToday: function () {
             this.mode = 'month';
-            this.setCurrentDate(moment());
+            this.setDate(moment());
             this.$grid.focus();
         },
 
         switchMode: function (mode, value) {
-            var date = this.dates.display;
             this.mode = mode;
+            var date = this.date.clone();
             switch (this.mode) {
                 case 'year': date.year(value); break;
                 case 'month': date.month(value); break;
                 // no default
             }
-            this.setCurrentDate(date);
+            this.setDate(date);
             this.$grid.focus();
         },
 
         onSwitchMode: function (e) {
-            e.preventDefault();
             var node = $(e.currentTarget), value = node.data('value');
             this.switchMode(node.attr('data-mode'), value);
+        },
+
+        onSelectDate: function (e) {
+            var date = moment($(e.currentTarget).attr('data-date'));
+            this.close();
+            this.trigger('select', date);
         },
 
         onKeydown: (function () {
@@ -348,22 +351,21 @@ define('io.ox/backbone/views/datepicker', [
 
             function handlePageUpDown(e) {
                 var up = e.which === 33, step = e.shiftKey ? 'year' : 'month';
-                this.setCurrentDate(this.dates.current.add(up ? -1 : +1, step));
+                this.setDate(this.date.clone().add(up ? -1 : +1, step));
             }
 
             function handleHomeEnd(e) {
                 var isEnd = e.which === 35, fn = isEnd ? 'endOf' : 'startOf';
-                this.setCurrentDate(this.dates.current[fn]('month'));
+                this.setDate(this.date.clone().current[fn]('month'));
             }
 
             function handleCursor(e) {
 
                 var selected = this.$('[aria-selected="true"]'),
-                    current = this.dates.current,
                     type = 'add', direction = 'horizontal';
 
                 // take care of the unexpected
-                if (!selected.length) return this.setCurrentDate(current);
+                if (!selected.length) return this.setDate();
 
                 switch (e.which) {
                     // cursor left (nothing to do for cursor right)
@@ -375,35 +377,38 @@ define('io.ox/backbone/views/datepicker', [
                     // no default
                 }
 
-                this.setCurrentDate(current[type](movement[direction][this.mode]));
+                this.setDate(this.date.clone()[type](movement[direction][this.mode]));
             }
 
         }()),
 
-        setCurrentDate: function (date) {
+        setDate: function (date) {
 
-            var current = this.dates.current = date.clone(), selector;
+            date = (date || this.date).clone();
 
-            var select = function (node) {
-                if (!node.length) return;
-                this.$('[aria-selected="true"]').attr('aria-selected', false);
-                node.attr('aria-selected', true);
-                this.setActiveDescedant(node.attr('id'));
-            }.bind(this);
+            // update internal date
+            var isSame = date.isSame(this.date);
+            this.date = date;
+
+            var selector,
+                select = function (node) {
+                    if (!node.length) return;
+                    this.$('[aria-selected="true"]').attr('aria-selected', false);
+                    node.attr('aria-selected', true);
+                    this.setActiveDescedant(node.attr('id'));
+                }.bind(this);
 
             // currently visible?
             switch (this.mode) {
-                case 'decade': selector = '#year_' + current.year(); break;
-                case 'year': selector = '#month_' + current.format('YYYY-MM'); break;
-                case 'month': selector = '#date_' + $.escape(current.format('l')); break;
+                case 'decade': selector = '#year_' + this.date.year(); break;
+                case 'year': selector = '#month_' + this.date.format('YYYY-MM'); break;
+                case 'month': selector = '#date_' + $.escape(this.date.format('l')); break;
                 // no default
             }
             // found?
             var node = this.$grid.find(selector);
-            if (node.length) return select(node);
-            // otherwise update view
-            this.dates.display = current.clone().date(1);
-            this.render();
+            if (node.length) select(node); else this.render();
+            if (!isSame) this.trigger('change', this.date);
         }
     });
 

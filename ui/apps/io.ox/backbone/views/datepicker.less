@@ -49,56 +49,65 @@
         border: 0;
         margin: 0;
         .border-radius(3px);
+        &:hover { background-color: @hover; }
+        &:focus { background-color: @focus; color: white; }
     }
-
-    button:hover { background-color: @hover; }
-    button:focus { background-color: @focus; color: white; }
 
     caption { display: inline-block; }
 
-    .grid {
-        clear: both;
-        outline: 0;
-    }
-
-    th.cw {
+    td, th {
         color: @gray;
-        font-size: 10px;
-        font-weight: 300;
-        text-align: left;
-    }
-
-    .date, .weekday {
-        color: @gray;
-        display: inline-block;
         padding: 4px 8px 4px 0;
         width: 32px;
         text-align: right;
         line-height: 24px;
         font-weight: 300;
-        text-decoration: none;
         .border-radius(3px);
     }
 
-    .date.inside {
-        color: @black;
-        font-weight: normal;
+    th {
+        &.weekday {
+            color: @black;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        &.cw {
+            color: @gray;
+            font-size: 10px;
+            font-weight: 300;
+            text-align: left;
+        }
+        &.weekend { color: @red; }
     }
 
-    .date.today {
-        color: white;
-        background-color: @red;
+    td {
+        cursor: pointer;
+
+        &.inside {
+            color: @black;
+            font-weight: normal;
+        }
+        &.today {
+            color: white;
+            background-color: @red;
+        }
+
+        &.month, &.year {
+            width: 84px;
+            text-align: center;
+            padding: 16px 0;
+        }
     }
 
-    .weekday {
-        color: @black;
-        font-weight: bold;
-        font-size: 12px;
-        text-transform: uppercase;
-    }
-
-    .weekend {
-        color: @red;
+    .grid {
+        clear: both;
+        outline: 0;
+        td:hover { background-color: @hover; color: @black; }
+        td.today:hover { background-color: darken(@red, 10%); color: white; }
+        td[aria-selected="true"] { background-color: #ccc; color: @black; }
+        td[aria-selected="true"]:hover { background-color: #aaa; color: @black; }
+        &:focus td[aria-selected="true"] { background-color: @focus; color: white; }
     }
 
     .btn-today {
@@ -109,13 +118,4 @@
         margin: 8px 0 0 0;
         width: 100%;
     }
-
-    td.month, td.year {
-        width: 84px;
-        text-align: center;
-        padding: 16px 0;
-    }
-
-    .grid td[aria-selected="true"] { background-color: #ccc; color: @black; }
-    .grid:focus td[aria-selected="true"] { background-color: @focus; color: white; }
 }
