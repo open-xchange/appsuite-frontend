@@ -109,6 +109,16 @@ define('io.ox/files/upload/main', [
                 win.idle();
             }
         });
+
+        this.calculateTotalSíze = function () {
+            //update the total size for time estimation
+            if (!totalSize) {
+                uploadCollection.each(function (model) {
+                    totalSize += model.get('file').size;
+                });
+            }
+        };
+
         this.changed = function (item, position, files) {
             var uploadFiles = files.slice(uploadCollection.length, files.length)
                 .map(function (fileContainer) {
@@ -121,12 +131,9 @@ define('io.ox/files/upload/main', [
             }
             uploadCollection.add(uploadFiles);
 
-            //update the total size for time estimation
-            totalSize = 0;
-            uploadCollection.each(function (model) {
-                totalSize += model.get('file').size;
-            });
+            this.calculateTotalSíze();
         };
+
         this.progress = function (item, position, files) {
             var model = uploadCollection.at(position),
                 request = api.upload(
@@ -169,6 +176,7 @@ define('io.ox/files/upload/main', [
             var requests = uploadCollection.map(function (file) {
                 return file.get('request');
             });
+            totalSize = 0;
             api.trigger('stop:upload', requests);
             api.trigger('refresh.all');
             totalProgress = 0;
