@@ -111,6 +111,8 @@ define('io.ox/find/main', [
                 var parent = app.get('parent');
                 app.on({
                     'find:query:result': function () {
+                        // handle delayed result
+                        if (app.isActive() !== true) return;
                         parent.props.set('find-result', true);
                     },
                     'find:idle': function () {
