@@ -110,7 +110,7 @@ define('io.ox/backbone/views/datepicker', [
         open: function () {
             if (this.closing || this.isOpen()) return;
             // render first to have dimensions
-            this.render().$el.insertAfter(this.$target);
+            this.render().$el.appendTo('body');
             // find proper placement
             var offset = this.$target.offset() || { top: 200, left: 600 },
                 targetHeight = this.$target.outerHeight() || 0,
@@ -421,15 +421,23 @@ define('io.ox/backbone/views/datepicker', [
 
             function handleTab(e) {
 
-                // no focus trap if the picker is attached
-                if (this.$target.length) return;
-
                 var tabbable = this.$(':input, :button'),
                     index = tabbable.index(e.target),
                     lowOut = e.shiftKey && index === 0,
                     highOut = !e.shiftKey && index === tabbable.length - 1;
-                // otherwise apply focus trap
+
+                // apply focus trap
                 if (lowOut || highOut) e.preventDefault();
+                if (!this.$target.length) return;
+                // set proper focus
+                if (lowOut) this.$target.focus();
+                else if (highOut) focusNext.call(this);
+            }
+
+            function focusNext() {
+                var all = $(':input, :button, a, [tabindex]').filter(':visible'),
+                    index = all.index(this.$target);
+                all.eq(index + 1).focus();
             }
 
             function handleEscape() {
