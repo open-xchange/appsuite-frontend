@@ -370,20 +370,12 @@ define('io.ox/calendar/edit/recurrence-view', [
                         }).mobiscroll('show');
                     });
                 } else {
-                    require(['io.ox/core/tk/datepicker'], function () {
-                        $dateInput.datepicker({
-                            parentEl: self.$el,
-                            startDate: minDate
-                        });
+                    require(['io.ox/backbone/views/datepicker'], function (Picker) {
+                        new Picker({ date: minDate })
+                            .attachTo($dateInput)
+                            .on('select', updateValue);
                         $anchor.after($dateInput).hide();
-                        $dateInput.select().on({
-                            'hide': updateValue,
-                            'keydown': function (e) {
-                                if (e.which === 13) {
-                                    updateValue();
-                                }
-                            }
-                        });
+                        $dateInput.select().focus();
                     });
                 }
 
@@ -399,8 +391,6 @@ define('io.ox/calendar/edit/recurrence-view', [
                     try {
                         if (_.device('smartphone')) {
                             $dateInput.mobiscroll('destroy');
-                        } else {
-                            $dateInput.datepicker('remove');
                         }
                         $dateInput.remove();
                     } catch (e) {
@@ -430,7 +420,7 @@ define('io.ox/calendar/edit/recurrence-view', [
 
         this.ghost = function () {
             var $ghost = this.$el.clone(false);
-            $ghost.find('.no-clone, .datepicker')
+            $ghost.find('.no-clone, .date-picker')
                 .remove();
             $ghost
                 .find('*')

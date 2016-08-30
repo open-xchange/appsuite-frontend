@@ -59,6 +59,7 @@ define('io.ox/backbone/views/datepicker', [
             });
             this.focusOut = _.debounce(function () {
                 var active = document.activeElement;
+                if (this.disposed) return;
                 if (this.el === active) return;
                 if (this.$target[0] === active) return;
                 if ($.contains(this.el, active)) return;
