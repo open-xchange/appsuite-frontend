@@ -98,12 +98,14 @@
             font-weight: 300;
         }
 
-        &.inside.weekend { color: @red; }
-
-        &.today, &.weekend.today {
+        &.today {
             color: white;
             background-color: @red;
         }
+
+        &.weekend { color: @red; }
+        &.weekend.outside { color: @gray; }
+        &.weekend.today { color: white; }
 
         &.month, &.year {
             width: 84px;
