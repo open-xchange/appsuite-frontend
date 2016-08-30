@@ -151,5 +151,7 @@ define('plugins/notifications/mail/register', [
 
     api.checkInbox();
 
+    ox.on('socket:mail:new', api.checkInbox);
+
     return true;
 });

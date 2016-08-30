@@ -1475,7 +1475,6 @@ define('io.ox/mail/api', [
             }
         })
         .then(function (unseen) {
-
             // check most recent mail
             var recent = _(unseen).filter(function (obj) {
                 // ignore mails 'mark as deleted'
