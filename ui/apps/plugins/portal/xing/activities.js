@@ -28,9 +28,8 @@ define('plugins/portal/xing/activities', [
     var linkXingContact, makeName, very_short, shorter, very_short_middle_ellipsis;
 
     linkXingContact = function (contact) {
-        var contactNode = $('<a>')
-            .attr({ href: 'https://www.xing.com/profile/' + contact.page_name, target: '_blank' })
-            .addClass('external xing');
+        var contactNode = $('<a class="external xing" target="_blank" rel="noopener">')
+            .attr('href', 'https://www.xing.com/profile/' + contact.page_name);
         if (contact.photo_urls) {
             var ps = contact.photo_urls,
                 photoUrl = ps.maxi_thumb || ps.medium_thumb || ps.mini_thumb || ps.thumb || ps.large;
@@ -97,8 +96,7 @@ define('plugins/portal/xing/activities', [
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s posted a link:', makeName(linkActivity.creator))),
                 $('<div class="actionContent">').append(
-                    $('<a>').attr({ 'href': linkActivity.url, 'target': '_blank' })
-                    .addClass('external xing')
+                    $('<a class="external xing" target="_blank" rel="noopener">').attr('href', linkActivity.url)
                     .text(shorter(linkActivity.description, options) || very_short_middle_ellipsis(linkActivity.url, options))
                 )
             );
