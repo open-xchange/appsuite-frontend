@@ -200,7 +200,6 @@ define('io.ox/backbone/mini-views/datepicker', [
             var timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
             if (_.isNaN(timestamp)) return;
             timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
-            console.log('update value', this.getDateStr(timestamp));
             this.nodes.dayField.val(this.getDateStr(timestamp)).trigger('change');
             if (!this.mobileMode) {
                 this.nodes.timeField.val(timestamp.format('LT'));

@@ -43,8 +43,8 @@ define('io.ox/backbone/views/datepicker', [
             this.options = options || {};
             this.$target = $(this.options.target);
             this.date = moment(this.options.date);
-            console.log('init', this.options.date, this.date);
             this.mode = 'month';
+            this.closing = false;
             // the original constructor will call initialize()
             DisposableView.prototype.constructor.apply(this, arguments);
             this.renderScaffold();
@@ -123,7 +123,7 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         open: function () {
-            if (this.isOpen()) return;
+            if (this.isOpen() || this.closing) return;
             // render first to have dimensions
             this.render().$el.appendTo('body');
             // find proper placement
@@ -147,11 +147,11 @@ define('io.ox/backbone/views/datepicker', [
 
         close: function (restoreFocus) {
             if (!this.isOpen()) return;
+            this.closing = true;
             this.$el.removeClass('open');
             this.$target.attr('aria-expanded', false);
-            this.$target.off('focus', this.open);
             if (restoreFocus !== false) this.$target.focus();
-            this.$target.on('focus', $.proxy(this.open, this));
+            this.closing = false;
             this.trigger('close');
         },
 
@@ -533,9 +533,8 @@ define('io.ox/backbone/views/datepicker', [
             }
         },
 
-        onTargetInput: function (e) {
+        onTargetInput: function () {
             var val = this.$target.val(), date = moment(val, 'l');
-            console.log('yay', e.type, val, date.isValid(), date);
             this.setDate(date);
         },
 
