@@ -435,7 +435,7 @@ define('io.ox/backbone/views/datepicker', [
             }
 
             function focusNext() {
-                var all = $(':input, :button, a, [tabindex]').filter(':visible'),
+                var all = $('input, select, textarea, button, a[href], [tabindex]').filter(':visible'),
                     index = all.index(this.$target);
                 all.eq(index + 1).focus();
             }
