@@ -31,7 +31,7 @@ define('io.ox/core/boot/load', [
         util.cleanUp();
 
         prefetch();
-        socketSetup();
+        setupSockets();
         applyHighContrast();
         loadUserTheme();
 
@@ -131,9 +131,15 @@ define('io.ox/core/boot/load', [
         }
     }
 
-    function socketSetup() {
+    function setupSockets() {
+        // get connected socket
         socket.getSocket().done(function (socket) {
-            console.log('got a socket!', socket);
+            if (capabilities.has('webmail')) {
+                socket.on('ox:mail:new', function (data) {
+                    // simple event forwarding
+                    ox.trigger('socket:mail:new', data);
+                });
+            }
         });
     }
 

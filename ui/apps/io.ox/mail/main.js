@@ -31,7 +31,6 @@ define('io.ox/mail/main', [
     'io.ox/core/folder/view',
     'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
-    'io.ox/core/sockets',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'io.ox/mail/actions',
@@ -41,7 +40,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, sockets, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, gt, settings) {
 
     'use strict';
 
@@ -1844,21 +1843,17 @@ define('io.ox/mail/main', [
                 });
             });
         },
-        'socket.io': function (app) {
-            sockets.getSocket().done(function (socket) {
-                socket.on('ox:mail:new', function (data) {
-                    folderAPI.reload(data.folder);
-                    // push arrvies, other folder selected
-                    if (data.folder !== app.folder.get(data.folder)) {
-                        _(api.pool.getByFolder(data.folder)).each(function (collection) {
-                            collection.expired = true;
-                        });
-                    } else {
-                        app.listView.reload();
-                    }
-
-                });
-                window.socket = app.socket = socket;
+        'sockets': function (app) {
+            ox.on('socket:mail:new', function (data) {
+                folderAPI.reload(data.folder);
+                // push arries, other folder selected
+                if (data.folder !== app.folder.get(data.folder)) {
+                    _(api.pool.getByFolder(data.folder)).each(function (collection) {
+                        collection.expired = true;
+                    });
+                } else {
+                    app.listView.reload();
+                }
             });
         }
     });
