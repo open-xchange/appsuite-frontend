@@ -314,6 +314,8 @@ define('io.ox/mail/detail/content',
                     text = text.split(/\?/, 2)[0];
                     link.text(text);
                 }
+                link = $(node).filter(':not([href^="mailto:"])');
+                if (link.attr('href')) link.attr('rel', 'noopener');
             });
         }
     });
