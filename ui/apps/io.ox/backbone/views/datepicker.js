@@ -43,8 +43,8 @@ define('io.ox/backbone/views/datepicker', [
             this.options = options || {};
             this.$target = $(this.options.target);
             this.date = moment(this.options.date);
+            console.log('init', this.options.date, this.date);
             this.mode = 'month';
-            this.closing = false;
             // the original constructor will call initialize()
             DisposableView.prototype.constructor.apply(this, arguments);
             this.renderScaffold();
@@ -53,8 +53,19 @@ define('io.ox/backbone/views/datepicker', [
                     this.date = date.clone();
                     this.close();
                 },
-                destroy: function () {
-                    this.$target.off('click focus dispose');
+                dispose: function () {
+                    this.$target
+                        .off({
+                            change: this.onTargetInput,
+                            click: this.open,
+                            dispose: this.remove,
+                            focus: this.open,
+                            focusout: this.focusOut,
+                            input: this.onTargetInput,
+                            keydown: this.onTargetKeydown
+                        })
+                        .closest('.scrollable').off('scroll', this.close);
+                    $(window).off('resize', $.proxy(this.onWindowResize, this));
                 }
             });
             this.focusOut = _.debounce(function () {
@@ -66,6 +77,7 @@ define('io.ox/backbone/views/datepicker', [
                 this.close(false);
             }, 1);
             this.$el.on('focusout', $.proxy(this.focusOut, this));
+            $(window).on('resize', $.proxy(this.onWindowResize, this));
         },
 
         //
@@ -86,7 +98,9 @@ define('io.ox/backbone/views/datepicker', [
             if (this.$target.is(':input')) {
                 // just open from input fields (no toggle)
                 this.$target.on('focus click', $.proxy(this.open, this));
-                this.on('select', function () { this.$target.val(this.date.format('l')); });
+                this.on('select', function () {
+                    this.$target.val(this.date.format('l')).trigger('change');
+                });
             } else {
                 // click (i.e. mouse click and enter) to toggle
                 this.$target.on('click', $.proxy(this.toggle, this));
@@ -96,6 +110,7 @@ define('io.ox/backbone/views/datepicker', [
                     'aria-haspopup': true,
                     'aria-expanded': false
                 })
+                .on('change input', $.proxy(this.onTargetInput, this))
                 .on('keydown', $.proxy(this.onTargetKeydown, this))
                 .on('focusout', $.proxy(this.focusOut, this))
                 .on('dispose', $.proxy(this.remove, this))
@@ -108,7 +123,7 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         open: function () {
-            if (this.closing || this.isOpen()) return;
+            if (this.isOpen()) return;
             // render first to have dimensions
             this.render().$el.appendTo('body');
             // find proper placement
@@ -131,16 +146,21 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         close: function (restoreFocus) {
-            this.closing = true;
+            if (!this.isOpen()) return;
             this.$el.removeClass('open');
             this.$target.attr('aria-expanded', false);
+            this.$target.off('focus', this.open);
             if (restoreFocus !== false) this.$target.focus();
-            this.closing = false;
+            this.$target.on('focus', $.proxy(this.open, this));
             this.trigger('close');
         },
 
         isOpen: function () {
             return this.$el.hasClass('open');
+        },
+
+        onWindowResize: function () {
+            if (this.isOpen()) this.close();
         },
 
         render: function () {
@@ -457,8 +477,14 @@ define('io.ox/backbone/views/datepicker', [
             }
 
             function handlePageUpDown(e) {
-                var up = e.which === 33, step = e.shiftKey ? 'year' : 'month';
-                this.setDate(this.date.clone().add(up ? -1 : +1, step));
+                var interval = {}, up = e.which === 33, sign = up ? -1 : +1;
+                switch (this.mode) {
+                    case 'month': interval.month = sign * (e.shiftKey ? 12 : 1); break;
+                    case 'year': interval.year = sign * (e.shiftKey ? 10 : 1); break;
+                    case 'decade': interval.year = sign * (e.shiftKey ? 100 : 10); break;
+                    // no default
+                }
+                this.setDate(this.date.clone().add(interval));
             }
 
             function handleHomeEnd(e) {
@@ -507,9 +533,19 @@ define('io.ox/backbone/views/datepicker', [
             }
         },
 
+        onTargetInput: function (e) {
+            var val = this.$target.val(), date = moment(val, 'l');
+            console.log('yay', e.type, val, date.isValid(), date);
+            this.setDate(date);
+        },
+
         setDate: function (date) {
 
-            date = (date || this.date).clone();
+            date = moment(date || this.date);
+            // valid?
+            if (!date.isValid()) return;
+            // avoid BC
+            if (date.year() <= 0) return;
 
             // update internal date
             var isSame = date.isSame(this.date);

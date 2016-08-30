@@ -149,7 +149,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             } else {
                 require(['io.ox/backbone/views/datepicker', 'io.ox/core/tk/datepicker'], function (Picker) {
 
-                    new Picker().attachTo(self.nodes.dayField);
+                    new Picker({ date: self.model.get(self.attribute) }).attachTo(self.nodes.dayField);
 
                     // build and init timepicker based on combobox plugin
                     var hours_typeahead = [],
@@ -195,25 +195,16 @@ define('io.ox/backbone/mini-views/datepicker', [
             // clear if set to null
             if (_.isNull(this.model.get(this.attribute))) {
                 this.nodes.dayField.val('');
-                if (this.nodes.timeField) {
-                    this.nodes.timeField.val('');
-                }
+                if (this.nodes.timeField) this.nodes.timeField.val('');
             }
             var timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
             if (_.isNaN(timestamp)) return;
             timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
+            console.log('update value', this.getDateStr(timestamp));
+            this.nodes.dayField.val(this.getDateStr(timestamp)).trigger('change');
             if (!this.mobileMode) {
                 this.nodes.timeField.val(timestamp.format('LT'));
-                // check if datepicker plugin is not loaded and initialized
-                // if not initialized, the update call would create a new datepicker, using the standard values. So the clear button might be missing etc.
-                if (this.nodes.dayField.datepicker && this.nodes.dayField.data('datepicker')) {
-                    this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
-                } else {
-                    this.nodes.dayField.val(this.getDateStr(timestamp));
-                }
                 this.nodes.timezoneField.text(gt.noI18n(timestamp.zoneAbbr()));
-            } else {
-                this.nodes.dayField.val(this.getDateStr(timestamp));
             }
         },
 
