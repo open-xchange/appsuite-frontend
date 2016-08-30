@@ -130,7 +130,7 @@ define('plugins/portal/tumblr/register',
                 var postTitle = function () {
                     var title = $('<h2>').text(_.noI18n(post.title));
                     if (post.url || post.post_url) {
-                        return $('<a>', { href: post.url || post.post_url, target: '_blank' }).append(title);
+                        return $('<a>', { href: post.url || post.post_url, target: '_blank', rel: 'noopener' }).append(title);
                     } else {
                         return title;
                     }
@@ -145,7 +145,7 @@ define('plugins/portal/tumblr/register',
                         tagBaseUri = 'http://' + post.blog_name + '.tumblr.com/tagged/';
                     if (post.tags && post.tags.length > 0) {
                         _(post.tags).each(function (tag) {
-                            tags.push($('<a>', { href: tagBaseUri + tag, target: '_blank' })
+                            tags.push($('<a>', { href: tagBaseUri + tag, target: '_blank', rel: 'noopener' })
                                 .addClass('tag').text(tag).prepend($('<i class="fa fa-tag">')));
                         });
                     }
@@ -186,10 +186,10 @@ define('plugins/portal/tumblr/register',
                         .append($('<em>').text(_.escape($.trim(post.source))));
                 },
                 postLink = function () {
-                    return $('<a>', { href: post.post_url, target: '_blank', title: gt('Read article on tumblr.com') }).append($('<i class="icon-tumblr-sign">'));
+                    return $('<a>', { href: post.post_url, target: '_blank', rel: 'noopener', title: gt('Read article on tumblr.com') }).append($('<i class="icon-tumblr-sign">'));
                 },
                 postExternalLink = function () {
-                    return $('<a>', { href: post.url, target: '_blank', title: gt('Open external link') }).append($('<i class="fa fa-external-link-square">'));
+                    return $('<a>', { href: post.url, target: '_blank', rel: 'noopener', title: gt('Open external link') }).append($('<i class="fa fa-external-link-square">'));
                 },
                 postNav = function () {
                     var nav = $('<div class="post-bar">');

@@ -137,7 +137,7 @@ define('plugins/portal/flickr/register',
                     );
                     if (flickrUrl) {
                         img.wrap(
-                            $('<a>', { href: flickrUrl + '/' + photo.owner + '/' + photo.id + '/', target: '_blank' })
+                            $('<a target="_blank" rel="noopener">').attr({ href: flickrUrl + '/' + photo.owner + '/' + photo.id + '/' })
                         );
                     }
                 }
