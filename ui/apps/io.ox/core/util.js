@@ -121,7 +121,7 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             return text.replace(regUrl, function (url) {
                 var fix = this.fixUrlSuffix(url);
                 // soft-break long words (like long URLs)
-                return '<a href="' + fix.url + '" target="_blank">' + that.breakableHTML(fix.url) + '</a>' + fix.suffix;
+                return '<a href="' + fix.url + '" target="_blank" rel="noopener">' + that.breakableHTML(fix.url) + '</a>' + fix.suffix;
             }.bind(this));
         },
 

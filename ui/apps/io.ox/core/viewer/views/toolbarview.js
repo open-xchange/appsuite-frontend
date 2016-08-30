@@ -10,6 +10,7 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
+ /* global blankshield */
 define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/disposable',
@@ -361,7 +362,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         action: function (baton) {
             var convertParams = Util.getConvertParams(baton.context.model),
                 documentPDFUrl = Util.getConverterUrl(convertParams);
-            window.open(documentPDFUrl, '_blank');
+            blankshield.open(documentPDFUrl, '_blank');
         }
     });
 

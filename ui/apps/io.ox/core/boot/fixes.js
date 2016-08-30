@@ -10,7 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-
+/* global blankshield */
 define('io.ox/core/boot/fixes', [], function () {
 
     //
@@ -52,6 +52,14 @@ define('io.ox/core/boot/fixes', [], function () {
             e.preventDefault();
         });
     }
+
+    // Prevent Content Spoofing
+    // See: https://mathiasbynens.github.io/rel-noopener/
+    // and: https://github.com/danielstjules/blankshield
+    $(document).on('click', 'a[rel="noopener"]', function (e) {
+        e.preventDefault();
+        blankshield.open($(this).attr('href'));
+    });
 
     //
     // Desktop fixes
