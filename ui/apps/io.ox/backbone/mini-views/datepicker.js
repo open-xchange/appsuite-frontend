@@ -147,15 +147,9 @@ define('io.ox/backbone/mini-views/datepicker', [
                     def.resolve();
                 });
             } else {
-                require(['io.ox/core/tk/datepicker'], function () {
-                    // get the right date format and init datepicker
-                    self.nodes.dayField.datepicker({
-                        clearBtn: self.options.clearButton,
-                        parentEl: self.$el
-                    }).on('clearDate', function () {
-                        // clear the timefield too if the clearbutton is pressed
-                        self.nodes.timeField.val('');
-                    });
+                require(['io.ox/backbone/views/datepicker', 'io.ox/core/tk/datepicker'], function (Picker) {
+
+                    new Picker().attachTo(self.nodes.dayField);
 
                     // build and init timepicker based on combobox plugin
                     var hours_typeahead = [],

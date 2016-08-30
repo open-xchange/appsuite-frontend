@@ -23,6 +23,8 @@ define('io.ox/backbone/views/datepicker', [
     // Date picker
     //
     // options:
+    // - date: the predefined date, either number, a native Date instance, or a momentjs instance
+    // - target: the DOM element to attach to
 
     var DatePickerView = DisposableView.extend({
 
@@ -33,37 +35,111 @@ define('io.ox/backbone/views/datepicker', [
             'click .btn-today': 'onToday',
             'click .switch-mode': 'onSwitchMode',
             'click .date': 'onSelectDate',
-            'keydown': 'onKeydown',
-            'keydown .grid': 'onGridKeydown'
+            'keydown': 'onKeydown'
         },
 
         // we use the constructor here not to collide with initialize()
         constructor: function (options) {
             this.options = options || {};
-            this.target = $(this.options.target);
+            this.$target = $(this.options.target);
             this.date = moment(this.options.date);
             this.mode = 'month';
+            this.closing = false;
             // the original constructor will call initialize()
             DisposableView.prototype.constructor.apply(this, arguments);
             this.renderScaffold();
+            this.on({
+                select: function (date) {
+                    this.date = date.clone();
+                    this.close();
+                },
+                destroy: function () {
+                    this.$target.off('click focus dispose');
+                }
+            });
+            this.focusOut = _.debounce(function () {
+                var active = document.activeElement;
+                if (this.el === active) return;
+                if (this.$target[0] === active) return;
+                if ($.contains(this.el, active)) return;
+                this.close(false);
+            }, 1);
+            this.$el.on('focusout', $.proxy(this.focusOut, this));
         },
 
+        //
+        // Focus behavior
+        //
+        // <input> field:
+        // - opens on focus and on click
+        // - the focus is not changed
+        // - closes if the focus moves along (neither on input or picker)
+        //
+        // non-input element:
+        // - opens on click (i.e. mouse click and enter)
+        // - focus is always moved to picker to allow keyboard usage
+        // - closes if the focus moves along (neither on input or picker)
+        //
         attachTo: function (target) {
-            this.target = $(target);
-            $(this.target).on('focus', $.proxy(this.open, this));
+            this.$target = $(target);
+            if (this.$target.is(':input')) {
+                // just open from input fields (no toggle)
+                this.$target.on('focus click', $.proxy(this.open, this));
+                this.on('select', function () { this.$target.val(this.date.format('l')); });
+            } else {
+                // click (i.e. mouse click and enter) to toggle
+                this.$target.on('click', $.proxy(this.toggle, this));
+            }
+            this.$target
+                .attr({
+                    'aria-haspopup': true,
+                    'aria-expanded': false
+                })
+                .on('keydown', $.proxy(this.onTargetKeydown, this))
+                .on('focusout', $.proxy(this.focusOut, this))
+                .on('dispose', $.proxy(this.remove, this))
+                .closest('.scrollable').on('scroll', $.proxy(this.close, this));
             return this;
+        },
+
+        toggle: function () {
+            if (this.isOpen()) this.close(); else this.open();
         },
 
         open: function () {
-            var offset = this.target.offset() || { top: '30%', left: '40%' };
-            this.render().$el.appendTo('body').css({ top: offset.top, left: offset.left }).show();
+            if (this.closing || this.isOpen()) return;
+            // render first to have dimensions
+            this.render().$el.insertAfter(this.$target);
+            // find proper placement
+            var offset = this.$target.offset() || { top: 200, left: 600 },
+                targetHeight = this.$target.outerHeight() || 0,
+                maxHeight = $('body').height();
+            // exceeds screen bottom?
+            if ((offset.top + targetHeight + this.$el.outerHeight()) > maxHeight) {
+                // above
+                this.$el.css({ top: 'auto', bottom: maxHeight - offset.top });
+            } else {
+                // below
+                this.$el.css({ top: offset.top + targetHeight, bottom: 'auto' });
+            }
+            this.$el.css({ left: offset.left }).addClass('open');
+            this.$target.attr('aria-expanded', true);
+            // only change for non-input fields
+            if (!this.$target.is(':input')) this.$el.focus();
             this.trigger('open');
-            return this;
         },
 
-        close: function () {
-            this.$el.hide();
+        close: function (restoreFocus) {
+            this.closing = true;
+            this.$el.removeClass('open');
+            this.$target.attr('aria-expanded', false);
+            if (restoreFocus !== false) this.$target.focus();
+            this.closing = false;
             this.trigger('close');
+        },
+
+        isOpen: function () {
+            return this.$el.hasClass('open');
         },
 
         render: function () {
@@ -160,9 +236,10 @@ define('io.ox/backbone/views/datepicker', [
                                                     'id': 'date_' + m.format('l'),
                                                     'aria-label': m.format('l, dddd'),
                                                     'aria-selected': isSame(m, current),
-                                                    'date-date': m.valueOf()
+                                                    'data-date': m.valueOf()
                                                 })
-                                                .toggleClass('inside', m.month() === month)
+                                                .toggleClass('outside', m.month() !== month)
+                                                .toggleClass('weekend', m.day() === 0 || m.day() === 6)
                                                 .toggleClass('today', isToday(m))
                                                 .text(m.format('D'));
                                         } finally {
@@ -268,9 +345,15 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onToday: function () {
-            this.mode = 'month';
-            this.setDate(moment());
-            this.$grid.focus();
+            if (this.mode !== 'month') {
+                // switch to current date in month view
+                this.mode = 'month';
+                this.setDate(moment());
+                this.$grid.focus();
+            } else {
+                // select current date and close picker
+                this.trigger('select', moment());
+            }
         },
 
         switchMode: function (mode, value) {
@@ -291,28 +374,11 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onSelectDate: function (e) {
-            var date = moment($(e.currentTarget).attr('data-date'));
-            this.close();
+            var date = moment($(e.currentTarget).data('date'));
             this.trigger('select', date);
         },
 
         onKeydown: (function () {
-
-            function handleFocusChange($el, e) {
-                var tabbable = $el.find(':input, :button'),
-                    index = tabbable.index(e.target);
-                if ((e.shiftKey && index === 0) || (!e.shiftKey && index === tabbable.length - 1)) e.preventDefault();
-            }
-
-            return function (e) {
-                // escape
-                if (e.which === 27) return this.close();
-                // focus trap
-                if (e.which === 9) return handleFocusChange(this.$el, e);
-            };
-        }()),
-
-        onGridKeydown: (function () {
 
             var movement = {
                 horizontal: { month: { day: 1 }, year: { month: 1 }, decade: { year: 1 } },
@@ -322,9 +388,15 @@ define('io.ox/backbone/views/datepicker', [
             return function (e) {
 
                 switch (e.which) {
+                    case 9:
+                        handleTab.call(this, e);
+                        return;
                     case 13:
                         handleEnter.call(this, e);
-                        break;
+                        return;
+                    case 27:
+                        handleEscape.call(this, e);
+                        return;
                     case 33:
                     case 34:
                         handlePageUpDown.call(this, e);
@@ -341,12 +413,38 @@ define('io.ox/backbone/views/datepicker', [
                         break;
                     // no default
                 }
+
+                // some keys interfere with outer UI so we stop bubbling
+                e.stopPropagation();
             };
 
+            function handleTab(e) {
+
+                // no focus trap if the picker is attached
+                if (this.$target.length) return;
+
+                var tabbable = this.$(':input, :button'),
+                    index = tabbable.index(e.target),
+                    lowOut = e.shiftKey && index === 0,
+                    highOut = !e.shiftKey && index === tabbable.length - 1;
+                // otherwise apply focus trap
+                if (lowOut || highOut) e.preventDefault();
+            }
+
+            function handleEscape() {
+                this.close();
+            }
+
             function handleEnter() {
-                var selected = this.$('[aria-selected="true"]'),
-                    mode = selected.attr('data-mode');
-                if (mode) this.switchMode(mode, selected.data('value'));
+                // handle enter only if focus is on grid
+                if (this.$grid[0] !== document.activeElement) return;
+                if (this.mode === 'month') {
+                    this.trigger('select', this.date.clone());
+                } else {
+                    var selected = this.$('[aria-selected="true"]'),
+                        mode = selected.attr('data-mode');
+                    if (mode) this.switchMode(mode, selected.data('value'));
+                }
             }
 
             function handlePageUpDown(e) {
@@ -356,7 +454,7 @@ define('io.ox/backbone/views/datepicker', [
 
             function handleHomeEnd(e) {
                 var isEnd = e.which === 35, fn = isEnd ? 'endOf' : 'startOf';
-                this.setDate(this.date.clone().current[fn]('month'));
+                this.setDate(this.date.clone()[fn]('month'));
             }
 
             function handleCursor(e) {
@@ -378,9 +476,27 @@ define('io.ox/backbone/views/datepicker', [
                 }
 
                 this.setDate(this.date.clone()[type](movement[direction][this.mode]));
+                this.$grid.focus();
             }
 
         }()),
+
+        onTargetKeydown: function (e) {
+
+            switch (e.which) {
+                // capture tab (not shift-tab) if open
+                case 9:
+                    if (e.shiftKey || !this.isOpen()) return;
+                    e.preventDefault();
+                    this.$el.focus();
+                    break;
+                case 13:
+                case 27:
+                    this.toggle();
+                    break;
+                // no default
+            }
+        },
 
         setDate: function (date) {
 

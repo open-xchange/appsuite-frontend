@@ -20,7 +20,8 @@
     @red:   #a00;
 
     display: none;
-    position: absolute;
+    position: fixed;
+    z-index: 1000000;
     width: 290px;
     min-height: 160px;
     padding: 16px;
@@ -31,6 +32,15 @@
     outline: 0;
     cursor: default;
     .border-radius(3px);
+
+    &:focus {
+        border-color: #66afe9;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    }
+
+    &.open {
+        display: block;
+    }
 
     .navigation {
         font-weight: bold;
@@ -56,12 +66,11 @@
     caption { display: inline-block; }
 
     td, th {
-        color: @gray;
+        color: @black;
         padding: 4px 8px 4px 0;
         width: 32px;
         text-align: right;
         line-height: 24px;
-        font-weight: 300;
         .border-radius(3px);
     }
 
@@ -84,11 +93,14 @@
     td {
         cursor: pointer;
 
-        &.inside {
-            color: @black;
-            font-weight: normal;
+        &.outside {
+            color: @gray;
+            font-weight: 300;
         }
-        &.today {
+
+        &.inside.weekend { color: @red; }
+
+        &.today, &.weekend.today {
             color: white;
             background-color: @red;
         }

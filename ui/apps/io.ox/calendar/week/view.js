@@ -161,14 +161,13 @@ define('io.ox/calendar/week/view', [
 
             //append datepicker
             if (!_.device('smartphone')) {
-                require(['io.ox/core/tk/datepicker'], function () {
-                    self.kwInfo.datepicker({ parentEl: self.$el }).on('changeDate', function (e) {
-                        self.setStartDate(e.date.getTime());
-                        self.trigger('onRefresh');
-                    })
-                    .on('show', function () {
-                        $(this).datepicker('update', new Date(self.startDate.valueOf()));
-                    });
+                require(['io.ox/backbone/views/datepicker'], function (Picker) {
+                    new Picker({ date: self.startDate })
+                        .attachTo(self.kwInfo)
+                        .on('select', function (date) {
+                            self.setStartDate(date);
+                            self.trigger('onRefresh');
+                        });
                 });
             }
         },
