@@ -96,14 +96,14 @@ define('plugins/portal/rss/register', [
                 var $body = $('<div class="text-body noI18n">').html(item.body);
 
                 // add target to a tags
-                $body.find('a').attr('target', '_blank');
+                $body.find('a').attr({ target: '_blank', rel: 'noopener' });
 
                 this.append(
                     $('<div class="text">').append(
                         $('<h4>').text(_.noI18n(item.subject)),
                         $body,
                         $('<div class="rss-url">').append(
-                            $('<a>').attr({ href: item.url, target: '_blank' }).text(_.noI18n(item.feedTitle + ' - ' + moment(item.date).format('l')))
+                            $('<a>').attr({ href: item.url, target: '_blank', rel: 'noopener' }).text(_.noI18n(item.feedTitle + ' - ' + moment(item.date).format('l')))
                         )
                     )
                 );

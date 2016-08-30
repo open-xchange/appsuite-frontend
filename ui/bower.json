@@ -36,7 +36,8 @@
     "tinymce-dist": "4.3.7",
     "typeahead.js": "0.10.5",
     "underscore": "1.8.3",
-    "velocity": "1.2.2"
+    "velocity": "1.2.2",
+    "blankshield": "^0.6.0"
   },
   "resolutions": {
     "backbone": "fda02db428c464badb12010c990622ee91f28a48"

@@ -15,21 +15,21 @@ define('plugins/portal/twitter/util', [
             linkMatches;
 
         _(entities.hashtags).each(function (hashtag) {
-            var elem = $('<a>', { href: 'https://twitter.com/#!/search/%23' + hashtag.text, target: '_blank' }).text('#' + hashtag.text);
+            var elem = $('<a target="_blank" rel="noopener">').attr('href', 'https://twitter.com/#!/search/%23' + hashtag.text).text('#' + hashtag.text);
             offsets[hashtag.indices[0]] = {
                 elem: elem,
                 indices: hashtag.indices
             };
         });
         _(entities.urls).each(function (url) {
-            var elem = $('<a>', { href: url.expanded_url, target: '_blank' }).text(url.display_url);
+            var elem = $('<a target="_blank" rel="noopener">').attr('href', url.expanded_url).text(url.display_url);
             offsets[url.indices[0]] = {
                 elem: elem,
                 indices: url.indices
             };
         });
         _(entities.user_mentions).each(function (user_mention) {
-            var elem = $('<a>', { href: 'https://twitter.com/#!/' + user_mention.screen_name, target: '_blank' }).text('@' + user_mention.screen_name);
+            var elem = $('<a target="_blank" rel="noopener">').attr('href', 'https://twitter.com/#!/' + user_mention.screen_name).text('@' + user_mention.screen_name);
             offsets[user_mention.indices[0]] = {
                 elem: elem,
                 indices: user_mention.indices
@@ -180,13 +180,13 @@ define('plugins/portal/twitter/util', [
         }
 
         $myTweet.append(
-            $('<a>').attr({ href: profileLink, target: '_blank' }).append(
+            $('<a target="_blank" rel="noopener">').attr('href', profileLink).append(
                 $('<img>', { src: tweet.user.profile_image_url_https, 'class': 'profilePicture', alt: tweet.user.description })
             ),
             $('<div class="text">').append(
-                $('<strong class="io-ox-twitter-name">').append($('<a>', { href: profileLink, target: '_blank' }).text(tweet.user.name)),
+                $('<strong class="io-ox-twitter-name">').append($('<a target="_blank" rel="noopener">').attr('href', profileLink).text(tweet.user.name)),
                 '<br />',
-                $('<a>', { 'class': 'name', href: profileLink, target: '_blank' }).text('@' + tweet.user.screen_name),
+                $('<a class="name" target="_blank" rel="noopener">').attr('href', profileLink).text('@' + tweet.user.screen_name),
                 '<br />',
                 parseTweet(tweet.text, tweet.entities)
             )
@@ -194,7 +194,7 @@ define('plugins/portal/twitter/util', [
 
         if (hideLinks) {
             $myTweet.append($('<div class="io-ox-twitter-details">').append(
-                $('<a>').attr({ 'class': 'io-ox-twitter-date', 'href': tweetLink, 'target': '_blank' }).text(tweeted),
+                $('<a class="io-ox-twitter-date" target="_blank" rel="noopener">').attr('href', tweetLink).text(tweeted),
                     getReplyLink(tweet, $myTweet),
                     isCurrentUser ? getDeleteLink(tweet, $myTweet) : getRetweetLink(tweet, $myTweet),
                     getFavoriteLink(tweet, $myTweet)

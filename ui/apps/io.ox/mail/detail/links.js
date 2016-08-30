@@ -152,7 +152,7 @@ define('io.ox/mail/detail/links', [
         // fix punctuation marks and brackets
         var fix = util.fixUrlSuffix(url, suffix), href = fix.url;
         if (!/^http/i.test(href)) href = 'http://' + href;
-        var link = $('<a href="#" target="_blank">').attr('href', href).text(fix.url);
+        var link = $('<a href="#" target="_blank" rel="noopener">').attr('href', href).text(fix.url);
 
         return { node: node, prefix: prefix, replacement: link, suffix: fix.suffix };
     }

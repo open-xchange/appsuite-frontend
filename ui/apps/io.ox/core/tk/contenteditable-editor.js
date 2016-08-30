@@ -302,7 +302,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             execcommand_callback: function (editor_id, elm, command) {
                 if (command === 'createlink') {
                     _.defer(function () {
-                        $(tinyMCE.get(editor_id).getBody()).find('a').attr('target', '_blank');
+                        $(tinyMCE.get(editor_id).getBody()).find('a').attr({
+                            target: '_blank',
+                            rel: 'noopener'
+                        });
                     });
                 }
             },
