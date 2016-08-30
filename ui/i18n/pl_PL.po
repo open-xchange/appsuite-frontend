@@ -10630,6 +10630,12 @@ msgstr "niepotwierdzone"
 msgid "unknown"
 msgstr "nieznane"
 
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "unknown sender"
+msgstr "Nieznany nadawca"
+
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 msgid "unlimited"
 msgstr "bez ograniczeń"

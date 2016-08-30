@@ -10701,6 +10701,12 @@ msgstr "no confirmat"
 msgid "unknown"
 msgstr "desconegut"
 
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "unknown sender"
+msgstr "Remitent desconegut"
+
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 msgid "unlimited"
 msgstr "il·limitat"

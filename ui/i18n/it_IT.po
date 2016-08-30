@@ -10595,6 +10595,12 @@ msgstr "non confermato"
 msgid "unknown"
 msgstr "sconosciuto"
 
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "unknown sender"
+msgstr "Mittente sconosciuto"
+
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 msgid "unlimited"
 msgstr "illimitata"

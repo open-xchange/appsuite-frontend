@@ -8240,6 +8240,11 @@ msgstr ""
 
 #: apps/io.ox/mail/actions/copyMove.js
 #: module:io.ox/mail
+msgid "unknown sender"
+msgstr ""
+
+#: apps/io.ox/mail/actions/copyMove.js
+#: module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
 msgstr ""
 

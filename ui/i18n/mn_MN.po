@@ -10255,6 +10255,10 @@ msgstr ""
 msgid "unknown"
 msgstr ""
 
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
+msgid "unknown sender"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 msgid "unlimited"
 msgstr ""

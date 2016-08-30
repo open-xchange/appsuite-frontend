@@ -10342,6 +10342,12 @@ msgstr "未確認"
 msgid "unknown"
 msgstr "未知"
 
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "unknown sender"
+msgstr "未知的寄件者"
+
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 msgid "unlimited"
 msgstr "未限制"
