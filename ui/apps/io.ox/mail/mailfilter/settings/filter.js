@@ -414,10 +414,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     },
 
                     renderFilter: function () {
-                        var self = this,
-                            list = self.$el.find('.widget-list').empty();
                         if (this.collection.length === 0) {
-                            list.append($('<div>').text(gt('There is no rule defined')));
+                            this.$el.append($('<div class="hint">').text(gt('There is no rule defined')));
                         } else {
                             this.$el.append(new ListView({
                                 collection: this.collection,
