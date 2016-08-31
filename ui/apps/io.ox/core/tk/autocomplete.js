@@ -159,9 +159,13 @@ define('io.ox/core/tk/autocomplete',
             },
 
             fnBlur = function () {
-                    if (!disableBlurHandler)
+                // if the underlying popup is focussed we don't close, IE does this when the scrollbars are clicked with the mouse
+                if (!$(document.activeElement).hasClass('autocomplete-popup')) {
+                    if (!disableBlurHandler) {
                         setTimeout(close, 200);
-                },
+                    }
+                }
+            },
 
             blurOff = function () {
                     self.off('blur', fnBlur).focus();
