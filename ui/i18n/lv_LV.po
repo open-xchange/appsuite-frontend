@@ -1560,6 +1560,10 @@ msgstr "CC"
 msgid "CSV"
 msgstr "CSV"
 
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "CW"
+msgstr "CW"
+
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
@@ -4053,6 +4057,42 @@ msgstr "Konfigurējiet savu ierīci, izmantojot e-pastu."
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
 msgstr "Atsausmes"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Show next day"
+msgid "Go to next decade"
+msgstr "Rādīt nākošo dienu"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "one month"
+msgid "Go to next month"
+msgstr "viens mēnesis"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "one year"
+msgid "Go to next year"
+msgstr "viens gads"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Show previous day"
+msgid "Go to previous decade"
+msgstr "Rādīt iepriekšējo dienu"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Previous month"
+msgid "Go to previous month"
+msgstr "Iepriekšējais mēnesis"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Previous year"
+msgid "Go to previous year"
+msgstr "Iepriekšējais gads"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Good evening, %s"
@@ -9040,10 +9080,11 @@ msgstr ""
 "Lai aizpildītu šo apgabalu, lūdzu pārvelciet vēstules uz šīs vērtnes "
 "virsrakstu."
 
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Today"
@@ -9338,6 +9379,12 @@ msgstr ""
 #. Tooltip for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "Use cursor keys to navigate"
+msgstr "Lai pārvietotos, izmantojiet kursora taustiņus"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Use cursor keys to navigate"
+msgid "Use cursor keys to navigate, press enter to select a date"
 msgstr "Lai pārvietotos, izmantojiet kursora taustiņus"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
@@ -11535,9 +11582,6 @@ msgstr "yyyy"
 
 #~ msgid "CSV (Contacts)"
 #~ msgstr "CSV (Kontakti)"
-
-#~ msgid "CW"
-#~ msgstr "CW"
 
 #~ msgid "Calendar custom view"
 #~ msgstr "Kalendāra pielāgotais skats"

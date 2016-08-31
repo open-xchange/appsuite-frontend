@@ -1537,6 +1537,10 @@ msgstr "CC"
 msgid "CSV"
 msgstr "CSV"
 
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "CW"
+msgstr "CW"
+
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
@@ -4032,6 +4036,42 @@ msgstr "Obtenha seu dispositivo configurado por e-mail."
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
 msgstr "Deixe seu comentário"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Show next day"
+msgid "Go to next decade"
+msgstr "Exibir próximo dia"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "one month"
+msgid "Go to next month"
+msgstr "um mês"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "one year"
+msgid "Go to next year"
+msgstr "um ano"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Show previous day"
+msgid "Go to previous decade"
+msgstr "Exibir dia anterior"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Previous month"
+msgid "Go to previous month"
+msgstr "Mês anterior"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Previous year"
+msgid "Go to previous year"
+msgstr "Ano passado"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Good evening, %s"
@@ -9019,10 +9059,11 @@ msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr ""
 "Para preencher esta área, arraste e solte e-mails para o título desta aba."
 
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Today"
@@ -9317,6 +9358,12 @@ msgstr ""
 #. Tooltip for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "Use cursor keys to navigate"
+msgstr "Use as teclas do cursor para navegar"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Use cursor keys to navigate"
+msgid "Use cursor keys to navigate, press enter to select a date"
 msgstr "Use as teclas do cursor para navegar"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
@@ -11361,9 +11408,6 @@ msgstr "aaaa"
 
 #~ msgid "CSV (Contacts)"
 #~ msgstr "CSV (Contatos)"
-
-#~ msgid "CW"
-#~ msgstr "CW"
 
 #~ msgid "Calendar custom view"
 #~ msgstr "Visualização personalizada do calendário"

@@ -290,6 +290,62 @@ msgstr ""
 msgid "Please enter a value"
 msgstr ""
 
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+msgid "Use cursor keys to navigate, press enter to select a date"
+msgstr ""
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/week/view.js
+#: apps/io.ox/core/tk/datepicker.js
+#: apps/io.ox/find/date/patterns.js
+#: apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
+#: apps/plugins/portal/birthdays/register.js
+#: module:plugins/portal
+msgid "Today"
+msgstr ""
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+msgid "Go to previous month"
+msgstr ""
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+msgid "Go to next month"
+msgstr ""
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+msgid "CW"
+msgstr ""
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+msgid "Go to previous year"
+msgstr ""
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+msgid "Go to next year"
+msgstr ""
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+msgid "Go to previous decade"
+msgstr ""
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+msgid "Go to next decade"
+msgstr ""
+
 #. button label for closing the Presenter app.
 #. button tooltip for closing the Presenter app.
 #: apps/io.ox/backbone/views/modal.js
@@ -1666,21 +1722,6 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: module:io.ox/calendar
 msgid "Show previous day"
-msgstr ""
-
-#: apps/io.ox/calendar/mobile-toolbar-actions.js
-#: module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
-#: apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/week/view.js
-#: apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core
-#: apps/io.ox/find/date/patterns.js
-#: apps/io.ox/tasks/util.js
-#: module:io.ox/tasks
-#: apps/plugins/portal/birthdays/register.js
-#: module:plugins/portal
-msgid "Today"
 msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js

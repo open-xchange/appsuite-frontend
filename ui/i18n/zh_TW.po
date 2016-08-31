@@ -1505,6 +1505,10 @@ msgstr "副本"
 msgid "CSV"
 msgstr "CSV"
 
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "CW"
+msgstr "日曆週"
+
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
@@ -3959,6 +3963,42 @@ msgstr "透過電子郵件設定裝置。"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
 msgstr "提供意見回饋"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Show next day"
+msgid "Go to next decade"
+msgstr "顯示下一天"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "one month"
+msgid "Go to next month"
+msgstr "一個月"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "one year"
+msgid "Go to next year"
+msgstr "一年"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Show previous day"
+msgid "Go to previous decade"
+msgstr "顯示上一天"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Previous month"
+msgid "Go to previous month"
+msgstr "前一個月"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Previous year"
+msgid "Go to previous year"
+msgstr "前一年"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Good evening, %s"
@@ -8818,10 +8858,11 @@ msgstr ""
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr "若要填滿此區塊，請將郵件拖曳到此分頁標題。"
 
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Today"
@@ -9112,6 +9153,12 @@ msgstr ""
 #. Tooltip for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "Use cursor keys to navigate"
+msgstr "使用方向鍵切換"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Use cursor keys to navigate"
+msgid "Use cursor keys to navigate, press enter to select a date"
 msgstr "使用方向鍵切換"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
@@ -11211,9 +11258,6 @@ msgstr "年"
 
 #~ msgid "CSV (Contacts)"
 #~ msgstr "CSV（聯繫方式）"
-
-#~ msgid "CW"
-#~ msgstr "日曆週"
 
 #~ msgid "Calendar custom view"
 #~ msgstr "日曆自定義視圖"
