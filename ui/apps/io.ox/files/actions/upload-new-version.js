@@ -32,6 +32,11 @@ define('io.ox/files/actions/upload-new-version', [
             });
         }
 
+        // Check if previous file was encrypted
+        function isEncrypted() {
+            return (data.meta && data.meta.Encrypted);
+        }
+
         /**
          * Process the upload of the new version.
          *
@@ -44,12 +49,12 @@ define('io.ox/files/actions/upload-new-version', [
          */
         function process(file, comment) {
             if (!file) { return $.Deferred().reject(); }
-
             return FilesAPI.versions.upload({
                 file: file,
                 id: data.id,
                 folder: data.folder_id,
-                version_comment: comment || ''
+                version_comment: comment || '',
+                params: isEncrypted() ? { 'cryptoAction': 'Encrypt' } : {} // If previous file encrypted new version should also be
             })
             .fail(notify);
         }
