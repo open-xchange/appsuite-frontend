@@ -124,6 +124,8 @@ define('io.ox/backbone/views/datepicker', [
 
         open: function () {
             if (this.isOpen() || this.closing) return;
+            // reset mode
+            this.mode = 'month';
             // render first to have dimensions
             this.render().$el.appendTo('body');
             // find proper placement
