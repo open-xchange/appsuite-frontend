@@ -51,18 +51,25 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
         });
 
         // close socket on invalid session
+        socket.on('session:invalid', function () {
+            if (debug) console.log('Websocket disconnected due to invalid session');
+            if (socket.connected) socket.close();
+        });
+
         ox.on('relogin:required', function () {
             if (debug) console.log('Websocket disconnected due to invalid session');
-            socket.close();
+            if (socket.connected) socket.close();
         });
 
         // reconnect socket on new session
         ox.on('relogin:success', function () {
             if (socket.disconnected) {
                 if (debug) console.log('Websocket reconnecting with new session');
-                // recreate URI to pass new session
-                socket.io.uri = URI + '/?session=' + ox.session;
-                socket.connect();
+                if (socket.disconnected) {
+                    // recreate URI to pass new session
+                    socket.io.uri = URI + '/?session=' + ox.session;
+                    socket.connect();
+                }
             }
         });
 
