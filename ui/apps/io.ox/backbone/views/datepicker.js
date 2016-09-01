@@ -233,19 +233,22 @@ define('io.ox/backbone/views/datepicker', [
                         // add empty <th> due to calendar week column
                         .append($('<th class="cw weekday">').text(gt('CW')))
                         .append(function () {
-                            var w = m.clone().day(0);
+                            var w = m.clone().startOf('week');
                             return _.range(0, 7).map(function () {
-                                w.add(1, 'day');
-                                return $('<th class="weekday">')
-                                    .toggleClass('weekend', w.day() === 0 || w.day() === 6)
-                                    .text(w.format('dd'));
+                                try {
+                                    return $('<th class="weekday">')
+                                        .toggleClass('weekend', w.day() === 0 || w.day() === 6)
+                                        .text(w.format('dd'));
+                                } finally {
+                                    w.add(1, 'day');
+                                }
                             });
                         })
                 ),
                 $('<tbody>').append(
                     function () {
                         var month = m.date(1).month(), start = m.clone(), end = m.clone().endOf('month');
-                        if (m.day(1).isAfter(start)) m.subtract(1, 'week');
+                        if (m.startOf('week').isAfter(start)) m.subtract(1, 'week');
                         return _.range(0, Math.ceil(end.diff(m, 'days') / 7)).map(function () {
                             return $('<tr role="row">')
                                 .append(
