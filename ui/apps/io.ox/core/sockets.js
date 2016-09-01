@@ -18,14 +18,14 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
         URI = ox.abs,
         isConnected = false,
         supported = Modernizr.websockets && cap.has('websocket'),
-        debug = _.url.hash('socket-debug');
+        debug = _.url.hash('socket-debug') || ox.debug;
 
     function connectSocket() {
         var def = $.Deferred();
         // connect Websocket
         if (debug) console.log('Websocket trying to connect...');
         socket = io.connect(URI + '/?session=' + ox.session, { transports: ['websocket'] });
-
+        window.socket = socket;
         socket.on('connect', function () {
             if (debug) console.log('Websocket connected!');
             isConnected = true;
@@ -49,6 +49,23 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
             if (debug) console.log('Websocket connection timeout');
             def.reject();
         });
+
+        // close socket on invalid session
+        ox.on('relogin:required', function () {
+            if (debug) console.log('Websocket disconnected due to invalid session');
+            socket.close();
+        });
+
+        // reconnect socket on new session
+        ox.on('relogin:success', function () {
+            if (socket.disconnected) {
+                if (debug) console.log('Websocket reconnecting with new session');
+                // recreate URI to pass new session
+                socket.io.uri = URI + '/?session=' + ox.session;
+                socket.connect();
+            }
+        });
+
         return def;
     }
 
