@@ -239,9 +239,28 @@ define('io.ox/core/notifications/subview', [
                 }
             }
         },
-        hideAll: function () {
-            this.hiddenCollection.add(this.collection.models);
+
+        hideAll: function (time) {
+            var models = this.collection.models,
+                self = this;
+            if (models.length === 0) {
+                return;
+            }
+            this.hiddenCollection.add(models);
             this.collection.reset();
+
+            // if a time is given, show notifcations again after the timeout
+            if (time) {
+                _(models).each(function (model) {
+                    setTimeout(function (hiddenModel) {
+                        self.hiddenCollection.remove(hiddenModel);
+                        //don't add twice
+                        if (!self.collection.get(hiddenModel.get('id'))) {
+                            self.addNotifications([hiddenModel]);
+                        }
+                    }, time, model);
+                });
+            }
         },
         hide: function (model, time) {
             //should work with models and objects with attributes
