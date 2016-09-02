@@ -120,6 +120,8 @@ define('io.ox/mail/categories/main', [
         dialog: undefined,
         events: {
             'click .category': 'onSelect',
+            'contextmenu .category': 'showOptions',
+            'dblclick .category': 'showOptions',
             'keydown .category': 'onKeydown',
             'selection:drop': 'onDrop',
             'click [data-action="tabbed-inbox-options"]': 'showOptions'
@@ -224,11 +226,13 @@ define('io.ox/mail/categories/main', [
                 new dialog.Generalize(this, baton);
             }.bind(this));
         },
-        showOptions: function () {
+        showOptions: function (e) {
             require(['io.ox/mail/categories/dialogs'], function (dialog) {
                 // triggers update event in this view (with data param)
                 new dialog.Options(this);
             }.bind(this));
+            // do not show native rightclick menu
+            if (e.type === 'contextmenu') e.preventDefault();
         },
         show: function () {
             this.trigger('show:before');
