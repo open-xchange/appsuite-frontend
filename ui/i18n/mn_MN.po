@@ -5580,6 +5580,10 @@ msgstr ""
 msgid "Notify all participants by email."
 msgstr "Бүх оролцогч нарт и-майлаар мэдэгдэх"
 
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Notify me again later"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "November"
 msgstr "11 сар"

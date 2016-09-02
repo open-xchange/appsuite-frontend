@@ -4916,6 +4916,11 @@ msgstr ""
 
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
+msgid "Notify me again later"
+msgstr ""
+
+#: apps/io.ox/core/notifications.js
+#: module:io.ox/core
 msgid "Would you like to enable desktop notifications?"
 msgstr ""
 
