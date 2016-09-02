@@ -18,8 +18,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'io.ox/backbone/mini-views',
     'io.ox/core/folder/picker',
-    'io.ox/backbone/mini-views/datepicker'
-], function (notifications, gt, ext, DEFAULTS, mini, picker, DatePicker) {
+    'io.ox/backbone/mini-views/datepicker',
+    'io.ox/core/folder/api'
+], function (notifications, gt, ext, DEFAULTS, mini, picker, DatePicker, folderAPI) {
 
     'use strict';
 
@@ -143,10 +144,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             node.append(warning);
         },
 
-        prepareFolderForDisplay = function (folder) {
-            var arrayOfParts = folder.split('/');
-            arrayOfParts.shift();
-            return arrayOfParts.join('/');
+        prepareFolderForDisplay = function (folder, input) {
+            folderAPI.get(folder).done(function (data) {
+                var arrayOfParts = folder.split('/');
+                arrayOfParts.shift();
+                if (data.standard_folder) {
+                    input.val(data.title);
+                } else {
+                    input.val(arrayOfParts.join('/'));
+                }
+            });
         },
 
         toggleSaveButton = function (footer, pane) {
@@ -374,35 +381,25 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             },
 
             onFolderSelect: function (e) {
-
                 e.preventDefault();
 
                 var self = this,
+                    model = $(e.currentTarget).data('model'),
                     list = $(e.currentTarget).closest('li'),
-                    actionID = list.attr('data-action-id'),
-                    inputField = list.find('input'),
-                    currentFolder =  this.model.get('actioncmds')[actionID].into,
-                    actionArray =  this.model.get('actioncmds');
+                    actionID = list.attr('data-action-id');
 
                 this.dialog.getPopup().hide();
 
                 picker({
                     context: 'filter',
                     done: function (id) {
-
-                        var prepared = prepareFolderForDisplay(id);
-
-                        actionArray[actionID].into = id;
-                        self.model.set('actioncmds', actionArray);
-
-                        inputField.val(prepared);
-                        inputField.attr('title', id);
+                        model.set('into', id);
                     },
                     close: function () {
                         self.dialog.getPopup().show();
                         self.$el.find('[data-action-id="' + actionID + '"] .folderselect').focus();
                     },
-                    folder: currentFolder,
+                    folder: model.get('into'),
                     module: 'mail',
                     root: '1'
                 });
@@ -731,7 +728,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             if (/customflag_/g.test(this.id)) {
                                 this.$el.val(this.model.get('flags')[0].replace(/^\$+/, ''));
                             } else if (/move_/g.test(this.id)) {
-                                this.$el.val(prepareFolderForDisplay(this.model.get('into')));
+                                prepareFolderForDisplay(this.model.get('into'), this.$el);
                             } else {
                                 this.$el.val($.trim(this.model.get(this.name)));
                             }
@@ -793,7 +790,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('row').append(
                                     $('<div>').addClass('col-sm-4 rightalign').append(
-                                        $('<a href="#" tabindex="1">').addClass('folderselect').text(gt('Select folder'))
+                                        $('<a href="#" class="folderselect">').text(gt('Select folder')).data({ 'model': o.inputOptions.model })
                                     ),
                                     $('<div class=" col-sm-8">').append(
                                         $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
