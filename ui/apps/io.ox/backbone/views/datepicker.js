@@ -186,7 +186,7 @@ define('io.ox/backbone/views/datepicker', [
                     .attr('aria-label', gt('Use cursor keys to navigate, press enter to select a date')),
                 $('<button role="button" class="btn-today">')
                     .attr('aria-label', 'Go to today')
-                    .text(gt('Today'))
+                    .text(gt('Today: %1$s', moment().format('l')))
             );
         },
 
