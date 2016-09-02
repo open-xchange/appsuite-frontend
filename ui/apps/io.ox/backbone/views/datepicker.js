@@ -260,7 +260,8 @@ define('io.ox/backbone/views/datepicker', [
                                             return $('<td role="gridcell" class="date">')
                                                 .attr({
                                                     'id': 'date_' + m.format('l'),
-                                                    'aria-label': m.format('l, dddd'),
+                                                    //#. CW is calender week and %1$d is the week number
+                                                    'aria-label': m.format('l, dddd') + ', ' + gt('CW %1$d', m.week()),
                                                     'aria-selected': isSame(m, current),
                                                     'data-date': m.valueOf()
                                                 })
