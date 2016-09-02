@@ -19,8 +19,9 @@ define('plugins/notifications/mail/register', [
     'gettext!plugins/notifications',
     'io.ox/mail/util',
     'io.ox/core/folder/api',
-    'io.ox/core/api/account'
-], function (api, ext, gt, util, folderApi, account) {
+    'io.ox/core/api/account',
+    'io.ox/core/capabilities'
+], function (api, ext, gt, util, folderApi, account, cap) {
 
     'use strict';
 
@@ -30,7 +31,14 @@ define('plugins/notifications/mail/register', [
         return /^default0\D/.test(model.id) && !account.is('spam|trash|unseen', model.id) && (folderApi.getSection(model.get('type')) === 'private');
     }
 
-    var lastCount = -1;
+    var lastCount = -1,
+        sound = new Audio('/apps/plugins/notifications/mail/marimba.mp3');
+
+    sound.volume = 0.5;
+
+    var playSound = _.debounce(function () {
+        sound.play();
+    }, 1000);
 
     var update = _.debounce(function () {
 
@@ -151,7 +159,10 @@ define('plugins/notifications/mail/register', [
 
     api.checkInbox();
 
-    ox.on('socket:mail:new', api.checkInbox);
+    ox.on('socket:mail:new', function () {
+        update();
+        if (cap.has('sound')) playSound();
+    });
 
     return true;
 });

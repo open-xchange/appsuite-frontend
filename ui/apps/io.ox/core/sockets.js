@@ -25,7 +25,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
         // connect Websocket
         if (debug) console.log('Websocket trying to connect...');
         socket = io.connect(URI + '/?session=' + ox.session, { transports: ['websocket'] });
-        window.socket = socket;
+
         socket.on('connect', function () {
             if (debug) console.log('Websocket connected!');
             isConnected = true;
