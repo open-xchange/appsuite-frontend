@@ -1532,7 +1532,9 @@ msgstr "CSV"
 msgid "CW"
 msgstr ""
 
+#. CW is calender week and %1$d is the week number
 #. %1$d = Calendar week
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/month/view.js module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
 msgid "CW %1$d"
@@ -9010,15 +9012,20 @@ msgstr ""
 "Täyttääksesi tämän alueen raahaa ja pudota viestit tämän välilehden "
 "otsikkoon."
 
-#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
+#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Today"
 msgstr "Tänään"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#, fuzzy
+#| msgid "Total: %1$d"
+msgid "Today: %1$s"
+msgstr "Yhteensä %1$d"
 
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
