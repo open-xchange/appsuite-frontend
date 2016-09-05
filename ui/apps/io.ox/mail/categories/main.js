@@ -273,13 +273,11 @@ define('io.ox/mail/categories/main', [
             set: function () {
                 var config = this.config.get(),
                     list = merge(config.list, this.categories.toJSON());
-                settings.set('categories/enabled', this.props.get('enabled'));
                 settings.set('categories/list', list);
             },
             load: function () {
                 var config = this.config.get();
                 this.categories.set(config.list);
-                this.props.set('enabled', config.enabled);
                 this.props.set('initialized', config.initialized);
                 this.trigger('load');
                 // update unread count
@@ -381,11 +379,19 @@ define('io.ox/mail/categories/main', [
             // load config
             this.config.load();
             // props
-            this.props.set('selected', this.restoreSelection());
+            this.props.set({
+                'selected': this.restoreSelection(),
+                'enabled': settings.get('categories/enabled')
+            });
             // inital refresh
             //_.defer(_.bind(this.refresh, this));
         },
         register: function () {
+            // temporary
+            settings.on('change:categories/enabled', function (e, value) {
+                this.props.set('enabled', value);
+            }.bind(this));
+
             this.listenTo(this.view, 'update', this.update);
             this.listenTo(this.view, 'select', this.select);
             // retrigger as custom value based event (change:enabled -> enabled:true/false)
@@ -405,7 +411,6 @@ define('io.ox/mail/categories/main', [
             this.listenTo(this.view, 'dialog:generalize', this.generalize);
             this.listenTo(this.view, 'dialog:revert', this.revert);
             // triggers settings save
-            this.listenTo(this.props, 'change:enabled', _.throttle(this.config.save, 2000, { leading: false }));
             this.listenTo(this, 'update:after', this.config.save);
             // reload: listview
             this.listenTo(this.props, 'change:selected', this.reload);
@@ -455,14 +460,6 @@ define('io.ox/mail/categories/main', [
             this.mail.listView.model.unset('categoryid');
             this.props.set('visible', false);
             this.trigger('hide');
-        },
-        enable: function () {
-            this.props.set('enabled', true);
-            this.trigger('enable');
-        },
-        disable: function () {
-            this.props.set('enabled', false);
-            this.trigger('disable');
         },
         restoreSelection: function () {
             var id = (this.categories.get(_.url.hash('category') || this.props.get('selected')) || this.categories.first() || {}).id;

@@ -263,6 +263,7 @@ define('io.ox/mail/toolbar', [
             .option('contactPictures', true, gt('Contact pictures'))
             .option('exactDates', true, gt('Exact dates'))
             .option('alwaysShowSize', true, gt('Message size'))
+            .option('categories', true, gt('Inbox tabs'))
             .divider()
             .link('categories-config', gt('Configure inbox tabs'), categoriesShowConfig.bind(null, baton.app))
             .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))

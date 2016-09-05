@@ -993,11 +993,16 @@ textarea.inplace-editor {
 }
 
 // categories: unavailable
+.classic-toolbar [data-name="categories"],
 .classic-toolbar [data-name="categories-config"] {
     display: none;
 }
 // categories: available
 .window-container.mail-categories {
+
+    .classic-toolbar [data-name="categories"] {
+        display: block;
+    }
 
     //categories:enabled
     &.mail-categories-enabled {

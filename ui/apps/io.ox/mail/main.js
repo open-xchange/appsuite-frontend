@@ -289,6 +289,7 @@ define('io.ox/mail/main', [
                 'contactPictures': _.device('smartphone') ? false : app.settings.get('showContactPictures', false),
                 'exactDates': app.settings.get('showExactDates', false),
                 'alwaysShowSize': app.settings.get('alwaysShowSize', false),
+                'categories': app.settings.get('categories/enabled', false),
                 'mobileFolderSelectMode': false
             });
         },
@@ -505,7 +506,8 @@ define('io.ox/mail/main', [
                     .set('layout', data.layout)
                     .set('showContactPictures', data.contactPictures)
                     .set('showExactDates', data.exactDates)
-                    .set('alwaysShowSize', data.alwaysShowSize);
+                    .set('alwaysShowSize', data.alwaysShowSize)
+                    .set('categories/enabled', data.categories);
                 if (_.device('!smartphone')) {
                     app.settings.set('showCheckboxes', data.checkboxes);
                 }
@@ -1709,8 +1711,8 @@ define('io.ox/mail/main', [
 
             var mapper;
             // register settings listener
-            if (settings.get('categories/enabled')) refresh();
-            settings.on('change:categories/enabled', refresh);
+            if (app.props.get('categories')) refresh();
+            app.props.on('change:categories', refresh);
 
             var Mapper = function (cat) {
                 var mapper = {
