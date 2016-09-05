@@ -20,7 +20,9 @@ define('io.ox/participants/add', [
     'io.ox/contacts/util',
     'io.ox/core/util',
     'io.ox/core/yell',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    // need jquery-ui for scrollParent
+    'static/3rd.party/jquery-ui.min.js'
 ], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, yell, gt) {
 
     'use strict';

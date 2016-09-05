@@ -188,10 +188,12 @@ define('io.ox/participants/views', [
         initialize: function (options) {
             this.options = options;
             this.listenTo(this.collection, 'add', function (model) {
+                this.renderLabel();
                 this.renderEmptyLabel();
                 this.renderParticipant(model);
             });
             this.listenTo(this.collection, 'remove', function () {
+                this.renderLabel();
                 this.renderEmptyLabel();
             });
             this.listenTo(this.collection, 'reset', function () {
@@ -204,11 +206,18 @@ define('io.ox/participants/views', [
         render: function () {
             this.$el.append(
                 $('<fieldset>').append(
-                    $('<legend>').text(this.options.label || gt('Participants')).addClass(this.options.labelClass || ''),
+                    $('<legend>').addClass(this.options.labelClass || ''),
                     this.$ul = $('<ul class="list-unstyled">')
                 )
             );
-            return this.renderAll();
+            this.renderAll();
+            return this;
+        },
+
+        renderLabel: function () {
+            var count = this.collection.length,
+                label = this.options.label || gt('Participants (%1$d)', count);
+            this.$('fieldset > legend').text(label);
         },
 
         renderParticipant: function (participant) {
@@ -237,6 +246,7 @@ define('io.ox/participants/views', [
 
         renderAll: function () {
             var self = this;
+            this.renderLabel();
             this.renderEmptyLabel();
             this.collection.each(function (model) {
                 self.renderParticipant(model);

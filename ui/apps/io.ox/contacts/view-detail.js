@@ -50,8 +50,15 @@ define('io.ox/contacts/view-detail', [
             return { format: _.noI18n('%' + index + '$s'), params: params };
         }
 
+        var count, desc;
+
         if (api.looksLikeDistributionList(data)) {
-            return single(7, gt('Distribution list'), true);
+            count = data.number_of_distribution_list;
+            //#. %1$d is a number of members in distribution list
+            desc = count === 0 ?
+                gt('Distribution list') :
+                gt.format(gt.ngettext('Distribution list with 1 entry', 'Distribution list with %1$d entries', count), count);
+            return single(7, desc, true);
         }
 
         if (api.looksLikeResource(data)) {
@@ -244,27 +251,23 @@ define('io.ox/contacts/view-detail', [
         draw: function (baton) {
 
             var list = _.copy(baton.data.distribution_list || [], true),
-                hash = {},
-                $list = $('<ul class="member-list list-unstyled">');
+                count = list.length,
+                hash = {}, $list;
 
-            this.append($list);
+            this.append(
+                count === 0 ? $('<div class="list-count">').text(gt('This list has no contacts yet')) : $(),
+                $list = $('<ul class="member-list list-unstyled">')
+            );
 
             // if there are no members in the list
-            if (list.length === 0) {
-                this.append(
-                    $('<div>').text(gt('This list has no contacts yet'))
-                );
-                return;
-            }
+            if (!count) return;
 
             // remove duplicates to fix backend bug
             http.pause();
             _(list)
                 .chain()
                 .filter(function (member) {
-                    if (hash[member.mail]) {
-                        return false;
-                    }
+                    if (hash[member.mail]) return false;
                     return (hash[member.mail] = true);
                 })
                 .each(function (member) {
