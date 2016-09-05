@@ -992,6 +992,26 @@ textarea.inplace-editor {
     visibility: hidden;
 }
 
+// categories: available
+.window-container.mail-categories {
+
+    //categories:enabled
+    &.mail-categories-enabled {
+
+        &:not(.io-ox-find-active) {
+            // layout: compact
+            .window-body:not(.classic-toolbar-visible) {
+                .abs.window-content {  top: 40px; }
+            }
+            // layout: vertical, horizontal, list
+            .window-body.classic-toolbar-visible {
+                .abs.window-content {  top: 80px; }
+                .classic-toolbar-container:not(.categories-container) .classic-toolbar { top: 40px; }
+            }
+        }
+    }
+}
+
 @media (max-width: 700px) {
 
     .thread-view-list { padding: 0; }

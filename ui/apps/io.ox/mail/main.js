@@ -1695,6 +1695,14 @@ define('io.ox/mail/main', [
             });
         },
 
+        'mail-categories-states': function (app) {
+            if (_.device('smartphone')) return;
+            if (!capabilities.has('mail_categories')) return;
+
+            var container = app.getWindow().nodes.outer;
+            container.addClass('mail-categories');
+        },
+
         'mail-categories': function (app) {
             if (_.device('smartphone')) return;
             if (!capabilities.has('mail_categories')) return;
