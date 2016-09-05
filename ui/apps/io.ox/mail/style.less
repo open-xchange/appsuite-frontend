@@ -992,11 +992,19 @@ textarea.inplace-editor {
     visibility: hidden;
 }
 
+// categories: unavailable
+.classic-toolbar [data-name="categories-config"] {
+    display: none;
+}
 // categories: available
 .window-container.mail-categories {
 
     //categories:enabled
     &.mail-categories-enabled {
+
+        .classic-toolbar [data-name="categories-config"] {
+            display: block;
+        }
 
         &:not(.io-ox-find-active) {
             // layout: compact

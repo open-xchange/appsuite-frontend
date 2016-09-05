@@ -236,6 +236,10 @@ define('io.ox/mail/toolbar', [
         });
     }
 
+    function categoriesShowConfig(app) {
+        if (app.categories) app.categories.showConfig();
+    }
+
     // view dropdown
     ext.point('io.ox/mail/classic-toolbar').extend({
         id: 'view-dropdown',
@@ -260,6 +264,7 @@ define('io.ox/mail/toolbar', [
             .option('exactDates', true, gt('Exact dates'))
             .option('alwaysShowSize', true, gt('Message size'))
             .divider()
+            .link('categories-config', gt('Configure inbox tabs'), categoriesShowConfig.bind(null, baton.app))
             .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
             .listenTo(baton.app.props, 'change:layout', updateContactPicture);
 

@@ -127,17 +127,7 @@ define('io.ox/mail/categories/main', [
             'click [data-action="tabbed-inbox-options"]': 'showOptions'
         },
         skeleton: function () {
-            return [
-                $('<ul>', { class: 'classic-toolbar categories', role: 'toolbar', 'aria-label': gt('Inbox tabs') }),
-                $('<div class="free-space">'),
-                $('<ul>', { class: 'classic-toolbar actions', role: 'toolbar', 'aria-label': gt('Configure your inbox tabs') }).append(
-                    $('<li role="presentation aria-hidden="true">').append(
-                        $('<a class="io-ox-action-link no-underline" href="#" tabindex="-1" data-action="tabbed-inbox-options" draggable="false" role="button" data-section="default" data-prio="hi" title=""">').append(
-                                $('<i class="fa fa-cog">')
-                            )
-                    )
-                )
-            ];
+            return $('<ul>', { class: 'classic-toolbar categories', role: 'toolbar', 'aria-label': gt('Inbox tabs') });
         },
         initialize: function (options) {
             _.extend(this, options || {});
@@ -149,7 +139,6 @@ define('io.ox/mail/categories/main', [
             // helper
             this.ui = {
                 list: this.$el.find('.classic-toolbar.categories'),
-                actions: this.$el.find('.classic-toolbar.actions'),
                 body: this.$el.closest('.window-body'),
                 container: this.$el.closest('.window-container')
             };
@@ -232,7 +221,7 @@ define('io.ox/mail/categories/main', [
                 new dialog.Options(this);
             }.bind(this));
             // do not show native rightclick menu
-            if (e.type === 'contextmenu') e.preventDefault();
+            if (e && e.type === 'contextmenu') e.preventDefault();
         },
         show: function () {
             this.trigger('show:before');
@@ -527,6 +516,9 @@ define('io.ox/mail/categories/main', [
         isFolderSupported: function () {
             var folder = this.props.get('folder');
             return accountAPI.is('inbox', folder) && accountAPI.isPrimary(folder);
+        },
+        showConfig: function () {
+            this.view.showOptions();
         },
         reload: function () {
             // TODO: dirty
