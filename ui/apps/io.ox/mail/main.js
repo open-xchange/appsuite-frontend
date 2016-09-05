@@ -1731,8 +1731,8 @@ define('io.ox/mail/main', [
             app.settings.on('change:categories/enabled', dispatch);
             app.on('folder:change', visibility);
 
-            function dispatch() {
-                if (app.settings.get('categories/enabled')) return enable();
+            function dispatch(e) {
+                if (app.settings.get('categories/enabled')) return enable(e);
                 disable();
             }
 
@@ -1742,7 +1742,11 @@ define('io.ox/mail/main', [
                 container.toggleClass('mail-categories-supported', isSupported);
             }
 
-            function enable() {
+            function enable(e) {
+                // user initiated change?
+                if (e && !container.hasClass('mail-categories-supported')) {
+                    notifications.yell('info', gt('The tabbed inbox feature only affects the main inbox.'));
+                }
                 app.categories.enable();
                 container.addClass('mail-categories-enabled');
             }
