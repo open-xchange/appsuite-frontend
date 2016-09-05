@@ -22,8 +22,7 @@ define('io.ox/mail/categories/main', [
     'io.ox/core/yell',
     'io.ox/core/extensions',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail',
-    'less!io.ox/mail/categories/style'
+    'gettext!io.ox/mail'
 ], function (api, mailAPI, accountAPI, folderAPI, dnd, links, capabilities, yell, ext, settings, gt) {
 
     'use strict';
@@ -126,16 +125,11 @@ define('io.ox/mail/categories/main', [
             'selection:drop': 'onDrop',
             'click [data-action="tabbed-inbox-options"]': 'showOptions'
         },
-        skeleton: function () {
-            return $('<ul>', { class: 'classic-toolbar categories', role: 'toolbar', 'aria-label': gt('Inbox tabs') });
-        },
         initialize: function (options) {
             _.extend(this, options || {});
             this.setElement($('.categories-toolbar-container'));
             // A11y: Do not add role to empty element
             $('.categories-toolbar-container').attr('role', 'menu');
-            // add skeleton nodes
-            this.$el.append(this.skeleton());
             // helper
             this.ui = {
                 list: this.$el.find('.classic-toolbar.categories'),
@@ -144,6 +138,7 @@ define('io.ox/mail/categories/main', [
             };
             // dnd
             dnd.enable({ draggable: true, container: this.ui.list, selection: this.selection, delegate: true, dropzone: true, dropzoneSelector: '.category' });
+            this.ui.list.empty();
             // register listeners
             this.register();
         },

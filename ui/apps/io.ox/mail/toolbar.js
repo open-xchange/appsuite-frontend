@@ -21,11 +21,12 @@ define('io.ox/mail/toolbar', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/toolbar',
     'settings!io.ox/core',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, gt) {
+], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, mailsettings, gt) {
 
     'use strict';
 
@@ -325,10 +326,22 @@ define('io.ox/mail/toolbar', [
         setup: function (app) {
             if (_.device('smartphone')) return;
             if (!capabilities.has('mail_categories')) return;
-
+            var category = _.findWhere(mailsettings.get('categories/list'), { id: 'general' }) || { name: 'General' },
+                label = category.name;
             // add placeholder
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                $('<div class="categories-toolbar-container categories-container">')
+                $('<div class="categories-toolbar-container categories-container">').append(
+                    $('<ul>', { class: 'classic-toolbar categories', role: 'toolbar', 'aria-label': gt('Inbox tabs') }).append(
+                        $('<li class="category selected" data-id="general">)').append(
+                            $('<a class="link" role="button">').append(
+                                $('<div class="category-icon">'),
+                                $('<div class="category-name truncate">').text(label),
+                                $('<div class="category-counter">')
+                            )
+                        ),
+                        $('<li class="free-space" aria-hidden="true">')
+                    )
+                )
             );
         }
     });
