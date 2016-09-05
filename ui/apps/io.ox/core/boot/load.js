@@ -118,6 +118,12 @@ define('io.ox/core/boot/load', [
                     limit: '0,30'
                 };
 
+            // mail categories (aka tabbed inbox)
+            if (!_.device('smartphone') && capabilities.has('mail_categories') && mailSettings.get('categories/enabled')) {
+                // main tab is 'general' (convention)
+                params.categoryid = 'general';
+            }
+
             // edge case: no prefetch if sorting is 'from-to' (need to many data we don't have yet)
             if (sort === 'from-to') return;
 
