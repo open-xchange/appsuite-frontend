@@ -1,0 +1,82 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.io-ox-notes-window {
+
+    .rightside {
+        background-color: #eee;
+        padding: 16px;
+    }
+
+    .note {
+        color: #333;
+    }
+
+    .note-title {
+        top: 16px;
+        right: 16px;
+        left: 16px;
+        height: 40px;
+        bottom: auto;
+        input {
+            width: 100%;
+            height: 40px;
+            border: 0;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 40px;
+            background-color: white;
+        }
+    }
+
+    .note-content {
+        top: 72px;
+        right: 16px;
+        left: 16px;
+        bottom: 16px;
+        font-size: 14px;
+        line-height: 20px;
+        background-color: white;
+
+        .todo {
+            list-style-type: none;
+            margin: 0 0 16px 0;
+            padding-left: 24px;
+            li:before {
+                font-family: FontAwesome;
+                font-size: 14px;
+                color: #777;
+                content: '\f1db';
+                position: relative;
+                left: -18px;
+                cursor: pointer;
+            }
+            li.checked:before {
+                color: #408c23;
+                content: '\f058';
+            }
+        }
+    }
+
+    .note-title input, .note-content {
+        border: 1px solid transparent;
+        padding: 15px;
+        outline: 0;
+    }
+
+    .note-title input:focus, .note-content:focus {
+        border-color: @input-border-focus;
+        @color: fade(@input-border-focus, 60%);
+        .box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px @{color}");
+    }
+}
