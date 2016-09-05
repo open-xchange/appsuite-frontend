@@ -438,6 +438,12 @@ define('io.ox/mail/categories/main', [
                 }
             });
         },
+        enable: function () {
+            this.props.set('enabled', true);
+        },
+        disable: function () {
+            this.props.set('enabled', false);
+        },
         // toggle
         show: function () {
             if (!this.props.get('enabled')) return;

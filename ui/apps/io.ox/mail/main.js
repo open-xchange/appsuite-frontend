@@ -1697,48 +1697,59 @@ define('io.ox/mail/main', [
             });
         },
 
-        'mail-categories-states': function (app) {
-            if (_.device('smartphone')) return;
-            if (!capabilities.has('mail_categories')) return;
-
-            var container = app.getWindow().nodes.outer;
-            container.addClass('mail-categories');
-        },
-
         'mail-categories': function (app) {
             if (_.device('smartphone')) return;
             if (!capabilities.has('mail_categories')) return;
 
-            var mapper;
-            // register settings listener
-            if (app.props.get('categories')) refresh();
-            app.props.on('change:categories', refresh);
-
-            var Mapper = function (cat) {
-                var mapper = {
-                    initialize: function () {
-                        cat.init({ mail: app, pool: api.pool.get('detail') });
-                        this.categories = cat;
-                        return this;
-                    },
-                    refresh: function () {
-                        this.categories.config.load();
-                    }
-                };
-                return mapper.initialize();
+            // pre-load logic
+            app.categories = {
+                enable: function () {
+                    app.listView.model.set('categoryid', 'general');
+                },
+                disable: function () {
+                    app.listView.model.unset('categoryid');
+                }
             };
 
-            // apply settings change (enable/disable)
-            function refresh() {
-                // refresh config (triggers show/hide internally)
-                if (mapper) return mapper.refresh();
-                // in case require not resolved in time
-                mapper = { refresh: $.noop };
-                // init on first call of 'apply'
-                require(['io.ox/mail/categories/main'], function (cat) {
-                    app.categories = cat;
-                    mapper = new Mapper(cat);
-                });
+            // fulllogic
+            require(['io.ox/mail/categories/main'], function (cat) {
+                app.categories = cat;
+                cat.init({ mail: app, pool: api.pool.get('detail') });
+            });
+        },
+
+        'mail-categories-states': function (app) {
+            if (_.device('smartphone')) return;
+            if (!capabilities.has('mail_categories')) return;
+
+            var container = app.getWindow().nodes.outer.addClass('mail-categories');
+
+            // initial
+            dispatch();
+            visibility();
+            // register
+            app.settings.on('change:categories/enabled', dispatch);
+            app.on('folder:change', visibility);
+
+            function dispatch() {
+                if (app.settings.get('categories/enabled')) return enable();
+                disable();
+            }
+
+            function visibility() {
+                var folder = app.listView.model.get('folder'),
+                    isSupported = account.is('inbox', folder) && account.isPrimary(folder);
+                container.toggleClass('mail-categories-supported', isSupported);
+            }
+
+            function enable() {
+                app.categories.enable();
+                container.addClass('mail-categories-enabled');
+            }
+
+            function disable() {
+                app.categories.disable();
+                container.removeClass('mail-categories-enabled');
             }
         },
 
