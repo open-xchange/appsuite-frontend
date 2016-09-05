@@ -320,11 +320,6 @@ define('io.ox/mail/settings/pane', [
             this.append(
                 fieldset(
                     gt('Inbox Tabs'),
-                    // enable
-                    settings.get('categories/forced') ? $() : checkbox(
-                        gt('Show Tabs for inbox'),
-                        new mini.CheckboxView({ name: 'categories/enabled', model: settings }).render().$el
-                    ),
                     // default behavior after move
                     $('<div class="col-xs-12 col-md-6">').append(
                         $('<div class="row">').append(

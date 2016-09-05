@@ -181,11 +181,6 @@ define('io.ox/mail/categories/dialogs', [
                     });
                     this.find('.form-inline-container').append(list);
                 },
-                'settings-hint': function () {
-                    this.append(
-                        $('<p class="description-main hint">').text(gt('The tabbed inbox can be completely disabled in the mail settings.'))
-                    );
-                },
                 register: function (baton) {
                     this.on('click', '.category-item', baton.view.onToggle);
                     baton.view.on('save', baton.view.onSave);

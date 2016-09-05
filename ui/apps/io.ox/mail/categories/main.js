@@ -446,7 +446,6 @@ define('io.ox/mail/categories/main', [
             // state
             this.props.set('visible', true);
             this.restoreSelection();
-            //this.mail.left.find('[data-name="thread"]').addClass('disabled');
             this.trigger('show');
         },
         hide: function () {
