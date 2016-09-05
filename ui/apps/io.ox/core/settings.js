@@ -146,6 +146,8 @@ define('io.ox/core/settings', [
             });
         };
 
+        // please note: doesn't trigger change events when manipulating
+        // properties of objects (#48456). Use `settings.on('change', cb)` instead.
         this.createModel = function (ModelClass) {
             return new ModelClass(tree).on('change', change);
         };
