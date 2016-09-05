@@ -1104,27 +1104,6 @@ define('io.ox/core/main', [
             }
         });
 
-        // launchpad
-        ext.point('io.ox/core/topbar/launchpad').extend({
-            id: 'default',
-            draw: function () {
-                if (capabilities.has('launchpad')) {
-                    addLauncher('left', $('<i class="fa fa-th">').attr('aria-label', gt('Your Applications')), function () {
-                        require(['io.ox/launchpad/main'], function (m) {
-                            launchers.children().removeClass('active-app');
-                            launcherDropdown.children().removeClass('active-app');
-                            launchers.children().first().addClass('active-app');
-                            m.show();
-                        });
-                    })
-                    // to match dimensions of side navigation
-                    .addClass('left-corner')
-                    // make QA happy (launchpad is not a "real" app, so no app-name, but should be accessible, too)
-                    .attr('data-app-name', 'launchpad');
-                }
-            }
-        });
-
         // favorites
         ext.point('io.ox/core/topbar/favorites').extend({
             id: 'default',
@@ -1192,7 +1171,6 @@ define('io.ox/core/main', [
                 // refresh animation
                 initRefreshAnimation();
 
-                ext.point('io.ox/core/topbar/launchpad').invoke('draw');
                 ext.point('io.ox/core/topbar/favorites').invoke('draw');
 
                 $(window).resize(tabManager);
