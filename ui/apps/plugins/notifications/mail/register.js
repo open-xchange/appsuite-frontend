@@ -32,9 +32,11 @@ define('plugins/notifications/mail/register', [
     }
 
     var lastCount = -1,
-        sound = new Audio('/apps/plugins/notifications/mail/marimba.mp3');
+        sound = new Audio(ox.base + '/apps/plugins/notifications/mail/marimba.mp3');
 
-    sound.volume = 0.5;
+    if (cap.has('sound')) console.log('Notification sound enabled');
+
+    sound.volume = 0.3;
 
     var playSound = _.debounce(function () {
         sound.play();
