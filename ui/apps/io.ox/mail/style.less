@@ -1015,14 +1015,20 @@ textarea.inplace-editor {
             width: 14px;
             margin: 0;
             margin-right: 8px;
+            &[disabled="disabled"] {
+                visibility: hidden;
+            }
         }
         .name {
             flex: 1;
             display: inline-block;
-        }
 
-        .hint {
-            font-style: italic;
+            &.locked {
+                border: 0;
+                background: transparent;
+                box-shadow: 0 0;
+                cursor: auto;
+            }
         }
 
         // disabled state

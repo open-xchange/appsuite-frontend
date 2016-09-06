@@ -14,9 +14,10 @@
 define('io.ox/mail/categories/dialogs', [
     'io.ox/backbone/views/modal',
     'settings!io.ox/mail',
+    'io.ox/core/yell',
     'gettext!io.ox/mail',
     'less!io.ox/mail/categories/style'
-], function (Modal, settings, gt) {
+], function (Modal, settings, yell, gt) {
 
     'use strict';
 
@@ -96,7 +97,6 @@ define('io.ox/mail/categories/dialogs', [
             .open();
         },
 
-
         Options: function (parent) {
             var Dialog = Modal.extend({
                 onToggle: function (e) {
@@ -126,6 +126,11 @@ define('io.ox/mail/categories/dialogs', [
                         });
                     });
                     parent.trigger('update', categories);
+                },
+                onDisable: function () {
+                    yell('info', gt('Enable again by clicking on the View button in the toolbar.', gt('View')));
+                    // mail app settings
+                    parent.module.mail.props.set('categories', false);
                 }
             });
             return new Dialog({
@@ -140,20 +145,6 @@ define('io.ox/mail/categories/dialogs', [
                 default: function (baton) {
                     _.extend(baton, { collection: parent.categories });
                     this.addClass('mail-categories-dialog');
-                },
-                description: function () {
-                    this.append(
-                        $('<p class="description-main">').text(gt('Please feel free to rename tabs to better match your needs. Use checkboxes to enable or disable specific tabs.'))
-                    );
-                },
-                'locked-hint': function (baton) {
-                    var locked = baton.collection.filter(function (model) {
-                        return !model.can('disable');
-                    });
-                    if (!locked.length) return;
-                    this.find('.description-main').append(
-                       $.txt(' ' + gt('Note that some of the tabs can not be disabled.'))
-                    );
                 },
                 'form-inline': function () {
                     this.append($('<form class="form-inline-container">'));
@@ -175,7 +166,7 @@ define('io.ox/mail/categories/dialogs', [
                         );
                         // apply states and permissions
                         if (model.is('active')) node.find('.category-item').addClass('active');
-                        if (!model.can('disable')) node.find('.status').attr('disabled', true);
+                        if (!model.can('disable')) node.find('.status').attr('disabled', true).end().find('.name').addClass('locked');
                         if (!model.can('rename')) node.find('.name').attr('disabled', true);
                         return node;
                     });
@@ -184,8 +175,10 @@ define('io.ox/mail/categories/dialogs', [
                 register: function (baton) {
                     this.on('click', '.category-item', baton.view.onToggle);
                     baton.view.on('save', baton.view.onSave);
+                    baton.view.on('disable', baton.view.onDisable);
                 }
             })
+            .addAlternativeButton({ label: gt('Disable tabbed inbox'), action: 'disable' })
             .addButton({ label: gt('Cancel'), action: 'cancel', className: 'btn-default' })
             .addButton({ label: gt('Save'), action: 'save' })
             .open();
