@@ -32,9 +32,10 @@ define('io.ox/notes/detail-view', [
             this.listenTo(this.model, 'change:html', this.renderHTML);
             this.listenTo(this.model, 'change:title', this.renderTitle);
             this.listenTo(this.model, 'change:preview', function (model, value) {
-                var meta = this.model.get('meta');
-                this.model.set('meta', _.extend({}, meta, { note_preview: value }));
-                if (2 > 3) api.update(_.cid(this.options.cid), { meta: meta });
+                var meta = _.extend({}, this.model.get('meta'), { note_preview: value });
+                this.model.set('meta', meta);
+                console.log('hier?', meta);
+                api.update(_.cid(this.options.cid), { meta: meta });
             });
 
             this.render().fetch();
@@ -50,7 +51,6 @@ define('io.ox/notes/detail-view', [
 
             // // fix line breaks
             this.$('.note-content').on('keydown', function (e) {
-                console.log('Sooo', e.which);
                 switch (e.which) {
                     // enter
                     case 13:
@@ -128,7 +128,7 @@ define('io.ox/notes/detail-view', [
             var lines = _.escape(text).split(/\n/), openList;
 
             lines = lines.map(function (line) {
-                var match = line.match(/^(\*|\#|\-\s?\[(?:\s|x)\])\s?(.+)$/), out;
+                var match = line.match(/^(\*\s|\#\s|\-\s\[(?:\s|x)\])\s?(.+)$/), out, item;
                 if (!match) {
                     if (openList) {
                         out = '</' + openList + '>' + (line.length ? line + '\n' : '');
@@ -138,19 +138,20 @@ define('io.ox/notes/detail-view', [
                     }
                     return out;
                 }
-                if (openList) return '<li>' + match[2] + '</li>';
+                item = (/^-\s\[x]/.test(line) ? '<li class="checked">' : '<li>') + match[2] + '</li>';
+                if (openList) return item;
                 switch (line[0]) {
                     case '#': out = '<ol>'; openList = 'ol'; break;
                     case '-': out = '<ul class="todo">'; openList = 'ul'; break;
                     default: out = '<ul>'; openList = 'ul'; break;
                 }
-                return out + '<li>' + match[2] + '</li>';
+                return out + item;
             });
 
             var html = lines.join('')
-                    .replace(/\*(\S+)\*/g, '<b>$1</b>')
-                    .replace(/\_(\S+)\_/g, '<u>$1</u>')
-                    .replace(/\~(\S+)\~/g, '<strike>$1</strike>')
+                    .replace(/(^|[^\\])\*([^<\*]+)\*/g, '$1<b>$2</b>')
+                    .replace(/(^|[^\\])\_([^<\_]+)\_/g, '$1<u>$2</u>')
+                    .replace(/(^|[^\\])\~([^<\~]+)\~/g, '$1<strike>$2</strike>')
                     .replace(/(http\:\/\/\S+)/ig, '<a href="$1" target="_blank" rel="noopener">$1</a>')
                     .replace(/\n/g, '<br>');
 

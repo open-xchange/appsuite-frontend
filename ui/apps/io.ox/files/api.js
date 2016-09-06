@@ -960,6 +960,7 @@ define('io.ox/files/api', [
     function performUpload(action, options, data) {
 
         options = _.extend({
+            addVersion: true,
             folder: coreSettings.get('folder/infostore'),
             // allow API consumers to override the module (like OX Guard will certainly do)
             module: 'files'
@@ -971,10 +972,11 @@ define('io.ox/files/api', [
         }, options.params);
 
         if (options.filename) params.filename = options.filename;
+        if (options.title) data.title = options.title;
 
         if (action === 'new') {
             params.extendedResponse = true;
-            params.try_add_version = true;
+            params.try_add_version = options.addVersion !== false;
         }
 
         var formData = new FormData();
@@ -1019,7 +1021,8 @@ define('io.ox/files/api', [
             }),
             chain = def.then(function (result) {
                 // return id and folder id only
-                var data = result.data.file, obj = _(data).pick('id', 'folder_id');
+                var data = result.data.file,
+                    obj = _(data).pick('id', 'folder_id');
                 // trigger proper event
                 if (result.data.save_action === 'new_version') {
                     // new version
@@ -1029,7 +1032,7 @@ define('io.ox/files/api', [
                 }
                 // new file
                 api.propagate('add:file', obj);
-                return obj;
+                return data;
             });
 
         // we need to hand over the abort function to the deferred of the chain.

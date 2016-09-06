@@ -22,7 +22,8 @@ define('io.ox/notes/mediator', [
     'io.ox/core/api/collection-loader',
     'io.ox/notes/detail-view',
     'gettext!io.ox/notes',
-    'settings!io.ox/notes'
+    'settings!io.ox/notes',
+    'io.ox/notes/toolbar'
 ], function (ext, api, notifications, TreeNodeView, TreeView, FolderView, ListView, CollectionLoader, DetailView, gt) {
 
     'use strict';
@@ -64,7 +65,7 @@ define('io.ox/notes/mediator', [
 
             'folder-view': function (app) {
                 // tree view
-                var root = app.settings.get('folder');
+                var root = app.settings.get('folder/root');
                 app.treeView = new TreeView({ app: app, icons: true, module: 'notes', contextmenu: true, root: root });
                 FolderView.initialize({ app: app, tree: app.treeView });
                 app.folderView.resize.enable();
@@ -113,7 +114,6 @@ define('io.ox/notes/mediator', [
                         id: 'title',
                         index: 200,
                         draw: function (baton) {
-                            console.log('list item', baton.data);
                             var title = String(baton.data.title).replace(/\.txt$/, '');
                             this.append(
                                 $('<div class="title">').text(title)
@@ -158,7 +158,7 @@ define('io.ox/notes/mediator', [
                     SECONDARY_PAGE_SIZE: 200
                 });
 
-                api.collectionLoader.each = function (data) {
+                collectionLoader.each = function (data) {
                     api.pool.add('detail', data);
                 };
 

@@ -12,12 +12,11 @@
  */
 
 define('io.ox/notes/main', [
-    'io.ox/core/folder/api',
-    'io.ox/core/http',
+    'io.ox/notes/api',
     'settings!io.ox/notes',
     'io.ox/notes/mediator',
     'less!io.ox/notes/style'
-], function (folderAPI, http, settings, mediator) {
+], function (api, settings, mediator) {
 
     'use strict';
 
@@ -50,21 +49,15 @@ define('io.ox/notes/main', [
             win.show();
         }
 
-        var folderId = settings.get('folder');
+        // hash support
+        app.getWindow().on('show', function () {
+            _.url.hash('folder', app.folder.get());
+        });
+
+        var folderId = api.getRootFolder();
         if (folderId) return show(_.url.hash('folder') || folderId);
 
-        var defaultInfoStoreFolder = folderAPI.getDefaultFolder('infostore');
-        folderAPI.create(defaultInfoStoreFolder, { title: 'Notes' }).done(function (data) {
-            var defaultFolder = data.id;
-            settings.set('folder', defaultFolder).save();
-            http.pause();
-            ['General', 'Ideas', 'Meetings', 'Shopping', 'Todo lists', 'Work'].forEach(function (title) {
-                folderAPI.create(defaultFolder, { title: title });
-            });
-            http.resume(function () {
-                show(defaultFolder);
-            });
-        });
+        api.createDefaultFolders.done(show);
     });
 
     return {
