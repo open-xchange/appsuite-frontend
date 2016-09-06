@@ -1013,7 +1013,7 @@ msgstr "Ďalšie nastavenia"
 msgid "Address Book"
 msgstr "Adresár kontaktov"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -1588,7 +1588,7 @@ msgid "Calendar"
 msgstr "Kalendár"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -2227,7 +2227,7 @@ msgstr "Konverzácia"
 msgid "Conversations"
 msgstr "Konverzácie"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -2810,6 +2810,15 @@ msgstr "Poštová konferencia"
 msgid "Distribution list has been saved"
 msgstr "Tento distribučný zoznam bol uložený"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Distribution list"
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] "Poštová konferencia"
+msgstr[1] "Poštová konferencia"
+msgstr[2] "Poštová konferencia"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2959,8 +2968,7 @@ msgstr "Dokument"
 msgid "Documents"
 msgstr "Dokumenty"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
 msgstr "Dokumenty"
@@ -3044,7 +3052,7 @@ msgstr "Ťahaním preusporiadate miniaplikácie"
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/launchpad/main.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
@@ -4938,9 +4946,8 @@ msgstr "Mac App Store"
 msgid "Mail"
 msgstr "Pošta"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
 msgstr "Pošta"
@@ -5050,10 +5057,6 @@ msgstr "Správ za deň-týždeň (%)"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
 msgstr "Označiť túto verziu ako aktuálnu"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Manage applications"
-msgstr "Spravovanie aplikácií"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -6042,9 +6045,14 @@ msgstr "Pager"
 #. the participants section label.
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
-#: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 msgid "Participants"
+msgstr "Účastníci"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+#, fuzzy
+#| msgid "Participants"
+msgid "Participants (%1$d)"
 msgstr "Účastníci"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -6449,7 +6457,7 @@ msgstr "Oddeliť samostatný prehliadač"
 msgid "Portal"
 msgstr "Portál"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -7229,10 +7237,6 @@ msgstr "Číslo izby"
 msgid "Rule name"
 msgstr "Názov pravidla"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Running applications"
-msgstr "Bežiace aplikácie"
-
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "Prihlasovacie meno SMTP"
@@ -7348,7 +7352,7 @@ msgstr[2] "Ukladajú sa prílohy..."
 msgid "Scheduling"
 msgstr "Plánovanie"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -7582,8 +7586,7 @@ msgstr "Nastaviť farbu"
 msgid "Settings"
 msgstr "Nastavenia"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Settings"
 msgstr "Nastavenia"
@@ -8250,7 +8253,7 @@ msgstr "Úloha bola predtým upravená. Prosím, znovu načítajte"
 msgid "Tasks"
 msgstr "Úlohy"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgctxt "app"
@@ -9992,17 +9995,9 @@ msgstr[2] "Budete automaticky odhlásení o %1$d sekúnd"
 msgid "Your %s newsfeed"
 msgstr "Váš kanál noviniek %s"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Your Applications"
-msgstr "Vaše aplikácie"
-
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
 msgstr "Vaša IP adresa sa zmenila"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Your applications"
-msgstr "Vaše aplikácie"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
@@ -13688,6 +13683,9 @@ msgstr "RRRR"
 #~ msgid "Malta"
 #~ msgstr "Malta"
 
+#~ msgid "Manage applications"
+#~ msgstr "Spravovanie aplikácií"
+
 #~ msgid "Manager:"
 #~ msgstr "Nadriadený:"
 
@@ -14728,6 +14726,9 @@ msgstr "RRRR"
 
 #~ msgid "Rules"
 #~ msgstr "Pravidlá"
+
+#~ msgid "Running applications"
+#~ msgstr "Bežiace aplikácie"
 
 #, fuzzy
 #~| msgid "Russian"
@@ -16690,8 +16691,14 @@ msgstr "RRRR"
 #~ "Váš účet %s bol vytvorený. Čoskoro očakávajte potvrdzovací e-mail od "
 #~ "odosielateľa %s."
 
+#~ msgid "Your Applications"
+#~ msgstr "Vaše aplikácie"
+
 #~ msgid "Your answer"
 #~ msgstr "Vaša odpoveď"
+
+#~ msgid "Your applications"
+#~ msgstr "Vaše aplikácie"
 
 #~ msgid "Your auto forward has been saved"
 #~ msgstr "Vaše automatické preposielanie bolo uložené"

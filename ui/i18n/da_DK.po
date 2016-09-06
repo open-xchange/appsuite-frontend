@@ -985,7 +985,7 @@ msgstr "Flere indstillinger"
 msgid "Address Book"
 msgstr "Adressebog"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -1563,7 +1563,7 @@ msgid "Calendar"
 msgstr "Kalender"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -2196,7 +2196,7 @@ msgstr "Samtale"
 msgid "Conversations"
 msgstr "Samtaler"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -2778,6 +2778,14 @@ msgstr "Distributionsliste"
 msgid "Distribution list has been saved"
 msgstr "Distributionsliste er blevet gemt"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Distribution list"
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] "Distributionsliste"
+msgstr[1] "Distributionsliste"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2923,8 +2931,7 @@ msgstr "Dokument"
 msgid "Documents"
 msgstr "Dokumenter"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
 msgstr "Dokumenter"
@@ -3008,7 +3015,7 @@ msgstr "Træk for omarrangere widget"
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/launchpad/main.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
@@ -4896,9 +4903,8 @@ msgstr "Mac App Store"
 msgid "Mail"
 msgstr "E-mail"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
 msgstr "E-mail"
@@ -5008,10 +5014,6 @@ msgstr "E-mails pr. ugedag (%)"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
 msgstr "Gør denne til nuværende version"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Manage applications"
-msgstr "Håndtér programmer"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -5996,9 +5998,14 @@ msgstr "Personsøger"
 #. the participants section label.
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
-#: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 msgid "Participants"
+msgstr "Deltagere"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+#, fuzzy
+#| msgid "Participants"
+msgid "Participants (%1$d)"
 msgstr "Deltagere"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -6404,7 +6411,7 @@ msgstr "Hop ud selvstændig fremviser"
 msgid "Portal"
 msgstr "Portal"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -7182,10 +7189,6 @@ msgstr "Værelsesnummer"
 msgid "Rule name"
 msgstr "Navn på regel"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Running applications"
-msgstr "Kør programmer"
-
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "SMTP-brugernavn"
@@ -7300,7 +7303,7 @@ msgstr[1] "Gemmer vedhæftninger..."
 msgid "Scheduling"
 msgstr "Planlægning"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -7532,8 +7535,7 @@ msgstr "Sæt farve"
 msgid "Settings"
 msgstr "Indstillinger"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Settings"
 msgstr "Indstillinger"
@@ -8191,7 +8193,7 @@ msgstr "Opgaven blev ændret tidligere, opdatér venligst"
 msgid "Tasks"
 msgstr "Opgaver"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgctxt "app"
@@ -9919,17 +9921,9 @@ msgstr[1] "Du bliver automatisk logget ud om %1$d sekunder"
 msgid "Your %s newsfeed"
 msgstr "Din %s-nyhedsstrøm"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Your Applications"
-msgstr "Dine programmer"
-
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
 msgstr "Din IP-adresse er blevet ændret"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Your applications"
-msgstr "Dine programmer"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
@@ -11632,6 +11626,9 @@ msgstr "åååå"
 #~ msgid "Main window"
 #~ msgstr "Hovedvindue"
 
+#~ msgid "Manage applications"
+#~ msgstr "Håndtér programmer"
+
 #~ msgctxt "help"
 #~ msgid "Managing E-Mail messages"
 #~ msgstr "Håndtér e-mail-beskeder"
@@ -11941,6 +11938,9 @@ msgstr "åååå"
 #, fuzzy
 #~ msgid "Right"
 #~ msgstr "i aften"
+
+#~ msgid "Running applications"
+#~ msgstr "Kør programmer"
 
 #~ msgid "SMTP login"
 #~ msgstr "SMTP-brugernavn"
@@ -12816,8 +12816,14 @@ msgstr "åååå"
 #~ "Din %s-konto er oprettet.  Det kommer nok snart en e-mail-bekræftelse fra "
 #~ "%s."
 
+#~ msgid "Your Applications"
+#~ msgstr "Dine programmer"
+
 #~ msgid "Your answer"
 #~ msgstr "Dit svar"
+
+#~ msgid "Your applications"
+#~ msgstr "Dine programmer"
 
 #~ msgid "Your auto forward has been saved"
 #~ msgstr "Din automatiske videresendelse blev gemt"

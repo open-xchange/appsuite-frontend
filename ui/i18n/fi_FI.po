@@ -978,7 +978,7 @@ msgstr "Lisäasetukset"
 msgid "Address Book"
 msgstr "Osoitekirja"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -1555,7 +1555,7 @@ msgid "Calendar"
 msgstr "Kalenteri"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -2191,7 +2191,7 @@ msgstr "Keskustelu"
 msgid "Conversations"
 msgstr "Keskustelut"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -2774,6 +2774,14 @@ msgstr "Jakelulista"
 msgid "Distribution list has been saved"
 msgstr "Jakelulista on tallennettu"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Distribution list"
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] "Jakelulista"
+msgstr[1] "Jakelulista"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2920,8 +2928,7 @@ msgstr "Asiakirja"
 msgid "Documents"
 msgstr "Asiakirjat"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
 msgstr "Asiakirjat"
@@ -3005,7 +3012,7 @@ msgstr "Siirrä uudelleenjärjestelläksesi widgetit"
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/launchpad/main.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
@@ -4889,9 +4896,8 @@ msgstr "Mac App Store"
 msgid "Mail"
 msgstr "Sähköposti"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
 msgstr "Sähköposti"
@@ -5001,10 +5007,6 @@ msgstr "Posti viikonpäivittäin (%)"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
 msgstr "Tee tästä vallitseva versio"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Manage applications"
-msgstr "Hallinnoi sovelluksia"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -5987,9 +5989,14 @@ msgstr "Hakulaite"
 #. the participants section label.
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
-#: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 msgid "Participants"
+msgstr "Osallistujat"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+#, fuzzy
+#| msgid "Participants"
+msgid "Participants (%1$d)"
 msgstr "Osallistujat"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -6395,7 +6402,7 @@ msgstr "Avaa erillisessä ikkunassa"
 msgid "Portal"
 msgstr "Portaali"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -7174,10 +7181,6 @@ msgstr "Huonenumero"
 msgid "Rule name"
 msgstr "Säännön nimi"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Running applications"
-msgstr "Käynnissä olevat sovellukset"
-
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "SMTP -sisäänkirjautuminen"
@@ -7292,7 +7295,7 @@ msgstr[1] "Tallenna liite"
 msgid "Scheduling"
 msgstr "Suunnittelu"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -7524,8 +7527,7 @@ msgstr "Aseta väri"
 msgid "Settings"
 msgstr "Asetukset"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Settings"
 msgstr "Asetukset"
@@ -8182,7 +8184,7 @@ msgstr "Tehtävää muutettu aiemmin. Ole hyvä ja päivitä."
 msgid "Tasks"
 msgstr "Tehtävät"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgctxt "app"
@@ -9910,17 +9912,9 @@ msgstr[1] "Automaattinen uloskirjautuminen %1$d sekunnin kuluttua"
 msgid "Your %s newsfeed"
 msgstr "%s uutissyötteesi"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Your Applications"
-msgstr "Sinun sovelluksesi"
-
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
 msgstr "IP osoitteesi on muuttunut"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Your applications"
-msgstr "Sovelluksesi"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
@@ -11468,6 +11462,9 @@ msgstr "vvvv"
 #~ msgid "Main window"
 #~ msgstr "Pääikkuna"
 
+#~ msgid "Manage applications"
+#~ msgstr "Hallinnoi sovelluksia"
+
 #~ msgctxt "help"
 #~ msgid "Managing E-Mail messages"
 #~ msgstr "Sähköpostiviestien hallinnointi"
@@ -11725,6 +11722,9 @@ msgstr "vvvv"
 #~| msgid "Text"
 #~ msgid "Rich Text"
 #~ msgstr "Teksti"
+
+#~ msgid "Running applications"
+#~ msgstr "Käynnissä olevat sovellukset"
 
 #~ msgid "SMTP login"
 #~ msgstr "SMTP -sisäänkirjautuminen"
@@ -12561,8 +12561,14 @@ msgstr "vvvv"
 #~ "Your %s account has been created. Expect a confirmation mail from %s soon."
 #~ msgstr "%s-tilisi on luotu. Voit odottaa saavasi pian %s varmistuspostin."
 
+#~ msgid "Your Applications"
+#~ msgstr "Sinun sovelluksesi"
+
 #~ msgid "Your answer"
 #~ msgstr "Vastauksesi"
+
+#~ msgid "Your applications"
+#~ msgstr "Sovelluksesi"
 
 #, fuzzy
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"

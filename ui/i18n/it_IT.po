@@ -990,7 +990,7 @@ msgstr "Impostazioni aggiuntive"
 msgid "Address Book"
 msgstr "Rubrica"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -1574,7 +1574,7 @@ msgid "Calendar"
 msgstr "Calendario"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -2208,7 +2208,7 @@ msgstr "Conversazione"
 msgid "Conversations"
 msgstr "Conversazioni"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -2791,6 +2791,14 @@ msgstr "Lista di distribuzione"
 msgid "Distribution list has been saved"
 msgstr "La lista di distribuzione è stata salvata"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Distribution list"
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] "Lista di distribuzione"
+msgstr[1] "Lista di distribuzione"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2939,8 +2947,7 @@ msgstr "Documento"
 msgid "Documents"
 msgstr "Documenti"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
 msgstr "Documenti"
@@ -3024,7 +3031,7 @@ msgstr "Trascina per riposizionare il widget"
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/launchpad/main.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
@@ -4925,9 +4932,8 @@ msgstr "App Store Mac"
 msgid "Mail"
 msgstr "Posta"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
 msgstr "Posta"
@@ -5037,10 +5043,6 @@ msgstr "Messaggi per giorno della settimana (%)"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
 msgstr "Scegli questa come versione corrente"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Manage applications"
-msgstr "Gestisci le applicazioni"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -6026,9 +6028,14 @@ msgstr "Cercapersone"
 #. the participants section label.
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
-#: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 msgid "Participants"
+msgstr "Partecipanti"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+#, fuzzy
+#| msgid "Participants"
+msgid "Participants (%1$d)"
 msgstr "Partecipanti"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -6436,7 +6443,7 @@ msgstr "Mostra il visualizzatore indipendente"
 msgid "Portal"
 msgstr "Portale"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -7216,10 +7223,6 @@ msgstr "Ufficio"
 msgid "Rule name"
 msgstr "Nome regola"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Running applications"
-msgstr "Applicazioni in esecuzione"
-
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "Accesso SMTP"
@@ -7334,7 +7337,7 @@ msgstr[1] "Salvataggio allegati..."
 msgid "Scheduling"
 msgstr "Pianificazione"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -7568,8 +7571,7 @@ msgstr "Imposta il colore"
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Settings"
 msgstr "Impostazioni"
@@ -8231,7 +8233,7 @@ msgstr "L'attività è stata modificata in precedenza, ricarica"
 msgid "Tasks"
 msgstr "Attività"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgctxt "app"
@@ -9993,17 +9995,9 @@ msgstr[1] "Sarai disconnesso automaticamente in %1$d secondi"
 msgid "Your %s newsfeed"
 msgstr "La tua fonte di notizie %s"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Your Applications"
-msgstr "Le tue applicazioni"
-
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
 msgstr "Il tuo indirizzo IP è cambiato"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Your applications"
-msgstr "Le tue applicazioni"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
@@ -13216,6 +13210,9 @@ msgstr "aaaa"
 #~ msgid "Main window"
 #~ msgstr "Finestra principale"
 
+#~ msgid "Manage applications"
+#~ msgstr "Gestisci le applicazioni"
+
 #~ msgctxt "help"
 #~ msgid "Managing E-Mail messages"
 #~ msgstr "Gestione dei messaggi di posta"
@@ -13657,6 +13654,9 @@ msgstr "aaaa"
 #~| msgid "Romanian"
 #~ msgid "Romania"
 #~ msgstr "Rumeno"
+
+#~ msgid "Running applications"
+#~ msgstr "Applicazioni in esecuzione"
 
 #, fuzzy
 #~| msgid "Russian"
@@ -14772,8 +14772,14 @@ msgstr "aaaa"
 #~ "Il tuo account %s è stato creato. Attendi a breve un messaggio di "
 #~ "conferma da %s."
 
+#~ msgid "Your Applications"
+#~ msgstr "Le tue applicazioni"
+
 #~ msgid "Your answer"
 #~ msgstr "La tua risposta"
+
+#~ msgid "Your applications"
+#~ msgstr "Le tue applicazioni"
 
 #~ msgid "Your auto forward has been saved"
 #~ msgstr "Il tuo inoltro automatico è stato salvato"

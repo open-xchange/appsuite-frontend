@@ -976,7 +976,7 @@ msgstr "Допълнителни настройки"
 msgid "Address Book"
 msgstr "Контакти"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -1544,7 +1544,7 @@ msgid "Calendar"
 msgstr "Календар"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -2179,7 +2179,7 @@ msgstr ""
 msgid "Conversations"
 msgstr "Разговори"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -2765,6 +2765,12 @@ msgstr ""
 msgid "Distribution list has been saved"
 msgstr ""
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2906,8 +2912,7 @@ msgstr "Документ"
 msgid "Documents"
 msgstr "Документ"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 #, fuzzy
 msgctxt "app"
 msgid "Documents"
@@ -2994,7 +2999,7 @@ msgstr ""
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/launchpad/main.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
@@ -4846,9 +4851,8 @@ msgstr ""
 msgid "Mail"
 msgstr "Мейл"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
 msgstr "Мейл"
@@ -4960,10 +4964,6 @@ msgstr "Мейлове на работен ден (%)"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Manage applications"
 msgstr ""
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
@@ -5949,9 +5949,14 @@ msgstr ""
 #. the participants section label.
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
-#: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 msgid "Participants"
+msgstr "Участници"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+#, fuzzy
+#| msgid "Participants"
+msgid "Participants (%1$d)"
 msgstr "Участници"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -6345,7 +6350,7 @@ msgstr ""
 msgid "Portal"
 msgstr "Портал"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -7106,10 +7111,6 @@ msgstr ""
 msgid "Rule name"
 msgstr ""
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Running applications"
-msgstr ""
-
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr ""
@@ -7228,7 +7229,7 @@ msgstr[1] ""
 msgid "Scheduling"
 msgstr ""
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -7453,8 +7454,7 @@ msgstr "Избери цвят"
 msgid "Settings"
 msgstr "Настройки"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Settings"
 msgstr "Настройки"
@@ -8107,7 +8107,7 @@ msgstr ""
 msgid "Tasks"
 msgstr "Задачи"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgctxt "app"
@@ -9716,16 +9716,8 @@ msgstr[1] ""
 msgid "Your %s newsfeed"
 msgstr ""
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Your Applications"
-msgstr ""
-
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Your applications"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core

@@ -960,7 +960,7 @@ msgstr "追加設定"
 msgid "Address Book"
 msgstr "アドレス帳"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -1528,7 +1528,7 @@ msgid "Calendar"
 msgstr "予定表"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -2163,7 +2163,7 @@ msgstr "スレッド"
 msgid "Conversations"
 msgstr "スレッド"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -2745,6 +2745,13 @@ msgstr "配布リスト"
 msgid "Distribution list has been saved"
 msgstr "配布リストが保存されました。"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Distribution list"
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] "配布リスト"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2889,8 +2896,7 @@ msgstr "ドキュメント"
 msgid "Documents"
 msgstr "ドキュメント"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
 msgstr "ドキュメント"
@@ -2974,7 +2980,7 @@ msgstr "ドラッグしてウィジェットの順番を変更できます。"
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/launchpad/main.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
@@ -4868,9 +4874,8 @@ msgstr "Mac App Store"
 msgid "Mail"
 msgstr "メール"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
 msgstr "メール"
@@ -4981,10 +4986,6 @@ msgstr "１日あたりのメール数 (%)"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
 msgstr "これを最新のバージョンにする"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Manage applications"
-msgstr "アプリケーションを管理"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -5965,9 +5966,14 @@ msgstr "ポケットベル"
 #. the participants section label.
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
-#: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 msgid "Participants"
+msgstr "出席者"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+#, fuzzy
+#| msgid "Participants"
+msgid "Participants (%1$d)"
 msgstr "出席者"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -6370,7 +6376,7 @@ msgstr "スタンドアロンビューアをポップアウト"
 msgid "Portal"
 msgstr "ポータル"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -7141,10 +7147,6 @@ msgstr "部屋番号"
 msgid "Rule name"
 msgstr "ルール名"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Running applications"
-msgstr "実行中のアプリケーション"
-
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "SMTP ログイン"
@@ -7258,7 +7260,7 @@ msgstr[0] "添付ファイルを保存しています..."
 msgid "Scheduling"
 msgstr "スケジューリング"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -7488,8 +7490,7 @@ msgstr "色を設定"
 msgid "Settings"
 msgstr "設定"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Settings"
 msgstr "設定"
@@ -8138,7 +8139,7 @@ msgstr "この仕事は既に変更されています。再読み込みしてく
 msgid "Tasks"
 msgstr "仕事"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgctxt "app"
@@ -9854,17 +9855,9 @@ msgstr[0] "%1$d 秒後に自動的にサインアウトされます。"
 msgid "Your %s newsfeed"
 msgstr "%s のニュースフィード"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Your Applications"
-msgstr "自分のアプリケーション"
-
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
 msgstr "IP アドレスが変更されました。"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Your applications"
-msgstr "自分のアプリケーション"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
@@ -14446,6 +14439,9 @@ msgstr "yyyy"
 #~ msgid "Malta"
 #~ msgstr "マルタ"
 
+#~ msgid "Manage applications"
+#~ msgstr "アプリケーションを管理"
+
 #~ msgid "Manager:"
 #~ msgstr "上司:"
 
@@ -15709,6 +15705,9 @@ msgstr "yyyy"
 
 #~ msgid "Rules"
 #~ msgstr "ルール"
+
+#~ msgid "Running applications"
+#~ msgstr "実行中のアプリケーション"
 
 #~| msgid "Russian"
 #~ msgid "Russia"
@@ -17875,8 +17874,14 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "%s アカウントが作成されました。まもなく %s から確認メールが送信されます。"
 
+#~ msgid "Your Applications"
+#~ msgstr "自分のアプリケーション"
+
 #~ msgid "Your answer"
 #~ msgstr "答え"
+
+#~ msgid "Your applications"
+#~ msgstr "自分のアプリケーション"
 
 #~ msgid "Your auto forward has been saved"
 #~ msgstr "自動転送が保存されました。"

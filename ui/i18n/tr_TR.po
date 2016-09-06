@@ -962,7 +962,7 @@ msgstr "Ek Ayarlar"
 msgid "Address Book"
 msgstr "Adres Defteri"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -1539,7 +1539,7 @@ msgid "Calendar"
 msgstr "Takvim"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -2196,7 +2196,7 @@ msgstr "Konuşmalar"
 msgid "Conversations"
 msgstr "Konuşmalar"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -2796,6 +2796,13 @@ msgstr "Dağıtım listesi"
 msgid "Distribution list has been saved"
 msgstr "Dağıtım listesi kaydedilmiştir"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Distribution list"
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] "Dağıtım listesi"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2955,8 +2962,7 @@ msgstr "Belgeler"
 msgid "Documents"
 msgstr "Belgeler"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
 msgstr "Belgeler"
@@ -3043,7 +3049,7 @@ msgstr "Aracı yeniden sipariş etmek için sürükleyiniz"
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/launchpad/main.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
@@ -4980,9 +4986,8 @@ msgstr ""
 msgid "Mail"
 msgstr "E posta"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
 msgstr "E posta"
@@ -5092,10 +5097,6 @@ msgstr "Hafta içi başına e-posta (%)"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
 msgstr "Bu sürümü güncel sürüm haline getir"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Manage applications"
-msgstr "Uygulamaları yönet"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 #, fuzzy
@@ -6101,9 +6102,14 @@ msgstr "Sayfalayıcı "
 #. the participants section label.
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
-#: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 msgid "Participants"
+msgstr "Katılımcılar"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+#, fuzzy
+#| msgid "Participants"
+msgid "Participants (%1$d)"
 msgstr "Katılımcılar"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -6511,7 +6517,7 @@ msgstr ""
 msgid "Portal"
 msgstr "Portal"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -7324,10 +7330,6 @@ msgstr "Oda numarası"
 msgid "Rule name"
 msgstr "Kural adı"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Running applications"
-msgstr "Çalışmakta olan uygulamalar"
-
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr ""
@@ -7443,7 +7445,7 @@ msgstr[0] "Kaydedilen ek ... Kaydedilen ekler ..."
 msgid "Scheduling"
 msgstr "Planlama"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -7679,8 +7681,7 @@ msgstr "Renk belirle"
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Settings"
 msgstr "Ayarlar"
@@ -8357,7 +8358,7 @@ msgstr "Görev daha önce değiştirildi, lütfen yeniden yükleyin"
 msgid "Tasks"
 msgstr "Görevler"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgctxt "app"
@@ -10134,17 +10135,9 @@ msgstr[0] ""
 msgid "Your %s newsfeed"
 msgstr "%s haberleriniz"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Your Applications"
-msgstr "Başvurularınız"
-
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
 msgstr "IP adresiniz değişti"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Your applications"
-msgstr "Uygulamalarınız"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 #, fuzzy
@@ -11034,6 +11027,9 @@ msgstr "yyyy"
 #~ msgid "Main window"
 #~ msgstr "E posta penceresi"
 
+#~ msgid "Manage applications"
+#~ msgstr "Uygulamaları yönet"
+
 #~ msgid "Mark as"
 #~ msgstr "Olarak işaretle"
 
@@ -11075,6 +11071,9 @@ msgstr "yyyy"
 
 #~ msgid "Remove facet"
 #~ msgstr "Özellliği kaldır"
+
+#~ msgid "Running applications"
+#~ msgstr "Çalışmakta olan uygulamalar"
 
 #~ msgid "Save to Drive"
 #~ msgstr "Drive'a kaydet"
@@ -11193,6 +11192,12 @@ msgstr "yyyy"
 
 #~ msgid "You like this"
 #~ msgstr "Bunu beğendiniz"
+
+#~ msgid "Your Applications"
+#~ msgstr "Başvurularınız"
+
+#~ msgid "Your applications"
+#~ msgstr "Uygulamalarınız"
 
 #~ msgid "end date "
 #~ msgstr "bitiş tarihi"

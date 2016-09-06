@@ -994,7 +994,7 @@ msgstr "Preferències del portal"
 msgid "Address Book"
 msgstr "Llibreta d'adreces"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -1582,7 +1582,7 @@ msgid "Calendar"
 msgstr "Calendari"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -2241,7 +2241,7 @@ msgstr "Converses"
 msgid "Conversations"
 msgstr "Converses"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -2841,6 +2841,14 @@ msgstr "Llista de distribució"
 msgid "Distribution list has been saved"
 msgstr "S'ha desat la llista de distribució"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Distribution list"
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] "Llista de distribució"
+msgstr[1] "Llista de distribució"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2985,8 +2993,7 @@ msgstr ""
 msgid "Documents"
 msgstr "Documents"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
 msgstr "Documents"
@@ -3072,7 +3079,7 @@ msgstr "Arrossega el widget per a col·locar-lo"
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/launchpad/main.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
@@ -4990,9 +4997,8 @@ msgstr ""
 msgid "Mail"
 msgstr "Correu"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
 msgstr "Correu"
@@ -5103,10 +5109,6 @@ msgstr "Correus per dia de la setmana (%)"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
 msgstr "Estableix-la com a versió actual"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Manage applications"
-msgstr "Administra les aplicacions"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -6124,9 +6126,14 @@ msgstr "Cercapersones"
 #. the participants section label.
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
-#: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 msgid "Participants"
+msgstr "Participants"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+#, fuzzy
+#| msgid "Participants"
+msgid "Participants (%1$d)"
 msgstr "Participants"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -6533,7 +6540,7 @@ msgstr ""
 msgid "Portal"
 msgstr "Portal"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -7319,10 +7326,6 @@ msgstr "Número de despatx"
 msgid "Rule name"
 msgstr "Nom de la regla"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Running applications"
-msgstr "Execució d'aplicacions"
-
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr ""
@@ -7441,7 +7444,7 @@ msgstr[1] "Desa l'adjunt"
 msgid "Scheduling"
 msgstr "Planificació"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -7671,8 +7674,7 @@ msgstr "Assigna-hi color"
 msgid "Settings"
 msgstr "Preferències"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Settings"
 msgstr "Preferències"
@@ -8344,7 +8346,7 @@ msgstr "La tasca ja havia estat modificada. Per favor, recarregau-la"
 msgid "Tasks"
 msgstr "Tasques"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgctxt "app"
@@ -10078,17 +10080,9 @@ msgstr[1] "Us desconnectareu automàticament en %1$d segons"
 msgid "Your %s newsfeed"
 msgstr "La vostra font de notícies de %s"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Your Applications"
-msgstr "Les vostres aplicacions"
-
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
 msgstr "La vostra adreça IP ha canviat"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Your applications"
-msgstr "Les vostres aplicacions"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
@@ -11238,6 +11232,9 @@ msgstr ""
 #~ msgid "Mail categories"
 #~ msgstr "Adreça de correu electrònic"
 
+#~ msgid "Manage applications"
+#~ msgstr "Administra les aplicacions"
+
 #~ msgid "Mark as"
 #~ msgstr "Marca-ho com"
 
@@ -11331,6 +11328,9 @@ msgstr ""
 #~| msgid "Never"
 #~ msgid "Revert"
 #~ msgstr "Mai"
+
+#~ msgid "Running applications"
+#~ msgstr "Execució d'aplicacions"
 
 #~ msgid "Saturday"
 #~ msgstr "dissabte"
@@ -11645,6 +11645,12 @@ msgstr ""
 #~ msgstr ""
 #~ "El vostre compte de %s ha estat creat. Aviat rebreu un correu de "
 #~ "confirmació de %s."
+
+#~ msgid "Your Applications"
+#~ msgstr "Les vostres aplicacions"
+
+#~ msgid "Your applications"
+#~ msgstr "Les vostres aplicacions"
 
 #, fuzzy
 #~| msgid "Your browser is not supported!"

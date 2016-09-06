@@ -993,7 +993,7 @@ msgstr "Additional settings"
 msgid "Address Book"
 msgstr "Adresboek"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -1577,7 +1577,7 @@ msgid "Calendar"
 msgstr "Agenda"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -2216,7 +2216,7 @@ msgstr "Conversatie"
 msgid "Conversations"
 msgstr "Conversaties"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -2798,6 +2798,14 @@ msgstr "Distributielijst"
 msgid "Distribution list has been saved"
 msgstr "De distributielijst is opgeslagen"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Distribution list"
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] "Distributielijst"
+msgstr[1] "Distributielijst"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2950,8 +2958,7 @@ msgstr "Document"
 msgid "Documents"
 msgstr "Documenten"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
 msgstr "Documenten"
@@ -3035,7 +3042,7 @@ msgstr "Sleep de widget om de volgorde te veranderen"
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/launchpad/main.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
@@ -4940,9 +4947,8 @@ msgstr "Mac App Store"
 msgid "Mail"
 msgstr "E-mail"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
 msgstr "E-mail"
@@ -5053,10 +5059,6 @@ msgstr "E-mailberichten per werkdag (%)"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
 msgstr "Maak dit de huidige versie"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Manage applications"
-msgstr "Beheer applicaties"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -6045,9 +6047,14 @@ msgstr "Pager"
 #. the participants section label.
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
-#: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 msgid "Participants"
+msgstr "Deelnemers"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+#, fuzzy
+#| msgid "Participants"
+msgid "Participants (%1$d)"
 msgstr "Deelnemers"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -6458,7 +6465,7 @@ msgstr "Pop-out alleenstaand scherm"
 msgid "Portal"
 msgstr "Portaal"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -7241,10 +7248,6 @@ msgstr "Kamernummer"
 msgid "Rule name"
 msgstr "Regelnaam"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Running applications"
-msgstr "Applicaties starten"
-
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "SMTP Aanmeldnaam"
@@ -7359,7 +7362,7 @@ msgstr[1] "Bijlagen opslaan ..."
 msgid "Scheduling"
 msgstr "Planning"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -7591,8 +7594,7 @@ msgstr "Stel kleur in"
 msgid "Settings"
 msgstr "Instellingen"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Settings"
 msgstr "Instellingen"
@@ -8254,7 +8256,7 @@ msgstr "De taak is reeds aangepast, ververs alstublieft"
 msgid "Tasks"
 msgstr "Taken"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgctxt "app"
@@ -10009,17 +10011,9 @@ msgstr[1] "U wordt over %1$d seconden automatisch afgemeld"
 msgid "Your %s newsfeed"
 msgstr "Uw %s nieuwsberichten"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Your Applications"
-msgstr "Uw Applicaties"
-
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
 msgstr "Uw IP-adres is gewijzigd"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Your applications"
-msgstr "Uw applicaties"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
@@ -11571,6 +11565,9 @@ msgstr "yyyy"
 #~ msgid "Main window"
 #~ msgstr "Hoofdscherm"
 
+#~ msgid "Manage applications"
+#~ msgstr "Beheer applicaties"
+
 #~ msgctxt "help"
 #~ msgid "Managing E-Mail messages"
 #~ msgstr "E-mailberichten beheren"
@@ -11832,6 +11829,9 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Right"
 #~ msgstr "vanavond"
+
+#~ msgid "Running applications"
+#~ msgstr "Applicaties starten"
 
 #~ msgid "SMTP login"
 #~ msgstr "SMTP aanmeldnaam"
@@ -12675,8 +12675,14 @@ msgstr "yyyy"
 #~ "Uw %s account is aangemaakt. Verwacht binnenkort een e-mailbevestiging "
 #~ "van %s."
 
+#~ msgid "Your Applications"
+#~ msgstr "Uw Applicaties"
+
 #~ msgid "Your answer"
 #~ msgstr "Uw antwoord"
+
+#~ msgid "Your applications"
+#~ msgstr "Uw applicaties"
 
 #, fuzzy
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"

@@ -973,7 +973,7 @@ msgstr "额外设定"
 msgid "Address Book"
 msgstr "地址簿"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -1534,7 +1534,7 @@ msgid "Calendar"
 msgstr "日历"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -2167,7 +2167,7 @@ msgstr "交谈"
 msgid "Conversations"
 msgstr "交谈"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -2746,6 +2746,14 @@ msgstr "通讯组列表"
 msgid "Distribution list has been saved"
 msgstr "已保存通讯组列表"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Distribution list"
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] "通讯组列表"
+msgstr[1] "通讯组列表"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2887,8 +2895,7 @@ msgstr "文件"
 msgid "Documents"
 msgstr "文档"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
 msgstr "文档"
@@ -2972,7 +2979,7 @@ msgstr "以拖动重新排序小部件"
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/launchpad/main.js apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
@@ -4828,9 +4835,8 @@ msgstr "Mac App Store"
 msgid "Mail"
 msgstr "邮件"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
+#: module:io.ox/mail apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
 msgstr "邮件"
@@ -4940,10 +4946,6 @@ msgstr "每工作日邮件数（%）"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Make this the current version"
 msgstr "定此为当前版本"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Manage applications"
-msgstr "管理应用"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -5921,9 +5923,14 @@ msgstr "寻呼机"
 #. the participants section label.
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
-#: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 msgid "Participants"
+msgstr "参与者"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+#, fuzzy
+#| msgid "Participants"
+msgid "Participants (%1$d)"
 msgstr "参与者"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -6319,7 +6326,7 @@ msgstr "弹出独立检视器"
 msgid "Portal"
 msgstr "门户"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -7086,10 +7093,6 @@ msgstr "房间号"
 msgid "Rule name"
 msgstr "规则名称"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Running applications"
-msgstr "运行中应用"
-
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "SMTP 登录"
@@ -7204,7 +7207,7 @@ msgstr[1] "保存附件中 ..."
 msgid "Scheduling"
 msgstr "安排时间"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -7433,8 +7436,7 @@ msgstr "设定颜色"
 msgid "Settings"
 msgstr "设置"
 
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Settings"
 msgstr "设定"
@@ -8086,7 +8088,7 @@ msgstr "任务已更改过，请重新加载"
 msgid "Tasks"
 msgstr "任务"
 
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/launchpad/main.js
+#: apps/io.ox/core/main.js module:io.ox/core
 #: apps/io.ox/search/view-template.js apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
 msgctxt "app"
@@ -9745,17 +9747,9 @@ msgstr[1] "您会在 %1$d 秒后自动注销"
 msgid "Your %s newsfeed"
 msgstr "您的 %s 新闻条目"
 
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "Your Applications"
-msgstr "您的应用程序"
-
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Your IP address has changed"
 msgstr "您的 IP 地址已更改"
-
-#: apps/io.ox/launchpad/main.js module:io.ox/core
-msgid "Your applications"
-msgstr "您的应用"
 
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Your browser does not support the audio format of this file."
@@ -12902,6 +12896,9 @@ msgstr "年"
 #~ msgid "Main window"
 #~ msgstr "主窗口"
 
+#~ msgid "Manage applications"
+#~ msgstr "管理应用"
+
 #~ msgctxt "help"
 #~ msgid "Managing E-Mail messages"
 #~ msgstr "管理电子邮件消息"
@@ -13345,6 +13342,9 @@ msgstr "年"
 #~| msgid "Romanian"
 #~ msgid "Romania"
 #~ msgstr "罗马尼亚文"
+
+#~ msgid "Running applications"
+#~ msgstr "运行中应用"
 
 #, fuzzy
 #~| msgid "Russian"
@@ -14335,8 +14335,14 @@ msgstr "年"
 #~ "Your %s account has been created. Expect a confirmation mail from %s soon."
 #~ msgstr "您的 %s 户口已创建，您快将收到来自 %s 邮件。"
 
+#~ msgid "Your Applications"
+#~ msgstr "您的应用程序"
+
 #~ msgid "Your answer"
 #~ msgstr "您的答案"
+
+#~ msgid "Your applications"
+#~ msgstr "您的应用"
 
 #~ msgid "Your auto forward has been saved"
 #~ msgstr "您的自动转发已被保存"

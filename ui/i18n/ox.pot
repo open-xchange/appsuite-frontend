@@ -1822,7 +1822,6 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/participants/detail.js
 #: module:io.ox/core
-#: apps/io.ox/participants/views.js
 #: apps/io.ox/presenter/views/navigationview.js
 #: module:io.ox/presenter
 msgid "Participants"
@@ -1887,7 +1886,6 @@ msgstr[1] ""
 #: module:io.ox/calendar
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -3526,6 +3524,13 @@ msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js
 #: module:io.ox/contacts
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts
 #: apps/io.ox/participants/model.js
 #: module:io.ox/core
 msgid "Resource"
@@ -4715,7 +4720,6 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -4723,7 +4727,6 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 #: apps/io.ox/search/view-template.js
@@ -4733,7 +4736,6 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -4741,7 +4743,6 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -4749,7 +4750,6 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 #: apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
@@ -4764,7 +4764,6 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js
 #: module:io.ox/files
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 #: apps/io.ox/search/view-template.js
@@ -4774,7 +4773,6 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -4859,11 +4857,6 @@ msgstr ""
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
 msgid "Sign out"
-msgstr ""
-
-#: apps/io.ox/core/main.js
-#: module:io.ox/core
-msgid "Your Applications"
 msgstr ""
 
 #: apps/io.ox/core/main.js
@@ -7844,35 +7837,6 @@ msgstr ""
 msgid "Failed to recover accounts"
 msgstr ""
 
-#: apps/io.ox/launchpad/main.js
-#: module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Settings"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js
-#: module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Documents"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js
-#: module:io.ox/core
-msgid "Running applications"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js
-#: module:io.ox/core
-msgid "Your applications"
-msgstr ""
-
-#: apps/io.ox/launchpad/main.js
-#: module:io.ox/core
-msgid "Manage applications"
-msgstr ""
-
 #: apps/io.ox/linkedIn/view-detail.js
 #: module:io.ox/portal
 msgid "Open on LinkedIn"
@@ -10128,6 +10092,11 @@ msgstr ""
 msgid "Remove contact"
 msgstr ""
 
+#: apps/io.ox/participants/views.js
+#: module:io.ox/core
+msgid "Participants (%1$d)"
+msgstr ""
+
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js
 #: module:io.ox/portal
@@ -10638,6 +10607,18 @@ msgstr ""
 #: apps/io.ox/search/model.js
 #: module:io.ox/search
 msgid "The selected folder is virtual and can not be searched. Please select another folder."
+msgstr ""
+
+#: apps/io.ox/search/view-template.js
+#: module:io.ox/core
+msgctxt "app"
+msgid "Settings"
+msgstr ""
+
+#: apps/io.ox/search/view-template.js
+#: module:io.ox/core
+msgctxt "app"
+msgid "Documents"
 msgstr ""
 
 #: apps/io.ox/search/view-template.js
