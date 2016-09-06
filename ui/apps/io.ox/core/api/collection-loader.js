@@ -42,7 +42,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 collection[method](data);
             });
             var isComplete = (type === 'load' && data.length < limit) || (type === 'paginate' && data.length <= 1);
-            if (isComplete) collection.trigger('complete');
+            collection.trigger('complete', isComplete);
             collection.trigger(type);
         }
 
@@ -116,7 +116,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             // offset is collection length minus one to allow comparing last item and first fetched item (see above)
             var offset = Math.max(0, collection.length - 1);
             params = this.getQueryParams(_.extend({ offset: offset }, params));
-            params.limit = offset + ',' + (offset + this.LIMIT + 1);
+            params.limit = offset + ',' + (collection.length + this.LIMIT);
             this.loading = true;
 
             collection.expired = false;
