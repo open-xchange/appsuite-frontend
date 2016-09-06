@@ -76,10 +76,11 @@
             chromeIOS = ua.indexOf('CriOS/') > -1;
 
             // TODO: This needs to be updated, if better user agent is available
-            // Edge is no Chrome and no Webkit.
+            // Edge is no Chrome, Webkit or Android.
             if (edge) {
                 chrome = false;
                 webkit = false;
+                Android = false;
             }
 
             /*eslint no-nested-ternary: 0*/
