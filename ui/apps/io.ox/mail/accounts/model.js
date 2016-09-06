@@ -152,26 +152,26 @@ define('io.ox/mail/accounts/model', [
                 // get account to determine changes
                 return AccountAPI.get(id).then(function (account) {
 
-                    var changes = { id: id };
+                    var changes = { id: id },
+                        // primary mail account only allows editing of display name, unified mail and default folders
+                        keys = id === 0 ?
+                            ['personal', 'unified_inbox_enabled', 'sent_fullname', 'trash_fullname', 'drafts_fullname', 'spam_fullname', 'archive_fullname'] :
+                            this.keys();
 
-                    // primary mail account only allows editing of display name and unified mail
-                    if (id === 0) {
-                        changes.personal = this.get('personal');
-                        changes.unified_inbox_enabled = this.get('unified_inbox_enabled');
-                    } else {
-                        // compare all attributes
-                        _(this.toJSON()).each(function (value, key) {
-                            if (!_.isEqual(value, account[key])) changes[key] = value;
-                        });
-                        // don't send transport_login/password if transport_auth is mail
-                        if (this.get('transport_auth') === 'mail') {
-                            delete changes.transport_login;
-                            delete changes.transport_password;
-                        }
+                    // compare all attributes
+                    _(this.pick(keys)).each(function (value, key) {
+                        if (!_.isEqual(value, account[key])) changes[key] = value;
+                    });
+
+                    // don't send transport_login/password if transport_auth is mail
+                    if (this.get('transport_auth') === 'mail') {
+                        delete changes.transport_login;
+                        delete changes.transport_password;
                     }
 
                     return AccountAPI.update(changes).done(function () {
                         folderAPI.pool.unfetch('default' + id);
+                        folderAPI.refresh();
                     });
 
                 }.bind(this));

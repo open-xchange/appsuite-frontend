@@ -369,8 +369,6 @@ define.async('io.ox/mail/accounts/view-form', [
 
             onFolderSelect: function (e) {
 
-                if (this.model.get('id') === 0) return;
-
                 this.dialog.getPopup().hide();
 
                 var accountId = 'default' + this.model.get('id'),
@@ -568,8 +566,8 @@ define.async('io.ox/mail/accounts/view-form', [
                         // skip archive if capability is missing
                         if (folder === 'archive' && !capabilities.has('archive_emails')) return;
 
-                        // neither 0 nor undefined
-                        var text = folderLabels[folder], id = model.get('id'), enabled = !!id;
+                        // offer folder selector if id is not undefined (i.e. while creating a new account)
+                        var text = folderLabels[folder], id = model.get('id'), enabled = id !== undefined;
                         folder = folder + '_fullname';
 
                         return group(
