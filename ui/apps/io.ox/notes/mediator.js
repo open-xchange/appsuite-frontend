@@ -20,8 +20,10 @@ define('io.ox/notes/mediator', [
     'io.ox/core/folder/view',
     'io.ox/core/tk/list',
     'io.ox/core/api/collection-loader',
+    'io.ox/notes/detail-view',
+    'gettext!io.ox/notes',
     'settings!io.ox/notes'
-], function (ext, api, notifications, TreeNodeView, TreeView, FolderView, ListView, CollectionLoader) {
+], function (ext, api, notifications, TreeNodeView, TreeView, FolderView, ListView, CollectionLoader, DetailView, gt) {
 
     'use strict';
 
@@ -49,7 +51,8 @@ define('io.ox/notes/mediator', [
                                 folder: tree.options.root,
                                 headless: true,
                                 open: true,
-                                icons: false,
+                                icons: true,
+                                iconClass: 'sticky-note',
                                 tree: tree,
                                 parent: tree
                             })
@@ -62,7 +65,7 @@ define('io.ox/notes/mediator', [
             'folder-view': function (app) {
                 // tree view
                 var root = app.settings.get('folder');
-                app.treeView = new TreeView({ app: app, module: 'notes', contextmenu: true, root: root });
+                app.treeView = new TreeView({ app: app, icons: true, module: 'notes', contextmenu: true, root: root });
                 FolderView.initialize({ app: app, tree: app.treeView });
                 app.folderView.resize.enable();
             },
@@ -74,7 +77,10 @@ define('io.ox/notes/mediator', [
                     index: 100,
                     draw: function (baton) {
                         // add border & render tree and add to DOM
-                        this.addClass('border-right').append(baton.app.treeView.$el);
+                        this.addClass('border-right').append(
+                            $('<div class="section-header">').text(gt('Topics')),
+                            baton.app.treeView.$el
+                        );
                     }
                 });
 
@@ -88,16 +94,43 @@ define('io.ox/notes/mediator', [
                     ref: 'io.ox/notes/listview'
                 });
 
-                ext.point('io.ox/notes/listview/item').extend({
-                    id: 'default',
-                    index: 100,
-                    draw: function (baton) {
-                        console.log('list item', baton.data);
-                        this.append(
-                            $('<div class="title">').text(baton.data.title)
-                        );
+                ext.point('io.ox/notes/listview/item').extend(
+                    {
+                        id: 'last_modified',
+                        index: 100,
+                        draw: function (baton) {
+
+                            var last_modified = moment(baton.data.last_modified),
+                                isToday = last_modified.isSame(moment(), 'day'),
+                                str = last_modified.format(isToday ? 'LT' : 'l');
+
+                            this.append(
+                                $('<span class="last_modified gray">').text(str)
+                            );
+                        }
+                    },
+                    {
+                        id: 'title',
+                        index: 200,
+                        draw: function (baton) {
+                            console.log('list item', baton.data);
+                            var title = String(baton.data.title).replace(/\.txt$/, '');
+                            this.append(
+                                $('<div class="title">').text(title)
+                            );
+                        }
+                    },
+                    {
+                        id: 'note_preview',
+                        index: 300,
+                        draw: function (baton) {
+                            var note_preview = baton.data.meta.note_preview || gt('Preview not available');
+                            this.append(
+                                $('<div class="preview gray">').text(note_preview)
+                            );
+                        }
                     }
-                });
+                );
 
                 app.listView = new NotesListView({ app: app, draggable: false, ignoreFocus: true });
                 app.listView.model.set({ folder: app.folder.get() });
@@ -116,14 +149,18 @@ define('io.ox/notes/mediator', [
                             action: 'all',
                             folder: params.folder,
                             columns: '1,2,3,5,20,23,108,700,702,703,704,705,707',
-                            sort: params.sort || '702',
-                            order: params.order || 'asc',
+                            sort: params.sort || '5',
+                            order: params.order || 'desc',
                             timezone: 'utc'
                         };
                     },
                     PRIMARY_PAGE_SIZE: 100,
                     SECONDARY_PAGE_SIZE: 200
                 });
+
+                api.collectionLoader.each = function (data) {
+                    api.pool.add('detail', data);
+                };
 
                 app.listView.connect(collectionLoader);
             },
@@ -141,50 +178,17 @@ define('io.ox/notes/mediator', [
 
             'selection': function (app) {
 
+                var current_cid = null;
+
                 app.showDetailView = function (cid) {
-
-                    var obj = _.cid(cid);
-
-                    var $el = $('<div class="abs note">').append(
-                        $('<div class="abs note-title">').append($('<input type="text">')),
-                        $('<div class="abs note-content scrollable" tabindex="0" contenteditable="true">')
-                    );
-
-                    $.when(
-                        api.get(obj).fail(notifications.yell),
-                        $.ajax({ type: 'GET', url: api.getUrl(obj, 'view') + '&' + _.now(), dataType: 'text' })
-                    )
-                    .done(function (data, text) {
-                        $el.find('.note-title input').val(
-                            String(data.title).replace(/\.txt$/i, '')
-                        );
-                        var lines = _.escape(text[0]).split(/\n/), openList;
-                        lines = lines.map(function (line) {
-                            var match = line.match(/^(\*|\-\s?\[(?:\s|x)\])\s?(.+)$/);
-                            if (!match) {
-                                if (openList) {
-                                    openList = false;
-                                    return '</ul>' + (line.length ? line + '\n' : '');
-                                }
-                                return line + '\n';
-                            }
-                            if (openList) return '<li>' + match[2] + '</li>';
-                            openList = true;
-                            return (/^\*/.test(line) ? '<ul>' : '<ul class="todo">') + '<li>' + match[2] + '</li>';
-                        });
-                        $el.find('.note-content').html(
-                            lines.join('')
-                                .replace(/\*(\S+)\*/g, '<b>$1</b>')
-                                .replace(/(http\:\/\/\S+)/ig, '<a href="$1" target="_blank" rel="noopener">$1</a>')
-                                .replace(/\n/g, '<br>')
-                        );
-                    });
-
-                    this.right.empty().append($el);
+                    if (current_cid === cid) return;
+                    this.right.empty().append(new DetailView({ cid: cid }).$el);
+                    current_cid = cid;
                 };
 
                 app.showEmptyDetailView = function () {
                     this.right.empty();
+                    current_cid = null;
                 };
 
                 var react = _.debounce(function (type, list) {

@@ -260,7 +260,7 @@ define('io.ox/core/folder/node', [
         getTreeNode: function (model) {
             var o = this.options,
                 level = o.headless || o.indent === false ? o.level : o.level + 1,
-                options = { folder: model.id, icons: this.options.icons, level: level, tree: o.tree, parent: this };
+                options = { folder: model.id, icons: this.options.icons, iconClass: this.options.iconClass, level: level, tree: o.tree, parent: this };
             return new TreeNodeView(o.tree.getTreeNodeOptions(options, model));
         },
 
@@ -307,6 +307,7 @@ define('io.ox/core/folder/node', [
                 empty: true,                    // show if empty, i.e. no subfolders?
                 headless: false,                // show folder row? root folder usually hidden
                 icons: false,                   // show folder icons
+                iconClass: undefined,           // use custom icon class
                 indent: true,                   // indent subfolders, i.e. increase level by 1
                 level: 0,                       // nesting / left padding
                 model_id: this.folder,          // use this id to load model data and subfolders
@@ -513,34 +514,43 @@ define('io.ox/core/folder/node', [
         },
 
         renderIcon: function () {
-            var o = this.options, type;
-            if ((o.tree.module !== 'infostore' && !o.icons) || (o.tree.module !== 'mail' && o.tree.module !== 'infostore')) return;
+
+            var o = this.options, type, iconClass = o.iconClass,
+                infostoreDefaultFolder, attachmentView, allAttachmentsFolder;
+
+            if ((o.tree.module !== 'infostore' && !o.icons) || !/^(mail|infostore|notes)$/.test(o.tree.module)) return;
+
             if (o.tree.module === 'mail') {
                 type = account.getType(this.folder) || 'default';
                 this.$.icon.addClass('visible ' + type);
                 return;
             }
 
-            var iconClass = '',
-                infostoreDefaultFolder = String(api.getDefaultFolder('infostore')),
-                attachmentView = settings.get('folder/mailattachments', {}),
+            if (!iconClass) {
+
+                infostoreDefaultFolder = String(api.getDefaultFolder('infostore'));
+                attachmentView = settings.get('folder/mailattachments', {});
                 allAttachmentsFolder = String(attachmentView.all);
 
-            switch (this.folder) {
-                case 'virtual/myshares':
-                    iconClass = 'visible myshares';
-                    break;
-                case allAttachmentsFolder:
-                    iconClass = 'visible attachments';
-                    break;
-                case infostoreDefaultFolder:
-                    iconClass = 'visible myfiles';
-                    break;
-                // no default
+                switch (this.folder) {
+                    case 'virtual/myshares':
+                        iconClass = 'visible myshares';
+                        break;
+                    case allAttachmentsFolder:
+                        iconClass = 'visible attachments';
+                        break;
+                    case infostoreDefaultFolder:
+                        iconClass = 'visible myfiles';
+                        break;
+                    // no default
+                }
+                if (iconClass === '' && api.is('trash', this.model.attributes) && this.model.get('standard_folder')) {
+                    iconClass = 'visible trash';
+                }
+            } else {
+                iconClass = 'visible ' + iconClass;
             }
-            if (iconClass === '' && api.is('trash', this.model.attributes) && this.model.get('standard_folder')) {
-                iconClass = 'visible trash';
-            }
+
             this.$.icon.addClass(iconClass);
         },
 

@@ -13,13 +13,67 @@
 
 .io-ox-notes-window {
 
+    //
+    // Folder view
+    //
+
+    .folder-icon.sticky-note i:before {
+        content: '\f249';
+    }
+
+    .section-header {
+        text-transform: uppercase;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 0 16px;
+        margin: 11px 0 4px 0;
+    }
+
+    //
+    // List view
+    //
+
+    .list-view {
+        .list-item {
+            padding-top: 9px;
+        }
+        .title {
+            font-weight: bold;
+            .ellipsis();
+        }
+        .last_modified {
+            float: right;
+        }
+        .preview {
+            height: 40px;
+            line-height: 16px;
+            padding-top: 7px;
+            margin-bottom: 5px;
+            word-break: break-all;
+            overflow: hidden;
+        }
+    }
+
+    //
+    // Detail view
+    //
+
     .rightside {
-        background-color: #eee;
         padding: 16px;
     }
 
     .note {
+
         color: #333;
+
+        strike {
+            color: #a00;
+        }
+
+        u {
+            text-decoration: none;
+            background-color: #ffdd79;
+        }
     }
 
     .note-title {
@@ -28,6 +82,7 @@
         left: 16px;
         height: 40px;
         bottom: auto;
+        z-index: 1;
         input {
             width: 100%;
             height: 40px;
@@ -40,25 +95,28 @@
     }
 
     .note-content {
-        top: 72px;
+        top: 56px;
         right: 16px;
         left: 16px;
         bottom: 16px;
         font-size: 14px;
         line-height: 20px;
         background-color: white;
-
+        z-index: 0;
         .todo {
             list-style-type: none;
             margin: 0 0 16px 0;
             padding-left: 24px;
+            li {
+                position: relative;
+            }
             li:before {
                 font-family: FontAwesome;
                 font-size: 14px;
                 color: #777;
                 content: '\f1db';
-                position: relative;
-                left: -18px;
+                position: absolute;
+                left: -20px;
                 cursor: pointer;
             }
             li.checked:before {
@@ -75,6 +133,7 @@
     }
 
     .note-title input:focus, .note-content:focus {
+        z-index: 2;
         border-color: @input-border-focus;
         @color: fade(@input-border-focus, 60%);
         .box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px @{color}");
