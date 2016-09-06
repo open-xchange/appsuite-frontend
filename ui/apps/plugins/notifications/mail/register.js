@@ -20,10 +20,17 @@ define('plugins/notifications/mail/register', [
     'io.ox/mail/util',
     'io.ox/core/folder/api',
     'io.ox/core/api/account',
-    'io.ox/core/capabilities'
-], function (api, ext, gt, util, folderApi, account, cap) {
+    'io.ox/core/capabilities',
+    'io.ox/backbone/mini-views',
+    'settings!io.ox/mail'
+], function (api, ext, gt, util, folderApi, account, cap, miniViews, settings) {
 
     'use strict';
+
+    var lastCount = -1,
+        path = ox.base + '/apps/plugins/notifications/mail/',
+        sound,
+        settingsModel = settings;
 
     function filter(model) {
         // ignore virtual/all (used by search, for example) and unsubscribed folders
@@ -31,16 +38,63 @@ define('plugins/notifications/mail/register', [
         return /^default0\D/.test(model.id) && !account.is('spam|trash|unseen', model.id) && (folderApi.getSection(model.get('type')) === 'private');
     }
 
-    var lastCount = -1,
-        sound = new Audio(ox.base + '/apps/plugins/notifications/mail/marimba.mp3');
+    function fieldset(text) {
+        var args = _(arguments).toArray();
+        return $('<fieldset>').append($('<legend class="sectiontitle">').append($('<h2>').text(text))).append(args.slice(1));
+    }
 
-    if (cap.has('sound')) console.log('Notification sound enabled');
+    // load a new soundfile
+    function loadSound(sound) {
+        var d = $.Deferred();
+        sound = new Audio(path + sound);
+        sound.volume = 0.3;
+        sound.addEventListener('canplaythrough', function () {
+            d.resolve(sound);
+        });
+        return d;
+    }
 
-    sound.volume = 0.3;
+    // get and load stored sound
+    loadSound(settingsModel.get('notificationSound')).done(function (s) {
+        sound = s;
+    });
 
+    // ensure we do not play a sound twice until the first sound has finished
     var playSound = _.debounce(function () {
         sound.play();
-    }, 1000);
+    }, 2000);
+
+    settingsModel.on('change:notificationSound', function () {
+        var s = settingsModel.get('notificationSound');
+        loadSound(s).done(function (s) {
+            // preview the selected sound by playing it on change
+            s.play();
+            sound = s;
+        });
+        settingsModel.saveAndYell();
+    });
+
+    if (cap.has('sound')) {
+        console.log('Notification sounds enabled, see mail settings.');
+        ext.point('io.ox/mail/settings/detail/pane').extend({
+            index: 490,
+            id: 'sounds',
+            draw: function () {
+
+                var list  = [
+                    { label: gt('Bell'), value: 'bell.mp3' },
+                    { label: gt('Marimba'), value: 'marimba.mp3' },
+                    { label: gt('Wood'), value: 'wood.mp3' },
+                    { label: gt('Chimes'), value: 'bell2.mp3' }
+                ];
+                this.append(fieldset(
+                    gt('Notification sound'),
+                        new miniViews.RadioView({ list: list, name: 'notificationSound', model: settingsModel }).render().$el
+                    )
+                );
+            }
+        });
+    }
 
     var update = _.debounce(function () {
 
@@ -161,6 +215,7 @@ define('plugins/notifications/mail/register', [
 
     api.checkInbox();
 
+    // play sound on new mail
     ox.on('socket:mail:new', function () {
         update();
         if (cap.has('sound')) playSound();

@@ -42,7 +42,8 @@ define('io.ox/mail/settings/defaults', [], function () {
         'sort': 'thread',
         'order': 'desc',
         'unread': false,
-        'simpleLineBreaks': true
+        'simpleLineBreaks': true,
+        'notificationSound': 'bell.mp3'
     };
 
     return settingsDefaults;
