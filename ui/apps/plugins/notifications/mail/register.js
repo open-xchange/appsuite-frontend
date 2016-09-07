@@ -22,13 +22,16 @@ define('plugins/notifications/mail/register', [
     'io.ox/core/api/account',
     'io.ox/core/capabilities',
     'io.ox/backbone/mini-views',
+    'io.ox/core/desktopNotifications',
     'settings!io.ox/mail'
-], function (api, ext, gt, util, folderApi, account, cap, miniViews, settings) {
+], function (api, ext, gt, util, folderApi, account, cap, miniViews, desktopNotifications, settings) {
 
     'use strict';
 
     var lastCount = -1,
+        SOUND_VOLUME = 0.3, // volume of push notification sound
         path = ox.base + '/apps/plugins/notifications/mail/',
+        iconPath = ox.base + '/apps/themes/default/icon120.png', // icon shown in desktop notification
         sound,
         settingsModel = settings;
 
@@ -47,11 +50,28 @@ define('plugins/notifications/mail/register', [
     function loadSound(sound) {
         var d = $.Deferred();
         sound = new Audio(path + sound);
-        sound.volume = 0.3;
+        sound.volume = SOUND_VOLUME;
         sound.addEventListener('canplaythrough', function () {
             d.resolve(sound);
         });
         return d;
+    }
+    // show desktopNotification (if enabled) for a new mail
+    function newMailDesktopNotification(message) {
+        var sender, text = gt('You have new mail'); // default
+
+        // some mailserver do not send extra data like sender and subject, check this here
+        if (message.sender && message.subject) {
+            sender = message.sender.split('<').length > 1 ? message.sender.split('<')[0].trim() : message.sender;
+            text = gt('Mail from %1$s, %2$s', _.noI18n(sender), _.noI18n(message.subject) || gt('No subject'));
+        }
+
+        desktopNotifications.show({
+            title: gt('New Mail'),
+            body: text,
+            icon: iconPath,
+            duration: 10000
+        });
     }
 
     // get and load stored sound
@@ -156,30 +176,31 @@ define('plugins/notifications/mail/register', [
                 return model.get('folder_id') + '.' + model.get('id');
             }),
             newItems = _.difference(newIds, oldIds);
-        if (newItems.length) {
+
+        // only show these if there is not already the websocket push listening
+        if (newItems.length && !cap.has('websocket')) {
             // if theres multiple items or no specific notification given, use the generic
-            require(['io.ox/core/desktopNotifications'], function (desktopNotifications) {
-                if (newItems.length > 1) {
+            if (newItems.length > 1) {
+                desktopNotifications.show({
+                    title: gt('New mails'),
+                    body: gt('You have new mail'),
+                    icon: iconPath
+                });
+            } else {
+                api.get(_.extend({}, _.cid(newItems[0]), { unseen: true })).then(function (data) {
+                    var from = data.from || [['', '']],
+                                  //#. %1$s mail sender
+                                  //#. %2$s mail subject
+                                  //#, c-format
+                        message = gt('Mail from %1$s, %2$s', _.noI18n(util.getDisplayName(from[0])), _.noI18n(data.subject) || gt('No subject'));
                     desktopNotifications.show({
-                        title: gt('New mails'),
-                        body: gt('You have new mail'),
-                        icon: ''
+                        title: gt('New mail'),
+                        body: message,
+                        icon: iconPath
                     });
-                } else {
-                    api.get(_.extend({}, _.cid(newItems[0]), { unseen: true })).then(function (data) {
-                        var from = data.from || [['', '']],
-                                      //#. %1$s mail sender
-                                      //#. %2$s mail subject
-                                      //#, c-format
-                            message = gt('Mail from %1$s, %2$s', _.noI18n(util.getDisplayName(from[0])), _.noI18n(data.subject) || gt('No subject'));
-                        desktopNotifications.show({
-                            title: gt('New mail'),
-                            body: message,
-                            icon: ''
-                        });
-                    });
-                }
-            });
+                });
+            }
+
         }
     }
 
@@ -216,9 +237,13 @@ define('plugins/notifications/mail/register', [
     api.checkInbox();
 
     // play sound on new mail
-    ox.on('socket:mail:new', function () {
+    ox.on('socket:mail:new', function (message) {
+        // update counters
         update();
+        // play sound
         if (cap.has('sound')) playSound();
+        // show notification
+        newMailDesktopNotification(message);
     });
 
     return true;
