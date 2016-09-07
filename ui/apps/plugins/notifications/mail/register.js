@@ -60,7 +60,7 @@ define('plugins/notifications/mail/register', [
     });
 
     // ensure we do not play a sound twice until the first sound has finished
-    var playSound = _.debounce(function () {
+    var playSound = _.throttle(function () {
         sound.play();
     }, 2000);
 
