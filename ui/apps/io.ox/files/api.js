@@ -193,6 +193,18 @@ define('io.ox/files/api', [
             }
         },
 
+        getGuardType: function () {
+            var parts = String(this.get('filename') || '').split('.');
+            if (parts.length < 3) return this.getFileType();
+            // If has extension .xyz.pgp, remove the pgp and test extension
+            if (parts.pop().toLowerCase() === 'pgp') {
+                var extension = parts[parts.length - 1];
+                for (var type in this.types) {
+                    if (this.types[type].test(extension)) return type;
+                }
+            }
+        },
+
         types: {
             image: /^(gif|bmp|tiff|jpe?g|gmp|png)$/,
             audio: /^(aac|mp3|m4a|m4b|ogg|opus|wav)$/,
