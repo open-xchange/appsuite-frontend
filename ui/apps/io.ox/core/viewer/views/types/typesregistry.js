@@ -50,7 +50,7 @@ define('io.ox/core/viewer/views/types/typesregistry', [
 
             if (!model) return $.Deferred().reject();
 
-            var modelType = typesMap[model.getFileType()] || 'defaultview';
+            var modelType = typesMap[(model.isEncrypted() ? model.getGuardType() : model.getFileType())] || 'defaultview';
 
             if ((model.isOffice() || model.isPDF()) && !Capabilities.has('document_preview')) {
                 modelType = 'defaultview';
