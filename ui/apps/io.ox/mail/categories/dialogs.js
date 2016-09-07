@@ -71,11 +71,6 @@ define('io.ox/mail/categories/dialogs', [
     return {
 
         toast: function (parent, baton) {
-            // preferred setting for generation (never, always, ask[default])
-            var userpref = settings.get('categories-extra/generalize');
-            if (userpref === 'never') return;
-            if (userpref === 'always') return parent.trigger('dialog:generalize', baton);
-
             var carrier = { parent: parent, maillist: baton.data, baton: baton },
                 pipeline = _.pipe(carrier);
 
