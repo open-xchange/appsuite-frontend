@@ -339,7 +339,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     label: gt('Rename'),
                     section: 'edit',
-                    ref: 'oxguard/rename'
+                    ref: 'io.ox/files/actions/rename'
                 },
                 'editdescription': {
                     prio: 'lo',
