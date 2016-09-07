@@ -65,6 +65,9 @@
     .note {
 
         color: #333;
+        max-width: 700px;
+        right: auto;
+        width: 100%;
 
         strike {
             color: #a00;
@@ -103,9 +106,11 @@
         line-height: 20px;
         background-color: white;
         z-index: 0;
+        ul, ol {
+            margin: 0;
+        }
         .todo {
             list-style-type: none;
-            margin: 0 0 16px 0;
             li {
                 position: relative;
             }
@@ -137,4 +142,20 @@
         @color: fade(@input-border-focus, 60%);
         .box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px @{color}");
     }
+}
+
+.note-debug {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    width: 500px;
+    height: 350px;
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 16px;
+    white-space: pre-wrap;
+    overflow: auto;
+    font-family: monospace;
+    font-size: 13px;
+    .user-select(all);
 }

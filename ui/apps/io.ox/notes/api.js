@@ -27,9 +27,23 @@ define('io.ox/notes/api', [
 
     var api = {
 
+        get: function (obj) {
+            return $.when(
+                filesAPI.get(obj),
+                $.ajax({ type: 'GET', url: filesAPI.getUrl(obj, 'view') + '&' + _.now(), dataType: 'text' })
+            )
+            .then(function (data, text) {
+                return { data: data, content: text[0] };
+            });
+        },
+
         resolve: function (list, json) {
             var models = _(list).chain().map(map).compact().value();
             return json === false ? models : _(models).invoke('toJSON');
+        },
+
+        getModel: function (cid) {
+            return filesAPI.pool.get('detail').get(cid);
         },
 
         addToPool: function (data) {
@@ -51,6 +65,16 @@ define('io.ox/notes/api', [
                 .done(function (data) {
                     filesAPI.pool.get('detail').add(data);
                 });
+        },
+
+        update: function (file, changes) {
+            if (_.isString(file)) file = _.cid(file);
+            return filesAPI.update(file, changes);
+        },
+
+        updateContent: function (file, content) {
+            var blob = new window.Blob([content], { type: 'text/plain' });
+            return filesAPI.versions.upload({ id: file.id, folder: file.folder_id, file: blob, filename: file.filename });
         },
 
         createDefaultFolders: function () {

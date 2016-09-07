@@ -13,9 +13,10 @@
 
 define('io.ox/notes/detail-view', [
     'io.ox/backbone/views/disposable',
-    'io.ox/files/api',
+    'io.ox/notes/api',
+    'io.ox/notes/parser',
     'io.ox/core/notifications'
-], function (DisposableView, api, notifications) {
+], function (DisposableView, api, parser, notifications) {
 
     'use strict';
 
@@ -34,29 +35,16 @@ define('io.ox/notes/detail-view', [
             this.listenTo(this.model, 'change:preview', function (model, value) {
                 var meta = _.extend({}, this.model.get('meta'), { note_preview: value });
                 this.model.set('meta', meta);
-                console.log('hier?', meta);
-                api.update(_.cid(this.options.cid), { meta: meta });
+                api.update(this.options.cid, { meta: meta });
             });
 
             this.render().fetch();
 
-            this.$('.note-title input').on('input', _.throttle(function () {
-                this.updateTitle();
-            }.bind(this), 5000));
-
-            // this.$('.note-content').on('input', _.throttle(function () {
-            //     console.log('throttle...');
-            //     this.updateContent();
-            // }.bind(this), 5000));
-
-            // // fix line breaks
             this.$('.note-content').on('keydown', function (e) {
+
+                if (!e.metaKey) return;
+
                 switch (e.which) {
-                    // enter
-                    case 13:
-                        e.preventDefault();
-                        document.execCommand('insertHTML', false, '<br>');
-                        break;
                     // "S"
                     case 83:
                         e.preventDefault();
@@ -70,14 +58,37 @@ define('io.ox/notes/detail-view', [
                     // no default
                 }
             });
+
+            this.$('.note-content').on('click', 'ul.todo li', function (e) {
+                if (e.offsetX >= 0) return;
+                $(this).toggleClass('checked');
+                $(e.delegateTarget).trigger('input');
+            });
+
+            var THROTTLE = 60 * 1000;
+
+            this.updateContent = _.throttle(function () {
+                this.updateContentImmediately();
+            }, THROTTLE, { leading: false });
+
+            this.updateTitle = _.throttle(function () {
+                this.updateTitleImmediately();
+            }, THROTTLE, { leading: false });
+
+            this.$('.note-content').on('input', this.updateContent.bind(this));
+            this.$('.note-title input').on('input', this.updateTitle.bind(this));
+
+            this.on('dispose', function () {
+                this.updateContentImmediately();
+                this.updateTitleImmediately();
+            });
         },
 
         getModel: function () {
-            var cid = this.options.cid,
-                model = api.pool.get('detail').get(cid);
+            var model = api.getModel(this.options.cid);
             if (!model) {
                 model = new Backbone.Model();
-                api.pool.get('detail').add(model);
+                api.addToPool(model);
             }
             return model;
         },
@@ -109,91 +120,37 @@ define('io.ox/notes/detail-view', [
 
             var obj = _.cid(this.options.cid), self = this;
 
-            $.when(
-                api.get(obj).fail(notifications.yell),
-                $.ajax({ type: 'GET', url: api.getUrl(obj, 'view') + '&' + _.now(), dataType: 'text' })
-            )
-            .done(function (data, text) {
-                if (self.disposed) return;
-                // move some meta data silently
-                self.model.set('preview', data.meta.note_preview, { silent: true });
-                // set all other data
-                self.model.set(data).set(self.parsePlainText(text[0]));
-            });
+            api.get(obj)
+                .done(function (response) {
+                    if (self.disposed) return;
+                    // move some meta data silently
+                    var data = response.data;
+                    self.model.set('preview', data.meta.note_preview, { silent: true });
+                    // set all other data
+                    self.model.set(data).set(parser.parsePlainText(response.content));
+                })
+                .fail(notifications.yell);
         },
 
-        parsePlainText: function (text) {
-
-            text = $.trim(text);
-            var lines = _.escape(text).split(/\n/), openList;
-
-            lines = lines.map(function (line) {
-                var match = line.match(/^(\*\s|\#\s|\-\s\[(?:\s|x)\])\s?(.+)$/), out, item;
-                if (!match) {
-                    if (openList) {
-                        out = '</' + openList + '>' + (line.length ? line + '\n' : '');
-                        openList = false;
-                    } else {
-                        out = line + '\n';
-                    }
-                    return out;
-                }
-                item = (/^-\s\[x]/.test(line) ? '<li class="checked">' : '<li>') + match[2] + '</li>';
-                if (openList) return item;
-                switch (line[0]) {
-                    case '#': out = '<ol>'; openList = 'ol'; break;
-                    case '-': out = '<ul class="todo">'; openList = 'ul'; break;
-                    default: out = '<ul>'; openList = 'ul'; break;
-                }
-                return out + item;
-            });
-
-            var html = lines.join('')
-                    .replace(/(^|[^\\])\*([^<\*]+)\*/g, '$1<b>$2</b>')
-                    .replace(/(^|[^\\])\_([^<\_]+)\_/g, '$1<u>$2</u>')
-                    .replace(/(^|[^\\])\~([^<\~]+)\~/g, '$1<strike>$2</strike>')
-                    .replace(/(http\:\/\/\S+)/ig, '<a href="$1" target="_blank" rel="noopener">$1</a>')
-                    .replace(/\n/g, '<br>');
-
-            var preview = text.replace(/\s+/g, ' ').substr(0, 200);
-
-            return { html: html, preview: preview, content: text };
+        updateContentImmediately: function () {
+            if (this.disposed) return;
+            var result = parser.parseHTML(this.$('.note-content'));
+            if (result.content === this.model.get('content')) return;
+            this.model.set(result);
+            console.log('updateContentImmediately', result);
+            // api.updateContent(this.model.pick('id', 'folder_id', 'filename'), result.content);
+            // this.$debug = this.$debug || $('<div class="note-debug">').appendTo('body');
+            // this.$debug.text(this.model.get('editedContent'));
         },
 
-        updateTitle: function () {
+        updateTitleImmediately: function () {
             if (this.disposed) return;
             var title = this.$('.note-title input').val();
+            if (title === this.model.get('title')) return;
             this.model.set('title', title);
-            var obj = _.cid(this.options.cid);
-            api.update(obj, { title: title });
-        },
-
-        updateContent: function () {
-            if (this.disposed) return;
-            var html = this.$('.note-content').html();
-            // get rid of unwanted DIVs (hopefully not needed)
-            // html = html.replace(/<div>/gi, '<br>').replace(/<\/div>/gi, '');
-            // we don't need <ul> elements
-            html = html.replace(/<\/?ul[^>]*>/gi, '\n');
-            // transform <li> elements
-            html = html.replace(/<li[^>]*>([^<]*)<\/li>/gi, function (all, content) {
-                return '* ' + content + '\n';
-            });
-            console.log('updateContent', html);
+            api.update(this.options.cid, { title: title });
         }
     });
-
-    // // update
-    // return api.versions.upload({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
-    //     .done(function () {
-    //         previous = model.toJSON();
-    //     })
-    //     .always(function () { view.idle(); })
-    //     .fail(notifications.yell)
-    //     .fail(function (error) {
-    //         // file no longer exists
-    //         if (error.code === 'IFO-0300') model.unset('id');
-    //     });
 
     return DetailView;
 });
