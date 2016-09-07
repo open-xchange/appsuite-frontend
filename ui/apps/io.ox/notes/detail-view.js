@@ -15,14 +15,15 @@ define('io.ox/notes/detail-view', [
     'io.ox/backbone/views/disposable',
     'io.ox/notes/api',
     'io.ox/notes/parser',
-    'io.ox/core/notifications'
-], function (DisposableView, api, parser, notifications) {
+    'io.ox/core/notifications',
+    'gettext!io.ox/notes'
+], function (DisposableView, api, parser, notifications, gt) {
 
     'use strict';
 
     var DetailView = DisposableView.extend({
 
-        className: 'abs note',
+        className: 'abs note scrollable',
 
         initialize: function (options) {
 
@@ -30,7 +31,12 @@ define('io.ox/notes/detail-view', [
             this.model = this.getModel();
             this.$el.attr('data-cid', this.options.cid);
 
+            //
+            // Model changes
+            //
+
             this.listenTo(this.model, 'change:html', this.renderHTML);
+            this.listenTo(this.model, 'change:last_modified', this.renderLastModified);
             this.listenTo(this.model, 'change:title', this.renderTitle);
             this.listenTo(this.model, 'change:preview', function (model, value) {
                 var meta = _.extend({}, this.model.get('meta'), { note_preview: value });
@@ -39,6 +45,10 @@ define('io.ox/notes/detail-view', [
             });
 
             this.render().fetch();
+
+            //
+            // Events
+            //
 
             this.$('.note-content').on('keydown', function (e) {
 
@@ -65,11 +75,28 @@ define('io.ox/notes/detail-view', [
                 $(e.delegateTarget).trigger('input');
             });
 
+            this.$('.note-content').on('paste', function (e) {
+                e.preventDefault();
+                // Get pasted data via clipboard API
+                var clipboardData = e.originalEvent.clipboardData || window.clipboardData,
+                    pastedText = clipboardData.getData('Text');
+                document.execCommand('inserttext', false, pastedText);
+            });
+
+            //
+            // Updates
+            //
+
             var THROTTLE = 60 * 1000;
 
-            this.updateContent = _.throttle(function () {
+            this.throttledUpdateContent = _.throttle(function () {
                 this.updateContentImmediately();
             }, THROTTLE, { leading: false });
+
+            this.updateContent = function () {
+                this.model.set('last_modified', _.now());
+                this.throttledUpdateContent();
+            };
 
             this.updateTitle = _.throttle(function () {
                 this.updateTitleImmediately();
@@ -78,9 +105,20 @@ define('io.ox/notes/detail-view', [
             this.$('.note-content').on('input', this.updateContent.bind(this));
             this.$('.note-title input').on('input', this.updateTitle.bind(this));
 
+            var updateLastModified = setInterval(function () {
+                this.renderLastModified();
+            }.bind(this), 10000);
+
+            //
+            // Dispose
+            //
+
             this.on('dispose', function () {
+                // already stop listening to avoid double update of "meta.note_preview"
+                this.stopListening();
                 this.updateContentImmediately();
                 this.updateTitleImmediately();
+                window.clearInterval(updateLastModified);
             });
         },
 
@@ -95,12 +133,23 @@ define('io.ox/notes/detail-view', [
 
         render: function () {
             this.$el.append(
-                $('<div class="abs note-title">').append($('<input type="text">')),
-                $('<div class="abs note-content scrollable" tabindex="0" contenteditable="true" spellcheck="true">')
+                $('<div class="note-container">').append(
+                    $('<div class="note-caption">'),
+                    $('<div class="note-title">').append('<input type="text">'),
+                    $('<div class="note-content" tabindex="0" contenteditable="true" spellcheck="true">')
+                )
             );
+            this.renderLastModified();
             this.renderTitle();
             this.renderHTML();
             return this;
+        },
+
+        renderLastModified: function () {
+            var t = this.model.get('last_modified');
+            this.$('.note-caption').text(
+                t ? gt('Modified') + ': ' + moment(t).fromNow() : '\u00A0'
+            );
         },
 
         renderTitle: function () {
@@ -136,9 +185,9 @@ define('io.ox/notes/detail-view', [
             if (this.disposed) return;
             var result = parser.parseHTML(this.$('.note-content'));
             if (result.content === this.model.get('content')) return;
+            console.log('updateContentImmediately...');
             this.model.set(result);
-            console.log('updateContentImmediately', result);
-            // api.updateContent(this.model.pick('id', 'folder_id', 'filename'), result.content);
+            api.updateContent(this.model.pick('id', 'folder_id', 'filename', 'preview'), result.content);
             // this.$debug = this.$debug || $('<div class="note-debug">').appendTo('body');
             // this.$debug.text(this.model.get('editedContent'));
         },

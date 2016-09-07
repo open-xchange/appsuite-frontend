@@ -65,9 +65,49 @@
     .note {
 
         color: #333;
+        padding: 0 32px;
+    }
+
+    .note-container {
         max-width: 700px;
-        right: auto;
         width: 100%;
+    }
+
+    .note-caption {
+        color: #777;
+        font-size: 13px;
+        text-align: right;
+        padding-top: 11px;
+        height: 40px;
+    }
+
+    .note-title {
+
+        input {
+            width: 100%;
+            height: 40px;
+            padding-bottom: 5px;
+            border: 0;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 1px solid transparent;
+            outline: 0;
+        }
+
+        input:focus {
+            border: 0;
+            border-bottom: 1px solid @input-border-focus;
+            @color: fade(@input-border-focus, 60%);
+        }
+    }
+
+    .note-content {
+
+        font-size: 14px;
+        line-height: 20px;
+        background-color: white;
+        padding: 8px 0 32px 0;
+        outline: 0;
 
         strike {
             color: #a00;
@@ -77,38 +117,11 @@
             text-decoration: none;
             background-color: #ffdd79;
         }
-    }
 
-    .note-title {
-        top: 16px;
-        right: 16px;
-        left: 16px;
-        height: 48px;
-        bottom: auto;
-        z-index: 1;
-        input {
-            width: 100%;
-            height: 48px;
-            border: 0;
-            font-size: 16px;
-            font-weight: bold;
-            line-height: 40px;
-            background-color: white;
-        }
-    }
-
-    .note-content {
-        top: 64px;
-        right: 16px;
-        left: 16px;
-        bottom: 16px;
-        font-size: 14px;
-        line-height: 20px;
-        background-color: white;
-        z-index: 0;
         ul, ol {
             margin: 0;
         }
+
         .todo {
             list-style-type: none;
             li {
@@ -128,19 +141,6 @@
                 content: '\f058';
             }
         }
-    }
-
-    .note-title input, .note-content {
-        border: 1px solid transparent;
-        padding: 15px;
-        outline: 0;
-    }
-
-    .note-title input:focus, .note-content:focus {
-        z-index: 2;
-        border-color: @input-border-focus;
-        @color: fade(@input-border-focus, 60%);
-        .box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px @{color}");
     }
 }
 

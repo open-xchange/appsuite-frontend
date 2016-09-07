@@ -74,7 +74,7 @@ define('io.ox/notes/api', [
 
         updateContent: function (file, content) {
             var blob = new window.Blob([content], { type: 'text/plain' });
-            return filesAPI.versions.upload({ id: file.id, folder: file.folder_id, file: blob, filename: file.filename });
+            return filesAPI.versions.upload({ id: file.id, folder: file.folder_id, file: blob, filename: file.filename, preview: file.preview });
         },
 
         createDefaultFolders: function () {
@@ -107,7 +107,7 @@ define('io.ox/notes/api', [
 
         createWelcomeNote: function () {
             return this.create({
-                content: 'With *OX Notes* you can create simple todo or shopping lists, ' +
+                content: 'With **OX Notes** you can create simple todo or shopping lists, ' +
                     'easily take meetings minutes, or quickly write down your ideas.\n\n' +
                     '- [x] Make a list\n- [x] Have a break\n- [x] Mark the first two items as done\n- [x] Be proud to have finished three items yet\n- [ ] So much done. Have a beer!\n\n' +
                     'You can also create numbered lists: \n# First item\n# Second item\n\n' +

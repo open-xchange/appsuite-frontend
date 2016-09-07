@@ -973,6 +973,7 @@ define('io.ox/files/api', [
 
         if (options.filename) params.filename = options.filename;
         if (options.title) data.title = options.title;
+        if (options.preview) data.meta = _.extend({}, data.meta, { note_preview: options.preview });
 
         if (action === 'new') {
             params.extendedResponse = true;

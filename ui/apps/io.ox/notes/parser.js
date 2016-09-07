@@ -16,8 +16,9 @@ define('io.ox/notes/parser', [], function () {
     'use strict';
 
     var replacements = {
+        'i': '*', '/i': '*',
+        'b': '**', '/b': '**',
         'u': '_', '/u': '_',
-        'b': '*', '/b': '*',
         'strike': '~', '/strike': '~',
         'a': '', '/a': '',
         'div': '\n', '/div': '',
@@ -61,10 +62,11 @@ define('io.ox/notes/parser', [], function () {
             });
 
             var html = lines.join('')
-                    .replace(/(^|[^\\])\*([^<\*]+)\*/g, '$1<b>$2</b>')
+                    .replace(/(^|[^\\])\*\*([^<\*]+)\*\*/g, '$1<b>$2</b>')
+                    .replace(/(^|[^\\])\*([^<\*]+)\*/g, '$1<i>$2</i>')
                     .replace(/(^|[^\\])\_([^<\_]+)\_/g, '$1<u>$2</u>')
                     .replace(/(^|[^\\])\~([^<\~]+)\~/g, '$1<strike>$2</strike>')
-                    .replace(/(http\:\/\/\S+)/ig, '<a href="$1" target="_blank" rel="noopener">$1</a>')
+                    .replace(/(https?\:\/\/\S+)/ig, '<a href="$1" target="_blank" rel="noopener">$1</a>')
                     .replace(/\n/g, '<br>');
 
             return { html: html, preview: this.getPreview(text), content: text };
@@ -75,19 +77,29 @@ define('io.ox/notes/parser', [], function () {
             // add classes to ordered list items
             $content.find('ul.todo > li').addClass('checkmark');
             $content.find('ol > li').addClass('number');
+            // get html
+            var html = $content.html();
             // fix special patterns
-            var html = $content.html().replace(/<div><br><\/div>/g, '<br>');
+            html = html.replace(/<div><br><\/div>/g, '<br>');
+            // convert entities
+            html = html.replace(/&\w+;/g, function (entity) {
+                var elem = document.createElement('span');
+                elem.innerHTML = entity;
+                return elem.innerText;
+            });
             // get rid of unwanted DIVs (hopefully not needed)
             var text = html.replace(/<(\/?\w+)([^>]*)>/g, function (all, tag, attr) {
                 // ensure lower case
                 tag = tag.toLowerCase();
                 var replacement = replacements[tag];
-                if (replacement === undefined) return all;
+                if (replacement === undefined) return '';
                 if (_.isFunction(replacement)) return replacement(attr);
                 return replacement;
             });
 
-            return { content: text, preview: this.getPreview(text) };
+            text = $.trim(text);
+
+            return { content: text, html: html, preview: this.getPreview(text) };
         },
 
         getPreview: function (text) {
