@@ -1420,6 +1420,10 @@ msgid ""
 "information. It will take less than a minute."
 msgstr "在您繼續使用本產品前，請輸入一些基礎資訊，這不會花您超過一分鐘。"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Bell"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js
@@ -1776,6 +1780,10 @@ msgstr "正在檢查帳號密碼..."
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "子女"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Chimes"
+msgstr ""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -4979,6 +4987,10 @@ msgstr "手動輸入"
 msgid "March"
 msgstr "三月"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Marimba"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Marital status"
 msgstr "婚姻狀況"
@@ -5597,6 +5609,12 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Notification"
+msgstr "通知"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notification sound"
 msgstr "通知"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -9425,6 +9443,10 @@ msgstr ""
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "全天"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Wood"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar

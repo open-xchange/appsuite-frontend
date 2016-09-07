@@ -1463,6 +1463,10 @@ msgstr ""
 "Avant de pouvoir continuer à utiliser ce produit, vous devez fournir "
 "quelques informations de base. Cela prendra moins d'une minute."
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Bell"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js
@@ -1825,6 +1829,10 @@ msgstr "Vérification de l'identité en cours… "
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Enfants"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Chimes"
+msgstr ""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -5111,6 +5119,10 @@ msgstr "Saisie au clavier"
 msgid "March"
 msgstr "Mars"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Marimba"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Marital status"
 msgstr "Situation de famille"
@@ -5739,6 +5751,12 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Notification"
 msgstr "Notification"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notification sound"
+msgstr "Notifications"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notifications"
@@ -9714,6 +9732,10 @@ msgstr ""
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Journée entière"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Wood"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar

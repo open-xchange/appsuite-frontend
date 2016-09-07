@@ -1445,6 +1445,10 @@ msgstr ""
 "Innan du kan fortsätta använda produkten måste du mata in lite information. "
 "Det går på mindre än en minut."
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Bell"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js
@@ -1803,6 +1807,10 @@ msgstr "Kontrollerar behörighet..."
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Barn"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Chimes"
+msgstr ""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -5046,6 +5054,10 @@ msgstr "Manuell inmatning"
 msgid "March"
 msgstr "Mars"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Marimba"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Marital status"
 msgstr "Civilstatus"
@@ -5667,6 +5679,12 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Notification"
 msgstr "Avisering"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notification sound"
+msgstr "Aviseringar"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notifications"
@@ -9581,6 +9599,10 @@ msgstr ""
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Hel dag"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Wood"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar

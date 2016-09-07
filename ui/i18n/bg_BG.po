@@ -1432,6 +1432,10 @@ msgid ""
 "information. It will take less than a minute."
 msgstr ""
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Bell"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js
@@ -1789,6 +1793,10 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
+msgstr ""
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Chimes"
 msgstr ""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
@@ -5001,6 +5009,10 @@ msgstr ""
 msgid "March"
 msgstr "Март"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Marimba"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Marital status"
 msgstr ""
@@ -5624,6 +5636,10 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Notification"
+msgstr ""
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Notification sound"
 msgstr ""
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -9397,6 +9413,10 @@ msgstr ""
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Цял ден"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Wood"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar

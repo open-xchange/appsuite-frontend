@@ -1472,6 +1472,10 @@ msgstr ""
 "Než budete moci pokračovat v používání produktu, je nutné zadat základní "
 "údaje. Zabere to méně než minutu."
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Bell"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js
@@ -1829,6 +1833,10 @@ msgstr "Ověřuji přihlašovací údaje..."
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Děti"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Chimes"
+msgstr ""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -5069,6 +5077,10 @@ msgstr "Manuální vstup"
 msgid "March"
 msgstr "Březen"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Marimba"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Marital status"
 msgstr "Rodinný stav"
@@ -5694,6 +5706,12 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Notification"
+msgstr "Oznámení"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notification sound"
 msgstr "Oznámení"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -9624,6 +9642,10 @@ msgstr ""
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Celý den"
+
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Wood"
+msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
