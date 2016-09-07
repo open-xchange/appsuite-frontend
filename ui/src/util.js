@@ -659,6 +659,12 @@
             return node;
         },
 
+        // extensions-like chaining of functions (usually with a carrier object)
+        pipe: function (carrier) {
+            if (arguments.length !== 1) carrier = _.extend({}, arguments);
+            return $.Deferred().resolve(carrier).promise();
+        },
+
         // makes sure you have an array
         getArray: function (o) {
             return _.isArray(o) ? o : [o];
