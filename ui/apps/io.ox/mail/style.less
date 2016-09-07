@@ -998,6 +998,19 @@ textarea.inplace-editor {
     .categories-toolbar-container { display: none; }
 }
 
+.io-ox-alert.category-toast {
+    a.close, .icon {
+        display: none;
+    }
+    .message {
+        padding: 16px;
+    }
+    .btn {
+        float: right;
+        margin-left: 6px;
+    }
+}
+
 .mail-categories-dialog {
     i { font-weight: 500; }
 
@@ -1100,6 +1113,7 @@ body.dragging .categories-toolbar-container {
             display: flex;
             position: static;
             border-bottom: 0;
+            width: 100%;
         }
 
         .free-space { flex: 1; }

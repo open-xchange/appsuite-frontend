@@ -207,7 +207,8 @@ define('io.ox/mail/categories/main', [
         showDialog: function (baton) {
             require(['io.ox/mail/categories/dialogs'], function (dialog) {
                 // triggers update event in this view (with data param)
-                new dialog.Generalize(this, baton);
+                //new dialog.Generalize(this, baton);
+                dialog.toast(this, baton);
             }.bind(this));
         },
         showOptions: function (e) {
