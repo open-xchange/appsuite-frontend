@@ -642,7 +642,9 @@ define('io.ox/calendar/api', [
                             type: obj.type,
                             start: options.start,
                             end: options.end,
-                            timezone: 'UTC'
+                            timezone: 'UTC',
+                            sort: 201,
+                            order: 'asc'
                         });
                     }
                 } else {

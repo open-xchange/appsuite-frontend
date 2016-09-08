@@ -59,8 +59,8 @@ define('io.ox/participants/views', [
             this.$el.append(
                 this.nodes.$img = $('<div>'),
                 this.nodes.$text = $('<div class="participant-name">'),
-                $('<div class="participant-email">').append(this.nodes.$mail = this.options.halo ? $('<a>') : $('<span>')),
-                $('<div class="extra-decorator">').append(this.nodes.$extra = $('<span>')),
+                this.options.hideMail ? '' : $('<div class="participant-email">').append(this.nodes.$mail = this.options.halo ? $('<a>') : $('<span>')),
+                this.options.hideMail ? '' : $('<div class="extra-decorator">').append(this.nodes.$extra = $('<span>')),
                 $('<a href="#" class="remove" role="button">').append(
                     $('<div class="icon">').append(
                         $('<i class="fa fa-trash-o" aria-hidden="true">'),
@@ -78,10 +78,15 @@ define('io.ox/participants/views', [
         },
 
         setDisplayName: function () {
-            util.renderPersonalName({
-                $el: this.nodes.$text,
-                name: this.model.getDisplayName()
-            }, this.model.toJSON());
+            var options = {
+                $el: this.nodes.$text
+            };
+            if (this.options.asHtml) {
+                options.html = this.model.getDisplayName({ asHtml: true, isMail: this.options.isMail });
+            } else {
+                options.name = this.model.getDisplayName({ asHtml: false, isMail: this.options.isMail });
+            }
+            util.renderPersonalName(options, this.model.toJSON());
         },
 
         setCustomImage: function () {
@@ -97,11 +102,13 @@ define('io.ox/participants/views', [
         },
 
         setRows: function (mail, extra) {
-            extra = extra || this.model.getTypeString() || '';
-            this.nodes.$mail.text(gt.noI18n(mail));
-            this.nodes.$extra.text(gt.noI18n(extra));
-            if (mail && extra) {
-                this.$el.addClass('three-rows');
+            if (!this.options.hideMail) {
+                extra = extra || this.model.getTypeString() || '';
+                this.nodes.$mail.text(gt.noI18n(mail));
+                this.nodes.$extra.text(gt.noI18n(extra));
+                if (mail && extra) {
+                    this.$el.addClass('three-rows');
+                }
             }
         },
 
@@ -148,7 +155,7 @@ define('io.ox/participants/views', [
                     }
                     break;
                 case 3:
-                    if (this.options.halo) {
+                    if (this.options.halo && !this.options.hideMail) {
                         var data = this.model.toJSON();
                         data.callbacks = {};
                         if (this.options.baton && this.options.baton.callbacks) {
@@ -227,7 +234,10 @@ define('io.ox/participants/views', [
                 model: participant,
                 baton: this.options.baton,
                 halo: this.options.halo !== undefined ? this.options.halo : true,
-                closeButton: true
+                closeButton: true,
+                hideMail: this.options.hideMail,
+                asHtml: this.options.asHtml,
+                isMail: this.options.isMail
             });
 
             view.on('render', function () {

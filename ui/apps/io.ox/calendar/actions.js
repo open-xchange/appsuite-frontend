@@ -318,7 +318,7 @@ define('io.ox/calendar/actions', [
         }
     });
 
-    /*new Action('io.ox/calendar/actions/freebusy', {
+    new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone !guest',
         requires: function () {
             return _.device('!smartphone');
@@ -362,9 +362,9 @@ define('io.ox/calendar/actions', [
                 });
             });
         }
-    });*/
+    });
 
-    new Action('io.ox/calendar/actions/freebusy', {
+    /*new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone !guest',
         requires: function () {
             return _.device('!smartphone');
@@ -379,7 +379,7 @@ define('io.ox/calendar/actions', [
                 start_date: start_date
             });
         }
-    });
+    });*/
 
     // Actions mobile
     new Action('io.ox/calendar/actions/dayview/showNext', {

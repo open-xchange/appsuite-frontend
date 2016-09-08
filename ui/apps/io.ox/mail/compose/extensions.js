@@ -255,7 +255,7 @@ define('io.ox/mail/compose/extensions', [
                     popup.open(function (result) {
                         var list = model.get(attr) || [];
                         model.set(attr, list.concat(_(result).pluck('array')));
-                    });
+                    }, { isMail: true });
                 });
             }
 
@@ -270,6 +270,7 @@ define('io.ox/mail/compose/extensions', [
                         id: guid,
                         className: attr,
                         extPoint: POINT,
+                        isMail: true,
                         apiOptions: {
                             contacts: true,
                             distributionlists: true,

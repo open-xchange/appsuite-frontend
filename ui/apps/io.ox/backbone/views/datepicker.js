@@ -24,7 +24,7 @@ define('io.ox/backbone/views/datepicker', [
     //
     // options:
     // - date: the predefined date, either number, a native Date instance, or a momentjs instance
-    // - target: the DOM element to attach to
+    // - parent: parent element of the picker; default is <body>
 
     var DatePickerView = DisposableView.extend({
 
@@ -41,7 +41,8 @@ define('io.ox/backbone/views/datepicker', [
         // we use the constructor here not to collide with initialize()
         constructor: function (options) {
             this.options = options || {};
-            this.$target = $(this.options.target);
+            this.$target = $();
+            this.$parent = $(this.options.parent || 'body');
             this.date = moment(this.options.date);
             this.mode = 'month';
             this.closing = false;
@@ -127,11 +128,12 @@ define('io.ox/backbone/views/datepicker', [
             // reset mode
             this.mode = 'month';
             // render first to have dimensions
-            this.render().$el.appendTo('body');
+            this.trigger('before:open');
+            this.render().$el.appendTo(this.$parent);
             // find proper placement
             var offset = this.$target.offset() || { top: 200, left: 600 },
                 targetHeight = this.$target.outerHeight() || 0,
-                maxHeight = $('body').height();
+                maxHeight = this.$parent.height();
             // exceeds screen bottom?
             if ((offset.top + targetHeight + this.$el.outerHeight()) > maxHeight) {
                 // above
@@ -150,6 +152,7 @@ define('io.ox/backbone/views/datepicker', [
         close: function (restoreFocus) {
             if (!this.isOpen()) return;
             this.closing = true;
+            this.trigger('before:close');
             this.$el.removeClass('open');
             this.$target.attr('aria-expanded', false);
             if (restoreFocus !== false) this.$target.focus();

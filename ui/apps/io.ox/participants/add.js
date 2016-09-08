@@ -36,12 +36,13 @@ define('io.ox/participants/add', [
     ext.point('io.ox/participants/add/autoCompleteItem').extend({
         id: 'view',
         index: 100,
-        draw: function (participant) {
+        draw: function (participant, options) {
             var pview = new pViews.ParticipantEntryView({
                 model: participant,
                 closeButton: false,
                 halo: false,
-                field: true
+                field: true,
+                isMail: options.isMail
             });
             this.append(pview.render().$el);
         }

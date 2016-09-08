@@ -56,6 +56,19 @@ define('io.ox/contacts/util', [
 
     }
 
+    function getFullNameFormatHelper(obj, isMail, htmlOutput) {
+        var copy = obj;
+        if (htmlOutput === true) {
+            copy = {};
+            _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
+                if (!$.trim(obj[id])) return;
+                var tagName = id === 'last_name' ? 'b' : 'span';
+                copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(obj[id]) + '</' + tagName + '>';
+            });
+        }
+        return isMail ? that.getMailFullNameFormat(obj) : that.getFullNameFormat(copy);
+    }
+
     var that = {
 
         // variant of getFullName without title, all lowercase
@@ -130,16 +143,7 @@ define('io.ox/contacts/util', [
         },
 
         getFullName: function (obj, htmlOutput) {
-            var copy = obj, fmt;
-            if (htmlOutput === true) {
-                copy = {};
-                _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
-                    if (!$.trim(obj[id])) return;
-                    var tagName = id === 'last_name' ? 'b' : 'span';
-                    copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(obj[id]) + '</' + tagName + '>';
-                });
-            }
-            fmt = this.getFullNameFormat(copy);
+            var fmt = getFullNameFormatHelper(obj, false, htmlOutput);
             return gt.format(fmt.format, fmt.params);
         },
 
@@ -170,7 +174,6 @@ define('io.ox/contacts/util', [
          * parameters to gettext.format to obtain the full name.
          */
         getMailFullNameFormat: function (obj) {
-
             // combine first name and last name
             if (obj.last_name && obj.first_name) {
                 return {
@@ -201,8 +204,8 @@ define('io.ox/contacts/util', [
             return { format: _.noI18n(''), params: [] };
         },
 
-        getMailFullName: function (obj) {
-            var fmt = that.getMailFullNameFormat(obj);
+        getMailFullName: function (obj, htmlOutput) {
+            var fmt = getFullNameFormatHelper(obj, true, htmlOutput);
             return gt.format(fmt.format, fmt.params);
         },
 

@@ -11,13 +11,12 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-/*define('io.ox/calendar/freetime/participantsView', [
+define('io.ox/calendar/freetime/participantsView', [
     'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/core/extensions',
-    'io.ox/backbone/disposable',
-    'gettext!io.ox/calendar'
-], function (AddParticipantsView, participantsViews, ext, DisposableView, gt) {
+    'io.ox/backbone/disposable'
+], function (AddParticipantsView, participantsViews, ext, DisposableView) {
 
     'use strict';
 
@@ -45,16 +44,7 @@
             typeahead.render().$el.addClass('add-participants-wrapper col-md-12');
         }
     });
-    // legend
-    pointHeader.extend({
-        id: 'legend',
-        index: 200,
-        draw: function (baton) {
-            baton.view.headerNodeRow2.append(
-                $('<legend>').text(gt('Participants')).attr('aria-hidden', true)
-            );
-        }
-    });
+
     // participants container
     pointBody.extend({
         id: 'participants_list',
@@ -65,8 +55,9 @@
                 baton: baton,
                 entryClass: 'col-xs-12 col-sm-12',
                 labelClass: 'sr-only',
-                halo: false
-
+                halo: false,
+                hideMail: true,
+                asHtml: true
             }).render().$el);
         }
     });
@@ -80,16 +71,14 @@
         initialize: function () {
             this.pointHeader = pointHeader;
             this.pointBody = pointBody;
-            this.headerNodeRow1 = $('<div class="freetime-participants-view-header row1">');
-            this.headerNodeRow2 = $('<div class="freetime-participants-view-header row2">');
+            this.headerNodeRow = $('<div class="freetime-participants-view-header row2">');
             this.bodyNode = $('<div class="freetime-participants-view-body">');
         },
 
         renderHeader: function () {
             var baton = new ext.Baton({ view: this, model: this.model });
-            this.headerNodeRow1.empty();
-            this.headerNodeRow2.empty();
-            this.pointHeader.invoke('draw', this.headerNodeRow1, baton);
+            this.headerNodeRow.empty();
+            this.pointHeader.invoke('draw', this.headerNodeRow, baton);
         },
 
         renderBody: function () {
@@ -98,4 +87,4 @@
             this.pointBody.invoke('draw', this.bodyNode, baton);
         }
     });
-});*/
+});

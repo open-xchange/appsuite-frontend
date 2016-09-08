@@ -164,8 +164,9 @@ define('io.ox/participants/model', [
             return this.get('id');
         },
 
-        getDisplayName: function () {
-            var dn = util.getMailFullName(this.toJSON());
+        getDisplayName: function (options) {
+            options = options || {};
+            var dn = options.isMail ? util.getMailFullName(this.toJSON(), options.asHtml) : util.getFullName(this.toJSON(), options.asHtml);
             // 'email only' participant
             return dn || (this.getEmail() !== '' ? this.getEmail() : '');
         },

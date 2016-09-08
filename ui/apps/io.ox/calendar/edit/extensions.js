@@ -700,7 +700,7 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    /*function openFreeBusyView(e) {
+    function openFreeBusyView(e) {
         require(['io.ox/calendar/freetime/main'], function (freetime) {
             //#. Applies changes to an existing appointment, used in scheduling view
             freetime.showDialog({ label: gt('Apply changes'), parentModel: e.data.model }).done(function (data) {
@@ -740,9 +740,9 @@ define('io.ox/calendar/edit/extensions', [
                 });
             });
         });
-    }*/
+    }
 
-    function openFreeBusyView(e) {
+    /*function openFreeBusyView(e) {
         var app = e.data.app,
             model = e.data.model,
             start = model.get('start_date'),
@@ -768,7 +768,7 @@ define('io.ox/calendar/edit/extensions', [
             }),
             model: model
         });
-    }
+    }*/
 
     // link free/busy view
     point.basicExtend({

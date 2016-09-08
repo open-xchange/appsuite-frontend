@@ -240,7 +240,8 @@ define('io.ox/contacts/view-detail', [
                 new pViews.ParticipantEntryView({
                     tagName: 'li',
                     model: new pModel.Participant(data),
-                    halo: true
+                    halo: true,
+                    isMail: true
                 }).render().$el
             );
         }

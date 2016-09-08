@@ -139,10 +139,12 @@ define('io.ox/contacts/addressbook/popup', [
                 limit: LIMITS.fetch
             }, options);
 
+            var isMail = options.isMail;
+            if (options.isMail) delete options.isMail;
             if (options.folder === 'all') delete options.folder;
 
             return fetchAddresses(options).then(function (list) {
-                return processAddresses(list);
+                return processAddresses(list, isMail);
             });
         };
 
@@ -162,8 +164,7 @@ define('io.ox/contacts/addressbook/popup', [
             });
         }
 
-        function processAddresses(list) {
-
+        function processAddresses(list, isMail) {
             var result = [], hash = {};
 
             list.forEach(function (item) {
@@ -193,7 +194,7 @@ define('io.ox/contacts/addressbook/popup', [
                 } else {
                     // get a match for each address
                     addresses.forEach(function (address, i) {
-                        var obj = process(item, sort_name, (item[address] || '').toLowerCase(), i);
+                        var obj = process(item, sort_name, (item[address] || '').toLowerCase(), i, isMail);
                         if (obj) result.push((hash[obj.cid] = obj));
                     });
                 }
@@ -201,7 +202,7 @@ define('io.ox/contacts/addressbook/popup', [
             return { items: result, hash: hash, index: buildIndex(result) };
         }
 
-        function process(item, sort_name, address, i) {
+        function process(item, sort_name, address, i, isMail) {
             // skip if empty
             address = $.trim(address);
             if (!address) return;
@@ -218,8 +219,8 @@ define('io.ox/contacts/addressbook/popup', [
                 email: address,
                 first_name: item.first_name,
                 folder_id: String(item.folder_id),
-                full_name: util.getFullName(item).toLowerCase(),
-                full_name_html: util.getFullName(item, true),
+                full_name: (isMail ? util.getMailFullName(item) : util.getFullName(item)).toLowerCase(),
+                full_name_html: isMail ? util.getMailFullName(item, true) : util.getFullName(item, true),
                 image: util.getImage(item),
                 id: String(item.id),
                 initials: initials,
@@ -272,8 +273,8 @@ define('io.ox/contacts/addressbook/popup', [
         'shared':  gt('Shared address books')
     };
 
-    function open(callback) {
-
+    function open(callback, options) {
+        options = options || {};
         // avoid parallel popups
         if (isOpen) return;
         isOpen = true;
@@ -343,6 +344,7 @@ define('io.ox/contacts/addressbook/popup', [
                 view.listView = new ListView({
                     collection: new Backbone.Collection(),
                     pagination: false,
+                    isMail: options.isMail,
                     ref: 'io.ox/contacts/addressbook-popup/list'
                 });
                 this.append(view.listView.render().$el);
@@ -379,7 +381,7 @@ define('io.ox/contacts/addressbook/popup', [
                 view.on('open', function () {
                     _.defer(function () {
                         if (cachedResponse) return success(cachedResponse);
-                        getAllMailAddresses().then(success, fail);
+                        getAllMailAddresses({ isMail: view.listView.options.isMail }).then(success, fail);
                     });
                 });
             },

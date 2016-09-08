@@ -33,10 +33,10 @@ define('io.ox/core/tk/tokenfield', [
         delimiter = delimiter || this._firstDelimiter;
         beautify = (typeof beautify !== 'undefined' && beautify !== null) ? beautify : this.options.beautify;
 
-        var separator = delimiter + (beautify && delimiter !== ' ' ? ' ' : '');
+        var separator = delimiter + (beautify && delimiter !== ' ' ? ' ' : ''), self = this;
         return $.map(this.getTokens(active), function (token) {
             if (token.model) {
-                var displayname = token.model.getDisplayName(),
+                var displayname = token.model.getDisplayName({ isMail: self.options.isMail }),
                     email = token.model.getEmail ? token.model.getEmail() : undefined;
                 // make sure the displayname contains no outer quotes
                 return displayname === email ? email : '"' + util.removeQuotes(displayname) + '" <' + email + '>';
@@ -90,7 +90,7 @@ define('io.ox/core/tk/tokenfield', [
                         return {
                             value: model.getTarget({ fallback: true }),
                             // fallback when firstname and lastname are empty strings
-                            label: model.getDisplayName().trim() || model.getEmail(),
+                            label: model.getDisplayName({ isMail: options.isMail }).trim() || model.getEmail(),
                             model: model
                         };
                     });
@@ -137,7 +137,8 @@ define('io.ox/core/tk/tokenfield', [
                     var pview = new pViews.ParticipantEntryView({
                         model: data.model,
                         closeButton: false,
-                        halo: false
+                        halo: false,
+                        isMail: options.isMail
                     });
                     this.append(pview.render().$el);
                 }
@@ -411,7 +412,8 @@ define('io.ox/core/tk/tokenfield', [
                     allowEditing: o.allowEditing,
                     typeahead: self.typeaheadOptions,
                     html: this.options.html || false,
-                    inputType: this.options.inputtype || 'email'
+                    inputType: this.options.inputtype || 'email',
+                    isMail: o.isMail
                 });
 
             this.register();
@@ -527,11 +529,11 @@ define('io.ox/core/tk/tokenfield', [
         },
 
         redrawTokens: function () {
-            var tokens = [];
+            var tokens = [], self = this;
             this.redrawLock = true;
             this.collection.each(function (model) {
                 tokens.push({
-                    label: model.getDisplayName(),
+                    label: model.getDisplayName({ isMail: self.options.isMail }),
                     value: model.cid,
                     model: model
                 });

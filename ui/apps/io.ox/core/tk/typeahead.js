@@ -142,7 +142,7 @@ define('io.ox/core/tk/typeahead', [
                 templates: {
                     suggestion: o.suggestion || function (result) {
                         var node = $('<div class="autocomplete-item">');
-                        ext.point(o.extPoint + '/autoCompleteItem').invoke('draw', node, result);
+                        ext.point(o.extPoint + '/autoCompleteItem').invoke('draw', node, result, o);
                         return node;
                     },
                     header: function (data) {

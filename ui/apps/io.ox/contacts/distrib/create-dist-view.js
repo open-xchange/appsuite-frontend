@@ -110,7 +110,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
 
             this.$el.append(new pViews.UserContainer({
                 collection: this.baton.member,
-                baton: this.baton
+                baton: this.baton,
+                isMail: true
             }).render().$el);
         }
     });
@@ -127,7 +128,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 placeholder: gt('Add contact') + ' \u2026',
                 label: gt('Add contact'),
                 collection: this.baton.member,
-                scrollIntoView: true
+                scrollIntoView: true,
+                isMail: true
             });
             this.$el.append(
                 view.$el
