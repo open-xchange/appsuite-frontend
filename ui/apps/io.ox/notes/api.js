@@ -79,7 +79,8 @@ define('io.ox/notes/api', [
 
         createDefaultFolders: function () {
             var defaultInfoStoreFolder = folderAPI.getDefaultFolder('infostore'),
-                rootFolder;
+                rootFolder,
+                defaultFolder;
             // yep, not yet translated
             return folderAPI.create(defaultInfoStoreFolder, { title: 'Notes' })
                 .done(function (data) {
@@ -89,7 +90,8 @@ define('io.ox/notes/api', [
                 .then(function () {
                     // add default folder
                     return folderAPI.create(rootFolder, { title: 'General' }).then(function (data) {
-                        settings.set('folder/default', data.id).save();
+                        defaultFolder = data.id;
+                        settings.set('folder/default', defaultFolder).save();
                         return api.createWelcomeNote();
                     });
                 })
@@ -102,7 +104,7 @@ define('io.ox/notes/api', [
                     return http.resume();
                 })
                 .then(function () {
-                    return rootFolder;
+                    return defaultFolder;
                 });
         },
 
