@@ -82,7 +82,7 @@ define('io.ox/notes/api', [
                 rootFolder;
             // yep, not yet translated
             return folderAPI.create(defaultInfoStoreFolder, { title: 'Notes' })
-                .then(function (data) {
+                .done(function (data) {
                     rootFolder = data.id;
                     settings.set('folder/root', rootFolder).save();
                 })
@@ -99,9 +99,10 @@ define('io.ox/notes/api', [
                     ['Ideas', 'Meetings', 'Shopping', 'Todo lists', 'Work'].forEach(function (title) {
                         folderAPI.create(rootFolder, { title: title });
                     });
-                    return http.resume().then(function () {
-                        return rootFolder;
-                    });
+                    return http.resume();
+                })
+                .then(function () {
+                    return rootFolder;
                 });
         },
 
