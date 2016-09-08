@@ -279,6 +279,7 @@ define('io.ox/settings/main', [
             // show subfolders on default
             if (view.hasSubFolders() && view.options.open !== 'open') view.toggle('open');
 
+            // show settings on changed selection or on forced refresh
             previousSelection = currentSelection;
             currentSelection = pool.getModel(id).get('meta');
 
@@ -288,10 +289,13 @@ define('io.ox/settings/main', [
             }
 
             left.trigger('select');
-            if (!ignoreChangeEvent) {
-                saveSettings('changeGrid');
+
+            // change event
+            if (ignoreChangeEvent) {
+                ignoreChangeEvent = false;
+                return;
             }
-            ignoreChangeEvent = false;
+            saveSettings('changeGrid');
         }
 
         // metrics
