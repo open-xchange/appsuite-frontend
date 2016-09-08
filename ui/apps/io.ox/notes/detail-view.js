@@ -16,14 +16,19 @@ define('io.ox/notes/detail-view', [
     'io.ox/notes/api',
     'io.ox/notes/parser',
     'io.ox/core/notifications',
+    'io.ox/backbone/mini-views/dropdown',
     'gettext!io.ox/notes'
-], function (DisposableView, api, parser, notifications, gt) {
+], function (DisposableView, api, parser, notifications, Dropdown, gt) {
 
     'use strict';
 
     var DetailView = DisposableView.extend({
 
         className: 'abs note scrollable',
+
+        events: {
+            'click a[data-name]': 'onInsert'
+        },
 
         initialize: function (options) {
 
@@ -134,7 +139,16 @@ define('io.ox/notes/detail-view', [
         render: function () {
             this.$el.append(
                 $('<div class="note-container">').append(
-                    $('<div class="note-caption">'),
+                    $('<div class="note-header">').append(
+                        new Dropdown({ caret: true, label: gt('Insert'), className: 'dropdown pull-left' })
+                        .link('insert-todo', 'Todo list')
+                        .link('insert-ul', 'Bulleted list')
+                        .link('insert-ol', 'Numbered list')
+                        .divider()
+                        .link('insert-image', 'Image')
+                        .render().$el,
+                        $('<div class="note-caption pull-right">')
+                    ),
                     $('<div class="note-title">').append('<input type="text">'),
                     $('<div class="note-content" tabindex="0" contenteditable="true" spellcheck="true">')
                 )
@@ -189,7 +203,7 @@ define('io.ox/notes/detail-view', [
             this.model.set(result);
             api.updateContent(this.model.pick('id', 'folder_id', 'filename', 'preview'), result.content);
             // this.$debug = this.$debug || $('<div class="note-debug">').appendTo('body');
-            // this.$debug.text(this.model.get('editedContent'));
+            // this.$debug.text(this.model.get('content'));
         },
 
         updateTitleImmediately: function () {
@@ -198,6 +212,65 @@ define('io.ox/notes/detail-view', [
             if (title === this.model.get('title')) return;
             this.model.set('title', title);
             api.update(this.options.cid, { title: title });
+        },
+
+        onInsert: function (e) {
+
+            var editor = this.$('.note-content').focus()[0],
+                range = this.getEditorRange(editor);
+
+            var type = $(e.currentTarget).attr('data-name'), node;
+            switch (type) {
+                case 'insert-todo': node = this.onInsertTodo(); break;
+                case 'insert-ul': node = this.onInsertBulletedList(); break;
+                case 'insert-ol': node = this.onInsertNumberedList(); break;
+                case 'insert-image': node = this.onInsertImage(); break;
+                // no default
+            }
+
+            range.insertNode(node);
+
+            setTimeout(function () {
+                range.collapse(false);
+                node.scrollIntoViewIfNeeded(true);
+                editor.focus();
+            }, 1);
+        },
+
+        getEditorRange: function (editor) {
+
+            var selection = window.getSelection(),
+                range = selection.getRangeAt(0),
+                contains = $.contains(editor, range.commonAncestorContainer);
+
+            if (contains) {
+                range.deleteContents();
+            } else {
+                range = document.createRange();
+                range.selectNodeContents(editor);
+                range.collapse(false);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+            return range;
+        },
+
+        onInsertTodo: function () {
+            return $('<ul class="todo"><li>First item</li><li>Second item</li></ul>')[0];
+        },
+
+        onInsertBulletedList: function () {
+            return $('<ul><li>First item</li><li>Second item</li></ul>')[0];
+        },
+
+        onInsertNumberedList: function () {
+            return $('<ol><li>First item</li><li>Second item</li></ol>')[0];
+        },
+
+        onInsertImage: function () {
+            var images = ['13894/63603', '13894/63604', '13894/63605', '13894/63583', '13894/63584', '13894/63585', '13894/63586', '13894/63587', '13894/63606', '13894/63673', '13894/63607', '13894/63674', '13894/63608', '13894/63590', '13894/63591', '13894/63592', '13894/63593', '13894/63594', '13894/63595', '13894/63596', '13894/63597', '13894/63609'],
+                id = images[Math.random() * images.length >> 0];
+            return $('<img>').attr('src', 'api/files?action=document&folder=13894&id=' + id + '&delivery=view&scaleType=contain&width=1024')[0];
         }
     });
 

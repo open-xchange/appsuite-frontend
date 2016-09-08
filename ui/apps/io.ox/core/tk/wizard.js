@@ -273,7 +273,7 @@ define('io.ox/core/tk/wizard', [
         },
 
         toggleBackdrop: function (state, color) {
-            backdrop.css('backgroundColor', color || null);
+            backdrop.css('backgroundColor', color || '');
             $('body').append(backdrop.toggle(!!state));
         },
 

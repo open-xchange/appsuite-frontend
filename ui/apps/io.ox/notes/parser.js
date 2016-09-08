@@ -30,7 +30,11 @@ define('io.ox/notes/parser', [], function () {
             if (/number/.test(attr)) return '# ';
             return '* ';
         },
-        '/li': '\n'
+        '/li': '\n',
+        'img': function (attr) {
+            var match = attr.match(/src="(.*?)"/i);
+            return match ? '![](' + match[1] + ') ' : ' ';
+        }
     };
 
     return {
@@ -62,6 +66,7 @@ define('io.ox/notes/parser', [], function () {
             });
 
             var html = lines.join('')
+                    .replace(/\!\[\]\((.*?)\)/g, '<img src="$1">')
                     .replace(/(^|[^\\])\*\*([^<\*]+)\*\*/g, '$1<b>$2</b>')
                     .replace(/(^|[^\\])\*([^<\*]+)\*/g, '$1<i>$2</i>')
                     .replace(/(^|[^\\])\_([^<\_]+)\_/g, '$1<u>$2</u>')

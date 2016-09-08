@@ -43,14 +43,32 @@ define('io.ox/notes/tour', ['io.ox/core/tk/wizard', 'settings!io.ox/notes'], fun
             .referTo('.io-ox-notes-window .rightside')
             .hotspot('.io-ox-notes-window .note-content')
             .content(
-                $('<p>').text('To keep it simple right now, there is no editor. So you have to use the keyboard to change formatting:'),
+                $('<p>').text('To keep it simple right now, there is no complex editor with controls. So you have to use the keyboard to change formatting:'),
                 $('<ul>').append(
                     $('<li>').text('Cmd + B: Bold'),
                     $('<li>').text('Cmd + I: Italic'),
                     $('<li>').text('Cmd + U: Underline/Mark'),
                     $('<li>').text('Cmd + S: Strike through')
-                ),
-                $('<p>').text('You cannot insert lists right now (see welcome note). That is the very next feature.')
+                )
+            )
+            .end()
+        .step()
+            .mandatory()
+            .title('Insert lists')
+            .referTo('.io-ox-notes-window .rightside')
+            .hotspot('.io-ox-notes-window .dropdown')
+            .on('show hide', function () {
+                $('.note-header .dropdown > a').dropdown('toggle');
+            })
+            .content(
+                $('<p>').text('You can also insert lists and images via the "Insert" dropdown')
+            )
+            .end()
+        .step()
+            .mandatory()
+            .title('And ...')
+            .content(
+                $('<p>').text('... it\'s just a prototype!')
             )
             .end();
 

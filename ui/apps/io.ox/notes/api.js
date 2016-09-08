@@ -130,9 +130,11 @@ define('io.ox/notes/api', [
                 content: 'With **OX Notes** you can create simple todo or shopping lists, ' +
                     'easily take meetings minutes, or quickly write down your ideas.\n\n' +
                     '- [x] Make a list\n- [x] Have a break\n- [x] Mark the first two items as done\n- [x] Be proud to have finished three items yet\n- [ ] So much done. Have a beer!\n\n' +
-                    'You can also create numbered lists: \n# First item\n# Second item\n\n' +
-                    '_And you can highlight important parts_ and you can ~cross out parts~.\n\n' +
-                    'Links are automatically detected, of course: http://www.open-xchange.com',
+                    'You can create numbered lists: \n# First item\n# Second item\n\n' +
+                    '_You can highlight important parts_ and you can ~cross out parts~.\n\n' +
+                    'Links are automatically detected, of course: http://www.open-xchange.com\n\n' +
+                    'And, finally, you can integrate **images**:\n\n' +
+                    '![](api/files?action=document&folder=13894&id=13894/63583&delivery=view&scaleType=contain&width=1024)',
                 title: 'Welcome to OX Notes'
             });
         },
