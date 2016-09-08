@@ -255,7 +255,9 @@ define('io.ox/settings/main', [
         });
         tree.preselect(_.url.hash('folder'));
 
-        tree.on('virtual', function (id, item, baton) {
+        // select virtual node
+        tree.on('virtual', select);
+        function select(id, item, baton) {
             var focus = true,
                 refresh = (baton && baton.options) ? baton.options.refresh : false;
 
@@ -290,8 +292,7 @@ define('io.ox/settings/main', [
                 saveSettings('changeGrid');
             }
             ignoreChangeEvent = false;
-
-        });
+        }
 
         // metrics
         tree.on('virtual', function (id) {
