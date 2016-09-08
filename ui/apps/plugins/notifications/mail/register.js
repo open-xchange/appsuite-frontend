@@ -70,7 +70,7 @@ define('plugins/notifications/mail/register', [
     function newMailDesktopNotification(message) {
         var sender, text = gt('You have new mail'); // default
 
-        // some mailserver do not send extra data like sender and subject, check this here
+        // some mailservers do not send extra data like sender and subject, check this here
         if (message.sender && message.subject) {
             sender = message.sender.split('<').length > 1 ? message.sender.split('<')[0].trim() : message.sender;
             text = gt('Mail from %1$s, %2$s', _.noI18n(sender), _.noI18n(message.subject) || gt('No subject'));
@@ -102,7 +102,7 @@ define('plugins/notifications/mail/register', [
         settingsModel.saveAndYell();
     });
 
-    if (cap.has('sound')) {
+    if (true) {
         console.log('Notification sounds enabled, see mail settings.');
         // get and load stored sound
         loadSound(settingsModel.get('notificationSound')).done(function (s) {
@@ -113,7 +113,8 @@ define('plugins/notifications/mail/register', [
             index: 490,
             id: 'sounds',
             draw: function () {
-
+                // use this array to customize the sounds
+                // copy new/other sounds to themefolder->sounds
                 var sounds, list = [
                     { label: gt('Bell'), value: 'bell.mp3' },
                     { label: gt('Marimba'), value: 'marimba.mp3' },
@@ -124,18 +125,19 @@ define('plugins/notifications/mail/register', [
                 this.append(fieldset(
                     gt('Sound'),
                     checkbox(
-                        gt('Play notification sound on new mail'),
+                        gt('Play sound on new mail'),
                         new miniViews.CheckboxView({ name: 'playSound', model: settings }).render().$el
                     ),
-                    gt('Notification sound'),
-                        sounds = new miniViews.RadioView({ list: list, name: 'notificationSound', model: settingsModel }).render().$el
+                    $('<label>').attr({ 'for': 'notificationSound' }).text(gt('Notification sound')),
+                            sounds = new miniViews.SelectView({ list: list, name: 'notificationSound', model: settingsModel, id: 'notificationSound', className: 'form-control' }).render().$el
                     )
                 );
 
-                $('input', sounds).prop('disabled', !settings.get('playSound'));
+                // toggle soundselection on overall settings
+                $(sounds).prop('disabled', !settings.get('playSound'));
 
                 settings.on('change:playSound', function () {
-                    $('input', sounds).prop('disabled', !settings.get('playSound'));
+                    $(sounds).prop('disabled', !settings.get('playSound'));
                 });
             }
         });
@@ -261,12 +263,12 @@ define('plugins/notifications/mail/register', [
 
     api.checkInbox();
 
-    // play sound on new mail
+    // play sound and/or show notification on new mail
     ox.on('socket:mail:new', function (message) {
         // update counters
         update();
         // play sound
-        if (cap.has('sound')) playSound();
+        if (settings.get('playSound')) playSound();
         // show notification
         newMailDesktopNotification(message);
     });
