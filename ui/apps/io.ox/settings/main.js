@@ -257,9 +257,12 @@ define('io.ox/settings/main', [
 
         // select virtual node
         tree.on('virtual', select);
-        function select(id, item, baton) {
-            var focus = true,
-                refresh = (baton && baton.options) ? baton.options.refresh : false;
+        function select(id, item, baton, options) {
+
+            var opt = _.extend({
+                focus: !!baton,
+                refresh: baton && baton.options && baton.options.refresh
+            }, options);
 
             tree.selection.uncheck().preselect(id);
             app.folder.set(id);
@@ -280,11 +283,10 @@ define('io.ox/settings/main', [
             currentSelection = pool.getModel(id).get('meta');
             if (!baton) {
                 baton = pool.getModel(id).get('meta');
-                focus = false;
             }
 
-            if (previousSelection === null || previousSelection.id !== currentSelection.id || refresh) {
-                showSettings(baton, focus);
+            if (previousSelection === null || previousSelection.id !== currentSelection.id || opt.refresh) {
+                showSettings(baton, opt.focus);
             }
 
             left.trigger('select');
