@@ -5369,6 +5369,7 @@ msgid "New Folder"
 msgstr "Nová složka"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "Nová zpráva"
 

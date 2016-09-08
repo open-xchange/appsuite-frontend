@@ -5379,6 +5379,7 @@ msgid "New Folder"
 msgstr "Nuova cartella"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "Nuovo messaggio"
 

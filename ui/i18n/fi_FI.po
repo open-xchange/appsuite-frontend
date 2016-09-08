@@ -5343,6 +5343,7 @@ msgid "New Folder"
 msgstr "Uusi kansio"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "Uusi viesti"
 

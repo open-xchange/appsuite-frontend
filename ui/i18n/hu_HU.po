@@ -5370,6 +5370,7 @@ msgid "New Folder"
 msgstr "Új mappa"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "Új levél"
 

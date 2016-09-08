@@ -5412,6 +5412,7 @@ msgid "New Folder"
 msgstr "Nouveau dossier"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "Nouveau message"
 

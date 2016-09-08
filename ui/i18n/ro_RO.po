@@ -5397,6 +5397,7 @@ msgid "New Folder"
 msgstr "Dosar nou"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "Mesaj nou"
 

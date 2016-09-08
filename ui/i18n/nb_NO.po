@@ -5335,6 +5335,7 @@ msgid "New Folder"
 msgstr "Ny mappe"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "Ny e-post"
 

@@ -5442,6 +5442,7 @@ msgid "New Folder"
 msgstr "Yeni Klasör"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "Yeni  E posta "
 
