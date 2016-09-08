@@ -57,7 +57,7 @@ define('io.ox/notes/main', [
         var folderId = api.getDefaultFolder();
         if (folderId) return show(_.url.hash('folder') || folderId);
 
-        api.createDefaultFolders.done(show);
+        api.createDefaultFolders().done(show);
     });
 
     return {
