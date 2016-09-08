@@ -227,7 +227,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'print': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Print'),
+                    label: gt('Print as PDF'),
                     section: 'export',
                     ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 },
@@ -419,9 +419,17 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
+        capabilities: 'document_preview',
         requires: function (e) {
+            if (!e.collection.has('one', 'read')) {
+                return false;
+            }
+
             var model = e.baton.model;
-            return e.baton.context.standalone && (model.isOffice() || model.isPDF() || model.isText());
+            var meta = model.get('meta');
+            var isError = meta && meta.document_conversion_error && meta.document_conversion_error.length > 0;
+
+            return (!isError && model.isFile() && (model.isOffice() || model.isPDF()));
         },
         action: function (baton) {
             var documentPDFUrl = DocConverterUtils.getEncodedConverterUrl(baton.context.model);
