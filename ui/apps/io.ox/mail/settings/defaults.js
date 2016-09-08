@@ -43,7 +43,8 @@ define('io.ox/mail/settings/defaults', [], function () {
         'order': 'desc',
         'unread': false,
         'simpleLineBreaks': true,
-        'notificationSound': 'bell.mp3'
+        'notificationSound': 'bell.mp3',
+        'playSound': true
     };
 
     return settingsDefaults;
