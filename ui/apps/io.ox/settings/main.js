@@ -264,16 +264,16 @@ define('io.ox/settings/main', [
                 refresh: baton && baton.options && baton.options.refresh
             }, options);
 
+            // different selections
             tree.selection.uncheck().preselect(id);
             app.folder.set(id);
-
             item = tree.selection.byId(id);
 
-            var view = item.closest('li').data('view');
-
             // view may not exists if the user does not have this setting
+            var view = item.closest('li').data('view');
             if (!view) return;
 
+            // expand subfolders
             folderUtil.open(view.options.parent);
 
             // show subfolders on default
@@ -281,12 +281,10 @@ define('io.ox/settings/main', [
 
             previousSelection = currentSelection;
             currentSelection = pool.getModel(id).get('meta');
-            if (!baton) {
-                baton = pool.getModel(id).get('meta');
-            }
 
             if (previousSelection === null || previousSelection.id !== currentSelection.id || opt.refresh) {
                 showSettings(baton, opt.focus);
+            baton = baton || pool.getModel(id).get('meta');
             }
 
             left.trigger('select');
