@@ -78,24 +78,28 @@ define('io.ox/notes/api', [
         },
 
         createDefaultFolders: function () {
+
             var defaultInfoStoreFolder = folderAPI.getDefaultFolder('infostore'),
                 rootFolder,
-                defaultFolder;
-            // yep, not yet translated
-            return folderAPI.create(defaultInfoStoreFolder, { title: 'Notes' })
+                defaultFolder,
+                // use separated deferred object to return progress
+                def = $.Deferred().notify(0.20, 'Creating root folder');
+
+            folderAPI.create(defaultInfoStoreFolder, { title: 'Notes' })
                 .done(function (data) {
                     rootFolder = data.id;
                     settings.set('folder/root', rootFolder).save();
                 })
                 .then(function () {
+                    def.notify(0.40, 'Creating default folder');
                     // add default folder
-                    return folderAPI.create(rootFolder, { title: 'General' }).then(function (data) {
+                    return folderAPI.create(rootFolder, { title: 'General' }).done(function (data) {
                         defaultFolder = data.id;
                         settings.set('folder/default', defaultFolder).save();
-                        return api.createWelcomeNote();
                     });
                 })
                 .then(function () {
+                    def.notify(0.60, 'Creating topics');
                     http.pause();
                     // yep, not yet translated
                     ['Ideas', 'Meetings', 'Shopping', 'Todo lists', 'Work'].forEach(function (title) {
@@ -104,8 +108,21 @@ define('io.ox/notes/api', [
                     return http.resume();
                 })
                 .then(function () {
+                    def.notify(0.80, 'Creating welcome note');
+                    return api.createWelcomeNote();
+                })
+                .then(function () {
+                    def.notify(1.00);
+                    // short delay to have a visual break
+                    return _.wait(300);
+                })
+                .then(function () {
                     return defaultFolder;
-                });
+                })
+                .then(def.resolve, def.reject);
+
+
+            return def;
         },
 
         createWelcomeNote: function () {

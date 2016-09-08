@@ -140,6 +140,13 @@ define('io.ox/notes/mediator', [
                 app.left.append(app.listView.$el);
             },
 
+            'auto-select': function (app) {
+
+                app.listView.on('first-content', function () {
+                    app.listView.selection.select(0);
+                });
+            },
+
             'connect-loader': function (app) {
 
                 var collectionLoader = new CollectionLoader({

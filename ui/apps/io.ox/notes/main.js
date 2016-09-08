@@ -42,11 +42,14 @@ define('io.ox/notes/main', [
         app.settings = settings;
         window.notes = app;
 
+        win.show();
+
         function show(folderId) {
-            app.folder.set(folderId);
+            win.idle();
             _.url.hash('folder', folderId);
+            app.folder.set(folderId);
             mediator(app);
-            win.show();
+            if (settings.get('tours/welcome/run', true)) showTour();
         }
 
         // hash support
@@ -57,8 +60,20 @@ define('io.ox/notes/main', [
         var folderId = api.getDefaultFolder();
         if (folderId) return show(_.url.hash('folder') || folderId);
 
-        api.createDefaultFolders().done(show);
+        win.busy(0.00);
+
+        api.createDefaultFolders()
+            .progress(function (pct, caption) {
+                win.busy(pct, caption);
+            })
+            .done(show);
     });
+
+    function showTour() {
+        require(['io.ox/notes/tour'], function (tour) {
+            tour.start();
+        });
+    }
 
     return {
         getApp: app.getInstance
