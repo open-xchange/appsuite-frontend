@@ -283,9 +283,8 @@ define('io.ox/settings/main', [
             previousSelection = currentSelection;
             currentSelection = pool.getModel(id).get('meta');
 
-            if (previousSelection === null || previousSelection.id !== currentSelection.id || opt.refresh) {
-                showSettings(baton, opt.focus);
-            baton = baton || pool.getModel(id).get('meta');
+            if (previousSelection === null || (previousSelection.id !== currentSelection.id) || opt.refresh) {
+                showSettings(baton || currentSelection, opt.focus);
             }
 
             left.trigger('select');
