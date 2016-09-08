@@ -255,12 +255,18 @@ define('io.ox/settings/main', [
         });
         tree.preselect(_.url.hash('folder'));
 
+        // select tree node on expand
+        tree.on('open', function (id) {
+            select(id, undefined, undefined, { focus: true, focusPane: true });
+        });
+
         // select virtual node
         tree.on('virtual', select);
         function select(id, item, baton, options) {
 
             var opt = _.extend({
-                focus: !!baton,
+                focus: false,
+                focusPane: !!baton,
                 refresh: baton && baton.options && baton.options.refresh
             }, options);
 
@@ -275,6 +281,8 @@ define('io.ox/settings/main', [
 
             // expand subfolders
             folderUtil.open(view.options.parent);
+            // focus tree node
+            if (opt.focus) item.focus();
 
             // show subfolders on default
             if (view.hasSubFolders() && view.options.open !== 'open') view.toggle('open');
@@ -284,7 +292,7 @@ define('io.ox/settings/main', [
             currentSelection = pool.getModel(id).get('meta');
 
             if (previousSelection === null || (previousSelection.id !== currentSelection.id) || opt.refresh) {
-                showSettings(baton || currentSelection, opt.focus);
+                showSettings(baton || currentSelection, opt.focusPane);
             }
 
             left.trigger('select');
