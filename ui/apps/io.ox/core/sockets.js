@@ -15,7 +15,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
     'use strict';
 
     var socket,
-        URI = ox.abs,
+        URI = _.url.hash('socket-uri') ? _.url.hash('socket-uri') : ox.abs,
         isConnected = false,
         supported = Modernizr.websockets && cap.has('websocket'),
         debug = _.url.hash('socket-debug') || ox.debug;
