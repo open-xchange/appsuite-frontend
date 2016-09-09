@@ -660,7 +660,8 @@ msgid "About"
 msgstr "O programu"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Absent"
 msgstr "Chybí"
 
@@ -1209,6 +1210,13 @@ msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Aplikace nemusí pracovat podle očekávání, dokud nebude tento problém vyřešen."
 
+#. Applies changes to an existing appointment, used in scheduling view
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Accept changes"
+msgid "Apply changes"
+msgstr "Přijmout změny"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Aplikovat roli"
@@ -1261,6 +1269,12 @@ msgstr "Seznam schůzek"
 #: module:plugins/notifications
 msgid "Appointment reminders"
 msgstr "Upomínky na schůzky"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Appointments"
+msgid "Appointment types"
+msgstr "Schůzky"
 
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
 msgid "Appointments"
@@ -1568,8 +1582,8 @@ msgstr "Týd."
 #. CW is calender week and %1$d is the week number
 #. %1$d = Calendar week
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
 msgid "CW %1$d"
 msgstr "CW %1$d"
 
@@ -2358,7 +2372,8 @@ msgid "Create all-day appointment"
 msgstr "Vytvořit celodenní schůzku"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Vytvořit schůzku"
 
@@ -2574,8 +2589,8 @@ msgstr "Odloženo"
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
-#: apps/io.ox/portal/main.js module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
+#: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
 #: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
@@ -2985,9 +3000,9 @@ msgstr "Dvojitým kliknutím na tento řádek zvolíte celodenní schůzku"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/mail apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid "Download"
 msgstr "Stáhnout"
 
@@ -3984,7 +3999,8 @@ msgid "Forward emails as"
 msgstr "Přeposílat zprávy jako"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Volné"
 
@@ -4230,6 +4246,10 @@ msgstr "Skrýt detaily"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Hide names"
 msgstr "Skrýt jména"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Hide non-working time"
+msgstr "Skrýt nepracovní čas"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Hide options for expert users."
@@ -4484,6 +4504,7 @@ msgid "Inline menu %1$s"
 msgstr "Vložené menu %1$s"
 
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#: apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Insert"
 msgstr "Vložit"
 
@@ -5210,7 +5231,7 @@ msgstr "Model není kompletní."
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer
+#: module:io.ox/core/viewer apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Modified"
 msgstr "Upraveno"
 
@@ -5421,6 +5442,12 @@ msgstr "Nová zpráva"
 msgid "New mails"
 msgstr "Nové zprávy"
 
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#, fuzzy
+#| msgid "New InfoItem"
+msgid "New note"
+msgstr "Nová informační položka"
+
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "New notifications"
 msgstr "Nová oznámení"
@@ -5476,7 +5503,8 @@ msgstr "Upomínky na nové úkoly"
 msgid "Next"
 msgstr "Další"
 
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js
 msgid "Next Day"
 msgstr "Další den"
 
@@ -5957,9 +5985,9 @@ msgstr "Nepovinné 19"
 msgid "Optional 20"
 msgstr "Nepovinné 20"
 
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/core/emoji/view.js module:io.ox/mail/emoji
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/toolbar.js
+#: module:io.ox/contacts apps/io.ox/core/emoji/view.js module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -6231,6 +6259,12 @@ msgstr "Prostý text"
 msgid "Play audio files"
 msgstr "Přehrát audio soubory"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#, fuzzy
+#| msgid "Send new mail"
+msgid "Play sound on new mail"
+msgstr "Poslat novou zprávu"
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Play video files"
 msgstr "Přehrát video soubory"
@@ -6394,6 +6428,11 @@ msgstr "Zadejte, prosím, staré heslo, aby mohl být účet obnoven."
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Vyberte, prosím, soubor k importu"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Please select a time for the appointment"
+msgstr "Vyberte, prosím, čas schůzky"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
@@ -6575,12 +6614,19 @@ msgstr "Podrobnosti o výběru"
 msgid "Preview"
 msgstr "Náhled"
 
+#: apps/io.ox/notes/mediator.js module:io.ox/notes
+#, fuzzy
+#| msgid "No preview available"
+msgid "Preview not available"
+msgstr "Žádný náhled k dispozici"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Předchozí"
 
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js
 msgid "Previous Day"
 msgstr "Předchozí den"
 
@@ -6621,12 +6667,17 @@ msgstr "Primární účet"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/print.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/mail/actions.js
+#: apps/io.ox/core/print.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Tisk"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Print tasks"
+msgid "Print as PDF"
+msgstr "Tisknout úkoly"
 
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
@@ -7136,7 +7187,8 @@ msgid "Resend invitation"
 msgstr "Znovu poslat pozvánku"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Reserved"
 msgstr "Vyhrazeno"
 
@@ -7341,7 +7393,8 @@ msgstr[1] "Ukládám přílohy"
 msgstr[2] "Ukládám přílohy"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Scheduling"
 msgstr "Plánování"
 
@@ -7470,6 +7523,7 @@ msgstr "Poslat jako vCard"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Poslat ve zprávě"
 
@@ -7961,6 +8015,10 @@ msgstr "Řadit podle"
 msgid "Sort options"
 msgstr "Možnosti řazení"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Sound"
+msgstr ""
+
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Source"
 msgstr "Zdroj"
@@ -8282,7 +8340,8 @@ msgid "Telex"
 msgstr "Telex"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Temporary"
 msgstr "Dočasné"
 
@@ -9076,7 +9135,8 @@ msgstr ""
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr "Pro zaplnění tohoto prostoru přetáhněte zprávy do názvu této karty."
 
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
 #: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
@@ -9131,6 +9191,10 @@ msgstr "10 nejčastějších odesílatelů"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Top 10 you sent mail to"
 msgstr "10 nejčastějších adresátů"
+
+#: apps/io.ox/notes/mediator.js module:io.ox/notes
+msgid "Topics"
+msgstr ""
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Total cost"
@@ -9366,7 +9430,8 @@ msgid "Use %1$s"
 msgstr "Použít %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -10108,6 +10173,7 @@ msgstr "Vaše časové pásmo"
 msgid "ZB"
 msgstr "ZB"
 
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Zoom"
 msgstr "Přiblížení"
@@ -14910,9 +14976,6 @@ msgstr "rrrr"
 #~ msgid "Hide later elements"
 #~ msgstr "Skrýt pozdější prvky"
 
-#~ msgid "Hide non-working time"
-#~ msgstr "Skrýt nepracovní čas"
-
 #~ msgid "Hide non-working time in teamview"
 #~ msgstr "Skrýt nepracovní čas v týmovém pohledu"
 
@@ -15820,9 +15883,6 @@ msgstr "rrrr"
 #~ msgid "New Distribution List"
 #~ msgstr "Nový distribuční seznam"
 
-#~ msgid "New InfoItem"
-#~ msgstr "Nová informační položka"
-
 #~ msgid "New Infoitem"
 #~ msgstr "Nová informační položka"
 
@@ -15954,9 +16014,6 @@ msgstr "rrrr"
 
 #~ msgid "No participants available"
 #~ msgstr "Nejsou k dispozici žádní účastníci"
-
-#~ msgid "No preview available"
-#~ msgstr "Žádný náhled k dispozici"
 
 #~ msgid "No recurrence"
 #~ msgstr "Žádné opakování"
@@ -16579,9 +16636,6 @@ msgstr "rrrr"
 
 #~ msgid "Please select a file to insert"
 #~ msgstr "Vyberte, prosím, soubor k vložení"
-
-#~ msgid "Please select a time for the appointment"
-#~ msgstr "Vyberte, prosím, čas schůzky"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "Vyberte, prosím, jen jednu publikaci"

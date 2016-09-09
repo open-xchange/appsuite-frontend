@@ -622,7 +622,8 @@ msgid "About"
 msgstr "關於"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Absent"
 msgstr "缺少"
 
@@ -1161,6 +1162,13 @@ msgstr "應用程式工具列"
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此問題解決前應用程式可能暫時無法使用。"
 
+#. Applies changes to an existing appointment, used in scheduling view
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Accept changes"
+msgid "Apply changes"
+msgstr "接受變更"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "套用腳色"
@@ -1213,6 +1221,12 @@ msgstr "約會清單"
 #: module:plugins/notifications
 msgid "Appointment reminders"
 msgstr "約會提醒"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Appointments"
+msgid "Appointment types"
+msgstr "約會"
 
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
 msgid "Appointments"
@@ -1516,8 +1530,8 @@ msgstr "日曆週"
 #. CW is calender week and %1$d is the week number
 #. %1$d = Calendar week
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
 msgid "CW %1$d"
 msgstr "第 %1$d 週"
 
@@ -2301,7 +2315,8 @@ msgid "Create all-day appointment"
 msgstr "建立全日約會"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "建立約會"
 
@@ -2517,8 +2532,8 @@ msgstr "延遲"
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
-#: apps/io.ox/portal/main.js module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
+#: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
 #: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
@@ -2923,9 +2938,9 @@ msgstr "雙擊此欄位以新增全天約會"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/mail apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid "Download"
 msgstr "下載"
 
@@ -3910,7 +3925,8 @@ msgid "Forward emails as"
 msgstr "轉發電子郵件為"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "空閒的"
 
@@ -4154,6 +4170,12 @@ msgstr "隱藏詳情"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Hide names"
 msgstr "隱藏名稱"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+#| msgid "End of working time"
+msgid "Hide non-working time"
+msgstr "工作時間結束"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Hide options for expert users."
@@ -4401,6 +4423,7 @@ msgid "Inline menu %1$s"
 msgstr "行內選單 %1$s"
 
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#: apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Insert"
 msgstr "插入"
 
@@ -5120,7 +5143,7 @@ msgstr "模型不完整。"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer
+#: module:io.ox/core/viewer apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Modified"
 msgstr "已修改"
 
@@ -5331,6 +5354,12 @@ msgstr "新郵件"
 msgid "New mails"
 msgstr "新郵件"
 
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#, fuzzy
+#| msgid "New Folder"
+msgid "New note"
+msgstr "新資料夾"
+
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "New notifications"
 msgstr "新通知"
@@ -5386,7 +5415,8 @@ msgstr "新任務提醒"
 msgid "Next"
 msgstr "下一個"
 
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js
 msgid "Next Day"
 msgstr "下一天"
 
@@ -5857,9 +5887,9 @@ msgstr "可選 19"
 msgid "Optional 20"
 msgstr "可選 20"
 
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/core/emoji/view.js module:io.ox/mail/emoji
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/toolbar.js
+#: module:io.ox/contacts apps/io.ox/core/emoji/view.js module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -6130,6 +6160,12 @@ msgstr "純文字"
 msgid "Play audio files"
 msgstr "撥放聲音檔案"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#, fuzzy
+#| msgid "Send new mail"
+msgid "Play sound on new mail"
+msgstr "寄送新郵件"
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Play video files"
 msgstr "撥放影片檔案"
@@ -6286,6 +6322,11 @@ msgstr "請提供舊密碼以復原帳號密碼。"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "請選擇要匯入的檔案"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Please select a time for the appointment"
+msgstr "請選擇約會時間"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
@@ -6465,12 +6506,19 @@ msgstr "選擇範圍詳情"
 msgid "Preview"
 msgstr "預覽"
 
+#: apps/io.ox/notes/mediator.js module:io.ox/notes
+#, fuzzy
+#| msgid "No preview available"
+msgid "Preview not available"
+msgstr "無可用預覽"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
 msgstr "上一個"
 
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js
 msgid "Previous Day"
 msgstr "前一天"
 
@@ -6511,12 +6559,17 @@ msgstr "主要帳號"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/print.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/mail/actions.js
+#: apps/io.ox/core/print.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "列印"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Print tasks"
+msgid "Print as PDF"
+msgstr "列印任務"
 
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
@@ -7014,7 +7067,8 @@ msgid "Resend invitation"
 msgstr "重寄邀請函"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Reserved"
 msgstr "已保留"
 
@@ -7218,7 +7272,8 @@ msgstr[0] "正在儲存附件…"
 msgstr[1] "正在儲存附件…"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Scheduling"
 msgstr "行程"
 
@@ -7344,6 +7399,7 @@ msgstr "以 vCard 傳送"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "透過電子郵件寄送"
 
@@ -7822,6 +7878,10 @@ msgstr "排序依照"
 msgid "Sort options"
 msgstr "排序選項"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Sound"
+msgstr ""
+
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Source"
 msgstr "來源"
@@ -8139,7 +8199,8 @@ msgid "Telex"
 msgstr "電報"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Temporary"
 msgstr "臨時"
 
@@ -8885,7 +8946,8 @@ msgstr ""
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr "若要填滿此區塊，請將郵件拖曳到此分頁標題。"
 
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
 #: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
@@ -8940,6 +9002,10 @@ msgstr "前十名寄件者"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Top 10 you sent mail to"
 msgstr "前十名收件者"
+
+#: apps/io.ox/notes/mediator.js module:io.ox/notes
+msgid "Topics"
+msgstr ""
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Total cost"
@@ -9173,7 +9239,8 @@ msgid "Use %1$s"
 msgstr "使用 %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -9895,6 +9962,7 @@ msgstr "您的時區"
 msgid "ZB"
 msgstr "ZB"
 
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Zoom"
 msgstr "縮放"
@@ -12989,9 +13057,6 @@ msgstr "年"
 #~ msgid "No matching templates on this Server"
 #~ msgstr "伺服器上沒有符合的範本"
 
-#~ msgid "No preview available"
-#~ msgstr "無可用預覽"
-
 #~ msgid "No wall posts yet."
 #~ msgstr "尚無塗鴉牆貼文。"
 
@@ -13136,9 +13201,6 @@ msgstr "年"
 
 #~ msgid "Please enter an feed-url."
 #~ msgstr "請輸入資訊來源網址。"
-
-#~ msgid "Please select a time for the appointment"
-#~ msgstr "請選擇約會時間"
 
 #~ msgid "Polish"
 #~ msgstr "波蘭文"

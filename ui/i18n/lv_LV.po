@@ -655,7 +655,8 @@ msgid "About"
 msgstr "Par"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Absent"
 msgstr "Nav"
 
@@ -1203,6 +1204,13 @@ msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Aplikācija var nestrādāt kā paredzēts kamēr šī problēma nav atrisināta."
 
+#. Applies changes to an existing appointment, used in scheduling view
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Accept changes"
+msgid "Apply changes"
+msgstr "Piekrist izmaiņām"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
 msgstr "Piešķirt lomu"
@@ -1255,6 +1263,12 @@ msgstr "Mītiņu saraksts"
 #: module:plugins/notifications
 msgid "Appointment reminders"
 msgstr "Mītiņu atgādinājumi"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Appointments"
+msgid "Appointment types"
+msgstr "Mītiņi"
 
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
 msgid "Appointments"
@@ -1571,8 +1585,8 @@ msgstr "CW"
 #. CW is calender week and %1$d is the week number
 #. %1$d = Calendar week
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
 msgid "CW %1$d"
 msgstr "KN %1$d"
 
@@ -2363,7 +2377,8 @@ msgid "Create all-day appointment"
 msgstr "Izveidot visas dienas notikumu"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
 msgid "Create appointment"
 msgstr "Izveidot mītiņu"
 
@@ -2579,8 +2594,8 @@ msgstr "Atlikts"
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
-#: apps/io.ox/portal/main.js module:io.ox/portal
-#: apps/io.ox/portal/settings/widgetview.js
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
+#: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions.js
 #: module:io.ox/tasks apps/io.ox/tasks/actions/delete.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
@@ -2992,9 +3007,9 @@ msgstr "Dubultklišķis rindā, lai izveidotu visas dienas mītiņu"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding apps/plugins/portal/updater/register.js
-#: module:plugins/portal
+#: module:io.ox/mail apps/io.ox/notes/toolbar.js module:io.ox/notes
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid "Download"
 msgstr "Lejupielāde"
 
@@ -4003,7 +4018,8 @@ msgid "Forward emails as"
 msgstr "Pārsūtīt e-pastu kā"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Brīvs"
 
@@ -4249,6 +4265,10 @@ msgstr "Paslēpt detaļas"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Hide names"
 msgstr "Paslēpt vārdus"
+
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Hide non-working time"
+msgstr "Paslēpt ne-darbalaiku"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Hide options for expert users."
@@ -4504,6 +4524,7 @@ msgid "Inline menu %1$s"
 msgstr "Ietvertā izvēlne %1$s"
 
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+#: apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Insert"
 msgstr "Ievietot"
 
@@ -5231,7 +5252,7 @@ msgstr "Modelis nav pabeigts."
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer
+#: module:io.ox/core/viewer apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Modified"
 msgstr "Izmainīts"
 
@@ -5442,6 +5463,12 @@ msgstr "Jaunais pasts"
 msgid "New mails"
 msgstr "Jaunās vēstules"
 
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
+#, fuzzy
+#| msgid "New InfoItem"
+msgid "New note"
+msgstr "Jauna infovienība"
+
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "New notifications"
 msgstr "Jauni paziņojumi"
@@ -5497,7 +5524,8 @@ msgstr "Jauno uzdevumu atgādinājumi"
 msgid "Next"
 msgstr "Nākošais"
 
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js
 msgid "Next Day"
 msgstr "Nākošā diena"
 
@@ -5980,9 +6008,9 @@ msgstr "Papildus 19"
 msgid "Optional 20"
 msgstr "Papildus 20"
 
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/core/emoji/view.js module:io.ox/mail/emoji
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/toolbar.js
+#: module:io.ox/contacts apps/io.ox/core/emoji/view.js module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -6255,6 +6283,12 @@ msgstr "Vienkāršs teksts"
 msgid "Play audio files"
 msgstr "Atskaņot audio failus"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#, fuzzy
+#| msgid "Send new mail"
+msgid "Play sound on new mail"
+msgstr "Sūtīt  jaunu pastu"
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Play video files"
 msgstr "Atskaņot video failus"
@@ -6418,6 +6452,11 @@ msgstr "Lūdzu ievadiet veco paroli, lai varētu atkopt konta paroles."
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Lūdzu izvēlieties importējamo failu"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Please select a time for the appointment"
+msgstr "Lūdzu izvēlieties mītiņa laiku"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a valid iCal File to import"
@@ -6597,12 +6636,19 @@ msgstr "Izvēles detaļas"
 msgid "Preview"
 msgstr "Apskats"
 
+#: apps/io.ox/notes/mediator.js module:io.ox/notes
+#, fuzzy
+#| msgid "No preview available"
+msgid "Preview not available"
+msgstr "Apskats nav iespējams"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
 msgstr "Iepriekšējais"
 
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js
 msgid "Previous Day"
 msgstr "Iepriekšējā diena"
 
@@ -6643,12 +6689,17 @@ msgstr "Primārais konts"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/print.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/mail/actions.js
+#: apps/io.ox/core/print.js module:io.ox/core apps/io.ox/mail/actions.js
 #: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Drukāt"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Print tasks"
+msgid "Print as PDF"
+msgstr "Drukāt uzdevumus"
 
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
@@ -7160,7 +7211,8 @@ msgid "Resend invitation"
 msgstr "Pārsūtīt uzaicinājumu"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Reserved"
 msgstr "Rezervēts"
 
@@ -7365,7 +7417,8 @@ msgstr[1] "Saglabā pievienojumus ..."
 msgstr[2] "Saglabā pievienojumus ..."
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Scheduling"
 msgstr "Plānošana"
 
@@ -7495,6 +7548,7 @@ msgstr "Sūtīt kā vCard"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
+#: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Sūtīt ar pastu"
 
@@ -7986,6 +8040,10 @@ msgstr "Kārtot pēc"
 msgid "Sort options"
 msgstr "Kārtošanas opcijas"
 
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+msgid "Sound"
+msgstr ""
+
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Source"
 msgstr "Avots"
@@ -8306,7 +8364,8 @@ msgid "Telex"
 msgstr "Telekss"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Temporary"
 msgstr "Pagaidu"
 
@@ -9108,7 +9167,8 @@ msgstr ""
 "Lai aizpildītu šo apgabalu, lūdzu pārvelciet vēstules uz šīs vērtnes "
 "virsrakstu."
 
-#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
 #: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
@@ -9163,6 +9223,10 @@ msgstr "Top 10 no kuriem ir saņemts pasts"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail
 msgid "Top 10 you sent mail to"
 msgstr "Top 10 kuriem ir nosūtīts pasts"
+
+#: apps/io.ox/notes/mediator.js module:io.ox/notes
+msgid "Topics"
+msgstr ""
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Total cost"
@@ -9399,7 +9463,8 @@ msgid "Use %1$s"
 msgstr "Izmantot %1$s"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js
 msgid ""
 "Use cursor keys to change the date. Press ctrl-key at the same time to "
 "change year or shift-key to change month. Close date-picker by pressing ESC "
@@ -10152,6 +10217,7 @@ msgstr "Jūsu laika zona"
 msgid "ZB"
 msgstr "ZB"
 
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Zoom"
 msgstr "Palielināt"
@@ -13137,9 +13203,6 @@ msgstr "yyyy"
 #~ msgid "Hide conflicts"
 #~ msgstr "Paslēpt kofliktus"
 
-#~ msgid "Hide non-working time"
-#~ msgstr "Paslēpt ne-darbalaiku"
-
 #~ msgid "Hide non-working time in teamview"
 #~ msgstr "Paslēpt ne-darbalaiku grupu skatā"
 
@@ -13947,9 +14010,6 @@ msgstr "yyyy"
 #~ msgid "New Distribution List"
 #~ msgstr "Jauns izplatīšanas saraksts"
 
-#~ msgid "New InfoItem"
-#~ msgstr "Jauna infovienība"
-
 #~ msgid "New Infoitem"
 #~ msgstr "Jauna infovienība"
 
@@ -14064,9 +14124,6 @@ msgstr "yyyy"
 
 #~ msgid "No participants available"
 #~ msgstr "Neviens dalībnieks nav pieejams"
-
-#~ msgid "No preview available"
-#~ msgstr "Apskats nav iespējams"
 
 #~ msgid "No recurrence"
 #~ msgstr "Bez atkārtojuma"
@@ -14483,9 +14540,6 @@ msgstr "yyyy"
 
 #~ msgid "Please select a country for the start address"
 #~ msgstr "Lūdzu izvēlieties valsti sākuma adresē"
-
-#~ msgid "Please select a time for the appointment"
-#~ msgstr "Lūdzu izvēlieties mītiņa laiku"
 
 #~ msgid "Please select only one Publication"
 #~ msgstr "Lūdzu izvēlieties tikai vienu publikāciju"
