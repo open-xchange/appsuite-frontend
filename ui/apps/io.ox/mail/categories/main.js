@@ -27,16 +27,16 @@ define('io.ox/mail/categories/main', [
 
     'use strict';
 
-    // TODO: trigger unread after train/move
-
     if (!capabilities.has('mail_categories')) {
         console.error("mail/categories/main: capababilty 'mail_categories' missing");
     }
 
     // do not clutter hash
     ox.on('app:start app:resume', function (app) {
+        if (!app || !app.categories) return;
+        if (app.id !== 'io.ox/mail' || !app.categories.initialized) return;
         // restore
-        if (app && app.id === 'io.ox/mail') return module.restoreSelection();
+        module.restoreSelection();
         // reset
         _.url.hash('category', null);
     });
@@ -378,6 +378,7 @@ define('io.ox/mail/categories/main', [
                 'selected': this.restoreSelection(),
                 'enabled': settings.get('categories/enabled')
             });
+            this.initialized = true;
             // inital refresh
             //_.defer(_.bind(this.refresh, this));
         },

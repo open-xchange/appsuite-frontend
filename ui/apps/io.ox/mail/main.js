@@ -1713,8 +1713,8 @@ define('io.ox/mail/main', [
 
             // fulllogic
             require(['io.ox/mail/categories/main'], function (cat) {
-                app.categories = cat;
                 cat.init({ mail: app, pool: api.pool.get('detail') });
+                app.categories = cat;
             });
         },
 
