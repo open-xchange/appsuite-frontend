@@ -35,7 +35,7 @@ define('plugins/notifications/mail/register', [
         path = ox.base + '/apps/themes/default/sounds/', // soundfiles are located in the theme
         iconPath = ox.base + '/apps/themes/default/fallback-image-contact.png', // fallbackicon shown in desktop notification
         sound,
-        type = _.device('!windows && !mac && !ios && !android') ? '.ogg' : '.mp3', // linux frickel uses ogg
+        type = _.device('!windows && !macos && !ios && !android') ? '.ogg' : '.mp3', // linux frickel uses ogg
         settingsModel = settings;
 
     function filter(model) {
