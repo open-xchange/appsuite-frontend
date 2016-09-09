@@ -35,6 +35,7 @@ define('plugins/notifications/mail/register', [
         path = ox.base + '/apps/themes/default/sounds/', // soundfiles are located in the theme
         iconPath = ox.base + '/apps/themes/default/icon120.png', // fallbackicon shown in desktop notification
         sound,
+        type = _.device('!windows && !mac && !ios && !android') ? '.ogg' : '.mp3', // linux frickel uses ogg
         settingsModel = settings;
 
     function filter(model) {
@@ -58,7 +59,7 @@ define('plugins/notifications/mail/register', [
     // load a soundfile
     function loadSound(sound) {
         var d = $.Deferred();
-        sound = new Audio(path + sound);
+        sound = new Audio(path + sound + type);
         sound.volume = SOUND_VOLUME;
         sound.addEventListener('canplaythrough', function () {
             d.resolve(sound);
@@ -68,19 +69,16 @@ define('plugins/notifications/mail/register', [
 
     // show desktopNotification (if enabled) for a new mail
     function newMailDesktopNotification(message) {
-        var sender, text = gt('You have new mail'); // default
 
         // some mailservers do not send extra data like sender and subject, check this here
-        if (message.displayname && message.subject) {
-            sender = message.displayname;
-            text = gt('Mail from %1$s, %2$s', _.noI18n(sender), _.noI18n(message.subject) || gt('No subject'));
-        }
+        var text = message.subject || gt('No subject');
         // get email for picture halo
         var imageURL = message.email ? contactsApi.pictureHalo(null, {
-            email: message.email }, { urlOnly: true, width: 150, height: 150 }) : iconPath;
+            email: message.email }, { urlOnly: true, width: 300, height: 300 }) : iconPath;
+        // check for image size
 
         desktopNotifications.show({
-            title: gt('New Mail'),
+            title: message.displayname || message.email || gt('New mail'),
             body: text,
             icon: imageURL,
             duration: DURATION
@@ -92,8 +90,8 @@ define('plugins/notifications/mail/register', [
         sound.play();
     }, 2000);
 
-    settingsModel.on('change:notificationSound', function () {
-        var s = settingsModel.get('notificationSound');
+    settingsModel.on('change:notificationSoundName', function () {
+        var s = settingsModel.get('notificationSoundName');
         loadSound(s).done(function (s) {
             // preview the selected sound by playing it on change
             s.play();
@@ -102,46 +100,45 @@ define('plugins/notifications/mail/register', [
         settingsModel.saveAndYell();
     });
 
-    if (true) {
-        console.log('Notification sounds enabled, see mail settings.');
-        // get and load stored sound
-        loadSound(settingsModel.get('notificationSound')).done(function (s) {
-            sound = s;
-        });
+    console.log('Notification sounds enabled, see mail settings.');
+    // get and load stored sound
+    loadSound(settingsModel.get('notificationSoundName')).done(function (s) {
+        sound = s;
+    });
 
-        ext.point('io.ox/mail/settings/detail/pane').extend({
-            index: 490,
-            id: 'sounds',
-            draw: function () {
-                // use this array to customize the sounds
-                // copy new/other sounds to themefolder->sounds
-                var sounds, list = [
-                    { label: gt('Bell'), value: 'bell.mp3' },
-                    { label: gt('Marimba'), value: 'marimba.mp3' },
-                    { label: gt('Wood'), value: 'wood.mp3' },
-                    { label: gt('Chimes'), value: 'chimes.mp3' }
-                    ];
+    ext.point('io.ox/mail/settings/detail/pane').extend({
+        index: 490,
+        id: 'sounds',
+        draw: function () {
+            // use this array to customize the sounds
+            // copy new/other sounds to themefolder->sounds
+            var sounds, list = [
+                { label: gt('Bell'), value: 'bell' },
+                { label: gt('Marimba'), value: 'marimba' },
+                { label: gt('Wood'), value: 'wood' },
+                { label: gt('Chimes'), value: 'chimes' }
+                ];
 
-                this.append(fieldset(
-                    gt('Sound'),
-                    checkbox(
-                        gt('Play sound on new mail'),
-                        new miniViews.CheckboxView({ name: 'playSound', model: settings }).render().$el
-                    ),
-                    $('<label>').attr({ 'for': 'notificationSound' }).text(gt('Notification sound')),
-                            sounds = new miniViews.SelectView({ list: list, name: 'notificationSound', model: settingsModel, id: 'notificationSound', className: 'form-control' }).render().$el
-                    )
-                );
+            this.append(fieldset(
+                gt('Sound'),
+                checkbox(
+                    gt('Play sound on new mail'),
+                    new miniViews.CheckboxView({ name: 'playSound', model: settings }).render().$el
+                ),
+                $('<label>').attr({ 'for': 'notificationSoundName' }).text(gt('Notification sound')),
+                        sounds = new miniViews.SelectView({ list: list, name: 'notificationSoundName', model: settingsModel, id: 'notificationSoundName', className: 'form-control' }).render().$el
+                )
+            );
 
-                // toggle soundselection on overall settings
+            // toggle soundselection on overall settings
+            $(sounds).prop('disabled', !settings.get('playSound'));
+
+            settings.on('change:playSound', function () {
                 $(sounds).prop('disabled', !settings.get('playSound'));
+            });
+        }
+    });
 
-                settings.on('change:playSound', function () {
-                    $(sounds).prop('disabled', !settings.get('playSound'));
-                });
-            }
-        });
-    }
 
     var update = _.debounce(function () {
 
