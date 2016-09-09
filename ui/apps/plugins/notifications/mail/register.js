@@ -71,8 +71,8 @@ define('plugins/notifications/mail/register', [
         var sender, text = gt('You have new mail'); // default
 
         // some mailservers do not send extra data like sender and subject, check this here
-        if (message.sender && message.subject) {
-            sender = message.sender.split('<').length > 1 ? message.sender.split('<')[0].trim() : message.sender;
+        if (message.displayname && message.subject) {
+            sender = message.displayname;
             text = gt('Mail from %1$s, %2$s', _.noI18n(sender), _.noI18n(message.subject) || gt('No subject'));
         }
         // get email for picture halo
