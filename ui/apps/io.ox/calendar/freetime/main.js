@@ -51,8 +51,9 @@ define('io.ox/calendar/freetime/main', [
                 this.timeSubview = new TimeView({ model: this.model, parentModel: options.parentModel, parentView: this });
 
                 this.model.on('change:zoom', self.updateZoom.bind(this));
+                this.model.on('change:compact', self.updateCompact.bind(this));
                 this.model.on('change:onlyWorkingHours', self.updateWorkingHours.bind(this));
-                this.model.on('change:onlyWorkingHours change:zoom change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateSettings.bind(this));
+                this.model.on('change:onlyWorkingHours change:compact change:zoom change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateSettings.bind(this));
 
                 this.on('dispose', function () {
                     self.timeSubview.dispose();
@@ -68,6 +69,7 @@ define('io.ox/calendar/freetime/main', [
                 this.header = $('<div class="freetime-view freetime-view-header">').addClass('zoomlevel-' + this.model.get('zoom'));
                 this.body = $('<div class="freetime-view freetime-view-body">').addClass('zoomlevel-' + this.model.get('zoom'));
                 this.updateWorkingHours();
+                this.updateCompact();
             },
             updateSettings: function () {
                 settings.set('schedulingZoomlevel', this.model.get('zoom'));
@@ -76,6 +78,7 @@ define('io.ox/calendar/freetime/main', [
                 settings.set('schedulingShowAbsent', this.model.get('showAbsent'));
                 settings.set('schedulingShowReserved', this.model.get('showReserved'));
                 settings.set('schedulingShowTemporary', this.model.get('showTemporary'));
+                settings.set('schedulingCompactMode', this.model.get('compact'));
                 settings.save();
             },
 
@@ -86,6 +89,10 @@ define('io.ox/calendar/freetime/main', [
             updateWorkingHours: function () {
                 this.header.toggleClass('only-workinghours', this.model.get('onlyWorkingHours'));
                 this.body.toggleClass('only-workinghours', this.model.get('onlyWorkingHours'));
+            },
+            updateCompact: function () {
+                this.header.toggleClass('compact', this.model.get('compact'));
+                this.body.toggleClass('compact', this.model.get('compact'));
             },
 
             renderHeader: function () {

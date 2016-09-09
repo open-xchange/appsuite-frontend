@@ -21,6 +21,7 @@ define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar', 'io.ox/parti
             this.set({
                 timezone: now.tz(),
                 currentWeek: now,
+                compact: settings.get('schedulingCompactMode', false),
                 zoom: settings.get('schedulingZoomlevel', 100),
                 onlyWorkingHours: settings.get('schedulingOnlyWorkingHours', true),
                 startHour: Math.max(parseInt(settings.get('startTime', 8), 10) - 1, 0),

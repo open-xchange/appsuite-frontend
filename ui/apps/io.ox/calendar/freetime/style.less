@@ -298,6 +298,21 @@
             }
         }
     }
+    &.compact {
+        .participantsrow {
+            .participant-wrapper {
+                min-height: 22px;
+            }
+            .participant-image {
+                margin-top: 2px;
+                width: 16px;
+                height: 16px;
+            }
+            .participant-name {
+                padding-top: 0px;
+            }
+        }
+    }
 
     &.zoomlevel-100 .appointment .title {
         &.under-one-hour {
@@ -443,9 +458,26 @@
                 }
             }
         }
+
         &.showFree .appointments .free { display: block; }
         &.showTemporary .appointments .temporary { display: block; }
         &.showReserved .appointments .reserved { display: block; }
         &.showAbsent .appointments .absent { display: block; }
+    }
+    &.compact {
+        .appointments {
+            .appointment-table {
+                height: 24px;
+                .appointment {
+                    padding: 4px 8px;
+                    .title {
+                        line-height: 16px;
+                    }
+                    .location {
+                        display: none;
+                    }
+                }
+            }
+        }
     }
 }

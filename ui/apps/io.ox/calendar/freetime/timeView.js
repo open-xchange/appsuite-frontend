@@ -115,6 +115,8 @@ define('io.ox/calendar/freetime/timeView', [
                 .option('zoom', '200', gt.noI18n('200%'), { radio: true })
                 .option('zoom', '400', gt.noI18n('400%'), { radio: true })
                 .option('zoom', '1000', gt.noI18n('1000%'), { radio: true })
+                //#. rows of scheduling table
+                .option('compact', true, gt('Compact rows'))
                 .divider()
                 .header(gt('Appointment types'))
                 .option('showFree', true, gt('Free'))
@@ -279,7 +281,7 @@ define('io.ox/calendar/freetime/timeView', [
                         }).tooltip({ container: tooltipContainer });
                     }
                     if (appointment.location && appointment.location !== '') {
-                        appointmentNode.append($('<div class="location">').text('123')).addClass('has-location');
+                        appointmentNode.append($('<div class="location">').text(appointment.location)).addClass('has-location');
                     }
 
                     participantTable.append(appointmentNode);
