@@ -28,7 +28,7 @@ define('io.ox/core/desktopNotifications', [
         //only show if page is hidden (minimized etc)
         //no need to show them otherwise
         //if visibility api is not supported, we always show desktop notifications because we cannot be sure
-        if (!visibilityApi.isHidden && !message.ignoreVisibility) {
+        if (!visibilityApi.isHidden && !message.ignoreVisibility && !message.forceDisplay) {
             return;
         }
         //defaults

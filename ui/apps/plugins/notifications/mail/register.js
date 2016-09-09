@@ -33,7 +33,7 @@ define('plugins/notifications/mail/register', [
         SOUND_VOLUME = 0.3, // volume of push notification sound
         DURATION = 10 * 1000, // miliseconds to show the notification
         path = ox.base + '/apps/themes/default/sounds/', // soundfiles are located in the theme
-        iconPath = ox.base + '/apps/themes/default/icon120.png', // fallbackicon shown in desktop notification
+        iconPath = ox.base + '/apps/themes/default/fallback-image-contact.png', // fallbackicon shown in desktop notification
         sound,
         type = _.device('!windows && !mac && !ios && !android') ? '.ogg' : '.mp3', // linux frickel uses ogg
         settingsModel = settings;
@@ -75,14 +75,21 @@ define('plugins/notifications/mail/register', [
         // get email for picture halo
         var imageURL = message.email ? contactsApi.pictureHalo(null, {
             email: message.email }, { urlOnly: true, width: 300, height: 300 }) : iconPath;
-        // check for image size
 
-        desktopNotifications.show({
-            title: message.displayname || message.email || gt('New mail'),
-            body: text,
-            icon: imageURL,
-            duration: DURATION
-        });
+        // check if user has an image, otherwise use fallback image
+        $(new Image()).one('load error', function (e) {
+            if (this.width === 1 || e.type === 'error') {
+                // use fallback image
+                imageURL = iconPath;
+            }
+            desktopNotifications.show({
+                title: message.displayname || message.email || gt('New mail'),
+                body: text,
+                icon: imageURL,
+                duration: DURATION,
+                forceDisplay: true
+            });
+        }).attr('src', imageURL);
     }
 
     // ensure we do not play a sound twice until the first sound has finished
@@ -120,13 +127,19 @@ define('plugins/notifications/mail/register', [
                 ];
 
             this.append(fieldset(
-                gt('Sound'),
-                checkbox(
-                    gt('Play sound on new mail'),
-                    new miniViews.CheckboxView({ name: 'playSound', model: settings }).render().$el
-                ),
-                $('<label>').attr({ 'for': 'notificationSoundName' }).text(gt('Notification sound')),
-                        sounds = new miniViews.SelectView({ list: list, name: 'notificationSoundName', model: settingsModel, id: 'notificationSoundName', className: 'form-control' }).render().$el
+                    //#. Should be "töne" in german, used for notification sounds. Not "geräusch"
+                    gt('Notification sounds'),
+                    checkbox(
+                        gt('Play sound on incoming mail'),
+                        new miniViews.CheckboxView({ name: 'playSound', model: settings }).render().$el
+                    ),
+                    $('<div class="col-xs-12 col-md-6">').append(
+                        $('<div class="row">').append(
+                            $('<label>').attr({ 'for': 'notificationSoundName' }).text(gt('Sound')),
+                            sounds = new miniViews.SelectView({ list: list, name: 'notificationSoundName', model: settingsModel, id: 'notificationSoundName', className: 'form-control' }).render().$el
+
+                        )
+                    )
                 )
             );
 
