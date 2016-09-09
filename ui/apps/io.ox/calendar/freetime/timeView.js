@@ -212,6 +212,13 @@ define('io.ox/calendar/freetime/timeView', [
             }
             width = node.children().length * 60 * (parseInt(baton.model.get('zoom'), 10) / 100);
             table.css('width', width + 'px');
+            if (baton.view.keepScrollpos === 'today') {
+                if (baton.view.headerNodeRow2.find('.today').length) {
+                    baton.view.keepScrollpos = moment().hours(baton.model.get('startHour') + 1).startOf('hour').valueOf();
+                } else {
+                    delete baton.view.keepScrollpos;
+                }
+            }
             if (baton.view.keepScrollpos) {
                 table.parent().scrollLeft(baton.view.timeToPosition(baton.view.keepScrollpos) / 100 * width);
                 delete baton.view.keepScrollpos;
@@ -329,8 +336,12 @@ define('io.ox/calendar/freetime/timeView', [
                 }
                 this.lassoStart = this.timeToPosition(start);
                 this.lassoEnd = this.timeToPosition(end);
+                this.keepScrollpos = start;
             }
-
+            if (!this.model.get('startTime') && !options.parentModel) {
+                // special scrollposition on start
+                this.keepScrollpos = 'today';
+            }
             this.updateVisibility();
         },
 
@@ -611,6 +622,8 @@ define('io.ox/calendar/freetime/timeView', [
                     // no default
                 }
             } else if (_.isNumber(option)) {
+                // scroll to date
+                this.keepScrollpos = moment(option).hours(this.model.get('startHour') + 1).valueOf();
                 week = moment(option).startOf('week');
             }
             week.startOf('day');
