@@ -2026,6 +2026,13 @@ msgstr "一般表情符号"
 msgid "Compact"
 msgstr "精简"
 
+#. rows of scheduling table
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Compact view"
+msgid "Compact rows"
+msgstr "精简视图"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js
@@ -5305,7 +5312,6 @@ msgid "New Folder"
 msgstr "新文件夹"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "新邮件"
 
@@ -5644,10 +5650,11 @@ msgstr ""
 msgid "Notification"
 msgstr "通知"
 
+#. Should be "töne" in german, used for notification sounds. Not "geräusch"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, fuzzy
 #| msgid "Notifications"
-msgid "Notification sound"
+msgid "Notification sounds"
 msgstr "通知"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -6165,7 +6172,7 @@ msgstr "播放音效档"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, fuzzy
 #| msgid "Send new mail"
-msgid "Play sound on new mail"
+msgid "Play sound on incoming mail"
 msgstr "发送新电子邮件"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
@@ -11562,9 +11569,6 @@ msgstr "年"
 #~| msgid "Tomorrow"
 #~ msgid "Comoros"
 #~ msgstr "明天"
-
-#~ msgid "Compact view"
-#~ msgstr "精简视图"
 
 #~ msgid "Company:"
 #~ msgstr "公司："

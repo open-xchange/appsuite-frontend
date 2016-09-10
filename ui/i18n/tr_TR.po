@@ -2048,6 +2048,13 @@ msgstr "Common Emoji"
 msgid "Compact"
 msgstr "Sıkıştır"
 
+#. rows of scheduling table
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Compact"
+msgid "Compact rows"
+msgstr "Sıkıştır"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js
@@ -5464,7 +5471,6 @@ msgid "New Folder"
 msgstr "Yeni Klasör"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "Yeni  E posta "
 
@@ -5817,10 +5823,11 @@ msgstr ""
 msgid "Notification"
 msgstr "Uyarılar"
 
+#. Should be "töne" in german, used for notification sounds. Not "geräusch"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, fuzzy
 #| msgid "Notifications"
-msgid "Notification sound"
+msgid "Notification sounds"
 msgstr "Uyarılar"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -6347,7 +6354,7 @@ msgstr "Ses dosyalarını çal"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, fuzzy
 #| msgid "Send new mail"
-msgid "Play sound on new mail"
+msgid "Play sound on incoming mail"
 msgstr "Yeni eposta gönder "
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files

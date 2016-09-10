@@ -2075,6 +2075,14 @@ msgstr "Algemene Emoji"
 msgid "Compact"
 msgstr "Compact"
 
+# (Reinout) inklappen/inschuiven?
+#. rows of scheduling table
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Compact view"
+msgid "Compact rows"
+msgstr "Compact overzicht"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js
@@ -5418,7 +5426,6 @@ msgid "New Folder"
 msgstr "Nieuwe Map"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "Nieuwe e-mail"
 
@@ -5766,10 +5773,11 @@ msgstr ""
 msgid "Notification"
 msgstr "Kennisgeving"
 
+#. Should be "töne" in german, used for notification sounds. Not "geräusch"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, fuzzy
 #| msgid "Notifications"
-msgid "Notification sound"
+msgid "Notification sounds"
 msgstr "Kennisgevingen"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -6292,7 +6300,7 @@ msgstr "Afspelen audio-bestanden"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, fuzzy
 #| msgid "Send new mail"
-msgid "Play sound on new mail"
+msgid "Play sound on incoming mail"
 msgstr "Verzend nieuw e-mailbericht"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
@@ -11118,10 +11126,6 @@ msgstr "yyyy"
 #~| msgid "Tomorrow"
 #~ msgid "Comoros"
 #~ msgstr "Morgen"
-
-# (Reinout) inklappen/inschuiven?
-#~ msgid "Compact view"
-#~ msgstr "Compact overzicht"
 
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "Nieuw e-mailbericht opstellen"

@@ -2086,6 +2086,13 @@ msgstr "Bežné Emoji"
 msgid "Compact"
 msgstr "Kompaktné"
 
+#. rows of scheduling table
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Compact view"
+msgid "Compact rows"
+msgstr "Kompaktné zobrazenie"
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js
@@ -5414,7 +5421,6 @@ msgid "New Folder"
 msgstr "Nový priečinok"
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr "Nová pošta"
 
@@ -5761,10 +5767,11 @@ msgstr ""
 msgid "Notification"
 msgstr "Oznámenie"
 
+#. Should be "töne" in german, used for notification sounds. Not "geräusch"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, fuzzy
 #| msgid "Notifications"
-msgid "Notification sound"
+msgid "Notification sounds"
 msgstr "Oznámenia"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -6286,7 +6293,7 @@ msgstr "Prehrať zvukové súbory"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, fuzzy
 #| msgid "Send new mail"
-msgid "Play sound on new mail"
+msgid "Play sound on incoming mail"
 msgstr "Poslať nový email"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
@@ -11880,9 +11887,6 @@ msgstr "RRRR"
 #~| msgid "Tomorrow"
 #~ msgid "Comoros"
 #~ msgstr "Zajtra"
-
-#~ msgid "Compact view"
-#~ msgstr "Kompaktné zobrazenie"
 
 #~ msgid "Company:"
 #~ msgstr "Spoločnosť:"

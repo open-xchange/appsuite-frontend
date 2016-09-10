@@ -1579,6 +1579,12 @@ msgstr ""
 msgid "Zoom"
 msgstr ""
 
+#. rows of scheduling table
+#: apps/io.ox/calendar/freetime/timeView.js
+#: module:io.ox/calendar
+msgid "Compact rows"
+msgstr ""
+
 #: apps/io.ox/calendar/freetime/timeView.js
 #: module:io.ox/calendar
 msgid "Appointment types"
@@ -8389,8 +8395,6 @@ msgstr ""
 
 #: apps/io.ox/mail/api.js
 #: module:io.ox/mail
-#: apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
 msgid "New Mail"
 msgstr ""
 
@@ -11773,15 +11777,7 @@ msgstr ""
 
 #: apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
-msgid "You have new mail"
-msgstr ""
-
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-#, c-format
-msgid "Mail from %1$s, %2$s"
+msgid "New mail"
 msgstr ""
 
 #: apps/plugins/notifications/mail/register.js
@@ -11804,19 +11800,20 @@ msgstr ""
 msgid "Chimes"
 msgstr ""
 
+#. Should be "töne" in german, used for notification sounds. Not "geräusch"
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+msgid "Notification sounds"
+msgstr ""
+
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+msgid "Play sound on incoming mail"
+msgstr ""
+
 #: apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
 msgid "Sound"
-msgstr ""
-
-#: apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-msgid "Play sound on new mail"
-msgstr ""
-
-#: apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-msgid "Notification sound"
 msgstr ""
 
 #. %1$d number of notifications
@@ -11832,7 +11829,15 @@ msgstr ""
 
 #: apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
-msgid "New mail"
+msgid "You have new mail"
+msgstr ""
+
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+#, c-format
+msgid "Mail from %1$s, %2$s"
 msgstr ""
 
 #: apps/plugins/notifications/tasks/register.js

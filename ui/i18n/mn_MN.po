@@ -2013,6 +2013,11 @@ msgstr ""
 msgid "Compact"
 msgstr ""
 
+#. rows of scheduling table
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Compact rows"
+msgstr ""
+
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js
@@ -5274,7 +5279,6 @@ msgid "New Folder"
 msgstr ""
 
 #: apps/io.ox/mail/api.js module:io.ox/mail
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "New Mail"
 msgstr ""
 
@@ -5608,9 +5612,10 @@ msgstr ""
 msgid "Notification"
 msgstr "Байршил"
 
+#. Should be "töne" in german, used for notification sounds. Not "geräusch"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, fuzzy
-msgid "Notification sound"
+msgid "Notification sounds"
 msgstr "Байршил"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -6126,7 +6131,7 @@ msgid "Play audio files"
 msgstr ""
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
-msgid "Play sound on new mail"
+msgid "Play sound on incoming mail"
 msgstr ""
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
