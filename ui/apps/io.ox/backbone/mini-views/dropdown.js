@@ -127,12 +127,16 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             );
         },
 
-        link: function (name, text, callback) {
+        link: function (name, text, callback, options) {
+            options = options || {};
             var link = $('<a href="#" draggable="false">')
                 .attr('data-name', name)
                 // in firefox draggable=false is not enough to prevent dragging...
                 .on('dragstart', false)
-                .text(text);
+                .append(
+                    options.icon ? $('<i class="fa fa-fw" aria-hidden="true">') : $(),
+                    text
+                );
             if (callback) link.on('click', {}, callback);
             return this.append(link);
         },
