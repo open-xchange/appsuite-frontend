@@ -15,8 +15,7 @@ define('io.ox/mail/categories/dialogs', [
     'io.ox/backbone/views/modal',
     'settings!io.ox/mail',
     'io.ox/core/yell',
-    'gettext!io.ox/mail',
-    'less!io.ox/mail/categories/style'
+    'gettext!io.ox/mail'
 ], function (Modal, settings, yell, gt) {
 
     'use strict';
@@ -126,7 +125,7 @@ define('io.ox/mail/categories/dialogs', [
             });
             return new Dialog({
                 //#. might be suitable to use 'tabs' rather than translating it
-                title: gt('Edit Tabs'),
+                title: gt('Edit categories'),
                 point: 'io.ox/mail/categories/edit',
                 focus: '.form-inline',
                 maximize: false,
@@ -158,7 +157,7 @@ define('io.ox/mail/categories/dialogs', [
                         // apply states and permissions
                         if (model.is('active')) node.find('.category-item').addClass('active');
                         if (!model.can('disable')) node.find('.status').attr('disabled', true).end().find('.name').addClass('locked');
-                        if (!model.can('rename')) node.find('.name').attr('disabled', true);
+                        if (!model.can('rename')) node.find('.name').attr('disabled', true).end().find('.name').addClass('ready-only');
                         return node;
                     });
                     this.find('.form-inline-container').append(list);
@@ -169,7 +168,7 @@ define('io.ox/mail/categories/dialogs', [
                     baton.view.on('disable', baton.view.onDisable);
                 }
             })
-            .addAlternativeButton({ label: gt('Disable tabbed inbox'), action: 'disable' })
+            .addAlternativeButton({ label: gt('Disable categories'), action: 'disable' })
             .addButton({ label: gt('Cancel'), action: 'cancel', className: 'btn-default' })
             .addButton({ label: gt('Save'), action: 'save' })
             .open();

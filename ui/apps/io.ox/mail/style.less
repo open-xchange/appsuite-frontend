@@ -1036,18 +1036,12 @@ textarea.inplace-editor {
             flex: 1;
             display: inline-block;
 
-            &.locked {
+            &.locked, &.ready-only {
                 border: 0;
                 background: transparent;
                 box-shadow: 0 0;
                 cursor: auto;
             }
-        }
-
-        // disabled state
-        &:not(.active) .name  {
-            font-style: italic;
-            color: #888;
         }
     }
 }
