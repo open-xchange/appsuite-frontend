@@ -31,13 +31,19 @@ define('io.ox/mail/categories/dialogs', [
 
     function createTextLines(carrier) {
         carrier.textlines = {
-            //#. successfully moved a message via drag&drop to another mail category (tab)
-            success: gt.ngettext('Message moved successfully.', 'Messages moved successfully.', carrier.maillist.length),
+            success: gt.format(
+                //#. successfully moved a message via drag&drop to another mail category (tab)
+                //#. %1$d represents the name if the target category
+                //#, c-format
+                gt.ngettext('Message moved to %1$d.', 'Messages moved to %1$d.', carrier.maillist.length),
+                '<i>' + carrier.baton.targetname + '</i>'
+            ),
             question: gt.format(
                 //#. ask user to move all messages from the same sender to the mail category (tab)
                 //#. %1$d represents a email address
                 //#, c-format
-                gt.ngettext('Move all messages of %1$d?', 'Move all messages of selected senders?', carrier.senderlist.length), carrier.senderlist
+                gt.ngettext('Move all messages of %1$d?', 'Move all messages of selected senders?', carrier.senderlist.length),
+                '<b>' + carrier.senderlist + '</b>'
             )
         };
         return carrier;
@@ -46,7 +52,8 @@ define('io.ox/mail/categories/dialogs', [
     function createContentString(carrier) {
         carrier.contentstring = $('<tmp>').append(
             $('<div class="content">').append(
-                $('<div>').text(carrier.textlines.success + ' ' + carrier.textlines.question),
+                $('<div>').html(carrier.textlines.success),
+                $('<div>').html(carrier.textlines.question),
                 $('<button role="button" class="btn btn-default btn-primary" data-action="move-all">').text(gt('Move all')),
                 $('<button role="button" class="btn btn-default" data-action="cancel">').text(gt('Cancel'))
             )
