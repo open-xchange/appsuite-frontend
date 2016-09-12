@@ -102,7 +102,6 @@ define('io.ox/mail/toolbar', [
             mobile: 'none',
             icon: 'fa fa-bookmark',
             label: gt('Set color'),
-            drawDisabled: true,
             ref: 'io.ox/mail/actions/color',
             customize: function (baton) {
                 flagPicker.attach(this, { data: baton.data });
