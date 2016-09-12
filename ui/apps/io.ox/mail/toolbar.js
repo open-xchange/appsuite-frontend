@@ -97,6 +97,20 @@ define('io.ox/mail/toolbar', [
             label: gt('Not spam'),
             ref: 'io.ox/mail/actions/nospam'
         },
+        'category': {
+            prio: 'hi',
+            mobile: 'none',
+            //icon: 'fa fa-tag',
+            icon: 'fa fa-folder-o',
+            label: gt('Set category'),
+            ref: 'io.ox/mail/actions/category',
+            customize: function (baton) {
+                var self = this;
+                require(['io.ox/mail/categories/picker'], function (categoryPicker) {
+                    categoryPicker.attach(self, { data: baton.data, app: baton.app });
+                });
+            }
+        },
         'color': {
             prio: 'hi',
             mobile: 'none',
@@ -185,6 +199,12 @@ define('io.ox/mail/toolbar', [
     };
 
     // local dummy action
+
+    new actions.Action('io.ox/mail/actions/category', {
+        capabilities: 'mail_categories',
+        requires: 'some',
+        action: $.noop
+    });
 
     new actions.Action('io.ox/mail/actions/color', {
         requires: 'some',
