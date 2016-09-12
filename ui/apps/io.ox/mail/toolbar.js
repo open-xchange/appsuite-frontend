@@ -257,16 +257,25 @@ define('io.ox/mail/toolbar', [
             if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'), { radio: true });
             dropdown.option('layout', 'horizontal', gt('Horizontal'), { radio: true })
             .option('layout', 'list', gt('List'), { radio: true })
-            .divider()
+            .divider();
+
+            // feature: tabbed inbox
+            if (capabilities.has('mail_categories')) {
+                dropdown
+                .header(gt('Inbox'))
+                .option('categories', true, gt('Categories'))
+                .link('categories-config', gt('Configure') + '…', categoriesShowConfig.bind(null, baton.app), { icon: true })
+                .divider();
+            }
+
+            dropdown
             .header(gt('Options'))
             .option('folderview', true, gt('Folder view'))
             .option('checkboxes', true, gt('Checkboxes'))
             .option('contactPictures', true, gt('Contact pictures'))
             .option('exactDates', true, gt('Exact dates'))
             .option('alwaysShowSize', true, gt('Message size'))
-            .option('categories', true, gt('Inbox tabs'))
             .divider()
-            .link('categories-config', gt('Configure inbox tabs'), categoriesShowConfig.bind(null, baton.app))
             .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
             .listenTo(baton.app.props, 'change:layout', updateContactPicture);
 

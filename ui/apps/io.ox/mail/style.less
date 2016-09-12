@@ -1052,24 +1052,11 @@ textarea.inplace-editor {
     }
 }
 
-// categories: unavailable
-.classic-toolbar [data-name="categories"],
-.classic-toolbar [data-name="categories-config"] {
-    display: none;
-}
 // categories: available
 .window-container.mail-categories {
 
-    .classic-toolbar [data-name="categories"] {
-        display: block;
-    }
-
     // categories:enabled and current folder is supported
     &.mail-categories-enabled.mail-categories-supported {
-
-        .classic-toolbar [data-name="categories-config"] {
-            display: block;
-        }
 
         &:not(.io-ox-find-active) {
             // layout: compact
