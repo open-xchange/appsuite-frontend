@@ -1745,7 +1745,11 @@ define('io.ox/mail/main', [
             function enable(e) {
                 // user initiated change?
                 if (e && !container.hasClass('mail-categories-supported')) {
-                    notifications.yell('info', gt('The tabbed inbox feature only affects the main inbox.'));
+                    app.folder.set(account.getInbox());
+                    notifications.yell({
+                        type: 'info',
+                        message: gt('Categories are represented as tabs in your inbox.')
+                    });
                 }
                 app.categories.enable();
                 container.addClass('mail-categories-enabled');
