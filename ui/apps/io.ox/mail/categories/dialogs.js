@@ -58,7 +58,7 @@ define('io.ox/mail/categories/dialogs', [
         carrier.node = yell({
             message: carrier.contentstring,
             html: true,
-            duration: 4000
+            duration: -1
         })
         .addClass('category-toast')
         .on('click', '.btn', function (e) {
