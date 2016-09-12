@@ -74,7 +74,7 @@ define('plugins/notifications/mail/register', [
         var text = message.subject || gt('No subject');
         // get email for picture halo
         var imageURL = message.email ? contactsApi.pictureHalo(null, {
-            email: message.email }, { urlOnly: true, width: 300, height: 300 }) : iconPath;
+            email: message.email }, { urlOnly: true, width: 192, height: 192, scaleType: 'contains' }) : iconPath;
 
         // check if user has an image, otherwise use fallback image
         $(new Image()).one('load error', function (e) {
