@@ -56,13 +56,12 @@ define('io.ox/mail/categories/picker', [
                 .append($('<li class="dropdown-header" role="separator">').text(gt('Move to category')))
                 .append(
                     _(list).map(function (category) {
-                        // alternative: api.COLORS for rainbow colors
+                        if (category.id === current) return;
                         return preParsed.listItem.clone().append(
                             preParsed.menuItemAction.clone().append(
                                 $.txt(category.name)
                             )
                             .attr('data-category', category.id)
-                            .addClass(category.id === current ? 'disabled' : '')
                         );
                     })
                 )
@@ -98,10 +97,7 @@ define('io.ox/mail/categories/picker', [
 
         change: function (e) {
             if (!that.isReady()) return;
-
             e.preventDefault();
-            if ($(e.target).hasClass('disabled')) return;
-
             var data = e.data.data,
                 category = $(e.currentTarget).attr('data-category') || '0',
                 name = $(e.currentTarget).text(),
