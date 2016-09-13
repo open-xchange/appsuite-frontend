@@ -12,7 +12,7 @@
  */
 
 define('io.ox/mail/categories/main', [
-    'io.ox/mail/categories/api',
+    'io.ox/core/http',
     'io.ox/mail/api',
     'io.ox/core/api/account',
     'io.ox/core/folder/api',
@@ -23,13 +23,71 @@ define('io.ox/mail/categories/main', [
     'io.ox/core/extensions',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, mailAPI, accountAPI, folderAPI, dnd, links, capabilities, yell, ext, settings, gt) {
+], function (http, mailAPI, accountAPI, folderAPI, dnd, links, capabilities, yell, ext, settings, gt) {
 
     'use strict';
+
+    console.log('%c' + 'main', 'color: white; background-color: grey');
 
     if (!capabilities.has('mail_categories')) {
         console.error("mail/categories/main: capababilty 'mail_categories' missing");
     }
+
+    /**
+     * API
+     */
+
+    var api = {
+
+        get: function () {
+            return http.GET({
+                module: 'mail/categories',
+                params: {
+                    action: 'unread'
+                }
+            });
+        },
+
+        // add mail to category
+        move: function (options) {
+            if (!options.data || !options.data.length) return $.when();
+
+            var data = _.map(options.data, function (obj) {
+                return _.pick(obj, 'id', 'folder_id');
+            });
+            return http.PUT({
+                module: 'mail/categories',
+                params: {
+                    'action': 'move',
+                    'category_id': options.category
+                },
+                data: data
+            });
+        },
+
+        // generate rule(s) to add mail to category
+        train: function (options) {
+            var opt = _.extend({ past: true, future: true }, options);
+            if (!opt.category || !opt.data) return;
+            // plain list of mail addresses
+            var list = _.chain(options.data)
+                        .map(function (obj) { return obj.from[0][1]; })
+                        .uniq()
+                        .value();
+            return http.PUT({
+                module: 'mail/categories',
+                params: {
+                    'action': 'train',
+                    'category_id': opt.category,
+                    'apply-for-existing': opt.past,
+                    'apply-for-future-ones': opt.future
+                },
+                data: {
+                    from: list
+                }
+            });
+        }
+    };
 
     // do not clutter hash
     ox.on('app:start app:resume', function (app) {
@@ -67,7 +125,10 @@ define('io.ox/mail/categories/main', [
         if (DEBUG) return console.log('%c' + name + (detail && false ? ': ' + JSON.stringify(detail, undefined, 2) : ''), 'color: white; background-color: ' + color);
     }
 
-    // MODEL
+    /**
+     * MODEL
+     */
+
     Model = Backbone.Model.extend({
         defaults: {
             unread:  0,
@@ -90,7 +151,10 @@ define('io.ox/mail/categories/main', [
         }
     });
 
-    // COLLECTION
+    /**
+     * COLLECTION
+     */
+
     Collection = Backbone.Collection.extend({
         model: Model,
         refresh: function () {
@@ -114,7 +178,10 @@ define('io.ox/mail/categories/main', [
         return container.find('[data-id="' + model.get('id') + '"]').length;
     }
 
-    // VIEW: knows module, collection, module.props
+    /**
+     * VIEW: knows module, collection, module.props
+     */
+
     View = Backbone.View.extend({
         dialog: undefined,
         events: {
@@ -355,7 +422,10 @@ define('io.ox/mail/categories/main', [
         return proc.bind(context);
     };
 
-    // CONTROLL
+    /**
+     * CONTROLLER
+     */
+
     module = {
         api: api,
         init: function (options) {
@@ -381,6 +451,7 @@ define('io.ox/mail/categories/main', [
             this.initialized = true;
             // inital refresh
             //_.defer(_.bind(this.refresh, this));
+            return module;
         },
         register: function () {
             // temporary
@@ -531,6 +602,9 @@ define('io.ox/mail/categories/main', [
     };
 
     // hint: settings in io.ox/mail/settings/pane
-    return module;
+    return {
+        api: api,
+        controller: module
+    };
 
 });

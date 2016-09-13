@@ -1712,9 +1712,8 @@ define('io.ox/mail/main', [
             };
 
             // fulllogic
-            require(['io.ox/mail/categories/main'], function (cat) {
-                cat.init({ mail: app, pool: api.pool.get('detail') });
-                app.categories = cat;
+            require(['io.ox/mail/categories/main'], function (categories) {
+                app.categories = categories.controller.init({ mail: app, pool: api.pool.get('detail') });
             });
         },
 
