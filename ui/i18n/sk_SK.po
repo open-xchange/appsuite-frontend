@@ -5212,6 +5212,12 @@ msgstr "Členovia"
 msgid "Message (optional)"
 msgstr "Správa (nepovinná)"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messages"
+msgid "Message size"
+msgstr "Správy"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
 msgstr "Správy"
@@ -7861,10 +7867,6 @@ msgstr "Zobraziť interný odkaz"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Zobraziť zoznam"
-
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Show message size"
-msgstr "Zobraziť veľkosť správy"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -15138,6 +15140,9 @@ msgstr "RRRR"
 
 #~ msgid "Show legal information"
 #~ msgstr "Zobraziť právne informácie"
+
+#~ msgid "Show message size"
+#~ msgstr "Zobraziť veľkosť správy"
 
 #~ msgid "Show more"
 #~ msgstr "Zobraziť ďalšie"

@@ -5191,6 +5191,12 @@ msgstr "Tagok"
 msgid "Message (optional)"
 msgstr "Üzenet (opcionális)"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messages"
+msgid "Message size"
+msgstr "Üzenetek"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
 msgstr "Üzenetek"
@@ -7830,10 +7836,6 @@ msgstr "Belső hivatkozás megjelenítése"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Lista megjelenítése"
-
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Show message size"
-msgstr "Üzenet méretének megjelenítése"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -11077,6 +11079,9 @@ msgstr "yyyy"
 
 #~ msgid "Show comments"
 #~ msgstr "Megjegyzések megjelenítése"
+
+#~ msgid "Show message size"
+#~ msgstr "Üzenet méretének megjelenítése"
 
 #, fuzzy
 #~| msgid "Show names"

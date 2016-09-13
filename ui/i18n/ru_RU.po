@@ -5197,6 +5197,12 @@ msgstr "Участники"
 msgid "Message (optional)"
 msgstr "Сообщение (дополнительно)"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messages"
+msgid "Message size"
+msgstr "Сообщения"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
 msgstr "Сообщения"
@@ -7835,10 +7841,6 @@ msgstr "Показать внутреннюю ссылку"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Показать список"
-
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Show message size"
-msgstr "Показать размер сообщения"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -12258,6 +12260,9 @@ msgstr "гггг"
 
 #~ msgid "Show legal information"
 #~ msgstr "Показать юридическое уведомление"
+
+#~ msgid "Show message size"
+#~ msgstr "Показать размер сообщения"
 
 #~ msgid "Show more"
 #~ msgstr "Больше..."

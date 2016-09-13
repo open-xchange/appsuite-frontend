@@ -5209,6 +5209,12 @@ msgstr "Locekļi"
 msgid "Message (optional)"
 msgstr "Ziņojums (neobligāts)"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messages"
+msgid "Message size"
+msgstr "Ziņojumi"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
 msgstr "Ziņojumi"
@@ -7861,10 +7867,6 @@ msgstr "Rādīt iekšējo saiti"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Rādīt sarakstu"
-
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Show message size"
-msgstr "Rādīt ziņojuma izmēru"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -15161,6 +15163,9 @@ msgstr "yyyy"
 
 #~ msgid "Show legal information"
 #~ msgstr "Rādīt juridisko informāciju"
+
+#~ msgid "Show message size"
+#~ msgstr "Rādīt ziņojuma izmēru"
 
 #~ msgid "Show more"
 #~ msgstr "Rādīt vairāk"

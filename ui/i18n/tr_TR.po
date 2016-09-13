@@ -5258,6 +5258,11 @@ msgstr "Üyeler"
 msgid "Message (optional)"
 msgstr "Mesaj (tercihi)"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+msgid "Message size"
+msgstr "Mesajlaşma"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
 msgid "Messages"
@@ -7959,11 +7964,6 @@ msgstr "Dahili link göster"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Listeyi göster"
-
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-msgid "Show message size"
-msgstr "Resimleri göster"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -11178,6 +11178,10 @@ msgstr "yyyy"
 
 #~ msgid "Show comments"
 #~ msgstr "Yorumları göster"
+
+#, fuzzy
+#~ msgid "Show message size"
+#~ msgstr "Resimleri göster"
 
 #, fuzzy
 #~| msgid "Show names"

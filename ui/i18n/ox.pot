@@ -9710,7 +9710,7 @@ msgstr ""
 
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
-msgid "Show message size"
+msgid "Message size"
 msgstr ""
 
 #: apps/io.ox/mail/toolbar.js

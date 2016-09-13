@@ -5100,6 +5100,12 @@ msgstr "成員"
 msgid "Message (optional)"
 msgstr "訊息（非必要）"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messages"
+msgid "Message size"
+msgstr "訊息"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
 msgstr "訊息"
@@ -7704,10 +7710,6 @@ msgstr "顯示內部連結"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "顯示清單"
-
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Show message size"
-msgstr "顯示訊息大小"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -13468,6 +13470,9 @@ msgstr "年"
 
 #~ msgid "Show legal information"
 #~ msgstr "顯示法律資訊"
+
+#~ msgid "Show message size"
+#~ msgstr "顯示訊息大小"
 
 #~ msgid "Show more"
 #~ msgstr "顯示更多"

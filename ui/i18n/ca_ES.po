@@ -5269,6 +5269,11 @@ msgstr "desembre"
 msgid "Message (optional)"
 msgstr "Missatge (opcional)"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+msgid "Message size"
+msgstr "Missatgeria"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #, fuzzy
 msgid "Messages"
@@ -7954,11 +7959,6 @@ msgstr "Mostra enllaç intern"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Mostra la llista"
-
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-msgid "Show message size"
-msgstr "Mostra imatges"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #, fuzzy
@@ -11469,6 +11469,10 @@ msgstr ""
 #~| msgid "Show tiles"
 #~ msgid "Show file"
 #~ msgstr "Mostra els títols"
+
+#, fuzzy
+#~ msgid "Show message size"
+#~ msgstr "Mostra imatges"
 
 #, fuzzy
 #~ msgid "Show more"

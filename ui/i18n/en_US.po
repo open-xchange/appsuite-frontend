@@ -5034,6 +5034,10 @@ msgstr ""
 msgid "Message (optional)"
 msgstr ""
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgid "Message size"
+msgstr ""
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
 msgstr ""
@@ -7598,10 +7602,6 @@ msgstr ""
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
-msgstr ""
-
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Show message size"
 msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail

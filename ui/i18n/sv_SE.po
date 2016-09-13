@@ -5167,6 +5167,12 @@ msgstr "Medlemmar"
 msgid "Message (optional)"
 msgstr "Meddelande (valfritt)"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messages"
+msgid "Message size"
+msgstr "Meddelanden"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
 msgstr "Meddelanden"
@@ -7799,10 +7805,6 @@ msgstr "Visa intern länk"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Visa lista"
-
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Show message size"
-msgstr "Visa meddelandestorlek"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -14487,6 +14489,9 @@ msgstr "yyyy"
 
 #~ msgid "Show legal information"
 #~ msgstr "Visa juridisk information"
+
+#~ msgid "Show message size"
+#~ msgstr "Visa meddelandestorlek"
 
 #~ msgid "Show more"
 #~ msgstr "Visa fler"

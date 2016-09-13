@@ -5216,6 +5216,12 @@ msgstr "Membri"
 msgid "Message (optional)"
 msgstr "Mesaj (opțional)"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messages"
+msgid "Message size"
+msgstr "Mesaje"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
 msgstr "Mesaje"
@@ -7870,10 +7876,6 @@ msgstr "Afișează legătura internă"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Afișează listă"
-
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Show message size"
-msgstr "Afișează dimensiunea mesajului"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -15221,6 +15223,9 @@ msgstr "aaaa"
 
 #~ msgid "Show legal information"
 #~ msgstr "Afișează informațiile legale"
+
+#~ msgid "Show message size"
+#~ msgstr "Afișează dimensiunea mesajului"
 
 #~ msgid "Show more"
 #~ msgstr "Afișează mai multe"

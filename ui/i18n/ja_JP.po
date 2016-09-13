@@ -5141,6 +5141,12 @@ msgstr "メンバ"
 msgid "Message (optional)"
 msgstr "メッセージ（オプション）"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messages"
+msgid "Message size"
+msgstr "メッセージ"
+
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
 msgstr "メッセージ"
@@ -7755,10 +7761,6 @@ msgstr "内部リンクを表示"
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "リストを表示"
-
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Show message size"
-msgstr "メッセージのサイズを表示"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
@@ -16162,6 +16164,9 @@ msgstr "yyyy"
 
 #~ msgid "Show legal information"
 #~ msgstr "法的情報を表示"
+
+#~ msgid "Show message size"
+#~ msgstr "メッセージのサイズを表示"
 
 #~ msgid "Show more"
 #~ msgstr "詳細表示"
