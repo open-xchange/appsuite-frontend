@@ -100,8 +100,7 @@ define('io.ox/mail/toolbar', [
         'category': {
             prio: 'hi',
             mobile: 'none',
-            //icon: 'fa fa-tag',
-            icon: 'fa fa-folder-o',
+            icon: 'fa fa-folder-open-o',
             label: gt('Set category'),
             ref: 'io.ox/mail/actions/category',
             customize: function (baton) {
@@ -114,7 +113,7 @@ define('io.ox/mail/toolbar', [
         'color': {
             prio: 'hi',
             mobile: 'none',
-            icon: 'fa fa-bookmark',
+            icon: 'fa fa-bookmark-o',
             label: gt('Set color'),
             ref: 'io.ox/mail/actions/color',
             customize: function (baton) {
@@ -202,7 +201,9 @@ define('io.ox/mail/toolbar', [
 
     new actions.Action('io.ox/mail/actions/category', {
         capabilities: 'mail_categories',
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && e.baton.app.props.get('categories');
+        },
         action: $.noop
     });
 
