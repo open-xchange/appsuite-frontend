@@ -283,7 +283,8 @@ define('io.ox/mail/toolbar', [
                 dropdown
                 .header(gt('Inbox'))
                 .option('categories', true, gt('Categories'))
-                .link('categories-config', gt('Configure') + '…', categoriesShowConfig.bind(null, baton.app), { icon: true })
+                 //#. term is followed by a space and three dots (' …')
+                .link('categories-config', gt('Configure') + ' …', categoriesShowConfig.bind(null, baton.app), { icon: true })
                 .divider();
             }
 

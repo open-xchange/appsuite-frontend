@@ -59,7 +59,6 @@ define('io.ox/mail/categories/picker', [
                         // alternative: api.COLORS for rainbow colors
                         return preParsed.listItem.clone().append(
                             preParsed.menuItemAction.clone().append(
-                                preParsed.dropdownIcon.clone(),
                                 $.txt(category.name)
                             )
                             .attr('data-category', category.id)
@@ -68,12 +67,11 @@ define('io.ox/mail/categories/picker', [
                     })
                 )
                 .append('<li class="divider" role="separator">')
-                .append($('<li class="dropdown-header" role="separator">').text(gt('Move to folder')))
                 .append(
                     preParsed.listItem.clone().append(
                         preParsed.menuItemLink.clone().append(
-                            preParsed.dropdownIcon.clone(),
-                            gt('Select folder')
+                            //#. term is followed by a space and three dots (' …')
+                            gt('Move to folder') + ' …'
                         )
                     )
                 )
