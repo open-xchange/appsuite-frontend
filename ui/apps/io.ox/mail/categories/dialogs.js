@@ -35,14 +35,14 @@ define('io.ox/mail/categories/dialogs', [
                 //#. %1$d represents the name if the target category
                 //#, c-format
                 gt.ngettext('Message moved to %1$d.', 'Messages moved to %1$d.', carrier.maillist.length),
-                '<i>' + carrier.baton.targetname + '</i>'
+                '<i>' + _.escape(carrier.baton.targetname) + '</i>'
             ),
             question: gt.format(
                 //#. ask user to move all messages from the same sender to the mail category (tab)
                 //#. %1$d represents a email address
                 //#, c-format
                 gt.ngettext('Move all messages of %1$d?', 'Move all messages of selected senders?', carrier.senderlist.length),
-                '<b>' + carrier.senderlist + '</b>'
+                '<b>' + _.escape(carrier.senderlist) + '</b>'
             )
         };
         return carrier;
