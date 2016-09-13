@@ -81,6 +81,10 @@ define('io.ox/files/upload/main', [
             self = this,
             api = filesAPI;
 
+        api.on('add:imp_version', function (title) {
+            notifications.yell('info', gt('A new version for %1$s has been created.', title));
+        });
+
         this.update = upload.createQueue({
             start: function () {
                 win.busy(0);

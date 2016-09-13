@@ -978,6 +978,7 @@ define('io.ox/files/api', [
         if (action === 'new') {
             params.extendedResponse = true;
             params.try_add_version = options.addVersion !== false;
+            if (settings.get('uploadHandling') === 'newFile') params.try_add_version = false;
         }
 
         var formData = new FormData();
@@ -1023,12 +1024,14 @@ define('io.ox/files/api', [
             chain = def.then(function (result) {
                 // return id and folder id only
                 var data = result.data.file,
-                    obj = _(data).pick('id', 'folder_id');
+                    obj = _(data).pick('id', 'folder_id'),
+                    fileTitle = data.title || data.filename;
                 // trigger proper event
                 if (result.data.save_action === 'new_version') {
                     // new version
                     var model = api.pool.get('detail').get(_.cid(obj));
                     if (model) model.set('id', data.id);
+                    if (options.addVersion !== false && result.data.save_action === 'new_version' && settings.get('uploadHandling') === 'announceNewVersion') api.trigger('add:imp_version', fileTitle);
                     return api.propagate('add:version', data);
                 }
                 // new file

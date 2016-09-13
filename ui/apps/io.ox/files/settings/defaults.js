@@ -20,7 +20,8 @@ define('io.ox/files/settings/defaults', function () {
         videoEnabled: true,
         audioEnabled: true,
         rootFolderId: 9,
-        showHidden: false
+        showHidden: false,
+        uploadHandling: 'announceNewVersion'
     };
 
     return settingsDefaults;

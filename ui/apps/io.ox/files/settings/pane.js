@@ -77,4 +77,25 @@ define('io.ox/files/settings/pane', [
             );
         }
     });
+
+    ext.point(POINT + '/pane').extend({
+        index: 300,
+        id: 'uploadHandling',
+        draw: function () {
+            var preferences = [
+                { label: gt('Add new version'), value: 'newVersion' },
+                { label: gt('Add new version and show popup'), value: 'announceNewVersion' },
+                { label: gt('Add separate file / no new version'), value: 'newFile' }
+
+            ];
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle').append(
+                        $('<h2>').text(gt('Upload handling'))
+                    ),
+                    new mini.RadioView({ list: preferences, name: 'uploadHandling', model: model }).render().$el
+                )
+            );
+        }
+    });
 });
