@@ -132,15 +132,16 @@ define('io.ox/mail/categories/dialogs', [
                 enter: 'save'
             })
             .extend({
-                default: function (baton) {
-                    _.extend(baton, { collection: parent.categories });
-                    this.addClass('mail-categories-dialog');
+                default: function () {
+                    this.$body.addClass('mail-categories-dialog');
                 },
                 'form-inline': function () {
-                    this.append($('<form class="form-inline-container">'));
+                    this.$body.append(
+                        this.$container = $('<form class="form-inline-container">')
+                    );
                 },
-                'form-group': function (baton) {
-                    var list = baton.collection.map(function (model) {
+                'form-group': function () {
+                    var list = parent.categories.map(function (model) {
                         var node =
                         $('<form class="form-inline">').append(
                             $('<div class="form-group category-item">')
@@ -160,12 +161,13 @@ define('io.ox/mail/categories/dialogs', [
                         if (!model.can('rename')) node.find('.name').attr('disabled', true).end().find('.name').addClass('ready-only');
                         return node;
                     });
-                    this.find('.form-inline-container').append(list);
+                    this.$container.append(list);
                 },
                 register: function (baton) {
-                    this.on('click', '.category-item', baton.view.onToggle);
-                    baton.view.on('save', baton.view.onSave);
-                    baton.view.on('disable', baton.view.onDisable);
+                    debugger;
+                    this.$body.on('click', '.category-item', baton.view.onToggle);
+                    this.on('save', this.onSave);
+                    this.on('disable', this.onDisable);
                 }
             })
             .addAlternativeButton({ label: gt('Disable categories'), action: 'disable' })
