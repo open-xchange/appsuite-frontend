@@ -287,12 +287,14 @@ define('io.ox/contacts/addressbook/popup', [
             title: gt('Select contacts')
         })
         .extend({
-            addClass: function (baton) {
-                baton.view.$el.addClass('addressbook-popup');
+            addClass: function () {
+                this.$el.addClass('addressbook-popup');
             },
-            header: function (baton) {
-                var view = baton.view;
-                view.$('.modal-header').append(
+            header: function () {
+
+                var view = this;
+
+                this.$('.modal-header').append(
                     $('<div class="row">').append(
                         $('<div class="col-xs-6">').append(
                             $('<input type="text" class="form-control search-field">')
@@ -308,7 +310,7 @@ define('io.ox/contacts/addressbook/popup', [
                 );
 
                 // fill folder drop-down
-                var $dropdown = view.$('.folder-dropdown');
+                var $dropdown = this.$('.folder-dropdown');
                 folderAPI.flat({ module: 'contacts' }).done(function (folders) {
                     var count = 0;
                     $dropdown.append(
@@ -327,67 +329,66 @@ define('io.ox/contacts/addressbook/popup', [
                     if (count > 1) $dropdown.removeClass('invisible');
                 });
 
-                view.folder = folder;
+                this.folder = folder;
 
-                view.$('.folder-dropdown').val(folder).on('change', function () {
+                this.$('.folder-dropdown').val(folder).on('change', function () {
                     view.folder = folder = $(this).val() || 'all';
                     view.lastJSON = null;
                     view.search(view.$('.search-field').val());
                 });
             },
-            list: function (baton) {
-                var view = baton.view;
+            list: function () {
                 // we just use a ListView to get its selection support
                 // the collection is just a dummy; rendering is done
                 // via templates to have maximum performance for
                 // the find-as-you-type feature
-                view.listView = new ListView({
+                this.listView = new ListView({
                     collection: new Backbone.Collection(),
                     pagination: false,
                     isMail: options.isMail,
                     ref: 'io.ox/contacts/addressbook-popup/list'
                 });
-                this.append(view.listView.render().$el);
+                this.$body.append(this.listView.render().$el);
             },
-            footer: function (baton) {
-                baton.view.$('.modal-footer').prepend(
+            footer: function () {
+                this.$('.modal-footer').prepend(
                     $('<div class="selection-summary">').hide()
                 );
             },
-            onOpen: function (baton) {
+            onOpen: function () {
 
-                var view = baton.view;
+                var isMail = this.listView.options.isMail;
 
                 // hide body initially / add busy animation
-                view.busy(true);
+                this.busy(true);
 
                 function success(response) {
-                    if (view.disposed) return;
+                    if (this.disposed) return;
                     cachedResponse = response;
-                    view.items = response.items.sort(sorter);
-                    view.hash = response.hash;
-                    view.index = response.index;
-                    view.search('');
-                    view.idle();
+                    this.items = response.items.sort(sorter);
+                    this.hash = response.hash;
+                    this.index = response.index;
+                    this.search('');
+                    this.idle();
                 }
 
                 function fail(e) {
                     // remove animation but block form
-                    if (view.disposed) return;
-                    view.idle().disableFormElements();
-                    view.trigger('error', e);
+                    if (this.disposed) return;
+                    this.idle().disableFormElements();
+                    this.trigger('error', e);
                 }
 
-                view.on('open', function () {
+                this.on('open', function () {
                     _.defer(function () {
-                        if (cachedResponse) return success(cachedResponse);
-                        getAllMailAddresses({ isMail: view.listView.options.isMail }).then(success, fail);
-                    });
+                        if (cachedResponse) return success.call(this, cachedResponse);
+                        getAllMailAddresses({ isMail: isMail }).then(success.bind(this), fail.bind(this));
+                    }.bind(this));
                 });
             },
-            search: function (baton) {
+            search: function () {
 
-                baton.view.search = function (query) {
+                this.search = function (query) {
                     var result, isSearch = query.length && query !== '@';
                     if (isSearch) {
                         // split query into single words (without leading @; covers edge-case)
@@ -416,58 +417,55 @@ define('io.ox/contacts/addressbook/popup', [
                     this.renderItems(result, { isSearch: isSearch });
                 };
             },
-            onInput: function (baton) {
-
-                var view = baton.view;
-
+            onInput: function () {
+                var view = this;
                 var onInput = _.debounce(function () {
                     view.search($(this).val());
                 }, 100);
-
-                view.$('.search-field').on('input', onInput);
+                this.$('.search-field').on('input', onInput);
             },
-            onCursorDown: function (baton) {
-                var view = baton.view;
-                view.$('.search-field').on('keydown', function (e) {
+            onCursorDown: function () {
+                var view = this;
+                this.$('.search-field').on('keydown', function (e) {
                     if (!(e.which === 40 || e.which === 13)) return;
                     view.listView.selection.select(0);
                 });
             },
-            onEnter: function (baton) {
-                var view = baton.view;
-                view.listView.$el.on('keydown', function (e) {
+            onEnter: function () {
+                var view = this;
+                this.listView.$el.on('keydown', function (e) {
                     if (e.which !== 13) return;
                     view.trigger('select');
                     view.close();
                 });
             },
-            onDoubleClick: function (baton) {
-                var view = baton.view;
-                view.$('.list-view').on('dblclick', '.list-item', function () {
+            onDoubleClick: function () {
+                var view = this;
+                this.$('.list-view').on('dblclick', '.list-item', function () {
                     view.trigger('select');
                     view.close();
                 });
             },
-            onEscape: function (baton) {
-                var view = baton.view;
-                view.$('.list-view').on('keydown', function (e) {
+            onEscape: function () {
+                var view = this;
+                this.$('.list-view').on('keydown', function (e) {
                     if (e.which !== 27) return;
                     e.preventDefault();
                     view.$('.search-field').focus();
                 });
             },
-            onSelectionChange: function (baton) {
+            onSelectionChange: function () {
 
-                var selection = baton.view.selection = {};
+                var selection = this.selection = {};
 
                 function clearSelection(e) {
                     e.preventDefault();
-                    selection = baton.view.selection = {};
+                    selection = this.selection = {};
                     this.listView.selection.clear();
                     this.listView.selection.triggerChange();
                 }
 
-                baton.view.listenTo(baton.view.listView, 'selection:change', function () {
+                this.listenTo(this.listView, 'selection:change', function () {
 
                     var array = this.flattenItems(_(selection).keys()),
                         summary = this.$('.selection-summary').empty(),
@@ -492,11 +490,11 @@ define('io.ox/contacts/addressbook/popup', [
                     );
                 });
 
-                baton.view.listenTo(baton.view.listView, 'selection:add', function (array) {
+                this.listenTo(this.listView, 'selection:add', function (array) {
                     _(array).each(function (id) { selection[id] = true; });
                 });
 
-                baton.view.listenTo(baton.view.listView, 'selection:remove', function (array) {
+                this.listenTo(this.listView, 'selection:remove', function (array) {
                     _(array).each(function (id) { delete selection[id]; });
                 });
             }

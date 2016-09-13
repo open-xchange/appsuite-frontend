@@ -14,12 +14,12 @@
 
 define('io.ox/core/folder/actions/add', [
     'io.ox/core/folder/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/extensions',
     'io.ox/core/notifications',
     'io.ox/core/capabilities',
     'gettext!io.ox/core'
-], function (api, dialogs, ext, notifications, capabilities, gt) {
+], function (api, ModalDialog, ext, notifications, capabilities, gt) {
 
     'use strict';
 
@@ -29,9 +29,7 @@ define('io.ox/core/folder/actions/add', [
      * @param opt {object} (optional) options object can contain only
      * a module name, for now
      */
-    function add(folder, title, opt) {
-
-        opt = opt || {};
+    function addFolder(folder, module, title) {
 
         var invalid = false;
 
@@ -48,47 +46,53 @@ define('io.ox/core/folder/actions/add', [
         if (invalid) return $.Deferred().reject();
 
         // call API
-        return api.create(folder, {
-            title: $.trim(title),
-            module: opt.module
-        })
-        .fail(notifications.yell);
-    }
-
-    function getTitle(folder, module) {
-        return module === 'calendar' ? gt('Add new calendar') : gt('Add new folder');
-    }
-
-    function getName(module) {
-        return module === 'calendar' ? gt('New calendar') : gt('New folder');
+        return api.create(folder, { title: $.trim(title), module: module })
+            .fail(notifications.yell);
     }
 
     function open(folder, opt) {
 
-        new dialogs.ModalDialog({
+        return new ModalDialog({
             async: true,
-            width: 400,
-            enter: 'add',
-            help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create'
+            context: { folder: folder, module: opt.module, supportsPublicFolders: opt.supportsPublicFolders },
+            enter: true,
+            focus: 'input[name="name"]',
+            help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create',
+            point: 'io.ox/core/folder/add-popup',
+            width: 400
         })
-        .header(
-            $('<h4>').text(getTitle(folder, opt.module))
-        )
-        .build(function () {
+        .inject({
+            addFolder: addFolder,
+            getTitle: function () {
+                return this.context.module === 'calendar' ? gt('Add new calendar') : gt('Add new folder');
+            },
+            getName: function () {
+                return this.context.module === 'calendar' ? gt('New calendar') : gt('New folder');
+            }
+        })
+        .extend({
+            title: function () {
+                this.$('.modal-title').text(this.getTitle());
+            },
+            name: function () {
 
-            var guid = _.uniqueId('label_'),
-                label = opt.module === 'calendar' ? gt('Add as public calendar') : gt('Add as public folder');
+                var guid = _.uniqueId('label_');
 
-            this.getContentNode().append(
-                // name
-                $('<div class="form-group">').append(
-                    $('<label class="sr-only">').text(gt('Folder name')).attr('for', guid),
-                    $('<input type="text" name="name" class="form-control">').attr({ id: guid, placeholder: gt('Folder name') })
-                )
-            );
+                this.$body.append(
+                    // name
+                    $('<div class="form-group">').append(
+                        $('<label class="sr-only">').text(gt('Folder name')).attr('for', guid),
+                        $('<input type="text" name="name" class="form-control">').attr({ id: guid, placeholder: gt('Folder name') })
+                    )
+                );
+            },
+            checkbox: function () {
 
-            if (opt.supportsPublicFolders) {
-                this.getContentNode().append(
+                if (!this.context.supportsPublicFolders) return;
+
+                var label = this.context.module === 'calendar' ? gt('Add as public calendar') : gt('Add as public folder');
+
+                this.$body.append(
                     // public
                     $('<div class="form-group checkbox">').append(
                         // checkbox
@@ -107,17 +111,20 @@ define('io.ox/core/folder/actions/add', [
                 );
             }
         })
-        .addPrimaryButton('add', gt('Add'))
-        .addButton('cancel', gt('Cancel'))
-        .on('add', function () {
-            var node = this.getContentNode(),
-                name = node.find('input[name="name"]').val(),
-                isPublic = node.find('input[name="public"]').prop('checked');
-            add(isPublic ? '2' : folder, name, opt).then(this.close, this.idle);
+        .addCancelButton()
+        .addButton({ action: 'add', label: gt('Add') })
+        .on({
+            add: function () {
+                var name = this.$('input[name="name"]').val(),
+                    isPublic = this.$('input[name="public"]').prop('checked');
+                this.busy(true);
+                this.addFolder(isPublic ? '2' : folder, this.context.module, name).then(this.close, this.idle);
+            },
+            open: function () {
+                this.$('input[name="name"]').val(this.getName()).focus().select();
+            }
         })
-        .show(function () {
-            this.find('input[name="name"]').val(getName(opt.module)).focus().select();
-        });
+        .open();
     }
 
     /**

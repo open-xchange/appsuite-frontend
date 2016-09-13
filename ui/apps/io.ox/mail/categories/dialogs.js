@@ -22,7 +22,7 @@ define('io.ox/mail/categories/dialogs', [
 
     function senderlist(data) {
         return _.chain(data)
-                .map(function (mail) { return mail.from[0][1]; })
+                .map(function (mail) { return _.escape(mail.from[0][1]); })
                 .uniq()
                 .value();
     }
@@ -41,29 +41,30 @@ define('io.ox/mail/categories/dialogs', [
                 maximize: false,
                 model: new Backbone.Model(obj),
                 enter: 'close'
-            }).extend({
+            })
+            .extend({
                 default: function () {
-                    this.addClass('mail-categories-dialog');
+                    this.$body.addClass('mail-categories-dialog');
                 },
-                'info-status': function (baton) {
-                    this.append(
+                'info-status': function () {
+                    this.$body.append(
                         $('<p>').html(
                             gt.format(
                               //#. %1$d is the number of mails
                               //#, c-format
-                              gt.ngettext('Selected message was moved successfully.', 'Selected messages has been moved successfully.', baton.view.model.get('data').length)
+                              gt.ngettext('Selected message was moved successfully.', 'Selected messages has been moved successfully.', this.model.get('data').length)
                             )
                         )
                     );
                 },
-                'info-actions': function (baton) {
-                    var list = senderlist(baton.view.model.get('data'));
-                    this.append(
+                'info-actions': function () {
+                    var list = senderlist(this.model.get('data'));
+                    this.$body.append(
                         $('<p>').html(
                             //#. %1$s single mail address or comma separated list of multiple
                             //#. %2$s target mail category
                             //#, c-format
-                            gt('Should all other past and future messages from %1$s also be moved to %2$s?', '<b>' + list.join(', ') + '</b>', '<i>' + baton.view.model.get('targetname') + '</i>')
+                            gt('Should all other past and future messages from %1$s also be moved to %2$s?', '<b>' + list.join(', ') + '</b>', '<i>' + _.escape(this.model.get('targetname')) + '</i>')
                         )
                     );
                 },
@@ -75,14 +76,15 @@ define('io.ox/mail/categories/dialogs', [
                 //         )
                 //     );
                 // },
-                register: function (baton) {
-                    baton.view.on('generalize', function () {
-                        var obj = _.pick(baton.view.model.toJSON(), 'data', 'targetname', 'target', 'source');
-                        parent.trigger('dialog:generalize', obj);
-                    });
-                    baton.view.on('revert', function () {
-                        var obj = _.pick(baton.view.model.toJSON(), 'data', 'targetname', 'target', 'source');
-                        parent.trigger('dialog:revert', obj);
+                register: function () {
+                    var data = this.model.pick('data', 'targetname', 'target', 'source');
+                    this.on({
+                        'generalize': function () {
+                            parent.trigger('dialog:generalize', data);
+                        },
+                        'revert': function () {
+                            parent.trigger('dialog:revert', data);
+                        }
                     });
                 }
             })

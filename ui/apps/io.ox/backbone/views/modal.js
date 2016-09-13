@@ -43,12 +43,18 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         // we use the constructor here not to collide with initialize()
         constructor: function (options) {
             // ensure options
-            options = _.extend({ container: 'body', keyboard: true }, options);
+            options = _.extend({
+                async: false,
+                container: 'body',
+                context: {},
+                keyboard: true,
+                maximize: false
+            }, options);
+            this.context = options.context;
             // the original constructor will call initialize()
             ExtensibleView.prototype.constructor.apply(this, arguments);
             // add structure now
-            var title_id = _.uniqueId('title'),
-                self = this;
+            var title_id = _.uniqueId('title');
             this.$el
                 .toggleClass('maximize', options.maximize)
                 .attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id })
@@ -63,8 +69,12 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
                         )
                     )
                 );
+            // ensure proper context for the following functions to simplify callback handling
+            this.close = close.bind(this);
+            this.busy = busy.bind(this);
+            this.idle = idle.bind(this);
             // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
-            this.$el.on('hidden.bs.modal', this.close.bind(self));
+            this.$el.on('hidden.bs.modal', this.close);
             // apply max height if maximize is given as number
             if (_.isNumber(options.maximize)) this.$('.modal-dialog').css('max-height', options.maximize);
             // add help icon?
@@ -100,20 +110,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             return this;
         },
 
-        close: function (e) {
-            this.trigger('before:close');
-            // stop listening to hidden event (avoid infinite loops)
-            this.$el.off('hidden.bs.modal');
-            if (!e || e.type !== 'hidden') {
-                this.$el.modal('hide');
-            }
-            this.$el.siblings().removeAttr('aria-hidden');
-            this.trigger('close');
-            if (this.previousFocus) this.previousFocus.focus();
-            this.$el.remove();
-            return this;
-        },
-
         disableFormElements: function () {
             // disable all form elements; mark already disabled elements via CSS class
             this.$(':input').each(function () {
@@ -127,28 +123,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             this.$(':input').each(function () {
                 $(this).prop('disabled', $(this).hasClass('disabled')).removeClass('disabled');
             });
-        },
-
-        busy: function (withAnimation) {
-            this.disableFormElements();
-            this.activeElement = this.activeElement || document.activeElement;
-            if (withAnimation) {
-                this.$body.addClass('invisible');
-                this.$('.modal-content').busy();
-            } else {
-                this.$body.css('opacity', 0.50);
-            }
-            this.$el.focus();
-            return this;
-        },
-
-        idle: function () {
-            this.enableFormElements();
-            this.$('.modal-content').idle();
-            this.$body.removeClass('invisible').css('opacity', '');
-            if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
-            this.activeElement = null;
-            return this;
         },
 
         build: function (fn) {
@@ -217,6 +191,42 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             this.close();
         }
     });
+
+    function close(e) {
+        this.trigger('before:close');
+        // stop listening to hidden event (avoid infinite loops)
+        this.$el.off('hidden.bs.modal');
+        if (!e || e.type !== 'hidden') {
+            this.$el.modal('hide');
+        }
+        this.$el.siblings().removeAttr('aria-hidden');
+        this.trigger('close');
+        if (this.previousFocus) this.previousFocus.focus();
+        this.$el.remove();
+        return this;
+    }
+
+    function busy(withAnimation) {
+        this.disableFormElements();
+        this.activeElement = this.activeElement || document.activeElement;
+        if (withAnimation) {
+            this.$body.addClass('invisible');
+            this.$('.modal-content').busy();
+        } else {
+            this.$body.css('opacity', 0.50);
+        }
+        this.$el.focus();
+        return this;
+    }
+
+    function idle() {
+        this.enableFormElements();
+        this.$('.modal-content').idle();
+        this.$body.removeClass('invisible').css('opacity', '');
+        if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
+        this.activeElement = null;
+        return this;
+    }
 
     /*
 
