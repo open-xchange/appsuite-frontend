@@ -37,6 +37,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
         });
         socket.on('reconnect', function () {
             if (debug) console.log('Websocket was reconnected');
+            isConnected = true;
         });
         socket.on('reconnecting', function () {
             if (debug) console.log('Websocket trying to reconnect');
