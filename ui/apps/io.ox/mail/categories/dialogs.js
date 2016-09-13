@@ -156,7 +156,7 @@ define('io.ox/mail/categories/dialogs', [
                     });
                     if (!locked.length) return;
                     this.$body.append(
-                        $('<div class="hint">').text(gt('Please note that some of these categories can not be renamed or disabled.'))
+                        $('<div class="hint">').text(gt('Please note that some categories are predefined and you might not be able to rename or disable.'))
                     );
                 },
                 'register': function () {
@@ -164,6 +164,7 @@ define('io.ox/mail/categories/dialogs', [
                     this.on('disable', this.onDisable);
                 }
             })
+            .addAlternativeButton({ label: gt('Disable categories'), action: 'disable' })
             .addButton({ label: gt('Cancel'), action: 'cancel', className: 'btn-default' })
             .addButton({ label: gt('Save'), action: 'save' })
             .open();
