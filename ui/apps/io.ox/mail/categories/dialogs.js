@@ -150,6 +150,15 @@ define('io.ox/mail/categories/dialogs', [
                     });
                     this.$container.append(list);
                 },
+                'locked-hint': function () {
+                    var locked = parent.categories.filter(function (model) {
+                        return !model.can('disable') || !model.can('rename');
+                    });
+                    if (!locked.length) return;
+                    this.$body.append(
+                        $('<div class="hint">').text(gt('Please note that some of these categories can not be renamed or disabled.'))
+                    );
+                },
                 'register': function () {
                     this.on('save', this.onSave);
                     this.on('disable', this.onDisable);
