@@ -89,42 +89,29 @@ define('io.ox/mail/categories/dialogs', [
 
         Options: function (parent) {
             var Dialog = Modal.extend({
-                onToggle: function (e) {
-                    e.stopPropagation();
-                    // text input
-                    var target = $(e.target);
-                    if (target.hasClass('name')) return;
-                    if (target.find('.status').is(':disabled')) return;
-                    // visualize disabled state
-                    var container = $(this);
-                    container.toggleClass('active');
-                    // manually (if needed)
-                    if (target.hasClass('status')) return;
-                    var checkbox = container.find('.status');
-                    checkbox.prop('checked', !checkbox.prop('checked'));
-                },
                 onSave: function () {
                     var list = this.$('.category-item input.name'),
                         categories = [];
                     _.each(list, function (target) {
                         var input = $(target),
-                            node = input.closest('.category-item');
+                            node = input.closest('.category-item'),
+                            checkbox = node.find('[type="checkbox"]');
                         categories.push({
                             id: node.attr('data-id'),
                             name: input.val().trim(),
-                            active: node.hasClass('active')
+                            active: checkbox.prop('checked')
                         });
                     });
                     parent.trigger('update', categories);
                 },
                 onDisable: function () {
-                    yell('info', gt('Enable again by clicking on the View button in the toolbar.', gt('View')));
+                    yell('info', gt('You can enable categories again via the view dropdown on the right'));
                     // mail app settings
                     parent.module.mail.props.set('categories', false);
                 }
             });
+
             return new Dialog({
-                //#. might be suitable to use 'tabs' rather than translating it
                 title: gt('Edit categories'),
                 point: 'io.ox/mail/categories/edit',
                 focus: '.form-inline',
@@ -132,45 +119,42 @@ define('io.ox/mail/categories/dialogs', [
                 enter: 'save'
             })
             .extend({
-                default: function () {
+                'default': function () {
                     this.$body.addClass('mail-categories-dialog');
                 },
-                'form-inline': function () {
+                'form-inline-container': function () {
                     this.$body.append(
                         this.$container = $('<form class="form-inline-container">')
                     );
                 },
-                'form-group': function () {
+                'form-inline': function () {
                     var list = parent.categories.map(function (model) {
-                        var node =
-                        $('<form class="form-inline">').append(
-                            $('<div class="form-group category-item">')
-                                .attr('data-id', model.get('id'))
-                                .append(
-                                    $('<input type="checkbox" class="status" data-action="toggle">')
-                                        .prop('checked', model.is('active')),
-                                    $('<input type="text" class="form-control name">')
-                                        .attr('placeholder', gt('Name'))
-                                        .val(model.get('name'))
-                                ),
-                            model.get('description') ? $('<div class="description">').text(model.get('description')) : $()
-                        );
-                        // apply states and permissions
-                        if (model.is('active')) node.find('.category-item').addClass('active');
-                        if (!model.can('disable')) node.find('.status').attr('disabled', true).end().find('.name').addClass('locked');
-                        if (!model.can('rename')) node.find('.name').attr('disabled', true).end().find('.name').addClass('ready-only');
-                        return node;
+                        return $('<form class="form-inline">').append(
+                                    // inputs
+                                    $('<div class="form-group category-item">')
+                                        .attr('data-id', model.get('id'))
+                                        .append(
+                                            $('<input type="checkbox" class="status">')
+                                                .prop('checked', model.is('active'))
+                                                .attr('disabled', !model.can('disable')),
+                                            $('<input type="text" class="form-control name">')
+                                                .attr({
+                                                    placeholder: gt('Name'),
+                                                    disabled: !model.can('rename')
+                                                })
+                                                .val(model.get('name'))
+                                        ),
+                                    // optional description block
+                                    model.get('description') ? $('<div class="description">').text(model.get('description')) : $()
+                                );
                     });
                     this.$container.append(list);
                 },
-                register: function (baton) {
-                    debugger;
-                    this.$body.on('click', '.category-item', baton.view.onToggle);
+                'register': function () {
                     this.on('save', this.onSave);
                     this.on('disable', this.onDisable);
                 }
             })
-            .addAlternativeButton({ label: gt('Disable categories'), action: 'disable' })
             .addButton({ label: gt('Cancel'), action: 'cancel', className: 'btn-default' })
             .addButton({ label: gt('Save'), action: 'save' })
             .open();
