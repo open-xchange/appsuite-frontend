@@ -55,7 +55,7 @@ define('io.ox/core/folder/actions/add', [
         return new ModalDialog({
             async: true,
             context: { folder: folder, module: opt.module, supportsPublicFolders: opt.supportsPublicFolders },
-            enter: true,
+            enter: 'add',
             focus: 'input[name="name"]',
             help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create',
             point: 'io.ox/core/folder/add-popup',
