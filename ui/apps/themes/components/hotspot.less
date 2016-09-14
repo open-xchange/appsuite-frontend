@@ -1,0 +1,77 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+//
+// pulsing hotspot
+//
+.hotspot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    z-index: 999;
+    background-color: @hotspot-color;
+    .border-radius(50%);
+
+    &:before {
+        content: '';
+        position: absolute;
+        background-color: @pulse-color;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 1px solid @pulse-border-color;
+        -webkit-animation: hotspot-pulsar 2.0s infinite ease-out;
+        animation: hotspot-pulsar 2.0s infinite ease-out;
+        top: -56px;
+        left: -56px;
+        z-index: -1;
+    }
+
+    &:after {
+        content: '';
+        position: absolute;
+        background-color: @pulse-color;
+        width: 120px;
+        height: 120px;
+        top: -56px;
+        left: -56px;
+        border-radius: 50%;
+        border: 1px solid @pulse-border-color;
+        -webkit-animation: hotspot-pulsar-inner 2.0s infinite ease-out;
+        animation: hotspot-pulsar-inner 2.0s infinite ease-out;
+    }
+}
+
+@-webkit-keyframes hotspot-pulsar {
+    0%   { opacity: 0.65; transform: scale(0.1); }
+    100% { opacity: 0.00; transform: scale(1.0); }
+}
+
+@keyframes hotspot-pulsar {
+    0%   { opacity: 0.65; transform: scale(0.1); }
+    100% { opacity: 0.00; transform: scale(1.0); }
+}
+
+@-webkit-keyframes hotspot-pulsar-inner {
+    0%   { opacity: 0.00; transform: scale(0.1); }
+    24%, 90% { opacity: 0.00 }
+    25%  { opacity: 0.65; transform: scale(0.1); }
+    100% { opacity: 0.00; transform: scale(1.0); }
+}
+
+@keyframes hotspot-pulsar-inner {
+    0%   { opacity: 0.00; transform: scale(0.1); }
+    24%, 90% { opacity: 0.00 }
+    25%  { opacity: 0.65; transform: scale(0.1); }
+    100% { opacity: 0.00; transform: scale(1.0); }
+}
