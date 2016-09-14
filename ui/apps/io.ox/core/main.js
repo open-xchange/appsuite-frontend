@@ -1060,7 +1060,7 @@ define('io.ox/core/main', [
                 var ul, a;
                 this.append(
                     $('<li id="io-ox-topbar-dropdown-icon" class="launcher dropdown" role="presentation">').append(
-                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">')
+                        a = $('<a href="#" tabindex="0" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">')
                         .append(
                             $('<i class="fa fa-bars launcher-icon" aria-hidden="true">'),
                             $('<span class="sr-only">').text(gt('Settings'))
