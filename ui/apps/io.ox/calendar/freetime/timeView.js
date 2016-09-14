@@ -287,6 +287,9 @@ define('io.ox/calendar/freetime/timeView', [
                     participantTable.append(appointmentNode);
                 });
             });
+            // timeviewbody and header must be the same width or they scroll out off sync (happens when timeviewbody has scrollbars)
+            // use margin so resize event does not change things
+            baton.view.headerNodeRow2.css('margin-right', 15 + baton.view.bodyNode[0].offsetWidth - baton.view.bodyNode[0].clientWidth + 'px');
         }
     });
 

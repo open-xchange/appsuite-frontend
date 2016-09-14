@@ -27,6 +27,7 @@
     .modal-content .modal-header {
         min-height: 56px;
         display: flex;
+        display: -webkit-flex;
         .modal-title {
             min-width: 255px;
             max-width: 255px;
@@ -39,6 +40,7 @@
     }
     .modal-content .modal-body {
         display: flex;
+        display: -webkit-flex;
         padding-top: 0;
         padding-bottom: 0;
     }
@@ -109,6 +111,7 @@
     }
     .freetime-time-view-header {
         flex: 1;
+        -webkit-flex: 1;
         &.row1 {
             margin-top: 1px;
         }
@@ -150,6 +153,7 @@
     }
     .freetime-time-view-header {
         flex: 1;
+        -webkit-flex: 1;
 
         &.row2 {
             border-left: 1px solid #ddd;
@@ -164,6 +168,8 @@
 
             .timeline-day {
                 border-bottom: 1px solid #ccc;
+                // needed to make safari happy
+                flex-shrink: 0;
 
                 .daylabel-container {
                     display: flex;
@@ -196,12 +202,14 @@
 
                 .day-hours {
                     display: flex;
+                    display: -webkit-flex;
                     height: 31px
                 }
             }
 
             .freetime-hour {
                 flex: 1;
+                -webkit-flex: 1;
                 line-height: 21px;
                 margin-top: 9px;
                 padding-left: 8px;
@@ -268,6 +276,7 @@
         width: 255px;
         font-size: 13px;
         overflow-y: hidden;
+        min-height: auto;
 
         @media all and (max-width: 850px) {
             width: 185px;
@@ -338,6 +347,7 @@
 
     .freetime-time-view-body {
         flex: 1;
+        -webkit-flex: 1;
         position: relative;
         overflow-y: auto;
         border-left: 1px solid #ddd;
