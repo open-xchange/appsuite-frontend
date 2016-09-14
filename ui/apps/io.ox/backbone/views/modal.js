@@ -37,7 +37,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         events: {
             'click [data-action]': 'onAction',
             'keydown input:text, input:password': 'onKeypress',
-            'keydown': 'onEscape'
+            'keydown': 'onKeydown'
         },
 
         // we use the constructor here not to collide with initialize()
@@ -143,7 +143,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
                 left = o.placement === 'left', fn = left ? 'prepend' : 'append';
             if (left) o.className += ' pull-left';
             this.$('.modal-footer')[fn](
-                $('<button class="btn">')
+                $('<button class="btn" tabindex="0">')
                     .addClass(o.className)
                     .attr('data-action', o.action)
                     .text(o.label)
@@ -185,10 +185,35 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             this.invokeAction(this.options.enter);
         },
 
+        onKeydown: function (e) {
+            this.onEscape(e);
+            this.onTab(e);
+        },
+
         onEscape: function (e) {
             if (e.which !== 27) return;
             if (e.isDefaultPrevented()) return;
             this.close();
+        },
+
+        onTab: function (e) {
+            if (e.which !== 9) return;
+            var items, focus, index;
+            // tab
+            items = this.$el.find('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible');
+            if (items.length) {
+                e.preventDefault();
+                focus = $(document.activeElement);
+                index = items.index(focus);
+                index += (e.shiftKey) ? -1 : 1;
+
+                if (index >= items.length) {
+                    index = 0;
+                } else if (index < 0) {
+                    index = items.length - 1;
+                }
+                items.eq(index).focus();
+            }
         }
     });
 
