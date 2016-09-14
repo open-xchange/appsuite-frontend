@@ -573,6 +573,12 @@ msgstr ""
 "い。読み込みがうまくいかない場合は、ご利用のシステムの管理者にご連絡くださ"
 "い。"
 
+#: apps/io.ox/files/upload/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Drop new version of \"%1$s\" here"
+msgid "A new version for %1$s has been created."
+msgstr "新規バージョン\"%1$s\"をここにドロップ"
+
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid ""
 "A public folder is used for content that is of common interest for all "
@@ -827,6 +833,16 @@ msgstr "新規のルールを追加"
 msgid "Add new signature"
 msgstr "新規の署名を追加"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Upload new version"
+msgid "Add new version"
+msgstr "新規バージョンをアップロード"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Add new version and show popup"
+msgstr ""
+
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
 #: apps/io.ox/files/actions.js module:io.ox/files
@@ -854,6 +870,10 @@ msgstr "人を追加"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Add recipients ..."
 msgstr "宛先を追加します..."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Add separate file / no new version"
+msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -1593,8 +1613,7 @@ msgstr "予定表"
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
 #: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
-#: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/add.js
-#: apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
@@ -9295,6 +9314,12 @@ msgstr "アップロード"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
 msgstr "ファイルをアップロード"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Upload local file"
+msgid "Upload handling"
+msgstr "ローカルファイルをアップロード"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"

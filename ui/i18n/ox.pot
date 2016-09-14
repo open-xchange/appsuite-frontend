@@ -406,7 +406,6 @@ msgstr ""
 #: apps/io.ox/contacts/main.js
 #: apps/io.ox/core/desktop.js
 #: apps/io.ox/core/export/export.js
-#: apps/io.ox/core/folder/actions/add.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
@@ -4192,18 +4191,18 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/add.js
 #: module:io.ox/core
+#: apps/io.ox/core/folder/actions/rename.js
+msgid "Folder name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js
+#: module:io.ox/core
 msgid "Add as public calendar"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/add.js
 #: module:io.ox/core
 msgid "Add as public folder"
-msgstr ""
-
-#: apps/io.ox/core/folder/actions/add.js
-#: module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js
-msgid "Folder name"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/add.js
@@ -7223,6 +7222,26 @@ msgstr ""
 msgid "Show hidden files and folders"
 msgstr ""
 
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Add new version"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Add new version and show popup"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Add separate file / no new version"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Upload handling"
+msgstr ""
+
 #: apps/io.ox/files/share/listview.js
 #: module:io.ox/files
 msgid "Internal users"
@@ -7650,6 +7669,11 @@ msgid "%1$d week"
 msgid_plural "%1$d weeks"
 msgstr[0] ""
 msgstr[1] ""
+
+#: apps/io.ox/files/upload/main.js
+#: module:io.ox/files
+msgid "A new version for %1$s has been created."
+msgstr ""
 
 #. %1$s progress of currently uploaded files in percent
 #: apps/io.ox/files/upload/main.js

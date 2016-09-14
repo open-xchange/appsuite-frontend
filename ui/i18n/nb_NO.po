@@ -593,6 +593,12 @@ msgstr ""
 "En generell nettverksfeil oppstod. Vennligst forsøk å laste inn dokumentet "
 "på nytt. Kontakt support dersom problemet vedvarer."
 
+#: apps/io.ox/files/upload/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Drop new version of \"%1$s\" here"
+msgid "A new version for %1$s has been created."
+msgstr "Slipp ny versjon av \"%1$s\" her"
+
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid ""
 "A public folder is used for content that is of common interest for all "
@@ -847,6 +853,16 @@ msgstr "Legg til ny regel"
 msgid "Add new signature"
 msgstr "Legg til ny signatur"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Upload new version"
+msgid "Add new version"
+msgstr "Last opp en ny versjon"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Add new version and show popup"
+msgstr ""
+
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
 #: apps/io.ox/files/actions.js module:io.ox/files
@@ -872,6 +888,10 @@ msgstr "Legg til personer"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Add recipients ..."
 msgstr "Legg til mottakere ..."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Add separate file / no new version"
+msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -1612,8 +1632,7 @@ msgstr "Kalendere"
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
 #: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
-#: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/add.js
-#: apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
@@ -9345,6 +9364,12 @@ msgstr "Last opp"
 msgid "Upload file"
 msgstr "Last opp fil"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Uploading..."
+msgid "Upload handling"
+msgstr "Laster opp..."
+
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
 msgstr "Last opp lokal fil"
@@ -11297,9 +11322,6 @@ msgstr "yyyy"
 
 #~ msgid "Upload new files"
 #~ msgstr "Laste opp nye filer"
-
-#~ msgid "Uploading..."
-#~ msgstr "Laster opp..."
 
 #, fuzzy
 #~| msgid "User"

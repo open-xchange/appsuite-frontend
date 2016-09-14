@@ -598,6 +598,12 @@ msgstr ""
 "Ett allmänt nätverksfel inträffade. Prova att ladda om dokumentet. Om detta "
 "inte hjälper, kontakta din systemadministratör."
 
+#: apps/io.ox/files/upload/main.js module:io.ox/files
+#, fuzzy
+#| msgid "Drop new version of \"%1$s\" here"
+msgid "A new version for %1$s has been created."
+msgstr "Släpp ny version av \"%1$s\" här"
+
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid ""
 "A public folder is used for content that is of common interest for all "
@@ -852,6 +858,16 @@ msgstr "Lägg till ny regel"
 msgid "Add new signature"
 msgstr "Lägg till ny signatur"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Upload new version"
+msgid "Add new version"
+msgstr "Ladda upp ny version"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Add new version and show popup"
+msgstr ""
+
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
 #: apps/io.ox/files/actions.js module:io.ox/files
@@ -879,6 +895,10 @@ msgstr "Lägg till folk"
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Add recipients ..."
 msgstr "Lägg till mottagare..."
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Add separate file / no new version"
+msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -1624,8 +1644,7 @@ msgstr "Kalendrar"
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
 #: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
-#: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/add.js
-#: apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
@@ -9353,6 +9372,12 @@ msgstr "Ladda upp"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
 msgstr "Ladda upp fil"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Upload local file"
+msgid "Upload handling"
+msgstr "Ladda upp lokal fil"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
