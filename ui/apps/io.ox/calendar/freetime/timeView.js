@@ -405,7 +405,7 @@ define('io.ox/calendar/freetime/timeView', [
                 this.getAppointments();
             } else {
                 var baton = new ext.Baton({ view: this, model: this.model });
-                this.bodyNode.empty().idle();
+                this.bodyNode.empty();
                 this.pointBody.invoke('draw', this.bodyNode, baton);
             }
         },
