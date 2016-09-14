@@ -320,7 +320,7 @@ define('io.ox/calendar/freetime/timeView', [
             // add some listeners
             this.model.get('participants').on('add reset remove', self.getAppointments.bind(this));
             this.model.on('change:onlyWorkingHours', self.onChangeWorkingHours.bind(this));
-            this.model.on('change:currentWeek', self.getAppointments.bind(this));
+            this.model.on('change:currentWeek', self.getAppointmentsInstant.bind(this));
             this.model.on('change:appointments', self.renderBody.bind(this));
             this.model.on('change:zoom', self.updateZoom.bind(this));
             this.model.on('change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateVisibility.bind(this));
@@ -389,7 +389,7 @@ define('io.ox/calendar/freetime/timeView', [
             }
 
             this.renderHeader(true);
-            this.getAppointments();
+            this.getAppointmentsInstant();
         },
 
         renderHeader: function (onlyTimeline) {
@@ -405,7 +405,7 @@ define('io.ox/calendar/freetime/timeView', [
 
         renderBody: function () {
             if (this.model.get('participants').length !== _(this.model.get('appointments')).keys().length) {
-                this.getAppointments();
+                this.getAppointmentsInstant();
             } else {
                 var baton = new ext.Baton({ view: this, model: this.model });
                 this.bodyNode.empty();
@@ -414,7 +414,9 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         // use debounce because participants can change rapidly if groups or distributionlists are resolved
-        getAppointments: _.debounce(function () {
+        getAppointments: _.debounce(function () { this.getAppointmentsInstant(); }, 150),
+
+        getAppointmentsInstant: function () {
             // render busy animation
             this.bodyNode.busy(true);
             // get fresh appointments
@@ -438,10 +440,10 @@ define('io.ox/calendar/freetime/timeView', [
                 }
                 // remove busy animation again
                 self.bodyNode.idle();
-                // set appointments, force trigger to redraw correctly.
-                self.model.set('appointments', appointments).trigger('change:appointments');
+                // set appointments silent, force trigger to redraw correctly. (normal setting does not trigger correctly when just switching times)
+                self.model.set('appointments', appointments, { silent: true }).trigger('change:appointments');
             });
-        }, 150),
+        },
 
         onSelectHour: function (e) {
             var index = parseInt($(e.target).val(), 10),
