@@ -236,7 +236,7 @@ define('io.ox/core/sub/subscriptions', [
             $('<strong>').text(label),
             $.txt(' '),
             $('<span>').html(msg),
-            $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
+            $('<button type="button" tabindex="0" data-dismiss="alert" class="btn btn-default close">').text('x'))
         );
 
     }
@@ -269,7 +269,7 @@ define('io.ox/core/sub/subscriptions', [
                     setSource(accounts[0].id);
                     controls = $('<button type="button" class="btn btn-default disabled">').text(accounts[0].displayName);
                 } else if (accounts.length > 1) {
-                    controls = $('<select name="' + fd.name + '">').on('change', function () {
+                    controls = $('<select tabindex="0">').attr('name', fd.name).on('change', function () {
                         setSource($(this).val());
                     });
                     _.each(accounts, function (account) {
@@ -280,7 +280,7 @@ define('io.ox/core/sub/subscriptions', [
                     // set initially to first account in list
                     setSource(accounts[0].id);
                 } else {
-                    controls = $('<button type="button" class="btn btn-default btn-new-account">').text(gt('Add new account')).on('click', function () {
+                    controls = $('<button type="button" class="btn btn-default btn-new-account" tabindex="0">').text(gt('Add new account')).on('click', function () {
                         oauth(getAccountType(fd.options.type)).done(function () {
                             buildForm(node, baton);
                         });
@@ -289,12 +289,12 @@ define('io.ox/core/sub/subscriptions', [
 
             } else {
                 var input_type = fd.name === 'password' ? 'password' : 'text';
-                controls = $('<input class="form-control" type="' + input_type + '" name="' + fd.name + '">');
+                controls = $('<input class="form-control" tabindex="0">').attr({ 'type': input_type, 'name': fd.name });
             }
             node.append(
-                $('<div>').addClass('control-group').append(
-                    $('<label>').addClass('control-label').attr('for', fd.name).text((fd.name === 'account' ? gt('Account') : fd.displayName)),
-                    $('<div>').addClass('controls').append(controls)
+                $('<div class="control-group">').append(
+                    $('<label class="control-label">').attr('for', fd.name).text((fd.name === 'account' ? gt('Account') : fd.displayName)),
+                    $('<div class="controls">').append(controls)
                 )
             );
         });
@@ -317,10 +317,10 @@ define('io.ox/core/sub/subscriptions', [
         draw: function (baton) {
             var node, userform;
 
-            this.append($('<div>').addClass('control-group').append(
-                $('<label>').addClass('control-label').attr('for', 'service-value').text(gt('Source')),
-                $('<div>').addClass('controls').append(
-                    node = $('<select>').attr('name', 'service-value').addClass('form-control service-value').on('change', function () {
+            this.append($('<div class="control-group">').append(
+                $('<label class="control-label" for="service-value">').text(gt('Source')),
+                $('<div class="controls">').append(
+                    node = $('<select name="service-value" class="form-control service-value" tabindex="0">').on('change', function () {
                         userform.parent().find('.alert-danger').remove();
                         userform.parent().find('.error').removeClass('error');
                         baton.model.setSource(findId(baton.services, node.val()));
@@ -337,7 +337,7 @@ define('io.ox/core/sub/subscriptions', [
                 node.val(baton.model.source().service.id);
             }
 
-            this.append(userform = $('<div>').addClass('userform'));
+            this.append(userform = $('<div class="userform">'));
             buildForm(userform, baton);
 
         }
@@ -349,10 +349,10 @@ define('io.ox/core/sub/subscriptions', [
         draw: function (baton) {
             var destructive = isDestructiveSubscription(baton);
             this.append(
-                $('<div>').addClass('control-group').append(
-                    $('<div>').addClass('controls checkbox').append(
+                $('<div class="control-group">').append(
+                    $('<div class="controls checkbox">').append(
                         $('<label>').append(
-                            $('<input type="checkbox">')
+                            $('<input type="checkbox" tabindex="0">')
                                 .prop('checked', true)
                                 .prop('disabled', destructive)
                                 .on('change', function () {
@@ -381,11 +381,11 @@ define('io.ox/core/sub/subscriptions', [
         id: 'durationinformation',
         index: 300,
         draw: function () {
-            var fullNode = $('<div>').addClass('alert alert-info').css({ 'margin-bottom': 0, 'margin-top': '10px' }).append(
-                $('<b>').addClass('privacy-label').text(gt('Approximate Duration for Subscriptions')),
-                        $('<div>').addClass('privacy-text').text(
+            var fullNode = $('<div class="alert alert-info">').css({ 'margin-bottom': 0, 'margin-top': '10px' }).append(
+                $('<b class="privacy-label">').text(gt('Approximate Duration for Subscriptions')),
+                        $('<div class="privacy-text">').text(
                             gt('Updating subscribed data takes time. Importing 100 contacts for example, may take up to 5 minutes. Please have some patience.')));
-            var link = $('<div>').addClass('control-group').append($('<a href="#">').addClass('controls').text(gt('Approximate Duration for Subscriptions')).on('click', function (e) {
+            var link = $('<div class="control-group">').append($('<a href="#" class="controls" tabindex="0">').text(gt('Approximate Duration for Subscriptions')).on('click', function (e) {
                 e.preventDefault();
                 link.replaceWith(fullNode);
             }));
