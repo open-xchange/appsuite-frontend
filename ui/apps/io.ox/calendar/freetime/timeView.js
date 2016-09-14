@@ -405,13 +405,13 @@ define('io.ox/calendar/freetime/timeView', [
                 this.getAppointments();
             } else {
                 var baton = new ext.Baton({ view: this, model: this.model });
-                this.bodyNode.empty();
+                this.bodyNode.empty().idle();
                 this.pointBody.invoke('draw', this.bodyNode, baton);
             }
         },
 
-        // use throttle because participants can change rapidly if groups or distributionlists are resolved
-        getAppointments: _.throttle(function () {
+        // use debounce because participants can change rapidly if groups or distributionlists are resolved
+        getAppointments: _.debounce(function () {
             // render busy animation
             this.bodyNode.busy(true);
             // get fresh appointments

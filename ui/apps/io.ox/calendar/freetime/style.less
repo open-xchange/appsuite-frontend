@@ -184,6 +184,9 @@
                     &.today {
                         background: #cf3239;
                         color: #fff;
+                        .weekend {
+                            color: #fff;
+                        }
                     }
 
                     &.first {
@@ -338,6 +341,11 @@
         position: relative;
         overflow-y: auto;
         border-left: 1px solid #ddd;
+
+        // to show busy animation correctly
+        &.io-ox-busy {
+            position: initial;
+        }
 
         // copied from bootstrap; but without own background-color; mixins do not work here; therefore copy/paste
         .striped {

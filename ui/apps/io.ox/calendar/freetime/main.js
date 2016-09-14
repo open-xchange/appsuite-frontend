@@ -131,7 +131,8 @@ define('io.ox/calendar/freetime/main', [
                 var popup = new dialog({
                         width: '100%',
                         async: true,
-                        title: options.title || gt('Scheduling')
+                        title: options.title || gt('Scheduling'),
+                        maximize: true
                     }),
                     view;
                 options.popup = popup;
