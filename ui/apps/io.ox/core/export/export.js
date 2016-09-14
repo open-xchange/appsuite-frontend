@@ -47,7 +47,7 @@ define('io.ox/core/export/export', [
                 $('<label>').append(
                     $.txt(gt('Format')),
                     $('<br>'),
-                    baton.$.select = $('<select aria-label="' + gt('select format') + '">')
+                    baton.$.select = $('<select tabindex="0">').attr('aria-label', gt('select format'))
                 )
             );
 
@@ -80,7 +80,7 @@ define('io.ox/core/export/export', [
                 ),
                 // checkbox
                 $('<label class="checkbox include_distribution_lists">').append(
-                    baton.$.include = $('<input type="checkbox" name="include_distribution_lists" checked="checked">'),
+                    baton.$.include = $('<input tabindex="0" type="checkbox" name="include_distribution_lists" checked="checked">'),
                     $.txt(gt('Include distribution lists'))
                 )
             );
@@ -99,8 +99,7 @@ define('io.ox/core/export/export', [
     ext.point('io.ox/core/export/export/buttons').extend({
         id: 'default',
         draw: function () {
-            this
-                .addPrimaryButton('export', gt('Export'), 'export')
+            this.addPrimaryButton('export', gt('Export'), 'export')
                 .addButton('cancel', gt('Cancel'), 'cancel');
         }
     });
@@ -112,11 +111,7 @@ define('io.ox/core/export/export', [
         id: 'csv',
         index: 100,
         draw: function (baton) {
-            if (baton.module === 'contacts') {
-                this.append(
-                    $('<option value="csv">CSV</option>')
-                );
-            }
+            if (baton.module === 'contacts') this.append($('<option value="csv">CSV</option>'));
         }
     });
 
@@ -127,11 +122,7 @@ define('io.ox/core/export/export', [
         id: 'vcard',
         index: 200,
         draw: function (baton) {
-            if (baton.module === 'contacts') {
-                this.append(
-                    $('<option value="vcard">vCard</option>')
-                );
-            }
+            if (baton.module === 'contacts') this.append($('<option value="vcard">vCard</option>'));
         }
     });
 
@@ -142,11 +133,7 @@ define('io.ox/core/export/export', [
         id: 'ical',
         index: 400,
         draw: function (baton) {
-            if (baton.module === 'calendar' || baton.module === 'tasks') {
-                this.append(
-                    $('<option value="ical">iCalendar</option>')
-                );
-            }
+            if (baton.module === 'calendar' || baton.module === 'tasks') this.append($('<option value="ical">iCalendar</option>'));
         }
     });
 
@@ -177,10 +164,9 @@ define('io.ox/core/export/export', [
                             var format = baton.$.select.val() || '',
                                 include = (baton.$.include || $()).prop('checked') || false,
                                 options = $.extend({ include: include }, baton.options);
+
                             require(['io.ox/core/download'], function (download) {
-                                download.url(
-                                        api.getUrl(format, baton.folder, options)
-                                    );
+                                download.url(api.getUrl(format, baton.folder, options));
                             });
                         } else {
                             dialog = null;
