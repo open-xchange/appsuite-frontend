@@ -56,7 +56,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             // add structure now
             var title_id = _.uniqueId('title');
             this.$el
-                .toggleClass('maximize', options.maximize)
+                .toggleClass('maximize', !!options.maximize)
                 .attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id })
                 .append(
                     $('<div class="modal-dialog">').width(options.width).append(

@@ -129,10 +129,10 @@ define('io.ox/calendar/freetime/main', [
 
             require(['io.ox/backbone/views/modal'], function (dialog) {
                 var popup = new dialog({
-                        width: '100%',
                         async: true,
+                        maximize: true,
                         title: options.title || gt('Scheduling'),
-                        maximize: true
+                        width: '100%'
                     }),
                     view;
                 options.popup = popup;
