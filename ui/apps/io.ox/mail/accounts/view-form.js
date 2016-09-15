@@ -144,8 +144,8 @@ define.async('io.ox/mail/accounts/view-form', [
                 var self = this;
                 model = self.model;
                 self.$el.empty().append(
-                    $('<div>').addClass('settings-detail-pane').append(
-                        $('<div>').addClass('io-ox-account-settings')
+                    $('<div class="settings-detail-pane">').append(
+                        $('<div class="io-ox-account-settings">')
                     )
                 );
 
@@ -578,7 +578,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                 $('<div class="input-group folderselect enabled">').attr('data-property', folder).append(
                                     new InputView({ model: model, id: folder }).render().$el.prop('disabled', true),
                                     $('<span class="input-group-btn">').append(
-                                        $('<button type="button" class="btn btn-default">').text(gt('Select'))
+                                        $('<button type="button" class="btn btn-default" tabindex="0">').text(gt('Select'))
                                     )
                                 ) :
                                 // just show path

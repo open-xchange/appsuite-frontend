@@ -178,7 +178,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 active = active + '<b class="caret">';
             }
             return $('<div class="action ' + options.toggle + ' value">').addClass(options.classes).append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').html(active),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
@@ -433,7 +433,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 appliedConditions = baton.model.get('test'),
                 inputId,
                 drawDeleteButton = function (type) {
-                    return $('<a href="#" class="remove" data-action="remove-' + type + '">').append($('<i class="fa fa-trash-o">'));
+                    return $('<a href="#" class="remove" tabindex="0">').attr('data-action', 'remove-' + type).append($('<i class="fa fa-trash-o">'));
                 };
 
             appliedConditions = appliedConditions.tests ? appliedConditions.tests : [appliedConditions];
@@ -1050,7 +1050,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     return $('<div>').addClass('control-group mailfilter checkbox').append(
                         $('<div>').addClass('controls'),
                         $('<label>').text(gt('Process subsequent rules')).prepend(
-                            $('<input data-action="check-for-stop" type="checkbox">').attr('checked', value)
+                            $('<input data-action="check-for-stop" type="checkbox" tabindex="0">').attr('checked', value)
                         )
                     );
                 },
@@ -1079,7 +1079,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             toggleWarning();
 
             if (!target.find('[type="checkbox"]').length) {
-                target.append(drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));
+                _.defer(function () {
+                    target.prepend(drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));
+                });
             }
 
         }

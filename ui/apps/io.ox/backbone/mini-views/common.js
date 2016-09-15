@@ -20,7 +20,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var InputView = AbstractView.extend({
-        el: '<input type="text" class="form-control">',
+        el: '<input type="text" class="form-control" tabindex="0">',
         // firefox does not trigger a change event if you drop text.
         events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop' } : { 'change': 'onChange' },
         onChange: function () {
@@ -56,7 +56,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var PasswordView = AbstractView.extend({
-        el: '<input type="password" class="form-control">',
+        el: '<input type="password" class="form-control" tabindex="0">',
         events: { 'change': 'onChange' },
         onChange: function () {
             var value = this.$el.val();
@@ -89,7 +89,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var TextView = AbstractView.extend({
-        el: '<textarea class="form-control">',
+        el: '<textarea class="form-control" tabindex="0">',
         // firefox does not trigger a change event if you drop text.
         events: _.device('firefox') ? { 'change': 'onChange', 'drop': 'onDrop' } : { 'change': 'onChange' },
         onChange: function () {
@@ -126,7 +126,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var CheckboxView = AbstractView.extend({
-        el: '<input type="checkbox">',
+        el: '<input type="checkbox" tabindex="0">',
         events: { 'change': 'onChange' },
         onChange: function () {
             this.model.set(this.name, this.$el.prop('checked'));
@@ -167,9 +167,9 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         render: function () {
             var self = this;
             this.$el.append(_.map(this.options.list, function (option) {
-                return $('<div>').addClass('radio').append(
+                return $('<div class="radio">').append(
                     $('<label>').text(option.label).prepend(
-                        $('<input type="radio" name="' + self.name + '">').val(option.value)
+                        $('<input type="radio" tabindex="0">').attr('name', self.name).val(option.value)
                     )
                 );
             }));
@@ -196,7 +196,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
             this.$el.val(this.model.get(this.name));
         },
         render: function () {
-            this.$el.attr({ name: this.name });
+            this.$el.attr({ name: this.name, tabindex: 0 });
             if (this.id) this.$el.attr({ id: this.id });
             this.$el.append(_.map(this.options.list, function (option) {
                 return $('<option>').attr({ value: option.value }).text(option.label);
@@ -279,11 +279,11 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         render: function () {
             this.$el.append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').text(this.options.values[this.model.get(this.name)]),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').text(this.options.values[this.model.get(this.name)]),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(this.options.values).map(function (name, value) {
                         return $('<li>').append(
-                            $('<a href="#" data-action="change-value">').attr('data-value', value).text(name)
+                            $('<a href="#" data-action="change-value" tabindex="0">').attr('data-value', value).text(name)
                         );
                     })
                 )
