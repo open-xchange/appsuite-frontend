@@ -33,36 +33,34 @@ define('io.ox/core/api/account', [
 
         var rPath = /^default\d+/,
 
-            fix = function (account, id, title) {
-                var prefix = 'default' + account.id + separator,
-                    field = id + '_fullname';
-                if (account.id === 0 && !account[field]) {
-                    var folder = settings.get(['folder', id]);
-                    // folder isn't available in config
+            fix = function (type) {
+                var prefix = 'default' + this.id + separator,
+                    field = type + '_fullname',
+                    folder;
+                // check if folder path is not defined
+                if (!this[field]) {
+                    // only fix primary account (see US 91604548 / Bug 37439)
+                    if (this.id !== 0) return;
+                    folder = settings.get(['folder', type]);
                     if (!folder) {
-                        // educated guess
-                        folder = altnamespace ? 'default0' : settings.get('folder/inbox');
-                        folder += separator + (account[id] || title);
+                        // fix fullname only if we have a short name
+                        if (this[type]) {
+                            folder = altnamespace ? 'default0' : settings.get('folder/inbox');
+                            folder += separator + this[type];
+                        } else {
+                            // empty string simply to avoid null value
+                            folder = '';
+                        }
                     }
-                    account[field] = folder;
-                } else if (!account[field]) {
-                    // US 91604548 / Bug 37439: remove legacy code
-                    // educated guess
-                    // account[field] = prefix + (account[id] || title);
-                } else if (!rPath.test(account[field])) {
+                    this[field] = folder;
+                } else if (!rPath.test(this[field])) {
                     // missing prefix
-                    account[field] = prefix + account[field];
+                    this[field] = prefix + this[field];
                 }
             };
 
         _(data).each(function (account) {
-            fix(account, 'trash', 'Trash');
-            fix(account, 'sent', 'Sent');
-            fix(account, 'drafts', 'Drafts');
-            fix(account, 'spam', 'Spam');
-            fix(account, 'archive', 'Archive');
-            fix(account, 'confirmed_spam', 'Confirmed Spam');
-            fix(account, 'confirmed_ham', 'Confirmed Ham');
+            _(['trash', 'sent', 'drafts', 'spam', 'archive', 'confirmed_spam', 'confirmed_ham']).each(fix, account);
         });
 
         return isArray ? data : data[0];
