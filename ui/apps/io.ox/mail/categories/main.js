@@ -27,8 +27,6 @@ define('io.ox/mail/categories/main', [
 
     'use strict';
 
-    console.log('%c' + 'main', 'color: white; background-color: grey');
-
     if (!capabilities.has('mail_categories')) {
         console.error("mail/categories/main: capababilty 'mail_categories' missing");
     }
@@ -340,6 +338,7 @@ define('io.ox/mail/categories/main', [
             load: function () {
                 var config = this.config.get();
                 this.categories.set(config.list);
+                this.props.set('enabled', config.enabled);
                 this.props.set('initialized', config.initialized);
                 this.trigger('load');
                 // update unread count
