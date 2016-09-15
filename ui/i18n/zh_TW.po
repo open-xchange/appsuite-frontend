@@ -2186,8 +2186,10 @@ msgstr "包含"
 msgid "Content"
 msgstr "內容"
 
+#. button label for continuing the presentation
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
 msgid "Continue"
 msgstr "繼續"
 
@@ -3353,7 +3355,9 @@ msgstr "啟用 %1$s"
 msgid "Enable for the following addresses"
 msgstr "對下列地址啟用"
 
+#. button label for ending the presentation
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "End"
 msgstr "結束"
 
@@ -4591,6 +4595,11 @@ msgstr "工作"
 msgid "Job description"
 msgstr "工作描述"
 
+#. button label for joining the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+msgid "Join"
+msgstr ""
+
 #. link button to join the currently running presentation
 #: apps/io.ox/presenter/views/notification.js module:io.ox/presenter
 msgid "Join Presentation"
@@ -4715,7 +4724,9 @@ msgid "Learn more"
 msgstr "了解更多"
 
 #. label for the leave presentation button
+#. button label for leaving the presentation
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "Leave"
 msgstr "離開"
 
@@ -6067,6 +6078,11 @@ msgstr "密碼強度: 弱"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "密碼強度: 長度錯誤"
+
+#. button label for pausing the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+msgid "Pause"
+msgstr ""
 
 #. button label for pausing the presentation
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -7941,7 +7957,9 @@ msgstr "標準資料夾"
 msgid "Standard timezone"
 msgstr "標準時區"
 
+#. button label for the 'start presentation' dropdown
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
 msgstr "開始"

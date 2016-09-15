@@ -2214,8 +2214,10 @@ msgstr "Innehåller"
 msgid "Content"
 msgstr "Innehåll"
 
+#. button label for continuing the presentation
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
 msgid "Continue"
 msgstr "Fortsätt"
 
@@ -3388,7 +3390,9 @@ msgstr "Aktivera %1$s"
 msgid "Enable for the following addresses"
 msgstr "Aktivera för följande adresser"
 
+#. button label for ending the presentation
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "End"
 msgstr "Slut"
 
@@ -4656,6 +4660,11 @@ msgstr "Jobb"
 msgid "Job description"
 msgstr "Jobbeskrivning"
 
+#. button label for joining the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+msgid "Join"
+msgstr ""
+
 #. link button to join the currently running presentation
 #: apps/io.ox/presenter/views/notification.js module:io.ox/presenter
 msgid "Join Presentation"
@@ -4780,7 +4789,9 @@ msgid "Learn more"
 msgstr "Läs mer"
 
 #. label for the leave presentation button
+#. button label for leaving the presentation
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "Leave"
 msgstr "Lämna"
 
@@ -6137,6 +6148,11 @@ msgstr "Lösenordets styrka: Svagt"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "Lösenordets styrka: Fel längd"
+
+#. button label for pausing the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+msgid "Pause"
+msgstr ""
 
 #. button label for pausing the presentation
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -8041,7 +8057,9 @@ msgstr "Standardmappar"
 msgid "Standard timezone"
 msgstr "Standardtidszon"
 
+#. button label for the 'start presentation' dropdown
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
 msgstr "Start"

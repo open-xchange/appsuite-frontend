@@ -2240,8 +2240,10 @@ msgstr "содержит"
 msgid "Content"
 msgstr "Содержимое"
 
+#. button label for continuing the presentation
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
 msgid "Continue"
 msgstr "Продолжить"
 
@@ -3420,7 +3422,9 @@ msgstr "Включить %1$s"
 msgid "Enable for the following addresses"
 msgstr "Включить для следующих адресов"
 
+#. button label for ending the presentation
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "End"
 msgstr "Конец"
 
@@ -4686,6 +4690,11 @@ msgstr "Должность"
 msgid "Job description"
 msgstr "Описание должности"
 
+#. button label for joining the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+msgid "Join"
+msgstr ""
+
 #. link button to join the currently running presentation
 #: apps/io.ox/presenter/views/notification.js module:io.ox/presenter
 msgid "Join Presentation"
@@ -4810,7 +4819,9 @@ msgid "Learn more"
 msgstr "Узнать больше"
 
 #. label for the leave presentation button
+#. button label for leaving the presentation
 #: apps/io.ox/presenter/views/presentationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "Leave"
 msgstr "Выйти"
 
@@ -6173,6 +6184,11 @@ msgstr "Пароль: слабый"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Password strength: Wrong length"
 msgstr "Пароль: недопустимая длина"
+
+#. button label for pausing the presentation
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+msgid "Pause"
+msgstr ""
 
 #. button label for pausing the presentation
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -8075,7 +8091,9 @@ msgstr "Стандартные папки"
 msgid "Standard timezone"
 msgstr "Стандартный часовой пояс"
 
+#. button label for the 'start presentation' dropdown
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
 msgstr "Начало"

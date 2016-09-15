@@ -4937,10 +4937,13 @@ msgstr ""
 msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
 msgstr ""
 
+#. button label for continuing the presentation
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
 #: apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
+#: apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
 msgid "Continue"
 msgstr ""
 
@@ -9816,15 +9819,21 @@ msgstr ""
 msgid "Email addresses"
 msgstr ""
 
+#. button label for the 'start presentation' dropdown
 #: apps/io.ox/mail/vacationnotice/settings/model.js
 #: module:io.ox/mail
+#: apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
 #: apps/io.ox/tasks/print.js
 #: module:io.ox/tasks
 msgid "Start"
 msgstr ""
 
+#. button label for ending the presentation
 #: apps/io.ox/mail/vacationnotice/settings/model.js
 #: module:io.ox/mail
+#: apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
 msgid "End"
 msgstr ""
 
@@ -10599,8 +10608,10 @@ msgid "Leave presentation"
 msgstr ""
 
 #. label for the leave presentation button
+#. button label for leaving the presentation
 #: apps/io.ox/presenter/views/presentationview.js
 #: module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "Leave"
 msgstr ""
 
@@ -10655,6 +10666,18 @@ msgstr ""
 #: apps/io.ox/presenter/views/toolbarview.js
 #: module:io.ox/presenter
 msgid "End the presentation"
+msgstr ""
+
+#. button label for pausing the presentation
+#: apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
+msgid "Pause"
+msgstr ""
+
+#. button label for joining the presentation
+#: apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
+msgid "Join"
 msgstr ""
 
 #. button label for joining the presentation
