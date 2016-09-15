@@ -41,8 +41,7 @@
     .modal-content .modal-body {
         display: flex;
         display: -webkit-flex;
-        padding-top: 0;
-        padding-bottom: 0;
+        padding: 0 0 0 16px;
     }
     .tooltip {
         z-index: 20000;
@@ -158,7 +157,6 @@
         &.row2 {
             border-left: 1px solid #ddd;
             overflow: hidden;
-            margin-right: 16px;
         }
 
         .freetime-timeline {
@@ -171,27 +169,36 @@
                 // needed to make safari happy
                 flex-shrink: 0;
 
+                &.today {
+                    .daylabel-container {
+                        border-left-color: @today;
+                        .day-label-wrapper:first-child {
+                            .day-label {
+                                background: @today;
+                                color: #fff;
+                            }
+                        }
+                    }
+                    .day-start {
+                        border-left-color: @today;
+                    }
+                }
+
                 .daylabel-container {
                     display: flex;
                     display: -webkit-flex;
                     height: 24px;
                     border-left: 1px solid #888;
-                    .day-label {
-                        padding-left: 8px;
+                    .day-label-wrapper {
                         font-weight: bold;
                         display: inline;
                         min-width: 25%;
-                        margin-top: 2px;
+                        .day-label {
+                            padding: 2px 8px 4px 8px;
+                            display: inline-block;
+                        }
                         &.weekend {
                             color: #cf3239;
-                        }
-                    }
-
-                    &.today {
-                        background: #cf3239;
-                        color: #fff;
-                        .weekend {
-                            color: #fff;
                         }
                     }
 
@@ -236,7 +243,7 @@
             display: none;
         }
 
-        .freetime-timeline .timeline-day .daylabel-container .day-label {
+        .freetime-timeline .timeline-day .daylabel-container .day-label-wrapper {
             min-width: 50%;
         }
 
@@ -248,7 +255,7 @@
         }
     }
     &.zoomlevel-200 {
-        &.only-workinghours .freetime-timeline .timeline-day .daylabel-container .day-label {
+        &.only-workinghours .freetime-timeline .timeline-day .daylabel-container .day-label-wrapper {
             min-width: 50%;
             &.level-2{
                 display: none;

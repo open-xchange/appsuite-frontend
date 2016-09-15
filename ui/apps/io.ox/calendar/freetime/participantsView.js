@@ -72,7 +72,7 @@ define('io.ox/calendar/freetime/participantsView', [
             this.pointHeader = pointHeader;
             this.pointBody = pointBody;
             this.headerNodeRow = $('<div class="freetime-participants-view-header row2">');
-            this.bodyNode = $('<div class="freetime-participants-view-body scrollable-pane">');
+            this.bodyNode = $('<div class="freetime-participants-view-body scrollpane">');
         },
 
         renderHeader: function () {

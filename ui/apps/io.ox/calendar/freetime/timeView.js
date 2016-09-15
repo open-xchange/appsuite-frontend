@@ -149,12 +149,11 @@ define('io.ox/calendar/freetime/timeView', [
                     start = baton.model.get('onlyWorkingHours') ? baton.model.get('startHour') : 0,
                     end = baton.model.get('onlyWorkingHours') ? baton.model.get('endHour') : 23,
                     sections = [],
-                    dayLabel = $('<div class="day-label">').addClass(day.day() === 0 || day.day() === 6 ? 'weekend' : '').text(day.format('ddd, ll')),
+                    dayLabel = $('<div class="day-label-wrapper">').append($('<div class="day-label">').addClass(day.day() === 0 || day.day() === 6 ? 'weekend' : '').text(day.format('ddd, ll'))),
                     dayNode;
 
-                node.append($('<div class=timeline-day>').append($('<div class="daylabel-container">')
-                    .addClass(counter === 0 ? 'first' : '')
-                    .addClass(today.valueOf() === day.valueOf() ? 'today' : '').append(
+                node.append($('<div class=timeline-day>').addClass(today.valueOf() === day.valueOf() ? 'today' : '').append($('<div class="daylabel-container">')
+                    .addClass(counter === 0 ? 'first' : '').append(
                     dayLabel,
                     dayLabel.clone().addClass('level-2'),
                     dayLabel.clone().addClass('level-1'),
@@ -173,12 +172,12 @@ define('io.ox/calendar/freetime/timeView', [
                 day.add(1, 'days');
             }
             baton.model.on('change:currentWeek', function () {
-                var labels = node.find('.daylabel-container'),
+                var labels = node.find('.timeline-day'),
                     day = moment(baton.model.get('currentWeek')).startOf('day'),
                     today = moment().startOf('day');
 
                 for (var i = 0; i <= labels.length; i++) {
-                    $(labels[i]).toggleClass('today', day.valueOf() === today.valueOf()).find('.day-label').text(day.format('ddd, ll')).parent();
+                    $(labels[i]).toggleClass('today', day.valueOf() === today.valueOf()).find('.day-label').text(day.format('ddd, ll'));
                     day.add(1, 'days');
                 }
             });
@@ -216,7 +215,8 @@ define('io.ox/calendar/freetime/timeView', [
             table.css('width', width + 'px');
             if (baton.view.keepScrollpos === 'today') {
                 if (baton.view.headerNodeRow2.find('.today').length) {
-                    baton.view.keepScrollpos = moment().hours(baton.model.get('startHour') + 1).startOf('hour').valueOf();
+                    var hours = baton.model.get('onlyWorkingHours') ? 0 : baton.model.get('startHour');
+                    baton.view.keepScrollpos = moment().hours(hours).startOf('hour').valueOf();
                 } else {
                     delete baton.view.keepScrollpos;
                 }
@@ -255,7 +255,7 @@ define('io.ox/calendar/freetime/timeView', [
                 tooltipContainer = baton.view.headerNodeRow1.parent().parent().parent();
 
             _(baton.model.get('participants').models).each(function (participant) {
-                var participantTable = $('<div class="appointment-table">').appendTo(table);
+                var participantTable = $('<div class="appointment-table">').attr('data-value', participant.get('id')).appendTo(table);
 
                 _(baton.model.get('appointments')[participant.get('id')]).each(function (appointment, index) {
                     var start = appointment.start_date,
@@ -289,7 +289,7 @@ define('io.ox/calendar/freetime/timeView', [
             });
             // timeviewbody and header must be the same width or they scroll out off sync (happens when timeviewbody has scrollbars)
             // use margin so resize event does not change things
-            baton.view.headerNodeRow2.css('margin-right', 15 + baton.view.bodyNode[0].offsetWidth - baton.view.bodyNode[0].clientWidth + 'px');
+            baton.view.headerNodeRow2.css('margin-right', baton.view.bodyNode[0].offsetWidth - baton.view.bodyNode[0].clientWidth - 1 + 'px');
         }
     });
 
@@ -318,7 +318,9 @@ define('io.ox/calendar/freetime/timeView', [
                 .on('scroll', self.onScroll.bind(this));
 
             // add some listeners
-            this.model.get('participants').on('add reset remove', self.getAppointments.bind(this));
+            this.model.get('participants').on('add reset', self.getAppointments.bind(this));
+            // no need to fire a server request when removing a participant
+            this.model.get('participants').on('remove', self.removeParticipant.bind(this));
             this.model.on('change:onlyWorkingHours', self.onChangeWorkingHours.bind(this));
             this.model.on('change:currentWeek', self.getAppointmentsInstant.bind(this));
             this.model.on('change:appointments', self.renderBody.bind(this));
@@ -414,9 +416,9 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         // use debounce because participants can change rapidly if groups or distributionlists are resolved
-        getAppointments: _.debounce(function () { this.getAppointmentsInstant(); }, 150),
+        getAppointments: _.debounce(function () { this.getAppointmentsInstant(true); }, 10),
 
-        getAppointmentsInstant: function () {
+        getAppointmentsInstant: function (addOnly) {
             // render busy animation
             this.bodyNode.busy(true);
             // get fresh appointments
@@ -425,6 +427,14 @@ define('io.ox/calendar/freetime/timeView', [
                 end,
                 participants = this.model.get('participants').toJSON(),
                 appointments = {};
+
+            // no need to get appointments for every participant all the time
+            if (addOnly === true) {
+                var keys = _(self.model.get('appointments')).keys();
+                participants = _(participants).filter(function (participant) {
+                    return _(keys).indexOf(String(participant.id)) === -1;
+                });
+            }
 
             if (this.model.get('onlyWorkingHours')) {
                 start = moment(this.model.get('currentWeek')).add(this.model.get('startHour'), 'hours');
@@ -435,6 +445,9 @@ define('io.ox/calendar/freetime/timeView', [
             }
 
             return api.freebusy(participants, { start: start.valueOf(), end: end.valueOf() }).done(function (items) {
+                if (addOnly === true) {
+                    appointments = self.model.get('appointments');
+                }
                 for (var i = 0; i < participants.length; i++) {
                     appointments[participants[i].id] = items[i] ? items[i].data : [];
                 }
@@ -443,6 +456,20 @@ define('io.ox/calendar/freetime/timeView', [
                 // set appointments silent, force trigger to redraw correctly. (normal setting does not trigger correctly when just switching times)
                 self.model.set('appointments', appointments, { silent: true }).trigger('change:appointments');
             });
+        },
+
+        removeParticipant: function (model) {
+            var node = this.bodyNode.find('.appointment-table[data-value="' + model.get('id') + '"]'),
+                appointments = this.model.get('appointments');
+            if (node.length) {
+                node.remove();
+                // timeviewbody and header must be the same width or they scroll out off sync (happens when timeviewbody has scrollbars)
+                // use margin so resize event does not change things
+                this.headerNodeRow2.css('margin-right', this.bodyNode[0].offsetWidth - this.bodyNode[0].clientWidth - 1 + 'px');
+            }
+            delete appointments[model.get('id')];
+            // silent or we would trigger a redraw
+            this.model.set('appointments', appointments, { silent: true });
         },
 
         onSelectHour: function (e) {
@@ -630,7 +657,8 @@ define('io.ox/calendar/freetime/timeView', [
                 }
             } else if (_.isNumber(option)) {
                 // scroll to date
-                this.keepScrollpos = moment(option).hours(this.model.get('startHour') + 1).valueOf();
+                var hours = this.model.get('onlyWorkingHours') ? 0 : this.model.get('startHour');
+                this.keepScrollpos = moment(option).hours(hours).valueOf();
                 week = moment(option).startOf('week');
             }
             week.startOf('day');
