@@ -115,8 +115,9 @@ define('io.ox/calendar/freetime/timeView', [
                 .option('zoom', '200', gt.noI18n('200%'), { radio: true })
                 .option('zoom', '400', gt.noI18n('400%'), { radio: true })
                 .option('zoom', '1000', gt.noI18n('1000%'), { radio: true })
-                //#. rows of scheduling table
-                .option('compact', true, gt('Compact rows'))
+                .divider()
+                .header(gt('Rows'))
+                .option('compact', true, gt('Compact'))
                 .divider()
                 .header(gt('Appointment types'))
                 .option('showFree', true, gt('Free'))
@@ -189,33 +190,38 @@ define('io.ox/calendar/freetime/timeView', [
         id: 'timetable',
         index: 100,
         draw: function (baton) {
-            var node, table, width;
+            var node, table, width,
+                worktimeStart = parseInt(settings.get('startTime', 8), 10),
+                worktimeEnd = parseInt(settings.get('endTime', 18), 10),
+                start = baton.model.get('onlyWorkingHours') ? baton.model.get('startHour') : 0,
+                end = baton.model.get('onlyWorkingHours') ? baton.model.get('endHour') : 23,
+                time = moment(baton.model.get('currentWeek')).startOf('day'),
+                today = moment().startOf('day');
+
+            today.hours(start);
 
             this.append(table = $('<div class="freetime-table">').append(node = $('<div class="freetime-time-table">')));
 
             for (var counter = 0; counter < 7; counter++) {
-                var time = moment().startOf('hour'),
-                    worktimeStart = parseInt(settings.get('startTime', 8), 10),
-                    worktimeEnd = parseInt(settings.get('endTime', 18), 10),
-                    start = baton.model.get('onlyWorkingHours') ? baton.model.get('startHour') : 0,
-                    end = baton.model.get('onlyWorkingHours') ? baton.model.get('endHour') : 23,
-                    cells = [];
+                var cells = [];
 
                 for (var i = start; i <= end; i++) {
                     time.hours(i);
                     cells.push($('<span class="freetime-table-cell">').val(counter * (end - start + 1) + (baton.model.get('onlyWorkingHours') ? i - baton.model.get('startHour') : i))
                                .addClass(i === worktimeEnd || i === worktimeStart ? 'working-hour-start-end' : '')
                                .addClass(i === start ? 'day-start' : '')
+                               .addClass(time.valueOf() === today.valueOf() ? 'today' : '')
                                .addClass(i === start && counter === 0 ? 'first' : '')
                                .addClass(i <= baton.model.get('startHour') || i >= baton.model.get('endHour') ? 'non-working-hour' : ''));
                 }
                 node.append(cells);
+                time.add(1, 'days');
             }
             width = node.children().length * 60 * (parseInt(baton.model.get('zoom'), 10) / 100);
             table.css('width', width + 'px');
             if (baton.view.keepScrollpos === 'today') {
                 if (baton.view.headerNodeRow2.find('.today').length) {
-                    var hours = baton.model.get('onlyWorkingHours') ? 0 : baton.model.get('startHour');
+                    var hours = (baton.model.get('onlyWorkingHours') ? baton.model.get('startHour') : 0);
                     baton.view.keepScrollpos = moment().hours(hours).startOf('hour').valueOf();
                 } else {
                     delete baton.view.keepScrollpos;
@@ -419,6 +425,11 @@ define('io.ox/calendar/freetime/timeView', [
         getAppointments: _.debounce(function () { this.getAppointmentsInstant(true); }, 10),
 
         getAppointmentsInstant: function (addOnly) {
+            // save scrollposition or it is lost when the busy animation is shown
+            var oldWidth = this.bodyNode.find('.freetime-table').width(),
+                oldScrollPos = this.bodyNode.scrollLeft();
+            this.keepScrollpos = this.positionToTime(oldScrollPos / oldWidth * 100);
+
             // render busy animation
             this.bodyNode.busy(true);
             // get fresh appointments
@@ -466,6 +477,8 @@ define('io.ox/calendar/freetime/timeView', [
                 // timeviewbody and header must be the same width or they scroll out off sync (happens when timeviewbody has scrollbars)
                 // use margin so resize event does not change things
                 this.headerNodeRow2.css('margin-right', this.bodyNode[0].offsetWidth - this.bodyNode[0].clientWidth - 1 + 'px');
+                // trigger scroll for lazyload
+                this.parentView.participantsSubview.bodyNode.trigger('scroll');
             }
             delete appointments[model.get('id')];
             // silent or we would trigger a redraw
@@ -657,7 +670,7 @@ define('io.ox/calendar/freetime/timeView', [
                 }
             } else if (_.isNumber(option)) {
                 // scroll to date
-                var hours = this.model.get('onlyWorkingHours') ? 0 : this.model.get('startHour');
+                var hours = (this.model.get('onlyWorkingHours') ? this.model.get('startHour') : 0);
                 this.keepScrollpos = moment(option).hours(hours).valueOf();
                 week = moment(option).startOf('week');
             }
