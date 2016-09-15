@@ -17,6 +17,7 @@ define('io.ox/mail/categories/main', [
     'io.ox/core/api/account',
     'io.ox/core/folder/api',
     'io.ox/backbone/views/modal',
+    'io.ox/core/extPatterns/actions',
     'io.ox/core/tk/list-dnd',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
@@ -24,7 +25,7 @@ define('io.ox/mail/categories/main', [
     'io.ox/core/extensions',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (http, mailAPI, accountAPI, folderAPI, Modal, dnd, links, capabilities, yell, ext, settings, gt) {
+], function (http, mailAPI, accountAPI, folderAPI, Modal, actions, dnd, links, capabilities, yell, ext, settings, gt) {
 
     'use strict';
 
@@ -32,11 +33,52 @@ define('io.ox/mail/categories/main', [
         console.error("mail/categories/main: capababilty 'mail_categories' missing");
     }
 
+    var api, dialog, picker, Model, Collection, View, module, DEBUG = false;
+
+    /**
+     * HELPERS
+     */
+
+    // do not clutter hash
+    ox.on('app:start app:resume', function (app) {
+        if (!app || !app.categories) return;
+        if (app.id !== 'io.ox/mail' || !app.categories.initialized) return;
+        // restore
+        module.restoreSelection();
+        // reset
+        _.url.hash('category', null);
+    });
+
+    function trigger() { this.trigger.apply(this, arguments); }
+
+    // helper: merge cateogories part of the server side and local config
+    function merge(target, source) {
+        var hash = {}, list = [];
+        // create hash for second list
+        _.each(source, function (obj) {
+            hash[obj.id] = obj;
+        });
+        // merge each element of first and second list
+        _.each(target, function (obj) {
+            list.push(_.extend({}, obj, hash[obj.id] || {}));
+        });
+        return list;
+    }
+
+    function exists(container, model) {
+        return container.find('[data-id="' + model.get('id') + '"]').length;
+    }
+
+    // helper: log all events on view/collection/model/module
+    function debug(color, name, detail) {
+        if (DEBUG) return console.log('%c' + name + (detail && false ? ': ' + JSON.stringify(detail, undefined, 2) : ''), 'color: white; background-color: ' + color);
+    }
+
     /**
      * API
      */
 
-    var api = {
+    api = {
 
         get: function () {
             return http.GET({
@@ -88,7 +130,11 @@ define('io.ox/mail/categories/main', [
         }
     };
 
-    var dialog = (function () {
+    /**
+     * DIALOG
+     */
+
+    dialog = (function () {
 
         function createSenderList(carrier) {
             carrier.senderlist = _.chain(carrier.maillist)
@@ -243,42 +289,109 @@ define('io.ox/mail/categories/main', [
 
     })();
 
+    /**
+     * MODEL
+     */
 
-    // do not clutter hash
-    ox.on('app:start app:resume', function (app) {
-        if (!app || !app.categories) return;
-        if (app.id !== 'io.ox/mail' || !app.categories.initialized) return;
-        // restore
-        module.restoreSelection();
-        // reset
-        _.url.hash('category', null);
-    });
+    picker = (function () {
 
-    var DEBUG = false,
-        // category config propertys that should be synced
-        SYNCED = ['id', 'name', 'active'],
-        Model, Collection, View, module;
+        var preParsed = {
+            div: $('<div>'),
+            list: $('<ul class="dropdown-menu" role="menu">'),
+            listItem: $('<li>'),
+            menuItemAction: $('<a href="#" role="menuitem" class="category">'),
+            menuItemLink: $('<a href="#" role="menuitem" class="link">'),
+            dropdownIcon: $('<i class="fa fa-fw">')
+        };
 
-    function trigger() { this.trigger.apply(this, arguments); }
+        var that = {
 
-    // helper: merge cateogories part of the server side and local config
-    function merge(target, source) {
-        var hash = {}, list = [];
-        // create hash for second list
-        _.each(source, function (obj) {
-            hash[obj.id] = obj;
-        });
-        // merge each element of first and second list
-        _.each(target, function (obj) {
-            list.push(_.extend({}, obj, hash[obj.id] || {}));
-        });
-        return list;
-    }
+            intitialize: function (options) {
+                if (that.app) return;
+                _.extend(that, options);
+            },
 
-    // helper: log all events on view/collection/model/module
-    function debug(color, name, detail) {
-        if (DEBUG) return console.log('%c' + name + (detail && false ? ': ' + JSON.stringify(detail, undefined, 2) : ''), 'color: white; background-color: ' + color);
-    }
+            isReady: function () {
+                return !!(that.app && that.app.categories && that.app.categories.initialized);
+            },
+
+            appendDropdown: function (node, data) {
+                if (!that.isReady()) return;
+
+                var list = _.filter(settings.get('categories/list'), function (item) {
+                    return item.active;
+                });
+                var current = that.app.categories.props.get('selected');
+
+                node.after(
+                    // drop down
+                    preParsed.list.clone()
+                    .on('click', 'a.category', { data: data }, that.change)
+                    .on('click', 'a.link', { data: data }, that.link)
+                    .append($('<li class="dropdown-header" role="separator">').text(gt('Move to category')))
+                    .append(
+                        _(list).map(function (category) {
+                            if (category.id === current) return;
+                            return preParsed.listItem.clone().append(
+                                preParsed.menuItemAction.clone().append(
+                                    $.txt(category.name)
+                                )
+                                .attr('data-category', category.id)
+                            );
+                        })
+                    )
+                    .append('<li class="divider" role="separator">')
+                    .append(
+                        preParsed.listItem.clone().append(
+                            preParsed.menuItemLink.clone().append(
+                                //#. term is followed by a space and three dots (' …')
+                                gt('Move to folder') + ' …'
+                            )
+                        )
+                    )
+                );
+
+                node.addClass('dropdown-toggle').attr({
+                    'aria-haspopup': 'true',
+                    'data-toggle': 'dropdown',
+                    'role': 'button'
+                });
+
+                node.parent().addClass('dropdown category-picker');
+            },
+
+            link: function (e) {
+                if (!that.isReady()) return;
+                var baton = e.data;
+                actions.check('io.ox/mail/actions/move', baton.data).done(function () {
+                    actions.invoke('io.ox/mail/actions/move', null, baton);
+                });
+
+                e.preventDefault();
+            },
+
+            change: function (e) {
+                if (!that.isReady()) return;
+                e.preventDefault();
+                var data = e.data.data,
+                    category = $(e.currentTarget).attr('data-category') || '0',
+                    name = $(e.currentTarget).text(),
+                    node = $(this).closest('.category-picker');
+                that.app.categories.move({ data: data, target: category, targetname: name });
+
+                node.find('.dropdown-toggle').focus();
+            },
+
+            // attach flag-picker behavior on existing node
+            attach: function (node, options) {
+                this.intitialize(options);
+                this.appendDropdown(node, [].concat(options.data));
+            }
+        };
+
+        return that;
+
+    })();
 
     /**
      * MODEL
@@ -292,7 +405,7 @@ define('io.ox/mail/categories/main', [
         },
         toJSON: function () {
             // sync/store only specific properties
-            return _.pick.apply(this, [_.clone(this.attributes)].concat(SYNCED));
+            return _.pick.apply(this, [_.clone(this.attributes)].concat(['id', 'name', 'active']));
         },
         getCount: function () {
             return this.get('unread') === 0 ? '' : this.get('unread');
@@ -328,10 +441,6 @@ define('io.ox/mail/categories/main', [
             return def;
         }
     });
-
-    function exists(container, model) {
-        return container.find('[data-id="' + model.get('id') + '"]').length;
-    }
 
     /**
      * VIEW: knows module, collection, module.props
@@ -755,7 +864,8 @@ define('io.ox/mail/categories/main', [
     // hint: settings in io.ox/mail/settings/pane
     return {
         api: api,
-        controller: module
+        controller: module,
+        picker: picker
     };
 
 });
