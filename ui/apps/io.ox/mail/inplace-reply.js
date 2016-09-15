@@ -77,14 +77,15 @@ define('io.ox/mail/inplace-reply', [
         onSend: function () {
             // get reply
             this.busy(true).setProgress(30);
+            var cid = this.cid;
             // alternativ also asks for HTML
             var view = getFormat() === 'text' ? 'text' : 'html';
             api.replyall(_.cid(this.cid), view)
-                .done(this.onReplyReady.bind(this, $.trim(this.getContent())))
+                .done(this.onReplyReady.bind(this, $.trim(this.getContent()), cid))
                 .fail(this.onSendFail.bind(this));
         },
 
-        onReplyReady: function (content, data) {
+        onReplyReady: function (content, cid, data) {
             // progress
             this.setProgress(70);
             // escape plain text content since we always send HTML
@@ -98,27 +99,34 @@ define('io.ox/mail/inplace-reply', [
                 data.from[0] = from;
                 // go!
                 api.send(data)
-                    .done(this.onSendComplete.bind(this))
+                    .done(this.onSendComplete.bind(this, cid))
                     .fail(this.onSendFail.bind(this));
             }.bind(this));
         },
 
-        onSendComplete: function (response) {
+        //cid is given as an argument, because this way it survives the dispose event
+        onSendComplete: function (cid, response) {
             this.setProgress(100);
             this.trigger('send', transformID(response.data));
-            delete drafts[this.cid];
+
+            delete drafts[cid];
             var view = this, $el = this.$el;
             setTimeout(function () {
                 view.renderSuccess();
-                setTimeout(function () {
-                    $el.fadeOut();
-                    $el = view = null;
-                }, 4000);
+                if (!this.disposed) {
+                    setTimeout(function () {
+                        $el.fadeOut();
+                        $el = view = null;
+                    }, 4000);
+                }
             }, 1000);
         },
 
         onSendFail: function (e) {
             yell(e);
+            if (this.disposed) {
+                return;
+            }
             this.busy(false);
         },
 
@@ -229,6 +237,11 @@ define('io.ox/mail/inplace-reply', [
         },
 
         renderSuccess: function () {
+            // if already disposed, use yell
+            if (this.disposed) {
+                yell('success', gt('Your reply has been sent'));
+                return;
+            }
             this.$el.empty().append(
                 $('<div class="success" role="alert">').append(
                     $('<i class="fa fa-check" aria-hidden="true">'),
