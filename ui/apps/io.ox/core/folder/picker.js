@@ -181,7 +181,8 @@ define('io.ox/core/folder/picker', [
                     // path might fail so we use always to con
                     .always(function () {
                         dialog.getBody().idle().prepend(tree.render().$el);
-                        tree.$el.focus();
+                        // focus and trigger click on first element for proper keyboard a11y
+                        tree.$el.find('.tree-container > li:first').focus().trigger('click');
                         o.show(dialog, tree);
                     });
             })
