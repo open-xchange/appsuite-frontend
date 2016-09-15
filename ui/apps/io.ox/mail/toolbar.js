@@ -106,7 +106,7 @@ define('io.ox/mail/toolbar', [
             customize: function (baton) {
                 var self = this;
                 require(['io.ox/mail/categories'], function (categories) {
-                    categories.picker.attach(self, { data: baton.data, app: baton.app });
+                    categories.picker(self, { data: baton.data });
                 });
             }
         },

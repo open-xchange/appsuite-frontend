@@ -17,6 +17,7 @@ define('io.ox/mail/categories', [
     'io.ox/core/api/account',
     'io.ox/core/folder/api',
     'io.ox/backbone/views/modal',
+    'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/tk/list-dnd',
     'io.ox/core/extPatterns/links',
@@ -25,7 +26,7 @@ define('io.ox/mail/categories', [
     'io.ox/core/extensions',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (http, mailAPI, accountAPI, folderAPI, Modal, actions, dnd, links, capabilities, yell, ext, settings, gt) {
+], function (http, mailAPI, accountAPI, folderAPI, Modal, Dropdown, actions, dnd, links, capabilities, yell, ext, settings, gt) {
 
     'use strict';
 
@@ -295,101 +296,73 @@ define('io.ox/mail/categories', [
 
     picker = (function () {
 
-        var preParsed = {
-            div: $('<div>'),
-            list: $('<ul class="dropdown-menu" role="menu">'),
-            listItem: $('<li>'),
-            menuItemAction: $('<a href="#" role="menuitem" class="category">'),
-            menuItemLink: $('<a href="#" role="menuitem" class="link">'),
-            dropdownIcon: $('<i class="fa fa-fw">')
-        };
+        function getLabel() {
+            return $('<i class="fa fa-folder-open-o">');
+        }
 
-        var that = {
+        var PickerDropdown = Dropdown.extend({
+            tagName: 'li',
 
-            intitialize: function (options) {
-                if (that.app) return;
-                _.extend(that, options);
+            renderToggle: function (node) {
+                // replace toolbar icon
+                node.closest('li').replaceWith(this.$el);
+                // render container once
+                if (this.rendered) return;
+                this.render().$el.attr('data-dropdown', 'category');
+                this.rendered = true;
             },
 
-            isReady: function () {
-                return !!(that.app && that.app.categories && that.app.categories.initialized);
+            renderMenu: function (options) {
+                this.$ul.empty();
+                var data = [].concat(options.data);
+                this.addCategories(data);
+                this.addLinks(data);
             },
 
-            appendDropdown: function (node, data) {
-                if (!that.isReady()) return;
+            addCategories: function (data) {
+                var current = module.props.get('selected'),
+                    list = _.filter(settings.get('categories/list'), function (item) {
+                        return item.active && item.id !== current;
+                    });
 
-                var list = _.filter(settings.get('categories/list'), function (item) {
-                    return item.active;
+                if (!list.length) return;
+
+                this.header(gt('Move to category'));
+                _.each(list, function (category) {
+                    this.link(category.id, category.name, $.proxy(this.onCategory, this, data));
+                }.bind(this));
+                this.divider();
+            },
+
+            addLinks: function (data) {
+                this.link('move-to-folder', gt('Move to folder') + ' …', $.proxy(this.onLink, this, data));
+            },
+
+            onCategory: function (data, e) {
+                var node = $(e.currentTarget),
+                    category = node.attr('data-name') || '0',
+                    name = node.text(),
+                    dropdown = node.closest('.dropdown');
+
+                module.move({ data: data, target: category, targetname: name });
+
+                dropdown.find('[data-toggle="dropdown"]').focus();
+            },
+
+            onLink: function (data) {
+                actions.check('io.ox/mail/actions/move', data).done(function () {
+                    actions.invoke('io.ox/mail/actions/move', null, { data: data });
                 });
-                var current = that.app.categories.props.get('selected');
-
-                node.after(
-                    // drop down
-                    preParsed.list.clone()
-                    .on('click', 'a.category', { data: data }, that.change)
-                    .on('click', 'a.link', { data: data }, that.link)
-                    .append($('<li class="dropdown-header" role="separator">').text(gt('Move to category')))
-                    .append(
-                        _(list).map(function (category) {
-                            if (category.id === current) return;
-                            return preParsed.listItem.clone().append(
-                                preParsed.menuItemAction.clone().append(
-                                    $.txt(category.name)
-                                )
-                                .attr('data-category', category.id)
-                            );
-                        })
-                    )
-                    .append('<li class="divider" role="separator">')
-                    .append(
-                        preParsed.listItem.clone().append(
-                            preParsed.menuItemLink.clone().append(
-                                //#. term is followed by a space and three dots (' …')
-                                gt('Move to folder') + ' …'
-                            )
-                        )
-                    )
-                );
-
-                node.addClass('dropdown-toggle').attr({
-                    'aria-haspopup': 'true',
-                    'data-toggle': 'dropdown',
-                    'role': 'button'
-                });
-
-                node.parent().addClass('dropdown category-picker');
-            },
-
-            link: function (e) {
-                if (!that.isReady()) return;
-                var baton = e.data;
-                actions.check('io.ox/mail/actions/move', baton.data).done(function () {
-                    actions.invoke('io.ox/mail/actions/move', null, baton);
-                });
-
-                e.preventDefault();
-            },
-
-            change: function (e) {
-                if (!that.isReady()) return;
-                e.preventDefault();
-                var data = e.data.data,
-                    category = $(e.currentTarget).attr('data-category') || '0',
-                    name = $(e.currentTarget).text(),
-                    node = $(this).closest('.category-picker');
-                that.app.categories.move({ data: data, target: category, targetname: name });
-
-                node.find('.dropdown-toggle').focus();
-            },
-
-            // attach flag-picker behavior on existing node
-            attach: function (node, options) {
-                this.intitialize(options);
-                this.appendDropdown(node, [].concat(options.data));
             }
-        };
+        });
 
-        return that;
+        var picker = new PickerDropdown({ label: getLabel });
+
+        return function (node, options) {
+            // called only once
+            picker.renderToggle(node);
+            picker.renderMenu(options);
+        };
 
     })();
 
