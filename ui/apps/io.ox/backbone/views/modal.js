@@ -100,7 +100,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             this.$el.siblings().attr('aria-hidden', true);
             this.trigger('open');
             // set initial focus
-            this.previousFocus = $(document.activeElement);
+            this.previousFocus = o.previousFocus || $(document.activeElement);
             var elem = this.$(o.focus);
             if (elem.length) {
                 // dialog might be busy, i.e. elements are invisible so focus() might not work

@@ -57,6 +57,7 @@ define('io.ox/core/folder/actions/add', [
             context: { folder: folder, module: opt.module, supportsPublicFolders: opt.supportsPublicFolders },
             enter: 'add',
             focus: 'input[name="name"]',
+            previousFocus: $(document.activeElement),
             help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create',
             point: 'io.ox/core/folder/add-popup',
             width: 400
