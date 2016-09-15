@@ -113,7 +113,7 @@ define('io.ox/mail/inplace-reply', [
             var view = this, $el = this.$el;
             setTimeout(function () {
                 view.renderSuccess();
-                if (!this.disposed) {
+                if (!view.disposed) {
                     setTimeout(function () {
                         $el.fadeOut();
                         $el = view = null;
