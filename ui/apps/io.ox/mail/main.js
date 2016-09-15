@@ -1712,7 +1712,7 @@ define('io.ox/mail/main', [
             };
 
             // fulllogic
-            require(['io.ox/mail/categories/main'], function (categories) {
+            require(['io.ox/mail/categories'], function (categories) {
                 app.categories = categories.controller.init({ mail: app, pool: api.pool.get('detail') });
             });
         },

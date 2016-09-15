@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/mail/categories/main', [
+define('io.ox/mail/categories', [
     'io.ox/core/http',
     'io.ox/mail/api',
     'io.ox/core/api/account',
@@ -30,7 +30,7 @@ define('io.ox/mail/categories/main', [
     'use strict';
 
     if (!capabilities.has('mail_categories')) {
-        console.error("mail/categories/main: capababilty 'mail_categories' missing");
+        console.error("mail/categories: capababilty 'mail_categories' missing");
     }
 
     var api, dialog, picker, Model, Collection, View, module, DEBUG = false;
