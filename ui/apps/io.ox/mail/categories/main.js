@@ -16,6 +16,7 @@ define('io.ox/mail/categories/main', [
     'io.ox/mail/api',
     'io.ox/core/api/account',
     'io.ox/core/folder/api',
+    'io.ox/backbone/views/modal',
     'io.ox/core/tk/list-dnd',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
@@ -23,7 +24,7 @@ define('io.ox/mail/categories/main', [
     'io.ox/core/extensions',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (http, mailAPI, accountAPI, folderAPI, dnd, links, capabilities, yell, ext, settings, gt) {
+], function (http, mailAPI, accountAPI, folderAPI, Modal, dnd, links, capabilities, yell, ext, settings, gt) {
 
     'use strict';
 
@@ -86,6 +87,162 @@ define('io.ox/mail/categories/main', [
             });
         }
     };
+
+    var dialog = (function () {
+
+        function createSenderList(carrier) {
+            carrier.senderlist = _.chain(carrier.maillist)
+                    .map(function (mail) { return mail.from[0][1]; })
+                    .uniq()
+                    .value();
+            return carrier;
+        }
+
+        function createTextLines(carrier) {
+            carrier.textlines = {
+                success: gt.format(
+                    //#. successfully moved a message via drag&drop to another mail category (tab)
+                    //#. %1$d represents the name if the target category
+                    //#, c-format
+                    gt.ngettext('Message moved to to category "%1$d".', 'Messages moved to category "%1$d".', carrier.maillist.length),
+                    _.escape(carrier.baton.targetname)
+                ),
+                question: gt.format(
+                    //#. ask user to move all messages from the same sender to the mail category (tab)
+                    //#. %1$d represents a email address
+                    //#, c-format
+                    gt.ngettext('Move all messages from %1$d to that category?', 'Move all messages from selected senders to that category?', carrier.senderlist.length),
+                    '<b>' + _.escape(carrier.senderlist) + '</b>'
+                )
+            };
+            return carrier;
+        }
+
+        function createContentString(carrier) {
+            carrier.contentstring = $('<tmp>').append(
+                $('<div class="content">').append(
+                    $('<div>').html(carrier.textlines.success),
+                    $('<div>').html(carrier.textlines.question + '<br>'),
+                    $('<button role="button" class="btn btn-default btn-primary" data-action="move-all">').text(gt('Move all')),
+                    $('<button role="button" class="btn btn-default" data-action="cancel">').text(gt('Cancel'))
+                )
+            ).html();
+            return carrier;
+        }
+
+        function yellOut(carrier) {
+            carrier.node = yell({
+                message: carrier.contentstring,
+                html: true,
+                duration: -1
+            })
+            .addClass('category-toast')
+            .on('click', '.btn', function (e) {
+                if ($(e.target).attr('data-action') === 'move-all') carrier.parent.trigger('dialog:generalize', carrier.baton);
+                yell('close');
+            });
+            return carrier;
+        }
+
+        return {
+
+            toast: function (parent, baton) {
+                var carrier = { parent: parent, maillist: baton.data, baton: baton },
+                    pipeline = _.pipe(carrier);
+
+                pipeline
+                    .then(createSenderList)
+                    .then(createTextLines)
+                    .then(createContentString)
+                    .then(yellOut);
+            },
+
+            Options: function (parent) {
+                var Dialog = Modal.extend({
+                    onSave: function () {
+                        var list = this.$('.category-item input.name'),
+                            categories = [];
+                        _.each(list, function (target) {
+                            var input = $(target),
+                                node = input.closest('.category-item'),
+                                checkbox = node.find('[type="checkbox"]');
+                            categories.push({
+                                id: node.attr('data-id'),
+                                name: input.val().trim(),
+                                active: checkbox.prop('checked')
+                            });
+                        });
+                        parent.trigger('update', categories);
+                    },
+                    onDisable: function () {
+                        yell('info', gt('You can enable categories again via the view dropdown on the right'));
+                        // mail app settings
+                        parent.module.mail.props.set('categories', false);
+                    }
+                });
+
+                return new Dialog({
+                    title: gt('Edit categories'),
+                    point: 'io.ox/mail/categories/edit',
+                    focus: '.form-inline',
+                    maximize: false,
+                    enter: 'save'
+                })
+                .extend({
+                    'default': function () {
+                        this.$body.addClass('mail-categories-dialog');
+                    },
+                    'form-inline-container': function () {
+                        this.$body.append(
+                            this.$container = $('<form class="form-inline-container">')
+                        );
+                    },
+                    'form-inline': function () {
+                        var list = parent.categories.map(function (model) {
+                            return $('<form class="form-inline">').append(
+                                        // inputs
+                                        $('<div class="form-group category-item">')
+                                            .attr('data-id', model.get('id'))
+                                            .append(
+                                                $('<input type="checkbox" class="status">')
+                                                    .prop('checked', model.is('active'))
+                                                    .attr('disabled', !model.can('disable')),
+                                                $('<input type="text" class="form-control name">')
+                                                    .attr({
+                                                        placeholder: gt('Name'),
+                                                        disabled: !model.can('rename')
+                                                    })
+                                                    .val(model.get('name'))
+                                            ),
+                                        // optional description block
+                                        model.get('description') ? $('<div class="description">').text(model.get('description')) : $()
+                                    );
+                        });
+                        this.$container.append(list);
+                    },
+                    'locked-hint': function () {
+                        var locked = parent.categories.filter(function (model) {
+                            return !model.can('disable') || !model.can('rename');
+                        });
+                        if (!locked.length) return;
+                        this.$body.append(
+                            $('<div class="hint">').text(gt('Please note that some categories are predefined and you might not be able to rename or disable.'))
+                        );
+                    },
+                    'register': function () {
+                        this.on('save', this.onSave);
+                        this.on('disable', this.onDisable);
+                    }
+                })
+                .addAlternativeButton({ label: gt('Disable categories'), action: 'disable' })
+                .addButton({ label: gt('Cancel'), action: 'cancel', className: 'btn-default' })
+                .addButton({ label: gt('Save'), action: 'save' })
+                .open();
+            }
+        };
+
+    })();
+
 
     // do not clutter hash
     ox.on('app:start app:resume', function (app) {
@@ -181,7 +338,6 @@ define('io.ox/mail/categories/main', [
      */
 
     View = Backbone.View.extend({
-        dialog: undefined,
         events: {
             'click .category': 'onSelect',
             'contextmenu .category': 'showOptions',
@@ -270,16 +426,12 @@ define('io.ox/mail/categories/main', [
             container.append($('<li class="free-space" aria-hidden="true">'));
         },
         showDialog: function (baton) {
-            require(['io.ox/mail/categories/dialogs'], function (dialog) {
-                // triggers update event in this view (with data param)
-                dialog.toast(this, baton);
-            }.bind(this));
+            // triggers update event in this view (with data param)
+            dialog.toast(this, baton);
         },
         showOptions: function (e) {
-            require(['io.ox/mail/categories/dialogs'], function (dialog) {
-                // triggers update event in this view (with data param)
-                new dialog.Options(this);
-            }.bind(this));
+            // triggers update event in this view (with data param)
+            new dialog.Options(this);
             // do not show native rightclick menu
             if (e && e.type === 'contextmenu') e.preventDefault();
         },
