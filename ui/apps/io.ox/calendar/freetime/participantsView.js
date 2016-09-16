@@ -15,8 +15,9 @@ define('io.ox/calendar/freetime/participantsView', [
     'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/core/extensions',
-    'io.ox/backbone/disposable'
-], function (AddParticipantsView, participantsViews, ext, DisposableView) {
+    'io.ox/backbone/disposable',
+    'gettext!io.ox/calendar'
+], function (AddParticipantsView, participantsViews, ext, DisposableView, gt) {
 
     'use strict';
 
@@ -36,6 +37,7 @@ define('io.ox/calendar/freetime/participantsView', [
                     resources: true,
                     distributionlists: true
                 },
+                placeholder: gt('Add participant'),
                 collection: baton.model.get('participants')
             });
             this.append(

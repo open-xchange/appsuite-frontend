@@ -67,7 +67,7 @@ define('io.ox/calendar/freetime/timeView', [
             baton.model.on('change:currentWeek', fillInfo);
 
             // append datepicker
-            new DatePicker({ parent: this.closest('.modal') })
+            new DatePicker({ parent: this.closest('.modal,#io-ox-core') })
                 .attachTo(info)
                 .on('select', function (date) {
                     baton.view.setDate(date.valueOf());
@@ -351,7 +351,8 @@ define('io.ox/calendar/freetime/timeView', [
                 this.lassoEnd = this.timeToPosition(end);
                 this.keepScrollpos = start;
             }
-            if (!this.model.get('startTime') && !options.parentModel) {
+
+            if (!options.parentModel && moment().isoWeek() === this.model.get('currentWeek').isoWeek()) {
                 // special scrollposition on start
                 this.keepScrollpos = 'today';
             }
@@ -428,8 +429,9 @@ define('io.ox/calendar/freetime/timeView', [
             // save scrollposition or it is lost when the busy animation is shown
             var oldWidth = this.bodyNode.find('.freetime-table').width(),
                 oldScrollPos = this.bodyNode.scrollLeft();
-            this.keepScrollpos = this.positionToTime(oldScrollPos / oldWidth * 100);
-
+            if (!this.keepScrollpos && oldWidth) {
+                this.keepScrollpos = this.positionToTime(oldScrollPos / oldWidth * 100);
+            }
             // render busy animation
             this.bodyNode.busy(true);
             // get fresh appointments

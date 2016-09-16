@@ -18,9 +18,10 @@ define('io.ox/calendar/freetime/main', [
     'io.ox/calendar/freetime/timeView',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
+    'settings!io.ox/core',
     'less!io.ox/calendar/freetime/style',
     'less!io.ox/calendar/style'
-], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, gt, settings) {
+], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, gt, settings, settingsCore) {
 
     'use strict';
 
@@ -116,6 +117,32 @@ define('io.ox/calendar/freetime/main', [
                 this.renderBody();
             },
 
+            createFooter: function (app) {
+                var saveButton = $('<button class="btn btn-primary pull-right scheduling-save-button">').text(gt('Create appointment')),
+                    node = $('<div class="scheduling-app-footer clearfix">').append(saveButton),
+                    self = this;
+                self.app = app;
+                saveButton.on('click', function () {
+                    var appointment = self.createAppointment();
+
+                    if (appointment) {
+                        appointment.folder = settingsCore.get('folder/calendar');
+                        ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
+                            edit.getApp().launch().done(function () {
+                                this.create(appointment);
+                            });
+                        });
+                        self.app.quit();
+                    } else {
+                        require(['io.ox/core/yell'], function (yell) {
+                            yell('info', gt('Please select a time for the appointment'));
+                        });
+                    }
+                });
+
+                return node;
+            },
+
             // for convenienece
             createAppointment: function () {
                 return this.timeSubview.createAppointment();
@@ -152,12 +179,47 @@ define('io.ox/calendar/freetime/main', [
                 def.resolve({ dialog: popup, view: view });
             });
             return def;
+        },
+
+        createApp = function () {
+            var app = ox.ui.createApp({ name: 'io.ox/calendar/scheduling', title: gt('Scheduling'), closable: true }), win;
+
+            app.setLauncher(function (options) {
+                options = options || {};
+                options.model = new FreetimeModel();
+                var closeButton = $('<button class="btn btn-link fa fa-close scheduling-app-close">').on('click', function () {
+                    app.quit();
+                });
+
+                win = ox.ui.createWindow({
+                    name: 'io.ox/calendar/scheduling',
+                    chromeless: true
+                });
+                app.setWindow(win);
+                app.view = new freetimeView(options);
+                win.nodes.outer.find('.window-container-center').addClass('scheduling-app-container');
+                win.nodes.body.addClass('scheduling-app-body');
+                // append after header so it does not scroll with the rest of the view
+                win.nodes.header.addClass('scheduling-app-header').append($('<h4 class="app-title">').text(gt('Scheduling')), app.view.timeSubview.headerNodeRow1, closeButton).after(app.view.header);
+                win.nodes.main.addClass('scheduling-app-content').append(app.view.body);
+                win.nodes.footer.append(app.view.createFooter(app));
+                win.show();
+                app.view.render();
+            });
+
+            app.setQuit(function () {
+                app.view.dispose();
+                return $.when();
+            });
+
+            return app;
         };
 
     return {
         FreetimeView: freetimeView,
         showDialog: showDialog,
         // just for convenience purposes
-        FreetimeModel:  FreetimeModel
+        FreetimeModel:  FreetimeModel,
+        getApp: createApp
     };
 });

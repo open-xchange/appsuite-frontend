@@ -339,27 +339,7 @@ define('io.ox/calendar/actions', [
                     }
                 }
 
-                freetime.showDialog({ startDate: startDate, participants: [{ id: ox.user_id, type: 1 }] }).done(function (data) {
-                    var view = data.view;
-                    data.dialog.on('save', function () {
-                        var appointment = view.createAppointment();
-
-                        if (appointment) {
-                            data.dialog.close();
-                            appointment.folder = baton.app.folder.get();
-                            ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
-                                edit.getApp().launch().done(function () {
-                                    this.create(appointment);
-                                });
-                            });
-                        } else {
-                            data.dialog.idle();
-                            require(['io.ox/core/yell'], function (yell) {
-                                yell('info', gt('Please select a time for the appointment'));
-                            });
-                        }
-                    });
-                });
+                freetime.getApp().launch({ startDate: startDate, participants: [{ id: ox.user_id, type: 1 }] });
             });
         }
     });

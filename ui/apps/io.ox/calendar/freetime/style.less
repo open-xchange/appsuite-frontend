@@ -21,14 +21,60 @@
 @today: #cf3239;
 @weekend: #a00;
 
+.scheduling-app-container {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+
+    .scheduling-app-header {
+        padding: 0 16px;
+        min-height: 40px;
+        border-bottom: #ccc solid 1px;
+        .app-title {
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+    }
+    .scheduling-app-content {
+        display: flex;
+        display: -webkit-flex;
+    }
+    .scheduling-app-footer {
+        border-top: #ccc solid 1px;
+        padding: 8px 16px;
+    }
+    .freetime-participants-view-body {
+        margin-left: 16px;
+    }
+    .scheduling-app-body {
+        position: relative;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .freetime-time-view-header {
+        &.row1 {
+            padding-top: 8px;
+        }
+    }
+    .scheduling-app-close {
+        padding: 0 0 2px 32px;
+        color: #666;
+    }
+}
+
 .freetime-popup {
     padding: 16px;
+}
+.freetime-popup, .scheduling-app-container {
     overflow-x: hidden;
     .modal-content .modal-header {
         min-height: 56px;
+    }
+    .modal-content .modal-header, .scheduling-app-header {
         display: flex;
         display: -webkit-flex;
-        .modal-title {
+        .modal-title, .app-title{
             min-width: 255px;
             max-width: 255px;
 
