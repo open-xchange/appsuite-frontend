@@ -82,7 +82,7 @@ define('io.ox/files/upload/main', [
             api = filesAPI;
 
         api.on('add:imp_version', function (title) {
-            notifications.yell('info', gt('A new version for %1$s has been created.', title));
+            notifications.yell('info', gt('A new version for "%1$s" has been added.', title));
         });
 
         this.update = upload.createQueue({

@@ -84,14 +84,14 @@ define('io.ox/files/settings/pane', [
         draw: function () {
             var preferences = [
                 { label: gt('Add new version'), value: 'newVersion' },
-                { label: gt('Add new version and show popup'), value: 'announceNewVersion' },
-                { label: gt('Add separate file / no new version'), value: 'newFile' }
+                { label: gt('Add new version and show notification'), value: 'announceNewVersion' },
+                { label: gt('Add separate file'), value: 'newFile' }
 
             ];
             this.append(
                 $('<fieldset>').append(
                     $('<legend>').addClass('sectiontitle').append(
-                        $('<h2>').text(gt('Upload handling'))
+                        $('<h2>').text(gt('Adding files with identical names'))
                     ),
                     new mini.RadioView({ list: preferences, name: 'uploadHandling', model: model }).render().$el
                 )
