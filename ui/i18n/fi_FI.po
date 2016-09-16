@@ -1215,10 +1215,6 @@ msgstr "Sovella sääntöä, jos kaikki ehdot täyttyvät"
 msgid "Apply rule if any condition is met."
 msgstr "Sovella sääntöä, jos jokin ehto täyttyy."
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Apply to all messages?"
-msgstr "Käytä kaikkiin viesteihin?"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
@@ -1627,7 +1623,6 @@ msgstr "Kalenteri:"
 msgid "Calendars"
 msgstr "Kalenterit"
 
-#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -1663,7 +1658,7 @@ msgstr "Kalenterit"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1750,6 +1745,16 @@ msgstr "CardDAV URL"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Kori on tyhjä."
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Categories"
+msgstr "Postiosoite"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Categories are represented as tabs in your inbox."
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -2065,16 +2070,10 @@ msgstr "Yleiset emoji-merkit"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
 msgid "Compact"
 msgstr "Tiivis"
-
-#. rows of scheduling table
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Compact view"
-msgid "Compact rows"
-msgstr "Tiivis näkymä"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -2109,13 +2108,16 @@ msgstr "Ehdot"
 msgid "Configuration Email"
 msgstr "Konfiguraatioviesti"
 
+#. term is followed by a space and three dots (' …')
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure"
+msgstr "Konfiguroi nyt"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr "Konfiguroi nyt"
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
-msgid "Configure your inbox tabs"
-msgstr "Konfiguroi saapuneet-laatikkosi välilehdet"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Confirmation"
@@ -2749,6 +2751,12 @@ msgstr "Kytke pois"
 msgid "Disable %1$s"
 msgstr "Kytke pois %1$s"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Disable categories"
+msgstr "Postiosoite"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Disable widget"
 msgstr "Poista widget käytöstä"
@@ -3109,7 +3117,7 @@ msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "Tiputa tähän ladataksesi %1$s <b class=\"dndignore\">uusi versio</b>"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Drop here!"
 msgstr "Pudota tähän!"
 
@@ -3196,11 +3204,6 @@ msgstr "Muokkaa yhteystietoa"
 msgid "Edit Flickr photo stream"
 msgstr "Muokka Flickr kuvavirtaa"
 
-#. might be suitable to use 'tabs' rather than translating it
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Edit Tabs"
-msgstr "Muokkaa välilehtiä"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "Muokkaa Tumblr syötettä"
@@ -3215,6 +3218,12 @@ msgstr "Muokkaa kaikkia objekteja"
 #: module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "Muokkaa tapaamista"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Edit categories"
+msgstr "Postiosoite"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
@@ -4453,16 +4462,13 @@ msgstr "%1$d päivän kuluttua"
 msgid "In progress"
 msgstr "Meneillään"
 
-#: apps/io.ox/portal/widgets.js module:io.ox/portal
-#: apps/plugins/portal/mail/register.js module:plugins/portal
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
+#: module:io.ox/portal apps/plugins/portal/mail/register.js
+#: module:plugins/portal
 msgid "Inbox"
 msgstr "Saapuneet"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Inbox Tabs"
-msgstr "Saapuneet-välilehdet"
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Inbox tabs"
 msgstr "Saapuneet -välilehdet"
 
@@ -4622,7 +4628,7 @@ msgid "Is smaller than"
 msgstr "Pienempi kuin"
 
 #. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr "Yhteisten viestien yhdistäminen oletusvälilehtiin vie hetken."
@@ -5194,6 +5200,15 @@ msgstr "Jäsenet"
 msgid "Message (optional)"
 msgstr "Viesti (valinnainen)"
 
+#. successfully moved a message via drag&drop to another mail category (tab)
+#. %1$d represents the name if the target category
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, c-format
+msgid "Message moved to to category \"%1$d\"."
+msgid_plural "Messages moved to category \"%1$d\"."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Messages"
@@ -5303,9 +5318,8 @@ msgstr "Löytyi enemmän kuin nyt näytettävät %1$s kohdetta"
 msgid "Move"
 msgstr "Siirrä"
 
-#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Move all"
 msgstr "Siirrä kaikki"
 
@@ -5314,10 +5328,27 @@ msgstr "Siirrä kaikki"
 msgid "Move all messages"
 msgstr "Siirrä kaikki viestit"
 
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$d represents a email address
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Move all messages to another folder"
+msgid "Move all messages from %1$d to that category?"
+msgid_plural "Move all messages from selected senders to that category?"
+msgstr[0] "Siirrä kaikki viestit toiseen kansioon"
+msgstr[1] "Siirrä kaikki viestit toiseen kansioon"
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "Siirrä kansio"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move to folder"
+msgid "Move to category"
+msgstr "Siirrä kansioon"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
@@ -5374,7 +5405,7 @@ msgstr "Minun tehtäväni"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -5666,11 +5697,6 @@ msgstr "Moduulille ei ole saatavilla tilauspalveluja."
 msgid "No title."
 msgstr "Ei otsikkoa."
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "No, only move selected message(s)"
-msgstr "Eim, poista vain valitut viestit."
-
 #. object permissions - read
 #. object permissions - edit/modify
 #. object permissions - delete
@@ -5713,10 +5739,6 @@ msgstr "Huomaa"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "CSV-tiedostoja koskeva viesti:"
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Note that some of the tabs can not be disabled."
-msgstr "Huomioi, että joitakin välilehtiä ei voi kytkeä pois päältä."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -6288,11 +6310,6 @@ msgstr "Lähetä uusi viesti"
 msgid "Play video files"
 msgstr "Toista videotiedostoja"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Please ask me every time"
-msgstr "Kysy joka kerta"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please check your inbox for a confirmation email.\n"
@@ -6407,18 +6424,10 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Syötä salasanasi"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
-"Please feel free to rename tabs to better match your needs. Use checkboxes "
-"to enable or disable specific tabs."
-msgstr ""
-"Nimeä välilehdet vapaasti uudelleen paremmin tarpeitasi vastaaviksi. Käytä "
-"ruutuja tiettyjen välilehtien kytkemiseksi päälle ja pois päältä."
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid ""
-"Please note that conversations are not available when tabbed inbox is "
-"activated."
+"Please note that some categories are predefined and you might not be able to "
+"rename or disable."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -7297,6 +7306,10 @@ msgstr "Rich Text Area. Paina ALT-F10 saadaksesi näkyviin työkalupakin"
 msgid "Room number"
 msgstr "Huonenumero"
 
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Rows"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Rule name"
@@ -7338,7 +7351,7 @@ msgstr "Liikevaihto"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
@@ -7507,14 +7520,6 @@ msgstr "Valitse tiedosto"
 msgid "Select folder"
 msgstr "Valitse kansio"
 
-#. %1$d is the number of mails
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, c-format
-msgid "Selected message was moved successfully."
-msgid_plural "Selected messages has been moved successfully."
-msgstr[0] "Valittu viesti siirrettiin onnistuneesti."
-msgstr[1] "Valitut viestit on siirretty onnistuneesti."
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Valinnan yksityiskohdat"
@@ -7641,6 +7646,12 @@ msgstr "Palvelin ei saatavilla"
 msgid "Server version"
 msgstr "Palvelimen versio"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Business category"
+msgid "Set category"
+msgstr "Liiketoiminnan ala"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Set color"
@@ -7754,27 +7765,9 @@ msgstr "Jaetaan"
 msgid "Shopping cart"
 msgstr "Ostoskori"
 
-#. %1$s single mail address or comma separated list of multiple
-#. %2$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, c-format
-msgid ""
-"Should all other past and future messages from %1$s also be moved to %2$s?"
-msgstr ""
-"Siirretään kaikki aiemmat ja tulevat viestit lähettäjältä %1$s kohteeseen "
-"%2$s?"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Should only the current message or all messages of the sender be moved"
-msgstr "Poistetaanko vain tämä viesti vai kaikki saman lähettäjän viestit?"
-
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Näytä"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Show Tabs for inbox"
-msgstr "Näytä saapuneet-laatikon välilehdet"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -7981,7 +7974,7 @@ msgid "Something went wrong saving your changes."
 msgstr "Jotakin meni pieleen muutoksiasi tallennettaessa."
 
 #. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Sorry, common mails couldn't be assigned automatically."
 msgstr "Yhteisiä viestejä ei voitu siirtää automaattisesti."
 
@@ -8754,12 +8747,6 @@ msgstr "Alkupäivämäärän tulee olla ennen loppupäivämäärää."
 msgid "The subscription could not be created."
 msgstr "Tilausta ei voitu luoda"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "The tabbed inbox can be completely disabled in the mail settings."
-msgstr ""
-"Välilehdellä merkitty saapuneen postin laatikko voidaan kytkeä kokonaan pois "
-"päältä postin asetuksista."
-
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
@@ -9134,7 +9121,7 @@ msgstr ""
 "doe@example.com tai \"John Doe\" <jd@example.com>)"
 
 #. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr ""
 "Täyttääksesi tämän alueen raahaa ja pudota viestit tämän välilehden "
@@ -9323,7 +9310,7 @@ msgid "Unlock"
 msgstr "Avaa lukitus"
 
 #. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Unnamed"
 msgstr "Nimeämätön"
 
@@ -9782,11 +9769,6 @@ msgstr "Keltainen"
 msgid "Yes"
 msgstr "Kyllä"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Yes, always move them all"
-msgstr "Kyllä, siirrä aina kaikki"
-
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Kyllä, lähetä ilman aihetta."
@@ -9867,6 +9849,10 @@ msgstr ""
 "Voit kopioida tämän linkin sähköpostiviestiin, messengeriin tai sosiaaliseen "
 "verkostoon. Huomioi, että kuka tahansa pääsee jakamaasi kohteeseen tämän "
 "linkin kautta."
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+msgid "You can enable categories again via the view dropdown on the right"
+msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid ""
@@ -10932,6 +10918,9 @@ msgstr "vvvv"
 #~ msgid "Apply for mails from %1$s"
 #~ msgstr "Viesti lähettäjältä %1$s: %2$s"
 
+#~ msgid "Apply to all messages?"
+#~ msgstr "Käytä kaikkiin viesteihin?"
+
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
 #~ msgstr[0] "Tapaaminen on kopioitu"
@@ -11066,8 +11055,16 @@ msgstr "vvvv"
 #~ msgid "Comoros"
 #~ msgstr "Huomenna"
 
+#, fuzzy
+#~| msgid "Compact view"
+#~ msgid "Compact rows"
+#~ msgstr "Tiivis näkymä"
+
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "Uuden viestin laatiminen"
+
+#~ msgid "Configure your inbox tabs"
+#~ msgstr "Konfiguroi saapuneet-laatikkosi välilehdet"
 
 #~ msgid "Confirm"
 #~ msgstr "Vahvista"
@@ -11226,6 +11223,9 @@ msgstr "vvvv"
 #~| msgid "Last month"
 #~ msgid "East Timor"
 #~ msgstr "Viime kuussa"
+
+#~ msgid "Edit Tabs"
+#~ msgstr "Muokkaa välilehtiä"
 
 #~ msgid ""
 #~ "Edit a setting on the right side. In most of the cases, the changes are "
@@ -11533,6 +11533,9 @@ msgstr "vvvv"
 #~ "display area."
 #~ msgstr "Kuvakenäkymä esittää valitun kansion tiedostot näyttäalueella."
 
+#~ msgid "Inbox Tabs"
+#~ msgstr "Saapuneet-välilehdet"
+
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "Saapuvat ilmoituspostit"
 
@@ -11591,11 +11594,6 @@ msgstr "vvvv"
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Posti ja Some-tilit"
 
-#, fuzzy
-#~| msgid "Mail address"
-#~ msgid "Mail categories"
-#~ msgstr "Postiosoite"
-
 #~ msgid "Mail text"
 #~ msgstr "Viestin teksti"
 
@@ -11645,9 +11643,6 @@ msgstr "vvvv"
 #~| msgid "Apply to all subfolders"
 #~ msgid "Move all mails from a sender"
 #~ msgstr "Käytä kaikkiin alakansioihin"
-
-#~ msgid "Move all messages to another folder"
-#~ msgstr "Siirrä kaikki viestit toiseen kansioon"
 
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "Siirretään posteja... Tämä voi kestää muutaman sekunnin."
@@ -11714,6 +11709,9 @@ msgstr "vvvv"
 #~ msgid "No wall posts yet."
 #~ msgstr "Ei vielä seinäpostauksia."
 
+#~ msgid "No, only move selected message(s)"
+#~ msgstr "Eim, poista vain valitut viestit."
+
 #~ msgid "Normal"
 #~ msgstr "Tavallinen"
 
@@ -11724,6 +11722,9 @@ msgstr "vvvv"
 
 #~ msgid "Not yet confirmed"
 #~ msgstr "Vahvistamaton"
+
+#~ msgid "Note that some of the tabs can not be disabled."
+#~ msgstr "Huomioi, että joitakin välilehtiä ei voi kytkeä pois päältä."
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Uutisvirrassasi ei ole mitään."
@@ -11787,11 +11788,21 @@ msgstr "vvvv"
 #~ msgid "Phone alt"
 #~ msgstr "Puhelin vaihtoehtoinen"
 
+#~ msgid "Please ask me every time"
+#~ msgstr "Kysy joka kerta"
+
 #~ msgid "Please enter a correct number."
 #~ msgstr "Syötä käypä numero."
 
 #~ msgid "Please enter a valid date."
 #~ msgstr "Ole hyvä ja syötä käypä päivämäärä."
+
+#~ msgid ""
+#~ "Please feel free to rename tabs to better match your needs. Use "
+#~ "checkboxes to enable or disable specific tabs."
+#~ msgstr ""
+#~ "Nimeä välilehdet vapaasti uudelleen paremmin tarpeitasi vastaaviksi. "
+#~ "Käytä ruutuja tiettyjen välilehtien kytkemiseksi päälle ja pois päältä."
 
 #, fuzzy
 #~| msgid "Portal"
@@ -11910,6 +11921,11 @@ msgstr "vvvv"
 #~ msgid "Select none"
 #~ msgstr "Poista valinta"
 
+#~ msgid "Selected message was moved successfully."
+#~ msgid_plural "Selected messages has been moved successfully."
+#~ msgstr[0] "Valittu viesti siirrettiin onnistuneesti."
+#~ msgstr[1] "Valitut viestit on siirretty onnistuneesti."
+
 #~ msgid "Send as mail"
 #~ msgstr "Lähetä viestinä"
 
@@ -11933,8 +11949,21 @@ msgstr "vvvv"
 #~ msgid "Shared by: %1$s"
 #~ msgstr "Etsittiin %1$s"
 
+#~ msgid ""
+#~ "Should all other past and future messages from %1$s also be moved to %2$s?"
+#~ msgstr ""
+#~ "Siirretään kaikki aiemmat ja tulevat viestit lähettäjältä %1$s kohteeseen "
+#~ "%2$s?"
+
+#~ msgid ""
+#~ "Should only the current message or all messages of the sender be moved"
+#~ msgstr "Poistetaanko vain tämä viesti vai kaikki saman lähettäjän viestit?"
+
 #~ msgid "Show QR code"
 #~ msgstr "Näytä QR koodi"
+
+#~ msgid "Show Tabs for inbox"
+#~ msgstr "Näytä saapuneet-laatikon välilehdet"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
@@ -12221,6 +12250,11 @@ msgstr "vvvv"
 #~ msgstr ""
 #~ "Jaettu tieto tulee olemaan saatavilla koko internetistä. Harkitse "
 #~ "tarkasti mitä tietoa haluat jakaa."
+
+#~ msgid "The tabbed inbox can be completely disabled in the mail settings."
+#~ msgstr ""
+#~ "Välilehdellä merkitty saapuneen postin laatikko voidaan kytkeä kokonaan "
+#~ "pois päältä postin asetuksista."
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Tätä tiliä ei pystytä varmentamaan"
@@ -12666,6 +12700,9 @@ msgstr "vvvv"
 
 #~ msgid "Which device do you want to configure?"
 #~ msgstr "Minkä laitteen haluat konfiguroida?"
+
+#~ msgid "Yes, always move them all"
+#~ msgstr "Kyllä, siirrä aina kaikki"
 
 #~ msgid ""
 #~ "You can drag and drop files from your computer here to add as attachment."

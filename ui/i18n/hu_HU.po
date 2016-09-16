@@ -1225,10 +1225,6 @@ msgstr "Szabály alkalmazása, ha minden feltétel teljesül"
 msgid "Apply rule if any condition is met."
 msgstr "Szabály alkalmazása, ha bármely feltétel teljesül."
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Apply to all messages?"
-msgstr "Alkalmazza az összes üzenetre?"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
@@ -1638,7 +1634,6 @@ msgstr "Naptár:"
 msgid "Calendars"
 msgstr "Naptárak"
 
-#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -1674,7 +1669,7 @@ msgstr "Naptárak"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1762,6 +1757,16 @@ msgstr "CalDAV URL"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "A kosár üres."
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Series"
+msgid "Categories"
+msgstr "Ismétlődések"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Categories are represented as tabs in your inbox."
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -2079,15 +2084,9 @@ msgstr "Általános Emoji"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
 msgid "Compact"
-msgstr "Kompakt"
-
-#. rows of scheduling table
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Compact"
-msgid "Compact rows"
 msgstr "Kompakt"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -2123,13 +2122,16 @@ msgstr "Feltételek"
 msgid "Configuration Email"
 msgstr "Beállító e-mail"
 
+#. term is followed by a space and three dots (' …')
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure"
+msgstr "Beállítás"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr "Beállítás"
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
-msgid "Configure your inbox tabs"
-msgstr "Beérkezett üzenetek lapjainak beállítása"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Confirmation"
@@ -2764,6 +2766,12 @@ msgstr "Letiltás"
 msgid "Disable %1$s"
 msgstr "%1$s letiltása"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Disable widget"
+msgid "Disable categories"
+msgstr "Widget letiltása"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Disable widget"
 msgstr "Widget letiltása"
@@ -3134,7 +3142,7 @@ msgid ""
 msgstr ""
 "Húzza ide a(z) „%1$s” feltöltendő <b class='dndignore'>új verzióját</b>"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Drop here!"
 msgstr "Húzza ide!"
 
@@ -3221,11 +3229,6 @@ msgstr "Névjegy szerkesztése"
 msgid "Edit Flickr photo stream"
 msgstr "Flickr fotófolyam szerkesztése"
 
-#. might be suitable to use 'tabs' rather than translating it
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Edit Tabs"
-msgstr "Lapok szerkesztése"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "Tumblr hírforrás szerkesztése"
@@ -3240,6 +3243,12 @@ msgstr "Minden elem szerkesztése"
 #: module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "Találkozó szerkesztése"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Edit resource"
+msgid "Edit categories"
+msgstr "Erőforrás szerkesztése"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
@@ -4478,16 +4487,13 @@ msgstr "%1$d nap múlva"
 msgid "In progress"
 msgstr "Folyamatban"
 
-#: apps/io.ox/portal/widgets.js module:io.ox/portal
-#: apps/plugins/portal/mail/register.js module:plugins/portal
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
+#: module:io.ox/portal apps/plugins/portal/mail/register.js
+#: module:plugins/portal
 msgid "Inbox"
 msgstr "Beérkezett üzenetek"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Inbox Tabs"
-msgstr "Beérkezett üzenetek lapjai"
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Inbox tabs"
 msgstr "Beérkezett üzenetek lapjai"
 
@@ -4647,7 +4653,7 @@ msgid "Is smaller than"
 msgstr "Kisebb, mint"
 
 #. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr ""
@@ -5221,6 +5227,15 @@ msgstr "Tagok"
 msgid "Message (optional)"
 msgstr "Üzenet (opcionális)"
 
+#. successfully moved a message via drag&drop to another mail category (tab)
+#. %1$d represents the name if the target category
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, c-format
+msgid "Message moved to to category \"%1$d\"."
+msgid_plural "Messages moved to category \"%1$d\"."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Messages"
@@ -5330,9 +5345,8 @@ msgstr "A megjelenített %1$s elemnél több is található"
 msgid "Move"
 msgstr "Mozgatás"
 
-#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Move all"
 msgstr "Összes mozgatása"
 
@@ -5341,10 +5355,27 @@ msgstr "Összes mozgatása"
 msgid "Move all messages"
 msgstr "Összes üzenet mozgatása"
 
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$d represents a email address
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Move all messages to another folder"
+msgid "Move all messages from %1$d to that category?"
+msgid_plural "Move all messages from selected senders to that category?"
+msgstr[0] "Összes üzenet mozgatása egy másik mappába"
+msgstr[1] "Összes üzenet mozgatása egy másik mappába"
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "Mappa mozgatása"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move to folder"
+msgid "Move to category"
+msgstr "Mozgatás mappába"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
@@ -5401,7 +5432,7 @@ msgstr "Saját feladatok"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -5694,11 +5725,6 @@ msgstr "Ehhez a modulhoz nincs feliratkozás kötve."
 msgid "No title."
 msgstr "Nincs cím."
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "No, only move selected message(s)"
-msgstr "Nem, csak a kiválasztott üzenete(ke)t mozgassa"
-
 #. object permissions - read
 #. object permissions - edit/modify
 #. object permissions - delete
@@ -5741,10 +5767,6 @@ msgstr "Megjegyzés"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Megjegyzés a CSV fájlokon:"
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Note that some of the tabs can not be disabled."
-msgstr "Néhány lap nem tiltható le."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -6316,11 +6338,6 @@ msgstr "Új levél küldése"
 msgid "Play video files"
 msgstr "Videofájlok lejátszása"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Please ask me every time"
-msgstr "Kérdezze meg minden alkalommal"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please check your inbox for a confirmation email.\n"
@@ -6435,18 +6452,10 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Adja meg jelszavát."
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
-"Please feel free to rename tabs to better match your needs. Use checkboxes "
-"to enable or disable specific tabs."
-msgstr ""
-"Bármikor átnevezheti a lapokat és a jelölőnégyzet segítségével "
-"engedélyezheti vagy letilthatja azokat."
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid ""
-"Please note that conversations are not available when tabbed inbox is "
-"activated."
+"Please note that some categories are predefined and you might not be able to "
+"rename or disable."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -7326,6 +7335,10 @@ msgstr ""
 msgid "Room number"
 msgstr "Szobaszám"
 
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Rows"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Rule name"
@@ -7367,7 +7380,7 @@ msgstr "Értékesítési mennyiség"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
@@ -7537,14 +7550,6 @@ msgstr "Válasszon fájlt"
 msgid "Select folder"
 msgstr "Válasszon mappát"
 
-#. %1$d is the number of mails
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, c-format
-msgid "Selected message was moved successfully."
-msgid_plural "Selected messages has been moved successfully."
-msgstr[0] "A kijelölt üzenet mozgatása sikeres volt."
-msgstr[1] "A kijelölt üzenetek mozgatása sikeres volt."
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Kijelölés részletei"
@@ -7671,6 +7676,12 @@ msgstr "A kiszolgáló nem érhető el"
 msgid "Server version"
 msgstr "Kiszolgáló verziója"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Business category"
+msgid "Set category"
+msgstr "Cégkategória"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Set color"
@@ -7784,27 +7795,9 @@ msgstr "Megosztás"
 msgid "Shopping cart"
 msgstr "Bevásárlókosár"
 
-#. %1$s single mail address or comma separated list of multiple
-#. %2$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, c-format
-msgid ""
-"Should all other past and future messages from %1$s also be moved to %2$s?"
-msgstr ""
-"Az összes %1$s feladótól érkezett korábbi és jövőbeli üzenet a(z) %2$s "
-"helyre kerüljön?"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Should only the current message or all messages of the sender be moved"
-msgstr "Csak az aktuális vagy a küldő összes üzenete kerüljön mozgatásra"
-
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Megjelenítés"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Show Tabs for inbox"
-msgstr "Beérkezett üzenetek lapjainak megjelenítése"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -8011,7 +8004,7 @@ msgid "Something went wrong saving your changes."
 msgstr "Hiba történt a módosítások mentésekor."
 
 #. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Sorry, common mails couldn't be assigned automatically."
 msgstr ""
 "Sajnáljuk, a közös levelek nem tudtak automatikusan a megfelelő laphoz "
@@ -8790,10 +8783,6 @@ msgstr "A kezdő dátumnak a befejező dátum előtt kell lennie."
 msgid "The subscription could not be created."
 msgstr "A feliratkozás nem hozható létre."
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "The tabbed inbox can be completely disabled in the mail settings."
-msgstr "A levelezés beállításainál a lapok teljesen letilthatók."
-
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
@@ -9167,7 +9156,7 @@ msgstr ""
 "janos.kovacs@pelda.hu vagy \"Kovács János\" <kj@pelda.hu>)"
 
 #. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr "Húzzon a lap címéhez leveleket a terület feltöltéséhez."
 
@@ -9354,7 +9343,7 @@ msgid "Unlock"
 msgstr "Feloldás"
 
 #. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Unnamed"
 msgstr "Névtelen"
 
@@ -9816,11 +9805,6 @@ msgstr "Sárga"
 msgid "Yes"
 msgstr "Igen"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Yes, always move them all"
-msgstr "Igen, mindig mozgassa az összest"
-
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Igen, küldés tárgy nélkül"
@@ -9903,6 +9887,10 @@ msgstr ""
 "Lemásolhatja és beillesztheti a hivatkozást egy e-mailbe, azonnali "
 "üzenetküldőbe vagy közösségi hálózatra. Vegye figyelembe, hogy ezzel a "
 "hivatkozással bárki eléri a megosztott tartalmat."
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+msgid "You can enable categories again via the view dropdown on the right"
+msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid ""
@@ -10844,6 +10832,9 @@ msgstr "yyyy"
 #~ msgid "Applications"
 #~ msgstr "Alkalmazások"
 
+#~ msgid "Apply to all messages?"
+#~ msgstr "Alkalmazza az összes üzenetre?"
+
 #~ msgid "Appointment scheduling"
 #~ msgstr "Találkozó ütemezése"
 
@@ -10889,6 +10880,14 @@ msgstr "yyyy"
 #~ msgid "Comoros"
 #~ msgstr "Holnap"
 
+#, fuzzy
+#~| msgid "Compact"
+#~ msgid "Compact rows"
+#~ msgstr "Kompakt"
+
+#~ msgid "Configure your inbox tabs"
+#~ msgstr "Beérkezett üzenetek lapjainak beállítása"
+
 #~ msgid "Day View"
 #~ msgstr "Napnézet"
 
@@ -10913,6 +10912,9 @@ msgstr "yyyy"
 #~| msgid "Last month"
 #~ msgid "East Timor"
 #~ msgstr "Múlt hónap"
+
+#~ msgid "Edit Tabs"
+#~ msgstr "Lapok szerkesztése"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "E-mail értesítés elfogadásról és visszautasításról"
@@ -11001,6 +11003,9 @@ msgstr "yyyy"
 #~ msgid "IMAP server"
 #~ msgstr "IMAP kiszolgáló"
 
+#~ msgid "Inbox Tabs"
+#~ msgstr "Beérkezett üzenetek lapjai"
+
 #, fuzzy
 #~| msgid "Undone"
 #~ msgid "Indonesia"
@@ -11048,9 +11053,6 @@ msgstr "yyyy"
 #~ msgid "Montserrat"
 #~ msgstr "Hónap"
 
-#~ msgid "Move all messages to another folder"
-#~ msgstr "Összes üzenet mozgatása egy másik mappába"
-
 #, fuzzy
 #~| msgid "New calendar"
 #~ msgid "New Caledonia"
@@ -11061,6 +11063,9 @@ msgstr "yyyy"
 #~ msgid "New Zealand"
 #~ msgstr "Új naptár"
 
+#~ msgid "No, only move selected message(s)"
+#~ msgstr "Nem, csak a kiválasztott üzenete(ke)t mozgassa"
+
 #~ msgid "Normal"
 #~ msgstr "Normál"
 
@@ -11068,6 +11073,9 @@ msgstr "yyyy"
 #~| msgid "Forward"
 #~ msgid "Norway"
 #~ msgstr "Továbbítás"
+
+#~ msgid "Note that some of the tabs can not be disabled."
+#~ msgstr "Néhány lap nem tiltható le."
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Nincs semmi a hírcsatornában."
@@ -11084,6 +11092,16 @@ msgstr "yyyy"
 #~| msgid "Distance"
 #~ msgid "Pakistan"
 #~ msgstr "Távolság"
+
+#~ msgid "Please ask me every time"
+#~ msgstr "Kérdezze meg minden alkalommal"
+
+#~ msgid ""
+#~ "Please feel free to rename tabs to better match your needs. Use "
+#~ "checkboxes to enable or disable specific tabs."
+#~ msgstr ""
+#~ "Bármikor átnevezheti a lapokat és a jelölőnégyzet segítségével "
+#~ "engedélyezheti vagy letilthatja azokat."
 
 #, fuzzy
 #~| msgid "Portal"
@@ -11117,8 +11135,26 @@ msgstr "yyyy"
 #~ msgid "Save to Drive"
 #~ msgstr "Mentés a Drive-ra"
 
+#~ msgid "Selected message was moved successfully."
+#~ msgid_plural "Selected messages has been moved successfully."
+#~ msgstr[0] "A kijelölt üzenet mozgatása sikeres volt."
+#~ msgstr[1] "A kijelölt üzenetek mozgatása sikeres volt."
+
 #~ msgid "Send as mail"
 #~ msgstr "Küldés e-mailként"
+
+#~ msgid ""
+#~ "Should all other past and future messages from %1$s also be moved to %2$s?"
+#~ msgstr ""
+#~ "Az összes %1$s feladótól érkezett korábbi és jövőbeli üzenet a(z) %2$s "
+#~ "helyre kerüljön?"
+
+#~ msgid ""
+#~ "Should only the current message or all messages of the sender be moved"
+#~ msgstr "Csak az aktuális vagy a küldő összes üzenete kerüljön mozgatásra"
+
+#~ msgid "Show Tabs for inbox"
+#~ msgstr "Beérkezett üzenetek lapjainak megjelenítése"
 
 #~ msgid "Show comments"
 #~ msgstr "Megjegyzések megjelenítése"
@@ -11168,6 +11204,9 @@ msgstr "yyyy"
 
 #~ msgid "The notification area is closed"
 #~ msgstr "Az értesítési terület zárva"
+
+#~ msgid "The tabbed inbox can be completely disabled in the mail settings."
+#~ msgstr "A levelezés beállításainál a lapok teljesen letilthatók."
 
 #~ msgid ""
 #~ "This document is password protected and cannot be displayed. Please open "
@@ -11263,6 +11302,9 @@ msgstr "yyyy"
 
 #~ msgid "Workweek View"
 #~ msgstr "Munkahét nézet"
+
+#~ msgid "Yes, always move them all"
+#~ msgstr "Igen, mindig mozgassa az összest"
 
 #~ msgid "You like this"
 #~ msgstr "Kedveli ezt"

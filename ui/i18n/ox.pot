@@ -383,7 +383,6 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js
 #: module:io.ox/core
 #: apps/io.ox/calendar/actions.js
@@ -445,7 +444,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js
 #: apps/io.ox/mail/compose/names.js
@@ -498,6 +497,7 @@ msgstr ""
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Compact"
@@ -804,7 +804,7 @@ msgstr ""
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js
 #: module:io.ox/mail
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -1578,10 +1578,9 @@ msgstr ""
 msgid "Zoom"
 msgstr ""
 
-#. rows of scheduling table
 #: apps/io.ox/calendar/freetime/timeView.js
 #: module:io.ox/calendar
-msgid "Compact rows"
+msgid "Rows"
 msgstr ""
 
 #: apps/io.ox/calendar/freetime/timeView.js
@@ -2818,7 +2817,7 @@ msgstr ""
 #: apps/io.ox/files/share/view-options.js
 #: module:io.ox/files
 #: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -4238,10 +4237,9 @@ msgctxt "verb"
 msgid "Archive"
 msgstr ""
 
-#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js
 #: module:io.ox/core
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
 msgid "Move all"
 msgstr ""
@@ -8459,84 +8457,83 @@ msgstr ""
 msgid "Couldn't load your auto forward."
 msgstr ""
 
-#: apps/io.ox/mail/categories/dialogs.js
-#: module:io.ox/mail
-msgid "Apply to all messages?"
-msgstr ""
-
-#. %1$d is the number of mails
-#: apps/io.ox/mail/categories/dialogs.js
+#. successfully moved a message via drag&drop to another mail category (tab)
+#. %1$d represents the name if the target category
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
 #, c-format
-msgid "Selected message was moved successfully."
-msgid_plural "Selected messages has been moved successfully."
+msgid "Message moved to to category \"%1$d\"."
+msgid_plural "Messages moved to category \"%1$d\"."
 msgstr[0] ""
 msgstr[1] ""
 
-#. %1$s single mail address or comma separated list of multiple
-#. %2$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$d represents a email address
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
 #, c-format
-msgid "Should all other past and future messages from %1$s also be moved to %2$s?"
+msgid "Move all messages from %1$d to that category?"
+msgid_plural "Move all messages from selected senders to that category?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/mail/categories.js
+#: module:io.ox/mail
+msgid "You can enable categories again via the view dropdown on the right"
 msgstr ""
 
-#. might be suitable to use 'tabs' rather than translating it
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
-msgid "Edit Tabs"
+msgid "Edit categories"
 msgstr ""
 
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
-msgid "Please feel free to rename tabs to better match your needs. Use checkboxes to enable or disable specific tabs."
+msgid "Please note that some categories are predefined and you might not be able to rename or disable."
 msgstr ""
 
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
-msgid "Note that some of the tabs can not be disabled."
+msgid "Disable categories"
 msgstr ""
 
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
-msgid "The tabbed inbox can be completely disabled in the mail settings."
+msgid "Move to category"
 msgstr ""
 
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
-msgid "Inbox tabs"
-msgstr ""
-
-#: apps/io.ox/mail/categories/main.js
-#: module:io.ox/mail
-msgid "Configure your inbox tabs"
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Move to folder"
 msgstr ""
 
 #. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
 msgid "Unnamed"
 msgstr ""
 
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
 msgid "Drop here!"
 msgstr ""
 
 #. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
 msgid "It will take some time until common mails are assigned to the default tabs."
 msgstr ""
 
 #. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
 msgid "Sorry, common mails couldn't be assigned automatically."
 msgstr ""
 
 #. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr ""
@@ -9213,11 +9210,6 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-msgid "Move to folder"
-msgstr ""
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
 msgid "Reject with reason"
 msgstr ""
 
@@ -9357,6 +9349,11 @@ msgid "Sending 1 message ... %2$d%"
 msgid_plural "Sending %1$d messages ... %2$d%"
 msgstr[0] ""
 msgstr[1] ""
+
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "Categories are represented as tabs in your inbox."
+msgstr ""
 
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
@@ -9547,44 +9544,6 @@ msgstr ""
 msgid "Show requests for read receipts"
 msgstr ""
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Please ask me every time"
-msgstr ""
-
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Yes, always move them all"
-msgstr ""
-
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "No, only move selected message(s)"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Inbox Tabs"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Please note that conversations are not available when tabbed inbox is activated."
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Show Tabs for inbox"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Should only the current message or all messages of the sender be moved"
-msgstr ""
-
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Change IMAP subscriptions"
@@ -9717,12 +9676,37 @@ msgstr ""
 
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
+msgid "Set category"
+msgstr ""
+
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
 msgid "Vertical"
 msgstr ""
 
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Horizontal"
+msgstr ""
+
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+#: apps/io.ox/portal/widgets.js
+#: module:io.ox/portal
+#: apps/plugins/portal/mail/register.js
+#: module:plugins/portal
+msgid "Inbox"
+msgstr ""
+
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+msgid "Categories"
+msgstr ""
+
+#. term is followed by a space and three dots (' …')
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+msgid "Configure"
 msgstr ""
 
 #: apps/io.ox/mail/toolbar.js
@@ -9743,6 +9727,11 @@ msgstr ""
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Statistics"
+msgstr ""
+
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+msgid "Inbox tabs"
 msgstr ""
 
 #. (From) email1 via email2. Appears in email detail view.
@@ -10358,13 +10347,6 @@ msgstr ""
 #: apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Reduce to widget summary"
-msgstr ""
-
-#: apps/io.ox/portal/widgets.js
-#: module:io.ox/portal
-#: apps/plugins/portal/mail/register.js
-#: module:plugins/portal
-msgid "Inbox"
 msgstr ""
 
 #: apps/io.ox/portal/widgets.js

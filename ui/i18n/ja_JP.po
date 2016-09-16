@@ -1196,10 +1196,6 @@ msgstr "すべての条件を満たす場合にルールを適用"
 msgid "Apply rule if any condition is met."
 msgstr "いずれかの条件を満たす場合にルールを適用"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Apply to all messages?"
-msgstr "すべてのメッセージに適用されますか。"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
@@ -1600,7 +1596,6 @@ msgstr "予定表："
 msgid "Calendars"
 msgstr "予定表"
 
-#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -1636,7 +1631,7 @@ msgstr "予定表"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1722,6 +1717,14 @@ msgstr "CardDAV URL"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "カートには何も入っていません。"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgid "Categories"
+msgstr "カテゴリ"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Categories are represented as tabs in your inbox."
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -2037,16 +2040,10 @@ msgstr "他社共通絵文字"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
 msgid "Compact"
 msgstr "コンパクト"
-
-#. rows of scheduling table
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Compact view"
-msgid "Compact rows"
-msgstr "コンパクト ビュー"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -2081,13 +2078,16 @@ msgstr "条件"
 msgid "Configuration Email"
 msgstr "構成メール"
 
+#. term is followed by a space and three dots (' …')
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure"
+msgstr "今構成する"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr "今構成する"
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
-msgid "Configure your inbox tabs"
-msgstr "受信トレイのタブを構成する"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Confirmation"
@@ -2720,6 +2720,12 @@ msgstr "無効"
 msgid "Disable %1$s"
 msgstr "%1$s を無効にする"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail categories"
+msgid "Disable categories"
+msgstr "利用可能なカテゴリ:"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Disable widget"
 msgstr "ウィジェットを無効化"
@@ -3086,7 +3092,7 @@ msgstr ""
 "\"%1$s\" の <b class=\"dndignore\">新規バージョン</b> をアップロードするに"
 "は、ここにドロップしてください。"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Drop here!"
 msgstr "ここにドロップしてください！"
 
@@ -3173,11 +3179,6 @@ msgstr "連絡先を編集"
 msgid "Edit Flickr photo stream"
 msgstr "Flickr フォトストリームを編集"
 
-#. might be suitable to use 'tabs' rather than translating it
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Edit Tabs"
-msgstr "タブを編集"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "Tumblr フィードを編集"
@@ -3192,6 +3193,12 @@ msgstr "すべてのオブジェクトを編集"
 #: module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "アポイントを編集"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail categories"
+msgid "Edit categories"
+msgstr "利用可能なカテゴリ:"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
@@ -4430,16 +4437,13 @@ msgstr "%1$d 日後"
 msgid "In progress"
 msgstr "進行中"
 
-#: apps/io.ox/portal/widgets.js module:io.ox/portal
-#: apps/plugins/portal/mail/register.js module:plugins/portal
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
+#: module:io.ox/portal apps/plugins/portal/mail/register.js
+#: module:plugins/portal
 msgid "Inbox"
 msgstr "受信トレイ"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Inbox Tabs"
-msgstr "受信トレイのタブ"
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Inbox tabs"
 msgstr "受信トレイのタブ"
 
@@ -4599,7 +4603,7 @@ msgid "Is smaller than"
 msgstr "次の数より小さい"
 
 #. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr "一般的なメールを既定のタブに割り当てるに時間がかかります。"
@@ -5171,6 +5175,14 @@ msgstr "メンバ"
 msgid "Message (optional)"
 msgstr "メッセージ（オプション）"
 
+#. successfully moved a message via drag&drop to another mail category (tab)
+#. %1$d represents the name if the target category
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, c-format
+msgid "Message moved to to category \"%1$d\"."
+msgid_plural "Messages moved to category \"%1$d\"."
+msgstr[0] ""
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Messages"
@@ -5281,9 +5293,8 @@ msgstr ""
 msgid "Move"
 msgstr "移動"
 
-#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Move all"
 msgstr "全て移動"
 
@@ -5292,10 +5303,26 @@ msgstr "全て移動"
 msgid "Move all messages"
 msgstr "全てのメッセージを移動する"
 
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$d represents a email address
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Move all messages to another folder"
+msgid "Move all messages from %1$d to that category?"
+msgid_plural "Move all messages from selected senders to that category?"
+msgstr[0] "メッセージを別のフォルダへ移動"
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "フォルダを移動"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move to folder"
+msgid "Move to category"
+msgstr "フォルダに移動"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
@@ -5352,7 +5379,7 @@ msgstr "自分の仕事"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -5645,11 +5672,6 @@ msgstr "このモジュールに利用できる登録サービスがありませ
 msgid "No title."
 msgstr "タイトルなし"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "No, only move selected message(s)"
-msgstr "選択したメッセージのみを移動する"
-
 #. object permissions - read
 #. object permissions - edit/modify
 #. object permissions - delete
@@ -5692,10 +5714,6 @@ msgstr "通知内容"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "CSVファイルについての注意："
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Note that some of the tabs can not be disabled."
-msgstr "幾つかのタブは無効にすることができません。"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -6263,11 +6281,6 @@ msgstr "新規メールを送信"
 msgid "Play video files"
 msgstr "動画ファイルを再生"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Please ask me every time"
-msgstr "いつも確認してください"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please check your inbox for a confirmation email.\n"
@@ -6381,18 +6394,10 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "パスワードを入力してください。"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
-"Please feel free to rename tabs to better match your needs. Use checkboxes "
-"to enable or disable specific tabs."
-msgstr ""
-"必要に応じて自由にタブ名を変えてください。チェックボックスを使って特定のタブ"
-"を有効または無効にしてください。"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid ""
-"Please note that conversations are not available when tabbed inbox is "
-"activated."
+"Please note that some categories are predefined and you might not be able to "
+"rename or disable."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -7261,6 +7266,10 @@ msgstr "リッチテキストエリアツールバーの ALT-F10 を押します
 msgid "Room number"
 msgstr "部屋番号"
 
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Rows"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Rule name"
@@ -7302,7 +7311,7 @@ msgstr "売上規模"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
@@ -7470,13 +7479,6 @@ msgstr "ファイルを選択"
 msgid "Select folder"
 msgstr "フォルダを選択"
 
-#. %1$d is the number of mails
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, c-format
-msgid "Selected message was moved successfully."
-msgid_plural "Selected messages has been moved successfully."
-msgstr[0] "選択したメッセージの移動ができました。"
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "選択オプションの詳細"
@@ -7602,6 +7604,12 @@ msgstr "サーバに到達できません。"
 msgid "Server version"
 msgstr "サーババージョン"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Select a task category"
+msgid "Set category"
+msgstr "仕事のカテゴリを選択してください。"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Set color"
@@ -7711,25 +7719,9 @@ msgstr "共有"
 msgid "Shopping cart"
 msgstr "ショッピングカート"
 
-#. %1$s single mail address or comma separated list of multiple
-#. %2$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, c-format
-msgid ""
-"Should all other past and future messages from %1$s also be moved to %2$s?"
-msgstr "%1$s からの今までとこれからのメッセージは %2$s へ移動しますか。"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Should only the current message or all messages of the sender be moved"
-msgstr "この差出人の現在のメッセージまたは全てのメッセージをいどうしますか。"
-
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "表示"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Show Tabs for inbox"
-msgstr "受信トレイのタブを表示"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -7937,7 +7929,7 @@ msgid "Something went wrong saving your changes."
 msgstr "変更の保存中にエラーが発生しました。"
 
 #. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Sorry, common mails couldn't be assigned automatically."
 msgstr "一般的なメールが自動的に割り当てることができませんでした。"
 
@@ -8707,10 +8699,6 @@ msgstr "開始日は終了日より前の日付でなければなりません。
 msgid "The subscription could not be created."
 msgstr "登録できませんでした。"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "The tabbed inbox can be completely disabled in the mail settings."
-msgstr "メール設定でタブ付きの受信トレイを完全に無効にする事はできます。"
-
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
@@ -9076,7 +9064,7 @@ msgstr ""
 "doe@example.com または \"John Doe\" <jd@example.com>)。"
 
 #. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr ""
 "このエリアを満たすためにタブのタイトルの上にメールをドロップしてください。"
@@ -9264,7 +9252,7 @@ msgid "Unlock"
 msgstr "ロックを解除"
 
 #. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Unnamed"
 msgstr "無題"
 
@@ -9726,11 +9714,6 @@ msgstr "黄"
 msgid "Yes"
 msgstr "はい"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Yes, always move them all"
-msgstr "いつも全てを移動する"
-
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "件名なしで送信"
@@ -9810,6 +9793,10 @@ msgstr ""
 "このリンクをメール、インスタントメッセンジャー、またはソーシャルネットワーク"
 "にコピーして貼り付けることができます。このリンクを持っている人はだれでも共有"
 "ファイルにアクセスできますので、ご注意ください。"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+msgid "You can enable categories again via the view dropdown on the right"
+msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid ""
@@ -11572,6 +11559,9 @@ msgstr "yyyy"
 #~ msgid "Apply for mails from %1$s"
 #~ msgstr "%1$s からのメール: %2$s"
 
+#~ msgid "Apply to all messages?"
+#~ msgstr "すべてのメッセージに適用されますか。"
+
 #~ msgid "Appointment '%s' not found."
 #~ msgstr "アポイント '%s' が見つかりません。"
 
@@ -12219,9 +12209,6 @@ msgstr "yyyy"
 #~ msgid "Cards"
 #~ msgstr "カード"
 
-#~ msgid "Categories"
-#~ msgstr "カテゴリ"
-
 #~ msgid "Categories..."
 #~ msgstr "カテゴリ..."
 
@@ -12427,6 +12414,11 @@ msgstr "yyyy"
 #~ msgid "Comoros"
 #~ msgstr "明日"
 
+#, fuzzy
+#~| msgid "Compact view"
+#~ msgid "Compact rows"
+#~ msgstr "コンパクト ビュー"
+
 #~ msgid "Company (business)"
 #~ msgstr "会社 (ビジネス)"
 
@@ -12438,6 +12430,9 @@ msgstr "yyyy"
 
 #~ msgid "Configuration damaged, please inform the administrator."
 #~ msgstr "構成が破損しています。管理者に連絡してください。"
+
+#~ msgid "Configure your inbox tabs"
+#~ msgstr "受信トレイのタブを構成する"
 
 #~ msgid "Confirm"
 #~ msgstr "確認"
@@ -13110,6 +13105,9 @@ msgstr "yyyy"
 
 #~ msgid "Edit Mode"
 #~ msgstr "編集モード"
+
+#~ msgid "Edit Tabs"
+#~ msgstr "タブを編集"
 
 #~ msgid "Edit a Subreddit"
 #~ msgstr "サブレディットを編集"
@@ -14101,6 +14099,9 @@ msgstr "yyyy"
 #~ "アイコン ビューでは、選択したフォルダにあるファイルが表示エリアに表示され"
 #~ "ます。"
 
+#~ msgid "Inbox Tabs"
+#~ msgstr "受信トレイのタブ"
+
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "受信済みの通知メール"
 
@@ -14536,10 +14537,6 @@ msgstr "yyyy"
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "メール アカウントとソーシャル アカウント"
 
-#~| msgid "Available Categories:"
-#~ msgid "Mail categories"
-#~ msgstr "利用可能なカテゴリ:"
-
 #~ msgid "Mail text"
 #~ msgstr "メールの本文"
 
@@ -14736,9 +14733,6 @@ msgstr "yyyy"
 #~| msgid "Apply to all subfolders"
 #~ msgid "Move all mails from a sender"
 #~ msgstr "全てのサブフォルダに適用"
-
-#~ msgid "Move all messages to another folder"
-#~ msgstr "メッセージを別のフォルダへ移動"
 
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "メールを移動しています... 数秒かかる場合があります。"
@@ -14982,6 +14976,9 @@ msgstr "yyyy"
 #~ msgid "No, not now"
 #~ msgstr "いいえ、今は結構です。"
 
+#~ msgid "No, only move selected message(s)"
+#~ msgstr "選択したメッセージのみを移動する"
+
 #~ msgid "Norfolk Island"
 #~ msgstr "ノーフォーク島"
 
@@ -15005,6 +15002,9 @@ msgstr "yyyy"
 
 #~ msgid "Not yet confirmed"
 #~ msgstr "未確認"
+
+#~ msgid "Note that some of the tabs can not be disabled."
+#~ msgstr "幾つかのタブは無効にすることができません。"
 
 #~ msgid "Note: Attachments are not viewable when composing a new message"
 #~ msgstr "注: メッセージ作成中は、添付ファイルを見ることはできません。"
@@ -15429,6 +15429,9 @@ msgstr "yyyy"
 #~ msgid "Place of Signature:"
 #~ msgstr "署名の場所:"
 
+#~ msgid "Please ask me every time"
+#~ msgstr "いつも確認してください"
+
 #~ msgid "Please choose"
 #~ msgstr "選択してください。"
 
@@ -15443,6 +15446,13 @@ msgstr "yyyy"
 
 #~ msgid "Please enter an feed-url."
 #~ msgstr "フィードの URL を入力してください。"
+
+#~ msgid ""
+#~ "Please feel free to rename tabs to better match your needs. Use "
+#~ "checkboxes to enable or disable specific tabs."
+#~ msgstr ""
+#~ "必要に応じて自由にタブ名を変えてください。チェックボックスを使って特定のタ"
+#~ "ブを有効または無効にしてください。"
 
 #~ msgid ""
 #~ "Please have a look at the %sInteresting UWA modules%s page. It shows a "
@@ -15999,9 +16009,6 @@ msgstr "yyyy"
 #~ msgid "Select a contact category"
 #~ msgstr "連絡先のカテゴリを選択してください。"
 
-#~ msgid "Select a task category"
-#~ msgstr "仕事のカテゴリを選択してください。"
-
 #~ msgid "Select a type"
 #~ msgstr "タイプを選択してください。"
 
@@ -16043,6 +16050,10 @@ msgstr "yyyy"
 
 #~ msgid "Select the number of items to be displayed in the module panes."
 #~ msgstr "モジュール ペインに表示するアイテム数を選択してください。"
+
+#~ msgid "Selected message was moved successfully."
+#~ msgid_plural "Selected messages has been moved successfully."
+#~ msgstr[0] "選択したメッセージの移動ができました。"
 
 #~ msgid "Send Attachment"
 #~ msgstr "添付ファイルを送信"
@@ -16128,6 +16139,15 @@ msgstr "yyyy"
 #~ "ルダにあるアイテムの編集が許可されている場合、フォルダの所有者の代理として"
 #~ "変更を行います。"
 
+#~ msgid ""
+#~ "Should all other past and future messages from %1$s also be moved to %2$s?"
+#~ msgstr "%1$s からの今までとこれからのメッセージは %2$s へ移動しますか。"
+
+#~ msgid ""
+#~ "Should only the current message or all messages of the sender be moved"
+#~ msgstr ""
+#~ "この差出人の現在のメッセージまたは全てのメッセージをいどうしますか。"
+
 #~ msgid "Show 0 elements"
 #~ msgstr "0 個の要素を表示"
 
@@ -16166,6 +16186,9 @@ msgstr "yyyy"
 
 #~ msgid "Show QuickInfo after Login"
 #~ msgstr "ログイン後にクイックインフォを表示"
+
+#~ msgid "Show Tabs for inbox"
+#~ msgstr "受信トレイのタブを表示"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
@@ -16987,6 +17010,9 @@ msgstr "yyyy"
 
 #~ msgid "The subscription %s is now enabled"
 #~ msgstr "登録 %s は有効になりました。"
+
+#~ msgid "The tabbed inbox can be completely disabled in the mail settings."
+#~ msgstr "メール設定でタブ付きの受信トレイを完全に無効にする事はできます。"
 
 #~ msgid ""
 #~ "The updater will inform you of any updates for the Connector for "
@@ -17873,6 +17899,9 @@ msgstr "yyyy"
 
 #~ msgid "Yemen"
 #~ msgstr "イエメン"
+
+#~ msgid "Yes, always move them all"
+#~ msgstr "いつも全てを移動する"
 
 #~ msgid "Yes, upgrade my account"
 #~ msgstr "はい、アカウントをアップグレードします。"

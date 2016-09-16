@@ -1203,10 +1203,6 @@ msgstr "符合所有條件時套用規則"
 msgid "Apply rule if any condition is met."
 msgstr "符合任何條件時套用規則"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Apply to all messages?"
-msgstr "要套用到所有訊息嗎？"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
@@ -1604,7 +1600,6 @@ msgstr "行事曆:"
 msgid "Calendars"
 msgstr "日曆"
 
-#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -1640,7 +1635,7 @@ msgstr "日曆"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1727,6 +1722,14 @@ msgstr "CardDAV 網址"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "購物車是空的。"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgid "Categories"
+msgstr "類別"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Categories are represented as tabs in your inbox."
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -2039,16 +2042,10 @@ msgstr "共通表情符號"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
 msgid "Compact"
 msgstr "精簡"
-
-#. rows of scheduling table
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Compact view"
-msgid "Compact rows"
-msgstr "精簡型面板"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -2083,13 +2080,16 @@ msgstr "條件"
 msgid "Configuration Email"
 msgstr "設定郵件"
 
+#. term is followed by a space and three dots (' …')
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure"
+msgstr "立刻設定"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr "立刻設定"
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
-msgid "Configure your inbox tabs"
-msgstr "設定您的收件匣分頁"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Confirmation"
@@ -2719,6 +2719,12 @@ msgstr "禁用"
 msgid "Disable %1$s"
 msgstr "停用 %1$s"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Disable categories"
+msgstr "可用類別："
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Disable widget"
 msgstr "停用小工具"
@@ -3074,7 +3080,7 @@ msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "放到此處以上傳 <b class='dndignore'>新版本的</b>「%1$s」"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Drop here!"
 msgstr "丟到這裡！"
 
@@ -3161,11 +3167,6 @@ msgstr "編輯聯絡人"
 msgid "Edit Flickr photo stream"
 msgstr "編輯 Flickr 相片流"
 
-#. might be suitable to use 'tabs' rather than translating it
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Edit Tabs"
-msgstr "編輯分頁"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "編輯 Tumblr 資訊來源"
@@ -3180,6 +3181,12 @@ msgstr "編輯所有物件"
 #: module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "編輯約會"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Edit categories"
+msgstr "可用類別："
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
@@ -4396,16 +4403,13 @@ msgstr "%1$d 天內"
 msgid "In progress"
 msgstr "進行中"
 
-#: apps/io.ox/portal/widgets.js module:io.ox/portal
-#: apps/plugins/portal/mail/register.js module:plugins/portal
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
+#: module:io.ox/portal apps/plugins/portal/mail/register.js
+#: module:plugins/portal
 msgid "Inbox"
 msgstr "收件箱"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Inbox Tabs"
-msgstr "收件匣分頁"
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Inbox tabs"
 msgstr "收件匣分頁"
 
@@ -4560,7 +4564,7 @@ msgid "Is smaller than"
 msgstr "小於"
 
 #. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr "需要一些時間才能將一般郵件分配到預設分頁中。"
@@ -5130,6 +5134,15 @@ msgstr "成員"
 msgid "Message (optional)"
 msgstr "訊息（非必要）"
 
+#. successfully moved a message via drag&drop to another mail category (tab)
+#. %1$d represents the name if the target category
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, c-format
+msgid "Message moved to to category \"%1$d\"."
+msgid_plural "Messages moved to category \"%1$d\"."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Messages"
@@ -5239,9 +5252,8 @@ msgstr "找到超過目前顯示的 %1$s 個項目"
 msgid "Move"
 msgstr "移動"
 
-#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Move all"
 msgstr "全部移動"
 
@@ -5250,10 +5262,27 @@ msgstr "全部移動"
 msgid "Move all messages"
 msgstr "移動所有訊息"
 
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$d represents a email address
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Move all messages to another folder"
+msgid "Move all messages from %1$d to that category?"
+msgid_plural "Move all messages from selected senders to that category?"
+msgstr[0] "移動所有訊息到其他資料夾"
+msgstr[1] "移動所有訊息到其他資料夾"
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "移動資料夾"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move to folder"
+msgid "Move to category"
+msgstr "移至文件夾"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
@@ -5310,7 +5339,7 @@ msgstr "我的任務"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -5601,11 +5630,6 @@ msgstr "無此模組的訂閱服務"
 msgid "No title."
 msgstr "無標題。"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "No, only move selected message(s)"
-msgstr "不要，僅移動選擇的訊息"
-
 #. object permissions - read
 #. object permissions - edit/modify
 #. object permissions - delete
@@ -5648,10 +5672,6 @@ msgstr "備註"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "CSV 檔案注意事項:"
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Note that some of the tabs can not be disabled."
-msgstr "請注意某些分頁無法關閉。"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -6218,11 +6238,6 @@ msgstr "寄送新郵件"
 msgid "Play video files"
 msgstr "撥放影片檔案"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Please ask me every time"
-msgstr "每次都問我"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please check your inbox for a confirmation email.\n"
@@ -6335,16 +6350,10 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "請輸入您的密碼。"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
-"Please feel free to rename tabs to better match your needs. Use checkboxes "
-"to enable or disable specific tabs."
-msgstr "您可以隨意依照需求修改分頁名稱，使用選取盒開啟或關閉部分分頁。"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid ""
-"Please note that conversations are not available when tabbed inbox is "
-"activated."
+"Please note that some categories are predefined and you might not be able to "
+"rename or disable."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -7205,6 +7214,10 @@ msgstr "格式化文字區域，請按 Alt+F10 叫出工具列"
 msgid "Room number"
 msgstr "房間號"
 
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Rows"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Rule name"
@@ -7246,7 +7259,7 @@ msgstr "銷售量"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
@@ -7413,14 +7426,6 @@ msgstr "選擇檔案"
 msgid "Select folder"
 msgstr "選擇資料夾"
 
-#. %1$d is the number of mails
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, c-format
-msgid "Selected message was moved successfully."
-msgid_plural "Selected messages has been moved successfully."
-msgstr[0] "已成功移動所選的訊息。"
-msgstr[1] "已成功移動所選的訊息。"
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "選擇範圍詳情"
@@ -7547,6 +7552,12 @@ msgstr "無法連線到伺服器"
 msgid "Server version"
 msgstr "伺服器版本"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Category"
+msgid "Set category"
+msgstr "類別"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Set color"
@@ -7660,25 +7671,9 @@ msgstr "共享"
 msgid "Shopping cart"
 msgstr "購物車"
 
-#. %1$s single mail address or comma separated list of multiple
-#. %2$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, c-format
-msgid ""
-"Should all other past and future messages from %1$s also be moved to %2$s?"
-msgstr "是否也要將 %1$s 其他過去與未來的訊息移動至 %2$s？"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Should only the current message or all messages of the sender be moved"
-msgstr "僅移動此寄件者目前的訊息或所有訊息"
-
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "顯示"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Show Tabs for inbox"
-msgstr "顯示收件匣分頁"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -7882,7 +7877,7 @@ msgid "Something went wrong saving your changes."
 msgstr "儲存您的更改時發生某些錯誤。"
 
 #. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Sorry, common mails couldn't be assigned automatically."
 msgstr "抱歉，無法自動分配一般郵件。"
 
@@ -8633,10 +8628,6 @@ msgstr "起始日期必須在結束日期前。"
 msgid "The subscription could not be created."
 msgstr "無法建立訂閱。"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "The tabbed inbox can be completely disabled in the mail settings."
-msgstr "可在郵件設定中完全關閉收件匣分頁"
-
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
@@ -8988,7 +8979,7 @@ msgstr ""
 "\"John Doe\" <jd@example.com>)"
 
 #. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr "若要填滿此區塊，請將郵件拖曳到此分頁標題。"
 
@@ -9174,7 +9165,7 @@ msgid "Unlock"
 msgstr "解鎖"
 
 #. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Unnamed"
 msgstr "未命名"
 
@@ -9629,11 +9620,6 @@ msgstr "黃色"
 msgid "Yes"
 msgstr "是"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Yes, always move them all"
-msgstr "好，總是全部移動"
-
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "是，請寄出"
@@ -9705,6 +9691,10 @@ msgid ""
 msgstr ""
 "您可以複製並將此連結貼到郵件、即時訊息或社交網路中，請注意任何看到此連結的人"
 "都能存取此分享內容。"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+msgid "You can enable categories again via the view dropdown on the right"
+msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid ""
@@ -11052,6 +11042,9 @@ msgstr "年"
 #~ msgid "Apply for mails from %1$s"
 #~ msgstr "來自 %1$s 的郵件: %2$d"
 
+#~ msgid "Apply to all messages?"
+#~ msgstr "要套用到所有訊息嗎？"
+
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
 #~ msgstr[0] "約會已複製"
@@ -11434,17 +11427,11 @@ msgstr "年"
 #~ msgid "Cape Verde"
 #~ msgstr "維德角"
 
-#~ msgid "Categories"
-#~ msgstr "類別"
-
 #~ msgid "Categories..."
 #~ msgstr "類別..."
 
 #~ msgid "Categories:"
 #~ msgstr "類別："
-
-#~ msgid "Category"
-#~ msgstr "類別"
 
 #~ msgid "Category names must be unique"
 #~ msgstr "類別名必須是唯一的"
@@ -11614,6 +11601,11 @@ msgstr "年"
 #~ msgid "Comoros"
 #~ msgstr "明天"
 
+#, fuzzy
+#~| msgid "Compact view"
+#~ msgid "Compact rows"
+#~ msgstr "精簡型面板"
+
 #~ msgid "Company:"
 #~ msgstr "公司："
 
@@ -11622,6 +11614,9 @@ msgstr "年"
 
 #~ msgid "Configuration damaged, please inform the administrator."
 #~ msgstr "配置已被破壞，請通知管理員。"
+
+#~ msgid "Configure your inbox tabs"
+#~ msgstr "設定您的收件匣分頁"
 
 #~ msgid "Confirm"
 #~ msgstr "確認"
@@ -12195,6 +12190,9 @@ msgstr "年"
 #~ msgid "Edit Mode"
 #~ msgstr "編輯模式"
 
+#~ msgid "Edit Tabs"
+#~ msgstr "編輯分頁"
+
 #~ msgid "Edit a Subreddit"
 #~ msgstr "編輯 Subreddit"
 
@@ -12758,6 +12756,9 @@ msgstr "年"
 #~ "display area."
 #~ msgstr "在圖示視圖，您可以在顯示區域中檢視所選的資料夾當中的檔案。"
 
+#~ msgid "Inbox Tabs"
+#~ msgstr "收件匣分頁"
+
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "接收通知郵件"
 
@@ -12922,11 +12923,6 @@ msgstr "年"
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "郵件與社交帳戶"
 
-#, fuzzy
-#~| msgid "Available Categories:"
-#~ msgid "Mail categories"
-#~ msgstr "可用類別："
-
 #~ msgid "Mail text"
 #~ msgstr "郵件文字"
 
@@ -13001,9 +12997,6 @@ msgstr "年"
 #~| msgid "Apply to all subfolders"
 #~ msgid "Move all mails from a sender"
 #~ msgstr "套用至所有子資料夾"
-
-#~ msgid "Move all messages to another folder"
-#~ msgstr "移動所有訊息到其他資料夾"
 
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "正在移動郵件... 可能需要幾秒鐘。"
@@ -13109,6 +13102,9 @@ msgstr "年"
 #~ msgid "No wall posts yet."
 #~ msgstr "尚無塗鴉牆貼文。"
 
+#~ msgid "No, only move selected message(s)"
+#~ msgstr "不要，僅移動選擇的訊息"
+
 #, fuzzy
 #~| msgid "Cook Islands"
 #~ msgid "Norfolk Island"
@@ -13124,6 +13120,9 @@ msgstr "年"
 
 #~ msgid "Not yet confirmed"
 #~ msgstr "未確認"
+
+#~ msgid "Note that some of the tabs can not be disabled."
+#~ msgstr "請注意某些分頁無法關閉。"
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "您的 Newsfeed 中沒有內容。"
@@ -13239,6 +13238,9 @@ msgstr "年"
 #~ msgid "Phone alt"
 #~ msgstr "替代電話"
 
+#~ msgid "Please ask me every time"
+#~ msgstr "每次都問我"
+
 #~ msgid "Please enter a correct number."
 #~ msgstr "請輸入一個正確數字。"
 
@@ -13250,6 +13252,11 @@ msgstr "年"
 
 #~ msgid "Please enter an feed-url."
 #~ msgstr "請輸入資訊來源網址。"
+
+#~ msgid ""
+#~ "Please feel free to rename tabs to better match your needs. Use "
+#~ "checkboxes to enable or disable specific tabs."
+#~ msgstr "您可以隨意依照需求修改分頁名稱，使用選取盒開啟或關閉部分分頁。"
 
 #~ msgid "Polish"
 #~ msgstr "波蘭文"
@@ -13450,6 +13457,11 @@ msgstr "年"
 #~ msgid "Select page"
 #~ msgstr "選擇頁面"
 
+#~ msgid "Selected message was moved successfully."
+#~ msgid_plural "Selected messages has been moved successfully."
+#~ msgstr[0] "已成功移動所選的訊息。"
+#~ msgstr[1] "已成功移動所選的訊息。"
+
 #~ msgid "Send as mail"
 #~ msgstr "以郵件方式寄送"
 
@@ -13476,8 +13488,19 @@ msgstr "年"
 #~ msgid "Shared by: %1$s"
 #~ msgstr "已搜尋: %1$s"
 
+#~ msgid ""
+#~ "Should all other past and future messages from %1$s also be moved to %2$s?"
+#~ msgstr "是否也要將 %1$s 其他過去與未來的訊息移動至 %2$s？"
+
+#~ msgid ""
+#~ "Should only the current message or all messages of the sender be moved"
+#~ msgstr "僅移動此寄件者目前的訊息或所有訊息"
+
 #~ msgid "Show QR code"
 #~ msgstr "顯示 QR code"
+
+#~ msgid "Show Tabs for inbox"
+#~ msgstr "顯示收件匣分頁"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr "顯示所有郵件。請注意：郵件將不再依對話內容分組。"
@@ -13859,6 +13882,9 @@ msgstr "年"
 #~ "The shared data will be accessible to everyone on the Internet. Please "
 #~ "consider, which data you want to share."
 #~ msgstr "分享的資料夾將可被網路上的所有人存取。請注意您要發佈哪些資料。"
+
+#~ msgid "The tabbed inbox can be completely disabled in the mail settings."
+#~ msgstr "可在郵件設定中完全關閉收件匣分頁"
 
 #~ msgid "Theme colors"
 #~ msgstr "佈景主題色彩"
@@ -14319,6 +14345,9 @@ msgstr "年"
 
 #~ msgid "Workweek View"
 #~ msgstr "工作週視圖"
+
+#~ msgid "Yes, always move them all"
+#~ msgstr "好，總是全部移動"
 
 #~ msgid "You already accepted this invitation"
 #~ msgstr "您已接受此邀請"

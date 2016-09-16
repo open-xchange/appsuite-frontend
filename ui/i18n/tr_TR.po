@@ -1198,11 +1198,6 @@ msgstr "Tüm koşulların sağlanması durumunda kuralları uygula"
 msgid "Apply rule if any condition is met."
 msgstr "Herhangi bir koşulun sağlanması durumunda kuralı uygula"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
-msgid "Apply to all messages?"
-msgstr "Alt klasörlerin tümü için uygula"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
@@ -1615,7 +1610,6 @@ msgstr "Takvim"
 msgid "Calendars"
 msgstr "Takvim"
 
-#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -1651,7 +1645,7 @@ msgstr "Takvim"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1742,6 +1736,16 @@ msgstr "CalDAV URL"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Araba boş."
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Categories"
+msgstr "E-posta adresi"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Categories are represented as tabs in your inbox."
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -2062,15 +2066,9 @@ msgstr "Common Emoji"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
 msgid "Compact"
-msgstr "Sıkıştır"
-
-#. rows of scheduling table
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Compact"
-msgid "Compact rows"
 msgstr "Sıkıştır"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -2107,12 +2105,15 @@ msgstr "Durumlar"
 msgid "Configuration Email"
 msgstr "Onaylama"
 
+#. term is followed by a space and three dots (' …')
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unconfirmed"
+msgid "Configure"
+msgstr "Onaylanmadı"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
-msgstr ""
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
-msgid "Configure your inbox tabs"
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -2768,6 +2769,12 @@ msgstr "Devre dışı bırak"
 msgid "Disable %1$s"
 msgstr "Devre dışı bırak"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Disable categories"
+msgstr "E-posta adresi"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Disable widget"
 msgstr "Widgetı devre dışı bırak"
@@ -3149,7 +3156,7 @@ msgstr ""
 "\"%1$s\" ın yeni bir versiyonunu yüklemek için <b class=\"dndignore\">buraya "
 "bırakın</b>"
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Drop here!"
 msgstr ""
 
@@ -3237,12 +3244,6 @@ msgstr "İletişim bilgisini düzenle"
 msgid "Edit Flickr photo stream"
 msgstr "Flickr fotoğraf akışını düzenle"
 
-#. might be suitable to use 'tabs' rather than translating it
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
-msgid "Edit Tabs"
-msgstr "Görevi düzenle"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "Tumblr yayınını düzenle"
@@ -3258,6 +3259,12 @@ msgstr "bütün objeleri düzenleyin "
 #: module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "Görüşmeyi düzenle"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Edit categories"
+msgstr "E-posta adresi"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
@@ -4525,17 +4532,13 @@ msgstr "%1$d gün içerisinde"
 msgid "In progress"
 msgstr "İlerleme içerisinde"
 
-#: apps/io.ox/portal/widgets.js module:io.ox/portal
-#: apps/plugins/portal/mail/register.js module:plugins/portal
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
+#: module:io.ox/portal apps/plugins/portal/mail/register.js
+#: module:plugins/portal
 msgid "Inbox"
 msgstr "Gelen kutusu"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-msgid "Inbox Tabs"
-msgstr "Gelen kutusu"
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 msgid "Inbox tabs"
 msgstr "Gelen kutusu"
@@ -4698,7 +4701,7 @@ msgid "Is smaller than"
 msgstr "den küçük"
 
 #. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr ""
@@ -5287,6 +5290,14 @@ msgstr "Üyeler"
 msgid "Message (optional)"
 msgstr "Mesaj (tercihi)"
 
+#. successfully moved a message via drag&drop to another mail category (tab)
+#. %1$d represents the name if the target category
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, c-format
+msgid "Message moved to to category \"%1$d\"."
+msgid_plural "Messages moved to category \"%1$d\"."
+msgstr[0] ""
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 msgid "Message size"
@@ -5398,9 +5409,8 @@ msgstr "Şu anda gösterilen %1$s öğelerden fazlası bulundu"
 msgid "Move"
 msgstr "Taşı"
 
-#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #, fuzzy
 msgid "Move all"
 msgstr "Taşı"
@@ -5410,10 +5420,26 @@ msgstr "Taşı"
 msgid "Move all messages"
 msgstr "Bütün mesajları taşı"
 
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$d represents a email address
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Apply to all subfolders"
+msgid "Move all messages from %1$d to that category?"
+msgid_plural "Move all messages from selected senders to that category?"
+msgstr[0] "Alt klasörlerin tümü için uygula"
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "Klasörü taşı"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move to folder"
+msgid "Move to category"
+msgstr "Klasöre taşı"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
@@ -5470,7 +5496,7 @@ msgstr "Görevlerim"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -5767,12 +5793,6 @@ msgstr "Üzgünüz, bu dosya için uygun bir önizleme yok."
 msgid "No title."
 msgstr "Herhangi bir başlık bulunamadı"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-msgid "No, only move selected message(s)"
-msgstr "Silinmiş mesajlar"
-
 #. object permissions - read
 #. object permissions - edit/modify
 #. object permissions - delete
@@ -5817,11 +5837,6 @@ msgstr "Not"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "CVS dosyaları hakkında not:"
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy
-msgid "Note that some of the tabs can not be disabled."
-msgstr "Dosyasız ögeler indirilemez."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -6400,11 +6415,6 @@ msgstr "Yeni eposta gönder "
 msgid "Play video files"
 msgstr "Video dosyalarını oynat"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Please ask me every time"
-msgstr ""
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please check your inbox for a confirmation email.\n"
@@ -6519,16 +6529,10 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Lütfen şifrenizi giriniz"
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
-"Please feel free to rename tabs to better match your needs. Use checkboxes "
-"to enable or disable specific tabs."
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid ""
-"Please note that conversations are not available when tabbed inbox is "
-"activated."
+"Please note that some categories are predefined and you might not be able to "
+"rename or disable."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -7442,6 +7446,10 @@ msgstr ""
 msgid "Room number"
 msgstr "Oda numarası"
 
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Rows"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Rule name"
@@ -7483,7 +7491,7 @@ msgstr "Ses Düzeyi"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
@@ -7658,13 +7666,6 @@ msgstr "Dosya seç"
 msgid "Select folder"
 msgstr "Dosya seç"
 
-#. %1$d is the number of mails
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy, c-format
-msgid "Selected message was moved successfully."
-msgid_plural "Selected messages has been moved successfully."
-msgstr[0] "Veri başarıyla taşındı"
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Seçim ayrıntıları"
@@ -7791,6 +7792,12 @@ msgstr "Sunucuya ulaşılamıyor"
 msgid "Server version"
 msgstr "Sunucu sürümü"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Business category"
+msgid "Set category"
+msgstr "Girişim kategorisi"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Set color"
@@ -7911,26 +7918,9 @@ msgstr "Paylaş"
 msgid "Shopping cart"
 msgstr "Alışveriş sepeti"
 
-#. %1$s single mail address or comma separated list of multiple
-#. %2$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, fuzzy, c-format
-msgid ""
-"Should all other past and future messages from %1$s also be moved to %2$s?"
-msgstr "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Should only the current message or all messages of the sender be moved"
-msgstr ""
-
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Göster"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-msgid "Show Tabs for inbox"
-msgstr "Gelen kutunuzda herhangi bir e-posta bulunmuyor"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -8140,7 +8130,7 @@ msgid "Something went wrong saving your changes."
 msgstr "Değişiklikleriniz kaydedilirken bir sorun oluşmaktadır"
 
 #. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Sorry, common mails couldn't be assigned automatically."
 msgstr ""
 
@@ -8939,10 +8929,6 @@ msgstr "Başlangıç tarihi bitiş tarihinden önce olmalıdır"
 msgid "The subscription could not be created."
 msgstr "Abonelik oluşturulamadı."
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "The tabbed inbox can be completely disabled in the mail settings."
-msgstr ""
-
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
@@ -9313,7 +9299,7 @@ msgstr ""
 "john.doe@example.com veya \"John Doe\" <jd@example.com>)"
 
 #. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr ""
 
@@ -9500,7 +9486,7 @@ msgid "Unlock"
 msgstr "Kilidi kaldır"
 
 #. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #, fuzzy
 msgid "Unnamed"
 msgstr "Kullanıcı adı"
@@ -9981,11 +9967,6 @@ msgstr "Sarı"
 msgid "Yes"
 msgstr "Evet"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Yes, always move them all"
-msgstr ""
-
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Evet, konu eklemeden yolla"
@@ -10068,6 +10049,10 @@ msgstr ""
 "E-posta, mesajlar ya da sosyal ağlar içerisinde kopyalayıp yapıştırmak için "
 "link oluştur. Lütfen unutmayınız ki bu linke erişen herkes paylaşıma "
 "ulaşabilir. "
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+msgid "You can enable categories again via the view dropdown on the right"
+msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid ""
@@ -11060,6 +11045,10 @@ msgstr "yyyy"
 #~ msgstr "%1$s: %2$s dan E-posta "
 
 #, fuzzy
+#~ msgid "Apply to all messages?"
+#~ msgstr "Alt klasörlerin tümü için uygula"
+
+#, fuzzy
 #~ msgid "Appointment scheduling"
 #~ msgstr "Randevu Listesi"
 
@@ -11081,11 +11070,20 @@ msgstr "yyyy"
 #~ msgid "Close this reminder"
 #~ msgstr "Bu hatırlatıcıyı kapat"
 
+#, fuzzy
+#~| msgid "Compact"
+#~ msgid "Compact rows"
+#~ msgstr "Sıkıştır"
+
 #~ msgid "Day View"
 #~ msgstr "Gün Görüntüle"
 
 #~ msgid "Double click to rename"
 #~ msgstr "Yeniden adlandırmak için çift tıkla"
+
+#, fuzzy
+#~ msgid "Edit Tabs"
+#~ msgstr "Görevi düzenle"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "Kabul Etme/Geri Çevirme için E-posta bildirimi"
@@ -11135,6 +11133,10 @@ msgstr "yyyy"
 #~ msgid "IMAP folder subscription"
 #~ msgstr "IMAP dosya üyeliği"
 
+#, fuzzy
+#~ msgid "Inbox Tabs"
+#~ msgstr "Gelen kutusu"
+
 #~ msgid "Invalid data"
 #~ msgstr "Geçersiz bilgi"
 
@@ -11153,11 +11155,6 @@ msgstr "yyyy"
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "E-posta ve Sosyal Hesaplar"
 
-#, fuzzy
-#~| msgid "Mail address"
-#~ msgid "Mail categories"
-#~ msgstr "E-posta adresi"
-
 #~ msgid "Main window"
 #~ msgstr "E posta penceresi"
 
@@ -11173,15 +11170,18 @@ msgstr "yyyy"
 #~ msgid "Mark unread"
 #~ msgstr "Okunmamış olarak işaretle"
 
-#, fuzzy
-#~| msgid "Apply to all subfolders"
-#~ msgid "Move all mails from a sender"
-#~ msgstr "Alt klasörlerin tümü için uygula"
-
 #~ msgid "No items were found. Please adjust currently used facets."
 #~ msgstr ""
 #~ "Herhangi bir öge bulunamadı. Lütfen şu anda kullanılan özellikleri "
 #~ "düzenleyiniz. "
+
+#, fuzzy
+#~ msgid "No, only move selected message(s)"
+#~ msgstr "Silinmiş mesajlar"
+
+#, fuzzy
+#~ msgid "Note that some of the tabs can not be disabled."
+#~ msgstr "Dosyasız ögeler indirilemez."
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Haberyayınınızda herhangi bir şey bulunamadı."
@@ -11215,8 +11215,22 @@ msgstr "yyyy"
 #~ msgstr "Buradan arayın"
 
 #, fuzzy
+#~ msgid "Selected message was moved successfully."
+#~ msgid_plural "Selected messages has been moved successfully."
+#~ msgstr[0] "Veri başarıyla taşındı"
+
+#, fuzzy
 #~ msgid "Send as mail"
 #~ msgstr "Eposta gönder"
+
+#, fuzzy
+#~ msgid ""
+#~ "Should all other past and future messages from %1$s also be moved to %2$s?"
+#~ msgstr "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
+
+#, fuzzy
+#~ msgid "Show Tabs for inbox"
+#~ msgstr "Gelen kutunuzda herhangi bir e-posta bulunmuyor"
 
 #~ msgid "Show comments"
 #~ msgstr "Yorumları göster"

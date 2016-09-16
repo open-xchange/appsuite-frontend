@@ -1233,10 +1233,6 @@ msgstr "Applica la regola se tutte le condizioni sono verificate"
 msgid "Apply rule if any condition is met."
 msgstr "Applica la regola se qualsiasi condizione viene verificata."
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Apply to all messages?"
-msgstr "Vuoi applicare a tutti i messaggi?"
-
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
@@ -1646,7 +1642,6 @@ msgstr "Calendario:"
 msgid "Calendars"
 msgstr "Calendari"
 
-#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
@@ -1682,7 +1677,7 @@ msgstr "Calendari"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1769,6 +1764,14 @@ msgstr "URL CardDAV"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Il carrello è vuoto."
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgid "Categories"
+msgstr "Categorie"
+
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Categories are represented as tabs in your inbox."
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -2082,16 +2085,10 @@ msgstr "Emoji generiche"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
 msgid "Compact"
 msgstr "Compatta"
-
-#. rows of scheduling table
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Compact view"
-msgid "Compact rows"
-msgstr "Vista compatta"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -2126,13 +2123,16 @@ msgstr "Condizioni"
 msgid "Configuration Email"
 msgstr "Messaggio di configurazione"
 
+#. term is followed by a space and three dots (' …')
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Configure now"
+msgid "Configure"
+msgstr "Configura ora"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr "Configura ora"
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
-msgid "Configure your inbox tabs"
-msgstr "Configura le tue schede della posta in arrivo"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Confirmation"
@@ -2766,6 +2766,12 @@ msgstr "Disabilita"
 msgid "Disable %1$s"
 msgstr "Disabilita %1$s"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Disable categories"
+msgstr "Categorie disponibili:"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Disable widget"
 msgstr "Disabilita widget"
@@ -3131,7 +3137,7 @@ msgstr ""
 "Rilascia qui per caricare una <b class=\"dndignore\">nuova versione</b> di "
 "\"%1$s\""
 
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Drop here!"
 msgstr "Rilascia qui!"
 
@@ -3218,11 +3224,6 @@ msgstr "Modifica contatto"
 msgid "Edit Flickr photo stream"
 msgstr "Modifica un flusso di foto di Flickr"
 
-#. might be suitable to use 'tabs' rather than translating it
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Edit Tabs"
-msgstr "Modifica schede"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Edit Tumblr feed"
 msgstr "Modifica fonte Tumblr"
@@ -3237,6 +3238,12 @@ msgstr "Modificare tutti gli oggetti"
 #: module:io.ox/calendar
 msgid "Edit appointment"
 msgstr "Modifica appuntamento"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Edit categories"
+msgstr "Categorie disponibili:"
 
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
@@ -4488,16 +4495,13 @@ msgstr "In %1$d giorni"
 msgid "In progress"
 msgstr "In corso"
 
-#: apps/io.ox/portal/widgets.js module:io.ox/portal
-#: apps/plugins/portal/mail/register.js module:plugins/portal
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
+#: module:io.ox/portal apps/plugins/portal/mail/register.js
+#: module:plugins/portal
 msgid "Inbox"
 msgstr "Posta in arrivo"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Inbox Tabs"
-msgstr "Schede della posta in arrivo"
-
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Inbox tabs"
 msgstr "Schede della posta in arrivo"
 
@@ -4657,7 +4661,7 @@ msgid "Is smaller than"
 msgstr "È minore di"
 
 #. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "It will take some time until common mails are assigned to the default tabs."
 msgstr ""
@@ -5230,6 +5234,15 @@ msgstr "Membri"
 msgid "Message (optional)"
 msgstr "Messaggio (facoltativo)"
 
+#. successfully moved a message via drag&drop to another mail category (tab)
+#. %1$d represents the name if the target category
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, c-format
+msgid "Message moved to to category \"%1$d\"."
+msgid_plural "Messages moved to category \"%1$d\"."
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Messages"
@@ -5339,9 +5352,8 @@ msgstr "Sono stati trovati più elementi dei %1$s attualmente visualizzati"
 msgid "Move"
 msgstr "Sposta"
 
-#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Move all"
 msgstr "Sposta tutto"
 
@@ -5350,10 +5362,27 @@ msgstr "Sposta tutto"
 msgid "Move all messages"
 msgstr "Sposta tutti i messaggi"
 
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$d represents a email address
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Move all messages to another folder"
+msgid "Move all messages from %1$d to that category?"
+msgid_plural "Move all messages from selected senders to that category?"
+msgstr[0] "Sposta tutti i messaggi in un'altra cartella"
+msgstr[1] "Sposta tutti i messaggi in un'altra cartella"
+
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "Sposta la cartella"
 
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move to folder"
+msgid "Move to category"
+msgstr "Sposta nella cartella"
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
@@ -5410,7 +5439,7 @@ msgstr "Le mie attività"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -5702,11 +5731,6 @@ msgstr "Nessun servizio di sottoscrizione disponibile per questo modulo"
 msgid "No title."
 msgstr "Nessun titolo."
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "No, only move selected message(s)"
-msgstr "No, sposta solo i messaggi selezionati"
-
 #. object permissions - read
 #. object permissions - edit/modify
 #. object permissions - delete
@@ -5749,10 +5773,6 @@ msgstr "Nota"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Note on CSV files:"
 msgstr "Nota su file CSV:"
-
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "Note that some of the tabs can not be disabled."
-msgstr "Nota che alcune delle schede non possono essere disabilitate."
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
@@ -6328,11 +6348,6 @@ msgstr "Invia nuovo messaggio"
 msgid "Play video files"
 msgstr "Riproduci file video"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Please ask me every time"
-msgstr "Chiedi ogni volta"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Please check your inbox for a confirmation email.\n"
@@ -6448,18 +6463,10 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Digita la tua password."
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
-"Please feel free to rename tabs to better match your needs. Use checkboxes "
-"to enable or disable specific tabs."
-msgstr ""
-"Sei libero di rinominare le schede in base alle tue esigenze. Utilizza le "
-"caselle di selezione per abilitare o disabilitare schede specifiche."
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid ""
-"Please note that conversations are not available when tabbed inbox is "
-"activated."
+"Please note that some categories are predefined and you might not be able to "
+"rename or disable."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -7339,6 +7346,10 @@ msgstr "Area di testo formattato. Premi ALT-F10 per la barra degli strumenti"
 msgid "Room number"
 msgstr "Ufficio"
 
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+msgid "Rows"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Rule name"
@@ -7380,7 +7391,7 @@ msgstr "Volume vendite"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/dialogs.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
@@ -7551,14 +7562,6 @@ msgstr "Seleziona file"
 msgid "Select folder"
 msgstr "Seleziona cartella"
 
-#. %1$d is the number of mails
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, c-format
-msgid "Selected message was moved successfully."
-msgid_plural "Selected messages has been moved successfully."
-msgstr[0] "Il messaggio selezionato è stato spostato correttamente."
-msgstr[1] "I messaggi selezionati sono stati spostati correttamente."
-
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Dettagli selezione"
@@ -7685,6 +7688,12 @@ msgstr "Server non raggiungibile"
 msgid "Server version"
 msgstr "Versione del server"
 
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Category"
+msgid "Set category"
+msgstr "Categoria"
+
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Set color"
@@ -7798,27 +7807,9 @@ msgstr "Condivisione"
 msgid "Shopping cart"
 msgstr "Carrello della spesa"
 
-#. %1$s single mail address or comma separated list of multiple
-#. %2$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-#, c-format
-msgid ""
-"Should all other past and future messages from %1$s also be moved to %2$s?"
-msgstr ""
-"Vuoi che tutti i messaggi passati e futuri di %1$s siano spostati in %2$s?"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Should only the current message or all messages of the sender be moved"
-msgstr ""
-"Scegli se spostare solo il messaggio corrente o tutti i messaggi del mittente"
-
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Show"
 msgstr "Mostra"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Show Tabs for inbox"
-msgstr "Mostra le schede di posta in arrivo"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/core/settings/user.js
@@ -8028,7 +8019,7 @@ msgid "Something went wrong saving your changes."
 msgstr "Qualcosa non ha funzionato durante il salvataggio delle modifiche."
 
 #. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Sorry, common mails couldn't be assigned automatically."
 msgstr ""
 "Spiacenti, i messaggi normali non possono essere assegnati automaticamente."
@@ -8816,12 +8807,6 @@ msgstr "La data iniziale deve precedere la data finale."
 msgid "The subscription could not be created."
 msgstr "La sottoscrizione non può essere creata."
 
-#: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
-msgid "The tabbed inbox can be completely disabled in the mail settings."
-msgstr ""
-"La posta in arrivo con schede può essere completamente disabilitata nelle "
-"impostazioni di posta."
-
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
@@ -9206,7 +9191,7 @@ msgstr ""
 "valido (ad es. mario.rossi@esempio.com o \"Mario Rossi\" <mr@esempio.com>)"
 
 #. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr ""
 "Per riempire questa area, trascina e rilascia i messaggi sul titolo di "
@@ -9396,7 +9381,7 @@ msgid "Unlock"
 msgstr "Sblocca"
 
 #. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories/main.js module:io.ox/mail
+#: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid "Unnamed"
 msgstr "Senza nome"
 
@@ -9861,11 +9846,6 @@ msgstr "Giallo"
 msgid "Yes"
 msgstr "Sì"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Yes, always move them all"
-msgstr "Sì, spostali tutti sempre"
-
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Sì, invia senza oggetto"
@@ -9948,6 +9928,10 @@ msgstr ""
 "Puoi copiar e incollare questo collegamento in un messaggio di posta "
 "elettronica, messaggistica istantanea o rete sociale. Nota che chiunque può "
 "accedere alla condivisione con questo collegamento."
+
+#: apps/io.ox/mail/categories.js module:io.ox/mail
+msgid "You can enable categories again via the view dropdown on the right"
+msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid ""
@@ -11316,6 +11300,9 @@ msgstr "aaaa"
 #~ msgid "Apply for mails from %1$s"
 #~ msgstr "Messaggio di posta da %1$s: %2$s"
 
+#~ msgid "Apply to all messages?"
+#~ msgstr "Vuoi applicare a tutti i messaggi?"
+
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
 #~ msgstr[0] "L'appuntamento è stato copiato"
@@ -11754,17 +11741,11 @@ msgstr "aaaa"
 #~ msgid "Cards"
 #~ msgstr "Biglietti da visita"
 
-#~ msgid "Categories"
-#~ msgstr "Categorie"
-
 #~ msgid "Categories..."
 #~ msgstr "Categorie..."
 
 #~ msgid "Categories:"
 #~ msgstr "Categorie:"
-
-#~ msgid "Category"
-#~ msgstr "Categoria"
 
 #~ msgid "Category names must be unique"
 #~ msgstr "I nomi delle categorie devono essere univoci"
@@ -11947,6 +11928,11 @@ msgstr "aaaa"
 #~ msgid "Comoros"
 #~ msgstr "Domani"
 
+#, fuzzy
+#~| msgid "Compact view"
+#~ msgid "Compact rows"
+#~ msgstr "Vista compatta"
+
 #~ msgid "Company:"
 #~ msgstr "Azienda:"
 
@@ -11955,6 +11941,9 @@ msgstr "aaaa"
 
 #~ msgid "Configuration damaged, please inform the administrator."
 #~ msgstr "Configurazione danneggiata, informare l'amministratore."
+
+#~ msgid "Configure your inbox tabs"
+#~ msgstr "Configura le tue schede della posta in arrivo"
 
 #~ msgid "Confirm"
 #~ msgstr "Conferma"
@@ -12564,6 +12553,9 @@ msgstr "aaaa"
 #~ msgid "Edit Mode"
 #~ msgstr "Modalità modifica"
 
+#~ msgid "Edit Tabs"
+#~ msgstr "Modifica schede"
+
 #~ msgid "Edit a Subreddit"
 #~ msgstr "Modifica un subreddit"
 
@@ -13160,6 +13152,9 @@ msgstr "aaaa"
 #~ "Nella vista Icone, è possibile vedere i file o le cartelle selezionate "
 #~ "nell'area di visualizzazione."
 
+#~ msgid "Inbox Tabs"
+#~ msgstr "Schede della posta in arrivo"
+
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "Messaggi di notifica in arrivo"
 
@@ -13329,11 +13324,6 @@ msgstr "aaaa"
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "Account di posta e reti sociali"
 
-#, fuzzy
-#~| msgid "Available Categories:"
-#~ msgid "Mail categories"
-#~ msgstr "Categorie disponibili:"
-
 #~ msgid "Mail text"
 #~ msgstr "Testo del messaggio"
 
@@ -13410,9 +13400,6 @@ msgstr "aaaa"
 #~| msgid "Apply to all subfolders"
 #~ msgid "Move all mails from a sender"
 #~ msgstr "Applica a tutte le sottocartelle"
-
-#~ msgid "Move all messages to another folder"
-#~ msgstr "Sposta tutti i messaggi in un'altra cartella"
 
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "Spostamento dei messaggi... Potrebbe richiedere qualche secondo."
@@ -13520,6 +13507,9 @@ msgstr "aaaa"
 #~ msgid "No wall posts yet."
 #~ msgstr "Ancora nessun commento in bacheca."
 
+#~ msgid "No, only move selected message(s)"
+#~ msgstr "No, sposta solo i messaggi selezionati"
+
 #, fuzzy
 #~| msgid "Cook Islands"
 #~ msgid "Norfolk Island"
@@ -13535,6 +13525,9 @@ msgstr "aaaa"
 
 #~ msgid "Not yet confirmed"
 #~ msgstr "Non ancora confermata"
+
+#~ msgid "Note that some of the tabs can not be disabled."
+#~ msgstr "Nota che alcune delle schede non possono essere disabilitate."
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Niente nella tua fonte di notizie."
@@ -13650,6 +13643,9 @@ msgstr "aaaa"
 #~ msgid "Phone alt"
 #~ msgstr "Telefono alt"
 
+#~ msgid "Please ask me every time"
+#~ msgstr "Chiedi ogni volta"
+
 #~ msgid "Please enter a correct number."
 #~ msgstr "Digita un numero corretto."
 
@@ -13661,6 +13657,13 @@ msgstr "aaaa"
 
 #~ msgid "Please enter an feed-url."
 #~ msgstr "Digita l'URL di una fonte."
+
+#~ msgid ""
+#~ "Please feel free to rename tabs to better match your needs. Use "
+#~ "checkboxes to enable or disable specific tabs."
+#~ msgstr ""
+#~ "Sei libero di rinominare le schede in base alle tue esigenze. Utilizza le "
+#~ "caselle di selezione per abilitare o disabilitare schede specifiche."
 
 #~ msgid "Polish"
 #~ msgstr "Polacco"
@@ -13864,6 +13867,11 @@ msgstr "aaaa"
 #~ msgid "Select page"
 #~ msgstr "Seleziona pagina"
 
+#~ msgid "Selected message was moved successfully."
+#~ msgid_plural "Selected messages has been moved successfully."
+#~ msgstr[0] "Il messaggio selezionato è stato spostato correttamente."
+#~ msgstr[1] "I messaggi selezionati sono stati spostati correttamente."
+
 #~ msgid "Send as mail"
 #~ msgstr "Invia come messaggio di posta"
 
@@ -13890,8 +13898,22 @@ msgstr "aaaa"
 #~ msgid "Shared by: %1$s"
 #~ msgstr "Ricerca effettuata: %1$s"
 
+#~ msgid ""
+#~ "Should all other past and future messages from %1$s also be moved to %2$s?"
+#~ msgstr ""
+#~ "Vuoi che tutti i messaggi passati e futuri di %1$s siano spostati in %2$s?"
+
+#~ msgid ""
+#~ "Should only the current message or all messages of the sender be moved"
+#~ msgstr ""
+#~ "Scegli se spostare solo il messaggio corrente o tutti i messaggi del "
+#~ "mittente"
+
 #~ msgid "Show QR code"
 #~ msgstr "Mostra codice QR"
+
+#~ msgid "Show Tabs for inbox"
+#~ msgstr "Mostra le schede di posta in arrivo"
 
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
@@ -14321,6 +14343,11 @@ msgstr "aaaa"
 #~ msgstr ""
 #~ "I dati condivisi saranno accessibili a chiunque su Internet. Considera "
 #~ "attentamente quali dati condividere. "
+
+#~ msgid "The tabbed inbox can be completely disabled in the mail settings."
+#~ msgstr ""
+#~ "La posta in arrivo con schede può essere completamente disabilitata nelle "
+#~ "impostazioni di posta."
 
 #~ msgid "Theme colors"
 #~ msgstr "Colori del tema"
@@ -14864,6 +14891,9 @@ msgstr "aaaa"
 
 #~ msgid "Workweek View"
 #~ msgstr "Vista Settimana lavorativa"
+
+#~ msgid "Yes, always move them all"
+#~ msgstr "Sì, spostali tutti sempre"
 
 #~ msgid "You already accepted this invitation"
 #~ msgstr "Hai già accettato questo invito"
