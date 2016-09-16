@@ -283,8 +283,8 @@ define('io.ox/mail/toolbar', [
             if (capabilities.has('mail_categories')) {
                 dropdown
                 .header(gt('Inbox'))
-                .option('categories', true, gt('Categories'))
-                 //#. term is followed by a space and three dots (' …')
+                .option('categories', true, gt('Use categories'))
+                 //#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
                 .link('categories-config', gt('Configure') + ' …', categoriesShowConfig.bind(null, baton.app), { icon: true })
                 .divider();
             }

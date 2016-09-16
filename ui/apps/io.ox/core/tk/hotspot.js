@@ -11,8 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/hotspot', [
-], function () {
+define('io.ox/core/tk/hotspot', [], function () {
 
     'use strict';
 

@@ -1698,6 +1698,7 @@ define('io.ox/mail/main', [
         },
 
         'mail-categories': function (app) {
+
             if (_.device('smartphone')) return;
             if (!capabilities.has('mail_categories')) return;
 
@@ -1718,6 +1719,7 @@ define('io.ox/mail/main', [
         },
 
         'mail-categories-states': function (app) {
+
             if (_.device('smartphone')) return;
             if (!capabilities.has('mail_categories')) return;
 

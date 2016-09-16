@@ -24,9 +24,10 @@ define('io.ox/mail/categories', [
     'io.ox/core/capabilities',
     'io.ox/core/yell',
     'io.ox/core/extensions',
+    'io.ox/core/tk/hotspot',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (http, mailAPI, accountAPI, folderAPI, Modal, Dropdown, actions, dnd, links, capabilities, yell, ext, settings, gt) {
+], function (http, mailAPI, accountAPI, folderAPI, Modal, Dropdown, actions, dnd, links, capabilities, yell, ext, hotspot, settings, gt) {
 
     'use strict';
 
@@ -222,9 +223,18 @@ define('io.ox/mail/categories', [
                         parent.trigger('update', categories);
                     },
                     onDisable: function () {
-                        yell('info', gt('You can enable categories again via the view dropdown on the right'));
                         // mail app settings
                         parent.module.mail.props.set('categories', false);
+                        // delay a bit not to confuse the user
+                        // das tut's nicht, weil obiges delay hat. das muss mehr oder weniger instant passieren
+                        // die 300ms reichen nicht
+                        _.delay(function () {
+                            hotspot.add($('.dropdown[data-dropdown="view"]'));
+                            yell('info', gt('You can enable categories again via the view dropdown on the right'))
+                                .on('notification:removed', function () {
+                                    hotspot.removeAll();
+                                });
+                        }, 300);
                     }
                 });
 
@@ -273,7 +283,9 @@ define('io.ox/mail/categories', [
                         });
                         if (!locked.length) return;
                         this.$body.append(
-                            $('<div class="hint">').text(gt('Please note that some categories are predefined and you might not be able to rename or disable.'))
+                            $('<div class="hint">').text(
+                                gt('Please note that some categories are predefined and you might not be able to rename or disable them.')
+                            )
                         );
                     },
                     'register': function () {
