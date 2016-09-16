@@ -114,14 +114,14 @@ define('io.ox/core/boot/load', [
                     columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
                     sort: sort,
                     order: mailSettings.get(['viewOptions', folder, 'order'], 'desc'),
+                    categoryid: _.url.hash('category') || 'general',
                     timezone: 'utc',
-                    limit: '0,30'
+                    limit: '0,' + mailSettings.get('listview/primaryPageSize', 50)
                 };
 
             // mail categories (aka tabbed inbox)
-            if (!_.device('smartphone') && capabilities.has('mail_categories') && mailSettings.get('categories/enabled')) {
-                // main tab is 'general' (convention)
-                params.categoryid = 'general';
+            if (_.device('smartphone') || !capabilities.has('mail_categories') || !mailSettings.get('categories/enabled')) {
+                delete params.categoryid;
             }
 
             // edge case: no prefetch if sorting is 'from-to' (need to many data we don't have yet)
