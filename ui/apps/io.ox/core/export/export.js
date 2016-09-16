@@ -47,7 +47,7 @@ define('io.ox/core/export/export', [
                 $('<label>').append(
                     $.txt(gt('Format')),
                     $('<br>'),
-                    baton.$.select = $('<select tabindex="0">').attr('aria-label', gt('select format'))
+                    baton.$.select = $('<select>').attr('aria-label', gt('select format'))
                 )
             );
 
@@ -80,7 +80,7 @@ define('io.ox/core/export/export', [
                 ),
                 // checkbox
                 $('<label class="checkbox include_distribution_lists">').append(
-                    baton.$.include = $('<input tabindex="0" type="checkbox" name="include_distribution_lists" checked="checked">'),
+                    baton.$.include = $('<input type="checkbox" name="include_distribution_lists" checked="checked">'),
                     $.txt(gt('Include distribution lists'))
                 )
             );

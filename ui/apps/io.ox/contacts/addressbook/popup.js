@@ -297,11 +297,11 @@ define('io.ox/contacts/addressbook/popup', [
                 this.$('.modal-header').append(
                     $('<div class="row">').append(
                         $('<div class="col-xs-6">').append(
-                            $('<input type="text" class="form-control search-field" tabindex="0">')
+                            $('<input type="text" class="form-control search-field">')
                             .attr('placeholder', gt('Search'))
                         ),
                         $('<div class="col-xs-6">').append(
-                            $('<select class="form-control folder-dropdown invisible" tabindex="0">').append(
+                            $('<select class="form-control folder-dropdown invisible">').append(
                                 $('<option value="all">').text(gt('All contacts')),
                                 $('<option value="all_lists">').text(gt('All distribution lists'))
                             )
@@ -482,7 +482,7 @@ define('io.ox/contacts/addressbook/popup', [
                                 //#. %1$d is number of selected addresses
                                 gt.format(gt.ngettext('%1$d address selected', '%1$d addresses selected', n), n)
                             ),
-                            $('<a href="#" class="pull-right" role="button" tabindex="0">')
+                            $('<a href="#" class="pull-right" role="button">')
                             .text(gt('Clear selection'))
                             .on('click', $.proxy(clearSelection, this))
                         ),

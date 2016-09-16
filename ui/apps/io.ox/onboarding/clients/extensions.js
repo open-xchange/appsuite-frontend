@@ -361,7 +361,7 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         _updateState: function (e) {
-            if (e.keyCode === 13) return;
+            if (e.which === 13) return;
             var value = $(e.target).val().trim(),
                 button = this.$('button.action-call');
             util.removeIcons(button);
@@ -449,7 +449,7 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         _updateState: function (e) {
-            if (e.keyCode === 13) return;
+            if (e.which === 13) return;
             var value = $(e.target).val().trim(),
                 button = this.$('button.action-call');
             util.removeIcons(button);

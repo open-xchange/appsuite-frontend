@@ -13,9 +13,10 @@
 
 define('io.ox/backbone/views/datepicker', [
     'io.ox/backbone/views/disposable',
+    'io.ox/core/a11y',
     'gettext!io.ox/core',
     'less!io.ox/backbone/views/datepicker'
-], function (DisposableView, gt) {
+], function (DisposableView, a11y, gt) {
 
     'use strict';
 
@@ -464,7 +465,7 @@ define('io.ox/backbone/views/datepicker', [
             }
 
             function focusNext() {
-                var all = $('input, select, textarea, button, a[href], [tabindex]').filter(':visible'),
+                var all = a11y.getTabbable($('body')),
                     index = all.index(this.$target);
                 all.eq(index + 1).focus();
             }

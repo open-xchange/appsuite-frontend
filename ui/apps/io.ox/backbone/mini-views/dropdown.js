@@ -158,7 +158,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
             if (_.isString(label)) ariaLabel += (' ' + label);
             this.$el.append(
-                toggle = $('<a href="#" draggable="false" role="button" aria-haspopup="true" data-toggle="dropdown" tabindex="0">').attr('aria-label', ariaLabel)
+                toggle = $('<a href="#" draggable="false" role="button" aria-haspopup="true" data-toggle="dropdown">').attr('aria-label', ariaLabel)
                 .append(
                     // label
                     $('<span class="dropdown-label">').append(label),

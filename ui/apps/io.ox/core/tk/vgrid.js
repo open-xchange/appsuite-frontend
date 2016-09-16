@@ -261,7 +261,7 @@ define('io.ox/core/tk/vgrid', [
             },
 
             fnClickCheckbox = function (e) {
-                if (!(e.type === 'click' || e.keyCode === 32)) return;
+                if (!(e.type === 'click' || e.which === 32)) return;
                 e.preventDefault();
                 var grid = e.data.grid, checked = $(this).find('i').hasClass('fa-square-o');
                 if (checked) {

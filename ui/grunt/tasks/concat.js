@@ -138,6 +138,7 @@ module.exports = function (grunt) {
                             // 3rd wave
                             'apps/io.ox/core/extPatterns/links.js',
                             'apps/io.ox/core/adaptiveLoader.js',
+                            'apps/io.ox/core/a11y.js',
                             'apps/io.ox/core/tk/dialogs.js',
                             'apps/io.ox/core/tk/draghelper.js',
                             // mobile stuff

@@ -86,7 +86,7 @@ define('io.ox/mail/compose/extensions', [
                 this.append($('<button type="button" class="btn btn-primary" data-action="send">')
                     .on('click', function () { baton.view.send(); })
                     .on('keyup', function (e) {
-                        if ((e.keyCode || e.which) === 27) baton.view.focusEditor();
+                        if (e.which === 27) baton.view.focusEditor();
                     })
                     .text(gt('Send')));
             }

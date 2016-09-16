@@ -129,7 +129,7 @@ define('io.ox/files/mediaplayer', [
             this.container.on('keydown', function (e) {
                 // close on ESC unless in fullscreen mode
                 // note: macos' native fullscreen mode does not close on ESC (same for Chrome & Firefox)
-                if (e.keyCode === 27 && !MediaElementPlayer.fullscreen) self.close();
+                if (e.which === 27 && !MediaElementPlayer.fullscreen) self.close();
             });
         },
 
@@ -347,7 +347,7 @@ define('io.ox/files/mediaplayer', [
                 })
                 .on('keydown', function (e) {
                     // enter
-                    if ((e.keyCode || e.which) === 13) {
+                    if (e.which === 13) {
                         ox.launch('io.ox/files/main');
                         $('.mediaplayer_container').show();
                         $(this).remove();

@@ -301,12 +301,9 @@ define('io.ox/presenter/views/navigationview', [
                 event.preventDefault();
                 self.app.mainView.showNextSlide();
             }
-            function onInputKeydown(event) {
-                event.stopPropagation();
-                var keyCode = event.which;
-                if (keyCode === 13 || keyCode === 27) {
-                    self.$el.parent().focus();
-                }
+            function onInputKeydown(e) {
+                e.stopPropagation();
+                if (e.which === 13 || e.which === 27) self.$el.parent().focus();
             }
             function onInputChange() {
                 var newValue = parseInt($(this).val(), 10);

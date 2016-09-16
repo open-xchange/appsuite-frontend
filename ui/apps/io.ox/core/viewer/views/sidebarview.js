@@ -161,7 +161,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          */
         onTabKeydown: function (event) {
             event.stopPropagation();
-            switch (event.which || event.keyCode) {
+            switch (event.which) {
                 case 13: // enter
                     this.onTabClicked(event);
                     break;

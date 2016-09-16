@@ -952,9 +952,7 @@ define('io.ox/mail/compose/view', [
 
         unblockReuse: function (sendtype) {
             this.blocked[sendtype] = (this.blocked[sendtype] || 0) - 1;
-            if (this.blocked[sendtype] <= 0) {
-                delete this.blocked[sendtype];
-            }
+            if (this.blocked[sendtype] <= 0) delete this.blocked[sendtype];
         },
 
         focusEditor: function () {
@@ -964,14 +962,12 @@ define('io.ox/mail/compose/view', [
         flagSubjectField: function (e) {
             var node = $(e.target);
             // required for custom focus handling within inputs on enter
-            if ((e.keyCode || e.which) === 13) {
-                return node.attr('data-enter-keydown', true);
-            }
+            if (e.which === 13) return node.attr('data-enter-keydown', true);
         },
 
         focusSendButton: function (e) {
             // Focus send button on ctrl || meta + Enter (a11y + keyboardsupport)
-            if ((e.metaKey || e.ctrlKey) && ((e.keyCode || e.which) === 13)) {
+            if ((e.metaKey || e.ctrlKey) && e.which === 13) {
                 e.preventDefault();
                 this.$el.parents().find('button[data-action="send"]').focus();
             }
@@ -1003,10 +999,8 @@ define('io.ox/mail/compose/view', [
                         $(this).attr('data-ime', 'inactive');
                     },
                     keydown: function (e) {
-                        if (e.which === 13 && $(this).attr('data-ime') !== 'active') {
-                            // clear tokenfield input
-                            $(this).val('');
-                        }
+                        // clear tokenfield input
+                        if (e.which === 13 && $(this).attr('data-ime') !== 'active') $(this).val('');
                     },
                     // shortcuts (to/cc/bcc)
                     keyup: function (e) {
@@ -1027,9 +1021,7 @@ define('io.ox/mail/compose/view', [
                 });
             });
 
-            this.$el.append(
-                this.editorContainer
-            );
+            this.$el.append(this.editorContainer);
 
             this.initAutoSaveAsDraft();
 

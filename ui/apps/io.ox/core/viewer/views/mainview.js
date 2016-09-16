@@ -156,7 +156,7 @@ define('io.ox/core/viewer/views/mainview', [
                 // focus next action candidate
                 tabableActions.eq(nextElementIndex).focus();
             }
-            switch (event.which || event.keyCode) {
+            switch (event.which) {
                 case 9: // TAB key
                     tabHandler(event);
                     break;

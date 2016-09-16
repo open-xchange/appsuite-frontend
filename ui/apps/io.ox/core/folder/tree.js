@@ -201,9 +201,9 @@ define('io.ox/core/folder/tree', [
         onKeydownMenuKeys: function (e) {
             // Needed for a11y, shift + F10 and the menu key open the contextmenu
             if (e.type === 'keydown') {
-                var shiftF10 = (e.shiftKey && e.keyCode === 121),
-                    menuKey = (_.device('windows') && e.keyCode === 93);
-                if (e.keyCode === 32 || e.keyCode === 13 || shiftF10 || menuKey) this.focusFirst = true;
+                var shiftF10 = (e.shiftKey && e.which === 121),
+                    menuKey = (_.device('windows') && e.which === 93);
+                if (e.which === 32 || e.which === 13 || shiftF10 || menuKey) this.focusFirst = true;
                 if (shiftF10 || menuKey) {
                     // e.preventDefault() is needed here to surpress browser menu
                     e.preventDefault();

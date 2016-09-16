@@ -83,7 +83,7 @@ define('io.ox/core/folder/actions/add', [
                     // name
                     $('<div class="form-group">').append(
                         $('<label class="sr-only">').text(gt('Folder name')).attr('for', guid),
-                        $('<input type="text" name="name" class="form-control" tabindex="0">').attr({ id: guid, placeholder: gt('Folder name') })
+                        $('<input type="text" name="name" class="form-control">').attr({ id: guid, placeholder: gt('Folder name') })
                     )
                 );
             },
@@ -98,7 +98,7 @@ define('io.ox/core/folder/actions/add', [
                     $('<div class="form-group checkbox">').append(
                         // checkbox
                         $('<label>').append(
-                            $('<input tabindex="0" type="checkbox" name="public">'),
+                            $('<input type="checkbox" name="public">'),
                             $.txt(label)
                         )
                     ),

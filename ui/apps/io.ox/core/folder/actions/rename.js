@@ -56,7 +56,7 @@ define('io.ox/core/folder/actions/rename', [
         .build(function () {
             this.getContentNode().append(
                 $('<form role="form">').append(
-                    $('<input class="form-control" type="text" tabindex="0">').attr('placeholder', gt('Folder name')).val(model.get('title'))
+                    $('<input class="form-control" type="text">').attr('placeholder', gt('Folder name')).val(model.get('title'))
                 )
             );
         })

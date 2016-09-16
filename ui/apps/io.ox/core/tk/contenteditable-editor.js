@@ -37,7 +37,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         draw: function (ed) {
             ed.on('keydown', function (e) {
                 // pressed enter?
-                if ((e.keyCode || e.which) === 13) {
+                if (e.which === 13) {
                     splitContent(ed, e);
                 }
             });

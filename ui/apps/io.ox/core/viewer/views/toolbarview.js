@@ -784,10 +784,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             function onNextPage() {
                 self.viewerEvents.trigger('viewer:document:next');
             }
-            function onInputKeydown(event) {
-                event.stopPropagation();
-                var keyCode = event.which;
-                if (keyCode === 13 || keyCode === 27) {
+            function onInputKeydown(e) {
+                e.stopPropagation();
+                if (e.which === 13 || e.which === 27) {
                     self.$el.parent().focus();
                 }
             }

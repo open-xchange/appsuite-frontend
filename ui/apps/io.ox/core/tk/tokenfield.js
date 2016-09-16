@@ -513,7 +513,7 @@ define('io.ox/core/tk/tokenfield', [
                 }
             }).on('keydown', function (e) {
                 //Remove on cut
-                if ((e.ctrlKey || e.metaKey) && e.keyCode === 88) {
+                if ((e.ctrlKey || e.metaKey) && e.which === 88) {
                     $(this).find('.token.active').each(function () {
                         self.collection.remove($(this).data().attrs.model);
                     });

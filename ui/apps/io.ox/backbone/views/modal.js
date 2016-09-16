@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettext!io.ox/core'], function (ExtensibleView, gt) {
+define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/core/a11y', 'gettext!io.ox/core'], function (ExtensibleView, a11y, gt) {
 
     'use strict';
 
@@ -143,7 +143,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
                 left = o.placement === 'left', fn = left ? 'prepend' : 'append';
             if (left) o.className += ' pull-left';
             this.$('.modal-footer')[fn](
-                $('<button class="btn" tabindex="0">')
+                $('<button class="btn">')
                     .addClass(o.className)
                     .attr('data-action', o.action)
                     .text(o.label)
@@ -198,22 +198,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
 
         onTab: function (e) {
             if (e.which !== 9) return;
-            var items, focus, index;
-            // tab
-            items = this.$el.find('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible');
-            if (items.length) {
-                e.preventDefault();
-                focus = $(document.activeElement);
-                index = items.index(focus);
-                index += (e.shiftKey) ? -1 : 1;
-
-                if (index >= items.length) {
-                    index = 0;
-                } else if (index < 0) {
-                    index = items.length - 1;
-                }
-                items.eq(index).focus();
-            }
+            a11y.trapFocus(this.$el, e);
         }
     });
 

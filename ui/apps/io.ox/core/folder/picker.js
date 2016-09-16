@@ -182,7 +182,7 @@ define('io.ox/core/folder/picker', [
                     .always(function () {
                         dialog.getBody().idle().prepend(tree.render().$el);
                         // focus and trigger click on first element for proper keyboard a11y
-                        tree.$el.find('.tree-container > li:first').focus().trigger('click');
+                        tree.$('.tree-container .selectable:first').focus().trigger('click');
                         o.show(dialog, tree);
                     });
             })

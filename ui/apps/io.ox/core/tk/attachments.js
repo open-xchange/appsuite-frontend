@@ -299,7 +299,7 @@ define('io.ox/core/tk/attachments', [
             gguid = _.uniqueId('form-control-label-'),
             label = $('<label class="sr-only">').attr('for', gguid).text(options.buttontext),
             input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr('id', gguid),
-            uploadButton = $('<span class="btn btn-default btn-file" role="button" tabindex="0">').append($.txt(options.buttontext)).append(label, input),
+            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($.txt(options.buttontext)).append(label, input),
             driveButton = $('<button type="button" class="btn btn-default" data-action="add-internal">').text(gt('Add from Drive'));
 
         input.on('focus', function () {

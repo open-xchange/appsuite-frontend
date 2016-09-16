@@ -96,7 +96,7 @@ define('io.ox/mail/view-options', [
     }
 
     function toggleSelection(e) {
-        if (e.type === 'click' || e.keyCode === 32) {
+        if (e.type === 'click' || e.which === 32) {
             e.preventDefault();
             var i = $(this).find('i'), selection = e.data.baton.app.listView.selection;
             if (i.hasClass('fa-check-square-o')) selection.selectNone(); else selection.selectAll();

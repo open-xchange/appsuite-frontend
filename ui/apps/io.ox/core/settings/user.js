@@ -48,11 +48,7 @@ define('io.ox/core/settings/user', [
             dialog.getContentControls()
                 .prepend(
                     $('<label class="checkbox-inline pull-left">').append(
-                        $('<input>')
-                            .addClass('toggle-check')
-                            .attr({
-                                type: 'checkbox'
-                            })
+                        $('<input type="checkbox" class="toggle-check">')
                             .on('change', function (e) {
                                 e.preventDefault();
                                 view.toggle.call(view.$el);
