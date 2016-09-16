@@ -41,14 +41,14 @@ define('io.ox/mail/categories', [
      */
 
     // do not clutter hash
-    ox.on('app:start app:resume', function (app) {
-        if (!app || !app.categories) return;
-        if (app.id !== 'io.ox/mail' || !app.categories.initialized) return;
-        // restore
-        module.restoreSelection();
-        // reset
-        _.url.hash('category', null);
-    });
+    // ox.on('app:start app:resume', function (app) {
+    //     if (!app || !app.categories) return;
+    //     if (app.id !== 'io.ox/mail' || !app.categories.initialized) return;
+    //     // restore
+    //     module.restoreSelection();
+    //     // reset
+    //     _.url.hash('category', null);
+    // });
 
     function trigger() { this.trigger.apply(this, arguments); }
 
