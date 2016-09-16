@@ -9,6 +9,7 @@
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
     "eslint": "~2.12.0",
+    "eslint-config-open-xchange-appsuite": "^0.1.0",
     "grunt": "^0.4.5",
     "grunt-bump": "^0.3.0",
     "grunt-check-dependencies": "^0.9.0",
