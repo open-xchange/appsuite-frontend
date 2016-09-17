@@ -580,7 +580,7 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-msgid "A new version for %1$s has been created."
+msgid "A new version for \"%1$s\" has been added."
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
@@ -835,7 +835,7 @@ msgid "Add new version"
 msgstr ""
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add new version and show popup"
+msgid "Add new version and show notification"
 msgstr ""
 
 #. Please translate like "take a note", "Notiz" in German, for example.
@@ -852,6 +852,10 @@ msgstr ""
 msgid "Add original message as attachment"
 msgstr ""
 
+#: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
+msgid "Add participant"
+msgstr ""
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr ""
@@ -865,7 +869,7 @@ msgid "Add recipients ..."
 msgstr ""
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add separate file / no new version"
+msgid "Add separate file"
 msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
@@ -959,6 +963,10 @@ msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Added the new participant"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Adding files with identical names"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
@@ -1693,10 +1701,6 @@ msgstr ""
 msgid "Cart is empty."
 msgstr ""
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Categories"
-msgstr ""
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Categories are represented as tabs in your inbox."
 msgstr ""
@@ -2044,7 +2048,7 @@ msgstr ""
 msgid "Configuration Email"
 msgstr ""
 
-#. term is followed by a space and three dots (' …')
+#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Configure"
 msgstr ""
@@ -6254,7 +6258,7 @@ msgstr ""
 #: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
-"rename or disable."
+"rename or disable them."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6279,8 +6283,8 @@ msgstr ""
 msgid "Please select a file to import"
 msgstr ""
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 msgid "Please select a time for the appointment"
 msgstr ""
 
@@ -9059,10 +9063,6 @@ msgstr ""
 msgid "Upload file"
 msgstr ""
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Upload handling"
-msgstr ""
-
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
 msgstr ""
@@ -9102,6 +9102,10 @@ msgstr ""
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Use %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgid "Use categories"
 msgstr ""
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core

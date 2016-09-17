@@ -597,7 +597,7 @@ msgstr ""
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
 #| msgid "Drop new version of \"%1$s\" here"
-msgid "A new version for %1$s has been created."
+msgid "A new version for \"%1$s\" has been added."
 msgstr "Lataa uusi versio tiedostosta \"%1$s\" "
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
@@ -860,8 +860,10 @@ msgid "Add new version"
 msgstr "Lataa uusi versio"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add new version and show popup"
-msgstr ""
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Add new version and show notification"
+msgstr "Napsauta sulkeaksesi ilmoituksen"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
@@ -879,6 +881,10 @@ msgstr "%s lisää"
 msgid "Add original message as attachment"
 msgstr "Näytä alkuperäinen viesti"
 
+#: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
+msgid "Add participant"
+msgstr "Lisää osallistuja"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Lisää osallistuja/resurssi"
@@ -892,8 +898,10 @@ msgid "Add recipients ..."
 msgstr "Lisää vastaanottajia..."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add separate file / no new version"
-msgstr ""
+#, fuzzy
+#| msgid "Add local file"
+msgid "Add separate file"
+msgstr "Lisää paikallinen tiedosto"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -989,6 +997,12 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "Uusi osallistuja lisätty"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Adding further details"
+msgid "Adding files with identical names"
+msgstr "Muiden tietojen lisääminen"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -1746,12 +1760,6 @@ msgstr "CardDAV URL"
 msgid "Cart is empty."
 msgstr "Kori on tyhjä."
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Categories"
-msgstr "Postiosoite"
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Categories are represented as tabs in your inbox."
 msgstr ""
@@ -2108,7 +2116,7 @@ msgstr "Ehdot"
 msgid "Configuration Email"
 msgstr "Konfiguraatioviesti"
 
-#. term is followed by a space and three dots (' …')
+#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -6427,7 +6435,7 @@ msgstr "Syötä salasanasi"
 #: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
-"rename or disable."
+"rename or disable them."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6457,8 +6465,8 @@ msgstr "Syötä vanha salasana, jotta tilin salasanat voidaan palauttaa."
 msgid "Please select a file to import"
 msgstr "Valitse tuotava tiedosto"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 msgid "Please select a time for the appointment"
 msgstr "Valitse tapaamisen ajankohta"
 
@@ -9378,12 +9386,6 @@ msgstr "Lataa tiedosto"
 msgid "Upload file"
 msgstr "Lataa tiedosto"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Upload local file"
-msgid "Upload handling"
-msgstr "Lataa paikallinen tiedosto"
-
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
 msgstr "Lataa paikallinen tiedosto"
@@ -9426,6 +9428,12 @@ msgstr "Kiireellisyys"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "Käytä %1$s"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Use categories"
+msgstr "Postiosoite"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -10867,12 +10875,6 @@ msgstr "vvvv"
 #~ msgid "Add new guest"
 #~ msgstr "Lisää uusi vieras"
 
-#~ msgid "Add participant"
-#~ msgstr "Lisää osallistuja"
-
-#~ msgid "Adding further details"
-#~ msgstr "Muiden tietojen lisääminen"
-
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Lisätään tilaus. Tämä voi kestää muutaman sekunnin..."
 
@@ -10999,6 +11001,11 @@ msgstr "vvvv"
 
 #~ msgid "Blind copy (BCC) to"
 #~ msgstr "Piilokopio (BCC)"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Categories"
+#~ msgstr "Postiosoite"
 
 #~ msgid "Change View"
 #~ msgstr "Muuta näkymää"
@@ -12603,6 +12610,11 @@ msgstr "vvvv"
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Päivitä premium-versioon"
+
+#, fuzzy
+#~| msgid "Upload local file"
+#~ msgid "Upload handling"
+#~ msgstr "Lataa paikallinen tiedosto"
 
 #~ msgid "Upload new files"
 #~ msgstr "Lataa uusia tiedostoja"

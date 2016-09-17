@@ -602,7 +602,7 @@ msgstr ""
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
 #| msgid "Drop new version of \"%1$s\" here"
-msgid "A new version for %1$s has been created."
+msgid "A new version for \"%1$s\" has been added."
 msgstr "Húzza ide a(z) \"%1$s\" fájl új verzióját"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
@@ -867,8 +867,10 @@ msgid "Add new version"
 msgstr "Új verzió feltöltése"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add new version and show popup"
-msgstr ""
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Add new version and show notification"
+msgstr "Értesítés elrejtése"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
@@ -884,6 +886,12 @@ msgstr "Hozzáadás itt: %s"
 msgid "Add original message as attachment"
 msgstr ""
 
+#: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Add new participant"
+msgid "Add participant"
+msgstr "Új résztvevő hozzáadása"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Résztvevő/erőforrás hozzáadása"
@@ -897,8 +905,10 @@ msgid "Add recipients ..."
 msgstr "Címzettek hozzáadása ..."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add separate file / no new version"
-msgstr ""
+#, fuzzy
+#| msgid "Add local file"
+msgid "Add separate file"
+msgstr "Helyi fájl hozzáadása"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -995,6 +1005,10 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "Az új résztvevő hozzáadva"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Adding files with identical names"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -1758,12 +1772,6 @@ msgstr "CalDAV URL"
 msgid "Cart is empty."
 msgstr "A kosár üres."
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Series"
-msgid "Categories"
-msgstr "Ismétlődések"
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Categories are represented as tabs in your inbox."
 msgstr ""
@@ -2122,7 +2130,7 @@ msgstr "Feltételek"
 msgid "Configuration Email"
 msgstr "Beállító e-mail"
 
-#. term is followed by a space and three dots (' …')
+#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -6455,7 +6463,7 @@ msgstr "Adja meg jelszavát."
 #: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
-"rename or disable."
+"rename or disable them."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6486,8 +6494,8 @@ msgstr ""
 msgid "Please select a file to import"
 msgstr "Válassza ki a fájlt az importáláshoz"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 msgid "Please select a time for the appointment"
 msgstr "Válassza ki a találkozó időpontját"
 
@@ -9411,12 +9419,6 @@ msgstr "Feltöltés"
 msgid "Upload file"
 msgstr "Fájl feltöltése"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Upload local file"
-msgid "Upload handling"
-msgstr "Helyi fájl feltöltése"
-
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
 msgstr "Helyi fájl feltöltése"
@@ -9459,6 +9461,12 @@ msgstr "Sürgősség"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "%1$s használata"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Disable widget"
+msgid "Use categories"
+msgstr "Widget letiltása"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -10856,6 +10864,11 @@ msgstr "yyyy"
 #~ msgid "Back to platforms"
 #~ msgstr "az Ön rendszere"
 
+#, fuzzy
+#~| msgid "Series"
+#~ msgid "Categories"
+#~ msgstr "Ismétlődések"
+
 #~ msgid "Change subscription"
 #~ msgstr "Feliratkozás módosítása"
 
@@ -11260,6 +11273,11 @@ msgstr "yyyy"
 #~ "Nem lehet csatlakozni a levélkezelő kiszolgálóhoz. Ennek okai lehetnek, "
 #~ "hogy kiszolgáló leállt (átmenetileg) vagy hálózati kapcsolódási hiba van. "
 #~ "Próbálja újra néhány perc múlva."
+
+#, fuzzy
+#~| msgid "Upload local file"
+#~ msgid "Upload handling"
+#~ msgstr "Helyi fájl feltöltése"
 
 #~ msgid "Use"
 #~ msgstr "Alkalmazás"

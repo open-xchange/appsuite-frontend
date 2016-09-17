@@ -626,7 +626,7 @@ msgstr ""
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
 #| msgid "Drop new version of \"%1$s\" here"
-msgid "A new version for %1$s has been created."
+msgid "A new version for \"%1$s\" has been added."
 msgstr "Ielādēt jaunu \"%1$s\" versiju šeit"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
@@ -890,8 +890,10 @@ msgid "Add new version"
 msgstr "Ielādēt jaunu versiju"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add new version and show popup"
-msgstr ""
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Add new version and show notification"
+msgstr "Paslēpt šo paziņojumu"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
@@ -909,6 +911,10 @@ msgstr "Pievienot %s"
 msgid "Add original message as attachment"
 msgstr "Rādīt sākotnējo ziņojumu"
 
+#: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
+msgid "Add participant"
+msgstr "Pievienot dalībnieku"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Pievienot dalībnieku/resursu"
@@ -922,8 +928,10 @@ msgid "Add recipients ..."
 msgstr "Pievienot saņēmējus ..."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add separate file / no new version"
-msgstr ""
+#, fuzzy
+#| msgid "Add local file"
+msgid "Add separate file"
+msgstr "Pievienot lokālu failu"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -1021,6 +1029,12 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "Jauns dalībnieks ir pievienots"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Adding further details"
+msgid "Adding files with identical names"
+msgstr "Pārejo detaļu pievienošana"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -1779,10 +1793,6 @@ msgstr "CardDAV URL"
 msgid "Cart is empty."
 msgstr "Grozs ir tukšs"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Categories"
-msgstr "Kategorijas"
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Categories are represented as tabs in your inbox."
 msgstr ""
@@ -2138,7 +2148,7 @@ msgstr "Nosacījumi"
 msgid "Configuration Email"
 msgstr "Konfigurēšanas e-pasts"
 
-#. term is followed by a space and three dots (' …')
+#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -6480,7 +6490,7 @@ msgstr "Lūdzu ievadiet paroli."
 #: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
-"rename or disable."
+"rename or disable them."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6510,8 +6520,8 @@ msgstr "Lūdzu ievadiet veco paroli, lai varētu atkopt konta paroles."
 msgid "Please select a file to import"
 msgstr "Lūdzu izvēlieties importējamo failu"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 msgid "Please select a time for the appointment"
 msgstr "Lūdzu izvēlieties mītiņa laiku"
 
@@ -9452,12 +9462,6 @@ msgstr "Ielādēt"
 msgid "Upload file"
 msgstr "Ielādēt failu"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Upload local file"
-msgid "Upload handling"
-msgstr "Augšupielādēt lokālu failu"
-
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
 msgstr "Augšupielādēt lokālu failu"
@@ -9500,6 +9504,12 @@ msgstr "Svarīgums"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "Izmantot %1$s"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Use categories"
+msgstr "Pieejamās kategorijas:"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -11184,9 +11194,6 @@ msgstr "yyyy"
 #~ msgid "Add new subfolder"
 #~ msgstr "Pievienot jaunu apakšmapi"
 
-#~ msgid "Add participant"
-#~ msgstr "Pievienot dalībnieku"
-
 #~ msgid "Add picture"
 #~ msgstr "Pievienot attēlu"
 
@@ -11195,9 +11202,6 @@ msgstr "yyyy"
 
 #~ msgid "Add sender to \"To\", recipients to \"Cc\""
 #~ msgstr "Pievienot sūtītāju pie \"Saņēmējs\", saņēmējus pie \"Cc\""
-
-#~ msgid "Adding further details"
-#~ msgstr "Pārejo detaļu pievienošana"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Tiek pievienots abonements. Process var aizņemt dažas sekundes ..."
@@ -11748,6 +11752,9 @@ msgstr "yyyy"
 
 #~ msgid "Cards"
 #~ msgstr "Kartiņas"
+
+#~ msgid "Categories"
+#~ msgstr "Kategorijas"
 
 #~ msgid "Categories..."
 #~ msgstr "Kategorijas..."
@@ -16516,6 +16523,11 @@ msgstr "yyyy"
 
 #~ msgid "Upload a picture"
 #~ msgstr "Ielādēt attēlu"
+
+#, fuzzy
+#~| msgid "Upload local file"
+#~ msgid "Upload handling"
+#~ msgstr "Augšupielādēt lokālu failu"
 
 #~ msgid "Upload new file"
 #~ msgstr "Ielādēt jaunu failu"

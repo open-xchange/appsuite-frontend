@@ -597,7 +597,7 @@ msgstr ""
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
 #| msgid "Drop new version of \"%1$s\" here"
-msgid "A new version for %1$s has been created."
+msgid "A new version for \"%1$s\" has been added."
 msgstr "把 \"%1$s\" 新版本投下这里"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
@@ -857,8 +857,10 @@ msgid "Add new version"
 msgstr "上载新版本"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add new version and show popup"
-msgstr ""
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Add new version and show notification"
+msgstr "隐藏此通知"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
@@ -876,6 +878,10 @@ msgstr "在 %s 上添加"
 msgid "Add original message as attachment"
 msgstr "显示原来消息"
 
+#: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
+msgid "Add participant"
+msgstr "添加参与者"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "添加参与者/资源"
@@ -889,8 +895,10 @@ msgid "Add recipients ..."
 msgstr "添加收件人 ..."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add separate file / no new version"
-msgstr ""
+#, fuzzy
+#| msgid "Add local file"
+msgid "Add separate file"
+msgstr "附加本地文件"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -984,6 +992,12 @@ msgstr "已添加到通讯组列表 %s（%s 个成员）。此通讯组列表的
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "添加新参与者"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Adding further details"
+msgid "Adding files with identical names"
+msgstr "添加更多详情"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -1725,10 +1739,6 @@ msgstr "CardDAV URL"
 msgid "Cart is empty."
 msgstr "购物车是空的。"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Categories"
-msgstr "类别"
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Categories are represented as tabs in your inbox."
 msgstr ""
@@ -2082,7 +2092,7 @@ msgstr "条件"
 msgid "Configuration Email"
 msgstr "设置电子邮件"
 
-#. term is followed by a space and three dots (' …')
+#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -6356,7 +6366,7 @@ msgstr "请输入您的密码。"
 #: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
-"rename or disable."
+"rename or disable them."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6383,8 +6393,8 @@ msgstr "请您提供旧密码以复原户口密码。"
 msgid "Please select a file to import"
 msgstr "请选择一个汇入的文件"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 msgid "Please select a time for the appointment"
 msgstr "请选择一个约会时间"
 
@@ -9232,12 +9242,6 @@ msgstr "上载"
 msgid "Upload file"
 msgstr "上载档案"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Upload local file"
-msgid "Upload handling"
-msgstr "上载本地文件"
-
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
 msgstr "上载本地文件"
@@ -9280,6 +9284,12 @@ msgstr "紧急"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "使用 %1$s"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Use categories"
+msgstr "可用类别："
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -10907,9 +10917,6 @@ msgstr "年"
 #~ msgid "Add new subfolder"
 #~ msgstr "添加新子文件夹"
 
-#~ msgid "Add participant"
-#~ msgstr "添加参与者"
-
 #~ msgid "Add picture"
 #~ msgstr "添加图片"
 
@@ -10918,9 +10925,6 @@ msgstr "年"
 
 #~ msgid "Add sender to \"To\", recipients to \"Cc\""
 #~ msgstr "将发件人添加至“收件人”，收件人添加至“抄送”"
-
-#~ msgid "Adding further details"
-#~ msgstr "添加更多详情"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "添加订阅中，可能稍时片刻..."
@@ -11424,6 +11428,9 @@ msgstr "年"
 
 #~ msgid "Cape Verde"
 #~ msgstr "佛得角"
+
+#~ msgid "Categories"
+#~ msgstr "类别"
 
 #~ msgid "Categories..."
 #~ msgstr "类别..."
@@ -14330,6 +14337,11 @@ msgstr "年"
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "升级到精华版"
+
+#, fuzzy
+#~| msgid "Upload local file"
+#~ msgid "Upload handling"
+#~ msgstr "上载本地文件"
 
 #~ msgid "Upload new file"
 #~ msgstr "上载新文件"

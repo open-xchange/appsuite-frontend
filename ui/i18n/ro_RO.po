@@ -628,7 +628,7 @@ msgstr ""
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
 #| msgid "Drop new version of \"%1$s\" here"
-msgid "A new version for %1$s has been created."
+msgid "A new version for \"%1$s\" has been added."
 msgstr "Glisați aici noua versiune a \"%1$s\" "
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
@@ -892,8 +892,10 @@ msgid "Add new version"
 msgstr "Încarcă o versiune nouă"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add new version and show popup"
-msgstr ""
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Add new version and show notification"
+msgstr "Ascunde această notificare"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
@@ -911,6 +913,10 @@ msgstr "Adaugă pe %s"
 msgid "Add original message as attachment"
 msgstr "Afișează mesajul original"
 
+#: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
+msgid "Add participant"
+msgstr "Adaugă participant"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Adaugă participant/resursă"
@@ -924,8 +930,10 @@ msgid "Add recipients ..."
 msgstr "Adaugă destinatari..."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add separate file / no new version"
-msgstr ""
+#, fuzzy
+#| msgid "Add local file"
+msgid "Add separate file"
+msgstr "Adaugă fișier local"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -1023,6 +1031,12 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "Noul participant a fost adăugat"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Adding further details"
+msgid "Adding files with identical names"
+msgstr "Adăugarea detaliilor suplimentare"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -1782,10 +1796,6 @@ msgstr "URL CardDAV"
 msgid "Cart is empty."
 msgstr "Coșul este gol."
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Categories"
-msgstr "Categorii"
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Categories are represented as tabs in your inbox."
 msgstr ""
@@ -2143,7 +2153,7 @@ msgstr "Condiții"
 msgid "Configuration Email"
 msgstr "E-mail de configurare"
 
-#. term is followed by a space and three dots (' …')
+#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -6484,7 +6494,7 @@ msgstr "Introduceți parola."
 #: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
-"rename or disable."
+"rename or disable them."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6514,8 +6524,8 @@ msgstr "Introduceți parola veche pentru a putea recupera parola contului."
 msgid "Please select a file to import"
 msgstr "Selectați fișierul care trebuie importat"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 msgid "Please select a time for the appointment"
 msgstr "Selectați o oră pentru întâlnire"
 
@@ -9475,12 +9485,6 @@ msgstr "Încarcă"
 msgid "Upload file"
 msgstr "Încarcă un fișier"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Upload local file"
-msgid "Upload handling"
-msgstr "Încarcă un fișier local"
-
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
 msgstr "Încarcă un fișier local"
@@ -9523,6 +9527,12 @@ msgstr "Urgență"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "Utilizează %1$s"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Use categories"
+msgstr "Categorii disponibile:"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -11214,9 +11224,6 @@ msgstr "aaaa"
 #~ msgid "Add new subfolder"
 #~ msgstr "Adaugă un dosar subordonat nou"
 
-#~ msgid "Add participant"
-#~ msgstr "Adaugă participant"
-
 #~ msgid "Add picture"
 #~ msgstr "Adaugă imagine"
 
@@ -11225,9 +11232,6 @@ msgstr "aaaa"
 
 #~ msgid "Add sender to \"To\", recipients to \"Cc\""
 #~ msgstr "Adaugă expeditorul la \"Către\", destinatarii la \"Cc\""
-
-#~ msgid "Adding further details"
-#~ msgstr "Adăugarea detaliilor suplimentare"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr ""
@@ -11776,6 +11780,9 @@ msgstr "aaaa"
 
 #~ msgid "Cards"
 #~ msgstr "Fișe"
+
+#~ msgid "Categories"
+#~ msgstr "Categorii"
 
 #~ msgid "Categories..."
 #~ msgstr "Categorii..."
@@ -16599,6 +16606,11 @@ msgstr "aaaa"
 
 #~ msgid "Upload a picture"
 #~ msgstr "Încarcă o imagine"
+
+#, fuzzy
+#~| msgid "Upload local file"
+#~ msgid "Upload handling"
+#~ msgstr "Încarcă un fișier local"
 
 #~ msgid "Upload new file"
 #~ msgstr "Încarcă fișier nou"

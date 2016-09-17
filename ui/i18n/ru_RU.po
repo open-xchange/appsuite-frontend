@@ -627,7 +627,7 @@ msgstr ""
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
 #| msgid "Drop new version of \"%1$s\" here"
-msgid "A new version for %1$s has been created."
+msgid "A new version for \"%1$s\" has been added."
 msgstr "Перетащите новую версию «%1$s» сюда"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
@@ -889,8 +889,10 @@ msgid "Add new version"
 msgstr "Добавить новую версию"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add new version and show popup"
-msgstr ""
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Add new version and show notification"
+msgstr "Закрыть уведомление"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
@@ -908,6 +910,10 @@ msgstr "Добавить в %s"
 msgid "Add original message as attachment"
 msgstr "Показать исходное сообщение"
 
+#: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
+msgid "Add participant"
+msgstr "Добавить участника"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Добавить участника или ресурс"
@@ -921,8 +927,10 @@ msgid "Add recipients ..."
 msgstr "Добавить получателей..."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add separate file / no new version"
-msgstr ""
+#, fuzzy
+#| msgid "Add local file"
+msgid "Add separate file"
+msgstr "Добавить локальный файл"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -1016,6 +1024,12 @@ msgstr "Был добавлен список рассылки %s с %s учас�
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "Участник добавлен"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Adding further details"
+msgid "Adding files with identical names"
+msgstr "Дополнительно"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -1775,12 +1789,6 @@ msgstr "CardDAV URL"
 msgid "Cart is empty."
 msgstr "Корзина пуста."
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Categories"
-msgstr "Почтовый адрес"
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Categories are represented as tabs in your inbox."
 msgstr ""
@@ -2136,7 +2144,7 @@ msgstr "Условия"
 msgid "Configuration Email"
 msgstr "Конфигурация по почте"
 
-#. term is followed by a space and three dots (' …')
+#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -6465,7 +6473,7 @@ msgstr "Введите пароль."
 #: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
-"rename or disable."
+"rename or disable them."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6494,8 +6502,8 @@ msgstr "Для восстановления паролей введите ста
 msgid "Please select a file to import"
 msgstr "Выберите файл для импорта"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 msgid "Please select a time for the appointment"
 msgstr "Выберите время встречи"
 
@@ -9413,12 +9421,6 @@ msgstr "Отправить"
 msgid "Upload file"
 msgstr "Добавить файл"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Upload local file"
-msgid "Upload handling"
-msgstr "Добавить локальный файл"
-
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
 msgstr "Добавить локальный файл"
@@ -9461,6 +9463,12 @@ msgstr "Срочность"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "Использовать %1$s"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Use categories"
+msgstr "Почтовый адрес"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -10941,12 +10949,6 @@ msgstr "гггг"
 #~ msgid "Add new guest"
 #~ msgstr "Добавить гостя"
 
-#~ msgid "Add participant"
-#~ msgstr "Добавить участника"
-
-#~ msgid "Adding further details"
-#~ msgstr "Дополнительно"
-
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Добавление подписки... Это может занять несколько секунд."
 
@@ -11122,6 +11124,11 @@ msgstr "гггг"
 
 #~ msgid "Block pre-loading of externally linked images"
 #~ msgstr "Не загружать изображения из сети"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Categories"
+#~ msgstr "Почтовый адрес"
 
 #~ msgid "Change View"
 #~ msgstr "Изменить вид"
@@ -12997,6 +13004,11 @@ msgstr "гггг"
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Повысить до уровня Premium"
+
+#, fuzzy
+#~| msgid "Upload local file"
+#~ msgid "Upload handling"
+#~ msgstr "Добавить локальный файл"
 
 #~ msgid "Upload new file"
 #~ msgstr "Отправить новый файл"

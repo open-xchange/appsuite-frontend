@@ -630,7 +630,7 @@ msgstr ""
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
 #| msgid "Drop new version of \"%1$s\" here"
-msgid "A new version for %1$s has been created."
+msgid "A new version for \"%1$s\" has been added."
 msgstr "Přetáhněte sem novou verzi „%1$s“"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
@@ -895,8 +895,10 @@ msgid "Add new version"
 msgstr "Nahrát novou verzi"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add new version and show popup"
-msgstr ""
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Add new version and show notification"
+msgstr "Skrýt toto oznámení"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
@@ -914,6 +916,10 @@ msgstr "Přidat do %s"
 msgid "Add original message as attachment"
 msgstr "Zobrazit původní zprávu"
 
+#: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
+msgid "Add participant"
+msgstr "Přidat účastníka"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Přidat účastníka/zdroj"
@@ -927,8 +933,10 @@ msgid "Add recipients ..."
 msgstr "Přidat adresáty..."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add separate file / no new version"
-msgstr ""
+#, fuzzy
+#| msgid "Add local file"
+msgid "Add separate file"
+msgstr "Připojit lokální soubor"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -1026,6 +1034,12 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "Nový účastník byl přidán"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Adding further details"
+msgid "Adding files with identical names"
+msgstr "Doplnění dalších podrobností"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -1776,10 +1790,6 @@ msgstr "Adresa CardDAV"
 msgid "Cart is empty."
 msgstr "Košík je prázdný."
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Categories"
-msgstr "Kategorie"
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Categories are represented as tabs in your inbox."
 msgstr ""
@@ -2134,7 +2144,7 @@ msgstr "Podmínky"
 msgid "Configuration Email"
 msgstr "Konfigurační zpráva"
 
-#. term is followed by a space and three dots (' …')
+#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -6456,7 +6466,7 @@ msgstr "Zadejte, prosím, své heslo."
 #: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
-"rename or disable."
+"rename or disable them."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6486,8 +6496,8 @@ msgstr "Zadejte, prosím, staré heslo, aby mohl být účet obnoven."
 msgid "Please select a file to import"
 msgstr "Vyberte, prosím, soubor k importu"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 msgid "Please select a time for the appointment"
 msgstr "Vyberte, prosím, čas schůzky"
 
@@ -9419,12 +9429,6 @@ msgstr "Nahrát"
 msgid "Upload file"
 msgstr "Nahrát soubor"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Upload local file"
-msgid "Upload handling"
-msgstr "Nahrát místní soubor"
-
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
 msgstr "Nahrát místní soubor"
@@ -9467,6 +9471,12 @@ msgstr "Naléhavost"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "Použít %1$s"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Use categories"
+msgstr "Dostupné kategorie:"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -11555,9 +11565,6 @@ msgstr "rrrr"
 #~ msgid "Add new subfolder"
 #~ msgstr "Přidat novou podsložku"
 
-#~ msgid "Add participant"
-#~ msgstr "Přidat účastníka"
-
 #~ msgid "Add picture"
 #~ msgstr "Přidat obrázek"
 
@@ -11569,9 +11576,6 @@ msgstr "rrrr"
 
 #~ msgid "Added"
 #~ msgstr "Přidáno"
-
-#~ msgid "Adding further details"
-#~ msgstr "Doplnění dalších podrobností"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Přidávám nové přihlášení k odběru. Může to několik sekund trvat..."
@@ -13243,6 +13247,9 @@ msgstr "rrrr"
 
 #~ msgid "Cards"
 #~ msgstr "Karty"
+
+#~ msgid "Categories"
+#~ msgstr "Kategorie"
 
 #~ msgid "Categories..."
 #~ msgstr "Kategorie..."
@@ -19224,6 +19231,11 @@ msgstr "rrrr"
 
 #~ msgid "Upload a picture"
 #~ msgstr "Nahrát obrázek"
+
+#, fuzzy
+#~| msgid "Upload local file"
+#~ msgid "Upload handling"
+#~ msgstr "Nahrát místní soubor"
 
 #~ msgid "Upload new file"
 #~ msgstr "Nahrát nový soubor"

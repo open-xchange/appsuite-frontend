@@ -530,13 +530,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js
-#: module:io.ox/calendar/edit/main
-msgid "Please select a time for the appointment"
-msgstr ""
-
-#: apps/io.ox/calendar/actions.js
-#: module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgid "Change status"
 msgstr ""
@@ -1073,6 +1066,13 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
+msgid "Please select a time for the appointment"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freebusy/templates.js
 #: module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js
@@ -1522,6 +1522,11 @@ msgstr ""
 #: apps/io.ox/calendar/freebusy/templates.js
 #: module:io.ox/calendar/freebusy
 msgid "You are not allowed to create appointments in \"%1$s\". Appointments will therefore be created in your private calendar."
+msgstr ""
+
+#: apps/io.ox/calendar/freetime/participantsView.js
+#: module:io.ox/calendar
+msgid "Add participant"
 msgstr ""
 
 #: apps/io.ox/calendar/freetime/timeView.js
@@ -7230,17 +7235,17 @@ msgstr ""
 
 #: apps/io.ox/files/settings/pane.js
 #: module:io.ox/files
-msgid "Add new version and show popup"
+msgid "Add new version and show notification"
 msgstr ""
 
 #: apps/io.ox/files/settings/pane.js
 #: module:io.ox/files
-msgid "Add separate file / no new version"
+msgid "Add separate file"
 msgstr ""
 
 #: apps/io.ox/files/settings/pane.js
 #: module:io.ox/files
-msgid "Upload handling"
+msgid "Adding files with identical names"
 msgstr ""
 
 #: apps/io.ox/files/share/listview.js
@@ -7673,7 +7678,7 @@ msgstr[1] ""
 
 #: apps/io.ox/files/upload/main.js
 #: module:io.ox/files
-msgid "A new version for %1$s has been created."
+msgid "A new version for \"%1$s\" has been added."
 msgstr ""
 
 #. %1$s progress of currently uploaded files in percent
@@ -8489,7 +8494,7 @@ msgstr ""
 
 #: apps/io.ox/mail/categories.js
 #: module:io.ox/mail
-msgid "Please note that some categories are predefined and you might not be able to rename or disable."
+msgid "Please note that some categories are predefined and you might not be able to rename or disable them."
 msgstr ""
 
 #: apps/io.ox/mail/categories.js
@@ -9700,10 +9705,10 @@ msgstr ""
 
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
-msgid "Categories"
+msgid "Use categories"
 msgstr ""
 
-#. term is followed by a space and three dots (' …')
+#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Configure"

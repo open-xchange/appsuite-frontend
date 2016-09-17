@@ -576,7 +576,7 @@ msgstr ""
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
 #| msgid "Drop new version of \"%1$s\" here"
-msgid "A new version for %1$s has been created."
+msgid "A new version for \"%1$s\" has been added."
 msgstr "新規バージョン\"%1$s\"をここにドロップ"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
@@ -840,8 +840,10 @@ msgid "Add new version"
 msgstr "新規バージョンをアップロード"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add new version and show popup"
-msgstr ""
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Add new version and show notification"
+msgstr "この通知を隠す。"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
@@ -859,6 +861,10 @@ msgstr "%s に追加"
 msgid "Add original message as attachment"
 msgstr "元のメッセージを表示"
 
+#: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
+msgid "Add participant"
+msgstr "出席者を追加"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "出席者/設備を追加"
@@ -872,8 +878,10 @@ msgid "Add recipients ..."
 msgstr "宛先を追加します..."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add separate file / no new version"
-msgstr ""
+#, fuzzy
+#| msgid "Add local file"
+msgid "Add separate file"
+msgstr "ローカルファイルを追加"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -971,6 +979,12 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "新規出席者が追加されました。"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "Adding further details"
+msgid "Adding files with identical names"
+msgstr "詳細情報の追加"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -1718,10 +1732,6 @@ msgstr "CardDAV URL"
 msgid "Cart is empty."
 msgstr "カートには何も入っていません。"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Categories"
-msgstr "カテゴリ"
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Categories are represented as tabs in your inbox."
 msgstr ""
@@ -2078,7 +2088,7 @@ msgstr "条件"
 msgid "Configuration Email"
 msgstr "構成メール"
 
-#. term is followed by a space and three dots (' …')
+#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -6397,7 +6407,7 @@ msgstr "パスワードを入力してください。"
 #: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
-"rename or disable."
+"rename or disable them."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6427,8 +6437,8 @@ msgstr ""
 msgid "Please select a file to import"
 msgstr "インポートするファイルを選択してください。"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 msgid "Please select a time for the appointment"
 msgstr "このアポイントの時間を選択してください。"
 
@@ -9321,12 +9331,6 @@ msgstr "アップロード"
 msgid "Upload file"
 msgstr "ファイルをアップロード"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Upload local file"
-msgid "Upload handling"
-msgstr "ローカルファイルをアップロード"
-
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
 msgstr "ローカルファイルをアップロード"
@@ -9369,6 +9373,12 @@ msgstr "緊急度"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "%1$s を使用"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail categories"
+msgid "Use categories"
+msgstr "利用可能なカテゴリ:"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -11052,9 +11062,6 @@ msgstr "yyyy"
 #~ msgid "Add new subfolder"
 #~ msgstr "新規サブフォルダを追加"
 
-#~ msgid "Add participant"
-#~ msgstr "出席者を追加"
-
 #~ msgid "Add picture"
 #~ msgstr "写真を追加"
 
@@ -11063,9 +11070,6 @@ msgstr "yyyy"
 
 #~ msgid "Add sender to \"To\", recipients to \"Cc\""
 #~ msgstr "差出人を \"To\" に追加し、宛先を \"Cc\" に追加"
-
-#~ msgid "Adding further details"
-#~ msgstr "詳細情報の追加"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "登録追加中です。この処理には数秒かかる場合があります。"
@@ -12208,6 +12212,9 @@ msgstr "yyyy"
 
 #~ msgid "Cards"
 #~ msgstr "カード"
+
+#~ msgid "Categories"
+#~ msgstr "カテゴリ"
 
 #~ msgid "Categories..."
 #~ msgstr "カテゴリ..."
@@ -17602,6 +17609,11 @@ msgstr "yyyy"
 
 #~ msgid "Upload a picture"
 #~ msgstr "写真をアップロード"
+
+#, fuzzy
+#~| msgid "Upload local file"
+#~ msgid "Upload handling"
+#~ msgstr "ローカルファイルをアップロード"
 
 #~ msgid "Upload new file"
 #~ msgstr "新規ファイルをアップロード"

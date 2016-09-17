@@ -579,7 +579,7 @@ msgstr ""
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
 #| msgid "Reminder has been created"
-msgid "A new version for %1$s has been created."
+msgid "A new version for \"%1$s\" has been added."
 msgstr "Hatırlatma oluşturuldu"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
@@ -843,8 +843,10 @@ msgid "Add new version"
 msgstr "UI sürümü"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add new version and show popup"
-msgstr ""
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Add new version and show notification"
+msgstr "Bu bildirimi gizle"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
@@ -860,6 +862,10 @@ msgstr "%s üzerine ekle"
 msgid "Add original message as attachment"
 msgstr ""
 
+#: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
+msgid "Add participant"
+msgstr "Katılımcı Ekle"
+
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
 msgstr "Katılımcı/kaynak ekle"
@@ -874,8 +880,10 @@ msgid "Add recipients ..."
 msgstr "Alıcı ekle"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Add separate file / no new version"
-msgstr ""
+#, fuzzy
+#| msgid "Add local file"
+msgid "Add separate file"
+msgstr "Yerel dosya ekle"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -972,6 +980,10 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "Yeni katılımcı eklendi"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Adding files with identical names"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -1737,12 +1749,6 @@ msgstr "CalDAV URL"
 msgid "Cart is empty."
 msgstr "Araba boş."
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Categories"
-msgstr "E-posta adresi"
-
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Categories are represented as tabs in your inbox."
 msgstr ""
@@ -2105,7 +2111,7 @@ msgstr "Durumlar"
 msgid "Configuration Email"
 msgstr "Onaylama"
 
-#. term is followed by a space and three dots (' …')
+#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Unconfirmed"
@@ -6532,7 +6538,7 @@ msgstr "Lütfen şifrenizi giriniz"
 #: apps/io.ox/mail/categories.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
-"rename or disable."
+"rename or disable them."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6562,8 +6568,8 @@ msgstr "Hesap şifrelerinin kurtarılabilmesi için lütfen eski şifrenizi giri
 msgid "Please select a file to import"
 msgstr "Lütfen aktarılacak dosyayı seçiniz"
 
-#: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #, fuzzy
 msgid "Please select a time for the appointment"
 msgstr "Lütfen aktarılacak dosyayı seçiniz"
@@ -9559,12 +9565,6 @@ msgstr "Yükleniyor %1$s"
 msgid "Upload file"
 msgstr "Yerel dosya yükleyin"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Upload local file"
-msgid "Upload handling"
-msgstr "Yerel dosya yükleyin"
-
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
 msgstr "Yerel dosya yükleyin"
@@ -9608,6 +9608,12 @@ msgstr "Aciliyet"
 #, fuzzy
 msgid "Use %1$s"
 msgstr "Sona erme tarihi %1$s"
+
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Use categories"
+msgstr "E-posta adresi"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -11016,9 +11022,6 @@ msgstr "yyyy"
 #~ msgid "Add member"
 #~ msgstr "Üye ekle"
 
-#~ msgid "Add participant"
-#~ msgstr "Katılımcı Ekle"
-
 #~ msgid "Advanced Settings"
 #~ msgstr "Gelişmiş Ayarlar"
 
@@ -11057,6 +11060,11 @@ msgstr "yyyy"
 
 #~ msgid "Bcc"
 #~ msgstr "Gizli bilgi"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Categories"
+#~ msgstr "E-posta adresi"
 
 #~ msgid "Change folder"
 #~ msgstr "Klasör değiştir"
@@ -11309,6 +11317,11 @@ msgstr "yyyy"
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Premium'a yükseltin"
+
+#, fuzzy
+#~| msgid "Upload local file"
+#~ msgid "Upload handling"
+#~ msgstr "Yerel dosya yükleyin"
 
 #, fuzzy
 #~| msgid "Username"
