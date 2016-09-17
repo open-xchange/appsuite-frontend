@@ -31,6 +31,7 @@ define('io.ox/mail/main', [
     'io.ox/core/folder/view',
     'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
+    'io.ox/mail/categories/mediator',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'io.ox/mail/actions',
@@ -40,7 +41,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, gt, settings) {
 
     'use strict';
 
@@ -290,6 +291,7 @@ define('io.ox/mail/main', [
                 'exactDates': app.settings.get('showExactDates', false),
                 'alwaysShowSize': app.settings.get('alwaysShowSize', false),
                 'categories': app.settings.get('categories/enabled', false),
+                'category_id': categories.getInitialCategoryId(),
                 'mobileFolderSelectMode': false
             });
         },
@@ -379,8 +381,11 @@ define('io.ox/mail/main', [
          */
         'list-view': function (app) {
             app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
-            app.listView.model.set({ folder: app.folder.get() });
-            app.listView.model.set('thread', true);
+            app.listView.model.set({
+                category_id: categories.getInitialCategoryId(),
+                folder: app.folder.get(),
+                thread: true
+            });
             // for debugging
             window.list = app.listView;
         },
@@ -803,7 +808,7 @@ define('io.ox/mail/main', [
                 // defer so that all selection events are triggered (e.g. selection:all)
                 _.defer(function () {
                     // tabbed inbox / mail categories: absolute tab count is unknown
-                    var inTab = app.categories && app.categories.props.get('enabled') && app.categories.props.get('visible'),
+                    var inTab = categories.isVisible(),
                         count = $('<span class="number">').text(list.length).prop('outerHTML');
                     app.right.find('.multi-selection-message .message')
                         .empty()
@@ -1700,71 +1705,6 @@ define('io.ox/mail/main', [
             });
         },
 
-        'mail-categories': function (app) {
-
-            if (_.device('smartphone')) return;
-            if (!capabilities.has('mail_categories')) return;
-
-            // pre-load logic
-            app.categories = {
-                enable: function () {
-                    app.listView.model.set('categoryid', 'general');
-                },
-                disable: function () {
-                    app.listView.model.unset('categoryid');
-                }
-            };
-
-            // fulllogic
-            require(['io.ox/mail/categories'], function (categories) {
-                app.categories = categories.controller.init({ mail: app, pool: api.pool.get('detail') });
-            });
-        },
-
-        'mail-categories-states': function (app) {
-
-            if (_.device('smartphone')) return;
-            if (!capabilities.has('mail_categories')) return;
-
-            var container = app.getWindow().nodes.outer.addClass('mail-categories');
-
-            // initial
-            dispatch();
-            visibility();
-            // register
-            app.settings.on('change:categories/enabled', dispatch);
-            app.on('folder:change', visibility);
-
-            function dispatch(e) {
-                if (app.settings.get('categories/enabled')) return enable(e);
-                disable();
-            }
-
-            function visibility() {
-                var folder = app.listView.model.get('folder'),
-                    isSupported = account.is('inbox', folder) && account.isPrimary(folder);
-                container.toggleClass('mail-categories-supported', isSupported);
-            }
-
-            function enable(e) {
-                // user initiated change?
-                if (e && !container.hasClass('mail-categories-supported')) {
-                    app.folder.set(account.getInbox());
-                    notifications.yell({
-                        type: 'info',
-                        message: gt('Categories are represented as tabs in your inbox.')
-                    });
-                }
-                app.categories.enable();
-                container.addClass('mail-categories-enabled');
-            }
-
-            function disable() {
-                app.categories.disable();
-                container.removeClass('mail-categories-enabled');
-            }
-        },
-
         'unified-folder-support': function () {
             // only register if we have a unified mail account
             account.getUnifiedMailboxName().done(function (unifiedMailboxName) {
@@ -1876,6 +1816,7 @@ define('io.ox/mail/main', [
                 });
             });
         },
+
         'sockets': function (app) {
             ox.on('socket:mail:new', function (data) {
                 folderAPI.reload(data.folder);

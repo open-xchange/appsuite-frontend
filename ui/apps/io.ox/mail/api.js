@@ -738,6 +738,7 @@ define('io.ox/mail/api', [
         return update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
             unsetSorted(list, 651);
             folderAPI.reload(list);
+            api.trigger('after:refresh.unseen', list);
         });
     };
 
@@ -770,6 +771,7 @@ define('io.ox/mail/api', [
         return update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
             unsetSorted(list, 651);
             folderAPI.reload(list);
+            api.trigger('after:refresh.seen', list);
         });
     };
 
@@ -1858,7 +1860,7 @@ define('io.ox/mail/api', [
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
                     max: (params.offset || 0) + 300,
-                    categoryid: params.categoryid,
+                    categoryid: params.category_id,
                     timezone: 'utc'
                 };
             }
@@ -1868,7 +1870,7 @@ define('io.ox/mail/api', [
                 columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
                 sort: params.sort || '610',
                 order: params.order || 'desc',
-                categoryid: params.categoryid,
+                categoryid: params.category_id,
                 timezone: 'utc'
             };
         },

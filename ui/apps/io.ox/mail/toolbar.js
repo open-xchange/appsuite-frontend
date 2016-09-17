@@ -104,10 +104,9 @@ define('io.ox/mail/toolbar', [
             label: gt('Set category'),
             ref: 'io.ox/mail/actions/category',
             customize: function (baton) {
-                var self = this;
-                require(['io.ox/mail/categories'], function (categories) {
-                    categories.picker(self, { data: baton.data });
-                });
+                require(['io.ox/mail/categories/picker'], function (picker) {
+                    picker(this, { props: baton.app.props, data: baton.data });
+                }.bind(this));
             }
         },
         'color': {
@@ -257,8 +256,10 @@ define('io.ox/mail/toolbar', [
         });
     }
 
-    function categoriesShowConfig(app) {
-        if (app.categories) app.categories.showConfig();
+    function onConfigureCategories(props) {
+        require(['io.ox/mail/categories/edit'], function (dialog) {
+            dialog.open(props);
+        });
     }
 
     // view dropdown
@@ -285,7 +286,7 @@ define('io.ox/mail/toolbar', [
                 .header(gt('Inbox'))
                 .option('categories', true, gt('Use categories'))
                  //#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
-                .link('categories-config', gt('Configure') + ' …', categoriesShowConfig.bind(null, baton.app), { icon: true })
+                .link('categories-config', gt('Configure') + ' …', _.bind(onConfigureCategories, this, baton.app.props), { icon: true })
                 .divider();
             }
 
@@ -348,34 +349,6 @@ define('io.ox/mail/toolbar', [
         }
     });
 
-
-    // classic toolbar
-    ext.point('io.ox/mail/mediator').extend({
-        id: 'categories',
-        index: 10000,
-        setup: function (app) {
-            if (_.device('smartphone')) return;
-            if (!capabilities.has('mail_categories')) return;
-            var category = _.findWhere(mailsettings.get('categories/list'), { id: 'general' }) || { name: 'General' },
-                label = category.name;
-            // add placeholder
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                $('<div class="categories-toolbar-container categories-container">').append(
-                    $('<ul>', { class: 'classic-toolbar categories', role: 'toolbar', 'aria-label': gt('Inbox tabs') }).append(
-                        $('<li class="category selected" data-id="general">)').append(
-                            $('<a class="link" role="button">').append(
-                                $('<div class="category-icon">'),
-                                $('<div class="category-name truncate">').text(label),
-                                $('<div class="category-counter">')
-                            )
-                        ),
-                        $('<li class="free-space" aria-hidden="true">')
-                    )
-                )
-            );
-        }
-    });
-
     ext.point('io.ox/mail/mediator').extend({
         id: 'update-toolbar',
         index: 10200,
@@ -388,5 +361,4 @@ define('io.ox/mail/toolbar', [
             });
         }
     });
-
 });
