@@ -32,7 +32,11 @@ define('plugins/portal/mail/register', [
         require(['io.ox/mail/detail/view'], function (detail) {
             var obj = api.reduce(baton.item);
             api.get(obj).done(function (data) {
-                var view = new detail.View({ data: data });
+                var view = new detail.View({
+                    data: data,
+                    // no threads - no different subject
+                    disable: { 'io.ox/mail/detail/header/row3': 'different-subject' }
+                });
                 popup.idle().append(view.render().expand().$el.addClass('no-padding'));
                 data = null;
                 // response to "remove" event
