@@ -51,7 +51,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
             point.initial = false;
             // special flag/handling for 'replace' cause we want
             // to keep the attachments that will be removed otherwise
-            if (/(reply|replyall|forward)/.test(point.mode)) point.restored = true;
+            if (point.mode === 'reply') point.restored = true;
             return compose(point.mode)(point);
         };
 
@@ -77,7 +77,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                     require(['io.ox/mail/compose/bundle']).then(function () {
                         return require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model']);
                     }).then(function (MailComposeView, MailComposeModel) {
-                        var keepdata = /(compose|edit)/.test(obj.mode) || obj.restored,
+                        var keepdata = /(compose|edit|forward)/.test(obj.mode) || obj.restored,
                             data = keepdata ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
                         app.model = new MailComposeModel(data);
                         app.view = new MailComposeView({ app: app, model: app.model });
