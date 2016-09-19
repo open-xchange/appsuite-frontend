@@ -30,7 +30,7 @@ define('io.ox/presenter/views/navigationview', [
         NAVIGATION_LINKS_ID = NAVIGATION_ID + '/links',
         NAVIGATION_DROPDOWN_ID = 'io.ox/presenter/actions/navigation/dropdown',
         PRESENTER_ACTION_ID = 'io.ox/presenter/actions',
-        SMALL_DEVICE = $(window).width() < 580;;
+        SMALL_DEVICE = $(window).width() < 580;
 
     /**
      * Creates the HTML mark-up for a slide navigation button.
