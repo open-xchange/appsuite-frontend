@@ -29,7 +29,8 @@ define('io.ox/presenter/views/navigationview', [
     var NAVIGATION_ID = 'io.ox/presenter/navigation',
         NAVIGATION_LINKS_ID = NAVIGATION_ID + '/links',
         NAVIGATION_DROPDOWN_ID = 'io.ox/presenter/actions/navigation/dropdown',
-        PRESENTER_ACTION_ID = 'io.ox/presenter/actions';
+        PRESENTER_ACTION_ID = 'io.ox/presenter/actions',
+        SMALL_DEVICE = $(window).width() < 580;;
 
     /**
      * Creates the HTML mark-up for a slide navigation button.
@@ -67,7 +68,7 @@ define('io.ox/presenter/views/navigationview', [
             prio: 'hi',
             mobile: 'lo',
             //#. button label for pausing the presentation
-            label: gt('Pause presentation'),
+            label: SMALL_DEVICE ? gt('Pause') : gt('Pause presentation'),
             //#. button tooltip for pausing the presentation
             title: gt('Pause the presentation'),
             ref: PRESENTER_ACTION_ID + '/pause',
@@ -83,7 +84,7 @@ define('io.ox/presenter/views/navigationview', [
             prio: 'hi',
             mobile: 'lo',
             //#. button label for continuing the presentation
-            label: gt('Continue presentation'),
+            label: SMALL_DEVICE ? gt('Continue') : gt('Continue presentation'),
             //#. button tooltip for continuing the presentation
             title: gt('Continue the presentation'),
             ref: PRESENTER_ACTION_ID + '/continue',
