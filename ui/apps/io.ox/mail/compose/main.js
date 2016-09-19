@@ -17,6 +17,13 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
 
     var blocked = {};
 
+    function keepData(obj) {
+        return /(compose|edit)/.test(obj.mode) ||
+               // forwarding muliple messages
+               /(forward)/.test(obj.mode) && !obj.id ||
+               obj.restored;
+    }
+
     // multi instance pattern
     function createInstance() {
 
@@ -50,7 +57,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
             point.initial = false;
             // special flag/handling for 'replace' cause we want
             // to keep the attachments that will be removed otherwise
-            if (point.mode === 'reply') point.restored = true;
+            if (/(reply|replyall|forward)/.test(point.mode)) point.restored = true;
             return compose(point.mode)(point);
         };
 
@@ -75,8 +82,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 win.busy().show(function () {
                     require(['io.ox/mail/compose/bundle'], function () {
                         require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model'], function (MailComposeView, MailComposeModel) {
-                            var keepdata = /(compose|edit|forward)/.test(obj.mode) || obj.restored,
-                                data = keepdata ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
+                            var data = keepData(obj) ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
                             app.model = new MailComposeModel(data);
                             app.view = new MailComposeView({ app: app, model: app.model });
                             win.nodes.main.addClass('scrollable').append(app.view.render().$el);
