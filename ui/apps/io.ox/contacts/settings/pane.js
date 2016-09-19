@@ -72,13 +72,16 @@ define('io.ox/contacts/settings/pane', [
             index: 150,
             id: 'startfolder',
             draw: function () {
+
+                if (!settings.isConfigurable('startInGlobalAddressbook')) return;
+
                 this.append(
                     $('<fieldset>').append(
-                        $('<legend>').addClass('sectiontitle').append(
+                        $('<legend class="sectiontitle">').append(
                             $('<h2>').text(gt('Initial folder'))
                         ),
-                        $('<div>').addClass('form-group').append(
-                            $('<div>').addClass('checkbox').append(
+                        $('<div class="form-group">').append(
+                            $('<div class="checkbox">').append(
                                 $('<label>').text(gt('Start in global address book')).prepend(
                                     new mini.CheckboxView({ name: 'startInGlobalAddressbook', model: contactsModel }).render().$el
                                 )
