@@ -17,8 +17,9 @@ define('plugins/portal/recentfiles/register', [
     'io.ox/core/api/user',
     'gettext!plugins/portal',
     'settings!io.ox/core',
+    'settings!io.ox/files',
     'less!plugins/portal/recentfiles/style'
-], function (ext, filesAPI, userAPI, gt, settings) {
+], function (ext, filesAPI, userAPI, gt, settings, driveSettings) {
 
     'use strict';
 
@@ -41,6 +42,13 @@ define('plugins/portal/recentfiles/register', [
 
             load: function (baton) {
                 return filesAPI.search('', searchOptions).then(function (files) {
+                    // don't show hidden files if disabled in settings
+                    if (driveSettings.get('showHidden') === false) {
+                        files = _(files).filter(function (file) {
+                            var title = (file ? file.title : '');
+                            return title.indexOf('.') !== 0;
+                        });
+                    }
                     // update baton
                     baton.data = files;
                     // get user ids
