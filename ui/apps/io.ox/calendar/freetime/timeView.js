@@ -85,13 +85,15 @@ define('io.ox/calendar/freetime/timeView', [
                         'aria-label': gt('Previous Day')
                     })
                     .append($('<i class="fa fa-chevron-left" aria-hidden="true">')),
-                    $('<a class="control today" >').attr({
-                        href: '#',
-                        role: 'button',
-                        title: gt('Today'),
-                        'aria-label': gt('Today')
-                    })
-                    .append($('<i class="fa fa-circle" aria-hidden="true">')),
+                    // let's try a first round without today button
+                    // don't know how important that is; date picker offers today anyway
+                    // $('<a class="control today" >').attr({
+                    //     href: '#',
+                    //     role: 'button',
+                    //     title: gt('Today'),
+                    //     'aria-label': gt('Today')
+                    // })
+                    // .append($('<i class="fa fa-circle" aria-hidden="true">')),
                     $('<a class="control next" >').attr({
                         href: '#',
                         role: 'button',
