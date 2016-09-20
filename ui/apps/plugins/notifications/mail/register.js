@@ -90,7 +90,7 @@ define('plugins/notifications/mail/register', [
                 forceDisplay: true,
                 onclick: function () {
                     window.focus();
-                    ox.launch('io.ox/mail/main');
+                    ox.launch('io.ox/mail/main', { folder: message.folder });
                 }
             });
         }).attr('src', imageURL);
@@ -111,7 +111,6 @@ define('plugins/notifications/mail/register', [
         settingsModel.saveAndYell();
     });
 
-    console.log('Notification sounds enabled, see mail settings.');
     // get and load stored sound
     loadSound(settingsModel.get('notificationSoundName')).done(function (s) {
         sound = s;
