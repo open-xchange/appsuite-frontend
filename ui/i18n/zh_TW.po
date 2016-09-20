@@ -2198,8 +2198,8 @@ msgstr "內容"
 
 #. button label for continuing the presentation
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
-#: module:io.ox/mail apps/io.ox/presenter/views/toolbarview.js
-#: module:io.ox/presenter
+#: module:io.ox/mail apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue"
 msgstr "繼續"
 
@@ -6110,7 +6110,8 @@ msgid "Password strength: Wrong length"
 msgstr "密碼強度: 長度錯誤"
 
 #. button label for pausing the presentation
-#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "Pause"
 msgstr ""
 
@@ -8993,8 +8994,7 @@ msgstr ""
 msgid "To fill this area please drag and drop mails to the title of this tab."
 msgstr "若要填滿此區塊，請將郵件拖曳到此分頁標題。"
 
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
 #: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js

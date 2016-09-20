@@ -2241,8 +2241,8 @@ msgstr "Contenuto"
 
 #. button label for continuing the presentation
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
-#: module:io.ox/mail apps/io.ox/presenter/views/toolbarview.js
-#: module:io.ox/presenter
+#: module:io.ox/mail apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue"
 msgstr "Continua"
 
@@ -6218,7 +6218,8 @@ msgid "Password strength: Wrong length"
 msgstr "Sicurezza della password: lunghezza errata"
 
 #. button label for pausing the presentation
-#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "Pause"
 msgstr ""
 
@@ -9207,8 +9208,7 @@ msgstr ""
 "Per riempire questa area, trascina e rilascia i messaggi sul titolo di "
 "questa scheda."
 
-#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
 #: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js

@@ -1537,22 +1537,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/freetime/timeView.js
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/mobile-toolbar-actions.js
-#: apps/io.ox/calendar/toolbar.js
-#: apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/week/view.js
-#: apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core
-#: apps/io.ox/find/date/patterns.js
-#: apps/io.ox/tasks/util.js
-#: module:io.ox/tasks
-#: apps/plugins/portal/birthdays/register.js
-#: module:plugins/portal
-msgid "Today"
-msgstr ""
-
-#: apps/io.ox/calendar/freetime/timeView.js
-#: module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
 msgid "Next Day"
 msgstr ""
@@ -1817,6 +1801,21 @@ msgstr ""
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: module:io.ox/calendar
 msgid "Show previous day"
+msgstr ""
+
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/week/view.js
+#: apps/io.ox/core/tk/datepicker.js
+#: module:io.ox/core
+#: apps/io.ox/find/date/patterns.js
+#: apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
+#: apps/plugins/portal/birthdays/register.js
+#: module:plugins/portal
+msgid "Today"
 msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
@@ -4945,8 +4944,9 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
-#: apps/io.ox/presenter/views/toolbarview.js
+#: apps/io.ox/presenter/views/navigationview.js
 #: module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue"
 msgstr ""
 
@@ -10444,6 +10444,13 @@ msgstr ""
 #: apps/io.ox/presenter/views/navigationview.js
 #: module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
+msgid "Pause"
+msgstr ""
+
+#. button label for pausing the presentation
+#: apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "Pause presentation"
 msgstr ""
 
@@ -10653,12 +10660,6 @@ msgstr ""
 #: apps/io.ox/presenter/views/toolbarview.js
 #: module:io.ox/presenter
 msgid "End the presentation"
-msgstr ""
-
-#. button label for pausing the presentation
-#: apps/io.ox/presenter/views/toolbarview.js
-#: module:io.ox/presenter
-msgid "Pause"
 msgstr ""
 
 #. button label for joining the presentation
