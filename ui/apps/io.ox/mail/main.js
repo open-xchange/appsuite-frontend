@@ -803,14 +803,17 @@ define('io.ox/mail/main', [
                 // defer so that all selection events are triggered (e.g. selection:all)
                 _.defer(function () {
                     // tabbed inbox / mail categories: absolute tab count is unknown
-                    var inTab = app.categories && app.categories.props.get('enabled') && app.categories.props.get('visible');
+                    var inTab = app.categories && app.categories.props.get('enabled') && app.categories.props.get('visible'),
+                        count = $('<span class="number">').text(list.length).prop('outerHTML');
                     app.right.find('.multi-selection-message .message')
                         .empty()
                         .attr('id', 'mail-multi-selection-message')
                         .append(
                             // message
                             $('<div>').append(
-                                gt('%1$d messages selected', $('<span class="number">').text(list.length).prop('outerHTML'))
+                                // although we are in showMultiple, we could just have one message if selection mode is alternative
+                                //#. %1$d is the number of selected messages
+                                gt.format(gt.ngettext('%1$d message selected', '%1$d messages selected', count, count))
                             ),
                             // inline actions
                             id && total > list.length && !search && !inTab && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
