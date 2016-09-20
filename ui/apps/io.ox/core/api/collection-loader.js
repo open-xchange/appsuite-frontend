@@ -72,8 +72,11 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             });
 
             // track completeness
-            collection.complete = (type === 'load' && data.length < PAGE_SIZE) || (type === 'paginate' && data.length <= 1);
-            if (collection.complete) collection.trigger('complete');
+            var complete = (type === 'load' && data.length < PAGE_SIZE) || (type === 'paginate' && data.length <= 1);
+            if (complete !== collection.complete) {
+                collection.complete = complete;
+                collection.trigger('complete', complete);
+            }
             collection.trigger(type);
         }
 
@@ -141,7 +144,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var offset = Math.max(0, collection.length - 1);
             params = this.getQueryParams(_.extend({ offset: offset }, params));
             if (this.isBad(params.folder)) return collection;
-            params.limit = offset + ',' + (offset + this.SECONDARY_PAGE_SIZE + 1);
+            params.limit = offset + ',' + (collection.length + this.SECONDARY_PAGE_SIZE);
             this.loading = true;
 
             collection.expired = false;

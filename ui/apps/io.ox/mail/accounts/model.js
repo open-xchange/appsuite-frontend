@@ -135,6 +135,11 @@ define('io.ox/mail/accounts/model', [
 
             data = _.extend({ unified_inbox_enabled: false, transport_auth: 'mail' }, data || this.toJSON());
             data.name = data.personal = data.primary_address;
+            // don't send transport_login/password if transport_auth is mail
+            if (data.transport_auth === 'mail') {
+                delete data.transport_login;
+                delete data.transport_password;
+            }
             return AccountAPI.validate(data, options);
         },
 
