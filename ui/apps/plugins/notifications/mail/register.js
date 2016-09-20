@@ -31,7 +31,7 @@ define('plugins/notifications/mail/register', [
 
     var lastCount = -1,
         SOUND_VOLUME = 0.3, // volume of push notification sound
-        DURATION = 10 * 1000, // miliseconds to show the notification
+        DURATION = 20 * 1000, // miliseconds to show the notification
         path = ox.base + '/apps/themes/default/sounds/', // soundfiles are located in the theme
         iconPath = ox.base + '/apps/themes/default/fallback-image-contact.png', // fallbackicon shown in desktop notification
         sound,
@@ -74,8 +74,7 @@ define('plugins/notifications/mail/register', [
         var text = message.subject || gt('No subject');
         // get email for picture halo
         var imageURL = message.email ? contactsApi.pictureHalo(null, {
-            email: message.email }, { urlOnly: true, width: 192, height: 192, scaleType: 'containforcedimension' }) : iconPath;
-
+            email: message.email }, { urlOnly: true, width: 120, height: 120, scaleType: 'containforcedimension' }) : iconPath;
         // check if user has an image, otherwise use fallback image
         $(new Image()).one('load error', function (e) {
             if (this.width === 1 || e.type === 'error') {
