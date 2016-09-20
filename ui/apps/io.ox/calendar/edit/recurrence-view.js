@@ -1141,12 +1141,10 @@ define('io.ox/calendar/edit/recurrence-view', [
             updateSuggestions: function () {
 
                 var startAttribute = this.model.get('start_time') || this.model.get('start_date');
-                if (!startAttribute) {
-                    return;
-                }
-                var self = this,
+                if (!startAttribute) return;
 
-                    startDate = moment.utc(startAttribute).local(true),
+                var self = this,
+                    startDate = moment(startAttribute).utc(true),
                     dayBits = 1 << startDate.day(),
                     dayInMonth = startDate.date(),
                     month = startDate.month(),
