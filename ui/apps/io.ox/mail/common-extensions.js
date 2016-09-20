@@ -35,8 +35,8 @@ define('io.ox/mail/common-extensions', [
     'use strict';
 
     // little helper
-    function isSearchActive(baton) {
-        return !!baton.app && !!baton.app.get('find') && baton.app.get('find').isActive();
+    function isSearchResult(baton) {
+        return !!baton.app && !!baton.app.props.get('find-result');
     }
 
     var extensions = {
@@ -77,11 +77,14 @@ define('io.ox/mail/common-extensions', [
             var data = baton.data,
                 size = api.threads.size(data),
                 single = size <= 1,
-                addresses = single && !isSearchActive(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from;
+                addresses = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
+                // search result: use image based on 'addresses'
+                picture = isSearchResult ? undefined : data.picture;
+
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: data.picture || (addresses && addresses[0] && addresses[0][1]) },
+                    { email: picture || (addresses && addresses[0] && addresses[0][1]) },
                     { width: 40, height: 40, effect: 'fadeIn' }
                 )
             );
@@ -125,7 +128,7 @@ define('io.ox/mail/common-extensions', [
 
             var data = baton.data,
                 single = !data.threadSize || data.threadSize === 1,
-                field = single && !isSearchActive(baton) && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
+                field = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
                 // get folder data to check capabilities:
                 // if bit 4096 is set, the server sort by local part not display name
                 capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
@@ -292,7 +295,7 @@ define('io.ox/mail/common-extensions', [
         // add orignal folder as label to search result items
         folder: function (baton) {
             // missing data or find currently inactive
-            if (!baton.data.original_folder_id || !isSearchActive(baton)) return;
+            if (!baton.data.original_folder_id || !isSearchResult(baton)) return;
             // add container
             var node = $('<span class="original-folder">').appendTo(this);
             // add breadcrumb
