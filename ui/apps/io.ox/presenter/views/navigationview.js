@@ -294,6 +294,11 @@ define('io.ox/presenter/views/navigationview', [
                 safariFullscreen = this.app.mainView.fullscreen && _.device('safari'),
                 self = this;
 
+            if (SMALL_DEVICE) {
+                prev.css({ 'min-width': '30px', padding: '0 4px' });
+                next.css({ 'min-width': '30px', padding: '0 4px' });
+            }
+
             function onPrevSlide(event) {
                 event.preventDefault();
                 self.app.mainView.showPreviousSlide();
