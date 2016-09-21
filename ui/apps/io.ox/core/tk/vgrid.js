@@ -225,7 +225,6 @@ define('io.ox/core/tk/vgrid', [
             secondToolbar: false,
             swipeLeftHandler: false,
             swipeRightHandler: false,
-            selectSmart: true,
             containerLabel: gt('Multiselect')
         }, options || {});
 
@@ -252,7 +251,7 @@ define('io.ox/core/tk/vgrid', [
                 obj['aria-label'] = options.containerLabel;
                 return obj;
             },
-            container = $('<div class="vgrid-scrollpane-container f6-target" role="listbox">').attr(ariaAttributesContainer()).css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+            container = $('<div class="vgrid-scrollpane-container f6-target" role="listbox" tabindex="0">').attr(ariaAttributesContainer()).css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // mobile select mode
             mobileSelectMode = false,
 
@@ -267,7 +266,7 @@ define('io.ox/core/tk/vgrid', [
                 if (checked) {
                     grid.selection.selectAll();
                     // Bugfix 38498
-                    _.defer(function () { container.focus(); });
+                    _.defer(function () { container.children('[tabindex="0"]:first').focus(); });
                     updateSelectAll(grid.selection.get());
                 } else {
                     grid.selection.clear();
@@ -1322,11 +1321,28 @@ define('io.ox/core/tk/vgrid', [
             self.selection.resetLastIndex();
         });
 
-        container.on('focus', function () {
-            if (!options.multiple && options.selectSmart) {
-                self.selection.selectSmart();
-            }
-        });
+        // focus handling (adopted from newer list.js)
+
+        function onContainerFocus() {
+            var items = container.children(),
+                tabbable = items.filter('[tabindex="0"]:first');
+            if (tabbable.length) tabbable.focus(); else items.first().click();
+        }
+
+        function onItemFocus() {
+            container.removeAttr('tabindex');
+        }
+
+        function onItemBlur() {
+            container.attr('tabindex', 0);
+        }
+
+        if (!_.device('smartphone')) {
+            container
+                .on('focus', onContainerFocus)
+                .on('focus', '.vgrid-cell', onItemFocus)
+                .on('blur', '.vgrid-cell', onItemBlur);
+        }
 
         // default implementation if hash cannot be mapped
         // returns index
