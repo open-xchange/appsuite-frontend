@@ -43,6 +43,9 @@ define('io.ox/contacts/addressbook/popup', [
     // split words
     var regSplitWords = /[\s,.\-:;\<\>\(\)\_\@\/\'\"]/;
 
+    // feature toggles
+    var useInitialsColor = settings.get('picker/useInitialsColor', true);
+
     //
     // Build a search index
     //
@@ -139,12 +142,10 @@ define('io.ox/contacts/addressbook/popup', [
                 limit: LIMITS.fetch
             }, options);
 
-            var isMail = options.isMail;
-            if (options.isMail) delete options.isMail;
             if (options.folder === 'all') delete options.folder;
 
             return fetchAddresses(options).then(function (list) {
-                return processAddresses(list, isMail);
+                return processAddresses(list);
             });
         };
 
@@ -164,7 +165,8 @@ define('io.ox/contacts/addressbook/popup', [
             });
         }
 
-        function processAddresses(list, isMail) {
+        function processAddresses(list) {
+
             var result = [], hash = {};
 
             list.forEach(function (item) {
@@ -194,7 +196,7 @@ define('io.ox/contacts/addressbook/popup', [
                 } else {
                     // get a match for each address
                     addresses.forEach(function (address, i) {
-                        var obj = process(item, sort_name, (item[address] || '').toLowerCase(), i, isMail);
+                        var obj = process(item, sort_name, (item[address] || '').toLowerCase(), i);
                         if (obj) result.push((hash[obj.cid] = obj));
                     });
                 }
@@ -202,7 +204,7 @@ define('io.ox/contacts/addressbook/popup', [
             return { items: result, hash: hash, index: buildIndex(result) };
         }
 
-        function process(item, sort_name, address, i, isMail) {
+        function process(item, sort_name, address, i) {
             // skip if empty
             address = $.trim(address);
             if (!address) return;
@@ -219,12 +221,12 @@ define('io.ox/contacts/addressbook/popup', [
                 email: address,
                 first_name: item.first_name,
                 folder_id: String(item.folder_id),
-                full_name: (isMail ? util.getMailFullName(item) : util.getFullName(item)).toLowerCase(),
-                full_name_html: isMail ? util.getMailFullName(item, true) : util.getFullName(item, true),
+                full_name: util.getFullName(item).toLowerCase(),
+                full_name_html: util.getFullName(item, true),
                 image: util.getImage(item),
                 id: String(item.id),
                 initials: initials,
-                initial_color: util.getInitialsColor(initials),
+                initial_color: util.getInitialsColor(useInitialsColor && initials),
                 last_name: item.last_name,
                 list: item.mark_as_distributionlist ? item.distribution_list : false,
                 // all lower-case to be case-insensitive; replace spaces to better match server-side collation
@@ -344,7 +346,6 @@ define('io.ox/contacts/addressbook/popup', [
                 // the find-as-you-type feature
                 this.listView = new ListView({
                     collection: new Backbone.Collection(),
-                    isMail: options.isMail,
                     pagination: false,
                     ref: 'io.ox/contacts/addressbook-popup/list',
                     selection: { behavior: 'normal' }
@@ -357,8 +358,6 @@ define('io.ox/contacts/addressbook/popup', [
                 );
             },
             onOpen: function () {
-
-                var isMail = this.listView.options.isMail;
 
                 // hide body initially / add busy animation
                 this.busy(true);
@@ -383,7 +382,7 @@ define('io.ox/contacts/addressbook/popup', [
                 this.on('open', function () {
                     _.defer(function () {
                         if (cachedResponse) return success.call(this, cachedResponse);
-                        getAllMailAddresses({ isMail: isMail }).then(success.bind(this), fail.bind(this));
+                        getAllMailAddresses().then(success.bind(this), fail.bind(this));
                     }.bind(this));
                 });
             },
