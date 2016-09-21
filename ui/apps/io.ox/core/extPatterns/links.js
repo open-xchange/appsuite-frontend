@@ -76,8 +76,9 @@ define('io.ox/core/extPatterns/links', [
                 // has icon?
                 if (icons) a.addClass('no-underline');
                 // use tooltip?
-                if (!_.device('smartphone') && (icons && self.label) || self.title) {
-                    attr = _.extend(attr, {
+                var addTooltip = !_.device('smartphone') && (icons && self.label) || self.title;
+                if (addTooltip) {
+                    _.extend(attr, {
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
                         'data-animation': 'false',
@@ -86,12 +87,13 @@ define('io.ox/core/extPatterns/links', [
                         // therefore we always add arial-label to maintain screen reader support
                         'aria-label': self.title || self.label || null
                     });
-                    a.tooltip({ trigger: 'hover' })
-                        .on('dispose', function () {
-                            $(this).tooltip('destroy');
-                        });
                 }
-                return a.attr(attr);
+                // apply attributes now in a single run
+                a.attr(attr);
+                // initialize tooltip
+                if (addTooltip) a.tooltip({ trigger: 'hover' }).on('dispose', function () { $(this).tooltip('destroy'); });
+                // done
+                return a;
             };
 
         this.draw = this.draw || function (baton) {
