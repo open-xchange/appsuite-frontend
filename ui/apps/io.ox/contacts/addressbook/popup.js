@@ -344,9 +344,10 @@ define('io.ox/contacts/addressbook/popup', [
                 // the find-as-you-type feature
                 this.listView = new ListView({
                     collection: new Backbone.Collection(),
-                    pagination: false,
                     isMail: options.isMail,
-                    ref: 'io.ox/contacts/addressbook-popup/list'
+                    pagination: false,
+                    ref: 'io.ox/contacts/addressbook-popup/list',
+                    selection: { behavior: 'normal' }
                 });
                 this.$body.append(this.listView.render().$el);
             },
