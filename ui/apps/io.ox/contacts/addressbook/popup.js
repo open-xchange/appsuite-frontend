@@ -18,11 +18,12 @@ define('io.ox/contacts/addressbook/popup', [
     'io.ox/core/tk/list',
     'io.ox/core/extensions',
     'io.ox/contacts/util',
+    'io.ox/contacts/api',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
     'settings!io.ox/mail',
     'less!io.ox/contacts/addressbook/style'
-], function (http, folderAPI, ModalDialog, ListView, ext, util, gt, settings, mailSettings) {
+], function (http, folderAPI, ModalDialog, ListView, ext, util, api, gt, settings, mailSettings) {
 
     'use strict';
 
@@ -44,7 +45,8 @@ define('io.ox/contacts/addressbook/popup', [
     var regSplitWords = /[\s,.\-:;\<\>\(\)\_\@\/\'\"]/;
 
     // feature toggles
-    var useInitialsColor = settings.get('picker/useInitialsColor', true);
+    var useInitials = settings.get('picker/useInitials', true),
+        useInitialsColor = useInitials && settings.get('picker/useInitialsColor', true);
 
     //
     // Build a search index
@@ -223,9 +225,9 @@ define('io.ox/contacts/addressbook/popup', [
                 folder_id: String(item.folder_id),
                 full_name: util.getFullName(item).toLowerCase(),
                 full_name_html: util.getFullName(item, true),
-                image: util.getImage(item),
+                image: util.getImage(item) || (!useInitials && api.getFallbackImage()),
                 id: String(item.id),
-                initials: initials,
+                initials: useInitials && initials,
                 initial_color: util.getInitialsColor(useInitialsColor && initials),
                 last_name: item.last_name,
                 list: item.mark_as_distributionlist ? item.distribution_list : false,
