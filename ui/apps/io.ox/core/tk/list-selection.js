@@ -924,7 +924,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         // normal select now triggers selection:action instead of the usual events (item will be shown in detail view and checkbox is not checked)
         selectEvents: function (items) {
-            var layout = this.view.app.props.get('layout') || 'list';
+            var layout = (this.view.app && this.view.app.props.get('layout')) || 'list';
             //in list layout we need the old events or mails open when they are not supposed to (for example when moving with arrow keys)
             if (layout === 'list') {
                 this.triggerChange(items);
