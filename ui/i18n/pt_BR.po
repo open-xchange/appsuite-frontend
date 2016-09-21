@@ -135,13 +135,18 @@ msgid_plural "%1$d members"
 msgstr[0] "%1$d membro"
 msgstr[1] "%1$d membros"
 
+#. %1$d is the number of selected messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "%1$d messages selected"
+msgid "%1$d message selected"
+msgid_plural "%1$d messages selected"
+msgstr[0] "%1$d mensagens selecionadas"
+msgstr[1] "%1$d mensagens selecionadas"
+
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "%1$d messages in this conversation"
 msgstr "%1$d mensagens nesta conversa"
-
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "%1$d messages selected"
-msgstr "%1$d mensagens selecionadas"
 
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files

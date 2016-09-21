@@ -146,13 +146,19 @@ msgstr[0] "%1$d dalībnieks"
 msgstr[1] "%1$d dalībnieki"
 msgstr[2] "%1$d dalībnieki"
 
+#. %1$d is the number of selected messages
+#: apps/io.ox/mail/main.js module:io.ox/mail
+#, fuzzy
+#| msgid "%1$d messages selected"
+msgid "%1$d message selected"
+msgid_plural "%1$d messages selected"
+msgstr[0] "Iezīmēti %1$d ziņojumi"
+msgstr[1] "Iezīmēti %1$d ziņojumi"
+msgstr[2] "Iezīmēti %1$d ziņojumi"
+
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "%1$d messages in this conversation"
 msgstr "Šai sarunā ir %1$d ziņojumi"
-
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "%1$d messages selected"
-msgstr "Iezīmēti %1$d ziņojumi"
 
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files

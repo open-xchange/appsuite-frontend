@@ -9331,10 +9331,13 @@ msgstr ""
 msgid "No message selected"
 msgstr ""
 
+#. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
-msgid "%1$d messages selected"
-msgstr ""
+msgid "%1$d message selected"
+msgid_plural "%1$d messages selected"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
