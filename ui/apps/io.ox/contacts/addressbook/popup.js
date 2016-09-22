@@ -350,7 +350,7 @@ define('io.ox/contacts/addressbook/popup', [
                     collection: new Backbone.Collection(),
                     pagination: false,
                     ref: 'io.ox/contacts/addressbook-popup/list',
-                    selection: { behavior: 'normal' }
+                    selection: { behavior: 'simple' }
                 });
                 this.$body.append(this.listView.render().$el);
             },
@@ -431,14 +431,6 @@ define('io.ox/contacts/addressbook/popup', [
                 this.$('.search-field').on('keydown', function (e) {
                     if (!(e.which === 40 || e.which === 13)) return;
                     view.listView.selection.select(0);
-                });
-            },
-            onEnter: function () {
-                var view = this;
-                this.listView.$el.on('keydown', function (e) {
-                    if (e.which !== 13) return;
-                    view.trigger('select');
-                    view.close();
                 });
             },
             onDoubleClick: function () {
