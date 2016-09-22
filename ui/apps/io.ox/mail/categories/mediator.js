@@ -40,7 +40,6 @@ define('io.ox/mail/categories/mediator', [
     if (!capabilities.has('mail_categories')) return helper;
     if (_.device('smartphone')) return helper;
 
-
     // extend mediator
     ext.point('io.ox/mail/mediator').extend(
         {
@@ -130,19 +129,5 @@ define('io.ox/mail/categories/mediator', [
         }
     );
 
-<<<<<<< eca0df1effe788ab2190f076933e85bdc1db802d
     return helper;
-
-=======
-    return {
-
-        isVisible: function () {
-            return isVisible;
-        },
-
-        getInitialCategoryId: function () {
-            return settings.get('categories/enabled') ? DEFAULT_CATEGORY : undefined;
-        }
-    };
->>>>>>> Minor code streamlining for tabbed inbox
 });
