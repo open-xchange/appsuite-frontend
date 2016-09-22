@@ -9,9 +9,10 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/core/config',
     'io.ox/core/notifications',
     'io.ox/backbone/mini-views/listutils',
+    'io.ox/mail/util',
     'io.ox/backbone/mini-views/settings-list-view',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, gt, settings, dialogs, snippets, mini, http, config, notifications, listutils, ListView) {
+], function (ext, gt, settings, dialogs, snippets, mini, http, config, notifications, listutils, mailutil, ListView) {
 
     'use strict';
 
@@ -383,15 +384,15 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         );
                         this.$el.append($('<div class="signature-preview">').append($('<div>').on('click', clickEdit).append(content)));
 
-                        if (settings.get('defaultSignature') === model.get('id')) this.$el.addClass('default');
+                        if (mailutil.getDefaultSignature('compose') === model.get('id')) this.$el.addClass('default');
                     }
                 }
             })
             .on('edit', clickEdit)
             .on('delete', function (e) {
                 var id = $(e.currentTarget).closest('li').attr('data-id');
-                if (settings.get('defaultSignature') === id) settings.set('defaultSignature', '');
-                if (settings.get('defaultReplyForwardSignature') === id) settings.set('defaultReplyForwardSignature', '');
+                if (mailutil.getDefaultSignature('compose') === id) settings.set('defaultSignature', '');
+                if (mailutil.getDefaultSignature('replay/forward') === id) settings.set('defaultReplyForwardSignature', '');
                 snippets.destroy(id).fail(require('io.ox/core/notifications').yell);
                 e.preventDefault();
             });
@@ -399,7 +400,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             this.append(list.render().$el);
 
             function onChangeDefault() {
-                var id = settings.get('defaultSignature');
+                var id = mailutil.getDefaultSignature('compose');
                 list.$('.default').removeClass('default');
                 list.$('[data-id="' + id + '"]').addClass('default');
             }
@@ -440,11 +441,11 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 defaultSignatureView.$el.empty().append(
                     $('<option value="">').text(gt('No signature')),
                     baton.collection.map(makeOption)
-                ).val(settings.get('defaultSignature') || '');
+                ).val(mailutil.getDefaultSignature('compose'));
                 defaultReplyForwardView.$el.empty().append(
                     $('<option value="">').text(gt('No signature')),
                     baton.collection.map(makeOption)
-                ).val(settings.get('defaultReplyForwardSignature') || '');
+                ).val(mailutil.getDefaultSignature('reply/forward'));
             });
 
             this.append(

@@ -125,7 +125,7 @@ define('io.ox/mail/compose/signatures', [
         getDefaultSignature: function () {
             return /compose|edit/.test(this.get('mode')) ?
                 this.get('defaultSignatureId') :
-                settings.get('defaultReplyForwardSignature');
+                mailUtil.getDefaultSignature('reply/forward');
         },
 
         // getter
