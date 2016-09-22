@@ -189,6 +189,7 @@ define('io.ox/core/settings/pane', [
 
     // Themes
     (function () {
+
         var availableThemes = settingOptions.get('themes') || {};
 
         //  until we get translated themes from backend
@@ -242,6 +243,7 @@ define('io.ox/core/settings/pane', [
     }());
 
     (function () {
+
         if (settings.isConfigurable('refreshInterval')) {
             var MINUTES = 60000,
                 options = [
@@ -315,6 +317,9 @@ define('io.ox/core/settings/pane', [
 
     // Auto Logout
     (function () {
+
+        if (!settings.isConfigurable('autoLogout')) return;
+
         var MINUTES = 60000,
             options = [
                 { label: gt('disable'), value: 0 },
@@ -379,6 +384,7 @@ define('io.ox/core/settings/pane', [
             });
         }
     }());
+
     (function () {
         point.extend({
             id: 'showDesktopNotifications',
