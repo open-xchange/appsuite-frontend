@@ -45,6 +45,7 @@ define('io.ox/mail/categories/tabs', [
         },
 
         register: function () {
+            this.listenTo(api, 'move', this.openTrainNotification);
             this.listenTo(this.collection, 'update reset change', _.debounce(this.render, 200));
             this.listenTo(this.props, 'change:category_id', this.onCategoryChange);
         },
@@ -108,13 +109,13 @@ define('io.ox/mail/categories/tabs', [
                     targetname: this.collection.get(target).get('name')
                 };
 
-            api.move(options)
-                .done(function () {
-                    require(['io.ox/mail/categories/train'], function (dialog) {
-                        dialog.open(options);
-                    });
-                })
-                .fail(yell);
+            api.move(options).fail(yell);
+        },
+
+        openTrainNotification: function (options) {
+            require(['io.ox/mail/categories/train'], function (dialog) {
+                dialog.open(options);
+            });
         }
     });
 
