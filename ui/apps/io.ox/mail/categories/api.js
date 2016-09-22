@@ -31,6 +31,7 @@ define('io.ox/mail/categories/api', [
 
         toJSON: function () {
             // sync/store only specific properties
+            // is this just this.pick('id', 'name', 'active')? Why clone?
             return _.pick.apply(this, [_.clone(this.attributes)].concat(['id', 'name', 'active']));
         },
 
