@@ -19,15 +19,8 @@ define('io.ox/mail/categories/api', [
 
     'use strict';
 
-    function trigger(context, eventname) {
-        if (!context.trigger) return $.noop;
-        return function () {
-            Array.prototype.unshift.call(arguments, eventname);
-            context.trigger.apply(context, arguments);
-        };
-    }
-
     var Model = Backbone.Model.extend({
+
         defaults: function () {
             return {
                 unread: 0,
@@ -35,16 +28,20 @@ define('io.ox/mail/categories/api', [
                 permissions: []
             };
         },
+
         toJSON: function () {
             // sync/store only specific properties
             return _.pick.apply(this, [_.clone(this.attributes)].concat(['id', 'name', 'active']));
         },
+
         getCount: function () {
             return this.get('unread') === 0 ? '' : this.get('unread');
         },
+
         can: function (id) {
             return this.get('permissions').indexOf(id) > -1;
         },
+
         is: function (id) {
             if (id === 'disabled') return !this.get('active');
             return this.get(id);
@@ -52,15 +49,19 @@ define('io.ox/mail/categories/api', [
     });
 
     var Collection = Backbone.Collection.extend({
+
         model: Model,
+
         initialize: function () {
             this.refresh();
             this.register();
         },
+
         register: function () {
             this.on('change:name change:active', _.debounce(this.save, 200));
             mailAPI.on('after:refresh.unseen after:refresh.seen refresh.all ', _.debounce(this.refresh.bind(this), 200));
         },
+
         refresh: function () {
             var def = $.Deferred(),
                 self = this;
@@ -76,24 +77,23 @@ define('io.ox/mail/categories/api', [
             });
             return def;
         },
+
         save: function () {
             settings.set('categories/list', this.toJSON())
                 .save(undefined, { force: true })
-                .done(trigger(this, 'saved'));
+                .done(this.trigger.bind(this, 'save'));
         }
     });
 
     // plain list of mail addresses
     function getSenderAddresses(data) {
         return _.chain(data)
-                .map(function (obj) {
-                    return obj.from[0][1];
-                })
-                .uniq()
-                .value();
+            .map(function (obj) { return obj.from[0][1]; })
+            .uniq()
+            .value();
     }
 
-    var api = _.extend({
+    var api = _.extend({}, Backbone.Events, {
 
         collection: new Collection(settings.get('categories/list', [])),
 
@@ -108,11 +108,13 @@ define('io.ox/mail/categories/api', [
 
         // add mail to category
         move: function (options) {
+
             if (!options.data || !options.data.length) return $.when();
 
             var data = _.map(options.data, function (obj) {
                 return _.pick(obj, 'id', 'folder_id');
             });
+
             return http.PUT({
                 module: 'mail/categories',
                 params: {
@@ -120,13 +122,15 @@ define('io.ox/mail/categories/api', [
                     'category_id': options.target
                 },
                 data: data
-            }).then(function () {
-                api.trigger('after:move', options);
+            })
+            .then(function () {
+                api.trigger('move', options);
             });
         },
 
         // generate rule(s) to add mail to category
         train: function (options) {
+
             var opt = _.extend({ past: true, future: true }, options);
 
             if (!opt.target || !opt.data) return $.when();
@@ -142,11 +146,12 @@ define('io.ox/mail/categories/api', [
                 data: {
                     from: getSenderAddresses(options.data)
                 }
-            }).then(function () {
-                api.trigger('after:train', options);
+            })
+            .then(function () {
+                api.trigger('train', options);
             });
         }
-    }, Backbone.Events);
+    });
 
     return api;
 });

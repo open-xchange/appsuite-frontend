@@ -56,18 +56,10 @@ define('io.ox/mail/categories/mediator', [
                     return app.folder.get() === settings.get('folder/inbox');
                 }
 
-                function isCategoryUnset() {
-                    return !app.props.get('category_id');
-                }
-
                 function toggleCategories() {
                     isVisible = isEnabled() && isInbox();
-
-                    // fallback
-                    if (isVisible && isCategoryUnset()) app.props.set('category_id', DEFAULT_CATEGORY);
-
                     app.getWindow().nodes.outer.toggleClass('mail-categories-visible', isVisible);
-                    app.listView.model.set('category_id', isVisible ? app.props.get('category_id') : undefined);
+                    app.listView.model.set('category_id', isVisible ? app.props.get('category_id') || DEFAULT_CATEGORY : undefined);
                 }
 
                 // we knowingly use settings here (small delay in contrast to app.props)
@@ -108,9 +100,8 @@ define('io.ox/mail/categories/mediator', [
                 );
 
                 // events
-                api.on('after:move after:train', refresh);
-                api.collection.on('saved', refresh);
-
+                api.on('move train', refresh);
+                api.collection.on('save', refresh);
             }
         },
         {
@@ -139,6 +130,19 @@ define('io.ox/mail/categories/mediator', [
         }
     );
 
+<<<<<<< eca0df1effe788ab2190f076933e85bdc1db802d
     return helper;
 
+=======
+    return {
+
+        isVisible: function () {
+            return isVisible;
+        },
+
+        getInitialCategoryId: function () {
+            return settings.get('categories/enabled') ? DEFAULT_CATEGORY : undefined;
+        }
+    };
+>>>>>>> Minor code streamlining for tabbed inbox
 });

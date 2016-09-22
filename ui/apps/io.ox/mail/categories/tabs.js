@@ -41,17 +41,16 @@ define('io.ox/mail/categories/tabs', [
             this.$el.attr({ 'role': 'menu', 'aria-label': gt('Inbox categories') });
             // dnd
             dnd.enable({ draggable: true, container: this.$el, selection: this.selection, delegate: true, dropzone: true, dropzoneSelector: '.category' });
-
             this.register();
         },
 
         register: function () {
-            this.listenTo(api, 'after:move', this.onMoveAfter);
             this.listenTo(this.collection, 'update reset change', _.debounce(this.render, 200));
             this.listenTo(this.props, 'change:category_id', this.onCategoryChange);
         },
 
         render: function () {
+
             var current = this.props.get('category_id');
 
             this.$el.empty().append(
@@ -95,27 +94,28 @@ define('io.ox/mail/categories/tabs', [
         },
 
         onMove: function (e, baton) {
+
             // prevent execution of copy/move handler
             e.stopPropagation();
 
             var source = this.props.get('category_id'),
-                target = baton.target;
-            api.move({
-                data: mailAPI.resolve(baton.data),
-                source: source,
-                sourcename: this.collection.get(source).get('name'),
-                target: target,
-                targetname: this.collection.get(target).get('name')
-            })
-            .fail(yell);
-        },
+                target = baton.target,
+                options = {
+                    data: mailAPI.resolve(baton.data),
+                    source: source,
+                    sourcename: this.collection.get(source).get('name'),
+                    target: target,
+                    targetname: this.collection.get(target).get('name')
+                };
 
-        onMoveAfter: function (options) {
-            require(['io.ox/mail/categories/train'], function (dialog) {
-                dialog.open(options);
-            });
+            api.move(options)
+                .done(function () {
+                    require(['io.ox/mail/categories/train'], function (dialog) {
+                        dialog.open(options);
+                    });
+                })
+                .fail(yell);
         }
-
     });
 
     return TabView;

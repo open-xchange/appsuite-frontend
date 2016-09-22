@@ -31,16 +31,20 @@ define('io.ox/mail/categories/train', [
         carrier.textlines = {
             success: gt.format(
                 //#. successfully moved a message via drag&drop to another mail category (tab)
-                //#. %1$d represents the name if the target category
+                //#. %1$s represents the name if the target category
                 //#, c-format
-                gt.ngettext('Message moved to to category "%1$d".', 'Messages moved to category "%1$d".', carrier.maillist.length),
+                gt.ngettext('Message moved to to category "%1$s".', 'Messages moved to category "%1$s".', carrier.maillist.length),
                 _.escape(carrier.options.targetname)
             ),
             question: gt.format(
                 //#. ask user to move all messages from the same sender to the mail category (tab)
-                //#. %1$d represents a email address
+                //#. %1$s represents a email address
                 //#, c-format
-                gt.ngettext('Move all messages from %1$d to that category?', 'Move all messages from selected senders to that category?', carrier.senderlist.length),
+                gt.ngettext(
+                    'Do you want to move all messages from %1$s to that category?',
+                    'Do you want to move all messages from selected senders to that category?',
+                    carrier.senderlist.length
+                ),
                 '<b>' + _.escape(carrier.senderlist) + '</b>'
             )
         };
@@ -50,8 +54,8 @@ define('io.ox/mail/categories/train', [
     function createContentString(carrier) {
         carrier.contentstring = $('<tmp>').append(
             $('<div class="content">').append(
-                $('<div class="status">').html(carrier.textlines.success + '<br><br>'),
-                $('<div>').html(carrier.textlines.question + '<br>'),
+                $('<p class="status">').html(carrier.textlines.success),
+                $('<p>').html(carrier.textlines.question),
                 $('<button role="button" class="btn btn-default btn-primary" data-action="move-all">').text(gt('Move all'))
             )
         ).html();

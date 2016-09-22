@@ -24,6 +24,7 @@ define('io.ox/mail/categories/picker', [
     }
 
     var PickerDropdown = Dropdown.extend({
+
         tagName: 'li',
 
         renderToggle: function (node) {
@@ -44,6 +45,7 @@ define('io.ox/mail/categories/picker', [
         },
 
         addCategories: function (data) {
+
             var current = this.props.get('category_id'),
                 list = _.filter(settings.get('categories/list'), function (item) {
                     return item.active && item.id !== current;
@@ -63,6 +65,7 @@ define('io.ox/mail/categories/picker', [
         },
 
         onCategory: function (data, e) {
+
             var node = $(e.currentTarget),
                 category = node.attr('data-name') || '0',
                 name = node.text(),
@@ -76,8 +79,6 @@ define('io.ox/mail/categories/picker', [
                 target: category,
                 targetname: name
             });
-
-            //api.move({ data: data, target: category, targetname: name });
 
             dropdown.find('[data-toggle="dropdown"]').focus();
         },
