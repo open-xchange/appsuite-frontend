@@ -534,6 +534,14 @@ define('io.ox/mail/util', [
             return others > 0;
         },
 
+        getDefaultSignature: function (mode) {
+            // default: false, used: [id], disabled by user: ''
+            var compose = settings.get('defaultSignature') || '',
+                replyforward = settings.get('defaultReplyForwardSignature');
+            if (/(compose|edit)/.test(mode)) return compose;
+            return _.isBoolean(replyforward) ? compose : replyforward;
+        },
+
         //deprecated?
         getInitialDefaultSender: function () {
             var mailArray = _(settings.get('defaultSendAddress', []));
