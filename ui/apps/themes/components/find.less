@@ -144,7 +144,7 @@
     &.io-ox-find-active {
 
         //top: managed by backbone view
-        .window-body { transition: top .2s; }
+        &:not(.mail-categories-visible) .window-body { transition: top .2s; }
 
         .folder-tree {
             margin-top: 40px;

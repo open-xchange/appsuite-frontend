@@ -1045,14 +1045,18 @@ textarea.inplace-editor {
 
 // categories: available
 .window-container.mail-categories-visible {
-    // layout: compact
-    .window-body {
-        .abs.window-content { top: 40px; }
-    }
-    // layout: vertical, horizontal, list
-    .window-body.classic-toolbar-visible {
-        .abs.window-content {  top: 80px; }
-        .classic-toolbar-container .classic-toolbar { top: 40px; }
+
+    &:not(.io-ox-find-active) {
+
+        // layout: compact
+        .window-body {
+            .abs.window-content { top: 40px; }
+        }
+        // layout: vertical, horizontal, list
+        .window-body.classic-toolbar-visible {
+            .abs.window-content {  top: 80px; }
+            .classic-toolbar-container .classic-toolbar { top: 40px; }
+        }
     }
 }
 
