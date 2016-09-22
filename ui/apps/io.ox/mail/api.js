@@ -1372,10 +1372,12 @@ define('io.ox/mail/api', [
         // For the moment, not supporting multiple call, so pgp needs own attachment handling
 
         return require(['io.ox/guard/mail/attachments']).then(function (guardAttachments) {
-            return $.when.apply(list.map(function (data) {
+            return $.when.apply(this, list.map(function (data) {
                 return guardAttachments.savePGPAttachment(data, target);
             }));
-        }).done(function () {
+        })
+        .then(function () { return arguments; }) // return an array of results as the first parameter
+        .done(function () {
             require(['io.ox/files/api'], function (fileAPI) {
                 fileAPI.pool.resetFolder(target);
                 fileAPI.trigger('add:file');
