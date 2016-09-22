@@ -50,10 +50,9 @@ define('io.ox/mail/categories/train', [
     function createContentString(carrier) {
         carrier.contentstring = $('<tmp>').append(
             $('<div class="content">').append(
-                $('<div>').html(carrier.textlines.success),
+                $('<div class="status">').html(carrier.textlines.success + '<br><br>'),
                 $('<div>').html(carrier.textlines.question + '<br>'),
-                $('<button role="button" class="btn btn-default btn-primary" data-action="move-all">').text(gt('Move all')),
-                $('<button role="button" class="btn btn-default" data-action="cancel">').text(gt('Cancel'))
+                $('<button role="button" class="btn btn-default btn-primary" data-action="move-all">').text(gt('Move all'))
             )
         ).html();
         return carrier;
@@ -66,9 +65,8 @@ define('io.ox/mail/categories/train', [
             duration: -1
         })
         .addClass('category-toast')
-        .on('click', '.btn', function (e) {
-            var action = $(e.target).attr('data-action');
-            if (/move-all/.test(action)) api.train(carrier.options).fail(yell);
+        .on('click', '.btn-primary', function () {
+            api.train(carrier.options).fail(yell);
             yell('close');
         });
         return carrier;
