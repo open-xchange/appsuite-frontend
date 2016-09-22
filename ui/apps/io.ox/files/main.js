@@ -206,7 +206,14 @@ define('io.ox/files/main', [
             var quota = new QuotaView({
                 title: gt('File quota'),
                 renderUnlimited: false,
-                module: 'file'
+                module: 'file',
+                upsell: {
+                    title: gt('Need more space?'),
+                    requires: 'boxcom || google || msliveconnect',
+                    id: 'files-folderview-quota',
+                    icon: ''
+                },
+                upsellLimit: 5 * 1024 * 1024 // default upsell limit of 5 mb
             });
             // add some listeners
             folderAPI.on('clear', function () {
