@@ -433,10 +433,10 @@ define('io.ox/calendar/month/perspective', [
                     interval;
                 // onLoad does not work with firefox on mac, so ugly polling is used
                 interval = setInterval(function () {
-                    counter++;
-                    if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
-                        win.print();
+                    if (++counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
                         clearInterval(interval);
+                        // add another extra delay for firefox (see bug 48949)
+                        setTimeout(function () { win.print(); }, 300);
                     }
                 }, 100);
             } else {
