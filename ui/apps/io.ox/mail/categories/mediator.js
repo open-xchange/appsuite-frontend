@@ -24,13 +24,22 @@ define('io.ox/mail/categories/mediator', [
 
     'use strict';
 
-    // early exit
-    if (!capabilities.has('mail_categories')) return;
-    if (_.device('smartphone')) return;
-
     // helpers
     var DEFAULT_CATEGORY = 'general',
-        isVisible = false;
+        isVisible = false,
+        helper = {
+            isVisible: function () {
+                return isVisible;
+            },
+            getInitialCategoryId: function () {
+                return settings.get('categories/enabled') ? DEFAULT_CATEGORY : undefined;
+            }
+        };
+
+    // early exit
+    if (!capabilities.has('mail_categories')) return helper;
+    if (_.device('smartphone')) return helper;
+
 
     // extend mediator
     ext.point('io.ox/mail/mediator').extend(
@@ -130,13 +139,6 @@ define('io.ox/mail/categories/mediator', [
         }
     );
 
-    return {
-        isVisible: function () {
-            return isVisible;
-        },
-        getInitialCategoryId: function () {
-            return settings.get('categories/enabled') ? DEFAULT_CATEGORY : undefined;
-        }
-    };
+    return helper;
 
 });
