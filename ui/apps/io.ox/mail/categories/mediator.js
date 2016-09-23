@@ -33,7 +33,7 @@ define('io.ox/mail/categories/mediator', [
                 return isVisible;
             },
             getInitialCategoryId: function () {
-                return settings.get('categories/enabled') ? DEFAULT_CATEGORY : undefined;
+                return DEFAULT_CATEGORY;
             }
         };
 
@@ -59,7 +59,7 @@ define('io.ox/mail/categories/mediator', [
                 function toggleCategories() {
                     isVisible = isEnabled() && isInbox();
                     app.getWindow().nodes.outer.toggleClass('mail-categories-visible', isVisible);
-                    app.listView.model.set('category_id', isVisible ? app.props.get('category_id') || DEFAULT_CATEGORY : undefined);
+                    app.listView.model.set('category_id', isVisible ? app.props.get('category_id') : undefined);
                 }
 
                 settings.on('change:categories/enabled', toggleCategories);
@@ -72,8 +72,9 @@ define('io.ox/mail/categories/mediator', [
             id: 'foward-category-id',
             index: 20100,
             setup: function (app) {
-                // forward current category id
+                // update collection loaders parameter
                 app.props.on('change:category_id', function (model, value) {
+                    if (!isVisible) return;
                     app.listView.model.set('category_id', value);
                 });
             }
