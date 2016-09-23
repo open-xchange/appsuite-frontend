@@ -19,14 +19,23 @@ define('io.ox/contacts/addressbook/popup', [
     'io.ox/core/extensions',
     'io.ox/contacts/util',
     'gettext!io.ox/contacts',
+    'settings!io.ox/contacts',
     'settings!io.ox/mail',
     'less!io.ox/contacts/addressbook/style'
-], function (http, folderAPI, ModalDialog, ListView, ext, util, gt, mailSettings) {
+], function (http, folderAPI, ModalDialog, ListView, ext, util, gt, settings, mailSettings) {
 
     'use strict';
 
     var names = 'last_name first_name display_name'.split(' '),
         addresses = 'email1 email2 email3'.split(' ');
+
+    // limits
+    var LIMITS = {
+        fetch: settings.get('picker/limits/fetch', 10000),
+        render: settings.get('picker/limits/list', 100),
+        search: settings.get('picker/limits/search', 50),
+        more: settings.get('picker/limits/more', 100)
+    };
 
     // special folder id
     var collected_id = mailSettings.get('contactCollectFolder', 0);
@@ -127,13 +136,13 @@ define('io.ox/contacts/addressbook/popup', [
             options = _.extend({
                 // keep this list really small for good performance!
                 columns: '1,20,500,501,502,505,555,556,557,592,602,606',
-                limit: 5000
+                limit: LIMITS.fetch
             }, options);
 
             if (options.folder === 'all') delete options.folder;
 
             return fetchAddresses(options).then(function (list) {
-                return processAddresses(list, options);
+                return processAddresses(list);
             });
         };
 
@@ -143,7 +152,8 @@ define('io.ox/contacts/addressbook/popup', [
                 params: {
                     action: 'search',
                     columns: options.columns,
-                    right_hand_limit: options.limit
+                    right_hand_limit: options.limit,
+                    sort: 609
                 },
                 data: {
                     // emailAutoComplete doesn't work; need to clean up client-side anyway
@@ -152,14 +162,13 @@ define('io.ox/contacts/addressbook/popup', [
             });
         }
 
-        function processAddresses(list, options) {
+        function processAddresses(list) {
 
             var result = [], hash = {};
 
-            // fail when exceeding the limit
-            if (list.length >= options.limit) return $.Deferred().reject('too-many');
-
             list.forEach(function (item) {
+                // remove quotes from display name (common in collected addresses)
+                item.display_name = getDisplayName(item.display_name);
                 // get sort name
                 var sort_name = [], address;
                 names.forEach(function (name) {
@@ -196,8 +205,10 @@ define('io.ox/contacts/addressbook/popup', [
             // skip if empty
             address = $.trim(address);
             if (!address) return;
-            // remove quotes from display name (common in collected addresses)
-            item.display_name = getDisplayName(item.display_name);
+            // drop no-reply addresses
+            if (/^(noreply|no-reply|do-not-reply)@/.test(address)) return;
+            // drop broken imports
+            if (/^\=\?iso\-8859\-1\?q\?\=22/i.test(item.display_name)) return;
             // add to results
             // do all calculations now; during rendering is more expensive
             var initials = util.getInitials(item);
@@ -215,7 +226,8 @@ define('io.ox/contacts/addressbook/popup', [
                 initial_color: util.getInitialsColor(initials),
                 last_name: item.last_name,
                 list: item.mark_as_distributionlist ? item.distribution_list : false,
-                sort_name: sort_name.concat(address).join('_'),
+                // all lower-case to be case-insensitive; replace spaces to better match server-side collation
+                sort_name: sort_name.concat(address).join('_').toLowerCase().replace(/\s/g, '_'),
                 title: item.title
             };
         }
@@ -232,9 +244,8 @@ define('io.ox/contacts/addressbook/popup', [
     function sorter(a, b) {
         if (a.list && !b.list) return +1;
         if (b.list && !a.list) return -1;
-        // asc
-        if (a.sort_name === b.sort_name) return 0;
-        return b.sort_name < a.sort_name ? +1 : -1;
+        // asc with locale compare
+        return a.sort_name.localeCompare(b.sort_name);
     }
 
     //
@@ -253,7 +264,7 @@ define('io.ox/contacts/addressbook/popup', [
     // Open dialog
     //
 
-    var isOpen = false, tooMany = false, cachedResponse = null, folder = 'all', appeared = {};
+    var isOpen = false, cachedResponse = null, folder = 'all', appeared = {};
 
     var sections = {
         'private': gt('My address books'),
@@ -288,7 +299,8 @@ define('io.ox/contacts/addressbook/popup', [
                         ),
                         $('<div class="col-xs-6">').append(
                             $('<select class="form-control folder-dropdown invisible" tabindex="1">').append(
-                                $('<option value="all">').text('All contacts')
+                                $('<option value="all">').text(gt('All contacts')),
+                                $('<option value="all_lists">').text(gt('All distribution lists'))
                             )
                         )
                     )
@@ -303,6 +315,8 @@ define('io.ox/contacts/addressbook/popup', [
                             if (!sections[id] || !section.length) return $();
                             return $('<optgroup>').attr('label', sections[id]).append(
                                 _(section).map(function (folder) {
+                                    // skip strange broken folders
+                                    if (!folder.id || !folder.title) return $();
                                     count++;
                                     return $('<option>').val(folder.id).text(folder.title);
                                 })
@@ -333,10 +347,14 @@ define('io.ox/contacts/addressbook/popup', [
                 });
                 this.append(view.listView.render().$el);
             },
+            footer: function (baton) {
+                baton.view.$('.modal-footer').prepend(
+                    $('<div class="selection-summary">').hide()
+                );
+            },
             onOpen: function (baton) {
 
                 var view = baton.view;
-                if (tooMany) return view.busy().trigger('too-many');
 
                 // hide body initially / add busy animation
                 view.busy(true);
@@ -355,7 +373,7 @@ define('io.ox/contacts/addressbook/popup', [
                     // remove animation but block form
                     if (view.disposed) return;
                     view.idle().disableFormElements();
-                    if (e === 'too-many') view.trigger('too-many'); else view.trigger('error', e);
+                    view.trigger('error', e);
                 }
 
                 view.on('open', function () {
@@ -368,8 +386,8 @@ define('io.ox/contacts/addressbook/popup', [
             search: function (baton) {
 
                 baton.view.search = function (query) {
-                    var result;
-                    if (query.length && query !== '@') {
+                    var result, isSearch = query.length && query !== '@';
+                    if (isSearch) {
                         // split query into single words (without leading @; covers edge-case)
                         var words = query.replace(/^@/, '').split(regSplitWords), firstWord = words[0];
                         // use first word for the index-based lookup
@@ -389,10 +407,11 @@ define('io.ox/contacts/addressbook/popup', [
                     var folder = this.folder;
                     result = _(result).filter(function (item) {
                         if (folder === 'all') return item.folder_id !== collected_id;
+                        if (folder === 'all_lists') return item.list;
                         return item.folder_id === folder;
                     });
                     // render
-                    this.renderItems(result);
+                    this.renderItems(result, { isSearch: isSearch });
                 };
             },
             onInput: function (baton) {
@@ -422,7 +441,7 @@ define('io.ox/contacts/addressbook/popup', [
             },
             onDoubleClick: function (baton) {
                 var view = baton.view;
-                view.$('.list-view').on('dblclick', function () {
+                view.$('.list-view').on('dblclick', '.list-item', function () {
                     view.trigger('select');
                     view.close();
                 });
@@ -433,6 +452,50 @@ define('io.ox/contacts/addressbook/popup', [
                     if (e.which !== 27) return;
                     e.preventDefault();
                     view.$('.search-field').focus();
+                });
+            },
+            onSelectionChange: function (baton) {
+
+                var selection = baton.view.selection = {};
+
+                function clearSelection(e) {
+                    e.preventDefault();
+                    selection = baton.view.selection = {};
+                    this.listView.selection.clear();
+                    this.listView.selection.triggerChange();
+                }
+
+                baton.view.listenTo(baton.view.listView, 'selection:change', function () {
+
+                    var array = this.flattenItems(_(selection).keys()),
+                        summary = this.$('.selection-summary').empty(),
+                        n = array.length,
+                        hasItems = !!n;
+
+                    summary.toggle(hasItems);
+                    if (!hasItems) return;
+
+                    var addresses = _(array).pluck('email').join(', ');
+                    summary.append(
+                        $('<div>').append(
+                            $('<span class="count pull-left">').text(
+                                //#. %1$d is number of selected addresses
+                                gt.format(gt.ngettext('%1$d address selected', '%1$d addresses selected', n), n)
+                            ),
+                            $('<a href="#" class="pull-right" role="button" tabindex="1">')
+                            .text(gt('Clear selection'))
+                            .on('click', $.proxy(clearSelection, this))
+                        ),
+                        $('<div class="addresses">').attr('title', addresses).text(addresses)
+                    );
+                });
+
+                baton.view.listenTo(baton.view.listView, 'selection:add', function (array) {
+                    _(array).each(function (id) { selection[id] = true; });
+                });
+
+                baton.view.listenTo(baton.view.listView, 'selection:remove', function (array) {
+                    _(array).each(function (id) { delete selection[id]; });
                 });
             }
         })
@@ -459,33 +522,67 @@ define('io.ox/contacts/addressbook/popup', [
                 '<% }); %>'
             );
 
-            var LIMIT = 100;
-
             this.$el.on('appear', function (e) {
                 // track contact pictures that appear; we assume they get cached
                 appeared[$(e.target).attr('data-original')] = true;
             });
 
-            this.renderItems = function (list) {
+            this.renderItems = function (list, options) {
                 // avoid duplicates
                 list = _(list).filter(function (item) {
                     if (this[item.email]) return false; return (this[item.email] = true);
                 }, {});
-                // get subset; we never draw more than 100 items
-                var subset = list.slice(0, LIMIT),
-                    html = template({ list: subset });
-                if (list.length > LIMIT) {
-                    //#. %1$d and %2$d are both numbers; usually > 100; never singular
-                    html += '<li class="limit">' + gt('%1$d contacts found. This list is limited to %2$d items.', list.length, LIMIT) + '</li>';
-                }
-                this.$('.list-view')[0].innerHTML = html;
-                this.$('.list-view').scrollTop(0);
+                // get defaults
+                options = _.extend({
+                    limit: options.isSearch ? LIMITS.search : LIMITS.render,
+                    offset: 0
+                }, options);
+                // get subset; don't draw more than n items by default
+                var subset = list.slice(options.offset, options.limit),
+                    $el = this.$('.list-view');
+                // clear if offset is zero
+                if (options.offset === 0) $el[0].innerHTML = '';
+                $el[0].innerHTML += template({ list: subset });
+                if (options.offset === 0) $el.scrollTop(0);
+                $el.data({ list: list, options: options });
                 this.$('.contact-picture[data-original]').each(function () {
                     // appeared before? show now; no lazyload; better experience
                     var node = $(this), url = node.attr('data-original');
                     if (appeared[url]) node.css('background-image', 'url(' + url + ')'); else node.lazyload();
                 });
+                // restore selection
+                var ids = _(this.selection).keys();
+                this.listView.selection.set(ids);
             };
+
+            this.renderMoreItems = function () {
+                var data = $list.data(), options = data.options;
+                if (options.limit >= data.list.length) return;
+                options.offset = options.limit;
+                options.limit = options.limit + LIMITS.more;
+                this.renderItems(data.list, options);
+            };
+
+            var $list = $();
+
+            var onScroll = _.debounce(function () {
+
+                var height = $list.outerHeight(),
+                    scrollTop = $list[0].scrollTop,
+                    scrollHeight = $list[0].scrollHeight,
+                    bottom = scrollTop + height;
+
+                if (bottom / scrollHeight < 0.80) return;
+
+                var defer = window.requestAnimationFrame || window.setTimeout;
+                defer(this.renderMoreItems.bind(this));
+
+            }, 50);
+
+            this.on('open', function () {
+                $list = this.$('.list-view');
+                $list.on('scroll', $.proxy(onScroll, this));
+            });
 
             this.resolveItems = function (ids) {
                 return _(ids)
@@ -494,44 +591,46 @@ define('io.ox/contacts/addressbook/popup', [
                     .compact()
                     .value();
             };
+
+            this.flattenItems = function (ids) {
+                return flatten(this.resolveItems(ids));
+            };
+
+            function flatten(list) {
+                return _(list)
+                    .chain()
+                    .map(function (item) {
+                        if (item.list) return flatten(item.list);
+                        var name = item.display_name, mail = item.mail || item.email;
+                        return {
+                            array: [name || null, mail || null],
+                            display_name: name,
+                            id: item.id,
+                            folder_id: item.folder_id,
+                            email: mail
+                        };
+                    }, this)
+                    .flatten()
+                    .uniq(function (item) { return item.email; })
+                    .value();
+            }
         })
         .on({
             'close': function () {
                 isOpen = false;
             },
-            'too-many': function () {
-                tooMany = true;
-                this.trigger('error', gt('Too many contacts in your address book.'));
-            },
             'error': function (e) {
                 this.$body.empty().addClass('error').text(e.error || e);
             },
             'select': function () {
-                if (_.isFunction(callback)) callback(reduce(this.resolveItems(this.listView.selection.get())));
+                var ids = _(this.selection).keys();
+                if (_.isFunction(callback)) callback(this.flattenItems(ids));
             }
         })
         .addCancelButton()
         //#. Context: Add selected contacts; German "Auswählen", for example
         .addButton({ label: gt.pgettext('select-contacts', 'Select'), action: 'select' })
         .open();
-    }
-
-    function reduce(list) {
-        return _(list)
-            .chain()
-            .map(function (item) {
-                if (item.list) return reduce(item.list);
-                var name = item.display_name, mail = item.mail || item.email;
-                return {
-                    array: [name || null, mail || null],
-                    display_name: name,
-                    id: item.id,
-                    folder_id: item.folder_id,
-                    email: mail
-                };
-            })
-            .flatten()
-            .value();
     }
 
     /* Debug lines
