@@ -97,9 +97,8 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
         var o = {
                 duration: 0,
-                html: false,
-                type: 'info',
-                focus: false
+                focus: false,
+                type: 'info'
             },
             // there is a special yell for displaying conflicts for filestorages correctly
             useConflictsView = false,
@@ -155,10 +154,20 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
                 $(document).on(_.device('touch') ? 'tap.yell' : 'mousedown.yell', click);
             });
 
-            var html = o.html ? o.message : _.escape(o.message).replace(/\n/g, '<br>'),
+            var node = $('<div tabindex="-1">'),
                 className = 'io-ox-alert io-ox-alert-' + o.type,
-                wordbreak = html.indexOf('http') >= 0 ? 'break-all' : 'normal',
-                node = $('<div tabindex="-1">');
+                content, wordbreak, text;
+
+            if (o.message instanceof $) {
+                content = o.message;
+                text = content.text();
+            } else {
+                content = $.parseHTML(_.escape(o.message).replace(/\n/g, '<br>'));
+                text = o.message;
+            }
+
+            // check if the content contains (probably long) links
+            wordbreak = text.indexOf('http') >= 0 ? 'break-all' : 'normal';
 
             if (alert.length) {
                 className += ' appear';
@@ -177,7 +186,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
                     $('<div role="alert" aria-live="polite" class="message user-select-text">').append(
                         ariaText[o.type] && o.headline && o.type !== o.headline.toLowerCase() ? $('<span class="sr-only">').text(/*#, dynamic*/gt(ariaText[o.type])) : [],
                         o.headline ? $('<h2 class="headline">').text(o.headline) : [],
-                        $('<div>').css('word-break', wordbreak).html(html)
+                        $('<div>').css('word-break', wordbreak).append(content)
                     )
                 );
             });
