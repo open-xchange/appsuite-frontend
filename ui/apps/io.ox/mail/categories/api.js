@@ -58,13 +58,11 @@ define('io.ox/mail/categories/api', [
         model: Model,
 
         initialize: function () {
-            this.refresh();
-            this.register();
-        },
 
-        register: function () {
             this.on('change:name change:enabled', _.debounce(this.save, 200));
             mailAPI.on('after:refresh.unseen after:refresh.seen refresh.all ', _.debounce(this.refresh.bind(this), 200));
+
+            this.refresh();
         },
 
         refresh: function () {

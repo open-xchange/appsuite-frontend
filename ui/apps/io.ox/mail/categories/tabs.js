@@ -34,17 +34,18 @@ define('io.ox/mail/categories/tabs', [
         },
 
         initialize: function (options) {
+
             // reference to app props
             this.props = options.props;
             this.collection = api.collection;
+
             // a11y
             this.$el.attr({ 'role': 'menu', 'aria-label': gt('Inbox categories') });
+
             // dnd
             dnd.enable({ draggable: true, container: this.$el, selection: this.selection, delegate: true, dropzone: true, dropzoneSelector: '.category' });
-            this.register();
-        },
 
-        register: function () {
+            // register events
             this.listenTo(api, 'move', this.openTrainNotification);
             this.listenTo(this.collection, 'update reset change', _.debounce(this.render, 200));
             this.listenTo(this.props, 'change:category_id', this.onCategoryChange);
