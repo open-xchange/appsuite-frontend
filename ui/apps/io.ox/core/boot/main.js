@@ -32,6 +32,7 @@ define('io.ox/core/boot/main', [
         guest: 'useForm',
         guest_password: 'useForm',
         anonymous_password: 'useForm',
+        reset_password: 'useForm',
         message: 'useForm',
         message_continue: 'useForm'
     };
