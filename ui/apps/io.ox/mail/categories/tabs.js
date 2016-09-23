@@ -68,7 +68,7 @@ define('io.ox/mail/categories/tabs', [
                             $('<div class="category-drop-helper">').text(gt('Drop here!'))
                         )
                         .toggleClass('selected', model.get('id') === current)
-                        .toggleClass('hidden', model.is('disabled'))
+                        .toggleClass('hidden', !model.isEnabled())
                         .attr({ 'data-id': model.get('id') });
                 }),
                 $('<li class="free-space" aria-hidden="true">')

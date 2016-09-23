@@ -43,9 +43,8 @@ define('io.ox/mail/categories/api', [
             return this.get('permissions').indexOf(id) > -1;
         },
 
-        is: function (id) {
-            if (id === 'disabled') return !this.get('active');
-            return this.get(id);
+        isEnabled: function () {
+            return this.get('active');
         }
     });
 

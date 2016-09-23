@@ -85,7 +85,7 @@ define('io.ox/mail/categories/edit', [
                                     .attr('data-id', model.get('id'))
                                     .append(
                                         $('<input type="checkbox" class="status">')
-                                            .prop('checked', model.is('active'))
+                                            .prop('checked', model.isEnabled())
                                             .attr('disabled', !model.can('disable')),
                                         $('<input type="text" class="form-control name">')
                                             .attr({
