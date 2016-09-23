@@ -47,15 +47,15 @@ define('io.ox/mail/categories/picker', [
         addCategories: function (data) {
 
             var current = this.props.get('category_id'),
-                list = _.filter(settings.get('categories/list'), function (item) {
-                    return item.active && item.id !== current;
+                list = api.collection.filter(function (model) {
+                    return model.isEnabled() && model.id !== current;
                 });
 
             if (!list.length) return;
 
             this.header(gt('Move to category'));
-            _.each(list, function (category) {
-                this.link(category.id, category.name, $.proxy(this.onCategory, this, data));
+            _.each(list, function (model) {
+                this.link(model.id, model.get('name'), $.proxy(this.onCategory, this, data));
             }.bind(this));
             this.divider();
         },
