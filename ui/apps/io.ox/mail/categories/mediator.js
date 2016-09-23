@@ -61,11 +61,7 @@ define('io.ox/mail/categories/mediator', [
                     app.listView.model.set('category_id', isVisible ? app.props.get('category_id') || DEFAULT_CATEGORY : undefined);
                 }
 
-                // we knowingly use settings here (small delay in contrast to app.props)
-                // special case: mail middlware api ignores category_id param when categories
-                // are disabled so we have to wait for the jslob call first
-                // TODO: remove the debounce once kevin changed the api
-                settings.on('change:categories/enabled', _.debounce(toggleCategories, 1000));
+                settings.on('change:categories/enabled', toggleCategories);
                 app.on('folder:change', toggleCategories);
 
                 toggleCategories();
