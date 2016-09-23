@@ -1674,7 +1674,7 @@ msgstr "Kalender"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1765,10 +1765,6 @@ msgstr "CardDAV-URL"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Einkaufswagen ist leer."
-
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Categories are represented as tabs in your inbox."
-msgstr "Kategorien werden als Registerkarten in Ihrem Posteingang angezeigt."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -2765,7 +2761,7 @@ msgstr "Deaktivieren"
 msgid "Disable %1$s"
 msgstr "%1$s deaktivieren"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "Disable categories"
 msgstr "Kategorien deaktivieren"
 
@@ -2988,6 +2984,17 @@ msgstr ""
 "Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
 "bearbeiten?"
 
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$s represents a email address
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
+#, fuzzy, c-format
+msgid "Do you want to move all messages from %1$s to that category?"
+msgid_plural ""
+"Do you want to move all messages from selected senders to that category?"
+msgstr[0] "Alle Nachrichten von %1$d in diese Kategorie verschieben?"
+msgstr[1] ""
+"Alle Nachrichten der markierten Sender in diese Kategorie verschieben?"
+
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Do you want to permanently delete this mail?"
 msgid_plural "Do you want to permanently delete these mails?"
@@ -3141,7 +3148,7 @@ msgstr ""
 "Zum Hochladen einer <b class=\"dndignore\">neuen Version</b> von \"%1$s\" "
 "hier ablegen"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Drop here!"
 msgstr "Hier ablegen"
 
@@ -3243,7 +3250,7 @@ msgstr "Alle Objekte bearbeiten"
 msgid "Edit appointment"
 msgstr "Termin bearbeiten"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "Edit categories"
 msgstr "Kategorien bearbeiten"
 
@@ -3418,6 +3425,12 @@ msgstr "Aktivieren"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable %1$s"
 msgstr "%1$s aktivieren"
+
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+#, fuzzy
+#| msgid "Disable categories"
+msgid "Enable categories"
+msgstr "Kategorien deaktivieren"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Enable for the following addresses"
@@ -4490,9 +4503,11 @@ msgstr "In Bearbeitung"
 msgid "Inbox"
 msgstr "Posteingang"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Inbox tabs"
-msgstr "Posteingangs-Tabs"
+#: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Use categories"
+msgid "Inbox categories"
+msgstr "Kategorien verwenden"
 
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
@@ -4648,10 +4663,15 @@ msgstr "stimmt exakt überein mit"
 msgid "Is smaller than"
 msgstr "ist kleiner als"
 
-#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#. mail categories feature: the update job is running that assigns
+#. some common mails (e.g. from twitter.com) to predefined categories
+#: apps/io.ox/mail/categories/mediator.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "It will take some time until common mails are assigned to the default "
+#| "tabs."
 msgid ""
-"It will take some time until common mails are assigned to the default tabs."
+"It may take some time until mails are assigned to the default categories."
 msgstr ""
 "Es wird einige Zeit dauern, bis allgemeine E-Mails den Standard-Tabs "
 "zugeordnet sind."
@@ -5227,11 +5247,13 @@ msgid "Message (optional)"
 msgstr "Nachricht (optional)"
 
 #. successfully moved a message via drag&drop to another mail category (tab)
-#. %1$d represents the name if the target category
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-#, c-format
-msgid "Message moved to to category \"%1$d\"."
-msgid_plural "Messages moved to category \"%1$d\"."
+#. %1$s represents the name if the target category
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Message moved to to category \"%1$d\"."
+#| msgid_plural "Messages moved to category \"%1$d\"."
+msgid "Message moved to to category \"%1$s\"."
+msgid_plural "Messages moved to category \"%1$s\"."
 msgstr[0] "Nachricht wurde in die Kategorie \"%1$d\" verschoben."
 msgstr[1] "Nachrichten wurden in die Kategorie \"%1$d\" verschoben."
 
@@ -5343,7 +5365,7 @@ msgid "Move"
 msgstr "Verschieben"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
 msgid "Move all"
 msgstr "Alle verschieben"
 
@@ -5352,25 +5374,15 @@ msgstr "Alle verschieben"
 msgid "Move all messages"
 msgstr "Alle Nachrichten verschieben"
 
-#. ask user to move all messages from the same sender to the mail category (tab)
-#. %1$d represents a email address
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-#, fuzzy, c-format
-msgid "Move all messages from %1$d to that category?"
-msgid_plural "Move all messages from selected senders to that category?"
-msgstr[0] "Alle Nachrichten von %1$d in diese Kategorie verschieben?"
-msgstr[1] ""
-"Alle Nachrichten der markierten Sender in diese Kategorie verschieben?"
-
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "Ordner verschieben"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 msgid "Move to category"
 msgstr "In Kategorie verschieben"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
@@ -5427,7 +5439,7 @@ msgstr "Meine Aufgaben"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -6445,7 +6457,7 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Geben Sie bitte Ihr Passwort ein."
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
 "rename or disable them."
@@ -7368,7 +7380,7 @@ msgstr "Umsatz"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
@@ -7987,11 +7999,6 @@ msgstr "Beim erneuten Autorisieren des Account trat ein Fehler auf."
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Something went wrong saving your changes."
 msgstr "Beim Speichern Ihrer Änderungen trat ein Fehler auf."
-
-#. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "Sorry, common mails couldn't be assigned automatically."
-msgstr "Allgemeine E-Mails konnten leider nicht automatisch zugeordnet werden."
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
@@ -9167,13 +9174,6 @@ msgstr ""
 "Mail-Adresse an (z.B. john.doe@beispiel.com oder \"John Doe\" <jd@beispiel."
 "com>)"
 
-#. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "To fill this area please drag and drop mails to the title of this tab."
-msgstr ""
-"Um diesen Bereich zu füllen, ziehen Sie bitte E-Mails auf den Titel dieses "
-"Tabs und legen sie diese dort ab."
-
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
@@ -9352,11 +9352,6 @@ msgstr "Unbekannter Absender"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "Sperre aufheben"
-
-#. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "Unnamed"
-msgstr "Unbenannt"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Unnamed subscription"
@@ -9897,7 +9892,7 @@ msgstr ""
 "oder ein soziales Netzwerk einfügen. Bitte beachten Sie, dass jeder im "
 "Besitz dieses Links auf die Freigabe zugreifen kann."
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "You can enable categories again via the view dropdown on the right"
 msgstr ""
 "Sie können Kategorien wieder über das Aufklappmenü \"Ansicht\" auf der "
@@ -11537,6 +11532,10 @@ msgstr "JJJJ"
 #~ msgid "Categories"
 #~ msgstr "Kategorien"
 
+#~ msgid "Categories are represented as tabs in your inbox."
+#~ msgstr ""
+#~ "Kategorien werden als Registerkarten in Ihrem Posteingang angezeigt."
+
 #~ msgid "Centered, no text wrapping"
 #~ msgstr "Zentriert, kein Textumlauf"
 
@@ -12539,6 +12538,9 @@ msgstr "JJJJ"
 #~ "angeklickten Ordners."
 
 #~ msgid "Inbox Tabs"
+#~ msgstr "Posteingangs-Tabs"
+
+#~ msgid "Inbox tabs"
 #~ msgstr "Posteingangs-Tabs"
 
 #~ msgid "Incoming Notification Mails"
@@ -13776,6 +13778,10 @@ msgstr "JJJJ"
 #~ msgstr ""
 #~ "Jemand hat Ihnen einen Ordner freigegeben. Möchten Sie %1$s abonnieren?"
 
+#~ msgid "Sorry, common mails couldn't be assigned automatically."
+#~ msgstr ""
+#~ "Allgemeine E-Mails konnten leider nicht automatisch zugeordnet werden."
+
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "Das Dokument konnte leider nicht erfolgreich geladen werden."
 
@@ -14380,6 +14386,12 @@ msgstr "JJJJ"
 #~ "nicht angezeigt werden, klicken Sie links unten auf das Symbol."
 
 #~ msgid ""
+#~ "To fill this area please drag and drop mails to the title of this tab."
+#~ msgstr ""
+#~ "Um diesen Bereich zu füllen, ziehen Sie bitte E-Mails auf den Titel "
+#~ "dieses Tabs und legen sie diese dort ab."
+
+#~ msgid ""
 #~ "To invite other participants, enter their names in the field below "
 #~ "Participants. To avoid appointment conflicts, click on Find a free time "
 #~ "at the upper right side."
@@ -14601,6 +14613,9 @@ msgstr "JJJJ"
 
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "Unbekannter Fehler beim Prüfen des Subreddit"
+
+#~ msgid "Unnamed"
+#~ msgstr "Unbenannt"
 
 #~ msgid "Unread only"
 #~ msgstr "Nur ungelesene"

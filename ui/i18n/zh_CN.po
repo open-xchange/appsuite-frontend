@@ -1656,7 +1656,7 @@ msgstr "日历"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1743,10 +1743,6 @@ msgstr "CardDAV URL"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "购物车是空的。"
-
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Categories are represented as tabs in your inbox."
-msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -2736,7 +2732,7 @@ msgstr "禁用"
 msgid "Disable %1$s"
 msgstr "停用 %1$s"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #, fuzzy
 #| msgid "Available Categories:"
 msgid "Disable categories"
@@ -2949,6 +2945,17 @@ msgid ""
 "series?"
 msgstr "您是否想编辑整个循环约会或循环约会中的其中一个？"
 
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$s represents a email address
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Move all messages to another folder"
+msgid "Do you want to move all messages from %1$s to that category?"
+msgid_plural ""
+"Do you want to move all messages from selected senders to that category?"
+msgstr[0] "移动所有消息到别的文件夹"
+msgstr[1] "移动所有消息到别的文件夹"
+
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Do you want to permanently delete this mail?"
 msgid_plural "Do you want to permanently delete these mails?"
@@ -3097,7 +3104,7 @@ msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "拖到这里以上载 \"%1$s\" 的一个 <b class=\"dndignore\">新版本</b>"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Drop here!"
 msgstr "放在这里！"
 
@@ -3199,7 +3206,7 @@ msgstr "编辑所有对象"
 msgid "Edit appointment"
 msgstr "编辑约会"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #, fuzzy
 #| msgid "Available Categories:"
 msgid "Edit categories"
@@ -3374,6 +3381,12 @@ msgstr "启用"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable %1$s"
 msgstr "启用 %1$s"
+
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Enable categories"
+msgstr "可用类别："
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Enable for the following addresses"
@@ -4426,9 +4439,11 @@ msgstr "进行中"
 msgid "Inbox"
 msgstr "收件箱"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Inbox tabs"
-msgstr "收件箱选项卡"
+#: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Inbox categories"
+msgstr "可用类别："
 
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
@@ -4581,10 +4596,15 @@ msgstr "正是"
 msgid "Is smaller than"
 msgstr "是小于"
 
-#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#. mail categories feature: the update job is running that assigns
+#. some common mails (e.g. from twitter.com) to predefined categories
+#: apps/io.ox/mail/categories/mediator.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "It will take some time until common mails are assigned to the default "
+#| "tabs."
 msgid ""
-"It will take some time until common mails are assigned to the default tabs."
+"It may take some time until mails are assigned to the default categories."
 msgstr "将会花一点时间直到所有邮件分派到默认选项卡里。"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
@@ -5153,13 +5173,14 @@ msgid "Message (optional)"
 msgstr "消息（选填）"
 
 #. successfully moved a message via drag&drop to another mail category (tab)
-#. %1$d represents the name if the target category
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-#, c-format
-msgid "Message moved to to category \"%1$d\"."
-msgid_plural "Messages moved to category \"%1$d\"."
-msgstr[0] ""
-msgstr[1] ""
+#. %1$s represents the name if the target category
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Move to folder"
+msgid "Message moved to to category \"%1$s\"."
+msgid_plural "Messages moved to category \"%1$s\"."
+msgstr[0] "移动到文件夹"
+msgstr[1] "移动到文件夹"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
@@ -5271,7 +5292,7 @@ msgid "Move"
 msgstr "移动"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
 msgid "Move all"
 msgstr "移动全部"
 
@@ -5280,27 +5301,17 @@ msgstr "移动全部"
 msgid "Move all messages"
 msgstr "移动所有消息"
 
-#. ask user to move all messages from the same sender to the mail category (tab)
-#. %1$d represents a email address
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-#, fuzzy, c-format
-#| msgid "Move all messages to another folder"
-msgid "Move all messages from %1$d to that category?"
-msgid_plural "Move all messages from selected senders to that category?"
-msgstr[0] "移动所有消息到别的文件夹"
-msgstr[1] "移动所有消息到别的文件夹"
-
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "移动文件夹"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 #, fuzzy
 #| msgid "Move to folder"
 msgid "Move to category"
 msgstr "移动到文件夹"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
@@ -5357,7 +5368,7 @@ msgstr "我的任务"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -6369,7 +6380,7 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "请输入您的密码。"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
 "rename or disable them."
@@ -7279,7 +7290,7 @@ msgstr "销售量"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
@@ -7894,11 +7905,6 @@ msgstr "在重认证户口时发生错误。"
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Something went wrong saving your changes."
 msgstr "保存更改时发生错误。"
-
-#. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "Sorry, common mails couldn't be assigned automatically."
-msgstr "抱歉，无法自动分配通用邮件。"
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
@@ -8996,11 +9002,6 @@ msgstr ""
 "要手动添加参与者，只要提供一个有效电子邮件地址（例如： john.doe@example.com "
 "或 \"John Doe\" <jd@example.com>）"
 
-#. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "To fill this area please drag and drop mails to the title of this tab."
-msgstr "要填充此区域，请拖放邮件到此选项卡的主题。"
-
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
@@ -9180,11 +9181,6 @@ msgstr "未知发送人"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "解锁"
-
-#. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "Unnamed"
-msgstr "未命名"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Unnamed subscription"
@@ -9706,7 +9702,7 @@ msgstr ""
 "您能复制和贴上此链接在电子邮件、即时通讯器、或社交网路里。请注意每一个有此链"
 "接的人皆能访问该分享。"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "You can enable categories again via the view dropdown on the right"
 msgstr ""
 
@@ -12862,6 +12858,9 @@ msgstr "年"
 #~ msgid "Inbox Tabs"
 #~ msgstr "收件箱选项卡"
 
+#~ msgid "Inbox tabs"
+#~ msgstr "收件箱选项卡"
+
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "接收通知邮件"
 
@@ -13727,6 +13726,9 @@ msgstr "年"
 #~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
 #~ msgstr "有人向您分享了一个文件夹。请问您要否订阅它们 %1$s？"
 
+#~ msgid "Sorry, common mails couldn't be assigned automatically."
+#~ msgstr "抱歉，无法自动分配通用邮件。"
+
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "抱歉，加载文档失败。"
 
@@ -14184,6 +14186,10 @@ msgstr "年"
 #~ "方的图标。"
 
 #~ msgid ""
+#~ "To fill this area please drag and drop mails to the title of this tab."
+#~ msgstr "要填充此区域，请拖放邮件到此选项卡的主题。"
+
+#~ msgid ""
 #~ "To invite other participants, enter their names in the field below "
 #~ "Participants. To avoid appointment conflicts, click on Find a free time "
 #~ "at the upper right side."
@@ -14327,6 +14333,9 @@ msgstr "年"
 
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "检查 subreddit 时不明错误"
+
+#~ msgid "Unnamed"
+#~ msgstr "未命名"
 
 #~ msgid "Unread only"
 #~ msgstr "只有未读"

@@ -1667,7 +1667,7 @@ msgstr "Kalendere"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1756,10 +1756,6 @@ msgstr "CardDAV-URL"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Handlekurven er tom"
-
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Categories are represented as tabs in your inbox."
-msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -2753,7 +2749,7 @@ msgstr "Deaktiver"
 msgid "Disable %1$s"
 msgstr "Deaktiver %1$s"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail address"
 msgid "Disable categories"
@@ -2967,6 +2963,17 @@ msgid ""
 "series?"
 msgstr "Ønsker du å redigere hele serien, eller bare én enkeltavtale i serien?"
 
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$s represents a email address
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Move all messages to another folder"
+msgid "Do you want to move all messages from %1$s to that category?"
+msgid_plural ""
+"Do you want to move all messages from selected senders to that category?"
+msgstr[0] "Flytt alle meldinger til en annen mappe"
+msgstr[1] "Flytt alle meldinger til en annen mappe"
+
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Do you want to permanently delete this mail?"
 msgid_plural "Do you want to permanently delete these mails?"
@@ -3118,7 +3125,7 @@ msgstr ""
 "Slipp her for å laste opp en <b class=\"dndignore\">ny versjon</b> av \"%1$s"
 "\""
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Drop here!"
 msgstr "Slipp her!"
 
@@ -3220,7 +3227,7 @@ msgstr "Rediger alle objekter"
 msgid "Edit appointment"
 msgstr "Rediger avtale"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail address"
 msgid "Edit categories"
@@ -3396,6 +3403,12 @@ msgstr "Aktiver"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable %1$s"
 msgstr "Aktiver %1$s"
+
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Enable categories"
+msgstr "E-postadresse"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Enable for the following addresses"
@@ -4472,9 +4485,11 @@ msgstr "Under behandling"
 msgid "Inbox"
 msgstr "Innboks"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Inbox tabs"
-msgstr "Innboks-faner"
+#: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Inbox categories"
+msgstr "E-postadresse"
 
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
@@ -4630,10 +4645,15 @@ msgstr "Er nøyaktig"
 msgid "Is smaller than"
 msgstr "Er mindre enn"
 
-#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#. mail categories feature: the update job is running that assigns
+#. some common mails (e.g. from twitter.com) to predefined categories
+#: apps/io.ox/mail/categories/mediator.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "It will take some time until common mails are assigned to the default "
+#| "tabs."
 msgid ""
-"It will take some time until common mails are assigned to the default tabs."
+"It may take some time until mails are assigned to the default categories."
 msgstr "Det vil ta litt tid før enkelte eposter blir tildelt standardfanene."
 
 #: apps/io.ox/core/commons.js module:io.ox/core
@@ -5202,13 +5222,14 @@ msgid "Message (optional)"
 msgstr "Melding (valgfritt)"
 
 #. successfully moved a message via drag&drop to another mail category (tab)
-#. %1$d represents the name if the target category
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-#, c-format
-msgid "Message moved to to category \"%1$d\"."
-msgid_plural "Messages moved to category \"%1$d\"."
-msgstr[0] ""
-msgstr[1] ""
+#. %1$s represents the name if the target category
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Move to folder"
+msgid "Message moved to to category \"%1$s\"."
+msgid_plural "Messages moved to category \"%1$s\"."
+msgstr[0] "Flytt til mappe"
+msgstr[1] "Flytt til mappe"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
@@ -5320,7 +5341,7 @@ msgid "Move"
 msgstr "Flytt"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
 msgid "Move all"
 msgstr "Flytt alle"
 
@@ -5329,27 +5350,17 @@ msgstr "Flytt alle"
 msgid "Move all messages"
 msgstr "Flytt alle meldinger"
 
-#. ask user to move all messages from the same sender to the mail category (tab)
-#. %1$d represents a email address
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-#, fuzzy, c-format
-#| msgid "Move all messages to another folder"
-msgid "Move all messages from %1$d to that category?"
-msgid_plural "Move all messages from selected senders to that category?"
-msgstr[0] "Flytt alle meldinger til en annen mappe"
-msgstr[1] "Flytt alle meldinger til en annen mappe"
-
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "Flytt mappen"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 #, fuzzy
 #| msgid "Move to folder"
 msgid "Move to category"
 msgstr "Flytt til mappe"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
@@ -5406,7 +5417,7 @@ msgstr "Mine oppgaver"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -6429,7 +6440,7 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Skriv inn ditt passord."
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
 "rename or disable them."
@@ -7350,7 +7361,7 @@ msgstr "Salgsvolum"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
@@ -7970,11 +7981,6 @@ msgstr "Noe gikk galt ved reautorisering av kontoen."
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Something went wrong saving your changes."
 msgstr "Noe gikk galt under lagringen av endringene."
-
-#. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "Sorry, common mails couldn't be assigned automatically."
-msgstr "Beklager, noen eposter kunne ikke tildeles faner automatisk."
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
@@ -9124,13 +9130,6 @@ msgstr ""
 "For å legge til kontakter manuelt, oppgi en gyldig e-postadresse (f.eks john."
 "doe@example.com eller «John Doe\"< jd@example.com >)"
 
-#. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "To fill this area please drag and drop mails to the title of this tab."
-msgstr ""
-"For å fylle ut dette området, dra og slipp eposter til tittelen av denne "
-"fanen."
-
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
@@ -9311,11 +9310,6 @@ msgstr "Ukjent avsender"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "Låse opp"
-
-#. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "Unnamed"
-msgstr "Uten navn"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Unnamed subscription"
@@ -9859,7 +9853,7 @@ msgstr ""
 "sosialt nettverk. Vær oppmerksom på at alle som mottar denne lenken kan åpne "
 "ressursen."
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "You can enable categories again via the view dropdown on the right"
 msgstr ""
 
@@ -11031,6 +11025,9 @@ msgstr "yyyy"
 #~ msgid "Inbox Tabs"
 #~ msgstr "Innboks-faner"
 
+#~ msgid "Inbox tabs"
+#~ msgstr "Innboks-faner"
+
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "Innkommende varslingseposter"
 
@@ -11272,6 +11269,9 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Noen delte en mappe med deg. Har du lyst til å abonnere på disse %1$s?"
 
+#~ msgid "Sorry, common mails couldn't be assigned automatically."
+#~ msgstr "Beklager, noen eposter kunne ikke tildeles faner automatisk."
+
 #, fuzzy
 #~| msgid "This file could not be uploaded."
 #~ msgid "Sorry, the audio file could not be played."
@@ -11371,6 +11371,12 @@ msgstr "yyyy"
 #~ msgid "Timezone"
 #~ msgstr "Tidssone"
 
+#~ msgid ""
+#~ "To fill this area please drag and drop mails to the title of this tab."
+#~ msgstr ""
+#~ "For å fylle ut dette området, dra og slipp eposter til tittelen av denne "
+#~ "fanen."
+
 #~ msgid "Toggle checkboxes"
 #~ msgstr "Veksle avkrysningsboksene"
 
@@ -11379,6 +11385,9 @@ msgstr "yyyy"
 
 #~ msgid "Tuesday"
 #~ msgstr "Tirsdag"
+
+#~ msgid "Unnamed"
+#~ msgstr "Uten navn"
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Oppgrader til premium"

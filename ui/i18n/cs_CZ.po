@@ -1707,7 +1707,7 @@ msgstr "Kalendáře"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -1795,10 +1795,6 @@ msgstr "Adresa CardDAV"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Košík je prázdný."
-
-#: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "Categories are represented as tabs in your inbox."
-msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
@@ -2792,7 +2788,7 @@ msgstr "Zakázat"
 msgid "Disable %1$s"
 msgstr "Zakázat %1$s"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #, fuzzy
 #| msgid "Available Categories:"
 msgid "Disable categories"
@@ -3009,6 +3005,18 @@ msgid ""
 "series?"
 msgstr "Chcete upravit celou sérii, nebo jednu schůzku ze série?"
 
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$s represents a email address
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Move all messages to another folder"
+msgid "Do you want to move all messages from %1$s to that category?"
+msgid_plural ""
+"Do you want to move all messages from selected senders to that category?"
+msgstr[0] "Přesunout všechny zprávy do jiné složky"
+msgstr[1] "Přesunout všechny zprávy do jiné složky"
+msgstr[2] "Přesunout všechny zprávy do jiné složky"
+
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Do you want to permanently delete this mail?"
 msgid_plural "Do you want to permanently delete these mails?"
@@ -3158,7 +3166,7 @@ msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr "Upusťte zde pro nahrání <b class=\"dndignore\">nové verze</b> „%1$s“"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Drop here!"
 msgstr "Upusťte zde!"
 
@@ -3260,7 +3268,7 @@ msgstr "Upravovat všechny objekty"
 msgid "Edit appointment"
 msgstr "Upravit schůzku"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #, fuzzy
 #| msgid "Available Categories:"
 msgid "Edit categories"
@@ -3436,6 +3444,12 @@ msgstr "Povolit"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable %1$s"
 msgstr "Povolit %1$s"
+
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Enable categories"
+msgstr "Dostupné kategorie:"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Enable for the following addresses"
@@ -4505,9 +4519,11 @@ msgstr "Probíhá"
 msgid "Inbox"
 msgstr "Doručená pošta"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail
-msgid "Inbox tabs"
-msgstr "Karta příchozí pošty"
+#: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Inbox categories"
+msgstr "Dostupné kategorie:"
 
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
@@ -4664,10 +4680,15 @@ msgstr "Je přesně"
 msgid "Is smaller than"
 msgstr "Je menší než"
 
-#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#. mail categories feature: the update job is running that assigns
+#. some common mails (e.g. from twitter.com) to predefined categories
+#: apps/io.ox/mail/categories/mediator.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "It will take some time until common mails are assigned to the default "
+#| "tabs."
 msgid ""
-"It will take some time until common mails are assigned to the default tabs."
+"It may take some time until mails are assigned to the default categories."
 msgstr ""
 "Nějakou dobu potrvá, než se běžné zprávy zaznamenají do výchozích karet."
 
@@ -5239,14 +5260,15 @@ msgid "Message (optional)"
 msgstr "Zpráva (volitelné)"
 
 #. successfully moved a message via drag&drop to another mail category (tab)
-#. %1$d represents the name if the target category
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-#, c-format
-msgid "Message moved to to category \"%1$d\"."
-msgid_plural "Messages moved to category \"%1$d\"."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+#. %1$s represents the name if the target category
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
+#, fuzzy, c-format
+#| msgid "Move to folder"
+msgid "Message moved to to category \"%1$s\"."
+msgid_plural "Messages moved to category \"%1$s\"."
+msgstr[0] "Přesunout do složky"
+msgstr[1] "Přesunout do složky"
+msgstr[2] "Přesunout do složky"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
@@ -5358,7 +5380,7 @@ msgid "Move"
 msgstr "Přesunout"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/train.js module:io.ox/mail
 msgid "Move all"
 msgstr "Přesunout vše"
 
@@ -5367,28 +5389,17 @@ msgstr "Přesunout vše"
 msgid "Move all messages"
 msgstr "Přesunout všechny zprávy"
 
-#. ask user to move all messages from the same sender to the mail category (tab)
-#. %1$d represents a email address
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-#, fuzzy, c-format
-#| msgid "Move all messages to another folder"
-msgid "Move all messages from %1$d to that category?"
-msgid_plural "Move all messages from selected senders to that category?"
-msgstr[0] "Přesunout všechny zprávy do jiné složky"
-msgstr[1] "Přesunout všechny zprávy do jiné složky"
-msgstr[2] "Přesunout všechny zprávy do jiné složky"
-
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "Přesunout složku"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 #, fuzzy
 #| msgid "Move to folder"
 msgid "Move to category"
 msgstr "Přesunout do složky"
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
@@ -5445,7 +5456,7 @@ msgstr "Mé úkoly"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
 #: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
@@ -6470,7 +6481,7 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Zadejte, prosím, své heslo."
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
 "rename or disable them."
@@ -7396,7 +7407,7 @@ msgstr "Objem prodeje"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
@@ -8024,11 +8035,6 @@ msgstr "Při opětovné autorizaci účtu došlo k chybě."
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Something went wrong saving your changes."
 msgstr "Při ukládání vašich změn došlo k chybě."
-
-#. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "Sorry, common mails couldn't be assigned automatically."
-msgstr "Promiňte, běžné zprávy nemohly být přiřazeny automaticky."
 
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
@@ -9180,11 +9186,6 @@ msgstr ""
 "Chcete-li přidat kontakty ručně, zadejte platnou e-mailovou adresu (např. "
 "jan.novak@priklad.cz nebo „Jan Novák\" <jan.novak@priklad.cz>)"
 
-#. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "To fill this area please drag and drop mails to the title of this tab."
-msgstr "Pro zaplnění tohoto prostoru přetáhněte zprávy do názvu této karty."
-
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
@@ -9365,11 +9366,6 @@ msgstr "Neznámý odesílatel"
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "Odemknout"
-
-#. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories.js module:io.ox/mail
-msgid "Unnamed"
-msgstr "Bez názvu"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Unnamed subscription"
@@ -9909,7 +9905,7 @@ msgstr ""
 "Tento odkaz můžete kopírovat do zpráv, chatu nebo na sociální sítě. Mějte na "
 "paměti, že každý, kdo má tento odkaz, může přistupovat ke sdíleným datům."
 
-#: apps/io.ox/mail/categories.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "You can enable categories again via the view dropdown on the right"
 msgstr ""
 
@@ -15210,6 +15206,9 @@ msgstr "rrrr"
 #~ msgid "Inbox Tabs"
 #~ msgstr "Karty příchozí pošty"
 
+#~ msgid "Inbox tabs"
+#~ msgstr "Karta příchozí pošty"
+
 #~ msgid "Incoming Notification Mails"
 #~ msgstr "Příchozí upozorňovací zprávy"
 
@@ -17569,6 +17568,9 @@ msgstr "rrrr"
 #~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
 #~ msgstr "Někdo s vámi sdílel složku. Přejete si přihlásit dané %1$s?"
 
+#~ msgid "Sorry, common mails couldn't be assigned automatically."
+#~ msgstr "Promiňte, běžné zprávy nemohly být přiřazeny automaticky."
+
 #~ msgid "Sorry, failed to load the document successfully."
 #~ msgstr "Je mi líto, dokument se nepodařilo načíst."
 
@@ -18883,6 +18885,10 @@ msgstr "rrrr"
 #~ "dole."
 
 #~ msgid ""
+#~ "To fill this area please drag and drop mails to the title of this tab."
+#~ msgstr "Pro zaplnění tohoto prostoru přetáhněte zprávy do názvu této karty."
+
+#~ msgid ""
 #~ "To invite other participants, enter their names in the field below "
 #~ "Participants. To avoid appointment conflicts, click on Find a free time "
 #~ "at the upper right side."
@@ -19204,6 +19210,9 @@ msgstr "rrrr"
 
 #~ msgid "Unknown error while checking subreddit."
 #~ msgstr "Neznámá chyba při načítání subreddit."
+
+#~ msgid "Unnamed"
+#~ msgstr "Bez názvu"
 
 #~ msgid "Unread only"
 #~ msgstr "Jen nepřečtené"

@@ -444,7 +444,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories.js
+#: apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js
 #: apps/io.ox/mail/compose/names.js
@@ -797,7 +797,7 @@ msgstr ""
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js
 #: module:io.ox/mail
-#: apps/io.ox/mail/categories.js
+#: apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -2821,7 +2821,7 @@ msgstr ""
 #: apps/io.ox/files/share/view-options.js
 #: module:io.ox/files
 #: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories.js
+#: apps/io.ox/mail/categories/edit.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -4243,7 +4243,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/common.js
 #: module:io.ox/core
-#: apps/io.ox/mail/categories.js
+#: apps/io.ox/mail/categories/train.js
 #: module:io.ox/mail
 msgid "Move all"
 msgstr ""
@@ -8462,86 +8462,79 @@ msgstr ""
 msgid "Couldn't load your auto forward."
 msgstr ""
 
-#. successfully moved a message via drag&drop to another mail category (tab)
-#. %1$d represents the name if the target category
-#: apps/io.ox/mail/categories.js
-#: module:io.ox/mail
-#, c-format
-msgid "Message moved to to category \"%1$d\"."
-msgid_plural "Messages moved to category \"%1$d\"."
-msgstr[0] ""
-msgstr[1] ""
-
-#. ask user to move all messages from the same sender to the mail category (tab)
-#. %1$d represents a email address
-#: apps/io.ox/mail/categories.js
-#: module:io.ox/mail
-#, c-format
-msgid "Move all messages from %1$d to that category?"
-msgid_plural "Move all messages from selected senders to that category?"
-msgstr[0] ""
-msgstr[1] ""
-
-#: apps/io.ox/mail/categories.js
-#: module:io.ox/mail
-msgid "You can enable categories again via the view dropdown on the right"
-msgstr ""
-
-#: apps/io.ox/mail/categories.js
+#: apps/io.ox/mail/categories/edit.js
 #: module:io.ox/mail
 msgid "Edit categories"
 msgstr ""
 
-#: apps/io.ox/mail/categories.js
+#: apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail
+msgid "You can enable categories again via the view dropdown on the right"
+msgstr ""
+
+#: apps/io.ox/mail/categories/edit.js
 #: module:io.ox/mail
 msgid "Please note that some categories are predefined and you might not be able to rename or disable them."
 msgstr ""
 
-#: apps/io.ox/mail/categories.js
+#: apps/io.ox/mail/categories/edit.js
 #: module:io.ox/mail
 msgid "Disable categories"
 msgstr ""
 
-#: apps/io.ox/mail/categories.js
+#: apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail
+msgid "Enable categories"
+msgstr ""
+
+#. mail categories feature: the update job is running that assigns
+#. some common mails (e.g. from twitter.com) to predefined categories
+#: apps/io.ox/mail/categories/mediator.js
+#: module:io.ox/mail
+msgid "It may take some time until mails are assigned to the default categories."
+msgstr ""
+
+#: apps/io.ox/mail/categories/picker.js
 #: module:io.ox/mail
 msgid "Move to category"
 msgstr ""
 
-#: apps/io.ox/mail/categories.js
+#: apps/io.ox/mail/categories/picker.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
 msgstr ""
 
-#. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories.js
+#: apps/io.ox/mail/categories/tabs.js
 #: module:io.ox/mail
-msgid "Unnamed"
+msgid "Inbox categories"
 msgstr ""
 
-#: apps/io.ox/mail/categories.js
+#: apps/io.ox/mail/categories/tabs.js
 #: module:io.ox/mail
 msgid "Drop here!"
 msgstr ""
 
-#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories.js
+#. successfully moved a message via drag&drop to another mail category (tab)
+#. %1$s represents the name if the target category
+#: apps/io.ox/mail/categories/train.js
 #: module:io.ox/mail
-msgid "It will take some time until common mails are assigned to the default tabs."
-msgstr ""
+#, c-format
+msgid "Message moved to to category \"%1$s\"."
+msgid_plural "Messages moved to category \"%1$s\"."
+msgstr[0] ""
+msgstr[1] ""
 
-#. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories.js
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$s represents a email address
+#: apps/io.ox/mail/categories/train.js
 #: module:io.ox/mail
-msgid "Sorry, common mails couldn't be assigned automatically."
-msgstr ""
-
-#. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories.js
-#: module:io.ox/mail
-msgid "To fill this area please drag and drop mails to the title of this tab."
-msgstr ""
+#, c-format
+msgid "Do you want to move all messages from %1$s to that category?"
+msgid_plural "Do you want to move all messages from selected senders to that category?"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
@@ -9360,11 +9353,6 @@ msgstr[1] ""
 
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
-msgid "Categories are represented as tabs in your inbox."
-msgstr ""
-
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
 #: apps/io.ox/settings/main.js
 #: module:io.ox/core
 msgid "Application may not work as expected until this problem is solved."
@@ -9735,11 +9723,6 @@ msgstr ""
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Statistics"
-msgstr ""
-
-#: apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail
-msgid "Inbox tabs"
 msgstr ""
 
 #. (From) email1 via email2. Appears in email detail view.
