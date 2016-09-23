@@ -47,7 +47,7 @@ define('io.ox/contacts/addressbook/popup', [
     // feature toggles
     var useInitials = settings.get('picker/useInitials', true),
         useInitialsColor = useInitials && settings.get('picker/useInitialsColor', true),
-        useLabels = useInitials && settings.get('picker/useLabels', false);
+        useLabels = settings.get('picker/useLabels', false);
 
     //
     // Build a search index
@@ -363,11 +363,11 @@ define('io.ox/contacts/addressbook/popup', [
                     var count = 0;
                     $dropdown.append(
                         _(folders).map(function (section, id) {
+                            // skip empty and (strange) almost empty folders
                             if (!sections[id] || !section.length) return $();
+                            if (!section[0].id && !section[0].title) return $();
                             return $('<optgroup>').attr('label', sections[id]).append(
                                 _(section).map(function (folder) {
-                                    // skip strange broken folders
-                                    if (!folder.id || !folder.title) return $();
                                     count++;
                                     return $('<option>').val(folder.id).text(folder.title);
                                 })
@@ -555,7 +555,7 @@ define('io.ox/contacts/addressbook/popup', [
                 '    <% } else if (item.label) { %>' +
                 '      <div class="contact-picture label" aria-label="hidden"><i class="fa fa-users"></i></div>' +
                 '    <% } else if (item.image) { %>' +
-                '      <div class="contact-picture" data-original="<%= item.image %>" aria-label="hidden"></div>' +
+                '      <div class="contact-picture image" data-original="<%= item.image %>" aria-label="hidden"></div>' +
                 '    <% } else { %>' +
                 '      <div class="contact-picture initials <%= item.initial_color %>" aria-label="hidden"><%- item.initials %></div>' +
                 '    <% } %>' +
