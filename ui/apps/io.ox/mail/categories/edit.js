@@ -26,7 +26,7 @@ define('io.ox/mail/categories/edit', [
         open: function (props) {
 
             return new ModalDialog({
-                title: gt('Edit categories'),
+                title: gt('Configure categories'),
                 point: 'io.ox/mail/categories/edit',
                 focus: '.form-inline',
                 maximize: false,
@@ -49,6 +49,8 @@ define('io.ox/mail/categories/edit', [
                             })
                             .toArray()
                     );
+                    // also enable categories
+                    props.set('categories', true);
                 },
                 onToggle: function () {
                     // toggle in mail app settings
@@ -116,7 +118,7 @@ define('io.ox/mail/categories/edit', [
                     this.on('toggle', this.onToggle);
                 }
             })
-            .addAlternativeButton({ label: (props.get('categories') ? gt('Disable categories') : gt('Enable categories')), action: 'toggle' })
+            .addAlternativeButton({ label: gt('Disable categories'), action: 'toggle', className: (props.get('categories') ? 'btn-default' : 'hidden') })
             .addButton({ label: gt('Cancel'), action: 'cancel', className: 'btn-default' })
             .addButton({ label: gt('Save'), action: 'save' })
             .open();
