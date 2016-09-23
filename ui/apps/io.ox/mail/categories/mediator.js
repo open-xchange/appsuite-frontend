@@ -16,11 +16,12 @@ define('io.ox/mail/categories/mediator', [
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
     'io.ox/mail/categories/api',
+    'io.ox/mail/api',
     'io.ox/mail/categories/tabs',
     'io.ox/core/yell',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (capabilities, ext, api, TabView, yell, settings, gt) {
+], function (capabilities, ext, api, mailAPI, TabView, yell, settings, gt) {
 
     'use strict';
 
@@ -82,9 +83,16 @@ define('io.ox/mail/categories/mediator', [
             index: 20200,
             setup: function (app) {
 
-                function refresh() {
-                    app.listView.collection.expired = true;
-                    app.listView.load();
+                function refresh(options) {
+                    // reload 'current tab'
+                    app.listView.reload();
+                    // flag collections as expired
+                    var rCategory = new RegExp('categoryid=' + options.target);
+                    _.each(mailAPI.pool.getCollections(), function (collection, id) {
+                        if (rCategory.test(id)) collection.expired = true;
+                    });
+                    // remove expired collections
+                    mailAPI.pool.gc();
                 }
 
                 // add placeholder
@@ -96,7 +104,7 @@ define('io.ox/mail/categories/mediator', [
 
                 // events
                 api.on('move train', refresh);
-                api.collection.on('save', refresh);
+                api.collection.on('save', refresh.bind(this, { target: 'general' }));
             }
         },
         {
