@@ -56,13 +56,20 @@ define('io.ox/mail/categories/mediator', [
                     return app.folder.get() === settings.get('folder/inbox');
                 }
 
+                function gotEnabled(args) {
+                    // parameters might be (model|value)
+                    if (args[0] && args[0].attributes) return args[1];
+                }
+
                 function toggleCategories() {
+                    if (gotEnabled(arguments) && !isInbox()) app.folder.set(settings.get('folder/inbox'));
+
                     isVisible = isEnabled() && isInbox();
                     app.getWindow().nodes.outer.toggleClass('mail-categories-visible', isVisible);
                     app.listView.model.set('category_id', isVisible ? app.props.get('category_id') : undefined);
                 }
 
-                settings.on('change:categories/enabled', toggleCategories);
+                app.props.on('change:categories', toggleCategories);
                 app.on('folder:change', toggleCategories);
 
                 toggleCategories();
