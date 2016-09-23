@@ -44,7 +44,7 @@ define('io.ox/mail/categories/edit', [
                                 return {
                                     id: node.attr('data-id'),
                                     name: input.val().trim(),
-                                    active: node.find('[type="checkbox"]').prop('checked')
+                                    enabled: node.find('[type="checkbox"]').prop('checked')
                                 };
                             })
                             .toArray()

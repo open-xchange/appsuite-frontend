@@ -121,8 +121,8 @@ define('io.ox/mail/categories/mediator', [
             setup: function (app) {
 
                 // current category gets disabled: use 'general' as fallback
-                api.collection.on('change:active', function (model, active) {
-                    if (active) return;
+                api.collection.on('change:enabled', function (model, enabled) {
+                    if (enabled) return;
                     if (model.id !== app.props.get('category_id')) return;
                     app.props.set('category_id', DEFAULT_CATEGORY);
                 });

@@ -24,14 +24,20 @@ define('io.ox/mail/categories/api', [
         defaults: function () {
             return {
                 unread: 0,
-                active: true,
+                enabled: true,
                 permissions: []
             };
         },
 
+        constructor: function () {
+            // fix irritating naming
+            Backbone.Model.apply(this, arguments);
+            this.attributes.enabled = this.attributes.active;
+        },
+
         toJSON: function () {
             // sync/store only specific properties
-            return this.pick('id', 'name', 'active', 'enabled');
+            return { id: this.get('id'), name: this.get('name'), active: this.get('enabled') };
         },
 
         getCount: function () {
@@ -43,7 +49,7 @@ define('io.ox/mail/categories/api', [
         },
 
         isEnabled: function () {
-            return this.get('active');
+            return this.get('enabled');
         }
     });
 
@@ -57,7 +63,7 @@ define('io.ox/mail/categories/api', [
         },
 
         register: function () {
-            this.on('change:name change:active', _.debounce(this.save, 200));
+            this.on('change:name change:enabled', _.debounce(this.save, 200));
             mailAPI.on('after:refresh.unseen after:refresh.seen refresh.all ', _.debounce(this.refresh.bind(this), 200));
         },
 
