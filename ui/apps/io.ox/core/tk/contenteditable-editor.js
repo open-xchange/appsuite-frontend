@@ -385,10 +385,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 editor.css('min-height', h - top - bottomMargin + 'px');
                 if (opt.css) editor.css(opt.css);
 
-                var th = $(fixed_toolbar + ' > div').height(),
+                var t = $(fixed_toolbar + ' > div'),
                     w = $(fixed_toolbar).next().outerWidth();
 
-                if (th) $(fixed_toolbar).css('height', th);
+                if (t.height()) $(fixed_toolbar).css('height', t.outerHeight());
                 if (w) $(fixed_toolbar).css('width', w);
                 return;
             }, 30),
