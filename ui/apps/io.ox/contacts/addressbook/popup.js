@@ -46,7 +46,8 @@ define('io.ox/contacts/addressbook/popup', [
 
     // feature toggles
     var useInitials = settings.get('picker/useInitials', true),
-        useInitialsColor = useInitials && settings.get('picker/useInitialsColor', true);
+        useInitialsColor = useInitials && settings.get('picker/useInitialsColor', true),
+        useLabels = useInitials && settings.get('picker/useLabels', false);
 
     //
     // Build a search index
@@ -137,6 +138,19 @@ define('io.ox/contacts/addressbook/popup', [
     var getAllMailAddresses = (function () {
 
         return function (options) {
+            return $.when(
+                fetchAddresses(options),
+                useLabels ? fetchLabels() : $.when()
+            )
+            .then(function (contacts, labels) {
+                var result = [], hash = {};
+                processAddresses(contacts[0], result, hash);
+                if (useLabels) processLabels(labels[0], result, hash);
+                return { items: result, hash: hash, index: buildIndex(result) };
+            });
+        };
+
+        function fetchAddresses(options) {
 
             options = _.extend({
                 // keep this list really small for good performance!
@@ -146,12 +160,6 @@ define('io.ox/contacts/addressbook/popup', [
 
             if (options.folder === 'all') delete options.folder;
 
-            return fetchAddresses(options).then(function (list) {
-                return processAddresses(list);
-            });
-        };
-
-        function fetchAddresses(options) {
             return http.PUT({
                 module: 'contacts',
                 params: {
@@ -160,16 +168,24 @@ define('io.ox/contacts/addressbook/popup', [
                     right_hand_limit: options.limit,
                     sort: 609
                 },
-                data: {
-                    // emailAutoComplete doesn't work; need to clean up client-side anyway
-                    last_name: '*'
+                // emailAutoComplete doesn't work; need to clean up client-side anyway
+                data: { last_name: '*' }
+            });
+        }
+
+        function fetchLabels() {
+            return http.GET({
+                module: 'labels',
+                params: {
+                    action: 'all',
+                    module: 'contacts',
+                    start: 0,
+                    limit: 1000
                 }
             });
         }
 
-        function processAddresses(list) {
-
-            var result = [], hash = {};
+        function processAddresses(list, result, hash) {
 
             list.forEach(function (item) {
                 // remove quotes from display name (common in collected addresses)
@@ -241,6 +257,33 @@ define('io.ox/contacts/addressbook/popup', [
             return $.trim(str).replace(/^["']+|["']+$/g, '');
         }
 
+        function processLabels(list, result, hash) {
+
+            list.forEach(function (item, i) {
+                item.display_name = String(item.title);
+                item = {
+                    caption: gt('Group'),
+                    cid: 'label.' + item.id + '.' + i,
+                    display_name: item.display_name,
+                    email: item.display_name,
+                    first_name: '',
+                    folder_id: 'label',
+                    full_name: util.getFullName(item).toLowerCase(),
+                    full_name_html: util.getFullName(item, true),
+                    image: '',
+                    id: String(item.id),
+                    initials: '',
+                    initial_color: '',
+                    label: true,
+                    last_name: '',
+                    // all lower-case to be case-insensitive; replace spaces to better match server-side collation
+                    sort_name: item.display_name.toLowerCase().replace(/\s/g, '_'),
+                    title: item.title
+                };
+                result.push((hash[item.cid] = item));
+            });
+        }
+
     }());
 
     //
@@ -307,7 +350,8 @@ define('io.ox/contacts/addressbook/popup', [
                         $('<div class="col-xs-6">').append(
                             $('<select class="form-control folder-dropdown invisible">').append(
                                 $('<option value="all">').text(gt('All contacts')),
-                                $('<option value="all_lists">').text(gt('All distribution lists'))
+                                $('<option value="all_lists">').text(gt('All distribution lists')),
+                                useLabels ? $('<option value="all_labels">').text(gt('All groups')) : $()
                             )
                         )
                     )
@@ -413,6 +457,7 @@ define('io.ox/contacts/addressbook/popup', [
                     result = _(result).filter(function (item) {
                         if (folder === 'all') return item.folder_id !== collected_id;
                         if (folder === 'all_lists') return item.list;
+                        if (folder === 'all_labels') return item.label;
                         return item.folder_id === folder;
                     });
                     // render
@@ -473,6 +518,9 @@ define('io.ox/contacts/addressbook/popup', [
                     summary.append(
                         $('<div>').append(
                             $('<span class="count pull-left">').text(
+                                useLabels ?
+                                //#. %1$d is number of selected items (addresses/groups) in the list
+                                gt.format(gt.ngettext('%1$d item selected', '%1$d items selected', n), n) :
                                 //#. %1$d is number of selected addresses
                                 gt.format(gt.ngettext('%1$d address selected', '%1$d addresses selected', n), n)
                             ),
@@ -504,13 +552,15 @@ define('io.ox/contacts/addressbook/popup', [
                 '  <div class="list-item-content">' +
                 '    <% if (item.list) { %>' +
                 '      <div class="contact-picture distribution-list" aria-label="hidden"><i class="fa fa-align-justify"></i></div>' +
+                '    <% } else if (item.label) { %>' +
+                '      <div class="contact-picture label" aria-label="hidden"><i class="fa fa-users"></i></div>' +
                 '    <% } else if (item.image) { %>' +
                 '      <div class="contact-picture" data-original="<%= item.image %>" aria-label="hidden"></div>' +
                 '    <% } else { %>' +
                 '      <div class="contact-picture initials <%= item.initial_color %>" aria-label="hidden"><%- item.initials %></div>' +
                 '    <% } %>' +
                 '    <div class="name"><%= item.full_name_html || "\u00A0" %></div>' +
-                '    <div class="email gray"><%- item.email || "\u00A0" %></div>' +
+                '    <div class="email gray"><%- item.caption || item.email || "\u00A0" %></div>' +
                 '  </div>' +
                 '</li>' +
                 '<% }); %>'
@@ -524,6 +574,7 @@ define('io.ox/contacts/addressbook/popup', [
             this.renderItems = function (list, options) {
                 // avoid duplicates
                 list = _(list).filter(function (item) {
+                    if (item.label) return true;
                     if (this[item.email]) return false; return (this[item.email] = true);
                 }, {});
                 // get defaults
