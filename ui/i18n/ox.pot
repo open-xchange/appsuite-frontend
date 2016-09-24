@@ -4243,8 +4243,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/common.js
 #: module:io.ox/core
-#: apps/io.ox/mail/categories/train.js
-#: module:io.ox/mail
 msgid "Move all"
 msgstr ""
 
@@ -4307,6 +4305,8 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/move.js
 #: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/mail/categories/train.js
+#: module:io.ox/mail
 msgid "Move all messages"
 msgstr ""
 
@@ -7192,6 +7192,13 @@ msgstr ""
 msgid "File quota"
 msgstr ""
 
+#: apps/io.ox/files/main.js
+#: module:io.ox/files
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "Need more space?"
+msgstr ""
+
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js
 #: module:io.ox/files
@@ -8464,7 +8471,7 @@ msgstr ""
 
 #: apps/io.ox/mail/categories/edit.js
 #: module:io.ox/mail
-msgid "Edit categories"
+msgid "Configure categories"
 msgstr ""
 
 #: apps/io.ox/mail/categories/edit.js
@@ -8480,11 +8487,6 @@ msgstr ""
 #: apps/io.ox/mail/categories/edit.js
 #: module:io.ox/mail
 msgid "Disable categories"
-msgstr ""
-
-#: apps/io.ox/mail/categories/edit.js
-#: module:io.ox/mail
-msgid "Enable categories"
 msgstr ""
 
 #. mail categories feature: the update job is running that assigns
@@ -8520,8 +8522,7 @@ msgstr ""
 #. %1$s represents the name if the target category
 #: apps/io.ox/mail/categories/train.js
 #: module:io.ox/mail
-#, c-format
-msgid "Message moved to to category \"%1$s\"."
+msgid "Message moved to category \"%1$s\"."
 msgid_plural "Messages moved to category \"%1$s\"."
 msgstr[0] ""
 msgstr[1] ""
@@ -8530,7 +8531,6 @@ msgstr[1] ""
 #. %1$s represents a email address
 #: apps/io.ox/mail/categories/train.js
 #: module:io.ox/mail
-#, c-format
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural "Do you want to move all messages from selected senders to that category?"
 msgstr[0] ""
@@ -9301,11 +9301,6 @@ msgstr ""
 #: apps/plugins/portal/quota/register.js
 #: module:plugins/portal
 msgid "Mail quota"
-msgstr ""
-
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
-msgid "Need more space?"
 msgstr ""
 
 #: apps/io.ox/mail/main.js

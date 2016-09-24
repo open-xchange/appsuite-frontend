@@ -2157,6 +2157,12 @@ msgstr "Konfigurēšanas e-pasts"
 msgid "Configure"
 msgstr "Konfigurēt"
 
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Configure categories"
+msgstr "Pieejamās kategorijas:"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr "Konfigurēt"
@@ -3015,7 +3021,7 @@ msgstr "Vai vēlaties rediģēt visu sēriju vai tikai atsevišķu mītiņu?"
 #. ask user to move all messages from the same sender to the mail category (tab)
 #. %1$s represents a email address
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Move all messages to another folder"
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
@@ -3281,12 +3287,6 @@ msgstr "Rediģēt visus objektus"
 msgid "Edit appointment"
 msgstr "Rediģēt mītiņu"
 
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Edit categories"
-msgstr "Pieejamās kategorijas:"
-
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
 msgid "Edit contact"
@@ -3458,12 +3458,6 @@ msgstr "Iespējot"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable %1$s"
 msgstr "Iespējot %1$s"
-
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Enable categories"
-msgstr "Pieejamās kategorijas:"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Enable for the following addresses"
@@ -5283,9 +5277,9 @@ msgstr "Ziņojums (neobligāts)"
 #. successfully moved a message via drag&drop to another mail category (tab)
 #. %1$s represents the name if the target category
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Move to folder"
-msgid "Message moved to to category \"%1$s\"."
+msgid "Message moved to category \"%1$s\"."
 msgid_plural "Messages moved to category \"%1$s\"."
 msgstr[0] "Pārvietot uz mapi"
 msgstr[1] "Pārvietot uz mapi"
@@ -5401,12 +5395,12 @@ msgid "Move"
 msgstr "Pārvietot"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/train.js module:io.ox/mail
 msgid "Move all"
 msgstr "Pārvietot visu"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/mail/categories/train.js
+#: module:io.ox/mail
 msgid "Move all messages"
 msgstr "Pārvietot visus ziņojumus"
 
@@ -5488,7 +5482,8 @@ msgstr "Vārds"
 msgid "Nature"
 msgstr "Daba"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail
 msgid "Need more space?"
 msgstr "Vai ir nepieciešama papildus vieta?"
 
@@ -12586,6 +12581,11 @@ msgstr "yyyy"
 #~ msgid "Edit as new"
 #~ msgstr "Rediģēt kā jaunu"
 
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Edit categories"
+#~ msgstr "Pieejamās kategorijas:"
+
 #~ msgid "Edit document"
 #~ msgstr "Rediģēt dokumentu"
 
@@ -12668,6 +12668,11 @@ msgstr "yyyy"
 
 #~ msgid "Enable calendar hovers"
 #~ msgstr "Iespējot kalendāra apskatlogus"
+
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Enable categories"
+#~ msgstr "Pieejamās kategorijas:"
 
 #~ msgid "Enable start page hovers"
 #~ msgstr "Iespējot sākumlapas apskatlogus"

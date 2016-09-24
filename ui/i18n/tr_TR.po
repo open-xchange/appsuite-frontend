@@ -2118,6 +2118,12 @@ msgstr "Onaylama"
 msgid "Configure"
 msgstr "Onaylanmadı"
 
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Configure categories"
+msgstr "E-posta adresi"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr ""
@@ -3006,7 +3012,7 @@ msgstr ""
 #. ask user to move all messages from the same sender to the mail category (tab)
 #. %1$s represents a email address
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Apply to all subfolders"
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
@@ -3276,12 +3282,6 @@ msgstr "bütün objeleri düzenleyin "
 msgid "Edit appointment"
 msgstr "Görüşmeyi düzenle"
 
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Edit categories"
-msgstr "E-posta adresi"
-
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
 msgid "Edit contact"
@@ -3457,12 +3457,6 @@ msgstr " Etkinleştir"
 #, fuzzy
 msgid "Enable %1$s"
 msgstr " Etkinleştir"
-
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Enable categories"
-msgstr "E-posta adresi"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #, fuzzy
@@ -5317,9 +5311,9 @@ msgstr "Mesaj (tercihi)"
 #. successfully moved a message via drag&drop to another mail category (tab)
 #. %1$s represents the name if the target category
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Move to folder"
-msgid "Message moved to to category \"%1$s\"."
+msgid "Message moved to category \"%1$s\"."
 msgid_plural "Messages moved to category \"%1$s\"."
 msgstr[0] "Klasöre taşı"
 
@@ -5435,13 +5429,13 @@ msgid "Move"
 msgstr "Taşı"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/train.js module:io.ox/mail
 #, fuzzy
 msgid "Move all"
 msgstr "Taşı"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/mail/categories/train.js
+#: module:io.ox/mail
 msgid "Move all messages"
 msgstr "Bütün mesajları taşı"
 
@@ -5523,7 +5517,8 @@ msgstr "İsim"
 msgid "Nature"
 msgstr "Doğa"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail
 msgid "Need more space?"
 msgstr ""
 
@@ -11087,6 +11082,11 @@ msgstr "yyyy"
 #~ msgid "Edit Tabs"
 #~ msgstr "Görevi düzenle"
 
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Edit categories"
+#~ msgstr "E-posta adresi"
+
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "Kabul Etme/Geri Çevirme için E-posta bildirimi"
 
@@ -11104,6 +11104,11 @@ msgstr "yyyy"
 
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr "Klasör boşaltılıyor... Bu bir kaç saniye süre alabilir"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Enable categories"
+#~ msgstr "E-posta adresi"
 
 #~ msgid "Enabled"
 #~ msgstr "Etkinleştirilmiş"

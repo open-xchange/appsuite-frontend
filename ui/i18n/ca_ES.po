@@ -2167,6 +2167,12 @@ msgstr ""
 msgid "Configure"
 msgstr "No confirmat"
 
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail address"
+msgid "Configure categories"
+msgstr "Adreça de correu electrònic"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr ""
@@ -3040,7 +3046,7 @@ msgstr "Voleu editar la sèrie sencera o només una cita dins aquesta?"
 #. ask user to move all messages from the same sender to the mail category (tab)
 #. %1$s represents a email address
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy, c-format
+#, fuzzy
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
@@ -3304,12 +3310,6 @@ msgstr ""
 msgid "Edit appointment"
 msgstr "Edita cita"
 
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Edit categories"
-msgstr "Adreça de correu electrònic"
-
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
 #, fuzzy
@@ -3490,12 +3490,6 @@ msgstr "Activa"
 #, fuzzy
 msgid "Enable %1$s"
 msgstr "Activa"
-
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
-msgid "Enable categories"
-msgstr "Adreça de correu electrònic"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Enable for the following addresses"
@@ -5329,9 +5323,9 @@ msgstr "Missatge (opcional)"
 #. successfully moved a message via drag&drop to another mail category (tab)
 #. %1$s represents the name if the target category
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Move to folder"
-msgid "Message moved to to category \"%1$s\"."
+msgid "Message moved to category \"%1$s\"."
 msgid_plural "Messages moved to category \"%1$s\"."
 msgstr[0] "Mou-ho a la carpeta"
 msgstr[1] "Mou-ho a la carpeta"
@@ -5448,12 +5442,12 @@ msgid "Move"
 msgstr "Mou"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/train.js module:io.ox/mail
 msgid "Move all"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/mail/categories/train.js
+#: module:io.ox/mail
 #, fuzzy
 msgid "Move all messages"
 msgstr "Obre/tanca tots els missatges"
@@ -5539,7 +5533,8 @@ msgstr "Nom"
 msgid "Nature"
 msgstr "Natura"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail
 msgid "Need more space?"
 msgstr ""
 
@@ -11220,6 +11215,11 @@ msgstr ""
 #~ msgid "Edit Tabs"
 #~ msgstr "Edita la tasca"
 
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Edit categories"
+#~ msgstr "Adreça de correu electrònic"
+
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "Notificació per correu electrònic per a acceptades/rebutjades"
 
@@ -11244,6 +11244,11 @@ msgstr ""
 
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr "Es buida la carpeta... el procés es pot torbar uns segons."
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Enable categories"
+#~ msgstr "Adreça de correu electrònic"
 
 #~ msgid "Enabled"
 #~ msgstr "Activat"

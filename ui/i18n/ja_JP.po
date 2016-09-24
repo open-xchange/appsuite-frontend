@@ -2095,6 +2095,12 @@ msgstr "構成メール"
 msgid "Configure"
 msgstr "今構成する"
 
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail categories"
+msgid "Configure categories"
+msgstr "利用可能なカテゴリ:"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr "今構成する"
@@ -2949,7 +2955,7 @@ msgstr ""
 #. ask user to move all messages from the same sender to the mail category (tab)
 #. %1$s represents a email address
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Move all messages to another folder"
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
@@ -3214,12 +3220,6 @@ msgstr "すべてのオブジェクトを編集"
 msgid "Edit appointment"
 msgstr "アポイントを編集"
 
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail categories"
-msgid "Edit categories"
-msgstr "利用可能なカテゴリ:"
-
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
 msgid "Edit contact"
@@ -3389,12 +3389,6 @@ msgstr "有効"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable %1$s"
 msgstr "%1$s を有効にする"
-
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail categories"
-msgid "Enable categories"
-msgstr "利用可能なカテゴリ:"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Enable for the following addresses"
@@ -5211,9 +5205,9 @@ msgstr "メッセージ（オプション）"
 #. successfully moved a message via drag&drop to another mail category (tab)
 #. %1$s represents the name if the target category
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Move to folder"
-msgid "Message moved to to category \"%1$s\"."
+msgid "Message moved to category \"%1$s\"."
 msgid_plural "Messages moved to category \"%1$s\"."
 msgstr[0] "フォルダに移動"
 
@@ -5328,12 +5322,12 @@ msgid "Move"
 msgstr "移動"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/train.js module:io.ox/mail
 msgid "Move all"
 msgstr "全て移動"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/mail/categories/train.js
+#: module:io.ox/mail
 msgid "Move all messages"
 msgstr "全てのメッセージを移動する"
 
@@ -5415,7 +5409,8 @@ msgstr "名前"
 msgid "Nature"
 msgstr "自然"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail
 msgid "Need more space?"
 msgstr "容量が必要ですか。"
 
@@ -13132,6 +13127,11 @@ msgstr "yyyy"
 #~ msgid "Edit as new"
 #~ msgstr "新規編集"
 
+#, fuzzy
+#~| msgid "Mail categories"
+#~ msgid "Edit categories"
+#~ msgstr "利用可能なカテゴリ:"
+
 #~ msgid "Edit document"
 #~ msgstr "ドキュメントを編集"
 
@@ -13216,6 +13216,11 @@ msgstr "yyyy"
 
 #~ msgid "Enable calendar hovers"
 #~ msgstr "予定表のホバー表示を有効化"
+
+#, fuzzy
+#~| msgid "Mail categories"
+#~ msgid "Enable categories"
+#~ msgstr "利用可能なカテゴリ:"
 
 #~ msgid "Enable start page hovers"
 #~ msgstr "スタート ページのホバー表示を有効化"

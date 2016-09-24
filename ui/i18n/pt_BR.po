@@ -2134,6 +2134,12 @@ msgstr "Configuração de e-mail"
 msgid "Configure"
 msgstr "Configure agora"
 
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+#, fuzzy
+#| msgid "Available Categories:"
+msgid "Configure categories"
+msgstr "Categorias disponíveis:"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr "Configure agora"
@@ -2996,7 +3002,7 @@ msgstr ""
 #. ask user to move all messages from the same sender to the mail category (tab)
 #. %1$s represents a email address
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Move all messages to another folder"
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
@@ -3255,12 +3261,6 @@ msgstr "Editar todos os objetos"
 msgid "Edit appointment"
 msgstr "Editar compromisso"
 
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Edit categories"
-msgstr "Categorias disponíveis:"
-
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
 msgid "Edit contact"
@@ -3432,12 +3432,6 @@ msgstr "Habilitar"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable %1$s"
 msgstr "Habilitar %1$s"
-
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Available Categories:"
-msgid "Enable categories"
-msgstr "Categorias disponíveis:"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Enable for the following addresses"
@@ -5259,9 +5253,9 @@ msgstr "Mensagem (opcional)"
 #. successfully moved a message via drag&drop to another mail category (tab)
 #. %1$s represents the name if the target category
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Move to folder"
-msgid "Message moved to to category \"%1$s\"."
+msgid "Message moved to category \"%1$s\"."
 msgid_plural "Messages moved to category \"%1$s\"."
 msgstr[0] "Mover para pasta"
 msgstr[1] "Mover para pasta"
@@ -5376,12 +5370,12 @@ msgid "Move"
 msgstr "Mover"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/train.js module:io.ox/mail
 msgid "Move all"
 msgstr "Mover todos"
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/mail/categories/train.js
+#: module:io.ox/mail
 msgid "Move all messages"
 msgstr "Mover todas as mensagens"
 
@@ -5463,7 +5457,8 @@ msgstr "Nome"
 msgid "Nature"
 msgstr "Natureza"
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail
 msgid "Need more space?"
 msgstr "Precisa de mais espaço?"
 
@@ -12257,6 +12252,11 @@ msgstr "aaaa"
 #~ "Edite uma configuração no lado direito. Na maioria dos casos, as "
 #~ "alterações são ativadas imediatamente."
 
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Edit categories"
+#~ msgstr "Categorias disponíveis:"
+
 #~ msgid "Edit document"
 #~ msgstr "Editar documento"
 
@@ -12339,6 +12339,11 @@ msgstr "aaaa"
 
 #~ msgid "Enable calendar hovers"
 #~ msgstr "Habilitar calendário em foco"
+
+#, fuzzy
+#~| msgid "Available Categories:"
+#~ msgid "Enable categories"
+#~ msgstr "Categorias disponíveis:"
 
 #~ msgid "Enable start page hovers"
 #~ msgstr "Habilitar a página inicial em foco"

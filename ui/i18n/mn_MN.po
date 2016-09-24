@@ -2075,6 +2075,11 @@ msgstr ""
 msgid "Configure"
 msgstr ""
 
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+#, fuzzy
+msgid "Configure categories"
+msgstr "Байршил"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
 msgstr ""
@@ -2926,7 +2931,6 @@ msgstr ""
 #. ask user to move all messages from the same sender to the mail category (tab)
 #. %1$s represents a email address
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, c-format
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
@@ -3185,10 +3189,6 @@ msgstr ""
 msgid "Edit appointment"
 msgstr "Уулзалтыг засварлах"
 
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-msgid "Edit categories"
-msgstr ""
-
 #: apps/io.ox/contacts/edit/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
 msgid "Edit contact"
@@ -3358,11 +3358,6 @@ msgstr ""
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 #, fuzzy
 msgid "Enable %1$s"
-msgstr "Байршил"
-
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-msgid "Enable categories"
 msgstr "Байршил"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
@@ -5118,9 +5113,9 @@ msgstr ""
 #. successfully moved a message via drag&drop to another mail category (tab)
 #. %1$s represents the name if the target category
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Business category"
-msgid "Message moved to to category \"%1$s\"."
+msgid "Message moved to category \"%1$s\"."
 msgid_plural "Messages moved to category \"%1$s\"."
 msgstr[0] "Бизнесийн төрөл"
 msgstr[1] "Бизнесийн төрөл"
@@ -5237,12 +5232,12 @@ msgid "Move"
 msgstr "Шилжүүлэх"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
-#: apps/io.ox/mail/categories/train.js module:io.ox/mail
 msgid "Move all"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/mail/categories/train.js
+#: module:io.ox/mail
 msgid "Move all messages"
 msgstr ""
 
@@ -5324,7 +5319,8 @@ msgstr ""
 msgid "Nature"
 msgstr ""
 
-#: apps/io.ox/mail/main.js module:io.ox/mail
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail
 msgid "Need more space?"
 msgstr ""
 
@@ -10477,6 +10473,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Tabs"
 #~ msgstr "Засварлах"
+
+#, fuzzy
+#~ msgid "Enable categories"
+#~ msgstr "Байршил"
 
 #~ msgid "Saved in"
 #~ msgstr "Хадгалсан байршил"
