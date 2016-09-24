@@ -19,6 +19,16 @@ define('io.ox/mail/categories/api', [
 
     'use strict';
 
+    function invalidateCollections(options) {
+         // flag collections as expired
+        var rCategory = new RegExp('categoryid=' + options.target);
+        _.each(mailAPI.pool.getCollections(), function (collection, id) {
+            if (rCategory.test(id)) collection.expired = true;
+        });
+        // TODO: investigate why we have to call gc manually to get it work
+        mailAPI.pool.gc();
+    }
+
     var Model = Backbone.Model.extend({
 
         defaults: function () {
@@ -84,7 +94,11 @@ define('io.ox/mail/categories/api', [
         save: function () {
             settings.set('categories/list', this.toJSON())
                 .save(undefined, { force: true })
-                .done(this.trigger.bind(this, 'save'));
+                .done(function () {
+                    this.trigger('save');
+                    this.refresh();
+                    invalidateCollections.bind(this, { target: 'general' });
+                }.bind(this));
         }
     });
 
@@ -128,6 +142,8 @@ define('io.ox/mail/categories/api', [
             })
             .then(function () {
                 api.trigger('move', options);
+                invalidateCollections(options);
+                api.collection.refresh();
             });
         },
 
@@ -152,6 +168,8 @@ define('io.ox/mail/categories/api', [
             })
             .then(function () {
                 api.trigger('train', options);
+                invalidateCollections(options);
+                api.collection.refresh();
             });
         }
     });

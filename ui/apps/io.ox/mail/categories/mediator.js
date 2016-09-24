@@ -86,19 +86,6 @@ define('io.ox/mail/categories/mediator', [
             id: 'category-tabs',
             index: 20200,
             setup: function (app) {
-
-                function refresh(options) {
-                    // reload 'current tab'
-                    app.listView.reload();
-                    // flag collections as expired
-                    var rCategory = new RegExp('categoryid=' + options.target);
-                    _.each(mailAPI.pool.getCollections(), function (collection, id) {
-                        if (rCategory.test(id)) collection.expired = true;
-                    });
-                    // remove expired collections
-                    mailAPI.pool.gc();
-                }
-
                 // add placeholder
                 app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                     $('<div class="categories-toolbar-container">').append(
@@ -107,8 +94,8 @@ define('io.ox/mail/categories/mediator', [
                 );
 
                 // events
-                api.on('move train', refresh);
-                api.collection.on('save', refresh.bind(this, { target: 'general' }));
+                api.on('move train', app.listView.reload.bind(app.listView));
+                api.collection.on('save', app.listView.reload.bind(app.listView));
             }
         },
         {
