@@ -546,7 +546,7 @@ define('io.ox/core/folder/node', [
                         break;
                     // no default
                 }
-                if (iconClass === '' && api.is('trash', this.model.attributes) && this.model.get('standard_folder')) {
+                if (!iconClass && api.is('trash', this.model.attributes) && this.model.get('standard_folder')) {
                     iconClass = 'visible trash';
                 }
             } else {
