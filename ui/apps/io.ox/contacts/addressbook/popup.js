@@ -35,7 +35,8 @@ define('io.ox/contacts/addressbook/popup', [
         fetch: settings.get('picker/limits/fetch', 10000),
         render: settings.get('picker/limits/list', 100),
         search: settings.get('picker/limits/search', 50),
-        more: settings.get('picker/limits/more', 100)
+        more: settings.get('picker/limits/more', 100),
+        labels: settings.get('picker/limits/labels', 1000)
     };
 
     // special folder id
@@ -179,8 +180,9 @@ define('io.ox/contacts/addressbook/popup', [
                 params: {
                     action: 'all',
                     module: 'contacts',
+                    members: true,
                     start: 0,
-                    limit: 1000
+                    limit: LIMITS.labels
                 }
             });
         }
@@ -260,12 +262,24 @@ define('io.ox/contacts/addressbook/popup', [
         function processLabels(list, result, hash) {
 
             list.forEach(function (item, i) {
+
                 item.display_name = String(item.title);
+
+                // translate into array of object
+                item.members = _(item.members).map(function (data) {
+                    return {
+                        display_name: util.getMailFullName(data),
+                        id: data.id,
+                        folder_id: data.folder_id,
+                        email: $.trim(data.email1 || data.email2 || data.email3).toLowerCase()
+                    };
+                });
+
                 item = {
-                    caption: gt('Group'),
+                    caption: _(item.members).pluck('display_name').join(', '),
                     cid: 'label.' + item.id + '.' + i,
                     display_name: item.display_name,
-                    email: item.display_name,
+                    email: _(item.members).pluck('email').join(', '),
                     first_name: '',
                     folder_id: 'label',
                     full_name: util.getFullName(item).toLowerCase(),
@@ -274,7 +288,7 @@ define('io.ox/contacts/addressbook/popup', [
                     id: String(item.id),
                     initials: '',
                     initial_color: '',
-                    label: true,
+                    label: item.members,
                     last_name: '',
                     // all lower-case to be case-insensitive; replace spaces to better match server-side collation
                     sort_name: item.display_name.toLowerCase().replace(/\s/g, '_'),
@@ -645,7 +659,7 @@ define('io.ox/contacts/addressbook/popup', [
                 return _(list)
                     .chain()
                     .map(function (item) {
-                        if (item.list) return flatten(item.list);
+                        if (item.list || item.label) return flatten(item.list || item.label);
                         var name = item.display_name, mail = item.mail || item.email;
                         return {
                             array: [name || null, mail || null],
@@ -669,6 +683,7 @@ define('io.ox/contacts/addressbook/popup', [
             },
             'select': function () {
                 var ids = _(this.selection).keys();
+                if (ox.debug) console.log('select', ids, this.flattenItems(ids));
                 if (_.isFunction(callback)) callback(this.flattenItems(ids));
             }
         })
