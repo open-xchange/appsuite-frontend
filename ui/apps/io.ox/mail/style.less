@@ -1010,28 +1010,35 @@ textarea.inplace-editor {
         padding-bottom: 6px;
     }
 
-    .category-item {
+    .center-childs {
         display: flex;
         align-items: center;
+    }
+
+    .category-item {
         padding-bottom: 6px;
+
         .status {
             height: 14px;
             width: 14px;
             margin: 0;
             margin-right: 8px;
-            &[disabled="disabled"] {
+            &.disabled {
                 visibility: hidden;
             }
         }
         .name {
             flex: 1;
             display: inline-block;
+        }
 
-            &[disabled="disabled"] {
+        label {
+            margin-bottom: 0;
+            width: 100%;
+            // adjust default style
+            .form-control {
+                box-shadow: none;
                 border: 0;
-                background: transparent;
-                box-shadow: 0 0;
-                cursor: auto;
             }
         }
     }

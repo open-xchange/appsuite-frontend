@@ -83,18 +83,31 @@ define('io.ox/mail/categories/edit', [
                         this.collection.map(function (model) {
                             return $('<form class="form-inline">').append(
                                 // inputs
-                                $('<div class="form-group category-item">')
+                                $('<div class="form-group category-item center-childs">')
                                     .attr('data-id', model.get('id'))
                                     .append(
-                                        $('<input type="checkbox" class="status">')
-                                            .prop('checked', model.isEnabled())
-                                            .attr('disabled', !model.can('disable')),
-                                        $('<input type="text" class="form-control name">')
-                                            .attr({
-                                                placeholder: gt('Name'),
-                                                disabled: !model.can('rename')
-                                            })
-                                            .val(model.get('name'))
+                                        // read only
+                                        model.can('rename') ? $() : [
+                                            $('<label class="center-childs">').append(
+                                                $('<input type="checkbox" class="status">')
+                                                    .prop('checked', model.isEnabled())
+                                                    .attr('disabled', !model.can('disable'))
+                                                    .toggleClass('disabled', !model.can('disable')),
+                                                $('<div class="name form-control">').text(model.get('name'))
+                                            )
+                                        ]
+                                    )
+                                    .append(
+                                        // changable
+                                        !model.can('rename') ? $() : [
+                                            $('<input type="checkbox" class="status">')
+                                                .prop('checked', model.isEnabled())
+                                                .attr('disabled', !model.can('disable'))
+                                                .toggleClass('disabled', !model.can('disable')),
+                                            $('<input type="text" class="form-control name">')
+                                                .attr({ placeholder: gt('Name') })
+                                                .val(model.get('name'))
+                                        ]
                                     ),
                                 // optional description block
                                 model.get('description') ? $('<div class="description">').text(model.get('description')) : $()
