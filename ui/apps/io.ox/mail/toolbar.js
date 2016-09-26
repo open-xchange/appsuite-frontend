@@ -285,7 +285,9 @@ define('io.ox/mail/toolbar', [
                 dropdown
                 .header(gt('Inbox'))
                 .option('categories', true, gt('Use categories'))
-                 //#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
+                 //#. term is followed by a space and three dots (' …')
+                 //#. the dots are placeholders for 'Categories'
+                 //#. so user reads it as 'Configure Categories'
                 .link('categories-config', gt('Configure') + ' …', _.bind(onConfigureCategories, this, baton.app.props), { icon: true })
                 .divider();
             }

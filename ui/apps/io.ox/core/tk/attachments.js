@@ -328,6 +328,7 @@ define('io.ox/core/tk/attachments', [
 
     var progressView  = DisposableView.extend({
         className: 'attachments-progress-view',
+        //#. headline for a progress bar
         label: gt('Uploading attachments'),
         initialize: function (options) {
             var self = this;
