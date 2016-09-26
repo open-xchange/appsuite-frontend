@@ -277,8 +277,7 @@ define('io.ox/contacts/addressbook/popup', [
         'shared':  gt('Shared address books')
     };
 
-    function open(callback, options) {
-        options = options || {};
+    function open(callback) {
         // avoid parallel popups
         if (isOpen) return;
         isOpen = true;

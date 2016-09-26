@@ -359,9 +359,9 @@ define('io.ox/emoji/main', [
             return text;
         },
 
-        converterFor: function (options, format) {
+        converterFor: function (options, defaultFormat) {
             var self = this;
-            format = format || 'html';
+            defaultFormat = defaultFormat || 'html';
 
             options = _.extend({
                 from: 'unified',
@@ -374,7 +374,7 @@ define('io.ox/emoji/main', [
                 return function (text, format) {
                     return self.imageTagsToPUA(self.unifiedToImageTag(text, {
                         forceEmojiIcons: true
-                    }), format);
+                    }), format || defaultFormat);
                 };
             } else if (options.from === 'all' && options.to === 'unified') {
                 return function (text) {

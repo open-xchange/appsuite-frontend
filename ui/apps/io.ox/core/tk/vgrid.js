@@ -317,7 +317,6 @@ define('io.ox/core/tk/vgrid', [
             // counters
             numVisible = 0,
             numRows = 0,
-            numLabels = 0,
             // current mode
             currentMode = 'all',
             // default all & list request
@@ -544,14 +543,12 @@ define('io.ox/core/tk/vgrid', [
                 index: {},
                 textIndex: {}
             };
-            numLabels = 0;
             // loop
             var i = 0, $i = all.length + 1, current = '', tmp = '';
             for (; i < $i; i++) {
                 tmp = self.requiresLabel(i, all[i], current, $i);
                 if (tmp !== false) {
                     labels.list.push({ top: 0, text: '', pos: i });
-                    numLabels++;
                     current = tmp;
                 }
             }
@@ -704,7 +701,7 @@ define('io.ox/core/tk/vgrid', [
         };
 
         function initLabels() {
-            // process labels first (determines numLabels), then set height
+            // process labels first, then set height
             processLabels();
             return paintLabels().done(function (cumulatedLabelHeight) {
                 container.css({
