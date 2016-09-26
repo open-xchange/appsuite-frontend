@@ -316,21 +316,30 @@ define('io.ox/participants/model', [
                         if (!groupUsers) {
                             groupAPI.get({ id: participant.id || participant.get('id') }).done(function (group) {
                                 groupUsers = group.members;
-                                userAPI.getList(groupUsers).done(function (Users) {
-                                    self.addUniquely(Users);
+                                userAPI.getList(groupUsers).done(function (users) {
+                                    users = _(users).sortBy('last_name');
+                                    self.addUniquely(users);
                                 });
                             });
                         }
-                        userAPI.getList(groupUsers).done(function (Users) {
-                            self.addUniquely(Users);
+                        userAPI.getList(groupUsers).done(function (users) {
+                            users = _(users).sortBy('last_name');
+                            self.addUniquely(users);
                         });
                     } else {
+                        var models = [], defs = [];
                         _([].concat(add || participant)).each(function (data) {
                             // check if model
                             var mod = data instanceof self.model ? data : new self.model(data);
+                            models.push(mod);
                             // wait for fetch, then add to collection
-                            mod.loading.then(function () {
-                                self.oldAdd(mod, opt);
+                            defs.push(mod.loading);
+                        });
+
+                        $.when.apply($, defs).then(function () {
+                            models = _(models).sortBy(function (obj) { return obj.get('last_name'); });
+                            _(models).each(function (model) {
+                                self.oldAdd(model, opt);
                             });
                         });
                     }
