@@ -688,7 +688,7 @@ define('io.ox/core/tk/wizard', [
 
         // wait for element for be visible
         waitFor: function (selector, timeout) {
-            this.options.waitFor = { selector: selector, timout: timeout };
+            this.options.waitFor = { selector: selector, timeout: timeout };
             return this;
         },
 
