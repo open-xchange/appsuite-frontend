@@ -26,31 +26,38 @@ define('io.ox/mail/categories/edit', [
         open: function (props) {
 
             return new ModalDialog({
-                title: gt('Configure categories'),
-                point: 'io.ox/mail/categories/edit',
+                async: true,
+                collection: api.collection,
+                enter: 'save',
                 focus: '.form-inline',
                 maximize: false,
-                enter: 'save',
+                point: 'io.ox/mail/categories/edit',
                 props: props,
-                collection: api.collection
+                title: gt('Configure categories')
             })
             .inject({
                 onSave: function () {
-                    this.collection.set(
-                        this.$('.category-item input.name')
-                            .map(function () {
-                                var input = $(this),
-                                    node = input.closest('.category-item');
-                                return {
-                                    id: node.attr('data-id'),
-                                    name: input.val().trim(),
-                                    enabled: node.find('[type="checkbox"]').prop('checked')
-                                };
-                            })
-                            .toArray()
-                    );
-                    // also enable categories
-                    props.set('categories', true);
+                    this.collection
+                        .update(
+                            // set category
+                            this.$('.category-item')
+                                .map(function () {
+                                    var $node = $(this),
+                                        $name = $node.find('.name');
+                                    return {
+                                        id: $node.attr('data-id'),
+                                        name: $name.is('input') ? $name.val().trim() : $name.text(),
+                                        enabled: $node.find('[type="checkbox"]').prop('checked')
+                                    };
+                                })
+                                .toArray()
+                        )
+                        .done(function () {
+                            // ensure enabled categories
+                            props.set('categories', true);
+                        })
+                        .always(this.close.bind(this));
+
                 },
                 onToggle: function () {
                     // toggle in mail app settings
@@ -67,6 +74,7 @@ define('io.ox/mail/categories/edit', [
                                 hotspot.removeAll();
                             });
                     }, 300);
+                    this.close();
                 }
             })
             .extend({

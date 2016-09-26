@@ -68,8 +68,6 @@ define('io.ox/mail/categories/api', [
         model: Model,
 
         initialize: function () {
-
-            this.on('change:name change:enabled', _.debounce(this.save, 200));
             mailAPI.on('after:refresh.unseen after:refresh.seen refresh.all ', _.debounce(this.refresh.bind(this), 200));
 
             this.refresh();
@@ -91,8 +89,13 @@ define('io.ox/mail/categories/api', [
             return def;
         },
 
+        update: function (list) {
+            this.set(list);
+            return this.save();
+        },
+
         save: function () {
-            settings.set('categories/list', this.toJSON())
+            return settings.set('categories/list', this.toJSON())
                 .save(undefined, { force: true })
                 .done(function () {
                     this.trigger('save');
