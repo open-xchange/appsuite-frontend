@@ -119,7 +119,8 @@ define('io.ox/calendar/freetime/main', [
 
             createFooter: function (app) {
                 var saveButton = $('<button class="btn btn-primary pull-right scheduling-save-button">').text(gt('Create appointment')),
-                    node = $('<div class="scheduling-app-footer clearfix">').append(saveButton),
+                    distributionListButton = $('<button class="btn btn-link scheduling-distributionlist-button">').text(gt('Save as distribution list')),
+                    node = $('<div class="scheduling-app-footer clearfix">').append(distributionListButton, saveButton),
                     self = this;
                 self.app = app;
                 saveButton.on('click', function () {
@@ -138,6 +139,11 @@ define('io.ox/calendar/freetime/main', [
                             yell('info', gt('Please select a time for the appointment'));
                         });
                     }
+                });
+                distributionListButton.on('click', function () {
+                    require(['io.ox/calendar/freetime/distributionListPopup'], function (distrib) {
+                        distrib.showDialog({ participants: self.model.get('participants') });
+                    });
                 });
 
                 return node;
