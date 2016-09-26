@@ -243,11 +243,11 @@ define('io.ox/calendar/freetime/main', [
             };
 
             app.failRestore = function (point) {
+                this.view.model.get('participants').add(point.participants);
                 this.view.timeSubview.setDate(point.currentWeek);
                 this.view.timeSubview.lassoStart = point.lassoStart;
                 this.view.timeSubview.lassoEnd = point.lassoEnd;
                 this.view.timeSubview.updateLasso(true);
-                this.view.model.get('participants').add(point.participants);
                 return $.when();
             };
 
