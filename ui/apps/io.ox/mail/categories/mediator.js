@@ -104,7 +104,6 @@ define('io.ox/mail/categories/mediator', [
             id: 'ensure-category-id',
             index: 20300,
             setup: function (app) {
-
                 // current category gets disabled: use 'general' as fallback
                 api.collection.on('change:enabled', function (model, enabled) {
                     if (enabled) return;
@@ -114,8 +113,17 @@ define('io.ox/mail/categories/mediator', [
             }
         },
         {
-            id: 'check-category-state',
+            id: 'setting-updates-prop',
             index: 20400,
+            setup: function (app) {
+                settings.on('change:categories/enabled', function (model, value) {
+                    app.props.set('categories', value);
+                });
+            }
+        },
+        {
+            id: 'check-category-state',
+            index: 20500,
             setup: function (app) {
                 if (!app.props.get('categories')) return;
                 if (settings.get('categories/initialized') !== 'running') return;

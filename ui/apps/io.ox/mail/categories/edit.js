@@ -16,14 +16,17 @@ define('io.ox/mail/categories/edit', [
     'io.ox/backbone/views/modal',
     'io.ox/core/tk/hotspot',
     'io.ox/core/yell',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, ModalDialog, hotspot, yell, gt) {
+], function (api, ModalDialog, hotspot, yell, settings, gt) {
 
     'use strict';
 
+    function isEnabled() { return settings.get('categories/enabled'); }
+
     return {
 
-        open: function (props) {
+        open: function () {
 
             return new ModalDialog({
                 async: true,
@@ -32,7 +35,6 @@ define('io.ox/mail/categories/edit', [
                 focus: '.form-inline',
                 maximize: false,
                 point: 'io.ox/mail/categories/edit',
-                props: props,
                 title: gt('Configure categories')
             })
             .inject({
@@ -54,19 +56,17 @@ define('io.ox/mail/categories/edit', [
                         )
                         .done(function () {
                             // ensure enabled categories
-                            props.set('categories', true);
+                            settings.set('categories/enabled', true);
                         })
                         .always(this.close.bind(this));
 
                 },
                 onToggle: function () {
-                    // toggle in mail app settings
-                    this.options.props.set('categories', !this.options.props.get('categories'));
+                    // toggle
+                    settings.set('categories/enabled', !isEnabled());
                     // no need to show the hint
-                    if (this.options.props.get('categories')) return;
+                    if (isEnabled()) return;
                     // delay a bit not to confuse the user
-                    // TODO: das tut's nicht, weil obiges delay hat. das muss mehr oder weniger instant passieren
-                    // die 300ms reichen nicht
                     _.delay(function () {
                         hotspot.add($('.dropdown[data-dropdown="view"]'));
                         yell('info', gt('You can enable categories again via the view dropdown on the right'))
@@ -139,7 +139,7 @@ define('io.ox/mail/categories/edit', [
                     this.on('toggle', this.onToggle);
                 }
             })
-            .addAlternativeButton({ label: gt('Disable categories'), action: 'toggle', className: (props.get('categories') ? 'btn-default' : 'hidden') })
+            .addAlternativeButton({ label: gt('Disable categories'), action: 'toggle', className: (isEnabled() ? 'btn-default' : 'hidden') })
             .addButton({ label: gt('Cancel'), action: 'cancel', className: 'btn-default' })
             .addButton({ label: gt('Save'), action: 'save' })
             .open();

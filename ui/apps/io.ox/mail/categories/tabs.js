@@ -91,8 +91,8 @@ define('io.ox/mail/categories/tabs', [
         onConfigureCategories: function (e) {
             e.preventDefault();
             require(['io.ox/mail/categories/edit'], function (dialog) {
-                dialog.open(this.props);
-            }.bind(this));
+                dialog.open();
+            });
         },
 
         onMove: function (e, baton) {
