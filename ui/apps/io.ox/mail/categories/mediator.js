@@ -57,9 +57,15 @@ define('io.ox/mail/categories/mediator', [
                     return app.folder.get() === INBOX;
                 }
 
+                function gotEnabled(args) {
+                    // parameters might be (model|value)
+                    if (args[0] && args[0].attributes) return args[1];
+                }
+
                 function toggleCategories() {
-                    // ensure inbox if enabled but in a different folder
-                    if (isEnabled() && !isInbox()) app.folder.set(INBOX);
+                    // ensure inbox if user enables while in a different folder
+                    if (gotEnabled(arguments) && !isInbox()) app.folder.set(INBOX);
+
                     isVisible = isEnabled() && isInbox();
                     app.getWindow().nodes.outer.toggleClass('mail-categories-visible', isVisible);
                     app.listView.model.set('category_id', isVisible ? app.props.get('category_id') : undefined);
