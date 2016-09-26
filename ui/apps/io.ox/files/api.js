@@ -172,6 +172,10 @@ define('io.ox/files/api', [
         getMimeType: function () {
             // split by ; because this field might contain further unwanted data
             var type = String(this.get('file_mimetype')).toLowerCase().split(';')[0];
+            // For Guard files, get the orig mime
+            if ((this.get('source') === 'guardDrive') && this.get('meta') && this.get('meta').OrigMime) {
+                type = this.get('meta').OrigMime;
+            }
             // unusable mime type?
             if (regUnusableType.test(type)) {
                 // return mime type based on file extension
