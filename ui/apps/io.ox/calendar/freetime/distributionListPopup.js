@@ -33,7 +33,7 @@ define('io.ox/calendar/freetime/distributionListPopup', [
             }),
             input = $('<input type="text" class="form-control">');
 
-        popup.$body.append($('<label class="control-label scheduling-distribution-name-label">').text(gt('Name')).append(input), $('<label>').text(gt('Please note, that distribution lists may not contain ressources.')));
+        popup.$body.append($('<label class="control-label scheduling-distribution-name-label">').text(gt('Name')).append(input), $('<label>').text(gt('Please note, that distribution lists cannot not contain ressources.')));
         popup.addCancelButton();
         popup.addButton({ label: options.label || gt('Create distibution list'), action: 'save' });
         popup.on('save', function () {
@@ -79,6 +79,7 @@ define('io.ox/calendar/freetime/distributionListPopup', [
             }
         });
         popup.open();
+        input.focus();
     };
 
     return {

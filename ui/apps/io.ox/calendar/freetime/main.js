@@ -117,9 +117,21 @@ define('io.ox/calendar/freetime/main', [
                 this.renderBody();
             },
 
+            createDistributionlistButton: function () {
+                var self = this,
+                    distributionListButton = $('<button class="btn btn-link scheduling-distributionlist-button">').text(gt('Save as distribution list'));
+
+                distributionListButton.on('click', function () {
+                    require(['io.ox/calendar/freetime/distributionListPopup'], function (distrib) {
+                        distrib.showDialog({ participants: self.model.get('participants') });
+                    });
+                });
+                return distributionListButton;
+            },
+
             createFooter: function (app) {
                 var saveButton = $('<button class="btn btn-primary pull-right scheduling-save-button">').text(gt('Create appointment')),
-                    distributionListButton = $('<button class="btn btn-link scheduling-distributionlist-button">').text(gt('Save as distribution list')),
+                    distributionListButton = this.createDistributionlistButton(),
                     node = $('<div class="scheduling-app-footer clearfix">').append(distributionListButton, saveButton),
                     self = this;
                 self.app = app;
@@ -139,11 +151,6 @@ define('io.ox/calendar/freetime/main', [
                             yell('info', gt('Please select a time for the appointment'));
                         });
                     }
-                });
-                distributionListButton.on('click', function () {
-                    require(['io.ox/calendar/freetime/distributionListPopup'], function (distrib) {
-                        distrib.showDialog({ participants: self.model.get('participants') });
-                    });
                 });
 
                 return node;
@@ -178,6 +185,7 @@ define('io.ox/calendar/freetime/main', [
                 // append after header so it does not scroll with the rest of the view
                 popup.$el.find('.modal-header').append(view.timeSubview.headerNodeRow1).after(view.header);
                 popup.$body.append(view.body);
+                popup.$el.find('.modal-footer').prepend(view.createDistributionlistButton().addClass('pull-left'));
                 view.render();
                 popup.on('close', function () {
                     view.dispose();
@@ -188,7 +196,7 @@ define('io.ox/calendar/freetime/main', [
         },
 
         createApp = function () {
-            var app = ox.ui.createApp({ name: 'io.ox/calendar/scheduling', title: gt('Scheduling'), closable: true }), win;
+            var app = ox.ui.createApp({ name: 'io.ox/calendar/scheduling', title: gt('Scheduling'), userContent: true, closable: true }), win;
 
             app.setLauncher(function (options) {
                 options = options || {};
@@ -217,6 +225,31 @@ define('io.ox/calendar/freetime/main', [
                 app.view.dispose();
                 return $.when();
             });
+
+            app.failSave = function () {
+                if (this.view.model) {
+                    return {
+                        description: gt('Scheduling'),
+                        module: 'io.ox/calendar/freetime',
+                        point:  {
+                            participants: this.view.model.get('participants'),
+                            currentWeek: this.view.model.get('currentWeek').valueOf(),
+                            lassoStart: this.view.timeSubview.lassoStart,
+                            lassoEnd: this.view.timeSubview.lassoEnd
+                        }
+                    };
+                }
+                return false;
+            };
+
+            app.failRestore = function (point) {
+                this.view.timeSubview.setDate(point.currentWeek);
+                this.view.timeSubview.lassoStart = point.lassoStart;
+                this.view.timeSubview.lassoEnd = point.lassoEnd;
+                this.view.timeSubview.updateLasso(true);
+                this.view.model.get('participants').add(point.participants);
+                return $.when();
+            };
 
             return app;
         };

@@ -214,6 +214,10 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.trigger('close');
         if (this.previousFocus) this.previousFocus.focus();
         this.$el.remove();
+        // if multiple modal dialogs are open, set the modal-open class correctly
+        if ($(document.body).children().hasClass('modal')) {
+            $(document.body).addClass('modal-open');
+        }
         return this;
     }
 
