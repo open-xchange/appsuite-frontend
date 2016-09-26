@@ -255,8 +255,8 @@ define('io.ox/core/tk/doc-converter-utils', [
             var file_options_params = file_options ? file_options.params : null;
             return {
                 source: 'guard',
-                // MT: guardUrl can probably be removed, at least the DocumentConverterAction now uses the cryptoAuth/Action.
-                guardUrl: model.get('guardUrl'),
+                // guardUrl being used for access of mail attachments
+                guardUrl: model.get('guardUrl') ? model.get('guardUrl') : null,
                 cryptoAuth: file_options_params ? file_options_params.cryptoAuth : null,
                 cryptoAction: file_options_params ? file_options_params.cryptoAction : null,
                 mimetype: model.get('meta').OrigMime || model.get('file_mimetype')
