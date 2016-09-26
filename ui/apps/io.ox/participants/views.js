@@ -265,6 +265,9 @@ define('io.ox/participants/views', [
         },
 
         renderEmptyLabel: function () {
+            if (this.options.noEmptyLabel) {
+                return;
+            }
             if (this.collection.length === 0) {
                 this.$ul.append(this.$empty);
             } else {

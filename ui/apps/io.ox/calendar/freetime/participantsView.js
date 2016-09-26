@@ -59,7 +59,8 @@ define('io.ox/calendar/freetime/participantsView', [
                 labelClass: 'sr-only',
                 halo: false,
                 hideMail: true,
-                asHtml: true
+                asHtml: true,
+                noEmptyLabel: true
             }).render().$el);
         }
     });
