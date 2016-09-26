@@ -21,16 +21,16 @@ define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar', 'io.ox/parti
             this.set({
                 timezone: now.tz(),
                 currentWeek: now,
-                compact: settings.get('schedulingCompactMode', false),
-                zoom: settings.get('schedulingZoomlevel', 100),
-                onlyWorkingHours: settings.get('schedulingOnlyWorkingHours', true),
+                compact: settings.get('scheduling/CompactMode', false),
+                zoom: settings.get('scheduling/Zoomlevel', 100),
+                onlyWorkingHours: settings.get('scheduling/OnlyWorkingHours', true),
                 startHour: Math.max(parseInt(settings.get('startTime', 8), 10) - 1, 0),
                 endHour: Math.min(parseInt(settings.get('endTime', 18), 10), 24),
                 participants: new participantsModel.Participants([], { splitGroups: true }),
-                showFree: settings.get('schedulingShowFree', false),
-                showAbsent: settings.get('schedulingShowAbsent', true),
-                showReserved: settings.get('schedulingShowReserved', true),
-                showTemporary: settings.get('schedulingShowTemporary', false),
+                showFree: settings.get('scheduling/ShowFree', false),
+                showAbsent: settings.get('scheduling/ShowAbsent', true),
+                showReserved: settings.get('scheduling/ShowReserved', true),
+                showTemporary: settings.get('scheduling/ShowTemporary', false),
                 appointments: {}
             });
         }

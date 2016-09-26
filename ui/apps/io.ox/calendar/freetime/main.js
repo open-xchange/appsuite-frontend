@@ -73,13 +73,13 @@ define('io.ox/calendar/freetime/main', [
                 this.updateCompact();
             },
             updateSettings: function () {
-                settings.set('schedulingZoomlevel', this.model.get('zoom'));
-                settings.set('schedulingOnlyWorkingHours', this.model.get('onlyWorkingHours'));
-                settings.set('schedulingShowFree', this.model.get('showFree'));
-                settings.set('schedulingShowAbsent', this.model.get('showAbsent'));
-                settings.set('schedulingShowReserved', this.model.get('showReserved'));
-                settings.set('schedulingShowTemporary', this.model.get('showTemporary'));
-                settings.set('schedulingCompactMode', this.model.get('compact'));
+                settings.set('scheduling/Zoomlevel', this.model.get('zoom'));
+                settings.set('scheduling/OnlyWorkingHours', this.model.get('onlyWorkingHours'));
+                settings.set('scheduling/ShowFree', this.model.get('showFree'));
+                settings.set('scheduling/ShowAbsent', this.model.get('showAbsent'));
+                settings.set('scheduling/ShowReserved', this.model.get('showReserved'));
+                settings.set('scheduling/ShowTemporary', this.model.get('showTemporary'));
+                settings.set('scheduling/CompactMode', this.model.get('compact'));
                 settings.save();
             },
 
