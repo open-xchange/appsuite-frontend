@@ -1065,7 +1065,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onDoubleClick: function (e) {
             // emulate a third click
             // as users expect this one to be part of the selection (dialog also closes)
-            this.onClick(e);
+            if (!$(e.currentTarget).hasClass('selected')) this.onClick(e);
         }
     };
 
