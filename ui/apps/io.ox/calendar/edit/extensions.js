@@ -16,6 +16,8 @@ define('io.ox/calendar/edit/extensions', [
     'gettext!io.ox/calendar/edit/main',
     'io.ox/calendar/util',
     'io.ox/contacts/util',
+    'io.ox/mail/util',
+    'io.ox/core/util',
     'io.ox/backbone/views',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
@@ -30,7 +32,7 @@ define('io.ox/calendar/edit/extensions', [
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'less!io.ox/calendar/style'
-], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
+], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
 
     'use strict';
 
@@ -67,7 +69,9 @@ define('io.ox/calendar/edit/extensions', [
                 .on('click', function () {
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
                         fail = _.bind(baton.app.onError || _.noop, baton.app),
-                        folder = baton.model.get('folder_id');
+                        folder = baton.model.get('folder_id'),
+                        inputfieldVal = baton.parentView.$el.find('.add-participant.tt-input').val();
+
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
                         //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
@@ -83,7 +87,20 @@ define('io.ox/calendar/edit/extensions', [
                     var timezone = baton.model.get('endTimezone');
                     baton.model.unset('endTimezone', { silent: true });
                     baton.model.endTimezone = timezone;
-                    baton.model.save().then(save, fail);
+
+                    //check if participants inputfield contains a valid email address
+                    if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
+                        var participantModel = new baton.model._participants.model({
+                            display_name: mailUtil.parseRecipient(inputfieldVal)[0],
+                            email1: mailUtil.parseRecipient(inputfieldVal)[1],
+                            field: 'email1', type: 5
+                        });
+                        participantModel.loading.done(function () {
+                            baton.model._participants.oldAdd(participantModel);
+                        }).always(function () { baton.model.save().then(save, fail); });
+                    } else {
+                        baton.model.save().then(save, fail);
+                    }
                 })
             );
 
@@ -723,7 +740,7 @@ define('io.ox/calendar/edit/extensions', [
                             defs.push(mod.loading);
                         });
                         $.when.apply($, defs).done(function () {
-                            // first reset then addUniquely collection might not reraw correctly otherwise in some cases
+                            // first reset then addUniquely collection might not redraw correctly otherwise in some cases
                             e.data.model._participants.reset([]);
                             e.data.model._participants.addUniquely(models);
                         });
