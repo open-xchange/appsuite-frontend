@@ -751,16 +751,16 @@ define('io.ox/core/folder/api', [
 
         // already cached?
         var module = options.module,
-            collection = getFlatCollection(module, 'private');
+            collection = getFlatCollection(module, 'private'),
+            cached = {};
 
         if (collection.fetched && options.cache === true) {
-            return $.when({
-                'private': collection.toJSON(),
-                'public':  getFlatCollection(module, 'public').toJSON(),
-                'shared':  getFlatCollection(module, 'shared').toJSON(),
-                'sharing': getFlatCollection(module, 'sharing').toJSON(),
-                'hidden':  getFlatCollection(module, 'hidden').toJSON()
+            cached['private'] = collection.toJSON();
+            ['public', 'shared', 'sharing', 'hidden'].forEach(function (section) {
+                var collection = getFlatCollection(module, section);
+                if (collection.fetched) cached[section] = collection.toJSON();
             });
+            return $.when(cached);
         }
 
         return http.GET({
