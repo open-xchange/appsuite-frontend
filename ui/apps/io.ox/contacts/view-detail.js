@@ -25,8 +25,11 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/util',
     'io.ox/core/capabilities',
     'gettext!io.ox/contacts',
+    'settings!io.ox/contacts',
+    'io.ox/core/tk/attachments',
+    'io.ox/core/http',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, attachments, http) {
 
     'use strict';
 
@@ -254,6 +257,7 @@ define('io.ox/contacts/view-detail', [
             }
 
             // remove duplicates to fix backend bug
+            http.pause();
             _(list)
                 .chain()
                 .filter(function (member) {
@@ -265,6 +269,7 @@ define('io.ox/contacts/view-detail', [
                 .each(function (member) {
                     ext.point('io.ox/contacts/detail/member').invoke('draw', $list, member);
                 }, this);
+            http.resume();
         }
     });
 

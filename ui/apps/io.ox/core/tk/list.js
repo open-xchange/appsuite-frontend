@@ -179,29 +179,9 @@ define('io.ox/core/tk/list', [
             }
         },
 
+        // bundle draws
         onAdd: function (model) {
-            this.idle();
-
-            var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
-                children = this.getItems(),
-                li = this.renderListItem(model);
-
-            // manage the empty message
-            this.$el.find('.message-empty-container').toggleClass('hidden', this.collection.length > 0);
-
-            // insert or append
-            if (index < children.length) {
-                children.eq(index).before(li);
-                // scroll position might have changed due to insertion
-                if (li[0].offsetTop <= this.el.scrollTop) {
-                    this.el.scrollTop += li.outerHeight(true);
-                }
-            } else {
-                this.$el.append(li);
-            }
-
-            // forward event
-            this.trigger('add', model, index);
+            this.queue.add(model).render();
         },
 
         onRemove: function (model) {
@@ -463,7 +443,7 @@ define('io.ox/core/tk/list', [
                 swipe: false
             }, options);
 
-            var events = {}, dndEnabled = false;
+            var events = {}, dndEnabled = false, self = this;
 
             // selection?
             if (this.options.selection) {
@@ -531,8 +511,7 @@ define('io.ox/core/tk/list', [
 
             // helper to detect scrolling in action, only used by mobiles
             if (_.device('smartphone')) {
-                var self = this,
-                    timer,
+                var timer,
                     scrollPos = 0;
                 this.selection.isScrolling = false;
                 this.$el.scroll(function () {
@@ -553,6 +532,23 @@ define('io.ox/core/tk/list', [
             this.on('dispose', function () {
                 $(window).off('resize.list-view');
             });
+
+            this.queue = {
+
+                list: [],
+
+                add: function (item) {
+                    this.list.push(item);
+                    return this;
+                },
+
+                render: _.debounce(this.renderListItems.bind(this), 10),
+
+                iterate: function (fn) {
+                    this.list.forEach(fn.bind(self));
+                    this.list = [];
+                }
+            };
         },
 
         forwardCollectionEvents: function (name) {
@@ -704,6 +700,35 @@ define('io.ox/core/tk/list', [
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
+        },
+
+        renderListItems: function () {
+
+            this.idle();
+
+            // do this line once (expensive)
+            var children = this.getItems();
+
+            this.queue.iterate(function (model) {
+
+                var index = model.has('index') ? model.get('index') : this.collection.indexOf(model),
+                    li = this.renderListItem(model);
+
+                // insert or append
+                if (index < children.length) {
+                    children.eq(index).before(li);
+                    // scroll position might have changed due to insertion
+                    if (li[0].offsetTop <= this.el.scrollTop) {
+                        this.el.scrollTop += li.outerHeight(true);
+                    }
+                } else {
+                    this.$el.append(li);
+                }
+
+                // forward event
+                this.trigger('add', model, index);
+
+            });
         },
 
         getBaton: function (model) {
