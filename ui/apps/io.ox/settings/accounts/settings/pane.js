@@ -19,13 +19,15 @@ define('io.ox/settings/accounts/settings/pane', [
     'io.ox/core/folder/api',
     'io.ox/settings/util',
     'io.ox/core/notifications',
+    'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/disposable',
     'io.ox/core/api/filestorage',
+    'settings!io.ox/core',
     'gettext!io.ox/settings/accounts',
     'io.ox/backbone/mini-views/settings-list-view',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, listUtils, DisposableView, filestorageApi, gt, ListView) {
+], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, mini, listUtils, DisposableView, filestorageApi, coreSettings, gt, ListView) {
 
     'use strict';
 
@@ -72,6 +74,19 @@ define('io.ox/settings/accounts/settings/pane', [
                    })
                )
             );
+        },
+        drawCertificateValidation = function () {
+            // make sure event handlers don't multiply on redraw
+            coreSettings.off('change:security/AllowUntrustedTLSEndpoints').on('change:security/AllowUntrustedTLSEndpoints', function () {
+                this.save();
+            });
+            return $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').addClass('control-label').text(gt('Allow accounts with untrusted certificates')).prepend(
+                                new mini.CheckboxView({ name: 'security/AllowUntrustedTLSEndpoints', model: coreSettings }).render().$el
+                            )
+                        )
+                    );
         },
 
         drawRecoveryButtonHeadline = function () {
@@ -273,6 +288,10 @@ define('io.ox/settings/accounts/settings/pane', [
                     });
 
                 $pane.append(accountsList.render().$el);
+
+                if (coreSettings.isConfigurable('security/AllowUntrustedTLSEndpoints')) {
+                    $pane.append(drawCertificateValidation());
+                }
 
                 if (collection.length > 1) {
                     $pane.append(drawRecoveryButtonHeadline(), drawRecoveryButton());
