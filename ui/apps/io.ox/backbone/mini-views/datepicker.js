@@ -200,11 +200,13 @@ define('io.ox/backbone/mini-views/datepicker', [
             var timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
             if (_.isNaN(timestamp)) return;
             timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
-            this.nodes.dayField.val(this.getDateStr(timestamp)).trigger('change');
+            this.nodes.dayField.val(this.getDateStr(timestamp));
             if (!this.mobileMode) {
                 this.nodes.timeField.val(timestamp.format('LT'));
                 this.nodes.timezoneField.text(gt.noI18n(timestamp.zoneAbbr()));
             }
+            // trigger change after all fields are updated, not before. Otherwise we update the model with a wrong time value
+            this.nodes.dayField.trigger('change');
         },
 
         updateModel: function () {
