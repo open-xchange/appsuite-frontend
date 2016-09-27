@@ -48,7 +48,8 @@ define('io.ox/contacts/addressbook/popup', [
     // feature toggles
     var useInitials = settings.get('picker/useInitials', true),
         useInitialsColor = useInitials && settings.get('picker/useInitialsColor', true),
-        useLabels = settings.get('picker/useLabels', false);
+        useLabels = settings.get('picker/useLabels', false),
+        closeOnDoubleClick = settings.get('picker/closeOnDoubleClick', true);
 
     //
     // Build a search index
@@ -492,26 +493,27 @@ define('io.ox/contacts/addressbook/popup', [
                 this.$('.search-field').on('input', onInput);
             },
             onCursorDown: function () {
-                var view = this;
                 this.$('.search-field').on('keydown', function (e) {
                     if (!(e.which === 40 || e.which === 13)) return;
-                    view.listView.selection.select(0);
-                });
+                    this.listView.selection.select(0);
+                }.bind(this));
             },
             onDoubleClick: function () {
-                var view = this;
-                this.$('.list-view').on('dblclick', '.list-item', function () {
-                    view.trigger('select');
-                    view.close();
-                });
+                if (!closeOnDoubleClick) return;
+                this.$('.list-view').on('dblclick', '.list-item', function (e) {
+                    // emulate a third click
+                    // as users expect this one to be part of the selection (dialog also closes)
+                    if (!$(e.currentTarget).hasClass('selected')) this.selection.onClick(e);
+                    this.trigger('select');
+                    this.close();
+                }.bind(this));
             },
             onEscape: function () {
-                var view = this;
                 this.$('.list-view').on('keydown', function (e) {
                     if (e.which !== 27) return;
                     e.preventDefault();
-                    view.$('.search-field').focus();
-                });
+                    this.$('.search-field').focus();
+                }.bind(this));
             },
             onSelectionChange: function () {
 

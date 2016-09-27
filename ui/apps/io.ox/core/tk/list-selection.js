@@ -973,7 +973,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.view.$el
                 .on('click', SELECTABLE, $.proxy(this.onClick, this))
                 .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
-                .on('dblclick', SELECTABLE, $.proxy(this.onDoubleClick, this))
                 .on('focus', $.proxy(this.onFocus, this));
         },
 
@@ -1060,12 +1059,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             this.resetTabIndex(items, items.eq(index));
             this.focus(index, items);
-        },
-
-        onDoubleClick: function (e) {
-            // emulate a third click
-            // as users expect this one to be part of the selection (dialog also closes)
-            if (!$(e.currentTarget).hasClass('selected')) this.onClick(e);
         }
     };
 
