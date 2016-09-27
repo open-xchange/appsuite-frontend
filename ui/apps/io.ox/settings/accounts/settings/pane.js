@@ -77,13 +77,13 @@ define('io.ox/settings/accounts/settings/pane', [
         },
         drawCertificateValidation = function () {
             // make sure event handlers don't multiply on redraw
-            coreSettings.off('change:security/allowUntrustedTLSEndpoints').on('change:security/allowUntrustedTLSEndpoints', function () {
+            coreSettings.off('change:security/acceptUntrustedCertificates').on('change:security/acceptUntrustedCertificates', function () {
                 this.save();
             });
-            return $('<div>').addClass('form-group expertmode').append(
+            return $('<div>').addClass('form-group').append(
                         $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Allow accounts with untrusted certificates')).prepend(
-                                new mini.CheckboxView({ name: 'security/allowUntrustedTLSEndpoints', model: coreSettings }).render().$el
+                            $('<label>').addClass('control-label').text(gt('Allow connections with untrusted certificates')).prepend(
+                                new mini.CheckboxView({ name: 'security/acceptUntrustedCertificates', model: coreSettings }).render().$el
                             )
                         )
                     );
@@ -289,7 +289,7 @@ define('io.ox/settings/accounts/settings/pane', [
 
                 $pane.append(accountsList.render().$el);
 
-                if (coreSettings.isConfigurable('security/allowUntrustedTLSEndpoints')) {
+                if (coreSettings.isConfigurable('security/acceptUntrustedCertificates')) {
                     $pane.append(drawCertificateValidation());
                 }
 
