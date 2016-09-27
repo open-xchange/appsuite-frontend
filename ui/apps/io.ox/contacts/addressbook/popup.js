@@ -249,6 +249,7 @@ define('io.ox/contacts/addressbook/popup', [
                 initial_color: util.getInitialsColor(useInitialsColor && initials),
                 last_name: item.last_name,
                 list: item.mark_as_distributionlist ? item.distribution_list : false,
+                mail_full_name: util.getMailFullName(item),
                 // all lower-case to be case-insensitive; replace spaces to better match server-side collation
                 sort_name: sort_name.concat(address).join('_').toLowerCase().replace(/\s/g, '_'),
                 title: item.title
@@ -292,6 +293,7 @@ define('io.ox/contacts/addressbook/popup', [
                     initial_color: '',
                     label: item.members,
                     last_name: '',
+                    mail_full_name: util.getMailFullName(item),
                     // all lower-case to be case-insensitive; replace spaces to better match server-side collation
                     sort_name: item.display_name.toLowerCase().replace(/\s/g, '_'),
                     title: item.title
@@ -329,6 +331,11 @@ define('io.ox/contacts/addressbook/popup', [
     //
 
     var isOpen = false, cachedResponse = null, folder = 'all', appeared = {};
+
+    // clear cache on address book changes
+    api.on('create update delete', function () {
+        cachedResponse = null;
+    });
 
     var sections = {
         'private': gt('My address books'),
@@ -662,7 +669,7 @@ define('io.ox/contacts/addressbook/popup', [
                     .chain()
                     .map(function (item) {
                         if (item.list || item.label) return flatten(item.list || item.label);
-                        var name = item.display_name, mail = item.mail || item.email;
+                        var name = item.mail_full_name, mail = item.mail || item.email;
                         return {
                             array: [name || null, mail || null],
                             display_name: name,
