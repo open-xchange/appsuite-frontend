@@ -263,6 +263,8 @@ define('io.ox/contacts/addressbook/popup', [
 
             list.forEach(function (item, i) {
 
+                if (!item.members || !item.members.length) return;
+
                 item.display_name = String(item.title);
 
                 // translate into array of object
@@ -342,6 +344,7 @@ define('io.ox/contacts/addressbook/popup', [
         return new ModalDialog({
             enter: false,
             focus: '.search-field',
+            invokeWithView: true,
             maximize: 600,
             point: 'io.ox/contacts/addressbook-popup',
             title: gt('Select contacts')
