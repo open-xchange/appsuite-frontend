@@ -126,6 +126,16 @@ msgid_plural "%1$d hours and %2$s"
 msgstr[0] "%1$d 小时和 %2$s"
 msgstr[1] "%1$d 小时和 %2$s"
 
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$s item selected"
+#| msgid_plural "%1$s items selected"
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "已选定 %1$d 个项目"
+msgstr[1] "已选定 %1$d 个项目"
+
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core
 msgid "%1$d member"
@@ -1112,6 +1122,12 @@ msgid ""
 "the selected folder."
 msgstr "所有来自选定邮件发送人的未来消息，将会移到选定的文件夹里。"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete group"
+msgid "All groups"
+msgstr "删除组"
+
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "All messages have been deleted"
 msgstr "已删除所有消息"
@@ -2093,7 +2109,9 @@ msgstr "条件"
 msgid "Configuration Email"
 msgstr "设置电子邮件"
 
-#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
+#. term is followed by a space and three dots (' …')
+#. the dots refer to the term 'Categories' right above this dropdown entry
+#. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -2371,6 +2389,13 @@ msgstr "创建约会"
 msgid "Create contact"
 msgstr "创建联系人"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create distibution list"
+msgstr "创建通讯组列表"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -2816,6 +2841,7 @@ msgstr "通讯组列表详情"
 msgid "Distribution list"
 msgstr "通讯组列表"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "已保存通讯组列表"
@@ -5357,6 +5383,7 @@ msgid "My tasks"
 msgstr "我的任务"
 
 #. Name of distribution list
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -6302,6 +6329,12 @@ msgstr "请输入一个描述。"
 msgid "Please enter a feed URL."
 msgstr "请输入一个 feed URL。"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Please enter a name for the group of feeds."
+msgid "Please enter a name for the distribution list"
+msgstr "请为 feed 组输入一个名称。"
+
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Please enter a search query"
 msgstr "请输入一个搜索查詢"
@@ -6375,6 +6408,10 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "请输入您的密码。"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+msgid "Please note that distribution lists cannot contain ressources."
+msgstr ""
+
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
@@ -6417,6 +6454,12 @@ msgstr "请选择一个有效 iCal 文件作汇入"
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 msgid "Please select a valid image File to insert"
 msgstr "请选择一个有效图像文件作插入"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Please define at least one action."
+msgid "Please select at least one participant"
+msgstr "请定义最少一个动作。"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -7305,7 +7348,8 @@ msgid "Save as PDF"
 msgstr "另存为 PDF"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
+#: module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "保存为通讯组列表"
 
@@ -7812,7 +7856,7 @@ msgstr "显示为"
 msgid "Sign in"
 msgstr "登录"
 
-#. the word not the verb
+#. the noun not the verb
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #, fuzzy
 #| msgid "Sign in"
@@ -9258,6 +9302,7 @@ msgstr "上载进度"
 msgid "Uploading %1$s"
 msgstr "%1$s 上载中"
 
+#. headline for a progress bar
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #, fuzzy
 #| msgid "Add attachments"
@@ -13353,9 +13398,6 @@ msgstr "年"
 
 #~ msgid "Please enter a correct number."
 #~ msgstr "请输入一个正确数值。"
-
-#~ msgid "Please enter a name for the group of feeds."
-#~ msgstr "请为 feed 组输入一个名称。"
 
 #~ msgid "Please enter a valid date."
 #~ msgstr "请输入一个有效日期。"

@@ -130,6 +130,16 @@ msgid_plural "%1$d hours and %2$s"
 msgstr[0] "%1$d heure et %2$s"
 msgstr[1] "%1$d heures et %2$s"
 
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$s item selected"
+#| msgid_plural "%1$s items selected"
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "%1$s élément sélectionné"
+msgstr[1] "%1$s éléments sélectionnés"
+
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core
 msgid "%1$d member"
@@ -1134,6 +1144,12 @@ msgid ""
 msgstr ""
 "Tous les futurs messages des expéditeurs des courriels sélectionnés seront "
 "déplacés dans le dossier sélectionné."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete group"
+msgid "All groups"
+msgstr "Supprimer le groupe"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "All messages have been deleted"
@@ -2141,7 +2157,9 @@ msgstr "Conditions"
 msgid "Configuration Email"
 msgstr "Courriel de configuration"
 
-#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
+#. term is followed by a space and three dots (' …')
+#. the dots refer to the term 'Categories' right above this dropdown entry
+#. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -2423,6 +2441,13 @@ msgstr "Créer un rendez-vous"
 msgid "Create contact"
 msgstr "Créer un contact"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create distibution list"
+msgstr "Créer une liste de distribution"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -2872,6 +2897,7 @@ msgstr "Détails de la liste de distribution"
 msgid "Distribution list"
 msgstr "Liste de distribution"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "La liste de distribution a été enregistrée"
@@ -5486,6 +5512,7 @@ msgid "My tasks"
 msgstr "Mes tâches"
 
 #. Name of distribution list
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -6449,6 +6476,12 @@ msgstr "Veuillez saisir une description."
 msgid "Please enter a feed URL."
 msgstr "Veuillez saisir l'URL d'un flux."
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Please enter a name for the group of feeds."
+msgid "Please enter a name for the distribution list"
+msgstr "Veuillez saisir un nom pour le groupe de flux."
+
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Please enter a search query"
 msgstr "Veuillez formuler la recherche"
@@ -6527,6 +6560,10 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Veuillez saisir votre mot de passe."
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+msgid "Please note that distribution lists cannot contain ressources."
+msgstr ""
+
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
@@ -6574,6 +6611,12 @@ msgstr "Choisissez un fichier iCal valide à importer"
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 msgid "Please select a valid image File to insert"
 msgstr "Choisissez un fichier image valide à importer"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Please define at least one action."
+msgid "Please select at least one participant"
+msgstr "Veuillez définir au moins une action."
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -7477,7 +7520,8 @@ msgid "Save as PDF"
 msgstr "Enregistrer comme PDF"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
+#: module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Enregistrer comme liste de distribution"
 
@@ -7990,7 +8034,7 @@ msgstr "Affiché sous forme de"
 msgid "Sign in"
 msgstr "Se connecter"
 
-#. the word not the verb
+#. the noun not the verb
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #, fuzzy
 #| msgid "Sign in"
@@ -9527,6 +9571,7 @@ msgstr "Avancement du téléversement"
 msgid "Uploading %1$s"
 msgstr "Téléversement de %1$s"
 
+#. headline for a progress bar
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #, fuzzy
 #| msgid "Add attachments"
@@ -12484,9 +12529,6 @@ msgstr "aaaa"
 
 #~ msgid "Please enter a correct number."
 #~ msgstr "Veuillez saisir un nombre valide."
-
-#~ msgid "Please enter a name for the group of feeds."
-#~ msgstr "Veuillez saisir un nom pour le groupe de flux."
 
 #~ msgid "Please enter a valid date."
 #~ msgstr "Veuillez saisir une date valide."

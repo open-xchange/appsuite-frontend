@@ -116,6 +116,15 @@ msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
 msgstr[0] "%1$d 時間 %2$s"
 
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$s item selected"
+#| msgid_plural "%1$s items selected"
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "%1$s 件のアイテムが選択されています。"
+
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core
 msgid "%1$d member"
@@ -1099,6 +1108,12 @@ msgid ""
 msgstr ""
 "選択したメールの差出人からのこれからのメッセージは選択したフォルダへ移動しま"
 "す。"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete group"
+msgid "All groups"
+msgstr "グループを削除"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "All messages have been deleted"
@@ -2088,7 +2103,9 @@ msgstr "条件"
 msgid "Configuration Email"
 msgstr "構成メール"
 
-#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
+#. term is followed by a space and three dots (' …')
+#. the dots refer to the term 'Categories' right above this dropdown entry
+#. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -2368,6 +2385,13 @@ msgstr "アポイントを作成"
 msgid "Create contact"
 msgstr "連絡先を作成"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create distibution list"
+msgstr "配布リストを作成"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -2814,6 +2838,7 @@ msgstr "配布リスト詳細"
 msgid "Distribution list"
 msgstr "配布リスト"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "配布リストが保存されました。"
@@ -5393,6 +5418,7 @@ msgid "My tasks"
 msgstr "自分の仕事"
 
 #. Name of distribution list
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -6342,6 +6368,12 @@ msgstr "説明を入力してください。"
 msgid "Please enter a feed URL."
 msgstr "フィードの URL を入力してください。"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Please enter a name for the group of feeds."
+msgid "Please enter a name for the distribution list"
+msgstr "フィード グループ名を入力してください。"
+
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Please enter a search query"
 msgstr "検索クエリを入力してください。"
@@ -6415,6 +6447,10 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "パスワードを入力してください。"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+msgid "Please note that distribution lists cannot contain ressources."
+msgstr ""
+
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
@@ -6460,6 +6496,12 @@ msgstr "インポートする有効な iCal ファイルを選択してくださ
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 msgid "Please select a valid image File to insert"
 msgstr "挿入する画像ファイルを選択してください。"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Please define at least one action."
+msgid "Please select at least one participant"
+msgstr "少なくとも１つの仕事を指定してください。"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -7352,7 +7394,8 @@ msgid "Save as PDF"
 msgstr "PDF として保存"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
+#: module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "配布リストとして保存"
 
@@ -7856,7 +7899,7 @@ msgstr "公開方法"
 msgid "Sign in"
 msgstr "サインイン"
 
-#. the word not the verb
+#. the noun not the verb
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #, fuzzy
 #| msgid "Sign in"
@@ -9345,6 +9388,7 @@ msgstr "進行中"
 msgid "Uploading %1$s"
 msgstr "%1$sをアップロードしています..."
 
+#. headline for a progress bar
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #, fuzzy
 #| msgid "Add attachments"
@@ -15451,9 +15495,6 @@ msgstr "yyyy"
 
 #~ msgid "Please enter a correct number."
 #~ msgstr "正しい数を入力してください。"
-
-#~ msgid "Please enter a name for the group of feeds."
-#~ msgstr "フィード グループ名を入力してください。"
 
 #~ msgid "Please enter a valid date."
 #~ msgstr "有効な日付を入力してください。"

@@ -138,6 +138,17 @@ msgstr[0] "%1$d stunda un %2$s"
 msgstr[1] "%1$d stundas un %2$s"
 msgstr[2] "%1$d stundas un %2$s"
 
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$s item selected"
+#| msgid_plural "%1$s items selected"
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "%1$s vienība iezimēta"
+msgstr[1] "%1$s vienības iezīmētas"
+msgstr[2] "%1$s vienības iezīmētas"
+
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core
 msgid "%1$d member"
@@ -1152,6 +1163,12 @@ msgstr ""
 "Visi turpmākie ziņojumi no izvēlēto e-pastu nosūtītājiem tiks pārvietoti uz "
 "norādīto mapi."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete group"
+msgid "All groups"
+msgstr "Dzēst grupu"
+
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "All messages have been deleted"
 msgstr "Visi ziņojumi ir izdzēsti"
@@ -2150,7 +2167,9 @@ msgstr "Nosacījumi"
 msgid "Configuration Email"
 msgstr "Konfigurēšanas e-pasts"
 
-#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
+#. term is followed by a space and three dots (' …')
+#. the dots refer to the term 'Categories' right above this dropdown entry
+#. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -2432,6 +2451,13 @@ msgstr "Izveidot mītiņu"
 msgid "Create contact"
 msgstr "Izveidot kontaktu"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create distibution list"
+msgstr "Izveidot izplatīšanas sarakstu"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -2877,6 +2903,7 @@ msgstr "Izplatīšanas saraksta detaļas"
 msgid "Distribution list"
 msgstr "Izplatīšanas saraksts"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Izplatīšanas saraksts ir saglabāts"
@@ -5466,6 +5493,7 @@ msgid "My tasks"
 msgstr "Mani uzdevumi"
 
 #. Name of distribution list
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -6427,6 +6455,12 @@ msgstr "Lūdzu ievadiet aprakstu."
 msgid "Please enter a feed URL."
 msgstr "Lūdzu ievadiet avota URL."
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Please enter a name for the group of feeds."
+msgid "Please enter a name for the distribution list"
+msgstr "Lūdzu ievadiet avotu grupas nosaukumu."
+
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Please enter a search query"
 msgstr "Lūdzu ievadiet meklēšanas vaicājumu"
@@ -6500,6 +6534,10 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Lūdzu ievadiet paroli."
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+msgid "Please note that distribution lists cannot contain ressources."
+msgstr ""
+
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
@@ -6545,6 +6583,12 @@ msgstr "Lūdzu izvēlieties importam derīgu iCal failu"
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 msgid "Please select a valid image File to insert"
 msgstr "Lūdzu izvēlieties derīgu attēla failu"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Please define at least one action."
+msgid "Please select at least one participant"
+msgstr "Lūdzu definējiet vismaz vienu darbību."
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -7446,7 +7490,8 @@ msgid "Save as PDF"
 msgstr "Saglabāt kā PDF"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
+#: module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Saglabāt kā izplatīšanas sarakstu"
 
@@ -7963,7 +8008,7 @@ msgstr "Rādīts kā"
 msgid "Sign in"
 msgstr "Pieslēgšanās"
 
-#. the word not the verb
+#. the noun not the verb
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #, fuzzy
 #| msgid "Sign in"
@@ -9477,6 +9522,7 @@ msgstr "Ielādes progress"
 msgid "Uploading %1$s"
 msgstr "Ielādē %1$s"
 
+#. headline for a progress bar
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #, fuzzy
 #| msgid "Add attachments"
@@ -14558,9 +14604,6 @@ msgstr "yyyy"
 
 #~ msgid "Please enter a correct number."
 #~ msgstr "Lūdzu ievadiet pareizu skaitli."
-
-#~ msgid "Please enter a name for the group of feeds."
-#~ msgstr "Lūdzu ievadiet avotu grupas nosaukumu."
 
 #~ msgid "Please enter a valid date."
 #~ msgstr "Lūdzu ievadiet derīgu datumu"

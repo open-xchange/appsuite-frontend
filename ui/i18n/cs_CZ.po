@@ -140,6 +140,17 @@ msgstr[0] "%1$d hodinu a %2$s"
 msgstr[1] "%1$d hodiny a %2$s"
 msgstr[2] "%1$d hodin a %2$s"
 
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "%1$s item selected"
+#| msgid_plural "%1$s items selected"
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "%1$d položka vybrána"
+msgstr[1] "%1$d položky vybrány"
+msgstr[2] "%1$d položek vybráno"
+
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core
 msgid "%1$d member"
@@ -1157,6 +1168,12 @@ msgstr ""
 "Všechny budoucí zprávy od odesílatelů vyznačených zpráv budou přesunuty do "
 "vyznačené složky."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete group"
+msgid "All groups"
+msgstr "Smazat skupinu"
+
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "All messages have been deleted"
 msgstr "Všechny zprávy byly smazány"
@@ -2146,7 +2163,9 @@ msgstr "Podmínky"
 msgid "Configuration Email"
 msgstr "Konfigurační zpráva"
 
-#. section label is 'Inbox' like 'Configure inbox'; term is followed by a space and three dots (' …')
+#. term is followed by a space and three dots (' …')
+#. the dots refer to the term 'Categories' right above this dropdown entry
+#. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 #| msgid "Configure now"
@@ -2427,6 +2446,13 @@ msgstr "Vytvořit schůzku"
 msgid "Create contact"
 msgstr "Vytvořit kontakt"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create distibution list"
+msgstr "Vytvořit distribuční seznam"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
@@ -2872,6 +2898,7 @@ msgstr "Distribuční seznam, podrobnosti"
 msgid "Distribution list"
 msgstr "Distribuční seznam"
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "Distribuční seznam byl uložen"
@@ -5445,6 +5472,7 @@ msgid "My tasks"
 msgstr "Mé úkoly"
 
 #. Name of distribution list
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -6403,6 +6431,12 @@ msgstr "Změňte, prosím, popis."
 msgid "Please enter a feed URL."
 msgstr "Zadejte, prosím, URL kanálu."
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Please enter a name for the group of feeds."
+msgid "Please enter a name for the distribution list"
+msgstr "Zadejte, prosím, název skupiny kanálů."
+
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Please enter a search query"
 msgstr "Zadejte, prosím, co vyhledat"
@@ -6476,6 +6510,10 @@ msgstr ""
 msgid "Please enter your password."
 msgstr "Zadejte, prosím, své heslo."
 
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+msgid "Please note that distribution lists cannot contain ressources."
+msgstr ""
+
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
@@ -6521,6 +6559,12 @@ msgstr "Vyberte, prosím, platný soubor iCal k importu"
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 msgid "Please select a valid image File to insert"
 msgstr "Vyberte, prosím, platný soubor s obrázkem k vložení"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Please define at least one action."
+msgid "Please select at least one participant"
+msgstr "Nastavte, prosím, alespoň jednu činnost."
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -7422,7 +7466,8 @@ msgid "Save as PDF"
 msgstr "Uložit jako PDF"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
+#: module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Uložit jako distribuční seznam"
 
@@ -7938,7 +7983,7 @@ msgstr "Zobrazené jako"
 msgid "Sign in"
 msgstr "Přihlásit"
 
-#. the word not the verb
+#. the noun not the verb
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #, fuzzy
 #| msgid "Sign in"
@@ -9446,6 +9491,7 @@ msgstr "Probíhá nahrávání"
 msgid "Uploading %1$s"
 msgstr "Nahrávám %1$s"
 
+#. headline for a progress bar
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #, fuzzy
 #| msgid "Add attachments"
@@ -16628,9 +16674,6 @@ msgstr "rrrr"
 
 #~ msgid "Please enter a correct number."
 #~ msgstr "Zadejte, prosím, správné číslo."
-
-#~ msgid "Please enter a name for the group of feeds."
-#~ msgstr "Zadejte, prosím, název skupiny kanálů."
 
 #~ msgid "Please enter a valid date."
 #~ msgstr "Zadejte, prosím, platné datum."
