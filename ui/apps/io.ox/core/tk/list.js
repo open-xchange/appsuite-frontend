@@ -451,7 +451,7 @@ define('io.ox/core/tk/list', [
 
             // selection?
             if (this.options.selection) {
-                this.selection = new Selection(this);
+                this.selection = new Selection(this, this.options.selection);
                 events = {
                     'focus .list-item': 'onItemFocus',
                     'blur .list-item': 'onItemBlur',

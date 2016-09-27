@@ -20,7 +20,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         SWIPEMORE = '.swipe-button.more',
         isTouch = _.device('touch'),
         isLegacyWebview = _.device('android') && _.browser.android < '4.4',
-        behavior = settings.get('selectionMode', 'normal'),
+        defaultBehavior = settings.get('selectionMode', 'normal'),
         // mobile stuff
         THRESHOLD_X =        20, // touchmove threshold for mobiles in PX
         THRESHOLD_STICK =    40, // threshold in px
@@ -34,12 +34,17 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         cell,
         recentWindowsKey = false;
 
-    function Selection(view) {
+    function Selection(view, options) {
+
+        options = _.isObject(options) ? options : {};
 
         this.view = view;
-        this.behavior = behavior;
+        this.behavior = options.behavior || defaultBehavior;
         this._direction = 'down';
         this._lastPosition = -1;
+
+        if (this.behavior === 'alternative') _.extend(this, alternativeBehavior);
+
         this.view.$el
             .on('mousedown', $.proxy(this.onMousedown, this))
             .on('mouseup', $.proxy(this.onMouseup, this))
@@ -867,6 +872,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onFocus: function () {
 
         },
+
         getBehavior: function () {
             return this.behavior;
         }
@@ -940,10 +946,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
     };
 
     _.extend(Selection.prototype, prototype);
-
-    if (behavior === 'alternative') {
-        _.extend(Selection.prototype, alternativeBehavior);
-    }
 
     return Selection;
 });
