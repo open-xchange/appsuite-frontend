@@ -166,6 +166,7 @@ define('io.ox/contacts/addressbook/popup', [
                 module: 'contacts',
                 params: {
                     action: 'search',
+                    admin: settings.get('showAdmin', false),
                     columns: options.columns,
                     right_hand_limit: options.limit,
                     sort: 609
