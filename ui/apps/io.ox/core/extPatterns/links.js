@@ -410,7 +410,7 @@ define('io.ox/core/extPatterns/links', [
             if (isSmartphone) all.children().filter('[data-prio="none"]').parent().remove();
 
             if (lo.length > 1 && !allDisabled && (!multiple || extension.dropdown === true) && extension.dropdown !== false) {
-                var dd;
+                var dd, node;
                 nav.append(
                     $('<li class="dropdown">').append(
                         dd = $('<a>').addClass('actionlink ' + (options.smart ? 'smart-dropdown' : '')).attr({
@@ -433,11 +433,21 @@ define('io.ox/core/extPatterns/links', [
                             var left = $(this).parent().position().left;
                             $(this).next().attr('class', 'dropdown-menu' + (left < 200 ? '' : ' pull-right'));
                         }),
-                        $('<ul class="dropdown-menu pull-right" role="menu">')
+                        node = $('<ul class="dropdown-menu pull-right" role="menu">')
                             .attr('aria-label', isSmartphone ? gt('Actions') : gt('More'))
                             .append(lo)
                     )
                 );
+
+                // ugly workaround to prevent IE scrolling the parent object when Scrollbar is at the Top/Bottom and the Mousewheel/Touchpad is used
+                if (_.device('IE')) {
+                    node.on('wheel', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        //apply scrolling manually
+                        this.scrollTop = this.scrollTop + e.originalEvent.deltaY;
+                    });
+                }
 
                 if (!isSmartphone) {
                     dd.attr({
