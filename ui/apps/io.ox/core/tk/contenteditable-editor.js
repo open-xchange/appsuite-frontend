@@ -288,6 +288,12 @@ define.async('io.ox/core/tk/contenteditable-editor',
                 ed.on('BeforeRenderUI', function () {
                     rendered.resolve();
                 });
+
+                if (ed.oxContext && ed.oxContext.signature) {
+                    ed.on('BeforeSetContent', sanitizeAttributes);
+                }
+
+                ed.on('BeforePastePreProcess', sanitizeAttributes);
             }
         };
 
@@ -300,6 +306,21 @@ define.async('io.ox/core/tk/contenteditable-editor',
         function trimEnd(str) {
             return String(str || '').replace(/[\s\xA0]+$/g, '');
         }
+
+        var sanitizeAttributes = function (e) {
+            if (!e.content) return;
+            var tmp = document.createElement('DIV');
+            tmp.innerHTML = e.content;
+            var nodes = tmp.querySelectorAll('*');
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i], ai = 0, attr;
+                while (attr = node.attributes[ai++]) {
+                    if (/^on/i.test(attr.name)) { node.removeAttribute(attr.name); }
+                }
+            }
+            e.content = tmp.innerHTML;
+            tmp = null;
+        };
 
         var resizeEditor = _.debounce(function () {
             if (el === null) return;
