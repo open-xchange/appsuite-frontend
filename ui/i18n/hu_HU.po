@@ -1160,6 +1160,11 @@ msgstr "Összes találkozó"
 msgid "All timezones"
 msgstr "Összes időzóna"
 
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Allow connections with untrusted certificates"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "HTML formátumú e-mailek engedélyezése"

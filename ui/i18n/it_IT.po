@@ -1166,6 +1166,11 @@ msgstr "Tutti i miei appuntamenti"
 msgid "All timezones"
 msgstr "Tutti i fusi orari"
 
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Allow connections with untrusted certificates"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Consenti i messaggi di posta formattati in html"

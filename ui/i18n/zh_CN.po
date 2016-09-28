@@ -1144,6 +1144,11 @@ msgstr "我所有的约会"
 msgid "All timezones"
 msgstr "所有时区"
 
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Allow connections with untrusted certificates"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "允许 html 格式的电子邮件"

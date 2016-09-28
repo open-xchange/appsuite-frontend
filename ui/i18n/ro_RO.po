@@ -1188,6 +1188,11 @@ msgstr "Toate întâlnirile mele"
 msgid "All timezones"
 msgstr "Toate fusurile orare"
 
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Allow connections with untrusted certificates"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Permite mesajele în format html"

@@ -1130,6 +1130,11 @@ msgstr "Tüm randevularım"
 msgid "All timezones"
 msgstr "Tüm saat dilimleri"
 
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Allow connections with untrusted certificates"
+msgstr ""
+
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "html formatlı e-postalara izin ver"
