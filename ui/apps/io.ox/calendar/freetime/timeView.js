@@ -354,7 +354,8 @@ define('io.ox/calendar/freetime/timeView', [
                 this.keepScrollpos = start;
             }
 
-            if (!options.parentModel && moment().isoWeek() === this.model.get('currentWeek').isoWeek()) {
+            // must use start of week. Otherwise we get the wrong iso week in countries where the first day of the week is a sunday
+            if (!options.parentModel && moment().startOf('week').isoWeek() === this.model.get('currentWeek').isoWeek()) {
                 // special scrollposition on start
                 this.keepScrollpos = 'today';
             }
@@ -463,8 +464,15 @@ define('io.ox/calendar/freetime/timeView', [
                 if (addOnly === true) {
                     appointments = self.model.get('appointments');
                 }
+                var sorted;
                 for (var i = 0; i < participants.length; i++) {
-                    appointments[participants[i].id] = items[i] ? items[i].data : [];
+                    if (items [i]) {
+                        // sort by start_date
+                        sorted = _(items[i].data).sortBy('start_date');
+                        appointments[participants[i].id] = sorted;
+                    } else {
+                        appointments[participants[i].id] = [];
+                    }
                 }
                 // remove busy animation again
                 self.bodyNode.idle();
