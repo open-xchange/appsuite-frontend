@@ -533,8 +533,7 @@ define('io.ox/contacts/addressbook/popup', [
                         n = array.length,
                         hasItems = !!n;
 
-                    summary.toggle(hasItems);
-                    if (!hasItems) return;
+                    if (!hasItems) return summary.hide();
 
                     var addresses = _(array).pluck('email').join(', ');
                     summary.append(
@@ -552,6 +551,18 @@ define('io.ox/contacts/addressbook/popup', [
                         ),
                         $('<div class="addresses">').attr('title', addresses).text(addresses)
                     );
+
+                    summary.show();
+
+                    // adjust scrollTop to avoid overlapping of last item (bug 49035)
+                    var focus = this.listView.$('.list-item:focus');
+                    if (!focus.hasClass('selected')) return;
+
+                    var itemHeight = focus.outerHeight(),
+                        bottom = focus.position().top + itemHeight,
+                        height = this.listView.$el.outerHeight();
+
+                    if (bottom > height) this.listView.el.scrollTop += bottom - height;
                 });
 
                 this.listenTo(this.listView, 'selection:add', function (array) {
