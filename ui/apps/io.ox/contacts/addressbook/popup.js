@@ -615,6 +615,8 @@ define('io.ox/contacts/addressbook/popup', [
                     limit: options.isSearch ? LIMITS.search : LIMITS.render,
                     offset: 0
                 }, options);
+                // empty?
+                if (!list.length) return this.renderEmpty(options);
                 // get subset; don't draw more than n items by default
                 var subset = list.slice(options.offset, options.limit),
                     $el = this.$('.list-view');
@@ -631,6 +633,18 @@ define('io.ox/contacts/addressbook/popup', [
                 // restore selection
                 var ids = _(this.selection).keys();
                 this.listView.selection.set(ids);
+            };
+
+            this.renderEmpty = function (options) {
+                var $el = this.$('.list-view');
+                $el[0].innerHTML = '';
+                $el.append(
+                    $('<div class="message-empty-container">').append(
+                        $('<div class="message-empty">').text(
+                            options.isSearch ? gt('No matching items found.') : gt('Empty')
+                        )
+                    )
+                );
             };
 
             this.renderMoreItems = function () {
