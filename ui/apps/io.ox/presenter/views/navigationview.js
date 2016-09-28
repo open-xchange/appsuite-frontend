@@ -295,8 +295,9 @@ define('io.ox/presenter/views/navigationview', [
                 self = this;
 
             if (SMALL_DEVICE) {
-                prev.css({ 'min-width': '30px', padding: '0 4px' });
-                next.css({ 'min-width': '30px', padding: '0 4px' });
+                prev.css({ 'min-width': '20px', padding: '0 4px' });
+                next.css({ 'min-width': '20px', padding: '0 4px' });
+                slideInputWrapper.css('margin-left', 0);
             }
 
             function onPrevSlide(event) {
