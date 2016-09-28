@@ -1649,68 +1649,72 @@ define('io.ox/core/main', [
 
                     debug('Stage "load" > autoLaunch ...');
 
-                    // auto launch
-                    _(baton.autoLaunch)
-                    .chain()
-                    .map(function (id) {
-                        return getAutoLaunchDetails(id);
-                    })
-                    .filter(function (details) {
-                        //don’t autoload without manifest
-                        //don’t autoload disabled apps
-                        return ox.manifests.apps[details.app] !== undefined && !ox.manifests.isDisabled(details.app);
-                    })
-                    .each(function (details, index) {
-                        //only load first app on small devices
-                        if (_.device('smartphone') && index > 0) return;
-                        // split app/call
-                        var hash = _.url.hash(), launch, method, options = _(hash).pick('folder', 'id');
-                        debug('Auto launch:', details.app, options);
-                        launch = ox.launch(details.app, options);
-                        method = details.method;
-                        // TODO: all pretty hard-wired here; looks for better solution
-                        // special case: open viewer too?
-                        if (hash.app === 'io.ox/files' && hash.id !== undefined) {
-                            require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
-                                folderAPI.get(hash.folder)
-                                    .done(function () {
-                                        api.get(hash).done(function (data) {
-                                            new Viewer().launch({ files: [data], folder: hash.folder });
-                                        });
-                                    })
-                                    .fail(function (error) {
-                                        _.url.hash('id', null);
-                                        notifications.yell(error);
-                                    });
-                            });
-                        }
-                        // explicit call?
-                        if (method) {
-                            launch.done(function () {
-                                if (_.isFunction(this[method])) {
-                                    this[method]();
-                                }
-                            });
-                        }
-                        // non-app deeplinks
-                        var id = _.url.hash('reg');
-                        if (id && ox.registry.get(id)) {
-                            // normalise args
-                            var list = (_.url.hash('regopt') || '').split(','),
-                                data = {}, parts;
-                            // key:value, key:value... -> object
-                            _.each(list, function (str) {
-                                parts = str.split(':');
-                                data[parts[0]] = parts[1];
-                            });
-                            // call after app is ready
-                            launch.done(function () {
-                                ox.registry.call(id, 'client-onboarding', { data: data });
-                            });
-                        }
-                    });
+                    // store hash now or restored apps might have changed url
+                    var hash = _.copy(_.url.hash());
+
                     // restore apps
-                    ox.ui.App.restore();
+                    ox.ui.App.restore().always(function () {
+                        // auto launch
+                        _(baton.autoLaunch)
+                        .chain()
+                        .map(function (id) {
+                            return getAutoLaunchDetails(id);
+                        })
+                        .filter(function (details) {
+                            //don’t autoload without manifest
+                            //don’t autoload disabled apps
+                            return ox.manifests.apps[details.app] !== undefined && !ox.manifests.isDisabled(details.app);
+                        })
+                        .each(function (details, index) {
+                            //only load first app on small devices
+                            if (_.device('smartphone') && index > 0) return;
+                            // split app/call
+                            var launch, method, options = _(hash).pick('folder', 'id');
+                            debug('Auto launch:', details.app, options);
+                            launch = ox.launch(details.app, options);
+                            method = details.method;
+                            // TODO: all pretty hard-wired here; looks for better solution
+                            // special case: open viewer too?
+                            if (hash.app === 'io.ox/files' && hash.id !== undefined) {
+                                require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
+                                    folderAPI.get(hash.folder)
+                                        .done(function () {
+                                            api.get(hash).done(function (data) {
+                                                new Viewer().launch({ files: [data], folder: hash.folder });
+                                            });
+                                        })
+                                        .fail(function (error) {
+                                            _.url.hash('id', null);
+                                            notifications.yell(error);
+                                        });
+                                });
+                            }
+                            // explicit call?
+                            if (method) {
+                                launch.done(function () {
+                                    if (_.isFunction(this[method])) {
+                                        this[method]();
+                                    }
+                                });
+                            }
+                            // non-app deeplinks
+                            var id = _.url.hash('reg');
+                            if (id && ox.registry.get(id)) {
+                                // normalise args
+                                var list = (_.url.hash('regopt') || '').split(','),
+                                    data = {}, parts;
+                                // key:value, key:value... -> object
+                                _.each(list, function (str) {
+                                    parts = str.split(':');
+                                    data[parts[0]] = parts[1];
+                                });
+                                // call after app is ready
+                                launch.done(function () {
+                                    ox.registry.call(id, 'client-onboarding', { data: data });
+                                });
+                            }
+                        });
+                    });
 
                     baton.instantFadeOut = instantFadeOut;
                 })
