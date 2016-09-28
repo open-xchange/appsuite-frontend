@@ -293,7 +293,7 @@ define('io.ox/core/folder/view', [
                         return;
                     }
                     // and on appear
-                    tree.once('appear:' + id, function () {
+                    tree.onAppear(id, function () {
                         // defer selection; might be too fast otherwise
                         _.defer(function () {
                             tree.selection.preselect(id);
