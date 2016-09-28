@@ -308,8 +308,6 @@ define('io.ox/contacts/addressbook/popup', [
     // Sorter for use_count and sort_name
     //
     function sorter(a, b) {
-        if (a.list && !b.list) return +1;
-        if (b.list && !a.list) return -1;
         // asc with locale compare
         return a.sort_name.localeCompare(b.sort_name);
     }
