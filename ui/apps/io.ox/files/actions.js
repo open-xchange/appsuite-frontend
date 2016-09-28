@@ -86,26 +86,45 @@ define('io.ox/files/actions', [
                         current,
                         e.collection.has('one', 'modify'),
                         !util.hasStatus('lockedByOthers', e),
-                        (/\.(csv|txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
+                        (/\.(csv|txt|js|css|md|tmpl|html?)[\.pgp]*$/i).test(e.context.filename),
+                        (!(/\.pgp$/i).test(e.context.filename) || capabilities.has('guard')),  // if has .pgp, must have Guard capability
                         (e.baton.openedBy !== 'io.ox/mail/compose'),
                         util.isFolderType('!trash', e.baton)
                     );
                 });
             },
             action: function (baton) {
-                if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) {
-                    // if this was opened from the viewer, close it now
-                    if (baton.context && baton.context.viewerEvents) {
-                        baton.context.viewerEvents.trigger('viewer:close');
+                var launch = function (params) {
+                    if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) {
+                        // if this was opened from the viewer, close it now
+                        if (baton.context && baton.context.viewerEvents) {
+                            baton.context.viewerEvents.trigger('viewer:close');
+                        }
+                        return;
                     }
+                    ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id, params: _.extend({}, params) }).done(function () {
+                        // if this was opened from the viewer, close it now
+                        if (baton.context && baton.context.viewerEvents) {
+                            baton.context.viewerEvents.trigger('viewer:close');
+                        }
+                    });
+                };
+
+                // Check if Guard file.  If so, do auth then call with parameters
+                if ((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.endsWith('.pgp')) {
+                    require(['io.ox/guard/auth/authorizer'], function (guardAuth) {
+                        guardAuth.authorize().then(function (auth) {
+                            var params = {
+                                cryptoAction: 'Decrypt',
+                                cryptoAuth: auth
+                            };
+                            launch(params);
+                        });
+                    });
                     return;
                 }
-                ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id }).done(function () {
-                    // if this was opened from the viewer, close it now
-                    if (baton.context && baton.context.viewerEvents) {
-                        baton.context.viewerEvents.trigger('viewer:close');
-                    }
-                });
+
+                launch();
             }
         });
 
