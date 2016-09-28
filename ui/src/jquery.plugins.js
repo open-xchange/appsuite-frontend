@@ -105,11 +105,32 @@
         });
     };
 
+    function isScrolledOut(node, parent) {
+        var item = node.getBoundingClientRect(),
+            container = parent.getBoundingClientRect(),
+            visible = { topline: container.top, bottomline: container.top + parent.offsetHeight };
+        if (item.bottom < visible.topline) return 'top';
+        if (item.top < visible.topline) return 'top:partial';
+        if (item.top > visible.bottomline) return 'bottom';
+        if (item.bottom > visible.bottomline) return 'bottom:partial';
+    }
+
+    $.fn.intoView = function (parent, options) {
+        parent = parent[0] || parent;
+        var node = this[0],
+            opt = _.extend({ ignore: '' }, options),
+            scrolledOut = isScrolledOut(node, parent);
+        // use case: ignore bottom:partial for really large nodes (e.g. folder node with subfolders)
+        if (!scrolledOut || _(opt.ignore.split(',')).contains(scrolledOut)) return;
+        // alignToTop: top vs. bottom
+        node.scrollIntoView(/^(top|top:partial)$/.test(scrolledOut));
+    };
+
     $.fn.intoViewport = function (node) {
 
-        if (!node || this.length === 0) {
-            return this;
-        }
+        if (!node) node = this.closest('.scrollable-pane');
+
+        if (node.length === 0 || this.length === 0) return this;
 
         try {
 

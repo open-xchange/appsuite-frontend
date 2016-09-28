@@ -281,20 +281,14 @@ define('io.ox/core/folder/view', [
                         // folder 6 is special, it's the global addressbook and the only system folder under public section. Folderdata alone does not give this info.
                         section = folder.id === '6' ? 'public' : api.getSection(folder.type, folder.id);
 
-                    if (section && _(['mail', 'contacts', 'calendar', 'tasks', 'infostore']).contains(tree.module) && tree.flat && tree.context === 'app') {
+                    if (section && /(mail|contacts|calendar|tasks|infostore)/.test(tree.module) && tree.flat && tree.context === 'app') {
                         ids.push('virtual/flat/' + tree.module + '/' + section);
                     }
                     tree.open = _(tree.open.concat(ids)).uniq();
                 })
                 .always(function () {
-                    // try now
-                    if (tree.selection.preselect(id)) {
-                        tree.selection.scrollIntoView(id);
-                        return;
-                    }
-                    // and on appear
+                    // defer selection; might be too fast otherwise
                     tree.onAppear(id, function () {
-                        // defer selection; might be too fast otherwise
                         _.defer(function () {
                             tree.selection.preselect(id);
                             tree.selection.scrollIntoView(id);
@@ -327,19 +321,45 @@ define('io.ox/core/folder/view', [
 
             var ignoreChangeEvent = false;
 
+            function show(id, index, path) {
+                // ignore system root
+                if (index === 0) return;
+                // expand parents
+                if (index !== (path.length - 1)) {
+                    return this.onAppear(id, function (node) {
+                        if (!node.isOpen()) node.toggle(true);
+                    });
+                }
+                // scroll leaf into view
+                this.onAppear(id, function (node) {
+                    // cause folder node contains all sub folder nodes and can become quite large
+                    node.$el.intoView(this.$el, { ignore: 'bottom:partial' });
+                });
+            }
+
+            // on change via app.folder.set
+            app.on('folder:change', function (id) {
+                if (ignoreChangeEvent) return;
+                // updates selection manager
+                tree.selection.set(id);
+                tree.traversePath(id, show);
+            });
+
+            // on selection change
             tree.on('change', function (id) {
+                // updates folder manager
                 ignoreChangeEvent = true;
                 app.folder.set(id);
                 ignoreChangeEvent = false;
             });
 
+            // on selection change
             tree.on('virtual', function (id) {
                 app.trigger('folder-virtual:change', id);
             });
 
-            app.on('folder:change', function (id) {
-                if (ignoreChangeEvent) return;
-                tree.selection.set(id);
+            api.on('create', function (data) {
+                tree.traversePath(data.id, show);
             });
 
         }());

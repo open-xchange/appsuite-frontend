@@ -104,6 +104,15 @@ define('io.ox/core/folder/tree', [
             });
         },
 
+        // hint: doesn't cover 'sections'
+        traversePath: function (id, callback) {
+            var tree = this;
+            api.path(id).then(function (path) {
+                return _(path).pluck('id').forEach(callback.bind(tree));
+            });
+        },
+
+        // usually you want to use app.folder.set
         select: function (id) {
 
             var ids = [], tree = this;

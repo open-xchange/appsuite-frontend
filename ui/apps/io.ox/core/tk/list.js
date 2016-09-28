@@ -128,6 +128,13 @@ define('io.ox/core/tk/list', [
 
         }, 20),
 
+        // ensure first selected node is not scrolled out
+        onSelect: function (ids) {
+            var id = ids[0], node = this.selection.getNode(id);
+            if (!node.length) return;
+            node.intoView(this.$el);
+        },
+
         onLoad: function () {
             this.idle();
             // trigger scroll event after initial load
@@ -447,7 +454,8 @@ define('io.ox/core/tk/list', [
                 draggable: false,
                 selection: true,
                 scrollable: true,
-                swipe: false
+                swipe: false,
+                scrollto: false
             }, options);
 
             var events = {}, dndEnabled = false, self = this;
@@ -537,6 +545,10 @@ define('io.ox/core/tk/list', [
             if (this.options.pagination) {
                 // respond to window resize (see bug 37728)
                 $(window).on('resize.list-view', this.onScroll.bind(this));
+            }
+
+            if (this.options.scrollto) {
+                this.on('selection:add', _.debounce(this.onSelect.bind(this), 100));
             }
 
             this.on('dispose', function () {
