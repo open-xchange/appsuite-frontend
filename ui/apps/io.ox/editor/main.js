@@ -210,9 +210,9 @@ define('io.ox/editor/main', [
 
             // set state
             if ('id' in options) {
-                app.load({ folder_id: options.folder, id: options.id });
+                app.load({ folder_id: options.folder, id: options.id, params: options.params });
             } else if (_.url.hash('id')) {
-                app.load({ folder_id: _.url.hash('folder'), id: _.url.hash('id') });
+                app.load({ folder_id: _.url.hash('folder'), id: _.url.hash('id'), params: options.params });
             } else {
                 app.create();
             }
@@ -281,7 +281,13 @@ define('io.ox/editor/main', [
                 // create or update?
                 if (model.has('id')) {
                     // update
-                    return api.versions.upload({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
+                    var params = {};
+                    if ((data.meta && data.meta.Encrypted) || data.filename.endsWith('.pgp')) {
+                        params = {
+                            cryptoAction: 'Encrypt'
+                        };
+                    }
+                    return api.versions.upload({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename, params: params })
                         .done(function () {
                             previous = model.toJSON();
                         })
@@ -327,7 +333,7 @@ define('io.ox/editor/main', [
                 win.busy();
                 $.when(
                     api.get(o).fail(notifications.yell),
-                    $.ajax({ type: 'GET', url: api.getUrl(o, 'view') + '&' + _.now(), dataType: 'text' })
+                    $.ajax({ type: 'GET', url: api.getUrl(o, 'view', o) + '&' + _.now(), dataType: 'text' })
                 )
                 .done(function (data, text) {
                     win.idle();
