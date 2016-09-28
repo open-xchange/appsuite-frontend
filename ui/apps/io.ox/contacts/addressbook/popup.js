@@ -459,6 +459,7 @@ define('io.ox/contacts/addressbook/popup', [
             search: function () {
 
                 this.search = function (query) {
+                    query = $.trim(query);
                     var result, isSearch = query.length && query !== '@';
                     if (isSearch) {
                         // split query into single words (without leading @; covers edge-case)
