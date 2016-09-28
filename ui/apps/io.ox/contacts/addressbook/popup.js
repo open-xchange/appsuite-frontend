@@ -362,7 +362,7 @@ define('io.ox/contacts/addressbook/popup', [
                         ),
                         $('<div class="col-xs-6">').append(
                             $('<select class="form-control folder-dropdown invisible">').append(
-                                $('<option value="all">').text(gt('All address books')),
+                                $('<option value="all">').text(gt('All contacts')),
                                 $('<option value="all_lists">').text(gt('All distribution lists')),
                                 useLabels ? $('<option value="all_labels">').text(gt('All groups')) : $()
                             )
