@@ -90,6 +90,8 @@ define('io.ox/core/folder/tree', [
         // counter-part
         onAppear: function (id, handler) {
             id = String(id).replace(/\s/g, '_');
+            var node = this.getNodeView(id);
+            if (node) return handler.call(this, node);
             this.once('appear:' + id, handler);
         },
 
