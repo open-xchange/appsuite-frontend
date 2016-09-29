@@ -50,7 +50,7 @@ define('io.ox/backbone/views/extensible', ['io.ox/backbone/views/disposable', 'i
 
         invoke: function (type, $el) {
             var baton = new ext.Baton({ view: this, model: this.model });
-            this.point.invoke(type || 'render', $el || this.$el, baton);
+            this.point.invoke(type || 'render', this.options.invokeWithView ? this : $el || this.$el, baton);
             // close for further calls of extend
             closed[this.point.id] = true;
             return this;

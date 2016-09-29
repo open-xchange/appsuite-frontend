@@ -301,7 +301,7 @@ define('io.ox/mail/compose/extensions', [
                                 'title': title
                             })
                             .on('click', { attr: attr, model: baton.model }, onClickLabel)
-                            .tooltip({ animation: false, delay: 0, placement: 'bottom' })
+                            .tooltip({ animation: false, delay: 0, placement: 'bottom', trigger: 'hover' })
                         ),
                         node
                     )

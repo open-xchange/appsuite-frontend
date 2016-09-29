@@ -84,13 +84,14 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         open: function () {
             var o = this.options;
             this.render().$el.appendTo(o.container);
+            // remember previous focus
+            this.previousFocus = o.previousFocus || $(document.activeElement);
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
             this.$el.modal({ keyboard: false }).modal('show');
             this.$el.siblings().attr('aria-hidden', true);
             this.trigger('open');
             // set initial focus
-            this.previousFocus = $(document.activeElement);
             var elem = this.$(o.focus);
             if (elem.length) {
                 // dialog might be busy, i.e. elements are invisible so focus() might not work
