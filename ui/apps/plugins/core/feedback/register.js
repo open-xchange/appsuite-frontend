@@ -12,18 +12,20 @@
  */
 
 define('plugins/core/feedback/register', [
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/core',
     'io.ox/core/notifications',
     'settings!io.ox/core',
     'io.ox/core/api/user',
     'io.ox/core/extensions',
     'less!plugins/core/feedback/style'
-], function (dialogs, gt, notifications, settings, api, ext) {
+], function (ModalDialog, gt, notifications, settings, api, ext) {
 
     'use strict';
 
-    var includeUserInfo = settings.get('feeback/includeUserInfo', false);
+    // disabled as this is evil privacy: includeUserInfo = settings.get('feeback/includeUserInfo', false),
+    var apiToken, // temporary API token
+        feedbackService;
     function buildStarWidget(number, hover) {
         //number of stars and boolean to enable or disable the hovereffect, default is 5 stars and hover enabled
         number = number || 5;
@@ -96,80 +98,109 @@ define('plugins/core/feedback/register', [
         return { getValue: function () { return value; }, node: node };
     }
 
-    function sendFeedback(data) {
-        if (includeUserInfo) {
-            return api.getCurrentUser().then(function (userdata) {
-                data.user_id = ox.user_id;
-                data.email = userdata.get('email1');
-                //print data to console for now
-                console.log(data);
-                return $.when();
-                // TODO: check if backend is ready now?
-                //when backend is ready remove the placeholder 'console.log and return $.when' and use the correct function below
-
-                /*return http.PUT({//could be done to use all folders, see portal widget but not sure if this is needed
-                    module: 'feedback',
-                    params: { action: 'send',
-                        timezone: 'UTC'
-                    },
-                    data: data
-                });*/
-            });
+    ext.point('plugins/core/feedback').extend({
+        id: 'api',
+        index: 100,
+        initialize: function () {
+            console.info('Using debug feedback-service');
+            apiToken = '!Afasdfasfqa9asd8fnRFFAsd';
+            feedbackService = {
+                sendFeedback: function (data) {
+                    return $.ajax({
+                        method: 'PUT',
+                        //url: 'http://localhost:5000/feedback',
+                        url: 'https://ox-feedback.herokuapp.com/feedback',
+                        data: JSON.stringify(data),
+                        contentType: 'application/json; charset=UTF-8',
+                        processData: false,
+                        headers: { 'api-token': apiToken }
+                    });
+                }
+            };
         }
-        //print data to console for now
-        console.log(data);
-        return $.when();
-        // TODO: check if backend is ready now?
-        // when backend is ready remove the placeholder 'console.log and return $.when' and use the correct function below
+    });
 
-        /*return http.PUT({//could be done to use all folders, see portal widget but not sure if this is needed
-            module: 'feedback',
-            params: { action: 'send',
-                timezone: 'UTC'
-            },
-            data: data
-        });*/
+    function sendFeedback(data) {
+        /*if (includeUserInfo) {
+            return api.getCurrentUser().then(function (userdata) {
+                data.user = { id: ox.user_id, email: userdata.get('email1') };
+                // feedbackservice was loaded via SCRIPT tag, is an external script like
+                // analytics and should be implemented by the customer or OX SAAS
+                if (window.feedbackService) {
+                    return window.feedbackService.sendFeedback(data, apiToken);
+                }
+                return $.when();
+            });
+        }*/
+        if (feedbackService) {
+            return feedbackService.sendFeedback(data);
+        }
+        return $.when();
     }
 
     var feedback = {
         show: function () {
             var guid = _.uniqueId('feedback-note-'),
-                popup = new dialogs.ModalDialog()
-                    .header($('<h4>').text(gt('Feedback')))
-                    .addPrimaryButton('send', gt('Send feedback'), 'send')
-                    .addButton('cancel', gt('Cancel'), 'cancel'),
                 stars = buildStarWidget(settings.get('feeback/numberOfStars', 5), settings.get('feeback/showHover', true)),
                 note = $('<textarea class="feedback-note form-control" rows="5">').attr('id', guid),
+                popup = new ModalDialog({ enter: 'send', point: 'plugins/core/feedback', title: 'Feedback' })
+                .extend({
+                    text: function () {
+                        this.$body.append(
+                            $('<div class="feedback-welcome-text">')
+                                .text(gt('Please rate this product')),
+                            stars.node,
+                            $('<label class="feedback-label">').attr('for', guid).text(gt('Comments and suggestions')),
+                            note,
+                            $('<div class="feedback-info">')
+                                .text(gt('Please note, that support requests cannot be handled via the feedback-formular. If you have questions or problems please contact our support directly')),
+                            supportlink
+                            //$('<div class="feedback-userdata-notice">').text(includeUserInfo ? gt('Your email address will be included when sending this feedback') : '')
+
+                        );
+                    }
+                })
+                .addButton({ action: 'send', label: gt('Send') })
+                .addCancelButton(),
                 supportlink = settings.get('feedback/supportlink', '');
             if (supportlink !== '') {
                 supportlink = $('<a>').attr('href', supportlink);
             }
 
-            popup.getBody().append(
-                $('<div class="feedback-welcome-text">')
-                    .text(gt('Welcome. Please provide your feedback about this product')),
-                stars.node,
-                $('<label class="feedback-label">').attr('for', guid).text(gt('Comments and suggestions')),
-                note,
-                $('<div class="feedback-info">')
-                    .text(gt('Please note, that support requests cannot be handled via the feedback-formular. When you have questions or problems please contact our support directly')),
-                supportlink,
-                $('<div class="feedback-userdata-notice">').text(includeUserInfo ? gt('Your email address will be included when sending this feedback') : ''));
+            popup.on('send', function () {
+                var data = {
+                    feedback: {
+                        rating: stars.getValue(),
+                        text: note.val()
+                    },
+                    client: {
+                        ua: window.navigator.userAgent,
+                        browser: _(_.browser).pick(function (val) { return !!val; }),
+                        lang: ox.language
+                    },
+                    meta: {
+                        serverVersion: ox.serverConfig.serverVersion,
+                        uiVersion: ox.serverConfig.version,
+                        productName: ox.serverConfig.productName,
+                        path: ox.abs
+                    }
+                };
 
-            popup.show().done(function (action) {
-                if (action === 'send') {
-                    sendFeedback({ rating: stars.getValue(), message: note.val() })
+                sendFeedback(data)
                     .done(function () {
                         notifications.yell('success', gt('Thank you for your feedback'));
                     })
                     .fail(function (error) {
                         notifications.yell(error);
                     });
-                }
+
             });
+
+            popup.open();
+
         },
         drawButton: function () {
-            var position = settings.get('feedback/position', 'left'),
+            var position = settings.get('feedback/position', 'right'),
                 feedbackButton = $('<div class="feedback-button">').text('Feedback')
                 .addClass(position + 'side-button')
                 .on('click', this.show);
@@ -207,6 +238,8 @@ define('plugins/core/feedback/register', [
 
         }
     });
+
+    ext.point('plugins/core/feedback').invoke('initialize', this);
 
     return feedback;
 });
