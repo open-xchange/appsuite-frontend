@@ -222,13 +222,13 @@ define.async('io.ox/mail/compose/model', [
 
             // Get flat attachments
             mail.attachments = this.attributes.attachments.toJSON();
-            mail.attachments = _.filter(mail.attachments.models, function (attachment) {
-                return attachment.get('group') !== 'localFile';
+            mail.attachments = _.filter(mail.attachments, function (attachment) {
+                return attachment.group !== 'localFile';
             });
 
             _(mail.attachments).each(function (attachment) {
-                if (attachment.get('content')) {
-                    attachment.set('content', attachment.get('content').replace(/<img[^>]*src=\\?"data:[^>]*>/gi, ''));
+                if (attachment.content) {
+                    attachment.content = attachment.content.replace(/<img[^>]*src=\\?"data:[^>]*>/gi, '');
                 }
             });
 
