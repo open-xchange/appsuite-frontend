@@ -402,7 +402,7 @@ define('io.ox/core/extPatterns/links', [
                 var dd, node;
                 nav.append(
                     $('<li class="dropdown">').append(
-                        dd = $('<a href="#" class="actionlink" draggable="false" role="button" data-toggle="dropdown" data-action="more" aria-haspopup="true">')
+                        dd = $('<a href="#" class="io-ox-action-link" draggable="false" role="button" data-toggle="dropdown" data-action="more" aria-haspopup="true">')
                             .addClass(options.smart ? 'smart-dropdown' : '')
                             .attr('data-original-title', isSmartphone ? gt('Actions') : gt('More actions')).append(
                                 isSmartphone && !extension.compactDropdown ?
