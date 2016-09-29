@@ -281,7 +281,7 @@ define('io.ox/calendar/freetime/timeView', [
                     appointmentNode.css('z-index', 1 + zIndexbase[availabilityClasses[appointment.shown_as]] + index + (appointment.full_time ? 0 : 4000));
 
                     if (appointment.title) {
-                        appointmentNode.append($('<div class="title">').addClass(100 - right - left < baton.view.grid * 4 ? 'under-one-hour' : '').text(gt.noI18n(appointment.title)).append($('<span class="appointment-time">').text(util.getTimeInterval(appointment))))
+                        appointmentNode.addClass(100 - right - left < baton.view.grid * 4 ? 'under-one-hour' : '').append($('<div class="title">').text(gt.noI18n(appointment.title)).append($('<span class="appointment-time">').text(util.getTimeInterval(appointment))))
                         .attr({
                             title: appointment.title,
                             'aria-label': appointment.title,
