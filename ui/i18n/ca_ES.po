@@ -1101,11 +1101,6 @@ msgstr "Totes les carpetes"
 msgid "All attachments"
 msgstr "Tots els adjunts"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-msgid "All contacts"
-msgstr "Afegeix contacte"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1126,6 +1121,7 @@ msgstr "Totes les carpetes"
 msgid "All files have been deleted"
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Totes les carpetes"
@@ -3484,6 +3480,7 @@ msgid "Employment"
 msgstr "Ocupació"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Buit"
@@ -5805,6 +5802,7 @@ msgid "No mails in your inbox"
 msgstr "No hi ha correus a la vostra safata d'entrada"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr ""
@@ -11127,6 +11125,10 @@ msgstr ""
 
 #~ msgid "Advanced options"
 #~ msgstr "Opcions avançades"
+
+#, fuzzy
+#~ msgid "All contacts"
+#~ msgstr "Afegeix contacte"
 
 #~ msgid "Applications"
 #~ msgstr "Aplicacions"

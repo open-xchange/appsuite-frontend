@@ -1122,12 +1122,6 @@ msgstr "Visas mapes"
 msgid "All attachments"
 msgstr "Visi pievienojumi"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Add contact"
-msgid "All contacts"
-msgstr "Pievienot kontaktu"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1147,6 +1141,7 @@ msgstr "Visi faili"
 msgid "All files have been deleted"
 msgstr "Visi faili ir izdzēsti"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Visas mapes"
@@ -3457,6 +3452,7 @@ msgid "Employment"
 msgstr "Nodarbinātība"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Tukšs"
@@ -5746,6 +5742,7 @@ msgid "No mails in your inbox"
 msgstr "Jūsu pasta kastē nav vēstuļu"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Nav atrasta neviena vienība."
@@ -11308,6 +11305,11 @@ msgstr "yyyy"
 
 #~ msgid "All changes saved"
 #~ msgstr "Visas izmaiņas saglabātas"
+
+#, fuzzy
+#~| msgid "Add contact"
+#~ msgid "All contacts"
+#~ msgstr "Pievienot kontaktu"
 
 #~ msgid "All users"
 #~ msgstr "Visi lietotāji"

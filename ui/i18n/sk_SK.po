@@ -1125,12 +1125,6 @@ msgstr "Všetky priečinky"
 msgid "All attachments"
 msgstr "Všetky prílohy"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Add contact"
-msgid "All contacts"
-msgstr "Pridať člena"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1150,6 +1144,7 @@ msgstr "Všetky súbory"
 msgid "All files have been deleted"
 msgstr "Všetky súbory boli zmazané"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Všetky priečinky"
@@ -3458,6 +3453,7 @@ msgid "Employment"
 msgstr "Zamestnanie"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Prázdne"
@@ -5749,6 +5745,7 @@ msgid "No mails in your inbox"
 msgstr "Žiadne poštové správy v priečinku Prijaté"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Neboli nájdené žiadne zodpovedajúce položky."
@@ -11304,6 +11301,11 @@ msgstr "RRRR"
 
 #~ msgid "All changes saved"
 #~ msgstr "Všetky zmeny boli uložené"
+
+#, fuzzy
+#~| msgid "Add contact"
+#~ msgid "All contacts"
+#~ msgstr "Pridať člena"
 
 #~ msgid "All users"
 #~ msgstr "Všetci používatelia"

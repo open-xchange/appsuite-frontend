@@ -1083,12 +1083,6 @@ msgstr "所有文件夹"
 msgid "All attachments"
 msgstr "所有附件"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Add contact"
-msgid "All contacts"
-msgstr "添加联系人"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1108,6 +1102,7 @@ msgstr "所有文件"
 msgid "All files have been deleted"
 msgstr "已删除所有文件"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "所有文件夹"
@@ -3379,6 +3374,7 @@ msgid "Employment"
 msgstr "雇用"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "空置"
@@ -5634,6 +5630,7 @@ msgid "No mails in your inbox"
 msgstr "您的文件夹中没有邮件"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "没找到匹配项目。"
@@ -11026,6 +11023,11 @@ msgstr "年"
 
 #~ msgid "All changes saved"
 #~ msgstr "全部更改已保存"
+
+#, fuzzy
+#~| msgid "Add contact"
+#~ msgid "All contacts"
+#~ msgstr "添加联系人"
 
 #~ msgid "All users"
 #~ msgstr "所有用户"

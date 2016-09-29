@@ -1095,12 +1095,6 @@ msgstr "Todas as pastas"
 msgid "All attachments"
 msgstr "Todos os anexos"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Add contact"
-msgid "All contacts"
-msgstr "Adicionar contato"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1120,6 +1114,7 @@ msgstr "Todos os arquivos"
 msgid "All files have been deleted"
 msgstr "Todos os arquivos foram excluídos"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Todas as pastas"
@@ -3430,6 +3425,7 @@ msgid "Employment"
 msgstr "Emprego"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Vazio"
@@ -5720,6 +5716,7 @@ msgid "No mails in your inbox"
 msgstr "Nenhum e-mail na sua caixa de entrada"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Nenhum item correspondente encontrado."
@@ -11204,6 +11201,11 @@ msgstr "aaaa"
 
 #~ msgid "All Categories..."
 #~ msgstr "Todas as categorias..."
+
+#, fuzzy
+#~| msgid "Add contact"
+#~ msgid "All contacts"
+#~ msgstr "Adicionar contato"
 
 #~ msgid "All users"
 #~ msgstr "Todos os usuários"

@@ -1095,12 +1095,6 @@ msgstr "Alla mappar"
 msgid "All attachments"
 msgstr "Alla bilagor"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Add contact"
-msgid "All contacts"
-msgstr "Lägg till medlem"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1120,6 +1114,7 @@ msgstr "Alla filer"
 msgid "All files have been deleted"
 msgstr "Alla filer har tagits bort"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Alla mappar"
@@ -3412,6 +3407,7 @@ msgid "Employment"
 msgstr "Anställning"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Tomt"
@@ -5700,6 +5696,7 @@ msgid "No mails in your inbox"
 msgstr "Inga meddelanden i din inkorg"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Inga matchande objekt hittades."
@@ -11354,6 +11351,11 @@ msgstr "yyyy"
 
 #~ msgid "Alarm date for the reminder is missing."
 #~ msgstr "Datum för alarmets påminnelse saknas."
+
+#, fuzzy
+#~| msgid "Add contact"
+#~ msgid "All contacts"
+#~ msgstr "Lägg till medlem"
 
 #~ msgid "All internal users"
 #~ msgstr "Alla interna användare"

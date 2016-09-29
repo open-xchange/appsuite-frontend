@@ -1066,11 +1066,6 @@ msgstr "Tüm Klasörler"
 msgid "All attachments"
 msgstr "Tüm ekler "
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-msgid "All contacts"
-msgstr "Kişi ekle"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1091,6 +1086,7 @@ msgstr "Tüm dosyalar"
 msgid "All files have been deleted"
 msgstr "Bu dosya silinmediBu dosyalar silinmedi"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Tüm klasörler"
@@ -3450,6 +3446,7 @@ msgid "Employment"
 msgstr "İşe alım"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Boş"
@@ -5779,6 +5776,7 @@ msgid "No mails in your inbox"
 msgstr "Gelen kutunuzda herhangi bir e-posta bulunmuyor"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 #, fuzzy
 msgid "No matching items found."
@@ -11068,6 +11066,10 @@ msgstr "yyyy"
 
 #~ msgid "Advanced options"
 #~ msgstr "Gelişmiş Seçenekler"
+
+#, fuzzy
+#~ msgid "All contacts"
+#~ msgstr "Kişi ekle"
 
 #~ msgid "Applications"
 #~ msgstr "Uygulamalar"

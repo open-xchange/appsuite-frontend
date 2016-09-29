@@ -1085,11 +1085,6 @@ msgstr "Alle mapper"
 msgid "All attachments"
 msgstr "Alle vedlegg"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-msgid "All contacts"
-msgstr "Legg til kontaktinfo"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1109,6 +1104,7 @@ msgstr "Alle filer"
 msgid "All files have been deleted"
 msgstr "Alle filer har blitt slettet"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Alle mapper"
@@ -3401,6 +3397,7 @@ msgid "Employment"
 msgstr "Sysselsetting"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Tom"
@@ -5684,6 +5681,7 @@ msgid "No mails in your inbox"
 msgstr "Ingen e-post i innboksen din"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Ingen treff ble funnet."
@@ -10894,6 +10892,10 @@ msgstr "yyyy"
 
 #~ msgid "Advanced options"
 #~ msgstr "Avanserte alternativer"
+
+#, fuzzy
+#~ msgid "All contacts"
+#~ msgstr "Legg til kontaktinfo"
 
 #~ msgid "Applications"
 #~ msgstr "Applikasjoner"

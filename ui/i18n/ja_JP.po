@@ -1068,12 +1068,6 @@ msgstr "すべてのフォルダ"
 msgid "All attachments"
 msgstr "すべての添付ファイル"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Add contact"
-msgid "All contacts"
-msgstr "メンバを追加する"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1093,6 +1087,7 @@ msgstr "全てのファイル"
 msgid "All files have been deleted"
 msgstr "すべてのファイルを削除しました。"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "すべてのフォルダ"
@@ -3386,6 +3381,7 @@ msgid "Employment"
 msgstr "職業"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "何もありません。"
@@ -5671,6 +5667,7 @@ msgid "No mails in your inbox"
 msgstr "受信トレイにメールがありません。"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "アイテムが見つかりません。"
@@ -11316,6 +11313,11 @@ msgstr "yyyy"
 
 #~ msgid "All changes saved"
 #~ msgstr "すべての変更を保存しました。"
+
+#, fuzzy
+#~| msgid "Add contact"
+#~ msgid "All contacts"
+#~ msgstr "メンバを追加する"
 
 #~ msgid "All users"
 #~ msgstr "すべてのユーザ"

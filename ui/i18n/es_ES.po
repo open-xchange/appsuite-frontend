@@ -1100,12 +1100,6 @@ msgstr "Todas las carpetas"
 msgid "All attachments"
 msgstr "Todos los adjuntos"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "All my contacts"
-msgid "All contacts"
-msgstr "Todos mis contactos"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1125,6 +1119,7 @@ msgstr "Todos los ficheros"
 msgid "All files have been deleted"
 msgstr "Se han borrado todos los ficheros"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Todas las carpetas"
@@ -3438,6 +3433,7 @@ msgid "Employment"
 msgstr "Empleo"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Vacío"
@@ -5732,6 +5728,7 @@ msgid "No mails in your inbox"
 msgstr "No hay correos en su bandeja de entrada"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "No se encontraron elementos coincidentes."
@@ -11873,6 +11870,11 @@ msgstr "yyyy"
 
 #~ msgid "All changes saved"
 #~ msgstr "Todos los cambios están guardados"
+
+#, fuzzy
+#~| msgid "All my contacts"
+#~ msgid "All contacts"
+#~ msgstr "Todos mis contactos"
 
 #~ msgid "All times will be shown in the timezone %1$s"
 #~ msgstr "Todas las horas se muestran en la zona horaria %1$s"

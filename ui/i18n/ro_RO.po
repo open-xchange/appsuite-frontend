@@ -1124,12 +1124,6 @@ msgstr "Toate dosarele"
 msgid "All attachments"
 msgstr "Toate fișierele atașate"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Add contact"
-msgid "All contacts"
-msgstr "Adaugă contact"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1149,6 +1143,7 @@ msgstr "Toate fișierele"
 msgid "All files have been deleted"
 msgstr "Toate fișierele au fost șterse"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Toate dosarele"
@@ -3461,6 +3456,7 @@ msgid "Employment"
 msgstr "Loc de muncă"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Gol"
@@ -5753,6 +5749,7 @@ msgid "No mails in your inbox"
 msgstr "Niciun mesaj în dosarul dumneavoastră de mesaje primite"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Nu s-au găsit elemente corespunzătoare."
@@ -11340,6 +11337,11 @@ msgstr "aaaa"
 
 #~ msgid "All changes saved"
 #~ msgstr "Toate modificările au fost salvate"
+
+#, fuzzy
+#~| msgid "Add contact"
+#~ msgid "All contacts"
+#~ msgstr "Adaugă contact"
 
 #~ msgid "All users"
 #~ msgstr "Toți utilizatorii"

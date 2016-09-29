@@ -2809,7 +2809,9 @@ msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
-msgid "All contacts"
+#: apps/io.ox/search/facets/extensions.js
+#: module:io.ox/core
+msgid "All folders"
 msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js
@@ -2841,6 +2843,22 @@ msgstr[1] ""
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
 msgid "Clear selection"
+msgstr ""
+
+#. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#: apps/io.ox/find/main.js
+#: module:io.ox/core
+msgid "No matching items found."
+msgstr ""
+
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail
+msgid "Empty"
 msgstr ""
 
 #. Context: Add selected contacts; German "Auswählen", for example
@@ -7923,12 +7941,6 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
-#. search feature returns an empty result
-#: apps/io.ox/find/main.js
-#: module:io.ox/core
-msgid "No matching items found."
-msgstr ""
-
 #: apps/io.ox/find/view-facets.js
 #: module:io.ox/core
 msgid "Search facets"
@@ -8586,12 +8598,6 @@ msgstr ""
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
 msgid "has attachments"
-msgstr ""
-
-#. empty message for list view
-#: apps/io.ox/mail/common-extensions.js
-#: module:io.ox/mail
-msgid "Empty"
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js
@@ -10724,11 +10730,6 @@ msgstr ""
 #: apps/io.ox/preview/main.js
 #: module:io.ox/core
 msgid "Click to open."
-msgstr ""
-
-#: apps/io.ox/search/facets/extensions.js
-#: module:io.ox/core
-msgid "All folders"
 msgstr ""
 
 #: apps/io.ox/search/items/view-template.js

@@ -1127,12 +1127,6 @@ msgstr "Všechny složky"
 msgid "All attachments"
 msgstr "Všechny přílohy"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "All my contacts"
-msgid "All contacts"
-msgstr "Všechny mé kontakty"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1152,6 +1146,7 @@ msgstr "Všechny soubory"
 msgid "All files have been deleted"
 msgstr "Všechny soubory byly smazány"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Všechny složky"
@@ -3443,6 +3438,7 @@ msgid "Employment"
 msgstr "Zaměstnání"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Prázdné"
@@ -5725,6 +5721,7 @@ msgid "No mails in your inbox"
 msgstr "Vaše složka příchozích zpráv je prázdná"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Nepodařilo se nalézt žádné odpovídající položky"
@@ -11846,6 +11843,11 @@ msgstr "rrrr"
 
 #~ msgid "All changes saved"
 #~ msgstr "Všechny změny uloženy"
+
+#, fuzzy
+#~| msgid "All my contacts"
+#~ msgid "All contacts"
+#~ msgstr "Všechny mé kontakty"
 
 #~ msgid "All times will be shown in the timezone %1$s"
 #~ msgstr "Všechny časy budou zobrazeny v časové zóně %1$s"

@@ -1103,12 +1103,6 @@ msgstr "Alle Mappen"
 msgid "All attachments"
 msgstr "Alle bijlagen"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Add contact"
-msgid "All contacts"
-msgstr "Contactpersoon toevoegen"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1128,6 +1122,7 @@ msgstr "Alle bestanden"
 msgid "All files have been deleted"
 msgstr "Alle bestanden zijn verwijderd"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Alle mappen"
@@ -3452,6 +3447,7 @@ msgid "Employment"
 msgstr "Werk"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Leeg"
@@ -5749,6 +5745,7 @@ msgid "No mails in your inbox"
 msgstr "Geen e-mailberichten in uw Postvak IN"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "Geen overeenkomstige elementen gevonden"
@@ -11043,6 +11040,11 @@ msgstr "yyyy"
 #~| msgid "Assistant"
 #~ msgid "Afghanistan"
 #~ msgstr "Assistent"
+
+#, fuzzy
+#~| msgid "Add contact"
+#~ msgid "All contacts"
+#~ msgstr "Contactpersoon toevoegen"
 
 #~ msgid "Allow us to use your %s account here"
 #~ msgstr "Sta ons toe uw %s account hier te gebruiken"

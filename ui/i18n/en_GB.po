@@ -1095,12 +1095,6 @@ msgstr "All Folders"
 msgid "All attachments"
 msgstr "All attachments"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Add contact"
-msgid "All contacts"
-msgstr "Add contact"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -1120,6 +1114,7 @@ msgstr "All files"
 msgid "All files have been deleted"
 msgstr "All files have been deleted"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "All folders"
@@ -3423,6 +3418,7 @@ msgid "Employment"
 msgstr "Employment"
 
 #. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Empty"
 msgstr "Empty"
@@ -5710,6 +5706,7 @@ msgid "No mails in your inbox"
 msgstr "No email messages in your inbox"
 
 #. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "No matching items found."
 msgstr "No matching items found."
@@ -10973,6 +10970,11 @@ msgstr "yyyy"
 #~| msgid "Assistant"
 #~ msgid "Afghanistan"
 #~ msgstr "Assistant"
+
+#, fuzzy
+#~| msgid "Add contact"
+#~ msgid "All contacts"
+#~ msgstr "Add contact"
 
 #~ msgid "Allow us to use your %s account here"
 #~ msgstr "Allow us to use your %s account here"
