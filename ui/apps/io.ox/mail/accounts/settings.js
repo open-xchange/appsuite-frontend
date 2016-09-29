@@ -136,7 +136,7 @@ define('io.ox/mail/accounts/settings', [
         index: 300,
         draw: function () {
             if (window.location.protocol !== 'https:') return;
-            this.append($('<div class="help-block">').text('Your credentials will be sent over a secure connection only'));
+            this.append($('<div class="help-block">').text(gt('Your credentials will be sent over a secure connection only')));
         }
     });
 
