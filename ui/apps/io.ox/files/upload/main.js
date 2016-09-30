@@ -273,13 +273,13 @@ define('io.ox/files/upload/main', [
             .on('start', function () {
                 mainView.addClass('toolbar-bottom-visible');
                 $el = $('<div class="upload-wrapper">');
-                ext.point('io.ox/files/upload/toolbar').invoke('draw', $el);
+                ext.point('io.ox/files/upload/toolbar').invoke('draw', $el, ext.Baton({ fileupload: this }));
                 bottomToolbar.append($el);
-            })
+            }.bind(this))
             .on('progress', function (e, def, file) {
                 $('.upload-wrapper').find('.file-name').text(
                     //#. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-                    gt('Uploading %1$s', file.file.name)
+                    gt('Uploading "%1$s"', file.file.name)
                 );
             })
             .on('stop', function () {
@@ -296,7 +296,7 @@ define('io.ox/files/upload/main', [
      * If several files are loaded this toolbar provides links to open an overview of all currently uploaded files.
      */
     ext.point('io.ox/files/upload/toolbar').extend({
-        draw: function () {
+        draw: function (baton) {
             this.append(
                 $('<div class="upload-title">').append(
                     $('<div class="estimated-time">'),
@@ -309,6 +309,12 @@ define('io.ox/files/upload/main', [
                         require(['io.ox/files/upload/view'], function (uploadView) {
                             uploadView.show();
                         });
+                    })
+                ),
+                $('<div class="upload-cancel">').append(
+                    $('<a href=#>').text(gt('Cancel')).click(function (e) {
+                        e.preventDefault();
+                        baton.fileupload.abort();
                     })
                 ),
                 $('<div class="progress">').append(
