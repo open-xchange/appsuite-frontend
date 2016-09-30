@@ -24,84 +24,89 @@ define('plugins/core/feedback/register', [
 
     'use strict';
 
+    var captions = {
+        //#. 1 of 5 star rating
+        1: gt.pgettext('rating', 'It\'s really bad'),
+        //#. 2 of 5 star rating
+        2: gt.pgettext('rating', 'I don\'t like it'),
+        //#. 3 of 5 star rating
+        3: gt.pgettext('rating', 'It\'s ok'),
+        //#. 4 of 5 star rating
+        4: gt.pgettext('rating', 'I like it'),
+        //#. 5 of 5 star rating
+        5: gt.pgettext('rating', 'It\'s awesome')
+    };
+
     // disabled as this is evil privacy: includeUserInfo = settings.get('feeback/includeUserInfo', false),
     var StarRatingView = DisposableView.extend({
 
-        className: 'star-wrapper',
+        className: 'star-rating',
 
         events: {
             'keydown': 'onKeyDown',
-            'click .rating-star': 'updateStars',
-            'mouseenter .rating-star': 'updateStars',
-            'mouseleave .rating-star': 'updateStars'
+            'click .star': 'onClick',
+            'mouseenter .star': 'onHover',
+            'mouseleave .star': 'onHover'
         },
 
         initialize: function (options) {
-            options = _.extend({ hover: true }, options);
+            this.options = _.extend({ hover: true }, options);
             this.value = 0;
-            this.options = options;
-
-            //#. %1$d is current raiting
-            //#, c-format
-            this.$el.attr({ 'aria-label': gt('Rating %1$d of 5. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', this.value), tabindex: 0 });
+            this.$el.attr({
+                'aria-label': gt('Use left and right cursor keys to adjust your rating.'),
+                'aria-live': 'polite',
+                role: 'group',
+                tabindex: 0
+            });
         },
 
         render: function () {
-            this.$el.empty();
-            //build stars
-            for (var i = 0; i < 5; i++) {
-                this.$el.append($('<i class="fa fa-star rating-star">').attr('starnumber', i + 1));
-            }
+            this.$el.empty().append(
+                _.range(0, 5).map(function (i) {
+                    return $('<i class="fa fa-star star" role="presentation">').attr('data-rating', i + 1);
+                }),
+                $('<caption>').text('\u00a0')
+            );
             return this;
+        },
+
+        renderRating: function (value) {
+            this.$('.star').each(function (index) {
+                $(this).toggleClass('checked', index < value);
+            });
+            this.$('caption').text(captions[value]);
         },
 
         getValue: function () {
             return this.value;
         },
 
-        updateStars: function (e) {
-            if (!this.options.hover && (e.type === 'mouseleave' && e.type === 'mouseenter')) return;
+        setValue: function (value) {
+            if (value < 1 || value > 5) return;
+            this.value = value;
+            this.renderRating(value);
+            this.$el.attr('aria-label', gt('Rating %1$d of 5', value));
+        },
 
-            var starnumber = e.starnumber || $(e.target).attr('starnumber');
+        onClick: function (e) {
+            var value = $(e.currentTarget).data('rating');
+            this.setValue(value);
+        },
 
-            // reset stars on mouseleave
-            if (e.type === 'mouseleave') starnumber = this.value;
-
-            _(this.$('.rating-star')).each(function (star, index) {
-                $(star).toggleClass('active-star', index < starnumber);
-            });
-            // update on click
-            if (e.type === 'click') this.value = starnumber;
+        onHover: function (e) {
+            if (!this.options.hover) return;
+            var value = e.type === 'mouseenter' ? $(e.currentTarget).data('rating') : this.value;
+            this.renderRating(value);
         },
 
         onKeyDown: function (e) {
-            var activestars = this.$('.active-star').length;
+            var value = this.$('.checked').length;
             switch (e.which) {
-                case 37:
-                    // left arrow
-                    if (activestars - 1 >= 0) {
-                        this.updateStars({ starnumber: activestars - 1 });
-                    }
-                    this.$el.attr('aria-label', gt('Rating %1$d of 5. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', activestars - 1));
-                    break;
-                case 39:
-                    // right arrow
-                    if (activestars + 1 <= 5) {
-                        this.updateStars({ starnumber: activestars + 1 });
-                    }
-                    this.$el.attr('aria-label', gt('Rating %1$d of 5. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', activestars + 1));
-                    break;
-                case 13:
-                    // enter
-                    this.updateStars({ type: 'click', starnumber: activestars });
-                    this.$el.attr('aria-label', gt('Rating %1$d of 5 confirmed. Use the left and right arrowkeys to adjust your rating.', this.value));
-                    break;
-                case 9:
-                    // tab
-                    this.updateStars({ type: 'mouseleave', starnumber: this.value });
-                    this.$el.attr('aria-label', gt('Rating %1$d of 5. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', this.value));
-                    break;
-                    // no default
+                // cursor left
+                case 37: this.setValue(value - 1); break;
+                // cursor right
+                case 39: this.setValue(value + 1); break;
+                // no default
             }
         }
     });
@@ -132,55 +137,53 @@ define('plugins/core/feedback/register', [
     });
 
     function sendFeedback(data) {
-        /*if (includeUserInfo) {
-            return api.getCurrentUser().then(function (userdata) {
-                data.user = { id: ox.user_id, email: userdata.get('email1') };
-                // feedbackservice was loaded via SCRIPT tag, is an external script like
-                // analytics and should be implemented by the customer or OX SAAS
-                if (window.feedbackService) {
-                    return window.feedbackService.sendFeedback(data, apiToken);
-                }
-                return $.when();
-            });
-        }*/
-        if (feedbackService) {
-            return feedbackService.sendFeedback(data);
-        }
-        return $.when();
+        return feedbackService ? feedbackService.sendFeedback(data) : $.when();
     }
 
     var feedback = {
-        show: function () {
-            var guid = _.uniqueId('feedback-note-'),
-                starRatingView = new StarRatingView({ hover: settings.get('feeback/showHover', true) });
 
-            new ModalDialog({ enter: 'send', point: 'plugins/core/feedback', title: 'Feedback' })
+        show: function () {
+
+            new ModalDialog({ enter: 'send', point: 'plugins/core/feedback', title: gt('Your feedback') })
                 .extend({
                     title: function () {
-                        this.$body.append($('<div class="feedback-welcome-text">').text(gt('Please rate this product')));
+                        this.$body.append(
+                            $('<div class="feedback-welcome-text">').text(gt('Please rate this product'))
+                        );
                     },
                     starView: function () {
-                        this.$body.append(starRatingView.render().$el);
+                        this.starRatingView = new StarRatingView({ hover: settings.get('feeback/showHover', true) });
+                        this.$body.append(this.starRatingView.render().$el);
                     },
                     comment: function () {
-                        this.$body.append($('<label class="feedback-label">').attr('for', guid).text(gt('Comments and suggestions')), $('<textarea class="feedback-note form-control" rows="5">').attr('id', guid));
+                        var guid = _.uniqueId('feedback-note-');
+                        this.$body.append(
+                            $('<label>').attr('for', guid).text(gt('Comments and suggestions')),
+                            $('<textarea class="feedback-note form-control" rows="5">').attr('id', guid)
+                        );
                     },
                     infotext: function () {
-                        this.$body.append($('<div class="feedback-info">')
-                                .text(gt('Please note, that support requests cannot be handled via the feedback-formular. If you have questions or problems please contact our support directly')));
+                        this.$body.append(
+                            $('<div>').text(
+                                gt('Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly')
+                            )
+                        );
                     },
                     supportlink: function () {
                         if (settings.get('feedback/supportlink', '') === '') return;
-                        this.$body.append($('<a>').attr('href', settings.get('feedback/supportlink', '')));
+                        this.$body.append(
+                            $('<a>').attr('href', settings.get('feedback/supportlink', ''))
+                        );
                     }
                 })
-                .addButton({ action: 'send', label: gt('Send') })
                 .addCancelButton()
+                .addButton({ action: 'send', label: gt('Send') })
                 .on('send', function () {
+
                     var data = {
                         feedback: {
-                            rating: starRatingView.getValue(),
-                            text: this.$body.find('#' + guid).val()
+                            rating: this.starRatingView.getValue(),
+                            text: this.$('.feedback-note').val()
                         },
                         client: {
                             ua: window.navigator.userAgent,
@@ -199,18 +202,18 @@ define('plugins/core/feedback/register', [
                         .done(function () {
                             yell('success', gt('Thank you for your feedback'));
                         })
-                        .fail(function (error) {
-                            yell(error);
-                        });
+                        .fail(yell);
                 })
                 .open();
         },
 
         drawButton: function () {
-            $('#io-ox-core').append($('<div class="feedback-button">')
-                .text('Feedback')
+            $('#io-ox-core').append(
+                $('<button role="button" class="feedback-button" tabindex="0">')
+                .text(gt('Feedback'))
                 .addClass(settings.get('feedback/position', 'right') + 'side-button')
-                .on('click', this.show));
+                .on('click', this.show)
+            );
         }
     };
 
@@ -240,7 +243,6 @@ define('plugins/core/feedback/register', [
             if (_.device('!smartphone') && (currentSetting === 'both' || currentSetting === 'side')) {
                 feedback.drawButton();
             }
-
         }
     });
 

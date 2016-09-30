@@ -11,61 +11,64 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-.star-wrapper {
-    margin-top: 3px;
-    //don't make the stars too small since those are buttons as well
-    font-size: 26px;
-    .rating-star {
+.star-rating {
+    // don't make the stars too small since those are buttons as well
+    font-size: 24px;
+    line-height: 32px;
+    margin: 0 0 8px 0;
+    .star {
         cursor: pointer;
         color: #ccc;
-        margin-right: 1px;
+        margin-right: 4px;
+        vertical-align: middle;
     }
-    .active-star { color: #fd0; }
+    .checked { color: #FDD835; }
+    caption {
+        display: inline-block;
+        margin-left: 16px;
+        color: @black;
+        font-size: 14px;
+        font-weight: bold;
+    }
 }
 
 .feedback-note {
     width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 0;
+    padding: 8px;
+    margin: 0 0 16px 0;
 }
 
 .feedback-button {
-    padding-top: 2px;
-    text-align: center;
-    background-color: #aaa;
-    border: 1px solid #aaa;
-    border-bottom-color: transparent;
-    height: 26px;
-    width: 90px;
-    z-index: 50;
-    font-size: 11pt;
+
     color: white;
-    top: 80%;
+    background-color: @topbar-background;
+    z-index: 50;
+    font-size: 13px;
+    line-height: 32px;
+    padding: 0 16px;
+    text-align: center;
     position: absolute;
     cursor: pointer;
     border-radius: @border-radius-base @border-radius-base 0 0;
+    border: 0;
 
     html.high-contrast & { background-color: @hc-gray; }
 }
 
-.feedback-label { color: #888; }
-
-.feedback-userdata-notice {
-    margin-top: 6px;
-}
-
 .rightside-button {
-    //text rotation
-    right: -37px;
-    transform:rotate(-90deg);
-    -ms-transform:rotate(-90deg); /* IE 9 */
-    -webkit-transform:rotate(-90deg); /* Safari and Chrome */
+    left: 100%;
+    -webkit-transform: rotate(-90deg); /* Safari and Chrome */
+    transform: rotate(-90deg);
+    -webkit-transform-origin: bottom left;
+    transform-origin: bottom left;
+    bottom: 32px;
 }
 
 .leftside-button {
-    //text rotation
-    left: -37px;
-    transform:rotate(90deg);
-    -ms-transform:rotate(90deg); /* IE 9 */
-    -webkit-transform:rotate(90deg); /* Safari and Chrome */
+    right: 100;
+    -webkit-transform: rotate(90deg); /* Safari and Chrome */
+    transform: rotate(90deg);
+    -webkit-transform-origin: bottom right;
+    transform-origin: bottom right;
+    bottom: 56px;
 }
