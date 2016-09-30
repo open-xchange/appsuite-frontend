@@ -349,16 +349,25 @@
     bottom: 0;
     width: 100%;
     z-index: 1;
+    line-height: 1.42857143;
 
     .upload-title {
         margin-bottom: 8px;
 
-        .file-name { white-space: nowrap; }
+        .file-name,
+        .estimated-time {
+            white-space: nowrap;
+            font-weight: 300;
+            .ellipsis();
+        }
 
-        .estimated-time { float: right; }
+        .estimated-time {
+            font-style: italic;
+        }
     }
 
-    .upload-details {
+    .upload-details,
+    .upload-cancel {
         float: right;
         margin-left: 10px;
     }

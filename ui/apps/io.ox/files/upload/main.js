@@ -299,8 +299,8 @@ define('io.ox/files/upload/main', [
         draw: function () {
             this.append(
                 $('<div class="upload-title">').append(
-                    $('<span class="file-name">'),
-                    $('<span class="estimated-time">')
+                    $('<div class="estimated-time">'),
+                    $('<div class="file-name">')
                 ),
                 $('<div class="upload-details">').append(
                     $('<a href=#>').text(gt('Details')).click(function (e) {
