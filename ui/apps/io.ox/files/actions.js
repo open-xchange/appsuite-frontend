@@ -329,6 +329,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/viewer', {
         requires: function (e) {
+            if (e.collection.has('guard') && !capabilities.has('guard-drive')) return false;
             return e.collection.has('some', 'items');
         },
         action: function (baton) {
@@ -601,6 +602,7 @@ define('io.ox/files/actions', [
             // use current folder
             id = e.baton.app.folder.get();
         }
+        if (e.collection.has('guard')) return false;  // Guard sharing not supported currently
         if (!id) return false;
         // general capability and folder check
         model = folderAPI.pool.getModel(id);
