@@ -65,7 +65,7 @@ require(['settings!io.ox/portal'], function(settings) {
 # Debug relogin
 
 ```javascript
-ox.autoLogoutRestartDebug();
+ox.autoLogout.debug();
 ```
 
 # Enable/disable capability via URL hash
