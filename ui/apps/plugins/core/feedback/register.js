@@ -153,6 +153,7 @@ define('plugins/core/feedback/register', [
         show: function () {
             var guid = _.uniqueId('feedback-note-'),
                 starRatingView = new StarRatingView({ hover: settings.get('feeback/showHover', true) });
+
             new ModalDialog({ enter: 'send', point: 'plugins/core/feedback', title: 'Feedback' })
                 .extend({
                     title: function () {
@@ -204,6 +205,7 @@ define('plugins/core/feedback/register', [
                 })
                 .open();
         },
+
         drawButton: function () {
             $('#io-ox-core').append($('<div class="feedback-button">')
                 .text('Feedback')
