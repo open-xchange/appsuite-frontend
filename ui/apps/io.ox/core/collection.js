@@ -71,7 +71,9 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                     // quality
                     'items': false,
                     'folders': false,
-                    'mixed': false
+                    'mixed': false,
+                    // guard
+                    'guard': false
                 },
 
                 // get all folders first
@@ -103,6 +105,9 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
 
                     item = collection[i];
                     objectPermission = item && item.object_permissions && _(item.object_permissions).find(findUserPermissions);
+
+                    // Check for Guard files or folders
+                    if (item.meta && item.meta.Encrypted) props.guard = true;
 
                     if (isFolder(item)) {
 
