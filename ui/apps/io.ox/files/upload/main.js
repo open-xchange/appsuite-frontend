@@ -91,7 +91,7 @@ define('io.ox/files/upload/main', [
             },
             progress: function (item, position, files) {
                 var pct = position / files.length;
-                console.log(pct);
+                //console.log(pct);
                 win.busy(pct, 0);
                 return api.versions.upload({
                     file: item.file,
@@ -102,7 +102,7 @@ define('io.ox/files/upload/main', [
                 .progress(function (e) {
                     var sub = e.loaded / e.total;
                     win.busy(pct + sub / files.length, sub);
-                    console.log(pct + sub / files.length, sub);
+                    //console.log(pct + sub / files.length, sub);
                 }).fail(function (e) {
                     if (e && e.data && e.data.custom) {
                         notifications.yell(e.data.custom.type, e.data.custom.text);
@@ -164,7 +164,7 @@ define('io.ox/files/upload/main', [
                 })
                 .fail(function (e) {
                     model.set({ abort: true });
-                    remove(position, model);
+                    remove(model);
 
                     if (e && e.data && e.data.custom && e.error !== '0 abort') {
                         notifications.yell(e.data.custom.type, e.data.custom.text);
@@ -207,20 +207,25 @@ define('io.ox/files/upload/main', [
         }
         this.getEstimatedTime = getEstimatedTime;
 
-        this.abort = function (index) {
-            var model = uploadCollection.at(index),
-                request = model.get('request');
-
-            if (model !== undefined) {
-                if (request === null) {
-                    //remove the model from the list
-                    model.set({ abort: true });
-                    remove(index, model);
-                } else if (request.state() === 'pending') {
-                    //abort the upload process
-                    request.abort();
-                }
-            }
+        this.abort = function (cid) {
+            uploadCollection.chain()
+                .filter(function (model) {
+                    return (cid === undefined) || (model.cid === cid);
+                })
+                .each(function (model) {
+                    debugger;
+                    var request = model.get('request');
+                    if (model !== undefined) {
+                        if (request === null) {
+                            //remove the model from the list
+                            model.set({ abort: true });
+                            remove(model);
+                        } else if (request.state() === 'pending') {
+                            //abort the upload process
+                            request.abort();
+                        }
+                    }
+                });
         };
 
         this.collection = uploadCollection;
@@ -248,7 +253,7 @@ define('io.ox/files/upload/main', [
                 self.create.remove(options.index);
             });
 
-        function remove(index, model) {
+        function remove(model) {
             currentSize -= model.get('loaded');
             totalSize -= model.get('file').size;
             uploadCollection.remove(model);
