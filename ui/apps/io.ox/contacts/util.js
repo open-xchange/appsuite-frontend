@@ -338,9 +338,14 @@ define('io.ox/contacts/util', [
                 // yep, both first()
                 if (first_name && last_name) return first(first_name) + first(last_name);
                 if (display_name) return first(display_name) + last(display_name);
+
                 // again, first() only
                 if (last_name) return first(last_name);
                 if (first_name) return first(first_name);
+
+                // try mail address
+                var email = $.trim(obj.email1 || obj.email2 || obj.email3);
+                if (email) return first(email);
 
                 return '';
             }

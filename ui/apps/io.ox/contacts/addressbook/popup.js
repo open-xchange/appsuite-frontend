@@ -266,17 +266,27 @@ define('io.ox/contacts/addressbook/popup', [
 
             list.forEach(function (item, i) {
 
-                item.display_name = String(item.title);
-
                 // translate into array of object
-                item.members = _(item.members).map(function (data) {
-                    return {
-                        display_name: util.getMailFullName(data),
-                        id: data.id,
-                        folder_id: data.folder_id,
-                        email: $.trim(data.email1 || data.email2 || data.email3).toLowerCase()
-                    };
-                });
+                item.members = _(item.members)
+                    .chain()
+                    .map(function (member) {
+                        return {
+                            display_name: util.getMailFullName(member),
+                            id: member.id,
+                            folder_id: member.folder_id,
+                            email: $.trim(member.email1 || member.email2 || member.email3).toLowerCase()
+                        };
+                    })
+                    .filter(function (member) {
+                        // drop members without an email address
+                        return !!member.email;
+                    })
+                    .value();
+
+                // drop empty groups
+                if (!item.members.length) return;
+
+                item.display_name = String(item.title);
 
                 item = {
                     caption: _(item.members).pluck('display_name').join(', '),
@@ -592,7 +602,7 @@ define('io.ox/contacts/addressbook/popup', [
                 '    <% } else { %>' +
                 '      <div class="contact-picture initials <%= item.initial_color %>" aria-label="hidden"><%- item.initials %></div>' +
                 '    <% } %>' +
-                '    <div class="name"><%= item.full_name_html || "\u00A0" %></div>' +
+                '    <div class="name"><%= item.full_name_html || item.email || "\u00A0" %></div>' +
                 '    <div class="email gray"><%- item.caption || item.email || "\u00A0" %></div>' +
                 '  </div>' +
                 '</li>' +
