@@ -86,8 +86,8 @@ define('io.ox/files/actions', [
                         current,
                         e.collection.has('one', 'modify'),
                         !util.hasStatus('lockedByOthers', e),
-                        (/\.(csv|txt|js|css|md|tmpl|html?)[\.pgp]*$/i).test(e.context.filename),
-                        (!(/\.pgp$/i).test(e.context.filename) || capabilities.has('guard')),  // if has .pgp, must have Guard capability
+                        (/\.(csv|txt|js|css|md|tmpl|html?)(\.pgp)?$/i).test(e.context.filename),
+                        (!(/\.pgp$/i).test(e.context.filename) || capabilities.has('guard-drive')),  // if has .pgp, must have Guard capability
                         (e.baton.openedBy !== 'io.ox/mail/compose'),
                         util.isFolderType('!trash', e.baton)
                     );
@@ -111,7 +111,7 @@ define('io.ox/files/actions', [
                 };
 
                 // Check if Guard file.  If so, do auth then call with parameters
-                if ((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.endsWith('.pgp')) {
+                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.endsWith('.pgp')) && capabilities.has('guard-drive')) {
                     require(['io.ox/guard/auth/authorizer'], function (guardAuth) {
                         guardAuth.authorize().then(function (auth) {
                             var params = {
