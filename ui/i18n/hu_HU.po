@@ -1720,7 +1720,6 @@ msgstr "Naptárak"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3826,10 +3825,6 @@ msgstr "Február"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "Forrás URL"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "Visszajelzés"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6526,9 +6521,14 @@ msgstr ""
 "fog okozni a megjelenítéskor és szerkesztéskor."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "A támogatási kérdéseket nem ezen keresztül kezeljük. Amennyiben kérdése vagy "
@@ -6540,6 +6540,12 @@ msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr ""
 "Adja meg a régi jelszót, hogy a fiók jelszavai visszaállíthatók legyenek."
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Adjon meg egy múltbeli dátumot"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7622,6 +7628,7 @@ msgstr "Kijelölés részletei"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Küldés"
 
@@ -7645,10 +7652,6 @@ msgstr "Küldés vCard-ként"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Küldés e-mailben"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "Visszajelzés küldése"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9757,10 +9760,6 @@ msgstr "Üdvözöljük a Beérkezett üzeneteinél"
 msgid "Welcome to your tasks"
 msgstr "Üdvözöljük a feladatai között"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "Üdvözöljük, kérjük adjon visszajelzést a termékkel kapcsolatban."
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10163,13 +10162,13 @@ msgstr ""
 "jelenleg az elérhető %2$s lemezhelyből ennyit használ: %1$s. Szabad hely: "
 "%3$s."
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "A jelenlegi jelszava"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "A visszajelzés elküldésekor az e-mail címe is csatolva lesz"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11025,6 +11024,9 @@ msgstr "yyyy"
 #~ msgid "Favorite timezone"
 #~ msgstr "Kedvenc időzóná"
 
+#~ msgid "Feedback"
+#~ msgstr "Visszajelzés"
+
 #~ msgid "Filename"
 #~ msgstr "Fájlnév"
 
@@ -11215,6 +11217,9 @@ msgstr "yyyy"
 #~ msgid "Send as mail"
 #~ msgstr "Küldés e-mailként"
 
+#~ msgid "Send feedback"
+#~ msgstr "Visszajelzés küldése"
+
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"
 #~ msgstr ""
@@ -11376,6 +11381,9 @@ msgstr "yyyy"
 #~ msgid "Week View"
 #~ msgstr "Hét nézet"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr "Üdvözöljük, kérjük adjon visszajelzést a termékkel kapcsolatban."
+
 #, fuzzy
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
@@ -11403,6 +11411,9 @@ msgstr "yyyy"
 
 #~ msgid "Your applications"
 #~ msgstr "Alkalmazásai"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr "A visszajelzés elküldésekor az e-mail címe is csatolva lesz"
 
 #~ msgid "end date "
 #~ msgstr "befejező dátum"

@@ -1743,7 +1743,6 @@ msgstr "Kalendāri"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3849,10 +3848,6 @@ msgstr "Februāris"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "Plūsmas URL"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "Atsauksmes"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6555,9 +6550,14 @@ msgstr ""
 "un rediģēšanas problēms."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "Ivērojiet, ka atbalsta pieprasījumiem nevar izmantot atsauksmju funkciju. Ja "
@@ -6568,6 +6568,12 @@ msgstr ""
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "Lūdzu ievadiet veco paroli, lai varētu atkopt konta paroles."
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Lūdzu ievadiet pagātnes datumu"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7650,6 +7656,7 @@ msgstr "Izvēles detaļas"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Sūtīt"
 
@@ -7673,10 +7680,6 @@ msgstr "Sūtīt kā vCard"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Sūtīt ar pastu"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "Nosūtīt atsauksmi"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9802,10 +9805,6 @@ msgstr "Esiet sveicināti sava e-pasta vietnē"
 msgid "Welcome to your tasks"
 msgstr "Esiet sveicināti savu uzdevumu vietnē"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "Esiet sveicināti. Lūdzu dodiet savas atsauksmes par šo produktu"
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10214,13 +10213,13 @@ msgstr ""
 "pašreiz izmanto %1$s no atļautā %2$s diska apjoma. Atlikušais brīvais apjoms "
 "ir %3$s."
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Jūsu pašreizējā parole"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "Nosūtītajām atsauksmēm tiks pievienota jūsu e-pasta adrese"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -12957,6 +12956,9 @@ msgstr "yyyy"
 #~ msgid "Feb"
 #~ msgstr "Feb."
 
+#~ msgid "Feedback"
+#~ msgstr "Atsauksmes"
+
 #~ msgid "Fiji"
 #~ msgstr "Fidži"
 
@@ -15178,6 +15180,9 @@ msgstr "yyyy"
 #~ msgid "Send email"
 #~ msgstr "Sūtīt e-pastu"
 
+#~ msgid "Send feedback"
+#~ msgstr "Nosūtīt atsauksmi"
+
 #~ msgid "Sender"
 #~ msgstr "Sūtītājs"
 
@@ -16754,6 +16759,9 @@ msgstr "yyyy"
 #~ msgid "Weekend Day"
 #~ msgstr "Izejamā diena"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr "Esiet sveicināti. Lūdzu dodiet savas atsauksmes par šo produktu"
+
 #~ msgid "Western Sahara"
 #~ msgstr "Rietumsahāra"
 
@@ -17008,6 +17016,9 @@ msgstr "yyyy"
 
 #~ msgid "Your data has been saved"
 #~ msgstr "Jūsu dati ir saglabāti"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr "Nosūtītajām atsauksmēm tiks pievienota jūsu e-pasta adrese"
 
 #~ msgid ""
 #~ "Your password changed. For a future use of your subscriptions and "

@@ -1738,7 +1738,6 @@ msgstr "Календари"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3835,10 +3834,6 @@ msgstr "Февраль"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "URL ленты"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "Обратная связь"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6538,9 +6533,14 @@ msgstr ""
 "редактированию файла."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "Не следует использовать форму обратной связи для создания запросов "
@@ -6550,6 +6550,12 @@ msgstr ""
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "Для восстановления паролей введите старый пароль."
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Введите прошедшую дату."
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7625,6 +7631,7 @@ msgstr "Свойства выбора"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Отправить"
 
@@ -7648,10 +7655,6 @@ msgstr "Отправить vCard"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Отправить по почте"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "Отправить отзыв"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9759,10 +9762,6 @@ msgstr "Добро пожаловать во входящие"
 msgid "Welcome to your tasks"
 msgstr "Добро пожаловать в задачи"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "Добро пожаловать. Здесь можно оставить отзыв об этом продукте"
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10160,13 +10159,13 @@ msgstr ""
 "Пользователи в группе совместно используют доступное пространство. Ваша "
 "группа использует %1$s из %2$s (свободно %3$s)."
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Текущий пароль"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "Ваш электронный адрес будет добавлен в отзыв"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11610,6 +11609,9 @@ msgstr "гггг"
 #~ msgid "Fax (private)"
 #~ msgstr "Факс (личный)"
 
+#~ msgid "Feedback"
+#~ msgstr "Обратная связь"
+
 #~ msgid "File names must not be empty"
 #~ msgstr "Имя файла не может быть пустым."
 
@@ -12330,6 +12332,9 @@ msgstr "гггг"
 
 #~ msgid "Send as mail"
 #~ msgstr "Отправить по почте"
+
+#~ msgid "Send feedback"
+#~ msgstr "Отправить отзыв"
 
 #~ msgid "Sender"
 #~ msgstr "Отправитель"
@@ -13146,6 +13151,9 @@ msgstr "гггг"
 #~ msgid "Weekend Day"
 #~ msgstr "Выходной"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr "Добро пожаловать. Здесь можно оставить отзыв об этом продукте"
+
 #, fuzzy
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
@@ -13241,6 +13249,9 @@ msgstr "гггг"
 
 #~ msgid "Your data has been saved"
 #~ msgstr "Данные сохранены"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr "Ваш электронный адрес будет добавлен в отзыв"
 
 #~ msgid "Your password has been changed"
 #~ msgstr "Ваш пароль был изменен"

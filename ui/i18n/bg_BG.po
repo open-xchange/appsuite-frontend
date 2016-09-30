@@ -1693,7 +1693,6 @@ msgstr ""
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3768,10 +3767,6 @@ msgstr "Февруари"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
-msgstr ""
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
 msgstr ""
 
 #. Emoji category
@@ -6431,7 +6426,7 @@ msgstr ""
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 
@@ -6439,6 +6434,12 @@ msgstr ""
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr ""
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Моля въведете дата в миналото"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7496,6 +7497,7 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Изпрати"
 
@@ -7519,10 +7521,6 @@ msgstr ""
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Изпрати по мейл"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr ""
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9527,10 +9525,6 @@ msgstr ""
 msgid "Welcome to your tasks"
 msgstr ""
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr ""
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -9910,12 +9904,12 @@ msgid ""
 "space is %3$s. "
 msgstr ""
 
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Your current password"
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
 msgstr ""
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Your current password"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings

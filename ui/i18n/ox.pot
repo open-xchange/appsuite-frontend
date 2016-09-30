@@ -469,7 +469,6 @@ msgstr ""
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
 #: apps/plugins/portal/flickr/register.js
@@ -8030,6 +8029,11 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
 msgstr ""
 
@@ -8721,6 +8725,8 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
 msgid "Send"
 msgstr ""
 
@@ -11583,17 +11589,7 @@ msgstr ""
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Feedback"
-msgstr ""
-
-#: apps/plugins/core/feedback/register.js
-#: module:io.ox/core
-msgid "Send feedback"
-msgstr ""
-
-#: apps/plugins/core/feedback/register.js
-#: module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
+msgid "Please rate this product"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js
@@ -11603,12 +11599,7 @@ msgstr ""
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Please note, that support requests cannot be handled via the feedback-formular. When you have questions or problems please contact our support directly"
-msgstr ""
-
-#: apps/plugins/core/feedback/register.js
-#: module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
+msgid "Please note, that support requests cannot be handled via the feedback-formular. If you have questions or problems please contact our support directly"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js

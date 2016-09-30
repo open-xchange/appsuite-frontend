@@ -1691,7 +1691,6 @@ msgstr "Takvim"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3850,10 +3849,6 @@ msgstr "Şubat"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "Yayın URL'i "
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "Geri bildirim "
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6593,9 +6588,14 @@ msgstr ""
 "görüntülerken ya da düzenlerken problemlere yol açacaktır."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "Lütfen, destek taleplerinin geri bildirim formu üzerinden yanıtlanmayacağını "
@@ -6606,6 +6606,12 @@ msgstr ""
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "Hesap şifrelerinin kurtarılabilmesi için lütfen eski şifrenizi giriniz"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Lütfen geçmişte olan bir tarih giriniz"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7727,6 +7733,7 @@ msgstr "Seçim ayrıntıları"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Gönder"
 
@@ -7750,10 +7757,6 @@ msgstr "vCard olarak gönder"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Posta ile gönder"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "Geri bildirim gönderin"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9905,11 +9908,6 @@ msgstr "Gelen kutunuza hoşgeldiniz"
 msgid "Welcome to your tasks"
 msgstr "Görevlerinize hoşgeldiniz"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr ""
-"Hoşgeldiniz. Lütfen bu ürün ile ilgili geri bildirimlerinizi belirtiniz"
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10334,13 +10332,13 @@ msgstr ""
 "Kapasiteniz tüm grup üyeleriyle paylaşılmaktadır. Grubunuz şu anda %2$s "
 "mevcut disk alanının %1$s kadarını kullanmaktadır. %3$s boş alan miktarıdır."
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Şu andaki şifreniz"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "Bu geri bildirimi gönderdiğinizde e posta adresiniz dahil olacak "
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11170,6 +11168,9 @@ msgstr "yyyy"
 #~ msgid "Facebook reported an error:"
 #~ msgstr "Facebook bir hata bildirdi:"
 
+#~ msgid "Feedback"
+#~ msgstr "Geri bildirim "
+
 #~ msgid "Filename"
 #~ msgstr "Dosya Adı "
 
@@ -11281,6 +11282,9 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Send as mail"
 #~ msgstr "Eposta gönder"
+
+#~ msgid "Send feedback"
+#~ msgstr "Geri bildirim gönderin"
 
 #, fuzzy
 #~ msgid ""
@@ -11399,6 +11403,10 @@ msgstr "yyyy"
 #~ msgid "Week View"
 #~ msgstr "Hafta Görünümü"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr ""
+#~ "Hoşgeldiniz. Lütfen bu ürün ile ilgili geri bildirimlerinizi belirtiniz"
+
 #~ msgid ""
 #~ "When you select different timezones the timezone of the end date will not "
 #~ "be saved."
@@ -11414,6 +11422,9 @@ msgstr "yyyy"
 
 #~ msgid "Your applications"
 #~ msgstr "Uygulamalarınız"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr "Bu geri bildirimi gönderdiğinizde e posta adresiniz dahil olacak "
 
 #~ msgid "end date "
 #~ msgstr "bitiş tarihi"

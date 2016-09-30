@@ -1717,7 +1717,6 @@ msgstr "Kalendre"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3807,10 +3806,6 @@ msgstr "Februar"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "Kilde URL"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "Respons"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6507,9 +6502,14 @@ msgstr ""
 "ved visning eller redigering."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "Bemærk venligst at du ikke kan bede om hjælp gennem respons-formularen.  Når "
@@ -6520,6 +6520,12 @@ msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr ""
 "Angiv venligst den gamle adgangskode, så kontoadgangskoderne kan gendannes."
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Skriv venligst en dato i fortiden"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7600,6 +7606,7 @@ msgstr "Udvalgsdetaljer"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Send"
 
@@ -7623,10 +7630,6 @@ msgstr "Send som vCard"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Send med e-mail"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "Send respons"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9730,10 +9733,6 @@ msgstr "Velkommen til din indbakke"
 msgid "Welcome to your tasks"
 msgstr "Velkommen til dine opgaver"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "Velkommen.  Giv venligst din respons om dette produkt"
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10137,13 +10136,13 @@ msgstr ""
 "øjeblikket %1$s af sin %2$s tilgængelige diskplads. Mængden af fri plads er "
 "%3$s."
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Din nuværende adgangskode"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "Din e-mail-adresse vil blive inkluderet, når du sender denne respons"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11533,6 +11532,9 @@ msgstr "åååå"
 #~ msgid "Fax (private)"
 #~ msgstr "Fax (privat)"
 
+#~ msgid "Feedback"
+#~ msgstr "Respons"
+
 #~ msgid "File names must not be empty"
 #~ msgstr "Filnavne må ikke være tomme"
 
@@ -12216,6 +12218,9 @@ msgstr "åååå"
 
 #~ msgid "Send as mail"
 #~ msgstr "Send som e-mail"
+
+#~ msgid "Send feedback"
+#~ msgstr "Send respons"
 
 #~ msgid "Sender"
 #~ msgstr "Sender"
@@ -12998,6 +13003,9 @@ msgstr "åååå"
 #~ msgid "Weekend Day"
 #~ msgstr "Wekkenddag"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr "Velkommen.  Giv venligst din respons om dette produkt"
+
 #, fuzzy
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
@@ -13088,6 +13096,10 @@ msgstr "åååå"
 
 #~ msgid "Your data has been saved"
 #~ msgstr "Dine data er blevet gemt"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr ""
+#~ "Din e-mail-adresse vil blive inkluderet, når du sender denne respons"
 
 #, fuzzy
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"

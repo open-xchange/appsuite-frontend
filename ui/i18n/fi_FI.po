@@ -1709,7 +1709,6 @@ msgstr "Kalenterit"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3802,10 +3801,6 @@ msgstr "helmikuu"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "Syötteen URL"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "Palaute"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6498,9 +6493,14 @@ msgstr ""
 "ongelmia katselulle ja muokkaukselle."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "Ole hyvä ja huomioi ettei tukipyyntöjä voida vastaanottaa palautelomakkeen "
@@ -6511,6 +6511,12 @@ msgstr ""
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "Syötä vanha salasana, jotta tilin salasanat voidaan palauttaa."
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Ole hyvä ja syötä mennyt päivämäärä"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7592,6 +7598,7 @@ msgstr "Valinnan yksityiskohdat"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Lähetä"
 
@@ -7615,10 +7622,6 @@ msgstr "Lähetä vCard muodossa"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Lähetä postitse"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "Lähetä palautetta"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9721,10 +9724,6 @@ msgstr "Tervetuloa saapuneen postin postilaatikkoosi"
 msgid "Welcome to your tasks"
 msgstr "Tervetuloa tehtäviisi"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "Tervetuloa. Ole hyvä ja anna tuotteesta palautetta."
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10127,13 +10126,13 @@ msgstr ""
 "Tilasi on jaettu kaikkien ryhmäsi jäsenten kesken. Ryhmäsi käyttää nyt %1$s "
 "kaikkiaan %2$s tilastaan. Vapaan tilan määrä on %3$s."
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Nykyinen salasanasi"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "Sähköpostiosoitteesi liitetään tähän palautteeseen"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11432,6 +11431,9 @@ msgstr "vvvv"
 #~ msgid "Fax (private)"
 #~ msgstr "Faksi (yksityinen)"
 
+#~ msgid "Feedback"
+#~ msgstr "Palaute"
+
 #~ msgid "File names must not be empty"
 #~ msgstr "Tiedoston nimi ei voi olla tyhjä"
 
@@ -11994,6 +11996,9 @@ msgstr "vvvv"
 
 #~ msgid "Send as mail"
 #~ msgstr "Lähetä viestinä"
+
+#~ msgid "Send feedback"
+#~ msgstr "Lähetä palautetta"
 
 #~ msgid "Sender"
 #~ msgstr "Lähettäjä"
@@ -12744,6 +12749,9 @@ msgstr "vvvv"
 #~ msgid "Week View"
 #~ msgstr "Viikkonäkymä"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr "Tervetuloa. Ole hyvä ja anna tuotteesta palautetta."
+
 #, fuzzy
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
@@ -12826,6 +12834,9 @@ msgstr "vvvv"
 
 #~ msgid "Your applications"
 #~ msgstr "Sovelluksesi"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr "Sähköpostiosoitteesi liitetään tähän palautteeseen"
 
 #, fuzzy
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"

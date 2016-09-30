@@ -1740,7 +1740,6 @@ msgstr "Kalendáře"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3830,10 +3829,6 @@ msgstr "Únor"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "URL kanálu"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "Zpětná vazba"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6531,9 +6526,14 @@ msgstr ""
 "potíže při prohlížení a upravování."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "Berte, prosím, na vědomí, že otázky na podporu nelze řešit přes formulář pro "
@@ -6544,6 +6544,12 @@ msgstr ""
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "Zadejte, prosím, staré heslo, aby mohl být účet obnoven."
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Zadejte, prosím, datum v minulosti"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7625,6 +7631,7 @@ msgstr "Podrobnosti o výběru"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Poslat"
 
@@ -7648,10 +7655,6 @@ msgstr "Poslat jako vCard"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Poslat ve zprávě"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "Poslat zpětnou vazbu"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9770,10 +9773,6 @@ msgstr "Vítejte ve své složce příchozích zpráv"
 msgid "Welcome to your tasks"
 msgstr "Vítejte u svých úkolů"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "Vítejte. Poskytněte, prosím, zpětnou vazbu o tomto produktu"
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10176,13 +10175,13 @@ msgstr ""
 "chvíli používá %1$s z %2$s dostupného diskového prostoru. Volného místa je "
 "%3$s. "
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Vaše aktuální heslo"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "Při odesílání této zpětné vazby bude poslána i vaše e-mailová adresa"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -14720,6 +14719,9 @@ msgstr "rrrr"
 #~ msgid "Feb"
 #~ msgstr "Úno"
 
+#~ msgid "Feedback"
+#~ msgstr "Zpětná vazba"
+
 #~ msgid "Fiji"
 #~ msgstr "Fidži"
 
@@ -17349,6 +17351,9 @@ msgstr "rrrr"
 #~ msgid "Send email"
 #~ msgstr "Poslat e-mail"
 
+#~ msgid "Send feedback"
+#~ msgstr "Poslat zpětnou vazbu"
+
 #~ msgid "Sender"
 #~ msgstr "Odesílatel"
 
@@ -19472,6 +19477,9 @@ msgstr "rrrr"
 #~ msgid "Weekend day"
 #~ msgstr "Víkendový den"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr "Vítejte. Poskytněte, prosím, zpětnou vazbu o tomto produktu"
+
 #~ msgid "Western Sahara"
 #~ msgstr "Západní Sahara"
 
@@ -19748,6 +19756,10 @@ msgstr "rrrr"
 
 #~ msgid "Your data has been saved"
 #~ msgstr "Vaše data byla uložena"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr ""
+#~ "Při odesílání této zpětné vazby bude poslána i vaše e-mailová adresa"
 
 #~ msgid ""
 #~ "Your password changed. For a future use of your subscriptions and "

@@ -1686,7 +1686,6 @@ msgstr "日曆"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3754,10 +3753,6 @@ msgstr "二月"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "資訊來源 URL"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "回饋"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6424,9 +6419,14 @@ msgid ""
 msgstr "請注意，更改或移除副檔名將會導致檢視或編輯發生問題。"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "請注意，技術支援請求無法透過意見回饋方式傳送。若您有問題時請直接連絡我們的技"
@@ -6436,6 +6436,12 @@ msgstr ""
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "請提供舊密碼以復原帳號密碼。"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "請輸入過去的日期"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7500,6 +7506,7 @@ msgstr "選擇範圍詳情"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "發送"
 
@@ -7523,10 +7530,6 @@ msgstr "以 vCard 傳送"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "透過電子郵件寄送"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "寄送意見回饋"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9577,10 +9580,6 @@ msgstr "歡迎來到您的收件匣"
 msgid "Welcome to your tasks"
 msgstr "歡迎使用任務程式"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "歡迎，請提供您關於此產品的意見回饋"
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -9969,13 +9968,13 @@ msgstr ""
 "您的可用空間與群組中的所有使用者共享。您的群組目前正使用可用空間 %2$s 當中的 "
 "%1$s，可用空間大小尚餘 %3$s。"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "您目前的密碼"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "傳送此意見回饋時將會自動包含您的電子郵件地址"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -12565,6 +12564,9 @@ msgstr "年"
 #~ msgid "Fax (private)"
 #~ msgstr "傳真（私人）"
 
+#~ msgid "Feedback"
+#~ msgstr "回饋"
+
 #~ msgid "File names must not be empty"
 #~ msgstr "檔案名稱不能為空"
 
@@ -13530,6 +13532,9 @@ msgstr "年"
 #~ msgid "Send as mail"
 #~ msgstr "以郵件方式寄送"
 
+#~ msgid "Send feedback"
+#~ msgstr "寄送意見回饋"
+
 #~ msgid "Sender"
 #~ msgstr "寄件者"
 
@@ -14355,6 +14360,9 @@ msgstr "年"
 #~ msgid "Weekend Day"
 #~ msgstr "週末"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr "歡迎，請提供您關於此產品的意見回饋"
+
 #, fuzzy
 #~| msgid "Do you want to save your configuration?"
 #~ msgid "What do you want to use on your Mac?"
@@ -14480,6 +14488,9 @@ msgstr "年"
 
 #~ msgid "Your data has been saved"
 #~ msgstr "已儲存您的資料"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr "傳送此意見回饋時將會自動包含您的電子郵件地址"
 
 #~ msgid "Your password has been changed"
 #~ msgstr "您的密碼已更改"

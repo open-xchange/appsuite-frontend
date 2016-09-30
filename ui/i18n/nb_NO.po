@@ -1700,7 +1700,6 @@ msgstr "Kalendere"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3792,10 +3791,6 @@ msgstr "Februar"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "Feed-URL"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "Tilbakemelding"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6490,9 +6485,14 @@ msgstr ""
 "visning eller redigering."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "Vær oppmerksom på at støtteforespørsler ikke håndteres via "
@@ -6504,6 +6504,12 @@ msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr ""
 "Vennligst oppgi det gamle passordet slik at kontopassordet kan gjenopprettes."
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Vennligst oppgi en dato som har passert"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7578,6 +7584,7 @@ msgstr "Utvalgsdetaljer"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Send"
 
@@ -7601,10 +7608,6 @@ msgstr "Send som vCard"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Send per e-post"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "Send tilbakemelding"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9714,10 +9717,6 @@ msgstr "Velkommen til din innboks"
 msgid "Welcome to your tasks"
 msgstr "Velkommen til dine oppgaver"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "Velkommen. Vennligst gi din tilbakemelding om dette produktet"
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10125,14 +10124,13 @@ msgstr ""
 "bruker for tiden %1$s av %2$s tilgjengelig diskplass. Du har %3$s til "
 "rådighet."
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Gjeldende passord"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr ""
-"Din e-postadresse vil bli inkludert når du sender denne tilbakemeldingen"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11047,6 +11045,9 @@ msgstr "yyyy"
 #~ msgid "Facebook reported an error:"
 #~ msgstr "Facebook rapporterte en feil:"
 
+#~ msgid "Feedback"
+#~ msgstr "Tilbakemelding"
+
 #, fuzzy
 #~| msgid "Folder name"
 #~ msgid "Filename"
@@ -11258,6 +11259,9 @@ msgstr "yyyy"
 
 #~ msgid "Send as mail"
 #~ msgstr "Send som epost"
+
+#~ msgid "Send feedback"
+#~ msgstr "Send tilbakemelding"
 
 #~ msgid "Set as default"
 #~ msgstr "Sett som standard"
@@ -11494,6 +11498,9 @@ msgstr "yyyy"
 #~ msgid "Week View"
 #~ msgstr "Ukeoversikt"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr "Velkommen. Vennligst gi din tilbakemelding om dette produktet"
+
 #~ msgid "What do you want to use on your Mac?"
 #~ msgstr "Hva ønsker du å bruke på Mac-en din?"
 
@@ -11551,6 +11558,10 @@ msgstr "yyyy"
 
 #~ msgid "Your applications"
 #~ msgstr "Dine programmer"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr ""
+#~ "Din e-postadresse vil bli inkludert når du sender denne tilbakemeldingen"
 
 #~ msgid "date range"
 #~ msgstr "datointervall"

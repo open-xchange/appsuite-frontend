@@ -1718,7 +1718,6 @@ msgstr "Calendários"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3822,10 +3821,6 @@ msgstr "Fevereiro"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "URL do feed"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "Comentário"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6525,9 +6520,14 @@ msgstr ""
 "visualizar ou editar."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "Note que as solicitações ao suporte não podem ser tratadas através do "
@@ -6539,6 +6539,12 @@ msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr ""
 "Forneça sua senha antiga, assim as senhas das contas podem ser recuperadas."
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Insira uma data no passado"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7621,6 +7627,7 @@ msgstr "Seleção de detalhes"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Enviar"
 
@@ -7644,10 +7651,6 @@ msgstr "Enviar como vCard"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Enviar por e-mail"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "Enviar comentário"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9774,10 +9777,6 @@ msgstr "Bem-vindo à sua caixa de entrada"
 msgid "Welcome to your tasks"
 msgstr "Bem-vindo às suas tarefas"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "Bem-vindo. Forneça seu comentário sobre este produto"
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10187,13 +10186,13 @@ msgstr ""
 "grupo está usando atualmente %1$s de seus %2$s disponíveis de espaço em "
 "disco. O total de espaço livre é %3$s."
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Sua senha atual"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "Seu endereço de e-mail será incluído ao enviar este comentário"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -12619,6 +12618,9 @@ msgstr "aaaa"
 #~ msgid "Feb"
 #~ msgstr "Fev"
 
+#~ msgid "Feedback"
+#~ msgstr "Comentário"
+
 #~ msgid "Fiji"
 #~ msgstr "Fiji"
 
@@ -14560,6 +14562,9 @@ msgstr "aaaa"
 #~ msgid "Send as mail"
 #~ msgstr "Enviar como e-mail"
 
+#~ msgid "Send feedback"
+#~ msgstr "Enviar comentário"
+
 #~ msgid "Sender"
 #~ msgstr "Remetente"
 
@@ -16016,6 +16021,9 @@ msgstr "aaaa"
 #~ msgid "Weekend Day"
 #~ msgstr "Dia do fim de semana"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr "Bem-vindo. Forneça seu comentário sobre este produto"
+
 #~ msgid "Western Sahara"
 #~ msgstr "Saara Ocidental"
 
@@ -16245,6 +16253,9 @@ msgstr "aaaa"
 
 #~ msgid "Your contact information have been saved."
 #~ msgstr "Suas informações de contato foram salvas."
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr "Seu endereço de e-mail será incluído ao enviar este comentário"
 
 #~ msgid ""
 #~ "Your password changed. For a future use of your subscriptions and "

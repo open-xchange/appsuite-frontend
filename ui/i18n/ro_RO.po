@@ -1744,7 +1744,6 @@ msgstr "Calendare"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3853,10 +3852,6 @@ msgstr "Februarie"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "URL flux"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "Feedback"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6559,9 +6554,14 @@ msgstr ""
 "la vizualizare sau editare."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "Vă atragem atenția că solicitările de asistență nu pot fi soluționate prin "
@@ -6572,6 +6572,12 @@ msgstr ""
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "Introduceți parola veche pentru a putea recupera parola contului."
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Introduceți o dată din trecut"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7658,6 +7664,7 @@ msgstr "Detalii selecție"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Trimite"
 
@@ -7681,10 +7688,6 @@ msgstr "Trimite ca vCard"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Trimite prin mail"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "Trimite feedback"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9827,10 +9830,6 @@ msgstr "Bine ați venit la dosarul dumneavoastră de mesaje primite"
 msgid "Welcome to your tasks"
 msgstr "Bine ați venit la sarcinile dumneavoastră"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "Bine ați venit. Vă rugăm să ne furnizați feedback despre acest produs"
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10237,13 +10236,13 @@ msgstr ""
 "dumneavoastră utilizează momentan %1$s din spațiul disponibil pe disc, %2$s. "
 "Spațiu liber rămas: %3$s."
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Parola dumneavoastră actuală"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "Adresa dumneavoastră de mail va fi inclusă în mesajul de feedback"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -13005,6 +13004,9 @@ msgstr "aaaa"
 #~ msgid "Feb"
 #~ msgstr "Feb"
 
+#~ msgid "Feedback"
+#~ msgstr "Feedback"
+
 #~ msgid "Fiji"
 #~ msgstr "Fiji"
 
@@ -15239,6 +15241,9 @@ msgstr "aaaa"
 #~ msgid "Send as mail"
 #~ msgstr "Trimite ca mail"
 
+#~ msgid "Send feedback"
+#~ msgstr "Trimite feedback"
+
 #~ msgid "Sender"
 #~ msgstr "Expeditor"
 
@@ -16841,6 +16846,10 @@ msgstr "aaaa"
 #~ msgid "Weekend Day"
 #~ msgstr "Zi de sfârșit de săptămână"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr ""
+#~ "Bine ați venit. Vă rugăm să ne furnizați feedback despre acest produs"
+
 #~ msgid "Western Sahara"
 #~ msgstr "Sahara Occidentală"
 
@@ -17101,6 +17110,9 @@ msgstr "aaaa"
 
 #~ msgid "Your data has been saved"
 #~ msgstr "Datele dumneavoastră au fost salvate"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr "Adresa dumneavoastră de mail va fi inclusă în mesajul de feedback"
 
 #~ msgid ""
 #~ "Your password changed. For a future use of your subscriptions and "

@@ -1713,7 +1713,6 @@ msgstr "Kalendrar"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3802,10 +3801,6 @@ msgstr "Februari"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "Flödes-URL"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "Synpunkter"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6499,9 +6494,14 @@ msgstr ""
 "filändelsen vid visning eller redigering."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "Observera att kundtjänstärenden inte kan hanteras genom synpunkts- "
@@ -6512,6 +6512,12 @@ msgstr ""
 msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr "Ange det gamla lösenordet för att få tillbaka de andra lösenorden."
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "Ange ett datum i det förflutna"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7592,6 +7598,7 @@ msgstr "Detaljer om markering"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "Skicka"
 
@@ -7615,10 +7622,6 @@ msgstr "Skicka som vCard"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "Skicka via e-post"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "Lämna synpunkter"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9727,10 +9730,6 @@ msgstr "Välkommen till din inkorg"
 msgid "Welcome to your tasks"
 msgstr "Välkommen till dina uppgifter"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "Välkommen. Ge oss dina synpunkter om den här produkten"
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10136,13 +10135,13 @@ msgstr ""
 "närvarande %1$s av dess tillgängliga diskutrymme (%2$s). Mängden ledigt "
 "utrymme är %3$s. "
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Ditt nuvarande lösenord"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "Din e-postadress skickas med när du lämnar dina synpunkter"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -12732,6 +12731,9 @@ msgstr "yyyy"
 #~ msgid "Fax (private)"
 #~ msgstr "Fax (privat)"
 
+#~ msgid "Feedback"
+#~ msgstr "Synpunkter"
+
 #~ msgid "File \"%1$s\" could not be found."
 #~ msgstr "Filen \"%1$s\" kunde inte hittas."
 
@@ -14528,6 +14530,9 @@ msgstr "yyyy"
 
 #~ msgid "Send as mail"
 #~ msgstr "Skicka som e-post"
+
+#~ msgid "Send feedback"
+#~ msgstr "Lämna synpunkter"
 
 #~ msgid "Sender"
 #~ msgstr "Avsändare"
@@ -16648,6 +16653,9 @@ msgstr "yyyy"
 #~ msgid "Weekend Day"
 #~ msgstr "Helgdag"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr "Välkommen. Ge oss dina synpunkter om den här produkten"
+
 #, fuzzy
 #~| msgid "Do you really want to discard your changes?"
 #~ msgid "What do you want to use on your iPhone?"
@@ -16887,6 +16895,9 @@ msgstr "yyyy"
 
 #~ msgid "Your data has been saved"
 #~ msgstr "Din data har sparats"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr "Din e-postadress skickas med när du lämnar dina synpunkter"
 
 #, fuzzy
 #~ msgid "Your selected picture exceeds the maximum allowed filesize of %1$s"

@@ -1680,7 +1680,6 @@ msgstr "予定表"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/portal/flickr/register.js
 #: module:plugins/portal apps/plugins/portal/mail/register.js
@@ -3777,10 +3776,6 @@ msgstr "２月"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "フィード URL"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Feedback"
-msgstr "フィードバック"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6468,9 +6463,14 @@ msgstr ""
 "ご注意ください。"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Please note, that support requests cannot be handled via the feedback-"
+#| "formular. When you have questions or problems please contact our support "
+#| "directly"
 msgid ""
 "Please note, that support requests cannot be handled via the feedback-"
-"formular. When you have questions or problems please contact our support "
+"formular. If you have questions or problems please contact our support "
 "directly"
 msgstr ""
 "サポートのご依頼はフィードバックでご送信ください。ご質問や不明な点がありまし"
@@ -6481,6 +6481,12 @@ msgid ""
 "Please provide the old password so the account passwords can be recovered."
 msgstr ""
 "アカウントパスワードを復元するため、ご利用のパスワードを入力してください。"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "Please rate this product"
+msgstr "過去の日付を入力してください。"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -7551,6 +7557,7 @@ msgstr "選択オプションの詳細"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Send"
 msgstr "送信"
 
@@ -7574,10 +7581,6 @@ msgstr "vCard を送信"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "Send by mail"
 msgstr "メールで送信"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Send feedback"
-msgstr "フィードバックを送信"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 #, fuzzy
@@ -9666,10 +9669,6 @@ msgstr "受信トレイへようこそ"
 msgid "Welcome to your tasks"
 msgstr "仕事へようこそ"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "ようこそこの製品のフィードバックをお送りください。"
-
 #. title for 3rd step of the client onboarding wizard
 #. user can choose between different scenarios (usually identical with our apps)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -10070,13 +10069,13 @@ msgstr ""
 "容量はグループ内のすべてのメンバで共有されています。現在グループでは、合計サ"
 "イズ %2$s 中の %1$s の容量を使用しています。空き容量は %3$s です。 "
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
+
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "ご利用のパスワード"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "フィードバックの送信時にご利用のメールアドレスが追加されます。"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -13638,6 +13637,9 @@ msgstr "yyyy"
 #~ msgid "Feb"
 #~ msgstr "2 月"
 
+#~ msgid "Feedback"
+#~ msgstr "フィードバック"
+
 #~ msgid "Fiji"
 #~ msgstr "フィジー"
 
@@ -16132,6 +16134,9 @@ msgstr "yyyy"
 #~ msgid "Send as mail"
 #~ msgstr "メールで送信"
 
+#~ msgid "Send feedback"
+#~ msgstr "フィードバックを送信"
+
 #~ msgid "Sender"
 #~ msgstr "差出人"
 
@@ -17881,6 +17886,9 @@ msgstr "yyyy"
 #~ msgid "Weekend Day"
 #~ msgstr "週末"
 
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr "ようこそこの製品のフィードバックをお送りください。"
+
 #~ msgid "Western Sahara"
 #~ msgstr "西サハラ"
 
@@ -18130,6 +18138,9 @@ msgstr "yyyy"
 
 #~ msgid "Your data has been saved"
 #~ msgstr "データが保存されました。"
+
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr "フィードバックの送信時にご利用のメールアドレスが追加されます。"
 
 #~ msgid ""
 #~ "Your password changed. For a future use of your subscriptions and "
