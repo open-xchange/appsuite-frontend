@@ -57,13 +57,11 @@ define('io.ox/core/export/export', [
     });
 
     function toggle(format) {
-        var note = this.find('.alert'), label = this.find('.include_distribution_lists');
+        var checkbox = this.find('.include_distribution_lists input');
         if (format === 'csv') {
-            note.hide();
-            label.show();
+            checkbox.prop('checked', 'checked');
         } else {
-            note.show();
-            label.hide();
+            checkbox.prop('checked', null);
         }
     }
 
@@ -75,9 +73,6 @@ define('io.ox/core/export/export', [
             if (baton.module !== 'contacts') return;
 
             this.append(
-                $('<div class="alert alert-info">').hide().text(
-                    gt('Note: The vCard format cannot contain distribution lists')
-                ),
                 // checkbox
                 $('<label class="checkbox include_distribution_lists">').append(
                     baton.$.include = $('<input type="checkbox" name="include_distribution_lists" checked="checked">'),
