@@ -31,6 +31,11 @@ define('io.ox/settings/accounts/settings/pane', [
 
     'use strict';
 
+    // make sure changes get saved
+    coreSettings.on('change:security/acceptUntrustedCertificates', function () {
+        this.save();
+    });
+
     var collection,
 
         createExtpointForSelectedAccount = function (args) {
@@ -75,18 +80,15 @@ define('io.ox/settings/accounts/settings/pane', [
                )
             );
         },
+
         drawCertificateValidation = function () {
-            // make sure event handlers don't multiply on redraw
-            coreSettings.off('change:security/acceptUntrustedCertificates').on('change:security/acceptUntrustedCertificates', function () {
-                this.save();
-            });
-            return $('<div>').addClass('form-group').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Allow connections with untrusted certificates')).prepend(
-                                new mini.CheckboxView({ name: 'security/acceptUntrustedCertificates', model: coreSettings }).render().$el
-                            )
-                        )
-                    );
+            return $('<div class="form-group">').append(
+                $('<div class="checkbox">').append(
+                    $('<label class="control-label">').text(gt('Allow connections with untrusted certificates')).prepend(
+                        new mini.CheckboxView({ name: 'security/acceptUntrustedCertificates', model: coreSettings }).render().$el
+                    )
+                )
+            );
         },
 
         drawRecoveryButtonHeadline = function () {
