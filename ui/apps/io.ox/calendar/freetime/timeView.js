@@ -230,7 +230,12 @@ define('io.ox/calendar/freetime/timeView', [
                 }
             }
             if (baton.view.keepScrollpos) {
-                table.parent().scrollLeft(baton.view.timeToPosition(baton.view.keepScrollpos) / 100 * width);
+                var scrollpos = baton.view.timeToPosition(baton.view.keepScrollpos) / 100 * width;
+                table.parent().scrollLeft(scrollpos);
+                if (baton.view.center) {
+                    table.parent().scrollLeft(scrollpos - this.width() / 2);
+                    delete baton.view.center;
+                }
                 delete baton.view.keepScrollpos;
             }
             // participantsview and timeview must be the same height or they scroll out off sync (happens when timeview has scrollbars)
@@ -352,6 +357,7 @@ define('io.ox/calendar/freetime/timeView', [
                 this.lassoStart = this.timeToPosition(start);
                 this.lassoEnd = this.timeToPosition(end);
                 this.keepScrollpos = start;
+                this.center = true;
             }
 
             // must use start of week. Otherwise we get the wrong iso week in countries where the first day of the week is a sunday
@@ -599,11 +605,17 @@ define('io.ox/calendar/freetime/timeView', [
             if (!this.lasso) {
                 return;
             }
-
-            if (!e.buttons) {
+            // safari doesn't know the buttons attribute
+            if (_.device('safari')) {
+                if (e.which === 0) {
+                    this.onMouseUp(e);
+                    return;
+                }
+            } else if (!e.buttons) {
                 this.onMouseUp(e);
                 return;
             }
+
             //currentTarget is always .freetime-table
             var currentTarget = $(e.currentTarget);
             // don't use e.OffsetX because it uses the offset relative to child elements too (in this case appointments)
