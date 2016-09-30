@@ -106,6 +106,42 @@ define('io.ox/mail/accounts/settings', [
         }
     });
 
+    ext.point('io.ox/mail/add-account/preselect').extend({
+        id: 'providerselect',
+        index: 100,
+        draw: function (baton) {
+            var providerList = [
+                    { id: 'google', label: 'Gmail', icon: 'google' },
+                    { id: 'web', label: 'Web.de' },
+                    { id: 'yahoo', label: 'Yahoo', icon: 'yahoo' },
+                    { id: 'gmx', label: 'Gmx' },
+                    { id: 'other', label: gt('Other') }
+                ], list;
+
+            this.append(
+                list = $('<li class="form-group list-unstyled mail-account-provider-list">').append(
+                    $('<label>').text(gt('Please select your mail account provider'))
+                )
+            );
+
+            _(providerList).each(function (provider) {
+                var node = $('<ul role="button" class="provider-list-item">').addClass('provider-' + provider.id).text(provider.label).prepend($('<i class="provider-list-icon fa">').addClass(provider.icon ? 'fa-' + provider.icon : 'fa-envelope'));
+                list.append(node);
+                if (provider.id === 'other') {
+                    node.on('click', function () {
+                        baton.popup.getFooter().find('[data-action="add"]').show();
+                        // invoke extensions
+                        ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                    });
+                } else {
+                    node.on('click', function () {
+                        notifications.yell('info', 'Do Oauth stuff here');
+                    });
+                }
+            });
+        }
+    });
+
     ext.point('io.ox/mail/add-account/wizard').extend({
         id: 'address',
         index: 100,
@@ -307,7 +343,7 @@ define('io.ox/mail/accounts/settings', [
                 )
                 .build(function () {
                     // invoke extensions
-                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', this.getContentNode());
+                    ext.point('io.ox/mail/add-account/preselect').invoke('draw', this.getContentNode(), ext.Baton({ popup: this }));
                 })
                 .addPrimaryButton('add', gt('Add'), 'add')
                 .addButton('cancel', gt('Cancel'), 'cancel')
@@ -339,6 +375,8 @@ define('io.ox/mail/accounts/settings', [
                     createExtpointForNewAccount(args);
                 })
                 .show(function () {
+                    // hide add button for now
+                    this.find('[data-action="add"]').hide();
                     a11y.getTabbable(this).first().focus();
                 });
 
