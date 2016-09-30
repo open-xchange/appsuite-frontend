@@ -20,7 +20,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         SWIPEMORE = '.swipe-button.more',
         isTouch = _.device('touch'),
         isLegacyWebview = _.device('android') && _.browser.android < '4.4',
-        behavior = settings.get('selectionMode', 'normal'),
+        defaultBehavior = settings.get('selectionMode', 'normal'),
         // mobile stuff
         THRESHOLD_X =        20, // touchmove threshold for mobiles in PX
         THRESHOLD_STICK =    40, // threshold in px
@@ -34,62 +34,31 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         cell,
         recentWindowsKey = false;
 
-    function Selection(view) {
+    function Selection(view, options) {
+
+        options = _.isObject(options) ? options : {};
 
         this.view = view;
-        this.behavior = behavior;
+        this.behavior = options.behavior || defaultBehavior;
         this._direction = 'down';
         this._lastPosition = -1;
-        this.view.$el
-            .on('mousedown', $.proxy(this.onMousedown, this))
-            .on('mouseup', $.proxy(this.onMouseup, this))
-            // normal click/keyboard navigation
-            .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
-            .on(isTouch ? 'tap' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
-            // help accessing the list via keyboard if focus is outside
-            .on('focus', $.proxy(function () {
-                if (this.view.mousedown) {
-                    return;
-                }
-                var items = this.getItems(),
-                    first = items.filter('[tabindex="1"]'),
-                    index = items.index(first),
-                    selectedItems = this.get();
-                if (selectedItems.length <= 1) {
-                    if (index > -1) this.select(index); else this.select(0);
-                } else {
-                    this.focus(index, items);
-                }
-            }, this))
-            .on(isTouch ? 'tap' : 'click', SELECTABLE, $.proxy(function (e) {
-                if (!this.isMultiple(e)) this.triggerAction(e);
-            }, this))
-            // double click
-            .on('dblclick', SELECTABLE, $.proxy(function (e) {
-                this.triggerDouble(e);
-            }, this))
-            // avoid context menu
-            .on('contextmenu', function (e) { e.preventDefault(); });
 
-        if (this.view.options.swipe) {
-            if (isTouch && _.device('android || ios') && _.device('smartphone') && !isLegacyWebview) {
-                this.view.$el
-                    .on('touchstart', SELECTABLE, this, this.onTouchStart)
-                    .on('touchmove', SELECTABLE, this, this.onTouchMove)
-                    .on('touchend', SELECTABLE, this, this.onTouchEnd)
-                    .on('tap', SWIPEDELETE, $.proxy(function (e) {
-                        this.onSwipeDelete(e);
-                    }, this))
-                    .on('tap', SWIPEMORE, $.proxy(function (e) {
-                        this.onSwipeMore(e);
-                    }, this));
-            } else if (isTouch) {
-                this.view.$el
-                    .on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
-                    .on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this))
-                    .on('tap', '.swipe-left-content', $.proxy(this.onTapRemove, this));
-            }
+        switch (this.behavior) {
+            case 'normal':
+                _.extend(this, normalBehavior);
+                break;
+            case 'alternative':
+                _.extend(this, normalBehavior, alternativeBehavior);
+                break;
+            case 'simple':
+                _.extend(this, simpleBehavior);
+                break;
+            default:
+                console.error('Unknown selection behavior', this.behavior);
+                break;
         }
+
+        this.registerEvents();
     }
 
     var prototype = {
@@ -446,7 +415,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         // defines behaviour when index out of bounds should be selected by arrow keys
         outOfBounds: function (index, items) {
             if (index < 0) return false;
-
             if (index >= items.length) {
                 // scroll to very bottom if at end of list (to keep a11y support)
                 this.view.$el.scrollTop(0xFFFFFF);
@@ -866,9 +834,66 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         onFocus: function () {
 
+            var items = this.getItems(),
+                first = items.filter('[tabindex="1"]:first'),
+                index = items.index(first),
+                selectedItems = this.get();
+            if (selectedItems.length <= 1) {
+                if (index > -1) this.select(index); else this.select(0);
+            } else {
+                this.focus(index, items);
+            }
         },
+
         getBehavior: function () {
             return this.behavior;
+        }
+    };
+
+    var normalBehavior = {
+
+        registerEvents: function () {
+
+            this.view.$el
+                .on('mousedown', $.proxy(this.onMousedown, this))
+                .on('mouseup', $.proxy(this.onMouseup, this))
+                // normal click/keyboard navigation
+                .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
+                .on(isTouch ? 'tap' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
+                // help accessing the list via keyboard if focus is outside
+                .on('focus', $.proxy(function () {
+                    if (this.view.mousedown) return;
+                    this.onFocus();
+                }, this))
+                .on(isTouch ? 'tap' : 'click', SELECTABLE, $.proxy(function (e) {
+                    if (!this.isMultiple(e)) this.triggerAction(e);
+                }, this))
+                // double click
+                .on('dblclick', SELECTABLE, $.proxy(function (e) {
+                    this.triggerDouble(e);
+                }, this))
+                // avoid context menu
+                .on('contextmenu', function (e) { e.preventDefault(); });
+
+            if (this.view.options.swipe) {
+                if (isTouch && _.device('android || ios') && _.device('smartphone') && !isLegacyWebview) {
+                    this.view.$el
+                        .on('touchstart', SELECTABLE, this, this.onTouchStart)
+                        .on('touchmove', SELECTABLE, this, this.onTouchMove)
+                        .on('touchend', SELECTABLE, this, this.onTouchEnd)
+                        .on('tap', SWIPEDELETE, $.proxy(function (e) {
+                            this.onSwipeDelete(e);
+                        }, this))
+                        .on('tap', SWIPEMORE, $.proxy(function (e) {
+                            this.onSwipeMore(e);
+                        }, this));
+                } else if (isTouch) {
+                    this.view.$el
+                        .on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
+                        .on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this))
+                        .on('tap', '.swipe-left-content', $.proxy(this.onTapRemove, this));
+                }
+            }
         }
     };
 
@@ -918,7 +943,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         // normal select now triggers selection:action instead of the usual events (item will be shown in detail view and checkbox is not checked)
         selectEvents: function (items) {
-            var layout = this.view.app.props.get('layout') || 'list';
+            var layout = (this.view.app && this.view.app.props.get('layout')) || 'list';
             //in list layout we need the old events or mails open when they are not supposed to (for example when moving with arrow keys)
             if (layout === 'list') {
                 this.triggerChange(items);
@@ -939,11 +964,105 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         }
     };
 
-    _.extend(Selection.prototype, prototype);
+    var simpleBehavior = {
 
-    if (behavior === 'alternative') {
-        _.extend(Selection.prototype, alternativeBehavior);
-    }
+        registerEvents: function () {
+
+            this.view.$el.addClass('focus-indicator');
+
+            this.view.$el
+                .on('click', SELECTABLE, $.proxy(this.onClick, this))
+                .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
+                .on('focus', $.proxy(this.onFocus, this));
+        },
+
+        isMultiple: function () {
+            return true;
+        },
+
+        isRange: function () {
+            return false;
+        },
+
+        onFocus: function () {
+
+            var items = this.getItems(),
+                first = items.filter('[tabindex="1"]:first'),
+                index = items.index(first);
+
+            this.focus(index > -1 ? index : 0, items);
+        },
+
+        onClick: function (e) {
+
+            var items = this.getItems(),
+                index = items.index($(e.currentTarget));
+
+            this.resetTabIndex(items, items.eq(index));
+            this.pick(index, items);
+            this.triggerChange(items);
+        },
+
+        onKeydown: function (e) {
+
+            switch (e.which) {
+
+                // space
+                case 32:
+                    this.onSpace(e);
+                    break;
+
+                // cursor up/down
+                case 38:
+                case 40:
+                    this.onCursor(e);
+                    break;
+
+                // [Ctrl|Cmd + A] > select all
+                case 65:
+                case 97:
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        this.selectAll();
+                    }
+                    break;
+
+                // [Ctrl|Cmd + D] > Deselect all
+                case 68:
+                case 100:
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        this.selectNone();
+                        this.focus(0);
+                    }
+                    break;
+
+                // no default
+            }
+        },
+
+        onSpace: function (e) {
+            // actually same as a click
+            this.onClick(e);
+        },
+
+        onCursor: function (e) {
+
+            // get current index
+            var items = this.getItems(),
+                current = $(document.activeElement),
+                index = (items.index(current) || 0),
+                cursorDown = e.which === 40;
+
+            index += cursorDown ? +1 : -1;
+            index = this.outOfBounds(index, items);
+
+            this.resetTabIndex(items, items.eq(index));
+            this.focus(index, items);
+        }
+    };
+
+    _.extend(Selection.prototype, prototype);
 
     return Selection;
 });
