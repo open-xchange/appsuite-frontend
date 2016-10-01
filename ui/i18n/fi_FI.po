@@ -1687,7 +1687,7 @@ msgstr "Kalenterit"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -3802,6 +3802,10 @@ msgstr "helmikuu"
 msgid "Feed URL"
 msgstr "Syötteen URL"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Feedback"
+msgstr "Palaute"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 気持ち・装飾
@@ -4384,6 +4388,20 @@ msgstr "Tuntia"
 msgid "How does this work?"
 msgstr "Kuinka tämä toimii?"
 
+#. 2 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "I don't like it"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "You like this"
+msgctxt "rating"
+msgid "I like it"
+msgstr "Sinä pidät tästä"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "IMAP -sisäänkirjautuminen"
@@ -4681,6 +4699,24 @@ msgstr "Pienempi kuin"
 msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr "Yhteisten viestien yhdistäminen oletusvälilehtiin vie hetken."
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
+msgstr ""
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 1 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's really bad"
+msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
@@ -5800,10 +5836,6 @@ msgstr ""
 "Huom: Tämän tilauksen päivittäminen korvaa kalenterisi sisällön ulkoisella "
 "sisällöllä. Ohjelmiston sisällä tekemäsi muutokset ylikirjoitetaan"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Huom: vCard-muoto ei voi sisältää jakelulistoja"
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
@@ -6484,14 +6516,6 @@ msgid ""
 "rename or disable them."
 msgstr ""
 
-#: apps/io.ox/files/util.js module:io.ox/files
-msgid ""
-"Please note, changing or removing the file extension will cause problems "
-"when viewing or editing."
-msgstr ""
-"Huomioithan, että tiedoston päätteen poistaminen tai muuttaminen aiheuttaa "
-"ongelmia katselulle ja muokkaukselle."
-
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -6499,13 +6523,20 @@ msgstr ""
 #| "formular. When you have questions or problems please contact our support "
 #| "directly"
 msgid ""
-"Please note, that support requests cannot be handled via the feedback-"
-"formular. If you have questions or problems please contact our support "
-"directly"
+"Please note that support requests cannot be handled via the feedback form. "
+"If you have questions or problems please contact our support directly"
 msgstr ""
 "Ole hyvä ja huomioi ettei tukipyyntöjä voida vastaanottaa palautelomakkeen "
 "kautta. Mikäli sinulla on kysymyksiä tai ongelmia, ole hyvä ja ota suoraan "
 "yhteyttä tukeemme."
+
+#: apps/io.ox/files/util.js module:io.ox/files
+msgid ""
+"Please note, changing or removing the file extension will cause problems "
+"when viewing or editing."
+msgstr ""
+"Huomioithan, että tiedoston päätteen poistaminen tai muuttaminen aiheuttaa "
+"ongelmia katselulle ja muokkaukselle."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -6926,23 +6957,10 @@ msgid "RSS Feeds"
 msgstr "RSS syötteet"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid ""
-"Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-"your rating."
-msgstr ""
-"Arvio %1$d %2$d mahdollisesta vahvistettu. Käytä nuolinäppäimiä muuttaaksesi "
-"arviotasi."
-
-#. %1$d is current raiting
-#. %2$d is the maximum rating
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
-msgid ""
-"Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
-"arrowkeys to adjust your rating."
-msgstr ""
-"Arvio %1$d %2$d mahdollisesta. Paina [Enter] vahvistaaksesi arvio tai käytä "
-"nuolinäppäimiä muuttaaksesi arviotasi."
+#, fuzzy
+#| msgid "Page %1$d of %2$d"
+msgid "Rating %1$d of 5"
+msgstr "%1$s/%2$s"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9446,7 +9464,9 @@ msgstr "Latauksen edistyminen"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-msgid "Uploading %1$s"
+#, fuzzy
+#| msgid "Uploading %1$s"
+msgid "Uploading \"%1$s\""
 msgstr "Ladataan  %1$s."
 
 #. headline for a progress bar
@@ -9512,6 +9532,16 @@ msgstr "Käytä mukautettua nimiä"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Näytä tekstimuotoiset postit vakiolevyisellä kirjasimella"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
+#| "your rating."
+msgid "Use left and right cursor keys to adjust your rating."
+msgstr ""
+"Arvio %1$d %2$d mahdollisesta vahvistettu. Käytä nuolinäppäimiä muuttaaksesi "
+"arviotasi."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -10133,6 +10163,12 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Nykyinen salasanasi"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Give feedback"
+msgid "Your feedback"
+msgstr "Anna palautetta"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11431,9 +11467,6 @@ msgstr "vvvv"
 #~ msgid "Fax (private)"
 #~ msgstr "Faksi (yksityinen)"
 
-#~ msgid "Feedback"
-#~ msgstr "Palaute"
-
 #~ msgid "File names must not be empty"
 #~ msgstr "Tiedoston nimi ei voi olla tyhjä"
 
@@ -11794,6 +11827,9 @@ msgstr "vvvv"
 #~ msgid "Note that some of the tabs can not be disabled."
 #~ msgstr "Huomioi, että joitakin välilehtiä ei voi kytkeä pois päältä."
 
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "Huom: vCard-muoto ei voi sisältää jakelulistoja"
+
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Uutisvirrassasi ei ole mitään."
 
@@ -11904,6 +11940,13 @@ msgstr "vvvv"
 
 #~ msgid "Publications must have a name"
 #~ msgstr "Julkaisulla täytyy olla nimi"
+
+#~ msgid ""
+#~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
+#~ "arrowkeys to adjust your rating."
+#~ msgstr ""
+#~ "Arvio %1$d %2$d mahdollisesta. Paina [Enter] vahvistaaksesi arvio tai "
+#~ "käytä nuolinäppäimiä muuttaaksesi arviotasi."
 
 #~ msgid "Reading the details"
 #~ msgstr "Yksityiskohtien katselu"
@@ -12818,9 +12861,6 @@ msgstr "vvvv"
 #~ msgstr[1] ""
 #~ "Sinulla on %1$d ilmoitusta. Paina [enter] päästäksesi ilmoitusalueelle ja "
 #~ "[escape] sulkeaksi sen."
-
-#~ msgid "You like this"
-#~ msgstr "Sinä pidät tästä"
 
 #~ msgid ""
 #~ "Your %s account has been created. Expect a confirmation mail from %s soon."

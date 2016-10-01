@@ -1716,7 +1716,7 @@ msgstr "Календари"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -3835,6 +3835,10 @@ msgstr "Февраль"
 msgid "Feed URL"
 msgstr "URL ленты"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Feedback"
+msgstr "Обратная связь"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 気持ち・装飾
@@ -4418,6 +4422,20 @@ msgstr "Часы"
 msgid "How does this work?"
 msgstr "Как это работает?"
 
+#. 2 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "I don't like it"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "You like this"
+msgctxt "rating"
+msgid "I like it"
+msgstr "Вам понравилось"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "Логин IMAP"
@@ -4717,6 +4735,24 @@ msgid ""
 msgstr ""
 "Сортировка почтовых сообщений общего назначения по стандартным вкладкам "
 "может занять некоторое время."
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
+msgstr ""
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 1 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's really bad"
+msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
@@ -5842,10 +5878,6 @@ msgstr ""
 "Примечание. Обновление подписки заменит содержимое календаря. Существующие "
 "настройки будут переопределены."
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Примечание. vCard не может содержать списки рассылок."
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
@@ -6524,14 +6556,6 @@ msgid ""
 "rename or disable them."
 msgstr ""
 
-#: apps/io.ox/files/util.js module:io.ox/files
-msgid ""
-"Please note, changing or removing the file extension will cause problems "
-"when viewing or editing."
-msgstr ""
-"Изменение и удаление расширения может помешать дальнейшему просмотру и "
-"редактированию файла."
-
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -6539,12 +6563,19 @@ msgstr ""
 #| "formular. When you have questions or problems please contact our support "
 #| "directly"
 msgid ""
-"Please note, that support requests cannot be handled via the feedback-"
-"formular. If you have questions or problems please contact our support "
-"directly"
+"Please note that support requests cannot be handled via the feedback form. "
+"If you have questions or problems please contact our support directly"
 msgstr ""
 "Не следует использовать форму обратной связи для создания запросов "
 "поддержки. В этом случае обратитесь в службу поддержки напрямую."
+
+#: apps/io.ox/files/util.js module:io.ox/files
+msgid ""
+"Please note, changing or removing the file extension will cause problems "
+"when viewing or editing."
+msgstr ""
+"Изменение и удаление расширения может помешать дальнейшему просмотру и "
+"редактированию файла."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -6963,22 +6994,10 @@ msgid "RSS Feeds"
 msgstr "RSS-каналы"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid ""
-"Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-"your rating."
-msgstr ""
-"Установлен рейтинг %1$d из %2$d. Используйте стрелки, чтобы его изменить."
-
-#. %1$d is current raiting
-#. %2$d is the maximum rating
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
-msgid ""
-"Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
-"arrowkeys to adjust your rating."
-msgstr ""
-"Рейтинг %1$d из %2$d. Нажмите Enter, чтобы подтвердить, или используйте "
-"стрелки, чтобы изменить рейтинг."
+#, fuzzy
+#| msgid "Page %1$d of %2$d"
+msgid "Rating %1$d of 5"
+msgstr "%1$d из %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9483,7 +9502,9 @@ msgstr "Индикатор выполнения"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-msgid "Uploading %1$s"
+#, fuzzy
+#| msgid "Uploading %1$s"
+msgid "Uploading \"%1$s\""
 msgstr "Отправляется %1$s"
 
 #. headline for a progress bar
@@ -9549,6 +9570,15 @@ msgstr "Другое имя"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Фиксированный шрифт для текстовых сообщений"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
+#| "your rating."
+msgid "Use left and right cursor keys to adjust your rating."
+msgstr ""
+"Установлен рейтинг %1$d из %2$d. Используйте стрелки, чтобы его изменить."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -10166,6 +10196,12 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Текущий пароль"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Give feedback"
+msgid "Your feedback"
+msgstr "Оставить отзыв"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11609,9 +11645,6 @@ msgstr "гггг"
 #~ msgid "Fax (private)"
 #~ msgstr "Факс (личный)"
 
-#~ msgid "Feedback"
-#~ msgstr "Обратная связь"
-
 #~ msgid "File names must not be empty"
 #~ msgstr "Имя файла не может быть пустым."
 
@@ -12068,6 +12101,9 @@ msgstr "гггг"
 #~ msgid "Note that some of the tabs can not be disabled."
 #~ msgstr "Некоторые вкладки не могут быть отключены."
 
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "Примечание. vCard не может содержать списки рассылок."
+
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Лента новостей пуста."
 
@@ -12225,6 +12261,13 @@ msgstr "гггг"
 
 #~ msgid "Publish item"
 #~ msgstr "Опубликовать объект"
+
+#~ msgid ""
+#~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
+#~ "arrowkeys to adjust your rating."
+#~ msgstr ""
+#~ "Рейтинг %1$d из %2$d. Нажмите Enter, чтобы подтвердить, или используйте "
+#~ "стрелки, чтобы изменить рейтинг."
 
 #~ msgid "Reading the details"
 #~ msgstr "Подробности"
@@ -13223,9 +13266,6 @@ msgstr "гггг"
 #~ msgstr[2] ""
 #~ "Получено %1$d уведомлений. Нажмите [Enter] для перехода к секции "
 #~ "уведомлений или [Escape], чтобы закрыть окно."
-
-#~ msgid "You like this"
-#~ msgstr "Вам понравилось"
 
 #~ msgid ""
 #~ "Your %s account has been created. Expect a confirmation mail from %s soon."

@@ -1713,7 +1713,7 @@ msgstr "Calendari"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -3877,6 +3877,10 @@ msgstr "febrer"
 msgid "Feed URL"
 msgstr "URL del feed"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Feedback"
+msgstr "Comentari"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 気持ち・装飾
@@ -4473,6 +4477,20 @@ msgstr "Hores"
 msgid "How does this work?"
 msgstr "Com funciona això?"
 
+#. 2 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "I don't like it"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "You like this"
+msgctxt "rating"
+msgid "I like it"
+msgstr "Us agrada això"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr ""
@@ -4763,6 +4781,24 @@ msgstr "És menor que"
 #: apps/io.ox/mail/categories/mediator.js module:io.ox/mail
 msgid ""
 "It may take some time until mails are assigned to the default categories."
+msgstr ""
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
+msgstr ""
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 1 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's really bad"
 msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
@@ -5915,10 +5951,6 @@ msgstr ""
 "calendari amb el contingut extern. Els canvis que heu realitzat en "
 "l'aplicació es sobreescriuran"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Nota: el format vCard no pot contenir llistes de distribució"
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
@@ -6601,14 +6633,6 @@ msgid ""
 "rename or disable them."
 msgstr ""
 
-#: apps/io.ox/files/util.js module:io.ox/files
-msgid ""
-"Please note, changing or removing the file extension will cause problems "
-"when viewing or editing."
-msgstr ""
-"Per favor, teniu en compte que modificar o eliminar l'extensió del fitxer "
-"pot causar problemes a l'hora de visualitzar-lo o editar-lo."
-
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -6616,13 +6640,20 @@ msgstr ""
 #| "formular. When you have questions or problems please contact our support "
 #| "directly"
 msgid ""
-"Please note, that support requests cannot be handled via the feedback-"
-"formular. If you have questions or problems please contact our support "
-"directly"
+"Please note that support requests cannot be handled via the feedback form. "
+"If you have questions or problems please contact our support directly"
 msgstr ""
 "Per favor, teniu en compte que les peticions de suport no es poden "
 "canalitzar a través del formulari de retroalimentació. Per favor, quan "
 "tengueu qüestions o problemes contactau directament amb el nostre suport."
+
+#: apps/io.ox/files/util.js module:io.ox/files
+msgid ""
+"Please note, changing or removing the file extension will cause problems "
+"when viewing or editing."
+msgstr ""
+"Per favor, teniu en compte que modificar o eliminar l'extensió del fitxer "
+"pot causar problemes a l'hora de visualitzar-lo o editar-lo."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -7057,24 +7088,8 @@ msgid "RSS Feeds"
 msgstr "Feed RSS"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid ""
-"Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-"your rating."
+msgid "Rating %1$d of 5"
 msgstr ""
-"Puntuació %1$d de %2$d confirmada. Emprau les tecles de moviment del cursor "
-"a l'esquerra i a la dreta per a ajustar la vostra puntuació."
-
-#. %1$d is current raiting
-#. %2$d is the maximum rating
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
-msgid ""
-"Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
-"arrowkeys to adjust your rating."
-msgstr ""
-"Puntuació %1$d de %2$d confirmada. Premeu Intro per a confirmar-la o emprau "
-"les tecles de moviment del cursor a l'esquerra i a la dreta per a ajustar la "
-"vostra puntuació."
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9593,7 +9608,7 @@ msgstr "En progrés"
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
-msgid "Uploading %1$s"
+msgid "Uploading \"%1$s\""
 msgstr "Pujant..."
 
 #. headline for a progress bar
@@ -9659,6 +9674,16 @@ msgstr "Nom d'usuari"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Empra fonts d'amplada fixa per a correus de text"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
+#| "your rating."
+msgid "Use left and right cursor keys to adjust your rating."
+msgstr ""
+"Puntuació %1$d de %2$d confirmada. Emprau les tecles de moviment del cursor "
+"a l'esquerra i a la dreta per a ajustar la vostra puntuació."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -10289,6 +10314,12 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "La vostra contrasenya actual"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Give feedback"
+msgid "Your feedback"
+msgstr "Deixa un comentari"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11313,9 +11344,6 @@ msgstr ""
 #~ msgid "Facebook reported an error:"
 #~ msgstr "Facebook ha informat d'un error:"
 
-#~ msgid "Feedback"
-#~ msgstr "Comentari"
-
 #~ msgid "File names must not be empty"
 #~ msgstr "Els noms de fitxer no poden estar buits"
 
@@ -11460,6 +11488,9 @@ msgstr ""
 #~ msgid "Note that some of the tabs can not be disabled."
 #~ msgstr "No es poden descarregar els ítems sense fitxer."
 
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "Nota: el format vCard no pot contenir llistes de distribució"
+
 #~ msgid "Off"
 #~ msgstr "Desconnectat"
 
@@ -11499,6 +11530,14 @@ msgstr ""
 
 #~ msgid "Public"
 #~ msgstr "Públic"
+
+#~ msgid ""
+#~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
+#~ "arrowkeys to adjust your rating."
+#~ msgstr ""
+#~ "Puntuació %1$d de %2$d confirmada. Premeu Intro per a confirmar-la o "
+#~ "emprau les tecles de moviment del cursor a l'esquerra i a la dreta per a "
+#~ "ajustar la vostra puntuació."
 
 #, fuzzy
 #~| msgid "Remove contact"
@@ -11820,9 +11859,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Podeu arrossegar i amollar els fitxers des de l'ordinador per a pujar bé "
 #~ "un fitxer nou, bé una nova versió d'un fitxer."
-
-#~ msgid "You like this"
-#~ msgstr "Us agrada això"
 
 #, fuzzy
 #~| msgid "Appointment invitations"

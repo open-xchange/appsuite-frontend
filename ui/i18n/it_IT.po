@@ -1706,7 +1706,7 @@ msgstr "Calendari"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -3831,6 +3831,10 @@ msgstr "Febbraio"
 msgid "Feed URL"
 msgstr "URL della fonte"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Feedback"
+msgstr "Commento"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 気持ち・装飾
@@ -4419,6 +4423,20 @@ msgstr "Ore"
 msgid "How does this work?"
 msgstr "Come funziona?"
 
+#. 2 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "I don't like it"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "You like this"
+msgctxt "rating"
+msgid "I like it"
+msgstr "Ti piace"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "Accesso IMAP"
@@ -4717,6 +4735,24 @@ msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr ""
 "L'assegnazione dei messaggi alle schede predefinite richiederà del tempo."
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
+msgstr ""
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 1 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's really bad"
+msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
@@ -5838,10 +5874,6 @@ msgstr ""
 "calendario con contenuto esterno. Le modifiche apportate con appsuite "
 "saranno sovrascritte"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Nota: il formato vCard non può contenere liste di distribuzione"
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
@@ -6525,14 +6557,6 @@ msgid ""
 "rename or disable them."
 msgstr ""
 
-#: apps/io.ox/files/util.js module:io.ox/files
-msgid ""
-"Please note, changing or removing the file extension will cause problems "
-"when viewing or editing."
-msgstr ""
-"Nota: la modifica o rimozione dell'estensione del file comporterà problemi "
-"di visualizzazione e modifica."
-
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -6540,13 +6564,20 @@ msgstr ""
 #| "formular. When you have questions or problems please contact our support "
 #| "directly"
 msgid ""
-"Please note, that support requests cannot be handled via the feedback-"
-"formular. If you have questions or problems please contact our support "
-"directly"
+"Please note that support requests cannot be handled via the feedback form. "
+"If you have questions or problems please contact our support directly"
 msgstr ""
 "Nota: le richieste di supporto non possono essere gestite tramite il modulo "
 "di commento. Quando hai domande o problemi, contatta direttamente il nostro "
 "supporto"
+
+#: apps/io.ox/files/util.js module:io.ox/files
+msgid ""
+"Please note, changing or removing the file extension will cause problems "
+"when viewing or editing."
+msgstr ""
+"Nota: la modifica o rimozione dell'estensione del file comporterà problemi "
+"di visualizzazione e modifica."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -6967,23 +6998,10 @@ msgid "RSS Feeds"
 msgstr "Fonti RSS"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid ""
-"Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-"your rating."
-msgstr ""
-"Valutazione di %1$d di %2$d confermata. Utilizza le frecce direzionali "
-"destra e sinistra per modificare la tua valutazione."
-
-#. %1$d is current raiting
-#. %2$d is the maximum rating
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
-msgid ""
-"Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
-"arrowkeys to adjust your rating."
-msgstr ""
-"Valutazione di %1$d di %2$d. Premi Invio per confermare o utilizza le frecce "
-"direzionali destra e sinistra per modificare la tua valutazione."
+#, fuzzy
+#| msgid "Page %1$d of %2$d"
+msgid "Rating %1$d of 5"
+msgstr "Pagina %1$d di %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9518,7 +9536,9 @@ msgstr "Avanzamento del caricamento"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-msgid "Uploading %1$s"
+#, fuzzy
+#| msgid "Uploading %1$s"
+msgid "Uploading \"%1$s\""
 msgstr "Caricamento di %1$s"
 
 #. headline for a progress bar
@@ -9585,6 +9605,16 @@ msgstr "Usa nome personalizzato"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Usa un carattere a larghezza fissa per il testo dei messaggi"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
+#| "your rating."
+msgid "Use left and right cursor keys to adjust your rating."
+msgstr ""
+"Valutazione di %1$d di %2$d confermata. Utilizza le frecce direzionali "
+"destra e sinistra per modificare la tua valutazione."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -10214,6 +10244,12 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "La password attuale"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Give feedback"
+msgid "Your feedback"
+msgstr "Commenta"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -12933,9 +12969,6 @@ msgstr "aaaa"
 #~ msgid "Fax (private)"
 #~ msgstr "Fax (privato)"
 
-#~ msgid "Feedback"
-#~ msgstr "Commento"
-
 #~ msgid "File name:"
 #~ msgstr "Nome file:"
 
@@ -13596,6 +13629,9 @@ msgstr "aaaa"
 #~ msgid "Note that some of the tabs can not be disabled."
 #~ msgstr "Nota che alcune delle schede non possono essere disabilitate."
 
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "Nota: il formato vCard non può contenere liste di distribuzione"
+
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Niente nella tua fonte di notizie."
 
@@ -13798,6 +13834,13 @@ msgstr "aaaa"
 
 #~ msgid "Pull To Refresh"
 #~ msgstr "Estendi per aggiornare"
+
+#~ msgid ""
+#~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
+#~ "arrowkeys to adjust your rating."
+#~ msgstr ""
+#~ "Valutazione di %1$d di %2$d. Premi Invio per confermare o utilizza le "
+#~ "frecce direzionali destra e sinistra per modificare la tua valutazione."
 
 #~ msgid "Read Only Mode"
 #~ msgstr "Modalità di sola lettura"
@@ -15019,9 +15062,6 @@ msgstr "aaaa"
 
 #~ msgid "You have edit rights."
 #~ msgstr "Hai i diritti di modifica."
-
-#~ msgid "You like this"
-#~ msgstr "Ti piace"
 
 #~ msgid ""
 #~ "Your %s account has been created. Expect a confirmation mail from %s soon."

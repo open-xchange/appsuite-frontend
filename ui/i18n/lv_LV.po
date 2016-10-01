@@ -1721,7 +1721,7 @@ msgstr "Kalendāri"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -3849,6 +3849,10 @@ msgstr "Februāris"
 msgid "Feed URL"
 msgstr "Plūsmas URL"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Feedback"
+msgstr "Atsauksmes"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 気持ち・装飾
@@ -4429,6 +4433,20 @@ msgstr "Stundas"
 msgid "How does this work?"
 msgstr "Kā tas strādā?"
 
+#. 2 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "I don't like it"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "You like this"
+msgctxt "rating"
+msgid "I like it"
+msgstr "Jums šis patīk"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "IMAP pieslēgums"
@@ -4729,6 +4747,24 @@ msgid ""
 msgstr ""
 "Kopējo pasta vēstuļu sakārtošana atbilstošajās vērtnēs var prasīt zināmu "
 "laiku."
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
+msgstr ""
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 1 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's really bad"
+msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
@@ -5856,10 +5892,6 @@ msgstr ""
 "aizvietotas ar ārējo saturu. Izmaiņas, kuras ir veiktas Open-Xchange "
 "aplikācijā tiks zaudētas."
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Piezīme: vCard formāts nevar saturēt izplatīšanas sarakstus"
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
@@ -6541,14 +6573,6 @@ msgid ""
 "rename or disable them."
 msgstr ""
 
-#: apps/io.ox/files/util.js module:io.ox/files
-msgid ""
-"Please note, changing or removing the file extension will cause problems "
-"when viewing or editing."
-msgstr ""
-"Ievērojiet ka faila paplašinājuma izmaiņas vai dzēšana izraisīs skatīšanas "
-"un rediģēšanas problēms."
-
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -6556,13 +6580,20 @@ msgstr ""
 #| "formular. When you have questions or problems please contact our support "
 #| "directly"
 msgid ""
-"Please note, that support requests cannot be handled via the feedback-"
-"formular. If you have questions or problems please contact our support "
-"directly"
+"Please note that support requests cannot be handled via the feedback form. "
+"If you have questions or problems please contact our support directly"
 msgstr ""
 "Ivērojiet, ka atbalsta pieprasījumiem nevar izmantot atsauksmju funkciju. Ja "
 "jums ir jautājumi vai problēmas, lūdzu sazinieties tieši ar mūsu atbalsta "
 "dienestu"
+
+#: apps/io.ox/files/util.js module:io.ox/files
+msgid ""
+"Please note, changing or removing the file extension will cause problems "
+"when viewing or editing."
+msgstr ""
+"Ievērojiet ka faila paplašinājuma izmaiņas vai dzēšana izraisīs skatīšanas "
+"un rediģēšanas problēms."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -6981,23 +7012,10 @@ msgid "RSS Feeds"
 msgstr "RSS avoti"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid ""
-"Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-"your rating."
-msgstr ""
-"Vērtējums %1$d no %2$d ir apstiprināts. Lai koriģētu vērtējumu, izmantojiet "
-"kreiso un labo bultiņas taustiņu."
-
-#. %1$d is current raiting
-#. %2$d is the maximum rating
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
-msgid ""
-"Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
-"arrowkeys to adjust your rating."
-msgstr ""
-"Vērtējums %1$d no %2$d. Lai koriģētu vērtējumu, izmantojiet kreiso un labo "
-"bultiņas taustiņu. Lai pastiprinātu, piespiediet 'Enter'."
+#, fuzzy
+#| msgid "Page %1$d of %2$d"
+msgid "Rating %1$d of 5"
+msgstr "Lapa %1$d no %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9524,7 +9542,9 @@ msgstr "Ielādes progress"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-msgid "Uploading %1$s"
+#, fuzzy
+#| msgid "Uploading %1$s"
+msgid "Uploading \"%1$s\""
 msgstr "Ielādē %1$s"
 
 #. headline for a progress bar
@@ -9591,6 +9611,16 @@ msgstr "Lietot pielāgotu vārdu"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Lietot fiksēta garuma fontu teksta formāta vēstulēs"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
+#| "your rating."
+msgid "Use left and right cursor keys to adjust your rating."
+msgstr ""
+"Vērtējums %1$d no %2$d ir apstiprināts. Lai koriģētu vērtējumu, izmantojiet "
+"kreiso un labo bultiņas taustiņu."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -10220,6 +10250,12 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Jūsu pašreizējā parole"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Give feedback"
+msgid "Your feedback"
+msgstr "Atsausmes"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -12956,9 +12992,6 @@ msgstr "yyyy"
 #~ msgid "Feb"
 #~ msgstr "Feb."
 
-#~ msgid "Feedback"
-#~ msgstr "Atsauksmes"
-
 #~ msgid "Fiji"
 #~ msgstr "Fidži"
 
@@ -14312,6 +14345,9 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Piezīme: Pievienojumi nav apskatāmi jauna ziņojuma sastādīšanas laikā"
 
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "Piezīme: vCard formāts nevar saturēt izplatīšanas sarakstus"
+
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Jūsu ziņu straumē nav jaunas informācijas."
 
@@ -14810,6 +14846,13 @@ msgstr "yyyy"
 
 #~ msgid "RUB"
 #~ msgstr "RUB"
+
+#~ msgid ""
+#~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
+#~ "arrowkeys to adjust your rating."
+#~ msgstr ""
+#~ "Vērtējums %1$d no %2$d. Lai koriģētu vērtējumu, izmantojiet kreiso un "
+#~ "labo bultiņas taustiņu. Lai pastiprinātu, piespiediet 'Enter'."
 
 #~ msgid "Read Only Mode"
 #~ msgstr "Tikai lasīšanai"
@@ -16959,9 +17002,6 @@ msgstr "yyyy"
 
 #~ msgid "You have the following appointment in %s:"
 #~ msgstr "Jums ir sekojošas tikšanās iekš %s:"
-
-#~ msgid "You like this"
-#~ msgstr "Jums šis patīk"
 
 #~ msgid "You must specify an E-Mail address for redirection."
 #~ msgstr "Jums ir jānorāda e-pasta adrese pāradresācijai."

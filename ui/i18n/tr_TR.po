@@ -1669,7 +1669,7 @@ msgstr "Takvim"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -3850,6 +3850,10 @@ msgstr "Şubat"
 msgid "Feed URL"
 msgstr "Yayın URL'i "
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Feedback"
+msgstr "Geri bildirim "
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 気持ち・装飾
@@ -4450,6 +4454,20 @@ msgstr "Saat"
 msgid "How does this work?"
 msgstr "Bu nasıl çalışır?"
 
+#. 2 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "I don't like it"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "You like this"
+msgctxt "rating"
+msgid "I like it"
+msgstr "Bunu beğendiniz"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr ""
@@ -4742,6 +4760,24 @@ msgstr "den küçük"
 #: apps/io.ox/mail/categories/mediator.js module:io.ox/mail
 msgid ""
 "It may take some time until mails are assigned to the default categories."
+msgstr ""
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
+msgstr ""
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 1 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's really bad"
 msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
@@ -5888,10 +5924,6 @@ msgstr ""
 "değiştirecek. Appsuite içinde yapmış olduğunuz değişiklikler yeniden "
 "yazılmış olacak"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Not: vCard formatı dağıtım listelerini içermemektedir "
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
@@ -6579,14 +6611,6 @@ msgid ""
 "rename or disable them."
 msgstr ""
 
-#: apps/io.ox/files/util.js module:io.ox/files
-msgid ""
-"Please note, changing or removing the file extension will cause problems "
-"when viewing or editing."
-msgstr ""
-"Lütfen unutmayınz ki, dosya uzantısını değiştirmek veya kaldırmak "
-"görüntülerken ya da düzenlerken problemlere yol açacaktır."
-
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -6594,13 +6618,20 @@ msgstr ""
 #| "formular. When you have questions or problems please contact our support "
 #| "directly"
 msgid ""
-"Please note, that support requests cannot be handled via the feedback-"
-"formular. If you have questions or problems please contact our support "
-"directly"
+"Please note that support requests cannot be handled via the feedback form. "
+"If you have questions or problems please contact our support directly"
 msgstr ""
 "Lütfen, destek taleplerinin geri bildirim formu üzerinden yanıtlanmayacağını "
 "unutmayın. Herhangi bir sorunuz ya da sorununuz olması durumunda lütfen "
 "doğrudan destek birimimizle iletişime geçin. "
+
+#: apps/io.ox/files/util.js module:io.ox/files
+msgid ""
+"Please note, changing or removing the file extension will cause problems "
+"when viewing or editing."
+msgstr ""
+"Lütfen unutmayınz ki, dosya uzantısını değiştirmek veya kaldırmak "
+"görüntülerken ya da düzenlerken problemlere yol açacaktır."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -7042,23 +7073,9 @@ msgid "RSS Feeds"
 msgstr "RSS Feeds"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid ""
-"Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-"your rating."
-msgstr ""
-"%2$d derecelendirmesi %1$d onaylanmıştır. Derecelendirmenizi ayarlamak için "
-"sağ ve sol tuşlarını kullanın."
-
-#. %1$d is current raiting
-#. %2$d is the maximum rating
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
-msgid ""
-"Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
-"arrowkeys to adjust your rating."
-msgstr ""
-"%2$d derecelendirmesi %1$d. Onaylamak için lütfen Giriş'e tıklatın ya da sağ "
-"ve sol ok tuşlarını kullanarak derecelendirmenizi ayarlayın."
+#, fuzzy
+msgid "Rating %1$d of 5"
+msgstr "%1$d of %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9618,7 +9635,9 @@ msgstr "İlerlemeyi yükle"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-msgid "Uploading %1$s"
+#, fuzzy
+#| msgid "Uploading %1$s"
+msgid "Uploading \"%1$s\""
 msgstr "Yükleniyor %1$s"
 
 #. headline for a progress bar
@@ -9686,6 +9705,16 @@ msgstr "Özel bir isim kullanın"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Metin epostaları için sabit genişlikli yazı tipini kullanın"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
+#| "your rating."
+msgid "Use left and right cursor keys to adjust your rating."
+msgstr ""
+"%2$d derecelendirmesi %1$d onaylanmıştır. Derecelendirmenizi ayarlamak için "
+"sağ ve sol tuşlarını kullanın."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -10339,6 +10368,12 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Şu andaki şifreniz"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Give feedback"
+msgid "Your feedback"
+msgstr "Geri bildirim brakın "
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11168,9 +11203,6 @@ msgstr "yyyy"
 #~ msgid "Facebook reported an error:"
 #~ msgstr "Facebook bir hata bildirdi:"
 
-#~ msgid "Feedback"
-#~ msgstr "Geri bildirim "
-
 #~ msgid "Filename"
 #~ msgstr "Dosya Adı "
 
@@ -11243,6 +11275,9 @@ msgstr "yyyy"
 #~ msgid "Note that some of the tabs can not be disabled."
 #~ msgstr "Dosyasız ögeler indirilemez."
 
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "Not: vCard formatı dağıtım listelerini içermemektedir "
+
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Haberyayınınızda herhangi bir şey bulunamadı."
 
@@ -11258,6 +11293,13 @@ msgstr "yyyy"
 
 #~ msgid "Press [enter] to open"
 #~ msgstr "Açmak için [giriş yapın] a tıklayın"
+
+#~ msgid ""
+#~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
+#~ "arrowkeys to adjust your rating."
+#~ msgstr ""
+#~ "%2$d derecelendirmesi %1$d. Onaylamak için lütfen Giriş'e tıklatın ya da "
+#~ "sağ ve sol ok tuşlarını kullanarak derecelendirmenizi ayarlayın."
 
 #~ msgid "Remove facet"
 #~ msgstr "Özellliği kaldır"
@@ -11413,9 +11455,6 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Farklı zaman dilimleri seçtiğinizde bitiş tarihine ait olan zaman dilimi "
 #~ "kaydedilmeyecektir."
-
-#~ msgid "You like this"
-#~ msgstr "Bunu beğendiniz"
 
 #~ msgid "Your Applications"
 #~ msgstr "Başvurularınız"

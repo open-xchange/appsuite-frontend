@@ -1698,7 +1698,7 @@ msgstr "Naptárak"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -3826,6 +3826,10 @@ msgstr "Február"
 msgid "Feed URL"
 msgstr "Forrás URL"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Feedback"
+msgstr "Visszajelzés"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 気持ち・装飾
@@ -4409,6 +4413,20 @@ msgstr "Óra"
 msgid "How does this work?"
 msgstr "Hogyan működik?"
 
+#. 2 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "I don't like it"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "You like this"
+msgctxt "rating"
+msgid "I like it"
+msgstr "Kedveli ezt"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "IMAP bejelentkezés"
@@ -4708,6 +4726,24 @@ msgid ""
 msgstr ""
 "Eltarthat egy ideig, amíg a közös levelek az alapértelmezett lapokhoz "
 "rendelődnek."
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
+msgstr ""
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 1 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's really bad"
+msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
@@ -5828,10 +5864,6 @@ msgstr ""
 "Megjegyzés: Ezen feliratkozás frissítése lecseréli a naptártartalmat a külső "
 "tartalommal. Az appsuite-on belül végzett módosítások felül lesznek írva."
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Megjegyzés: A vCard formátum nem tartalmaz disztribúciós listákat"
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
@@ -6512,14 +6544,6 @@ msgid ""
 "rename or disable them."
 msgstr ""
 
-#: apps/io.ox/files/util.js module:io.ox/files
-msgid ""
-"Please note, changing or removing the file extension will cause problems "
-"when viewing or editing."
-msgstr ""
-"Ne feledje, a fájlkiterjesztések módosítása vagy eltávolítása problémákat "
-"fog okozni a megjelenítéskor és szerkesztéskor."
-
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -6527,13 +6551,20 @@ msgstr ""
 #| "formular. When you have questions or problems please contact our support "
 #| "directly"
 msgid ""
-"Please note, that support requests cannot be handled via the feedback-"
-"formular. If you have questions or problems please contact our support "
-"directly"
+"Please note that support requests cannot be handled via the feedback form. "
+"If you have questions or problems please contact our support directly"
 msgstr ""
 "A támogatási kérdéseket nem ezen keresztül kezeljük. Amennyiben kérdése vagy "
 "problémája van, akkor lépjen kapcsolatba közvetlenül a technikai "
 "támogatással."
+
+#: apps/io.ox/files/util.js module:io.ox/files
+msgid ""
+"Please note, changing or removing the file extension will cause problems "
+"when viewing or editing."
+msgstr ""
+"Ne feledje, a fájlkiterjesztések módosítása vagy eltávolítása problémákat "
+"fog okozni a megjelenítéskor és szerkesztéskor."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -6953,23 +6984,10 @@ msgid "RSS Feeds"
 msgstr "RSS hírforrások"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid ""
-"Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-"your rating."
-msgstr ""
-"%1$d / %2$d értékelés megerősítése. Az értékelést a jobb/bal nyíllal lehet "
-"módosítani."
-
-#. %1$d is current raiting
-#. %2$d is the maximum rating
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
-msgid ""
-"Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
-"arrowkeys to adjust your rating."
-msgstr ""
-"%1$d / %2$d értékelés megerősítése. Az értékeléshez nyomja meg ez Entert "
-"vagy módosítsa a jobb/bal nyíllal."
+#, fuzzy
+#| msgid "Page %1$d of %2$d"
+msgid "Rating %1$d of 5"
+msgstr "%1$d/%2$d oldal"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9479,7 +9497,9 @@ msgstr "Feltöltés folyamatban"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-msgid "Uploading %1$s"
+#, fuzzy
+#| msgid "Uploading %1$s"
+msgid "Uploading \"%1$s\""
 msgstr "%1$s feltöltése"
 
 #. headline for a progress bar
@@ -9546,6 +9566,16 @@ msgstr "Egyéni név használata"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Rögzített szélességű betűkészlet szöveges levelekhez"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
+#| "your rating."
+msgid "Use left and right cursor keys to adjust your rating."
+msgstr ""
+"%1$d / %2$d értékelés megerősítése. Az értékelést a jobb/bal nyíllal lehet "
+"módosítani."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -10169,6 +10199,12 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "A jelenlegi jelszava"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Give feedback"
+msgid "Your feedback"
+msgstr "Adjon visszajelzést"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11024,9 +11060,6 @@ msgstr "yyyy"
 #~ msgid "Favorite timezone"
 #~ msgstr "Kedvenc időzóná"
 
-#~ msgid "Feedback"
-#~ msgstr "Visszajelzés"
-
 #~ msgid "Filename"
 #~ msgstr "Fájlnév"
 
@@ -11151,6 +11184,9 @@ msgstr "yyyy"
 #~ msgid "Note that some of the tabs can not be disabled."
 #~ msgstr "Néhány lap nem tiltható le."
 
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "Megjegyzés: A vCard formátum nem tartalmaz disztribúciós listákat"
+
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Nincs semmi a hírcsatornában."
 
@@ -11187,6 +11223,13 @@ msgstr "yyyy"
 
 #~ msgid "Press [enter] to open"
 #~ msgstr "Nyomja meg az [enter]-t a megnyitáshoz:"
+
+#~ msgid ""
+#~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
+#~ "arrowkeys to adjust your rating."
+#~ msgstr ""
+#~ "%1$d / %2$d értékelés megerősítése. Az értékeléshez nyomja meg ez Entert "
+#~ "vagy módosítsa a jobb/bal nyíllal."
 
 #~ msgid "Resource name"
 #~ msgstr "Erőforrásnév"
@@ -11402,9 +11445,6 @@ msgstr "yyyy"
 
 #~ msgid "Yes, always move them all"
 #~ msgstr "Igen, mindig mozgassa az összest"
-
-#~ msgid "You like this"
-#~ msgstr "Kedveli ezt"
 
 #~ msgid "Your Applications"
 #~ msgstr "Alkalmazásai"

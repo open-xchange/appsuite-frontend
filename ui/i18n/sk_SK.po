@@ -1722,7 +1722,7 @@ msgstr "Kalendáre"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -3851,6 +3851,10 @@ msgstr "február"
 msgid "Feed URL"
 msgstr "URL kanála"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Feedback"
+msgstr "Spätná väzba"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 気持ち・装飾
@@ -4432,6 +4436,20 @@ msgstr "Hodiny"
 msgid "How does this work?"
 msgstr "Ako to funguje?"
 
+#. 2 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "I don't like it"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "You like this"
+msgctxt "rating"
+msgid "I like it"
+msgstr "Toto sa vám páči"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "Prihlasovacie meno IMAP"
@@ -4730,6 +4748,24 @@ msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr ""
 "Bude trvať nejaký čas, kým sa spoločné maily priradia do predvolených kariet."
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
+msgstr ""
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 1 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's really bad"
+msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
@@ -5856,10 +5892,6 @@ msgstr ""
 "Poznámka: Obnovenie tohto odberu nahradí obsah kalendára externým obsahom. "
 "Prepíše akékoľvek zmeny, ktoré ste vykonali v rámci appsuite"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Poznámka: Formát vCard nemôže obsahovať distribučné zoznamy"
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
@@ -6541,14 +6573,6 @@ msgid ""
 "rename or disable them."
 msgstr ""
 
-#: apps/io.ox/files/util.js module:io.ox/files
-msgid ""
-"Please note, changing or removing the file extension will cause problems "
-"when viewing or editing."
-msgstr ""
-"Vezmite prosím na vedomie, že zmenenie alebo odstránenie prípony súboru "
-"spôsobí problémy prehliadaním či úpravou."
-
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -6556,13 +6580,20 @@ msgstr ""
 #| "formular. When you have questions or problems please contact our support "
 #| "directly"
 msgid ""
-"Please note, that support requests cannot be handled via the feedback-"
-"formular. If you have questions or problems please contact our support "
-"directly"
+"Please note that support requests cannot be handled via the feedback form. "
+"If you have questions or problems please contact our support directly"
 msgstr ""
 "Prosím, pamätajte, že žiadosti o podporu nemôžeme riešiť pomocou formulára "
 "spätnej väzby. Ak máte otázky alebo problémy, prosím kontaktujte priamo našu "
 "podporu."
+
+#: apps/io.ox/files/util.js module:io.ox/files
+msgid ""
+"Please note, changing or removing the file extension will cause problems "
+"when viewing or editing."
+msgstr ""
+"Vezmite prosím na vedomie, že zmenenie alebo odstránenie prípony súboru "
+"spôsobí problémy prehliadaním či úpravou."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -6983,23 +7014,10 @@ msgid "RSS Feeds"
 msgstr "Kanály RSS"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid ""
-"Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-"your rating."
-msgstr ""
-"Hodnotenie %1$d z %2$d potvrdené. Použite šípky vľavo a vpravo na upravenie "
-"vášho hodnotenia."
-
-#. %1$d is current raiting
-#. %2$d is the maximum rating
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
-msgid ""
-"Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
-"arrowkeys to adjust your rating."
-msgstr ""
-"Hodnotenie %1$d z %2$d. Použite Enter na potvrdenie alebo šípky vľavo a "
-"vpravo na upravenie vášho hodnotenia."
+#, fuzzy
+#| msgid "Page %1$d of %2$d"
+msgid "Rating %1$d of 5"
+msgstr "Strana %1$d z %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9527,7 +9545,9 @@ msgstr "Priebeh nahrávania"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-msgid "Uploading %1$s"
+#, fuzzy
+#| msgid "Uploading %1$s"
+msgid "Uploading \"%1$s\""
 msgstr "Nahráva sa %1$s"
 
 #. headline for a progress bar
@@ -9594,6 +9614,16 @@ msgstr "Použiť vlastné meno"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Používať proporcionálne písmo pre text emailov"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
+#| "your rating."
+msgid "Use left and right cursor keys to adjust your rating."
+msgstr ""
+"Hodnotenie %1$d z %2$d potvrdené. Použite šípky vľavo a vpravo na upravenie "
+"vášho hodnotenia."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -10219,6 +10249,12 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Vaše aktuálne heslo"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Give feedback"
+msgid "Your feedback"
+msgstr "Poskytnúť spätnú väzbu"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -12943,9 +12979,6 @@ msgstr "RRRR"
 #~ msgid "Feb"
 #~ msgstr "Feb"
 
-#~ msgid "Feedback"
-#~ msgstr "Spätná väzba"
-
 #~ msgid "Fiji"
 #~ msgstr "Fidži"
 
@@ -14296,6 +14329,9 @@ msgstr "RRRR"
 #~ msgid "Note: Attachments are not viewable when composing a new message"
 #~ msgstr "Pozn.: Prílohy sa nedajú zobraziť počas písania novej správy"
 
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "Poznámka: Formát vCard nemôže obsahovať distribučné zoznamy"
+
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Váš kanál správ je prázdny."
 
@@ -14793,6 +14829,13 @@ msgstr "RRRR"
 
 #~ msgid "RUB"
 #~ msgstr "RUB"
+
+#~ msgid ""
+#~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
+#~ "arrowkeys to adjust your rating."
+#~ msgstr ""
+#~ "Hodnotenie %1$d z %2$d. Použite Enter na potvrdenie alebo šípky vľavo a "
+#~ "vpravo na upravenie vášho hodnotenia."
 
 #~ msgid "Read Only Mode"
 #~ msgstr "Režim len na čítanie"
@@ -16907,9 +16950,6 @@ msgstr "RRRR"
 
 #~ msgid "You have the following appointment in %s:"
 #~ msgstr "%s máte nasledovnú schôdzku:"
-
-#~ msgid "You like this"
-#~ msgstr "Toto sa vám páči"
 
 #~ msgid "You must specify an E-Mail address for redirection."
 #~ msgstr "Musíte zadať emailovú adresu presmerovania."

@@ -434,6 +434,7 @@ msgstr ""
 #: apps/io.ox/files/actions/versions-delete.js
 #: apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js
 #: module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js
@@ -4192,11 +4193,6 @@ msgstr ""
 
 #: apps/io.ox/core/export/export.js
 #: module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr ""
-
-#: apps/io.ox/core/export/export.js
-#: module:io.ox/core
 msgid "Include distribution lists"
 msgstr ""
 
@@ -7762,7 +7758,7 @@ msgstr ""
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js
 #: module:io.ox/files
-msgid "Uploading %1$s"
+msgid "Uploading \"%1$s\""
 msgstr ""
 
 #: apps/io.ox/files/upload/view.js
@@ -11574,17 +11570,54 @@ msgstr ""
 msgid "Delete resource"
 msgstr ""
 
-#. %1$d is current raiting
-#. %2$d is the maximum rating
+#. 1 of 5 star rating
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-#, c-format
-msgid "Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating."
+msgctxt "rating"
+msgid "It's really bad"
+msgstr ""
+
+#. 2 of 5 star rating
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
+msgctxt "rating"
+msgid "I don't like it"
+msgstr ""
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
+msgctxt "rating"
+msgid "I like it"
+msgstr ""
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust your rating."
+msgid "Use left and right cursor keys to adjust your rating."
+msgstr ""
+
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
+msgid "Rating %1$d of 5"
+msgstr ""
+
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
+msgid "Your feedback"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js
@@ -11599,12 +11632,17 @@ msgstr ""
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Please note, that support requests cannot be handled via the feedback-formular. If you have questions or problems please contact our support directly"
+msgid "Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
 msgid "Thank you for your feedback"
+msgstr ""
+
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
+msgid "Feedback"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js

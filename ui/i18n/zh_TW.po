@@ -1664,7 +1664,7 @@ msgstr "日曆"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -3754,6 +3754,10 @@ msgstr "二月"
 msgid "Feed URL"
 msgstr "資訊來源 URL"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Feedback"
+msgstr "回饋"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 気持ち・装飾
@@ -4333,6 +4337,20 @@ msgstr "時"
 msgid "How does this work?"
 msgstr "這個功能如何使用？"
 
+#. 2 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "I don't like it"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "You like this"
+msgctxt "rating"
+msgid "I like it"
+msgstr "您覺得這個讚"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "IMAP 登入資訊"
@@ -4619,6 +4637,24 @@ msgstr "小於"
 msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr "需要一些時間才能將一般郵件分配到預設分頁中。"
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
+msgstr ""
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 1 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's really bad"
+msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
@@ -5733,10 +5769,6 @@ msgstr ""
 "備註：更新此訂閱將會以外部內容取代行事曆內容。您在軟體套裝裏已經作出的更改將"
 "會被覆蓋。"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "注意: vCard 格式無法幫韓通訊組清單"
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
@@ -6412,12 +6444,6 @@ msgid ""
 "rename or disable them."
 msgstr ""
 
-#: apps/io.ox/files/util.js module:io.ox/files
-msgid ""
-"Please note, changing or removing the file extension will cause problems "
-"when viewing or editing."
-msgstr "請注意，更改或移除副檔名將會導致檢視或編輯發生問題。"
-
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -6425,12 +6451,17 @@ msgstr "請注意，更改或移除副檔名將會導致檢視或編輯發生問
 #| "formular. When you have questions or problems please contact our support "
 #| "directly"
 msgid ""
-"Please note, that support requests cannot be handled via the feedback-"
-"formular. If you have questions or problems please contact our support "
-"directly"
+"Please note that support requests cannot be handled via the feedback form. "
+"If you have questions or problems please contact our support directly"
 msgstr ""
 "請注意，技術支援請求無法透過意見回饋方式傳送。若您有問題時請直接連絡我們的技"
 "術支援團隊。"
+
+#: apps/io.ox/files/util.js module:io.ox/files
+msgid ""
+"Please note, changing or removing the file extension will cause problems "
+"when viewing or editing."
+msgstr "請注意，更改或移除副檔名將會導致檢視或編輯發生問題。"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -6849,19 +6880,10 @@ msgid "RSS Feeds"
 msgstr "RSS 資訊來源"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid ""
-"Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-"your rating."
-msgstr "已確認 %1$d / %2$d 評分。請使用左右鍵調整您的評分。"
-
-#. %1$d is current raiting
-#. %2$d is the maximum rating
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
-msgid ""
-"Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
-"arrowkeys to adjust your rating."
-msgstr "已評分 %1$d / %2$d。請按 Enter 確認或使用左右鍵調整您的評分。"
+#, fuzzy
+#| msgid "Page %1$d of %2$d"
+msgid "Rating %1$d of 5"
+msgstr "第 %1$d 頁，共 %2$d 頁"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9304,7 +9326,9 @@ msgstr "上船進度"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-msgid "Uploading %1$s"
+#, fuzzy
+#| msgid "Uploading %1$s"
+msgid "Uploading \"%1$s\""
 msgstr "正在上傳 %1$s"
 
 #. headline for a progress bar
@@ -9370,6 +9394,14 @@ msgstr "使用自訂名稱"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "針對純文字郵件使用固定寬度字體顯示"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
+#| "your rating."
+msgid "Use left and right cursor keys to adjust your rating."
+msgstr "已確認 %1$d / %2$d 評分。請使用左右鍵調整您的評分。"
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -9975,6 +10007,12 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "您目前的密碼"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Give feedback"
+msgid "Your feedback"
+msgstr "提供意見回饋"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -12564,9 +12602,6 @@ msgstr "年"
 #~ msgid "Fax (private)"
 #~ msgstr "傳真（私人）"
 
-#~ msgid "Feedback"
-#~ msgstr "回饋"
-
 #~ msgid "File names must not be empty"
 #~ msgstr "檔案名稱不能為空"
 
@@ -13194,6 +13229,9 @@ msgstr "年"
 #~ msgid "Note that some of the tabs can not be disabled."
 #~ msgstr "請注意某些分頁無法關閉。"
 
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "注意: vCard 格式無法幫韓通訊組清單"
+
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "您的 Newsfeed 中沒有內容。"
 
@@ -13394,6 +13432,11 @@ msgstr "年"
 
 #~ msgid "Pull To Refresh"
 #~ msgstr "往下拉以更新"
+
+#~ msgid ""
+#~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
+#~ "arrowkeys to adjust your rating."
+#~ msgstr "已評分 %1$d / %2$d。請按 Enter 確認或使用左右鍵調整您的評分。"
 
 #~ msgid "Read Only Mode"
 #~ msgstr "唯讀模式"
@@ -14463,9 +14506,6 @@ msgstr "年"
 
 #~ msgid "You have edit rights."
 #~ msgstr "您擁有編輯全線。"
-
-#~ msgid "You like this"
-#~ msgstr "您覺得這個讚"
 
 #~ msgid ""
 #~ "Your %s account has been created. Expect a confirmation mail from %s soon."

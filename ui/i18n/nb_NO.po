@@ -1678,7 +1678,7 @@ msgstr "Kalendere"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -3792,6 +3792,10 @@ msgstr "Februar"
 msgid "Feed URL"
 msgstr "Feed-URL"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Feedback"
+msgstr "Tilbakemelding"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 気持ち・装飾
@@ -4375,6 +4379,20 @@ msgstr "Timer"
 msgid "How does this work?"
 msgstr "Hvordan fungerer dette?"
 
+#. 2 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "I don't like it"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "You like this"
+msgctxt "rating"
+msgid "I like it"
+msgstr "Du liker dette"
+
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "IMAP-brukernavn"
@@ -4672,6 +4690,24 @@ msgstr "Er mindre enn"
 msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr "Det vil ta litt tid før enkelte eposter blir tildelt standardfanene."
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
+msgstr ""
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 1 of 5 star rating
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgctxt "rating"
+msgid "It's really bad"
+msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
@@ -5789,10 +5825,6 @@ msgstr ""
 "med det eksterne innholdet. Endringene du har gjort inne i appsuite vil bli "
 "overskrevet"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Notat: vCard-formatet kan ikke inneholde distribusjonslister"
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
@@ -6476,14 +6508,6 @@ msgid ""
 "rename or disable them."
 msgstr ""
 
-#: apps/io.ox/files/util.js module:io.ox/files
-msgid ""
-"Please note, changing or removing the file extension will cause problems "
-"when viewing or editing."
-msgstr ""
-"Vær oppmerksom på, å endre eller fjerne filtypen vil føre til problemer ved "
-"visning eller redigering."
-
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid ""
@@ -6491,13 +6515,20 @@ msgstr ""
 #| "formular. When you have questions or problems please contact our support "
 #| "directly"
 msgid ""
-"Please note, that support requests cannot be handled via the feedback-"
-"formular. If you have questions or problems please contact our support "
-"directly"
+"Please note that support requests cannot be handled via the feedback form. "
+"If you have questions or problems please contact our support directly"
 msgstr ""
 "Vær oppmerksom på at støtteforespørsler ikke håndteres via "
 "tilbakemeldingskjema. Når du har spørsmål eller problemer kan du kontakte "
 "vår support direkte"
+
+#: apps/io.ox/files/util.js module:io.ox/files
+msgid ""
+"Please note, changing or removing the file extension will cause problems "
+"when viewing or editing."
+msgstr ""
+"Vær oppmerksom på, å endre eller fjerne filtypen vil føre til problemer ved "
+"visning eller redigering."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -6916,23 +6947,10 @@ msgid "RSS Feeds"
 msgstr "RSS-strøm"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid ""
-"Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-"your rating."
-msgstr ""
-"Vurdering %1$d av %​​2$d bekreftet. Bruk venstre og høyre piltaster til å "
-"justere din vurdering."
-
-#. %1$d is current raiting
-#. %2$d is the maximum rating
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, c-format
-msgid ""
-"Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
-"arrowkeys to adjust your rating."
-msgstr ""
-"Vurdering %1$d av %2$d. Trykk Enter for å bekrefte eller bruk venstre og "
-"høyre piltast til å justere din vurdering."
+#, fuzzy
+#| msgid "Page %1$d of %2$d"
+msgid "Rating %1$d of 5"
+msgstr "Side %1$d av %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9437,7 +9455,9 @@ msgstr "Opplastingsfremdrift"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-msgid "Uploading %1$s"
+#, fuzzy
+#| msgid "Uploading %1$s"
+msgid "Uploading \"%1$s\""
 msgstr "Laster opp %1$s"
 
 #. headline for a progress bar
@@ -9504,6 +9524,16 @@ msgstr "Bruk egendefinert navn"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Bruk fast-bredde skrifttype for tekst e-poster"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
+#| "your rating."
+msgid "Use left and right cursor keys to adjust your rating."
+msgstr ""
+"Vurdering %1$d av %​​2$d bekreftet. Bruk venstre og høyre piltaster til å "
+"justere din vurdering."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -10131,6 +10161,12 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Gjeldende passord"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Give feedback"
+msgid "Your feedback"
+msgstr "Gi tilbakemelding"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -11045,9 +11081,6 @@ msgstr "yyyy"
 #~ msgid "Facebook reported an error:"
 #~ msgstr "Facebook rapporterte en feil:"
 
-#~ msgid "Feedback"
-#~ msgstr "Tilbakemelding"
-
 #, fuzzy
 #~| msgid "Folder name"
 #~ msgid "Filename"
@@ -11172,6 +11205,9 @@ msgstr "yyyy"
 #~ msgid "Note that some of the tabs can not be disabled."
 #~ msgstr "Merk at noen av fanene ikke kan deaktiveres."
 
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "Notat: vCard-formatet kan ikke inneholde distribusjonslister"
+
 #~ msgid "Off"
 #~ msgstr "Av"
 
@@ -11216,6 +11252,13 @@ msgstr "yyyy"
 
 #~ msgid "Prev"
 #~ msgstr "Forrige"
+
+#~ msgid ""
+#~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
+#~ "arrowkeys to adjust your rating."
+#~ msgstr ""
+#~ "Vurdering %1$d av %2$d. Trykk Enter for å bekrefte eller bruk venstre og "
+#~ "høyre piltast til å justere din vurdering."
 
 #~ msgid "Remove facet"
 #~ msgstr "Fjern filter"
@@ -11549,9 +11592,6 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Du kan dra og slippe filer fra datamaskinen for å laste opp en ny fil "
 #~ "eller en annen versjon av en fil."
-
-#~ msgid "You like this"
-#~ msgstr "Du liker dette"
 
 #~ msgid "Your Applications"
 #~ msgstr "Dine programmer"
