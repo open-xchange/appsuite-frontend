@@ -743,6 +743,8 @@ define('io.ox/core/tk/list', [
 
                 // forward event
                 this.trigger('add', model, index);
+                // use raw cid here for non-listview listeners (see custom getCompositeKey)
+                this.trigger('add:' + model.cid, model, index);
 
             });
         },

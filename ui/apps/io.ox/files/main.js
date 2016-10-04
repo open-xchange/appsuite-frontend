@@ -893,6 +893,12 @@ define('io.ox/files/main', [
 
             folderAPI.on('create', function (data) {
                 if (data.folder_id === app.folder.get()) app.listView.reload();
+
+                // select created folder
+                app.listView.on('add:' + _.cid(data), function (model) {
+                    var cid = app.listView.getCompositeKey(model);
+                    app.listView.selection.set([cid], true);
+                });
             });
 
             folderAPI.on('remove', function (id, data) {
