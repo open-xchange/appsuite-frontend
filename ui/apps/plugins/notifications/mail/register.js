@@ -72,6 +72,9 @@ define('plugins/notifications/mail/register', [
 
         // some mailservers do not send extra data like sender and subject, check this here
         var text = message.subject || gt('No subject');
+
+        // Dovecot has extra field "teaser"
+        if (message.teaser) text += '\n\n' + message.teaser;
         // get email for picture halo
         var imageURL = message.email ? contactsApi.pictureHalo(null, {
             email: message.email }, { urlOnly: true, width: 120, height: 120, scaleType: 'containforcedimension' }) : iconPath;
