@@ -213,7 +213,6 @@ define('io.ox/files/upload/main', [
                     return (cid === undefined) || (model.cid === cid);
                 })
                 .each(function (model) {
-                    debugger;
                     var request = model.get('request');
                     if (model !== undefined) {
                         if (request === null) {
