@@ -1012,7 +1012,8 @@ define('io.ox/presenter/views/presentationview', [
          * @returns {Number} zoom factor
          */
         getFitScreenZoomFactor: function () {
-            var offset = 40,
+            var fullscreen = this.app.mainView.fullscreen,
+                offset = fullscreen ? 0 : 40,
                 slideHeight = this.$el.height(),
                 slideWidth = this.$el.width(),
                 originalPageSize = this.pdfDocument.getOriginalPageSize(),
@@ -1117,7 +1118,8 @@ define('io.ox/presenter/views/presentationview', [
             }
             this.documentLoad.done(function () {
                 var fitScreenZoomFactor = this.getFitScreenZoomFactor(),
-                    swiperSlide = this.getActiveSlideNode();
+                    swiperSlide = this.getActiveSlideNode(),
+                    fullscreen = this.app.mainView.fullscreen;
 
                 this.setZoomLevelDebounced(fitScreenZoomFactor);
 
@@ -1129,7 +1131,7 @@ define('io.ox/presenter/views/presentationview', [
                     // After an on resize call, the plugin 'resets' the active slide to the beginning.
                     //this.swiper.slideTo(this.currentSlideIndex);
                 }
-                this.getSlides().css('line-height', swiperSlide.height() + 'px');
+                this.getSlides().css('line-height', fullscreen ? '' : swiperSlide.height() + 'px');
 
             }.bind(this));
         },
