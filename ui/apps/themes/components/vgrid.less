@@ -102,24 +102,38 @@
 
         .grid-options.dropdown {
             position: absolute;
-            right: 18px;
+            right: 0;
             top: 0;
+            a {
+                display: block;
+                padding-right: 16px;
+                padding-left: 16px;
+                &:focus, &:focus i {
+                    color: @selected-color;
+                    background: @selected-background;
+                    outline: 0;
+                }
+            }
         }
 
         .select-all {
             float: left;
-            width: 40px;
+            width: 46px;
             height: 44px;
             line-height: 40px;
             padding-left: 16px;
             display: none;
             i {
                 color: #ccc;
-                margin-right: 8px;
                 width: 16px;
                 font-size: 18px;
                 position: relative;
                 top: 4px;
+            }
+            &:focus, &:focus i {
+                color: @selected-color;
+                background: @selected-background;
+                outline: 0;
             }
         }
 
