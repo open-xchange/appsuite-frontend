@@ -12,17 +12,33 @@
  */
 
 .star-rating {
-    // don't make the stars too small since those are buttons as well
-    font-size: 24px;
-    line-height: 32px;
+
+    @star-color: #ccc;
+    @star-color-focus: #777;
+    @star-color-checked: #FDD835;
+
     margin: 0 0 8px 0;
+    outline: 0;
+
     .star {
+        // don't make the stars too small since those are buttons as well
+        font-size: 24px;
+        line-height: 32px;
         cursor: pointer;
-        color: #ccc;
+        color: @star-color;
         margin-right: 4px;
+    }
+
+    .checked { color: @star-color-checked; }
+
+    input[type="radio"]:focus + .star {
+        color: @star-color-focus;
+    }
+
+    label {
         vertical-align: middle;
     }
-    .checked { color: #FDD835; }
+
     caption {
         display: inline-block;
         margin-left: 16px;

@@ -37,36 +37,35 @@ define('plugins/core/feedback/register', [
         5: gt.pgettext('rating', 'It\'s awesome')
     };
 
-    // disabled as this is evil privacy: includeUserInfo = settings.get('feeback/includeUserInfo', false),
     var StarRatingView = DisposableView.extend({
 
         className: 'star-rating',
 
         events: {
-            'keydown': 'onKeyDown',
-            'click .star': 'onClick',
-            'mouseenter .star': 'onHover',
-            'mouseleave .star': 'onHover'
+            'change input': 'onChange',
+            'mouseenter label': 'onHover',
+            'mouseleave label': 'onHover'
         },
 
         initialize: function (options) {
             this.options = _.extend({ hover: true }, options);
             this.value = 0;
-            this.$el.attr({
-                'aria-label': gt('Use left and right cursor keys to adjust your rating.'),
-                'aria-live': 'polite',
-                role: 'group',
-                tabindex: 0
-            });
+            this.$el.attr('tabindex', -1);
         },
 
         render: function () {
-            this.$el.empty().append(
-                _.range(0, 5).map(function (i) {
-                    return $('<i class="fa fa-star star" role="presentation">').attr('data-rating', i + 1);
+
+            this.$el.append(
+                _.range(1, 6).map(function (i) {
+                    return $('<label>').append(
+                        $('<input type="radio" name="star-rating" class="sr-only">').val(i)
+                            .attr('title', gt('%1$d of 5 stars', i) + '. ' + captions[i]),
+                        $('<i class="fa fa-star star" aria-hidden="true">')
+                    );
                 }),
-                $('<caption>').text('\u00a0')
+                $('<caption aria-hidden="true">').text('\u00a0')
             );
+
             return this;
         },
 
@@ -85,29 +84,17 @@ define('plugins/core/feedback/register', [
             if (value < 1 || value > 5) return;
             this.value = value;
             this.renderRating(value);
-            this.$el.attr('aria-label', gt('Rating %1$d of 5', value));
         },
 
-        onClick: function (e) {
-            var value = $(e.currentTarget).data('rating');
+        onChange: function () {
+            var value = this.$('input:checked').val() || 1;
             this.setValue(value);
         },
 
         onHover: function (e) {
             if (!this.options.hover) return;
-            var value = e.type === 'mouseenter' ? $(e.currentTarget).data('rating') : this.value;
+            var value = e.type === 'mouseenter' ? $(e.currentTarget).find('input').val() : this.value;
             this.renderRating(value);
-        },
-
-        onKeyDown: function (e) {
-            var value = this.$('.checked').length;
-            switch (e.which) {
-                // cursor left
-                case 37: this.setValue(value - 1); break;
-                // cursor right
-                case 39: this.setValue(value + 1); break;
-                // no default
-            }
         }
     });
 
@@ -165,7 +152,7 @@ define('plugins/core/feedback/register', [
                     infotext: function () {
                         this.$body.append(
                             $('<div>').text(
-                                gt('Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly')
+                                gt('Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly.')
                             )
                         );
                     },
@@ -209,7 +196,7 @@ define('plugins/core/feedback/register', [
 
         drawButton: function () {
             $('#io-ox-core').append(
-                $('<button role="button" class="feedback-button" tabindex="0">')
+                $('<button role="button" class="feedback-button">')
                 .text(gt('Feedback'))
                 .addClass(settings.get('feedback/position', 'right') + 'side-button')
                 .on('click', this.show)
@@ -224,8 +211,8 @@ define('plugins/core/feedback/register', [
             var currentSetting = settings.get('feeback/show', 'both');
             if (currentSetting === 'both' || currentSetting === 'topbar') {
                 this.append(
-                    $('<li>').append(
-                        $('<a href="#" data-action="feedback" role="menuitem">').text(gt('Give feedback'))
+                    $('<li role="presentation">').append(
+                        $('<a href="#" data-action="feedback" role="menuitem" tabindex="-1">').text(gt('Give feedback'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -239,10 +226,10 @@ define('plugins/core/feedback/register', [
     ext.point('io.ox/core/plugins').extend({
         id: 'feedback',
         draw: function () {
+            if (_.device('smartphone')) return;
             var currentSetting = settings.get('feeback/show', 'both');
-            if (_.device('!smartphone') && (currentSetting === 'both' || currentSetting === 'side')) {
-                feedback.drawButton();
-            }
+            if (!(currentSetting === 'both' || currentSetting === 'side')) return;
+            feedback.drawButton();
         }
     });
 
