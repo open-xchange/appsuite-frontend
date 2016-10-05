@@ -18,9 +18,10 @@ define('io.ox/mail/accounts/settings', [
     'io.ox/mail/accounts/view-form',
     'io.ox/core/tk/dialogs',
     'io.ox/core/notifications',
+    'io.ox/core/a11y',
     'gettext!io.ox/mail/accounts/settings',
     'less!io.ox/settings/style'
-], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, gt) {
+], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, a11y, gt) {
 
     'use strict';
 
@@ -46,7 +47,7 @@ define('io.ox/mail/accounts/settings', [
         .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
         .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
         .show(function () {
-            this.find('input[type=text]:first').focus();
+            a11y.getTabbable(this).first().focus();
         });
 
         //show errors
@@ -338,7 +339,7 @@ define('io.ox/mail/accounts/settings', [
                     createExtpointForNewAccount(args);
                 })
                 .show(function () {
-                    this.find('input[type=text]:first').focus();
+                    a11y.getTabbable(this).first().focus();
                 });
 
             });
