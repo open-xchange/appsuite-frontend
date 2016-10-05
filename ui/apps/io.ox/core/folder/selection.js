@@ -154,8 +154,9 @@ define('io.ox/core/folder/selection', [], function () {
             this.view.trigger('sort sort:' + folder, ids);
         },
 
-        pick: function (index, items) {
-            var node = this.focus(index, items);
+        pick: function (index, items, options) {
+            var opt = _.extend({ focus: true }, options);
+            var node = opt.focus ? this.focus(index, items) : (items || this.getItems()).eq(index);
             this.check(node);
             this.triggerChange(items);
         },
