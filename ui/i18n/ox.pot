@@ -454,6 +454,7 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/oauth/keychain.js
 #: apps/io.ox/oauth/settings.js
 #: apps/io.ox/portal/main.js
 #: module:io.ox/portal
@@ -9898,6 +9899,13 @@ msgstr ""
 msgid "Account could not be added"
 msgstr ""
 
+#: apps/io.ox/oauth/keychain.js
+#: module:io.ox/core
+#: apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
+msgid "Reauthorize"
+msgstr ""
+
 #: apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
 msgid "Changes have been saved."
@@ -9926,11 +9934,6 @@ msgstr ""
 #: apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
 msgid "Display Name"
-msgstr ""
-
-#: apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
-msgid "Reauthorize"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js

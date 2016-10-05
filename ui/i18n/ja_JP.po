@@ -1669,7 +1669,8 @@ msgstr "予定表"
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
+#: apps/io.ox/oauth/keychain.js apps/io.ox/oauth/settings.js
+#: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts apps/io.ox/settings/apps/settings/pane.js
@@ -6952,7 +6953,8 @@ msgstr "自分のオブジェクトのみを表示"
 msgid "Read permissions"
 msgstr "読み取り権限"
 
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgid "Reauthorize"
 msgstr "再認証"
 
