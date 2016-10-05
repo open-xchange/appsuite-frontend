@@ -250,7 +250,7 @@ define('io.ox/core/tk/doc-converter-utils', [
                 module: moduleId
             };
 
-        } else if (model.isGuard()) {
+        } else if (model.isEncrypted()) {
             var file_options = model.get('file_options');
             var file_options_params = file_options ? file_options.params : null;
             return {
