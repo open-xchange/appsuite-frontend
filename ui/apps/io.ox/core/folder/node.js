@@ -227,7 +227,7 @@ define('io.ox/core/folder/node', [
                 /*eslint-enable no-nested-ternary */
             );
             // a11y
-            if (hasSubFolders) this.$el.attr('aria-expanded', isOpen); else this.$el.removeAttr('aria-expanded');
+            if (hasSubFolders && !this.options.headless) this.$el.attr('aria-expanded', isOpen); else this.$el.removeAttr('aria-expanded');
             // toggle subfolder node
             this.$el.toggleClass('open', isOpen);
             // empty?
@@ -328,7 +328,7 @@ define('io.ox/core/folder/node', [
             this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
-            this.describedbyID = _.uniqueId('description-');
+
             this.$ = {};
 
             // make accessible via DOM
@@ -366,42 +366,58 @@ define('io.ox/core/folder/node', [
                 offset = 22;
             }
 
+            if (!_.isEmpty(o.a11yDescription)) {
+                var uid = _.uniqueId('description-');
+                this.$el.attr('aria-describedby', uid);
+            }
+
+            // folder
+            this.$.selectable = $('<div class="folder-node" aria-hidden="true">')
+                .css('padding-left', (o.level * this.indentation) + offset).append(
+                    this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
+                    this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
+                    $('<div class="folder-label">').append(
+                        this.$.label = $('<div>')
+                    ),
+                    this.$.counter = $('<div class="folder-counter">')
+            );
+
+            var a11yuid = _.uniqueId('description-');
+
             // draw scaffold
             this.$el
                 .attr({
-                    'aria-describedby': this.describedbyID,
-                    'aria-label': '',
-                    'aria-level': o.level + 1,
-                    'aria-selected': false,
                     'data-id': this.folder,
                     'data-model': o.model_id,
-                    'data-contextmenu-id': o.contextmenu_id,
-                    'role': 'treeitem',
-                    'tabindex': '-1'
+                    'data-contextmenu-id': o.contextmenu_id
                 })
                 .append(
-                    // folder
-                    this.$.selectable = $('<div class="folder-node" role="presentation">')
-                    .css('padding-left', (o.level * this.indentation) + offset)
-                    .append(
-                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw" aria-hidden="true"></i></div>') : [],
-                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw" aria-hidden="true"></i></div>'),
-                        $('<div class="folder-label">').append(
-                            this.$.label = $('<div>')
-                        ),
-                        this.$.counter = $('<div class="folder-counter">')
-                    ),
+                    this.$.selectable,
                     // tag for screenreader only (aria-description)
-                    this.$.a11y = $('<span class="sr-only">').attr({ id: this.describedbyID }),
+                    this.$.a11y = $('<span class="sr-only">').attr('id', a11yuid),
                     // subfolders
                     this.$.subfolders = $('<ul class="subfolders" role="group">')
                 );
 
             // headless?
             if (o.headless) {
-                this.$el.removeClass('selectable').removeAttr('tabindex');
-                this.$.selectable.hide();
+                this.$el.removeClass('selectable');
+                this.$.selectable.remove();
+                this.$el.attr({
+                    'role': 'presentation'
+                });
+            } else {
+                this.$el.attr({
+                    'aria-describedby': a11yuid,
+                    'aria-level': o.level + 1,
+                    'aria-selected': false,
+                    'role': 'treeitem',
+                    'tabindex': '-1'
+                });
             }
+
+            // Remove useless a11y nodes
+            if (_.isEmpty(this.options.a11yDescription)) this.$.a11y.remove();
 
             // sortable
             if (o.sortable) this.$el.attr('data-sortable', true);
@@ -450,7 +466,8 @@ define('io.ox/core/folder/node', [
         renderCounter: function () {
             var value = this.getCounter();
             this.$.selectable.toggleClass('show-counter', value > 0);
-            this.$.counter.text(value > 99 ? '99+' : value);
+            if (value > 99) value = '99+';
+            this.$.counter.text(value === 0 ? '' : value);
         },
 
         getTitle: function () {
@@ -464,7 +481,9 @@ define('io.ox/core/folder/node', [
 
         renderA11yNode: function () {
             //draw even if there is no description or old descriptions cannot be cleared
-            this.$.a11y.text(this.options.a11yDescription.join('. '));
+            if (!_.isEmpty(this.options.a11yDescription)) {
+                this.$.a11y.text(this.options.a11yDescription.join('. '));
+            }
         },
 
         renderTooltip: function () {
