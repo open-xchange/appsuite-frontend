@@ -346,7 +346,7 @@ define('io.ox/core/api/filestorage', [
                     // use a collection for convenience
                     try {
                         var accountsWithStorage = {},
-                            oauthAccounts = new Backbone.Collection(keychain.accounts[0]);
+                            oauthAccounts = keychain.accounts;
                         _(accountsCache.models).each(function (account) {
                             // let's use a hardcoded list here to not accidentally delete filestorages we are not interested in
                             if (account.get('filestorageService') === 'googledrive' || account.get('filestorageService') === 'dropbox' ||
