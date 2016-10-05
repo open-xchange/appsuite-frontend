@@ -358,9 +358,10 @@ define('io.ox/core/folder/view', [
                 app.trigger('folder-virtual:change', id);
             });
 
-            api.on('create', function (data) {
+            api.on('create', _.debounce(function (data) {
+                // compare folder/node.js onSort delay
                 tree.traversePath(data.id, show);
-            });
+            }, 15));
 
         }());
 
