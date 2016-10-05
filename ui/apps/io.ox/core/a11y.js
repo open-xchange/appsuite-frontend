@@ -19,7 +19,7 @@ define('io.ox/core/a11y', [], function () {
         return $(el).find('input, select, textarea, button, a[href], [tabindex]')
             .filter(function () {
                 // skip tabbable elements of contenteditables
-                return !$(this).parents('[contenteditable="true"]').length;
+                return !$(this).closest('[contenteditable="true"]').length;
             })
             .filter('[tabindex!="-1"][disabled!="disabled"]:visible');
     }
