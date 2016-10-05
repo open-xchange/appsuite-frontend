@@ -187,6 +187,11 @@ define('io.ox/files/api', [
             return type;
         },
 
+        getGuardMimeType: function () {
+            if (this.get('meta') && this.get('meta').OrigMime) return this.get('meta').OrigMime;
+            return this.getMimeType();
+        },
+
         getFileType: function () {
             if (this.isFolder()) {
                 return 'folder';

@@ -354,11 +354,26 @@ define('io.ox/files/actions', [
                 return false;
             }
             var model = e.baton.models[0];
-            return ((model.isPresentation() || model.isPDF()) && model.isFile());
+            var type = model.isEncrypted() ? model.getGuardMimeType() : model.getMimeType();
+            return ((model.isPresentation(type) || model.isPDF(type)) && model.isFile(type));
         },
         action: function (baton) {
             var fileModel = baton.models[0];
-            ox.launch('io.ox/presenter/main', fileModel);
+            if (fileModel.isEncrypted()) {
+                require(['io.ox/guard/auth/authorizer'], function (authorizer) {
+                    authorizer.authorize().then(function (auth) {
+                        var params = {
+                            cryptoAction: 'Decrypt',
+                            cryptoAuth: auth,
+                        };
+                        fileModel.set('file_options', { params: params });
+                        ox.launch('io.ox/presenter/main', fileModel);
+                    });
+                });
+            } else {
+                ox.launch('io.ox/presenter/main', fileModel);
+            }
+
         }
     });
 
