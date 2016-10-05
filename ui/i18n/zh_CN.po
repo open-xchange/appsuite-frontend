@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-29 11:49+1000\n"
+"PO-Revision-Date: 2016-10-01 09:12+1000\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -2083,14 +2083,48 @@ msgstr "选择联系人"
 msgid "Search"
 msgstr "搜索"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr "找到 %1$d 个联系人。此列表限制 %2$d 项目。"
+#: apps/io.ox/search/facets/extensions.js module:io.ox/core
+msgid "All folders"
+msgstr "所有文件夹"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "您的地址簿太多联系人。"
+msgid "All distribution lists"
+msgstr "所有分发列表"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "All groups"
+msgstr "所有群组"
+
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "已选择 %1$d 个项目"
+msgstr[1] "已选择 %1$d 个项目"
+
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "已选择 %1$d 个地址"
+msgstr[1] "已选择 %1$d 个地址"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "清除选择"
+
+#. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/find/main.js module:io.ox/core
+msgid "No matching items found."
+msgstr "没找到匹配项目。"
+
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "空置"
 
 #. Context: Add selected contacts; German "Auswählen", for example
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2869,6 +2903,12 @@ msgstr "密码"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
+msgid "Sign in"
+msgstr "登录"
+
+#. the word not the verb
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgctxt "word"
 msgid "Sign in"
 msgstr "登录"
 
@@ -3651,11 +3691,6 @@ msgstr "了解更多"
 msgid "Import from file"
 msgstr "从文件导入"
 
-#. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "There was no appointment data to import"
-msgstr "没有可以导入的约会数据"
-
 #. Error message if contact import failed
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no contact data to import"
@@ -3665,6 +3700,16 @@ msgstr "没有要导入的联系人数据"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no task data to import"
 msgstr "没有要导入的任务数据"
+
+#. Error message if calendar import failed
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "There was no appointment data to import"
+msgstr "没有可以导入的约会数据"
+
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "Line %1$d: %2$s"
+msgstr "行 %1$ d: %2$s"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -3779,6 +3824,10 @@ msgstr "现在登出"
 msgid "close for %1$s"
 msgstr "按 %1$s 关闭"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "(current app)"
+msgstr "（当前应用程序）"
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "设置"
@@ -3883,21 +3932,23 @@ msgid ""
 "You can manage desktop notifications at any time, by vitising your settings"
 msgstr "您能到您的设置，随时管理桌面通知"
 
-#. %1$d number of notifications
+#. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, c-format
-msgid "You have %1$d notification."
-msgid_plural "You have %1$d notifications."
-msgstr[0] "您有 %1$d 条通知。"
-msgstr[1] "您有 %1$d 条通知。"
+msgid "%1$d notification."
+msgid_plural "%1$d notifications."
+msgstr[0] "%1$ d 个通知。"
+msgstr[1] "%1$ d 个通知。"
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is open"
-msgstr "通知区域开放"
+msgid "expanded"
+msgstr "扩大的"
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is closed"
-msgstr "通知区域关闭"
+msgid "collapsed"
+msgstr "折叠的"
 
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "Hide this notification"
@@ -4711,46 +4762,47 @@ msgstr "在此选择一个时间"
 msgid "OK"
 msgstr "确认"
 
+#. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close this reminder"
-msgstr "关闭此提醒"
+msgid "Close reminder for %1$s"
+msgstr "关闭 %1$s 提醒"
 
+#. %1$s is something like "in 5 minutes"
+#. don't know if that works for all languages but it has been
+#. a string concatenation before; at least now it's documented
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Remind me again "
-msgstr "再次提醒我"
+msgid "Remind me again %1$s"
+msgstr "再次提醒我 %1$s"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js
-msgid "Press [enter] to open"
-msgstr "按下 [enter] 以打开"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "end date "
-msgstr "结束日期"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "status "
-msgstr "状态"
+msgid "Press to open Details"
+msgstr "按下打开详细信息"
 
 #. %1$s task title
-#. %2$s task end date
-#. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
-msgid "%1$s %2$s %3$s."
-msgstr "%2$s %1$s %3$s"
+msgid "Reminder for task %1$s."
+msgstr "任务 %1$s 的提醒。"
 
-#. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
+#. %1$s appointment title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, c-format
-msgid "%1$s %2$s %3$s %4$s."
-msgstr "%1$s %2$s %3$s %4$s."
+msgid "Reminder for appointment %1$s."
+msgstr "约会 %1$s 的提醒。"
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "There are no matching autocomplete entries for this query."
+msgstr "没有此查询匹配的自动完成条目。"
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, c-format
+msgid "There is one matching autocomplete entry for this query."
+msgid_plural "There are %1$d matching autocomplete entries for this query."
+msgstr[0] "此查询有 1 个匹配的自动完成条目。"
+msgstr[1] "此查询有 %1$d 个匹配的自动完成条目。"
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid ""
@@ -4769,6 +4821,10 @@ msgstr "已添加到通讯组列表 %s（%s 个成员）。此通讯组列表的
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
 msgstr "添加了 %1$s、%2$s。"
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid " press backspace to remove this token"
+msgstr "按下 backspace 删除此代币"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -4948,6 +5004,7 @@ msgstr "已与别人分享此文件"
 msgid "This folder is shared with others"
 msgstr "已与别人分享此文件夹"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
@@ -6230,11 +6287,6 @@ msgstr "所有文件夹"
 msgid "Accounts"
 msgstr "账户"
 
-#. search feature returns an empty result
-#: apps/io.ox/find/main.js module:io.ox/core
-msgid "No matching items found."
-msgstr "没找到匹配项目。"
-
 #: apps/io.ox/find/view-facets.js module:io.ox/core
 msgid "Search facets"
 msgstr "搜寻刻面"
@@ -6825,11 +6877,6 @@ msgstr "未读"
 msgid "has attachments"
 msgstr "有附件"
 
-#. empty message for list view
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "空置"
-
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/print.js
 msgctxt "CC"
@@ -6900,12 +6947,21 @@ msgstr "已经取消消息发送。"
 msgid "The email has been sent"
 msgstr "已发送电子邮件"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
+"between the tokens"
+msgstr "%1$s 自动完成代币字段。使用左或右方向键于代币之间导航"
+
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "CC"
 msgstr "抄送"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "BCC"
 msgstr "暗送"
@@ -7048,11 +7104,6 @@ msgstr "请选择一个有效图像文件作插入"
 msgid "Compose"
 msgstr "撰写"
 
-#. %s is the product name
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-msgid "Sent from %s via mobile"
-msgstr "从 %s 经过移动网路发送"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
 msgstr "邮件"
@@ -7086,6 +7137,11 @@ msgstr ""
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Edit real names"
 msgstr "编辑真实名称"
+
+#. %s is the product name
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "Sent from %s via mobile"
+msgstr "从 %s 经过移动网路发送"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Plain Text"
@@ -7474,9 +7530,12 @@ msgstr "消息选项"
 msgid "No message selected"
 msgstr "没有选定消息"
 
+#. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "%1$d messages selected"
-msgstr "已选定 %1$d 个消息"
+msgid "%1$d message selected"
+msgid_plural "%1$d messages selected"
+msgstr[0] "已选择 %1$d 个消息"
+msgstr[1] "已选择 %1$d 个消息"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
@@ -8591,10 +8650,6 @@ msgstr "点击打开，拖到桌面以下载。"
 msgid "Click to open."
 msgstr "点击打开。"
 
-#: apps/io.ox/search/facets/extensions.js module:io.ox/core
-msgid "All folders"
-msgstr "所有文件夹"
-
 #: apps/io.ox/search/items/view-template.js module:io.ox/core
 msgid "No items found"
 msgstr "没找到项目"
@@ -8687,7 +8742,8 @@ msgstr "更改完成日期"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Mark as done"
 msgstr "标记为已完成"
 
@@ -9415,14 +9471,17 @@ msgstr ""
 "在您的 %1$s 上安装此网页软件： 轻按 %2$s 后，再按 %3$s'添加到主页画面'%4$s"
 
 #. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
-#. %5$s Appointment Organizer
+#. %1$s task title
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js
 #, c-format
-msgid "%1$s %2$s %3$s %4$s %5$s."
-msgstr "%1$s %2$s %3$s %4$s %5$s."
+msgid "Invitation for %1$s."
+msgstr "%1$s 的邀请。"
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js
+msgid "Accept/Decline"
+msgstr "接受 / 拒绝"
 
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 msgid "Accept / Decline"
@@ -9510,13 +9569,6 @@ msgstr "来自 %1$s 的电子邮件：%2$s"
 msgid "New mail"
 msgstr "新邮件"
 
-#. %1$s task title
-#. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, c-format
-msgid "%1$s %2$s."
-msgstr "%1$s %2$s"
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "过期任务"
@@ -9561,10 +9613,6 @@ msgstr "新任务提醒"
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "隐藏所有任务提醒。"
-
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "Accept/Decline"
-msgstr "接受 / 拒绝"
 
 #. Inviations (notifications) to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -10246,6 +10294,53 @@ msgstr "邀请到 %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "在 %s 上添加"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr "找到 %1$d 个联系人。此列表限制 %2$d 项目。"
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "您的地址簿太多联系人。"
+
+#~ msgid "You have %1$d notification."
+#~ msgid_plural "You have %1$d notifications."
+#~ msgstr[0] "您有 %1$d 条通知。"
+#~ msgstr[1] "您有 %1$d 条通知。"
+
+#~ msgid "The notification area is open"
+#~ msgstr "通知区域开放"
+
+#~ msgid "The notification area is closed"
+#~ msgstr "通知区域关闭"
+
+#~ msgid "Close this reminder"
+#~ msgstr "关闭此提醒"
+
+#~ msgid "Remind me again "
+#~ msgstr "再次提醒我"
+
+#~ msgid "Press [enter] to open"
+#~ msgstr "按下 [enter] 以打开"
+
+#~ msgid "end date "
+#~ msgstr "结束日期"
+
+#~ msgid "status "
+#~ msgstr "状态"
+
+#~ msgid "%1$s %2$s %3$s."
+#~ msgstr "%2$s %1$s %3$s"
+
+#~ msgid "%1$s %2$s %3$s %4$s."
+#~ msgstr "%1$s %2$s %3$s %4$s."
+
+#~ msgid "%1$d messages selected"
+#~ msgstr "已选定 %1$d 个消息"
+
+#~ msgid "%1$s %2$s %3$s %4$s %5$s."
+#~ msgstr "%1$s %2$s %3$s %4$s %5$s."
+
+#~ msgid "%1$s %2$s."
+#~ msgstr "%1$s %2$s"
 
 #~ msgid "Resource name"
 #~ msgstr "资源名称"
