@@ -39,7 +39,11 @@ define('com.spamexperts/settings/register', [
                 $('<iframe>', {
                     src: data.panel_web_ui_url + data.panel_session,
                     frameborder: 0
-                }).css({ width: '100%', minHeight: '90%' }).appendTo(self);
+                }).css({
+                    position: 'absolute',
+                    width: '100%',
+                    minHeight: '100%'
+                }).appendTo(self);
             });
         }
     });
