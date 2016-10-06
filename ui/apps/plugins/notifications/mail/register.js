@@ -31,7 +31,7 @@ define('plugins/notifications/mail/register', [
 
     var lastCount = -1,
         SOUND_VOLUME = 0.3, // volume of push notification sound
-        DURATION = 20 * 1000, // miliseconds to show the notification
+        DURATION = 5 * 1000, // miliseconds to show the notification
         path = ox.base + '/apps/themes/default/sounds/', // soundfiles are located in the theme
         iconPath = ox.base + '/apps/themes/default/fallback-image-contact.png', // fallbackicon shown in desktop notification
         sound,
