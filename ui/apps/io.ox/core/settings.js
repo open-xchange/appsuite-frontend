@@ -12,9 +12,8 @@
  */
 
 define('io.ox/core/settings', [
-    'io.ox/core/http',
-    'io.ox/core/event'
-], function (http, Event) {
+    'io.ox/core/http'
+], function (http) {
 
     'use strict';
 
@@ -149,6 +148,7 @@ define('io.ox/core/settings', [
         // please note: doesn't trigger change events when manipulating
         // properties of objects (#48456). Use `settings.on('change', cb)` instead.
         this.createModel = function (ModelClass) {
+            if (ox.debug) console.warn('createModel is deprecated');
             return new ModelClass(tree).on('change', change);
         };
 
@@ -323,7 +323,7 @@ define('io.ox/core/settings', [
             });
         };
 
-        Event.extend(this);
+        _.extend(this, Backbone.Events);
     };
 
     return {

@@ -13,26 +13,24 @@
 
 define('io.ox/files/settings/pane', [
     'settings!io.ox/files',
-    'io.ox/files/settings/model',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'gettext!io.ox/files',
     'io.ox/backbone/mini-views'
-], function (settings, filesSettingsModel, ext, capabilities, gt, mini) {
+], function (settings, ext, capabilities, gt, mini) {
 
     'use strict';
 
     // not really relevant for guests (as of today)
     if (capabilities.has('guest')) return;
 
-    var model = settings.createModel(filesSettingsModel),
-        POINT = 'io.ox/files/settings/detail';
+    var POINT = 'io.ox/files/settings/detail';
 
-    model.on('change', function (model) {
-        model.saveAndYell();
+    settings.on('change', function () {
+        settings.saveAndYell();
     });
 
-    model.on('change:showHidden', function () {
+    settings.on('change:showHidden', function () {
         require(['io.ox/core/folder/api'], function (folderAPI) {
             folderAPI.refresh();
         });
@@ -68,7 +66,7 @@ define('io.ox/files/settings/pane', [
                         $('<div>').addClass('col-sm-8').append(
                             $('<div>').addClass('checkbox').append(
                                 $('<label>').addClass('control-label').text(gt('Show hidden files and folders')).prepend(
-                                    new mini.CheckboxView({ name: 'showHidden', model: model }).render().$el
+                                    new mini.CheckboxView({ name: 'showHidden', model: settings }).render().$el
                                 )
                             )
                         )
@@ -93,7 +91,7 @@ define('io.ox/files/settings/pane', [
                     $('<legend>').addClass('sectiontitle').append(
                         $('<h2>').text(gt('Adding files with identical names'))
                     ),
-                    new mini.RadioView({ list: preferences, name: 'uploadHandling', model: model }).render().$el
+                    new mini.RadioView({ list: preferences, name: 'uploadHandling', model: settings }).render().$el
                 )
             );
         }

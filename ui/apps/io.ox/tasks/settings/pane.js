@@ -13,19 +13,17 @@
 
 define('io.ox/tasks/settings/pane', [
     'settings!io.ox/tasks',
-    'io.ox/tasks/settings/model',
     'io.ox/core/extensions',
     'gettext!io.ox/tasks',
     'io.ox/backbone/mini-views'
-], function (settings, tasksSettingsModel, ext, gt, mini) {
+], function (settings, ext, gt, mini) {
 
     'use strict';
 
-    var model =  settings.createModel(tasksSettingsModel),
-        POINT = 'io.ox/tasks/settings/detail';
+    var POINT = 'io.ox/tasks/settings/detail';
 
-    model.on('change', function (model) {
-        model.saveAndYell();
+    settings.on('change', function () {
+        settings.saveAndYell();
     });
 
     ext.point(POINT).extend({
@@ -65,21 +63,21 @@ define('io.ox/tasks/settings/pane', [
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('checkbox').append(
                             $('<label>').addClass('control-label').text(gt('Receive notifications when a task in which you participate is created, modified or deleted')).prepend(
-                                new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: model }).render().$el
+                                new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: settings }).render().$el
                             )
                         )
                     ),
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('checkbox').append(
                             $('<label>').addClass('control-label').text(gt('Receive notifications when a participant accepted or declined a task created by you')).prepend(
-                                new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: model }).render().$el
+                                new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: settings }).render().$el
                             )
                         )
                     ),
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('checkbox').append(
                             $('<label>').addClass('control-label').text(gt('Receive notifications when a participant accepted or declined a task in which you participate')).prepend(
-                                new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsParticipant', model: model }).render().$el
+                                new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsParticipant', model: settings }).render().$el
                             )
                         )
                     )

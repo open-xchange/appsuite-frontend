@@ -116,7 +116,7 @@ define('io.ox/mail/categories/mediator', [
             id: 'setting-updates-prop',
             index: 20400,
             setup: function (app) {
-                settings.on('change:categories/enabled', function (model, value) {
+                settings.on('change:categories/enabled', function (value) {
                     app.props.set('categories', value);
                 });
             }

@@ -34,8 +34,7 @@ define.async('plugins/wizards/mandatory/main', [
             user.set('last_name');
 
             var tour = new Tour(),
-                def = $.Deferred(),
-                tzModel = settings.createModel(Backbone.Model);
+                def = $.Deferred();
 
             tour.on('stop', function (reason) {
                 if (reason && reason.cancel) {
@@ -91,7 +90,7 @@ define.async('plugins/wizards/mandatory/main', [
             .step()
                 .mandatory()
                 .title(gt('Your timezone'))
-                .content(new TimezonePicker({ name: 'timezone', model: tzModel }).render().$el)
+                .content(new TimezonePicker({ name: 'timezone', model: settings }).render().$el)
                 .end()
             .start();
 

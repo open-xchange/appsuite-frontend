@@ -273,7 +273,7 @@ define('io.ox/calendar/week/view', [
             this.gridSize = 60 / settings.get('interval', 30);
             this.workStart = settings.get('startTime', this.workStart);
             this.workEnd = settings.get('endTime', this.workEnd);
-            settings.on('change', function (e, key) {
+            settings.on('change', function (key) {
                 switch (key) {
                     case 'interval':
                         self.gridSize = 60 / settings.get('interval', 30);
@@ -810,15 +810,17 @@ define('io.ox/calendar/week/view', [
                 }
             }
 
-            var update = _.throttle(function (e) {
-                if (e.type === 'change:favoriteTimezones') {
-                    drawDropdown();
-                }
+            var update = _.throttle(function () {
+                drawTimezoneLabels();
+            }, 100, { trailing: false });
+
+            var updateAndDrawDropdown = _.throttle(function () {
+                drawDropdown();
                 drawTimezoneLabels();
             }, 100, { trailing: false });
 
             settings.on('change:renderTimezones', update);
-            settings.on('change:favoriteTimezones', update);
+            settings.on('change:favoriteTimezones', updateAndDrawDropdown);
 
             this.timeLabelBar = $('<div class="time-label-bar">');
             drawDropdown();
