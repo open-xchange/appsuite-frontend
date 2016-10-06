@@ -196,6 +196,12 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] ""
 msgstr[1] ""
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "and %1$d others"
+msgid "%1$d of 5 stars"
+msgstr "и %1$d други"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
@@ -6451,7 +6457,7 @@ msgstr ""
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6872,10 +6878,6 @@ msgstr ""
 
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
-msgstr ""
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Rating %1$d of 5"
 msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
@@ -9334,10 +9336,6 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
-msgstr ""
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Use left and right cursor keys to adjust your rating."
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core

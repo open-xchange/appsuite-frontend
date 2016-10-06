@@ -192,6 +192,13 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "%2$s 的 %1$s 个项目"
 msgstr[1] "%2$s 的 %1$s"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%2$s 的 %1$s 个项目"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6456,7 +6463,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "请注意，支持请求不能经由回馈-公式处理，假若您有任何问题请直接联系我们的支持团"
 "队。"
@@ -6882,12 +6889,6 @@ msgstr "RSS Feed"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS Feeds"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "第 %1$d 页（共 %2$d 页）"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9395,14 +9396,6 @@ msgstr "使用自定义名称"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "文本邮件使用固定宽度"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr "确认了满分为 %2$d 的 %1$d 分评价。使用左右箭头键以调整您的评价。"
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -13541,6 +13534,11 @@ msgstr "年"
 #~ "满分为 %2$d 的 %1$d 分评价。按下 Enter 以确认或使用左右箭头键以调整您的评"
 #~ "价。"
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "第 %1$d 页（共 %2$d 页）"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "唯读模式"
 
@@ -14478,6 +14476,13 @@ msgstr "年"
 #~ "Use cursor keys to change the item position. Virtual cursor mode has to "
 #~ "be disabled."
 #~ msgstr "使用方向键以更改项目位置，必须停用虚拟方向模式。"
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr "确认了满分为 %2$d 的 %1$d 分评价。使用左右箭头键以调整您的评价。"
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

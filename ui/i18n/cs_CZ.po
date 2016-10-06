@@ -212,6 +212,13 @@ msgstr[0] "%1$s z %2$s položek"
 msgstr[1] "%1$s z %2$s položek"
 msgstr[2] "%1$s z %2$s položek"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$s z %2$s položek"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6558,7 +6565,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Berte, prosím, na vědomí, že otázky na podporu nelze řešit přes formulář pro "
 "zpětnou vazbu. Máte-li dotazy nebo potíže, kontaktujte, prosím, přímo naši "
@@ -6989,12 +6996,6 @@ msgstr "RSS kanál"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS kanály"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "Strana %1$d z %2$d"
 
 #
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
@@ -9582,16 +9583,6 @@ msgstr "Použít vlastní jméno"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Pro textové e-maily používat písmo s pevnou šířkou"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Potvrzeno hodnocení %1$d z %2$d. Použijte šipku doleva či doprava pro změnu "
-"svého hodnocení."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -16995,6 +16986,11 @@ msgstr "rrrr"
 #~ "Hodnocení %1$d z %2$d. Stiskněte Enter pro potvrzení, nebo použijte šipku "
 #~ "doleva či doprava pro změnu svého hodnocení."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "Strana %1$d z %2$d"
+
 #~ msgid "Read Acknowledgement"
 #~ msgstr "Přečíst potvrzení"
 
@@ -19384,6 +19380,15 @@ msgstr "rrrr"
 
 #~ msgid "Use for appointment"
 #~ msgstr "Použít pro schůzku"
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Potvrzeno hodnocení %1$d z %2$d. Použijte šipku doleva či doprava pro "
+#~ "změnu svého hodnocení."
 
 #~ msgid "Use the comments below."
 #~ msgstr "Využijte komentáře níže."

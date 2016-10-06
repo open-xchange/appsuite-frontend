@@ -11610,12 +11610,7 @@ msgstr ""
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-
-#: apps/plugins/core/feedback/register.js
-#: module:io.ox/core
-msgid "Rating %1$d of 5"
+msgid "%1$d of 5 stars"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js
@@ -11635,7 +11630,7 @@ msgstr ""
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly"
+msgid "Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly."
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js

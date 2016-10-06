@@ -173,6 +173,11 @@ msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$d of %2$d"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+msgid "%1$d of 5 stars"
+msgstr "%1$d of %2$d"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6620,7 +6625,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Lütfen, destek taleplerinin geri bildirim formu üzerinden yanıtlanmayacağını "
 "unutmayın. Herhangi bir sorunuz ya da sorununuz olması durumunda lütfen "
@@ -7072,11 +7077,6 @@ msgstr "RSS Feed"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS Feeds"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-msgid "Rating %1$d of 5"
-msgstr "%1$d of %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9708,16 +9708,6 @@ msgstr "Özel bir isim kullanın"
 msgid "Use fixed-width font for text mails"
 msgstr "Metin epostaları için sabit genişlikli yazı tipini kullanın"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"%2$d derecelendirmesi %1$d onaylanmıştır. Derecelendirmenizi ayarlamak için "
-"sağ ve sol tuşlarını kullanın."
-
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -11303,6 +11293,10 @@ msgstr "yyyy"
 #~ "%2$d derecelendirmesi %1$d. Onaylamak için lütfen Giriş'e tıklatın ya da "
 #~ "sağ ve sol ok tuşlarını kullanarak derecelendirmenizi ayarlayın."
 
+#, fuzzy
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "%1$d of %2$d"
+
 #~ msgid "Remove facet"
 #~ msgstr "Özellliği kaldır"
 
@@ -11440,6 +11434,15 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Öğe pozisyonunu değiştirmek için imleç tuşlarını kullanın. Sanal imleç "
 #~ "modunun devre dışı bırakılması gerekmektedir."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "%2$d derecelendirmesi %1$d onaylanmıştır. Derecelendirmenizi ayarlamak "
+#~ "için sağ ve sol tuşlarını kullanın."
 
 #~ msgid "View (New)"
 #~ msgstr "Görüntü (Yeni)"

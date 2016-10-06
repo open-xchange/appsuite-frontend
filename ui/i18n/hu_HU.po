@@ -193,6 +193,13 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$d / %2$d elem"
 msgstr[1] "%1$d / %2$d elem"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d / %2$d elem"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6553,7 +6560,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "A támogatási kérdéseket nem ezen keresztül kezeljük. Amennyiben kérdése vagy "
 "problémája van, akkor lépjen kapcsolatba közvetlenül a technikai "
@@ -6983,12 +6990,6 @@ msgstr "RSS hírforrás"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS hírforrások"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "%1$d/%2$d oldal"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9569,16 +9570,6 @@ msgstr "Egyéni név használata"
 msgid "Use fixed-width font for text mails"
 msgstr "Rögzített szélességű betűkészlet szöveges levelekhez"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"%1$d / %2$d értékelés megerősítése. Az értékelést a jobb/bal nyíllal lehet "
-"módosítani."
-
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -11233,6 +11224,11 @@ msgstr "yyyy"
 #~ "%1$d / %2$d értékelés megerősítése. Az értékeléshez nyomja meg ez Entert "
 #~ "vagy módosítsa a jobb/bal nyíllal."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "%1$d/%2$d oldal"
+
 #~ msgid "Resource name"
 #~ msgstr "Erőforrásnév"
 
@@ -11412,6 +11408,15 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "A kurzorbillentyűkkel módosíthatja az elem pozícióját. A virtuális "
 #~ "kurzormódnak letiltottnak kell lennie."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "%1$d / %2$d értékelés megerősítése. Az értékelést a jobb/bal nyíllal "
+#~ "lehet módosítani."
 
 #, fuzzy
 #~| msgid "Manual"

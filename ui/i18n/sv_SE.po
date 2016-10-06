@@ -195,6 +195,13 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$d av %2$s objekt"
 msgstr[1] "%1$d av %2$s objekt"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d av %2$s objekt"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6526,7 +6533,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Observera att kundtjänstärenden inte kan hanteras genom synpunkts- "
 "formuläret. Om du har frågor eller problem är det bäst om du tar direkt "
@@ -6957,12 +6964,6 @@ msgstr "RSS-flöde"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS-flöden"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "Sida %1$d av %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9539,16 +9540,6 @@ msgstr "Använd anpassat namn"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Använd teckensnitt med fast bredd för textmeddelanden"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Betyget %1$d av %2$d bekräftat. Använd vänster och höger piltangenter för "
-"att justera betyget."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -14397,6 +14388,11 @@ msgstr "yyyy"
 #~ "Betyget %1$d av %2$d. Tryck Enter för att bekräfta, eller använd vänster "
 #~ "och höger piltangenter för att justera ditt betyg."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "Sida %1$d av %2$d"
+
 #~ msgid "Read Acknowledgement"
 #~ msgstr "Läs bekräftelse"
 
@@ -16526,6 +16522,15 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Använd piltangenterna för att ändra objektets position. Virtuellt "
 #~ "pekarläge måste avaktiveras."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Betyget %1$d av %2$d bekräftat. Använd vänster och höger piltangenter för "
+#~ "att justera betyget."
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

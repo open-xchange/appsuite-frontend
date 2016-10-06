@@ -196,6 +196,13 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$d van %2$d item"
 msgstr[1] "%1$d van %2$d items"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d van %2$d item"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6586,7 +6593,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Houd er rekening mee dat ondersteuning niet wordt afgehandeld middels het "
 "feedback-formulier. Als u vragen of problemen heeft kan u direct onze "
@@ -7021,12 +7028,6 @@ msgstr "RSS Feed"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS Feeds"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "Pagina %1$d van %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9627,16 +9628,6 @@ msgstr "Gebruik de zelfgegeven  naam"
 msgid "Use fixed-width font for text mails"
 msgstr "Gebruik lettertype met vaste breedte voor tekstberichten"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Beoordeling %1$d van %2$d bevestigd. Gebruik de linker en rechter "
-"pijltjestoetsen om de beoordeling aan te passen."
-
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -12050,6 +12041,11 @@ msgstr "yyyy"
 #~ "Beoordeling %1$d van %2$d. Gebruik Enter om deze te bevestigen of de "
 #~ "linker en rechter pijltjestoetsen om de beoordeling aan te passen."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "Pagina %1$d van %2$d"
+
 #~ msgid "Reading the details"
 #~ msgstr "Details lezen"
 
@@ -12868,6 +12864,15 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Gebruik de pijltjestoetsen om de positie van het item te veranderen. De "
 #~ "Virtuele cursor moet uitgeschakeld zijn."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Beoordeling %1$d van %2$d bevestigd. Gebruik de linker en rechter "
+#~ "pijltjestoetsen om de beoordeling aan te passen."
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

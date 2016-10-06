@@ -211,6 +211,13 @@ msgstr[0] "%1$d из %2$d"
 msgstr[1] "%1$d из %2$d"
 msgstr[2] "%1$d из %2$d"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d из %2$d"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6565,7 +6572,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Не следует использовать форму обратной связи для создания запросов "
 "поддержки. В этом случае обратитесь в службу поддержки напрямую."
@@ -6993,12 +7000,6 @@ msgstr "RSS-канал"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS-каналы"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "%1$d из %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9572,15 +9573,6 @@ msgstr "Другое имя"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Фиксированный шрифт для текстовых сообщений"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Установлен рейтинг %1$d из %2$d. Используйте стрелки, чтобы его изменить."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -12271,6 +12263,11 @@ msgstr "гггг"
 #~ "Рейтинг %1$d из %2$d. Нажмите Enter, чтобы подтвердить, или используйте "
 #~ "стрелки, чтобы изменить рейтинг."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "%1$d из %2$d"
+
 #~ msgid "Reading the details"
 #~ msgstr "Подробности"
 
@@ -13151,6 +13148,14 @@ msgstr "гггг"
 #~ msgstr ""
 #~ "Чтобы изменить позицию элемента, используйте клавиши стрелок. "
 #~ "Предварительно отключите виртуальный курсор."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Установлен рейтинг %1$d из %2$d. Используйте стрелки, чтобы его изменить."
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

@@ -213,6 +213,13 @@ msgstr[0] "%1$d z %2$d pozycji"
 msgstr[1] "%1$d z %2$d pozycji"
 msgstr[2] "%1$d z %2$d pozycji"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d z %2$d pozycji"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6598,7 +6605,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Uwaga: prośby o pomoc techniczną nie mogą być obsługiwane przy użyciu "
 "formularza opinii. Jeśli masz pytania lub problemy, skontaktuj się "
@@ -7028,12 +7035,6 @@ msgstr "Kanał RSS"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "Kanały RSS"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "Strona %1$d z %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9646,16 +9647,6 @@ msgstr "Użyj nazwy niestandardowej"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Używaj czcionki o stałej szerokości w wiadomościach tekstowych"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Ocena %1$d na %2$d potwierdzona. Dopasuj ocenę za pomocą klawisza strzałki w "
-"lewo lub strzałki w prawo."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -12317,6 +12308,11 @@ msgstr "rrrr"
 #~ "Ocena %1$d na %2$d. Potwierdź, naciskając klawisz Enter, lub dostosuj za "
 #~ "pomocą klawisza strzałki w lewo lub strzałki w prawo."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "Strona %1$d z %2$d"
+
 #~ msgid "Reading the details"
 #~ msgstr "Zapoznawanie się ze szczegółami"
 
@@ -13217,6 +13213,15 @@ msgstr "rrrr"
 #~ msgstr ""
 #~ "Aby zmienić położenie elementu, użyj klawiszy kursora. Tryb kursora "
 #~ "wirtualnego musi zostać wyłączony."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Ocena %1$d na %2$d potwierdzona. Dopasuj ocenę za pomocą klawisza "
+#~ "strzałki w lewo lub strzałki w prawo."
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

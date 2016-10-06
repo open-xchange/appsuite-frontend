@@ -191,6 +191,13 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$d av %2$d element"
 msgstr[1] "%1$d av %2$d elementer"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d av %2$d element"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6517,7 +6524,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Vær oppmerksom på at støtteforespørsler ikke håndteres via "
 "tilbakemeldingskjema. Når du har spørsmål eller problemer kan du kontakte "
@@ -6946,12 +6953,6 @@ msgstr "RSS-strøm"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS-strøm"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "Side %1$d av %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9527,16 +9528,6 @@ msgstr "Bruk egendefinert navn"
 msgid "Use fixed-width font for text mails"
 msgstr "Bruk fast-bredde skrifttype for tekst e-poster"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Vurdering %1$d av %​​2$d bekreftet. Bruk venstre og høyre piltaster til å "
-"justere din vurdering."
-
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -11262,6 +11253,11 @@ msgstr "yyyy"
 #~ "Vurdering %1$d av %2$d. Trykk Enter for å bekrefte eller bruk venstre og "
 #~ "høyre piltast til å justere din vurdering."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "Side %1$d av %2$d"
+
 #~ msgid "Remove facet"
 #~ msgstr "Fjern filter"
 
@@ -11520,6 +11516,15 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Bruk piltastene for å endre plassering. Virtuelle piltaster må være "
 #~ "deaktivert."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Vurdering %1$d av %​​2$d bekreftet. Bruk venstre og høyre piltaster til å "
+#~ "justere din vurdering."
 
 #~ msgid "Use left/right arrow keys to navigate and escape key to exit view."
 #~ msgstr ""

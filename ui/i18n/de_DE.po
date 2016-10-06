@@ -187,6 +187,13 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$d von %2$d Objekt"
 msgstr[1] "%1$d von %2$d Objekten"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d von %2$d Objekt"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6521,7 +6528,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Bitte beachten Sie, dass Support-Anfragen nicht über das Feedback-Formular "
 "bearbeitet werden können. Sollten Sie Fragen oder Probleme haben, "
@@ -6947,12 +6954,6 @@ msgstr "RSS Feed"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS Feeds"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "Seite %1$d von %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9548,16 +9549,6 @@ msgstr "Benutzerdefinierten Namen verwenden"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Schrift mit fester Breite für Text-E-Mails verwenden"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Bewertung %1$d von %2$d bestätigt. Verwenden Sie die linke und rechte "
-"Pfeiltaste zum Anpassen Ihrer Bewertung."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -13496,6 +13487,11 @@ msgstr "JJJJ"
 #~ "verwenden Sie die linke und rechte Pfeiltaste zum Anpassen Ihrer "
 #~ "Bewertung."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "Seite %1$d von %2$d"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "Schreibgeschützter Lesezugriff"
 
@@ -14767,6 +14763,15 @@ msgstr "JJJJ"
 #~ msgstr ""
 #~ "Verwenden Sie die Pfeiltasten zum Ändern der Objektposition. Der "
 #~ "virtuelle Cursor-Modus muss deaktiviert werden."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Bewertung %1$d von %2$d bestätigt. Verwenden Sie die linke und rechte "
+#~ "Pfeiltaste zum Anpassen Ihrer Bewertung."
 
 #~ msgid "Use left/right arrow keys to navigate and escape key to exit view."
 #~ msgstr ""

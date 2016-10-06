@@ -194,6 +194,13 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$d of %2$d item"
 msgstr[1] "%1$d of %2$d items"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d of %2$d item"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6538,7 +6545,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Please note that support requests cannot be handled via the feedback-"
 "formular. When you have questions or problems please contact our support "
@@ -6970,12 +6977,6 @@ msgstr "RSS Feed"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS Feeds"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "Page %1$d of %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9550,16 +9551,6 @@ msgstr "Use custom name"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Use fixed-width font for text email messages"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Rating %1$d of %2$d confirmed. Use the left and right arrow keys to adjust "
-"your rating."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -12196,6 +12187,11 @@ msgstr "yyyy"
 #~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 #~ "arrowkeys to adjust your rating."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "Page %1$d of %2$d"
+
 #~ msgid "Reading the details"
 #~ msgstr "Reading the details"
 
@@ -13053,6 +13049,15 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Use cursor keys to change the item position. Virtual cursor mode has to "
 #~ "be disabled."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Rating %1$d of %2$d confirmed. Use the left and right arrow keys to "
+#~ "adjust your rating."
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

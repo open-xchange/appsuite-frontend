@@ -196,6 +196,11 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$s de %2$s"
 msgstr[1] "%1$s de %2$s"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+msgid "%1$d of 5 stars"
+msgstr "%1$s de %2$s"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
@@ -6642,7 +6647,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Per favor, teniu en compte que les peticions de suport no es poden "
 "canalitzar a través del formulari de retroalimentació. Per favor, quan "
@@ -7087,10 +7092,6 @@ msgstr "Feed RSS"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "Feed RSS"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Rating %1$d of 5"
-msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9677,16 +9678,6 @@ msgstr "Nom d'usuari"
 msgid "Use fixed-width font for text mails"
 msgstr "Empra fonts d'amplada fixa per a correus de text"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Puntuació %1$d de %2$d confirmada. Emprau les tecles de moviment del cursor "
-"a l'esquerra i a la dreta per a ajustar la vostra puntuació."
-
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -11834,6 +11825,15 @@ msgstr ""
 #~ "Use cursor keys to change the item position. Virtual cursor mode has to "
 #~ "be disabled."
 #~ msgstr "Emprau les tecles del cursor per a canviar la posició de l'element"
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Puntuació %1$d de %2$d confirmada. Emprau les tecles de moviment del "
+#~ "cursor a l'esquerra i a la dreta per a ajustar la vostra puntuació."
 
 #~ msgid "Version history"
 #~ msgstr "Historial de versions"

@@ -193,6 +193,13 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "第 %1$d 個，共 %2$d 個項目"
 msgstr[1] "第 %1$d 張，共 %2$d 張"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "第 %1$d 個，共 %2$d 個項目"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6453,7 +6460,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "請注意，技術支援請求無法透過意見回饋方式傳送。若您有問題時請直接連絡我們的技"
 "術支援團隊。"
@@ -6879,12 +6886,6 @@ msgstr "RSS 資訊來源"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS 資訊來源"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "第 %1$d 頁，共 %2$d 頁"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9396,14 +9397,6 @@ msgstr "使用自訂名稱"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "針對純文字郵件使用固定寬度字體顯示"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr "已確認 %1$d / %2$d 評分。請使用左右鍵調整您的評分。"
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -13440,6 +13433,11 @@ msgstr "年"
 #~ "arrowkeys to adjust your rating."
 #~ msgstr "已評分 %1$d / %2$d。請按 Enter 確認或使用左右鍵調整您的評分。"
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "第 %1$d 頁，共 %2$d 頁"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "唯讀模式"
 
@@ -14360,6 +14358,13 @@ msgstr "年"
 #~ "Use cursor keys to change the item position. Virtual cursor mode has to "
 #~ "be disabled."
 #~ msgstr "使用方向鍵修改項目位置。必須停用虛擬游標模式。"
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr "已確認 %1$d / %2$d 評分。請使用左右鍵調整您的評分。"
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

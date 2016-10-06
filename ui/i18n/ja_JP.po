@@ -176,6 +176,13 @@ msgid "%1$d of %2$d item"
 msgid_plural "%1$d of %2$d items"
 msgstr[0] "%2$d 中の %1$d"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%2$d 中の %1$d"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6495,7 +6502,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "サポートのご依頼はフィードバックでご送信ください。ご質問や不明な点がありまし"
 "たら、ネクスト・イット株式会社までご連絡ください。"
@@ -6924,12 +6931,6 @@ msgstr "RSS フィード"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS フィード"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "%2$d ページ中の %1$d ページ"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9480,15 +9481,6 @@ msgstr "カスタム名を使用"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "テキストメールに固定幅フォントを使用"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"評価は %1$d/%2$d です。左方向キーと右方向キーを使用して、評価を変更できます。"
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -15811,6 +15803,11 @@ msgstr "yyyy"
 #~ "評価は %1$d/%2$d です。確定するには Enter キー、評価を変更するには左方向"
 #~ "キーと右方向キーを使用してください。"
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "%2$d ページ中の %1$d ページ"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "読み取り専用モード"
 
@@ -17758,6 +17755,15 @@ msgstr "yyyy"
 
 #~ msgid "Use for appointment"
 #~ msgstr "アポイントに戻る"
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "評価は %1$d/%2$d です。左方向キーと右方向キーを使用して、評価を変更できま"
+#~ "す。"
 
 #~ msgid "Use the expert mode?"
 #~ msgstr "エキスパート モードを使用する"

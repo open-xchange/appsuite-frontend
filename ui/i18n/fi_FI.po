@@ -191,6 +191,13 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$d / %2$d "
 msgstr[1] "%1$s / %2$s"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d / %2$d "
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6525,7 +6532,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Ole hyvä ja huomioi ettei tukipyyntöjä voida vastaanottaa palautelomakkeen "
 "kautta. Mikäli sinulla on kysymyksiä tai ongelmia, ole hyvä ja ota suoraan "
@@ -6956,12 +6963,6 @@ msgstr "RSS syöte"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS syötteet"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "%1$s/%2$s"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9535,16 +9536,6 @@ msgstr "Käytä mukautettua nimiä"
 msgid "Use fixed-width font for text mails"
 msgstr "Näytä tekstimuotoiset postit vakiolevyisellä kirjasimella"
 
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Arvio %1$d %2$d mahdollisesta vahvistettu. Käytä nuolinäppäimiä muuttaaksesi "
-"arviotasi."
-
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -11950,6 +11941,11 @@ msgstr "vvvv"
 #~ "Arvio %1$d %2$d mahdollisesta. Paina [Enter] vahvistaaksesi arvio tai "
 #~ "käytä nuolinäppäimiä muuttaaksesi arviotasi."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "%1$s/%2$s"
+
 #~ msgid "Reading the details"
 #~ msgstr "Yksityiskohtien katselu"
 
@@ -12752,6 +12748,15 @@ msgstr "vvvv"
 #~ msgstr ""
 #~ "Käytä nuolinäppäimiä muuttaaksesi kohteen sijaintia. Virtuaalikursori "
 #~ "täytyy kytkeä pois päältä."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Arvio %1$d %2$d mahdollisesta vahvistettu. Käytä nuolinäppäimiä "
+#~ "muuttaaksesi arviotasi."
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

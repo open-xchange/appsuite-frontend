@@ -194,6 +194,13 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$d de %2$d item"
 msgstr[1] "%1$d de %2$d itens"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d de %2$d item"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6552,7 +6559,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Note que as solicitações ao suporte não podem ser tratadas através do "
 "formulário de comentário. Quando você tiver questões ou problemas nos "
@@ -6983,12 +6990,6 @@ msgstr "Feed RSS"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "Feeds RSS"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "Página %1$d de %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9585,16 +9586,6 @@ msgstr "Usar nome personalizado"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Usar fonte de largura fixa para e-mails de texto"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Classificação %1$d de %2$d confirmado. Use as setas para a direita ou "
-"esquerda para ajustar suas classificação."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -14279,6 +14270,11 @@ msgstr "aaaa"
 #~ "Classificação %1$d de %2$d confirmado. Pressione Enter para confirmar ou "
 #~ "use as setas para a direita ou esquerda para ajustar suas classificação."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "Página %1$d de %2$d"
+
 #~ msgid "Read all"
 #~ msgstr "Ler tudo"
 
@@ -15940,6 +15936,15 @@ msgstr "aaaa"
 
 #~ msgid "Use for appointment"
 #~ msgstr "Usar para compromisso"
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Classificação %1$d de %2$d confirmado. Use as setas para a direita ou "
+#~ "esquerda para ajustar suas classificação."
 
 #~ msgid "Use the expert mode?"
 #~ msgstr "Usar o modo avançado?"

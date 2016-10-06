@@ -212,6 +212,13 @@ msgstr[0] "%1$d din %2$d element"
 msgstr[1] "%1$d din %2$d elemente"
 msgstr[2] "%1$d din %2$d de elemente"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d din %2$d element"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6586,7 +6593,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Vă atragem atenția că solicitările de asistență nu pot fi soluționate prin "
 "intermediul formularului de feedback. Dacă aveți întrebări sau probleme, "
@@ -7017,12 +7024,6 @@ msgstr "Flux RSS"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "Fluxuri RSS"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "Pagina %1$d din %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9637,16 +9638,6 @@ msgstr "Utilizează nume personalizat"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Utilizează un font de lățime fixă pentru mesajele text"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Evaluarea %1$d din %2$d a fost confirmată. Utilizați săgețile stânga și "
-"dreapta pentru a modifica evaluarea."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -14923,6 +14914,11 @@ msgstr "aaaa"
 #~ "Evaluare %1$d din %2$d. Apăsați Enter pentru a confirma sau utilizați "
 #~ "săgețile stânga și dreapta pentru a modifica evaluarea."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "Pagina %1$d din %2$d"
+
 #~ msgctxt "to"
 #~ msgid "Read"
 #~ msgstr "Citește"
@@ -16759,6 +16755,15 @@ msgstr "aaaa"
 
 #~ msgid "Use for appointment"
 #~ msgstr "Folosește pentru întâlnire"
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Evaluarea %1$d din %2$d a fost confirmată. Utilizați săgețile stânga și "
+#~ "dreapta pentru a modifica evaluarea."
 
 #~ msgid "Use the expert mode?"
 #~ msgstr "Folosește modul expert?"

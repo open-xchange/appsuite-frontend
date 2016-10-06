@@ -196,6 +196,13 @@ msgid_plural "%1$d of %2$d items"
 msgstr[0] "%1$d di %2$d elemento"
 msgstr[1] "%1$d di %2$d elementi"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d di %2$d elemento"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6566,7 +6573,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Nota: le richieste di supporto non possono essere gestite tramite il modulo "
 "di commento. Quando hai domande o problemi, contatta direttamente il nostro "
@@ -6997,12 +7004,6 @@ msgstr "Fonte RSS"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "Fonti RSS"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "Pagina %1$d di %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9607,16 +9608,6 @@ msgstr "Usa nome personalizzato"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Usa un carattere a larghezza fissa per il testo dei messaggi"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Valutazione di %1$d di %2$d confermata. Utilizza le frecce direzionali "
-"destra e sinistra per modificare la tua valutazione."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -13844,6 +13835,11 @@ msgstr "aaaa"
 #~ "Valutazione di %1$d di %2$d. Premi Invio per confermare o utilizza le "
 #~ "frecce direzionali destra e sinistra per modificare la tua valutazione."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "Pagina %1$d di %2$d"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "Modalità di sola lettura"
 
@@ -14895,6 +14891,15 @@ msgstr "aaaa"
 #~ msgstr ""
 #~ "Utilizza le frecce direzionali per modificare la posizione dell'elemento. "
 #~ "La modalità con cursore virtuale deve essere disabilitata."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Valutazione di %1$d di %2$d confermata. Utilizza le frecce direzionali "
+#~ "destra e sinistra per modificare la tua valutazione."
 
 #~ msgid ""
 #~ "Use the folder tree to open the folder containing the objects that you "

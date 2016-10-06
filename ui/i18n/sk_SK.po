@@ -213,6 +213,13 @@ msgstr[0] "%1$d z %2$d položky"
 msgstr[1] "%1$d z %2$d položiek"
 msgstr[2] "%1$d z %2$d položiek"
 
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d of %2$d item"
+#| msgid_plural "%1$d of %2$d items"
+msgid "%1$d of 5 stars"
+msgstr "%1$d z %2$d položky"
+
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d second"
@@ -6582,7 +6589,7 @@ msgstr ""
 #| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
-"If you have questions or problems please contact our support directly"
+"If you have questions or problems please contact our support directly."
 msgstr ""
 "Prosím, pamätajte, že žiadosti o podporu nemôžeme riešiť pomocou formulára "
 "spätnej väzby. Ak máte otázky alebo problémy, prosím kontaktujte priamo našu "
@@ -7013,12 +7020,6 @@ msgstr "Kanál RSS"
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "Kanály RSS"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Page %1$d of %2$d"
-msgid "Rating %1$d of 5"
-msgstr "Strana %1$d z %2$d"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -9616,16 +9617,6 @@ msgstr "Použiť vlastné meno"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Používať proporcionálne písmo pre text emailov"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust "
-#| "your rating."
-msgid "Use left and right cursor keys to adjust your rating."
-msgstr ""
-"Hodnotenie %1$d z %2$d potvrdené. Použite šípky vľavo a vpravo na upravenie "
-"vášho hodnotenia."
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -14839,6 +14830,11 @@ msgstr "RRRR"
 #~ "Hodnotenie %1$d z %2$d. Použite Enter na potvrdenie alebo šípky vľavo a "
 #~ "vpravo na upravenie vášho hodnotenia."
 
+#, fuzzy
+#~| msgid "Page %1$d of %2$d"
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "Strana %1$d z %2$d"
+
 #~ msgid "Read Only Mode"
 #~ msgstr "Režim len na čítanie"
 
@@ -16626,6 +16622,15 @@ msgstr "RRRR"
 
 #~ msgid "Use for appointment"
 #~ msgstr "Použiť pre schôdzku"
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "Hodnotenie %1$d z %2$d potvrdené. Použite šípky vľavo a vpravo na "
+#~ "upravenie vášho hodnotenia."
 
 #~ msgid "Use the expert mode?"
 #~ msgstr "Použiť expertný režim?"
