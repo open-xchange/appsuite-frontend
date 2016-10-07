@@ -74,10 +74,13 @@ The following ad spaces are pre-defined and can be used to serve ads:
 - io.ox/ads/leaderboard
 - io.ox/ads/skyscraper
 - io.ox/ads/skyscraperLeft
-- io.ox/ads/mailDetail
 - io.ox/ads/driveFolder
+- io.ox/ads/portalBackground
 - io.ox/ads/portalBillboard
+- io.ox/ads/mailBackground
+- io.ox/ads/mailDetail
 - io.ox/ads/mailSentOverlay
+- io.ox/ads/logout
 
 In order to activate one of these spaces, a [custom plugin](components/plugins/01_create-plugins) is needed, shipping a
 configuration as described [above](#Configuration).
