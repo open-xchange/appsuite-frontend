@@ -349,28 +349,35 @@ define.async('io.ox/oauth/keychain', [
         });
     });
 
-    ox.on('http:error', function (err) {
-        if (err && err.code === 'OAUTH-0040' && $('.io-ox-dialog-popup.oauth-reauthorize').length === 0) {
-            err.handled = true;
-            require(['io.ox/core/tk/dialogs']).then(function (dialogs) {
-                new dialogs.ModalDialog({
-                    addClass: 'oauth-reauthorize'
-                })
-                .text(err.error)
-                .addButton('cancel', gt('Cancel'))
-                .addPrimaryButton('ok', gt('Reauthorize'))
-                .show()
-                .done(function (action) {
-                    if (action === 'ok') {
-                        var service = cache[err.error_params[4]];
-                        var account = service.accounts[err.error_params[1]];
-                        var api = new OAuthKeychainAPI(service);
+    ox.on('http:error:OAUTH-0040', function (err) {
+        //do not yell
+        err.handled = true;
+        if ($('.io-ox-dialog-popup.oauth-reauthorize').length > 0) return;
 
-                        api.reauthorize(account);
-                    }
-                });
-            });
-        }
+        require(['io.ox/backbone/views/modal']).then(function (ModalDialog) {
+            new ModalDialog({ title: gt('Error') })
+            .extend({
+                default: function () {
+                    this.$el.addClass('oauth-reauthorize');
+                },
+                text: function () {
+                    this.$body.append(err.error);
+                }
+            })
+            .addCancelButton()
+            .addButton({
+                action: 'reauthorize',
+                label: gt('Reauthorize')
+            })
+            .on('reauthorize', function () {
+                var service = cache[err.error_params[4]],
+                    account = service.accounts[err.error_params[1]],
+                    api = new OAuthKeychainAPI(service);
+
+                api.reauthorize(account);
+            })
+            .open();
+        });
     });
 
     return moduleDeferred;
