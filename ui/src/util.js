@@ -221,13 +221,10 @@
                     return url.data;
                 } else if (arguments.length === 1) {
                     if (_.isString(name)) return url.data[name];
-
                     _(name).each(function (value, name) {
                         url.set(name, value);
                     });
-
                     url.update();
-
                 } else if (arguments.length === 2) {
                     url.set(name, value);
                     url.update();
@@ -246,6 +243,9 @@
 
             url.encrypt = function (data) {
                 var obj = _.extend({}, data);
+                // do not change 99% case
+                if (/^default\d+\/inbox$/i.test(data.folder)) return obj;
+                // encrypt all other mail folders
                 if (/^default\d+\//.test(data.folder)) {
                     var index = data.folder.indexOf('/') + 1;
                     obj.folder = data.folder.substr(0, index) + '/' + encrypt(data.folder.substr(index));
