@@ -369,7 +369,7 @@ define('io.ox/mail/detail/view', [
 
     var View = DisposableView.extend({
 
-        className: 'list-item mail-item mail-detail f6-target',
+        className: 'list-item mail-item mail-detail f6-target focusable',
 
         events: {
             'keydown': 'onToggle',

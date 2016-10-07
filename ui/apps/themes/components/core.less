@@ -270,6 +270,18 @@ div.hopscotch-bubble {
     -webkit-tap-highlight-color: transparent;
 }
 
+.scrollable[tabindex] {
+    &:focus {
+        box-shadow: inset 0 0 0 2px @link-color;
+    }
+}
+
+.focusable {
+    &:focus {
+        outline: 2px solid @link-color;
+    }
+}
+
 .blockscroll { overflow: hidden !important; }
 
 .scrollable-pane {

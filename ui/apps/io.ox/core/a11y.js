@@ -15,6 +15,18 @@ define('io.ox/core/a11y', [], function () {
 
     'use strict';
 
+    $(document).on('mousedown', '.scrollable[tabindex]', function (e) {
+        $(e.currentTarget).css('box-shadow', 'none').on('blur', function () {
+            $(this).css('box-shadow', '');
+        });
+    });
+
+    $(document).on('mousedown', '.focusable', function (e) {
+        $(e.currentTarget).css('outline', 0).on('blur', function () {
+            $(this).css('outline', '');
+        });
+    });
+
     function getTabbable(el) {
         var skip = {},
             items = $(el).find('input, select, textarea, button, a[href], [tabindex]');
