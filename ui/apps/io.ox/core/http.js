@@ -622,6 +622,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
         if (isError) {
             // forward all errors to respond to special codes
+            ox.trigger('http:error:' + response.code, response);
             ox.trigger('http:error', response);
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
