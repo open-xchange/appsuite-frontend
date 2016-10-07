@@ -115,6 +115,9 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
                         conflicts.title = type.error;
                     }
                     conflicts.warnings.push(type.warnings.error);
+                } else if (type.handled === true) {
+                    //special flag to indicate this error has already been handled
+                    return;
                 } else {
                     o.type = 'error';
                     o.message = type.message || type.error;
