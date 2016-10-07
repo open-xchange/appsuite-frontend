@@ -352,7 +352,7 @@ define.async('io.ox/oauth/keychain', [
     ox.on('http:error:OAUTH-0040', function (err) {
         //do not yell
         err.handled = true;
-        if ($('.io-ox-dialog-popup.oauth-reauthorize').length > 0) return;
+        if ($('.modal.oauth-reauthorize').length > 0) return;
 
         require(['io.ox/backbone/views/modal']).then(function (ModalDialog) {
             new ModalDialog({ title: gt('Error') })
