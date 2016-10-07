@@ -130,7 +130,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         }
 
         // add message
-        if (message.handled === true || !validType.test(o.type)) return;
+        if (!validType.test(o.type)) return;
 
         var alert = [];
         //screenreader only messages can be much simpler and don't need styling or formating (audio only)
