@@ -443,12 +443,13 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     break;
 
                 // [Ctrl|Cmd + A] > select all
+                // [a] > archive
                 case 65:
                 case 97:
                     if (e.ctrlKey || e.metaKey || recentWindowsKey) {
                         e.preventDefault();
                         this.selectAll();
-                    } else if (!e.shiftKey && !e.altKey) {
+                    } else if (e.which === 65 && !e.shiftKey && !e.altKey) {
                         this.view.trigger('selection:archive', this.get());
                     }
                     break;
