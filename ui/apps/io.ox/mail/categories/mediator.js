@@ -61,6 +61,7 @@ define('io.ox/mail/categories/mediator', [
                     isVisible = isEnabled() && isInbox();
                     app.getWindow().nodes.outer.toggleClass('mail-categories-visible', isVisible);
                     app.listView.model.set('category_id', isVisible ? app.props.get('category_id') : undefined);
+                    if (isVisible) api.collection.initializeRefresh();
                 }
 
                 app.on('folder:change', toggleCategories);
