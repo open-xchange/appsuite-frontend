@@ -20,10 +20,11 @@ define('io.ox/core/a11y', [], function () {
     //
 
     $(document).on('mousedown', '.focusable, .scrollable[tabindex]', function (e) {
-        respondToNonKeyboardFocus($(e.currentTarget));
+        respondToNonKeyboardFocus(e.currentTarget);
     });
 
     function respondToNonKeyboardFocus(node) {
+        node = $(node);
         if (node.is('.scrollable[tabindex]')) {
             node.css('box-shadow', 'none').on('blur', removeBoxShadow);
         } else if (node.is('.focusable')) {
@@ -42,7 +43,7 @@ define('io.ox/core/a11y', [], function () {
     var fnFocus = $.fn.focus;
     $.fn.focus = function () {
         fnFocus.apply(this, arguments);
-        if (document.activeElement === this[0]) respondToNonKeyboardFocus($(this[0]));
+        if (document.activeElement === this[0]) respondToNonKeyboardFocus(this[0]);
         return this;
     };
 
