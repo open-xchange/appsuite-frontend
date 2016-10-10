@@ -173,7 +173,7 @@
          */
         hash: (function () {
 
-            var key;
+            var key, invalidKey = false;
 
             // this is not cryptography!
             // it just makes certain parameters like "folder" unreadable
@@ -204,8 +204,11 @@
             }
 
             key = _.getCookie('url.key');
-            // replace by new key if invalid
-            if (!/^\d+$/.test(key)) _.setCookie('url.key', key = getKey());
+            // replace by new key if invalid (expires never; let's say in 10 years)
+            if (!/^\d+$/.test(key)) {
+                invalidKey = true;
+                _.setCookie('url.key', key = getKey(), 1000 * 3600 * 24 * 365 * 10);
+            }
             // transform to integers
             key = key.split('').map(function (i) { return parseInt(i, 10); });
 
@@ -285,6 +288,9 @@
 
             decode();
             $(window).on('hashchange', decode);
+
+            // remove invlid folder
+            if (invalidKey && /^default\d+\//.test(url.data.folder)) url.set('folder', null);
 
             return url;
 
