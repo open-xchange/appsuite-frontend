@@ -15,17 +15,40 @@ define('io.ox/core/a11y', [], function () {
 
     'use strict';
 
-    $(document).on('mousedown', '.scrollable[tabindex]', function (e) {
-        $(e.currentTarget).css('box-shadow', 'none').on('blur', function () {
-            $(this).css('box-shadow', '');
-        });
+    //
+    // Focus management
+    //
+
+    $(document).on('mousedown', '.focusable, .scrollable[tabindex]', function (e) {
+        respondToNonKeyboardFocus($(e.currentTarget));
     });
 
-    $(document).on('mousedown', '.focusable', function (e) {
-        $(e.currentTarget).css('outline', 0).on('blur', function () {
-            $(this).css('outline', '');
-        });
-    });
+    function respondToNonKeyboardFocus(node) {
+        if (node.is('.scrollable[tabindex]')) {
+            node.css('box-shadow', 'none').on('blur', removeBoxShadow);
+        } else if (node.is('.focusable')) {
+            node.css('outline', 0).on('blur', removeOutline);
+        }
+    }
+
+    function removeOutline() {
+        $(this).css('outline', '');
+    }
+
+    function removeBoxShadow() {
+        $(this).css('box-shadow', '');
+    }
+
+    var fnFocus = $.fn.focus;
+    $.fn.focus = function () {
+        fnFocus.apply(this, arguments);
+        if (document.activeElement === this[0]) respondToNonKeyboardFocus($(this[0]));
+        return this;
+    };
+
+    //
+    // Tab trap
+    //
 
     function getTabbable(el) {
         var skip = {},
