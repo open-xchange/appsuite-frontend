@@ -276,10 +276,8 @@ div.hopscotch-bubble {
     }
 }
 
-.focusable {
-    &:focus {
-        outline: 2px solid @link-color;
-    }
+.focusable:focus, .list-item.focusable:focus {
+    outline: 2px solid @link-color;
 }
 
 .blockscroll { overflow: hidden !important; }
