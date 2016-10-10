@@ -65,8 +65,12 @@ define('io.ox/mail/categories/mediator', [
 
                 app.on('folder:change', toggleCategories);
                 app.props.on('change:categories', function () {
-                    // ensure inbox if user enables while in a different folder
-                    if (isEnabled() && !isInbox()) app.folder.set(INBOX);
+                    if (isEnabled()) {
+                        // ensure inbox if user enables while in a different folder
+                        if (!isInbox()) app.folder.set(INBOX);
+                        // ensure we respond the changed unseeen counts
+                        api.collection.initializeRefresh();
+                    }
                     toggleCategories();
                 });
 

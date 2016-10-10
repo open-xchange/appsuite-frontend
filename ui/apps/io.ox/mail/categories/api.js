@@ -67,10 +67,11 @@ define('io.ox/mail/categories/api', [
 
         model: Model,
 
-        initialize: function () {
-            mailAPI.on('after:refresh.unseen after:refresh.seen refresh.all ', _.debounce(this.refresh.bind(this), 200));
-
+        // we don't do this in initialize() since the feature might be unavailable
+        initializeRefresh: function () {
+            mailAPI.on('after:refresh.unseen after:refresh.seen refresh.all', _.debounce(this.refresh.bind(this), 200));
             this.refresh();
+            this.initializeRefresh = _.noop;
         },
 
         refresh: function () {
