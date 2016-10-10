@@ -40,8 +40,18 @@ define('io.ox/files/listview', [
 
         getCompositeKey: function (model) {
             return model.isFolder() ? 'folder.' + model.get('id') : model.cid;
+        },
+
+        onChange: function (model) {
+            // ignore irrelevant changed attributes (see bug 49257)
+            var relevantChanges = _.intersection(_(model.changed).keys(), FileListView.relevantAttributes);
+            if (!relevantChanges.length) return;
+            ListView.prototype.onChange.apply(this, arguments);
         }
     });
+
+    // we redraw only if a relevant attribute changes (to avoid flickering)
+    FileListView.relevantAttributes = ['id', 'last_modified', 'locked_until', 'filename', 'file_mimetype', 'file_size', 'source', 'title', 'version'];
 
     //
     // Extension for detail sidebar
