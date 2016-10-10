@@ -157,11 +157,16 @@ define('io.ox/mail/settings/pane', [
         return $('<fieldset>').append($('<legend class="sectiontitle">').append($('<h2>').text(text))).append(args.slice(1));
     }
 
-    function checkbox(text) {
+    function checkbox(id, label) {
         var args = _(arguments).toArray();
+        if (!isConfigurable(id)) return $();
         return $('<div class="checkbox">').append(
-            $('<label class="control-label">').text(text).prepend(args.slice(1))
+            $('<label class="control-label">').text(label).prepend(args.slice(2))
         );
+    }
+
+    function isConfigurable(id) {
+        return settings.isConfigurable(id);
     }
 
     ext.point(POINT + '/pane').extend({
@@ -175,24 +180,29 @@ define('io.ox/mail/settings/pane', [
                 fieldset(
                     gt('Common'),
                     checkbox(
+                        'removeDeletedPermanently',
                         gt('Permanently remove deleted emails'),
                         new mini.CheckboxView({ name: 'removeDeletedPermanently', model: settings }).render().$el
                     ),
                     contactCollect ? checkbox(
+                        'contactCollectOnMailTransport',
                         gt('Automatically collect contacts in the folder "Collected addresses" while sending'),
                         new mini.CheckboxView({ name: 'contactCollectOnMailTransport', model: settings }).render().$el
-                    ) : '',
+                    ) : [],
                     contactCollect ? checkbox(
+                        'contactCollectOnMailAccess',
                         gt('Automatically collect contacts in the folder "Collected addresses" while reading'),
                         new mini.CheckboxView({ name: 'contactCollectOnMailAccess', model: settings }).render().$el
-                    ) : '',
+                    ) : [],
                     // fixed width
                     checkbox(
+                        'useFixedWidthFont',
                         gt('Use fixed-width font for text mails'),
                         new mini.CheckboxView({ name: 'useFixedWidthFont', model: settings }).render().$el
                     ),
                     // mailto handler registration
                     checkbox(
+                        'features/registerProtocolHandler',
                         gt('Ask for mailto link registration'),
                         new mini.CheckboxView({ name: 'features/registerProtocolHandler', model: settings }).render().$el
                     )
@@ -205,7 +215,7 @@ define('io.ox/mail/settings/pane', [
                             navigator.registerProtocolHandler(
                                 'mailto', url + '#app=' + ox.registry.get('mail-compose') + ':compose&mailto=%s', ox.serverConfig.productNameMail
                             );
-                        }) : ''
+                        }) : []
                     )
                 )
             );
@@ -219,10 +229,12 @@ define('io.ox/mail/settings/pane', [
             this.append(
                 fieldset(gt('Compose'),
                     checkbox(
+                        'appendVcard',
                         gt('Append vCard'),
                         new mini.CheckboxView({ name: 'appendVcard', model: settings }).render().$el
                     ),
                     checkbox(
+                        'appendMailTextOnReply',
                         gt('Insert the original email text to a reply'),
                         new mini.CheckboxView({ name: 'appendMailTextOnReply', model: settings }).render().$el
                     )
@@ -234,14 +246,14 @@ define('io.ox/mail/settings/pane', [
                     //     )
                     // )
                 ),
-                fieldset(gt('Forward emails as'),
+                isConfigurable('forwardMessageAs') ? fieldset(gt('Forward emails as'),
                     new mini.RadioView({ list: optionsForwardEmailAs, name: 'forwardMessageAs', model: settings }).render().$el
-                ),
+                ) : [],
 
-                _.device('!smartphone') ? fieldset(
+                isConfigurable('messageFormat') && _.device('!smartphone') ? fieldset(
                     gt('Format emails as'),
                     new mini.RadioView({ list: optionsFormatAs, name: 'messageFormat', model: settings }).render().$el
-                ) : '',
+                ) : [],
 
                 $('<div>').addClass('settings sectiondelimiter'),
                 $('<fieldset>').append(
@@ -273,24 +285,28 @@ define('io.ox/mail/settings/pane', [
         draw: function () {
             this.append(fieldset(
                 gt('Display'),
-
                 checkbox(
+                    'allowHtmlMessages',
                     gt('Allow html formatted emails'),
                     new mini.CheckboxView({ name: 'allowHtmlMessages', model: settings }).render().$el
                 ),
                 checkbox(
+                    'allowHtmlImages',
                     gt('Allow pre-loading of externally linked images'),
                     new mini.CheckboxView({ name: 'allowHtmlImages', model: settings }).render().$el
                 ),
                 checkbox(
+                    'displayEmoticons',
                     gt('Display emoticons as graphics in text emails'),
                     new mini.CheckboxView({ name: 'displayEmoticons', model: settings }).render().$el
                 ),
                 checkbox(
+                    'isColorQuoted',
                     gt('Color quoted lines'),
                     new mini.CheckboxView({ name: 'isColorQuoted', model: settings }).render().$el
                 ),
                 checkbox(
+                    'sendDispositionNotification',
                     gt('Show requests for read receipts'),
                     new mini.CheckboxView({ name: 'sendDispositionNotification', model: settings }).render().$el
                 )
@@ -359,6 +375,4 @@ define('io.ox/mail/settings/pane', [
             );
         }
     });
-
-
 });
