@@ -49,7 +49,7 @@ define.async('io.ox/mail/compose/model', [
                 priority: 3,
                 sendDisplayName: !!settings.get('sendDisplayName', true),
                 sendtype: mailAPI.SENDTYPE.NORMAL,
-                defaultSignatureId: settings.get('defaultSignature', ''),
+                defaultSignatureId: mailUtil.getDefaultSignature('compose'),
                 // identifier for empty signature (dropdown)
                 signatureId: '',
                 csid: mailAPI.csid(),
