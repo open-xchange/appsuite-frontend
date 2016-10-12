@@ -211,6 +211,10 @@ define('io.ox/realtime/groups', [
             return groups[id];
         },
 
+        existsGroup: function (id) {
+            return _.isObject(groups[id]);
+        },
+
         rtId: rt.resource
     };
 
