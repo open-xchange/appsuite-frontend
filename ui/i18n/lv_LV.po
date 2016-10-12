@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-27 12:40+0300\n"
+"PO-Revision-Date: 2016-10-06 13:17+0300\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -2126,15 +2126,50 @@ msgstr "Izvēlieties kontaktus"
 msgid "Search"
 msgstr "Meklēšana"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr ""
-"Atrastas %1$d kontaktpersonas. Šis saraksts ir ierobežots līdz %2$d vienībām."
+#: apps/io.ox/search/facets/extensions.js module:io.ox/core
+msgid "All folders"
+msgstr "Visas mapes"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Pārāk daudz kontaktpersonu adrešu grāmatā."
+msgid "All distribution lists"
+msgstr "Visi izplatīšanas saraksti"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "All groups"
+msgstr "Visas grupas"
+
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "Izvēlēts %1$d vienums"
+msgstr[1] "Izvēlēti %1$d vienumi"
+msgstr[2] "Izvēlēti %1$d vienumi"
+
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "Izvēlēta %1$d adrese"
+msgstr[1] "Izvēlētas %1$d adreses"
+msgstr[2] "Izvēlētas %1$d adreses"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Notīrīt izvēles"
+
+#. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/find/main.js module:io.ox/core
+msgid "No matching items found."
+msgstr "Nav atrasta neviena vienība."
+
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Tukšs"
 
 #. Context: Add selected contacts; German "Auswählen", for example
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2921,6 +2956,12 @@ msgstr "Parole"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
+msgid "Sign in"
+msgstr "Pieslēgšanās"
+
+#. the word not the verb
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgctxt "word"
 msgid "Sign in"
 msgstr "Pieslēgšanās"
 
@@ -3732,11 +3773,6 @@ msgstr "Uzzināt vairāk"
 msgid "Import from file"
 msgstr "Importēt no faila"
 
-#. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "There was no appointment data to import"
-msgstr "Nav importējamu mītiņu datu"
-
 #. Error message if contact import failed
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no contact data to import"
@@ -3746,6 +3782,16 @@ msgstr "Nav importējamas kontaktu informācijas"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no task data to import"
 msgstr "Nav importējamu uzdevumu"
+
+#. Error message if calendar import failed
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "There was no appointment data to import"
+msgstr "Nav importējamu mītiņu datu"
+
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "Line %1$d: %2$s"
+msgstr "Rinda %1$d: %2$s"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -3862,6 +3908,10 @@ msgstr "Atslēgties"
 msgid "close for %1$s"
 msgstr "slēgts priekš %1$s"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "(current app)"
+msgstr "(pašreizējais apl.)"
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Iestatījumi"
@@ -3970,22 +4020,24 @@ msgstr ""
 "Jūs varat jebkurā laikā pārvaldīt darbvirsmas paziņojumus, apmeklējot savu "
 "iestatījumu lapu"
 
-#. %1$d number of notifications
+#. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, c-format
-msgid "You have %1$d notification."
-msgid_plural "You have %1$d notifications."
-msgstr[0] "Jums ir %1$d paziņojums"
-msgstr[1] "Jums ir %1$d paziņojumi"
-msgstr[2] "Jums ir %1$d paziņojumi"
+msgid "%1$d notification."
+msgid_plural "%1$d notifications."
+msgstr[0] "%1$d paziņojums."
+msgstr[1] "%1$d paziņojumi."
+msgstr[2] "%1$d paziņojumi."
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is open"
-msgstr "Paziņojumu apgabals ir atvērts"
+msgid "expanded"
+msgstr "izvērsti"
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is closed"
-msgstr "Paziņojumu apgabals ir slēgts"
+msgid "collapsed"
+msgstr "sakļauti"
 
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "Hide this notification"
@@ -4815,46 +4867,48 @@ msgstr "Izvēlieties laiku šeit"
 msgid "OK"
 msgstr "Labi"
 
+#. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close this reminder"
-msgstr "Aizvērt šo atgādinājumu"
+msgid "Close reminder for %1$s"
+msgstr "Aizvērt %1$s atgādinājumu"
 
+#. %1$s is something like "in 5 minutes"
+#. don't know if that works for all languages but it has been
+#. a string concatenation before; at least now it's documented
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Remind me again "
-msgstr "Atgādināt man atkal"
+msgid "Remind me again %1$s"
+msgstr "Atgādināt man pēc %1$s"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js
-msgid "Press [enter] to open"
-msgstr "Lai atvērtu, piespiediet [enter]"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "end date "
-msgstr "beigu datums "
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "status "
-msgstr "statuss "
+msgid "Press to open Details"
+msgstr "Piespiediet lai skatītu detaļas"
 
 #. %1$s task title
-#. %2$s task end date
-#. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
-msgid "%1$s %2$s %3$s."
-msgstr "%1$s %2$s %3$s."
+msgid "Reminder for task %1$s."
+msgstr "Atgādināt par uzdevumu %1$s."
 
-#. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
+#. %1$s appointment title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, c-format
-msgid "%1$s %2$s %3$s %4$s."
-msgstr "%1$s %2$s %3$s %4$s."
+msgid "Reminder for appointment %1$s."
+msgstr "Atgādināt par mītiņu %1$s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "There are no matching autocomplete entries for this query."
+msgstr "Šim vaicājumam nav atbilstošu automātiskās pabeigšanas ierakstu."
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, c-format
+msgid "There is one matching autocomplete entry for this query."
+msgid_plural "There are %1$d matching autocomplete entries for this query."
+msgstr[0] "Šim vaicājumam ir viens automātiskās pabeigšanas ieraksts."
+msgstr[1] "Šim vaicājumam ir %1$d automātiskās pabeigšanas ieraksti."
+msgstr[2] "Šim vaicājumam ir %1$d automātiskās pabeigšanas ieraksti."
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid ""
@@ -4877,6 +4931,10 @@ msgstr ""
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
 msgstr "Pievienots %1$s, %2$s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid " press backspace to remove this token"
+msgstr "lai noņemtu šo žetonu piespiediet atgriešanās taustiņu"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -5071,6 +5129,7 @@ msgstr "Šis fails tiek koplietotas ar citiem"
 msgid "This folder is shared with others"
 msgstr "Šī mape tiek koplietota ar citiem"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
@@ -6397,11 +6456,6 @@ msgstr "Visas mapes"
 msgid "Accounts"
 msgstr "Konti"
 
-#. search feature returns an empty result
-#: apps/io.ox/find/main.js module:io.ox/core
-msgid "No matching items found."
-msgstr "Nav atrasta neviena vienība."
-
 #: apps/io.ox/find/view-facets.js module:io.ox/core
 msgid "Search facets"
 msgstr "Meklēt vienumus"
@@ -7024,11 +7078,6 @@ msgstr "Nelasīts"
 msgid "has attachments"
 msgstr "eksistē pielikumi"
 
-#. empty message for list view
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Tukšs"
-
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/print.js
 msgctxt "CC"
@@ -7101,12 +7150,23 @@ msgstr "Ziņojuma sūtīšana ir atcelta."
 msgid "The email has been sent"
 msgstr "Vēstule ir nosūtīta"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
+"between the tokens"
+msgstr ""
+"%1$s automātiskās pabeigšanas žetona lauks. Lai pārvietotos starp žetoniem, "
+"izmantojiet bultiņtaustiņus"
+
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "CC"
 msgstr "CC"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "BCC"
 msgstr "BCC"
@@ -7249,11 +7309,6 @@ msgstr "Lūdzu izvēlieties derīgu attēla failu"
 msgid "Compose"
 msgstr "Sastādīšana"
 
-#. %s is the product name
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-msgid "Sent from %s via mobile"
-msgstr "Nosūtīts no %s ar mobilo ierīci"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
 msgstr "Pasts"
@@ -7289,6 +7344,11 @@ msgstr ""
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Edit real names"
 msgstr "Rediģēt īstos vārdus"
+
+#. %s is the product name
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "Sent from %s via mobile"
+msgstr "Nosūtīts no %s ar mobilo ierīci"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Plain Text"
@@ -7679,9 +7739,13 @@ msgstr "Ziņojumu opcijas"
 msgid "No message selected"
 msgstr "Neviens ziņojums nav izvēlēts"
 
+#. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "%1$d messages selected"
-msgstr "Iezīmēti %1$d ziņojumi"
+msgid "%1$d message selected"
+msgid_plural "%1$d messages selected"
+msgstr[0] "Izvēlēts %1$d ziņojums"
+msgstr[1] "Izvēlēti %1$d zinojumi"
+msgstr[2] "Izvēlēti %1$d zinojumi"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
@@ -8811,10 +8875,6 @@ msgstr "Noklikšķiniet lai atvērtu. Pārvelciet uz darbvirsmu lai lejuplādēt
 msgid "Click to open."
 msgstr "Noklikšķiniet lai atvērtu."
 
-#: apps/io.ox/search/facets/extensions.js module:io.ox/core
-msgid "All folders"
-msgstr "Visas mapes"
-
 #: apps/io.ox/search/items/view-template.js module:io.ox/core
 msgid "No items found"
 msgstr "Nav atrasta neviena vienība"
@@ -8911,7 +8971,8 @@ msgstr "Mainīt izpildes datumu"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Mark as done"
 msgstr "Iezīmēt kā paveiktu"
 
@@ -9658,14 +9719,17 @@ msgstr ""
 "%3$s'Pievienot mājas ekrānam'%4$s"
 
 #. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
-#. %5$s Appointment Organizer
+#. %1$s task title
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js
 #, c-format
-msgid "%1$s %2$s %3$s %4$s %5$s."
-msgstr "%1$s %2$s %3$s %4$s %5$s."
+msgid "Invitation for %1$s."
+msgstr "Uzaicinājums uz %1$s."
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js
+msgid "Accept/Decline"
+msgstr "Piekrist / Atteikt"
 
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 msgid "Accept / Decline"
@@ -9754,13 +9818,6 @@ msgstr "Vēstule no %1$s, %2$s"
 msgid "New mail"
 msgstr "Jaunais pasts"
 
-#. %1$s task title
-#. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, c-format
-msgid "%1$s %2$s."
-msgstr "%1$s %2$s."
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "Novēloti uzdevumi"
@@ -9805,10 +9862,6 @@ msgstr "Jauna uzdevuma atgādinājums"
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Paslēpt visus uzdevumu atgādinājumus."
-
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "Accept/Decline"
-msgstr "Piekrist / Atteikt"
 
 #. Inviations (notifications) to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -10507,6 +10560,56 @@ msgstr "Uzaicināt %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pievienot %s"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr ""
+#~ "Atrastas %1$d kontaktpersonas. Šis saraksts ir ierobežots līdz %2$d "
+#~ "vienībām."
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Pārāk daudz kontaktpersonu adrešu grāmatā."
+
+#~ msgid "You have %1$d notification."
+#~ msgid_plural "You have %1$d notifications."
+#~ msgstr[0] "Jums ir %1$d paziņojums"
+#~ msgstr[1] "Jums ir %1$d paziņojumi"
+#~ msgstr[2] "Jums ir %1$d paziņojumi"
+
+#~ msgid "The notification area is open"
+#~ msgstr "Paziņojumu apgabals ir atvērts"
+
+#~ msgid "The notification area is closed"
+#~ msgstr "Paziņojumu apgabals ir slēgts"
+
+#~ msgid "Close this reminder"
+#~ msgstr "Aizvērt šo atgādinājumu"
+
+#~ msgid "Remind me again "
+#~ msgstr "Atgādināt man atkal"
+
+#~ msgid "Press [enter] to open"
+#~ msgstr "Lai atvērtu, piespiediet [enter]"
+
+#~ msgid "end date "
+#~ msgstr "beigu datums "
+
+#~ msgid "status "
+#~ msgstr "statuss "
+
+#~ msgid "%1$s %2$s %3$s."
+#~ msgstr "%1$s %2$s %3$s."
+
+#~ msgid "%1$s %2$s %3$s %4$s."
+#~ msgstr "%1$s %2$s %3$s %4$s."
+
+#~ msgid "%1$d messages selected"
+#~ msgstr "Iezīmēti %1$d ziņojumi"
+
+#~ msgid "%1$s %2$s %3$s %4$s %5$s."
+#~ msgstr "%1$s %2$s %3$s %4$s %5$s."
+
+#~ msgid "%1$s %2$s."
+#~ msgstr "%1$s %2$s."
 
 #~ msgid "Resource name"
 #~ msgstr "Resursa vārds"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-27 00:41+0200\n"
+"PO-Revision-Date: 2016-10-06 05:55+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -2114,14 +2114,48 @@ msgstr "Valitse yhteystietoja"
 msgid "Search"
 msgstr "Etsi"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr "%1$d yhteystietoa löydetty. Luettelo on rajattu  %2$d kohteeseen."
+#: apps/io.ox/search/facets/extensions.js module:io.ox/core
+msgid "All folders"
+msgstr "Kaikki kansiot"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Osoitekirjassasi on liian monta yhteystietoa."
+msgid "All distribution lists"
+msgstr "Kaikki jakeluluettelot"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "All groups"
+msgstr "Kaikki ryhmät"
+
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "%1$d kohde valittu"
+msgstr[1] "%1$d kohdetta valittu"
+
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d osoite valittu"
+msgstr[1] "%1$d osoitetta valittu"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Tyhjennä valinta"
+
+#. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/find/main.js module:io.ox/core
+msgid "No matching items found."
+msgstr "Kohteita ei löytynyt"
+
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Tyhjä"
 
 #. Context: Add selected contacts; German "Auswählen", for example
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2904,6 +2938,12 @@ msgstr "Salasana"
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Kirjaudu"
+
+#. the word not the verb
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgctxt "word"
+msgid "Sign in"
+msgstr "Kirjautuminen"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Stay signed in"
@@ -3701,11 +3741,6 @@ msgstr "Lue lisää"
 msgid "Import from file"
 msgstr "Tuo tiedostosta"
 
-#. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "There was no appointment data to import"
-msgstr "Tuotavia tapaamistietoja ei ole"
-
 #. Error message if contact import failed
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no contact data to import"
@@ -3715,6 +3750,16 @@ msgstr "Yhteystietodataa ei ollut tuotavaksi"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no task data to import"
 msgstr "Tehtävädataa ei ollut olemassa tuotavaksi"
+
+#. Error message if calendar import failed
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "There was no appointment data to import"
+msgstr "Tuotavia tapaamistietoja ei ole"
+
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "Line %1$d: %2$s"
+msgstr "Rivi  %1$d: %2$s"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -3829,6 +3874,10 @@ msgstr "Kirjaudu heti ulos"
 msgid "close for %1$s"
 msgstr "sulje %1$s"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "(current app)"
+msgstr "(käytössä oleva sovellus)"
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Asetukset"
@@ -3935,21 +3984,23 @@ msgid ""
 "You can manage desktop notifications at any time, by vitising your settings"
 msgstr "Voit hallita työpöytäilmoituksia milloin vain asetuksistasi käsin"
 
-#. %1$d number of notifications
+#. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, c-format
-msgid "You have %1$d notification."
-msgid_plural "You have %1$d notifications."
-msgstr[0] "Sinulla on %1$d ilmoitus."
-msgstr[1] "Sinulla on %1$d ilmoitusta."
+msgid "%1$d notification."
+msgid_plural "%1$d notifications."
+msgstr[0] "%1$d ilmoitus."
+msgstr[1] "%1$d ilmoitusta"
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is open"
-msgstr "Ilmoitusalue on avoinna"
+msgid "expanded"
+msgstr "suurennettu"
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is closed"
-msgstr "Ilmoitusalue on suljettu"
+msgid "collapsed"
+msgstr "pienennetty"
 
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "Hide this notification"
@@ -4789,46 +4840,47 @@ msgstr "Valitse aika tästä"
 msgid "OK"
 msgstr "OK"
 
+#. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close this reminder"
-msgstr "Sulje tämä muistutus"
+msgid "Close reminder for %1$s"
+msgstr "Sulje muistutus aiheesta %1$s"
 
+#. %1$s is something like "in 5 minutes"
+#. don't know if that works for all languages but it has been
+#. a string concatenation before; at least now it's documented
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Remind me again "
-msgstr "Muistuta minua uudestaan "
+msgid "Remind me again %1$s"
+msgstr "Muistuta uudelleen %1$s"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
-msgid "Press [enter] to open"
-msgstr "Paina [enter] avataksesi "
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "end date "
-msgstr "loppupäivämäärä"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "status "
-msgstr "tila"
+msgid "Press to open Details"
+msgstr "Paina avataksesi Tiedot"
 
 #. %1$s task title
-#. %2$s task end date
-#. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
-msgid "%1$s %2$s %3$s."
-msgstr "%1$s %2$s %3$s."
+msgid "Reminder for task %1$s."
+msgstr "Muistutus tehtävästä %1$s."
 
-#. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
+#. %1$s appointment title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, c-format
-msgid "%1$s %2$s %3$s %4$s."
-msgstr "%1$s %2$s %3$s %4$s."
+msgid "Reminder for appointment %1$s."
+msgstr "Muistutus tapaamisesta %1$s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "There are no matching autocomplete entries for this query."
+msgstr "Tälle tiedustelulle ei ole täydennysehdotuksia."
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, c-format
+msgid "There is one matching autocomplete entry for this query."
+msgid_plural "There are %1$d matching autocomplete entries for this query."
+msgstr[0] "Tälle tiedustelulle on yksi täydennysehdotus."
+msgstr[1] "Tälle tiedustelulle on %1$d täydennysehdotusta. "
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid ""
@@ -4849,6 +4901,10 @@ msgstr ""
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
 msgstr "%1$s, %2$s lisätty."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid " press backspace to remove this token"
+msgstr "Poista tämä lipuke painamalla askelpalautinta"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -5034,6 +5090,7 @@ msgstr "Tämä tiedosto on jaettu muiden kanssa"
 msgid "This folder is shared with others"
 msgstr "Tämä kansio on jaettu muiden kanssa"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
@@ -6340,11 +6397,6 @@ msgstr "Kaikki kansiot"
 msgid "Accounts"
 msgstr "Tilit"
 
-#. search feature returns an empty result
-#: apps/io.ox/find/main.js module:io.ox/core
-msgid "No matching items found."
-msgstr "Kohteita ei löytynyt"
-
 #: apps/io.ox/find/view-facets.js module:io.ox/core
 msgid "Search facets"
 msgstr "Etsi hakuasetuksia"
@@ -6960,11 +7012,6 @@ msgstr "Lukematon"
 msgid "has attachments"
 msgstr "on liitteitä"
 
-#. empty message for list view
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Tyhjä"
-
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/print.js
 msgctxt "CC"
@@ -7036,12 +7083,23 @@ msgstr "Viestien lähettäminen on peruttu."
 msgid "The email has been sent"
 msgstr "Sähköposti lähetetty"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
+"between the tokens"
+msgstr ""
+"%1$s automaattisesti täydennettävä kenttä. Käytä vasenta ja oikeaa "
+"nuolinäppäintä navigoidaksesi vaihtoehtojen välillä."
+
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "CC"
 msgstr "Kopio"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "BCC"
 msgstr "Piilokopio"
@@ -7184,11 +7242,6 @@ msgstr "Valitse lisättäväksi käypä kuvatiedosto"
 msgid "Compose"
 msgstr "Uusi viesti"
 
-#. %s is the product name
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-msgid "Sent from %s via mobile"
-msgstr "Lähetetty kohteesta %s mobiililaitteella"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
 msgstr "Sähköposti"
@@ -7223,6 +7276,11 @@ msgstr ""
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Edit real names"
 msgstr "Muokkaa oikeita nimiä."
+
+#. %s is the product name
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "Sent from %s via mobile"
+msgstr "Lähetetty kohteesta %s mobiililaitteella"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Plain Text"
@@ -7614,9 +7672,12 @@ msgstr "Viestien vaihtoehdot"
 msgid "No message selected"
 msgstr "Ei valittuja viestejä"
 
+#. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "%1$d messages selected"
-msgstr "%1$d viestiä valittuna"
+msgid "%1$d message selected"
+msgid_plural "%1$d messages selected"
+msgstr[0] "%1$d viesti valittu"
+msgstr[1] "%1$d viestiä valittu"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
@@ -8743,10 +8804,6 @@ msgstr "Napsauta avataksesi. Ladataksesi, siirrä työpöydällesi."
 msgid "Click to open."
 msgstr "Napsauta avataksesi."
 
-#: apps/io.ox/search/facets/extensions.js module:io.ox/core
-msgid "All folders"
-msgstr "Kaikki kansiot"
-
 #: apps/io.ox/search/items/view-template.js module:io.ox/core
 msgid "No items found"
 msgstr "Kohteita ei löytynyt"
@@ -8849,7 +8906,8 @@ msgstr "Vaihda valmistumispäivämäärää"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Mark as done"
 msgstr "Merkitse valmiiksi"
 
@@ -9603,15 +9661,17 @@ msgstr ""
 "to Home Screen'%4$s"
 
 #. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
-#. %5$s Appointment Organizer
+#. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 #, c-format
-msgid "%1$s %2$s %3$s %4$s %5$s."
-msgstr "%1$s %2$s %3$s %4$s %5$s."
+msgid "Invitation for %1$s."
+msgstr "Kutsu tapaamiseen/tehtävään %1$s."
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
+msgid "Accept/Decline"
+msgstr "Hyväksy/Kieltäydy"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
@@ -9710,13 +9770,6 @@ msgstr "Viesti lähettäjältä %1$s: %2$s"
 msgid "New mail"
 msgstr "Uusi viesti"
 
-#. %1$s task title
-#. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, c-format
-msgid "%1$s %2$s."
-msgstr "%1$s %2$s."
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "Erääntyneet tehtävät"
@@ -9761,10 +9814,6 @@ msgstr "Uusi tehtävämuistutus."
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Paina piilottaaksesi kaikki tehtävämuistutukset."
-
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "Accept/Decline"
-msgstr "Hyväksy/Kieltäydy"
 
 #. Inviations (notifications) to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -10461,6 +10510,53 @@ msgstr "Kutsu %s:in"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s lisää"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr "%1$d yhteystietoa löydetty. Luettelo on rajattu  %2$d kohteeseen."
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Osoitekirjassasi on liian monta yhteystietoa."
+
+#~ msgid "You have %1$d notification."
+#~ msgid_plural "You have %1$d notifications."
+#~ msgstr[0] "Sinulla on %1$d ilmoitus."
+#~ msgstr[1] "Sinulla on %1$d ilmoitusta."
+
+#~ msgid "The notification area is open"
+#~ msgstr "Ilmoitusalue on avoinna"
+
+#~ msgid "The notification area is closed"
+#~ msgstr "Ilmoitusalue on suljettu"
+
+#~ msgid "Close this reminder"
+#~ msgstr "Sulje tämä muistutus"
+
+#~ msgid "Remind me again "
+#~ msgstr "Muistuta minua uudestaan "
+
+#~ msgid "Press [enter] to open"
+#~ msgstr "Paina [enter] avataksesi "
+
+#~ msgid "end date "
+#~ msgstr "loppupäivämäärä"
+
+#~ msgid "status "
+#~ msgstr "tila"
+
+#~ msgid "%1$s %2$s %3$s."
+#~ msgstr "%1$s %2$s %3$s."
+
+#~ msgid "%1$s %2$s %3$s %4$s."
+#~ msgstr "%1$s %2$s %3$s %4$s."
+
+#~ msgid "%1$d messages selected"
+#~ msgstr "%1$d viestiä valittuna"
+
+#~ msgid "%1$s %2$s %3$s %4$s %5$s."
+#~ msgstr "%1$s %2$s %3$s %4$s %5$s."
+
+#~ msgid "%1$s %2$s."
+#~ msgstr "%1$s %2$s."
 
 #~ msgid "Resource name"
 #~ msgstr "Resurssin nimi"
