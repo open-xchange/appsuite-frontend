@@ -625,7 +625,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         if (cmodel.get('datevalue')[0] === null || cmodel.get('datevalue').length === 0) conditionList.find('[data-test-id="' + num + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
                         break;
                     case 'header':
-                        var title;
+                        var title,
+                            translation;
                         secondInputId = _.uniqueId('values');
 
                         inputId = _.uniqueId('headers');
@@ -635,7 +636,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         } else if (cmodel.get('headers').length === 2) {
                             title = headerTranslation.any;
                         } else {
-                            title = cmodel.get('headers')[0] === '' ? headerTranslation.cleanHeader : headerTranslation[condition.headers[0]];
+
+                            translation = _.chain(headerTranslation).pick(function (value, key) {
+                                var reg = new RegExp(key, 'i');
+                                return reg.test(cmodel.get('headers')[0]);
+                            }).values().first().value();
+
+                            title = cmodel.get('headers')[0] === '' ? headerTranslation.cleanHeader : translation;
                         }
 
                         if (cmodel.get('headers')[0] === '' || title === undefined) {
