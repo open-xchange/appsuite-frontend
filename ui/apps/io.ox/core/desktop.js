@@ -1570,7 +1570,7 @@ define('io.ox/core/desktop', [
                         // share data
                         _.extend(baton.data, {
                             label: gt('Search'),
-                            id:  win.name + '-search-field',
+                            id:  _.uniqueId(win.name + '-search-field'),
                             guid:  _.uniqueId('form-control-description-')
                         });
                         // search box form

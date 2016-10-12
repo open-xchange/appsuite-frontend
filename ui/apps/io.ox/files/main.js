@@ -317,7 +317,7 @@ define('io.ox/files/main', [
          * Setup list view control
          */
         'list-view-control': function (app) {
-            app.listControl = new ListViewControl({ id: 'io.ox/files', listView: app.listView, app: app });
+            app.listControl = new ListViewControl({ id: 'io.ox/files/listviewcontrol', listView: app.listView, app: app });
             var node = _.device('smartphone') ? app.pages.getPage('main') : app.getWindow().nodes.main;
             node.append(
                 app.listControl.render().$el
