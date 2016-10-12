@@ -401,12 +401,6 @@ define('io.ox/core/api/account', [
 
         return api.all()
         .then(function (list) {
-            // only consider accounts with a transport_url (see bug 48344)
-            return _(list).filter(function (account) {
-                return !!account.transport_url;
-            });
-        })
-        .then(function (list) {
             return $.when.apply($, _(list).map(ensureDisplayName));
         })
         .then(function () {
