@@ -442,7 +442,7 @@
 
         .detail-view-row.row-4, .inplace-reply { display: none; }
 
-        .unread-toggle, .flag-picker > a, .recipients, .row-3 { opacity: 0.3; }
+        .unread-toggle, .flag-picker > a, .recipients, .row-3 { opacity: 0.6; }
 
         &.unread .unread-toggle { opacity: 1; }
 
@@ -660,6 +660,13 @@
         min-width: 24px;
 
         html.high-contrast & { color: @hc-gray; }
+    }
+
+    .selected {
+        .thread-size,
+        .account-name,
+        .original-folder,
+        .original-folder .breadcrumb-link { color: #555; }
     }
 
     &.visible-selection.has-focus .selected {

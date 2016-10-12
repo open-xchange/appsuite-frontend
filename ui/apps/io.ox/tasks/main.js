@@ -841,7 +841,7 @@ define('io.ox/tasks/main', [
                 tagName: 'div',
                 caret: false,
                 label: function () {
-                    return [$('<i class="fa fa-arrow-down" aria-hidden="true">'), $('<i class="fa fa-arrow-up" aria-hidden="true">')];
+                    return [$('<i class="fa fa-arrow-down" aria-hidden="true">'), $('<i class="fa fa-arrow-up" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Sort options'))];
                 }
             })
                 .header(gt('Sort options'))

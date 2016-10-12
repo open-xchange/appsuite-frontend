@@ -99,7 +99,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                                 $('<span class="toggle-text">').text(lang[defaultLanguage]),
                                 $('<span class="caret">')
                             ),
-                            list = $('<ul id="io-ox-language-list" class="dropdown-menu" role="menu" aria-labeledby="io-ox-languages-label">')
+                            list = $('<ul id="io-ox-language-list" class="dropdown-menu" role="menu" aria-labelledby="io-ox-languages-label">')
                         )
                     );
 

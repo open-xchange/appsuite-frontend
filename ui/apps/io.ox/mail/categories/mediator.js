@@ -93,7 +93,7 @@ define('io.ox/mail/categories/mediator', [
                 app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                     $('<div class="categories-toolbar-container">').append(
                         new TabView({ props: app.props }).render().$el
-                    )
+                    ).toggle(isVisible)
                 );
 
                 // events

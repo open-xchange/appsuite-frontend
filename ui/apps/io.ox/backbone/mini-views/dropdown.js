@@ -129,7 +129,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         link: function (name, text, callback, options) {
             options = options || {};
-            var link = $('<a href="#" draggable="false">')
+            var link = $('<a href="#" draggable="false" role="menuitem">')
                 .attr('data-name', name)
                 // in firefox draggable=false is not enough to prevent dragging...
                 .on('dragstart', false)
