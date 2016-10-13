@@ -107,37 +107,65 @@ define('io.ox/mail/accounts/settings', [
     });
 
     ext.point('io.ox/mail/add-account/preselect').extend({
-        id: 'providerselect',
+        id: 'oauth',
         index: 100,
         draw: function (baton) {
-            var providerList = [
-                    { id: 'google', label: 'Gmail', icon: 'google' },
-                    { id: 'web', label: 'Web.de' },
-                    { id: 'yahoo', label: 'Yahoo', icon: 'yahoo' },
-                    { id: 'gmx', label: 'Gmx' },
-                    { id: 'other', label: gt('Other') }
-                ], list;
+            var $el = this;
+            require(['io.ox/oauth/keychain', 'io.ox/oauth/backbone']).then(function (oauthAPI, OAuth) {
+                var mailServices = new Backbone.Collection(oauthAPI.services.filter(function (service) {
+                        return _(service.get('availableScopes')).contains('mail') &&
+                            oauthAPI.accounts.forService(service.id, { scope: 'mail' }).map(function (account) {
+                                return account.id;
+                            }).reduce(function (acc, oauthId) {
+                                // make sure, no mail account using this oauth-account exists
+                                return acc && !_(api.cache).chain()
+                                    .values()
+                                    .map(function (account) {
+                                        return account.mail_oauth;
+                                    })
+                                    .any(oauthId)
+                                    .value();
+                            }, true);
+                    })), list = new OAuth.Views.ServicesListView({ collection: mailServices });
 
-            this.append(
-                list = $('<li class="form-group list-unstyled mail-account-provider-list">').append(
-                    $('<label>').text(gt('Please select your mail account provider'))
-                )
-            );
+                mailServices.push({
+                    id: 'wizard',
+                    displayName: gt('Other')
+                });
+                $el.append(
+                    $('<label>').text(gt('Please select your mail account provider')),
+                    list.render().$el
+                );
 
-            _(providerList).each(function (provider) {
-                var node = $('<ul role="button" class="provider-list-item">').addClass('provider-' + provider.id).text(provider.label).prepend($('<i class="provider-list-icon fa">').addClass(provider.icon ? 'fa-' + provider.icon : 'fa-envelope'));
-                list.append(node);
-                if (provider.id === 'other') {
-                    node.on('click', function () {
-                        baton.popup.getFooter().find('[data-action="add"]').show();
-                        // invoke extensions
-                        ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                list.listenTo(list, 'select', function (service) {
+                    if (service.id === 'wizard') return;
+
+                    var account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
+                        serviceId: service.id
                     });
-                } else {
-                    node.on('click', function () {
-                        notifications.yell('info', 'Do Oauth stuff here');
+
+                    account.enableScopes('mail');
+                    account.save();
+
+                    account.listenToOnce(account, 'sync', function (model) {
+                        api.autoconfig({
+                            oauth: model.id
+                        }).then(function (data) {
+                            var def = $.Deferred();
+                            // hopefully, login contains a valid mail address
+                            data.primary_address = data.login;
+
+                            validateMailaccount(data, baton.popup, def);
+                            return def;
+                        }, notifications.yell);
                     });
-                }
+                });
+
+                list.listenTo(list, 'select:wizard', function () {
+                    baton.popup.getFooter().find('[data-action="add"]').show();
+                    // invoke wizard
+                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                });
             });
         }
     });
@@ -332,6 +360,7 @@ define('io.ox/mail/accounts/settings', [
             }
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                var baton = ext.Baton({});
 
                 new dialogs.ModalDialog({
                     width: 400,
@@ -342,8 +371,9 @@ define('io.ox/mail/accounts/settings', [
                     $('<h2>').text(gt('Add mail account'))
                 )
                 .build(function () {
+                    baton.popup = this;
                     // invoke extensions
-                    ext.point('io.ox/mail/add-account/preselect').invoke('draw', this.getContentNode(), ext.Baton({ popup: this }));
+                    ext.point('io.ox/mail/add-account/preselect').invoke('draw', this.getContentNode(), baton);
                 })
                 .addPrimaryButton('add', gt('Add'), 'add')
                 .addButton('cancel', gt('Cancel'), 'cancel')
