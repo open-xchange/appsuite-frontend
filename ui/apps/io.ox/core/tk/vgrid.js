@@ -1313,9 +1313,8 @@ define('io.ox/core/tk/vgrid', [
         // focus handling (adopted from newer list.js)
 
         function onContainerFocus() {
-            var items = container.children(),
-                tabbable = items.filter('[tabindex="1"]:first');
-            if (tabbable.length) tabbable.focus(); else items.first().click();
+            var tabbable = container.children('.selectable[tabindex="1"]:first');
+            if (tabbable.length) tabbable.focus(); else self.selection.selectFirst();
         }
 
         function onItemFocus() {
