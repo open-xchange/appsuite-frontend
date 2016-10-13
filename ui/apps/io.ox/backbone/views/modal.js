@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettext!io.ox/core'], function (ExtensibleView, gt) {
+define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/core/a11y', 'gettext!io.ox/core'], function (ExtensibleView, a11y, gt) {
 
     'use strict';
 
@@ -37,7 +37,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
         events: {
             'click [data-action]': 'onAction',
             'keydown input:text, input:password': 'onKeypress',
-            'keydown': 'onEscape'
+            'keydown': 'onKeydown'
         },
 
         // we use the constructor here not to collide with initialize()
@@ -212,11 +212,22 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'gettex
             this.invokeAction(this.options.enter);
         },
 
+        onKeydown: function (e) {
+            this.onEscape(e);
+            this.onTab(e);
+        },
+
         onEscape: function (e) {
             if (e.which !== 27) return;
             if (e.isDefaultPrevented()) return;
             this.close();
+        },
+
+        onTab: function (e) {
+            if (e.which !== 9) return;
+            a11y.trapFocus(this.$el, e);
         }
+
     });
 
     /*

@@ -181,7 +181,7 @@ define('io.ox/core/folder/picker', [
                     // path might fail so we use always to con
                     .always(function () {
                         dialog.getBody().idle().prepend(tree.render().$el);
-                        tree.$el.focus();
+                        tree.$('.tree-container .selectable:first').focus().trigger('click');
                         o.show(dialog, tree);
                     });
             })

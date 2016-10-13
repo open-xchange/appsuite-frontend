@@ -14,8 +14,9 @@
 define('io.ox/core/tk/dialogs', [
     'io.ox/core/event',
     'io.ox/core/extensions',
+    'io.ox/core/a11y',
     'io.ox/backbone/mini-views/help'
-], function (Events, ext, HelpView) {
+], function (Events, ext, a11y, HelpView) {
 
     'use strict';
 
@@ -176,9 +177,7 @@ define('io.ox/core/tk/dialogs', [
 
             fnKey = function (e) {
 
-                var items, focus, index;
-
-                switch (e.which || e.keyCode) {
+                switch (e.which) {
                     case 27:
                         // ESC
                         if (!isBusy && self.getBody().find('.open > .dropdown-menu').length === 0) {
@@ -198,23 +197,7 @@ define('io.ox/core/tk/dialogs', [
                         break;
                     case 9:
                         // tab
-                        if (o.tabTrap) {
-                            // get items first
-                            items = $(this).find('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible');
-                            if (items.length) {
-                                e.preventDefault();
-                                focus = $(document.activeElement);
-                                index = items.index(focus);
-                                index += (e.shiftKey) ? -1 : 1;
-
-                                if (index >= items.length) {
-                                    index = 0;
-                                } else if (index < 0) {
-                                    index = items.length - 1;
-                                }
-                                items.eq(index).focus();
-                            }
-                        }
+                        if (o.tabTrap) a11y.trapFocus(this, e);
                         break;
                     default:
                         break;
@@ -800,9 +783,7 @@ define('io.ox/core/tk/dialogs', [
             })
             .on('keydown', function (e) {
                 // enter
-                if ((e.keyCode || e.which) === 13) {
-                    $(this).trigger('click');
-                }
+                if (e.which === 13) $(this).trigger('click');
             });
 
         function getPct(x) {
