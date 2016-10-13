@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-29 18:37+0100\n"
+"PO-Revision-Date: 2016-10-08 18:18+0100\n"
 "Last-Translator: Robert Kratky <kratky@rob.cz>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -2120,14 +2120,50 @@ msgstr "Vybrat kontakty"
 msgid "Search"
 msgstr "Hledat"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr "Nalezeno %1$d kontaktů. Tento seznam je omezen na %2$d položek."
+#: apps/io.ox/search/facets/extensions.js module:io.ox/core
+msgid "All folders"
+msgstr "Všechny složky"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Příliš mnoho kontaktů v adresáři."
+msgid "All distribution lists"
+msgstr "Všechny distribuční seznamy"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "All groups"
+msgstr "Všechny skupiny"
+
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "Vybrána %1$d položka"
+msgstr[1] "Vybrány %1$d položky"
+msgstr[2] "Vybráno %1$d položek"
+
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "Vybrána %1$d adresa"
+msgstr[1] "Vybrány %1$d adresy"
+msgstr[2] "Vybráno %1$d adres"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Zrušit výběr"
+
+#. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/find/main.js module:io.ox/core
+msgid "No matching items found."
+msgstr "Nepodařilo se nalézt žádné odpovídající položky"
+
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Prázdné"
 
 #. Context: Add selected contacts; German "Auswählen", for example
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2911,6 +2947,12 @@ msgstr "Heslo"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
+msgid "Sign in"
+msgstr "Přihlásit"
+
+#. the word not the verb
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgctxt "word"
 msgid "Sign in"
 msgstr "Přihlásit"
 
@@ -3718,11 +3760,6 @@ msgstr "Dozvědět se více"
 msgid "Import from file"
 msgstr "Importovat ze souboru"
 
-#. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "There was no appointment data to import"
-msgstr "Žádné údaje o schůzkách k importování"
-
 #. Error message if contact import failed
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no contact data to import"
@@ -3732,6 +3769,16 @@ msgstr "Žádné kontaktní údaje k importu"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no task data to import"
 msgstr "Žádné údaje o úkolech k importu"
+
+#. Error message if calendar import failed
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "There was no appointment data to import"
+msgstr "Žádné údaje o schůzkách k importování"
+
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "Line %1$d: %2$s"
+msgstr "Řádek %1$d: %2$s"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -3847,6 +3894,10 @@ msgstr "Odhlásit se"
 msgid "close for %1$s"
 msgstr "zavřít kvůli %1$s"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "(current app)"
+msgstr "(aktuální aplikace)"
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Nastavení"
@@ -3953,22 +4004,24 @@ msgid ""
 "You can manage desktop notifications at any time, by vitising your settings"
 msgstr "Oznámení na pracovní ploše můžete kdykoliv spravovat v nastavení"
 
-#. %1$d number of notifications
+#. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, c-format
-msgid "You have %1$d notification."
-msgid_plural "You have %1$d notifications."
+msgid "%1$d notification."
+msgid_plural "%1$d notifications."
 msgstr[0] "%1$d oznámení."
 msgstr[1] "%1$d oznámení."
 msgstr[2] "%1$d oznámení."
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is open"
-msgstr "Oznamovací oblast je otevřená"
+msgid "expanded"
+msgstr "rozbaleno"
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is closed"
-msgstr "Oznamovací oblast je zavřená"
+msgid "collapsed"
+msgstr "sbaleno"
 
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "Hide this notification"
@@ -4810,46 +4863,48 @@ msgstr "Zde vyberte čas"
 msgid "OK"
 msgstr "OK"
 
+#. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close this reminder"
-msgstr "Zavřít upomínku"
+msgid "Close reminder for %1$s"
+msgstr "Zavřít upomínku k %1$s"
 
+#. %1$s is something like "in 5 minutes"
+#. don't know if that works for all languages but it has been
+#. a string concatenation before; at least now it's documented
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Remind me again "
-msgstr "Připomeň mi znovu"
+msgid "Remind me again %1$s"
+msgstr "Připomeň mi znovu %1$s"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
-msgid "Press [enter] to open"
-msgstr "Stiskněte [Enter] pro otevření"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "end date "
-msgstr "koncové datum "
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "status "
-msgstr "stav "
+msgid "Press to open Details"
+msgstr "Stiskněte pro otevření podrobností"
 
 #. %1$s task title
-#. %2$s task end date
-#. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
-msgid "%1$s %2$s %3$s."
-msgstr "%1$s %2$s %3$s."
+msgid "Reminder for task %1$s."
+msgstr "Upomínka úkolu %1$s."
 
-#. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
+#. %1$s appointment title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, c-format
-msgid "%1$s %2$s %3$s %4$s."
-msgstr "%1$s %2$s %3$s %4$s."
+msgid "Reminder for appointment %1$s."
+msgstr "Upomínka schůzky $s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "There are no matching autocomplete entries for this query."
+msgstr "Tomuto zadání neodpovídá žádná položka pro automatické doplnění."
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, c-format
+msgid "There is one matching autocomplete entry for this query."
+msgid_plural "There are %1$d matching autocomplete entries for this query."
+msgstr[0] "Tomuto zadání odpovídá jedna položka pro automatické doplnění."
+msgstr[1] "Tomuto zadání odpovídají %1$d položky pro automatické doplnění."
+msgstr[2] "Tomuto zadání odpovídá %1$d položek pro automatické doplnění."
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid ""
@@ -4872,6 +4927,10 @@ msgstr ""
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
 msgstr "Přidán %1$s, %2$s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid " press backspace to remove this token"
+msgstr "stiskněte Backspace pro odstranění tohoto klíče"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -5063,6 +5122,7 @@ msgstr "Soubor je sdílen s ostatními"
 msgid "This folder is shared with others"
 msgstr "Tato složka je sdílena s ostatními"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
@@ -6380,11 +6440,6 @@ msgstr "Všechny složky"
 msgid "Accounts"
 msgstr "Účty"
 
-#. search feature returns an empty result
-#: apps/io.ox/find/main.js module:io.ox/core
-msgid "No matching items found."
-msgstr "Nepodařilo se nalézt žádné odpovídající položky"
-
 #: apps/io.ox/find/view-facets.js module:io.ox/core
 msgid "Search facets"
 msgstr "Vyhledávat kritéria"
@@ -7001,11 +7056,6 @@ msgstr "Nepřečtené"
 msgid "has attachments"
 msgstr "má přílohy"
 
-#. empty message for list view
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Prázdné"
-
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/print.js
 msgctxt "CC"
@@ -7077,12 +7127,23 @@ msgstr "Odesílání zprávy bylo zrušeno."
 msgid "The email has been sent"
 msgstr "Zpráva byla odeslána"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
+"between the tokens"
+msgstr ""
+"%1$s pole pro automatické doplnění klíče. Použijte šipku doleva či doprava"
+" pro výběr klíče"
+
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "CC"
 msgstr "CC"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "BCC"
 msgstr "BCC"
@@ -7225,11 +7286,6 @@ msgstr "Vyberte, prosím, platný soubor s obrázkem k vložení"
 msgid "Compose"
 msgstr "Psaní zpráv"
 
-#. %s is the product name
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-msgid "Sent from %s via mobile"
-msgstr "Posláno z %s z mobilního telefonu"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
 msgstr "Pošta"
@@ -7264,6 +7320,11 @@ msgstr ""
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Edit real names"
 msgstr "Upravit skutečná jména"
+
+#. %s is the product name
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "Sent from %s via mobile"
+msgstr "Posláno z %s z mobilního telefonu"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Plain Text"
@@ -7655,9 +7716,13 @@ msgstr "Možnosti zpráv"
 msgid "No message selected"
 msgstr "Nebyla vybrána žádná zpráva"
 
+#. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "%1$d messages selected"
-msgstr "%1$d zpráv vybráno"
+msgid "%1$d message selected"
+msgid_plural "%1$d messages selected"
+msgstr[0] "Vybrána %1$d zpráva"
+msgstr[1] "Vybrány %1$d zprávy"
+msgstr[2] "Vybráno %1$d zpráv"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
@@ -8787,10 +8852,6 @@ msgstr "Kliknutím otevřete. Přetažením na plochu stáhnete."
 msgid "Click to open."
 msgstr "Kliknutím otevřete."
 
-#: apps/io.ox/search/facets/extensions.js module:io.ox/core
-msgid "All folders"
-msgstr "Všechny složky"
-
 #: apps/io.ox/search/items/view-template.js module:io.ox/core
 msgid "No items found"
 msgstr "Nepodařilo se nalézt žádné položky"
@@ -8893,7 +8954,8 @@ msgstr "Změnit datum dokončení"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Mark as done"
 msgstr "Označit jako hotové"
 
@@ -9647,15 +9709,17 @@ msgstr ""
 "%3$s‚Přidat na domácí stránku‘%4$s"
 
 #. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
-#. %5$s Appointment Organizer
+#. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 #, c-format
-msgid "%1$s %2$s %3$s %4$s %5$s."
-msgstr "%1$s %2$s %3$s %4$s %5$s."
+msgid "Invitation for %1$s."
+msgstr "Pozvání pro %1$s."
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
+msgid "Accept/Decline"
+msgstr "Přijmout/Odmítnout"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
@@ -9755,13 +9819,6 @@ msgstr "Zpráva od %1$s: %2$s"
 msgid "New mail"
 msgstr "Nová zpráva"
 
-#. %1$s task title
-#. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, c-format
-msgid "%1$s %2$s."
-msgstr "%1$s %2$s."
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "Přetažené úkoly"
@@ -9806,10 +9863,6 @@ msgstr "Upomínka na nový úkol"
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Skrýt všechny upomínky na úkoly."
-
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "Accept/Decline"
-msgstr "Přijmout/Odmítnout"
 
 #. Inviations (notifications) to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -10507,6 +10560,54 @@ msgstr "Pozvat na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Přidat do %s"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr "Nalezeno %1$d kontaktů. Tento seznam je omezen na %2$d položek."
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Příliš mnoho kontaktů v adresáři."
+
+#~ msgid "You have %1$d notification."
+#~ msgid_plural "You have %1$d notifications."
+#~ msgstr[0] "%1$d oznámení."
+#~ msgstr[1] "%1$d oznámení."
+#~ msgstr[2] "%1$d oznámení."
+
+#~ msgid "The notification area is open"
+#~ msgstr "Oznamovací oblast je otevřená"
+
+#~ msgid "The notification area is closed"
+#~ msgstr "Oznamovací oblast je zavřená"
+
+#~ msgid "Close this reminder"
+#~ msgstr "Zavřít upomínku"
+
+#~ msgid "Remind me again "
+#~ msgstr "Připomeň mi znovu"
+
+#~ msgid "Press [enter] to open"
+#~ msgstr "Stiskněte [Enter] pro otevření"
+
+#~ msgid "end date "
+#~ msgstr "koncové datum "
+
+#~ msgid "status "
+#~ msgstr "stav "
+
+#~ msgid "%1$s %2$s %3$s."
+#~ msgstr "%1$s %2$s %3$s."
+
+#~ msgid "%1$s %2$s %3$s %4$s."
+#~ msgstr "%1$s %2$s %3$s %4$s."
+
+#~ msgid "%1$d messages selected"
+#~ msgstr "%1$d zpráv vybráno"
+
+#~ msgid "%1$s %2$s %3$s %4$s %5$s."
+#~ msgstr "%1$s %2$s %3$s %4$s %5$s."
+
+#~ msgid "%1$s %2$s."
+#~ msgstr "%1$s %2$s."
 
 #~ msgid "Resource name"
 #~ msgstr "Název zdroje"
