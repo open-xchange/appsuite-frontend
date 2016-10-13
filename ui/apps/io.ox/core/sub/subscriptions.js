@@ -236,7 +236,7 @@ define('io.ox/core/sub/subscriptions', [
             $('<strong>').text(label),
             $.txt(' '),
             $('<span>').html(msg),
-            $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
+            $('<button type="button" data-dismiss="alert" class="btn btn-default close" tabindex="1">').text('x'))
         );
 
     }
@@ -267,7 +267,7 @@ define('io.ox/core/sub/subscriptions', [
                 var accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
                 if (accounts.length === 1) {
                     setSource(accounts[0].id);
-                    controls = $('<button type="button" class="btn btn-default disabled">').text(accounts[0].displayName);
+                    controls = $('<button type="button" class="btn btn-default disabled" tabindex="1">').text(accounts[0].displayName);
                 } else if (accounts.length > 1) {
                     controls = $('<select name="' + fd.name + '">').on('change', function () {
                         setSource($(this).val());
@@ -280,7 +280,7 @@ define('io.ox/core/sub/subscriptions', [
                     // set initially to first account in list
                     setSource(accounts[0].id);
                 } else {
-                    controls = $('<button type="button" class="btn btn-default btn-new-account">').text(gt('Add new account')).on('click', function () {
+                    controls = $('<button type="button" class="btn btn-default btn-new-account" tabindex="1">').text(gt('Add new account')).on('click', function () {
                         oauth(getAccountType(fd.options.type)).done(function () {
                             buildForm(node, baton);
                         });
@@ -289,7 +289,7 @@ define('io.ox/core/sub/subscriptions', [
 
             } else {
                 var input_type = fd.name === 'password' ? 'password' : 'text';
-                controls = $('<input class="form-control" type="' + input_type + '" name="' + fd.name + '">');
+                controls = $('<input class="form-control" type="' + input_type + '" name="' + fd.name + '" tabindex="1">');
             }
             node.append(
                 $('<div>').addClass('control-group').append(

@@ -1670,7 +1670,7 @@ define('io.ox/core/desktop', [
                 buttonTimer = setTimeout(function () {
                     // add button to abort
                     if (!$blocker[0].firstChild) {
-                        var button = $('<button type="button" class="btn btn-primary">').text(gt('Cancel')).fadeIn();
+                        var button = $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Cancel')).fadeIn();
                         button.on('click', function () {
                             def.reject(true);
                             clear(blockerTimer);

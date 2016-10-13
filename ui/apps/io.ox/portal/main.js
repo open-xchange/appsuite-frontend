@@ -126,14 +126,11 @@ define('io.ox/portal/main', [
                     });
                     // please no button
                     $btn.find('.btn-group-portal').after($greeting);
-                    $btn.find('.btn-group-portal')
-                        .prepend($('<button type="button" class="btn btn-primary">')
-                        .attr({
-                            'data-action': 'customize',
-                            tabindex: 1
-                        })
-                        .text(gt('Customize this page'))
-                        .on('click', openSettings));
+                    $btn.find('.btn-group-portal').prepend(
+                        $('<button type="button" class="btn btn-primary" tabindex="1" data-action="customize">')
+                            .text(gt('Customize this page'))
+                            .on('click', openSettings)
+                    );
                 });
             } else {
                 $btn.append($greeting);

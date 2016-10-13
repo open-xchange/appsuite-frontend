@@ -51,7 +51,8 @@ define('io.ox/core/settings/user', [
                         $('<input>')
                             .addClass('toggle-check')
                             .attr({
-                                type: 'checkbox'
+                                type: 'checkbox',
+                                tabindex: 1
                             })
                             .on('change', function (e) {
                                 e.preventDefault();

@@ -1542,7 +1542,7 @@ define('io.ox/core/main', [
                         btn1, btn2;
 
                     $('#io-ox-core').append(
-                        dialog = $('<div class="io-ox-restore-dialog" tabindex="0">').append(
+                        dialog = $('<div class="io-ox-restore-dialog" tabindex="1">').append(
                             $('<div class="header">').append(
                                 $('<h3>').text(gt('Restore applications')),
                                 $('<div>').text(
@@ -1551,8 +1551,8 @@ define('io.ox/core/main', [
                             ),
                             $('<ul class="list-unstyled content">'),
                             $('<div class="footer">').append(
-                                btn1 = $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
-                                btn2 = $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
+                                btn1 = $('<button type="button" class="cancel btn btn-default" tabindex="1">').text(gt('Cancel')),
+                                btn2 = $('<button type="button" class="continue btn btn-primary" tabindex="1">').text(gt('Continue'))
                             )
                         )
                     );

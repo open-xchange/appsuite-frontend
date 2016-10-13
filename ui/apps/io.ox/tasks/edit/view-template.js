@@ -52,7 +52,7 @@ define('io.ox/tasks/edit/view-template', [
                 //title
                 headline = $('<h1 class="sr-only">').text(headlineText),
                 //save button
-                saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')
+                saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save" tabindex="1">')
                     .text(saveBtnText)
                     .on('click', function () {
                         app.getWindow().busy();
@@ -73,7 +73,7 @@ define('io.ox/tasks/edit/view-template', [
 
                     }),
                 //cancel button
-                $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')
+                $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel" tabindex="1">')
                     .text(gt('Discard'))
                     .on('click', function (e) {
                         e.stopPropagation();

@@ -235,7 +235,7 @@ define('io.ox/contacts/edit/view-form', [
             index: 100,
             id: 'save',
             draw: function (baton) {
-                this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
+                this.append($('<button type="button" class="btn btn-primary save" data-action="save" tabindex="1">')
                     .text(gt('Save'))
                     .on('click', function () {
                         actions.invoke(ref + '/actions/edit/save', this, baton);
@@ -249,7 +249,7 @@ define('io.ox/contacts/edit/view-form', [
             index: 200,
             id: 'discard',
             draw: function (baton) {
-                this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >')
+                this.append($('<button type="button" class="btn btn-default discard" data-action="discard" tabindex="1">')
                     .text(gt('Discard'))
                     .on('click', function () {
                         actions.invoke(ref + '/actions/edit/discard', this, baton);
@@ -267,7 +267,8 @@ define('io.ox/contacts/edit/view-form', [
                         $('<input>')
                             .addClass('toggle-check')
                             .attr({
-                                type: 'checkbox'
+                                type: 'checkbox',
+                                tabindex: 1
                             })
                             .on('change', function (e) {
                                 e.preventDefault();

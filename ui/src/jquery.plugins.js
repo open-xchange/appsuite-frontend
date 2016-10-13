@@ -180,7 +180,7 @@
 
         if (o.dismissable) {
             alert.append(
-                $('<button type="button" class="close" data-dismiss="alert">').append(
+                $('<button type="button" class="close" data-dismiss="alert" tabindex="1">').append(
                     $('<span aria-hidden="true">&times;</span>'),
                     $('<span class="sr-only">Close</span>')
                 )

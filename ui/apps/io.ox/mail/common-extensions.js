@@ -677,7 +677,7 @@ define('io.ox/mail/common-extensions', [
 
                 this.append(
                     $('<div class="alert alert-info disposition-notification">').append(
-                        $('<button type="button" class="close" data-dismiss="alert">&times;</button>'),
+                        $('<button type="button" class="close" data-dismiss="alert" tabindex="1">&times;</button>'),
                         $('<button type="button" class="btn btn-primary btn-sm" tabindex="1">').text(
                             //#. Respond to a read receipt request; German "Lesebestätigung senden"
                             gt('Send a read receipt')

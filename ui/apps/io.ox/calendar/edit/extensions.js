@@ -62,7 +62,7 @@ define('io.ox/calendar/edit/extensions', [
         id: 'save',
         draw: function (baton) {
             var oldFolder = baton.model.get('folder_id');
-            this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
+            this.append($('<button type="button" class="btn btn-primary save" data-action="save" tabindex="1">')
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
@@ -94,7 +94,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 200,
         id: 'discard',
         draw: function (baton) {
-            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >')
+            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" tabindex="1">')
                 .text(gt('Discard'))
                 .on('click', function (e) {
                     e.stopPropagation();
