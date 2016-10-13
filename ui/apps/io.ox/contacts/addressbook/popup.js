@@ -49,7 +49,8 @@ define('io.ox/contacts/addressbook/popup', [
     var useInitials = settings.get('picker/useInitials', true),
         useInitialsColor = useInitials && settings.get('picker/useInitialsColor', true),
         useLabels = settings.get('picker/useLabels', false),
-        closeOnDoubleClick = settings.get('picker/closeOnDoubleClick', true);
+        closeOnDoubleClick = settings.get('picker/closeOnDoubleClick', true),
+        useGlobalAddressBook = settings.get('picker/globalAddressBook', true);
 
     //
     // Build a search index
@@ -157,6 +158,7 @@ define('io.ox/contacts/addressbook/popup', [
             options = _.extend({
                 // keep this list really small for good performance!
                 columns: '1,20,500,501,502,505,555,556,557,592,602,606',
+                exclude: useGlobalAddressBook ? [] : ['6'],
                 limit: LIMITS.fetch
             }, options);
 
@@ -172,7 +174,10 @@ define('io.ox/contacts/addressbook/popup', [
                     sort: 609
                 },
                 // emailAutoComplete doesn't work; need to clean up client-side anyway
-                data: { last_name: '*' }
+                data: {
+                    exclude_folders: options.exclude,
+                    last_name: '*'
+                }
             });
         }
 
@@ -391,6 +396,10 @@ define('io.ox/contacts/addressbook/popup', [
                 var $dropdown = this.$('.folder-dropdown');
                 folderAPI.flat({ module: 'contacts' }).done(function (folders) {
                     var count = 0;
+                    // remove global address book?
+                    if (!useGlobalAddressBook && folders['public']) {
+                        folders['public'] = _(folders['public']).reject({ id: '6' });
+                    }
                     $dropdown.append(
                         _(folders).map(function (section, id) {
                             // skip empty and (strange) almost empty folders
