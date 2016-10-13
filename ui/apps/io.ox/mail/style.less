@@ -967,9 +967,6 @@ textarea.inplace-editor {
     .detail-view-header { border-bottom: 0; }
 }
 
-
-
-
 // Detail view
 
 .rightside.mail-detail-pane {
@@ -1054,6 +1051,10 @@ textarea.inplace-editor {
 
     &:not(.io-ox-find-active) {
 
+        .categories-toolbar-container {
+            display: flex;
+        }
+
         // layout: compact
         .window-body {
             .abs.window-content { top: 40px; }
@@ -1085,7 +1086,7 @@ body.dragging .categories-toolbar-container {
 
 .categories-toolbar-container {
 
-    display: flex;
+    display: none;
     justify-content: flex-start;
     align-items: center;
 
@@ -1128,8 +1129,7 @@ body.dragging .categories-toolbar-container {
 
             .category-counter .counter {
                 padding-left: 8px;
-                // clone of .folder-counter;
-                color: #08c;
+                color: @foldertree-counter-color;
                 font-weight: 700;
             }
 
