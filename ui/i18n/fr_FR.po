@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-28 05:14+0900\n"
+"PO-Revision-Date: 2016-10-12 17:56+0900\n"
 "Last-Translator: \n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_FR\n"
@@ -2147,15 +2147,48 @@ msgstr "Sélectionner les contacts"
 msgid "Search"
 msgstr "Chercher"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr ""
-"%1$d contacts trouvés. Cette liste est limitée aux %2$d premiers éléments."
+#: apps/io.ox/search/facets/extensions.js module:io.ox/core
+msgid "All folders"
+msgstr "Tous les dossiers"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Trop de contacts dans votre carnet d'adresses."
+msgid "All distribution lists"
+msgstr "Toutes les listes de diffusion"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "All groups"
+msgstr "Tous les groupes"
+
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "%1$d élément sélectionné"
+msgstr[1] "%1$d éléments sélectionnés"
+
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d adresse sélectionnée"
+msgstr[1] "%1$d adresses sélectionnées"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Annuler la sélection"
+
+#. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/find/main.js module:io.ox/core
+msgid "No matching items found."
+msgstr "Aucun élément correspondant trouvé."
+
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Vide"
 
 #. Context: Add selected contacts; German "Auswählen", for example
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2942,6 +2975,12 @@ msgstr "Mot de passe"
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Se connecter"
+
+#. the word not the verb
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgctxt "word"
+msgid "Sign in"
+msgstr "Connexion"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Stay signed in"
@@ -3746,11 +3785,6 @@ msgstr "En savoir plus"
 msgid "Import from file"
 msgstr "Importer depuis un fichier"
 
-#. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "There was no appointment data to import"
-msgstr "Pas de données de rendez-vous à importer"
-
 #. Error message if contact import failed
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no contact data to import"
@@ -3760,6 +3794,16 @@ msgstr "Pas de données de contacts à importer"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no task data to import"
 msgstr "Pas de données de tâches à importer"
+
+#. Error message if calendar import failed
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "There was no appointment data to import"
+msgstr "Pas de données de rendez-vous à importer"
+
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "Line %1$d: %2$s"
+msgstr "Ligne %1$d : %2$s"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -3880,6 +3924,10 @@ msgstr "Se déconnecter maintenant"
 msgid "close for %1$s"
 msgstr "fermer dans %1$s"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "(current app)"
+msgstr "(app en cours)"
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Réglages"
@@ -3988,21 +4036,23 @@ msgstr ""
 "Vous pouvez à tout moment gérer vos notifications de bureau en consultant "
 "vos réglages"
 
-#. %1$d number of notifications
+#. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, c-format
-msgid "You have %1$d notification."
-msgid_plural "You have %1$d notifications."
-msgstr[0] "Vous avez %1$d notification."
-msgstr[1] "Vous avez %1$d notifications."
+msgid "%1$d notification."
+msgid_plural "%1$d notifications."
+msgstr[0] "%1$d notification."
+msgstr[1] "%1$d notifications."
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is open"
-msgstr "La zone de notification est ouverte"
+msgid "expanded"
+msgstr "déployée"
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is closed"
-msgstr "La zone de notification est fermée"
+msgid "collapsed"
+msgstr "réduite"
 
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "Hide this notification"
@@ -4852,46 +4902,47 @@ msgstr "Choisissez une heure ici"
 msgid "OK"
 msgstr "OK"
 
+#. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close this reminder"
-msgstr "Fermer ce rappel"
+msgid "Close reminder for %1$s"
+msgstr "Fermer le rappel pour %1$s"
 
+#. %1$s is something like "in 5 minutes"
+#. don't know if that works for all languages but it has been
+#. a string concatenation before; at least now it's documented
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Remind me again "
-msgstr "Me rappeler à nouveau "
+msgid "Remind me again %1$s"
+msgstr "Me rappeler à nouveau %1$s"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
-msgid "Press [enter] to open"
-msgstr "Appuyez sur [Entrée] pour passer à "
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "end date "
-msgstr "date de fin"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "status "
-msgstr "état"
+msgid "Press to open Details"
+msgstr "Cliquez pour ouvrir les détails"
 
 #. %1$s task title
-#. %2$s task end date
-#. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
-msgid "%1$s %2$s %3$s."
-msgstr "%1$s %2$s %3$s."
+msgid "Reminder for task %1$s."
+msgstr "Rappel pour la tâche %1$s."
 
-#. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
+#. %1$s appointment title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, c-format
-msgid "%1$s %2$s %3$s %4$s."
-msgstr "%1$s %2$s %3$s %4$s."
+msgid "Reminder for appointment %1$s."
+msgstr "Rappel pour le rendez-vous %1$s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "There are no matching autocomplete entries for this query."
+msgstr "Aucun terme en autocomplétion n'existe pour cette requête."
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, c-format
+msgid "There is one matching autocomplete entry for this query."
+msgid_plural "There are %1$d matching autocomplete entries for this query."
+msgstr[0] "Un terme en autocomplétion existe pour cette requête."
+msgstr[1] "%1$d termes en autocomplétion existent pour cette requête."
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid ""
@@ -4914,6 +4965,10 @@ msgstr ""
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
 msgstr "Ajout de %1$s, %2$s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid " press backspace to remove this token"
+msgstr " appuyez sur la touche retour arrière pour supprimer ce jeton"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -5107,6 +5162,7 @@ msgstr "Ce fichier est partagé avec d'autres utilisateurs"
 msgid "This folder is shared with others"
 msgstr "Ce dossier est partagé avec d'autres utilisateurs"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
@@ -6429,11 +6485,6 @@ msgstr "Tous les dossiers"
 msgid "Accounts"
 msgstr "Comptes"
 
-#. search feature returns an empty result
-#: apps/io.ox/find/main.js module:io.ox/core
-msgid "No matching items found."
-msgstr "Aucun élément correspondant trouvé."
-
 #: apps/io.ox/find/view-facets.js module:io.ox/core
 msgid "Search facets"
 msgstr "Facettes de recherche"
@@ -6557,8 +6608,8 @@ msgstr "Impossible de se connecter."
 msgid ""
 "Auto-configuration failed. Do you want to configure your account manually?"
 msgstr ""
-"La configuration automatique a échoué. Souhaitez-vous configurer votre compte "
-"manuellement ?"
+"La configuration automatique a échoué. Souhaitez-vous configurer votre "
+"compte manuellement ?"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Cannot establish secure connection. Do you want to proceed anyway?"
@@ -7069,11 +7120,6 @@ msgstr "Non lu"
 msgid "has attachments"
 msgstr "présente des pièces jointes"
 
-#. empty message for list view
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Vide"
-
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/print.js
 msgctxt "CC"
@@ -7148,12 +7194,23 @@ msgstr "L'envoi du message a été annulé."
 msgid "The email has been sent"
 msgstr "Le courriel a été envoyé"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
+"between the tokens"
+msgstr ""
+"Champ jeton d'autocomplétion %1$s. Utilisez les flèches droite et gauche "
+"pour naviguer entre les jetons."
+
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "CC"
 msgstr "CC"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "BCC"
 msgstr "BCC"
@@ -7296,11 +7353,6 @@ msgstr "Veuillez sélectionner un fichier image valide à importer"
 msgid "Compose"
 msgstr "Rédiger"
 
-#. %s is the product name
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-msgid "Sent from %s via mobile"
-msgstr "Envoyé depuis %s sur un portable"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
 msgstr "Courrier"
@@ -7336,6 +7388,11 @@ msgstr ""
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Edit real names"
 msgstr "Modifier les noms réels"
+
+#. %s is the product name
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "Sent from %s via mobile"
+msgstr "Envoyé depuis %s sur un portable"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Plain Text"
@@ -7728,9 +7785,12 @@ msgstr "Options des messages"
 msgid "No message selected"
 msgstr "Aucun message sélectionné"
 
+#. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "%1$d messages selected"
-msgstr "%1$d messages sélectionnés"
+msgid "%1$d message selected"
+msgid_plural "%1$d messages selected"
+msgstr[0] "%1$d message sélectionné"
+msgstr[1] "%1$d messages sélectionnés"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
@@ -8874,10 +8934,6 @@ msgstr "Cliquez pour ouvrir. Déposez sur votre bureau pour télécharger."
 msgid "Click to open."
 msgstr "Cliquez pour ouvrir."
 
-#: apps/io.ox/search/facets/extensions.js module:io.ox/core
-msgid "All folders"
-msgstr "Tous les dossiers"
-
 #: apps/io.ox/search/items/view-template.js module:io.ox/core
 msgid "No items found"
 msgstr "Aucun élément trouvé"
@@ -8983,7 +9039,8 @@ msgstr "Modifier la date d'échéance"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Mark as done"
 msgstr "Marquer comme effectué"
 
@@ -9742,15 +9799,17 @@ msgstr ""
 "%3$s'Ajouter à l'écran d'accueil'%4$s"
 
 #. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
-#. %5$s Appointment Organizer
+#. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 #, c-format
-msgid "%1$s %2$s %3$s %4$s %5$s."
-msgstr "%1$s %2$s %3$s %4$s %5$s."
+msgid "Invitation for %1$s."
+msgstr "Invitation à %1$s."
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
+msgid "Accept/Decline"
+msgstr "Accepter / Décliner"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
@@ -9849,13 +9908,6 @@ msgstr "Courriel de %1$s, %2$s"
 msgid "New mail"
 msgstr "Nouveau message"
 
-#. %1$s task title
-#. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, c-format
-msgid "%1$s %2$s."
-msgstr "%1$s %2$s."
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "Tâches en retard"
@@ -9901,10 +9953,6 @@ msgstr "Nouveau rappel de tâche"
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Masquer tous les rappels de tâches."
-
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "Accept/Decline"
-msgstr "Accepter / Décliner"
 
 #. Inviations (notifications) to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -10615,6 +10663,54 @@ msgstr "Inviter à %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Ajouter à %s"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr ""
+#~ "%1$d contacts trouvés. Cette liste est limitée aux %2$d premiers éléments."
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Trop de contacts dans votre carnet d'adresses."
+
+#~ msgid "You have %1$d notification."
+#~ msgid_plural "You have %1$d notifications."
+#~ msgstr[0] "Vous avez %1$d notification."
+#~ msgstr[1] "Vous avez %1$d notifications."
+
+#~ msgid "The notification area is open"
+#~ msgstr "La zone de notification est ouverte"
+
+#~ msgid "The notification area is closed"
+#~ msgstr "La zone de notification est fermée"
+
+#~ msgid "Close this reminder"
+#~ msgstr "Fermer ce rappel"
+
+#~ msgid "Remind me again "
+#~ msgstr "Me rappeler à nouveau "
+
+#~ msgid "Press [enter] to open"
+#~ msgstr "Appuyez sur [Entrée] pour passer à "
+
+#~ msgid "end date "
+#~ msgstr "date de fin"
+
+#~ msgid "status "
+#~ msgstr "état"
+
+#~ msgid "%1$s %2$s %3$s."
+#~ msgstr "%1$s %2$s %3$s."
+
+#~ msgid "%1$s %2$s %3$s %4$s."
+#~ msgstr "%1$s %2$s %3$s %4$s."
+
+#~ msgid "%1$d messages selected"
+#~ msgstr "%1$d messages sélectionnés"
+
+#~ msgid "%1$s %2$s %3$s %4$s %5$s."
+#~ msgstr "%1$s %2$s %3$s %4$s %5$s."
+
+#~ msgid "%1$s %2$s."
+#~ msgstr "%1$s %2$s."
 
 #~ msgid "Resource name"
 #~ msgstr "Nom de la ressource"

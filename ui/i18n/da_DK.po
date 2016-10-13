@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-28 21:20+0200\n"
+"PO-Revision-Date: 2016-10-12 11:43+0200\n"
 "Last-Translator: Jacob Sparre Andersen <jacob@bureau-cornavin.com>\n"
 "Language-Team: Danish <da@bureau-cornavin.com>\n"
 "Language: da_DK\n"
@@ -2116,14 +2116,48 @@ msgstr "Vælg kontakter"
 msgid "Search"
 msgstr "Søg"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr "Fandt %1$d kontakter.  Denne liste er begrænset til de første %2$d."
+#: apps/io.ox/search/facets/extensions.js module:io.ox/core
+msgid "All folders"
+msgstr "Alle mapper"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "For mange kontakter i din adressebog."
+msgid "All distribution lists"
+msgstr "Alle distributionslister"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "All groups"
+msgstr "Alle grupper"
+
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "%1$d element valgt"
+msgstr[1] "%1$d elementer valgt"
+
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d adresse valgt"
+msgstr[1] "%1$d adresser valgt"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Ryd valg"
+
+#. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/find/main.js module:io.ox/core
+msgid "No matching items found."
+msgstr "Ingen passende elementer fundet."
+
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Tom"
 
 #. Context: Add selected contacts; German "Auswählen", for example
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2540,7 +2574,7 @@ msgstr "Messenger 2"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
-msgstr "IP telefon"
+msgstr "IP-telefon"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Phone (assistant)"
@@ -2905,6 +2939,12 @@ msgstr "Adgangskode"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
+msgid "Sign in"
+msgstr "Log ind"
+
+#. the word not the verb
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgctxt "word"
 msgid "Sign in"
 msgstr "Log ind"
 
@@ -3703,11 +3743,6 @@ msgstr "Lær mere"
 msgid "Import from file"
 msgstr "Importér fra fil"
 
-#. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "There was no appointment data to import"
-msgstr "Der var ingen aftaleoplysninger at importere"
-
 #. Error message if contact import failed
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no contact data to import"
@@ -3717,6 +3752,16 @@ msgstr "Der var ingen kontaktoplysninger at importere"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no task data to import"
 msgstr "Der var ingen opgaveoplysninger at importere"
+
+#. Error message if calendar import failed
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "There was no appointment data to import"
+msgstr "Der var ingen aftaleoplysninger at importere"
+
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "Line %1$d: %2$s"
+msgstr "Linje %1$d: %2$s"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -3831,6 +3876,10 @@ msgstr "Log ud nu"
 msgid "close for %1$s"
 msgstr "luk for %1$s"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "(current app)"
+msgstr "(aktuel app)"
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Indstillinger"
@@ -3938,21 +3987,23 @@ msgid ""
 msgstr ""
 "Du kan håndtere skrivebordsunderretninger når som helst i dine indstillinger"
 
-#. %1$d number of notifications
+#. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, c-format
-msgid "You have %1$d notification."
-msgid_plural "You have %1$d notifications."
-msgstr[0] "Du har %1$d underretning."
-msgstr[1] "Du har %1$d underretninger."
+msgid "%1$d notification."
+msgid_plural "%1$d notifications."
+msgstr[0] "%1$d påmindelse."
+msgstr[1] "%1$d påmindelser."
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is open"
-msgstr "Påmindelsesområdet er åbent"
+msgid "expanded"
+msgstr "udvidet"
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is closed"
-msgstr "Påmindelsesområdet er lukket"
+msgid "collapsed"
+msgstr "sammenfoldet"
 
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "Hide this notification"
@@ -4794,52 +4845,48 @@ msgstr "Vælg en tid her"
 msgid "OK"
 msgstr "OK"
 
+#. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close this reminder"
-msgstr "Luk denne påmindelse"
+msgid "Close reminder for %1$s"
+msgstr "Luk påmindelse om %1$s"
 
+#. %1$s is something like "in 5 minutes"
+#. don't know if that works for all languages but it has been
+#. a string concatenation before; at least now it's documented
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Remind me again "
-msgstr "Påmind mig igen"
+msgid "Remind me again %1$s"
+msgstr "Påmind mig igen %1$s"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
-msgid "Press [enter] to open"
-msgstr "Tast [enter] for at åbne"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "end date "
-msgstr "slutdato "
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "status "
-msgstr "status "
+msgid "Press to open Details"
+msgstr "Vælg for at åbne"
 
 #. %1$s task title
-#. %2$s task end date
-#. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
-msgid "%1$s %2$s %3$s."
-msgstr ""
-"%1$s\n"
-"%2$s\n"
-"%3$s"
+msgid "Reminder for task %1$s."
+msgstr "Påmindelse om opgaven %1$s."
 
-#. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
+#. %1$s appointment title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, c-format
-msgid "%1$s %2$s %3$s %4$s."
+msgid "Reminder for appointment %1$s."
+msgstr "Påmindelse om aftalen $s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "There are no matching autocomplete entries for this query."
 msgstr ""
-"%1$s\n"
-"%2$s %3$s\n"
-"%4$s"
+"Der er ikke nogle passende autocomplete-muligheder for denne forespørgsel."
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, c-format
+msgid "There is one matching autocomplete entry for this query."
+msgid_plural "There are %1$d matching autocomplete entries for this query."
+msgstr[0] "Der er en passende autocomplete-mulighed til denne forespørgsel."
+msgstr[1] "Der er %d passende autocomplete-muligheder til denne forespørgsel."
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid ""
@@ -4862,6 +4909,10 @@ msgstr ""
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
 msgstr "Tilføjet %1$s <%2$s>."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid " press backspace to remove this token"
+msgstr " tast [Backspace] for at fjerne dette element"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -5048,6 +5099,7 @@ msgstr "Denne fil deles med andre"
 msgid "This folder is shared with others"
 msgstr "Denne mappe deles med andre"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
@@ -6353,11 +6405,6 @@ msgstr "Alle mapper"
 msgid "Accounts"
 msgstr "Konti"
 
-#. search feature returns an empty result
-#: apps/io.ox/find/main.js module:io.ox/core
-msgid "No matching items found."
-msgstr "Ingen passende elementer fundet."
-
 #: apps/io.ox/find/view-facets.js module:io.ox/core
 msgid "Search facets"
 msgstr "Søgefacetter"
@@ -6978,11 +7025,6 @@ msgstr "Ulæst"
 msgid "has attachments"
 msgstr "har vedhæftninger"
 
-#. empty message for list view
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Tom"
-
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/print.js
 msgctxt "CC"
@@ -7053,12 +7095,23 @@ msgstr "Afsendelsen af beskeden blev annulleret."
 msgid "The email has been sent"
 msgstr "E-mailen er sendt"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
+"between the tokens"
+msgstr ""
+"%1$s kan udfyldes automatisk.  Brug venstre og højre piletaster til at hoppe "
+"mellem elementerne."
+
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "CC"
 msgstr "Cc"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "BCC"
 msgstr "BCc"
@@ -7201,11 +7254,6 @@ msgstr "Vælg venligst en gyldig billedfil at indsætte"
 msgid "Compose"
 msgstr "Skriv"
 
-#. %s is the product name
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-msgid "Sent from %s via mobile"
-msgstr "Sendt fra %s via mobil"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
 msgstr "E-mail"
@@ -7240,6 +7288,11 @@ msgstr ""
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Edit real names"
 msgstr "Redigér virkelige navne"
+
+#. %s is the product name
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "Sent from %s via mobile"
+msgstr "Sendt fra %s via mobil"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Plain Text"
@@ -7629,9 +7682,12 @@ msgstr "Beskedindstillinger"
 msgid "No message selected"
 msgstr "Ingen besked valgt"
 
+#. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "%1$d messages selected"
-msgstr "%1$d beskeder valgt"
+msgid "%1$d message selected"
+msgid_plural "%1$d messages selected"
+msgstr[0] "%1$d besked valgt"
+msgstr[1] "%1$d beskeder valgt"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
@@ -8761,10 +8817,6 @@ msgstr "Klik for at åbne. Træk til dit skrivebord for at hente."
 msgid "Click to open."
 msgstr "Klik for at åbne."
 
-#: apps/io.ox/search/facets/extensions.js module:io.ox/core
-msgid "All folders"
-msgstr "Alle mapper"
-
 #: apps/io.ox/search/items/view-template.js module:io.ox/core
 msgid "No items found"
 msgstr "Ingen elementer fundet"
@@ -8867,7 +8919,8 @@ msgstr "Ret afleveringsdato"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Mark as done"
 msgstr "Markér som færdig"
 
@@ -9619,19 +9672,17 @@ msgstr ""
 "Screen'%4$s"
 
 #. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
-#. %5$s Appointment Organizer
+#. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 #, c-format
-msgid "%1$s %2$s %3$s %4$s %5$s."
-msgstr ""
-"%1$s\n"
-"%2$s %3$s\n"
-"%4$s\n"
-"%5$s"
+msgid "Invitation for %1$s."
+msgstr "Invitation til %1$s."
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications apps/plugins/notifications/tasks/register.js
+msgid "Accept/Decline"
+msgstr "Acceptér/Afvis"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
@@ -9730,15 +9781,6 @@ msgstr "E-mail fra %1$s om %2$s"
 msgid "New mail"
 msgstr "Ny e-mail"
 
-#. %1$s task title
-#. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, c-format
-msgid "%1$s %2$s."
-msgstr ""
-"%1$s\n"
-"%2$s"
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "Opgaver over tid"
@@ -9783,10 +9825,6 @@ msgstr "Ny opgavepåmindelse"
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Skjul alle opgavepåmindelser."
-
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "Accept/Decline"
-msgstr "Acceptér/Afvis"
 
 #. Inviations (notifications) to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -10483,6 +10521,65 @@ msgstr "Invitér til %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Tilføj på %s"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr "Fandt %1$d kontakter.  Denne liste er begrænset til de første %2$d."
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "For mange kontakter i din adressebog."
+
+#~ msgid "You have %1$d notification."
+#~ msgid_plural "You have %1$d notifications."
+#~ msgstr[0] "Du har %1$d underretning."
+#~ msgstr[1] "Du har %1$d underretninger."
+
+#~ msgid "The notification area is open"
+#~ msgstr "Påmindelsesområdet er åbent"
+
+#~ msgid "The notification area is closed"
+#~ msgstr "Påmindelsesområdet er lukket"
+
+#~ msgid "Close this reminder"
+#~ msgstr "Luk denne påmindelse"
+
+#~ msgid "Remind me again "
+#~ msgstr "Påmind mig igen"
+
+#~ msgid "Press [enter] to open"
+#~ msgstr "Tast [enter] for at åbne"
+
+#~ msgid "end date "
+#~ msgstr "slutdato "
+
+#~ msgid "status "
+#~ msgstr "status "
+
+#~ msgid "%1$s %2$s %3$s."
+#~ msgstr ""
+#~ "%1$s\n"
+#~ "%2$s\n"
+#~ "%3$s"
+
+#~ msgid "%1$s %2$s %3$s %4$s."
+#~ msgstr ""
+#~ "%1$s\n"
+#~ "%2$s %3$s\n"
+#~ "%4$s"
+
+#~ msgid "%1$d messages selected"
+#~ msgstr "%1$d beskeder valgt"
+
+#~ msgid "%1$s %2$s %3$s %4$s %5$s."
+#~ msgstr ""
+#~ "%1$s\n"
+#~ "%2$s %3$s\n"
+#~ "%4$s\n"
+#~ "%5$s"
+
+#~ msgid "%1$s %2$s."
+#~ msgstr ""
+#~ "%1$s\n"
+#~ "%2$s"
 
 #~ msgid "Resource name"
 #~ msgstr "Ressourcenavn"

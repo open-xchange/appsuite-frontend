@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-29 22:28+0200\n"
+"PO-Revision-Date: 2016-10-10 21:00+0200\n"
 "Last-Translator: daiana <xdaiana@yahoo.com>\n"
 "Language-Team: Romanian <ro@bureau-cornavin.com>\n"
 "Language: ro_RO\n"
@@ -2130,14 +2130,50 @@ msgstr "Selectează contacte"
 msgid "Search"
 msgstr "Caută"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr "Au fost găsite %1$d contacte. Lista este limitată la %2$d elemente."
+#: apps/io.ox/search/facets/extensions.js module:io.ox/core
+msgid "All folders"
+msgstr "Toate dosarele"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr "Prea multe contacte în agendă."
+msgid "All distribution lists"
+msgstr "Toate listele de distribuție"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "All groups"
+msgstr "Toate grupurile"
+
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "%1$d element selectat"
+msgstr[1] "%1$d elemente selectate"
+msgstr[2] "%1$d de elemente selectate"
+
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d adresă selectată"
+msgstr[1] "%1$d adrese selectate"
+msgstr[2] "%1$d de adrese selectate"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Golește selecția"
+
+#. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/find/main.js module:io.ox/core
+msgid "No matching items found."
+msgstr "Nu s-au găsit elemente corespunzătoare."
+
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Gol"
 
 #. Context: Add selected contacts; German "Auswählen", for example
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -2923,6 +2959,12 @@ msgstr "Parolă"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
+msgid "Sign in"
+msgstr "Autentificare"
+
+#. the word not the verb
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgctxt "word"
 msgid "Sign in"
 msgstr "Autentificare"
 
@@ -3737,11 +3779,6 @@ msgstr "Mai multe informații"
 msgid "Import from file"
 msgstr "Importă dintr-un fișier"
 
-#. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "There was no appointment data to import"
-msgstr "Nu s-a găsit nicio dată despre întâlniri de importat"
-
 #. Error message if contact import failed
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no contact data to import"
@@ -3751,6 +3788,16 @@ msgstr "Nu s-a găsit nicio dată despre contacte de importat"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no task data to import"
 msgstr "Nu s-a găsit nicio dată despre sarcini de importat"
+
+#. Error message if calendar import failed
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "There was no appointment data to import"
+msgstr "Nu s-a găsit nicio dată despre întâlniri de importat"
+
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js module:io.ox/core
+msgid "Line %1$d: %2$s"
+msgstr "Linia %1$d: %2$s"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -3868,6 +3915,10 @@ msgstr "Deconectează acum"
 msgid "close for %1$s"
 msgstr "închide pentru %1$s"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "(current app)"
+msgstr "(aplicația curentă)"
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Setări "
@@ -3975,22 +4026,24 @@ msgid ""
 msgstr ""
 "Puteți gestiona notificările desktop în orice moment vizitând setările."
 
-#. %1$d number of notifications
+#. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
 #, c-format
-msgid "You have %1$d notification."
-msgid_plural "You have %1$d notifications."
-msgstr[0] "Aveți %1$d notificare."
-msgstr[1] "Aveți %1$d notificări."
-msgstr[2] "Aveți %1$d de notificări."
+msgid "%1$d notification."
+msgid_plural "%1$d notifications."
+msgstr[0] "%1$d notificare."
+msgstr[1] "%1$d notificări."
+msgstr[2] "%1$d de notificări."
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is open"
-msgstr "Zona de notificare este deschisă"
+msgid "expanded"
+msgstr "extins"
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "The notification area is closed"
-msgstr "Zona de notificare este închisă"
+msgid "collapsed"
+msgstr "restrâns"
 
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "Hide this notification"
@@ -4824,46 +4877,52 @@ msgstr "Alege o oră aici"
 msgid "OK"
 msgstr "OK"
 
+#. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Close this reminder"
-msgstr "Închide memento"
+msgid "Close reminder for %1$s"
+msgstr "Închide mementoul pentru %1$s"
 
+#. %1$s is something like "in 5 minutes"
+#. don't know if that works for all languages but it has been
+#. a string concatenation before; at least now it's documented
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "Remind me again "
-msgstr "Amintește-mi din nou"
+msgid "Remind me again %1$s"
+msgstr "Amintește-mi din nou %1$s"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js
-msgid "Press [enter] to open"
-msgstr "Apăsați [Enter] pentru a deschide"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "end date "
-msgstr "dată de sfârșit"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-msgid "status "
-msgstr "stare"
+msgid "Press to open Details"
+msgstr "Apăsați pentru a deschide detaliile"
 
 #. %1$s task title
-#. %2$s task end date
-#. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
-msgid "%1$s %2$s %3$s."
-msgstr "%1$s %2$s %3$s."
+msgid "Reminder for task %1$s."
+msgstr "Memento pentru sarcina %1$s."
 
-#. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
+#. %1$s appointment title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, c-format
-msgid "%1$s %2$s %3$s %4$s."
-msgstr "%1$s %2$s %3$s %4$s."
+msgid "Reminder for appointment %1$s."
+msgstr "Memento pentru întâlnirea %1$s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "There are no matching autocomplete entries for this query."
+msgstr "Nu există intrări de completare automată pentru această interogare."
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, c-format
+msgid "There is one matching autocomplete entry for this query."
+msgid_plural "There are %1$d matching autocomplete entries for this query."
+msgstr[0] ""
+"Există o intrare de completare automată ce corespunde acestei interogări."
+msgstr[1] ""
+"Există %1$d intrări de completare automată ce corespund acestei interogări."
+msgstr[2] ""
+"Există %1$d de intrări de completare automată ce corespund acestei "
+"interogări."
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid ""
@@ -4886,6 +4945,10 @@ msgstr ""
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
 msgstr "S-a adăugat %1$s, %2$s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid " press backspace to remove this token"
+msgstr "apăsați backspace pentru a elimina acest simbol"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -5077,6 +5140,7 @@ msgstr "Fișierul este partajat cu alți utilizatori"
 msgid "This folder is shared with others"
 msgstr "Dosarul este partajat cu alți utilizatori"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
@@ -6406,11 +6470,6 @@ msgstr "Toate dosarele"
 msgid "Accounts"
 msgstr "Conturi"
 
-#. search feature returns an empty result
-#: apps/io.ox/find/main.js module:io.ox/core
-msgid "No matching items found."
-msgstr "Nu s-au găsit elemente corespunzătoare."
-
 #: apps/io.ox/find/view-facets.js module:io.ox/core
 msgid "Search facets"
 msgstr "Căutare aspecte"
@@ -7031,11 +7090,6 @@ msgstr "Necitite"
 msgid "has attachments"
 msgstr "conține fișiere atașate"
 
-#. empty message for list view
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Gol"
-
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/print.js
 msgctxt "CC"
@@ -7108,12 +7162,23 @@ msgstr "Trimiterea mesajelor a fost anulată."
 msgid "The email has been sent"
 msgstr "E-mailul a fost trimis"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
+"between the tokens"
+msgstr ""
+"Câmp de completare automată %1$s. Utilizați săgețile stânga și dreapta "
+"pentru a naviga prin elemente."
+
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "CC"
 msgstr "CC"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "BCC"
 msgstr "BCC"
@@ -7256,11 +7321,6 @@ msgstr "Selectați un fișier imagine corect de inserat"
 msgid "Compose"
 msgstr "Compune"
 
-#. %s is the product name
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-msgid "Sent from %s via mobile"
-msgstr "Trimis de pe %s utilizând un mobil"
-
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "Mail"
 msgstr "Mail"
@@ -7296,6 +7356,11 @@ msgstr ""
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Edit real names"
 msgstr "Editează numele reale"
+
+#. %s is the product name
+#: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
+msgid "Sent from %s via mobile"
+msgstr "Trimis de pe %s utilizând un mobil"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Plain Text"
@@ -7686,9 +7751,13 @@ msgstr "Opțiuni mesaje"
 msgid "No message selected"
 msgstr "Niciun element selectat"
 
+#. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
-msgid "%1$d messages selected"
-msgstr "%1$d mesaje selectate"
+msgid "%1$d message selected"
+msgid_plural "%1$d messages selected"
+msgstr[0] "%1$d mesaj selectat"
+msgstr[1] "%1$d mesaje selectate"
+msgstr[2] "%1$d de mesaje selectate"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
@@ -8823,10 +8892,6 @@ msgstr "Apăsați aici pentru a deschide. Glisați pe desktop pentru a descărca
 msgid "Click to open."
 msgstr "Apăsați aici pentru a deschide."
 
-#: apps/io.ox/search/facets/extensions.js module:io.ox/core
-msgid "All folders"
-msgstr "Toate dosarele"
-
 #: apps/io.ox/search/items/view-template.js module:io.ox/core
 msgid "No items found"
 msgstr "Nu s-au găsit elemente"
@@ -8926,7 +8991,8 @@ msgstr "Modifică data scadentă"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
+#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Mark as done"
 msgstr "Marchează ca finalizat"
 
@@ -9678,14 +9744,17 @@ msgstr ""
 "apoi pe %3$'Adaugă la ecranul de pornire'%4$s"
 
 #. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
-#. %5$s Appointment Organizer
+#. %1$s task title
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js
 #, c-format
-msgid "%1$s %2$s %3$s %4$s %5$s."
-msgstr "%1$s %2$s %3$s %4$s %5$s."
+msgid "Invitation for %1$s."
+msgstr "Invitație pentru %1$s."
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js
+msgid "Accept/Decline"
+msgstr "Acceptă/Refuză"
 
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 msgid "Accept / Decline"
@@ -9774,13 +9843,6 @@ msgstr "Mesaj de la %1$s, %2$s"
 msgid "New mail"
 msgstr "Mesaj nou"
 
-#. %1$s task title
-#. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-#, c-format
-msgid "%1$s %2$s."
-msgstr "%1$s %2$s."
-
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "Sarcini cu scadență depășită"
@@ -9825,10 +9887,6 @@ msgstr "Memento nou pentru sarcină"
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Ascunde toate mementourile pentru sarcini."
-
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
-msgid "Accept/Decline"
-msgstr "Acceptă/Refuză"
 
 #. Inviations (notifications) to tasks
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -10529,6 +10587,54 @@ msgstr "Invită la %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
+
+#~ msgid "%1$d contacts found. This list is limited to %2$d items."
+#~ msgstr "Au fost găsite %1$d contacte. Lista este limitată la %2$d elemente."
+
+#~ msgid "Too many contacts in your address book."
+#~ msgstr "Prea multe contacte în agendă."
+
+#~ msgid "You have %1$d notification."
+#~ msgid_plural "You have %1$d notifications."
+#~ msgstr[0] "Aveți %1$d notificare."
+#~ msgstr[1] "Aveți %1$d notificări."
+#~ msgstr[2] "Aveți %1$d de notificări."
+
+#~ msgid "The notification area is open"
+#~ msgstr "Zona de notificare este deschisă"
+
+#~ msgid "The notification area is closed"
+#~ msgstr "Zona de notificare este închisă"
+
+#~ msgid "Close this reminder"
+#~ msgstr "Închide memento"
+
+#~ msgid "Remind me again "
+#~ msgstr "Amintește-mi din nou"
+
+#~ msgid "Press [enter] to open"
+#~ msgstr "Apăsați [Enter] pentru a deschide"
+
+#~ msgid "end date "
+#~ msgstr "dată de sfârșit"
+
+#~ msgid "status "
+#~ msgstr "stare"
+
+#~ msgid "%1$s %2$s %3$s."
+#~ msgstr "%1$s %2$s %3$s."
+
+#~ msgid "%1$s %2$s %3$s %4$s."
+#~ msgstr "%1$s %2$s %3$s %4$s."
+
+#~ msgid "%1$d messages selected"
+#~ msgstr "%1$d mesaje selectate"
+
+#~ msgid "%1$s %2$s %3$s %4$s %5$s."
+#~ msgstr "%1$s %2$s %3$s %4$s %5$s."
+
+#~ msgid "%1$s %2$s."
+#~ msgstr "%1$s %2$s."
 
 #~ msgid "Resource name"
 #~ msgstr "Nume resursă"
