@@ -324,12 +324,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         //yell on reject
                         settingsUtil.yellOnReject(
                             api.update(self.model).done(function () {
-                                var target = $(e.target).closest('.widget-controls').find('[data-action="toggle-process-subsequent"] i');
-                                if (containsStop(actioncmds)) {
-                                    target.removeClass('fa-arrow-down').addClass('fa-ban');
-                                } else {
-                                    target.removeClass('fa-ban').addClass('fa-arrow-down');
-                                }
+                                $(e.currentTarget).find('i').toggleClass('fa-ban fa-arrow-down');
                             })
                         );
                     },

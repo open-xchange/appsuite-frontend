@@ -128,7 +128,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
         setFocus = function (el, type) {
             var listelement = $(el).find('[data-' + type + '-id]').last();
-            if (type === 'test') listelement.find('input[tabindex="1"]').first().focus();
+            if (type === 'test') listelement.find('[tabindex="1"]').first().focus();
 
             if (type === 'action') listelement.find('[tabindex="1"]').first().focus();
         },
@@ -175,9 +175,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
-                            $('<a>', { href: '#', 'data-action': 'change-dropdown-value', 'data-value': value, 'tabindex': '1' }).data(options).append(
-                                $.txt(name)
-                            )
+                            $('<a href="#" data-action="change-dropdown-value" tabindex="1">').attr('data-value', value).data(options).text(name)
                         );
                     })
                 )
@@ -1050,13 +1048,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 },
 
                 drawcheckbox = function (value) {
-                    return $('<div>').addClass('control-group mailfilter checkbox').append(
-                        $('<div>').addClass('controls'),
+                    return $('<div class="control-group mailfilter checkbox">').append(
+                        $('<div class="controls">'),
                         $('<label>').text(gt('Process subsequent rules')).prepend(
-                            $('<input type="checkbox" tabindex="1">').attr({ 'data-action': 'check-for-stop', 'checked': value })
+                            $('<input type="checkbox" data-action="check-for-stop" tabindex="1">').attr('checked', value)
                         )
                     );
                 },
+
                 target = baton.view.dialog.getFooter(),
                 arrayOfActions = baton.model.get('actioncmds');
 
@@ -1080,10 +1079,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             }
 
             toggleWarning();
-
-            if (!target.find('[type="checkbox"]').length) {
-                target.append(drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));
-            }
+            _.defer(function () {
+                if (!target.find('[type="checkbox"]').length) {
+                    target.prepend(drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));
+                }
+            });
 
         }
     });
