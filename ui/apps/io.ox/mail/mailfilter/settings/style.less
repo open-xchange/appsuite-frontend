@@ -1,8 +1,24 @@
 .io-ox-settings-main .window-content .rightside .scrollable-pane .io-ox-mailfilter-settings {
     .settings-list-view {
-        .settings-list-item:not(.disabled) {
-            .list-item-title {
-                font-weight: bold;
+        .settings-list-item {
+            &:not(.disabled) {
+                .list-item-title {
+                    font-weight: bold;
+                }
+            }
+            .list-item-controls {
+                & > * {
+                    padding: 13px 16px;
+                    margin: 0;
+                }
+                .remove:focus {
+                    background-color: @trash-icon-hover-background;
+                    text-decoration: none;
+
+                    i {
+                        color: @trash-icon-hover-color;
+                    }
+                }
             }
         }
     }
@@ -157,7 +173,7 @@
         width: 44px;
         cursor: pointer;
 
-        &:hover {
+        &:hover, &:focus {
             background-color: @trash-icon-hover-background;
             text-decoration: none;
 

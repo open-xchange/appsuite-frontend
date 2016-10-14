@@ -158,11 +158,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
             }
 
             $(this).append(
+                listUtils.controlsToggle(texttoggle),
                 listUtils.controlsEdit({
                     'aria-label': gt('Edit %1$s', title),
                     'data-action': actionValue
                 }),
-                listUtils.controlsToggle(texttoggle),
                 listUtils.controlProcessSub({
                     faClass: faClass,
                     title: gt('Process subsequent rules of %1$s', title)
