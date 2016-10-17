@@ -33,11 +33,15 @@ define('io.ox/oauth/backbone', [
             scopes = _([].concat(scopes, wanted)).uniq();
             //if scopes is empty, add all availableScopes by default?
             this.set('wantedScopes', scopes);
+
+            return this;
         },
         disableScopes: function (scopes) {
             var wanted = this.get('wantedScopes') || this.get('enabledScopes') || [];
             scopes = _(wanted).difference([].concat(scopes));
             this.set('wantedScopes', scopes);
+
+            return this;
         },
         sync: function (method, model, options) {
             switch (method) {
