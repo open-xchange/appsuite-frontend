@@ -96,7 +96,7 @@ define.async('io.ox/oauth/keychain', [
         };
 
         this.createInteractively = function (popupWindow, scopes) {
-            scopes = [].concat(scopes);
+            scopes = [].concat(scopes || []);
 
             var def = $.Deferred();
 
@@ -237,7 +237,7 @@ define.async('io.ox/oauth/keychain', [
             if (account) {
                 params.id = account.id;
             }
-            if (account.wantedScopes) params.scopes = account.wantedScopes.join(' ');
+            if (_.isArray(account.wantedScopes)) params.scopes = account.wantedScopes.join(' ');
             var popupWindow = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
             popupWindow.focus();
 
@@ -248,6 +248,7 @@ define.async('io.ox/oauth/keychain', [
             .done(function (interaction) {
                 window['callback_' + callbackName] = function (response) {
 
+                    account.enabledScopes = account.wantedScopes;
                     accounts.add(account, { merge: true });
 
                     delete window['callback_' + callbackName];
