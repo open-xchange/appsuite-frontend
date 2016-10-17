@@ -373,9 +373,9 @@ define.async('io.ox/oauth/keychain', [
             .on('reauthorize', function () {
                 var service = services.get(err.error_params[4]),
                     account = accounts.get(err.error_params[1]),
-                    api = new OAuthKeychainAPI(service);
+                    api = new OAuthKeychainAPI(service.toJSON());
 
-                api.reauthorize(account);
+                api.reauthorize(account.toJSON());
             })
             .open();
         });
