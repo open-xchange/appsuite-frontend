@@ -122,6 +122,13 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
+                        flatten: true,
+                        src: ['requirejs/require.js'],
+                        cwd: 'bower_components/',
+                        dest: 'build/static/3rd.party/requirejs'
+                    },
+                    {
+                        expand: true,
                         src: ['unorm.js'],
                         cwd: 'bower_components/unorm/lib/',
                         dest: 'build/static/3rd.party/unorm'
