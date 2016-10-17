@@ -169,6 +169,12 @@ define('io.ox/calendar/main', [
 
         },
 
+        'subscription': function (app) {
+            app.subscription = {
+                wantedOAuthScopes: ['calendar_ro']
+            };
+        },
+
         /*
          * Early List view vsplit - we need that to get a Vgrid instance
          * Vsplit compatibilty

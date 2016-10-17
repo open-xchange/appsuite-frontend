@@ -142,6 +142,12 @@ define('io.ox/contacts/main', [
 
         },
 
+        'subscription': function (app) {
+            app.subscription = {
+                wantedOAuthScopes: ['contacts_ro']
+            };
+        },
+
         'folder-view-mobile': function (app) {
 
             if (_.device('!smartphone')) return;
