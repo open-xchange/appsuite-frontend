@@ -27,8 +27,9 @@ define('io.ox/mail/compose/extensions', [
     'gettext!io.ox/mail',
     'io.ox/core/extPatterns/links',
     'settings!io.ox/core',
+    'settings!io.ox/contacts',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt, links, settingsCore) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt, links, settingsCore, settingsContacts) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -288,8 +289,10 @@ define('io.ox/mail/compose/extensions', [
                     ext.point(POINT + '/recipientActions').invoke('draw', node);
                 }
 
-                if (!_.device('smartphone')) {
-                    node.append(
+                var usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true);
+
+                if (usePicker) {
+                    node.addClass('has-picker').append(
                         $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-plus" aria-hidden="true"></i></a>')
                         .attr('aria-label', gt('Click to select contacts'))
                         .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
@@ -299,20 +302,25 @@ define('io.ox/mail/compose/extensions', [
                 var title = gt('Click to select contacts');
 
                 this.append(
-                    extNode = $('<div data-extension-id="' + attr + '">').addClass(cls).append(
-                        $('<div class="maillabel col-xs-1">').append(
-                            $('<a href="#" role="button">')
-                            .text(tokenfieldTranslations[attr])
-                            .attr({
-                                // add aria label since tooltip takes away the title attribute
-                                'aria-label': title,
-                                'title': title
-                            })
-                            .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
-                            .tooltip({ animation: false, delay: 0, placement: 'bottom', trigger: 'hover' })
-                        ),
-                        node
+                    extNode = $('<div data-extension-id="' + attr + '">').addClass(cls)
+                    .append(
+                        usePicker ?
+                            // with picker
+                            $('<div class="maillabel col-xs-1">').append(
+                                $('<a href="#" role="button">')
+                                .text(tokenfieldTranslations[attr])
+                                .attr({
+                                    // add aria label since tooltip takes away the title attribute
+                                    'aria-label': title,
+                                    'title': title
+                                })
+                                .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
+                                .tooltip({ animation: false, delay: 0, placement: 'bottom', trigger: 'hover' })
+                            ) :
+                            // without picker
+                            $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
                     )
+                    .append(node)
                 );
 
                 tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
