@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-11 15:18+0200\n"
+"PO-Revision-Date: 2016-10-18 11:23+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -126,7 +126,8 @@ msgstr "Löschen"
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
-#: module:io.ox/mail apps/io.ox/contacts/toolbar.js apps/io.ox/files/actions.js
+#: module:io.ox/mail apps/io.ox/contacts/toolbar.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
@@ -1583,6 +1584,20 @@ msgstr "Nein"
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 msgid "Calendar Month View"
 msgstr "Kalender-Monatsansicht"
+
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+#: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
+msgid "Previous"
+msgstr "Zurück"
+
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
+#: apps/io.ox/core/tk/wizard.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js
+#: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
+#: apps/io.ox/wizards/upsell.js module:io.ox/wizards
+msgid "Next"
+msgstr "Weiter"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -4126,7 +4141,7 @@ msgstr "Jetzt entscheiden"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid ""
-"You can manage desktop notifications at any time, by vitising your settings"
+"You can manage desktop notifications at any time, by visiting your settings"
 msgstr ""
 "Sie können Desktop-Benachrichtigungen jederzeit in Ihren Einstellungen "
 "verwalten"
@@ -5143,13 +5158,6 @@ msgid "Start tour"
 msgstr "Tour starten"
 
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js
-#: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
-#: apps/io.ox/wizards/upsell.js module:io.ox/wizards
-msgid "Next"
-msgstr "Weiter"
-
-#: apps/io.ox/core/tk/wizard.js module:io.ox/core
 msgid "Welcome"
 msgstr "Willkommen"
 
@@ -5172,11 +5180,6 @@ msgstr "Die ersten 90 Tage sind kostenlos."
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Freies Upgrade holen"
-
-#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-#: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
-msgid "Previous"
-msgstr "Zurück"
 
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
@@ -6064,7 +6067,6 @@ msgid "Add separate file"
 msgstr "Separate Datei hinzufügen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
 msgid "Adding files with identical names"
 msgstr "Hinzufügen von Dateien mit identischen Namen"
 
@@ -6666,6 +6668,14 @@ msgid ""
 msgstr ""
 "Account-Einstellungen konnten nicht gespeichert werden. Bitte lesen Sie die "
 "Anmerkungen im Formular."
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Other"
+msgstr "Weitere"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Please select your mail account provider"
+msgstr "Bitte wählen Sie Ihren Mail-Account-Provider"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -8804,6 +8814,10 @@ msgstr ""
 "Systemadministrator."
 
 #: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
+msgid "You can't present the same document more than once."
+msgstr "Sie können das gleiche Dokument nicht mehr als einmal präsentieren."
+
+#: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
 msgid "An error occurred loading the document so it cannot be displayed."
 msgstr ""
 "Beim Laden des Dokuments ist ein Fehler aufgetreten. Es kann nicht angezeigt "
@@ -9089,7 +9103,6 @@ msgid "Add account"
 msgstr "Account hinzufügen"
 
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-#, fuzzy
 msgid "Allow connections with untrusted certificates"
 msgstr "Verbindungen mit nicht vertrauenswürdigen Zertifikaten zulassen"
 
@@ -9753,21 +9766,18 @@ msgstr "Ist wirklich schlecht"
 
 #. 2 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
 msgctxt "rating"
 msgid "I don't like it"
 msgstr "Gefällt mir nicht"
 
 #. 3 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
 msgctxt "rating"
 msgid "It's ok"
 msgstr "Ist OK"
 
 #. 4 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
 msgctxt "rating"
 msgid "I like it"
 msgstr "Gefällt mir"
@@ -10800,6 +10810,13 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid ""
+#~ "You can manage desktop notifications at any time, by vitising your "
+#~ "settings"
+#~ msgstr ""
+#~ "Sie können Desktop-Benachrichtigungen jederzeit in Ihren Einstellungen "
+#~ "verwalten"
 
 #~ msgid "Note: The vCard format cannot contain distribution lists"
 #~ msgstr "Hinweis: Das vCard-Format kann keine Verteilerlisten enthalten"
