@@ -440,6 +440,44 @@ define('io.ox/mail/compose/extensions', [
                 });
 
                 if (settings.get('compose/shareAttachments/enabled', false)) {
+
+                    new links.Action('io.ox/mail/compose/attachment/shareAttachmentsEnable', {
+                        capabilities: 'infostore',
+                        requires: function (options) {
+                            return !options.baton.view.shareAttachmentsIsActive();
+                        },
+                        multiple: function (list, baton) {
+                            baton.model.set('enable', true);
+                        }
+                    });
+
+                    new links.Action('io.ox/mail/compose/attachment/shareAttachmentsDisable', {
+                        capabilities: 'infostore',
+                        requires: function (options) {
+                            return options.baton.view.shareAttachmentsIsActive();
+                        },
+                        multiple: function (list, baton) {
+                            baton.model.set('enable', false);
+                        }
+                    });
+
+                    ext.point('io.ox/mail/attachment/shareAttachments').extend(
+                        new links.Link({
+                            id: 'shareAttachmentsEnable',
+                            index: 100,
+                            //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                            label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
+                            ref: 'io.ox/mail/compose/attachment/shareAttachmentsEnable'
+                        }),
+                        new links.Link({
+                            id: 'shareAttachmentseDisable',
+                            index: 110,
+                            //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                            label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
+                            ref: 'io.ox/mail/compose/attachment/shareAttachmentsDisable'
+                        })
+                    );
+
                     var ShareModel = Backbone.Model.extend({}),
                         requiredExpiration = settings.get('compose/shareAttachments/requiredExpiration', false);
 
