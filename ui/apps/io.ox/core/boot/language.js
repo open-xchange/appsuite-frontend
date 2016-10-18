@@ -95,7 +95,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                     node.append(
                         $('<span class="lang-label" data-i18n="Languages" data-i18n-attr="text">'),
                         $('<div class="dropup">').append(
-                            toggle = $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
+                            toggle = $('<a href="#" id="io-ox-languages-label" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
                                 $('<span class="toggle-text">').text(lang[defaultLanguage]),
                                 $('<span class="caret">')
                             ),
