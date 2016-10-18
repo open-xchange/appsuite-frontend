@@ -401,9 +401,10 @@ define('io.ox/core/api/account', [
 
         return api.all()
         .then(function (list) {
-            // only consider accounts with a transport_url (see bug 48344)
+            // only consider external accounts with a transport_url (see bug 48344)
+            // primary account is assumed to always work even without a transport_url
             return _(list).filter(function (account) {
-                return !!account.transport_url;
+                return account.id === 0 || !!account.transport_url;
             });
         })
         .then(function (list) {
