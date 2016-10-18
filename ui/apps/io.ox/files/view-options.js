@@ -24,7 +24,7 @@ define('io.ox/files/view-options', [
     // Mark as secondary toolbar
     //
 
-    ext.point('io.ox/files/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/top').extend({
         id: 'secondary',
         index: 100,
         draw: function () {
@@ -58,17 +58,17 @@ define('io.ox/files/view-options', [
         }
     });
 
-    ext.point('io.ox/files/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/top').extend({
         id: 'dropdown-container',
         index: 900,
         draw: function (baton) {
             var dropdownContainer = $('<div class="dropdown-container pull-right">');
-            ext.point('io.ox/files/list-view/toolbar/dropdowns').invoke('draw', dropdownContainer, baton);
+            ext.point('io.ox/files/listviewcontrol/list-view/toolbar/dropdowns').invoke('draw', dropdownContainer, baton);
             this.append(dropdownContainer);
         }
     });
 
-    ext.point('io.ox/files/list-view/toolbar/dropdowns').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/dropdowns').extend({
         id: 'dropdown',
         index: 100,
         draw: function (baton) {
@@ -137,7 +137,7 @@ define('io.ox/files/view-options', [
         }
     });
 
-    ext.point('io.ox/files/list-view/toolbar/dropdowns').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/dropdowns').extend({
         id: 'select',
         index: 200,
         draw: function (baton) {
@@ -158,7 +158,7 @@ define('io.ox/files/view-options', [
         }
     });
 
-    ext.point('io.ox/files/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/top').extend({
         id: 'move-up',
         index: 2100,
         draw: function (baton) {
@@ -196,7 +196,7 @@ define('io.ox/files/view-options', [
     // Breadcrumb
     //
 
-    ext.point('io.ox/files/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/top').extend({
         id: 'breadcrumb',
         index: 300,
         draw: function (baton) {
@@ -234,7 +234,7 @@ define('io.ox/files/view-options', [
             .addClass('toolbar-bottom-visible');
     }
 
-    ext.point('io.ox/files/list-view/toolbar/bottom').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/bottom').extend({
         id: 'toggle-folderview',
         index: 200,
         draw: function (baton) {
