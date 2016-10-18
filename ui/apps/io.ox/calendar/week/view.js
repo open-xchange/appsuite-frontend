@@ -1116,7 +1116,9 @@ define('io.ox/calendar/week/view', [
                         fulltimeCount++;
                         var node = this.renderAppointment(model), row,
                             fulltimePos = moment(model.getDate('start_date')).diff(this.startDate, 'days'),
-                            fulltimeWidth = Math.max((moment(model.get('end_date')).diff(moment(model.get('start_date')), 'days') + Math.min(0, fulltimePos)), 1);
+                            // calculate difference in utc, otherwhise we get wrong results if the appointment starts before a daylight saving change and ends after
+                            fulltimeWidth = Math.max((moment(model.get('end_date')).utc().diff(moment(model.get('start_date')).utc(), 'days') + Math.min(0, fulltimePos)), 1);
+
                         // loop over all column positions
                         for (row = 0; row < fulltimeColPos.length; row++) {
                             if (fulltimeColPos[row] <= model.get('start_date')) {
