@@ -210,14 +210,14 @@ define('io.ox/core/tk/dialogs', [
              */
             ariaHideSiblings = function () {
                 // add aria-hidden="true" to all siblings of the wrapper and all parents of the wrapper
-                $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings().each(function () {
+                $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings(':not(script,noscript)').each(function () {
                     var el = $(this);
                     // save aria-hidden value for later restoring
                     el.data('ox-restore-aria-hidden', el.attr('aria-hidden'));
                 }).attr('aria-hidden', true);
                 self.on('close', function () {
                     // restore aria-hidden and remove restoring information
-                    $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings().removeAttr('aria-hidden').each(function () {
+                    $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings(':not(script,noscript)').removeAttr('aria-hidden').each(function () {
                         var el = $(this);
                         if (el.data('ox-restore-aria-hidden')) el.attr('aria-hidden', el.data('ox-restore-aria-hidden'));
                         el.removeData('ox-restore-aria-hidden');
