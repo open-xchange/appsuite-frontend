@@ -223,12 +223,8 @@ define('io.ox/calendar/freetime/main', [
             app.setWindow(win);
 
             app.view = new FreetimeView(options);
-            win.nodes.outer.find('.window-container-center').addClass('scheduling-app-container');
-            win.nodes.body.addClass('scheduling-app-body');
-            // append after header so it does not scroll with the rest of the view
-            win.nodes.header.addClass('scheduling-app-header').append($('<h4 class="app-title">').text(gt('Scheduling')), app.view.timeSubview.headerNodeRow1, closeButton).after(app.view.header);
-            win.nodes.main.addClass('scheduling-app-content').append(app.view.body);
-            win.nodes.footer.append(app.view.createFooter(app));
+            win.nodes.main.append($('<div class="scheduling-app-header">').append($('<h4 class="app-title">').text(gt('Scheduling')), app.view.timeSubview.headerNodeRow1, closeButton), app.view.header,
+                                     $('<div class="scheduling-app-body">').append(app.view.body), app.view.createFooter(app));
             win.show();
             app.view.render();
 

@@ -21,13 +21,15 @@ define.async('io.ox/oauth/keychain', [
     'io.ox/core/event',
     'io.ox/core/notifications',
     'io.ox/core/api/filestorage',
+    'io.ox/oauth/backbone',
     'gettext!io.ox/core'
-], function (ext, http, Events, notifications, filestorageApi, gt) {
+], function (ext, http, Events, notifications, filestorageApi, OAuth, gt) {
 
     'use strict';
 
     var moduleDeferred = $.Deferred(),
-        cache = null,
+        accounts = new OAuth.Account.Collection(),
+        services = new Backbone.Collection(),
         point = ext.point('io.ox/keychain/api');
 
     var generateId = function () {
@@ -60,7 +62,7 @@ define.async('io.ox/oauth/keychain', [
 
         function chooseDisplayName() {
             var names = {}, name, counter = 0;
-            _(cache[service.id].accounts).each(function (account) {
+            _(accounts.forService(service.id)).each(function (account) {
                 names[account.displayName] = 1;
             });
 
@@ -74,11 +76,15 @@ define.async('io.ox/oauth/keychain', [
         }
 
         this.getAll = function () {
-            return _(cache[service.id].accounts).chain().map(function (account) { return account; }).sortBy(function (account) { return account.id; }).map(outgoing).value();
+            return _(accounts.forService(service.id)).chain()
+                .map(function (account) { return account.toJSON(); })
+                .sortBy(function (account) { return account.id; })
+                .map(outgoing)
+                .value();
         };
 
         this.get = function (id) {
-            return outgoing(cache[service.id].accounts[id]);
+            return outgoing(accounts.get(id).toJSON());
         };
 
         this.getStandardAccount = function () {
@@ -89,7 +95,8 @@ define.async('io.ox/oauth/keychain', [
             return this.getAll().length > 0;
         };
 
-        this.createInteractively = function (popupWindow) {
+        this.createInteractively = function (popupWindow, scopes) {
+            scopes = [].concat(scopes || []);
 
             var def = $.Deferred();
 
@@ -109,6 +116,8 @@ define.async('io.ox/oauth/keychain', [
                         session: ox.session
                     };
 
+                if (scopes.length > 0) params.scopes = scopes.join(' ');
+
                 window['callback_' + callbackName] = function (response) {
                     delete window['callback_' + callbackName];
                     popupWindow.close();
@@ -123,24 +132,19 @@ define.async('io.ox/oauth/keychain', [
                     getAll().done(function (services, accounts) {
                         var account,
                             success = function () {
-                                def.resolve(account);
-                                self.trigger('create', account);
+                                def.resolve(account.toJSON());
+                                self.trigger('create', account.toJSON());
                                 self.trigger('refresh.all refresh.list');
                                 ox.trigger('refresh-portal');
                                 notifications.yell('success', gt('Account added successfully'));
                             };
-                        for (var i = 0; i < accounts[0].length; i++) {
-                            if (accounts[0][i].id === id) {
-                                account = accounts[0][i];
-                                break;
-                            }
-                        }
+                        account = accounts.get(id);
                         if (account) {
                             // if this Oauth account belongs to a filestorage service (like dropbox etc.), we create a matching filestorage account.
                             // the folders will then appear in the drive module
                             // if the rampup has failed, just ignore filestorages
-                            if (filestorageApi.rampupDone && filestorageApi.isStorageAvailable(account.serviceId)) {
-                                filestorageApi.createAccountFromOauth(account).done(function () {
+                            if (account.hasScope('drive') && filestorageApi.rampupDone && filestorageApi.isStorageAvailable(account.serviceId)) {
+                                filestorageApi.createAccountFromOauth(account.toJSON()).done(function () {
                                     success();
                                 });
                             } else {
@@ -178,13 +182,16 @@ define.async('io.ox/oauth/keychain', [
                         filestorageApi.deleteAccount(filestorageAccount, { softDelete: true });
                     }
                 }
-                delete cache[service.id].accounts[account.id];
+                accounts.remove(account.id);
                 self.trigger('delete', account);
                 self.trigger('refresh.all refresh.list', account);
             });
         };
 
         this.update = function (account) {
+            var data = {
+                displayName: account.displayName
+            };
 
             return http.PUT({
                 module: 'oauth/accounts',
@@ -192,7 +199,7 @@ define.async('io.ox/oauth/keychain', [
                     action: 'update',
                     id: account.id
                 },
-                data: { displayName: account.displayName }
+                data: data
             }).done(function () {
                 var filestorageAccount;
                 // if rampup failed, ignore filestorages, maybe the server does not support them
@@ -206,12 +213,12 @@ define.async('io.ox/oauth/keychain', [
                     options.displayName = account.displayName;
 
                     filestorageApi.updateAccount(options).done(function () {
-                        cache[service.id].accounts[account.id] = account;
+                        accounts.add(account, { merge: true });
                         self.trigger('update', account);
                         self.trigger('refresh.list', account);
                     });
                 } else {
-                    cache[service.id].accounts[account.id] = account;
+                    accounts.add(account, { merge: true });
                     self.trigger('update', account);
                     self.trigger('refresh.list', account);
                 }
@@ -230,6 +237,7 @@ define.async('io.ox/oauth/keychain', [
             if (account) {
                 params.id = account.id;
             }
+            if (_.isArray(account.wantedScopes)) params.scopes = account.wantedScopes.join(' ');
             var popupWindow = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
             popupWindow.focus();
 
@@ -240,7 +248,8 @@ define.async('io.ox/oauth/keychain', [
             .done(function (interaction) {
                 window['callback_' + callbackName] = function (response) {
 
-                    cache[service.id].accounts[account.id] = account;
+                    account.enabledScopes = account.wantedScopes;
+                    accounts.add(account, { merge: true });
 
                     delete window['callback_' + callbackName];
                     popupWindow.close();
@@ -280,30 +289,22 @@ define.async('io.ox/oauth/keychain', [
                     action: 'all'
                 }
             }))
-            .done(function (services, accounts) {
-                //build cache
-                cache = {};
-
-                _(services[0]).each(function (service) {
-                    cache[service.id] = $.extend({ accounts: {} }, service);
-                });
-
-                _(accounts[0]).each(function (account) {
-                    cache[account.serviceId].accounts[account.id] = account;
-                });
+            .then(function (s, a) {
+                services.add(s[0]);
+                accounts.add(a[0]);
+                return $.when(services, accounts);
             });
     }
 
     getAll().done(function (services, accounts) {
         // build and register extensions
-        _(services[0]).each(function (service) {
-
-            var keychainAPI = new OAuthKeychainAPI(service);
+        services.forEach(function (service) {
+            var keychainAPI = new OAuthKeychainAPI(service.toJSON());
 
             // add initialized listener before extending (that triggers the initialized event)
             keychainAPI.one('initialized', function () {
                 // trigger refresh if we have accounts or the settings account list might miss Oauth accounts due to race conditions
-                if (_(cache[service.id].accounts).size() > 0) {
+                if (accounts.length > 0) {
                     keychainAPI.trigger('refresh.all');
                 }
             });
@@ -335,7 +336,8 @@ define.async('io.ox/oauth/keychain', [
                 message: 'Done with oauth keychain',
                 services: services,
                 accounts: accounts,
-                serviceIDs: _(services[0]).map(function (service) { return simplifyId(service.id); })
+                serviceIDs: services.map(function (service) { return simplifyId(service.id); }),
+                api: OAuthKeychainAPI
             });
         });
     })
@@ -370,11 +372,11 @@ define.async('io.ox/oauth/keychain', [
                 label: gt('Reauthorize')
             })
             .on('reauthorize', function () {
-                var service = cache[err.error_params[4]],
-                    account = service.accounts[err.error_params[1]],
-                    api = new OAuthKeychainAPI(service);
+                var service = services.get(err.error_params[4]),
+                    account = accounts.get(err.error_params[1]),
+                    api = new OAuthKeychainAPI(service.toJSON());
 
-                api.reauthorize(account);
+                api.reauthorize(account.toJSON());
             })
             .open();
         });

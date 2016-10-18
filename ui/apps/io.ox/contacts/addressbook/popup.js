@@ -32,11 +32,12 @@ define('io.ox/contacts/addressbook/popup', [
 
     // limits
     var LIMITS = {
+        departments: settings.get('picker/limits/departments', 100),
         fetch: settings.get('picker/limits/fetch', 10000),
-        render: settings.get('picker/limits/list', 100),
-        search: settings.get('picker/limits/search', 50),
+        labels: settings.get('picker/limits/labels', 1000),
         more: settings.get('picker/limits/more', 100),
-        labels: settings.get('picker/limits/labels', 1000)
+        render: settings.get('picker/limits/list', 100),
+        search: settings.get('picker/limits/search', 50)
     };
 
     // special folder id
@@ -49,7 +50,11 @@ define('io.ox/contacts/addressbook/popup', [
     var useInitials = settings.get('picker/useInitials', true),
         useInitialsColor = useInitials && settings.get('picker/useInitialsColor', true),
         useLabels = settings.get('picker/useLabels', false),
-        closeOnDoubleClick = settings.get('picker/closeOnDoubleClick', true);
+        closeOnDoubleClick = settings.get('picker/closeOnDoubleClick', true),
+        useGlobalAddressBook = settings.get('picker/globalAddressBook', true),
+        useDepartments = settings.get('picker/departments', true);
+
+    if (useDepartments) names.push('department');
 
     //
     // Build a search index
@@ -156,7 +161,8 @@ define('io.ox/contacts/addressbook/popup', [
 
             options = _.extend({
                 // keep this list really small for good performance!
-                columns: '1,20,500,501,502,505,555,556,557,592,602,606',
+                columns: '1,20,500,501,502,505,519,555,556,557,592,602,606',
+                exclude: useGlobalAddressBook ? [] : ['6'],
                 limit: LIMITS.fetch
             }, options);
 
@@ -172,7 +178,10 @@ define('io.ox/contacts/addressbook/popup', [
                     sort: 609
                 },
                 // emailAutoComplete doesn't work; need to clean up client-side anyway
-                data: { last_name: '*' }
+                data: {
+                    exclude_folders: options.exclude,
+                    last_name: '*'
+                }
             });
         }
 
@@ -236,19 +245,25 @@ define('io.ox/contacts/addressbook/popup', [
             if (/^\=\?iso\-8859\-1\?q\?\=22/i.test(item.display_name)) return;
             // add to results
             // do all calculations now; during rendering is more expensive
-            var initials = util.getInitials(item);
+            var folder_id = String(item.folder_id),
+                department = (useDepartments && folder_id === '6' && $.trim(item.department)) || '',
+                full_name = util.getFullName(item).toLowerCase(),
+                initials = util.getInitials(item);
             return {
+                caption: address,
                 cid: item.folder_id + '.' + item.id + '.' + i,
+                department: department,
                 display_name: item.display_name,
                 email: address,
                 first_name: item.first_name,
-                folder_id: String(item.folder_id),
-                full_name: util.getFullName(item).toLowerCase(),
+                folder_id: folder_id,
+                full_name: full_name,
                 full_name_html: util.getFullName(item, true),
                 image: util.getImage(item) || (!useInitials && api.getFallbackImage()),
                 id: String(item.id),
                 initials: useInitials && initials,
                 initial_color: util.getInitialsColor(useInitialsColor && initials),
+                keywords: (full_name + ' ' + address + ' ' + department).toLowerCase(),
                 last_name: item.last_name,
                 list: item.mark_as_distributionlist ? item.distribution_list : false,
                 mail_full_name: util.getMailFullName(item),
@@ -288,19 +303,23 @@ define('io.ox/contacts/addressbook/popup', [
 
                 item.display_name = String(item.title);
 
+                var full_name = util.getFullName(item).toLowerCase(),
+                    addresses = _(item.members).pluck('email').join(', ');
+
                 item = {
                     caption: _(item.members).pluck('display_name').join(', '),
                     cid: 'label.' + item.id + '.' + i,
                     display_name: item.display_name,
-                    email: _(item.members).pluck('email').join(', '),
+                    email: addresses,
                     first_name: '',
                     folder_id: 'label',
-                    full_name: util.getFullName(item).toLowerCase(),
+                    full_name: full_name,
                     full_name_html: util.getFullName(item, true),
                     image: '',
                     id: String(item.id),
                     initials: '',
                     initial_color: '',
+                    keywords: (full_name + ' ' + addresses).toLowerCase(),
                     label: item.members,
                     last_name: '',
                     mail_full_name: util.getMailFullName(item),
@@ -329,7 +348,7 @@ define('io.ox/contacts/addressbook/popup', [
         if (_.isEmpty(words)) return list;
         return _(list).filter(function (item) {
             return _(words).every(function (word) {
-                return item.full_name.indexOf(word) > -1 || item.email.indexOf(word) > -1;
+                return item.keywords.indexOf(word) > -1;
             });
         });
     }
@@ -352,6 +371,7 @@ define('io.ox/contacts/addressbook/popup', [
     };
 
     function open(callback) {
+
         // avoid parallel popups
         if (isOpen) return;
         isOpen = true;
@@ -363,13 +383,68 @@ define('io.ox/contacts/addressbook/popup', [
             point: 'io.ox/contacts/addressbook-popup',
             title: gt('Select contacts')
         })
+        .inject({
+            renderFolders: function (folders) {
+                var $dropdown = this.$('.folder-dropdown'),
+                    count = 0;
+                // remove global address book?
+                if (!useGlobalAddressBook && folders['public']) {
+                    folders['public'] = _(folders['public']).reject({ id: '6' });
+                }
+                $dropdown.append(
+                    _(folders).map(function (section, id) {
+                        // skip empty and (strange) almost empty folders
+                        if (!sections[id] || !section.length) return $();
+                        if (!section[0].id && !section[0].title) return $();
+                        return $('<optgroup>').attr('label', sections[id]).append(
+                            _(section).map(function (folder) {
+                                count++;
+                                return $('<option>').val('folder/' + folder.id).text(folder.title);
+                            })
+                        );
+                    })
+                );
+                if (count > 1) $dropdown.removeClass('invisible');
+            },
+            renderDepartments: function (result) {
+                var departments = this.getDepartments(result.items);
+                if (!departments.length) return;
+                this.$('.folder-dropdown')
+                    .append(
+                        $('<optgroup>').attr('label', gt('Departments')).append(
+                            departments.map(function (item) {
+                                return $('<option>').val('department/' + item.name).text(item.name);
+                            })
+                        )
+                    )
+                    // finally set current folder
+                    .val(folder);
+            },
+            getDepartments: function (items) {
+                var departments = {};
+                _(items).each(function (item) {
+                    if (item.department.length <= 1) return;
+                    departments[item.department] = (departments[item.department] || 0) + 1;
+                });
+                return _(departments)
+                    .chain()
+                    .map(function (count, name) {
+                        return { name: name, count: count };
+                    })
+                    // limit to largest departments; then sort by name
+                    .sortBy('count').reverse().first(LIMITS.departments).sortBy('name').value();
+            },
+            onChangeFolder: function () {
+                this.folder = folder = this.$('.folder-dropdown').val() || 'all';
+                this.lastJSON = null;
+                this.search(this.$('.search-field').val());
+            }
+        })
         .extend({
             addClass: function () {
                 this.$el.addClass('addressbook-popup');
             },
             header: function () {
-
-                var view = this;
 
                 this.$('.modal-header').append(
                     $('<div class="row">').append(
@@ -387,33 +462,12 @@ define('io.ox/contacts/addressbook/popup', [
                     )
                 );
 
-                // fill folder drop-down
-                var $dropdown = this.$('.folder-dropdown');
-                folderAPI.flat({ module: 'contacts' }).done(function (folders) {
-                    var count = 0;
-                    $dropdown.append(
-                        _(folders).map(function (section, id) {
-                            // skip empty and (strange) almost empty folders
-                            if (!sections[id] || !section.length) return $();
-                            if (!section[0].id && !section[0].title) return $();
-                            return $('<optgroup>').attr('label', sections[id]).append(
-                                _(section).map(function (folder) {
-                                    count++;
-                                    return $('<option>').val(folder.id).text(folder.title);
-                                })
-                            );
-                        })
-                    );
-                    if (count > 1) $dropdown.removeClass('invisible');
-                });
+                this.defFolder = folderAPI.flat({ module: 'contacts' }).done(this.renderFolders.bind(this));
+                this.defAddresses = $.Deferred();
+                $.when(this.defAddresses, this.defFolder).done(this.renderDepartments.bind(this));
 
                 this.folder = folder;
-
-                this.$('.folder-dropdown').val(folder).on('change', function () {
-                    view.folder = folder = $(this).val() || 'all';
-                    view.lastJSON = null;
-                    view.search(view.$('.search-field').val());
-                });
+                this.$('.folder-dropdown').on('change', $.proxy(this.onChangeFolder, this));
             },
             list: function () {
                 // we just use a ListView to get its selection support
@@ -446,6 +500,7 @@ define('io.ox/contacts/addressbook/popup', [
                     this.index = response.index;
                     this.search('');
                     this.idle();
+                    this.defAddresses.resolve(response);
                 }
 
                 function fail(e) {
@@ -489,7 +544,9 @@ define('io.ox/contacts/addressbook/popup', [
                         if (folder === 'all') return item.folder_id !== collected_id;
                         if (folder === 'all_lists') return item.list;
                         if (folder === 'all_labels') return item.label;
-                        return item.folder_id === folder;
+                        if (/^folder\//.test(folder)) return item.folder_id === folder.substr(7);
+                        if (/^department\//.test(folder)) return item.department === folder.substr(11);
+                        return false;
                     });
                     // render
                     this.renderItems(result, { isSearch: isSearch });
@@ -513,7 +570,7 @@ define('io.ox/contacts/addressbook/popup', [
                 this.$('.list-view').on('dblclick', '.list-item', function (e) {
                     // emulate a third click
                     // as users expect this one to be part of the selection (dialog also closes)
-                    if (!$(e.currentTarget).hasClass('selected')) this.selection.onClick(e);
+                    if (!$(e.currentTarget).hasClass('selected')) this.listView.selection.onClick(e);
                     this.trigger('select');
                     this.close();
                 }.bind(this));
@@ -602,8 +659,11 @@ define('io.ox/contacts/addressbook/popup', [
                 '    <% } else { %>' +
                 '      <div class="contact-picture initials <%= item.initial_color %>" aria-label="hidden"><%- item.initials %></div>' +
                 '    <% } %>' +
-                '    <div class="name"><%= item.full_name_html || item.email || "\u00A0" %></div>' +
-                '    <div class="email gray"><%- item.caption || item.email || "\u00A0" %></div>' +
+                '    <div class="name">' +
+                '       <%= item.full_name_html || item.email || "\u00A0" %>' +
+                '       <% if (item.department) { %><span class="gray">(<%- item.department %>)</span><% } %>' +
+                '    </div>' +
+                '    <div class="email gray"><%- item.caption || "\u00A0" %></div>' +
                 '  </div>' +
                 '</li>' +
                 '<% }); %>'

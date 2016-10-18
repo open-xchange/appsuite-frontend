@@ -232,6 +232,8 @@ define('io.ox/core/main', [
         launchers = $('.launchers', topbar),
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
+    launcherDropdown.attr('role', 'menu');
+
     topbar
         // prevent dragging links
         .on('dragstart', false)
@@ -308,14 +310,12 @@ define('io.ox/core/main', [
 
 
         if (hidden > 0) {
-            // a11y: dropdown menu should only have role menu if it is shown
             $('.dropdown-menu', launcherDropdown).removeAttr('aria-hidden');
             launcherDropDownIcon.show();
             for (i = hidden; i > 0; i--) {
                 $('li', launcherDropdown).eq(-i).show();
             }
         } else {
-            // a11y: dropdown menu should only have role menu if it is shown
             $('.dropdown-menu', launcherDropdown).attr('aria-hidden', true);
         }
     }, 100);

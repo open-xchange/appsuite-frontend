@@ -270,7 +270,7 @@ define('io.ox/mail/settings/pane', [
                             new mini.SelectView({ list: optionsAutoSave, name: 'autoSaveDraftsAfter', model: settings, id: 'autoSaveDraftsAfter', className: 'form-control' }).render().$el
                         ),
                         $('<div class="row">').append(
-                            $('<label for="forwardmail">').text(gt('Always add the following recipient to blind carbon copy (BCC)')),
+                            $('<label for="autobcc">').text(gt('Always add the following recipient to blind carbon copy (BCC)')),
                             new mini.InputView({ name: 'autobcc', model: settings, className: 'form-control', id: 'autobcc' }).render().$el
                         )
                     )

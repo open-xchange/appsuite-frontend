@@ -24,26 +24,29 @@
 .scheduling-distribution-name-label {
     width: 100%;
 }
-.scheduling-app-container {
 
-    display: flex;
-    display: -webkit-flex;
-    flex-direction: column;
+.io-ox-calendar-scheduling-window {
 
     // prevent text cursor on lasso drag
     cursor: default;
 
+    .window-content {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        height: 100%;
+    }
+
     .scheduling-app-header {
+        display: flex;
+        display: -webkit-flex;
+        flex-grow: 0;
         padding: 8px 16px;
         min-height: 56px;
         .app-title {
             margin-top: 8px;
             margin-bottom: 8px;
         }
-    }
-    .scheduling-app-content {
-        display: flex;
-        display: -webkit-flex;
     }
     .scheduling-app-footer {
         border-top: #ccc solid 1px;
@@ -53,9 +56,8 @@
         margin-left: 16px;
     }
     .scheduling-app-body {
-        position: relative;
-        left: 0;
-        width: 100%;
+        display: flex;
+        display: -webkit-flex;
         height: 100%;
     }
     .freetime-time-view-header {
@@ -71,9 +73,9 @@
 
 .freetime-popup {
     padding: 16px;
-}
-.freetime-popup, .scheduling-app-container {
     overflow-x: hidden;
+}
+.freetime-popup, .io-ox-calendar-scheduling-window {
     .modal-content .modal-header {
         min-height: 56px;
     }

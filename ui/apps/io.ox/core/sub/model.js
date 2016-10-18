@@ -118,7 +118,7 @@ define('io.ox/core/sub/model', [
                                 });
                             });
                             collection.each(function (model) {
-                                if (_(res).where({ id: model.id }).length === 0) {
+                                if (model && _(res).where({ id: model.id }).length === 0) {
                                     collection.remove(model);
                                 }
                             });

@@ -382,8 +382,10 @@ define('io.ox/mail/detail/content', [
         if (e.which === 13 || e.which === 23 || e.type === 'click') {
             e.preventDefault();
             e.stopPropagation();
+            var self = this;
             $(this).hide().prev().slideDown('fast', function () {
                 $(e.delegateTarget).trigger('resize');
+                $(self).remove();
             });
         }
     };
@@ -403,14 +405,19 @@ define('io.ox/mail/detail/content', [
                 var text = getText(node);
                 if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
                 var blockquoteId = _.uniqueId('collapsed-blockquote-');
+                var ellipsisButton = $('<i class="fa fa-ellipsis-h" tabindex="0" role="button">').attr({
+                    title: gt('Show quoted text')
+                });
+                if (!_.browser.Chrome) {
+                    ellipsisButton.attr({
+                        'aria-controls': blockquoteId,
+                        'aria-expanded': false
+                    });
+                }
                 $(node).addClass('collapsed-blockquote').attr('id', blockquoteId).after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
-                        $('<i class="fa fa-ellipsis-h" tabindex="0" role="button" aria-expanded="false">').attr({
-                            'aria-controls': blockquoteId,
-                            'aria-expanded': false,
-                            title: gt('Show quoted text')
-                        }),
+                        ellipsisButton,
                         $.txt(
                             text.replace(/<\s/g, '<')
                                 .replace(/\s>/g, '>')

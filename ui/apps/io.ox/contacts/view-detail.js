@@ -353,7 +353,10 @@ define('io.ox/contacts/view-detail', [
             $(this).append(
                 $('<dt>').text(label || model.fields[id]),
                 $('<dd>').append(
-                    $('<a>', { href: _.device('smartphone') ? 'tel:' + number : 'callto:' + number }).text(number)
+                    $('<a>').attr({
+                        href: _.device('smartphone') ? 'tel:' + number : 'callto:' + number,
+                        'aria-label': label || model.fields[id]
+                    }).text(number)
                 )
             );
         };
