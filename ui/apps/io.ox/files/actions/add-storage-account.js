@@ -63,17 +63,15 @@ define('io.ox/files/actions/add-storage-account', [
         e.data.dialog.close();
         require([
             'io.ox/oauth/keychain',
-            'io.ox/oauth/backbone',
             'io.ox/core/api/filestorage'
-        ]).then(function (oauthAPI, OAuth, filestorageApi) {
+        ]).then(function (oauthAPI, filestorageApi) {
             var service = oauthAPI.services.withShortId(e.data.service.id),
-                account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
+                account = oauthAPI.accounts.forService(service.id)[0] || oauthAPI.accounts.add({
                     serviceId: service.id,
                     displayName: 'My ' + service.get('displayName') + ' account'
                 });
 
             account.enableScopes('drive').save().then(function (res) {
-                oauthAPI.accounts.add(account, { merge: true });
                 return filestorageApi.createAccountFromOauth(res);
             }).then(function () {
                 notifications.yell('success', gt('Account added successfully'));
