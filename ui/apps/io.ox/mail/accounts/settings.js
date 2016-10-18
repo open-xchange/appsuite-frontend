@@ -141,15 +141,13 @@ define('io.ox/mail/accounts/settings', [
                     if (service.id === 'wizard') return;
 
                     var account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
-                        serviceId: service.id
+                        serviceId: service.id,
+                        displayName: 'My ' + service.get('displayName') + ' account'
                     });
 
-                    account.enableScopes('mail');
-                    account.save();
-
-                    account.listenToOnce(account, 'sync', function (model) {
+                    account.enableScopes('mail').save().then(function () {
                         api.autoconfig({
-                            oauth: model.id
+                            oauth: account.id
                         }).then(function (data) {
                             var def = $.Deferred();
                             // hopefully, login contains a valid mail address
@@ -157,6 +155,8 @@ define('io.ox/mail/accounts/settings', [
 
                             validateMailaccount(data, baton.popup, def);
                             return def;
+                        }).then(function () {
+                            oauthAPI.accounts.add(account, { merge: true });
                         }, notifications.yell);
                     });
                 });

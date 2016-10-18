@@ -12,15 +12,17 @@
  */
 
 define('io.ox/oauth/backbone', [
+    'io.ox/core/http',
     'less!io.ox/oauth/style'
-], function () {
+], function (http) {
     'use strict';
 
-    function getServiceAPI(serviceId) {
-        var keychain = require('io.ox/oauth/keychain');
-        var service = keychain.services.get(serviceId);
-        return new keychain.api(service.toJSON());
-    }
+    var generateId = function () {
+        generateId.id = generateId.id + 1;
+        return generateId.id;
+    };
+
+    generateId.id = 1;
 
     var Account = {};
 
@@ -43,21 +45,131 @@ define('io.ox/oauth/backbone', [
 
             return this;
         },
+        reauthorize: function (options) {
+            options = _.extend({ force: true }, options);
+            var account = this,
+                needsReauth = options.force || (this.get('wantedScopes') || []).reduce(function (acc, scope) {
+                    return acc || !account.hasScope(scope);
+                }, false);
+            if (!needsReauth) return $.when();
+
+            var callbackName = 'oauth' + generateId(),
+                params = {
+                    action: 'init',
+                    serviceId: account.get('serviceId'),
+                    displayName: account.get('displayName'),
+                    cb: callbackName,
+                    id: account.id
+                };
+
+            params.scopes = (_([].concat(this.get('enabledScopes'), this.get('wantedScopes'))).uniq()).join(' ');
+            var popupWindow = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
+            popupWindow.focus();
+
+            return http.GET({
+                module: 'oauth/accounts',
+                params: params
+            })
+            .then(function (interaction) {
+                var def = $.Deferred();
+
+                window['callback_' + callbackName] = def.resolve;
+                popupWindow.location = interaction.authUrl;
+
+                return def;
+            }).then(function () {
+                delete window['callback_' + callbackName];
+                popupWindow.close();
+                account.enableScopes(account.get('enabledScopes'));
+                account.set('enabledScopes', account.get('wantedScopes'));
+                account.unset('wantedScopes');
+                return account;
+            });
+        },
         sync: function (method, model, options) {
             switch (method) {
                 case 'create':
-                    var popupWindow = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
-                    popupWindow.focus();
-                    getServiceAPI(model.get('serviceId'))
-                        .createInteractively(popupWindow, model.get('wantedScopes'))
-                        .then(options.success, options.error);
-                    break;
+                    var popupWindow = model.get('popup') || window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
+                    return require(['io.ox/core/tk/keys']).then(function () {
+
+                        var callbackName = 'oauth' + generateId(),
+                            params = {
+                                action: 'init',
+                                cb: callbackName,
+                                display: 'popup',
+                                displayName: model.get('displayName'),
+                                redirect: true,
+                                serviceId: model.get('serviceId'),
+                                session: ox.session
+                            },
+                            def = $.Deferred();
+
+                        if (model.get('wantedScopes').length > 0) params.scopes = model.get('wantedScopes').join(' ');
+
+                        window['callback_' + callbackName] = def.resolve;
+
+                        popupWindow.location = ox.apiRoot + '/oauth/accounts?' + $.param(params);
+
+                        return def.done(function () {
+                            delete window['callback_' + callbackName];
+                        });
+                    }).then(function (response) {
+                        // FIXME: should the caller close the popup?
+                        popupWindow.close();
+
+                        if (!response.data) {
+                            // TODO handle a possible error object in response
+                            return $.Deferred().reject();
+                        }
+
+                        var id = response.data.id;
+                        //get fresh data from the server to be sure we have valid data (IE has some problems otherwise see Bug 37891)
+                        return http.GET({
+                            module: 'oauth/accounts',
+                            params: {
+                                action: 'get',
+                                id: id
+                            }
+                        }).then(function (res) {
+                            model.set(res);
+                            return res;
+                        });
+                    }).done(options.success).fail(options.error);
                 case 'update':
-                    getServiceAPI(model.get('serviceId'))
-                        .reauthorize(model.toJSON())
-                        .then(options.success, options.error);
-                    break;
-                case 'delete': getServiceAPI(model.get('serviceId')).remove(model.toJSON()); break;
+                    return model.reauthorize({ force: false }).then(function () {
+                        if (!model.changed.displayName) return;
+                        return http.PUT({
+                            module: 'oauth/accounts',
+                            params: {
+                                action: 'update',
+                                id: model.id
+                            },
+                            data: {
+                                displayName: model.get('displayName')
+                            }
+                        });
+                    }).then(function () {
+                        return model.toJSON();
+                    }).done(options.success).fail(options.error);
+                case 'delete':
+                    return http.PUT({
+                        module: 'oauth/accounts',
+                        params: {
+                            action: 'delete',
+                            id: model.id
+                        }
+                    }).done(options.success).fail(options.error);
+                case 'read':
+                    return http.GET({
+                        module: 'oauth/accounts',
+                        params: {
+                            action: 'get',
+                            id: model.id
+                        }
+                    }).then(function (res) {
+                        model.set(res);
+                        return res;
+                    }).done(options.success).fail(options.error);
                 default:
             }
         }

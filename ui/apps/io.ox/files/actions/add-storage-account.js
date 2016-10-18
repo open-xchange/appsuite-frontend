@@ -61,27 +61,22 @@ define('io.ox/files/actions/add-storage-account', [
         e.preventDefault();
         $(this).tooltip('destroy');
         e.data.dialog.close();
-        require(['io.ox/oauth/keychain', 'io.ox/core/api/filestorage']).then(function (oauthAPI, filestorageApi) {
-            var account = oauthAPI.accounts.filter(function (account) {
-                var id = account.get('serviceId'),
-                    simpleId = id.substring(id.lastIndexOf('.') + 1);
-                return simpleId === e.data.service.id;
-            })[0];
-
-            if (!account) {
-                //TODO: use backbone models to create new account :/
-                var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
-                e.data.service.createInteractively(win, ['drive']);
-                return;
-            }
-
-            account.enableScopes('drive');
-            account.save();
-
-            account.listenToOnce(account, 'sync', function (model) {
-                filestorageApi.createAccountFromOauth(model.toJSON()).done(function () {
-                    notifications.yell('success', gt('Account added successfully'));
+        require([
+            'io.ox/oauth/keychain',
+            'io.ox/oauth/backbone',
+            'io.ox/core/api/filestorage'
+        ]).then(function (oauthAPI, OAuth, filestorageApi) {
+            var service = oauthAPI.services.withShortId(e.data.service.id),
+                account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
+                    serviceId: service.id,
+                    displayName: 'My ' + service.get('displayName') + ' account'
                 });
+
+            account.enableScopes('drive').save().then(function (res) {
+                oauthAPI.accounts.add(account, { merge: true });
+                return filestorageApi.createAccountFromOauth(res);
+            }).then(function () {
+                notifications.yell('success', gt('Account added successfully'));
             });
         });
     }
