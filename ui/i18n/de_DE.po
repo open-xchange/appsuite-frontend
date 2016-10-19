@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-18 11:23+0200\n"
+"PO-Revision-Date: 2016-10-19 13:58+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1237,6 +1237,7 @@ msgid "Quit"
 msgstr "Verlassen"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
+#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "Hinweis"
@@ -2266,6 +2267,10 @@ msgstr "Geteilte Adressbücher"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Select contacts"
 msgstr "Kontakte auswählen"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Departments"
+msgstr "Abteilungen"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
@@ -5533,6 +5538,10 @@ msgid "Click to close this notification"
 msgstr "Zum Schließen dieser Benachrichtigung bitte klicken"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
+msgid "Title"
+msgstr "Anrede"
+
+#: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Enter document title here"
 msgstr "Geben Sie hier den Dokumententitel ein"
 
@@ -5786,6 +5795,12 @@ msgstr "Box"
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "OneDrive"
 msgstr "OneDrive"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account added successfully"
+msgstr "Account erfolgreich hinzugefügt"
 
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -6686,10 +6701,9 @@ msgid "Your password"
 msgstr "Ihr Passwort"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#, fuzzy
 msgid "Your credentials will be sent over a secure connection only"
 msgstr ""
-"Ihre Anmeldedaten werden nur über eine sichere Verbindung gesendet werden"
+"Ihre Anmeldedaten werden ausschließlich über eine sichere Verbindung gesendet"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -6724,11 +6738,6 @@ msgstr "Manuell"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "Dies ist keine gültige E-Mail-Adresse"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account added successfully"
-msgstr "Account erfolgreich hinzugefügt"
 
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -7532,7 +7541,6 @@ msgid "This message has been truncated due to size limitations."
 msgstr "Diese Nachricht wurde wegen Größenbeschränkungen abgeschnitten."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#, fuzzy
 msgid "Loading the full mail might lead to performance problems."
 msgstr ""
 "Das Laden der vollständigen E-Mail könnte zu Performance-Problemen führen."
@@ -9759,10 +9767,9 @@ msgstr "Ressource löschen"
 
 #. 1 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
 msgctxt "rating"
 msgid "It's really bad"
-msgstr "Ist wirklich schlecht"
+msgstr "Ist richtig schlecht"
 
 #. 2 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
@@ -9784,7 +9791,6 @@ msgstr "Gefällt mir"
 
 #. 5 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
 msgctxt "rating"
 msgid "It's awesome"
 msgstr "Ist super"
@@ -14387,9 +14393,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Timezone"
 #~ msgstr "Zeitzone"
-
-#~ msgid "Title"
-#~ msgstr "Anrede"
 
 #~ msgctxt "title"
 #~ msgid "Title"
