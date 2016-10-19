@@ -1225,6 +1225,7 @@ define('io.ox/core/folder/api', [
     function refresh() {
         // pause http layer to get one multiple
         http.pause();
+        var defs = [];
         // loop over all non-flat folders, get all parent folders, apply unique, and reload if they have subfolders
         _(api.pool.models).chain()
             .filter(function (model) {
@@ -1232,16 +1233,21 @@ define('io.ox/core/folder/api', [
             })
             .invoke('get', 'folder_id').uniq().compact().without('0')
             .each(function (id) {
-                list(id, { cache: false });
+                defs.push(list(id, { cache: false }));
             });
         // loop over flat views
         _(getFlatViews()).each(function (module) {
-            flat({ module: module, cache: false });
+            defs.push(flat({ module: module, cache: false }));
         });
-        // go!
-        return http.resume().done(function () {
+
+        // we cannot use virtual.refresh right after the multiple returns, because it does not wait for the callback functions of the requests to finish. This would result in outdated models in the pool
+        // use always to keep the behavior of the multiple (ignores errors)
+        $.when.apply($, defs).always(function () {
             virtual.refresh();
         });
+
+        // go!
+        return http.resume();
     }
 
     ox.on('please:refresh refresh^', refresh);
