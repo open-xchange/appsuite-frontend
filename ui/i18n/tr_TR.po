@@ -683,6 +683,7 @@ msgstr "Hesap"
 msgid "Account Settings"
 msgstr "Hesap Ayarları"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
@@ -2741,6 +2742,12 @@ msgstr ""
 msgid "Department"
 msgstr "Bölüm"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Department"
+msgid "Departments"
+msgstr "Bölüm"
+
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -3265,7 +3272,8 @@ msgstr "EB"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -5709,6 +5717,7 @@ msgstr "Yeni görev hatırlatıcısı"
 msgid "New task reminders"
 msgstr "Yeni görev hatırlatıcıları"
 
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -5904,6 +5913,7 @@ msgid "Not started"
 msgstr "Başlamadı"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
+#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "Not"
@@ -6221,6 +6231,10 @@ msgstr "Organizatör"
 
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Other"
 msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -6685,6 +6699,11 @@ msgid ""
 msgstr ""
 "%s hesabınızı yaratabilmek için hangi veriyi kullanabileceğimizi seçiniz:"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#, fuzzy
+msgid "Please select your mail account provider"
+msgstr "Lütfen aktarılacak dosyayı seçiniz"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #, fuzzy
 msgid "Please set day and month properly"
@@ -6859,6 +6878,7 @@ msgstr "Önizleme"
 msgid "Preview not available"
 msgstr ""
 
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
@@ -9347,6 +9367,13 @@ msgstr "Zaman aralığı (dakikalar ile)"
 msgid "Time zone"
 msgstr "Zaman aralığı"
 
+#: apps/io.ox/editor/main.js module:io.ox/editor
+#, fuzzy
+#| msgctxt "salutation"
+#| msgid "Title"
+msgid "Title"
+msgstr "Başlık"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgctxt "salutation"
 msgid "Title"
@@ -10119,7 +10146,7 @@ msgstr "Önceki ürün jenerasyonundan varolan imzaları içe aktarabilirsiniz. 
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid ""
-"You can manage desktop notifications at any time, by vitising your settings"
+"You can manage desktop notifications at any time, by visiting your settings"
 msgstr ""
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
@@ -10127,6 +10154,10 @@ msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr ""
 "Yağtığınız değişiklikleri Ctrl+Enter tuşlarına bakarak hızlı kayıt "
 "yapabilirsiniz."
+
+#: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
+msgid "You can't present the same document more than once."
+msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 #, fuzzy

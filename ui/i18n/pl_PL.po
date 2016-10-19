@@ -742,6 +742,7 @@ msgstr "Konto"
 msgid "Account Settings"
 msgstr "Ustawienia konta"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
@@ -2778,6 +2779,12 @@ msgstr ""
 msgid "Department"
 msgstr "Dział"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Department"
+msgid "Departments"
+msgstr "Dział"
+
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -3290,7 +3297,8 @@ msgstr "EB"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -5698,6 +5706,7 @@ msgstr "Nowe przypomnienie o zadaniu"
 msgid "New task reminders"
 msgstr "Nowe przypomnienia o zadaniach"
 
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -5887,6 +5896,7 @@ msgid "Not started"
 msgstr "Nierozpoczęte"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
+#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "Uwaga"
@@ -6205,6 +6215,10 @@ msgstr "Organizator"
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
 msgstr "Wiadomość oryginalna"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Other"
+msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6663,6 +6677,12 @@ msgid ""
 "account:"
 msgstr "Wybierz dane, których możemy użyć do utworzenia Twojego konta %s:"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#, fuzzy
+#| msgid "Please set day and month properly"
+msgid "Please select your mail account provider"
+msgstr "Ustaw prawidłowo dzień i miesiąc"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Please set day and month properly"
 msgstr "Ustaw prawidłowo dzień i miesiąc"
@@ -6829,6 +6849,7 @@ msgstr "Podgląd"
 msgid "Preview not available"
 msgstr "Brak dostępnego podglądu"
 
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
@@ -9292,6 +9313,10 @@ msgstr "Skala czasu w minutach"
 msgid "Time zone"
 msgstr "Strefa czasowa"
 
+#: apps/io.ox/editor/main.js module:io.ox/editor
+msgid "Title"
+msgstr "Tytuł"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgctxt "salutation"
 msgid "Title"
@@ -10049,13 +10074,21 @@ msgid ""
 msgstr "Możesz zaimportować istniejące podpisy z poprzedniej wersji produktu."
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "You can manage desktop notifications at any time, by vitising your "
+#| "settings"
 msgid ""
-"You can manage desktop notifications at any time, by vitising your settings"
+"You can manage desktop notifications at any time, by visiting your settings"
 msgstr "Powiadomienia na pulpicie możesz w dowolnym momencie skonfigurować."
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Możesz szybko zapisać zmiany, naciskając Ctrl+Enter."
+
+#: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
+msgid "You can't present the same document more than once."
+msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
@@ -12908,9 +12941,6 @@ msgstr "rrrr"
 
 #~ msgid "Timezone"
 #~ msgstr "Strefa czasowa"
-
-#~ msgid "Title"
-#~ msgstr "Tytuł"
 
 #~ msgctxt "title"
 #~ msgid "Title"
