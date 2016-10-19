@@ -1149,9 +1149,17 @@ body.dragging .categories-toolbar-container {
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
+    .thread-view-list { padding: 8px; }
+}
 
-    .thread-view-list { padding: 0; }
+.touch {
+    &.ios, &.android {
+        .mail-detail .detail-view-header { overflow: hidden; }
+    }
+}
+
+@media (max-width: 700px) {
 
     .io-ox-mail-window .vsplit {
         width: 100%;
