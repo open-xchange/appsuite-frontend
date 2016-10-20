@@ -217,7 +217,8 @@ define('plugins/portal/linkedIn/register', [
                 refreshWidget();
             }, this);
 
-            this.find('h2 .title').replaceWith('<i class="fa fa-linkedin">');
+            this.find('h2:first').prepend($('<i class="fa fa-linkedin">'));
+            this.find('h2 .title').removeClass('title').addClass('sr-only');
             this.addClass('widget-color-custom color-linkedin');
         },
 

@@ -286,7 +286,8 @@ define('plugins/portal/twitter/register', [
                 refreshWidget();
             }, this);
 
-            this.find('h2 .title').replaceWith('<i class="fa fa-twitter">');
+            this.find('h2:first').prepend($('<i class="fa fa-twitter" aria-hidden="true">'));
+            this.find('h2 .title').removeClass('title').addClass('sr-only');
             this.addClass('widget-color-custom color-twitter');
         },
 
