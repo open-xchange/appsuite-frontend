@@ -93,7 +93,7 @@ define('io.ox/mail/threadview', [
             var length = baton.view.collection.length;
 
             this.find('.subject').append(
-                $('<h4 class="summary">').text(
+                $('<span class="summary">').text(
                     length > 1 ? gt('%1$d messages in this conversation', length) : '\u00A0'
                 )
             );
