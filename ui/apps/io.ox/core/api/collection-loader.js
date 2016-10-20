@@ -112,6 +112,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var collection;
 
             params = this.getQueryParams(params || {});
+            // params are false for virtual folders
+            if (params === false) return;
             params.limit = '0,' + this.PRIMARY_PAGE_SIZE;
             collection = this.collection = this.getCollection(params);
             this.loading = false;

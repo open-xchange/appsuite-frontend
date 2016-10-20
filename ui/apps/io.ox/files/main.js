@@ -399,7 +399,7 @@ define('io.ox/files/main', [
                     if (loading) return;
                     loading = true;
 
-                    require(['io.ox/files/share/listview'], function (MySharesView) {
+                    require(['io.ox/files/share/listview', 'io.ox/files/share/api'], function (MySharesView, shareApi) {
 
                         app.mysharesListView = new MySharesView({
                             app: app,
@@ -421,6 +421,10 @@ define('io.ox/files/main', [
                         }), 10);
 
                         folderAPI.on('change:permissions', _.debounce(function () {
+                            app.mysharesListView.reload();
+                        }), 10);
+
+                        shareApi.on('remove:link new:link', _.debounce(function () {
                             app.mysharesListView.reload();
                         }), 10);
 
