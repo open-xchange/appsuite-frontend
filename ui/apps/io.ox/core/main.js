@@ -1099,7 +1099,7 @@ define('io.ox/core/main', [
             draw: function () {
                 // add small logo to top bar
                 this.append(
-                    $('<div id="io-ox-top-logo-small" aria-hidden="true">')
+                    $('<li id="io-ox-top-logo-small" aria-hidden="true">')
                 );
             }
         });
