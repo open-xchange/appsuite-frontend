@@ -260,16 +260,6 @@ define('io.ox/mail/main', [
         },
 
         /*
-         * Convenience function to toggle folder view
-         */
-        'folder-view-toggle': function (app) {
-            if (_.device('smartphone')) return;
-            app.getWindow().nodes.main.on('dblclick', '.list-view-control .toolbar', function () {
-                app.folderView.toggle();
-            });
-        },
-
-        /*
          * Default application properties
          */
         'props': function (app) {
