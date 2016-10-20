@@ -390,7 +390,7 @@ define('io.ox/files/main', [
                     if (loading) return;
                     loading = true;
 
-                    require(['io.ox/files/share/listview'], function (MySharesView) {
+                    require(['io.ox/files/share/listview', 'io.ox/files/share/api'], function (MySharesView, shareApi) {
 
                         app.mysharesListView = new MySharesView({
                             app: app,
@@ -415,7 +415,11 @@ define('io.ox/files/main', [
                             app.mysharesListView.reload();
                         }), 10);
 
-                        var toolbar = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+                        shareApi.on('remove:link new:link', _.debounce(function () {
+                            app.mysharesListView.reload();
+                        }), 10);
+
+                        var toolbar = new Toolbar({ title: app.getTitle() });
 
                         app.getWindow().nodes.body.prepend(
                             app.mysharesListViewControl.render().$el
