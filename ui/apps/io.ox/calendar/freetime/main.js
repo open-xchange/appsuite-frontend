@@ -39,6 +39,7 @@ define('io.ox/calendar/freetime/main', [
 
             this.options = options || {};
             this.parentModel = options.parentModel;
+            this.app = options.app;
             if (options.parentModel) {
                 this.model.get('participants').add(options.parentModel.get('participants'));
                 this.model.set('currentWeek', moment(options.parentModel.get('start_date')).startOf('week'));
@@ -136,14 +137,9 @@ define('io.ox/calendar/freetime/main', [
             return distributionListButton;
         },
 
-        createFooter: function (app) {
-            var saveButton = $('<button class="btn btn-primary pull-right scheduling-save-button">').text(gt('Create appointment')),
-                distributionListButton = this.createDistributionlistButton(),
-                node = $('<div class="scheduling-app-footer clearfix">').append(distributionListButton, saveButton),
-                self = this;
-            self.app = app;
-            saveButton.on('click', function () {
-                var appointment = self.createAppointment();
+        save: function () {
+            if (this.options.isApp && this.app) {
+                var appointment = this.createAppointment();
 
                 if (appointment) {
                     appointment.folder = settingsCore.get('folder/calendar');
@@ -152,13 +148,23 @@ define('io.ox/calendar/freetime/main', [
                             this.create(appointment);
                         });
                     });
-                    self.app.quit();
+                    this.app.quit();
                 } else {
                     require(['io.ox/core/yell'], function (yell) {
                         yell('info', gt('Please select a time for the appointment'));
                     });
                 }
-            });
+            } else {
+                this.options.popup.invokeAction('save');
+            }
+        },
+
+        createFooter: function () {
+            var saveButton = $('<button class="btn btn-primary pull-right scheduling-save-button">').text(gt('Create appointment')),
+                distributionListButton = this.createDistributionlistButton(),
+                node = $('<div class="scheduling-app-footer clearfix">').append(distributionListButton, saveButton);
+
+            saveButton.on('click', this.save.bind(this));
 
             return node;
         },
@@ -186,6 +192,7 @@ define('io.ox/calendar/freetime/main', [
                 width: '100%'
             })
             .build(function () {
+                options.popup = this;
                 view = new FreetimeView(options);
                 this.$el.addClass('freetime-popup');
                 // append after header so it does not scroll with the rest of the view
@@ -210,6 +217,8 @@ define('io.ox/calendar/freetime/main', [
 
             options = options || {};
             options.model = new FreetimeModel();
+            options.isApp = true;
+            options.app = app;
 
             var closeButton = $('<button class="btn btn-link fa fa-close scheduling-app-close">').on('click', function () {
                 app.quit();
@@ -224,7 +233,7 @@ define('io.ox/calendar/freetime/main', [
 
             app.view = new FreetimeView(options);
             win.nodes.main.append($('<div class="scheduling-app-header">').append($('<h4 class="app-title">').text(gt('Scheduling')), app.view.timeSubview.headerNodeRow1, closeButton), app.view.header,
-                                     $('<div class="scheduling-app-body">').append(app.view.body), app.view.createFooter(app));
+                                     $('<div class="scheduling-app-body" draggable="false">').append(app.view.body), app.view.createFooter());
             win.show();
             app.view.render();
 
