@@ -98,7 +98,7 @@ define('io.ox/participants/views', [
                 data,
                 { width: 54, height: 54 }
             );
-            this.nodes.$img.addClass('participant-image ' + (this.IMG_CSS[parseInt(this.model.get('type'), 10)] || ''));
+            this.nodes.$img.attr('aria-hidden', true).addClass('participant-image ' + (this.IMG_CSS[parseInt(this.model.get('type'), 10)] || ''));
         },
 
         setRows: function (mail, extra) {

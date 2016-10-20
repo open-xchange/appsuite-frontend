@@ -163,7 +163,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     // label
                     $('<span class="dropdown-label">').append(label),
                     // caret
-                    this.options.caret ? $('<i aria-hidden="true" class="fa fa-caret-down">') : []
+                    this.options.caret ? $('<i class="fa fa-caret-down" aria-hidden="true">') : []
                 ),
                 this.$ul
             );

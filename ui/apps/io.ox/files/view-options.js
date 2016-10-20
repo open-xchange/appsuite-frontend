@@ -240,10 +240,9 @@ define('io.ox/files/view-options', [
         draw: function (baton) {
 
             this.append(
-                $('<a href="#" role="button" class="toolbar-item">')
-                .attr('title', gt('Open folder view'))
-                .append($('<i class="fa fa-angle-double-right">'))
-                .on('click', { app: baton.app, state: true }, toggleFolderView)
+                $('<a href="#" role="button" class="toolbar-item">').attr('aria-label', gt('Open folder view')).append(
+                    $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
+                ).on('click', { app: baton.app, state: true }, toggleFolderView)
             );
 
             baton.app.on({
@@ -261,12 +260,9 @@ define('io.ox/files/view-options', [
         draw: function (baton) {
             this.addClass('bottom-toolbar').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" role="button" class="toolbar-item" data-action="close-folder-view">')
-                    .append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
-                        $('<span class="sr-only">').text(gt('Close folder view'))
-                    )
-                    .on('click', { app: baton.app, state: false }, toggleFolderView)
+                    $('<a href="#" role="button" class="toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
+                    ).on('click', { app: baton.app, state: false }, toggleFolderView)
                 )
             );
         }

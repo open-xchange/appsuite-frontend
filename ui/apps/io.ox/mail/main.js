@@ -1559,10 +1559,14 @@ define('io.ox/mail/main', [
                     var $el = $('<div class="generic-toolbar bottom mail-progress">')
                         .hide()
                         .append(
-                            $('<div class="progress"><div class="progress-bar"></div></div>'),
+                            $('<div class="progress">').append(
+                                $('<div class="progress-bar">')
+                            ),
                             $('<div class="caption">').append(
                                 $('<span>'),
-                                $('<a href="#" class="close" data-action="close" role="button"><i class="fa fa-times"></i></a>')
+                                $('<a href="#" class="close" data-action="close" role="button">').attr('aria-label', gt('Close')).append(
+                                    $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))
+                                )
                             )
                        );
                     api.queue.collection.on('progress', function (data) {
