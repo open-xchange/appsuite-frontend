@@ -96,6 +96,8 @@ define('plugins/administration/groups/settings/members', [
 
         constructor: function () {
             Backbone.Model.apply(this, arguments);
+            // fix missing display name
+            if (!this.attributes.display_name) this.attributes.display_name = this.attributes.email1;
             // typeahead needs "value"
             this.value = this.getFullName();
         },
