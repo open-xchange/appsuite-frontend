@@ -15,9 +15,10 @@ define('io.ox/core/folder/actions/properties', [
     'io.ox/core/folder/api',
     'io.ox/core/capabilities',
     'io.ox/core/tk/dialogs',
+    'settings!io.ox/contacts',
     'settings!io.ox/caldav',
     'gettext!io.ox/core'
-], function (api, capabilities, dialogs, caldavConfig, gt) {
+], function (api, capabilities, dialogs, contactsSettings, caldavConfig, gt) {
 
     'use strict';
 
@@ -39,7 +40,11 @@ define('io.ox/core/folder/actions/properties', [
     return function folderProperties(id) {
 
         var model = api.pool.getModel(id),
-            module = model.get('module');
+            module = model.get('module'),
+            total = model.get('total');
+
+        // fix count in global address book if the admin is hidden
+        if (String(id) === '6' && !contactsSettings.get('showAdmin', false)) total--;
 
         new dialogs.ModalDialog()
             .header(
@@ -57,7 +62,7 @@ define('io.ox/core/folder/actions/properties', [
                             gt('Number of messages') :
                             //#. number of items in a folder
                             gt('Number of items'),
-                        model.get('total')
+                        total
                     )
                 );
                 // show CalDAV URL for calendar and task folders
