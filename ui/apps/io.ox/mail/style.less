@@ -410,11 +410,16 @@
     }
 
     .detail-view-row {
-        .date { float: right; margin-left: 16px; }
+        position: relative;
+
+        .date { float: right; margin-left: 16px; margin-right: 27px; }
         .recipients { float: left; }
         .priority { font-size: 14px; }
         .flag-picker {
-            margin-left: 16px;
+            float: none;
+            position: absolute;
+            top: 0;
+            right: 1px;
             width: 12px; // to match fa-bars
             text-align: right;
             a { color: #333; }
@@ -763,9 +768,6 @@
 
     & > .thread-view-header {
 
-        .flex-display(flex);
-        .flex-direction(row);
-
         & > * {
             .subject-base();
         }
@@ -776,20 +778,18 @@
         .subject {
             word-break: break-word;
             padding-bottom: 0;
-            .flex(1);
+        }
 
-            .summary {
-                display: block;
-                color: #767676;
-                font-size: 13px;
-                line-height: 16px;
-                font-weight: 300;
-                position: relative;
-                top: -5px;
-                margin: 0;
-                padding-top: 4px;
-                html.high-contrast & { color: @hc-gray; }
-            }
+        .summary {
+            display: block;
+            color: #767676;
+            font-size: 13px;
+            line-height: 16px;
+            font-weight: 300;
+            margin: 0;
+            padding-top: 0;
+            padding-bottom: 4px;
+            html.high-contrast & { color: @hc-gray; }
         }
 
         .toggle-all {
@@ -1204,12 +1204,11 @@ body.dragging .categories-toolbar-container {
 
             .subject {
                 line-height: 20px;
-
-                .summary {
-                    padding-top: 20px;
-                    font-size: @phone-font-size - 2;
-                    color: #fff;
-                }
+            }
+            .summary {
+                padding-top: 20px;
+                font-size: @phone-font-size - 2;
+                color: #fff;
             }
         }
         .row-3{

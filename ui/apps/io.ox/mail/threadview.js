@@ -42,12 +42,12 @@ define('io.ox/mail/threadview', [
                     ),
                     $('<div class="position">'),
                     $('<div class="prev-next">').append(
-                        $('<a href="#" role="button" class="previous-mail">')
-                            .attr('aria-label', gt('Previous message'))
-                            .append('<i class="fa fa-chevron-up" aria-hidden="true">'),
-                        $('<a href="#" role="button" class="next-mail">')
-                            .attr('aria-label', gt('Next message'))
-                            .append('<i class="fa fa-chevron-down" aria-hidden="true">')
+                        $('<a href="#" role="button" class="previous-mail">').attr('aria-label', gt('Previous message')).append(
+                            $('<i class="fa fa-chevron-up" aria-hidden="true">')
+                        ),
+                        $('<a href="#" role="button" class="next-mail">').attr('aria-label', gt('Next message')).append(
+                            $('<i class="fa fa-chevron-down" aria-hidden="true">')
+                        )
                     )
                 ).attr('role', 'toolbar')
             );
@@ -68,8 +68,27 @@ define('io.ox/mail/threadview', [
     });
 
     ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'subject',
+        id: 'toggle-all',
         index: 100,
+        draw: function (baton) {
+            if (baton.view.collection.length <= 1) return;
+            this.append(
+                $('<a href="#" role="button" class="toggle-all">')
+                .append('<i class="fa fa-angle-double-down" aria-hidden="true">')
+                .attr('aria-label', gt('Open all messages'))
+                .tooltip({
+                    animation: false,
+                    container: 'body',
+                    placement: 'left',
+                    title: gt('Open/close all messages')
+                })
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/thread-view/header').extend({
+        id: 'subject',
+        index: 200,
         draw: function (baton) {
 
             var keepFirstPrefix = baton.view.collection.length === 1,
@@ -87,34 +106,12 @@ define('io.ox/mail/threadview', [
 
     ext.point('io.ox/mail/thread-view/header').extend({
         id: 'summary',
-        index: 200,
-        draw: function (baton) {
-
-            var length = baton.view.collection.length;
-
-            this.find('.subject').append(
-                $('<span class="summary">').text(
-                    length > 1 ? gt('%1$d messages in this conversation', length) : '\u00A0'
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'toggle-all',
         index: 300,
         draw: function (baton) {
-            if (baton.view.collection.length <= 1) return;
-            this.append(
-                $('<a href="#" role="button" class="toggle-all">')
-                .append('<i class="fa fa-angle-double-down">')
-                .attr('aria-label', gt('Open all messages'))
-                .tooltip({
-                    animation: false,
-                    container: 'body',
-                    placement: 'left',
-                    title: gt('Open/close all messages')
-                })
+            var length = baton.view.collection.length;
+            if (length === 1) return;
+            this.find('.subject').after(
+                $('<h2 class="summary">').text(gt('%1$d messages in this conversation', length))
             );
         }
     });
