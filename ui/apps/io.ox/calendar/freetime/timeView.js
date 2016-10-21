@@ -537,6 +537,9 @@ define('io.ox/calendar/freetime/timeView', [
             this.lassoStart = index * width;
             this.lassoEnd = (index + 1) * width;
             this.updateLasso(true);
+            if (e.altKey && this.lassoEnd && this.lassoStart && this.lassoStart !== this.lassoEnd) {
+                this.parentView.save();
+            }
         },
 
         // utility function to get the position in percent for a given time
