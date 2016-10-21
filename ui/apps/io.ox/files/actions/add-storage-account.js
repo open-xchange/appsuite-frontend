@@ -14,9 +14,12 @@
 define('io.ox/files/actions/add-storage-account', [
     'io.ox/core/tk/dialogs',
     'io.ox/metrics/main',
-    'io.ox/core/notifications',
-    'gettext!io.ox/files'
-], function (dialogs, metrics, notifications, gt) {
+    'io.ox/core/yell',
+    'gettext!io.ox/files',
+    // must be required here or popupblocker blocks the window while we require files
+    'io.ox/oauth/keychain',
+    'io.ox/core/api/filestorage'
+], function (dialogs, metrics, yell, gt, oauthAPI, filestorageApi) {
 
     'use strict';
 
@@ -46,8 +49,7 @@ define('io.ox/files/actions/add-storage-account', [
     }
 
     function getAvailableServices() {
-        return require(['io.ox/keychain/api', 'io.ox/core/api/filestorage']).then(function (keychainApi, filestorageApi) {
-
+        return require(['io.ox/keychain/api']).then(function (keychainApi) {
             var availableFilestorageServices = _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; });
             return _(keychainApi.submodules).filter(function (submodule) {
                 if (!services[submodule.id]) return false;
@@ -61,21 +63,16 @@ define('io.ox/files/actions/add-storage-account', [
         e.preventDefault();
         $(this).tooltip('destroy');
         e.data.dialog.close();
-        require([
-            'io.ox/oauth/keychain',
-            'io.ox/core/api/filestorage'
-        ]).then(function (oauthAPI, filestorageApi) {
-            var service = oauthAPI.services.withShortId(e.data.service.id),
-                account = oauthAPI.accounts.forService(service.id)[0] || oauthAPI.accounts.add({
-                    serviceId: service.id,
-                    displayName: 'My ' + service.get('displayName') + ' account'
-                });
-
-            account.enableScopes('drive').save().then(function (res) {
-                return filestorageApi.createAccountFromOauth(res);
-            }).then(function () {
-                notifications.yell('success', gt('Account added successfully'));
+        var service = oauthAPI.services.withShortId(e.data.service.id),
+            account = oauthAPI.accounts.forService(service.id)[0] || oauthAPI.accounts.add({
+                serviceId: service.id,
+                displayName: 'My ' + service.get('displayName') + ' account'
             });
+
+        account.enableScopes('drive').save().then(function (res) {
+            return filestorageApi.createAccountFromOauth(res);
+        }).then(function () {
+            yell('success', gt('Account added successfully'));
         });
     }
 
