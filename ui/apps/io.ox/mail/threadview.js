@@ -109,7 +109,10 @@ define('io.ox/mail/threadview', [
         index: 300,
         draw: function (baton) {
             var length = baton.view.collection.length;
-            if (length === 1) return;
+            if (length === 1) {
+                this.find('.subject').addClass('spacer');
+                return;
+            }
             this.find('.subject').after(
                 $('<h2 class="summary">').text(gt('%1$d messages in this conversation', length))
             );
