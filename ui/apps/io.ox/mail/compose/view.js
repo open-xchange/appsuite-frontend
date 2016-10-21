@@ -615,6 +615,18 @@ define('io.ox/mail/compose/view', [
                 model = this.model,
                 mail = this.model.getMailForAutosave();
 
+            if (model.get('encrypt')) {
+                var view = this;
+                var baton = new ext.Baton({
+                    mail: mail,
+                    model: this.model,
+                    app: this.app,
+                    view: view
+                });
+                this.initAutoSaveAsDraft();
+                return ext.point('oxguard/mail/autosavedraft').invoke('action', this, baton);
+            }
+
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
