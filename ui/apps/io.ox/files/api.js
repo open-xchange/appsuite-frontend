@@ -821,7 +821,7 @@ define('io.ox/files/api', [
             items = _(list).difference(folders);
 
         // move all files
-        if (items) {
+        if (items && items.length > 0) {
             http.PUT({
                 module: 'files',
                 params: {
