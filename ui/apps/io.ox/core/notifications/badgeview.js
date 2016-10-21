@@ -51,6 +51,7 @@ define('io.ox/core/notifications/badgeview', [
             //don't create a loop here
             this.model.set('a11y', a11y, { silent: true });
             this.nodes.badge.toggleClass('empty', count === 0);
+            this.nodes.icon.attr('title', a11y);
             this.$el.attr('aria-label', a11y + ' ' + a11yState);
             this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
             // don't alert if there is no notification or the number did not change
@@ -76,7 +77,7 @@ define('io.ox/core/notifications/badgeview', [
             })
             .append(
                 this.nodes.icon = $('<i class="fa fa-bell launcher-icon" aria-hidden="true">'),
-                this.nodes.badge = $('<span class="badge">').append(
+                this.nodes.badge = $('<span class="badge" aria-hidden="true">').append(
                     this.nodes.number = $('<span class="number">')
                 )
             );

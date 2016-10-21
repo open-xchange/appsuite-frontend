@@ -657,8 +657,8 @@ define('io.ox/core/main', [
             var ariaBasicLabel =
                     //#. %1$s is app title/name
                     _.escape(gt('close for %1$s', model.get('title'))),
-                quitApp = $('<a href="#" class="closelink" role="button" aria-label="' + ariaBasicLabel + '">')
-                    .append($('<i class="fa fa-times" aria-hidden="true">'))
+                quitApp = $('<a href="#" class="closelink" role="button">').attr('aria-label', ariaBasicLabel)
+                    .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', ariaBasicLabel))
                     .on('click', function (e) {
                         e.preventDefault();
                         e.stopImmediatePropagation();
@@ -673,16 +673,14 @@ define('io.ox/core/main', [
         function addUserContent(model, launcher, first) {
             if (model.get('closable')) {
                 launcher.addClass('closable');
-                if (first) {
-                    launcher.find('a').after(quit(model));
-                }
+                if (first) launcher.find('a').after(quit(model));
             }
 
             if (model.get('userContent')) {
                 var cls = model.get('userContentClass') || '',
                     icon = model.get('userContentIcon') || '';
                 launcher.addClass('user-content').addClass(cls).children().first().prepend(
-                    $('<i class="' + icon + '">')
+                    $('<i>').addClass(icon)
                 );
             }
         }
@@ -802,9 +800,7 @@ define('io.ox/core/main', [
                     }
                 });
 
-                if (view.visible) {
-                    this.append(view.render().$el);
-                }
+                if (view.visible) this.append(view.render().$el);
             }
         });
 
@@ -839,7 +835,7 @@ define('io.ox/core/main', [
             draw: function () {
                 if (capabilities.has('search') && _.device('smartphone')) {
                     this.append(
-                        addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
+                        addLauncher('right', $('<i class="fa fa-search launcher-icon" aria-hidden="true">'), function () {
                             require(['io.ox/search/main'], function (searchapp) {
                                 searchapp.run({ reset: true });
                             });
@@ -855,11 +851,15 @@ define('io.ox/core/main', [
             index: 200,
             draw: function () {
                 this.append(
-                    addLauncher('right', $('<i class="fa fa-refresh launcher-icon">').attr('aria-hidden', 'true'), function () {
-                        refresh();
-                        return $.when();
-                    }, gt('Refresh'))
-                    .attr('id', 'io-ox-refresh-icon')
+                    addLauncher(
+                        'right',
+                        $('<i class="fa fa-refresh launcher-icon" aria-hidden="true">').attr('title', gt('Refresh')),
+                        function () {
+                            refresh();
+                            return $.when();
+                        },
+                        gt('Refresh')
+                    ).attr('id', 'io-ox-refresh-icon')
                 );
             }
         });
@@ -873,7 +873,6 @@ define('io.ox/core/main', [
                 this.append(
                     addLauncher('right', new HelpView({
                         iconClass: 'launcher-icon',
-                        tabindex: '0',
                         href: getHelp
                     }).render().$el)
                 );
@@ -997,7 +996,7 @@ define('io.ox/core/main', [
                 var node = this;
                 node.append(
                     $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                    $('<li role="presentation">', { 'class': 'io-ox-specificHelp' }).append(
+                    $('<li class="io-ox-specificHelp" role="presentation">').append(
                         new HelpView({
                             tabindex: '-1',
                             content: gt('Help'),
@@ -1060,10 +1059,8 @@ define('io.ox/core/main', [
                 var ul, a;
                 this.append(
                     $('<li id="io-ox-topbar-dropdown-icon" class="launcher dropdown" role="presentation">').append(
-                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">')
-                        .append(
-                            $('<i class="fa fa-bars launcher-icon" aria-hidden="true">'),
-                            $('<span class="sr-only">').text(gt('Settings'))
+                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
+                            $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
                         ),
                         ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
                     )
@@ -1520,9 +1517,9 @@ define('io.ox/core/main', [
                         btn1, btn2;
 
                     $('#io-ox-core').append(
-                        dialog = $('<div class="io-ox-restore-dialog" tabindex="0">').append(
+                        dialog = $('<div class="io-ox-restore-dialog" tabindex="0" role="dialog">').append(
                             $('<div class="header">').append(
-                                $('<h3>').text(gt('Restore applications')),
+                                $('<h1>').text(gt('Restore applications')),
                                 $('<div>').text(
                                     gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
                                 )
@@ -1549,7 +1546,7 @@ define('io.ox/core/main', [
                                 var version = item.version || '';
                                 version = version.split('.').slice(0, -2).join('.');
                                 if (version) {
-                                    versionInfo = $('<span>').addClass('oldversion').text(gt.noI18n('(' + version + ')'));
+                                    versionInfo = $('<span class="oldversion">').text(gt.noI18n('(' + version + ')'));
                                 }
                             }
                             this.append(
@@ -1557,7 +1554,7 @@ define('io.ox/core/main', [
                                     $('<a href="#" role="button" class="remove">').data(item).append(
                                         $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
-                                    item.icon ? $('<i class="' + item.icon + '">') : $(),
+                                    item.icon ? $('<i>').addClass(item.icon) : $(),
                                     $('<span>').text(gt.noI18n(info)),
                                     versionInfo
                                 )
