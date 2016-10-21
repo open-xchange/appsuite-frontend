@@ -37,7 +37,7 @@ define('plugins/portal/files/register', [
                     });
                 },
                 function fail(e) {
-                    return e.code === 'IFO-0300' ? 'remove' : e;
+                    return /^(FILE_STORAGE-0026|IFO-0300)$/.test(e.code) ? 'remove' : e;
                 }
             );
         },
