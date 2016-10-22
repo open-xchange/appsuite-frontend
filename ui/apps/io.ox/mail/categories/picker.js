@@ -32,7 +32,7 @@ define('io.ox/mail/categories/picker', [
             node.closest('li').replaceWith(this.$el);
             // render container once
             if (this.rendered) return;
-            this.render().$el.attr({ 'data-dropdown': 'category', role: 'presentation' });
+            this.render().$el.attr({ 'data-dropdown': 'category', role: 'presentation', tabindex: '-1' });
             this.rendered = true;
         },
 

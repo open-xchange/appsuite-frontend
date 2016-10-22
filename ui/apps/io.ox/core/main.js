@@ -27,6 +27,7 @@ define('io.ox/core/main', [
     'io.ox/core/capabilities',
     'io.ox/core/ping',
     'io.ox/core/folder/api',
+    'io.ox/core/a11y',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/relogin',
@@ -34,7 +35,7 @@ define('io.ox/core/main', [
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, gt) {
 
     'use strict';
 
@@ -908,7 +909,7 @@ define('io.ox/core/main', [
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="settings" role="menuitem" tabindex="-1">').text(gt('Settings'))
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="settings" role="menuitem">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -927,7 +928,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem">')
                         //#. starts the client onboarding wizard that helps users
                         //#. to configure their devices to access/sync appsuites
                         //#. data (f.e. install ox mail app)
@@ -953,7 +954,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="my-contact-data" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="my-contact-data" role="menuitem">')
                         .text(gt('My contact data'))
                     )
                     .on('click', function (e) {
@@ -975,7 +976,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="password" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="password" role="menuitem">')
                         .text(gt('Change password'))
                     )
                     .on('click', function (e) {
@@ -998,10 +999,9 @@ define('io.ox/core/main', [
                     $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                     $('<li class="io-ox-specificHelp" role="presentation">').append(
                         new HelpView({
-                            tabindex: '-1',
                             content: gt('Help'),
                             href: getHelp
-                        }).render().$el
+                        }).render().$el.attr('tabindex', -1)
                     )
                 );
             }
@@ -1023,7 +1023,7 @@ define('io.ox/core/main', [
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-action="about" role="menuitem" tabindex="-1">').text(gt('About'))
+                        $('<a href="#" data-action="about" role="menuitem">').text(gt('About'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -1040,9 +1040,9 @@ define('io.ox/core/main', [
             index: 1000,
             draw: function () {
                 this.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
+                    $('<li class="divider" aria-hidden="true" role="presentation">'),
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-action="logout" role="menuitem" tabindex="-1">').text(gt('Sign out'))
+                        $('<a href="#" data-action="logout" role="menuitem">').text(gt('Sign out'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -1063,6 +1063,7 @@ define('io.ox/core/main', [
                             $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
                         ),
                         ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
+                            .on('keydown.bs.dropdown.data-api', a11y.dropdownTrapFocus)
                     )
                 );
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);

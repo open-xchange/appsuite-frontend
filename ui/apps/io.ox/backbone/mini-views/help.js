@@ -90,7 +90,6 @@ define('io.ox/backbone/mini-views/help', ['gettext!io.ox/core'], function (gt) {
                     href: '#',
                     role: 'button',
                     target: '_blank',
-                    tabindex: 0,
                     'aria-label': gt('Online help')
                 });
             return this;

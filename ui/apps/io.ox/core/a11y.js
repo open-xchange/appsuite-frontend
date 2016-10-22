@@ -90,8 +90,52 @@ define('io.ox/core/a11y', [], function () {
         items.eq(index).focus();
     }
 
+    function dropdownTrapFocus(e) {
+
+        var dropdown = $(e.target).closest('ul.dropdown-menu'),
+            dropdownLinks = dropdown.find('li > a'),
+            firstLink = dropdownLinks.first(),
+            lastLink = dropdownLinks.last(),
+            isLastLink = $(e.target).is(lastLink),
+            isFirstLink = $(e.target).is(firstLink);
+
+        // do nothing if there is only one link
+        if (dropdownLinks.length === 1) return;
+
+        // a11y - trap focus in context menu - prevent tabbing out of context menu
+        if ((!e.shiftKey && e.which === 9 && isLastLink) ||
+            (e.shiftKey && e.which === 9 && isFirstLink)) {
+            return trapFocus(dropdown, e);
+        }
+
+        // cursor up (38), page down (34), end (35)
+        if (e.which === 38 && isFirstLink || e.which === 34 || e.which === 35) {
+            e.stopImmediatePropagation();
+            return lastLink.focus();
+        }
+        // cursor down (40), page up (33), home (36)
+        if (e.which === 40 && isLastLink || e.which === 33 || e.which === 36) {
+            e.stopImmediatePropagation();
+            return firstLink.focus();
+        }
+
+        // Typing a character key moves focus to the next node whose title begins with that character
+        var a = dropdownLinks.map(function () {
+            if ($(this).text().substring(0, 1).toLowerCase() === String.fromCharCode(e.which).toLowerCase()) return $(this);
+        });
+        if (a.length === 1) return a[0].focus();
+        if (a.length > 1) {
+            var nextFocus;
+            _.find(a, function (el, idx) {
+                if (el.is(':focus') && (idx >= 0 && idx < a.length - 1)) nextFocus = a[idx + 1];
+            });
+            return (nextFocus || a[0]).focus();
+        }
+    }
+
     return {
         getTabbable: getTabbable,
-        trapFocus: trapFocus
+        trapFocus: trapFocus,
+        dropdownTrapFocus: dropdownTrapFocus
     };
 });

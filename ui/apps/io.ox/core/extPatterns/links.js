@@ -16,8 +16,9 @@ define('io.ox/core/extPatterns/links', [
     'io.ox/core/extensions',
     'io.ox/core/collection',
     'io.ox/core/extPatterns/actions',
+    'io.ox/core/a11y',
     'gettext!io.ox/core'
-], function (ext, Collection, actions, gt) {
+], function (ext, Collection, actions, a11y, gt) {
 
     'use strict';
 
@@ -440,7 +441,8 @@ define('io.ox/core/extPatterns/links', [
                     .parent()
                     .on('shown.bs.dropdown dispose', function () {
                         $(this).children('a').tooltip('destroy');
-                    });
+                    })
+                    .on('keydown.bs.dropdown.data-api', a11y.dropdownTrapFocus);
                 }
 
                 //in firefox draggable=false is not enough to prevent dragging...
