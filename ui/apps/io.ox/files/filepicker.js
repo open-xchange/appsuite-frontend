@@ -241,8 +241,6 @@ define('io.ox/files/filepicker', [
             abs: false,
             folder: options.folder || undefined,
             hideTrashfolder: options.hideTrashfolder || undefined,
-            customize: options.customize || undefined,
-            selection: options.selection || undefined,
 
             done: function (id, dialog) {
                 def.resolve(
