@@ -261,6 +261,10 @@ define('io.ox/core/tk/wizard', [
 
         spotlight: function (selector) {
             if (!selector) return;
+            // allow dynamic selectors
+            if (_.isFunction(selector)) {
+                selector = selector();
+            }
             var elem = $(selector).filter(':visible');
             if (!elem.length) return;
             var bounds = getBounds(elem);
@@ -542,6 +546,10 @@ define('io.ox/core/tk/wizard', [
 
             function waitFor(counter) {
                 if (counter === 0) this.trigger('wait');
+                // allow dynamic selectors
+                if (_.isFunction(this.options.waitFor.selector)) {
+                    this.options.waitFor.selector = this.options.waitFor.selector();
+                }
                 if (resolveSelector(this.options.waitFor.selector)) return cont.call(this);
                 var max = _.isNumber(this.options.waitFor.timeout) ? (this.options.waitFor.timeout * 10) : 50;
                 if (counter < max) {
@@ -574,10 +582,10 @@ define('io.ox/core/tk/wizard', [
                 if (this.options.spotlight) {
                     // apply spotlight
                     this.parent.toggleBackdrop(false);
-                    this.parent.spotlight(this.options.spotlight);
+                    this.parent.spotlight(this.options.spotlight.selector);
                     // respond to window resize
                     $(window).on('resize.wizard.spotlight', _.debounce(function () {
-                        this.parent.spotlight(this.options.spotlight);
+                        this.parent.spotlight(this.options.spotlight.selector);
                     }.bind(this), 100));
                 } else {
                     // toggle backdrop
@@ -669,6 +677,10 @@ define('io.ox/core/tk/wizard', [
 
         // show hotspot
         hotspot: function (selector, options) {
+            // allow dynamic selectors
+            if (_.isFunction(selector)) {
+                selector = selector();
+            }
             this.options.hotspot = _.isArray(selector) ? selector : [[selector, options]];
             this.options.backdropColor = 'rgba(255, 255, 255, 0.01)';
             return this;
@@ -711,7 +723,7 @@ define('io.ox/core/tk/wizard', [
             // fall back to selector from referTo() or spotlight()
             if (!selector) {
                 if (this.options.referTo) return this.align(this.options.referTo);
-                if (this.options.spotlight) return this.align(this.options.spotlight);
+                if (this.options.spotlight) return this.align(this.options.spotlight.selector);
                 return;
             }
 

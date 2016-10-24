@@ -68,7 +68,8 @@ define('io.ox/tours/mail', [
             .title(gt('Entering the E-Mail text'))
             .content(gt('Enter the E-Mail text into the main area. If the text format was set to HTML in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar.'))
             .referTo('.io-ox-mail-compose-container')
-            .spotlight('.mail-compose-contenteditable-fields, .io-ox-mail-compose.container textarea')
+            // use editor class so the selector fits for html and plain text editor
+            .spotlight('.mail-compose-contenteditable-fields, .io-ox-mail-compose.container .editor')
             .end()
         .step()
             .title(gt('Sending the E-Mail'))
@@ -85,12 +86,20 @@ define('io.ox/tours/mail', [
         .step()
             .title(gt('Selecting a view'))
             .content(gt('To choose between the different views. click on View in the toolbar. Select a menu entry in the layout.'))
-            .spotlight('.classic-toolbar > li[data-dropdown=view]')
+            .spotlight('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
+            .referTo('.classic-toolbar [data-dropdown="view"] ul')
+            .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
+            .on('wait', function () {
+                $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
+            })
+            .on('hide', function () {
+                $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
+            })
             .end()
         .step()
             .title(gt('Opening an E-Mail in a separate window'))
             .content(gt('If double-clicking on an E-Mail in the list, the E-Mail is opened in a separate window.'))
-            .spotlight('.list-view.mail-item > li:first')
+            .spotlight('.list-view.mail-item > li.list-item:first')
             .end()
         .step()
             .title(gt('Reading E-Mail conversations'))
@@ -105,8 +114,15 @@ define('io.ox/tours/mail', [
         .step()
             .title(gt('Editing multiple E-Mails'))
             .content(gt('In order to edit multiple E-Mails at once, enable the checkboxes on the left side of the E-Mails. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'))
-            .hotspot('.classic-toolbar > li[data-dropdown=view]')
-            .referTo('.classic-toolbar > li[data-dropdown=view]')
+            .hotspot('.classic-toolbar [data-dropdown="view"] ul a[data-name="checkboxes"]')
+            .referTo('.classic-toolbar [data-dropdown="view"] ul')
+            .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="checkboxes"]')
+            .on('wait', function () {
+                $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
+            })
+            .on('hide', function () {
+                $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
+            })
             .end()
         .step()
             .title(gt('Opening the E-Mail settings'))
