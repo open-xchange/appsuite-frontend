@@ -202,8 +202,12 @@ define.async('io.ox/oauth/keychain', [
             });
         };
         if (_.contains(['xing', 'twitter', 'linkedin', 'boxcom', 'dropbox', 'google', 'msliveconnect', 'yahoo'], this.id)) {
-            this.canAdd = function () {
-                return self.getAll().length === 0;
+            this.canAdd = function (options) {
+                options = _.extend({}, options);
+                if (_.isString(options.scopes)) options.scopes = [options.scopes];
+                return (options.scopes || []).reduce(function hasAvailableScope(acc, scope) {
+                    return acc && _(service.availableScopes).contains(scope);
+                }, true) && self.getAll().length === 0;
             };
         }
     }

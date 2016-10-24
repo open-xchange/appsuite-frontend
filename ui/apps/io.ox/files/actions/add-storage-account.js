@@ -45,8 +45,8 @@ define('io.ox/files/actions/add-storage-account', [
 
     function needsOAuthScope(accounts) {
         return accounts.reduce(function (acc, account) {
-            return acc && _(account.availableScopes).contains('drive') && !_(account.enabledScopes).contains('drive');
-        }, true);
+            return acc || (_(account.availableScopes).contains('drive') && !_(account.enabledScopes).contains('drive'));
+        }, false);
     }
 
     function getAvailableServices() {
@@ -55,7 +55,7 @@ define('io.ox/files/actions/add-storage-account', [
             return _(keychainApi.submodules).filter(function (submodule) {
                 if (!services[submodule.id]) return false;
                 // we need support for both accounts, Oauth accounts and filestorage accounts.
-                return (!submodule.canAdd || submodule.canAdd.apply(this) || needsOAuthScope(submodule.getAll())) && availableFilestorageServices.indexOf(submodule.id) >= 0;
+                return (!_.isFunction(submodule.canAdd) || submodule.canAdd({ scopes: ['drive'] }) || needsOAuthScope(submodule.getAll())) && availableFilestorageServices.indexOf(submodule.id) >= 0;
             });
         });
     }
