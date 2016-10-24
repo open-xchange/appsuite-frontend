@@ -121,12 +121,12 @@ define('io.ox/mail/threadview', [
 
     ext.point('io.ox/mail/thread-view/header').extend({
         id: 'toggle-big-screen',
-        index: 400,
+        index: 110,
         draw: function (baton) {
             if (!baton.view.standalone) return;
             this.append(
                 $('<a href="#" role="button" class="toggle-big-screen">')
-                .append('<i class="fa fa-plus-square-o">')
+                .append('<i class="fa fa-expand">')
                 .attr('aria-label', gt('Toggle viewport size'))
                 .tooltip({
                     animation: false,

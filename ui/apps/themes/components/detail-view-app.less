@@ -25,16 +25,12 @@
         color: #767676;
         float: right;
         outline: 0;
+        &:hover { color: #595959; }
+        &:focus { color: @link-color; }
         padding: 0;
-        margin: 12px 16px 4px 0;
-        -webkit-flex: 0 0 auto;
-        -moz-flex: 0 0 auto;
-        -ms-flex: 0 0 auto;
-        flex: 0 0 auto;
-        -webkit-align-self: flex-start;
-        -moz-align-self: flex-start;
-        -ms-align-self: flex-start;
-        align-self: flex-start;
+        margin: 12px @default-padding 4px 0;
+        .flex(0 0 auto);
+        .align-self(flex-start);
     }
 
     .big-screen.thread-view-control, .big-screen.detail-view-container {
