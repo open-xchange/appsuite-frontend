@@ -20,7 +20,7 @@ define('io.ox/files/actions/add-storage-account', [
     'io.ox/oauth/keychain',
     'io.ox/core/api/filestorage',
     'io.ox/oauth/backbone'
-], function (dialogs, metrics, yell, gt, oauthAPI, filestorageApi, oauthModels) {
+], function (dialogs, metrics, yell, gt, oauthAPI, filestorageApi, OAuth) {
 
     'use strict';
 
@@ -65,22 +65,14 @@ define('io.ox/files/actions/add-storage-account', [
         $(this).tooltip('destroy');
         e.data.dialog.close();
         var service = oauthAPI.services.withShortId(e.data.service.id),
-            isNew = false,
-            account = oauthAPI.accounts.forService(service.id)[0];
-        if (!account) {
-            isNew = true;
-            // don't add the account to the collection yet otherwise we get account stumps in the collection if the user decides not to finish the setup process. See bug 49588
-            account = new oauthModels.Account.Model({
+            account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
                 serviceId: service.id,
                 displayName: 'My ' + service.get('displayName') + ' account'
             });
-        }
 
         account.enableScopes('drive').save().then(function (res) {
             // add new account after it has been created succesfully
-            if (isNew) {
-                oauthAPI.accounts.add(account);
-            }
+            oauthAPI.accounts.add(account);
             return filestorageApi.createAccountFromOauth(res);
         }).then(function () {
             yell('success', gt('Account added successfully'));
