@@ -226,7 +226,7 @@ define('io.ox/core/folder/api', [
 
         // checks if the folder supports a capability
         supports: function (capability) {
-            return _(this.get('supported_capabilities')).indexOf(capability) > -1;
+            return util.supports(capability, this.attributes);
         },
 
         // convenience function / maps to folderAPI.is(type, folder)

@@ -162,7 +162,10 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
             // check if the user has permission to upload new versions
             folderApi.get(this.model.get('folder_id')).done(function (folderData) {
 
-                if (this.disposed || !folderApi.can('write', folderData) || util.hasStatus('lockedByOthers', { context: this.model.attributes })) return;
+                if (this.disposed) return;
+                if (!folderApi.can('write', folderData)) return;
+                if (util.hasStatus('lockedByOthers', { context: this.model.attributes })) return;
+                if (!folderApi.can('add:version', folderData)) return;
 
                 // add file upload widget
                 var $el = this.$el;
