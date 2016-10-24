@@ -1801,6 +1801,7 @@ define('io.ox/mail/api', [
         },
 
         subject: function (cid) {
+            if (!this.collection.get) return '';
             cid = _.isString(cid) ? cid : _.cid(cid);
             var base, newest, model;
             // get newest message

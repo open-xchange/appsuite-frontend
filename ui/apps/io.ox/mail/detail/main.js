@@ -27,7 +27,7 @@ define('io.ox/mail/detail/main', [
          * Setup thread view
          */
         'thread-view': function (app) {
-            app.threadView = new threadView.Desktop({ disableDrag: true });
+            app.threadView = new threadView.Desktop({ disableDrag: true, standalone: true });
             app.getWindow().nodes.main
                 .addClass('detail-view-app')
                 .append(app.threadView.render().$el);
@@ -47,6 +47,25 @@ define('io.ox/mail/detail/main', [
                     });
                 }
             };
+        },
+
+        /*
+         * toogle big screen mode for wide mails
+         */
+        'big-screen-toggle': function (app) {
+            // if the mail is too big and we get some scrollbars,
+            // toggle bigscreen by default
+            app.threadView.on('mail:detail:body:render', function () {
+                var rootNode;
+                if (_.device('chrome')) {
+                    // chrome uses shadow-dom which can not be found by jquery by default
+                    rootNode = app.threadView.$el.find('.shadow-root-container')[0].shadowRoot;
+                } else {
+                    rootNode = app.threadView.$el;
+                }
+                var width = $(rootNode).find('.mail-detail-content').width();
+                if (width >= 800) app.threadView.toggleBigScreen(true);
+            });
         }
     });
 

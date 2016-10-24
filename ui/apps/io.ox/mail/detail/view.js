@@ -433,6 +433,7 @@ define('io.ox/mail/detail/view', [
                 ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
                 // global event for tracking purposes
                 ox.trigger('mail:detail:body:render', view);
+                view.trigger('mail:detail:body:render', view);
                 body = node = view = null;
             }, 20);
         },

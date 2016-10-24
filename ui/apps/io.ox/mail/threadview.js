@@ -119,6 +119,30 @@ define('io.ox/mail/threadview', [
         }
     });
 
+    ext.point('io.ox/mail/thread-view/header').extend({
+        id: 'toggle-big-screen',
+        index: 400,
+        draw: function (baton) {
+            if (!baton.view.standalone) return;
+            this.append(
+                $('<a href="#" role="button" class="toggle-big-screen">')
+                .append('<i class="fa fa-plus-square-o">')
+                .attr('aria-label', gt('Toggle viewport size'))
+                .tooltip({
+                    animation: false,
+                    container: 'body',
+                    placement: 'left',
+                    title: gt('Toggle viewport size')
+                })
+                .on('click', function () {
+                    // remove tooltip on click as the viewport changes
+                    var self = $(this);
+                    _.defer(function () { self.tooltip('hide'); });
+                })
+            );
+        }
+    });
+
     // Thread view
 
     var ThreadView = Backbone.View.extend({
@@ -131,6 +155,7 @@ define('io.ox/mail/threadview', [
             'click .back-navigation .previous-mail': 'onPrevious',
             'click .back-navigation .next-mail': 'onNext',
             'click .toggle-all': 'onToggleAll',
+            'click .toggle-big-screen': 'onToggleBigscreen',
             'keydown': 'onKeydown'
         },
 
@@ -199,6 +224,15 @@ define('io.ox/mail/threadview', [
                 this.toggleMail(model.cid, state);
             }, this);
             http.resume();
+        },
+
+        onToggleBigscreen: function (e) {
+            e.preventDefault();
+            this.$el.toggleClass('big-screen');
+        },
+
+        toggleBigScreen: function (state) {
+            this.$el.toggleClass('big-screen', state);
         },
 
         toggleMail: function (cid, state) {
@@ -402,6 +436,7 @@ define('io.ox/mail/threadview', [
             this.threaded = true;
             this.collection = new backbone.Collection();
             options = options || {};
+            this.standalone = options.standalone || false;
 
             this.listenTo(this.collection, {
                 add: this.onAdd,
@@ -449,7 +484,10 @@ define('io.ox/mail/threadview', [
 
         // render an email
         renderListItem: function (model) {
-            var view = new detail.View({ tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            var self = this, view = new detail.View({ tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            view.on('mail:detail:body:render', function (data) {
+                self.trigger('mail:detail:body:render', data);
+            });
             return view.render().$el.attr({ tabindex: '0' });
         },
 
