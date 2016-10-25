@@ -213,7 +213,7 @@ define('io.ox/calendar/edit/extensions', [
             this.$el.append(
                 $('<label class="control-label col-xs-12">').append(
                     $.txt(gt('Subject')),
-                    input = new mini.InputView({ name: 'title', model: self.model }).render().$el,
+                    input = new mini.InputView({ name: 'title', model: self.model, noAutoTrim: true, trimEvents: 'sync:start' }).render().$el,
                     new mini.ErrorView({ name: 'title', model: self.model }).render().$el
                 )
             );
@@ -232,7 +232,8 @@ define('io.ox/calendar/edit/extensions', [
             this.$el.append(
                 $('<label class="control-label col-xs-12">').append(
                     $.txt(gt('Location')),
-                    new mini.InputView({ name: 'location', model: this.model }).render().$el
+                    // only trim on save
+                    new mini.InputView({ name: 'location', model: this.model, noAutoTrim: true, trimEvents: 'sync:start' }).render().$el
                 )
             );
         }

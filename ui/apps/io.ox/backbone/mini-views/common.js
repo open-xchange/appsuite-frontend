@@ -38,9 +38,15 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
+            //trim events are usually save or create events
+            if (this.options.trimEvents) {
+                this.listenTo(this.model, this.options.trimEvents, function () {
+                    this.model.set(this.name, $.trim(this.model.get(this.name)));
+                });
+            }
         },
         update: function () {
-            this.$el.val($.trim(this.model.get(this.name)));
+            this.$el.val(this.options.noAutoTrim ? this.model.get(this.name) : $.trim(this.model.get(this.name)));
         },
         render: function () {
             this.$el.attr({ name: this.name });
