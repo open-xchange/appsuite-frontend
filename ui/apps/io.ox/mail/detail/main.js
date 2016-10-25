@@ -64,7 +64,7 @@ define('io.ox/mail/detail/main', [
                     rootNode = app.threadView.$el;
                 }
                 var width = $(rootNode).find('.mail-detail-content').width();
-                if (width >= 800) app.threadView.toggleBigScreen(true);
+                if (width >= 850) app.threadView.toggleBigScreen(true);
             });
         }
     });
