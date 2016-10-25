@@ -23,19 +23,13 @@
 
     .thread-view-header .toggle-big-screen {
         font-size: 16px;
-        color: #767676;
-        float: right;
-        outline: 0;
-        &:hover { color: #595959; }
-        &:focus { color: @link-color; }
-        padding: 0;
-        margin: 12px @default-padding 4px 0;
-        .flex(0 0 auto);
-        .align-self(flex-start);
     }
 
     .big-screen.thread-view-control, .big-screen.detail-view-container {
         max-width: 100%;
+        .mail-detail-content.simple-mail {
+                max-width: 100%;
+        }
     }
 
     .detail-view-container {

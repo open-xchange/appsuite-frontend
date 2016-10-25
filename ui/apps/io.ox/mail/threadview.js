@@ -229,10 +229,20 @@ define('io.ox/mail/threadview', [
         onToggleBigscreen: function (e) {
             e.preventDefault();
             this.$el.toggleClass('big-screen');
+            if (_.device('chrome')) {
+                // chrome uses shadow-dom which can not be found by jquery by default
+                var shadow = this.$el.find('.shadow-root-container')[0].shadowRoot;
+                $(shadow).find('.mail-detail-content').toggleClass('big-screen');
+            }
         },
 
         toggleBigScreen: function (state) {
             this.$el.toggleClass('big-screen', state);
+            if (_.device('chrome')) {
+                // chrome uses shadow-dom which can not be found by jquery by default
+                var shadow = this.$el.find('.shadow-root-container')[0].shadowRoot;
+                $(shadow).find('.mail-detail-content').toggleClass('big-screen');
+            }
         },
 
         toggleMail: function (cid, state) {
