@@ -264,6 +264,8 @@ define('io.ox/core/tk/list', [
             }
 
             return function () {
+                // needless cause added models not drawn yet (debounced renderListItems)
+                if (this.queue.list.length) return;
 
                 var dom, sorted, i, j, length, node, reference, index, done = {};
 
@@ -729,6 +731,9 @@ define('io.ox/core/tk/list', [
                 this.trigger('add', model, index);
 
             });
+
+            // needs to be called manually cause drawing is debounced
+            this.onSort();
         },
 
         getBaton: function (model) {
