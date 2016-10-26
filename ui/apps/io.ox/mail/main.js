@@ -972,7 +972,7 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
             app.applyLayout = function () {
 
-                var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, className,
+                var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, categoriesToolbar, className,
                     savedWidth = app.settings.get('listview/width/' + _.display()),
                     savedHeight = app.settings.get('listview/height/' + _.display());
 
@@ -1004,13 +1004,21 @@ define('io.ox/mail/main', [
 
                 // relocate toolbar
                 toolbar = nodes.body.find('.classic-toolbar-container');
+                categoriesToolbar = nodes.body.find('.categories-toolbar-container');
                 className = 'classic-toolbar-visible';
+
                 if (layout === 'compact') {
                     nodes.body.removeClass(className);
                     app.right.addClass(className).prepend(toolbar);
+                    if (categoriesToolbar.length > 0) {
+                        app.right.prepend(categoriesToolbar);
+                    }
                 } else {
                     app.right.removeClass(className);
                     nodes.body.addClass(className).prepend(toolbar);
+                    if (categoriesToolbar.length > 0) {
+                        nodes.body.prepend(categoriesToolbar);
+                    }
                 }
 
                 if (layout !== 'list' && app.props.previousAttributes().layout === 'list' && !app.right.hasClass('preview-visible')) {

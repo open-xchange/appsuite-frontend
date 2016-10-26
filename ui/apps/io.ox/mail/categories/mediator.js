@@ -92,11 +92,20 @@ define('io.ox/mail/categories/mediator', [
                 // add placeholder
                 // NOTE: Added _.defer as the source order, this should be solved in a more proficient way
                 _.defer(function () {
-                    app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                        $('<div class="categories-toolbar-container">').append(
-                            new TabView({ props: app.props }).render().$el
-                        )
-                    );
+                    var layout = app.props.get('layout');
+                    if (layout === 'compact') {
+                        app.right.addClass('classic-toolbar-visible').prepend(
+                            $('<div class="categories-toolbar-container">').append(
+                                new TabView({ props: app.props }).render().$el
+                            )
+                        );
+                    } else {
+                        app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
+                            $('<div class="categories-toolbar-container">').append(
+                                new TabView({ props: app.props }).render().$el
+                            )
+                        );
+                    }
                 });
 
                 // events
