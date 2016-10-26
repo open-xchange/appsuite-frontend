@@ -309,14 +309,14 @@ define('io.ox/files/share/wizard', [
                     $.txt(' '),
                     $('<div>').addClass('form-group').append(
                         $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
-                        passInput = new miniViews.PasswordView({ name: 'password', model: baton.model })
+                        passInput = new miniViews.PasswordView({ name: 'share_password', model: baton.model })
                             .render().$el
                             .attr({ id: guid, placeholder: gt('Password') })
                             .prop('disabled', !baton.model.get('secured'))
                     )
                 )
             );
-            baton.view.listenTo(baton.model, 'change:password', function (model, val) {
+            baton.view.listenTo(baton.model, 'change:share_password', function (model, val) {
                 if (val && !model.get('secured')) {
                     model.set('secured', true);
                 }

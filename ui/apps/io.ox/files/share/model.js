@@ -33,7 +33,7 @@ define('io.ox/files/share/model', [
                 message: '',
                 edit: false,
                 secured: false,
-                password: '',
+                share_password: '',
                 temporary: false,
                 expires: 2,
                 url: ''
@@ -57,7 +57,7 @@ define('io.ox/files/share/model', [
                 if (!_.isEqual(val, original[id])) changes[id] = val;
             });
             // limit to relevant attributes
-            return _(changes).pick('expiry_date', 'password', 'temporary', 'secured');
+            return _(changes).pick('expiry_date', 'share_password', 'temporary', 'secured');
         },
 
         hasChanges: function () {
@@ -122,7 +122,7 @@ define('io.ox/files/share/model', [
                     };
 
                     if (self.get('secured')) {
-                        recipientData.password = self.get('password');
+                        recipientData.share_password = self.get('share_password');
                     }
 
                     switch (recipientModel.get('type')) {
@@ -157,10 +157,10 @@ define('io.ox/files/share/model', [
             if (this.get('type') === this.TYPES.LINK) {
                 data = targets[0];
 
-                if (this.get('secured') && this.get('password') !== '') {
-                    data.password = this.get('password');
+                if (this.get('secured') && this.get('share_password') !== '') {
+                    data.share_password = this.get('share_password');
                 } else {
-                    data.password = null;
+                    data.share_password = null;
                 }
 
                 // collect recipients data
@@ -213,10 +213,10 @@ define('io.ox/files/share/model', [
                         data = model.toJSON();
                     // set password to null if password protection was revoked
                     if (changes.secured === false) {
-                        data.password = null;
-                    } else if (!('password' in changes)) {
+                        data.share_password = null;
+                    } else if (!('share_password' in changes)) {
                         // remove password from data unless it has changed
-                        delete data.password;
+                        delete data.share_password;
                     }
                     // update only if there are relevant changes
                     return (_.isEmpty(changes) ? $.when() : api.updateLink(data, model.get('lastModified')))
@@ -236,7 +236,7 @@ define('io.ox/files/share/model', [
             if (attr.type === this.TYPES.INVITE && attr.recipients.length === 0) {
                 return 'Empty receipient list';
             }
-            if (attr.secured === true && _.isEmpty(attr.password)) {
+            if (attr.secured === true && _.isEmpty(attr.share_password)) {
                 return 'Please set password';
             }
         }

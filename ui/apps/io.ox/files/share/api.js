@@ -126,6 +126,22 @@ define('io.ox/files/share/api', [
 
     var SharesCollection = Backbone.Collection.extend({ model: Share });
 
+    function map(data) {
+        // client-side: share_password; server-side: password
+        var clone = _.clone(data);
+        if ('password' in clone) {
+            clone.share_password = clone.share_password || clone.password;
+            delete clone.password;
+            return clone;
+        }
+        if ('share_password' in clone) {
+            clone.password = clone.password || clone.share_password;
+            delete clone.share_password;
+            return clone;
+        }
+        return clone;
+    }
+
     var api = {
 
         Model: Share,
@@ -163,7 +179,7 @@ define('io.ox/files/share/api', [
                 data: _(data).pick('module', 'folder', 'item')
             }).then(function (result) {
                 api.trigger('new:link');
-                return result;
+                return map(result);
             });
         },
 
@@ -180,7 +196,7 @@ define('io.ox/files/share/api', [
                     timezone: 'UTC',
                     timestamp: timestamp || _.now()
                 },
-                data: _(data).pick('module', 'folder', 'item', 'password', 'expiry_date')
+                data: _(map(data)).pick('module', 'folder', 'item', 'password', 'expiry_date')
             });
         },
 
