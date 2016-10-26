@@ -82,7 +82,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
                 label: gt('Today'),
                 drawDisabled: true,
                 ref: 'io.ox/calendar/actions/dayview/showToday',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+                cssClasses: 'io-ox-action-link mobile-toolbar-action text-button'
             },
             'today-month': {
                 prio: 'hi',
@@ -90,7 +90,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
                 label: gt('Today'),
                 drawDisabled: true,
                 ref: 'io.ox/calendar/actions/month/showToday',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+                cssClasses: 'io-ox-action-link mobile-toolbar-action text-button'
             },
             'move': {
                 prio: 'hi',
