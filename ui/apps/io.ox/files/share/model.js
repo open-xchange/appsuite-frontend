@@ -200,7 +200,7 @@ define('io.ox/files/share/model', [
             }
             switch (action) {
                 case 'invite':
-                    return api.invite(model.toJSON()).fail(yell);
+                    return if (ox.debug) console.warn('Deprecated');
                 case 'read':
                     return api.getLink(this.toJSON()).then(function (data, timestamp) {
                         self.set(_.extend(data, { lastModified: timestamp }));
