@@ -722,7 +722,7 @@ define('io.ox/files/main', [
             var ev = _.device('touch') ? 'tap' : 'dblclick';
 
             app.listView.$el.on(ev, '.file-type-folder .list-item-content', function (e) {
-                // simpler id check for folders, prevents errors if folder id contains '.'
+                // simple id check for folders, prevents errors if folder id contains '.'
                 var id = $(e.currentTarget).parent().attr('data-cid').replace(/^folder./, '');
 
                 app.folder.set(id);
@@ -746,7 +746,7 @@ define('io.ox/files/main', [
             // folders
             app.listView.$el.on('keydown', '.file-type-folder', function (e) {
                 if (e.which === 13) {
-                    // simpler id check for folders, prevents errors if folder id contains '.'
+                    // simple id check for folders, prevents errors if folder id contains '.'
                     var id = $(e.currentTarget).attr('data-cid').replace(/^folder./, '');
 
                     app.listView.once('collection:load', function () {
@@ -1339,7 +1339,16 @@ define('io.ox/files/main', [
         win.nodes.outer.on('selection:drop', function (e, baton) {
             // convert composite keys to objects
             baton.data = _(baton.data).map(function (item) {
-                return _.isString(item) ? _.cid(item) : item;
+
+                // simple id check for folders, prevents errors if folder id contains '.'
+                if (_.isString(item)) {
+                    if (item.startsWith('folder.')) {
+                        return { folder_id: 'folder', id: item.replace(/^folder./, '') };
+                    }
+                    return _.cid(item);
+                }
+
+                return item;
             });
             // empty?
             if (!baton.data.length) return;
