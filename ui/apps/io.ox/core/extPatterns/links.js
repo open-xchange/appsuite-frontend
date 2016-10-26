@@ -342,13 +342,13 @@ define('io.ox/core/extPatterns/links', [
             if (!node.hasClass('dropdown-description')) return;
             // related link is not first child && divider not already added
             if ((index - 1 >= 1) && !node.prev().prev().hasClass('divider')) {
-                $(list[index - 1]).before('<li class="divider" role="presentation">');
+                $(list[index - 1]).before('<li class="divider" role="separator">');
             }
             // description is not last child
             if (index === list.length - 1) return;
             // divider not already added
             if (!node.next().hasClass('divider')) {
-                node.after('<li class="divider" role="presentation">');
+                node.after('<li class="divider" role="separator">');
             }
         });
     }
@@ -356,7 +356,7 @@ define('io.ox/core/extPatterns/links', [
     function injectDividers(node) {
         // loop over all items and visually group by "section"
         var currentSection = '',
-            $li = $('<li class="divider" role="presentation">');
+            $li = $('<li class="divider" role="separator">');
         node.children('li').each(function () {
             var node = $(this), section = node.children('a').attr('data-section');
             // add divider?

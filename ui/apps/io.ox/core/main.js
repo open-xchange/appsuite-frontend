@@ -897,7 +897,7 @@ define('io.ox/core/main', [
                 if (view.visible) {
                     this.append(
                         view.render().$el,
-                        $('<li class="divider" aria-hidden="true" role="separator">')
+                        $('<li class="divider" role="separator">')
                     );
                 }
             }
@@ -996,12 +996,12 @@ define('io.ox/core/main', [
                 //replaced by module
                 var node = this;
                 node.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
+                    $('<li class="divider" role="separator"></li>'),
                     $('<li class="io-ox-specificHelp" role="presentation">').append(
                         new HelpView({
                             content: gt('Help'),
                             href: getHelp
-                        }).render().$el.attr('tabindex', -1)
+                        }).render().$el.attr('role', 'menuitem')
                     )
                 );
             }
@@ -1012,7 +1012,7 @@ define('io.ox/core/main', [
             index: 290,
             draw: function () {
                 this.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation">')
+                    $('<li class="divider" role="separator">')
                 );
             }
         });
@@ -1040,7 +1040,7 @@ define('io.ox/core/main', [
             index: 1000,
             draw: function () {
                 this.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation">'),
+                    $('<li class="divider" role="separator">'),
                     $('<li role="presentation">').append(
                         $('<a href="#" data-action="logout" role="menuitem">').text(gt('Sign out'))
                     )

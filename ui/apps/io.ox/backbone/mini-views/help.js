@@ -88,7 +88,6 @@ define('io.ox/backbone/mini-views/help', ['gettext!io.ox/core'], function (gt) {
                 .append(this.options.content)
                 .attr({
                     href: '#',
-                    role: 'button',
                     target: '_blank',
                     'aria-label': gt('Online help')
                 });

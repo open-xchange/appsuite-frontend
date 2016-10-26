@@ -47,7 +47,7 @@ define('io.ox/core/folder/contextmenu', [
 
     function divider() {
         this.append(
-            $('<li class="divider" role="presentation" aria-hidden="true">')
+            $('<li class="divider" role="separator">')
         );
     }
 
