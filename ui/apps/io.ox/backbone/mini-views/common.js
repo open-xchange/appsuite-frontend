@@ -38,15 +38,13 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
-            //trim events are usually save or create events
-            if (this.options.trimEvents) {
-                this.listenTo(this.model, this.options.trimEvents, function () {
-                    this.model.set(this.name, $.trim(this.model.get(this.name)));
-                });
-            }
         },
         update: function () {
-            this.$el.val(this.options.noAutoTrim ? this.model.get(this.name) : $.trim(this.model.get(this.name)));
+            // trim left spaces if possible
+            this.$el.val(_.isString(this.model.get(this.name)) ? this.model.get(this.name).replace(/^\s+/, '') : this.model.get(this.name));
+            // update model too or the the left spaces are still in the model data. They would be saved when the model is saved, creating inconsistent data
+            // infinite loops are not possible because the change event is only triggered if the new value is different
+            this.model.set(this.name, $.trim(this.model.get(this.name)));
         },
         render: function () {
             this.$el.attr({ name: this.name });
