@@ -19,6 +19,22 @@ define('io.ox/core/a11y', [], function () {
     // Focus management
     //
 
+    // fix for role="button"
+    $(document).on('keydown', 'a[role="button"]', function (e) {
+        if (!/32|13/.test(e.which) || e.isDefaultPrevented()) return;
+        e.preventDefault();
+        $(this).click();
+    });
+
+    // focus folder tree from top-bar on <enter>
+    $(document).on('keydown', '#io-ox-topbar .active-app a', function (e) {
+        if (e.which === 13) $('.folder-tree:visible .folder.selected').focus();
+    });
+
+    $(document).on('keydown.bs.dropdown.data-api', 'ul.dropdown-menu[role="menu"]', dropdownTrapFocus);
+
+    $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"]', menubarKeydown);
+
     $(document).on('mousedown', '.focusable, .scrollable[tabindex]', function (e) {
         respondToNonKeyboardFocus(e.currentTarget);
     });
@@ -93,7 +109,7 @@ define('io.ox/core/a11y', [], function () {
     function dropdownTrapFocus(e) {
 
         var dropdown = $(e.target).closest('ul.dropdown-menu'),
-            dropdownLinks = dropdown.find('li > a'),
+            dropdownLinks = dropdown.find('> li > a'),
             firstLink = dropdownLinks.first(),
             lastLink = dropdownLinks.last(),
             isLastLink = $(e.target).is(lastLink),
@@ -118,24 +134,45 @@ define('io.ox/core/a11y', [], function () {
             e.stopImmediatePropagation();
             return firstLink.focus();
         }
+        hotkey(e, dropdownLinks);
+    }
 
+    function hotkey(e, el) {
         // Typing a character key moves focus to the next node whose title begins with that character
-        var a = dropdownLinks.map(function () {
-            if ($(this).text().substring(0, 1).toLowerCase() === String.fromCharCode(e.which).toLowerCase()) return $(this);
-        });
-        if (a.length === 1) return a[0].focus();
-        if (a.length > 1) {
-            var nextFocus;
-            _.find(a, function (el, idx) {
-                if (el.is(':focus') && (idx >= 0 && idx < a.length - 1)) nextFocus = a[idx + 1];
+        if (!el.filter(':focus').length) return;
+        var nextFocus,
+            a = el.map(function () {
+                var linkText = $(this).text() || $(this).attr('aria-label');
+                if (linkText.substring(0, 1).toLowerCase() === String.fromCharCode(e.which).toLowerCase()) return $(this);
             });
-            return (nextFocus || a[0]).focus();
-        }
+        if (!a.length) return; else if (a.length === 1) return a[0].focus();
+        _.find(a, function (el, idx) {
+            if (el.is(':focus') && (idx >= 0 && idx < a.length - 1)) nextFocus = a[idx + 1];
+        });
+        (nextFocus || a[0]).focus();
+    }
+
+    function cursorHorizontalKeydown(e, el) {
+        if (!/(37|39)/.test(e.which)) return;
+        var idx = el.index(el.filter(':focus'));
+        if (e.which === 37) idx--; else idx++;
+        if (idx < 0) idx = el.length - 1;
+        if (idx === el.length) idx = 0;
+        return el.eq(idx).focus();
+    }
+
+    function menubarKeydown(e) {
+        if (e.which === 9 || e.which === 16 && e.shiftKey) return;
+        if (e.which === 32) $(e.target).click(); // space
+        var links = $(e.currentTarget).find('> li > a');
+        cursorHorizontalKeydown(e, links);
+        hotkey(e, links);
     }
 
     return {
         getTabbable: getTabbable,
         trapFocus: trapFocus,
-        dropdownTrapFocus: dropdownTrapFocus
+        dropdownTrapFocus: dropdownTrapFocus,
+        menubarKeydown: menubarKeydown
     };
 });

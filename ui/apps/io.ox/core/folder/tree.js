@@ -30,8 +30,7 @@ define('io.ox/core/folder/tree', [
         className: 'folder-tree',
 
         events: {
-            'click .contextmenu-control':                    'onToggleContextMenu',
-            'keydown .contextmenu-control':                  'onKeydown',
+            'click .contextmenu-control': 'onToggleContextMenu',
             'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu',
             'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys'
         },
@@ -242,21 +241,6 @@ define('io.ox/core/folder/tree', [
             this.$dropdown.find('.dropdown-toggle').dropdown('toggle');
         },
 
-        onKeydown: function (e) {
-
-            var dropdown = this.$dropdown;
-            // done if not open
-            // if (!dropdown.hasClass('open')) return;
-            // shift-tab
-            // if (e.shiftKey && e.which === 9) return;
-            if (e.which === 32) {
-                // cursor down
-                e.preventDefault();
-                $(e.currentTarget).click();
-                return dropdown.find('.dropdown-menu > li:first > a').focus();
-            }
-        },
-
         getContextMenuId: function (id) {
             return 'io.ox/core/foldertree/contextmenu/' + (id || 'default');
         },
@@ -328,7 +312,6 @@ define('io.ox/core/folder/tree', [
                     )
                     .on('show.bs.dropdown', show.bind(this))
                     .on('hidden.bs.dropdown', hide.bind(this))
-                    .on('keydown.bs.dropdown.data-api', a11y.dropdownTrapFocus)
                 );
                 this.$dropdownToggle.dropdown();
                 this.$dropdownMenu.removeAttr('role');

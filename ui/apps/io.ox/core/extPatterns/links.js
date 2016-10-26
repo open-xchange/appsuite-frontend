@@ -441,8 +441,7 @@ define('io.ox/core/extPatterns/links', [
                     .parent()
                     .on('shown.bs.dropdown dispose', function () {
                         $(this).children('a').tooltip('destroy');
-                    })
-                    .on('keydown.bs.dropdown.data-api', a11y.dropdownTrapFocus);
+                    });
                 }
 
                 //in firefox draggable=false is not enough to prevent dragging...

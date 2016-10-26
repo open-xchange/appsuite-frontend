@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstract', 'io.ox/core/a11y'], function (AbstractView, a11y) {
+define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstract'], function (AbstractView) {
 
     'use strict';
 
@@ -60,7 +60,6 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$ul = $('<ul class="dropdown-menu" role="menu">');
             // not so nice but we need this for mobile support
             this.$ul.on('click', 'a', $.proxy(this.onClick, this));
-            this.$ul.on('keydown.bs.dropdown.data-api', a11y.dropdownTrapFocus);
             if (this.model) this.listenTo(this.model, 'change', this.update);
         },
 

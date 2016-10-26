@@ -52,18 +52,6 @@ define('io.ox/core/main', [
         };
     }
 
-    // a11y: fix for role="button"
-    $(document).on('keydown', 'a[role="button"]', function (e) {
-        if (e.which !== 32 || e.isDefaultPrevented()) return;
-        e.preventDefault();
-        $(e.currentTarget).click();
-    });
-
-    // a11y: focus folder tree from top-bar on <enter>
-    $(document).on('keydown', '#io-ox-topbar .active-app a', function (e) {
-        if (e.which === 13) $('.folder-tree:visible .folder.selected').focus();
-    });
-
     // general fix for flexbox scrolling issue (see bugs 43799, 44938, 45501, 46950, 47395)
     $('#io-ox-windowmanager').on('scroll', function () {
         // no infinite loop here. Only scroll if needed
@@ -247,11 +235,10 @@ define('io.ox/core/main', [
         .end()
         .find('i.fa-bars').removeClass('fa-bars').addClass('fa-angle-double-right ');
 
-    launchers
-        .attr({
-            'role': 'navigation',
-            'aria-label': gt('Apps')
-        });
+    launchers.attr({
+        'role': 'tablist',
+        'aria-label': gt('Apps')
+    });
 
     // whatever ...
     gt.pgettext('app', 'Portal');
@@ -307,7 +294,7 @@ define('io.ox/core/main', [
                 hidden++;
             }
         }
-        $('li', launcherDropdown).hide();
+        $('li', launcherDropdown).attr('role', 'menuitem').hide();
 
 
         if (hidden > 0) {
@@ -323,7 +310,7 @@ define('io.ox/core/main', [
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
-        var node = $('<li class="launcher">');
+        var node = $('<li class="launcher" role="tab">');
 
         if (fn) {
             node.on('click', function (e) {
@@ -727,8 +714,8 @@ define('io.ox/core/main', [
             addUserContent(model, node, true);
 
             // add list item
-            node = $('<li>').append(
-                $('<a href="#" role="menuitem">', {
+            node = $('<li role="tab">').append(
+                $('<a href="#">', {
                     'data-app-name': name,
                     'data-app-guid': model.guid
                 })
@@ -1063,7 +1050,6 @@ define('io.ox/core/main', [
                             $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
                         ),
                         ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
-                            .on('keydown.bs.dropdown.data-api', a11y.dropdownTrapFocus)
                     )
                 );
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
@@ -1159,10 +1145,14 @@ define('io.ox/core/main', [
             id: 'default',
             draw: function () {
 
-                var rightbar = $('<ul class="launchers-secondary">').attr('aria-label', gt('Actions'));
+                var rightbar = $('<ul class="launchers-secondary" role="toolbar">')
+                    .attr('aria-label', gt('Actions'));
 
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', rightbar);
+
+                rightbar.find('> li').attr('role', 'presentation');
+                rightbar.find('> li > a').attr('role', 'button');
 
                 topbar.append(rightbar);
 
