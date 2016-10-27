@@ -351,6 +351,11 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             return this;
         };
 
+        this.toggle = function (id, state) {
+            state = _.isBoolean(state) ? state : disabled[id];
+            return state ? this.enable(id) : this.disable(id);
+        };
+
         this.isEnabled = function (id) {
             return !disabled[id] && !disabled['*'];
         };
