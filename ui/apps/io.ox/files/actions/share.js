@@ -42,18 +42,11 @@ define('io.ox/files/actions/share', [
             .header($('<h4>').text(header))
             .append(view.render().$el);
 
-        if (type === 'invite') {
-            // invite guests
-            dialog
-                .addPrimaryButton('share', gt('Invite'), 'share')
-                .addButton('cancel', gt('Cancel'), 'cancel');
-        } else {
-            // get a link (anonymouse)
-            dialog
-                .addPrimaryButton('share', gt('Close'), 'share')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .addAlternativeButton('remove', gt('Remove link'), 'remove');
-        }
+        // get a link (anonymouse)
+        dialog
+            .addPrimaryButton('share', gt('Close'), 'share')
+            .addButton('cancel', gt('Cancel'), 'cancel')
+            .addAlternativeButton('remove', gt('Remove link'), 'remove');
 
         function toggleButtons(sendVisible) {
             var footer = dialog.getFooter();

@@ -21,14 +21,13 @@ define('io.ox/files/share/model', [
     var WizardShare = Backbone.Model.extend({
 
         TYPES: {
-            INVITE: 'invite',
             LINK: 'link'
         },
 
         defaults: function () {
             return {
                 files: [],
-                type: this.TYPES.INVITE,
+                type: this.TYPES.LINK,
                 recipients: [],
                 message: '',
                 edit: false,
@@ -42,8 +41,7 @@ define('io.ox/files/share/model', [
 
         idAttribute: 'entity',
 
-        initialize: function (attributes) {
-            this.set('edit', attributes.type === this.TYPES.INVITE);
+        initialize: function () {
             this.setOriginal();
         },
 
@@ -87,8 +85,7 @@ define('io.ox/files/share/model', [
         toJSON: function () {
 
             // default invite data
-            var self = this,
-                targets = [],
+            var targets = [],
                 data = {};
 
             // collect target data
@@ -106,52 +103,6 @@ define('io.ox/files/share/model', [
                 }
                 targets.push(target);
             });
-
-            // secial data for invite request
-            if (this.get('type') === this.TYPES.INVITE) {
-
-                // set message data
-                data.message = this.get('message', '');
-                data.targets = targets;
-
-                // collect recipients data
-                data.recipients = [];
-                _(this.get('recipients')).each(function (recipientModel) {
-                    var recipientData = {
-                        bits: 33026
-                    };
-
-                    if (self.get('secured')) {
-                        recipientData.password = self.get('password');
-                    }
-
-                    switch (recipientModel.get('type')) {
-                        // internal user
-                        case 1:
-                            recipientData.type = 'user';
-                            recipientData.entity = recipientModel.get('id');
-                            break;
-                        // user group
-                        case 2:
-                            recipientData.type = 'group';
-                            recipientData.entity = recipientModel.get('id');
-                            break;
-                        // external user
-                        case 5:
-                            recipientData.type = 'guest';
-                            if (recipientModel.get('folder_id')) {
-                                recipientData.contact_folder = recipientModel.get('folder_id');
-                                recipientData.contact_id = recipientModel.get('id');
-                            }
-                            recipientData.email_address = recipientModel.get('token').value;
-                            break;
-                        // no default
-
-                    }
-                    data.recipients.push(recipientData);
-                });
-                return data;
-            }
 
             // secial data for getlink request
             if (this.get('type') === this.TYPES.LINK) {
@@ -195,12 +146,7 @@ define('io.ox/files/share/model', [
 
         sync: function (action, model) {
             var self = this;
-            if (this.get('type') === this.TYPES.INVITE) {
-                action = 'invite';
-            }
             switch (action) {
-                case 'invite':
-                    return if (ox.debug) console.warn('Deprecated');
                 case 'read':
                     return api.getLink(this.toJSON()).then(function (data, timestamp) {
                         self.set(_.extend(data, { lastModified: timestamp }));
@@ -233,9 +179,6 @@ define('io.ox/files/share/model', [
         },
 
         validate: function (attr) {
-            if (attr.type === this.TYPES.INVITE && attr.recipients.length === 0) {
-                return 'Empty receipient list';
-            }
             if (attr.secured === true && _.isEmpty(attr.password)) {
                 return 'Please set password';
             }
