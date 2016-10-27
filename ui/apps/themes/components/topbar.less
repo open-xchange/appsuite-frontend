@@ -56,7 +56,7 @@
     .launchers {
         overflow: hidden;
         float: left;
-        height: 100%;
+        height: 40px; // Fix for Bug 49734 after wrapping launchers in A11y div
         margin: 0;
         -ms-user-select: none; // Fix for Bug #26670
     }
@@ -82,7 +82,7 @@
         -webkit-tap-highlight-color: transparent;
 
         & > a {
-
+            background-color: red;
             color: @topbar-launcher-color;
             padding: 0 @default-padding;
             line-height: 40px;
