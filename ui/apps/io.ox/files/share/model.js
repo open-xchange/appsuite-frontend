@@ -20,14 +20,9 @@ define('io.ox/files/share/model', [
 
     var WizardShare = Backbone.Model.extend({
 
-        TYPES: {
-            LINK: 'link'
-        },
-
         defaults: function () {
             return {
                 files: [],
-                type: this.TYPES.LINK,
                 recipients: [],
                 message: '',
                 edit: false,
@@ -105,42 +100,40 @@ define('io.ox/files/share/model', [
             });
 
             // secial data for getlink request
-            if (this.get('type') === this.TYPES.LINK) {
-                data = targets[0];
+            data = targets[0];
 
-                if (this.get('secured') && this.get('password') !== '') {
-                    data.password = this.get('password');
-                } else {
-                    data.password = null;
-                }
-
-                // collect recipients data
-                data.recipients = [];
-                _(this.get('recipients')).each(function (recipientModel) {
-                    // model values might be outdated (token edit) so we act like mail compose
-                    data.recipients.push([
-                        recipientModel.get('token').label || recipientModel.getDisplayName(),
-                        recipientModel.get('token').value || recipientModel.getTarget()
-                    ]);
-                });
-                if (data.recipients.length === 0) {
-                    delete data.recipients;
-                }
-
-                if (this.get('message') && this.get('message') !== '') {
-                    data.message = this.get('message');
-                }
-
-                // create or update ?
-                if (!this.has('url')) return data;
-
-                if (this.get('temporary')) {
-                    data.expiry_date = this.getExpiryDate();
-                } else {
-                    data.expiry_date = null;
-                }
-                return data;
+            if (this.get('secured') && this.get('password') !== '') {
+                data.password = this.get('password');
+            } else {
+                data.password = null;
             }
+
+            // collect recipients data
+            data.recipients = [];
+            _(this.get('recipients')).each(function (recipientModel) {
+                // model values might be outdated (token edit) so we act like mail compose
+                data.recipients.push([
+                    recipientModel.get('token').label || recipientModel.getDisplayName(),
+                    recipientModel.get('token').value || recipientModel.getTarget()
+                ]);
+            });
+            if (data.recipients.length === 0) {
+                delete data.recipients;
+            }
+
+            if (this.get('message') && this.get('message') !== '') {
+                data.message = this.get('message');
+            }
+
+            // create or update ?
+            if (!this.has('url')) return data;
+
+            if (this.get('temporary')) {
+                data.expiry_date = this.getExpiryDate();
+            } else {
+                data.expiry_date = null;
+            }
+            return data;
 
         },
 
@@ -173,7 +166,6 @@ define('io.ox/files/share/model', [
         },
 
         send: function () {
-            if (this.get('type') !== this.TYPES.LINK) return;
             if (_.isEmpty(this.get('recipients'))) return;
             api.sendLink(this.toJSON()).fail(yell);
         },

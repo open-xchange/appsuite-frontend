@@ -20,7 +20,7 @@ define('io.ox/files/actions/share', [
 
     'use strict';
 
-    function share(array, type) {
+    function link(array) {
 
         if (!array) return;
 
@@ -28,7 +28,7 @@ define('io.ox/files/actions/share', [
             count = array.length,
             first = array[0],
             filler = count === 1 ? _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' }) : count,
-            view = new ShareWizard({ files: array, type: type });
+            view = new ShareWizard({ files: array });
 
         // build header
         if (first.isFile()) {
@@ -102,8 +102,6 @@ define('io.ox/files/actions/share', [
             });
         },
 
-        link: function (array) {
-            return share(array, 'link');
-        }
+        link: link
     };
 });

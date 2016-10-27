@@ -27,11 +27,7 @@ define('io.ox/files/share/wizard', [
     'use strict';
 
     var INDEX = 0,
-        POINT = 'io.ox/files/share/wizard',
-        trans = {
-            invite: gt('Invite people via email. Every recipient will get an individual link to access the shared files.'),
-            link: gt('You can copy and paste this link in an email, instant messenger or social network. Please note that anyone with this link can access the share.')
-        };
+        POINT = 'io.ox/files/share/wizard';
 
     /*
      * extension point descriptive text
@@ -39,9 +35,9 @@ define('io.ox/files/share/wizard', [
     ext.point(POINT + '/fields').extend({
         id: 'description',
         index: INDEX += 100,
-        draw: function (baton) {
+        draw: function () {
             this.append(
-                $('<span>').addClass('help-block').text(trans[baton.model.get('type', 'invite')])
+                $('<span>').addClass('help-block').text(gt('You can copy and paste this link in an email, instant messenger or social network. Please note that anyone with this link can access the share.'))
             );
         }
     });
@@ -53,9 +49,6 @@ define('io.ox/files/share/wizard', [
         id: 'link',
         index: INDEX += 100,
         draw: function (baton) {
-            // only available for type link
-            if (baton.model.get('type') !== baton.model.TYPES.LINK) return;
-
             var linkNode,
                 link = baton.model.get('url', ''),
                 formID = _.uniqueId('form-control-label-');
@@ -88,11 +81,9 @@ define('io.ox/files/share/wizard', [
     ext.point(POINT + '/fields').extend({
         id: 'link-to-clipboard',
         index: INDEX += 100,
-        draw: function (baton) {
+        draw: function () {
             // unsupported: https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
             if (_.device('safari')) return;
-            // only available for type link
-            if (baton.model.get('type') !== baton.model.TYPES.LINK) return;
 
             var group = this.find('.link-group'),
                 target = '#' + group.find('input').attr('id'),
@@ -151,8 +142,7 @@ define('io.ox/files/share/wizard', [
                 apiOptions: {
                     contacts: true,
                     users: true,
-                    // only availiable for invite autocomplete
-                    groups: baton.model.get('type') === 'invite'
+                    groups: false
                 },
                 leftAligned: true
             });
@@ -218,9 +208,6 @@ define('io.ox/files/share/wizard', [
         id: 'temporary',
         index: INDEX += 100,
         draw: function (baton) {
-            // only available for type link
-            if (baton.model.get('type') !== baton.model.TYPES.LINK) return;
-
             //#. options for terminal element of a sentence starts with "Expires in"
             var typeTranslations = {
                 0: gt('one day'),
@@ -277,8 +264,6 @@ define('io.ox/files/share/wizard', [
         id: 'write-permissions',
         index: INDEX += 100,
         draw: function (baton) {
-            // only available for type invite
-            if (baton.model.get('type') !== baton.model.TYPES.INVITE) return;
             this.append(
                 $('<div>').addClass('form-group editgroup').append(
                     $('<div>').addClass('checkbox').append(
@@ -337,11 +322,11 @@ define('io.ox/files/share/wizard', [
 
         tagName: 'form',
 
-        className: 'share-wizard',
+        className: 'share-wizard link',
 
         initialize: function (options) {
 
-            this.model = new sModel.WizardShare({ files: options.files, type: options.type });
+            this.model = new sModel.WizardShare({ files: options.files });
 
             this.baton = ext.Baton({ model: this.model, view: this });
 
@@ -352,9 +337,7 @@ define('io.ox/files/share/wizard', [
 
         render: function () {
 
-            this.$el.attr({
-                role: 'form'
-            }).addClass(this.model.get('type'));
+            this.$el.attr({ role: 'form' });
 
             // draw all extensionpoints
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);
