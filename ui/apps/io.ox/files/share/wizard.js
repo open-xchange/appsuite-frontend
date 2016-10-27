@@ -311,7 +311,7 @@ define('io.ox/files/share/wizard', [
                         $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
                         passInput = new miniViews.PasswordView({ name: 'password', model: baton.model })
                             .render().$el
-                            .attr({ id: guid, placeholder: gt('Password') })
+                            .attr({ id: guid, placeholder: gt('Password'), name: 'share_password' })
                             .prop('disabled', !baton.model.get('secured'))
                     )
                 )
