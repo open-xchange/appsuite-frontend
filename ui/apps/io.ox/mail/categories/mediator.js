@@ -29,7 +29,7 @@ define('io.ox/mail/categories/mediator', [
     var DEFAULT_CATEGORY = 'general',
         INBOX = settings.get('folder/inbox'),
         isVisible = false,
-        toolbaraction = ext.point('io.ox/mail/actions/category'),
+        toolbarAction = ext.point('io.ox/mail/actions/category'),
         helper = {
             isVisible: function () {
                 return isVisible;
@@ -63,7 +63,7 @@ define('io.ox/mail/categories/mediator', [
                     app.getWindow().nodes.outer.toggleClass('mail-categories-visible', isVisible);
                     app.listView.model.set('category_id', isVisible ? app.props.get('category_id') : undefined);
                     if (isVisible) api.collection.initializeRefresh();
-                    return isVisible ? toolbaraction.enable('default') : toolbaraction.disable('default');
+                    toolbarAction.toggle('default', isVisible);
                 }
 
                 app.on('folder:change', toggleCategories);
