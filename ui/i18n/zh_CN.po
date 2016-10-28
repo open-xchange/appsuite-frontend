@@ -4597,7 +4597,6 @@ msgid "Invitation sent"
 msgstr "已发送邀请"
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Invite"
 msgstr "邀请"
 
@@ -4609,12 +4608,6 @@ msgstr "邀请拥有者"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Invite people"
 msgstr "邀请人员"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"Invite people via email. Every recipient will get an individual link to "
-"access the shared files."
-msgstr "经由电子邮件邀请人员。每一个收件人将会收到个别链接以访问分享的文件。"
 
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Invite to %s"
@@ -13044,6 +13037,12 @@ msgstr "年"
 
 #~ msgid "Invalid data"
 #~ msgstr "无效数据"
+
+#~ msgid ""
+#~ "Invite people via email. Every recipient will get an individual link to "
+#~ "access the shared files."
+#~ msgstr ""
+#~ "经由电子邮件邀请人员。每一个收件人将会收到个别链接以访问分享的文件。"
 
 #~ msgid "Inviting other participants"
 #~ msgstr "邀请其他参与者"

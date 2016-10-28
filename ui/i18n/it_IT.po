@@ -4689,7 +4689,6 @@ msgid "Invitation sent"
 msgstr "Invito spedito"
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Invite"
 msgstr "Invita"
 
@@ -4701,14 +4700,6 @@ msgstr "Invita il proprietario"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Invite people"
 msgstr "Invita persone"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"Invite people via email. Every recipient will get an individual link to "
-"access the shared files."
-msgstr ""
-"Invita le persone tramite posta elettronica. Ogni destinatario riceverà un "
-"collegamento individuale per accedere ai file condivisi."
 
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Invite to %s"
@@ -13347,6 +13338,13 @@ msgstr "aaaa"
 
 #~ msgid "Invalid data"
 #~ msgstr "Dati non validi"
+
+#~ msgid ""
+#~ "Invite people via email. Every recipient will get an individual link to "
+#~ "access the shared files."
+#~ msgstr ""
+#~ "Invita le persone tramite posta elettronica. Ogni destinatario riceverà "
+#~ "un collegamento individuale per accedere ai file condivisi."
 
 #~ msgid "Inviting other participants"
 #~ msgstr "Invitare altri partecipanti"

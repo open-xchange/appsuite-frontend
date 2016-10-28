@@ -4679,7 +4679,6 @@ msgid "Invitation sent"
 msgstr "Meghívó elküldve"
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Invite"
 msgstr "Meghívás"
 
@@ -4691,14 +4690,6 @@ msgstr "Tulajdonos meghívása"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Invite people"
 msgstr "Emberek meghívása"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"Invite people via email. Every recipient will get an individual link to "
-"access the shared files."
-msgstr ""
-"Emberek meghívása e-mailen keresztül. Minden címzett egyedi hivatkozást kap "
-"a megosztott fájlok eléréséhez."
 
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Invite to %s"
@@ -11149,6 +11140,13 @@ msgstr "yyyy"
 
 #~ msgid "Invalid data"
 #~ msgstr "Érvénytelen adatok"
+
+#~ msgid ""
+#~ "Invite people via email. Every recipient will get an individual link to "
+#~ "access the shared files."
+#~ msgstr ""
+#~ "Emberek meghívása e-mailen keresztül. Minden címzett egyedi hivatkozást "
+#~ "kap a megosztott fájlok eléréséhez."
 
 #~ msgid "Item List"
 #~ msgstr "Elemlista"

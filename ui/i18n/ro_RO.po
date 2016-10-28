@@ -4706,7 +4706,6 @@ msgid "Invitation sent"
 msgstr "Invitație trimisă"
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Invite"
 msgstr "Invită"
 
@@ -4718,14 +4717,6 @@ msgstr "Invită proprietarul"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Invite people"
 msgstr "Invită persoane"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"Invite people via email. Every recipient will get an individual link to "
-"access the shared files."
-msgstr ""
-"Invitați persoane prin e-mail. Fiecare destinatar va primi o legătură "
-"individuală pentru a accesa fișierele partajate."
 
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Invite to %s"
@@ -13722,6 +13713,13 @@ msgstr "aaaa"
 
 #~ msgid "Invalid time."
 #~ msgstr "Oră incorectă."
+
+#~ msgid ""
+#~ "Invite people via email. Every recipient will get an individual link to "
+#~ "access the shared files."
+#~ msgstr ""
+#~ "Invitați persoane prin e-mail. Fiecare destinatar va primi o legătură "
+#~ "individuală pentru a accesa fișierele partajate."
 
 #~ msgid "Inviting other participants"
 #~ msgstr "Invitarea altor participanți "

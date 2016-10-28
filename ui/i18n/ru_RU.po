@@ -4688,7 +4688,6 @@ msgid "Invitation sent"
 msgstr "Приглашение отправлено"
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Invite"
 msgstr "Пригласить"
 
@@ -4700,14 +4699,6 @@ msgstr "Пригласить владельца"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Invite people"
 msgstr "Пригласить людей"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"Invite people via email. Every recipient will get an individual link to "
-"access the shared files."
-msgstr ""
-"Пригласить по почте. Пользователи получат индивидуальные ссылки для доступа "
-"к общим файлам."
 
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Invite to %s"
@@ -11898,6 +11889,13 @@ msgstr "гггг"
 
 #~ msgid "Invalid data"
 #~ msgstr "Недопустимые данные"
+
+#~ msgid ""
+#~ "Invite people via email. Every recipient will get an individual link to "
+#~ "access the shared files."
+#~ msgstr ""
+#~ "Пригласить по почте. Пользователи получат индивидуальные ссылки для "
+#~ "доступа к общим файлам."
 
 #~ msgid "Inviting other participants"
 #~ msgstr "Приглашение"

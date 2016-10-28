@@ -4688,7 +4688,6 @@ msgid "Invitation sent"
 msgstr "Invitación enviada"
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Invite"
 msgstr "Invitar"
 
@@ -4700,14 +4699,6 @@ msgstr "Invitar al propietario"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Invite people"
 msgstr "Invitar a personas"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"Invite people via email. Every recipient will get an individual link to "
-"access the shared files."
-msgstr ""
-"Invitar a personas mediante correo. Todos los destinatarios recibirán un "
-"enlace individual para acceder a los archivos compartidos."
 
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Invite to %s"
@@ -15523,6 +15514,13 @@ msgstr "yyyy"
 
 #~ msgid "Invalid time."
 #~ msgstr "Hora no válida."
+
+#~ msgid ""
+#~ "Invite people via email. Every recipient will get an individual link to "
+#~ "access the shared files."
+#~ msgstr ""
+#~ "Invitar a personas mediante correo. Todos los destinatarios recibirán un "
+#~ "enlace individual para acceder a los archivos compartidos."
 
 #~ msgid "Invite the group %1$s to the appointment."
 #~ msgstr "Invite al grupo %1$s a la cita."

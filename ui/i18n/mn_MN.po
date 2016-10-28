@@ -4534,7 +4534,6 @@ msgid "Invitation sent"
 msgstr ""
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Invite"
 msgstr "Урих"
 
@@ -4545,12 +4544,6 @@ msgstr ""
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Invite people"
-msgstr ""
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"Invite people via email. Every recipient will get an individual link to "
-"access the shared files."
 msgstr ""
 
 #: apps/plugins/xing/main.js module:plugins/portal
