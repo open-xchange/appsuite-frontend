@@ -309,7 +309,7 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'change:signatures',              this.updateSelectedSignature);
             this.listenTo(this.model, 'needsync',                       this.syncMail);
 
-            var mailto, params;
+            var mailto, params, self = this;
             // triggered by mailto?
             if (mailto = _.url.hash('mailto')) {
 
@@ -338,6 +338,16 @@ define('io.ox/mail/compose/view', [
             }
 
             ext.point(POINT + '/mailto').invoke('setup');
+
+            // add dynamic extensionpoint to trigger saveAsDraft on logout
+            this.logoutPointId = 'saveMailOnDraft' + this.app.id;
+            ext.point('io.ox/core/logout').extend({
+                id: this.logoutPointId,
+                index: 1000 + this.app.guid,
+                logout: function () {
+                    return self.autoSaveDraft();
+                }
+            });
         },
 
         markupQuotes: function (text) {
@@ -646,6 +656,8 @@ define('io.ox/mail/compose/view', [
         },
 
         dispose: function () {
+            // disable dynamic extensionpoint to trigger saveAsDraft on logout
+            ext.point('io.ox/core/logout').disable(this.logoutPointId);
             this.stopListening();
             this.model = null;
         },
