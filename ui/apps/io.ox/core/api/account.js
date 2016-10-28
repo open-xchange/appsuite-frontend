@@ -274,17 +274,23 @@ define('io.ox/core/api/account', [
             if (!account) return $.Deferred().reject(account);
 
             // use user-setting for primary account and unified folders
-            if (account_id === 0 || api.isUnified(account_id)) {
-                return require(['settings!io.ox/mail']).then(function (settings) {
-                    var defaultSendAddress = $.trim(settings.get('defaultSendAddress', ''));
-                    return [account.personal, defaultSendAddress || account.primary_address];
-                });
+            if (account_id === 0 || !account.transport_url || api.isUnified(account_id)) {
+                return api.getDefaultAddress();
             }
 
             return [account.personal, account.primary_address];
         })
         .then(function (address) {
             return getAddressArray(address[0], address[1]);
+        });
+    };
+
+    api.getDefaultAddress = function () {
+        return require(['settings!io.ox/mail']).then(function (settings) {
+            return api.get(0).then(ensureDisplayName).then(function (account) {
+                var defaultSendAddress = $.trim(settings.get('defaultSendAddress', ''));
+                return [account.personal, defaultSendAddress || account.primary_address];
+            });
         });
     };
 
