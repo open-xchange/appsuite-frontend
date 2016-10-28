@@ -357,17 +357,29 @@ define('io.ox/calendar/invitations/register', [
             .then(
                 function done() {
                     // api refresh
-                    require(['io.ox/calendar/api']).then(function (api) {
-                        api.refresh();
-                        if (self.options.yell !== false) {
-                            notifications.yell('success', success[action]);
-                        }
-                        // if the delete action was succesfull we don't need the button anymore, see Bug 40852
-                        if (action === 'delete') {
-                            self.model.set('actions', _(self.model.attributes.actions).without('delete'));
-                        }
-                        self.repaint();
-                    });
+                    var refresh = require(['io.ox/calendar/api']).then(
+                        function (api) {
+                            api.refresh();
+                            if (self.options.yell !== false) {
+                                notifications.yell('success', success[action]);
+                            }
+                        });
+
+                    if (settings.get('deleteInvitationMailAfterAction', false)) {
+                        // remove mail
+                        require(['io.ox/mail/api'], function (api) {
+                            api.remove([self.imip.mail]);
+                        });
+                    } else {
+                        // repaint only if there is something left to repaint
+                        refresh.then(function () {
+                            // if the delete action was succesfull we don't need the button anymore, see Bug 40852
+                            if (action === 'delete') {
+                                self.model.set('actions', _(self.model.attributes.actions).without('delete'));
+                            }
+                            self.repaint();
+                        });
+                    }
                 },
                 function fail(e) {
                     notifications.yell(e);
@@ -514,7 +526,7 @@ define('io.ox/calendar/invitations/register', [
                 this.task = updated;
             }
 
-            if (this.settings.get('deleteInvitationMailAfterAction', false)) {
+            if (settings.get('deleteInvitationMailAfterAction', false)) {
                 // remove mail
                 if (this.options.yell !== false) {
                     notifications.yell('success', successInternal[action]);
