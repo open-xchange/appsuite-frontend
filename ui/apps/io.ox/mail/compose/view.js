@@ -361,8 +361,8 @@ define('io.ox/mail/compose/view', [
 
             this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
 
-            var mailto, params;
-            // triggerd by mailto?
+            var mailto, params, self = this;
+            // triggered by mailto?
             if (mailto = _.url.hash('mailto')) {
 
                 var parseRecipients = function (recipients) {
@@ -390,6 +390,16 @@ define('io.ox/mail/compose/view', [
             }
 
             ext.point(POINT + '/mailto').invoke('setup');
+
+            // add dynamic extensionpoint to trigger saveAsDraft on logout
+            this.logoutPointId = 'saveMailOnDraft' + this.app.id;
+            ext.point('io.ox/core/logout').extend({
+                id: this.logoutPointId,
+                index: 1000 + this.app.guid,
+                logout: function () {
+                    return self.autoSaveDraft();
+                }
+            });
         },
 
         filterData: function (data) {
@@ -630,6 +640,7 @@ define('io.ox/mail/compose/view', [
 
         dispose: function () {
             this.clearKeepalive();
+            ext.point('io.ox/core/logout').disable(this.logoutPointId);
             this.stopListening();
             this.model = null;
         },

@@ -596,9 +596,6 @@ define('io.ox/core/desktop',
 
         getSavePoints: function () {
             return appCache.get('savepoints').then(function (list) {
-                if (!list || _.isEmpty(list)) {
-                    list = coreConfig.get('savepoints', []);
-                }
                 return _(list || []).filter(function (obj) {
                     var hasPoint = 'point' in obj,
                         sameUA = obj.ua === navigator.userAgent;
@@ -607,24 +604,11 @@ define('io.ox/core/desktop',
             });
         },
 
-        storeSavePoints: function (list) {
-
-            if (_.device('smartphone') || !coreConfig.get('features/storeSavePoints', true)) return;
-
-            function omitMetaData(l) {
-                return JSON.stringify(_.mapObject(l, function (o) { return _.omit(o, ['timestamp', 'version']); }));
-            }
-
-            var previous = omitMetaData(coreConfig.get('savepoints')),
-                current  = omitMetaData(list);
-
-            // Only save via jslob if savepoint has really changed
-            if (current !== previous) coreConfig.set('savepoints', list).save();
-        },
+        // deprecated
+        storeSavePoints: _.noop,
 
         setSavePoints: function (list) {
             list = list || [];
-            this.storeSavePoints(list);
             return appCache.add('savepoints', list);
         },
 
