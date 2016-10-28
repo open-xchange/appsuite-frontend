@@ -337,8 +337,6 @@ define('io.ox/files/share/wizard', [
      */
     var ShareWizard = DisposableView.extend({
 
-        tagName: 'form',
-
         className: 'share-wizard',
 
         initialize: function (options) {
@@ -354,9 +352,7 @@ define('io.ox/files/share/wizard', [
 
         render: function () {
 
-            this.$el.attr({
-                role: 'form'
-            }).addClass(this.model.get('type'));
+            this.$el.addClass(this.model.get('type'));
 
             // draw all extensionpoints
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);
