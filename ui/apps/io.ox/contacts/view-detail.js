@@ -503,7 +503,11 @@ define('io.ox/contacts/view-detail', [
                         simple(data, 'marital_status'),
                         simple(data, 'number_of_children'),
                         simple(data, 'spouse_name'),
-                        simple(data, 'anniversary')
+                        row('anniversary', function () {
+                            if (baton.data.anniversary) {
+                                return new moment(1153440000000).utc().format('l');
+                            }
+                        })
                     )
                     .attr('data-block', 'personal')
                 );
