@@ -328,7 +328,7 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'change:signatures', this.updateSignatures);
             this.listenTo(this.model, 'change:signature', this.redrawSignature);
 
-            var mailto, params;
+            var mailto, params, self = this;
             // triggered by mailto?
             if (mailto = _.url.hash('mailto')) {
 
@@ -360,6 +360,16 @@ define('io.ox/mail/compose/view', [
             this.listenTo(mailAPI.queue.collection, 'change:pct', this.onSendProgress);
 
             ext.point(POINT + '/mailto').invoke('setup');
+
+            // add dynamic extensionpoint to trigger saveAsDraft on logout
+            this.logoutPointId = 'saveMailOnDraft' + this.app.id;
+            ext.point('io.ox/core/logout').extend({
+                id: this.logoutPointId,
+                index: 1000 + this.app.guid,
+                logout: function () {
+                    return self.autoSaveDraft();
+                }
+            });
         },
 
         onSendProgress: function (model, value) {
@@ -662,6 +672,8 @@ define('io.ox/mail/compose/view', [
         },
 
         dispose: function () {
+            // disable dynamic extensionpoint to trigger saveAsDraft on logout
+            ext.point('io.ox/core/logout').disable(this.logoutPointId);
             this.stopListening();
             this.model = null;
         },
