@@ -16,12 +16,14 @@
 
 (function ($) {
 
-    $.fn.lazyload = function () {
+    $.fn.lazyload = function (options) {
+        options = options || {};
         this.each(function () {
             _.defer(function () {
                 // look for potential scrollpane
-                this.closest('.scrollpane, .scrollable, .tt-dropdown-menu, .preview-container').lazyloadScrollpane();
-                this.trigger('scroll');
+                (options.container || this.closest('.scrollpane, .scrollable, .tt-dropdown-menu'))
+                    .lazyloadScrollpane()
+                    .trigger('scroll');
             }.bind($(this).addClass('lazyload')));
         });
         return this;
