@@ -66,7 +66,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         id: 'upload-new-version',
         index: 400,
         draw: function (baton) {
-            this.append(new UploadNewVersionView({ model: baton.model }).render().el);
+            this.append(new UploadNewVersionView({ model: baton.model, app: baton.app }).render().el);
         }
     }));
 
@@ -110,6 +110,7 @@ define('io.ox/core/viewer/views/sidebarview', [
 
             this.model = null;
             this.zone = null;
+            this.app = options.app;
 
             // listen to slide change and set fresh model
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.setModel);
@@ -278,6 +279,7 @@ define('io.ox/core/viewer/views/sidebarview', [
                 options: this.options,
                 isViewer: this.isViewer,
                 context: this,
+                app: this.app,
                 $el: detailPane,
                 model: this.model,
                 data: this.model.isFile() ? this.model.toJSON() : this.model.get('origData')
@@ -348,16 +350,19 @@ define('io.ox/core/viewer/views/sidebarview', [
                 notify({ error: gt('Drop only a single file as new version.') });
                 return;
             }
+            var self = this;
+            require(['io.ox/files/upload/main'], function (fileUpload) {
+                var data = {
+                    folder: self.model.get('folder_id'),
+                    id: self.model.get('id'),
+                    // If file already encrypted, update should also be encrypted
+                    params: self.model.isEncrypted() ? { 'cryptoAction': 'Encrypt' } : {}
+                };
+                var node = self.isViewer ? self.$el.parent().find('.viewer-displayer') : self.app.getWindowNode();
+                fileUpload.setWindowNode(node);
+                fileUpload.update.offer(_.first(files), data);
+            });
 
-            FilesAPI.versions.upload({
-                file: _.first(files),
-                id: this.model.get('id'),
-                folder: this.model.get('folder_id'),
-                version_comment: '',
-                // If file already encrypted, update should also be encrypted
-                params: this.model.isEncrypted() ? { 'cryptoAction': 'Encrypt' } : {}
-            })
-            .fail(notify);
         },
 
         /**

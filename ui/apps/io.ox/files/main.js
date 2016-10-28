@@ -52,7 +52,7 @@ define('io.ox/files/main', [
     var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
-        sidebarView = new Sidebarview({ closable: true });
+        sidebarView = new Sidebarview({ closable: true, app: app });
 
     app.mediator({
 
