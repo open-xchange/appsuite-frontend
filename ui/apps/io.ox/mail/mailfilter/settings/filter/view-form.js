@@ -638,8 +638,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         } else {
 
                             translation = _.chain(headerTranslation).pick(function (value, key) {
-                                var reg = new RegExp(key, 'i');
-                                return reg.test(cmodel.get('headers')[0]);
+                                return cmodel.get('headers')[0].toUpperCase() === key.toUpperCase();
                             }).values().first().value();
 
                             title = cmodel.get('headers')[0] === '' ? headerTranslation.cleanHeader : translation;
