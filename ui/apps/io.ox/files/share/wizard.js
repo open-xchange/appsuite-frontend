@@ -318,16 +318,14 @@ define('io.ox/files/share/wizard', [
                     )
                 )
             );
-            baton.view.listenTo(baton.model, 'change:password', function (model, val) {
+            baton.view.listenTo(baton.model, 'change:password', function (model, val, options) {
                 if (val && !model.get('secured')) {
-                    model.set('secured', true);
+                    model.set('secured', true, options);
                 }
             });
-            baton.view.listenTo(baton.model, 'change:secured', function (model, val) {
+            baton.view.listenTo(baton.model, 'change:secured', function (model, val, opt) {
                 passInput.prop('disabled', !val);
-                if (val) {
-                    passInput.focus();
-                }
+                if (!opt._inital) passInput.focus();
             });
         }
     });
