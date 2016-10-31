@@ -217,8 +217,7 @@ define('io.ox/mail/actions', [
             return true;
         },
         action: function (baton) {
-            require(['io.ox/mail/mailfilter/settings/filter'
-                ], function (filter) {
+            require(['io.ox/mail/mailfilter/settings/filter'], function (filter) {
 
                 filter.initialize().then(function (data, config, opt) {
                     var factory = opt.model.protectedMethods.buildFactory('io.ox/core/mailfilter/model', opt.api),

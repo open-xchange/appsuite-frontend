@@ -239,12 +239,16 @@ define('io.ox/core/tk/nodetouch', [
             if (event.data.pinchHandler) {
                 if (fingers === 2 && (phase === 'start' || phase === 'move')) {
                     event.data.pinchHandler(phase, event,
-                            _distance(event.originalEvent.touches[0].pageX,
-                                      event.originalEvent.touches[0].pageY,
-                                      event.originalEvent.touches[1].pageX,
-                                      event.originalEvent.touches[1].pageY),
-                            { x: (event.originalEvent.touches[0].pageX + event.originalEvent.touches[1].pageX) / 2,
-                            y: (event.originalEvent.touches[0].pageY + event.originalEvent.touches[1].pageY) / 2 }
+                        _distance(
+                            event.originalEvent.touches[0].pageX,
+                            event.originalEvent.touches[0].pageY,
+                            event.originalEvent.touches[1].pageX,
+                            event.originalEvent.touches[1].pageY
+                        ),
+                        {
+                            x: (event.originalEvent.touches[0].pageX + event.originalEvent.touches[1].pageX) / 2,
+                            y: (event.originalEvent.touches[0].pageY + event.originalEvent.touches[1].pageY) / 2
+                        }
                     );
                     event.preventDefault();
 

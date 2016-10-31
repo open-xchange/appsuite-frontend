@@ -205,23 +205,34 @@ define('io.ox/core/pdf/pdfviewerlinkservice', [
                         if (zoomArg.indexOf('Fit') === -1) {
                             // If the zoomArg is a number, it has to get divided by 100. If it's
                             // a string, it should stay as it is.
-                            dest = [null, { name: 'XYZ' },
-                                    zoomArgs.length > 1 ? (zoomArgs[1] | 0) : null,
-                                            zoomArgs.length > 2 ? (zoomArgs[2] | 0) : null,
-                                                    (zoomArgNumber ? zoomArgNumber / 100 : zoomArg)];
+                            dest = [
+                                null,
+                                { name: 'XYZ' },
+                                zoomArgs.length > 1 ? (zoomArgs[1] | 0) : null,
+                                zoomArgs.length > 2 ? (zoomArgs[2] | 0) : null,
+                                (zoomArgNumber ? zoomArgNumber / 100 : zoomArg)
+                            ];
                         } else if (zoomArg === 'Fit' || zoomArg === 'FitB') {
                             dest = [null, { name: zoomArg }];
                         } else if ((zoomArg === 'FitH' || zoomArg === 'FitBH') ||
                                 (zoomArg === 'FitV' || zoomArg === 'FitBV')) {
-                            dest = [null, { name: zoomArg },
-                                    zoomArgs.length > 1 ? (zoomArgs[1] | 0) : null];
+                            dest = [
+                                null,
+                                { name: zoomArg },
+                                zoomArgs.length > 1 ? (zoomArgs[1] | 0) : null
+                            ];
                         } else if (zoomArg === 'FitR') {
                             if (zoomArgs.length !== 5) {
                                 console.error('PDFViewerLinkService_setHash: ' + 'Not enough parameters for \'FitR\'.');
                             } else {
-                                dest = [null, { name: zoomArg },
-                                        (zoomArgs[1] | 0), (zoomArgs[2] | 0),
-                                        (zoomArgs[3] | 0), (zoomArgs[4] | 0)];
+                                dest = [
+                                    null,
+                                    { name: zoomArg },
+                                    (zoomArgs[1] | 0),
+                                    (zoomArgs[2] | 0),
+                                    (zoomArgs[3] | 0),
+                                    (zoomArgs[4] | 0)
+                                ];
                             }
                         } else {
                             console.error('PDFViewerLinkService_setHash: \'' + zoomArg + '\' is not a valid zoom value.');

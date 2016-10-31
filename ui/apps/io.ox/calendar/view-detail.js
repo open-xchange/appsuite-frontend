@@ -49,8 +49,7 @@ define('io.ox/calendar/view-detail', [
             if (!baton.data.private_flag) return;
             this.append(
                 $('<i class="fa fa-lock private-flag" aria-hidden="true">')
-                .attr({ title: gt('Private'),
-                        'data-animation': 'false' }).tooltip(),
+                .attr({ title: gt('Private'), 'data-animation': false }).tooltip(),
                 $('<span class="sr-only">').text(gt('Private'))
             );
         }

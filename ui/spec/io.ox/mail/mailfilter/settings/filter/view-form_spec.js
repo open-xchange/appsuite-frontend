@@ -20,63 +20,64 @@ define([
     'use strict';
 
     var resultWithoutFilter = { data: [] },
-        resultWithSomeFilters = { data: [
-            {
-                id: 1,
-                position: 0,
-                rulename: 'testrule 1',
-                active: false,
-                flags: [],
-                test: { id: 'size', comparison: 'over', size: 101 },
-                actioncmds: [{ id: 'stop' }]
-            },
-            {
-                id: 2,
-                position: 1,
-                rulename: 'testrule 2',
-                active: false,
-                flags: [],
-                test: {
-                    id: 'allof',
-                    tests: [
+        resultWithSomeFilters = {
+            data: [
+                {
+                    id: 1,
+                    position: 0,
+                    rulename: 'testrule 1',
+                    active: false,
+                    flags: [],
+                    test: { id: 'size', comparison: 'over', size: 101 },
+                    actioncmds: [{ id: 'stop' }]
+                },
+                {
+                    id: 2,
+                    position: 1,
+                    rulename: 'testrule 2',
+                    active: false,
+                    flags: [],
+                    test: {
+                        id: 'allof',
+                        tests: [
+                            {
+                                id: 'header',
+                                comparison: 'contains',
+                                headers: ['From'],
+                                values: ['sender']
+                            },
+                            {
+                                id: 'body',
+                                comparison: 'contains',
+                                extensionskey: 'text',
+                                extensionsvalue: null,
+                                values: ['contend']
+                            },
+                            {
+                                id: 'header',
+                                comparison: 'contains',
+                                headers: ['Subject'],
+                                values: ['subject']
+                            }
+                        ]
+                    },
+                    actioncmds: [
                         {
-                            id: 'header',
-                            comparison: 'contains',
-                            headers: ['From'],
-                            values: ['sender']
+                            id: 'addflags',
+                            flags: ['$cl_1']
                         },
                         {
-                            id: 'body',
-                            comparison: 'contains',
-                            extensionskey: 'text',
-                            extensionsvalue: null,
-                            values: ['contend']
+                            id: 'addflags',
+                            flags: ['$tag']
                         },
                         {
-                            id: 'header',
-                            comparison: 'contains',
-                            headers: ['Subject'],
-                            values: ['subject']
+                            id: 'addflags',
+                            flags: ['\\deleted']
                         }
                     ]
-                },
-                actioncmds: [
-                    {
-                        id: 'addflags',
-                        flags: ['$cl_1']
-                    },
-                    {
-                        id: 'addflags',
-                        flags: ['$tag']
-                    },
-                    {
-                        id: 'addflags',
-                        flags: ['\\deleted']
-                    }
-                ]
-            }
-        ]
-    },
+                }
+            ]
+        },
 
         resultAfterSave = { data: 1 },
         resultConfig = { timestamp: 1378223251586, data: {
