@@ -220,7 +220,7 @@ define('io.ox/calendar/freetime/main', [
             options.isApp = true;
             options.app = app;
 
-            var closeButton = $('<button class="btn btn-link fa fa-close scheduling-app-close">').on('click', function () {
+            var closeButton = $('<button class="btn btn-link scheduling-app-close">').attr('title', gt('Close')).append($('<i class="fa fa-close" aria-hidden="true">')).on('click', function () {
                 app.quit();
             });
 
