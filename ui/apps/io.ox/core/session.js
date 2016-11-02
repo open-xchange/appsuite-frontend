@@ -132,6 +132,7 @@ define('io.ox/core/session', [
             .then(
                 function success(data) {
                     ox.secretCookie = true;
+                    ox.flags = (ox.flags || []).concat('autologin');
                     ox.rampup = data.rampup || ox.rampup || {};
                     return data;
                 },
