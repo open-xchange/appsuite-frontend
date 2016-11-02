@@ -275,25 +275,18 @@
         width: 100%;
         outline: none;
 
-        &:-webkit-full-screen {
+        &:-webkit-full-screen,
+        -moz-full-screen,
+        -ms-fullscreen,
+        full-screen,
+        fullscreen {
             top: 0;
             background-color: black;
-        }
-        &:-moz-full-screen {
-            top: 0;
-            background-color: black;
-        }
-        &:-ms-fullscreen {
-            top: 0;
-            background-color: black;
-        }
-        &:full-screen {
-            top: 0;
-            background-color: black;
-        }
-        &:fullscreen {
-            top: 0;
-            background-color: black;
+            
+            // #49797 - Presenting in full screen mode shows scroll bar 
+            .swiper-slide {
+                overflow: hidden;
+            }
         }
 
         .document-page {
