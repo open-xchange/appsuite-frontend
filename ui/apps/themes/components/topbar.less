@@ -13,6 +13,7 @@
  */
 
 #io-ox-top-logo-small {
+    list-style: none;
     width: 60px;
     height: 22px;
     margin: 8px 7px 0 13px;
@@ -55,7 +56,7 @@
     .launchers {
         overflow: hidden;
         float: left;
-        height: 100%;
+        height: 40px; // Fix for Bug 49734 after wrapping launchers in A11y div
         margin: 0;
         -ms-user-select: none; // Fix for Bug #26670
     }
@@ -81,7 +82,6 @@
         -webkit-tap-highlight-color: transparent;
 
         & > a {
-
             color: @topbar-launcher-color;
             padding: 0 @default-padding;
             line-height: 40px;
@@ -126,6 +126,12 @@
 
         }
 
+        .popover {
+            color: #333;
+            &.popover-signout {
+                margin-top: 0;
+            }
+        }
     }
 
     .launcher.closable:hover { color: @topbar-launcher-color-hover; }

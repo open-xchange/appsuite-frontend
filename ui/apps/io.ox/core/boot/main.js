@@ -43,6 +43,9 @@ define('io.ox/core/boot/main', [
             // use extensions to determine proper login method
             var baton = ext.Baton({ hash: _.url.hash() });
             ext.point('io.ox/core/boot/login').invoke('login', this, baton);
+
+            // a11y: remove meta viewport for desktop
+            if (_.device('desktop')) $('meta[name="viewport"]').remove();
         },
 
         invoke: function (loginType) {

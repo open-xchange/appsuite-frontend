@@ -463,6 +463,19 @@
         bottom: 0;
         outline: none;
 
+        &.toolbar-bottom-visible {
+            .toolbar.bottom {
+                display: block;
+            }
+        }
+        .toolbar.bottom {
+            display: none;
+            .upload-wrapper {
+                border-top: 1px solid #000000;
+                background-color: #000000;
+            }
+        }
+
         #viewer-carousel,
         .carousel-inner,
         .item,
@@ -495,6 +508,8 @@
 
             .io-ox-busy::before { color: @viewer-busy-color; }
         }
+
+        .viewer-displayer-item-container { max-height: 100%; }
 
         .viewer-displayer-item {
             max-height: 100%;

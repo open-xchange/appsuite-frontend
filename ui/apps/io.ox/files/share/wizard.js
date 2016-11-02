@@ -296,21 +296,21 @@ define('io.ox/files/share/wizard', [
                         $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
                         passInput = new miniViews.PasswordView({ name: 'password', model: baton.model })
                             .render().$el
-                            .attr({ id: guid, placeholder: gt('Password'), name: 'share_password' })
+                            // see bug 49639
+                            .attr({ id: guid, placeholder: gt('Password'), autocomplete: 'new-password' })
+                            .removeAttr('name')
                             .prop('disabled', !baton.model.get('secured'))
                     )
                 )
             );
-            baton.view.listenTo(baton.model, 'change:password', function (model, val) {
+            baton.view.listenTo(baton.model, 'change:password', function (model, val, options) {
                 if (val && !model.get('secured')) {
-                    model.set('secured', true);
+                    model.set('secured', true, options);
                 }
             });
-            baton.view.listenTo(baton.model, 'change:secured', function (model, val) {
+            baton.view.listenTo(baton.model, 'change:secured', function (model, val, opt) {
                 passInput.prop('disabled', !val);
-                if (val) {
-                    passInput.focus();
-                }
+                if (!opt._inital) passInput.focus();
             });
         }
     });
@@ -320,9 +320,7 @@ define('io.ox/files/share/wizard', [
      */
     var ShareWizard = DisposableView.extend({
 
-        tagName: 'form',
-
-        className: 'share-wizard link',
+        className: 'share-wizard',
 
         initialize: function (options) {
 
@@ -337,7 +335,7 @@ define('io.ox/files/share/wizard', [
 
         render: function () {
 
-            this.$el.attr({ role: 'form' });
+            this.$el.addClass(this.model.get('type'));
 
             // draw all extensionpoints
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);

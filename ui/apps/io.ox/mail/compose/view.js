@@ -328,7 +328,7 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'change:signatures', this.updateSignatures);
             this.listenTo(this.model, 'change:signature', this.redrawSignature);
 
-            var mailto, params;
+            var mailto, params, self = this;
             // triggered by mailto?
             if (mailto = _.url.hash('mailto')) {
 
@@ -360,6 +360,16 @@ define('io.ox/mail/compose/view', [
             this.listenTo(mailAPI.queue.collection, 'change:pct', this.onSendProgress);
 
             ext.point(POINT + '/mailto').invoke('setup');
+
+            // add dynamic extensionpoint to trigger saveAsDraft on logout
+            this.logoutPointId = 'saveMailOnDraft' + this.app.id;
+            ext.point('io.ox/core/logout').extend({
+                id: this.logoutPointId,
+                index: 1000 + this.app.guid,
+                logout: function () {
+                    return self.autoSaveDraft();
+                }
+            });
         },
 
         onSendProgress: function (model, value) {
@@ -615,6 +625,18 @@ define('io.ox/mail/compose/view', [
                 model = this.model,
                 mail = this.model.getMailForAutosave();
 
+            if (model.get('encrypt')) {
+                var view = this;
+                var baton = new ext.Baton({
+                    mail: mail,
+                    model: this.model,
+                    app: this.app,
+                    view: view
+                });
+                this.initAutoSaveAsDraft();
+                return ext.point('oxguard/mail/autosavedraft').invoke('action', this, baton);
+            }
+
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
@@ -696,6 +718,8 @@ define('io.ox/mail/compose/view', [
         },
 
         dispose: function () {
+            // disable dynamic extensionpoint to trigger saveAsDraft on logout
+            ext.point('io.ox/core/logout').disable(this.logoutPointId);
             this.stopListening();
             this.model = null;
         },

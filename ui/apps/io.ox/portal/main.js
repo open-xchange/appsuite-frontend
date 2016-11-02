@@ -242,10 +242,9 @@ define('io.ox/portal/main', [
                     $('<h2>').append(
                         // add remove icon
                         baton.model.get('protectedWidget') ? [] :
-                            $('<a href="#" role="button" class="disable-widget">').attr({
-                                'title': gt('Disable widget'),
-                                'aria-label': gt('Disable widget')
-                            }).append($('<i class="fa fa-times icon-remove">')),
+                            $('<a href="#" role="button" class="disable-widget">').attr('aria-label', gt('Disable widget')).append(
+                                $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Disable widget'))
+                            ),
                         // title span
                         $('<span class="title">').text('\u00A0')
                     )
@@ -615,7 +614,9 @@ define('io.ox/portal/main', [
     app.refresh = _.throttle(function () {
         _(widgets.getEnabled()).chain().filter(function (model) {
             // don't refresh widgets with loading errors automatically so logs don't get spammed (see bug 41740)
-            return !(model.attributes.baton && model.attributes.baton.options && model.attributes.baton.options.loadingError);
+            // also handle ignoreGlobalRefresh option (See Bug 49562)
+            var options = model.attributes.baton && model.attributes.baton.options;
+            return !options.loadingError && !model.get('ignoreGlobalRefresh');
         }).each(app.refreshWidget);
     }, 30000);
 

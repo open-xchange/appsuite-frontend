@@ -705,7 +705,6 @@ msgstr "账户"
 msgid "Account Settings"
 msgstr "账户设置"
 
-#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
@@ -2705,12 +2704,6 @@ msgstr "邮件从本地存储删除时也将从服务器上删除"
 msgid "Department"
 msgstr "部门"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Department"
-msgid "Departments"
-msgstr "部门"
-
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -3208,8 +3201,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -4597,6 +4589,7 @@ msgid "Invitation sent"
 msgstr "已发送邀请"
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
+#: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Invite"
 msgstr "邀请"
 
@@ -4608,6 +4601,12 @@ msgstr "邀请拥有者"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Invite people"
 msgstr "邀请人员"
+
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+msgid ""
+"Invite people via email. Every recipient will get an individual link to "
+"access the shared files."
+msgstr "经由电子邮件邀请人员。每一个收件人将会收到个别链接以访问分享的文件。"
 
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Invite to %s"
@@ -5570,7 +5569,6 @@ msgstr "新任务提醒"
 msgid "New task reminders"
 msgstr "新任务提醒"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -5758,7 +5756,6 @@ msgid "Not started"
 msgstr "未开始"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "备注"
@@ -6069,10 +6066,6 @@ msgstr "组织器"
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
 msgstr "原电子邮件"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Other"
-msgstr ""
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6525,12 +6518,6 @@ msgid ""
 "account:"
 msgstr "请选择以下哪些数据我们可以用作创建您的 %s 户口："
 
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#, fuzzy
-#| msgid "Please set day and month properly"
-msgid "Please select your mail account provider"
-msgstr "请正确设置月和日"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Please set day and month properly"
 msgstr "请正确设置月和日"
@@ -6696,7 +6683,6 @@ msgstr "概览"
 msgid "Preview not available"
 msgstr "无预览"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
@@ -9061,10 +9047,6 @@ msgstr "按分钟设置间隔"
 msgid "Time zone"
 msgstr "时区"
 
-#: apps/io.ox/editor/main.js module:io.ox/editor
-msgid "Title"
-msgstr "标题"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgctxt "salutation"
 msgid "Title"
@@ -9797,21 +9779,13 @@ msgid ""
 msgstr "您能从前代产品导入存在的签名。"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "You can manage desktop notifications at any time, by vitising your "
-#| "settings"
 msgid ""
-"You can manage desktop notifications at any time, by visiting your settings"
+"You can manage desktop notifications at any time, by vitising your settings"
 msgstr "您能到您的设置，随时管理桌面通知"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "您可以使用 Ctrl+Enter 快速保存更改。"
-
-#: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
-msgid "You can't present the same document more than once."
-msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
@@ -13038,12 +13012,6 @@ msgstr "年"
 #~ msgid "Invalid data"
 #~ msgstr "无效数据"
 
-#~ msgid ""
-#~ "Invite people via email. Every recipient will get an individual link to "
-#~ "access the shared files."
-#~ msgstr ""
-#~ "经由电子邮件邀请人员。每一个收件人将会收到个别链接以访问分享的文件。"
-
 #~ msgid "Inviting other participants"
 #~ msgstr "邀请其他参与者"
 
@@ -14241,6 +14209,9 @@ msgstr "年"
 
 #~ msgid "Timezone"
 #~ msgstr "时区"
+
+#~ msgid "Title"
+#~ msgstr "标题"
 
 #~ msgctxt "title"
 #~ msgid "Title"

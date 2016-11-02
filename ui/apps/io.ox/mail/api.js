@@ -453,6 +453,10 @@ define('io.ox/mail/api', [
                         // trigger delete to update notification area
                         api.trigger('delete');
                         api.trigger('deleted-mails', ids);
+                        // trigger dedicated event per message
+                        _(ids).each(function (item) {
+                            api.trigger('remove:' + _.ecid(item), item);
+                        });
                         // if this is a trash folder trigger special event (quota updates)
                         // checking the first id is enough, all id's must be from the same folder anyway when using our UI
                         if (accountAPI.is('trash', ids[0].folder_id)) {
@@ -1801,6 +1805,7 @@ define('io.ox/mail/api', [
         },
 
         subject: function (cid) {
+            if (!this.collection.get) return '';
             cid = _.isString(cid) ? cid : _.cid(cid);
             var base, newest, model;
             // get newest message

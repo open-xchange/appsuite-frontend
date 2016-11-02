@@ -232,6 +232,7 @@ define('io.ox/calendar/edit/extensions', [
             this.$el.append(
                 $('<label class="control-label col-xs-12">').append(
                     $.txt(gt('Location')),
+                    // only trim on save
                     new mini.InputView({ name: 'location', model: this.model }).render().$el
                 )
             );

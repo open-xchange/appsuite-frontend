@@ -738,7 +738,6 @@ msgstr "Konts"
 msgid "Account Settings"
 msgstr "Konta iestatījumi"
 
-#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
@@ -2767,12 +2766,6 @@ msgstr "Ziņojumu dzēšana lokālajā glabātuvē izraisīs to dzēšanu arī u
 msgid "Department"
 msgstr "Nodaļa"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Department"
-msgid "Departments"
-msgstr "Nodaļa"
-
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -3284,8 +3277,7 @@ msgstr "EB"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -4700,6 +4692,7 @@ msgid "Invitation sent"
 msgstr "Uzaicinājums nosūtīts"
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
+#: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Invite"
 msgstr "Uzaicināt"
 
@@ -4711,6 +4704,14 @@ msgstr "Uzaicināt īpašnieku"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Invite people"
 msgstr "Uzaicināt cilvēkus"
+
+#: apps/io.ox/files/share/wizard.js module:io.ox/files
+msgid ""
+"Invite people via email. Every recipient will get an individual link to "
+"access the shared files."
+msgstr ""
+"Uzaicināt cilvēkus, izmantojot e-pastu. Katrs dalībnieks saņems individuālu "
+"saiti piekļuvei pie koplietotajiem failiem."
 
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Invite to %s"
@@ -5678,7 +5679,6 @@ msgstr "Jauna uzdevuma atgādinājums"
 msgid "New task reminders"
 msgstr "Jauno uzdevumu atgādinājumi"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -5868,7 +5868,6 @@ msgid "Not started"
 msgstr "Nav iesākts"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
-#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "Piezīme"
@@ -6190,12 +6189,6 @@ msgstr "Organizators"
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Original mail"
 msgstr "Sākotnējais e-pasts"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#, fuzzy
-#| msgid "Others"
-msgid "Other"
-msgstr "Citi"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
@@ -6654,12 +6647,6 @@ msgid ""
 "account:"
 msgstr "Lūdzu norādiet kādus jūsu datus var izmantot %s konta izveidošanai:"
 
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#, fuzzy
-#| msgid "Please set day and month properly"
-msgid "Please select your mail account provider"
-msgstr "Lūdzu pareizi norādiet dienu un mēnesi"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Please set day and month properly"
 msgstr "Lūdzu pareizi norādiet dienu un mēnesi"
@@ -6825,7 +6812,6 @@ msgstr "Apskats"
 msgid "Preview not available"
 msgstr "Apskats nav iespējams"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
@@ -9273,10 +9259,6 @@ msgstr "Laika grafiks minūtēs"
 msgid "Time zone"
 msgstr "Laika zona"
 
-#: apps/io.ox/editor/main.js module:io.ox/editor
-msgid "Title"
-msgstr "Nosaukums"
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgctxt "salutation"
 msgid "Title"
@@ -10031,12 +10013,8 @@ msgid ""
 msgstr "Jūs varat importēt esošos parakstus no iepriekšējās produkta paaudzes."
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "You can manage desktop notifications at any time, by vitising your "
-#| "settings"
 msgid ""
-"You can manage desktop notifications at any time, by visiting your settings"
+"You can manage desktop notifications at any time, by vitising your settings"
 msgstr ""
 "Jūs varat jebkurā laikā pārvaldīt darbvirsmas paziņojumus, apmeklējot savu "
 "iestatījumu lapu"
@@ -10044,10 +10022,6 @@ msgstr ""
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Jūs varat ātri saglabāt izmaiņas izmantojot Ctrl+Enter"
-
-#: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
-msgid "You can't present the same document more than once."
-msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
@@ -13663,13 +13637,6 @@ msgstr "yyyy"
 #~ msgid "Invalid time."
 #~ msgstr "Nepareizs laiks."
 
-#~ msgid ""
-#~ "Invite people via email. Every recipient will get an individual link to "
-#~ "access the shared files."
-#~ msgstr ""
-#~ "Uzaicināt cilvēkus, izmantojot e-pastu. Katrs dalībnieks saņems "
-#~ "individuālu saiti piekļuvei pie koplietotajiem failiem."
-
 #~ msgid "Inviting other participants"
 #~ msgstr "Citu dalībnieku uzaicināšana"
 
@@ -14501,6 +14468,9 @@ msgstr "yyyy"
 
 #~ msgid "Organizer:"
 #~ msgstr "Organizators:"
+
+#~ msgid "Others"
+#~ msgstr "Citi"
 
 #~ msgid "Outlook file"
 #~ msgstr "Outlook fails"
@@ -16240,6 +16210,9 @@ msgstr "yyyy"
 
 #~ msgid "Timor-Leste"
 #~ msgstr "Timora"
+
+#~ msgid "Title"
+#~ msgstr "Nosaukums"
 
 #~ msgctxt "title"
 #~ msgid "Title"

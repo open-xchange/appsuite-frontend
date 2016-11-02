@@ -133,11 +133,7 @@ define('io.ox/search/facets/extensions', [
                     action,
                     option,
                     link, // action,
-                    menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
-                        .attr({
-                            'data-facet': 'folder',
-                            'data-value': 'custom'
-                        });
+                    menu = $('<ul class="dropdown dropdown-menu facet-dropdown" data-facet="folder" data-value="custom">');
 
                 button.appendTo(self);
                 button.append(
@@ -153,11 +149,10 @@ define('io.ox/search/facets/extensions', [
                 if (!baton.model.isMandatory('folder') && !baton.model.isMandatory('account')) {
                     menu.prepend(
                         $('<li role="presentation">').append(
-                            link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">').append(
-                                $('<i class="fa fa-fw ">'),
+                            link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1" data-custom="custom">').append(
+                                $('<i class="fa fa-fw" aria-hidden="true">'),
                                 $('<span>').text(gt('All folders'))
                             )
-                            .attr('data-custom', 'custom')
                             .attr('title', gt('All folders'))
                         )
                     );
@@ -193,7 +188,7 @@ define('io.ox/search/facets/extensions', [
                             // account name as dropdown header
                             if (Object.keys(accounts).length > 1) {
                                 menu.append(
-                                    $('<li class="dropdown-header">').append(account.name)
+                                    $('<li class="dropdown-header" role="presentation">').append(account.name)
                                 );
                             }
                             // add option
@@ -203,17 +198,14 @@ define('io.ox/search/facets/extensions', [
                                 if (/^virtual/.test(folder.id)) return;
 
                                 menu.append(
-                                    option = $('<li>').append(
-                                        $('<a href="#" role="menuitemcheckbox" class="option" tabindex="-1">')
-                                            .append(
-                                                $('<i class="fa fa-fw fa-none">'),
-                                                $('<span>').text(folder.title)
-                                            )
-                                            .attr({
-                                                'data-custom': folder.id,
-                                                'title': folder.title,
-                                                tabIndex: '-1'
-                                            })
+                                    option = $('<li role="presentation">').append(
+                                        $('<a href="#" role="menuitemcheckbox" class="option" tabindex="-1">').attr({
+                                            'data-custom': folder.id,
+                                            'title': folder.title
+                                        }).append(
+                                            $('<i class="fa fa-fw fa-none" aria-hidden="true">'),
+                                            $('<span>').text(folder.title)
+                                        )
                                     )
                                 );
                                 if (current === folder.id) {
@@ -223,19 +215,15 @@ define('io.ox/search/facets/extensions', [
                             });
 
                             // add divider
-                            menu.append(
-                                $('<li class="divider">')
-                            );
+                            menu.append($('<li class="divider" role="separator">'));
                         });
                         // add option to open dialog
                         menu.append(
-                            $('<li>').append(
-                                 $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">')
-                                    .append(
-                                        $('<i class="fa fa-fw fa-none">'),
-                                        $('<span>').text(gt('More') + ' ...')
-                                    )
-                                    .attr('data-action', 'dialog')
+                            $('<li role="presentation">').append(
+                                 $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1" data-action="dialog">').append(
+                                    $('<i class="fa fa-fw fa-none" aria-hidden="true">'),
+                                    $('<span>').text(gt('More') + ' ...')
+                                )
                             )
                         );
                     }).then(function () {

@@ -27,6 +27,7 @@ define('io.ox/core/main', [
     'io.ox/core/capabilities',
     'io.ox/core/ping',
     'io.ox/core/folder/api',
+    'io.ox/core/a11y',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/relogin',
@@ -34,7 +35,7 @@ define('io.ox/core/main', [
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, gt) {
 
     'use strict';
 
@@ -50,18 +51,6 @@ define('io.ox/core/main', [
             console.log.apply(console, args);
         };
     }
-
-    // a11y: fix for role="button"
-    $(document).on('keydown', 'a[role="button"]', function (e) {
-        if (e.which !== 32 || e.isDefaultPrevented()) return;
-        e.preventDefault();
-        $(e.currentTarget).click();
-    });
-
-    // a11y: focus folder tree from top-bar on <enter>
-    $(document).on('keydown', '#io-ox-topbar .active-app a', function (e) {
-        if (e.which === 13) $('.folder-tree:visible .folder.selected').focus();
-    });
 
     // general fix for flexbox scrolling issue (see bugs 43799, 44938, 45501, 46950, 47395)
     $('#io-ox-windowmanager').on('scroll', function () {
@@ -246,11 +235,10 @@ define('io.ox/core/main', [
         .end()
         .find('i.fa-bars').removeClass('fa-bars').addClass('fa-angle-double-right ');
 
-    launchers
-        .attr({
-            'role': 'navigation',
-            'aria-label': gt('Apps')
-        });
+    launchers.attr({
+        'role': 'tablist',
+        'aria-label': gt('Apps')
+    });
 
     // whatever ...
     gt.pgettext('app', 'Portal');
@@ -306,7 +294,7 @@ define('io.ox/core/main', [
                 hidden++;
             }
         }
-        $('li', launcherDropdown).hide();
+        $('li', launcherDropdown).attr('role', 'menuitem').hide();
 
 
         if (hidden > 0) {
@@ -322,7 +310,7 @@ define('io.ox/core/main', [
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
-        var node = $('<li class="launcher">');
+        var node = $('<li class="launcher" role="tab">');
 
         if (fn) {
             node.on('click', function (e) {
@@ -657,8 +645,8 @@ define('io.ox/core/main', [
             var ariaBasicLabel =
                     //#. %1$s is app title/name
                     _.escape(gt('close for %1$s', model.get('title'))),
-                quitApp = $('<a href="#" class="closelink" role="button" aria-label="' + ariaBasicLabel + '">')
-                    .append($('<i class="fa fa-times" aria-hidden="true">'))
+                quitApp = $('<a href="#" class="closelink" role="button">').attr('aria-label', ariaBasicLabel)
+                    .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', ariaBasicLabel))
                     .on('click', function (e) {
                         e.preventDefault();
                         e.stopImmediatePropagation();
@@ -673,16 +661,14 @@ define('io.ox/core/main', [
         function addUserContent(model, launcher, first) {
             if (model.get('closable')) {
                 launcher.addClass('closable');
-                if (first) {
-                    launcher.find('a').after(quit(model));
-                }
+                if (first) launcher.find('a').after(quit(model));
             }
 
             if (model.get('userContent')) {
                 var cls = model.get('userContentClass') || '',
                     icon = model.get('userContentIcon') || '';
                 launcher.addClass('user-content').addClass(cls).children().first().prepend(
-                    $('<i class="' + icon + '">')
+                    $('<i>').addClass(icon)
                 );
             }
         }
@@ -728,8 +714,8 @@ define('io.ox/core/main', [
             addUserContent(model, node, true);
 
             // add list item
-            node = $('<li>').append(
-                $('<a href="#" role="menuitem">', {
+            node = $('<li role="tab">').append(
+                $('<a href="#">', {
                     'data-app-name': name,
                     'data-app-guid': model.guid
                 })
@@ -802,9 +788,7 @@ define('io.ox/core/main', [
                     }
                 });
 
-                if (view.visible) {
-                    this.append(view.render().$el);
-                }
+                if (view.visible) this.append(view.render().$el);
             }
         });
 
@@ -839,7 +823,7 @@ define('io.ox/core/main', [
             draw: function () {
                 if (capabilities.has('search') && _.device('smartphone')) {
                     this.append(
-                        addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
+                        addLauncher('right', $('<i class="fa fa-search launcher-icon" aria-hidden="true">'), function () {
                             require(['io.ox/search/main'], function (searchapp) {
                                 searchapp.run({ reset: true });
                             });
@@ -855,11 +839,15 @@ define('io.ox/core/main', [
             index: 200,
             draw: function () {
                 this.append(
-                    addLauncher('right', $('<i class="fa fa-refresh launcher-icon">').attr('aria-hidden', 'true'), function () {
-                        refresh();
-                        return $.when();
-                    }, gt('Refresh'))
-                    .attr('id', 'io-ox-refresh-icon')
+                    addLauncher(
+                        'right',
+                        $('<i class="fa fa-refresh launcher-icon" aria-hidden="true">').attr('title', gt('Refresh')),
+                        function () {
+                            refresh();
+                            return $.when();
+                        },
+                        gt('Refresh')
+                    ).attr('id', 'io-ox-refresh-icon')
                 );
             }
         });
@@ -873,7 +861,6 @@ define('io.ox/core/main', [
                 this.append(
                     addLauncher('right', new HelpView({
                         iconClass: 'launcher-icon',
-                        tabindex: '0',
                         href: getHelp
                     }).render().$el)
                 );
@@ -897,7 +884,7 @@ define('io.ox/core/main', [
                 if (view.visible) {
                     this.append(
                         view.render().$el,
-                        $('<li class="divider" aria-hidden="true" role="separator">')
+                        $('<li class="divider" role="separator">')
                     );
                 }
             }
@@ -909,7 +896,7 @@ define('io.ox/core/main', [
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="settings" role="menuitem" tabindex="-1">').text(gt('Settings'))
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="settings" role="menuitem">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -928,7 +915,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem">')
                         //#. starts the client onboarding wizard that helps users
                         //#. to configure their devices to access/sync appsuites
                         //#. data (f.e. install ox mail app)
@@ -954,7 +941,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="my-contact-data" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="my-contact-data" role="menuitem">')
                         .text(gt('My contact data'))
                     )
                     .on('click', function (e) {
@@ -976,7 +963,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="password" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="password" role="menuitem">')
                         .text(gt('Change password'))
                     )
                     .on('click', function (e) {
@@ -996,13 +983,12 @@ define('io.ox/core/main', [
                 //replaced by module
                 var node = this;
                 node.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                    $('<li role="presentation">', { 'class': 'io-ox-specificHelp' }).append(
+                    $('<li class="divider" role="separator"></li>'),
+                    $('<li class="io-ox-specificHelp" role="presentation">').append(
                         new HelpView({
-                            tabindex: '-1',
                             content: gt('Help'),
                             href: getHelp
-                        }).render().$el
+                        }).render().$el.attr('role', 'menuitem')
                     )
                 );
             }
@@ -1013,7 +999,7 @@ define('io.ox/core/main', [
             index: 290,
             draw: function () {
                 this.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation">')
+                    $('<li class="divider" role="separator">')
                 );
             }
         });
@@ -1024,7 +1010,7 @@ define('io.ox/core/main', [
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-action="about" role="menuitem" tabindex="-1">').text(gt('About'))
+                        $('<a href="#" data-action="about" role="menuitem">').text(gt('About'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -1041,9 +1027,9 @@ define('io.ox/core/main', [
             index: 1000,
             draw: function () {
                 this.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
+                    $('<li class="divider" role="separator">'),
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-action="logout" role="menuitem" tabindex="-1">').text(gt('Sign out'))
+                        $('<a href="#" data-action="logout" role="menuitem">').text(gt('Sign out'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -1060,10 +1046,8 @@ define('io.ox/core/main', [
                 var ul, a;
                 this.append(
                     $('<li id="io-ox-topbar-dropdown-icon" class="launcher dropdown" role="presentation">').append(
-                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">')
-                        .append(
-                            $('<i class="fa fa-bars launcher-icon" aria-hidden="true">'),
-                            $('<span class="sr-only">').text(gt('Settings'))
+                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
+                            $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
                         ),
                         ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
                     )
@@ -1082,13 +1066,59 @@ define('io.ox/core/main', [
                     var logoutButton = addLauncher('right', $('<i class="fa fa-sign-out launcher-icon" aria-hidden="true">'), function () {
                         logout();
                     }, gt('Sign out'));
-                    logoutButton.find('a').tooltip({
+                    logoutButton.find('a')
+                    .attr('data-action', 'sign-out')
+                    .tooltip({
                         title: gt('Sign out'),
                         placement: function (tip, el) {
                             return ($(window).width() - $(el).offset().left - el.offsetWidth) < 80 ? 'left' : 'auto';
                         }
                     });
                     this.append(logoutButton);
+                }
+            });
+
+            var getMessage = function (data) {
+                var language = ox.language.substring(0, 2);
+                return data[language] || data.en || gt.noI18n('You forgot to sign out last time. Always use the sign-out button when you finished your work.');
+            };
+
+            ext.point('io.ox/core/topbar/right').extend({
+                id: 'logout-button-hint',
+                index: 2100,
+                draw: function () {
+                    var data = _.clone(settings.get('features/dedicatedLogoutButtonHint', {}));
+                    if (!data.enabled) return;
+                    // reset
+                    settings.set('features/dedicatedLogoutButtonHint/active', true).save();
+                    if (!data.active || _(ox.flags || []).contains('autologin')) return;
+                    // init
+                    var link = this.find('a[data-action="sign-out"]')
+                        .popover({
+                            content: getMessage(data),
+                            template: '<div class="popover popover-signout" role="tooltip"><div class="popover-content popover-content-signout"></div></div>',
+                            placement: function (tip, el) {
+                                return ($(window).width() - $(el).offset().left - el.offsetWidth) < 80 ? 'bottom' : 'auto';
+                            }
+                        });
+                    // prevent logout action when clicking hint
+                    this.get(0).addEventListener('click', function (e) {
+                        if (e.target.classList.contains('popover-content-signout')) e.stopImmediatePropagation();
+                        link.popover('destroy');
+                    }, true);
+                    // close on click
+                    $(document).one('click', link.popover.bind(link, 'destroy'));
+                    // show
+                    _.defer(link.popover.bind(link, 'show'));
+                }
+            });
+
+            ext.point('io.ox/core/logout').extend({
+                id: 'logout-button-hint',
+                logout: function () {
+                    http.pause();
+                    settings.set('features/dedicatedLogoutButtonHint/active', false).save();
+                    return http.resume();
                 }
             });
         }
@@ -1099,7 +1129,7 @@ define('io.ox/core/main', [
             draw: function () {
                 // add small logo to top bar
                 this.append(
-                    $('<div id="io-ox-top-logo-small" aria-hidden="true">')
+                    $('<li id="io-ox-top-logo-small" aria-hidden="true">')
                 );
             }
         });
@@ -1161,10 +1191,14 @@ define('io.ox/core/main', [
             id: 'default',
             draw: function () {
 
-                var rightbar = $('<ul class="launchers-secondary">').attr('aria-label', gt('Actions'));
+                var rightbar = $('<ul class="launchers-secondary" role="toolbar">')
+                    .attr('aria-label', gt('Actions'));
 
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', rightbar);
+
+                rightbar.find('> li').attr('role', 'presentation');
+                rightbar.find('> li > a').attr('role', 'button');
 
                 topbar.append(rightbar);
 
@@ -1520,9 +1554,9 @@ define('io.ox/core/main', [
                         btn1, btn2;
 
                     $('#io-ox-core').append(
-                        dialog = $('<div class="io-ox-restore-dialog" tabindex="0">').append(
+                        dialog = $('<div class="io-ox-restore-dialog" tabindex="0" role="dialog">').append(
                             $('<div class="header">').append(
-                                $('<h3>').text(gt('Restore applications')),
+                                $('<h1>').text(gt('Restore applications')),
                                 $('<div>').text(
                                     gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
                                 )
@@ -1549,7 +1583,7 @@ define('io.ox/core/main', [
                                 var version = item.version || '';
                                 version = version.split('.').slice(0, -2).join('.');
                                 if (version) {
-                                    versionInfo = $('<span>').addClass('oldversion').text(gt.noI18n('(' + version + ')'));
+                                    versionInfo = $('<span class="oldversion">').text(gt.noI18n('(' + version + ')'));
                                 }
                             }
                             this.append(
@@ -1557,7 +1591,7 @@ define('io.ox/core/main', [
                                     $('<a href="#" role="button" class="remove">').data(item).append(
                                         $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
-                                    item.icon ? $('<i class="' + item.icon + '">') : $(),
+                                    item.icon ? $('<i>').addClass(item.icon) : $(),
                                     $('<span>').text(gt.noI18n(info)),
                                     versionInfo
                                 )

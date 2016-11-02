@@ -460,6 +460,8 @@
                 }
             }
             .freetime-lasso {
+                // important or the lasso prevents clicks on the appointments
+                pointer-events:none;
                 background-color: @freetime-lasso;
                 bottom: 0px;
                 top: 0px;
@@ -502,12 +504,16 @@
                         opacity: 0.6;
                         margin-left: 4px;
                     }
+                    &.has-detailview:hover {
+                        cursor: pointer;
+                    }
                     &.has-location {
                         padding: 4px 8px;
                         .title {
                             line-height: 16px;
                         }
                         .location {
+                            opacity: 0.6;
                             line-height: 16px;
                             font-weight: normal;
                             overflow: hidden;

@@ -24,7 +24,7 @@ define('io.ox/files/view-options', [
     // Mark as secondary toolbar
     //
 
-    ext.point('io.ox/files/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/top').extend({
         id: 'secondary',
         index: 100,
         draw: function () {
@@ -58,17 +58,17 @@ define('io.ox/files/view-options', [
         }
     });
 
-    ext.point('io.ox/files/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/top').extend({
         id: 'dropdown-container',
         index: 900,
         draw: function (baton) {
             var dropdownContainer = $('<div class="dropdown-container pull-right">');
-            ext.point('io.ox/files/list-view/toolbar/dropdowns').invoke('draw', dropdownContainer, baton);
+            ext.point('io.ox/files/listviewcontrol/list-view/toolbar/dropdowns').invoke('draw', dropdownContainer, baton);
             this.append(dropdownContainer);
         }
     });
 
-    ext.point('io.ox/files/list-view/toolbar/dropdowns').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/dropdowns').extend({
         id: 'dropdown',
         index: 100,
         draw: function (baton) {
@@ -137,7 +137,7 @@ define('io.ox/files/view-options', [
         }
     });
 
-    ext.point('io.ox/files/list-view/toolbar/dropdowns').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/dropdowns').extend({
         id: 'select',
         index: 200,
         draw: function (baton) {
@@ -158,7 +158,7 @@ define('io.ox/files/view-options', [
         }
     });
 
-    ext.point('io.ox/files/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/top').extend({
         id: 'move-up',
         index: 2100,
         draw: function (baton) {
@@ -196,7 +196,7 @@ define('io.ox/files/view-options', [
     // Breadcrumb
     //
 
-    ext.point('io.ox/files/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/top').extend({
         id: 'breadcrumb',
         index: 300,
         draw: function (baton) {
@@ -234,16 +234,15 @@ define('io.ox/files/view-options', [
             .addClass('toolbar-bottom-visible');
     }
 
-    ext.point('io.ox/files/list-view/toolbar/bottom').extend({
+    ext.point('io.ox/files/listviewcontrol/list-view/toolbar/bottom').extend({
         id: 'toggle-folderview',
         index: 200,
         draw: function (baton) {
 
             this.append(
-                $('<a href="#" role="button" class="toolbar-item">')
-                .attr('title', gt('Open folder view'))
-                .append($('<i class="fa fa-angle-double-right">'))
-                .on('click', { app: baton.app, state: true }, toggleFolderView)
+                $('<a href="#" role="button" class="toolbar-item">').attr('aria-label', gt('Open folder view')).append(
+                    $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
+                ).on('click', { app: baton.app, state: true }, toggleFolderView)
             );
 
             baton.app.on({
@@ -261,12 +260,9 @@ define('io.ox/files/view-options', [
         draw: function (baton) {
             this.addClass('bottom-toolbar').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" role="button" class="toolbar-item" data-action="close-folder-view">')
-                    .append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
-                        $('<span class="sr-only">').text(gt('Close folder view'))
-                    )
-                    .on('click', { app: baton.app, state: false }, toggleFolderView)
+                    $('<a href="#" role="button" class="toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
+                    ).on('click', { app: baton.app, state: false }, toggleFolderView)
                 )
             );
         }

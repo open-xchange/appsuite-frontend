@@ -15,7 +15,9 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
     'use strict';
 
     var socket,
-        URI = _.url.hash('socket-uri') ? _.url.hash('socket-uri') : ox.abs,
+        // disable debugging for release
+        URI = /*_.url.hash('socket-uri') ? _.url.hash('socket-uri') :*/ ox.abs,
+        PATH = '/socket.io/appsuite',
         isConnected = false,
         supported = Modernizr.websockets && cap.has('websocket'),
         debug = _.url.hash('socket-debug') || ox.debug;
@@ -24,7 +26,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
         var def = $.Deferred();
         // connect Websocket
         if (debug) console.log('Websocket trying to connect...');
-        socket = io.connect(URI + '/?session=' + ox.session, { transports: ['websocket'] });
+        socket = io.connect(URI + '/?session=' + ox.session, { transports: ['websocket'], path: PATH });
         // expose global variable for debugging
         if (debug) window.socket = socket;
         socket.on('connect', function () {

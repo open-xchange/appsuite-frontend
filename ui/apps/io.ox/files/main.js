@@ -52,7 +52,7 @@ define('io.ox/files/main', [
     var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
-        sidebarView = new Sidebarview({ closable: true });
+        sidebarView = new Sidebarview({ closable: true, app: app });
 
     app.mediator({
 
@@ -399,7 +399,7 @@ define('io.ox/files/main', [
                     if (loading) return;
                     loading = true;
 
-                    require(['io.ox/files/share/listview'], function (MySharesView) {
+                    require(['io.ox/files/share/listview', 'io.ox/files/share/api'], function (MySharesView, shareApi) {
 
                         app.mysharesListView = new MySharesView({
                             app: app,
@@ -421,6 +421,10 @@ define('io.ox/files/main', [
                         }), 10);
 
                         folderAPI.on('change:permissions', _.debounce(function () {
+                            app.mysharesListView.reload();
+                        }), 10);
+
+                        shareApi.on('remove:link new:link', _.debounce(function () {
                             app.mysharesListView.reload();
                         }), 10);
 
@@ -718,7 +722,7 @@ define('io.ox/files/main', [
             var ev = _.device('touch') ? 'tap' : 'dblclick';
 
             app.listView.$el.on(ev, '.file-type-folder .list-item-content', function (e) {
-                // simpler id check for folders, prevents errors if folder id contains '.'
+                // simple id check for folders, prevents errors if folder id contains '.'
                 var id = $(e.currentTarget).parent().attr('data-cid').replace(/^folder./, '');
 
                 app.folder.set(id);
@@ -742,7 +746,7 @@ define('io.ox/files/main', [
             // folders
             app.listView.$el.on('keydown', '.file-type-folder', function (e) {
                 if (e.which === 13) {
-                    // simpler id check for folders, prevents errors if folder id contains '.'
+                    // simple id check for folders, prevents errors if folder id contains '.'
                     var id = $(e.currentTarget).attr('data-cid').replace(/^folder./, '');
 
                     app.listView.once('collection:load', function () {
@@ -1036,10 +1040,9 @@ define('io.ox/files/main', [
             side.find('.foldertree-container').addClass('bottom-toolbar');
             side.find('.foldertree-sidepanel').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button">')
+                    $('<a href="#" class="toolbar-item" role="button">').attr('aria-label', gt('Close folder view'))
                     .append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
-                        $('<span class="sr-only">').text(gt('Close folder view'))
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                     )
                     .on('click', { app: app, state: false }, toggleFolderView)
                 )
@@ -1336,7 +1339,16 @@ define('io.ox/files/main', [
         win.nodes.outer.on('selection:drop', function (e, baton) {
             // convert composite keys to objects
             baton.data = _(baton.data).map(function (item) {
-                return _.isString(item) ? _.cid(item) : item;
+
+                // simple id check for folders, prevents errors if folder id contains '.'
+                if (_.isString(item)) {
+                    if (item.startsWith('folder.')) {
+                        return { folder_id: 'folder', id: item.replace(/^folder./, '') };
+                    }
+                    return _.cid(item);
+                }
+
+                return item;
             });
             // empty?
             if (!baton.data.length) return;

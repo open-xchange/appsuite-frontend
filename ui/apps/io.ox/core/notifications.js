@@ -249,7 +249,7 @@ define('io.ox/core/notifications', [
 
         hideAll: function () {
             _(this.model.get('subviews')).each(function (view) {
-                view.hideAll(1800000);
+                view.hideAll(settings.get('notificationsHidingTimer', 1800000));
             });
         },
 

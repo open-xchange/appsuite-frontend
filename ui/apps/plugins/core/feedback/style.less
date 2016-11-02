@@ -14,7 +14,6 @@
 .star-rating {
 
     @star-color: #ccc;
-    @star-color-focus: #777;
     @star-color-checked: #FDD835;
 
     margin: 0 0 8px 0;
@@ -32,7 +31,7 @@
     .checked { color: @star-color-checked; }
 
     input[type="radio"]:focus + .star {
-        color: @star-color-focus;
+        text-shadow: 0 0 4px #000;
     }
 
     label {

@@ -82,6 +82,9 @@ define('io.ox/presenter/views/mainview', [
 
             // listen to local model updates
             this.listenTo(this.app.localModel, 'change', this.onLocalModelUpdate);
+
+            // listen to full screen mode changes
+            BigScreen.onchange = this.onChangeFullScreen.bind(this);
         },
 
         /**
@@ -400,19 +403,9 @@ define('io.ox/presenter/views/mainview', [
             if (BigScreen.enabled && _.device('!iOS')) {
 
                 if (_.isUndefined(state)) {
-                    BigScreen.toggle(
-                        this.presentationView.el,
-                        this.onEnterFullscreen.bind(this),
-                        this.onExitFullscreen.bind(this),
-                        this.onErrorFullscreen.bind(this)
-                    );
+                    BigScreen.toggle(this.presentationView.el);
                 } else if (state) {
-                    BigScreen.request(
-                        this.presentationView.el,
-                        this.onEnterFullscreen.bind(this),
-                        this.onExitFullscreen.bind(this),
-                        this.onErrorFullscreen.bind(this)
-                    );
+                    BigScreen.request(this.presentationView.el);
                 } else {
                     BigScreen.exit();
                 }
@@ -420,29 +413,27 @@ define('io.ox/presenter/views/mainview', [
         },
 
         /**
-         * Handle main view entering full screen mode
+         * Handle full screen mode change event.
+         *
+         * Note: BigScreen.onchange is the only event that works correctly with current Firefox.
+         *
+         * @param {DOM|null} element
+         *  The element that is currently displaying in full screen or null.
          */
-        onEnterFullscreen: function () {
-            this.fullscreen = true;
-            this.sidebarBeforeFullscreen = this.sidebarView.opened;
-            this.sidebarView.toggleSidebar(false);
-            this.presenterEvents.trigger('presenter:fullscreen:enter');
-        },
+        onChangeFullScreen: function (element) {
+            if (_.isNull(element)) {
+                // exit fullscreen
+                this.fullscreen = false;
+                this.sidebarView.toggleSidebar(this.sidebarBeforeFullscreen);
+                this.presenterEvents.trigger('presenter:fullscreen:exit');
 
-        /**
-         * Handle main view leaving full screen mode
-         */
-        onExitFullscreen: function () {
-            this.fullscreen = false;
-            this.sidebarView.toggleSidebar(this.sidebarBeforeFullscreen);
-            this.presenterEvents.trigger('presenter:fullscreen:exit');
-        },
-
-        /**
-         * Handle main view full screen toggle errors
-         */
-        onErrorFullscreen: function (foo) {
-            console.info('Presenter - error toggle fullscreen, reason:', foo);
+            } else if (element === this.presentationView.el) {
+                // enter fullscreen
+                this.fullscreen = true;
+                this.sidebarBeforeFullscreen = this.sidebarView.opened;
+                this.sidebarView.toggleSidebar(false);
+                this.presenterEvents.trigger('presenter:fullscreen:enter');
+            }
         },
 
         /**

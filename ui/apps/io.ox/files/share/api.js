@@ -145,6 +145,9 @@ define('io.ox/files/share/api', [
                     timezone: 'UTC'
                 },
                 data: _(data).pick('module', 'folder', 'item')
+            }).then(function (result) {
+                api.trigger('new:link');
+                return result;
             });
         },
 
@@ -191,9 +194,13 @@ define('io.ox/files/share/api', [
                 params: {
                     action: 'deleteLink',
                     timezone: 'UTC',
-                    timestamp: timestamp
+                    timestamp: timestamp || _.now()
                 },
                 data: _(data).pick('module', 'folder', 'item')
+            }).then(function (result) {
+                api.trigger('remove:link', data);
+                api.trigger('remove:link:' + data.module + ':' + data.folder + (data.item ? ':' + data.item : ''));
+                return result;
             });
         },
 

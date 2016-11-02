@@ -244,14 +244,14 @@ define('io.ox/core/folder/util', [
                 return !isMail && !is('account', data) && (data.capabilities & 1);
             case 'publish':
                 // check folder capability
-                if (_(data.supported_capabilities).indexOf('publication') === -1) return false;
+                if (!supports('publication', data)) return false;
                 // contact?
                 if (data.module === 'contacts') return true;
                 // files?
                 return data.module === 'infostore' && can('create', data) && rights !== 1 && rights !== 4;
             case 'subscribe':
                 // check folder capability
-                if (_(data.supported_capabilities).indexOf('subscription') === -1) return false;
+                if (!supports('subscription', data)) return false;
                 // check rights
                 return (/^(contacts|calendar|infostore)$/).test(data.module) && can('write', data);
             case 'subscribe:imap':
@@ -261,10 +261,18 @@ define('io.ox/core/folder/util', [
                 if (data.standard_folder && /^(7|9|10|11|12)$/.test(data.standard_folder_type)) return false;
                 return Boolean(data.capabilities & Math.pow(2, 4));
             case 'change:seen':
-                return _(data.supported_capabilities).indexOf('STORE_SEEN') > -1;
+                return supports('STORE_SEEN', data);
+            case 'add:version':
+                return supports('file_versions', data);
             default:
                 return false;
         }
+    }
+
+    // simple generic check to see if the folder supports a capability
+    // supports models and objects containing folder data
+    function supports(capability, data) {
+        return data.get ? _(data.get('supported_capabilities')).indexOf(capability) > -1 : _(data.supported_capabilities).indexOf(capability) > -1;
     }
 
     /*
@@ -281,6 +289,7 @@ define('io.ox/core/folder/util', [
     return {
         perm: perm,
         bits: bits,
+        supports: supports,
         is: is,
         can: can,
         getDefaultFolder: getDefaultFolder,

@@ -14,9 +14,13 @@
 define('io.ox/files/actions/add-storage-account', [
     'io.ox/core/tk/dialogs',
     'io.ox/metrics/main',
-    'io.ox/core/notifications',
-    'gettext!io.ox/files'
-], function (dialogs, metrics, notifications, gt) {
+    'io.ox/core/yell',
+    'gettext!io.ox/files',
+    // must be required here or popupblocker blocks the window while we require files
+    'io.ox/oauth/keychain',
+    'io.ox/core/api/filestorage',
+    'io.ox/oauth/backbone'
+], function (dialogs, metrics, yell, gt, oauthAPI, filestorageApi, OAuth) {
 
     'use strict';
 
@@ -41,18 +45,17 @@ define('io.ox/files/actions/add-storage-account', [
 
     function needsOAuthScope(accounts) {
         return accounts.reduce(function (acc, account) {
-            return acc && _(account.availableScopes).contains('drive') && !_(account.enabledScopes).contains('drive');
-        }, true);
+            return acc || (_(account.availableScopes).contains('drive') && !_(account.enabledScopes).contains('drive'));
+        }, false);
     }
 
     function getAvailableServices() {
-        return require(['io.ox/keychain/api', 'io.ox/core/api/filestorage']).then(function (keychainApi, filestorageApi) {
-
+        return require(['io.ox/keychain/api']).then(function (keychainApi) {
             var availableFilestorageServices = _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; });
             return _(keychainApi.submodules).filter(function (submodule) {
                 if (!services[submodule.id]) return false;
                 // we need support for both accounts, Oauth accounts and filestorage accounts.
-                return (!submodule.canAdd || submodule.canAdd.apply(this) || needsOAuthScope(submodule.getAll())) && availableFilestorageServices.indexOf(submodule.id) >= 0;
+                return (!_.isFunction(submodule.canAdd) || submodule.canAdd({ scopes: ['drive'] }) || needsOAuthScope(submodule.getAll())) && availableFilestorageServices.indexOf(submodule.id) >= 0;
             });
         });
     }
@@ -61,28 +64,18 @@ define('io.ox/files/actions/add-storage-account', [
         e.preventDefault();
         $(this).tooltip('destroy');
         e.data.dialog.close();
-        require(['io.ox/oauth/keychain', 'io.ox/core/api/filestorage']).then(function (oauthAPI, filestorageApi) {
-            var account = oauthAPI.accounts.filter(function (account) {
-                var id = account.get('serviceId'),
-                    simpleId = id.substring(id.lastIndexOf('.') + 1);
-                return simpleId === e.data.service.id;
-            })[0];
-
-            if (!account) {
-                //TODO: use backbone models to create new account :/
-                var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
-                e.data.service.createInteractively(win, ['drive']);
-                return;
-            }
-
-            account.enableScopes('drive');
-            account.save();
-
-            account.listenToOnce(account, 'sync', function (model) {
-                filestorageApi.createAccountFromOauth(model.toJSON()).done(function () {
-                    notifications.yell('success', gt('Account added successfully'));
-                });
+        var service = oauthAPI.services.withShortId(e.data.service.id),
+            account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
+                serviceId: service.id,
+                displayName: 'My ' + service.get('displayName') + ' account'
             });
+
+        account.enableScopes('drive').save().then(function (res) {
+            // add new account after it has been created succesfully
+            oauthAPI.accounts.add(account);
+            return filestorageApi.createAccountFromOauth(res);
+        }).then(function () {
+            yell('success', gt('Account added successfully'));
         });
     }
 

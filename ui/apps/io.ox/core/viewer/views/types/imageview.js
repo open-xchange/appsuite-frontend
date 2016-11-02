@@ -69,7 +69,7 @@ define('io.ox/core/viewer/views/types/imageview', [
                     var notification = self.createNotificationNode(gt('Sorry, there is no preview available for this image.'));
                     self.$el.idle().append(notification);
                 });
-                this.$el.append($('<div>').append(image));
+                this.$el.append($('<div class="viewer-displayer-item-container">').append(image));
             }
 
             return this;

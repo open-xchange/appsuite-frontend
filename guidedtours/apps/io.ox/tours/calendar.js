@@ -75,7 +75,7 @@ define('io.ox/tours/calendar', [
                 .end()
             .step()
                 .title(gt('Creating the appointment'))
-                .content(gt('To create the appointment, click on Create at the upper right side.'))
+                .content(gt('To create the appointment, click on Create at the lower left side.'))
                 .referTo('[data-action="save"]')
                 .hotspot('[data-action="save"]')
                 .end()
@@ -83,32 +83,40 @@ define('io.ox/tours/calendar', [
                 .title(gt('Selecting a view'))
                 .content(gt('To select one of the views like Day, Month or List, click on View in the toolbar. Select a menu entry from the Layout section.'))
                 .navigateTo('io.ox/calendar/main')
-                .waitFor('.classic-toolbar .pull-right')
-                .spotlight('.classic-toolbar .pull-right')
-                .on('before:show', function () {
-                    if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
-                        $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
-                    }
+                .spotlight('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
+                .referTo('.classic-toolbar [data-dropdown="view"] ul')
+                .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
+                .on('wait', function () {
+                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
                 })
-                .end()
-            .step()
-                .title(gt('The List view'))
-                .content(gt('The List view shows a list of the appointments in the current folder. If clicking on an appointment, the appointment\'s data and some functions are displayed in the Detail view.'))
-                .spotlight('.classic-toolbar .pull-right')
-                .on('before:show', function () {
-                    if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
-                        $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
-                    }
+                .on('hide', function () {
+                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
                 })
                 .end()
             .step()
                 .title(gt('The calendar views'))
                 .content(gt('The calendar views display a calendar sheet with the appointments for the selected time range.'))
-                .spotlight('.classic-toolbar .pull-right:visible')
-                .on('show', function () {
-                    if ($('.toolbar-button.dropdown.open .dropdown-menu:visible').length === 0) {
-                        $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible').click();
-                    }
+                .spotlight('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
+                .referTo('.classic-toolbar [data-dropdown="view"] ul')
+                .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="layout"]')
+                .on('wait', function () {
+                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
+                })
+                .on('hide', function () {
+                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
+                })
+                .end()
+            .step()
+                .title(gt('The List view'))
+                .content(gt('The List view shows a list of the appointments in the current folder. If clicking on an appointment, the appointment\'s data and some functions are displayed in the Detail view.'))
+                .spotlight('.classic-toolbar [data-dropdown="view"] ul a[data-value="list"]')
+                .referTo('.classic-toolbar [data-dropdown="view"] ul')
+                .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-value="list"]')
+                .on('wait', function () {
+                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
+                })
+                .on('hide', function () {
+                    $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
                 })
                 .end()
             .on('stop', function () {

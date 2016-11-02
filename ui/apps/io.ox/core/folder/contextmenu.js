@@ -47,7 +47,7 @@ define('io.ox/core/folder/contextmenu', [
 
     function divider() {
         this.append(
-            $('<li class="divider" role="presentation" aria-hidden="true">')
+            $('<li class="divider" role="separator">')
         );
     }
 
@@ -340,6 +340,7 @@ define('io.ox/core/folder/contextmenu', [
 
             return function (baton) {
 
+                if (_.indexOf(baton.data.supported_capabilities, 'zippable_folder') === -1) return;
                 if (_.device('smartphone')) return;
                 if (baton.module !== 'infostore') return;
 

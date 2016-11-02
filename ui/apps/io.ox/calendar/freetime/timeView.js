@@ -202,7 +202,7 @@ define('io.ox/calendar/freetime/timeView', [
 
             today.hours(start);
 
-            this.append(table = $('<div class="freetime-table">').append(node = $('<div class="freetime-time-table">')));
+            this.append(table = $('<div class="freetime-table" draggable="false">').append(node = $('<div class="freetime-time-table">')));
 
             for (var counter = 0; counter < 7; counter++) {
                 var cells = [];
@@ -251,7 +251,7 @@ define('io.ox/calendar/freetime/timeView', [
         draw: function (baton) {
             var table = this.find('.freetime-table');
             if (!baton.view.lassoNode) {
-                baton.view.lassoNode = $('<div class="freetime-lasso">').hide();
+                baton.view.lassoNode = $('<div class="freetime-lasso" draggable="false">').hide();
             }
             table.append(baton.view.lassoNode);
             // update lasso status
@@ -280,7 +280,7 @@ define('io.ox/calendar/freetime/timeView', [
                     }
                     var left = baton.view.timeToPosition(start),
                         right = 100 - baton.view.timeToPosition(end),
-                        appointmentNode = $('<div class="appointment">')
+                        appointmentNode = $('<div class="appointment" draggable="false">')
                             .addClass(availabilityClasses[appointment.shown_as])
                             .css({ left: left + '%', right: right + '%' });
                     appointmentNode.css('z-index', 1 + zIndexbase[availabilityClasses[appointment.shown_as]] + index + (appointment.full_time ? 0 : 4000));
@@ -288,7 +288,7 @@ define('io.ox/calendar/freetime/timeView', [
                     if (appointment.title) {
                         appointmentNode.addClass(100 - right - left < baton.view.grid * 4 ? 'under-one-hour' : '').append($('<div class="title">').text(gt.noI18n(appointment.title)).append($('<span class="appointment-time">').text(util.getTimeInterval(appointment))))
                         .attr({
-                            title: appointment.title,
+                            title: appointment.title + (appointment.location ? ' ' + appointment.location : ''),
                             'aria-label': appointment.title,
                             'data-toggle': 'tooltip'
                         }).tooltip({ container: tooltipContainer });
@@ -297,6 +297,34 @@ define('io.ox/calendar/freetime/timeView', [
                         appointmentNode.append($('<div class="location">').text(appointment.location)).addClass('has-location');
                     }
 
+                    if (baton.view.parentView.options.isApp && (appointment.folder_id || settings.get('freeBusyStrict', true) === false)) {
+                        appointmentNode.addClass('has-detailview').on('click', function (e) {
+                            //don't open if this was a lasso drag
+                            if (baton.view.lassoEnd === baton.view.lassoStart) {
+                                require(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-detail'], function (dialogs, detailView) {
+                                    new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
+                                        if (appointment.folder_id === undefined) {
+                                            popup.append(detailView.draw(appointment));
+                                            return;
+                                        }
+                                        popup.busy();
+                                        var dialog = this;
+                                        api.get(appointment).then(
+                                            function (data) {
+                                                popup.idle().append(detailView.draw(data));
+                                            },
+                                            function (error) {
+                                                dialog.close();
+                                                require(['io.ox/core/yell'], function (yell) {
+                                                    yell(error);
+                                                });
+                                            }
+                                        );
+                                    });
+                                });
+                            }
+                        });
+                    }
                     participantTable.append(appointmentNode);
                 });
             });
@@ -509,6 +537,9 @@ define('io.ox/calendar/freetime/timeView', [
             this.lassoStart = index * width;
             this.lassoEnd = (index + 1) * width;
             this.updateLasso(true);
+            if (e.altKey && this.lassoEnd && this.lassoStart && this.lassoStart !== this.lassoEnd) {
+                this.parentView.save();
+            }
         },
 
         // utility function to get the position in percent for a given time
@@ -646,6 +677,10 @@ define('io.ox/calendar/freetime/timeView', [
                 this.updateLasso(true);
 
                 this.lasso = false;
+
+                if (e.altKey && this.lassoEnd && this.lassoStart && this.lassoStart !== this.lassoEnd) {
+                    this.parentView.save();
+                }
             }
         },
 

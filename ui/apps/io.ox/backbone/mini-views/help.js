@@ -74,7 +74,7 @@ define('io.ox/backbone/mini-views/help', ['gettext!io.ox/core'], function (gt) {
         initialize: function (options) {
             this.options = _.extend({
                 href: 'index.html',
-                content: $('<i class="fa fa-question-circle" aria-hidden="true">'),
+                content: $('<i class="fa fa-question-circle" aria-hidden="true">').attr('title', gt('Online help')),
                 base: 'help'
             }, options);
 
@@ -88,9 +88,7 @@ define('io.ox/backbone/mini-views/help', ['gettext!io.ox/core'], function (gt) {
                 .append(this.options.content)
                 .attr({
                     href: '#',
-                    role: 'button',
                     target: '_blank',
-                    tabindex: 0,
                     'aria-label': gt('Online help')
                 });
             return this;

@@ -16,11 +16,12 @@ define('io.ox/core/folder/tree', [
     'io.ox/core/folder/selection',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
+    'io.ox/core/a11y',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/folder/favorites',
     'io.ox/core/folder/extensions'
-], function (DisposableView, Selection, api, ext, settings, gt) {
+], function (DisposableView, Selection, api, ext, a11y, settings, gt) {
 
     'use strict';
 
@@ -29,8 +30,7 @@ define('io.ox/core/folder/tree', [
         className: 'folder-tree',
 
         events: {
-            'click .contextmenu-control':                    'onToggleContextMenu',
-            'keydown .contextmenu-control':                  'onKeydown',
+            'click .contextmenu-control': 'onToggleContextMenu',
             'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu',
             'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys'
         },
@@ -241,21 +241,6 @@ define('io.ox/core/folder/tree', [
             this.$dropdown.find('.dropdown-toggle').dropdown('toggle');
         },
 
-        onKeydown: function (e) {
-
-            var dropdown = this.$dropdown;
-            // done if not open
-            // if (!dropdown.hasClass('open')) return;
-            // shift-tab
-            // if (e.shiftKey && e.which === 9) return;
-            if (e.which === 32) {
-                // cursor down
-                e.preventDefault();
-                $(e.currentTarget).click();
-                return dropdown.find('.dropdown-menu > li:first > a').focus();
-            }
-        },
-
         getContextMenuId: function (id) {
             return 'io.ox/core/foldertree/contextmenu/' + (id || 'default');
         },
@@ -317,26 +302,16 @@ define('io.ox/core/folder/tree', [
                 if (node) node.parent().focus();
             }
 
-            function trapFocus(e) {
-                // a11y - trap focus in context menu - prevent tabbing out of context menu
-                if ((!e.shiftKey && e.which === 9 && $(e.target).parent().next().length === 0) ||
-                    (e.shiftKey && e.which === 9 && $(e.target).parent().prev().length === 0)) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                }
-            }
-
             return function () {
 
                 this.$el.after(
                     this.$dropdown = $('<div class="context-dropdown dropdown" data-action="context-menu" data-contextmenu="default">').append(
                         $('<div class="abs context-dropdown-overlay">').on('contextmenu', this.onCloseContextMenu.bind(this)),
-                        this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
+                        this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Folder options')),
                         this.$dropdownMenu = $('<ul class="dropdown-menu">')
                     )
                     .on('show.bs.dropdown', show.bind(this))
                     .on('hidden.bs.dropdown', hide.bind(this))
-                    .on('keydown.bs.dropdown.data-api', trapFocus)
                 );
                 this.$dropdownToggle.dropdown();
                 this.$dropdownMenu.removeAttr('role');

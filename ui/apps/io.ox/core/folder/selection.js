@@ -105,16 +105,11 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         onKeydown: function (e) {
+            if (!/38|40/.test(e.which)) return;
             // bubbling?
             if (!$(e.target).hasClass('selectable')) return;
-            // cursor up/down
-            switch (e.which) {
-                case 38:
-                case 40:
-                    this.onCursorUpDown(e);
-                    break;
-                // no default
-            }
+
+            this.onCursorUpDown(e);
         },
 
         onCursorUpDown: function (e) {

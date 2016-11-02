@@ -49,12 +49,15 @@
 
     &.simple-mail {
         max-width: 700px;
-
+        &.big-screen {
+            max-width: 100%;
+        }
         img {
             max-width: 100%;
             height: auto!important;
         }
     }
+
 
     img {
 
@@ -199,7 +202,7 @@
         // fix long links
         word-break: break-word;
 
-        i {
+        button.bqt {
             color: #888;
             background-color: #eee;
             padding: 1px 10px;
@@ -210,14 +213,13 @@
             outline: none;
             position: absolute;
             left: 0;
+            border: 0;
 
             &:hover, &:focus {
                 color: #fff;
                 background-color: @link-color;
                 text-decoration: none;
             }
-
-            &:before { content: '...'; }
         }
     }
 

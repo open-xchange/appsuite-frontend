@@ -42,12 +42,12 @@ define('io.ox/mail/threadview', [
                     ),
                     $('<div class="position">'),
                     $('<div class="prev-next">').append(
-                        $('<a href="#" role="button" class="previous-mail">')
-                            .attr('aria-label', gt('Previous message'))
-                            .append('<i class="fa fa-chevron-up" aria-hidden="true">'),
-                        $('<a href="#" role="button" class="next-mail">')
-                            .attr('aria-label', gt('Next message'))
-                            .append('<i class="fa fa-chevron-down" aria-hidden="true">')
+                        $('<a href="#" role="button" class="previous-mail">').attr('aria-label', gt('Previous message')).append(
+                            $('<i class="fa fa-chevron-up" aria-hidden="true">')
+                        ),
+                        $('<a href="#" role="button" class="next-mail">').attr('aria-label', gt('Next message')).append(
+                            $('<i class="fa fa-chevron-down" aria-hidden="true">')
+                        )
                     )
                 ).attr('role', 'toolbar')
             );
@@ -68,8 +68,27 @@ define('io.ox/mail/threadview', [
     });
 
     ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'subject',
+        id: 'toggle-all',
         index: 100,
+        draw: function (baton) {
+            if (baton.view.collection.length <= 1) return;
+            this.append(
+                $('<a href="#" role="button" class="toggle-all">')
+                .append('<i class="fa fa-angle-double-down" aria-hidden="true">')
+                .attr('aria-label', gt('Open all messages'))
+                .tooltip({
+                    animation: false,
+                    container: 'body',
+                    placement: 'left',
+                    title: gt('Open/close all messages')
+                })
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/thread-view/header').extend({
+        id: 'subject',
+        index: 200,
         draw: function (baton) {
 
             var keepFirstPrefix = baton.view.collection.length === 1,
@@ -87,33 +106,38 @@ define('io.ox/mail/threadview', [
 
     ext.point('io.ox/mail/thread-view/header').extend({
         id: 'summary',
-        index: 200,
+        index: 300,
         draw: function (baton) {
-
             var length = baton.view.collection.length;
-
-            this.find('.subject').append(
-                $('<h4 class="summary">').text(
-                    length > 1 ? gt('%1$d messages in this conversation', length) : '\u00A0'
-                )
+            if (length === 1) {
+                this.find('.subject').addClass('spacer');
+                return;
+            }
+            this.find('.subject').after(
+                $('<h2 class="summary">').text(gt('%1$d messages in this conversation', length))
             );
         }
     });
 
     ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'toggle-all',
-        index: 300,
+        id: 'toggle-big-screen',
+        index: 110,
         draw: function (baton) {
-            if (baton.view.collection.length <= 1) return;
+            if (!baton.view.standalone) return;
             this.append(
-                $('<a href="#" role="button" class="toggle-all">')
-                .append('<i class="fa fa-angle-double-down">')
-                .attr('aria-label', gt('Open all messages'))
+                $('<a href="#" role="button" class="toggle-big-screen">')
+                .append('<i class="fa fa-expand">')
+                .attr('aria-label', gt('Toggle viewport size'))
                 .tooltip({
                     animation: false,
                     container: 'body',
                     placement: 'left',
-                    title: gt('Open/close all messages')
+                    title: gt('Toggle viewport size')
+                })
+                .on('click', function () {
+                    // remove tooltip on click as the viewport changes
+                    var self = $(this);
+                    _.defer(function () { self.tooltip('hide'); });
                 })
             );
         }
@@ -131,6 +155,7 @@ define('io.ox/mail/threadview', [
             'click .back-navigation .previous-mail': 'onPrevious',
             'click .back-navigation .next-mail': 'onNext',
             'click .toggle-all': 'onToggleAll',
+            'click .toggle-big-screen': 'onToggleBigscreen',
             'keydown': 'onKeydown'
         },
 
@@ -199,6 +224,25 @@ define('io.ox/mail/threadview', [
                 this.toggleMail(model.cid, state);
             }, this);
             http.resume();
+        },
+
+        onToggleBigscreen: function (e) {
+            e.preventDefault();
+            this.$el.toggleClass('big-screen');
+            if (_.device('chrome')) {
+                // chrome uses shadow-dom which can not be found by jquery by default
+                var shadow = this.$el.find('.shadow-root-container')[0].shadowRoot;
+                $(shadow).find('.mail-detail-content').toggleClass('big-screen');
+            }
+        },
+
+        toggleBigScreen: function (state) {
+            this.$el.toggleClass('big-screen', state);
+            if (_.device('chrome')) {
+                // chrome uses shadow-dom which can not be found by jquery by default
+                var shadow = this.$el.find('.shadow-root-container')[0].shadowRoot;
+                $(shadow).find('.mail-detail-content').toggleClass('big-screen');
+            }
         },
 
         toggleMail: function (cid, state) {
@@ -402,6 +446,7 @@ define('io.ox/mail/threadview', [
             this.threaded = true;
             this.collection = new backbone.Collection();
             options = options || {};
+            this.standalone = options.standalone || false;
 
             this.listenTo(this.collection, {
                 add: this.onAdd,
@@ -449,7 +494,10 @@ define('io.ox/mail/threadview', [
 
         // render an email
         renderListItem: function (model) {
-            var view = new detail.View({ tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            var self = this, view = new detail.View({ tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            view.on('mail:detail:body:render', function (data) {
+                self.trigger('mail:detail:body:render', data);
+            });
             return view.render().$el.attr({ tabindex: '0' });
         },
 

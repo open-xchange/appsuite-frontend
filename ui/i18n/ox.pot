@@ -155,7 +155,6 @@ msgstr ""
 #: apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
 #: apps/io.ox/files/main.js
@@ -1506,8 +1505,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/editor/main.js
-#: module:io.ox/editor
 #: apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail
 msgid "Note"
@@ -1942,27 +1939,6 @@ msgstr ""
 #: apps/io.ox/calendar/month/perspective.js
 #: module:io.ox/calendar
 msgid "Calendar Month View"
-msgstr ""
-
-#: apps/io.ox/calendar/month/perspective.js
-#: module:io.ox/calendar
-#: apps/io.ox/core/viewer/views/displayerview.js
-#: module:io.ox/core
-#: apps/io.ox/core/wizard/registry.js
-#: module:io.ox/core/wizard
-msgid "Previous"
-msgstr ""
-
-#: apps/io.ox/calendar/month/perspective.js
-#: module:io.ox/calendar
-#: apps/io.ox/core/tk/wizard.js
-#: module:io.ox/core
-#: apps/io.ox/core/viewer/views/displayerview.js
-#: apps/io.ox/core/wizard/registry.js
-#: module:io.ox/core/wizard
-#: apps/io.ox/wizards/upsell.js
-#: module:io.ox/wizards
-msgid "Next"
 msgstr ""
 
 #. add confirmation status behind appointment title
@@ -2818,11 +2794,6 @@ msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
-msgid "Departments"
-msgstr ""
-
-#: apps/io.ox/contacts/addressbook/popup.js
-#: module:io.ox/contacts
 #: apps/io.ox/core/desktop.js
 #: module:io.ox/core
 #: apps/io.ox/core/main.js
@@ -3628,6 +3599,8 @@ msgstr ""
 
 #: apps/io.ox/contacts/toolbar.js
 #: module:io.ox/contacts
+#: apps/io.ox/files/actions/share.js
+#: module:io.ox/files
 msgid "Invite"
 msgstr ""
 
@@ -5081,7 +5054,7 @@ msgstr ""
 
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
-msgid "You can manage desktop notifications at any time, by visiting your settings"
+msgid "You can manage desktop notifications at any time, by vitising your settings"
 msgstr ""
 
 #. %1$d number of notifications in notification area
@@ -6266,6 +6239,16 @@ msgstr ""
 
 #: apps/io.ox/core/tk/wizard.js
 #: module:io.ox/core
+#: apps/io.ox/core/viewer/views/displayerview.js
+#: apps/io.ox/core/wizard/registry.js
+#: module:io.ox/core/wizard
+#: apps/io.ox/wizards/upsell.js
+#: module:io.ox/wizards
+msgid "Next"
+msgstr ""
+
+#: apps/io.ox/core/tk/wizard.js
+#: module:io.ox/core
 msgid "Welcome"
 msgstr ""
 
@@ -6287,6 +6270,13 @@ msgstr ""
 #: apps/io.ox/core/upsell.js
 #: module:io.ox/core
 msgid "Get free upgrade"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/displayerview.js
+#: module:io.ox/core
+#: apps/io.ox/core/wizard/registry.js
+#: module:io.ox/core/wizard
+msgid "Previous"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/displayerview.js
@@ -6716,11 +6706,6 @@ msgstr ""
 
 #: apps/io.ox/editor/main.js
 #: module:io.ox/editor
-msgid "Title"
-msgstr ""
-
-#: apps/io.ox/editor/main.js
-#: module:io.ox/editor
 msgid "Enter document title here"
 msgstr ""
 
@@ -7010,15 +6995,6 @@ msgstr ""
 #: apps/io.ox/files/actions/add-storage-account.js
 #: module:io.ox/files
 msgid "OneDrive"
-msgstr ""
-
-#: apps/io.ox/files/actions/add-storage-account.js
-#: module:io.ox/files
-#: apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/keychain.js
-#: module:io.ox/core
-msgid "Account added successfully"
 msgstr ""
 
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
@@ -7575,6 +7551,11 @@ msgstr ""
 
 #: apps/io.ox/files/share/wizard.js
 #: module:io.ox/files
+msgid "Invite people via email. Every recipient will get an individual link to access the shared files."
+msgstr ""
+
+#: apps/io.ox/files/share/wizard.js
+#: module:io.ox/files
 msgid "You can copy and paste this link in an email, instant messenger or social network. Please note that anyone with this link can access the share."
 msgstr ""
 
@@ -8036,16 +8017,6 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
-msgid "Other"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
-msgid "Please select your mail account provider"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
 msgid "Your mail address"
 msgstr ""
 
@@ -8092,6 +8063,13 @@ msgstr ""
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/keychain.js
+#: module:io.ox/core
+msgid "Account added successfully"
 msgstr ""
 
 #. Auth type. Short for "Use same credentials as incoming mail server"
@@ -10477,11 +10455,6 @@ msgstr ""
 #: apps/io.ox/presenter/errormessages.js
 #: module:io.ox/presenter
 msgid "A general network error occurred. Please contact your system administrator."
-msgstr ""
-
-#: apps/io.ox/presenter/errormessages.js
-#: module:io.ox/presenter
-msgid "You can't present the same document more than once."
 msgstr ""
 
 #: apps/io.ox/presenter/errormessages.js

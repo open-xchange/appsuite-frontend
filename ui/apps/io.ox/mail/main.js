@@ -260,16 +260,6 @@ define('io.ox/mail/main', [
         },
 
         /*
-         * Convenience function to toggle folder view
-         */
-        'folder-view-toggle': function (app) {
-            if (_.device('smartphone')) return;
-            app.getWindow().nodes.main.on('dblclick', '.list-view-control .toolbar', function () {
-                app.folderView.toggle();
-            });
-        },
-
-        /*
          * Default application properties
          */
         'props': function (app) {
@@ -982,7 +972,7 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
             app.applyLayout = function () {
 
-                var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, className,
+                var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, categoriesToolbar, className,
                     savedWidth = app.settings.get('listview/width/' + _.display()),
                     savedHeight = app.settings.get('listview/height/' + _.display());
 
@@ -1014,13 +1004,21 @@ define('io.ox/mail/main', [
 
                 // relocate toolbar
                 toolbar = nodes.body.find('.classic-toolbar-container');
+                categoriesToolbar = nodes.body.find('.categories-toolbar-container');
                 className = 'classic-toolbar-visible';
+
                 if (layout === 'compact') {
                     nodes.body.removeClass(className);
                     app.right.addClass(className).prepend(toolbar);
+                    if (categoriesToolbar.length > 0) {
+                        app.right.prepend(categoriesToolbar);
+                    }
                 } else {
                     app.right.removeClass(className);
                     nodes.body.addClass(className).prepend(toolbar);
+                    if (categoriesToolbar.length > 0) {
+                        nodes.body.prepend(categoriesToolbar);
+                    }
                 }
 
                 if (layout !== 'list' && app.props.previousAttributes().layout === 'list' && !app.right.hasClass('preview-visible')) {
@@ -1559,10 +1557,14 @@ define('io.ox/mail/main', [
                     var $el = $('<div class="generic-toolbar bottom mail-progress">')
                         .hide()
                         .append(
-                            $('<div class="progress"><div class="progress-bar"></div></div>'),
+                            $('<div class="progress">').append(
+                                $('<div class="progress-bar">')
+                            ),
                             $('<div class="caption">').append(
                                 $('<span>'),
-                                $('<a href="#" class="close" data-action="close" role="button"><i class="fa fa-times"></i></a>')
+                                $('<a href="#" class="close" data-action="close" role="button">').attr('aria-label', gt('Close')).append(
+                                    $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))
+                                )
                             )
                        );
                     api.queue.collection.on('progress', function (data) {
