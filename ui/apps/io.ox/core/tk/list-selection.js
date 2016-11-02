@@ -429,7 +429,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.view.mousedown = false;
         },
 
-        onClick: function (e) {
+        onClick: function (e, options) {
+            options = options || {};
+
             if (e.type === 'tap') {
                 // prevent ghostclicks
                 e.preventDefault();
@@ -452,7 +454,10 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             // range select / single select
             this.pick(index, items, e);
-            //always trigger in multiple mode (sometimes only checkbox is changed)
+
+            // support custom events
+            if (options.customEvents) return;
+            // always trigger in multiple mode (sometimes only checkbox is changed)
             if (!_.isEqual(previous, this.get())) this.triggerChange(items);
         },
 
@@ -532,15 +537,22 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         onClick: function (e) {
-            var previous = this.get();
-            prototype.onClick.call(this, e);
+            var previous = this.get(),
+                mousedownSelect = (e.type === 'mousedown' && !this.isMultiple(e) && !$(e.currentTarget).is('.selected'));
+
+            prototype.onClick.call(this, e, { customEvents: mousedownSelect });
+            if (mousedownSelect) {
+                this.selectEvents();
+            }
             //trigger events (if only checkbox is changed the events are not triggered by normal function)
             if (_.isEqual(previous, this.get()) && e.type === 'mousedown' && this.isMultiple(e)) this.triggerChange(this.getItems());
         },
 
         // normal select now triggers selection:action instead of the usual events (item will be shown in detail view and checkbox is not checked)
         selectEvents: function (items) {
-            var layout = this.view.app.props.get('layout') || 'list';
+            items = items || this.getItems();
+            var layout = (this.view.app && this.view.app.props.get('layout')) || 'list';
+
             //in list layout we need the old events or mails open when they are not supposed to (for example when moving with arrow keys)
             if (layout === 'list') {
                 this.triggerChange(items);
