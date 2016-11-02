@@ -45,7 +45,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
             this.$el.val(val);
             // update model too or the the left spaces are still in the model data. They would be saved when the model is saved, creating inconsistent data
             // infinite loops are not possible because the change event is only triggered if the new value is different
-            this.model.set(val);
+            this.model.set(this.name, val);
         },
         render: function () {
             this.$el.attr({ name: this.name });
