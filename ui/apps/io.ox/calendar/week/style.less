@@ -125,7 +125,6 @@
 
                 .time {
                     position: relative;
-                    height: 48px;
                     margin-left: 1em;
                     border-bottom: 1px solid @weekview-border;
                     color: #777;
@@ -211,14 +210,10 @@
 
             .timeslot {
                 -webkit-touch-callout: none !important;
-                border-bottom: 1px solid @weekview-border;
+                border-bottom: 1px solid @weekview-border-light;
                 height: 24px;
 
-                &:nth-child(2n+1) {
-                    border-color: lighten(@weekview-border, 10%);
-
-                    &.out { border-color: transparent; }
-                }
+                &.out { border-color: transparent; }
 
                 &:last-child, .time:last-child { border: none; }
 
@@ -227,6 +222,60 @@
 
             &.today .timeslot { background-color: @calendar-today-background; }
 
+        }
+
+        &.time-scale-1 {
+            .scrollpane .week-container-label .time { height: 24px; }
+
+            .day .timeslot:not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
+        }
+
+        &.time-scale-2 {
+            .scrollpane .week-container-label .time { height: 48px; }
+
+            .day .timeslot:nth-child(2n):not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
+        }
+
+        &.time-scale-3 {
+            .scrollpane .week-container-label .time { height: 72px; }
+
+            .day .timeslot:nth-child(3n):not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
+        }
+
+        &.time-scale-4 {
+            .scrollpane .week-container-label .time { height: 96px; }
+
+            .day .timeslot:nth-child(4n):not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
+        }
+
+        &.time-scale-6 {
+            .scrollpane .week-container-label .time { height: 144px; }
+
+            .day .timeslot:nth-child(3n):not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
+        }
+
+        &.time-scale-12 {
+            .scrollpane .week-container-label .time { height: 288px; }
+
+            .day .timeslot:nth-child(3n):not(.working-time-border) {
+                border-color: @weekview-border;
+                &.out { border-color: @weekview-border; }
+            }
         }
 
     }

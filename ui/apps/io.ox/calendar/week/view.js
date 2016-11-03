@@ -44,7 +44,6 @@ define('io.ox/calendar/week/view', [
         className:      'week',
 
         columns:        7,      // default value for day columns
-        fragmentation:  2,      // fragmentation of a hour
         gridSize:       2,      // grid fragmentation of a hour
         cellHeight:     24,     // height of one single fragment in px
         minCellHeight:  24,     // min height of one single fragment in px
@@ -68,8 +67,8 @@ define('io.ox/calendar/week/view', [
         folderData:     {},     // current folder object
         restoreCache:   null,   // object, which contains data for save and restore functions
         extPoint:       null,   // appointment extension
-        dayLabelRef:    null,	// used to manage redraw on daychange
-        startLabelRef:  null,	// used to manage redraw on weekchange
+        dayLabelRef:    null,   // used to manage redraw on daychange
+        startLabelRef:  null,   // used to manage redraw on weekchange
 
         // startup options
         options:        {
@@ -271,12 +270,22 @@ define('io.ox/calendar/week/view', [
             // init settings
             var self = this;
             this.gridSize = 60 / settings.get('interval', 30);
-            this.workStart = settings.get('startTime', this.workStart);
-            this.workEnd = settings.get('endTime', this.workEnd);
+            this.workStart = settings.get('startTime', this.workStart) * 1;
+            this.workEnd = settings.get('endTime', this.workEnd) * 1;
             settings.on('change', function (key) {
                 switch (key) {
                     case 'interval':
+                        // save scroll ratio
+                        var scrollRatio = (self.pane.scrollTop() + self.pane.height() / 2) / self.height();
                         self.gridSize = 60 / settings.get('interval', 30);
+                        self.renderTimeslots();
+                        self.applyTimeScale();
+                        // reset height of .time fields, since the initial height comes from css
+                        $('.time', self.pane).css('height', '');
+                        self.adjustCellHeight(false);
+                        self.renderAppointments();
+                        // restore scroll position from ratio
+                        self.pane.scrollTop(scrollRatio * self.height() - self.pane.height() / 2);
                         break;
                     case 'startTime':
                     case 'endTime':
@@ -612,7 +621,7 @@ define('io.ox/calendar/week/view', [
                         this.lasso = $('<div>')
                             .addClass('appointment lasso')
                             .css({
-                                height: this.gridHeight(),
+                                height: this.cellHeight,
                                 minHeight: 0,
                                 top: this.roundToGrid(mouseY, 'n')
                             })
@@ -875,18 +884,10 @@ define('io.ox/calendar/week/view', [
                 this.fulltimePane
                     .append(day.clone());
 
-                // create timeslots and add days to week container
-                for (var i = 1; i <= this.slots * this.fragmentation; i++) {
-                    day.append(
-                        $('<div>')
-                        .addClass('timeslot')
-                        .addClass((i <= (this.workStart * this.fragmentation) || i > (this.workEnd * this.fragmentation)) ? 'out' : '')
-                        .addClass((i === (this.workStart * this.fragmentation) || i === (this.workEnd * this.fragmentation)) ? 'working-time-border' : '')
-                    );
-                }
-
                 this.weekCon.append(day);
             }
+
+            this.renderTimeslots();
 
             var nextStr = this.columns === 1 ? gt('Next Day') : gt('Next Week'),
                 prevStr = this.columns === 1 ? gt('Previous Day') : gt('Previous Week');
@@ -919,7 +920,7 @@ define('io.ox/calendar/week/view', [
                         self.weekCon
                     ),
                     this.moreAppointmentsIndicators
-                )
+                ).addClass('time-scale-' + this.gridSize)
             );
 
             var renderSecondaryTimeLabels = _.throttle(function () {
@@ -953,6 +954,34 @@ define('io.ox/calendar/week/view', [
             return this;
         },
 
+        applyTimeScale: function () {
+            var weekViewContainer = $('.week-view-container', this.$el);
+            // remove all classes like time-scale-*
+            weekViewContainer.removeClass(function (index, css) {
+                return (css.match(/(^|\s)time-scale-\S+/g) || []).join(' ');
+            });
+            weekViewContainer.addClass('time-scale-' + this.gridSize);
+        },
+
+        renderTimeslots: function () {
+            var self = this;
+            this.weekCon.children('.day').each(function () {
+                var day = $(this);
+
+                day.empty();
+
+                // create timeslots and add days to week container
+                for (var i = 1; i <= self.slots * self.gridSize; i++) {
+                    day.append(
+                        $('<div>')
+                        .addClass('timeslot')
+                        .addClass((i <= (self.workStart * self.gridSize) || i > (self.workEnd * self.gridSize)) ? 'out' : '')
+                        .addClass((i === (self.workStart * self.gridSize) || i === (self.workEnd * self.gridSize)) ? 'working-time-border' : '')
+                    );
+                }
+            });
+        },
+
         rerenderWorktime: function () {
             this.weekCon.find('.day').each(function () {
                 $(this).find('.timeslot').each(function (i, el) {
@@ -968,7 +997,7 @@ define('io.ox/calendar/week/view', [
          */
         setScrollPos: function () {
             this.adjustCellHeight();
-            var slotHeight = this.cellHeight * this.fragmentation,
+            var slotHeight = this.cellHeight * this.gridSize,
             // see bug 40297
                 timelineTop = parseFloat(this.timeline[0].style.top) * slotHeight * 0.24;
 
@@ -986,14 +1015,14 @@ define('io.ox/calendar/week/view', [
             var cells = Math.min(Math.max(4, (this.workEnd - this.workStart + 1)), 18);
             this.paneHeight = this.pane.height() || this.paneHeight;
             this.cellHeight = Math.floor(
-                Math.max(this.paneHeight / (cells * this.fragmentation),
+                Math.max(this.paneHeight / (cells * this.gridSize),
                 this.minCellHeight)
             );
 
             // only update if height differs from CSS default
             if (this.cellHeight !== this.minCellHeight) {
                 $('.timeslot', this.pane).height(this.cellHeight - 1);
-                $('.time', this.pane).height((this.cellHeight * this.fragmentation) - 1);
+                $('.time', this.pane).height((this.cellHeight * this.gridSize) - 1);
                 // if the cell height changes we also need to redraw all appointments
                 if (redraw) this.renderAppointments();
             }
@@ -1306,9 +1335,9 @@ define('io.ox/calendar/week/view', [
             $('.week-container .day>.appointment.modify', this.$el)
                 .resizable({
                     handles: 'n, s',
-                    grid: [0, self.gridHeight()],
+                    grid: [0, self.cellHeight],
                     // see Bug 32753 - Not possible to reduce an appointment to 30 minutes using drag&drop
-                    minHeight: self.gridHeight() - 2,
+                    minHeight: self.cellHeight - 2,
                     containment: 'parent',
                     start: function (e, ui) {
                         var d = $(this).data('ui-resizable');
@@ -1489,7 +1518,7 @@ define('io.ox/calendar/week/view', [
                     }
                 })
                 .draggable({
-                    grid: [colWidth, self.gridHeight()],
+                    grid: [colWidth, self.cellHeight],
                     distance: 10,
                     delay: 300,
                     scroll: true,
@@ -1784,7 +1813,7 @@ define('io.ox/calendar/week/view', [
          * @return { number }     rounded value
          */
         roundToGrid: function (pos, typ) {
-            var h = this.gridHeight();
+            var h = this.cellHeight;
             switch (typ) {
                 case 'n':
                     typ = 'floor';
@@ -1844,15 +1873,7 @@ define('io.ox/calendar/week/view', [
          * @return { number } height of the grid
          */
         height: function () {
-            return this.cellHeight * this.slots * this.fragmentation;
-        },
-
-        /**
-         * calculate height of a single grid fragment
-         * @return { number } height of a single grid fragment
-         */
-        gridHeight: function () {
-            return this.cellHeight * this.fragmentation / this.gridSize;
+            return this.cellHeight * this.slots * this.gridSize;
         },
 
         /**
