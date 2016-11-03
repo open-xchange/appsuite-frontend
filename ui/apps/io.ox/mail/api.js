@@ -504,7 +504,7 @@ define('io.ox/mail/api', [
             })
             .done(function (data) {
                 // backend tells us the if the archive folder is new and its id
-                if (data.created) {
+                if (_(_(data).pluck('created')).contains(true)) {
                     // update account data
                     accountAPI.reload().done(function () {
                         // refresh all folders because the archive folder might be new
@@ -513,7 +513,7 @@ define('io.ox/mail/api', [
                         api.trigger('refresh.all');
                     });
                 } else {
-                    folderAPI.reload(data.id);
+                    folderAPI.reload(_(data).pluck('id'));
                 }
                 api.trigger('archive', ids);
             })
