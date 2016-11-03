@@ -274,19 +274,34 @@
         bottom: 0;
         width: 100%;
         outline: none;
-
-        &:-webkit-full-screen,
-        -moz-full-screen,
-        -ms-fullscreen,
-        full-screen,
-        fullscreen {
+        
+        .fullscreen() {
             top: 0;
             background-color: black;
-            
+
             // #49797 - Presenting in full screen mode shows scroll bar 
-            .swiper-slide {
+            .swiper-container .swiper-wrapper .swiper-slide {
                 overflow: hidden;
             }
+        }
+
+        // The selectors for full screen need to be kept in separate declarations.
+        // For example if Firefox discovers ":-webkit-full-screen" it ignores the whole selector, same if Chrome discovers ":-moz-full-screen".
+        //
+        &:-webkit-full-screen {
+            .fullscreen()
+        }
+        &:-moz-full-screen {
+            .fullscreen()
+        }
+        &:-ms-fullscreen {
+            .fullscreen()
+        }
+        &:full-screen {
+            .fullscreen()
+        }
+        &:fullscreen {
+            .fullscreen()
         }
 
         .document-page {
