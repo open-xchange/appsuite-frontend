@@ -863,7 +863,8 @@ define('io.ox/mail/api', [
                     api.trigger('refresh.all');
                     return $.Deferred().reject(e.error);
                 }
-                return list;
+                // return new IDs on copy
+                return type === 'copy' ? _(data.response).pluck('data') : list;
             })
         );
     }

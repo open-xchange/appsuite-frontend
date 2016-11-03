@@ -569,6 +569,8 @@ define('io.ox/find/main', [
                     // inplace: use parents view window
                     app.view.render();
                     app.set('state', 'launched');
+                    // trigger global event
+                    ox.trigger('search:load', app);
                 });
                 // reset cache on contact changes
                 require(['io.ox/contacts/api'], function (contactsAPI) {
