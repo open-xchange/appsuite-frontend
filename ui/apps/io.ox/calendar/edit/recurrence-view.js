@@ -217,7 +217,7 @@ define('io.ox/calendar/edit/recurrence-view', [
             _(options.options).each(function (label, value) {
                 value = parseInt(String(value).replace(/^bit_/, ''), 10);
                 if (label === '') {
-                    $menu.append('<li class="divider" role="presentation">');
+                    $menu.append('<li class="divider" role="separator">');
                 } else {
                     $menu.append(
                         $('<li role="presentation">').append(

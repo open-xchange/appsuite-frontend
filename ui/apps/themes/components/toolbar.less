@@ -147,6 +147,10 @@
         text-align: center;
         margin: 0;
         vertical-align: middle;
+        .ellipsis();
+        &.text-button {
+            font-size: 18px;
+        }
     }
 
     .dropdown {
@@ -199,7 +203,8 @@
             &:focus { background-color: #eee; }
 
             &.disabled {
-                color: #aaa;
+                color: @toolbar-link-disabled-color;
+                cursor: not-allowed;
             }
             @media (max-width: 580px) {
                 // fix for phablets

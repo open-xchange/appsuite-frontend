@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-guidedtours\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-04 07:49+0000\n"
+"POT-Creation-Date: 2016-10-19 08:48+0000\n"
 "PO-Revision-Date: 2016-07-04 18:33+0000\n"
 "Last-Translator: hv@webhuset.no <hv@webhuset.no>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1467657196.000000\n"
 
-#: apps/io.ox/tours/files.js:221 module:io.ox/tours
+#: apps/io.ox/tours/files.js:228 module:io.ox/tours
 msgid "Add another account"
 msgstr "Legg til en annen konto"
 
@@ -26,7 +26,7 @@ msgstr "Legge til vedlegg"
 msgid "Adding further details"
 msgstr "Legge til flere detaljer"
 
-#: apps/io.ox/tours/files.js:104 module:io.ox/tours
+#: apps/io.ox/tours/files.js:111 module:io.ox/tours
 msgid ""
 "At the top you can find the toolbar with many functions and additional "
 "options. You can easily create new folders, new files and much more."
@@ -34,7 +34,7 @@ msgstr ""
 "På toppen finner du verktøylinjen med mange funksjoner og "
 "tilleggsalternativer. Du kan enkelt opprette nye mapper, filer og mer."
 
-#: apps/io.ox/tours/files.js:169 module:io.ox/tours
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
 msgid ""
 "Choose from two alternatives to share your files and folders. Use Invite "
 "people if you want to manage access rights and allow recipients to create "
@@ -55,7 +55,7 @@ msgstr ""
 "Klikk en bokstav på venstre side for å vise de korresponderende kontaktene "
 "fra den valgte adresseboken."
 
-#: apps/io.ox/tours/files.js:81 module:io.ox/tours
+#: apps/io.ox/tours/files.js:88 module:io.ox/tours
 msgid ""
 "Clicking on a folder displays all the subfolders, documents, media and other "
 "files that it contains."
@@ -63,7 +63,7 @@ msgstr ""
 "Ved å klikke på en mappe vises alle undermapper, dokumenter og filer som "
 "mappen inneholder."
 
-#: apps/io.ox/tours/files.js:132 module:io.ox/tours
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
 msgid "Clicking on the view icon leads you to a preview of the selected file."
 msgstr ""
 "Ved å klikke på visningsikonet får du se en forhåndsvisning av den valgte "
@@ -73,7 +73,7 @@ msgstr ""
 msgid "Closing a square"
 msgstr "Fjerne en widget"
 
-#: apps/io.ox/tours/files.js:182 module:io.ox/tours
+#: apps/io.ox/tours/files.js:189 module:io.ox/tours
 msgid "Collaborating"
 msgstr "Samarbeid"
 
@@ -131,7 +131,7 @@ msgid ""
 msgstr ""
 "Detaljerte veiledninger for hver enkelt app finnes i systemmenyen > Hjelp. "
 
-#: apps/io.ox/tours/files.js:198 module:io.ox/tours
+#: apps/io.ox/tours/files.js:205 module:io.ox/tours
 msgid ""
 "Did you know that you can edit text documents and spreadsheets online? Drive "
 "will automatically update your edited file, but thanks to versioning the "
@@ -142,7 +142,7 @@ msgstr ""
 "tidligere versjoner forbli tilgjengelig, i tilfelle du ønsker å gå tilbake "
 "til en tidligere versjon."
 
-#: apps/io.ox/tours/files.js:89 module:io.ox/tours
+#: apps/io.ox/tours/files.js:96 module:io.ox/tours
 msgid "Different views are available. Just select the one you like best."
 msgstr "Forskjellige visninger er tilgjengelig. Bare velg den du liker best."
 
@@ -154,7 +154,7 @@ msgstr "Vise innstillinger eller hjelpedokumentasjon"
 msgid "Drag and drop"
 msgstr "Dra og slipp"
 
-#: apps/io.ox/tours/files.js:222 module:io.ox/tours
+#: apps/io.ox/tours/files.js:229 module:io.ox/tours
 msgid ""
 "Drive allows you to connect to other storage solutions if you already have a "
 "cloud storage account you use to save and sync your files. Simply click on "
@@ -164,7 +164,7 @@ msgstr ""
 "av de støttede løsningene kan du få tilgang til også disse filene i Drive. "
 "Bare klikk på en av logoene for å komme i gang."
 
-#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:52 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
 "activated immediately."
@@ -172,11 +172,11 @@ msgstr ""
 "Endre en innstilling på høyre side. I de fleste tilfeller blir endringene "
 "aktivert umiddelbart."
 
-#: apps/io.ox/tours/files.js:197 module:io.ox/tours
+#: apps/io.ox/tours/files.js:204 module:io.ox/tours
 msgid "Edit documents"
 msgstr "Redigere dokumenter"
 
-#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:115 module:io.ox/tours
 msgid "Editing multiple E-Mails"
 msgstr "Redigere flere eposter"
 
@@ -188,7 +188,7 @@ msgstr "Redigere flere kontakter"
 msgid "Editing multiple tasks"
 msgstr "Redigere flere oppgaver"
 
-#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:51 module:io.ox/tours
 msgid "Editing settings"
 msgstr "Endre innstillinger"
 
@@ -252,19 +252,19 @@ msgstr "Angi et emne"
 msgid "Entering the task's data"
 msgstr "Legge inn detaljer om oppgaven"
 
-#: apps/io.ox/tours/files.js:205 module:io.ox/tours
+#: apps/io.ox/tours/files.js:212 module:io.ox/tours
 msgid "File details"
 msgstr "Fildetaljer"
 
-#: apps/io.ox/tours/files.js:80 module:io.ox/tours
+#: apps/io.ox/tours/files.js:87 module:io.ox/tours
 msgid "Folder content"
 msgstr "Mappeinnhold"
 
-#: apps/io.ox/tours/files.js:66 module:io.ox/tours
+#: apps/io.ox/tours/files.js:73 module:io.ox/tours
 msgid "Folder tree"
 msgstr "Mappetre"
 
-#: apps/io.ox/tours/files.js:143 module:io.ox/tours
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
 msgid ""
 "From preview you can also select other options to help you manage and work "
 "on your files."
@@ -289,11 +289,11 @@ msgstr "Mer informasjon"
 msgid "Getting started"
 msgstr "Kom i gang"
 
-#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:110 module:io.ox/tours
 msgid "Halo view"
 msgstr "Oversiktsbilde"
 
-#: apps/io.ox/tours/files.js:157 module:io.ox/tours
+#: apps/io.ox/tours/files.js:164 module:io.ox/tours
 msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
 "also collaborate on a document and set different access rights."
@@ -301,17 +301,17 @@ msgstr ""
 "Her kan du dele filer med kolleger og eksterne kontakter. Du kan også "
 "samarbeide på et dokument, og sette forskjellige tilgangsrettigheter."
 
-#: apps/io.ox/tours/files.js:232 module:io.ox/tours
+#: apps/io.ox/tours/files.js:239 module:io.ox/tours
 msgid ""
 "Hint: you can always restart guided tours, any time you need them, from the "
 "system menu."
 msgstr "Tips: du kan alltid starte omvisninger når som helst fra systemmenyen."
 
-#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Hvordan innstillingene er organisert"
 
-#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid ""
 "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
 "separate window."
@@ -330,7 +330,7 @@ msgstr ""
 "Når du mottar nye varsler, f.eks. avtaleinvitasjoner, blir varslingsområdet "
 "åpnet."
 
-#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:116 module:io.ox/tours
 msgid ""
 "In order to edit multiple E-Mails at once, enable the checkboxes on the left "
 "side of the E-Mails. If the checkboxes are not displayed, click on View > "
@@ -359,7 +359,7 @@ msgstr "Starte en app"
 msgid "Navigation bar"
 msgstr "Navigeringslinje"
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
+#: apps/io.ox/tours/files.js:74 module:io.ox/tours
 msgid ""
 "On the left you can see the folder tree. It displays your folder structure "
 "and allows you to navigate to specific folders and subfolders. To make your "
@@ -371,7 +371,7 @@ msgstr ""
 "lettere har vi allerede inkludert mapper for Dokumenter, Musikk, Bilder og "
 "Videoer."
 
-#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:100 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
 msgstr "Åpne en epost i et nytt vindu"
 
@@ -379,11 +379,11 @@ msgstr "Åpne en epost i et nytt vindu"
 msgid "Opening or closing the folder tree"
 msgstr "Åpne eller lukke mappetreet"
 
-#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:128 module:io.ox/tours
 msgid "Opening the E-Mail settings"
 msgstr "Innstillinger for epost"
 
-#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:56 module:io.ox/tours
 msgid "Opening the help"
 msgstr "Få hjelp"
 
@@ -391,15 +391,15 @@ msgstr "Få hjelp"
 msgid "Opening the settings"
 msgstr "Endre innstillingene"
 
-#: apps/io.ox/tours/files.js:131 module:io.ox/tours
+#: apps/io.ox/tours/files.js:138 module:io.ox/tours
 msgid "Preview files"
 msgstr "Forhåndsvise filer"
 
-#: apps/io.ox/tours/files.js:142 module:io.ox/tours
+#: apps/io.ox/tours/files.js:149 module:io.ox/tours
 msgid "Preview mode"
 msgstr "Forhåndsvisningsmodus"
 
-#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:105 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "Lese epostsamtaler"
 
@@ -407,7 +407,7 @@ msgstr "Lese epostsamtaler"
 msgid "Reading the details"
 msgstr "Se flere detaljer"
 
-#: apps/io.ox/tours/files.js:231 module:io.ox/tours
+#: apps/io.ox/tours/files.js:238 module:io.ox/tours
 msgid "Restart Guided Tour"
 msgstr "Start omvisning på nytt"
 
@@ -415,12 +415,12 @@ msgstr "Start omvisning på nytt"
 msgid "Searching for objects"
 msgstr "Søke etter elementer"
 
-#: apps/io.ox/tours/files.js:88 module:io.ox/tours
+#: apps/io.ox/tours/files.js:95 module:io.ox/tours
 msgid "Select a view"
 msgstr "Velge en visning"
 
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:87
 msgid "Selecting a view"
 msgstr "Velge en visning"
 
@@ -428,15 +428,15 @@ msgstr "Velge en visning"
 msgid "Sending an E-Mail to a contact"
 msgstr "Send en epost til en kontakt"
 
-#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "Sende eposten"
 
-#: apps/io.ox/tours/files.js:156 module:io.ox/tours
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
 msgid "Share files"
 msgstr "Dele filer"
 
-#: apps/io.ox/tours/files.js:183 module:io.ox/tours
+#: apps/io.ox/tours/files.js:190 module:io.ox/tours
 msgid ""
 "Sharing files by inviting people does not only offer your recipients the "
 "option to create and edit files. Internal and external participants are also "
@@ -447,11 +447,11 @@ msgstr ""
 "redigere filer - de kan også samarbeide med deg på tekstdokumenter eller "
 "regneark!"
 
-#: apps/io.ox/tours/files.js:168 module:io.ox/tours
+#: apps/io.ox/tours/files.js:175 module:io.ox/tours
 msgid "Sharing options"
 msgstr "Delingsinnstillinger"
 
-#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:70 module:io.ox/tours
 msgid "Signing out"
 msgstr "Logge ut"
 
@@ -459,7 +459,7 @@ msgstr "Logge ut"
 msgid "Sorting tasks"
 msgstr "Sortere oppgaver"
 
-#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
 msgid "Sorting your E-Mails"
 msgstr "Sortere eposter"
 
@@ -475,19 +475,19 @@ msgstr ""
 "Detaljvisningen viser innholdet til et element. Du finner også flere "
 "funksjoner for å behandle elementet."
 
-#: apps/io.ox/tours/files.js:59 module:io.ox/tours
+#: apps/io.ox/tours/files.js:66 module:io.ox/tours
 msgid "The Drive app"
 msgstr "Drive-appen"
 
-#: apps/io.ox/tours/files.js:53 module:io.ox/tours
+#: apps/io.ox/tours/files.js:59 module:io.ox/tours
 msgid "The Drive app tour.txt"
 msgstr "Omvisning av Drive-appen.txt"
 
-#: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:110 module:io.ox/tours
 msgid "The List view"
 msgstr "Listevisning"
 
-#: apps/io.ox/tours/calendar.js:96 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:111 module:io.ox/tours
 msgid ""
 "The List view shows a list of the appointments in the current folder. If "
 "clicking on an appointment, the appointment's data and some functions are "
@@ -501,8 +501,12 @@ msgid "The New objects icon"
 msgstr "Varslingsikonet"
 
 #: apps/io.ox/tours/intro.js:59 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "The New objects icon shows the number of unread E-Mails or other "
+#| "notifications. If clicking the icon, the info area opens."
 msgid ""
-"The New objects icon shows the number of unread E-Mails or other "
+"The New objects icon shows the number of appointment reminders or other "
 "notifications. If clicking the icon, the info area opens."
 msgstr ""
 "Varslingsikonet viser antall uleste eposter eller andre varslinger. Klikk på "
@@ -520,11 +524,11 @@ msgstr ""
 "Portalen gir deg oversikt over dine siste eposter, avtaler og oppgaver, med "
 "mer."
 
-#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:97 module:io.ox/tours
 msgid "The calendar views"
 msgstr "Kalendervisninger"
 
-#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:98 module:io.ox/tours
 msgid ""
 "The calendar views display a calendar sheet with the appointments for the "
 "selected time range."
@@ -532,7 +536,7 @@ msgstr ""
 "Kalenderen viser deg dine planlagte avtaler og hendelser innenfor den valgte "
 "tidsrammen."
 
-#: apps/io.ox/tours/files.js:206 module:io.ox/tours
+#: apps/io.ox/tours/files.js:213 module:io.ox/tours
 msgid ""
 "The file details side bar offers additional information about your files. "
 "Just enable the File details option from the View drop down menu and select "
@@ -554,7 +558,7 @@ msgstr "Informasjonsområdet"
 msgid "The list"
 msgstr "Elementlisten"
 
-#: apps/io.ox/tours/settings.js:37 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:45 module:io.ox/tours
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
 "Basic settings or E-Mail."
@@ -586,7 +590,7 @@ msgid ""
 msgstr ""
 "For å endre på layouten, dra og slipp en widget til en annen posisjon. "
 
-#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:88 module:io.ox/tours
 msgid ""
 "To choose between the different views. click on View in the toolbar. Select "
 "a menu entry in the layout."
@@ -633,7 +637,9 @@ msgstr ""
 "gjentagelsen blir deretter vist."
 
 #: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
-msgid "To create the appointment, click on Create at the upper right side."
+#, fuzzy
+#| msgid "To create the appointment, click on Create at the upper right side."
+msgid "To create the appointment, click on Create at the lower left side."
 msgstr "For å opprette avtalen, klikk \"Opprett\" øverst."
 
 #: apps/io.ox/tours/tasks.js:88 module:io.ox/tours
@@ -712,7 +718,7 @@ msgstr "For å få hjelp til huske avtalen kan du aktivere en påminnelse."
 msgid "To not miss the task, use the reminder function."
 msgstr "For å ikke glemme en oppgave kan du bruke påminnelsesfunksjonen."
 
-#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid ""
 "To open or close an E-Mail in a conversation, click on a free area in the "
 "header."
@@ -728,7 +734,7 @@ msgstr ""
 "For å åpne eller lukke mappetreet, klikk Visning > Mappetre på høyre side av "
 "verktøylinjen."
 
-#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:129 module:io.ox/tours
 msgid ""
 "To open the E-Mail settings, click the System menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on E-Mail on the left side."
@@ -736,7 +742,7 @@ msgstr ""
 "For å åpne epostinnstillingene, klikk systemmeny-ikonet øverst til høyre i "
 "menylinjen. Velg Innstillinger. Klikk deretter Epost på venstre side."
 
-#: apps/io.ox/tours/settings.js:49 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:57 module:io.ox/tours
 msgid ""
 "To open the help, click the System menu icon on the upper right side of the "
 "menu bar. Select Help. The help for the currently selected app is displayed. "
@@ -759,7 +765,7 @@ msgstr ""
 msgid "To read the details, click on an entry in a square."
 msgstr "For å se flere detaljer, klikk en oppføring i widgeten. "
 
-#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:111 module:io.ox/tours
 msgid ""
 "To receive information about the sender or other recipients, open the Halo "
 "view by clicking on a name."
@@ -787,11 +793,11 @@ msgstr ""
 "For å sende en epost til kontakten, klikk på en epostadresse, eller på "
 "\"Send epost\" i verktøylinjen. "
 
-#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:76 module:io.ox/tours
 msgid "To send the E-Mail, click on Send"
 msgstr "For å sende eposten, klikk \"Send\". "
 
-#: apps/io.ox/tours/settings.js:55 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:71 module:io.ox/tours
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
@@ -799,7 +805,7 @@ msgstr ""
 "For å logge ut, klikk på systemmeny-ikonet øverst til høyre i menylinjen. "
 "Velg \"Logg ut\". "
 
-#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:81 module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr ""
 "For å sortere epostene, klikk \"Sorter etter\", og velg et søkekriterium."
@@ -813,7 +819,7 @@ msgstr ""
 msgid "To track the editing status, enter the current progress."
 msgstr "For å følge fremgang på oppgaven, oppgi nåværende progresjon."
 
-#: apps/io.ox/tours/files.js:117 module:io.ox/tours
+#: apps/io.ox/tours/files.js:124 module:io.ox/tours
 msgid ""
 "To upload a new file from your local device, simply click on Add local file "
 "and select the file you would like to upload. It is even easier if you just "
@@ -825,7 +831,7 @@ msgstr ""
 "slipper filer fra en lokal mappe inn til Drive. Filene blir tilgjengelig i "
 "Drive på alle enhetene dine."
 
-#: apps/io.ox/tours/files.js:103 module:io.ox/tours
+#: apps/io.ox/tours/files.js:110 module:io.ox/tours
 msgid "Toolbar"
 msgstr "Verktøylinjen"
 
@@ -833,7 +839,7 @@ msgstr "Verktøylinjen"
 msgid "Tracking the editing status"
 msgstr "Spore progresjon"
 
-#: apps/io.ox/tours/files.js:116 module:io.ox/tours
+#: apps/io.ox/tours/files.js:123 module:io.ox/tours
 msgid "Upload a new file"
 msgstr "Laste opp en fil"
 
@@ -861,7 +867,7 @@ msgstr "Motta påminnelser"
 msgid "Welcome to %s"
 msgstr "Velkommen til %s"
 
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
+#: apps/io.ox/tours/files.js:67 module:io.ox/tours
 msgid ""
 "Welcome to your cloud storage app. This Guided Tour will introduce you to "
 "your new online storage solution - your one point to access online stored "

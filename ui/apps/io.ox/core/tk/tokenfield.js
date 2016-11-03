@@ -122,7 +122,7 @@ define('io.ox/core/tk/tokenfield', [
                     // add contact picture
                     $(this).prepend(
                         contactAPI.pictureHalo(
-                            $('<div class="contact-image">'),
+                            $('<div class="contact-image" aria-hidden="true">'),
                             model.toJSON(),
                             { width: 16, height: 16, scaleType: 'contain' }
                         )

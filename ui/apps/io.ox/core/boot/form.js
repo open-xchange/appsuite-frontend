@@ -138,6 +138,15 @@ define('io.ox/core/boot/form', [
             }
         }
 
+        function redeemToken() {
+            return http.GET({
+                module: 'share/redeem/token',
+                params: { token: _.url.hash('token'), language: language.getSelectedLanguage() },
+                appendSession: false,
+                processResponse: false
+            });
+        }
+
         var loginType = _.url.hash('login_type'), showContinue = false;
 
         switch (loginType) {
@@ -183,7 +192,7 @@ define('io.ox/core/boot/form', [
 
         // handle message params
         if (_.url.hash('token')) {
-            http.GET({ module: 'share/redeem/token', params: { token: _.url.hash('token') }, appendSession: false, processResponse: false })
+            redeemToken()
                 .done(function (data) {
                     if (data.message_type === 'ERROR') {
                         util.feedback('error', data.message);

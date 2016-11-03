@@ -16,6 +16,7 @@ define('io.ox/files/actions', [
     'io.ox/core/folder/api',
     'io.ox/files/api',
     'io.ox/files/util',
+    'io.ox/core/api/filestorage',
 
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
@@ -24,7 +25,7 @@ define('io.ox/files/actions', [
     'settings!io.ox/files',
     'gettext!io.ox/files'
 
-], function (folderAPI, api, util, ext, links, capabilities, settings, gt) {
+], function (folderAPI, api, util, filestorageApi, ext, links, capabilities, settings, gt) {
 
     'use strict';
 
@@ -511,6 +512,12 @@ define('io.ox/files/actions', [
             if (util.hasStatus('lockedByOthers', e)) return false;
             // hide in mail compose preview
             if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+            // use highly advanced magic to check capabilities, use try/catch, just in case
+            try {
+                if (filestorageApi.getAccountsCache().findWhere({ qualifiedId: folderAPI.pool.getModel(e.baton.data.folder_id || e.baton.data[0].folder_id).get('account_id') }).get('capabilities').indexOf('EXTENDED_METADATA') === -1) return false;
+            } catch (e) {
+                if (ox.debug) console.error(e);
+            }
             // access on folder?
             if (e.collection.has('modify')) return true;
             // check object permission

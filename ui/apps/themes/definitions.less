@@ -59,7 +59,7 @@
 @badge-color:                           @white;
 @badge-bg:                              #aaa;   // used by folder tree for unread messages, for example
 @label-info-bg:                         #3a87ad;
-@label-default-bg:                      #767676;
+@label-default-bg:                      #666;
 
 // Basic colors
 //----------------------
@@ -116,9 +116,9 @@
 
 // badge
 @notification-icon-color:               rgba(255, 255, 255, 1);
-@notification-icon-background: 			rgba(200, 0, 0, 1);
+@notification-icon-background:          rgba(200, 0, 0, 1);
 @notification-icon-color-active:        #333;
-@notification-icon-background-active: 	#fff; 	// alt. bright orange: #ff4700
+@notification-icon-background-active:   #fff;   // alt. bright orange: #ff4700
 @notification-pane-background:          rgba(255, 255, 255, 1);
 @notification-pane-item-background:     rgba(0, 0, 0, 0.10);
 
@@ -135,6 +135,7 @@
 @foldertree-badge-background:           @badge-bg;
 @foldertree-badge-focus-background:     #006597;
 @foldertree-badge-color:                @badge-color;
+@foldertree-counter-color:              #0076b3;
 @foldertree-selected-focus-counter-color: rgba(255, 255, 255, 0.95);
 @foldertree-selected-focus-options-background: rgba(0, 0, 0, 0.20);
 
@@ -152,12 +153,14 @@
 @toolbar-button-accent:                 lighten(@link-color, 0%);
 @toolbar-button-color:                  #bbb;
 @toolbar-link-color:                    lighten(@toolbar, 25%);
+@toolbar-link-disabled-color:           @link-disabled-color;
 @toolbar-focus-color:                   #08c;
 @toolbar-background:                    #333;
 @toolbar-background-alt:                lighten(@toolbar-background, 10%);
 @toolbar-line-height:                   24px;
 @toolbar-vertical-padding:              8px;
 @toolbar-height:                        @toolbar-line-height + 2 * @toolbar-vertical-padding;
+@link-disabled-color:                   #aaa;
 @link-accent-color:                     #ffad00;
 
 // mail app
@@ -199,7 +202,8 @@
 
 @weekview-appointment-lasso:            #D0EAFF;    /* light blue */
 @weekview-background:                   #fff;       /* white */
-@weekview-border:                       #ccc;
+@weekview-border:                       #c0c0c0;
+@weekview-border-light:                 #e6e6e6;
 @weekview-time-width:                   80px;
 @weekview-footer-height:                34px;
 @weekview-working-time-border:          #333;

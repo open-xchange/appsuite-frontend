@@ -253,7 +253,8 @@ define('io.ox/backbone/views/datepicker', [
                     function () {
                         var month = m.date(1).month(), start = m.clone(), end = m.clone().endOf('month');
                         if (m.startOf('week').isAfter(start)) m.subtract(1, 'week');
-                        return _.range(0, Math.ceil(end.diff(m, 'days') / 7)).map(function () {
+                        // use hours and divide by 168 (24 * 7). If we use days we get wrong results when a month has 6 calendar weeks and a daylight saving time change. (Oct 2016 for example) see Bug 49479
+                        return _.range(0, Math.ceil(end.diff(m, 'hours') / 168)).map(function () {
                             return $('<tr role="row">')
                                 .append(
                                     $('<th class="cw date">').text(m.week())

@@ -142,6 +142,12 @@ define('io.ox/contacts/main', [
 
         },
 
+        'subscription': function (app) {
+            app.subscription = {
+                wantedOAuthScopes: ['contacts_ro']
+            };
+        },
+
         'folder-view-mobile': function (app) {
 
             if (_.device('!smartphone')) return;
@@ -269,6 +275,8 @@ define('io.ox/contacts/main', [
 
         'thumbindex': function (app) {
 
+            // A11y: This needs some work!
+
             var fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
             /**
@@ -287,7 +295,7 @@ define('io.ox/contacts/main', [
             }
 
             Thumb.prototype.draw = function (baton) {
-                var node = $('<div class="thumb-index">')
+                var node = $('<div class="thumb-index" aria-hidden="true">')
                     .text(this.label || _.noI18n(this.text));
                 if (this.enabled(baton)) {
                     node.data('text', this.text);

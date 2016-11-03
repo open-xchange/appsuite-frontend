@@ -56,7 +56,11 @@ define('io.ox/presenter/errormessages', [
     };
     SVL['16'] = SVL['15'];
 
-    var RT_ERROR_MESSAGES = processErrorMessages(SVL, 'SVL');
+    var RT_STANZA = {
+        '1015': gt('You can\'t present the same document more than once.')
+    };
+
+    var RT_ERROR_MESSAGES = _.extend(processErrorMessages(SVL, 'SVL'), processErrorMessages(RT_STANZA, 'RT_STANZA'));
 
     /**
      * Document conversion error messages

@@ -106,6 +106,70 @@ define('io.ox/mail/accounts/settings', [
         }
     });
 
+    ext.point('io.ox/mail/add-account/preselect').extend({
+        id: 'oauth',
+        index: 100,
+        draw: function (baton) {
+            var $el = this;
+            require(['io.ox/oauth/keychain', 'io.ox/oauth/backbone']).then(function (oauthAPI, OAuth) {
+                var mailServices = new Backbone.Collection(oauthAPI.services.filter(function (service) {
+                        return _(service.get('availableScopes')).contains('mail') &&
+                            oauthAPI.accounts.forService(service.id, { scope: 'mail' }).map(function (account) {
+                                return account.id;
+                            }).reduce(function (acc, oauthId) {
+                                // make sure, no mail account using this oauth-account exists
+                                return acc && !_(api.cache).chain()
+                                    .values()
+                                    .map(function (account) {
+                                        return account.mail_oauth;
+                                    })
+                                    .any(oauthId)
+                                    .value();
+                            }, true);
+                    })), list = new OAuth.Views.ServicesListView({ collection: mailServices });
+
+                mailServices.push({
+                    id: 'wizard',
+                    displayName: gt('Other')
+                });
+                $el.append(
+                    $('<label>').text(gt('Please select your mail account provider')),
+                    list.render().$el
+                );
+
+                list.listenTo(list, 'select', function (service) {
+                    if (service.id === 'wizard') return;
+
+                    var account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
+                        serviceId: service.id,
+                        displayName: 'My ' + service.get('displayName') + ' account'
+                    });
+
+                    account.enableScopes('mail').save().then(function () {
+                        api.autoconfig({
+                            oauth: account.id
+                        }).then(function (data) {
+                            var def = $.Deferred();
+                            // hopefully, login contains a valid mail address
+                            data.primary_address = data.login;
+
+                            validateMailaccount(data, baton.popup, def);
+                            return def;
+                        }).then(function () {
+                            oauthAPI.accounts.add(account, { merge: true });
+                        }, notifications.yell);
+                    });
+                });
+
+                list.listenTo(list, 'select:wizard', function () {
+                    baton.popup.getFooter().find('[data-action="add"]').show();
+                    // invoke wizard
+                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                });
+            });
+        }
+    });
+
     ext.point('io.ox/mail/add-account/wizard').extend({
         id: 'address',
         index: 100,
@@ -296,6 +360,7 @@ define('io.ox/mail/accounts/settings', [
             }
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                var baton = ext.Baton({});
 
                 new dialogs.ModalDialog({
                     width: 400,
@@ -306,8 +371,9 @@ define('io.ox/mail/accounts/settings', [
                     $('<h2>').text(gt('Add mail account'))
                 )
                 .build(function () {
+                    baton.popup = this;
                     // invoke extensions
-                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', this.getContentNode());
+                    ext.point('io.ox/mail/add-account/preselect').invoke('draw', this.getContentNode(), baton);
                 })
                 .addPrimaryButton('add', gt('Add'), 'add')
                 .addButton('cancel', gt('Cancel'), 'cancel')
@@ -339,6 +405,8 @@ define('io.ox/mail/accounts/settings', [
                     createExtpointForNewAccount(args);
                 })
                 .show(function () {
+                    // hide add button for now
+                    this.find('[data-action="add"]').hide();
                     a11y.getTabbable(this).first().focus();
                 });
 

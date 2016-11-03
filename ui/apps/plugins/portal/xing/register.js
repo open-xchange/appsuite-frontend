@@ -282,7 +282,8 @@ define('plugins/portal/xing/register', [
 
             var content = this.find('.content');
 
-            this.find('h2 .title').replaceWith('<i class="fa fa-xing">');
+            this.find('h2:first').prepend($('<i class="fa fa-xing" aria-hidden="true">'));
+            this.find('h2 .title').removeClass('title').addClass('sr-only');
             this.addClass('widget-color-custom color-xing');
             content.find('.paragraph').empty().text(gt('Get news from your XING network delivered to you. Stay in touch and find out about new business opportunities.'));
             content.append(

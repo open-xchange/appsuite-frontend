@@ -388,7 +388,7 @@ define('io.ox/core/tk/vgrid', [
 
         // add label class
         this.multiselectId = _.uniqueId('multi-selection-message-');
-        template.node.addClass('selectable').attr('aria-describedby', this.multiselectId);
+        template.node.addClass('selectable'); //.attr('aria-describedby', this.multiselectId);
         label.node.addClass('vgrid-label').attr({ 'aria-hidden': 'true' });
 
         // fix mobile safari bug (all content other than position=static is cut off)
@@ -606,7 +606,7 @@ define('io.ox/core/tk/vgrid', [
                     row.appendTo(container);
                     // reset class name
 
-                    row.node.attr({ role: 'option', 'aria-posinset': offset + i + 1 });
+                    row.node.attr({ role: 'option', 'aria-posinset': offset + i + 1, 'aria-setsize': data.length });
                     node = row.node[0];
                     node.className = defaultClassName + ' ' + ((offset + i) % 2 ? 'odd' : 'even');
                     // update fields

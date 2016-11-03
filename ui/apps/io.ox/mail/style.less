@@ -21,6 +21,7 @@
 // preview panes
 
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
+.window-container.mail-categories-visible .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height * 2; }
 
 .preview-right {
     .leftside  { width: 320px; }
@@ -410,11 +411,16 @@
     }
 
     .detail-view-row {
-        .date { float: right; margin-left: 16px; }
+        position: relative;
+
+        .date { float: right; margin-left: 16px; margin-right: 27px; }
         .recipients { float: left; }
         .priority { font-size: 14px; }
         .flag-picker {
-            margin-left: 16px;
+            float: none;
+            position: absolute;
+            top: 0;
+            right: 1px;
             width: 12px; // to match fa-bars
             text-align: right;
             a { color: #333; }
@@ -442,7 +448,7 @@
 
         .detail-view-row.row-4, .inplace-reply { display: none; }
 
-        .unread-toggle, .flag-picker > a, .recipients, .row-3 { opacity: 0.3; }
+        .unread-toggle, .flag-picker > a, .recipients, .row-3 { opacity: 0.6; }
 
         &.unread .unread-toggle { opacity: 1; }
 
@@ -630,7 +636,7 @@
 
     .account-name, .original-folder, .thread-size {
         font-size: 12px;
-        color: #777;
+        color: #767676;
         line-height: 14px;
         padding: 0 4px;
         margin: 2px 0 0 (@default-padding / 2);
@@ -660,6 +666,13 @@
         min-width: 24px;
 
         html.high-contrast & { color: @hc-gray; }
+    }
+
+    .selected {
+        .thread-size,
+        .account-name,
+        .original-folder,
+        .original-folder .breadcrumb-link { color: #555; }
     }
 
     &.visible-selection.has-focus .selected {
@@ -756,9 +769,6 @@
 
     & > .thread-view-header {
 
-        .flex-display(flex);
-        .flex-direction(row);
-
         & > * {
             .subject-base();
         }
@@ -769,22 +779,24 @@
         .subject {
             word-break: break-word;
             padding-bottom: 0;
-            .flex(1);
-
-            .summary {
-                color: #777;
-                font-size: 13px;
-                line-height: 16px;
-                font-weight: 300;
-                position: relative;
-                top: -5px;
-                margin: 0;
-                padding-top: 4px;
-                html.high-contrast & { color: @hc-gray; }
+            &.spacer {
+                padding-bottom: 20px;
             }
         }
 
-        .toggle-all {
+        .summary {
+            display: block;
+            color: #767676;
+            font-size: 13px;
+            line-height: 16px;
+            font-weight: 300;
+            margin: 0;
+            padding-top: 0;
+            padding-bottom: 4px;
+            html.high-contrast & { color: @hc-gray; }
+        }
+
+        .toggle-all, .toggle-big-screen {
             color: #767676;
             float: right;
             outline: 0;
@@ -960,9 +972,6 @@ textarea.inplace-editor {
     .detail-view-header { border-bottom: 0; }
 }
 
-
-
-
 // Detail view
 
 .rightside.mail-detail-pane {
@@ -1047,14 +1056,16 @@ textarea.inplace-editor {
 
     &:not(.io-ox-find-active) {
 
-        // layout: compact
-        .window-body {
-            .abs.window-content { top: 40px; }
+        .categories-toolbar-container {
+            display: flex;
         }
+        .classic-toolbar-container .classic-toolbar {
+            top: 40px;
+        }
+
         // layout: vertical, horizontal, list
         .window-body.classic-toolbar-visible {
             .abs.window-content {  top: 80px; }
-            .classic-toolbar-container .classic-toolbar { top: 40px; }
         }
     }
 }
@@ -1078,7 +1089,7 @@ body.dragging .categories-toolbar-container {
 
 .categories-toolbar-container {
 
-    display: flex;
+    display: none;
     justify-content: flex-start;
     align-items: center;
 
@@ -1121,8 +1132,7 @@ body.dragging .categories-toolbar-container {
 
             .category-counter .counter {
                 padding-left: 8px;
-                // clone of .folder-counter;
-                color: #08c;
+                color: @foldertree-counter-color;
                 font-weight: 700;
             }
 
@@ -1142,9 +1152,17 @@ body.dragging .categories-toolbar-container {
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
+    .thread-view-list { padding: 8px; }
+}
 
-    .thread-view-list { padding: 0; }
+.touch {
+    &.ios, &.android {
+        .mail-detail .detail-view-header { overflow: hidden; }
+    }
+}
+
+@media (max-width: 700px) {
 
     .io-ox-mail-window .vsplit {
         width: 100%;
@@ -1188,12 +1206,11 @@ body.dragging .categories-toolbar-container {
 
             .subject {
                 line-height: 20px;
-
-                .summary {
-                    padding-top: 20px;
-                    font-size: @phone-font-size - 2;
-                    color: #fff;
-                }
+            }
+            .summary {
+                padding-top: 20px;
+                font-size: @phone-font-size - 2;
+                color: #fff;
             }
         }
         .row-3{

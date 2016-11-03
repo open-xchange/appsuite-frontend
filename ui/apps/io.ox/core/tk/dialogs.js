@@ -15,8 +15,9 @@ define('io.ox/core/tk/dialogs', [
     'io.ox/core/event',
     'io.ox/core/extensions',
     'io.ox/core/a11y',
-    'io.ox/backbone/mini-views/help'
-], function (Events, ext, a11y, HelpView) {
+    'io.ox/backbone/mini-views/help',
+    'gettext!io.ox/core'
+], function (Events, ext, a11y, HelpView, gt) {
 
     'use strict';
 
@@ -210,14 +211,14 @@ define('io.ox/core/tk/dialogs', [
              */
             ariaHideSiblings = function () {
                 // add aria-hidden="true" to all siblings of the wrapper and all parents of the wrapper
-                $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings().each(function () {
+                $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings(':not(script,noscript)').each(function () {
                     var el = $(this);
                     // save aria-hidden value for later restoring
                     el.data('ox-restore-aria-hidden', el.attr('aria-hidden'));
                 }).attr('aria-hidden', true);
                 self.on('close', function () {
                     // restore aria-hidden and remove restoring information
-                    $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings().removeAttr('aria-hidden').each(function () {
+                    $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings(':not(script,noscript)').removeAttr('aria-hidden').each(function () {
                         var el = $(this);
                         if (el.data('ox-restore-aria-hidden')) el.attr('aria-hidden', el.data('ox-restore-aria-hidden'));
                         el.removeData('ox-restore-aria-hidden');
@@ -646,10 +647,10 @@ define('io.ox/core/tk/dialogs', [
             sidepopuppane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="0">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<a href="#" class="close" data-action="close" role="button">').append(
-                        $('<i class="fa fa-times">')
-                    )
-                ),
+                $('<a href="#" class="close" data-action="close" role="button">').attr('aria-label', gt('Close')).append(
+                    $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))
+                )
+            ),
 
             popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, sidepopuppane),
 

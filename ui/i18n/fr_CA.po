@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-28 05:14+0900\n"
+"PO-Revision-Date: 2016-10-31 23:43+0900\n"
 "Last-Translator: \n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_CA\n"
@@ -57,12 +57,10 @@ msgstr[1] "%1$d semaines"
 
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "%1$d messages selected"
 msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
-msgstr[0] "%1$d messages sélectionnés"
-msgstr[1] "%1$d messages sélectionnés"
+msgstr[0] "%1$d adresse sélectionnée"
+msgstr[1] "%1$d adresses sélectionnées"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
@@ -132,13 +130,10 @@ msgstr[1] "%1$d heures et %2$s"
 
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "%1$s item selected"
-#| msgid_plural "%1$s items selected"
 msgid "%1$d item selected"
 msgid_plural "%1$d items selected"
-msgstr[0] "%1$s élément sélectionné"
-msgstr[1] "%1$s éléments sélectionnés"
+msgstr[0] "%1$d élément sélectionné"
+msgstr[1] "%1$d éléments sélectionnés"
 
 #. %1$d is the number of members
 #: apps/plugins/administration/groups/settings/pane.js module:io.ox/core
@@ -149,11 +144,9 @@ msgstr[1] "%1$d membres"
 
 #. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js module:io.ox/mail
-#, fuzzy
-#| msgid "%1$d messages selected"
 msgid "%1$d message selected"
 msgid_plural "%1$d messages selected"
-msgstr[0] "%1$d messages sélectionnés"
+msgstr[0] "%1$d message sélectionné"
 msgstr[1] "%1$d messages sélectionnés"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
@@ -169,13 +162,11 @@ msgstr[1] "%1$d minutes"
 
 #. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-#, fuzzy, c-format
-#| msgid "You have %1$d notification."
-#| msgid_plural "You have %1$d notifications."
+#, c-format
 msgid "%1$d notification."
 msgid_plural "%1$d notifications."
-msgstr[0] "Vous avez %1$d notification."
-msgstr[1] "Vous avez %1$d notifications."
+msgstr[0] "%1$d notification."
+msgstr[1] "%1$d notifications."
 
 #. text of a presentation slide caption
 #. Example result: "1 of 10"
@@ -197,11 +188,8 @@ msgstr[0] "%1$d sur %2$d éléments"
 msgstr[1] "%1$d sur %2$d éléments"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "%1$d of %2$d item"
-#| msgid_plural "%1$d of %2$d items"
 msgid "%1$d of 5 stars"
-msgstr "%1$d sur %2$d éléments"
+msgstr "%1$d sur 5 étoiles"
 
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -292,6 +280,8 @@ msgid ""
 "%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
 "between the tokens"
 msgstr ""
+"Champ avec jeton d'autocomplétion %1$s. Utilisez les flèches gauche et "
+"droite pour naviguer entre les jetons"
 
 #. We do not know the gender of the user and therefore, it is impossible to write e.g. '%1$s changed her status'.
 #. But you could use '%1$s changes his/her status' depending on the language.
@@ -523,10 +513,8 @@ msgid "(Read, write, and delete)"
 msgstr "(Lecture, écriture et suppression)"
 
 #: apps/io.ox/core/main.js module:io.ox/core
-#, fuzzy
-#| msgid "Current Date"
 msgid "(current app)"
-msgstr "Date actuelle"
+msgstr "(app actuelle)"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "1 day"
@@ -628,10 +616,8 @@ msgstr ""
 "administrateur système."
 
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-#, fuzzy
-#| msgid "Drop new version of \"%1$s\" here"
 msgid "A new version for \"%1$s\" has been added."
-msgstr "Déposez ici la nouvelle version de \"%1$s\""
+msgstr "Une nouvelle version de \"%1$s\" a été ajoutée."
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid ""
@@ -719,6 +705,7 @@ msgstr "Compte"
 msgid "Account Settings"
 msgstr "Réglages du compte"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
@@ -889,16 +876,12 @@ msgid "Add new signature"
 msgstr "Ajouter une nouvelle signature"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Upload new version"
 msgid "Add new version"
-msgstr "Téléverser une nouvelle version"
+msgstr "Ajouter une nouvelle version"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Hide this notification"
 msgid "Add new version and show notification"
-msgstr "Masquer cette notification"
+msgstr "Ajouter une nouvelle version et afficher la notification"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
@@ -911,10 +894,8 @@ msgid "Add on %s"
 msgstr "Ajouter à %s"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#, fuzzy
-#| msgid "Show original message"
 msgid "Add original message as attachment"
-msgstr "Afficher le message d'origine"
+msgstr "Ajouter le message d'origine en tant que pièce jointe"
 
 #: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
 msgid "Add participant"
@@ -933,10 +914,8 @@ msgid "Add recipients ..."
 msgstr "Ajouter des destinataires..."
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Add local file"
 msgid "Add separate file"
-msgstr "Ajouter un fichier local"
+msgstr "Ajouter un fichier distinct"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Add signature"
@@ -1036,10 +1015,8 @@ msgid "Added the new participant"
 msgstr "Ajouté le nouveau participant"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Adding further details"
 msgid "Adding files with identical names"
-msgstr "Ajouter des détails supplémentaires"
+msgstr "Ajouter des fichiers portant le même nom"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
@@ -1116,10 +1093,8 @@ msgid "All day"
 msgstr "Journée entière"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Add distribution list"
 msgid "All distribution lists"
-msgstr "Ajouter une liste de distribution"
+msgstr "Toutes les listes de diffusion"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "All files"
@@ -1148,10 +1123,8 @@ msgstr ""
 "déplacés dans le dossier sélectionné."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete group"
 msgid "All groups"
-msgstr "Supprimer le groupe"
+msgstr "Tous les groupes"
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "All messages have been deleted"
@@ -1174,7 +1147,7 @@ msgstr "Tous les fuseaux horaires"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
-msgstr ""
+msgstr "Autoriser les connexions avec des certificats non vérifiés"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Allow html formatted emails"
@@ -1259,10 +1232,8 @@ msgstr ""
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#, fuzzy
-#| msgid "Accept changes"
 msgid "Apply changes"
-msgstr "Accepter les modifications"
+msgstr "Appliquer les modifications"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Apply role"
@@ -1314,10 +1285,8 @@ msgid "Appointment reminders"
 msgstr "Rappels de rendez-vous"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Appointments"
 msgid "Appointment types"
-msgstr "Rendez-vous"
+msgstr "Types de rendez-vous"
 
 #: apps/plugins/portal/calendar/register.js module:plugins/portal
 msgid "Appointments"
@@ -1537,7 +1506,7 @@ msgstr ""
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Bell"
-msgstr ""
+msgstr "Cloche"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1761,6 +1730,8 @@ msgstr "Annulé"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Cannot add participant/member with an invalid mail address: %1$s"
 msgstr ""
+"Impossible d'ajouter un participant / membre avec une adresse électronique "
+"non valide : %1$s"
 
 #. error message when offline
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -1901,7 +1872,7 @@ msgstr "Enfants"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Chimes"
-msgstr ""
+msgstr "Carillon"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -1929,10 +1900,8 @@ msgid "Clear field"
 msgstr "Réinitialiser le champ"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Clear field"
 msgid "Clear selection"
-msgstr "Réinitialiser le champ"
+msgstr "Réinitialiser la sélection"
 
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
@@ -2011,10 +1980,11 @@ msgstr "Intégration du client "
 #. button label for closing the Presenter app.
 #. button tooltip for closing the Presenter app.
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
 #: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
+#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -2022,7 +1992,7 @@ msgstr "Intégration du client "
 #: apps/io.ox/files/mediaplayer.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/statistics.js
+#: module:io.ox/mail apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
@@ -2045,10 +2015,8 @@ msgid "Close folder view"
 msgstr "Fermer la vue des dossiers"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
-#, fuzzy
-#| msgid "The notification area is open"
 msgid "Close notification area"
-msgstr "La zone de notification est ouverte"
+msgstr "Fermer la zone de notification"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
@@ -2056,10 +2024,8 @@ msgstr "Fermer les fonctions Premium"
 
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#, fuzzy
-#| msgid "close for %1$s"
 msgid "Close reminder for %1$s"
-msgstr "fermer dans %1$s"
+msgstr "Fermer le rappel de %1$s"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -2167,16 +2133,12 @@ msgstr "Courriel de configuration"
 #. the dots refer to the term 'Categories' right above this dropdown entry
 #. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Configure now"
 msgid "Configure"
-msgstr "Configurer maintenant"
+msgstr "Configurer"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
 msgid "Configure categories"
-msgstr "Adresse électronique"
+msgstr "Configurer les catégories"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
@@ -2448,8 +2410,6 @@ msgid "Create contact"
 msgstr "Créer un contact"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Create distribution list"
 msgid "Create distibution list"
 msgstr "Créer une liste de distribution"
 
@@ -2760,6 +2720,12 @@ msgstr ""
 msgid "Department"
 msgstr "Département"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Department"
+msgid "Departments"
+msgstr "Département"
+
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -2826,10 +2792,8 @@ msgid "Disable %1$s"
 msgstr "Désactiver %1$s"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
 msgid "Disable categories"
-msgstr "Adresse électronique"
+msgstr "Désactiver les catégories"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Disable widget"
@@ -2909,12 +2873,10 @@ msgid "Distribution list has been saved"
 msgstr "La liste de distribution a été enregistrée"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Distribution list"
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
-msgstr[0] "Liste de distribution"
-msgstr[1] "Liste de distribution"
+msgstr[0] "Liste de diffusion comportant 1 élément"
+msgstr[1] "Liste de diffusion comportant 1 élément"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
@@ -3056,13 +3018,14 @@ msgstr ""
 #. ask user to move all messages from the same sender to the mail category (tab)
 #. %1$s represents a email address
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy
-#| msgid "Move all messages to another folder"
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
-msgstr[0] "Afficher tous les messages vers un autre dossier"
-msgstr[1] "Afficher tous les messages vers un autre dossier"
+msgstr[0] ""
+"Souhaitez-vous déplacer tous les messages de %1$s vers cette catégorie ?"
+msgstr[1] ""
+"Souhaitez-vous déplacer tous les messages des expéditeurs sélectionnés vers "
+"cette catégorie ?"
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Do you want to permanently delete this mail?"
@@ -3278,7 +3241,8 @@ msgstr "Eo"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -4014,6 +3978,12 @@ msgstr "Dossier"
 msgid "Folder name"
 msgstr "Nom du dossier"
 
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+#, fuzzy
+#| msgid "Files options"
+msgid "Folder options"
+msgstr "Options des fichiers"
+
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "Folder permissions"
 msgstr "Droits sur les dossiers"
@@ -4199,40 +4169,28 @@ msgid "Give feedback"
 msgstr "Donner vos impressions"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#, fuzzy
-#| msgid "Show next day"
 msgid "Go to next decade"
-msgstr "Afficher la journée suivante"
+msgstr "Aller à la décennie suivante"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#, fuzzy
-#| msgid "one month"
 msgid "Go to next month"
-msgstr "un mois"
+msgstr "Aller au mois suivant"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#, fuzzy
-#| msgid "one year"
 msgid "Go to next year"
-msgstr "un an"
+msgstr "Aller à l'année suivante"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#, fuzzy
-#| msgid "Show previous day"
 msgid "Go to previous decade"
-msgstr "Afficher la journée précédente"
+msgstr "Aller à la décennie précédente"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#, fuzzy
-#| msgid "Previous month"
 msgid "Go to previous month"
-msgstr "Mois précédent"
+msgstr "Aller au mois précédent"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#, fuzzy
-#| msgid "Previous year"
 msgid "Go to previous year"
-msgstr "Année précédente"
+msgstr "Aller à l'année précédente"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Good evening, %s"
@@ -4375,10 +4333,8 @@ msgid "Hide names"
 msgstr "Masquer les noms"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#, fuzzy
-#| msgid "End of working time"
 msgid "Hide non-working time"
-msgstr "Heure de fin de travail"
+msgstr "Masquer les heures non ouvrées"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Hide options for expert users."
@@ -4459,15 +4415,13 @@ msgstr "Comment cela fonctionne-t-il ?"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
 msgid "I don't like it"
-msgstr ""
+msgstr "Médiocre"
 
 #. 4 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "You like this"
 msgctxt "rating"
 msgid "I like it"
-msgstr "Vous aimez cela"
+msgstr "Bon"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
@@ -4598,10 +4552,8 @@ msgid "Inbox"
 msgstr "Boîte de réception"
 
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
 msgid "Inbox categories"
-msgstr "Adresse électronique"
+msgstr "Catégories de la boîte de réception"
 
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Include distribution lists"
@@ -4698,17 +4650,15 @@ msgstr "Utilisateurs internes"
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
-#, fuzzy, c-format
-#| msgid "Invitation sent"
+#, c-format
 msgid "Invitation for %1$s."
-msgstr "Invitation envoyée"
+msgstr "Invitation à %1$s."
 
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Invitation sent"
 msgstr "Invitation envoyée"
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Invite"
 msgstr "Inviter"
 
@@ -4720,14 +4670,6 @@ msgstr "Inviter le propriétaire"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Invite people"
 msgstr "Inviter des personnes"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"Invite people via email. Every recipient will get an individual link to "
-"access the shared files."
-msgstr ""
-"Inviter des personnes par courriel. Chaque destinataire recevra un lien "
-"individuel lui permettant d'accéder aux fichiers partagés."
 
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Invite to %s"
@@ -4761,33 +4703,29 @@ msgstr "Est plus petit que"
 #. mail categories feature: the update job is running that assigns
 #. some common mails (e.g. from twitter.com) to predefined categories
 #: apps/io.ox/mail/categories/mediator.js module:io.ox/mail
-#, fuzzy
-#| msgid ""
-#| "It will take some time until common mails are assigned to the default "
-#| "tabs."
 msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr ""
-"Un certain temps sera nécessaire afin que les courriers électroniques "
-"communs soient assignés aux onglets par défaut."
+"Un certain temps peut être nécessaire pour affecter les courriels aux "
+"catégories par défaut."
 
 #. 5 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
 msgid "It's awesome"
-msgstr ""
+msgstr "Excellent"
 
 #. 3 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
 msgid "It's ok"
-msgstr ""
+msgstr "Moyen"
 
 #. 1 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
 msgid "It's really bad"
-msgstr ""
+msgstr "Très mauvais"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
@@ -4822,7 +4760,7 @@ msgstr "Description du poste"
 #. button label for joining the presentation
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 msgid "Join"
-msgstr ""
+msgstr "Joindre"
 
 #. link button to join the currently running presentation
 #: apps/io.ox/presenter/views/notification.js module:io.ox/presenter
@@ -5017,10 +4955,8 @@ msgstr "Commentaire passé en « J'aime ça »"
 
 #. %1$d is line number, %2$s is an error message
 #: apps/io.ox/core/import/import.js module:io.ox/core
-#, fuzzy
-#| msgid "%1$d %2$s"
 msgid "Line %1$d: %2$s"
-msgstr "%1$d %2$s"
+msgstr "Ligne %1$d : %2$s"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -5059,11 +4995,11 @@ msgstr "Vue en liste"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Load full mail"
-msgstr ""
+msgstr "Charger le courriel complet"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Loading the full mail might lead to performance problems."
-msgstr ""
+msgstr "Le chargement du courriel entier peut ralentir les performances."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
@@ -5278,7 +5214,7 @@ msgstr "Mars"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Marimba"
-msgstr ""
+msgstr "Marimba"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Marital status"
@@ -5362,18 +5298,14 @@ msgstr "Message (facultatif)"
 #. successfully moved a message via drag&drop to another mail category (tab)
 #. %1$s represents the name if the target category
 #: apps/io.ox/mail/categories/train.js module:io.ox/mail
-#, fuzzy
-#| msgid "Move to folder"
 msgid "Message moved to category \"%1$s\"."
 msgid_plural "Messages moved to category \"%1$s\"."
-msgstr[0] "Déplacer dans le dossier"
-msgstr[1] "Déplacer dans le dossier"
+msgstr[0] "Message déplacé vers la catégorie \"%1$s\"."
+msgstr[1] "Messages déplacés vers la catégorie \"%1$s\"."
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Messages"
 msgid "Message size"
-msgstr "Messages"
+msgstr "Taille des messages"
 
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "Messages"
@@ -5494,16 +5426,14 @@ msgid "Move folder"
 msgstr "Déplacer le dossier"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#, fuzzy
-#| msgid "Move to folder"
 msgid "Move to category"
-msgstr "Déplacer dans le dossier"
+msgstr "Déplacer vers la catégorie"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Move to folder"
-msgstr "Déplacer dans le dossier"
+msgstr "Déplacer vers le dossier"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
 msgid "Multiselect"
@@ -5645,10 +5575,8 @@ msgid "New mails"
 msgstr "Nouveaux messages"
 
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
-#, fuzzy
-#| msgid "New Folder"
 msgid "New note"
-msgstr "Nouveau dossier"
+msgstr "Nouvelle note"
 
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "New notifications"
@@ -5699,6 +5627,7 @@ msgstr "Nouveau rappel de tâche"
 msgid "New task reminders"
 msgstr "Nouveaux rappels de tâches"
 
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/tk/wizard.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/displayerview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -5754,10 +5683,8 @@ msgid "No appointments found until %s"
 msgstr "Aucun rendez-vous trouvé jusqu'à %s"
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, fuzzy
-#| msgid "No matching items found."
 msgid "No autocomplete entries found"
-msgstr "Aucun élément correspondant trouvé."
+msgstr "Aucun élément trouvé en autocomplétion"
 
 #: apps/plugins/portal/birthdays/register.js module:plugins/portal
 msgid "No birthdays within the next %1$d weeks"
@@ -5888,6 +5815,7 @@ msgid "Not started"
 msgstr "Non démarré"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
+#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "Remarque"
@@ -5930,10 +5858,8 @@ msgstr "Notification"
 
 #. Should be "töne" in german, used for notification sounds. Not "geräusch"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, fuzzy
-#| msgid "Notifications"
 msgid "Notification sounds"
-msgstr "Notifications"
+msgstr "Sons des notifications"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notifications"
@@ -5949,7 +5875,7 @@ msgstr "Informer tous les participants par courriel."
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notify me again later"
-msgstr ""
+msgstr "Me le rappeler ultérieurement"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "November"
@@ -6014,8 +5940,8 @@ msgstr "Les jours ouvrés"
 #, c-format
 msgid "One autocomplete entry found"
 msgid_plural "%1$d autocomplete entries found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Un élément trouvé en autocomplétion"
+msgstr[1] "%1$d éléments trouvés en autocomplétion"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -6207,6 +6133,10 @@ msgstr "Organisateur"
 msgid "Original mail"
 msgstr "Courrier d'origine"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Other"
+msgstr "Autre"
+
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Other Address"
 msgstr "Autre adresse"
@@ -6264,10 +6194,8 @@ msgid "Participants"
 msgstr "Participants"
 
 #: apps/io.ox/participants/views.js module:io.ox/core
-#, fuzzy
-#| msgid "Participants"
 msgid "Participants (%1$d)"
-msgstr "Participants"
+msgstr "Participants (%1$d)"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
@@ -6331,7 +6259,7 @@ msgstr "Robustesse du mot de passe : mauvaise longueur"
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #. button label for pausing the presentation
 #: apps/io.ox/presenter/views/navigationview.js module:io.ox/presenter
@@ -6460,10 +6388,8 @@ msgid "Play audio files"
 msgstr "Jouer les fichiers audio"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, fuzzy
-#| msgid "Send new mail"
 msgid "Play sound on incoming mail"
-msgstr "Envoyer un nouveau courriel"
+msgstr "Jouer un son à l'arrivée d'un nouveau courriel"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Play video files"
@@ -6512,10 +6438,8 @@ msgid "Please enter a feed URL."
 msgstr "Veuillez saisir l'URL d'un flux."
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Please enter a name for the group of feeds."
 msgid "Please enter a name for the distribution list"
-msgstr "Veuillez saisir un nom pour le groupe de flux."
+msgstr "Veuillez saisir un nom pour la liste de diffusion"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "Please enter a search query"
@@ -6598,25 +6522,24 @@ msgstr "Veuillez saisir votre mot de passe."
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
 msgid "Please note that distribution lists cannot contain ressources."
 msgstr ""
+"Veuillez noter que les listes de diffusion ne peuvent pas contenir de "
+"ressources."
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid ""
 "Please note that some categories are predefined and you might not be able to "
 "rename or disable them."
 msgstr ""
+"Veuillez noter que certaines catégories sont pré-définies et que vous ne "
+"pourrez pas nécessairement les renommer ou les désactiver."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "Please note, that support requests cannot be handled via the feedback-"
-#| "formular. When you have questions or problems please contact our support "
-#| "directly"
 msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
 "If you have questions or problems please contact our support directly."
 msgstr ""
-"Veuillez remarquer que les requêtes d'assistance ne peuvent être effectuées "
-"par le biais du formulaire d'impressions. Si vous avez des questions ou des "
+"Veuillez noter que les demandes d'assistance ne peuvent être gérées par le "
+"biais du formulaire d'impressions. Si vous avez des questions ou des "
 "problèmes, veuillez les soumettre directement à l'assistance."
 
 #: apps/io.ox/files/util.js module:io.ox/files
@@ -6635,10 +6558,8 @@ msgstr ""
 "passe du compte."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Please enter a date in the past"
 msgid "Please rate this product"
-msgstr "Veuillez saisir une date passée"
+msgstr "Veuillez noter ce produit"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -6658,10 +6579,8 @@ msgid "Please select a valid image File to insert"
 msgstr "Choisissez un fichier image valide à importer"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Please define at least one action."
 msgid "Please select at least one participant"
-msgstr "Veuillez définir au moins une action."
+msgstr "Veuillez sélectionner au moins un participant"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -6675,6 +6594,10 @@ msgid ""
 msgstr ""
 "Veuillez choisir parmi les informations ci-dessous lesquelles utiliser pour "
 "créer votre compte %s :"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "Please select your mail account provider"
+msgstr "Veuillez sélectionner votre fournisseur de compte de courrier"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Please set day and month properly"
@@ -6694,7 +6617,7 @@ msgstr "Veuillez mettre à jour votre navigateur."
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Please wait for the previous operation to finish"
-msgstr ""
+msgstr "Veuillez attendre la fin de l'opération précédente"
 
 #: apps/io.ox/tasks/edit/util.js module:io.ox/tasks
 msgid "Plus"
@@ -6825,10 +6748,8 @@ msgstr "Appuyez sur [Entr] pour passer au flux Twitter."
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
-#, fuzzy
-#| msgid "Selection Details"
 msgid "Press to open Details"
-msgstr "Détails sur la sélection"
+msgstr "Appuyez pour ouvrir les détails"
 
 #: apps/io.ox/core/tk/attachmentsUtil.js module:io.ox/core
 #: apps/io.ox/preview/main.js
@@ -6836,11 +6757,10 @@ msgid "Preview"
 msgstr "Vue d'ensemble"
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
-#, fuzzy
-#| msgid "No preview available"
 msgid "Preview not available"
-msgstr "Pas de vue d'ensemble disponible"
+msgstr "Pas d'aperçu disponible"
 
+#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 msgid "Previous"
@@ -6895,10 +6815,8 @@ msgid "Print"
 msgstr "Imprimer"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#, fuzzy
-#| msgid "Print tasks"
 msgid "Print as PDF"
-msgstr "Imprimer les tâches"
+msgstr "Imprimer au format PDF"
 
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
@@ -7246,10 +7164,8 @@ msgstr "Me le rappeler à nouveau"
 #. don't know if that works for all languages but it has been
 #. a string concatenation before; at least now it's documented
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#, fuzzy
-#| msgid "Remind me again "
 msgid "Remind me again %1$s"
-msgstr "Me rappeler à nouveau "
+msgstr "Me rappeler à nouveau %1$s"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -7272,17 +7188,15 @@ msgstr "Date de rappel %1$s"
 
 #. %1$s appointment title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#, fuzzy, c-format
-#| msgid "Reminder date %1$s"
+#, c-format
 msgid "Reminder for appointment %1$s."
-msgstr "Date de rappel %1$s"
+msgstr "Rappel pour le rendez-vous %1$s."
 
 #. %1$s task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#, fuzzy, c-format
-#| msgid "Reminder date %1$s"
+#, c-format
 msgid "Reminder for task %1$s."
-msgstr "Date de rappel %1$s"
+msgstr "Rappel pour la tâche %1$s."
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Reminder has been created"
@@ -7484,7 +7398,7 @@ msgstr "Numéro de salle"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Rows"
-msgstr ""
+msgstr "Lignes"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7731,10 +7645,8 @@ msgid "Send by mail"
 msgstr "Envoyer par courriel"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
-#, fuzzy
-#| msgid "Get link"
 msgid "Send link"
-msgstr "Obtenir le lien"
+msgstr "Envoyer le lien"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -7824,10 +7736,8 @@ msgid "Server version"
 msgstr "Version du serveur"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Business category"
 msgid "Set category"
-msgstr "Catégorie d'entreprises"
+msgstr "Définir la catégorie"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
@@ -8060,8 +7970,6 @@ msgstr "Se connecter"
 
 #. the noun not the verb
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Sign in"
 msgctxt "word"
 msgid "Sign in"
 msgstr "Se connecter"
@@ -8191,7 +8099,7 @@ msgstr "Options de tri"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Sound"
-msgstr ""
+msgstr "Son"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Source"
@@ -9303,6 +9211,10 @@ msgstr "Échelle de temps en minutes"
 msgid "Time zone"
 msgstr "Fuseau horaire"
 
+#: apps/io.ox/editor/main.js module:io.ox/editor
+msgid "Title"
+msgstr "Titre"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgctxt "salutation"
 msgid "Title"
@@ -9337,10 +9249,8 @@ msgid "Today"
 msgstr "Aujourd'hui"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#, fuzzy
-#| msgid "Total: %1$d"
 msgid "Today: %1$s"
-msgstr "Total : %1$d"
+msgstr "Aujourd'hui : %1$d"
 
 #. button label for toggling fullscreen mode
 #. button tooltip for toggling fullscreen mode
@@ -9353,6 +9263,10 @@ msgstr "Passer en plein écran"
 #: module:io.ox/core/viewer
 msgid "Toggle panel"
 msgstr "Afficher/cacher le panneau"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "Toggle viewport size"
+msgstr ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
@@ -9385,7 +9299,7 @@ msgstr "10 principaux destinataires"
 
 #: apps/io.ox/notes/mediator.js module:io.ox/notes
 msgid "Topics"
-msgstr ""
+msgstr "Sujets"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Total cost"
@@ -9593,17 +9507,13 @@ msgstr "Avancement du téléversement"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js module:io.ox/files
-#, fuzzy
-#| msgid "Uploading %1$s"
 msgid "Uploading \"%1$s\""
-msgstr "Téléversement de %1$s"
+msgstr "Téléversement de \"%1$s\""
 
 #. headline for a progress bar
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
-#, fuzzy
-#| msgid "Add attachments"
 msgid "Uploading attachments"
-msgstr "Joindre des pièces"
+msgstr "Téléversement des pièces jointes"
 
 #: apps/io.ox/core/tk/upload.js module:io.ox/core
 msgid "Uploading folders is not supported."
@@ -9618,15 +9528,13 @@ msgid "Urgency"
 msgstr "Urgence"
 
 #. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "Utiliser %1$s"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail address"
 msgid "Use categories"
-msgstr "Adresse électronique"
+msgstr "Utiliser les catégories"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -9646,10 +9554,10 @@ msgid "Use cursor keys to navigate"
 msgstr "Utilisez les flèches du clavier pour naviguer."
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
-#, fuzzy
-#| msgid "Use cursor keys to navigate"
 msgid "Use cursor keys to navigate, press enter to select a date"
-msgstr "Utilisez les flèches du clavier pour naviguer."
+msgstr ""
+"Utilisez les flèches du clavier pour naviguer, appuyez sur Entrée pour "
+"choisir une date."
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
 msgid "Use cursor keys to reorder items"
@@ -9725,10 +9633,8 @@ msgstr "Commentaire de version"
 #. information about the currently displayed file version in viewer
 #. %1$d - version date
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
-#, fuzzy
-#| msgid "Versions (%1$d)"
 msgid "Version of %1$s"
-msgstr "Versions (%1$d)"
+msgstr "Version de %1$s"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
@@ -9910,7 +9816,7 @@ msgstr "Journée entière"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Wood"
-msgstr ""
+msgstr "Bois"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -10060,6 +9966,8 @@ msgstr ""
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "You can enable categories again via the view dropdown on the right"
 msgstr ""
+"Vous pouvez réactiver les catégories au moyen du menu déroulant de vue, à "
+"droite"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid ""
@@ -10070,14 +9978,18 @@ msgstr ""
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid ""
-"You can manage desktop notifications at any time, by vitising your settings"
+"You can manage desktop notifications at any time, by visiting your settings"
 msgstr ""
-"Vous pouvez à tout moment gérer vos notifications de bureau en consultant "
+"Vous pouvez gérer à tout moment les notifications de bureau en consultant "
 "vos réglages"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Vous pouvez enregistrer rapidement vos modifications avec Ctrl+Entrée."
+
+#: apps/io.ox/presenter/errormessages.js module:io.ox/presenter
+msgid "You can't present the same document more than once."
+msgstr "Vous ne pouvez pas présenter le même document plus d'une fois."
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "You cannot move items to this folder"
@@ -10297,16 +10209,15 @@ msgstr ""
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your credentials will be sent over a secure connection only"
 msgstr ""
+"Vos identifiants seront envoyés uniquement à travers une connexion sécurisée"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Votre mot de passe actuel"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Give feedback"
 msgid "Your feedback"
-msgstr "Donner vos impressions"
+msgstr "Vos impressions"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your mail address"
@@ -10477,10 +10388,8 @@ msgstr "fermer dans %1$s"
 
 #. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-#, fuzzy
-#| msgid "collapse"
 msgid "collapsed"
-msgstr "réduire"
+msgstr "réduite"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -10629,10 +10538,8 @@ msgstr "chaque semaine"
 
 #. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-#, fuzzy
-#| msgid "expand"
 msgid "expanded"
-msgstr "agrandir"
+msgstr "étendue"
 
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
@@ -10918,10 +10825,8 @@ msgid "unknown"
 msgstr "inconnu"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, fuzzy
-#| msgid "Unknown sender"
 msgid "unknown sender"
-msgstr "Expéditeur inconnu"
+msgstr "expéditeur inconnu"
 
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 msgid "unlimited"
@@ -12213,6 +12118,13 @@ msgstr "aaaa"
 #~ msgid "Invalid data"
 #~ msgstr "Données invalides"
 
+#~ msgid ""
+#~ "Invite people via email. Every recipient will get an individual link to "
+#~ "access the shared files."
+#~ msgstr ""
+#~ "Inviter des personnes par courriel. Chaque destinataire recevra un lien "
+#~ "individuel lui permettant d'accéder aux fichiers partagés."
+
 #~ msgid "Inviting other participants"
 #~ msgstr "Inviter d'autres participants"
 
@@ -13323,9 +13235,6 @@ msgstr "aaaa"
 #~ msgid "Timezone"
 #~ msgstr "Fuseau horaire"
 
-#~ msgid "Title"
-#~ msgstr "Titre"
-
 #~ msgctxt "title"
 #~ msgid "Title"
 #~ msgstr "Titre"
@@ -13767,6 +13676,13 @@ msgstr "aaaa"
 #~ "Vous pouvez glisser-déposer des fichiers depuis votre ordinateur pour "
 #~ "télécharger soit un nouveau fichier, soit une nouvelle version d'un "
 #~ "fichier existant."
+
+#~ msgid ""
+#~ "You can manage desktop notifications at any time, by vitising your "
+#~ "settings"
+#~ msgstr ""
+#~ "Vous pouvez à tout moment gérer vos notifications de bureau en consultant "
+#~ "vos réglages"
 
 #~ msgid "You don't have permissions to change this document"
 #~ msgstr "Vous n'avez pas le droit de modifier ce document"

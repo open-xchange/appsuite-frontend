@@ -59,10 +59,10 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 .toggleClass('maximize', !!options.maximize)
                 .attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id })
                 .append(
-                    $('<div class="modal-dialog">').width(options.width).append(
+                    $('<div class="modal-dialog" role="document">').width(options.width).append(
                         $('<div class="modal-content">').append(
                             $('<div class="modal-header">').append(
-                                $('<h4 class="modal-title">').attr('id', title_id).text(options.title || '\u00A0')
+                                $('<h1 class="modal-title">').attr('id', title_id).text(options.title || '\u00A0')
                             ),
                             this.$body = $('<div class="modal-body">'),
                             $('<div class="modal-footer">')
@@ -99,7 +99,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
             this.$el.modal({ keyboard: false }).modal('show');
-            this.$el.siblings().attr('aria-hidden', true);
+            this.$el.siblings(':not(script,noscript)').attr('aria-hidden', true);
             this.trigger('open');
             // set initial focus
             var elem = this.$(o.focus);
@@ -210,7 +210,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         if (!e || e.type !== 'hidden') {
             this.$el.modal('hide');
         }
-        this.$el.siblings().removeAttr('aria-hidden');
+        this.$el.siblings(':not(script,noscript)').removeAttr('aria-hidden');
         this.trigger('close');
         if (this.previousFocus) this.previousFocus.focus();
         this.$el.remove();

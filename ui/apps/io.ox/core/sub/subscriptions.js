@@ -74,7 +74,33 @@ define('io.ox/core/sub/subscriptions', [
                         notifications.yell('busy', gt('Checking credentials ...'));
                         var folder = self.model.attributes.folder;
 
-                        self.model.save().then(
+
+                        require(['io.ox/oauth/keychain']).then(function (oauth) {
+                            // optionally request oauth scope incrementally
+                            var account = oauth.accounts.get(self.model.source().account),
+                                hasAllScopes = (self.model.get('wantedScopes') || []).reduce(function (acc, scope) {
+                                    return acc && account.hasScope(scope);
+                                }, !!account);
+                            if (hasAllScopes) return;
+
+                            var def = $.Deferred();
+
+                            account.listenTo(account, 'sync', def.resolve);
+                            account.listenTo(account, 'error', function (m, resp) {
+                                def.reject(resp);
+                            });
+
+                            account
+                                .enableScopes(self.model.get('wantedScopes'))
+                                .save();
+
+                            return def;
+                        }).then(function () {
+                            // do not send wantedScopes to server, because those are used internally only
+                            self.model.unset('wantedScopes');
+
+                            return self.model.save();
+                        }).then(
                             function saveSuccess(id) {
                                 //set id, if none is present (new model)
                                 if (!self.model.id) { self.model.id = id; }
@@ -159,6 +185,12 @@ define('io.ox/core/sub/subscriptions', [
                         // remove service in case all formdescriptions where removed
                         return (service.formDescription || []).length;
                     });
+
+                    if (app.subscription && _.isArray(app.subscription.wantedOAuthScopes)) {
+                        // app requires some oauth scopes for subscriptions
+                        // TODO: should this info come from the backend?
+                        self.model.set('wantedScopes', app.subscription.wantedOAuthScopes);
+                    }
 
                     var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: services, popup: popup, newFolder: true });
 
@@ -258,7 +290,7 @@ define('io.ox/core/sub/subscriptions', [
 
         function oauth(accountType) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600, resizable=yes, scrollbars=yes');
-            return keychainAPI.createInteractively(accountType, win);
+            return keychainAPI.createInteractively(accountType, win, baton.model.get('wantedScopes') || []);
         }
 
         _.each(service.formDescription, function (fd) {

@@ -341,6 +341,12 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'edit',
                     ref: 'io.ox/files/actions/rename'
                 },
+                'eidt': {
+                    prio: 'hi',
+                    mobile: 'lo',
+                    label: gt('Edit'),
+                    ref: 'io.ox/files/actions/editor'
+                },
                 'editdescription': {
                     prio: 'lo',
                     mobile: 'lo',

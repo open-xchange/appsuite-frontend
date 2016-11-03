@@ -302,7 +302,6 @@ define('io.ox/core/commons', [
 
                     var total = countGridData ? grid.getIds().length : data.total,
                         node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
-                    grid.getContainer().attr('aria-setsize', total);
                     grid.meta = {
                         total: total,
                         title: data.title
@@ -636,8 +635,8 @@ define('io.ox/core/commons', [
                 draw: function () {
                     this.addClass('visual-focus').append(
                         $('<a href="#" class="toolbar-item">')
-                        .attr('title', gt('Open folder view'))
-                        .append($('<i class="fa fa-angle-double-right" aria-hidden="true">'))
+                        .attr('aria-label', gt('Open folder view'))
+                        .append($('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view')))
                         .on('click', { app: app, state: true }, toggleFolderView)
                     );
                 }
@@ -649,10 +648,9 @@ define('io.ox/core/commons', [
                 draw: function () {
                     this.addClass('bottom-toolbar').append(
                         $('<div class="generic-toolbar bottom visual-focus">').append(
-                            $('<a href="#" class="toolbar-item" role="button">')
+                            $('<a href="#" class="toolbar-item" role="button">').attr('aria-label', gt('Close folder view'))
                             .append(
-                                $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
-                                $('<span class="sr-only">').text(gt('Close folder view'))
+                                $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                             )
                             .on('click', { app: app, state: false }, toggleFolderView)
                         )

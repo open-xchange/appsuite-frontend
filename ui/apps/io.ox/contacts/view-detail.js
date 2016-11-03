@@ -353,7 +353,10 @@ define('io.ox/contacts/view-detail', [
             $(this).append(
                 $('<dt>').text(label || model.fields[id]),
                 $('<dd>').append(
-                    $('<a>', { href: _.device('smartphone') ? 'tel:' + number : 'callto:' + number }).text(number)
+                    $('<a>').attr({
+                        href: _.device('smartphone') ? 'tel:' + number : 'callto:' + number,
+                        'aria-label': label || model.fields[id]
+                    }).text(number)
                 )
             );
         };
@@ -488,19 +491,20 @@ define('io.ox/contacts/view-detail', [
                             }
                         }),
                         row('url', function () {
-                            if (baton.data.url) {
-                                if (baton.data.url.indexOf('http://') !== 0 && baton.data.url.indexOf('https://') !== 0) {
-                                    //fix urls
-                                    return $('<a>', { href: 'http://' + baton.data.url, target: '_blank' }).text(baton.data.url);
-                                }
-                                return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
-                            }
+                            var url = $.trim(baton.data.url);
+                            if (!url) return;
+                            if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
+                            return $('<a target="_blank" rel="noopener">').attr('href', url).text(url);
                         }),
                         // --- rare ---
                         simple(data, 'marital_status'),
                         simple(data, 'number_of_children'),
                         simple(data, 'spouse_name'),
-                        simple(data, 'anniversary')
+                        row('anniversary', function () {
+                            if (baton.data.anniversary) {
+                                return new moment(1153440000000).utc().format('l');
+                            }
+                        })
                     )
                     .attr('data-block', 'personal')
                 );

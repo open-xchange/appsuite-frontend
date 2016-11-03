@@ -130,11 +130,6 @@ define('io.ox/mail/detail/view', [
     //
     ext.point('io.ox/mail/detail/header/row1').extend(
         {
-            id: 'flag-picker',
-            index: INDEX_header += 100,
-            draw: extensions.flagPicker
-        },
-        {
             id: 'date',
             index: INDEX_header += 100,
             draw: extensions.fulldate
@@ -155,6 +150,11 @@ define('io.ox/mail/detail/view', [
                     )
                 );
             }
+        },
+        {
+            id: 'flag-picker',
+            index: INDEX_header += 100,
+            draw: extensions.flagPicker
         }
     );
 
@@ -433,6 +433,7 @@ define('io.ox/mail/detail/view', [
                 ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
                 // global event for tracking purposes
                 ox.trigger('mail:detail:body:render', view);
+                view.trigger('mail:detail:body:render', view);
                 body = node = view = null;
             }, 20);
         },

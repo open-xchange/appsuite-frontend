@@ -146,7 +146,7 @@ define('io.ox/core/notifications', [
                         cleanup();
                     }),
                     cleanup = function () {
-                        textNode.text(gt('You can manage desktop notifications at any time, by vitising your settings'))
+                        textNode.text(gt('You can manage desktop notifications at any time, by visiting your settings'))
                             .on('click', function () {
                                 var options = { id: 'io.ox/core' };
                                 ox.launch('io.ox/settings/main', options).done(function () {
@@ -249,7 +249,7 @@ define('io.ox/core/notifications', [
 
         hideAll: function () {
             _(this.model.get('subviews')).each(function (view) {
-                view.hideAll(1800000);
+                view.hideAll(settings.get('notificationsHidingTimer', 1800000));
             });
         },
 

@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.8\n"
 
-#: apps/io.ox/tours/files.js:221 module:io.ox/tours
+#: apps/io.ox/tours/files.js:228 module:io.ox/tours
 msgid "Add another account"
 msgstr "添加别的户口"
 
@@ -26,7 +26,7 @@ msgstr "添加附件"
 msgid "Adding further details"
 msgstr "添加更多详情"
 
-#: apps/io.ox/tours/files.js:104 module:io.ox/tours
+#: apps/io.ox/tours/files.js:111 module:io.ox/tours
 msgid ""
 "At the top you can find the toolbar with many functions and additional "
 "options. You can easily create new folders, new files and much more."
@@ -34,7 +34,7 @@ msgstr ""
 "在顶部您能找到带有很多功能和附加选项的工具条。您能轻松创建新文件夹、新文件和"
 "更多东西。"
 
-#: apps/io.ox/tours/files.js:169 module:io.ox/tours
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
 msgid ""
 "Choose from two alternatives to share your files and folders. Use Invite "
 "people if you want to manage access rights and allow recipients to create "
@@ -51,13 +51,13 @@ msgid ""
 "the corresponding contacts from the selected address book."
 msgstr "单击导航条左边的一个信件，以从选择的地址簿显示对应的联系人。"
 
-#: apps/io.ox/tours/files.js:81 module:io.ox/tours
+#: apps/io.ox/tours/files.js:88 module:io.ox/tours
 msgid ""
 "Clicking on a folder displays all the subfolders, documents, media and other "
 "files that it contains."
 msgstr "单击一个文件夹会显示包含的所有子文件夹、文档、媒体档、和其他文件。"
 
-#: apps/io.ox/tours/files.js:132 module:io.ox/tours
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
 msgid "Clicking on the view icon leads you to a preview of the selected file."
 msgstr "单击视图图标带领您到一个选择文件的预览。"
 
@@ -65,7 +65,7 @@ msgstr "单击视图图标带领您到一个选择文件的预览。"
 msgid "Closing a square"
 msgstr "关闭一个方块"
 
-#: apps/io.ox/tours/files.js:182 module:io.ox/tours
+#: apps/io.ox/tours/files.js:189 module:io.ox/tours
 msgid "Collaborating"
 msgstr "协作"
 
@@ -120,7 +120,7 @@ msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr "单一应用程序的详细指南位于系统菜单 > 帮助。"
 
-#: apps/io.ox/tours/files.js:198 module:io.ox/tours
+#: apps/io.ox/tours/files.js:205 module:io.ox/tours
 msgid ""
 "Did you know that you can edit text documents and spreadsheets online? Drive "
 "will automatically update your edited file, but thanks to versioning the "
@@ -129,7 +129,7 @@ msgstr ""
 "您知道您能线上编辑文档和试算表吗？Drive 将会自动更新您已编辑的文件，归功于版"
 "本功能源文件也保持可用。"
 
-#: apps/io.ox/tours/files.js:89 module:io.ox/tours
+#: apps/io.ox/tours/files.js:96 module:io.ox/tours
 msgid "Different views are available. Just select the one you like best."
 msgstr "有不同的视图可用，只需选择您最喜欢的一个。"
 
@@ -141,7 +141,7 @@ msgstr "显示帮助或设定"
 msgid "Drag and drop"
 msgstr "拖放"
 
-#: apps/io.ox/tours/files.js:222 module:io.ox/tours
+#: apps/io.ox/tours/files.js:229 module:io.ox/tours
 msgid ""
 "Drive allows you to connect to other storage solutions if you already have a "
 "cloud storage account you use to save and sync your files. Simply click on "
@@ -150,17 +150,17 @@ msgstr ""
 "如果您已经有一个云储存户口一直作保存和同步文件，Drive 允许您连接到该储存方"
 "案。简单的单击适当图标以访问您的现存数据。"
 
-#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:52 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
 "activated immediately."
 msgstr "编辑一个在右边的设定。在大部分情况下，变更会立刻激活。"
 
-#: apps/io.ox/tours/files.js:197 module:io.ox/tours
+#: apps/io.ox/tours/files.js:204 module:io.ox/tours
 msgid "Edit documents"
 msgstr "编辑文档"
 
-#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:115 module:io.ox/tours
 msgid "Editing multiple E-Mails"
 msgstr "编辑多个电子邮件"
 
@@ -172,7 +172,7 @@ msgstr "编辑多个联系人"
 msgid "Editing multiple tasks"
 msgstr "编辑多个任务"
 
-#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:51 module:io.ox/tours
 msgid "Editing settings"
 msgstr "编辑设定"
 
@@ -232,19 +232,19 @@ msgstr "输入对象"
 msgid "Entering the task's data"
 msgstr "输入任务的数据"
 
-#: apps/io.ox/tours/files.js:205 module:io.ox/tours
+#: apps/io.ox/tours/files.js:212 module:io.ox/tours
 msgid "File details"
 msgstr "文件详情"
 
-#: apps/io.ox/tours/files.js:80 module:io.ox/tours
+#: apps/io.ox/tours/files.js:87 module:io.ox/tours
 msgid "Folder content"
 msgstr "文件夹内容"
 
-#: apps/io.ox/tours/files.js:66 module:io.ox/tours
+#: apps/io.ox/tours/files.js:73 module:io.ox/tours
 msgid "Folder tree"
 msgstr "文件夹树"
 
-#: apps/io.ox/tours/files.js:143 module:io.ox/tours
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
 msgid ""
 "From preview you can also select other options to help you manage and work "
 "on your files."
@@ -267,11 +267,11 @@ msgstr "更多信息"
 msgid "Getting started"
 msgstr "开始使用"
 
-#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:110 module:io.ox/tours
 msgid "Halo view"
 msgstr "光环视图"
 
-#: apps/io.ox/tours/files.js:157 module:io.ox/tours
+#: apps/io.ox/tours/files.js:164 module:io.ox/tours
 msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
 "also collaborate on a document and set different access rights."
@@ -279,17 +279,17 @@ msgstr ""
 "您能与您的同事和外部联系人分享文件，您们也能在一个文档上协作和设置不同访问"
 "权。"
 
-#: apps/io.ox/tours/files.js:232 module:io.ox/tours
+#: apps/io.ox/tours/files.js:239 module:io.ox/tours
 msgid ""
 "Hint: you can always restart guided tours, any time you need them, from the "
 "system menu."
 msgstr "提示：您随时能按需要从系统菜单重新开始导览。"
 
-#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "设定如何组织的"
 
-#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid ""
 "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
 "separate window."
@@ -305,7 +305,7 @@ msgid ""
 "opened."
 msgstr "为免有新通知，例如：约会邀请，会开启信息区域。"
 
-#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:116 module:io.ox/tours
 msgid ""
 "In order to edit multiple E-Mails at once, enable the checkboxes on the left "
 "side of the E-Mails. If the checkboxes are not displayed, click on View > "
@@ -332,7 +332,7 @@ msgstr "执行一个应用程序"
 msgid "Navigation bar"
 msgstr "导航条"
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
+#: apps/io.ox/tours/files.js:74 module:io.ox/tours
 msgid ""
 "On the left you can see the folder tree. It displays your folder structure "
 "and allows you to navigate to specific folders and subfolders. To make your "
@@ -342,7 +342,7 @@ msgstr ""
 "在左边您能看到文件夹树。它显示您的文件夹结构和允许您导航到指定的文件夹和子文"
 "件夹。为了方便您，我们已经包括您文档、音乐、图片、和视频的文件夹。"
 
-#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:100 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
 msgstr "在一个分离窗口打开电子邮件"
 
@@ -350,11 +350,11 @@ msgstr "在一个分离窗口打开电子邮件"
 msgid "Opening or closing the folder tree"
 msgstr "打开或关闭文件夹树"
 
-#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:128 module:io.ox/tours
 msgid "Opening the E-Mail settings"
 msgstr "打开电子邮件设定"
 
-#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:56 module:io.ox/tours
 msgid "Opening the help"
 msgstr "打开帮助"
 
@@ -362,15 +362,15 @@ msgstr "打开帮助"
 msgid "Opening the settings"
 msgstr "打开设定"
 
-#: apps/io.ox/tours/files.js:131 module:io.ox/tours
+#: apps/io.ox/tours/files.js:138 module:io.ox/tours
 msgid "Preview files"
 msgstr "预览文件"
 
-#: apps/io.ox/tours/files.js:142 module:io.ox/tours
+#: apps/io.ox/tours/files.js:149 module:io.ox/tours
 msgid "Preview mode"
 msgstr "预览模式"
 
-#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:105 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "阅读电子邮件交谈"
 
@@ -378,7 +378,7 @@ msgstr "阅读电子邮件交谈"
 msgid "Reading the details"
 msgstr "阅读详情"
 
-#: apps/io.ox/tours/files.js:231 module:io.ox/tours
+#: apps/io.ox/tours/files.js:238 module:io.ox/tours
 msgid "Restart Guided Tour"
 msgstr "重新开始导览"
 
@@ -386,12 +386,12 @@ msgstr "重新开始导览"
 msgid "Searching for objects"
 msgstr "搜寻对象"
 
-#: apps/io.ox/tours/files.js:88 module:io.ox/tours
+#: apps/io.ox/tours/files.js:95 module:io.ox/tours
 msgid "Select a view"
 msgstr "选择一个视图"
 
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:87
 msgid "Selecting a view"
 msgstr "选择一个视图"
 
@@ -399,15 +399,15 @@ msgstr "选择一个视图"
 msgid "Sending an E-Mail to a contact"
 msgstr "发送一个电子邮件的一个联系人中"
 
-#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "发送电子邮件中"
 
-#: apps/io.ox/tours/files.js:156 module:io.ox/tours
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
 msgid "Share files"
 msgstr "分享文件"
 
-#: apps/io.ox/tours/files.js:183 module:io.ox/tours
+#: apps/io.ox/tours/files.js:190 module:io.ox/tours
 msgid ""
 "Sharing files by inviting people does not only offer your recipients the "
 "option to create and edit files. Internal and external participants are also "
@@ -417,11 +417,11 @@ msgstr ""
 "以邀请人员分享文件，不只提供您的收件人创建可编辑文件的选项。内部和外部参与者"
 "也可以与您在文档和试算表上同时协作。"
 
-#: apps/io.ox/tours/files.js:168 module:io.ox/tours
+#: apps/io.ox/tours/files.js:175 module:io.ox/tours
 msgid "Sharing options"
 msgstr "分享选项"
 
-#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:70 module:io.ox/tours
 msgid "Signing out"
 msgstr "注销"
 
@@ -429,7 +429,7 @@ msgstr "注销"
 msgid "Sorting tasks"
 msgstr "排序任务"
 
-#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
 msgid "Sorting your E-Mails"
 msgstr "排序您的电子邮件"
 
@@ -445,19 +445,19 @@ msgstr ""
 "详细视图显示一个对象的内容。视应用程序而定，可以在详细视图里找到更多用作组织"
 "对象的功能。"
 
-#: apps/io.ox/tours/files.js:59 module:io.ox/tours
+#: apps/io.ox/tours/files.js:66 module:io.ox/tours
 msgid "The Drive app"
 msgstr "Drive 应用程序"
 
-#: apps/io.ox/tours/files.js:53 module:io.ox/tours
+#: apps/io.ox/tours/files.js:59 module:io.ox/tours
 msgid "The Drive app tour.txt"
 msgstr "The Drive app tour.txt"
 
-#: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:110 module:io.ox/tours
 msgid "The List view"
 msgstr "列表视图"
 
-#: apps/io.ox/tours/calendar.js:96 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:111 module:io.ox/tours
 msgid ""
 "The List view shows a list of the appointments in the current folder. If "
 "clicking on an appointment, the appointment's data and some functions are "
@@ -471,8 +471,12 @@ msgid "The New objects icon"
 msgstr "新对象图标"
 
 #: apps/io.ox/tours/intro.js:59 module:io.ox/tours
+#, fuzzy
+#| msgid ""
+#| "The New objects icon shows the number of unread E-Mails or other "
+#| "notifications. If clicking the icon, the info area opens."
 msgid ""
-"The New objects icon shows the number of unread E-Mails or other "
+"The New objects icon shows the number of appointment reminders or other "
 "notifications. If clicking the icon, the info area opens."
 msgstr "新对象图标显示电子邮件或其他通知的数量。如果单击图标，会打开信息区域。"
 
@@ -486,17 +490,17 @@ msgid ""
 "news."
 msgstr "门户通知您有关电子邮件、约会、或社交网路新闻。"
 
-#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:97 module:io.ox/tours
 msgid "The calendar views"
 msgstr "日历视图"
 
-#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:98 module:io.ox/tours
 msgid ""
 "The calendar views display a calendar sheet with the appointments for the "
 "selected time range."
 msgstr "日历视图显示一个选择时段约会的日历表。"
 
-#: apps/io.ox/tours/files.js:206 module:io.ox/tours
+#: apps/io.ox/tours/files.js:213 module:io.ox/tours
 msgid ""
 "The file details side bar offers additional information about your files. "
 "Just enable the File details option from the View drop down menu and select "
@@ -517,7 +521,7 @@ msgstr "信息区域"
 msgid "The list"
 msgstr "列表"
 
-#: apps/io.ox/tours/settings.js:37 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:45 module:io.ox/tours
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
 "Basic settings or E-Mail."
@@ -545,7 +549,7 @@ msgid ""
 "there."
 msgstr "要更改布局，请把一个方块标题拖到别的位置后放在那里。"
 
-#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:88 module:io.ox/tours
 msgid ""
 "To choose between the different views. click on View in the toolbar. Select "
 "a menu entry in the layout."
@@ -585,7 +589,9 @@ msgid ""
 msgstr "要创建循环任务，请启用重复。会显示设置循环参数的功能。"
 
 #: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
-msgid "To create the appointment, click on Create at the upper right side."
+#, fuzzy
+#| msgid "To create the appointment, click on Create at the upper right side."
+msgid "To create the appointment, click on Create at the lower left side."
 msgstr "要创建约会，请单击右上方的创建。"
 
 #: apps/io.ox/tours/tasks.js:88 module:io.ox/tours
@@ -655,7 +661,7 @@ msgstr "不要错过约会，请使用提醒功能。"
 msgid "To not miss the task, use the reminder function."
 msgstr "不要错过任务，请使用提醒功能。"
 
-#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid ""
 "To open or close an E-Mail in a conversation, click on a free area in the "
 "header."
@@ -667,7 +673,7 @@ msgid ""
 "side of the toolbar."
 msgstr "要打开或关闭文件夹树，单击工具条右边的视图 > 文件夹视图。"
 
-#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:129 module:io.ox/tours
 msgid ""
 "To open the E-Mail settings, click the System menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on E-Mail on the left side."
@@ -675,7 +681,7 @@ msgstr ""
 "要打开电子邮件设置，在菜单条右上方的系统菜单图标单击。选择设置、单击左边的电"
 "子邮件。"
 
-#: apps/io.ox/tours/settings.js:49 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:57 module:io.ox/tours
 msgid ""
 "To open the help, click the System menu icon on the upper right side of the "
 "menu bar. Select Help. The help for the currently selected app is displayed. "
@@ -695,7 +701,7 @@ msgstr "要打开设置，单击菜单条右上方的系统菜单图标。选择
 msgid "To read the details, click on an entry in a square."
 msgstr "要阅读详情，请单击一个方块里的项目。"
 
-#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:111 module:io.ox/tours
 msgid ""
 "To receive information about the sender or other recipients, open the Halo "
 "view by clicking on a name."
@@ -720,17 +726,17 @@ msgid ""
 msgstr ""
 "要发送一个电子邮件给联系人，请单击一个电子邮件或工具条里的发送电子邮件。"
 
-#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:76 module:io.ox/tours
 msgid "To send the E-Mail, click on Send"
 msgstr "要发送电子邮件，单击发送。"
 
-#: apps/io.ox/tours/settings.js:55 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:71 module:io.ox/tours
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
 msgstr "要注销，请单击菜单条右上方的系统菜单图标。选择注销。"
 
-#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:81 module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr "要排序电子邮件，单击以..排序后选择一个排序准则。"
 
@@ -742,7 +748,7 @@ msgstr "要排序任务，单击以..排序后选择一个排序准则。"
 msgid "To track the editing status, enter the current progress."
 msgstr "要追踪编辑状态，请输入当前进度。"
 
-#: apps/io.ox/tours/files.js:117 module:io.ox/tours
+#: apps/io.ox/tours/files.js:124 module:io.ox/tours
 msgid ""
 "To upload a new file from your local device, simply click on Add local file "
 "and select the file you would like to upload. It is even easier if you just "
@@ -753,7 +759,7 @@ msgstr ""
 "件。如果您从本地装置拖拉文件到 Drive 里就更简单了。已上载的文件现在会在您所有"
 "装置上的 Drive 里可用。"
 
-#: apps/io.ox/tours/files.js:103 module:io.ox/tours
+#: apps/io.ox/tours/files.js:110 module:io.ox/tours
 msgid "Toolbar"
 msgstr "工具条"
 
@@ -761,7 +767,7 @@ msgstr "工具条"
 msgid "Tracking the editing status"
 msgstr "追踪编辑状态"
 
-#: apps/io.ox/tours/files.js:116 module:io.ox/tours
+#: apps/io.ox/tours/files.js:123 module:io.ox/tours
 msgid "Upload a new file"
 msgstr "上载一个新文件"
 
@@ -785,7 +791,7 @@ msgstr "使用提醒功能"
 msgid "Welcome to %s"
 msgstr "欢迎到 %s"
 
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
+#: apps/io.ox/tours/files.js:67 module:io.ox/tours
 msgid ""
 "Welcome to your cloud storage app. This Guided Tour will introduce you to "
 "your new online storage solution - your one point to access online stored "

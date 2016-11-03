@@ -71,13 +71,17 @@ define('io.ox/presenter/main', [
                     // init RT connection
                     app.rtModel = new RTModel();
                     app.rtConnection = new RTConnection(app.fileModel.toJSON());
-                    app.rtConnection.connect().then(rtConnectSuccess, rtConnectError);
-                    app.rtConnection.on({
-                        'update': rtUpdateHandler,
-                        'online': rtOnlineHandler,
-                        'offline': rtOfflineHandler,
-                        'timeout reset error:notMember error:stanzaProcessingFailed error:joinFailed error:disposed': rtErrorHandler
-                    });
+                    if (app.rtConnection.isInitialized()) {
+                        app.rtConnection.connect().then(rtConnectSuccess, rtConnectError);
+                        app.rtConnection.on({
+                            'update': rtUpdateHandler,
+                            'online': rtOnlineHandler,
+                            'offline': rtOfflineHandler,
+                            'timeout reset error:notMember error:stanzaProcessingFailed error:joinFailed error:disposed': rtErrorHandler
+                        });
+                    } else {
+                        app.showErrorNotification({ error: '', code: 'RT_STANZA-1015' }, { category: 'rt' });
+                    }
                 }
 
                 // get file error handler
@@ -145,9 +149,12 @@ define('io.ox/presenter/main', [
             // dispose RT connection instance
             app.disposeRTConnection = function () {
                 if (app.rtConnection) {
-                    app.rtConnection.close();
+                    if (app.rtConnection.isInitialized()) {
+                        app.rtConnection.close();
+                        app.rtConnection.dispose();
+                    }
+
                     app.rtConnection.off();
-                    app.rtConnection.dispose();
                     app.rtConnection = null;
                 }
             };
@@ -178,7 +185,7 @@ define('io.ox/presenter/main', [
 
         function beforeUnloadHandler() {
             var state = SessionRestore.state('presenter~' + app.file.id);
-            if (state) {
+            if (app.rtConnection.isInitialized() && state) {
                 state.slideId = app.mainView.getActiveSlideIndex();
                 SessionRestore.state('presenter~' + app.file.id, state);
             }
@@ -202,8 +209,10 @@ define('io.ox/presenter/main', [
 
             app.on('quit', function () {
                 ox.off('beforeunload', beforeUnloadHandler);
+                if (app.rtConnection.isInitialized()) {
+                    SessionRestore.state('presenter~' + app.file.id, null);
+                }
                 app.disposeRTConnection();
-                SessionRestore.state('presenter~' + app.file.id, null);
             });
 
             win.show();

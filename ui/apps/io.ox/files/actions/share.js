@@ -20,7 +20,7 @@ define('io.ox/files/actions/share', [
 
     'use strict';
 
-    function share(array, type) {
+    function link(array) {
 
         if (!array) return;
 
@@ -28,7 +28,7 @@ define('io.ox/files/actions/share', [
             count = array.length,
             first = array[0],
             filler = count === 1 ? _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' }) : count,
-            view = new ShareWizard({ files: array, type: type });
+            view = new ShareWizard({ files: array });
 
         // build header
         if (first.isFile()) {
@@ -42,18 +42,11 @@ define('io.ox/files/actions/share', [
             .header($('<h4>').text(header))
             .append(view.render().$el);
 
-        if (type === 'invite') {
-            // invite guests
-            dialog
-                .addPrimaryButton('share', gt('Invite'), 'share')
-                .addButton('cancel', gt('Cancel'), 'cancel');
-        } else {
-            // get a link (anonymouse)
-            dialog
-                .addPrimaryButton('share', gt('Close'), 'share')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .addAlternativeButton('remove', gt('Remove link'), 'remove');
-        }
+        // get a link (anonymouse)
+        dialog
+            .addPrimaryButton('share', gt('Close'), 'share')
+            .addButton('cancel', gt('Cancel'), 'cancel')
+            .addAlternativeButton('remove', gt('Remove link'), 'remove');
 
         function toggleButtons(sendVisible) {
             var footer = dialog.getFooter();
@@ -109,8 +102,6 @@ define('io.ox/files/actions/share', [
             });
         },
 
-        link: function (array) {
-            return share(array, 'link');
-        }
+        link: link
     };
 });

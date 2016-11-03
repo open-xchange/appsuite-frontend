@@ -574,6 +574,11 @@ define('io.ox/files/api', [
             params: params
         })
         .then(function (data) {
+
+            // fix for Bug 49472 - 'Edit as new' for mail attachments broken: Mail is empty when resending
+            // 'origin' is a temporary entry for mail attachment, we want to keep this info as long as possible
+            if (file.origin) { data.origin = _.clone(file.origin); }
+
             return mergeDetailInPool(data);
         }, function (error) {
             api.trigger('error error:' + error.code, error);
@@ -816,7 +821,7 @@ define('io.ox/files/api', [
             items = _(list).difference(folders);
 
         // move all files
-        if (items) {
+        if (items && items.length > 0) {
             http.PUT({
                 module: 'files',
                 params: {

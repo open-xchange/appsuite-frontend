@@ -43,13 +43,12 @@ define('io.ox/files/actions/save-as-pdf', [
 
             isAccessWrite = FolderApi.can('create', FolderApi.pool.models[model.get('folder_id')].toJSON()),
 
-        //  filename = model.getDisplayName() + '.pdf';
             filename = model.getDisplayName(),
 
             len      = filename.length,
             idx      = filename.lastIndexOf('.');
 
-        filename = filename.substring(0, ((idx >= 0) ? idx : len)) + '.pdf';
+        filename = filename.substring(0, ((idx >= 0) ? idx : len));
 
       //console.log('+++ io.ox/files/actions/save-as-pdf :: data, model, filename : ', data, model, filename);
       //console.log('+++ io.ox/files/actions/save-as-pdf :: isAccessWrite : ', isAccessWrite);
@@ -58,7 +57,7 @@ define('io.ox/files/actions/save-as-pdf', [
             return ConverterUtils.sendConverterRequest(model, {
 
                 documentformat: 'pdf',
-                saveas_filename: name,
+                saveas_filename: name + '.pdf',
               //saveas_folder_id: model.get('folder_id')
                 saveas_folder_id: (isAccessWrite ? model.get('folder_id') : require('settings!io.ox/files').get('folder/documents'))
 

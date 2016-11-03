@@ -96,12 +96,14 @@ define('io.ox/core/boot/util', [], function () {
             } else if (error && error.code === 'LGI-0011') {
                 //password expired
                 this.feedback('error', function () {
-                    return [$('<p>').text(self.gt('Your password is expired. Please change your password to continue.')),
-                            // don't use a button here or it will trigger a submit event
-                            $('<a target="_blank" role="button" class="btn btn-primary btn">')
-                                .text(self.gt('Change password'))
-                                // error_params[0] should contain a url to password change manager or sth.
-                                .attr('href', error.error_params[0])];
+                    return [
+                        $('<p>').text(self.gt('Your password is expired. Please change your password to continue.')),
+                        // don't use a button here or it will trigger a submit event
+                        $('<a target="_blank" role="button" class="btn btn-primary btn">')
+                            .text(self.gt('Change password'))
+                            // error_params[0] should contain a url to password change manager or sth.
+                            .attr('href', error.error_params[0])
+                    ];
                 });
             } else {
                 this.feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));

@@ -31,13 +31,24 @@ define('plugins/portal/files/register', [
             return api.get({ folder: props.folder_id, id: props.id }).then(
                 function success(data) {
                     baton.data = data;
-                    api.on('remove:file:' + _.ecid(data), function () {
-                        var widgetCol = portalWidgets.getCollection();
-                        widgetCol.remove(baton.model);
-                    });
+                    // respond to mail removal (attachment view; see bug 48544)
+                    // yay, good naming; why that short name?
+                    var mail = data['com.openexchange.file.storage.mail.mailMetadata'];
+                    if (mail) {
+                        // if we have mail meta data, we can assume to have mail as a capability
+                        require(['io.ox/mail/api'], function (api) {
+                            api.on('remove:' + _.ecid(mail), removeWidget);
+                        });
+                    }
+                    // respond to file removal
+                    api.on('remove:file:' + _.ecid(data), removeWidget);
+                    // remove widget from portal
+                    function removeWidget() {
+                        portalWidgets.getCollection().remove(baton.model);
+                    }
                 },
                 function fail(e) {
-                    return e.code === 'IFO-0300' ? 'remove' : e;
+                    return /^(FILE_STORAGE-0026|IFO-0300)$/.test(e.code) ? 'remove' : e;
                 }
             );
         },

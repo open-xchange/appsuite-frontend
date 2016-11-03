@@ -26,7 +26,13 @@ define('io.ox/mail/compose/inline-images', [
         inlineImage: function (data) {
             if ('FormData' in window) {
                 var formData = new FormData();
-                formData.append('file', data.file);
+                // avoid the generic blob filename
+                if (!data.file.name) {
+                    var type = data.file.type.replace('image/', '') || 'png';
+                    formData.append('file', data.file, 'image.' + type);
+                } else {
+                    formData.append('file', data.file);
+                }
                 return http.UPLOAD({
                     module: 'file',
                     params: { action: 'new', module: 'mail', type: 'image' },

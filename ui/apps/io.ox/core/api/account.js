@@ -274,17 +274,23 @@ define('io.ox/core/api/account', [
             if (!account) return $.Deferred().reject(account);
 
             // use user-setting for primary account and unified folders
-            if (account_id === 0 || api.isUnified(account_id)) {
-                return require(['settings!io.ox/mail']).then(function (settings) {
-                    var defaultSendAddress = $.trim(settings.get('defaultSendAddress', ''));
-                    return [account.personal, defaultSendAddress || account.primary_address];
-                });
+            if (account_id === 0 || !account.transport_url || api.isUnified(account_id)) {
+                return api.getDefaultAddress();
             }
 
             return [account.personal, account.primary_address];
         })
         .then(function (address) {
             return getAddressArray(address[0], address[1]);
+        });
+    };
+
+    api.getDefaultAddress = function () {
+        return require(['settings!io.ox/mail']).then(function (settings) {
+            return api.get(0).then(ensureDisplayName).then(function (account) {
+                var defaultSendAddress = $.trim(settings.get('defaultSendAddress', ''));
+                return [account.personal, defaultSendAddress || account.primary_address];
+            });
         });
     };
 
@@ -401,9 +407,10 @@ define('io.ox/core/api/account', [
 
         return api.all()
         .then(function (list) {
-            // only consider accounts with a transport_url (see bug 48344)
+            // only consider external accounts with a transport_url (see bug 48344)
+            // primary account is assumed to always work even without a transport_url
             return _(list).filter(function (account) {
-                return !!account.transport_url;
+                return account.id === 0 || !!account.transport_url;
             });
         })
         .then(function (list) {
@@ -642,12 +649,9 @@ define('io.ox/core/api/account', [
     api.autoconfig = function (data) {
         return http.POST({
             module: 'autoconfig',
-            params: {
-                action: 'get',
-                email: data.email,
-                password: data.password,
-                force_secure: data.force_secure
-            }
+            params: _.extend({
+                action: 'get'
+            }, data)
         });
     };
 

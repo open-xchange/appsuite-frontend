@@ -14,8 +14,13 @@
 define('io.ox/files/actions/add-storage-account', [
     'io.ox/core/tk/dialogs',
     'io.ox/metrics/main',
-    'gettext!io.ox/files'
-], function (dialogs, metrics, gt) {
+    'io.ox/core/yell',
+    'gettext!io.ox/files',
+    // must be required here or popupblocker blocks the window while we require files
+    'io.ox/oauth/keychain',
+    'io.ox/core/api/filestorage',
+    'io.ox/oauth/backbone'
+], function (dialogs, metrics, yell, gt, oauthAPI, filestorageApi, OAuth) {
 
     'use strict';
 
@@ -38,14 +43,19 @@ define('io.ox/files/actions/add-storage-account', [
         }
     };
 
-    function getAvailableServices() {
-        return require(['io.ox/keychain/api', 'io.ox/core/api/filestorage']).then(function (keychainApi, filestorageApi) {
+    function needsOAuthScope(accounts) {
+        return accounts.reduce(function (acc, account) {
+            return acc || (_(account.availableScopes).contains('drive') && !_(account.enabledScopes).contains('drive'));
+        }, false);
+    }
 
+    function getAvailableServices() {
+        return require(['io.ox/keychain/api']).then(function (keychainApi) {
             var availableFilestorageServices = _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; });
             return _(keychainApi.submodules).filter(function (submodule) {
                 if (!services[submodule.id]) return false;
                 // we need support for both accounts, Oauth accounts and filestorage accounts.
-                return (!submodule.canAdd || submodule.canAdd.apply(this)) && availableFilestorageServices.indexOf(submodule.id) >= 0;
+                return (!_.isFunction(submodule.canAdd) || submodule.canAdd({ scopes: ['drive'] }) || needsOAuthScope(submodule.getAll())) && availableFilestorageServices.indexOf(submodule.id) >= 0;
             });
         });
     }
@@ -54,8 +64,19 @@ define('io.ox/files/actions/add-storage-account', [
         e.preventDefault();
         $(this).tooltip('destroy');
         e.data.dialog.close();
-        var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
-        e.data.service.createInteractively(win);
+        var service = oauthAPI.services.withShortId(e.data.service.id),
+            account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
+                serviceId: service.id,
+                displayName: 'My ' + service.get('displayName') + ' account'
+            });
+
+        account.enableScopes('drive').save().then(function (res) {
+            // add new account after it has been created succesfully
+            oauthAPI.accounts.add(account);
+            return filestorageApi.createAccountFromOauth(res);
+        }).then(function () {
+            yell('success', gt('Account added successfully'));
+        });
     }
 
     function drawLink(service) {

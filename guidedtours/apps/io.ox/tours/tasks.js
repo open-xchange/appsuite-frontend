@@ -99,7 +99,14 @@ define('io.ox/tours/tasks', [
             .title(gt('Editing multiple tasks'))
             .content(gt('To edit multiple tasks at once, enable the checkboxes at the left side of the tasks. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'))
             .spotlight('.vgrid-scrollpane')
-            .hotspot('.classic-toolbar [data-dropdown=view]')
+            .hotspot('.classic-toolbar [data-dropdown="view"] ul a[data-name="checkboxes"]')
+            .waitFor('.classic-toolbar [data-dropdown="view"] ul a[data-name="checkboxes"]')
+            .on('wait', function () {
+                $('.classic-toolbar [data-dropdown="view"] ul').css('display', 'block');
+            })
+            .on('hide', function () {
+                $('.classic-toolbar [data-dropdown="view"] ul').css('display', '');
+            })
             .end()
         .on('stop', function () {
             if (createApp) {

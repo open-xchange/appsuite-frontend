@@ -364,6 +364,12 @@ define('io.ox/contacts/edit/view-form', [
             render: function () {
                 var mod = this.model.toJSON();
                 delete mod.display_name;
+
+                // A11y: Added id as this is referenced via aria-labelledby when this view is used in a modal dialog.
+                // e.g. My contact data
+                // This should be considered for refactoring
+                this.$el.attr('id', 'dialog-title');
+
                 this.$el.text(util.getFullName(mod) || '\u00A0');
                 //fix top margin if picture upload was removed
                 if (isMyContactData && !capabilities.has('gab')) {

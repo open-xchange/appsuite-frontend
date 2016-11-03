@@ -417,7 +417,10 @@ define('io.ox/core/folder/node', [
             }
 
             // Remove useless a11y nodes
-            if (_.isEmpty(this.options.a11yDescription)) this.$.a11y.remove();
+            if (_.isEmpty(this.options.a11yDescription)) {
+                this.$.a11y.remove();
+                this.$el.removeAttr('aria-describedby');
+            }
 
             // sortable
             if (o.sortable) this.$el.attr('data-sortable', true);
@@ -483,6 +486,9 @@ define('io.ox/core/folder/node', [
             //draw even if there is no description or old descriptions cannot be cleared
             if (!_.isEmpty(this.options.a11yDescription)) {
                 this.$.a11y.text(this.options.a11yDescription.join('. '));
+            } else {
+                this.$.a11y.remove();
+                this.$el.removeAttr('aria-describedby');
             }
         },
 

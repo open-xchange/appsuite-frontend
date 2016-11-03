@@ -26,6 +26,9 @@
 // link color on login screen must match background
 @link-color: #79bcfc;
 
+@wallpaper-start-color: #294F83;
+@wallpaper-end-color: #162C4A;
+
 @fa-font-path: '../../../3rd.party/font-awesome/fonts';
 
 @font-face {
@@ -114,7 +117,7 @@ html.baseline {
     bottom: 0;
     left: 0;
     z-index: 65102;
-    background-color: #fff;
+    background-color: @wallpaper-end-color;
     color: #fff;
 
     .no-margin {
@@ -165,8 +168,8 @@ html.baseline {
     left: 0;
     z-index: 0;
     &.wallpaper {
-        #gradient.radial(#294F83, #162C4A);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#294F83', endColorstr='#162C4A', GradientType=0);
+        #gradient.radial(@wallpaper-start-color, @wallpaper-end-color);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@wallpaper-start-color', endColorstr='@wallpaper-end-color', GradientType=0);
     }
 }
 

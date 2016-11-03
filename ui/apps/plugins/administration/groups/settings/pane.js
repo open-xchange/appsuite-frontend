@@ -51,7 +51,8 @@ define('plugins/administration/groups/settings/pane', [
 
         onDoubleClick: function (e) {
             var id = $(e.currentTarget).attr('data-cid');
-            if (id === '0') return;
+            // "All users" and "Guests" cannot be edited
+            if (id === '0' || id === '2147483647') return;
             require(['plugins/administration/groups/settings/edit'], function (edit) {
                 edit.open({ id: id });
             });

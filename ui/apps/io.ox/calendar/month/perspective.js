@@ -485,12 +485,16 @@ define('io.ox/calendar/month/perspective', [
                 var toolbarNode = $('<div>')
                     .addClass('controls-container')
                     .append(
-                        $('<a href="#" role="button">').addClass('control prev').append($('<i class="fa fa-chevron-left" aria-hidden="true">'))
+                        $('<a href="#" role="button" class="control prev">').attr('title', gt('Previous')).append(
+                            $('<i class="fa fa-chevron-left" aria-hidden="true">')
+                        )
                         .on('click', $.proxy(function (e) {
                             e.preventDefault();
                             this.gotoMonth('prev');
                         }, this)),
-                        $('<a href="#" role="button">').addClass('control next').append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
+                        $('<a href="#" role="button" class="control next">').attr('title', gt('Next')).append(
+                            $('<i class="fa fa-chevron-right" aria-hidden="true">')
+                        )
                         .on('click', $.proxy(function (e) {
                             e.preventDefault();
                             this.gotoMonth('next');

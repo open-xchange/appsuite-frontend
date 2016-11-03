@@ -682,9 +682,6 @@ define('io.ox/core/desktop', [
             if (!saveRestoreEnabled()) return $.when([]);
 
             return appCache.get('savepoints').then(function (list) {
-                if (!list || _.isEmpty(list)) {
-                    list = coreConfig.get('savepoints', []);
-                }
                 return _(list || []).filter(function (obj) {
                     var hasPoint = 'point' in obj,
                         sameUA = obj.ua === navigator.userAgent;
@@ -693,24 +690,11 @@ define('io.ox/core/desktop', [
             });
         },
 
-        storeSavePoints: function (list) {
-
-            if (!saveRestoreEnabled()) return;
-
-            function omitMetaData(l) {
-                return JSON.stringify(_.mapObject(l, function (o) { return _.omit(o, ['timestamp', 'version']); }));
-            }
-
-            var previous = omitMetaData(coreConfig.get('savepoints')),
-                current  = omitMetaData(list);
-
-            // Only save via jslob if savepoint has really changed
-            if (current !== previous) coreConfig.set('savepoints', list).save();
-        },
+        // deprecated
+        storeSavePoints: _.noop,
 
         setSavePoints: function (list) {
             list = list || [];
-            this.storeSavePoints(list);
             return appCache.add('savepoints', list);
         },
 
@@ -1570,7 +1554,7 @@ define('io.ox/core/desktop', [
                         // share data
                         _.extend(baton.data, {
                             label: gt('Search'),
-                            id:  win.name + '-search-field',
+                            id:  _.uniqueId(win.name + '-search-field'),
                             guid:  _.uniqueId('form-control-description-')
                         });
                         // search box form

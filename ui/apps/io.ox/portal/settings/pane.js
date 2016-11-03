@@ -114,7 +114,7 @@ define('io.ox/portal/settings/pane', [
                         // add disabld class if requires upsell
                         .addClass(!upsell.has(options.requires) ? 'requires-upsell' : undefined)
                         .append(
-                            $('<a href="#" role="menu-item">').attr('data-type', options.type).text(options.title)
+                            $('<a href="#" role="menuitem">').attr('data-type', options.type).text(options.title)
                         );
                 })
             );

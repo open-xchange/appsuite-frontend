@@ -151,15 +151,16 @@ define('io.ox/editor/main', [
         },
 
         render: function () {
-            var guid = _.uniqueId('form-control-label-');
+            var titleId = _.uniqueId('editor_title-'),
+                bodyId = _.uniqueId('editor_body-');
             this.$el.append(
                 $('<form role="form">').append(
                     $('<div class="row">').append(
                         // title
                         $('<div class="form-group col-xs-12 col-sm-8">').append(
-                            $('<label class="sr-only">').attr('for', guid).text(gt('Enter document title here')),
+                            $('<label class="sr-only">').attr('for', titleId).text(gt('Title')),
                             $('<input type="text" maxlength="350" class="title form-control">').attr({
-                                id: guid,
+                                id: titleId,
                                 placeholder: gt('Enter document title here')
                             })
                         ),
@@ -175,7 +176,8 @@ define('io.ox/editor/main', [
                     $('<div class="body row">').append(
                         $('<div class="col-md-12">').append(
                             // editor
-                            $('<textarea class="content form-control">').val('')
+                            $('<label class="sr-only">').attr('for', bodyId).text(gt('Note')),
+                            $('<textarea class="content form-control">').attr('id', bodyId).val('')
                                 .attr('placeholder', _.device('ios || android') ? '' : gt('You can quick-save your changes via Ctrl+Enter.'))
                         )
                     )
