@@ -85,6 +85,12 @@ define('io.ox/mail/mailfilter/settings/filter/defaults', function () {
                 'comparison': 'ge',
                 'datepart': 'date',
                 'datevalue': []
+            },
+            'address': {
+                'id': 'address',
+                'comparison': 'all',
+                'headers': ['From'],
+                'values': ['']
             }
         },
         actions: {
