@@ -172,6 +172,7 @@ define('io.ox/core/api/attachment', [
          * @return { string} url
          */
         getUrl: function (data, mode, options) {
+            options = options || {};
 
             var url = ox.apiRoot + '/attachment',
                 // scaling options
