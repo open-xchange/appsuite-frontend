@@ -132,12 +132,9 @@ define('io.ox/core/upsell', [
             }
 
             return function () {
-                // example: 'a', 'b || c' -> 'a || b || c'
-                // example: 'a b && c' -> 'a && b && c'
-                // example: 'a,b' -> invalid
+                // you can pass separate arguments as arrays and if two operands are not connected by an operator an && is automatically inserted
                 var condition = _(arguments).flatten().join(' || ').replace(/([^&\|]) ([^&\|])/gi, '$1 && $2');
-                if (ox.debug && /,/.test(condition)) return !!console.error('You can\'t use a comma in a condition use space instead.');
-                condition = condition.replace(/[a-z0-9_:-]+/ig, function (match) {
+                condition = condition.replace(/[a-z_:-]+/ig, function (match) {
                     match = match.toLowerCase();
                     return isEnabled(match);
                 });
