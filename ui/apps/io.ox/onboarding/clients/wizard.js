@@ -364,7 +364,7 @@ define('io.ox/onboarding/clients/wizard', [
                 missing = item.attr('data-missing-capabilities');
             if (!missing) return;
             require(['io.ox/core/upsell'], function (upsell) {
-                if (!upsell.enabled(missing)) return;
+                if (!upsell.enabled(missing.replace(/,/g, ' '))) return;
                 // TODO: without this workaround wizard step would overlay upsell dialog
                 this.wizard.trigger('step:close');
                 upsell.trigger({
