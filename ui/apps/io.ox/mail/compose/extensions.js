@@ -155,10 +155,30 @@ define('io.ox/mail/compose/extensions', [
                         function drawOptions() {
 
                             if (!list.sortedAddresses.length) return;
-                            var options = _(list.sortedAddresses).pluck('option');
 
-                            _(options).each(function (item) {
-                                item = applyDisplayName(item);
+                            var defaultAddress = sender.getDefaultSendAddress();
+
+                            var sortedAddresses = _(list.sortedAddresses)
+                                .chain()
+                                .map(function (address) {
+                                    var array = applyDisplayName(address.option);
+                                    return { key: _(array).compact().join(' ').toLowerCase(), array: array };
+                                })
+                                .sortBy('key')
+                                .pluck('array')
+                                .value();
+
+                            // draw default address first
+                            sortedAddresses = _(sortedAddresses).filter(function (item) {
+                                if (item[1] !== defaultAddress) return true;
+                                dropdown.option('from', [item], function () {
+                                    return renderFrom(item);
+                                });
+                                if (sortedAddresses.length > 1) dropdown.divider();
+                                return false;
+                            });
+
+                            _(sortedAddresses).each(function (item) {
                                 dropdown.option('from', [item], function () {
                                     return renderFrom(item);
                                 });
