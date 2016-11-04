@@ -24,21 +24,33 @@ define('io.ox/mail/write/inline-images',
 
     var api = {
         inlineImage: function (data) {
-            if ('FormData' in window) {
-                var formData = new FormData();
-                formData.append('file', data.file);
-                return http.UPLOAD({
-                    module: 'file',
-                    params: { action: 'new', module: 'mail', type: 'image' },
-                    data: formData,
-                    fixPost: true
-                });
-            } else {
+            try {
+                if ('FormData' in window) {
+                    var formData = new FormData();
+                    // avoid the generic blob filename
+                    if (!data.file.name) {
+                        var type = data.file.type.replace('image/', '') || 'png';
+                        formData.append('file', data.file, 'image.' + type);
+                    } else {
+                        formData.append('file', data.file);
+                    }
+                    return http.UPLOAD({
+                        module: 'file',
+                        params: { action: 'new', module: 'mail', type: 'image' },
+                        data: formData,
+                        fixPost: true
+                    });
+                }
                 return http.FORM({
                     module: 'file',
                     form: data.form,
                     params: { module: 'mail', type: 'image' }
                 });
+            } catch (e) {
+                // print error to console for debugging
+                console.debug(e);
+                //#. generic erromessage if inserting an image into a mail failed.
+                return $.Deferred().reject({ error: e, message: gt('Error while uploading your image') });
             }
         },
         getInsertedImageUrl: function (data) {
