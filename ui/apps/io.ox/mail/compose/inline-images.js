@@ -24,21 +24,28 @@ define('io.ox/mail/compose/inline-images', [
 
     var api = {
         inlineImage: function (data) {
-            if ('FormData' in window) {
-                var formData = new FormData();
-                formData.append('file', data.file);
-                return http.UPLOAD({
+            try {
+                if ('FormData' in window) {
+                    var formData = new FormData();
+                    formData.append('file', data.file);
+                    return http.UPLOAD({
+                        module: 'file',
+                        params: { action: 'new', module: 'mail', type: 'image' },
+                        data: formData,
+                        fixPost: true
+                    });
+                }
+                return http.FORM({
                     module: 'file',
-                    params: { action: 'new', module: 'mail', type: 'image' },
-                    data: formData,
-                    fixPost: true
+                    form: data.form,
+                    params: { module: 'mail', type: 'image' }
                 });
+            } catch (e) {
+                // print error to console for debugging
+                console.debug(e);
+                //#. generic erromessage if inserting an image into a mail failed.
+                return $.Deferred().reject({ error: e, message: gt('Error while uploading your image') });
             }
-            return http.FORM({
-                module: 'file',
-                form: data.form,
-                params: { module: 'mail', type: 'image' }
-            });
         },
         getInsertedImageUrl: function (data) {
             var url = ox.apiRoot + '/file',
