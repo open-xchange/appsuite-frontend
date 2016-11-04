@@ -635,7 +635,7 @@ define('io.ox/calendar/util', [
         getConfirmationStatus: function (obj, id) {
             var hash = this.getConfirmations(obj),
                 user = id || ox.user_id;
-            return hash[user] ? hash[user].status : 1;
+            return hash[user] ? hash[user].status : 0;
         },
 
         getConfirmationMessage: function (obj, id) {
