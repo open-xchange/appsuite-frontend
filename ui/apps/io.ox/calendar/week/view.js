@@ -674,16 +674,14 @@ define('io.ox/calendar/week/view', [
          * cleanUp all lasso data
          */
         cleanUpLasso: function () {
-            if (_.isObject(this.lasso)) {
-                var l = this.lasso.data();
-                // delete div and reset object
-                $.each(l.helper, function (i, el) {
-                    el.remove();
-                });
-                l = null;
-                this.lasso.remove();
-                this.lasso = false;
-            }
+            // more robost variant (see bug 47277)
+            var lasso = this.lasso instanceof $ ? this.lasso : $(),
+                data = lasso.data();
+            $.each(data.helper || [], function (i, el) {
+                el.remove();
+            });
+            lasso.remove();
+            this.lasso = false;
         },
 
         renderTimeLabel: function (timezone, className) {
