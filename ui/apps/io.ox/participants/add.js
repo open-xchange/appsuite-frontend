@@ -140,7 +140,7 @@ define('io.ox/participants/add', [
         keyDown: function (e) {
             if (e.which !== 13) return;
             var val = this.typeahead.$el.typeahead('val'),
-                list = val.match(/('[^']*'|"[^"]*"|[^"',;]+)+/g),
+                list = coreUtil.getAddresses(val),
                 participants = [];
             // split based on comma or semi-colon as delimiter
             _.each(list, function (value) {
