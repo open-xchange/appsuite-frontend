@@ -1173,11 +1173,18 @@ define('io.ox/mail/main', [
             }
 
             api.on('beforedelete', function (e, ids) {
-                var selection = app.listView.selection.get();
+                var selection = app.listView.selection.get(), cids;
                 if (isSingleThreadMessage(ids, selection)) return;
-                // looks for intersection
-                ids = _(ids).map(_.cid);
-                if (_.intersection(ids, selection).length) app.listView.selection.dodge();
+                // intersection check for Bug 49086, 41861
+                cids = _(ids).map(_.cid);
+                if (_.intersection(cids, selection).length) {
+                    // change selection
+                    app.listView.selection.dodge();
+                    // optimization for many items
+                    if (ids.length === 1) return;
+                    // remove all DOM elements of current collection; keep the first item
+                    app.listView.onBatchRemove(ids.slice(1));
+                }
             });
         },
 
