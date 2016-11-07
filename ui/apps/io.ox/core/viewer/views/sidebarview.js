@@ -14,6 +14,7 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/backbone/disposable',
     'io.ox/core/viewer/util',
     'io.ox/files/api',
+    'io.ox/core/folder/api',
     'io.ox/core/dropzone',
     'io.ox/core/capabilities',
     'io.ox/core/viewer/settings',
@@ -27,7 +28,7 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/extPatterns/links',
     // prefetch cause all views need the base view
     'io.ox/core/viewer/views/sidebar/panelbaseview'
-], function (DisposableView, Util, FilesAPI, Dropzone, Capabilities, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt, links) {
+], function (DisposableView, Util, FilesAPI, folderApi, Dropzone, Capabilities, ViewerSettings, ThumbnailView, FileInfoView, FileDescriptionView, FileVersionsView, UploadNewVersionView, ext, gt, links) {
 
     'use strict';
 
@@ -243,7 +244,8 @@ define('io.ox/core/viewer/views/sidebarview', [
          * and version history.
          */
         renderSections: function () {
-            var detailPane = this.$('.detail-pane');
+
+            var detailPane = this.$('.detail-pane'), folder = folderApi.pool.models[this.model.get('folder_id')];
             // remove previous sections
             detailPane.empty();
             // remove dropzone handler
@@ -257,8 +259,8 @@ define('io.ox/core/viewer/views/sidebarview', [
 
             // load file details
             this.loadFileDetails();
-            // add dropzone for drive files
-            if (this.model.isFile()) {
+            // add dropzone for drive files if the folder supports new versions
+            if (this.model.isFile() && folder && folder.can('add:version')) {
                 this.zone = new Dropzone.Inplace({
                     //#. %1$s is the filename of the current file
                     caption: gt('Drop new version of "%1$s" here', this.model.get('filename'))
