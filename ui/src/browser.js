@@ -266,8 +266,8 @@
             misc.touch = detectTouch();
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();
-            // no arguments?s
-            if (arguments.length === 0) {
+            // debug
+            if (condition === 'debug' || condition === 1337) {
                 return _.extend({}, browserLC, display, misc);
             }
             // true for undefined, null, empty string
@@ -289,6 +289,7 @@
             }
         })
     };
+
     underscoreExtends.device.loadUA = function (nav) {
         detectBrowser(nav);
         underscoreExtends.recheckDevice();
