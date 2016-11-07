@@ -580,6 +580,65 @@ define('io.ox/mail/detail/content', [
             }
 
             return { content: content, isLarge: baton.isLarge, type: baton.type, processedEmoji: baton.processedEmoji };
-        }
+        },
+
+        text2html: (function () {
+
+            var regBlockquote = /^(> )+[^\n]*(\n> [^\n]*)*\n?/,
+                regIsUnordered = /^\* [^\n]*(\n\* [^\n]*)*\n?/,
+                regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*)*\n?/,
+                regText = /^[^\n]+\n?/;
+
+            function exec(regex, str) {
+                var match = regex.exec(str);
+                return match && match[0];
+            }
+
+            function parse(str) {
+
+                var out = '', match, start;
+
+                while (str) {
+
+                    if (match = exec(regBlockquote, str)) {
+                        str = str.substr(match.length);
+                        match = match.replace(/^> /gm, '');
+                        out += '<blockquote type="cite">\n' + parse(match) + '</blockquote>\n';
+                        continue;
+                    }
+
+                    if (match = exec(regIsUnordered, str)) {
+                        str = str.substr(match.length);
+                        match = _.escape(match).replace(/^\* (.+)$/gm, '<li>$1</li>');
+                        out += '<ul>\n' + match + '</ul>\n';
+                        continue;
+                    }
+
+                    if (match = exec(regIsOrdered, str)) {
+                        str = str.substr(match.length);
+                        start = parseInt(match, 10);
+                        match = _.escape(match).replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+                        out += '<ol start="' + start + '">\n' + match + '\n</ol>\n';
+                        continue;
+                    }
+
+                    if (match = exec(regText, str)) {
+                        str = str.substr(match.length);
+                        out += _.escape(match).replace(/\n$/, '<br>\n');
+                        continue;
+                    }
+
+                    if (str) {
+                        if (ox.debug) console.error('Ooops', out + '\n\n' + str);
+                        break;
+                    }
+                }
+
+                return out;
+            }
+
+            return parse;
+
+        }())
     };
 });
