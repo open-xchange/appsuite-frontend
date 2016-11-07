@@ -533,7 +533,8 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/upload-new-version', {
         requires: function (e) {
             // hide in mail compose preview and only when file backend supports version comments
-            return e.collection.has('one', 'modify', 'items') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose') && COMMENTS;
+            return e.collection.has('one', 'modify', 'items') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose') && COMMENTS &&
+                   folderAPI.pool.getModel(e.baton.data.folder_id || e.baton.data[0].folder_id) && folderAPI.pool.getModel(e.baton.data.folder_id || e.baton.data[0].folder_id).can('add:version');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/upload-new-version']).done(function (action) {
