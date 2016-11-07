@@ -1183,7 +1183,11 @@ define('io.ox/mail/main', [
                 if (isSingleThreadMessage(ids, selection)) return;
                 // looks for intersection
                 ids = _(ids).map(_.cid);
-                if (_.intersection(ids, selection).length) app.listView.selection.dodge();
+                if (_.intersection(ids, selection).length) {
+                    app.listView.selection.dodge();
+                    if (ids.length === 1) return;
+                    app.listView.onBatchRemove(ids.slice(1));
+                }
             });
         },
 

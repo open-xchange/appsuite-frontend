@@ -241,8 +241,11 @@ define('io.ox/core/tk/list', [
             // build hash of all composite keys
             var hash = {};
             _(list).each(function (obj) {
-                var cid = obj.cid || _.cid(obj);
-                hash[cid] = true;
+                if (_.isObject(obj)) {
+                    var cid = obj.cid || _.cid(obj);
+                    hash[cid] = true;
+                } else hash[obj] = true;
+
             });
 
             // get all DOM nodes
