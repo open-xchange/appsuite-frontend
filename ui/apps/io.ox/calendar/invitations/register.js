@@ -362,7 +362,7 @@ define('io.ox/calendar/invitations/register', [
                         notifications.yell('success', success[action]);
                         // if the delete action was succesfull we don't need the button anymore, see Bug 40852
                         if (action === 'delete') {
-                            self.model.set('actions', _(self.model.attributes.actions).without('delete'));
+                            self.model.set('actions', _(self.model.get('actions')).without('delete'));
                         }
                         self.repaint();
                     });
@@ -453,7 +453,13 @@ define('io.ox/calendar/invitations/register', [
         },
 
         repaint: function () {
-            analyzeIMIPAttachment(this.imip).done(this.render.bind(this));
+            var self = this;
+            analyzeIMIPAttachment(this.imip)
+                .done(function (analyses) {
+                    var data = _(analyses).findWhere({ uid: self.model.get('uid') });
+                    this.model.set(data);
+                    this.render();
+                }.bind(this));
         }
     });
 
