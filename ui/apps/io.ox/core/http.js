@@ -342,7 +342,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '1042': 'archive_fullname',
                 '1043': 'transport_auth',
                 '1044': 'mail_starttls',
-                '1045': 'transport_starttls'
+                '1045': 'transport_starttls',
+                '1046': 'data_id',
+                '1047': 'auth_oauth'
             },
             'attachment': {
                 '1': 'id',

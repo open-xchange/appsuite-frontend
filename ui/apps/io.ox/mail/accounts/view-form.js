@@ -223,6 +223,8 @@ define.async('io.ox/mail/accounts/view-form', [
                     self.$el.find('input, select').not('#personal, [name="unified_inbox_enabled"]').prop('disabled', true);
                 }
 
+                if (model.get('auth_oauth') !== -1) self.$el.find('input, select').not('#personal, #name, [name="unified_inbox_enabled"]').prop('disabled', true);
+
                 return self;
             },
 
