@@ -89,7 +89,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
 
         onKeydown: function (e) {
             // if not space, cursor or modifier key pressed: Do not process
-            if (!/(32|37|38|39|40)/.test(e.which) || e.altKey || e.ctrlKey || e.shiftKey) {
+            if (!/(37|38|39|40)/.test(e.which) || e.altKey || e.ctrlKey || e.shiftKey) {
                 return;
             }
 
@@ -98,12 +98,6 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
             if (index < 0) return;
 
             switch (e.which) {
-
-                // SPACE
-                case 32:
-                    e.preventDefault();
-                    $(e.currentTarget).click();
-                    break;
 
                 // LEFT and UP
                 case 37:
