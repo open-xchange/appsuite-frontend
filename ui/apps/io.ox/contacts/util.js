@@ -174,15 +174,19 @@ define('io.ox/contacts/util', [
          * parameters to gettext.format to obtain the full name.
          */
         getMailFullNameFormat: function (obj) {
+            var first_name = $.trim(obj.first_name),
+                last_name = $.trim(obj.last_name),
+                display_name = $.trim(obj.display_name);
+
             // combine first name and last name
-            if (obj.last_name && obj.first_name) {
+            if (last_name && first_name) {
                 return {
                     format:
                         //#. Name in mail addresses
                         //#. %1$s is the first name
                         //#. %2$s is the last name
                         gt.pgettext('mail address', '%1$s %2$s'),
-                    params: [_.noI18n(obj.first_name), _.noI18n(obj.last_name)]
+                    params: [_.noI18n(first_name), _.noI18n(last_name)]
                 };
             }
 
@@ -191,14 +195,14 @@ define('io.ox/contacts/util', [
             // and this should be same order as getFullNameFormat()
 
             // fallback #1: just last_name
-            if (obj.last_name) return single(2, obj.last_name);
+            if (last_name) return single(2, last_name);
 
             // fallback #2: just first_name
-            if (obj.first_name) return single(1, obj.first_name);
+            if (first_name) return single(1, first_name);
 
             // fallback #3: use existing display name?
-            if (obj.display_name) {
-                return single(4, util.unescapeDisplayName(obj.display_name));
+            if (display_name) {
+                return single(4, util.unescapeDisplayName(display_name));
             }
 
             return { format: _.noI18n(''), params: [] };
