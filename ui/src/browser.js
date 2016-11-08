@@ -37,12 +37,12 @@
 
     // supported browsers
     us.browserSupport = {
-        'Chrome':    39,
-        'Safari':     7,
-        'Firefox':   33,
-        'IE':        10,
+        'Chrome':    50,
+        'Safari':     8,
+        'Firefox':   40,
+        'IE':        11,
         'Android':  4.2,
-        'iOS':      6.0
+        'iOS':      8.0
     };
 
     // helpers
