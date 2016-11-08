@@ -167,6 +167,8 @@ define('io.ox/participants/model', [
         getDisplayName: function (options) {
             options = options || {};
             var dn = options.isMail ? util.getMailFullName(this.toJSON(), options.asHtml) : util.getFullName(this.toJSON(), options.asHtml);
+            // see Bug 49903
+            if (dn) dn = dn.trim();
             // 'email only' participant
             return dn || (this.getEmail() !== '' ? this.getEmail() : '');
         },
