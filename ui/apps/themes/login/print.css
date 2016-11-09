@@ -109,10 +109,21 @@ pre.content {
     font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
     white-space: pre-line;
 }
+
+pre.content a {
+    word-break: break-word;
+}
+
 /* only apply for html-mail content*/
-section.mail pre.content {
+section.html pre.content {
     line-height: normal;
     white-space: normal;
+}
+
+section.text.fixed-width-font pre.content {
+    font-family: monospace;
+    -webkit-font-feature-settings: normal;
+    font-feature-settings: normal;
 }
 
 table {
