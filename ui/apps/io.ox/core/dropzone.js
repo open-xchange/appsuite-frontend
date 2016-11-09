@@ -213,6 +213,9 @@ define('io.ox/core/dropzone', [], function () {
         }
     });
 
+    // avoid any native drop
+    $(document).on('dragover drop', false);
+
     return {
         Inplace: InplaceDropzone
     };
