@@ -397,6 +397,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         initialize: function (options) {
+            this.options = _.extend({}, options);
             this.type = 'appointment';
             this.imip = options.imip;
             this.$el.hide();
@@ -484,6 +485,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         initialize: function (options) {
+            this.options = _.extend({}, options);
             this.listenTo(this.model, 'change:headers', this.render);
             this.$el.on('dispose', this.dispose.bind(this));
             this.cid = options.cid;
@@ -651,7 +653,8 @@ define('io.ox/calendar/invitations/register', [
 
         className: 'itip',
 
-        initialize: function () {
+        initialize: function (options) {
+            this.options = _.extend({}, options);
             // if headers are already available, call update()
             // otherwise wait for model change
             if (this.model.has('headers')) {
