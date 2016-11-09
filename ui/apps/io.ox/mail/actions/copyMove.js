@@ -55,7 +55,11 @@ define('io.ox/mail/actions/copyMove', [
                 }
 
                 var senderList = _.chain(folderAPI.ignoreSentItems(o.list))
-                .map(function (obj) { return obj.from[0][1]; })
+                .map(function (obj) {
+                    var sender = gt('unknown sender');
+                    if (_.isArray(obj.from) && obj.from[0][1]) sender = obj.from[0][1];
+                    return sender;
+                })
                 .uniq()
                 .value();
 

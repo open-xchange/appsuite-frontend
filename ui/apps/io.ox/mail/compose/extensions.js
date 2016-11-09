@@ -27,8 +27,9 @@ define('io.ox/mail/compose/extensions', [
     'gettext!io.ox/mail',
     'io.ox/core/extPatterns/links',
     'settings!io.ox/core',
+    'settings!io.ox/contacts',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt, links, settingsCore) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt, links, settingsCore, settingsContacts) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -289,11 +290,15 @@ define('io.ox/mail/compose/extensions', [
                 }
 
                 var title = gt('Click to select contacts');
+                var usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true);
 
                 this.append(
-                    extNode = $('<div data-extension-id="' + attr + '">').addClass(cls).append(
+                    extNode = $('<div data-extension-id="' + attr + '">').addClass(cls)
+                    .append(
+                        usePicker ?
+                        // with picker
                         $('<div class="maillabel col-xs-1">').append(
-                            $('<a href="#" role="button" tabindex="1">')
+                            $('<a href="#" role="button">')
                             .text(tokenfieldTranslations[attr])
                             .attr({
                                 // add aria label since tooltip takes away the title attribute
@@ -302,9 +307,11 @@ define('io.ox/mail/compose/extensions', [
                             })
                             .on('click', { attr: attr, model: baton.model }, onClickLabel)
                             .tooltip({ animation: false, delay: 0, placement: 'bottom', trigger: 'hover' })
-                        ),
-                        node
+                        ) :
+                        // without picker
+                        $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
                     )
+                    .append(node)
                 );
 
                 tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
@@ -424,6 +431,44 @@ define('io.ox/mail/compose/extensions', [
                 });
 
                 if (settings.get('compose/shareAttachments/enabled', false)) {
+
+                    new links.Action('io.ox/mail/compose/attachment/shareAttachmentsEnable', {
+                        capabilities: 'infostore',
+                        requires: function (options) {
+                            return !options.baton.view.shareAttachmentsIsActive();
+                        },
+                        multiple: function (list, baton) {
+                            baton.model.set('enable', true);
+                        }
+                    });
+
+                    new links.Action('io.ox/mail/compose/attachment/shareAttachmentsDisable', {
+                        capabilities: 'infostore',
+                        requires: function (options) {
+                            return options.baton.view.shareAttachmentsIsActive();
+                        },
+                        multiple: function (list, baton) {
+                            baton.model.set('enable', false);
+                        }
+                    });
+
+                    ext.point('io.ox/mail/attachment/shareAttachments').extend(
+                        new links.Link({
+                            id: 'shareAttachmentsEnable',
+                            index: 100,
+                            //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                            label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
+                            ref: 'io.ox/mail/compose/attachment/shareAttachmentsEnable'
+                        }),
+                        new links.Link({
+                            id: 'shareAttachmentseDisable',
+                            index: 110,
+                            //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                            label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
+                            ref: 'io.ox/mail/compose/attachment/shareAttachmentsDisable'
+                        })
+                    );
+
                     var ShareModel = Backbone.Model.extend({}),
                         requiredExpiration = settings.get('compose/shareAttachments/requiredExpiration', false);
 

@@ -249,7 +249,25 @@ define('io.ox/files/share/permissions', [
             },
 
             initialize: function (options) {
+                if (this.model.get('type') === 'anonymous') {
+                    var self = this,
+                        key,
+                        remove = function () {
+                            self.model.collection.remove(self.model);
+                            self.remove();
+                        };
 
+                    if (options.parentModel.isFile()) {
+                        key = 'remove:link:infostore:' + options.parentModel.get('folder_id') + ':' + options.parentModel.get('id');
+                    } else {
+                        key = 'remove:link:' + options.parentModel.get('module') + ':' + options.parentModel.get('id');
+                    }
+
+                    api.on(key, remove);
+                    this.on('dispose', function () {
+                        api.off(key, remove);
+                    });
+                }
                 this.parentModel = options.parentModel;
                 this.user = null;
                 this.display_name = '';

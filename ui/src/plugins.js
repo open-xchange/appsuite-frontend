@@ -465,6 +465,21 @@
                                 }
                             })();
                         });
+                    }).fail(function loadingFailed() {
+                        var modules = module.split(',');
+                        if (modules.length > 1) {
+                            console.warn('Problem loading concatenated modules, falling back to separate file loading');
+                            modules.forEach(function (m) {
+                                var name = m.replace(/\.js$/, '');
+                                load(m, name);
+                            });
+                        } else {
+                            runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''),
+                                'define("' + modulename + '", function () { console.error("Could not load module ' +
+                                    modulename + '. Defining dummy module.");})'
+                            );
+                            context.completeLoad(modulename);
+                        }
                     });
             }
         };

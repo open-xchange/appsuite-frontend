@@ -28,6 +28,10 @@ define('io.ox/files/settings/pane', [
     var model = settings.createModel(filesSettingsModel),
         POINT = 'io.ox/files/settings/detail';
 
+    function isConfigurable(id) {
+        return settings.isConfigurable(id);
+    }
+
     model.on('change', function (model) {
         model.saveAndYell();
     });
@@ -62,12 +66,15 @@ define('io.ox/files/settings/pane', [
         index: 200,
         id: 'common',
         draw: function () {
+
+            if (!isConfigurable('showHidden')) return;
+
             this.append(
-                $('<div>').addClass('form-group').append(
-                    $('<div>').addClass('row').append(
-                        $('<div>').addClass('col-sm-8').append(
-                            $('<div>').addClass('checkbox').append(
-                                $('<label>').addClass('control-label').text(gt('Show hidden files and folders')).prepend(
+                $('<div class="form-group">').append(
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-8">').append(
+                            $('<div class="checkbox">').append(
+                                $('<label class="control-label">').text(gt('Show hidden files and folders')).prepend(
                                     new mini.CheckboxView({ name: 'showHidden', model: model }).render().$el
                                 )
                             )
