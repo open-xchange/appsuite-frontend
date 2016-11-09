@@ -447,6 +447,22 @@ define('io.ox/core/tk/tokenfield', [
                 };
             }
 
+            // custom callback function
+            this.hiddenapi.input._callbacks.enterKeyed.sync[0] = function onEnterKeyed(type, $e) {
+                var cursorDatum = this.dropdown.getDatumForCursor(),
+                    topSuggestionDatum = this.dropdown.getDatumForTopSuggestion(),
+                    hint = this.input.getHint();
+
+                // if the hint is not empty the user is just hovering over the cursorDatum and has not really selected it. Use topSuggestion (the hint value) instead.See Bug 48542
+                if (cursorDatum && _.isEmpty(hint)) {
+                    this._select(cursorDatum);
+                    $e.preventDefault();
+                } else if (this.autoselect && topSuggestionDatum) {
+                    this._select(topSuggestionDatum);
+                    $e.preventDefault();
+                }
+            }.bind(this.hiddenapi);
+
             // workaround: register handler for delayed autoselect
             if (this.options.delayedautoselect) {
                 this.input.on('keydown', function (e) {
