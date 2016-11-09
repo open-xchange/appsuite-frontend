@@ -343,7 +343,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '1043': 'transport_auth',
                 '1044': 'mail_starttls',
                 '1045': 'transport_starttls',
-                '1046': 'data_id',
+                '1046': 'root_folder',
                 '1047': 'mail_oauth',
                 '1048': 'transport_oauth'
             },
