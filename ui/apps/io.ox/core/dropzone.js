@@ -40,7 +40,9 @@ define('io.ox/core/dropzone', [], function () {
                 case 'dragover':
                     this.stop(e);
                     this.leaving = false;
-                    if (!this.visible) this.show(e);
+                    if (!this.checked) this.checked = true; else return;
+                    if (!this.isValid(e)) return;
+                    if (!this.visible) this.show();
                     return false;
                 case 'dragleave':
                     this.leaving = true;
@@ -60,9 +62,8 @@ define('io.ox/core/dropzone', [], function () {
             e.stopPropagation();
         },
 
-        show: function (e) {
+        show: function () {
             // show dropzone
-            if (!this.isFile(e)) return;
             this.visible = true;
             this.$el.show();
             this.trigger('show');
@@ -70,18 +71,28 @@ define('io.ox/core/dropzone', [], function () {
 
         hide: function () {
             // hide dropzone
-            this.visible = false;
+            this.visible = this.checked = false;
             this.$el.hide().removeClass('dragover');
             this.trigger('hide');
         },
 
         initialize: function (options) {
             this.options = options;
+            this.checked = false;
             this.visible = false;
             this.leaving = false;
             this.timeout = -1;
             $(document).on(EVENTS, this.onDrag.bind(this));
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
+        },
+
+        isValid: function (e) {
+            return this.isEnabled(e) && this.isFile(e);
+        },
+
+        // overwrite for custom checks
+        isEnabled: function (e) {
+            return !!e;
         },
 
         isFile: function (e) {
