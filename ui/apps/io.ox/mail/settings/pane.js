@@ -339,6 +339,7 @@ define('io.ox/mail/settings/pane', [
                     // enable
                     $('<div class="help-block">').text('Please note that conversations are not available when tabbed inbox is activated.'),
                     settings.get('categories/forced') ? $() : checkbox(
+                        'categories/enabled',
                         gt('Show Tabs for inbox'),
                         new mini.CheckboxView({ name: 'categories/enabled', model: settings }).render().$el
                     ),
