@@ -1,3 +1,9 @@
+open-xchange-appsuite-saml (7.6.3-19) stable; urgency=medium
+
+  * Build for patch 2016-11-10 (3712)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 04 Nov 2016 14:17:08 +0000
+
 open-xchange-appsuite-saml (7.6.3-18) stable; urgency=medium
 
   * Build for patch 2016-09-26 (3569)
