@@ -13,8 +13,9 @@
 
 define('io.ox/find/extensions-api', [
     'io.ox/core/folder/util',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (folderUtil, gt) {
+], function (folderUtil, settings, gt) {
 
     'use strict';
 
@@ -252,7 +253,7 @@ define('io.ox/find/extensions-api', [
                 function preselect() {
                     //preselect
                     var options = folder.values[0].options,
-                        preselect, isMandatory, isDefault, isVirtual,
+                        preselect, isMandatory, isDefault, isVirtual, forceAllFolders,
                         // possible preselected options
                         all = _.findWhere(options, { id: 'disabled' }),
                         selected = _.findWhere(options, { value: current }),
@@ -278,10 +279,11 @@ define('io.ox/find/extensions-api', [
                     isMandatory = baton.app.isMandatory('folder');
                     isDefault = preselect.type === 'default';
                     isVirtual = module === 'mail' ? !folderAPI.can('read', preselect.data) : isVirtualFolder(preselect.data);
+                    forceAllFolders = isDefault && settings.get('search/allFoldersAsDefault', false);
 
                     // conditions mapping
-                    if (!isMandatory && (isDefault || isVirtual)) {
-                        // convenience function respectively fallback when virtual all not exists
+                    if (!isMandatory && (forceAllFolders || isVirtual)) {
+                        // convenience function respectively fallback when virtual 'all' not exists
                         preselect = all || standard;
                     } else if (isMandatory && isVirtual) {
                         // fallback when folder is mandatory
