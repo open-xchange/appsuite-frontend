@@ -240,7 +240,7 @@ define('io.ox/core/folder/tree', [
             // if (!dropdown.hasClass('open')) return;
             // shift-tab
             // if (e.shiftKey && e.which === 9) return;
-            if (e.which === 32) {
+            if (e.which === 40) {
                 // cursor down
                 e.preventDefault();
                 $(e.currentTarget).click();

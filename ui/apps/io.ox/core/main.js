@@ -51,18 +51,6 @@ define('io.ox/core/main', [
         };
     }
 
-    // a11y: fix for role="button"
-    $(document).on('keydown', 'a[role="button"]', function (e) {
-        if (e.which !== 32 || e.isDefaultPrevented()) return;
-        e.preventDefault();
-        $(e.currentTarget).click();
-    });
-
-    // a11y: focus folder tree from top-bar on <enter>
-    $(document).on('keydown', '#io-ox-topbar .active-app a', function (e) {
-        if (e.which === 13) $('.folder-tree:visible .folder.selected').focus();
-    });
-
     debug('core: Loaded');
     ox.trigger('core:load');
 
@@ -646,7 +634,9 @@ define('io.ox/core/main', [
                         node.find('.apptitle').append(placeholder.find('.topbar-launcherbadge')[0]);
                     }
                 }
+                var restoreFocus = placeholder.children('a')[0] === document.activeElement;
                 placeholder.remove();
+                if (restoreFocus) node.children('a').focus();
             }
         }
 
@@ -897,7 +887,7 @@ define('io.ox/core/main', [
                 if (view.visible) {
                     this.append(
                         view.render().$el,
-                        $('<li class="divider" aria-hidden="true" role="separator">')
+                        $('<li class="divider" role="separator">')
                     );
                 }
             }
@@ -996,13 +986,15 @@ define('io.ox/core/main', [
                 //replaced by module
                 var node = this;
                 node.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                    $('<li role="presentation">', { 'class': 'io-ox-specificHelp' }).append(
+                    $('<li class="divider" role="separator">'),
+                    $('<li role="presentation" class="io-ox-specificHelp">').append(
                         new HelpView({
-                            tabindex: '-1',
                             content: gt('Help'),
                             href: getHelp
-                        }).render().$el
+                        }).render().$el.attr({
+                            'role': 'menuitem',
+                            'tabindex': -1
+                        })
                     )
                 );
             }
@@ -1013,7 +1005,7 @@ define('io.ox/core/main', [
             index: 290,
             draw: function () {
                 this.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation">')
+                    $('<li class="divider" role="separator">')
                 );
             }
         });
@@ -1041,7 +1033,7 @@ define('io.ox/core/main', [
             index: 1000,
             draw: function () {
                 this.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
+                    $('<li class="divider" role="separator">'),
                     $('<li role="presentation">').append(
                         $('<a href="#" data-action="logout" role="menuitem" tabindex="-1">').text(gt('Sign out'))
                     )
@@ -1194,7 +1186,6 @@ define('io.ox/core/main', [
 
                 ext.point('io.ox/core/topbar/launchpad').invoke('draw');
                 ext.point('io.ox/core/topbar/favorites').invoke('draw');
-
                 $(window).resize(tabManager);
                 ox.on('recalculate-topbarsize', tabManager);
             }

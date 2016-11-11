@@ -204,9 +204,9 @@ define('io.ox/core/tk/dropdown-options', [
             });
             //close action
             if (opt.addclose) {
-                $menu.append('<li class="divider"></li>');
-                $menu.append($('<li style="text-align: center">').append(
-                        $('<a href="#">')
+                $menu.append('<li class="divider" role="separator">');
+                $menu.append($('<li style="text-align: center" role="presentation">').append(
+                        $('<a href="#" tabindex="-1">')
                         .text(gt('close'))
                         .on('click', function (e) {
                             e.preventDefault();

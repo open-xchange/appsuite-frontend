@@ -236,10 +236,10 @@ define('io.ox/core/folder/node', [
 
         // respond to cursor left/right
         onKeydown: function (e) {
+            if (e.which !== 37 && e.which !== 39) return;
             // already processed?
             if (e.isDefaultPrevented()) return;
             // not cursor right/left?
-            if (e.which !== 37 && e.which !== 39) return;
             // avoid further processing
             e.preventDefault();
             // skip unless folder has subfolders

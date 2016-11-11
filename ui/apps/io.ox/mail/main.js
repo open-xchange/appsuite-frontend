@@ -715,7 +715,7 @@ define('io.ox/mail/main', [
                     // set focus
                     var items = app.threadView.$('.list-item'),
                         index = items.index(items.filter('.expanded'));
-                    items.filter('.expanded:first').find('.body').focus();
+                    items.filter('.expanded:first').find('.body').visibleFocus();
                     // fix scroll position (focus might scroll down)
                     if (index === 0) app.threadView.$('.scrollable').scrollTop(0);
                 }
@@ -1054,9 +1054,9 @@ define('io.ox/mail/main', [
             app.listView.on('first-reset', function () {
                 // defer to have a visible window
                 _.defer(function () {
-                    app.listView.collection.find(function (model, index) {
+                    app.listView.collection.find(function (model) {
                         if (!util.isUnseen(model.get('flags'))) {
-                            app.listView.selection.select(index);
+                            app.listView.selection.set([model.cid]);
                             return true;
                         }
                     });
