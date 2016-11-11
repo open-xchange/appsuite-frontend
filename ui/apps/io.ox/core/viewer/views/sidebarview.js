@@ -245,6 +245,9 @@ define('io.ox/core/viewer/views/sidebarview', [
          */
         renderSections: function () {
 
+            // render sections only if side bar is open
+            if (!this.model || !this.open) return;
+
             var detailPane = this.$('.detail-pane'), folder = folderApi.pool.models[this.model.get('folder_id')];
             // remove previous sections
             detailPane.empty();
@@ -254,8 +257,6 @@ define('io.ox/core/viewer/views/sidebarview', [
                 this.zone.remove();
                 this.zone = null;
             }
-            // render sections only if side bar is open
-            if (!this.model || !this.open) return;
 
             // load file details
             this.loadFileDetails();
