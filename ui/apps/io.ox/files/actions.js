@@ -545,6 +545,8 @@ define('io.ox/files/actions', [
                 if (!e.collection.has('some')) return false;
                 if (e.baton.openedBy === 'io.ox/mail/compose') return false;
                 if (util.hasStatus('lockedByOthers', e)) return false;
+                // anonymous guests just have one folder so no valid target folder (see bug 42621)
+                if (capabilities.has('guest && anonymous')) return false;
                 // copy
                 if (type === 'copy') return e.collection.has('some', 'items', 'read');
                 // move
