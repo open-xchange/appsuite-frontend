@@ -1308,6 +1308,26 @@ define('io.ox/files/main', [
                     app.folder.set(obj.folder_id);
                 }
             };
+        },
+
+        'a11y': function (app) {
+            // mail list: focus mail detail view on <enter>
+            // mail list: focus folder on <escape>
+            app.listView.$el.on('keydown', '.list-item', function (e) {
+                // if a message is selected (mouse or keyboard) the focus is set on body
+                if (e.which === 27) {
+                    app.folderView.tree.$('.folder.selected').focus();
+                    return false;
+                }
+            });
+            // folder tree: focus list view on <enter>
+            // folder tree: focus top-bar on <escape>
+            app.folderView.tree.$el.on('keydown', '.folder', function (e) {
+                // check if it's really the folder - not the contextmenu toggle
+                if (!$(e.target).hasClass('folder')) return;
+                if (e.which === 13) app.listView.restoreFocus(true);
+                if (e.which === 27) $('#io-ox-topbar .active-app > a').focus();
+            });
         }
     });
 

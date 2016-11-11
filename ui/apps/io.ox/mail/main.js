@@ -713,7 +713,7 @@ define('io.ox/mail/main', [
                     // set focus
                     var items = app.threadView.$('.list-item'),
                         index = items.index(items.filter('.expanded'));
-                    items.filter('.expanded:first').find('.body').focus();
+                    items.filter('.expanded:first').find('.body').visibleFocus();
                     // fix scroll position (focus might scroll down)
                     if (index === 0) app.threadView.$('.scrollable').scrollTop(0);
                 }
