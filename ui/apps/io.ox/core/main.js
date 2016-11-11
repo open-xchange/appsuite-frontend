@@ -1233,13 +1233,11 @@ define('io.ox/core/main', [
 
                 var content = banner.find('.banner-content');
 
-                // show current user (unless anonymous)
-                if (ox.user !== 'anonymous') {
-                    content.append(
-                        $('<label>').text(gt('Signed in as:')),
-                        $.txt(' '), $.txt(ox.user)
-                    );
-                }
+                // show current user
+                content.append(
+                    $('<label>').text(gt('Signed in as:')),
+                    $.txt(' '), $.txt(ox.user)
+                );
 
                 content.append(
                     $('<a href="#" class="banner-action" data-action="logout" role="button">')
