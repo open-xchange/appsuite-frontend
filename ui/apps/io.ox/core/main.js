@@ -306,6 +306,7 @@ define('io.ox/core/main', [
         } else {
             $('.dropdown-menu', launcherDropdown).attr('aria-hidden', true);
         }
+
     }, 100);
 
     // add launcher
@@ -637,7 +638,9 @@ define('io.ox/core/main', [
                         node.find('.apptitle').append(placeholder.find('.topbar-launcherbadge')[0]);
                     }
                 }
+                var restoreFocus = placeholder.children('a')[0] === document.activeElement;
                 placeholder.remove();
+                if (restoreFocus) node.children('a').focus();
             }
         }
 
