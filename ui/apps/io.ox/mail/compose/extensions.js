@@ -422,7 +422,10 @@ define('io.ox/mail/compose/extensions', [
             }
 
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                baton.view.listenTo(snippetAPI, 'refresh.all', draw);
+                // use normal event listeners since view.listenTo does not trigger correctly.
+                snippetAPI.on('refresh.all', draw);
+                baton.view.$el.one('dispose', function () { snippetAPI.off('refresh.all', draw); });
+
                 draw();
             });
             self.append(container);
