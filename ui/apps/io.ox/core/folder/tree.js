@@ -199,8 +199,7 @@ define('io.ox/core/folder/tree', [
         },
 
         onToggleContextMenu: function (e) {
-
-            var target = $(e.currentTarget),
+            var target = ($(e.target).is('a') && e.type === 'keydown') ? $(e.target) : $(e.currentTarget),
                 // calculate proper position
                 offset = target.offset(),
                 top = offset.top - 7,
@@ -214,11 +213,14 @@ define('io.ox/core/folder/tree', [
             if (e.type === 'keydown') {
                 var shiftF10 = (e.shiftKey && e.which === 121),
                     menuKey = (_.device('windows') && e.which === 93);
-                if (e.which === 32 || e.which === 13 || shiftF10 || menuKey) this.focusFirst = true;
-                if (shiftF10 || menuKey) {
+                if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
+                    this.focusFirst = true;
+                    if (/38|40/.test(e.which) && $(e.target).is('a')) this.onToggleContextMenu(e);
                     // e.preventDefault() is needed here to surpress browser menu
-                    e.preventDefault();
-                    this.onContextMenu(e);
+                    if (shiftF10 || menuKey) {
+                        e.preventDefault();
+                        this.onContextMenu(e);
+                    }
                 }
             }
         },

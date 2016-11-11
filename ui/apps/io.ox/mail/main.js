@@ -1060,9 +1060,9 @@ define('io.ox/mail/main', [
             app.listView.on('first-reset', function () {
                 // defer to have a visible window
                 _.defer(function () {
-                    app.listView.collection.find(function (model, index) {
+                    app.listView.collection.find(function (model) {
                         if (!util.isUnseen(model.get('flags'))) {
-                            app.listView.selection.select(index);
+                            app.listView.selection.set([model.cid]);
                             return true;
                         }
                     });
@@ -1183,7 +1183,11 @@ define('io.ox/mail/main', [
                 if (isSingleThreadMessage(ids, selection)) return;
                 // looks for intersection
                 ids = _(ids).map(_.cid);
-                if (_.intersection(ids, selection).length) app.listView.selection.dodge();
+                if (_.intersection(ids, selection).length) {
+                    app.listView.selection.dodge();
+                    if (ids.length === 1) return;
+                    app.listView.onBatchRemove(ids.slice(1));
+                }
             });
         },
 

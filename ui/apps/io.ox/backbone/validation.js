@@ -30,27 +30,28 @@ define('io.ox/backbone/validation', [
         text: function () {
             return true;
         },
-        //numbers with . or , as a separator are valid 1.23 or 1,23 for example
+        // numbers with . or , as a separator are valid 1.23 or 1,23 for example
         anyFloat: function (val) {
+            // empty value is valid (if not, add the mandatory flag)
+            if (emptycheck(val)) return true;
+
             val = String(val)
                     .replace(/,/g, '.')
                     //remove zero only decimal places
                     .replace(/\.0*$/, '');
-            //empty value is valid (if not, add the mandatory flag)
-            var isValid = (emptycheck(val)) ||
-                          //check if its a number
-                          (!isNaN(parseFloat(val, 10)) &&
-                          //check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
+            // check if its a number
+            var isValid = (!isNaN(parseFloat(val, 10)) &&
+                          // check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
                           (parseFloat(val, 10).toString().length === val.toString().length));
             return isValid ||
               gt('Please enter a valid number');
         },
         number: function (val) {
-            //empty value is valid (if not, add the mandatory flag)
+            // empty value is valid (if not, add the mandatory flag)
             var isValid = (emptycheck(val)) ||
-                          //check if its a number
+                          // check if its a number
                           (!isNaN(parseFloat(val, 10)) &&
-                          //check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
+                          // check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
                           (parseFloat(val, 10).toString().length === val.toString().length));
             return isValid ||
                 gt('Please enter a valid number');

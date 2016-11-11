@@ -78,13 +78,9 @@ define('io.ox/files/actions', [
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                return api.versions.load(e.baton.data).then(function (versions) {
-                    var current = _.isArray(versions) && _.some(versions, function (item) {
-                        return item.current_version && item.version === e.baton.data.version;
-                    });
-
+                return api.versions.getCurrentState(e.baton.data).then(function (currentVersion) {
                     return util.conditionChain(
-                        current,
+                        currentVersion,
                         e.collection.has('one', 'modify'),
                         !util.hasStatus('lockedByOthers', e),
                         (/\.(csv|txt|js|css|md|tmpl|html?)(\.pgp)?$/i).test(e.context.filename),
@@ -549,6 +545,8 @@ define('io.ox/files/actions', [
                 if (!e.collection.has('some')) return false;
                 if (e.baton.openedBy === 'io.ox/mail/compose') return false;
                 if (util.hasStatus('lockedByOthers', e)) return false;
+                // anonymous guests just have one folder so no valid target folder (see bug 42621)
+                if (capabilities.has('guest && anonymous')) return false;
                 // copy
                 if (type === 'copy') return e.collection.has('some', 'items', 'read');
                 // move

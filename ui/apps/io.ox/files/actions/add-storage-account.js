@@ -49,13 +49,20 @@ define('io.ox/files/actions/add-storage-account', [
         }, false);
     }
 
+    // returns true if Oauth account with available and enabled scope is there but filestorage account is missing
+    function onlyNeedsFilestorageAccount(accounts) {
+        return accounts.reduce(function (acc, account) {
+            return acc || (_(account.availableScopes).contains('drive') && _(account.enabledScopes).contains('drive') && !filestorageApi.getAccountForOauth(account));
+        }, false);
+    }
+
     function getAvailableServices() {
         return require(['io.ox/keychain/api']).then(function (keychainApi) {
             var availableFilestorageServices = _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; });
             return _(keychainApi.submodules).filter(function (submodule) {
                 if (!services[submodule.id]) return false;
                 // we need support for both accounts, Oauth accounts and filestorage accounts.
-                return (!_.isFunction(submodule.canAdd) || submodule.canAdd({ scopes: ['drive'] }) || needsOAuthScope(submodule.getAll())) && availableFilestorageServices.indexOf(submodule.id) >= 0;
+                return (!_.isFunction(submodule.canAdd) || submodule.canAdd({ scopes: ['drive'] }) || needsOAuthScope(submodule.getAll()) || onlyNeedsFilestorageAccount(submodule.getAll())) && availableFilestorageServices.indexOf(submodule.id) >= 0;
             });
         });
     }
@@ -69,6 +76,19 @@ define('io.ox/files/actions/add-storage-account', [
                 serviceId: service.id,
                 displayName: 'My ' + service.get('displayName') + ' account'
             });
+
+        // if only the filestorage account is missing there is no need for Oauth authorization.
+        if (oauthAPI.accounts.forService(service.id)[0] && _(account.attributes.enabledScopes).contains('drive') && !filestorageApi.getAccountForOauth(account.attributes)) {
+            return filestorageApi.createAccountFromOauth(account.attributes).done(function () {
+                yell('success', gt('Account added successfully'));
+            }).fail(function (e) {
+                if (e) {
+                    yell(e);
+                    return;
+                }
+                yell('error', gt('Account could not be added'));
+            });
+        }
 
         account.enableScopes('drive').save().then(function (res) {
             // add new account after it has been created succesfully

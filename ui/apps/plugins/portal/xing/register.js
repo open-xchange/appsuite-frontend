@@ -281,7 +281,7 @@ define('plugins/portal/xing/register', [
             }, this);
 
             var content = this.find('.content');
-
+            if (this.hasClass('widget-color-custom')) return;
             this.find('h2:first').prepend($('<i class="fa fa-xing" aria-hidden="true">'));
             this.find('h2 .title').removeClass('title').addClass('sr-only');
             this.addClass('widget-color-custom color-xing');

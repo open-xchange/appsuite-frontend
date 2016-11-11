@@ -464,6 +464,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.focus = function () {
             if (_.device('ios')) return;
             _.defer(function () {
+                if (!ed) return;
                 ed.focus();
                 ed.execCommand('mceFocus', false, editorId);
             });

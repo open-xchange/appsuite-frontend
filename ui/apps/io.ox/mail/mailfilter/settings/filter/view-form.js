@@ -45,6 +45,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'regex': gt('Regex')
         },
 
+        addressValues = {
+            'user': gt('User'),
+            'detail': gt('Detail'),
+            'all': gt('All'),
+            'localpart': gt('Localpart'),
+            'domain': gt('Domain')
+        },
+
         timeValues = {
             'ge': gt('starts on'),
             'le': gt('ends on'),
@@ -62,7 +70,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'envelope': gt('Envelope - To'),
             'size': gt('Size (bytes)'),
             'body': gt('Content'),
-            'currentdate': gt('Current Date')
+            'currentdate': gt('Current Date'),
+            'address': gt('Sender address')
         },
 
         conditionsMapping = {
@@ -70,7 +79,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'envelope': ['envelope'],
             'size': ['size'],
             'body': ['body'],
-            'currentdate': ['currentdate']
+            'currentdate': ['currentdate'],
+            'address': ['address']
         },
 
         actionsTranslations = {
@@ -672,6 +682,19 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 title: headerTranslation.envelope,
                                 dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, containsValues) },
                                 inputLabel: headerTranslation.envelope + ' ' + containsValues[cmodel.get('comparison')],
+                                inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
+                                errorView: true
+                            })
+                        );
+                        break;
+                    case 'address':
+                        inputId = _.uniqueId('values');
+                        conditionList.append(
+                            drawCondition({
+                                inputId: inputId,
+                                title: headerTranslation.address,
+                                dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, addressValues) },
+                                inputLabel: headerTranslation.address + ' ' + addressValues[cmodel.get('comparison')],
                                 inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
                                 errorView: true
                             })

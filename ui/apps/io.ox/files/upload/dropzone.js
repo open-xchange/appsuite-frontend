@@ -14,8 +14,9 @@
 define('io.ox/files/upload/dropzone', [
     'io.ox/core/extensions',
     'io.ox/core/dropzone',
+    'io.ox/core/folder/api',
     'gettext!io.ox/files'
-], function (ext, dropzone, gt) {
+], function (ext, dropzone, api, gt) {
 
     'use strict';
 
@@ -30,6 +31,11 @@ define('io.ox/files/upload/dropzone', [
             var zone = new dropzone.Inplace({
                 caption: gt('Drop files here to upload')
             });
+
+            zone.isEnabled = function () {
+                var id = app.folder.get();
+                return api.pool.getModel(id).can('create');
+            };
 
             zone.on({
                 'show': function () {
