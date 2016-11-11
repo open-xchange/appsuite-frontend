@@ -263,7 +263,7 @@ define('io.ox/mail/detail/view', [
             this.append(
                 $('<section class="attachments">'),
                 // must have tabindex=1, otherwise tabindex inside Shadow DOM doesn't work
-                $body = $('<section class="body user-select-text" tabindex="1">')
+                $body = $('<section class="body user-select-text focusable" tabindex="1">')
             );
             // rendering mails in chrome is slow if we do not use a shadow dom
             if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
