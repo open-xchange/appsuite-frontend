@@ -217,26 +217,27 @@ define('io.ox/core/main', [
         $(window).trigger('offline');
     }
 
-    var topbar = $('#io-ox-topbar'),
+    var launcherDropdown,
+        topbar = $('#io-ox-topbar'),
         launchers = $('.launchers', topbar),
-        launcherDropdown = $('.launcher-dropdown ul', topbar);
+        launcherDropdownToggle;
 
-    launcherDropdown.attr('role', 'menu');
+    var launcherDropdownTab = $('<li class="launcher-dropdown dropdown" role="presentation">').append(
+        launcherDropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr({
+            'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.')
+        }).append(
+            $('<i class="fa fa-angle-double-right" aria-hidden="true">'),
+            $('<span class="sr-only">').text('Dropdown')
+        ),
+        launcherDropdown = $('<ul class="dropdown-menu" role="menu">')
+    );
 
-    topbar
-        // prevent dragging links
-        .on('dragstart', false)
-        // make system drop-down accessible
-        .find('a.dropdown-toggle').attr({
-            'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.'),
-            'role': 'button',
-            'aria-haspopup': 'true'
-        })
-        .end()
-        .find('i.fa-bars').removeClass('fa-bars').addClass('fa-angle-double-right ');
+    launcherDropdownToggle.dropdown();
 
-    launchers.attr({
-        'role': 'tablist',
+    // prevent dragging links
+    topbar.on('dragstart', false);
+
+    topbar.find('[role="navigation"]').attr({
         'aria-label': gt('Apps')
     });
 
@@ -260,7 +261,7 @@ define('io.ox/core/main', [
         // we don't show any launcher in top-bar on small devices
         if (_.device('smartphone') && !forceDesktopLaunchers) {
             items.hide();
-            launcherDropDownIcon.show();
+            launchers.append(launcherDropdownTab);
             return;
         }
 
@@ -276,7 +277,7 @@ define('io.ox/core/main', [
             launcherDropDownIconWidth = launcherDropDownIcon.width(),
             viewPortWidth = topbar.width() - launcherDropDownIconWidth;
 
-        launcherDropDownIcon.hide();
+        launcherDropdownTab.detach();
 
         itemsVisible.each(function () {
             // use native bounding client rect function to compute the width as floating point
@@ -298,20 +299,19 @@ define('io.ox/core/main', [
 
 
         if (hidden > 0) {
-            $('.dropdown-menu', launcherDropdown).removeAttr('aria-hidden');
-            launcherDropDownIcon.show();
+            launchers.append(launcherDropdownTab);
             for (i = hidden; i > 0; i--) {
                 $('li', launcherDropdown).eq(-i).show();
             }
         } else {
-            $('.dropdown-menu', launcherDropdown).attr('aria-hidden', true);
+            launcherDropdownTab.detach();
         }
 
     }, 100);
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
-        var node = $('<li class="launcher" role="tab">');
+        var node = $('<li class="launcher">');
 
         if (fn) {
             node.on('click', function (e) {
@@ -671,7 +671,7 @@ define('io.ox/core/main', [
                 var cls = model.get('userContentClass') || '',
                     icon = model.get('userContentIcon') || '';
                 launcher.addClass('user-content').addClass(cls).children().first().prepend(
-                    $('<i>').addClass(icon)
+                    $('<i aria-hidden="true">').addClass(icon)
                 );
             }
         }
@@ -717,21 +717,15 @@ define('io.ox/core/main', [
             addUserContent(model, node, true);
 
             // add list item
-            node = $('<li role="tab">').append(
-                $('<a href="#">', {
+            node = $('<li>').append(
+                $('<a href="#">').addClass(closable ? 'closable' : '').attr({
                     'data-app-name': name,
                     'data-app-guid': model.guid
-                })
-                .addClass(closable ? 'closable' : '')
-                .text(/*#, dynamic*/gt.pgettext('app', title))
+                }).text(/*#, dynamic*/gt.pgettext('app', title))
             );
 
-            if (closable) {
-                //add close button
-                node.append(
-                    quit(model)
-                );
-            }
+            //add close button
+            if (closable) node.append(quit(model));
 
             launcherDropdown.append(
                 node.on('click', function (e) {
@@ -744,27 +738,23 @@ define('io.ox/core/main', [
         });
 
         ox.ui.apps.on('remove', function (model) {
-            launchers.children('[data-app-guid="' + model.guid + '"]').remove();
-            launcherDropdown.children('[data-app-guid="' + model.guid + '"]').remove();
+            _([launchers, launcherDropdown]).each(function (node) {
+                node.children('[data-app-guid="' + model.guid + '"]').remove();
+            });
             tabManager();
         });
 
         ox.ui.apps.on('launch resume', function (model) {
+            if (_.device('smartphone') && !settings.get('forceDesktopLaunchers', false)) launchers.children('[role="tab"]').hide();
             // mark last active app
-            if (_.device('smartphone')) {
-                if (!settings.get('forceDesktopLaunchers', false)) {
-                    launchers.hide();
-                }
-            }
-            launchers.children().removeClass('active-app')
-                .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
+            _([launchers, launcherDropdown]).each(function (nodes) {
+                var node = nodes.children(),
+                    activeApp = node.filter('[data-app-guid="' + model.guid + '"]');
+                node.removeClass('active-app').find('span.sr-only').remove();
+                // A11y: Current app indicator for screen-readers
+                if (activeApp.length) activeApp.addClass('active-app').find('a').append($('<span class="sr-only">').text(gt('(current app)')));
+            });
 
-            launcherDropdown.children().removeClass('active-app')
-                .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
-
-            // A11y: Current app indicator for screen-readers
-            launchers.children().find('a > span.sr-only').remove();
-            launchers.children('.active-app').find('a').append($('<span class="sr-only">').text(gt('(current app)')));
         });
 
         ox.ui.apps.on('change:title', function (model, value) {

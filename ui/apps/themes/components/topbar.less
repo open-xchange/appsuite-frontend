@@ -54,7 +54,6 @@
     background-color: @topbar-background;
 
     .launchers {
-        overflow: hidden;
         float: left;
         height: 40px; // Fix for Bug 49734 after wrapping launchers in A11y div
         margin: 0;
@@ -137,6 +136,7 @@
     .launcher.closable:hover { color: @topbar-launcher-color-hover; }
 
     .launcher {
+        height: 40px;
         max-width: 15em; // see bug :29238
         cursor: pointer;
         text-overflow: ellipsis;
@@ -288,8 +288,6 @@
     }
 
     .launcher-dropdown {
-        float: left;
-        display: none;
 
         @media (max-width: 480px), (max-device-width: 480px) {
             .dropdown-toggle {
@@ -306,7 +304,7 @@
             }
 
             a {
-                max-width: 10em;
+                max-width: 15em;
                 .ellipsis();
             }
 

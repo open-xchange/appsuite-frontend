@@ -61,7 +61,7 @@ define('io.ox/core/a11y', [], function () {
 
     $(document).on('keydown.bs.dropdown.data-api', 'ul.dropdown-menu[role="menu"]', dropdownTrapFocus);
 
-    $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"]', menubarKeydown);
+    $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"], ul.launchers', menubarKeydown);
 
     $(document).on('mousedown', '.focusable, .scrollable[tabindex]', function (e) {
         respondToNonKeyboardFocus(e.currentTarget);
@@ -141,7 +141,7 @@ define('io.ox/core/a11y', [], function () {
     function dropdownTrapFocus(e) {
 
         var dropdown = $(e.target).closest('ul.dropdown-menu'),
-            dropdownLinks = dropdown.find('> li > a'),
+            dropdownLinks = dropdown.find('> li:visible > a'),
             firstLink = dropdownLinks.first(),
             lastLink = dropdownLinks.last(),
             isLastLink = $(e.target).is(lastLink),
@@ -175,6 +175,7 @@ define('io.ox/core/a11y', [], function () {
         var nextFocus,
             a = el.map(function () {
                 var linkText = $(this).text() || $(this).attr('aria-label');
+                if (!linkText) return;
                 if (linkText.substring(0, 1).toLowerCase() === String.fromCharCode(e.which).toLowerCase()) return $(this);
             });
         if (!a.length) return; else if (a.length === 1) return a[0].focus();
@@ -196,7 +197,7 @@ define('io.ox/core/a11y', [], function () {
     function menubarKeydown(e) {
         if (e.which === 9 || e.which === 16 && e.shiftKey) return;
         if (e.which === 32) $(e.target).click(); // space
-        var links = $(e.currentTarget).find('> li > a');
+        var links = $(e.currentTarget).find('> li:visible > a');
         cursorHorizontalKeydown(e, links);
         hotkey(e, links);
     }
