@@ -15,7 +15,6 @@ define('io.ox/files/actions/save-as-pdf', [
 
     'io.ox/core/folder/api',
     'io.ox/files/api',
-    'io.ox/files/util',
 
     'io.ox/presenter/errormessages',
 
@@ -25,7 +24,7 @@ define('io.ox/files/actions/save-as-pdf', [
 
     'gettext!io.ox/files'
 
-], function (FolderApi, FilesApi, FilesUtil, ErrorMessages, ext, dialogs, ConverterUtils, gt) {
+], function (FolderApi, FilesApi, ErrorMessages, ext, dialogs, ConverterUtils, gt) {
 
     'use strict';
 
@@ -109,7 +108,7 @@ define('io.ox/files/actions/save-as-pdf', [
             if (invalid) return $.Deferred().reject();
 
             // show confirm dialog if necessary
-            return FilesUtil.confirmDialog(name, filename).then(save.bind(this, name));
+            return save.call(this, name);
         }
 
         new dialogs.ModalDialog({ enter: 'save', async: true })
