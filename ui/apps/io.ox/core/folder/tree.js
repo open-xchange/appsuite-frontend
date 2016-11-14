@@ -13,6 +13,7 @@
 
 define('io.ox/core/folder/tree', [
     'io.ox/backbone/disposable',
+    'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/folder/selection',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
@@ -21,7 +22,7 @@ define('io.ox/core/folder/tree', [
     'gettext!io.ox/core',
     'io.ox/core/folder/favorites',
     'io.ox/core/folder/extensions'
-], function (DisposableView, Selection, api, ext, a11y, settings, gt) {
+], function (DisposableView, Dropdown, Selection, api, ext, a11y, settings, gt) {
 
     'use strict';
 
@@ -60,7 +61,6 @@ define('io.ox/core/folder/tree', [
 
             this.$el.data('view', this);
             this.$container = $('<ul class="tree-container f6-target" role="tree">');
-            this.$dropdown = $();
             this.$dropdownMenu = $();
             this.options = options;
 
@@ -173,14 +173,8 @@ define('io.ox/core/folder/tree', [
         toggleContextMenu: function (target, top, left) {
 
             // return early on close
-            var isOpen = this.$dropdown.hasClass('open');
+            var isOpen = this.dropdown.$el.hasClass('open');
             if (isOpen || _.device('smartphone')) return;
-
-            // copy contextmenu id
-            var contextmenu = target.is('.contextmenu-control') ?
-                target.attr('data-contextmenu') :
-                target.find('.contextmenu-control').first().attr('data-contextmenu');
-            this.$dropdown.attr('data-contextmenu', contextmenu);
 
             _.defer(function () {
 
@@ -189,11 +183,8 @@ define('io.ox/core/folder/tree', [
                 if (api.isVirtual(id)) return;
 
                 this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
-                this.$dropdown
-                    // helps to restore focus (see renderContextMenu)
-                    .data('previous-focus', target)
-                    // use official method
-                    .find('.dropdown-toggle').dropdown('toggle');
+                this.dropdown.$toggle = target;
+                this.$dropdownToggle.dropdown('toggle');
 
             }.bind(this));
         },
@@ -205,6 +196,7 @@ define('io.ox/core/folder/tree', [
                 top = offset.top - 7,
                 left = offset.left + target.outerWidth() + 7;
 
+            target.data('preventFocus', true);
             this.toggleContextMenu(target, top, left);
         },
 
@@ -237,12 +229,6 @@ define('io.ox/core/folder/tree', [
             this.toggleContextMenu(target, top, left);
         },
 
-        onCloseContextMenu: function (e) {
-            e.preventDefault();
-            if (!this.$dropdown.hasClass('open')) return;
-            this.$dropdown.find('.dropdown-toggle').dropdown('toggle');
-        },
-
         getContextMenuId: function (id) {
             return 'io.ox/core/foldertree/contextmenu/' + (id || 'default');
         },
@@ -272,10 +258,8 @@ define('io.ox/core/folder/tree', [
                     // remove leading, subsequent, and tailing dividers
                     if (node.prev().length === 0 || next.hasClass('divider') || next.length === 0) node.remove();
                 });
-                // check if menu exceeds viewport
-                if (!_.device('smartphone') && ul.offset().top + ul.outerHeight() > $(window).height() - 20) {
-                    ul.css({ top: 'auto', bottom: '20px' });
-                }
+                if (!_.device('smartphone')) view.dropdown.setDropdownOverlay();
+
                 if (view.focusFirst) {
                     ul.find('li:first > a').focus();
                     view.focusFirst = false;
@@ -298,24 +282,21 @@ define('io.ox/core/folder/tree', [
                 this.$dropdownMenu.attr('role', 'menu');
             }
 
-            function hide() {
-                // restore focus
-                var node = $(this).data('previous-focus');
-                if (node) node.parent().focus();
-            }
-
             return function () {
+                this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Folder options'));
+                this.$dropdownMenu = $('<ul class="dropdown-menu">');
+                this.dropdown = new Dropdown({
+                    smart: false,
+                    className: 'context-dropdown dropdown',
+                    $toggle: this.$dropdownToggle,
+                    $ul: this.$dropdownMenu,
+                    margin: 24,
+                });
 
                 this.$el.after(
-                    this.$dropdown = $('<div class="context-dropdown dropdown" data-action="context-menu" data-contextmenu="default">').append(
-                        $('<div class="abs context-dropdown-overlay">').on('contextmenu', this.onCloseContextMenu.bind(this)),
-                        this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Folder options')),
-                        this.$dropdownMenu = $('<ul class="dropdown-menu">')
-                    )
+                    this.dropdown.render().$el
                     .on('show.bs.dropdown', show.bind(this))
-                    .on('hidden.bs.dropdown', hide.bind(this))
                 );
-                this.$dropdownToggle.dropdown();
                 this.$dropdownMenu.removeAttr('role');
             };
         }()),

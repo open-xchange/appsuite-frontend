@@ -1455,7 +1455,7 @@ define('io.ox/mail/main', [
             // detail view: return back to list view via <escape>
             app.threadView.$el.attr('tabindex', -1).on('keydown', function (e) {
                 if (e.which !== 27) return;
-                if ($(e.target).is('.smart-dropdown, .dropdown-toggle, :input')) return;
+                if ($(e.target).is('.dropdown-toggle, :input')) return;
                 // make sure the detail view closes in list layout
                 app.right.removeClass('preview-visible');
                 app.listView.restoreFocus(true);

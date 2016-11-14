@@ -251,7 +251,7 @@ define('io.ox/core/folder/view', [
                 if (mobileSelectMode === true) {
                     // ignore selection of non-labels in mobile edit mode
                     if ($(e.target).parent().hasClass('folder-label')) {
-                        tree.$dropdown.find('.dropdown-toggle').trigger('click', 'foldertree');
+                        tree.dropdown.$('.dropdown-toggle').trigger('click', 'foldertree');
                     }
                     return;
                 } else if (targetFolder.is('.virtual')) {

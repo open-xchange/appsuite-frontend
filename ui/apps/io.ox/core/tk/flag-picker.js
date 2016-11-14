@@ -20,126 +20,6 @@ define('io.ox/core/tk/flag-picker', [
 
     'use strict';
 
-    // appends a listener for dropdowns to center them in scrollpane.
-    // move this code to another file if this should be used globally.
-    (function () {
-
-        if (_.device('smartphone')) return;
-
-        function handler() {
-
-            var $this = $(this),
-                $parent = $this.parent(),
-                $ul = $('ul', $parent).first(),
-                $zIndex = $parent.parents('[style*="z-index"]'),
-                transformOffset = $parent.closest('[style*="translate3d"]').offset() || { top: 0, left: 0 },
-                margin = 8,
-                $scrollContainer = $parent.closest('.ios .io-ox-sidepopup-pane, .ios .io-ox-dialog-popup');
-
-            $scrollContainer.css('-webkit-overflow-scrolling', 'auto');
-
-            function computeBounds() {
-
-                var positions = { top: 'auto', right: 'auto', bottom: 'auto', left: 'auto' },
-                    offset = $this.offset(),
-                    width = $this.width(),
-                    height = $this.height(),
-                    dropdownWidth = $ul.outerWidth(),
-                    dropdownHeight = $ul.outerHeight(),
-                    availableWidth = $(window).width(),
-                    // don't overlap topbar
-                    availableHeight = $(window).height() - $('#io-ox-topbar').height();
-
-                // check potential positions
-                if ((offset.top + height + dropdownHeight) < availableHeight) {
-                    // enough room below
-                    positions.top = offset.top + height;
-                    // right aligned?
-                    if ($parent.hasClass('pull-right') || (offset.left + dropdownWidth + margin) > availableWidth) {
-                        positions.left = offset.left + width - dropdownWidth;
-                    }
-                } else {
-                    // same top position
-                    positions.top = offset.top;
-                    // left or right?
-                    if ((offset.left + width + dropdownWidth + margin) < availableWidth) {
-                        // enough room on right side
-                        positions.left = offset.left + width + margin;
-                    } else {
-                        // position of left side
-                        positions.left = offset.left - dropdownWidth - margin;
-                    }
-                    // hits bottom?
-                    if (positions.top + dropdownHeight > availableHeight - margin) {
-                        // apply bottom limit
-                        positions.bottom = margin;
-                        // enough room above?
-                        if ((dropdownHeight + 2 * margin) < availableHeight) {
-                            positions.top = 'auto';
-                        } else {
-                            // again don't overlap the topbar or the dropdown is hidden underneath it
-                            positions.top = margin + $('#io-ox-topbar').height();
-                        }
-                    }
-                }
-
-                $ul.css(positions);
-            }
-
-            function reset() {
-                $zIndex.each(function () {
-                    var z = $(this);
-                    z.css('z-index', z.data('oldIndex'));
-                    z.removeData('oldIndex');
-                });
-                $parent.removeClass('smart-dropdown-container');
-                $parent.find('.abs').remove();
-                $ul.css({ top: '', left: '', bottom: '', right: '' });
-                $parent.off('ready', computeBounds);
-                $scrollContainer.css('-webkit-overflow-scrolling', '');
-            }
-
-            if (!$parent.hasClass('open')) return;
-
-            computeBounds();
-
-            $zIndex.each(function () {
-                var z = $(this);
-                //prevent accidentally overwriting of old z Index
-                if (z.data('oldIndex') === undefined) {
-                    z.data('oldIndex', z.css('z-index'));
-                }
-                z.css('z-index', 10000);
-            });
-
-            $parent
-                .on('ready', computeBounds)
-                .one('hidden.bs.dropdown', reset)
-                .addClass('smart-dropdown-container')
-                .append(
-                    $('<div class="abs overlay">')
-                        .css({
-                            left: -transformOffset.left,
-                            right: transformOffset.left
-                        })
-                        .on('mousewheel touchmove', false)
-                        .on('click', function () {
-                            $parent.removeClass('open');
-                            reset();
-                            return false;
-                        })
-                );
-        }
-
-        $(document).on('shown.bs.dropdown', function (e, arg) {
-            if (!$(arg.relatedTarget).hasClass('smart-dropdown')) return;
-            return handler.call(arg.relatedTarget, e);
-        });
-
-        $(document).on('click', '.smart-dropdown', handler);
-
-    }());
-
     var colorNames = {
         NONE:       gt('None'),
         RED:        gt('Red'),
@@ -212,7 +92,7 @@ define('io.ox/core/tk/flag-picker', [
             node.parent().addClass('dropdown flag-picker');
         },
 
-        draw: function (node, baton, overlay) {
+        draw: function (node, baton) {
 
             var data = baton.data,
                 // to fix buggy -1
@@ -222,7 +102,6 @@ define('io.ox/core/tk/flag-picker', [
             node.append(
                 preParsed.div.clone().append(
                     link = preParsed.setColorLink.clone()
-                    .addClass(overlay ? 'smart-dropdown' : '')
                     .append(
                         preParsed.dropdownIcon.clone().attr({
                             'data-color': color,

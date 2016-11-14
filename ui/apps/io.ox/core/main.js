@@ -20,6 +20,7 @@ define('io.ox/core/main', [
     'io.ox/core/extPatterns/stage',
     'io.ox/core/notifications',
     'io.ox/backbone/mini-views/help',
+    'io.ox/backbone/mini-views/dropdown',
     // defines jQuery plugin
     'io.ox/core/commons',
     'io.ox/core/upsell',
@@ -35,7 +36,7 @@ define('io.ox/core/main', [
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, gt) {
 
     'use strict';
 
@@ -1046,14 +1047,17 @@ define('io.ox/core/main', [
             id: 'dropdown',
             index: 1000,
             draw: function () {
-                var ul, a;
+                var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">'),
+                    a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
+                        $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
+                    );
                 this.append(
-                    $('<li id="io-ox-topbar-dropdown-icon" class="launcher dropdown" role="presentation">').append(
-                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
-                            $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
-                        ),
-                        ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
-                    )
+                    new Dropdown({
+                        id: 'io-ox-topbar-dropdown-icon',
+                        className: 'launcher dropdown',
+                        $ul: ul,
+                        $toggle: a,
+                    }).render().$el
                 );
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
                 a.dropdown();
