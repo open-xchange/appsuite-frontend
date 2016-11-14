@@ -355,11 +355,23 @@ define('io.ox/calendar/invitations/register',
             .then(
                 function done() {
                     // api refresh
-                    require(['io.ox/calendar/api']).then(function (api) {
-                        api.refresh();
-                        notifications.yell('success', success[action]);
-                        self.repaint();
-                    });
+                    var refresh = require(['io.ox/calendar/api']).then(
+                        function (api) {
+                            api.refresh();
+                            if (self.options.yell !== false) {
+                                notifications.yell('success', success[action]);
+                            }
+                        });
+
+                    if (settings.get('deleteInvitationMailAfterAction', false)) {
+                        // remove mail
+                        require(['io.ox/mail/api'], function (api) {
+                            api.remove([self.imip.mail]);
+                        });
+                    } else {
+                        // repaint only if there is something left to repaint
+                        refresh.then(function () { self.repaint(); });
+                    }
                 },
                 function fail(e) {
                     notifications.yell(e);
@@ -506,9 +518,11 @@ define('io.ox/calendar/invitations/register',
                 this.task = updated;
             }
 
-            if (this.settings.get('deleteInvitationMailAfterAction', false)) {
+            if (settings.get('deleteInvitationMailAfterAction', false)) {
                 // remove mail
-                notifications.yell('success', successInternal[action]);
+                if (this.options.yell !== false) {
+                    notifications.yell('success', successInternal[action]);
+                }
                 require(['io.ox/mail/api'], function (api) {
                     api.remove([this.model.toJSON()]);
                 }.bind(this));
@@ -656,7 +670,8 @@ define('io.ox/calendar/invitations/register',
 
         update: function () {
 
-            var headers, reminder, type, cid, $el = this.$el, imip;
+            var headers, reminder, type, cid, $el = this.$el, imip,
+                yell = this.options.yell;
 
             // external?
             if ((imip = this.getIMIPAttachment())) {
@@ -664,7 +679,11 @@ define('io.ox/calendar/invitations/register',
                 return analyzeIMIPAttachment(imip).done(function (analyses) {
                     _(analyses).each(function (analysis) {
                         var model = new Backbone.Model(analysis),
-                            view = new ExternalView({ model: model, imip: imip });
+                            view = new ExternalView({
+                                model: model,
+                                imip: imip,
+                                yell: yell
+                            });
                         $el.append(view.render().$el);
                     });
                 });
@@ -681,7 +700,12 @@ define('io.ox/calendar/invitations/register',
             cid = reminder[1] + '.' + reminder[0];
 
             this.$el.append(
-                new InternalView({ model: this.model, cid: cid, type: type }).render().$el
+                new InternalView({
+                    model: this.model,
+                    cid: cid,
+                    type: type,
+                    yell: this.options.yell
+                }).render().$el
             );
         },
 
@@ -699,7 +723,7 @@ define('io.ox/calendar/invitations/register',
         index: 'last',
         id: 'accept-decline',
         draw: function (baton) {
-            var view = new ItipView({ model: baton.model });
+            var view = new ItipView(_.extend({ model: baton.model }, baton.options));
             this.append(view.render().$el);
         }
     });
