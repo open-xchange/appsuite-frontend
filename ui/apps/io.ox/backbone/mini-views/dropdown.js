@@ -80,21 +80,23 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     width: bounds.width,
                     height: bounds.height,
                 },
-                offset = this.$toggle.offset(),
-                width = this.$toggle.outerWidth(),
+                offset = this.$toggle ? this.$toggle.offset() : 0,
+                width = this.$toggle ? this.$toggle.outerWidth() : 0,
                 availableWidth = $(window).width(),
                 availableHeight = $(window).height(),
                 topbar = $('#io-ox-topbar');
 
             // hits bottom ?
             if (bounds.top + bounds.height > availableHeight + this.margin) {
-                // left or right?
-                if ((offset.left + width + bounds.width + this.margin) < availableWidth) {
-                    // enough room on right side
-                    positions.left = offset.left + width + this.margin;
-                } else {
-                    // position of left side
-                    positions.left = offset.left - bounds.width - this.margin;
+                if (this.$toggle) {
+                    // left or right?
+                    if ((offset.left + width + bounds.width + this.margin) < availableWidth) {
+                        // enough room on right side
+                        positions.left = offset.left + width + this.margin;
+                    } else {
+                        // position of left side
+                        positions.left = offset.left - bounds.width - this.margin;
+                    }
                 }
 
                 // move dropdown up

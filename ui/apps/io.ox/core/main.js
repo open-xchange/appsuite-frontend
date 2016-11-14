@@ -1053,6 +1053,7 @@ define('io.ox/core/main', [
                     );
                 this.append(
                     new Dropdown({
+                        tagName: 'li',
                         id: 'io-ox-topbar-dropdown-icon',
                         className: 'launcher dropdown',
                         $ul: ul,

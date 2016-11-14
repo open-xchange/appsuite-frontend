@@ -221,12 +221,14 @@ define('io.ox/core/folder/tree', [
             // clicks bubbles. right-click not
             // DO NOT ADD e.preventDefault() HERE (see bug 42409)
             e.stopPropagation();
-            var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
+            var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30, t;
             if (target.is('.contextmenu-control')) {
                 top = target.offset().top;
                 left = target.offset().left + 40;
+                // only set target if clicked on control. right-clicks have no target
+                t = target;
             }
-            this.toggleContextMenu(target, top, left);
+            this.toggleContextMenu(t, top, left);
         },
 
         getContextMenuId: function (id) {
