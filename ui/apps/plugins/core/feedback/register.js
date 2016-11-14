@@ -98,26 +98,19 @@ define('plugins/core/feedback/register', [
         }
     });
 
-    var apiToken, // temporary API token
-        feedbackService;
+    var feedbackService;
 
     ext.point('plugins/core/feedback').extend({
         id: 'api',
         index: 100,
         initialize: function () {
-            console.info('Using debug feedback-service');
-            apiToken = '!Afasdfasfqa9asd8fnRFFAsd';
             feedbackService = {
                 sendFeedback: function (data) {
-                    return $.ajax({
-                        method: 'PUT',
-                        // url: 'http://localhost:5000/feedback',
-                        url: 'https://ox-feedback.herokuapp.com/feedback',
-                        data: JSON.stringify(data),
-                        contentType: 'application/json; charset=UTF-8',
-                        processData: false,
-                        headers: { 'api-token': apiToken }
-                    });
+                    console.log('Feedback API must be implemented. Use the extension point "plugins/core/feedback" and implement "sendFeedback".');
+                    console.log(data);
+                    // return a Deferred Object here ($.ajax)
+                    // which sends data to your backend
+                    return $.Deferred().resolve();
                 }
             };
         }

@@ -144,7 +144,8 @@ define('io.ox/core/print', [
                 get: $.noop,
                 selection: [],
                 i18n: {},
-                file: ox.base + '/print.html'
+                file: ox.base + '/print.html',
+                meta: {}
             }, options);
 
             options.selection = _.chain(options.selection).toArray().compact();
@@ -176,7 +177,7 @@ define('io.ox/core/print', [
                 // stop chaining
                 args = args.value();
                 // create new callback & open print window
-                var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length, filtered: all - args.length }),
+                var id = addCallback(options, { data: args, i18n: options.i18n, meta: options.meta, length: args.length, filtered: all - args.length }),
                     url = options.file + '?' + id;
                 // defer the following (see bug #31301)
                 _.defer(function () {

@@ -223,6 +223,15 @@ define.async('io.ox/mail/accounts/view-form', [
                     self.$el.find('input, select').not('#personal, [name="unified_inbox_enabled"]').prop('disabled', true);
                 }
 
+                var isMail_oauth = _.isNumber(model.get('mail_oauth')) && model.get('mail_oauth') > -1,
+                    isTransport_oauth = _.isNumber(model.get('transport_oauth')) && model.get('transport_oauth') > -1;
+
+                // disable E-mail address if any oauth is used
+                if (isMail_oauth || isTransport_oauth) self.$el.find('#primary_address').prop('disabled', true);
+
+                if (isMail_oauth) self.$el.find('.data_incoming').hide();
+                if (isTransport_oauth) self.$el.find('.data_outgoing').hide();
+
                 return self;
             },
 
@@ -424,7 +433,7 @@ define.async('io.ox/mail/accounts/view-form', [
             //
             // Incoming (IMAP/POP3)
             //
-            var serverSettingsIn = $('<fieldset>').append(
+            var serverSettingsIn = $('<fieldset class="data_incoming">').append(
                 $('<legend class="sectiontitle">').text(gt('Incoming server')),
                 $('<form class="form-horizontal" role="form">').append(
                     // server type
@@ -496,7 +505,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 )
             );
 
-            var serverSettingsOut = $('<fieldset>').append(
+            var serverSettingsOut = $('<fieldset class="data_outgoing">').append(
                 $('<legend class="sectiontitle">').text(gt('Outgoing server (SMTP)')),
                 $('<form class="form-horizontal" role="form">').append(
                     // server
@@ -557,7 +566,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 archive: gt.pgettext('folder', 'Archive')
             };
 
-            var serverSettingsFolder = $('<fieldset>').append(
+            var serverSettingsFolder = $('<fieldset class="data_folders">').append(
                 $('<legend class="sectiontitle">').text(gt('Standard folders')),
                 $('<form class="form-horizontal" role="form">').append(
                     // add four input fields
@@ -591,7 +600,7 @@ define.async('io.ox/mail/accounts/view-form', [
             );
 
             this.append(
-                $('<fieldset>').append(
+                $('<fieldset class="data_account">').append(
                     $('<legend class="sectiontitle">').text(gt('Account settings')),
                     $('<form class="form-horizontal" role="form">').append(
                         // account name

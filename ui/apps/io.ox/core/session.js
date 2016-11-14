@@ -283,6 +283,9 @@ define('io.ox/core/session', [
                 processResponse: false,
                 params: { action: 'store' }
             })
+            .then(function () {
+                ox.secretCookie = true;
+            })
             // makes store() always successful (should never block)
             .always(def.resolve);
             return def;

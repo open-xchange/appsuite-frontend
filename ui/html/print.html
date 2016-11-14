@@ -5,9 +5,9 @@
         <link rel="stylesheet" href="apps/themes/login/print.css">
     </head>
     <body onload="setTimeout(function () { window.print(); }, 500)">
-        <script type="text/template" class="mail-html">
+        <script type="text/template" class="mail">
         <% _.each(data, function(element) { %>
-            <section class="item mail">
+            <section class="item <%- meta.format %> <%- meta.fixedWidthFont %>">
                 <header>
                     <b class="date pull-left"><%= element.from %></b>
                     <span class="date pull-right"><%- element.date %></span>
@@ -17,31 +17,6 @@
                         <% if (element.to !== '')  { %><label><%- i18n.to %></label> <%= element.to %>&nbsp;&nbsp;<% } %>
                         <% if (element.cc !== '')  { %><label><%- i18n.copy %></label> <%= element.cc %>&nbsp;&nbsp;<% } %>
                         <% if (element.bcc !== '') { %><label><%- i18n.blindcopy %></label> <%= element.bcc %><% } %>
-                    </div>
-                </header>
-                <pre class="content"><%= element.content %></pre>
-                <% if (element.attachments.length > 0) { %>
-                    <ul class="content">
-                        <% _.each(element.attachments, function(a) { %>
-                            <li><%- a.title + ( a.size ? ' (' + a.size + ')' : '' ) %></li>
-                        <% }); %>
-                    </ul>
-                <% } %>
-            </section>
-        <% }); %>
-        </script>
-
-        <script type="text/template" class="mail-text">
-        <% _.each(data, function(element) { %>
-            <section class="item">
-                <header>
-                    <b class="date pull-left"><%= element.from %></b>
-                    <span class="date pull-right"><%- element.date %></span>
-                    <div class="clear"></div>
-                    <h1><%- element.subject %></h1>
-                    <div class="to-and-cc">
-                        <label><%- i18n.to %></label> <%= element.to %>&nbsp;&nbsp;
-                        <% if (element.cc !== '') { %><label><%- i18n.copy %></label> <%= element.cc %><% } %>
                     </div>
                 </header>
                 <pre class="content"><%= element.content %></pre>

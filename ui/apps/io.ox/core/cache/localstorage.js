@@ -214,10 +214,16 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
                     // (3) note: This 'clear()' method is not only called at a version change, but also at other circumstances (e.g. logout->login->real browser refresh).
                     // (4) note: When the key doesn't exists in localStorage, 'getItem' returns 'null' (see w3c spec)
                     // (5) note: The allocated data for this var is quite big, so it should be assured that the js GC can delete it later
-                    var permanentCache = localStorage.getItem('appsuite.office-fonts');
+                    var permanentCache = localStorage.getItem('appsuite.office-fonts'),
+                        savepointId = _(['appsuite.cache', ox.user, ox.language, 'app-cache.index.savepoints' || '']).compact().join('.'),
+                        // keep savepoints after version update too.
+                        savepoints = localStorage.getItem(savepointId);
 
                     localStorage.clear();
                     localStorage.setItem('appsuite-ui', JSON.stringify({ version: ox.version }));
+
+                    // restore savepoints
+                    if (savepoints) localStorage.setItem(savepointId, savepoints);
 
                     // Docs-392: Restore the permanentCache data after the localStorage was cleared. But only when the key existed (!== null) before.
                     if (permanentCache !== null) {

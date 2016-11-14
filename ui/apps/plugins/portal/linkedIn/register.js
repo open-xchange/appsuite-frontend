@@ -216,7 +216,7 @@ define('plugins/portal/linkedIn/register', [
                 baton.model.node.removeClass('requires-setup widget-color-custom color-linkedin');
                 refreshWidget();
             }, this);
-
+            if (this.hasClass('widget-color-custom')) return;
             this.find('h2:first').prepend($('<i class="fa fa-linkedin">'));
             this.find('h2 .title').removeClass('title').addClass('sr-only');
             this.addClass('widget-color-custom color-linkedin');

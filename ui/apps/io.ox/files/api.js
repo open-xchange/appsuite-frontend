@@ -1168,6 +1168,28 @@ define('io.ox/files/api', [
                 // the mediator will reload the current collection
                 api.propagate('change:version', file);
             });
+        },
+
+        /**
+         * return a Deferred with bool if current version is true
+         *
+         * @return {Deferred} with a boolean
+         */
+        getCurrentState: function (file, options) {
+            return api.versions.load(file, options).then(function (versions) {
+                var currentVersion = false;
+                if (_.isArray(versions)) {
+                    // fix for Bug 49895, drive plugin without support for versions
+                    if (versions.length) {
+                        currentVersion = _.some(versions, function (item) {
+                            return item.current_version && item.version === file.version;
+                        });
+                    } else {
+                        currentVersion = true;
+                    }
+                }
+                return currentVersion;
+            });
         }
     };
 

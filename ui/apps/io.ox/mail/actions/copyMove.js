@@ -41,10 +41,10 @@ define('io.ox/mail/actions/copyMove', [
                             if (senderList.length > 1) {
                                 preparedTest = { id: 'anyof', tests: [] };
                                 _.each(senderList, function (item) {
-                                    preparedTest.tests.push({ comparison: 'contains', headers: ['From'], id: 'header', values: [item] });
+                                    preparedTest.tests.push({ comparison: 'all', headers: ['From'], id: 'address', values: [item] });
                                 });
                             } else {
-                                preparedTest = { comparison: 'contains', headers: ['From'], id: 'header', values: [senderList[0]] };
+                                preparedTest = { comparison: 'all', headers: ['From'], id: 'address', values: [senderList[0]] };
                             }
 
                             args.data.obj.set('test', preparedTest);

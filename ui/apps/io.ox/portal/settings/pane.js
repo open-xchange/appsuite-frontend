@@ -291,7 +291,16 @@ define('io.ox/portal/settings/pane', [
                     };
                 },
                 filter: function (model) {
-                    return model.get('protectedWidget') !== true || model.get('enabled') !== false;
+                    //TODO: some tests?
+                    var enabledIsChangeable = _.isObject(model.get('changeable')) && model.get('changeable').enabled === true,
+                        anyChangeable = _.any(model.get('changeable'), function (val) {
+                            return val === true;
+                        });
+                    //do not show protected widgets which are disabled and the disabled state can not be changed
+                    if (model.get('protectedWidget') === true && (model.get('enabled') !== true || enabledIsChangeable)) return false;
+                    //do not show protected widgets which are enabled but don't have any attribute changeable
+                    if (model.get('protectedWidget') === true && model.get('enabled') === true && !anyChangeable) return false;
+                    return true;
                 },
                 update: function () {
                     widgets.getCollection().trigger('order-changed', 'settings');

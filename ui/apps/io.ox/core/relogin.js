@@ -74,7 +74,7 @@ define('io.ox/core/relogin', [
         if (!ox.online) return;
 
         // don't ask anonymous users
-        if (ox.user === 'anonymous') {
+        if (capabilities.has('guest && anonymous')) {
             showSessionLostDialog(error);
             return;
         }

@@ -58,7 +58,7 @@ define('io.ox/core/metrics/bot/util', [], function () {
                 id = hub;
                 hub = ox;
             }
-            hub.once(id, handler);
+            (hub.once || hub.one).call(hub, id, handler);
             return def.promise().done(callback);
         },
 

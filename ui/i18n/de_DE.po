@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-26 09:49+0200\n"
+"PO-Revision-Date: 2016-11-04 13:19+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -153,12 +153,472 @@ msgstr[1] "%1$d Nachrichten markiert"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d Nachrichten in dieser Konversation"
 
+<<<<<<< HEAD
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d Minute"
 msgstr[1] "%1$d Minuten"
+=======
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/core/folder/favorites.js
+msgid "Favorites"
+msgstr "Favoriten"
+
+#: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
+msgid "All timezones"
+msgstr "Alle Zeitzonen"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "%1$s Toolbar"
+msgstr "%1$s-Werkzeugleiste"
+
+#. screenreader label for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Actions. Use cursor keys to navigate."
+msgstr "Aktionen. Verwenden Sie die Pfeiltasten zum Navigieren."
+
+#. Tooltip for main toolbar
+#: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
+msgid "Use cursor keys to navigate"
+msgstr "Verwenden Sie die Pfeiltasten zum Navigieren"
+
+#: apps/io.ox/backbone/validation.js module:io.ox/core
+msgid "Please enter a valid number"
+msgstr "Bitte geben Sie eine gültige Zahl ein."
+
+#: apps/io.ox/backbone/validation.js module:io.ox/core
+msgid "Please enter a date in the past"
+msgstr "Bitte geben Sie ein Datum in der Vergangenheit ein."
+
+#: apps/io.ox/backbone/validation.js module:io.ox/core
+msgid "Please enter a valid email address"
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+
+#: apps/io.ox/backbone/validation.js module:io.ox/core
+msgid "Please enter a valid phone number. Allowed characters are: %1$s"
+msgstr ""
+"Bitte geben Sie eine gültige Telefonnummer ein. Folgende Zeichen sind "
+"erlaubt: %1$s"
+
+#: apps/io.ox/backbone/validation.js module:io.ox/core
+msgid "Please enter a valid email address or phone number"
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse oder Telefonnummer ein."
+
+#: apps/io.ox/backbone/validation.js module:io.ox/core
+msgid "Please enter a valid object"
+msgstr "Geben Sie ein gültiges Objekt ein."
+
+#: apps/io.ox/backbone/validation.js module:io.ox/core
+msgid "Please enter a value"
+msgstr "Bitte geben Sie einen Wert ein"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "Use cursor keys to navigate, press enter to select a date"
+msgstr ""
+"Verwenden Sie die Pfeiltasten zum Navigieren. Drücken Sie die Eingabetaste, "
+"um ein Datum zu wählen."
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "Today: %1$s"
+msgstr "Heute: %1$s"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "Go to previous month"
+msgstr "Zu vorherigem Monat gehen"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "Go to next month"
+msgstr "Zu nächstem Monat gehen"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "CW"
+msgstr "KW"
+
+#. CW is calender week and %1$d is the week number
+#. %1$d = Calendar week
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+#: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/view.js
+msgid "CW %1$d"
+msgstr "KW %1$d"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "Go to previous year"
+msgstr "Zu vorherigem Jahr gehen"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "Go to next year"
+msgstr "Zu nächstem Jahr gehen"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "Go to previous decade"
+msgstr "Zu vorherigem Jahrzehnt gehen"
+
+#: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
+msgid "Go to next decade"
+msgstr "Zu nächstem Jahrzehnt gehen"
+
+#. button label for closing the Presenter app.
+#. button tooltip for closing the Presenter app.
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
+#: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
+#: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
+#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
+#: apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/files/actions/share.js apps/io.ox/files/actions/showlink.js
+#: apps/io.ox/files/mediaplayer.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
+#: module:io.ox/mail apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
+#: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
+#: apps/plugins/upsell/simple-wizard/register.js
+#: module:plugins/upsell/simple-wizard
+msgid "Close"
+msgstr "Schließen"
+
+#: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/acceptdeny.js
+#: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
+#: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
+#: apps/io.ox/calendar/main.js apps/io.ox/calendar/month/perspective.js
+#: apps/io.ox/calendar/settings/timezones/favorite-view.js
+#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
+#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
+#: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/folder/actions/common.js
+#: apps/io.ox/core/folder/actions/remove.js
+#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
+#: apps/io.ox/core/import/import.js apps/io.ox/core/main.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/print.js
+#: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/core/tk/mobiscroll.js apps/io.ox/core/upsell.js
+#: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
+#: module:io.ox/core/viewer apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/files/actions/delete.js module:io.ox/files
+#: apps/io.ox/files/actions/edit-description.js
+#: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
+#: apps/io.ox/files/actions/share.js
+#: apps/io.ox/files/actions/upload-new-version.js
+#: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
+#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
+#: apps/io.ox/portal/settings/widgetview.js
+#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions/delete.js
+#: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js
+#: apps/io.ox/tasks/edit/main.js apps/io.ox/tasks/main.js
+#: apps/plugins/administration/groups/settings/edit.js
+#: apps/plugins/administration/groups/settings/toolbar.js
+#: apps/plugins/administration/resources/settings/edit.js
+#: apps/plugins/administration/resources/settings/toolbar.js
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
+#: apps/plugins/portal/tumblr/register.js apps/plugins/portal/twitter/util.js
+#: apps/plugins/portal/userSettings/register.js
+#: apps/plugins/portal/xing/register.js
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Do you want the appointments printed in detail or as a compact list?"
+msgstr "Möchten Sie die Termine im Detail oder als kompakte Liste drucken?"
+
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Detailed"
+msgstr "Detailliert"
+
+#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+msgid "Compact"
+msgstr "Kompakt"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/folder/contextmenu.js
+#: module:io.ox/core apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/actions/move.js apps/io.ox/tasks/mobile-toolbar-actions.js
+#: apps/io.ox/tasks/toolbar.js
+msgid "Move"
+msgstr "Verschieben"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
+msgid "Change status"
+msgstr "Status ändern"
+
+#. Calendar: Create follow-up appointment. Maybe "Folgetermin" in German.
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Follow-up"
+msgstr "Folgetermin"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js
+#: apps/io.ox/core/print.js module:io.ox/core apps/io.ox/mail/actions.js
+#: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+msgid "Print"
+msgstr "Drucken"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Send mail to all participants"
+msgstr "E-Mail an alle Teilnehmer senden"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Invite to new appointment"
+msgstr "Zu neuem Termin einladen"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
+#: module:io.ox/mail
+msgid "Save as distribution list"
+msgstr "Als Verteilerliste speichern"
+
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+msgid "Synchronize calendar"
+msgstr "Kalender synchronisieren"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+msgid "Reminder"
+msgstr "Erinnerung"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks
+#: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail
+msgid "Change confirmation status"
+msgstr "Bestätigungsstatus ändern"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+msgid ""
+"You are about to change your confirmation status. Please leave a comment for "
+"other participants."
+msgstr ""
+"Sie sind dabei, Ihren Bestätigungsstatus zu ändern. Bitte hinterlassen Sie "
+"für die anderen Teilnehmer einen Kommentar. "
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
+#: apps/plugins/portal/xing/actions.js module:plugins/portal
+msgid "Comment"
+msgstr "Anmerkungen"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+msgid "Please comment your confirmation status."
+msgstr "Kommentieren Sie bitte Ihren Bestätigungsstatus."
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#: apps/plugins/portal/xing/register.js module:plugins/portal
+msgid "Accept"
+msgstr "Bestätigen"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Tentative"
+msgstr "Vorläufig"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Decline"
+msgstr "Ablehnen"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/month/perspective.js
+#: apps/io.ox/calendar/week/perspective.js
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+msgid "Ignore conflicts"
+msgstr "Konflikte ignorieren"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+msgid ""
+"Do you want to confirm the whole series or just one appointment within the "
+"series?"
+msgstr ""
+"Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
+"bestätigen?"
+
+#. Use singular in this context
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/week/perspective.js
+msgid "Series"
+msgstr "Serie"
+
+#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
+#: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
+msgid "Appointment"
+msgstr "Termin"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid "Appointments in shared calendars"
+msgstr "Termine in geteilten Kalendern"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid ""
+"The selected calendar is shared by %1$s. Appointments in shared calendars "
+"will generally be created on behalf of the owner."
+msgstr ""
+"Der gewählte Kalender wurde von %1$s geteilt. Termine in geteilten Kalendern "
+"werden generell im Auftrag des Eigentümers angelegt."
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid ""
+"Do you really want to create an appointment <b>on behalf of the folder "
+"owner</b> or do you want to create an appointment <b>with the folder owner</"
+"b> in your own calendar?"
+msgstr ""
+"Wollen Sie wirklich einen Termin <b>im Auftrag des Ordner-Eigentümers</b> "
+"anlegen oder wollen Sie einen Termin <b>mit dem Ordner-Eigentümer</b> in "
+"Ihrem eigenen Kalender anlegen?"
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid "On behalf of the owner"
+msgstr "im Auftrag des Eigentümers "
+
+#: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
+msgid "Invite owner"
+msgstr "Eigentümer einladen"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+msgid ""
+"Do you want to delete the whole series or just one appointment within the "
+"series?"
+msgstr ""
+"Wollen Sie die komplette Serie oder nur einen einzelnen Termin aus der Serie "
+"löschen?"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
+msgid "Delete appointment"
+msgstr "Termin löschen"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+msgid "Delete whole series"
+msgstr "Komplette Serie löschen"
+
+#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
+msgid "Do you want to delete this appointment?"
+msgstr "Wollen Sie diesen Termin löschen?"
+
+#: apps/io.ox/calendar/actions/edit.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js
+msgid ""
+"Do you want to edit the whole series or just one appointment within the "
+"series?"
+msgstr ""
+"Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
+"bearbeiten?"
+
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
+msgid "Conflicts detected"
+msgstr "Konflikt aufgetreten"
+
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
+msgid "The new appointment conflicts with existing appointments."
+msgstr ""
+"Zwischen dem neuen Termin und bestehenden Terminen ist ein Konflikt "
+"aufgetreten."
+
+#: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/month/perspective.js
+#: apps/io.ox/calendar/week/perspective.js
+msgid "Appointment Details"
+msgstr "Termin-Details"
+
+#: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/week/perspective.js
+msgid "An error occurred. Please try again."
+msgstr "Es trat ein Fehler auf. Bitte versuchen Sie es später erneut."
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/toolbar.js
+#: module:io.ox/calendar
+msgid "Edit appointment"
+msgstr "Termin bearbeiten"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
+msgid "Create appointment"
+msgstr "Termin erstellen"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
+#: apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/settings/user.js
+#: apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
+#: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/names.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/plugins/administration/groups/settings/edit.js
+#: apps/plugins/administration/resources/settings/edit.js
+#: apps/plugins/portal/flickr/register.js module:plugins/portal
+#: apps/plugins/portal/mail/register.js apps/plugins/portal/rss/register.js
+#: module:io.ox/portal apps/plugins/portal/tumblr/register.js
+msgid "Save"
+msgstr "Speichern"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+#: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
+#: apps/plugins/administration/resources/settings/edit.js
+msgid "Create"
+msgstr "Anlegen"
+>>>>>>> origin/release-7.8.3
 
 #. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
@@ -3089,9 +3549,15 @@ msgstr "%s über den OX Updater herunterladen"
 msgid "Download entire folder"
 msgstr "Gesamten Ordner herunterladen"
 
+<<<<<<< HEAD
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Download installation file"
 msgstr "Installationsdatei herunterladen"
+=======
+#: apps/io.ox/core/folder/actions/common.js module:io.ox/core
+msgid "All files have been deleted"
+msgstr "Alle Dateien wurden gelöscht"
+>>>>>>> origin/release-7.8.3
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Download installation file (for Windows)"
@@ -5734,9 +6200,18 @@ msgstr "Keine Benachrichtigungen"
 msgid "No priority"
 msgstr "Keine Priorität"
 
+<<<<<<< HEAD
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "No recipients"
 msgstr "Keine Empfänger"
+=======
+#. object permissions - user role
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "User"
+msgstr "Benutzer"
+>>>>>>> origin/release-7.8.3
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js apps/io.ox/tasks/edit/view-template.js
@@ -6025,9 +6500,19 @@ msgstr "Optional 02"
 msgid "Optional 03"
 msgstr "Optional 03"
 
+<<<<<<< HEAD
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Optional 04"
 msgstr "Optional 04"
+=======
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/find/extensions-api.js module:io.ox/core
+#: apps/io.ox/find/manager/value-model.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "All"
+msgstr "Alle"
+>>>>>>> origin/release-7.8.3
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Optional 05"
@@ -6965,10 +7450,21 @@ msgstr "Alle Objekte lesen"
 msgid "Read article on tumblr.com"
 msgstr "Artikel auf tumblr.com lesen"
 
+<<<<<<< HEAD
 #. object permissions - read
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Read own objects"
 msgstr "Eigene Objekte lesen"
+=======
+#. generic erromessage if inserting an image into a mail failed.
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "Error while uploading your image"
+msgstr "Fehler beim Hochladen Ihres Bildes"
+
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "Insert inline image"
+msgstr "Bild-URL einfügen"
+>>>>>>> origin/release-7.8.3
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Read permissions"
@@ -7309,9 +7805,31 @@ msgstr "Ressource"
 msgid "Resource group"
 msgstr "Ressourcengruppe"
 
+<<<<<<< HEAD
 #: apps/plugins/administration/resources/settings/edit.js module:io.ox/core
 msgid "Resource name (mandatory)"
 msgstr "Ressourcenname (Pflichtfeld)"
+=======
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Detail"
+msgstr "Detail"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Localpart"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Domain"
+msgstr "Domain"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "starts on"
+msgstr "beginnt am"
+>>>>>>> origin/release-7.8.3
 
 #: apps/io.ox/participants/detail.js module:io.ox/core
 #: apps/plugins/administration/resources/register.js
@@ -7355,10 +7873,23 @@ msgstr "Weitergeleitet (Retweet) von %s"
 msgid "Review your purchases"
 msgstr "Prüfen Sie Ihre Bestellung"
 
+<<<<<<< HEAD
 #. Role: view folder + read/write all
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Reviewer"
 msgstr "Überarbeiter"
+=======
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+#, fuzzy
+msgid "Sender address"
+msgstr "Senderadresse"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Keep"
+msgstr "Behalten"
+>>>>>>> origin/release-7.8.3
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Revoke"

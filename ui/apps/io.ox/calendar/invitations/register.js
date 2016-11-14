@@ -468,7 +468,13 @@ define('io.ox/calendar/invitations/register', [
         },
 
         repaint: function () {
-            analyzeIMIPAttachment(this.imip).done(this.render.bind(this));
+            var self = this;
+            analyzeIMIPAttachment(this.imip)
+                .done(function (analyses) {
+                    var data = _(analyses).findWhere({ uid: self.model.get('uid') });
+                    this.model.set(data);
+                    this.render();
+                }.bind(this));
         }
     });
 

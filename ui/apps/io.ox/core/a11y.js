@@ -21,7 +21,7 @@ define('io.ox/core/a11y', [], function () {
 
     // fix for role="button"
     $(document).on('keydown', 'a[role="button"]', function (e) {
-        if (!/32|13/.test(e.which) || e.isDefaultPrevented()) return;
+        if (!/32/.test(e.which) || e.which === 13 && e.isDefaultPrevented()) return;
         e.preventDefault();
         $(this).click();
     });

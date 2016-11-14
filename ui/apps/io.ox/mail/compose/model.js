@@ -42,8 +42,8 @@ define.async('io.ox/mail/compose/model', [
                 autosavedAsDraft: false,
                 // Autodismiss confirmation dialog
                 autoDismiss: false,
-                preferredEditorMode: settings.get('messageFormat', 'html'),
-                editorMode: settings.get('messageFormat', 'html'),
+                preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
+                editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
                 attachments: new Attachments.Collection(),
                 folder_id: 'default0/INBOX',
                 initial: true,

@@ -523,11 +523,21 @@ define('io.ox/core/folder/api', [
         }
     };
 
+    function fail(error) {
+        error = { error: error, code: 'UI-FOLDER' };
+        console.warn('folder/api', error);
+        api.trigger('error error:' + error.code, error);
+        return $.Deferred().reject(error);
+    }
+
     //
     // Get a single folder
     //
 
     function get(id, options) {
+
+        // avoid undefined / yep, untranslated
+        if (id === undefined) return fail('Cannot fetch folder with undefined id');
 
         id = String(id);
         options = _.extend({ cache: true }, options);
@@ -539,9 +549,7 @@ define('io.ox/core/folder/api', [
 
         // fetch GAB but GAB is disabled?
         if (id === '6' && !capabilities.has('gab')) {
-            var error = gt('Accessing global address book is not permitted');
-            console.warn(error);
-            return $.Deferred().reject({ error: error });
+            return fail(gt('Accessing global address book is not permitted'));
         }
 
         return http.GET({
@@ -554,12 +562,15 @@ define('io.ox/core/folder/api', [
                 tree: tree(id)
             }
         })
-        .then(function (data) {
-            return renameDefaultCalendarFolders(data);
-        }, function (error) {
-            api.trigger('error error:' + error.code, error);
-            return error;
-        })
+        .then(
+            function (data) {
+                return renameDefaultCalendarFolders(data);
+            },
+            function (error) {
+                api.trigger('error error:' + error.code, error);
+                return error;
+            }
+        )
         .then(function (data) {
             // update/add model
             var model = pool.addModel(data);
