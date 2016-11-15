@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-31 22:16+0100\n"
+"PO-Revision-Date: 2016-11-09 08:57+0100\n"
 "Last-Translator: Jacob Sparre Andersen <jacob@bureau-cornavin.com>\n"
 "Language-Team: Danish <da@bureau-cornavin.com>\n"
 "Language: da_DK\n"
@@ -277,10 +277,11 @@ msgstr "Gå til næste årti"
 #. button label for closing the Presenter app.
 #. button tooltip for closing the Presenter app.
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
 #: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
+#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -288,7 +289,7 @@ msgstr "Gå til næste årti"
 #: apps/io.ox/files/mediaplayer.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/statistics.js
+#: module:io.ox/mail apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
@@ -1214,6 +1215,7 @@ msgid "Quit"
 msgstr "Afslut"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
+#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "Note"
@@ -2239,6 +2241,10 @@ msgstr "Delte adressebøger"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Select contacts"
 msgstr "Vælg kontakter"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Departments"
+msgstr "Afdelinger"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
@@ -3803,6 +3809,10 @@ msgstr "Mappespecifikke handlinger for %1$s"
 #: apps/io.ox/core/tk/mobiscroll.js
 msgid "Ok"
 msgstr "OK"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "Folder options"
+msgstr "Mappeindstillinger"
 
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -5478,6 +5488,10 @@ msgid "Click to close this notification"
 msgstr "Klik for at lukke denne meddelelse"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
+msgid "Title"
+msgstr "Titel"
+
+#: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Enter document title here"
 msgstr "Skriv dokumentets titel her"
 
@@ -5725,6 +5739,12 @@ msgstr "Box"
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "OneDrive"
 msgstr "OneDrive"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account added successfully"
+msgstr "Kontoen blev tilføjet med succes"
 
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -6121,6 +6141,8 @@ msgstr "Administratorrolle"
 
 #. object permissions - user role
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "User"
 msgstr "Bruger"
 
@@ -6412,6 +6434,8 @@ msgstr "Justér"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "All"
 msgstr "Alle"
 
@@ -6648,11 +6672,6 @@ msgstr "Manuelt"
 msgid "This is not a valid mail address"
 msgstr "Dette er ikke en gyldig e-mail-adresse"
 
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account added successfully"
-msgstr "Kontoen blev tilføjet med succes"
-
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "As incoming mail server"
@@ -6864,11 +6883,6 @@ msgstr "Tilføj til kalender"
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "View attachment"
 msgstr "Se vedhæftning"
-
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Use %1$s"
-msgstr "Brug %1$s"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Drop here to import this mail"
@@ -7197,8 +7211,8 @@ msgid ""
 "%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
 "between the tokens"
 msgstr ""
-"%1$s autoudfyldt felt.  Brug venstre og højre piletaster for at skifte mellem "
-"mulighederne."
+"%1$s autoudfyldt felt.  Brug venstre og højre piletaster for at skifte "
+"mellem mulighederne."
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -7267,6 +7281,11 @@ msgstr "Ingen underskrift"
 msgid "Manage signatures"
 msgstr "Håndtér underskrifter"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Use %1$s"
+msgstr "Brug %1$s"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Udløbstidspunkt"
@@ -7332,6 +7351,11 @@ msgstr "Slip vedhæftninger her"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Added %s to attachments."
 msgstr "Føjet %s til vedhæftninger."
+
+#. generic erromessage if inserting an image into a mail failed.
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "Error while uploading your image"
+msgstr "Fejl under overførsel af dit billede."
 
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 msgid "Insert inline image"
@@ -7614,6 +7638,21 @@ msgstr "Regulært udtryk"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
+msgid "Detail"
+msgstr "Detalje"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Localpart"
+msgstr "Lokal del"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Domain"
+msgstr "Domæne"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "starts on"
 msgstr "begynder"
 
@@ -7666,6 +7705,11 @@ msgstr "Indhold"
 #: module:io.ox/settings
 msgid "Current Date"
 msgstr "Dags dato"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Sender address"
+msgstr "Afsenderadresse"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8058,16 +8102,20 @@ msgid "Conversation"
 msgstr "Samtale"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "%1$d beskeder i denne samtale"
-
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open all messages"
 msgstr "Åbn alle beskeder"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open/close all messages"
 msgstr "Åbn/luk alle beskeder"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "%1$d messages in this conversation"
+msgstr "%1$d beskeder i denne samtale"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "Toggle viewport size"
+msgstr "Skift præsentationsstørrelse"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Close all messages"
@@ -9685,8 +9733,9 @@ msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
 "If you have questions or problems please contact our support directly."
 msgstr ""
-"Bemærk venligst at du ikke kan bede om hjælp gennem respons-formularen.  Hvis "
-"du har spørgsmål eller problemer, så kontakt venligst vores support direkte."
+"Bemærk venligst at du ikke kan bede om hjælp gennem respons-formularen.  "
+"Hvis du har spørgsmål eller problemer, så kontakt venligst vores support "
+"direkte."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -12552,9 +12601,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Timezone"
 #~ msgstr "Tidszone"
-
-#~ msgid "Title"
-#~ msgstr "Titel"
 
 #~ msgid "To add further details, click on Expand form."
 #~ msgstr "For at tilføje flere detaljer, klikkes der på Udvid."

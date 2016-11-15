@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2016-11-12 22:21+0100\n"
 "Last-Translator: Andres Herrera <andres@bureau-cornavin.com>\n"
 "Language-Team: Spanish <es@bureau-cornavin.com>\n"
 "Language: es_ES\n"
@@ -283,10 +283,11 @@ msgstr "Ir a la década siguiente"
 #. button label for closing the Presenter app.
 #. button tooltip for closing the Presenter app.
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
 #: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
+#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -294,7 +295,7 @@ msgstr "Ir a la década siguiente"
 #: apps/io.ox/files/mediaplayer.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/statistics.js
+#: module:io.ox/mail apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
@@ -1226,6 +1227,7 @@ msgid "Quit"
 msgstr "Salir"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
+#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "Nota"
@@ -2257,6 +2259,10 @@ msgstr "Libretas de direcciones compartidas"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Select contacts"
 msgstr "Seleccionar contactos"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Departments"
+msgstr "Departamentos"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
@@ -3827,6 +3833,10 @@ msgstr "Acciones específicas de carpeta para %1$s"
 #: apps/io.ox/core/tk/mobiscroll.js
 msgid "Ok"
 msgstr "Aceptar"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "Folder options"
+msgstr "Opciones de carpeta"
 
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -5514,6 +5524,10 @@ msgid "Click to close this notification"
 msgstr "Presione para cerrar esta notificación"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
+msgid "Title"
+msgstr "Tratamiento"
+
+#: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Enter document title here"
 msgstr "Indique el título del documento aquí"
 
@@ -5765,6 +5779,12 @@ msgstr "Box"
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "OneDrive"
 msgstr "OneDrive"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account added successfully"
+msgstr "Cuenta añadida satisfactoriamente"
 
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -6164,6 +6184,8 @@ msgstr "Rol administrativo"
 
 #. object permissions - user role
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "User"
 msgstr "Usuario"
 
@@ -6458,6 +6480,8 @@ msgstr "Ajustar"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "All"
 msgstr "Todos"
 
@@ -6698,11 +6722,6 @@ msgstr "Manual"
 msgid "This is not a valid mail address"
 msgstr "Esta no es una dirección de correo válida"
 
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account added successfully"
-msgstr "Cuenta añadida satisfactoriamente"
-
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "As incoming mail server"
@@ -6916,11 +6935,6 @@ msgstr "Añadir al calendario"
 msgid "View attachment"
 msgstr "Ver adjunto"
 
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Use %1$s"
-msgstr "Usar %1$s"
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Drop here to import this mail"
 msgstr "Soltar aquí para importar este correo"
@@ -7116,8 +7130,8 @@ msgid ""
 "Please note that some categories are predefined and you might not be able to "
 "rename or disable them."
 msgstr ""
-"Por favor, tenga en cuenta que algunas categorías están predefinidas y podría "
-"no ser posible renombrarlas o desactivarlas."
+"Por favor, tenga en cuenta que algunas categorías están predefinidas y "
+"podría no ser posible renombrarlas o desactivarlas."
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "Disable categories"
@@ -7129,8 +7143,8 @@ msgstr "Desactivar categorías"
 msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr ""
-"Puede pasar cierto tiempo hasta que los correos electrónicos se asignen a las "
-"categorías predeterminadas."
+"Puede pasar cierto tiempo hasta que los correos electrónicos se asignen a "
+"las categorías predeterminadas."
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 msgid "Move to category"
@@ -7327,6 +7341,11 @@ msgstr "Sin firma"
 msgid "Manage signatures"
 msgstr "Administrar firmas"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Use %1$s"
+msgstr "Usar %1$s"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Caducidad"
@@ -7392,6 +7411,11 @@ msgstr "Suelte los adjuntos aquí"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Added %s to attachments."
 msgstr "Añadidos %s a los adjuntos."
+
+#. generic erromessage if inserting an image into a mail failed.
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "Error while uploading your image"
+msgstr "Error al subir su imagen"
 
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 msgid "Insert inline image"
@@ -7675,6 +7699,21 @@ msgstr "Expresión regular"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
+msgid "Detail"
+msgstr "Detalle"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Localpart"
+msgstr "Parte local"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Domain"
+msgstr "Dominio"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "starts on"
 msgstr "comienza el"
 
@@ -7727,6 +7766,11 @@ msgstr "Contenido"
 #: module:io.ox/settings
 msgid "Current Date"
 msgstr "Fecha actual"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Sender address"
+msgstr "Dirección de remite"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8123,16 +8167,20 @@ msgid "Conversation"
 msgstr "Conversación"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "%1$d mensajes en esta conversación"
-
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open all messages"
 msgstr "Abrir todos los mensajes"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open/close all messages"
 msgstr "Abrir/cerrar todos los mensajes"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "%1$d messages in this conversation"
+msgstr "%1$d mensajes en esta conversación"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "Toggle viewport size"
+msgstr "Cambiar tamaño de visualización"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Close all messages"
@@ -8400,8 +8448,7 @@ msgid ""
 "automatically configure your iOS device! It´s that simple!"
 msgstr ""
 "Por favor, introduzca su número de teléfono celular y ¡le enviaremos un "
-"enlace "
-"para configurar automáticamente su dispositivo iOS! ¡Es así de simple!"
+"enlace para configurar automáticamente su dispositivo iOS! ¡Es así de simple!"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configuration Email"
@@ -8421,8 +8468,7 @@ msgid ""
 "´s that simple!"
 msgstr ""
 "Configure automáticamente su dispositivo presionando el botón inferior. ¡Es "
-"así "
-"de simple!"
+"así de simple!"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
@@ -9890,8 +9936,7 @@ msgid ""
 "Screen'%4$s"
 msgstr ""
 "Instale esta aplicación web en su %1$s: Presione %2$s y después %3$s'Añadir "
-"a "
-"la pantalla de inicio'%4$s"
+"a la pantalla de inicio'%4$s"
 
 #. %1$s Appointment title
 #. %1$s task title
@@ -18797,9 +18842,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Timor-Leste"
 #~ msgstr "Timor Oriental"
-
-#~ msgid "Title"
-#~ msgstr "Tratamiento"
 
 #~ msgctxt "title"
 #~ msgid "Title"

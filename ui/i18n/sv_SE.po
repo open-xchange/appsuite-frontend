@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-25 05:18+0100\n"
+"PO-Revision-Date: 2016-11-09 05:49+0100\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <ox@bureau-cornavin.com>\n"
 "Language: sv_SE\n"
@@ -278,10 +278,11 @@ msgstr "Gå till nästa årtionde"
 #. button label for closing the Presenter app.
 #. button tooltip for closing the Presenter app.
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
 #: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
+#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -289,7 +290,7 @@ msgstr "Gå till nästa årtionde"
 #: apps/io.ox/files/mediaplayer.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/statistics.js
+#: module:io.ox/mail apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
@@ -1214,6 +1215,7 @@ msgid "Quit"
 msgstr "Avsluta"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
+#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "Anteckning"
@@ -2242,6 +2244,10 @@ msgstr "Delade adressböcker"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Select contacts"
 msgstr "Välj kontakter"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Departments"
+msgstr "Avdelningar"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
@@ -3802,6 +3808,10 @@ msgstr "Mappspecifika åtgärder för %1$s"
 #: apps/io.ox/core/tk/mobiscroll.js
 msgid "Ok"
 msgstr "Ok"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "Folder options"
+msgstr "Mappalternativ"
 
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -5481,6 +5491,10 @@ msgid "Click to close this notification"
 msgstr "Klicka för att stänga den här aviseringen"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
+msgid "Title"
+msgstr "Titel"
+
+#: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Enter document title here"
 msgstr "Skriv in dokumentets titel här"
 
@@ -5730,6 +5744,12 @@ msgstr "Box"
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "OneDrive"
 msgstr "OneDrive"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account added successfully"
+msgstr "Kontot lades till"
 
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -6126,6 +6146,8 @@ msgstr "Administrativ roll"
 
 #. object permissions - user role
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "User"
 msgstr "Användare"
 
@@ -6417,6 +6439,8 @@ msgstr "Justera"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "All"
 msgstr "Alla"
 
@@ -6619,8 +6643,7 @@ msgstr "Ditt lösenord"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Your credentials will be sent over a secure connection only"
 msgstr ""
-"Din inloggningsinformation kommer endast skickas via en "
-"säker anslutning"
+"Din inloggningsinformation kommer endast skickas via en säker anslutning"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
@@ -6652,11 +6675,6 @@ msgstr "Handbok"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "Det här är inte en giltig e-postadress"
-
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account added successfully"
-msgstr "Kontot lades till"
 
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -6870,11 +6888,6 @@ msgstr "Lägg till i kalendern"
 msgid "View attachment"
 msgstr "Visa bilaga"
 
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Use %1$s"
-msgstr "Använd %1$s"
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Drop here to import this mail"
 msgstr "Släpp här för att importera meddelandet"
@@ -7064,9 +7077,8 @@ msgid ""
 "Please note that some categories are predefined and you might not be able to "
 "rename or disable them."
 msgstr ""
-"Observera att vissa kategorier är fördefinierade och du kanske inte kan döpa"
-" om "
-"eller avaktivera dem."
+"Observera att vissa kategorier är fördefinierade och du kanske inte kan döpa "
+"om eller avaktivera dem."
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "Disable categories"
@@ -7078,8 +7090,8 @@ msgstr "Avaktivera kategorier"
 msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr ""
-"Det kan ta lite tid tills meddelanden blir tilldelade till"
-" standardkategorierna."
+"Det kan ta lite tid tills meddelanden blir tilldelade till "
+"standardkategorierna."
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 msgid "Move to category"
@@ -7203,8 +7215,8 @@ msgid ""
 "%1$s autocomplete token field. Use left and right Arrowkeys to navigate "
 "between the tokens"
 msgstr ""
-"%1$s teckenfält för autofyll. Använd vänster och höger piltangenter "
-"för att navigera mellan tecknena"
+"%1$s teckenfält för autofyll. Använd vänster och höger piltangenter för att "
+"navigera mellan tecknena"
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -7273,6 +7285,11 @@ msgstr "Ingen signatur"
 msgid "Manage signatures"
 msgstr "Hantera signaturer"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Use %1$s"
+msgstr "Använd %1$s"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Utgår om"
@@ -7338,6 +7355,11 @@ msgstr "Släpp bilagor här"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Added %s to attachments."
 msgstr "Lade till %s som bilaga."
+
+#. generic erromessage if inserting an image into a mail failed.
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "Error while uploading your image"
+msgstr "Fel när din bild laddades upp"
 
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 msgid "Insert inline image"
@@ -7620,6 +7642,21 @@ msgstr "Reguttr"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
+msgid "Detail"
+msgstr "Detaljer"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Localpart"
+msgstr "Lokaldel"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Domain"
+msgstr "Domän"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "starts on"
 msgstr "startar den"
 
@@ -7672,6 +7709,11 @@ msgstr "Innehåll"
 #: module:io.ox/settings
 msgid "Current Date"
 msgstr "Aktuellt datum"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Sender address"
+msgstr "Avsändaradress"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7803,8 +7845,8 @@ msgid ""
 "the list. If you want to move or delete all messages, you find corresponding "
 "actions in the folder context menu."
 msgstr ""
-"Det finns %1$d meddelanden i den här mappen; alla meddelanden visas "
-"inte i listan. Om du vill flytta eller radera alla meddelanden hittar du "
+"Det finns %1$d meddelanden i den här mappen; alla meddelanden visas inte i "
+"listan. Om du vill flytta eller radera alla meddelanden hittar du "
 "motsvarande åtgärder i mappens snabbmeny."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
@@ -8064,16 +8106,20 @@ msgid "Conversation"
 msgstr "Konversation"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "%1$d meddelanden i den här konversationen"
-
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open all messages"
 msgstr "Öppna alla meddelanden"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open/close all messages"
 msgstr "Öppna/stäng alla meddelanden"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "%1$d messages in this conversation"
+msgstr "%1$d meddelanden i den här konversationen"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "Toggle viewport size"
+msgstr "Växla vystorlek"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Close all messages"
@@ -15640,9 +15686,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Timezone"
 #~ msgstr "Tidszon"
-
-#~ msgid "Title"
-#~ msgstr "Titel"
 
 #~ msgid "To add further details, click on Expand form."
 #~ msgstr ""

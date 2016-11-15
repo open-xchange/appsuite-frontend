@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-10-31 23:43+0900\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2016-11-08 20:50+0100\n"
+"Last-Translator: nicolas <nicolas@bureau-cornavin.com>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -240,8 +240,8 @@ msgstr "Veuillez saisir une valeur"
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Use cursor keys to navigate, press enter to select a date"
 msgstr ""
-"Utilisez les flèches du clavier pour naviguer, appuyez sur "
-"Entrée pour choisir une date."
+"Utilisez les flèches du clavier pour naviguer, appuyez sur Entrée pour "
+"choisir une date."
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Today: %1$s"
@@ -286,10 +286,11 @@ msgstr "Aller à la décennie suivante"
 #. button label for closing the Presenter app.
 #. button tooltip for closing the Presenter app.
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
+#: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
 #: apps/io.ox/core/about/about.js apps/io.ox/core/folder/actions/properties.js
 #: apps/io.ox/core/folder/tree.js apps/io.ox/core/main.js
-#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/wizard.js
-#: apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/core/tk/dialogs.js
+#: apps/io.ox/core/tk/wizard.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -297,7 +298,7 @@ msgstr "Aller à la décennie suivante"
 #: apps/io.ox/files/mediaplayer.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/statistics.js
+#: module:io.ox/mail apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
 #: apps/io.ox/presenter/views/toolbarview.js module:io.ox/presenter
 #: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
@@ -1241,6 +1242,7 @@ msgid "Quit"
 msgstr "Quitter"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
+#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "Remarque"
@@ -2274,6 +2276,10 @@ msgstr "Carnets d'adresses partagés"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Select contacts"
 msgstr "Sélectionner les contacts"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Departments"
+msgstr "Départements"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
@@ -3848,6 +3854,10 @@ msgstr "Actions spécifiques au dossier pour %1$s"
 msgid "Ok"
 msgstr "OK"
 
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "Folder options"
+msgstr "Options du dossier"
+
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "An unknown error occurred"
@@ -4153,8 +4163,8 @@ msgstr "Décider maintenant"
 msgid ""
 "You can manage desktop notifications at any time, by visiting your settings"
 msgstr ""
-"Vous pouvez gérer à tout moment les notifications de bureau en consultant vos "
-"réglages"
+"Vous pouvez gérer à tout moment les notifications de bureau en consultant "
+"vos réglages"
 
 #. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
@@ -5550,6 +5560,10 @@ msgid "Click to close this notification"
 msgstr "Cliquez pour fermer cette notification"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
+msgid "Title"
+msgstr "Titre"
+
+#: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "Enter document title here"
 msgstr "Saisissez ici le titre du document"
 
@@ -5803,6 +5817,12 @@ msgstr "Box"
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "OneDrive"
 msgstr "OneDrive"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account added successfully"
+msgstr "Compte ajouté avec succès"
 
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -6204,6 +6224,8 @@ msgstr "Rôle administratif"
 
 #. object permissions - user role
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "User"
 msgstr "Utilisateur"
 
@@ -6497,6 +6519,8 @@ msgstr "Ajuster"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "All"
 msgstr "Tous"
 
@@ -6738,11 +6762,6 @@ msgstr "Manuel"
 msgid "This is not a valid mail address"
 msgstr "Ce n'est pas une adresse électronique valide"
 
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account added successfully"
-msgstr "Compte ajouté avec succès"
-
 #. Auth type. Short for "Use same credentials as incoming mail server"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "As incoming mail server"
@@ -6957,11 +6976,6 @@ msgstr "Ajouter à l'agenda"
 msgid "View attachment"
 msgstr "Afficher la pièce jointe"
 
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Use %1$s"
-msgstr "Utiliser %1$s"
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Drop here to import this mail"
 msgstr "Déposer ici pour importer ce courriel"
@@ -7160,8 +7174,7 @@ msgid ""
 "rename or disable them."
 msgstr ""
 "Veuillez noter que certaines catégories sont pré-définies et que vous ne "
-"pourrez "
-"pas nécessairement les renommer ou les désactiver."
+"pourrez pas nécessairement les renommer ou les désactiver."
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "Disable categories"
@@ -7373,6 +7386,11 @@ msgstr "Pas de signature"
 msgid "Manage signatures"
 msgstr "Gérer les signatures"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "Use %1$s"
+msgstr "Utiliser %1$s"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Expiration"
 msgstr "Expiration"
@@ -7438,6 +7456,11 @@ msgstr "afficher les pièces jointes"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Added %s to attachments."
 msgstr "Ajout de %s aux pièces jointes."
+
+#. generic erromessage if inserting an image into a mail failed.
+#: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
+msgid "Error while uploading your image"
+msgstr "Erreur lors du téléversement de votre image"
 
 #: apps/io.ox/mail/compose/inline-images.js module:io.ox/mail
 msgid "Insert inline image"
@@ -7721,6 +7744,21 @@ msgstr "Expression rationnelle"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
+msgid "Detail"
+msgstr "Détails"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Localpart"
+msgstr "Partie locale"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Domain"
+msgstr "Domaine"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "starts on"
 msgstr "commence le"
 
@@ -7773,6 +7811,11 @@ msgstr "Contenu"
 #: module:io.ox/settings
 msgid "Current Date"
 msgstr "Date actuelle"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Sender address"
+msgstr "Adresse de l'expéditeur"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8173,16 +8216,20 @@ msgid "Conversation"
 msgstr "Discussion"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "%1$d messages dans cette conversation"
-
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open all messages"
 msgstr "Ouvrir tous les messages"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open/close all messages"
 msgstr "Ouvrir / Fermer tous les messages"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "%1$d messages in this conversation"
+msgstr "%1$d messages dans cette conversation"
+
+#: apps/io.ox/mail/threadview.js module:io.ox/mail
+msgid "Toggle viewport size"
+msgstr "Basculer la taille de la vue"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Close all messages"
@@ -8584,8 +8631,8 @@ msgstr "Ajouter un participant ou une ressource"
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Cannot add participant/member with an invalid mail address: %1$s"
 msgstr ""
-"Impossible d'ajouter un participant / membre avec une adresse "
-"électronique non valide : %1$s"
+"Impossible d'ajouter un participant / membre avec une adresse électronique "
+"non valide : %1$s"
 
 #: apps/io.ox/participants/detail.js module:io.ox/core
 msgid "External participants"
@@ -9815,8 +9862,8 @@ msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
 "If you have questions or problems please contact our support directly."
 msgstr ""
-"Veuillez noter que les demandes d'assistance ne peuvent être gérées "
-"par le biais du formulaire d'impressions. Si vous avez des questions ou des "
+"Veuillez noter que les demandes d'assistance ne peuvent être gérées par le "
+"biais du formulaire d'impressions. Si vous avez des questions ou des "
 "problèmes, veuillez les soumettre directement à l'assistance."
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
@@ -13171,9 +13218,6 @@ msgstr "Ajouter à %s"
 
 #~ msgid "Timezone"
 #~ msgstr "Fuseau horaire"
-
-#~ msgid "Title"
-#~ msgstr "Titre"
 
 #~ msgctxt "title"
 #~ msgid "Title"
