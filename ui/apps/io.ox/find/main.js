@@ -15,9 +15,10 @@ define('io.ox/find/main', [
     'io.ox/find/view-placeholder',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (PlaceholderView, folderAPI, ext, settings, gt) {
+], function (PlaceholderView, folderAPI, ext, links, settings, gt) {
 
     'use strict';
 
@@ -177,14 +178,51 @@ define('io.ox/find/main', [
             'listview-empty-message': function (app) {
                 if (!app.get('parent').listView) return;
                 var ref = app.get('parent').listView.ref;
+                // adjust empty message when presenting search results
                 ext.point(ref + '/empty').extend({
                     id: 'search',
                     index: 100,
                     draw: function (baton) {
                         if (!baton.app.props.get('find-result')) return;
-                        baton.stopPropagation();
                         //#. search feature returns an empty result
                         this.text(gt('No matching items found.'));
+                    }
+                });
+            },
+
+            'listview-empty-message-action': function (app) {
+                if (!app.get('parent').listView) return;
+                if (app.isMandatory('folder')) return;
+
+                var ref = app.get('parent').listView.ref;
+
+                ext.point(ref + '/empty')
+                    // add text link 'Search in all folders' helper when supported
+                    .extend(new links.Link({
+                        index: 200,
+                        id: 'search-button',
+                        //#. text link action to run current search again wihout any folder limitations
+                        label: gt('Search in all folders?'),
+                        ref: 'io.ox/find/listview/actions/all-folders',
+                        customize: function (baton) {
+                            if (!baton.app.props.get('find-result')) return this.remove();
+                            var app = baton.app.get('find'),
+                                manager = app.model.manager,
+                                isAll = manager.get('folder') && manager.get('folder').get('values').get('custom').getOption().id === 'disabled';
+                            // remove again when not supported
+                            if (isAll) this.remove();
+                        }
+                    }));
+
+                ext.point('io.ox/find/listview/actions/all-folders').extend({
+                    // run current search again wihout any folder limitations
+                    action: function (baton) {
+                        app = baton.app.get('find');
+                        app.model.manager.activate('folder', 'custom', 'disabled');
+                        require(['io.ox/metrics/main'], function (metrics) {
+                            var name = app.get('parent').get('name') || 'unknown',
+                                apptitle = _.last(name.split('/'));
+                        });
                     }
                 });
             },
