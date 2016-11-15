@@ -317,6 +317,8 @@ define('io.ox/core/session', [
                     params: {
                         action: 'logout'
                     }
+                }).then(function () {
+                    ox.trigger('logout');
                 });
             }
             return $.Deferred().resolve();

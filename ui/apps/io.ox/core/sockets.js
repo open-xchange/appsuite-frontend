@@ -76,6 +76,11 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
                 }
             }
         });
+        // disconnect on logout
+        ox.on('logout', function () {
+            if (debug) console.log('Websocket disconnected on logout');
+            if (socket.connected) socket.close();
+        });
 
         return def;
     }
