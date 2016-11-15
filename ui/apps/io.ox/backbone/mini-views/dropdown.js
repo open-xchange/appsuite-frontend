@@ -29,6 +29,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         className: 'dropdown',
 
         events: {
+            'show.bs.dropdown': 'onShow',
             'shown.bs.dropdown': 'onShown',
             'hidden.bs.dropdown': 'resetDropdownOverlay',
             'keydown *[data-toggle="dropdown"]': 'onKeyDown',
@@ -80,23 +81,21 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     width: bounds.width,
                     height: bounds.height,
                 },
-                offset = this.$toggle ? this.$toggle.offset() : 0,
-                width = this.$toggle ? this.$toggle.outerWidth() : 0,
+                offset = this.$toggle.offset(),
+                width = this.$toggle.outerWidth(),
                 availableWidth = $(window).width(),
                 availableHeight = $(window).height(),
                 topbar = $('#io-ox-topbar');
 
             // hits bottom ?
             if (bounds.top + bounds.height > availableHeight + this.margin) {
-                if (this.$toggle) {
-                    // left or right?
-                    if ((offset.left + width + bounds.width + this.margin) < availableWidth) {
-                        // enough room on right side
-                        positions.left = offset.left + width + this.margin;
-                    } else {
-                        // position of left side
-                        positions.left = offset.left - bounds.width - this.margin;
-                    }
+                // left or right?
+                if ((offset.left + width + bounds.width + this.margin) < availableWidth) {
+                    // enough room on right side
+                    positions.left = offset.left + width + this.margin;
+                } else {
+                    // position of left side
+                    positions.left = offset.left - bounds.width - this.margin;
                 }
 
                 // move dropdown up
@@ -108,11 +107,15 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 positions.height = Math.min(availableHeight - this.margin - positions.top, positions.height);
             }
 
+            if (this.$toggle.data('fixed')) positions.left = bounds.left;
             this.$ul.css(positions);
         },
 
-        onShown: function () {
+        onShow: function () {
             this.preventFocus = this.$toggle.data('preventFocus');
+        },
+
+        onShown: function () {
             if (this.smart === false) return;
             if (_.device('smartphone')) return;
             this.setDropdownOverlay();
