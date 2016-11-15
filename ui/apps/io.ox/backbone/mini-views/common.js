@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'], function (AbstractView) {
+define('io.ox/backbone/mini-views/common', [
+    'io.ox/backbone/mini-views/abstract',
+    'io.ox/backbone/mini-views/dropdown',
+], function (AbstractView, Dropdown) {
 
     'use strict';
 
@@ -268,33 +271,26 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         }
     });
 
-    var DropdownLinkView = AbstractView.extend({
+    var DropdownLinkView = Dropdown.extend({
         tagName: 'div',
         className: 'dropdownlink',
-        events: { 'click [data-action="change-value"]': 'onClick' },
-        onClick: function (e) {
-            e.preventDefault();
-            this.model.set(this.name, $(e.target).attr('data-value'));
-        },
-        setup: function () {
-            this.listenTo(this.model, 'change:' + this.name, this.update);
-        },
         update: function () {
             this.$el.find('.dropdown-toggle').text(this.options.values[this.model.get(this.name)]);
+            Dropdown.prototype.update.apply(this, arguments);
         },
         render: function () {
-            this.$el.append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').text(this.options.values[this.model.get(this.name)]),
-                $('<ul class="dropdown-menu" role="menu">').append(
-                    _(this.options.values).map(function (name, value) {
-                        return $('<li>').append(
-                            $('<a href="#" data-action="change-value">').attr('data-value', value).text(name)
-                        );
-                    })
-                )
-            );
+            var self = this;
+            this.options.$toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').text(this.options.values[this.model.get(this.name)]);
+            Dropdown.prototype.render.apply(this, arguments);
+            _(this.options.values).each(function (name, value) {
+                self.$ul.append($('<li>').append(
+                    $('<a href="#" data-action="change-value">').attr({
+                        'data-name': self.name,
+                        'data-value': value,
+                    }).text(name)
+                ));
+            });
 
-            this.update();
             return this;
         }
     });

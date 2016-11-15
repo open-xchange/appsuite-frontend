@@ -181,7 +181,6 @@ define('io.ox/tasks/actions', [
         mobile: 'lo',
         ref: 'io.ox/tasks/actions/placeholder',
         draw: function (baton) {
-
             var link = $('<a href="#">').text(gt('Change due date'));
 
             this.append(
