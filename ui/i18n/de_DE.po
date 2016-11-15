@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-04 13:19+0100\n"
+"PO-Revision-Date: 2016-11-15 09:25+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3098,7 +3098,6 @@ msgstr "Anmelden"
 
 #. the noun not the verb
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
 msgctxt "word"
 msgid "Sign in"
 msgstr "Anmeldung"
@@ -7737,7 +7736,7 @@ msgstr "Detail"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Localpart"
-msgstr ""
+msgstr "Lokalteil"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7801,9 +7800,8 @@ msgstr "Aktuelles Datum"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-#, fuzzy
 msgid "Sender address"
-msgstr "Senderadresse"
+msgstr "Absenderadresse"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
