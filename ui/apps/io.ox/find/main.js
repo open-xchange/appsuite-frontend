@@ -222,6 +222,11 @@ define('io.ox/find/main', [
                         require(['io.ox/metrics/main'], function (metrics) {
                             var name = app.get('parent').get('name') || 'unknown',
                                 apptitle = _.last(name.split('/'));
+                            metrics.trackEvent({
+                                app: apptitle,
+                                target: 'list/empty/search/filter/folder',
+                                action: 'remove'
+                            });
                         });
                     }
                 });
@@ -437,13 +442,13 @@ define('io.ox/find/main', [
                     require(['io.ox/metrics/main'], function (metrics) {
                         var name = app.get('parent').get('name') || 'unknown',
                             apptitle = _.last(name.split('/')),
-                            facet = model.get('facet').get('id').split(':')[0];
+                            facet = model.get('facet').get('id').split(':')[0],
+                            isDisabled = state === 'deactivate' || model.get('facet') && model.get('facet').getValue().getOption().id === 'disabled';
                         // toolbar actions
                         metrics.trackEvent({
                             app: apptitle,
-                            target: apptitle + '/search/facet/' + facet,
-                            action: 'search',
-                            value: facet
+                            target: 'search/filter/' + facet,
+                            action: isDisabled ? 'remove' : 'add'
                         });
                     });
                 }, 10)

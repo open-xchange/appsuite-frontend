@@ -70,6 +70,13 @@ A event triggers when an app started. The measure time is between the click on t
 | ------------------------------------- | ---------------------- |
 | core/upsell/[upsell.type]/[upsell.id] | Upsell event triggered |
 
+
+## Search
+
+| EventId                               | Trigger                |
+| ------------------------------------- | ---------------------- |
+| [app]/search/filter/[facet]/[add|remove] | Active filters changed |
+
 # Apps
 
 ## Portal
