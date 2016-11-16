@@ -1070,51 +1070,38 @@ define('io.ox/core/main', [
                     this.append(logoutButton);
                 }
             });
-
-            var getMessage = function (data) {
-                var language = ox.language.substring(0, 2);
-                return data[language] || data.en || gt.noI18n('You forgot to sign out last time. Always use the sign-out button when you finished your work.');
-            };
-
-            ext.point('io.ox/core/topbar/right').extend({
-                id: 'logout-button-hint',
-                index: 2100,
-                draw: function () {
-                    var data = _.clone(settings.get('features/dedicatedLogoutButtonHint', {}));
-                    if (!data.enabled) return;
-                    // reset
-                    settings.set('features/dedicatedLogoutButtonHint/active', true).save();
-                    if (!data.active || _(ox.flags || []).contains('autologin')) return;
-                    // init
-                    var link = this.find('a[data-action="sign-out"]')
-                        .popover({
-                            content: getMessage(data),
-                            template: '<div class="popover popover-signout" role="tooltip"><div class="popover-content popover-content-signout"></div></div>',
-                            placement: function (tip, el) {
-                                return ($(window).width() - $(el).offset().left - el.offsetWidth) < 80 ? 'bottom' : 'auto';
-                            }
-                        });
-                    // prevent logout action when clicking hint
-                    this.get(0).addEventListener('click', function (e) {
-                        if (e.target.classList.contains('popover-content-signout')) e.stopImmediatePropagation();
-                        link.popover('destroy');
-                    }, true);
-                    // close on click
-                    $(document).one('click', link.popover.bind(link, 'destroy'));
-                    // show
-                    _.defer(link.popover.bind(link, 'show'));
-                }
-            });
-
-            ext.point('io.ox/core/logout').extend({
-                id: 'logout-button-hint',
-                logout: function () {
-                    http.pause();
-                    settings.set('features/dedicatedLogoutButtonHint/active', false).save();
-                    return http.resume();
-                }
-            });
         }
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'logout-button-hint',
+            index: 2100,
+            draw: function () {
+                var data, link;
+                if (session.condition('autologin') && (session.condition('reload') || session.condition('history-traversal'))) return;
+                // disabled
+                data = _.clone(settings.get('features/logoutButtonHint', {}));
+                if (!data.enabled) return;
+                // banner action, topbar action, dropdown action
+                link = $('#io-ox-banner [data-action="logout"]');
+                if (!link.length) link = this.find('[data-action="sign-out"]');
+                if (!link.length) link = this.find('#io-ox-topbar-dropdown-icon > a');
+
+                link.popover({
+                    content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
+                    template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
+                    placement: 'bottom'
+                });
+                // prevent logout action when clicking hint
+                this.get(0).addEventListener('click', function (e) {
+                    if (e.target.classList.contains('popover-content-signout')) e.stopImmediatePropagation();
+                    link.popover('destroy');
+                }, true);
+                // close on click
+                $(document).one('click', link.popover.bind(link, 'destroy'));
+                // show
+                _.defer(link.popover.bind(link, 'show'));
+            }
+        });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'logo',

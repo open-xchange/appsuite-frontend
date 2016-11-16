@@ -21,8 +21,11 @@
     color: #fff;
     line-height: 32px;
     padding: @default-padding;
-    z-index: 11;
     .ellipsis();
+
+    // popover
+    overflow: visible;
+    z-index: 12; // one more than #io-ox-topbar
 
     #io-ox-core.show-banner & {
         display: block;
@@ -50,6 +53,7 @@
             font-weight: inherit;
             color: rgba(255, 255, 255, 0.70);
         }
+        .popover { color: #333; }
     }
 
     .banner-action {
