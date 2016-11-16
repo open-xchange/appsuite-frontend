@@ -21,7 +21,8 @@ define('io.ox/core/session', [
     'use strict';
 
     var TIMEOUTS = { AUTOLOGIN: 7000, LOGIN: 10000, FETCHCONFIG: 2000 },
-        CLIENT = 'open-xchange-appsuite';
+        CLIENT = 'open-xchange-appsuite',
+        conditions = [];
 
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
@@ -31,6 +32,12 @@ define('io.ox/core/session', [
         return _.chain(languages).keys().find(function (id) {
             return id.substr(0, 2) === language;
         }).value();
+    };
+
+    var getNavigationType = function () {
+        var type = (window.performance && window.performance.navigation) ? window.performance.navigation.type : 255,
+            mapping = { 0: 'navigate', 1: 'reload', 2: 'history-traversal', 255: 'unknown' };
+        return mapping[type];
     };
 
     var check = function (language) {
@@ -109,6 +116,9 @@ define('io.ox/core/session', [
                 }
             }
 
+            // conditions: add human readable navigation type
+            conditions.push(getNavigationType());
+
             // GET request
             return (
                 _.url.hash('token.autologin') === 'false' && _.url.hash('serverToken') ?
@@ -132,8 +142,8 @@ define('io.ox/core/session', [
             .then(
                 function success(data) {
                     ox.secretCookie = true;
-                    ox.flags = (ox.flags || []).concat('autologin');
                     ox.rampup = data.rampup || ox.rampup || {};
+                    conditions.push('autologin');
                     return data;
                 },
                 // If autologin fails, try token login
@@ -333,6 +343,11 @@ define('io.ox/core/session', [
         version: function () {
             // need to work with ox.version since we don't have the server config for auto-login
             return String(ox.version).split('.').slice(0, 3).join('.');
+        },
+
+        condition: function (key) {
+            // 'navigate', 'reload', 'history-traversal', autologin'
+            return !!(conditions.indexOf(key) > -1);
         },
 
         getBrowserLanguage: getBrowserLanguage
