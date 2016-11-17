@@ -685,7 +685,7 @@ define('io.ox/calendar/week/view', [
         cleanUpLasso: function () {
             // more robost variant (see bug 47277)
             var lasso = this.lasso instanceof $ ? this.lasso : $(),
-                data = lasso.data();
+                data = lasso.data() || {};
             $.each(data.helper || [], function (i, el) {
                 el.remove();
             });

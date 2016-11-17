@@ -131,7 +131,8 @@ define('io.ox/settings/main', [
 
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
             //needed or mac voice over reads the whole settings pane when an input element is focused
-            'role': 'main'
+            'role': 'main',
+            'tabindex': 0
         }).scrollable();
 
         // Create extensions for the apps
@@ -263,6 +264,8 @@ define('io.ox/settings/main', [
         // select virtual node
         tree.on('virtual', select);
         function select(id, item, baton, options) {
+            // a11y - avoid this folder to avoid focus drop
+            if (id === 'virtual/settings') return;
 
             var opt = _.extend({
                 focus: false,

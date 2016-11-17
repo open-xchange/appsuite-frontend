@@ -375,7 +375,7 @@ define('io.ox/calendar/invitations/register', [
                         refresh.then(function () {
                             // if the delete action was succesfull we don't need the button anymore, see Bug 40852
                             if (action === 'delete') {
-                                self.model.set('actions', _(self.model.attributes.actions).without('delete'));
+                                self.model.set('actions', _(self.model.get('actions')).without('delete'));
                             }
                             self.repaint();
                         });
@@ -688,7 +688,7 @@ define('io.ox/calendar/invitations/register', [
         update: function () {
 
             var headers, reminder, type, cid, $el = this.$el, imip,
-                yell = this.options.yell;
+                yell = this.options && this.options.yell;
 
             // external?
             if ((imip = this.getIMIPAttachment())) {
@@ -721,7 +721,7 @@ define('io.ox/calendar/invitations/register', [
                     model: this.model,
                     cid: cid,
                     type: type,
-                    yell: this.options.yell
+                    yell: yell
                 }).render().$el
             );
         },

@@ -266,6 +266,7 @@
             misc.touch = detectTouch();
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();
+            misc.reload = (window.performance && window.performance.navigation.type === 1);
             // debug
             if (condition === 'debug' || condition === 1337) {
                 return _.extend({}, browserLC, display, misc);

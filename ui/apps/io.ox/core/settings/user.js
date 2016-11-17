@@ -19,8 +19,9 @@ define('io.ox/core/settings/user', [
     'io.ox/core/tk/dialogs',
     'io.ox/contacts/util',
     'io.ox/core/yell',
+    'io.ox/core/a11y',
     'gettext!io.ox/contacts'
-], function (ext, api, contactModel, ViewForm, dialogs, util, yell, gt) {
+], function (ext, api, contactModel, ViewForm, dialogs, util, yell, a11y, gt) {
 
     'use strict';
 
@@ -70,6 +71,7 @@ define('io.ox/core/settings/user', [
                         var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user');
                         view = new UserEdit({ model: user });
                         $node.append(view.render().$el);
+                        a11y.getTabbable($node).first().focus();
 
                         user.on('change:first_name change:last_name', function () {
                             user.set('display_name', util.getFullName(user.toJSON(), { validate: true }));

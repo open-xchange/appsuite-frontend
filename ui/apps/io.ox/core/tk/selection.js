@@ -593,7 +593,7 @@ define('io.ox/core/tk/selection', [
                     node.addClass(self.classSelected).attr({
                         'aria-selected': 'true',
                         'tabindex': 0
-                    }).focus();
+                    });
                 } else {
                     node.removeClass(self.classSelected).attr({
                         'aria-selected': 'false',

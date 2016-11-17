@@ -375,8 +375,6 @@ define('io.ox/calendar/week/perspective', [
                 this.view.$el.show();
             }
 
-            this.view.pane.focus();
-
             // renew data
             this.refresh();
         },

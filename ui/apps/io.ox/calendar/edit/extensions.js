@@ -64,7 +64,7 @@ define('io.ox/calendar/edit/extensions', [
         id: 'save',
         draw: function (baton) {
             var oldFolder = baton.model.get('folder_id');
-            this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
+            this.append($('<button type="button" class="btn btn-primary save" data-action="save">')
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
