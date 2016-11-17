@@ -417,6 +417,7 @@ define('io.ox/mail/compose/view', [
                 .then(accountAPI.getValidAddress)
                 .then(function checkReplyAll(data) {
                     if (mode !== 'replyall') return data;
+                    if (!settings.get('features/confirmReplyToMailingLists', true)) return data;
                     return checks.replyToMailingList(_.cid(obj), data).then(function (result) {
                         mode = result.mode;
                         return result.data;
