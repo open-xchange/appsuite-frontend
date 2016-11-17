@@ -222,7 +222,7 @@ define('io.ox/core/api/attachment', [
             //make sure we have a string or target + api.DELIM results in NaN
             target = (target || coreConfig.get('folder/infostore')).toString();
 
-            http.PUT({
+            return http.PUT({
                 module: 'files',
                 params: {
                     action: 'saveAs',
