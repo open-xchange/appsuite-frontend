@@ -69,6 +69,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
         function compose(type) {
 
             return function (obj) {
+
                 var def = $.Deferred();
                 _.url.hash('app', 'io.ox/mail/compose:' + type);
 
@@ -83,15 +84,21 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 win.busy().show(function () {
                     require(['io.ox/mail/compose/bundle']).then(function () {
                         return require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model']);
-                    }).then(function (MailComposeView, MailComposeModel) {
+                    })
+                    .then(function (MailComposeView, MailComposeModel) {
                         var data = keepData(obj) ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
                         app.model = new MailComposeModel(data);
                         app.view = new MailComposeView({ app: app, model: app.model });
                         win.nodes.main.addClass('scrollable').append(app.view.render().$el);
                         return app.view.fetchMail(data);
-                    }).then(function () {
+                    })
+                    .then(function () {
+
+                    })
+                    .then(function () {
                         return app.view.setMail();
-                    }).done(function () {
+                    })
+                    .done(function () {
                         // Set window and toolbars visible again
                         win.nodes.header.removeClass('sr-only');
                         win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
