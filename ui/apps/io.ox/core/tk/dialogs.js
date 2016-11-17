@@ -631,7 +631,8 @@ define('io.ox/core/tk/dialogs', [
             arrow: true,
             // closely positon to click/touch location
             closely: false,
-            tabTrap: true
+            tabTrap: true,
+            focus: true
         }, options || {});
 
         var open,
@@ -644,7 +645,7 @@ define('io.ox/core/tk/dialogs', [
 
             overlay,
 
-            sidepopuppane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="0">'),
+            sidepopuppane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
                 $('<a href="#" class="close" data-action="close" role="button">').attr('aria-label', gt('Close')).append(
@@ -665,24 +666,7 @@ define('io.ox/core/tk/dialogs', [
             self = this,
 
             fnKey = function (e) {
-                var items, focus, index;
-                if (e.which === 9 && options.tabTrap) {
-
-                    items = $(this).find('[tabindex][disabled!="disabled"]:visible');
-                    if (items.length) {
-                        e.preventDefault();
-                        focus = $(document.activeElement);
-                        index = (items.index(focus) >= 0) ? items.index(focus) : 0;
-                        index += (e.shiftKey) ? -1 : 1;
-
-                        if (index >= items.length) {
-                            index = 0;
-                        } else if (index < 0) {
-                            index = items.length - 1;
-                        }
-                        items.eq(index).focus();
-                    }
-                }
+                if (e.which === 9 && options.tabTrap) a11y.trapFocus(this, e);
             },
 
             pane = sidepopuppane.scrollable();
@@ -903,8 +887,7 @@ define('io.ox/core/tk/dialogs', [
                     if (!options.modal) {
                         self.nodes.target.append(arrow);
                     }
-
-                    pane.parent().focus();
+                    closer.find('.close').focus();
                     self.trigger('show');
                 });
             }
