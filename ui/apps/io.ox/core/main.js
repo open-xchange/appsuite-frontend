@@ -1077,7 +1077,7 @@ define('io.ox/core/main', [
             index: 2100,
             draw: function () {
                 var data, link;
-                if (session.condition('autologin') && (session.condition('reload') || session.condition('history-traversal'))) return;
+                if (session.isAutoLogin() && _.device('reload')) return;
                 // disabled
                 data = _.clone(settings.get('features/logoutButtonHint', {}));
                 if (!data.enabled) return;
@@ -1085,7 +1085,7 @@ define('io.ox/core/main', [
                 link = $('#io-ox-banner [data-action="logout"]');
                 if (!link.length) link = this.find('[data-action="sign-out"]');
                 if (!link.length) link = this.find('#io-ox-topbar-dropdown-icon > a');
-
+                // popover
                 link.popover({
                     content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
                     template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
