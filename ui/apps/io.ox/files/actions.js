@@ -508,12 +508,7 @@ define('io.ox/files/actions', [
             if (util.hasStatus('lockedByOthers', e)) return false;
             // hide in mail compose preview
             if (e.baton.openedBy === 'io.ox/mail/compose') return false;
-            // use highly advanced magic to check capabilities, use try/catch, just in case
-            try {
-                if (filestorageApi.getAccountsCache().findWhere({ qualifiedId: folderAPI.pool.getModel(e.baton.data.folder_id || e.baton.data[0].folder_id).get('account_id') }).get('capabilities').indexOf('EXTENDED_METADATA') === -1) return false;
-            } catch (e) {
-                if (ox.debug) console.error(e);
-            }
+            if (!(folderAPI.pool.getModel(e.baton.data.folder_id || e.baton.data[0].folder_id).supports('extended_metadata'))) return false;
             // access on folder?
             if (e.collection.has('modify')) return true;
             // check object permission
