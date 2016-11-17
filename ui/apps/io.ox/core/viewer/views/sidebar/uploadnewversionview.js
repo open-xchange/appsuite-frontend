@@ -24,9 +24,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
 
     'use strict';
 
-    var POINT = 'io.ox/core/viewer/upload-new-version',
-        // TODO: switch to related capability when available
-        COMMENTS = settings.get('features/comments', true);
+    var POINT = 'io.ox/core/viewer/upload-new-version';
 
     /**
      * notifications lazy load
@@ -118,8 +116,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
          */
         onFileSelected: function (event) {
             event.preventDefault();
-
-            if (!COMMENTS) return this.upload();
+            if (!(folderApi.pool.getModel(this.model.get('folder_id')).supports('extended_metadata'))) return this.upload();
 
             // open dropdown for
             var baton = ext.Baton({
@@ -142,7 +139,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
                 folder: this.model.get('folder_id')
             };
 
-            if (COMMENTS) data.version_comment = comment || '';
+            if (folderApi.pool.getModel(this.model.get('folder_id')).supports('extended_metadata')) data.version_comment = comment || '';
 
             FilesAPI.versions.upload(data).fail(notify);
         },
