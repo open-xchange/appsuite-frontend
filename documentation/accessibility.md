@@ -49,16 +49,15 @@ Q1 17  | 7.8.4   | Working on open issues (see below)
 Q2 17  | 7.8.4   | New accessibility audit
 
 # Open issues
-- Timezone popup cannot be explored by screen reader users
-- Tokenfield and autocomplete keyboard interaction and screen reader supports needs improvement
-- Icon and tile view in drive lack proper keyboard support
-- Help lacks proper semantic markup
-- Folder tree context menu does not work properly in JAWS (when toggled by button)
-- Folder tree aria markup needs improvement for screen readers (is too verbose)
-- Dropdown menus do not consistently focus first or last element on cursor up/down/space/enter
-- App launcher could be improved by introducing tab panels
-- Address book thumb index is not accessible by keyboard
 
+- (Calendar) Timezone popup cannot be explored by screen reader users
+- (General) Tokenfield and autocomplete keyboard interaction and screen reader supports needs improvement
+- (Drive) Keyboard support improvements for icon and tile view in drive
+- (Help) Help partially lacks proper semantic markup
+- (General) Folder tree context menu does not respond properly in JAWS (when toggled by button)
+- (General) Folder tree aria markup needs improvement for screen readers (is too verbose)
+- (General) Dropdown menus do not consistently focus first or last element on cursor up/down/space/enter
+- (Address book) Thumb index is not accessible by keyboard
 
 [WCAG-TR]: https://www.w3.org/TR/WCAG20/
 [WCAG-WAI]: https://www.w3.org/WAI/WCAG2AA-Conformance
