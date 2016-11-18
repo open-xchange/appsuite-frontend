@@ -45,7 +45,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             if (!this.$overlay) return;
             this.$placeholder.replaceWith(this.$ul);
             this.$el.removeClass('open');
-            this.$ul.attr('style', this.$ul.data('style')).removeData('style');
+            this.$ul.attr('style', this.$ul.data('style') || '').removeData('style');
             this.$overlay.remove();
             this.$toggle.focus();
             delete this.$overlay;
