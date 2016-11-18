@@ -98,13 +98,14 @@ define('io.ox/mail/common-extensions', [
             // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
             userAPI.get({ id: ox.user_id }).then(function (user) {
                 var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
-                    address = addresses && addresses[0] && addresses[0][1];
+                    address = addresses && addresses[0] && addresses[0][1],
+                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
 
                 self.append(
                     contactsAPI.pictureHalo(
                         $('<div class="contact-picture" aria-hidden="true">'),
-                        (_(mailAdresses).contains(address) ? { id: ox.user_id } : { email: address }),
-                        { width: 40, height: 40, effect: 'fadeIn', api: (_(mailAdresses).contains(address) ? 'user' : 'contact') }
+                        (useUserApi ? { id: ox.user_id } : { email: address }),
+                        { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
                     )
                 );
             });
@@ -119,13 +120,14 @@ define('io.ox/mail/common-extensions', [
             // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
             userAPI.get({ id: ox.user_id }).then(function (user) {
                 var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
-                    address = addresses && addresses[0] && addresses[0][1];
+                    address = addresses && addresses[0] && addresses[0][1],
+                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
 
                 self.append(
                     contactsAPI.pictureHalo(
                         $('<div class="contact-picture" aria-hidden="true">'),
-                        (_(mailAdresses).contains(address) ? { id: ox.user_id } : { email: address }),
-                        { width: 40, height: 40, effect: 'fadeIn', api: (_(mailAdresses).contains(address) ? 'user' : 'contact') }
+                        (useUserApi ? { id: ox.user_id } : { email: address }),
+                        { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
                     )
                 );
             });
