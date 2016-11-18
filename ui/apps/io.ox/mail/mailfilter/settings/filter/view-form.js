@@ -19,8 +19,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'io.ox/backbone/mini-views',
     'io.ox/core/folder/picker',
     'io.ox/backbone/mini-views/datepicker',
-    'io.ox/core/folder/api'
-], function (notifications, gt, ext, DEFAULTS, mini, picker, DatePicker, folderAPI) {
+    'io.ox/core/folder/api',
+    'io.ox/backbone/mini-views/dropdown'
+], function (notifications, gt, ext, DEFAULTS, mini, picker, DatePicker, folderAPI, Dropdown) {
 
     'use strict';
 
@@ -187,9 +188,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             if (options.caret) {
                 active = active + '<b class="caret">';
             }
-            return $('<div class="action ' + options.toggle + ' value">').addClass(options.classes).append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
-                $('<ul class="dropdown-menu" role="menu">').append(
+            var $toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
+                $ul = $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
                             $('<a href="#" data-action="change-dropdown-value">').attr('data-value', value).data(options).append(
@@ -197,8 +197,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             )
                         );
                     })
-                )
-            );
+                );
+
+            return new Dropdown({
+                className: 'action dropdown value',
+                $toggle: $toggle,
+                $ul: $ul
+            }).render().$el;
         },
 
         FilterDetailView = Backbone.View.extend({
@@ -770,14 +775,19 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
                         }
                     }),
-                    Dropdown = mini.DropdownLinkView.extend({
+                    MarkAsDropdown = mini.DropdownLinkView.extend({
                         onClick: function (e) {
                             e.preventDefault();
-                            if (/markas_/g.test(this.id)) {
-                                this.model.set(this.name, [$(e.target).attr('data-value')]);
-                            } else {
-                                this.model.set(this.name, $(e.target).attr('data-value'));
-                            }
+                            this.model.set(this.name, JSON.parse($(e.target).attr('data-value')));
+                        },
+                        render: function () {
+                            var self = this;
+                            Dropdown.prototype.render.apply(this, arguments);
+                            _(this.options.values).each(function (name, value) {
+                                self.option(self.name, [value], name, { radio: true });
+                            });
+                            this.updateLabel();
+                            return this;
                         }
                     });
 
@@ -840,7 +850,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                             $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('row').append(
                                     $('<div>').addClass('col-sm-3 col-sm-offset-9 rightalign').append(
-                                        new Dropdown(o.dropdownOptions).render().$el
+                                        new MarkAsDropdown(o.dropdownOptions).render().$el
                                     )
                                 )
                             ),
