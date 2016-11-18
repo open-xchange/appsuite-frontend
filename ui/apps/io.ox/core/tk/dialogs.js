@@ -73,6 +73,9 @@ define('io.ox/core/tk/dialogs', [
                 // so we cannot just refocus the current popup
                 var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window').length > 0;
                 if (insidePopup) return;
+                // should not keep focus if smart dropdown is open
+                var smartDropdown = $('body > .smart-dropdown-container').length > 0;
+                if (smartDropdown) return;
                 if (nodes.popup.is(':visible')) {
                     e.stopPropagation();
                     nodes.popup.focus();

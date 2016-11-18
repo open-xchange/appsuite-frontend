@@ -1047,11 +1047,10 @@ define('io.ox/core/main', [
                         id: 'io-ox-topbar-dropdown-icon',
                         className: 'launcher dropdown',
                         $ul: ul,
-                        $toggle: a,
+                        $toggle: a
                     }).render().$el
                 );
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
-                a.dropdown();
             }
         });
 

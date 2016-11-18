@@ -275,22 +275,19 @@ define('io.ox/backbone/mini-views/common', [
         tagName: 'div',
         className: 'dropdownlink',
         update: function () {
-            this.$el.find('.dropdown-toggle').text(this.options.values[this.model.get(this.name)]);
+            this.updateLabel();
             Dropdown.prototype.update.apply(this, arguments);
+        },
+        updateLabel: function () {
+            this.$el.find('.dropdown-label').text(this.options.values[this.model.get(this.name)]);
         },
         render: function () {
             var self = this;
-            this.options.$toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').text(this.options.values[this.model.get(this.name)]);
             Dropdown.prototype.render.apply(this, arguments);
             _(this.options.values).each(function (name, value) {
-                self.$ul.append($('<li>').append(
-                    $('<a href="#" data-action="change-value">').attr({
-                        'data-name': self.name,
-                        'data-value': value,
-                    }).text(name)
-                ));
+                self.option(self.name, value, name, { radio: true });
             });
-
+            this.updateLabel();
             return this;
         }
     });

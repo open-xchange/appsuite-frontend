@@ -52,15 +52,15 @@ module.exports = function (grunt) {
                             'bower_components/bootstrap/js/button.js',
                             'bower_components/bootstrap/js/carousel.js',
                             'bower_components/bootstrap/js/collapse.js',
-                            'lib/bootstrap-custom-dropdown/custom-dropdown.js',
                             'bower_components/bootstrap/js/modal.js',
                             'bower_components/bootstrap/js/tooltip.js',
                             'bower_components/bootstrap/js/popover.js',
                             'bower_components/bootstrap/js/scrollspy.js',
                             'bower_components/bootstrap/js/tab.js',
                             'bower_components/bootstrap/js/affix.js',
-                            // add bootstrap plugins
-                            'bower_components/bootstrap-accessibility-plugin/plugins/js/bootstrap-accessibility.js',
+                            // add custom bootstrap code
+                            'apps/io.ox/core/tk/dropdown.js',
+                            'lib/bootstrap-a11y.js',
                             // add mandatory UI sources
                             'apps/io.ox/core/http.js',
                             'apps/io.ox/core/http_errors.js',

@@ -29,10 +29,9 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         className: 'dropdown',
 
         events: {
-            'show.bs.dropdown': 'onShow',
             'shown.bs.dropdown': 'onShown',
             'hidden.bs.dropdown': 'resetDropdownOverlay',
-            'keydown *[data-toggle="dropdown"]': 'onKeyDown',
+            'keydown *[data-toggle="dropdown"]': 'onKeyDown'
         },
 
         resetDropdownOverlay: function () {
@@ -64,13 +63,6 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     this.$ul
                 )
             );
-
-            // same as in bootstrap a11y plugin
-            if (!this.preventFocus) {
-                _.delay(function () {
-                    $('a[role^="menuitem"]', self.$ul).first(':visible').focus();
-                }, 200);
-            }
         },
 
         adjustBounds: function () {
@@ -79,7 +71,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     top: bounds.top,
                     left: bounds.left,
                     width: bounds.width,
-                    height: bounds.height,
+                    height: bounds.height
                 },
                 offset = this.$toggle.offset(),
                 width = this.$toggle.outerWidth(),
@@ -111,10 +103,6 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$ul.css(positions);
         },
 
-        onShow: function () {
-            this.preventFocus = this.$toggle.data('preventFocus');
-        },
-
         onShown: function () {
             if (this.smart === false) return;
             if (_.device('smartphone')) return;
@@ -123,10 +111,16 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         onKeyDown: function (e) {
             // select first or last item, if already open
-            if (!this.$el.hasClass('open')) return;
-            if (!/(38|40)/.test(e.which)) return;
-
-            $('a[role^="menuitem"]', this.$ul).first(':visible').focus();
+            if (!this.$el.hasClass('open') || !this.$overlay) return;
+            // special focus handling, because the $ul is no longer a child of the view
+            if (e.which === 40) $('a[role^="menuitem"]', this.$ul).first(':visible').focus();
+            if (e.which === 38) $('a[role^="menuitem"]', this.$ul).last(':visible').focus();
+            // special close handling on ESC
+            if (e.which === 27) {
+                this.$toggle.trigger('click');
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            }
         },
 
         onClick: function (e) {
@@ -155,6 +149,18 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 }
                 this.model.set(name, nextValue);
             }
+
+            // make sure event bubbles up
+            if (!e.isPropagationStopped() && this.$overlay && this.$placeholder) {
+                // to use jquery event bubbling, the element, which triggered the event must have the correct parents
+                // therefore, the target element is inserted at the original position before event bubbling
+                // the element only remains at that position while the event bubbles
+                var $temp = $('<div class="hidden">');
+                node.before($temp).detach();
+                this.$placeholder.append(node);
+                this.$el.trigger(e);
+                $temp.replaceWith(node);
+            }
         },
 
         setup: function () {
@@ -165,6 +171,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             // not so nice but we need this for mobile support
             // if $ul pops out on the overlay, this line is also required
             this.$ul.on('click', 'a', $.proxy(this.onClick, this));
+
             if (this.model) this.listenTo(this.model, 'change', this.update);
         },
 
@@ -242,6 +249,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     options.icon ? $('<i class="fa fa-fw" aria-hidden="true">') : $(),
                     text
                 );
+            if (options.data) link.data(options.data);
             if (callback) link.on('click', {}, callback);
             return this.append(link);
         },
@@ -276,11 +284,36 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             // in firefox draggable=false is not enough to prevent dragging...
             if (_.device('firefox')) this.$toggle.attr('ondragstart', 'return false;');
 
-            this.$toggle.dropdown();
             // update custom label
             this.label();
+            this.ensureA11y();
             return this;
+        },
+
+        ensureA11y: function () {
+            var items = this.$ul.children('li');
+
+            this.$toggle.attr({ 'aria-haspopup': true, 'aria-expanded': false });
+
+            this.$ul
+                .not('[role]')
+                .attr({ role: 'menu' });
+
+            items
+                .filter(':not([role])')
+                .attr({ role: 'presentation' });
+
+            items
+                .find('a:not([role])')
+                .attr({ role: 'menuitem', tabIndex: '-1' });
+        },
+
+        dispose: function () {
+            // remove overlay if dropdown code is removed
+            if (this.$overlay) this.$overlay.remove();
+            AbstractView.prototype.dispose.call(this, arguments);
         }
+
     });
 
     return Dropdown;
