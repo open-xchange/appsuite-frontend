@@ -31,14 +31,22 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         events: {
             'shown.bs.dropdown': 'onShown',
             'hidden.bs.dropdown': 'resetDropdownOverlay',
-            'keydown *[data-toggle="dropdown"]': 'onKeyDown'
+            'keydown *[data-toggle="dropdown"]': 'onKeyDown',
+            'ready': 'onReady'
+        },
+
+        onReady: function () {
+            if (this.smart === false && !this.$overlay) return;
+            this.resetDropdownOverlay();
+            this.$el.addClass('open');
+            this.setDropdownOverlay();
         },
 
         resetDropdownOverlay: function () {
             if (!this.$overlay) return;
             this.$placeholder.replaceWith(this.$ul);
             this.$el.removeClass('open');
-            this.$ul.css({ top: '', left: '', width: '', height: '' });
+            this.$ul.attr('style', this.$ul.data('style')).removeData('style');
             this.$overlay.remove();
             this.$toggle.focus();
             delete this.$overlay;
@@ -48,6 +56,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             var self = this;
 
             this.$overlay = $('<div class="smart-dropdown-container dropdown open">');
+            this.$ul.data('style', this.$ul.attr('style'));
             this.adjustBounds();
 
             // replaceWith and detach ($.fn.replaceWith is replaceWith and remove)
