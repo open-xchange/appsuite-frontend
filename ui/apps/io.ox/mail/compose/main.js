@@ -55,6 +55,10 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
         };
 
         app.failRestore = function (point) {
+            if (point.restoreById) {
+                delete point.restoreById;
+                return compose('edit')(point);
+            }
             point.initial = false;
             // special flag/handling for 'replace' cause we want
             // to keep the attachments that will be removed otherwise

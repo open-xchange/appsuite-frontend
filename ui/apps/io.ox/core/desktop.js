@@ -682,10 +682,15 @@ define('io.ox/core/desktop', [
             if (!saveRestoreEnabled()) return $.when([]);
 
             return appCache.get('savepoints').then(function (list) {
+                list = list || [];
+                // get restorepoints by Id too (those are saved in jslob so they survive logouts), don't return standard savepoints from jslob (those are artefacts from old versions, they are removed on the next save)
+                var savepointsById = coreConfig.get('savepoints', []).filter(function (savepoint) { return savepoint.restoreById; });
+                list = [].concat(list, savepointsById);
+
                 return _(list || []).filter(function (obj) {
                     var hasPoint = 'point' in obj,
                         sameUA = obj.ua === navigator.userAgent;
-                    return (hasPoint && sameUA);
+                    return (hasPoint && (sameUA || obj.restoreById));
                 });
             });
         },
@@ -695,6 +700,14 @@ define('io.ox/core/desktop', [
 
         setSavePoints: function (list) {
             list = list || [];
+            var pointsById = _(list).filter(function (point) {
+                return point.restoreById;
+            });
+            list = _(list).filter(function (point) {
+                return !point.restoreById;
+            });
+            // set both types of savepoints
+            coreConfig.set('savepoints', pointsById);
             return appCache.add('savepoints', list);
         },
 
@@ -707,10 +720,21 @@ define('io.ox/core/desktop', [
             return this.getSavePoints().then(function (list) {
                 list = list || [];
                 var ids = _(list).pluck('id'),
-                    pos = _(ids).indexOf(id);
+                    pos = _(ids).indexOf(id),
+                    point = list[pos];
                 list = list.slice();
                 if (pos > -1) {
                     list.splice(pos, 1);
+                }
+                // if this is a point that's restored by id we need to remove it in the settings
+                if (point && point.restoreById) {
+                    var pointsById = coreConfig.get('savepoints', []);
+                    ids = _(pointsById).pluck('id');
+                    pos = _(ids).indexOf(id);
+                    if (pos > -1) {
+                        pointsById.splice(pos, 1);
+                        coreConfig.set('savepoints', pointsById).save();
+                    }
                 }
                 return self.setSavePoints(list).then(function () {
                     return list;
