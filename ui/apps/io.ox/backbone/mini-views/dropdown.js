@@ -37,9 +37,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         onReady: function () {
             if (this.smart === false && !this.$overlay) return;
-            this.resetDropdownOverlay();
-            this.$el.addClass('open');
-            this.setDropdownOverlay();
+            this.$ul.css('height', 'auto');
+            this.adjustBounds();
         },
 
         resetDropdownOverlay: function () {
