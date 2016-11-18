@@ -24,13 +24,14 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/folder/title',
     'io.ox/core/notifications',
     'io.ox/contacts/api',
+    'io.ox/core/api/user',
     'io.ox/core/api/collection-pool',
     'io.ox/core/tk/flag-picker',
     'io.ox/core/capabilities',
     'settings!io.ox/mail',
     'io.ox/core/attachments/view',
     'gettext!io.ox/mail'
-], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
+], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, userAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
 
     'use strict';
 
@@ -75,31 +76,59 @@ define('io.ox/mail/common-extensions', [
             // - show picture of first recipient in "Sent items" and "Drafts"
             // - exception: always show sender in threaded messages
             var data = baton.data,
+                self = this,
                 size = api.threads.size(data),
                 single = size <= 1,
                 addresses = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
                 // search result: use image based on 'addresses'
                 picture = isSearchResult ? undefined : data.picture;
 
-            this.append(
-                contactsAPI.pictureHalo(
-                    $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: picture || (addresses && addresses[0] && addresses[0][1]) },
-                    { width: 40, height: 40, effect: 'fadeIn' }
-                )
-            );
+            if (picture) {
+                this.append(
+                    contactsAPI.pictureHalo(
+                        $('<div class="contact-picture" aria-hidden="true">'),
+                        { email: picture },
+                        { width: 40, height: 40, effect: 'fadeIn' }
+                    )
+                );
+                return;
+            }
+
+            // user should be in cache from rampup data
+            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
+            userAPI.get({ id: ox.user_id }).then(function (user) {
+                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
+                    address = addresses && addresses[0] && addresses[0][1];
+
+                self.append(
+                    contactsAPI.pictureHalo(
+                        $('<div class="contact-picture" aria-hidden="true">'),
+                        (_(mailAdresses).contains(address) ? { id: ox.user_id } : { email: address }),
+                        { width: 40, height: 40, effect: 'fadeIn', api: (_(mailAdresses).contains(address) ? 'user' : 'contact') }
+                    )
+                );
+            });
         },
 
         senderPicture: function (baton) {
             // shows picture of sender see Bug 41023
-            var addresses = baton.data.from;
-            this.append(
-                contactsAPI.pictureHalo(
-                    $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: addresses && addresses[0] && addresses[0][1] },
-                    { width: 40, height: 40, effect: 'fadeIn' }
-                )
-            );
+            var addresses = baton.data.from,
+                self = this;
+
+            // user should be in cache from rampup data
+            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
+            userAPI.get({ id: ox.user_id }).then(function (user) {
+                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
+                    address = addresses && addresses[0] && addresses[0][1];
+
+                self.append(
+                    contactsAPI.pictureHalo(
+                        $('<div class="contact-picture" aria-hidden="true">'),
+                        (_(mailAdresses).contains(address) ? { id: ox.user_id } : { email: address }),
+                        { width: 40, height: 40, effect: 'fadeIn', api: (_(mailAdresses).contains(address) ? 'user' : 'contact') }
+                    )
+                );
+            });
         },
 
         date: function (baton, options) {

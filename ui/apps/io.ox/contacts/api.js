@@ -686,6 +686,7 @@ define('io.ox/contacts/api', [
         return function (node, data, options) {
 
             var params,
+                useApi = options.api || 'contact',
                 url,
                 opt = _.extend({
                     width: 48,
@@ -696,7 +697,7 @@ define('io.ox/contacts/api', [
                     effect: 'show',
                     urlOnly: false
                 }, options);
-
+            delete opt.api;
             // use copy of data object because of delete-statements
             data = _.clone(data);
 
@@ -780,7 +781,7 @@ define('io.ox/contacts/api', [
                 }
             }
 
-            url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
+            url = ox.apiRoot + (useApi === 'user' ? '/image/user/picture?' : '/halo/contact/picture?') + $.param(params);
 
             // cached?
             if (cachesURLs[url]) {
