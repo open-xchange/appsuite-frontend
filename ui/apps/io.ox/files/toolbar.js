@@ -58,14 +58,14 @@ define('io.ox/files/toolbar', [
                         'aria-haspopup': 'true',
                         'data-toggle': 'dropdown',
                         'role': 'button'
-                    }).dropdown();
+                    });
 
                     this.parent().addClass('dropdown');
 
                     new Dropdown({
                         el: this.parent(),
                         $toggle: this,
-                        $ul: $ul,
+                        $ul: $ul
                     }).render();
                 }
             },
@@ -98,14 +98,14 @@ define('io.ox/files/toolbar', [
                         'aria-haspopup': 'true',
                         'data-toggle': 'dropdown',
                         'role': 'button'
-                    }).dropdown();
+                    });
 
                     this.parent().addClass('dropdown');
 
                     new Dropdown({
                         el: this.parent(),
                         $toggle: this,
-                        $ul: $ul,
+                        $ul: $ul
                     }).render();
 
                     // set proper tooltip
