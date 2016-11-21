@@ -531,23 +531,22 @@ define('io.ox/core/extPatterns/links', [
         var label = baton.label || options.label,
             args = $.makeArray(arguments),
             node = baton.$el || $('<div>'),
-            ul;
+            ul = $('<ul class="dropdown-menu" role="menu">');
 
         // label: Use baton or String or DOM node
         label = _.isString(label) ? $.txt(label) : label;
         // build dropdown
-        this.append(
-            node.addClass('dropdown').append(
-                $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true">').attr({
-                    'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
-                })
-                .append(
-                    options.icon ? $('<i aria-hidden="true">').addClass(options.icon).attr('title', label.textContent) : label,
-                    options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
-                ),
-                ul = $('<ul class="dropdown-menu" role="menu">')
-            )
-        );
+        this.append(new MiniViewDropdown({
+            el: node.addClass('dropdown'),
+            $toggle: $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true">').attr({
+                'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
+            })
+            .append(
+                options.icon ? $('<i aria-hidden="true">').addClass(options.icon).attr('title', label.textContent) : label,
+                options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
+            ),
+            $ul: ul
+        }).render().$el);
         // store reference to <ul>; we need that for mobile drop-downs
         node.data('ul', ul);
 

@@ -15,8 +15,9 @@ define('io.ox/core/tk/flag-picker', [
     'io.ox/mail/api',
     'io.ox/core/folder/api',
     'gettext!io.ox/mail',
+    'io.ox/backbone/mini-views/dropdown',
     'less!io.ox/core/tk/flag-picker'
-], function (api, folderAPI, gt) {
+], function (api, folderAPI, gt, Dropdown) {
 
     'use strict';
 
@@ -64,9 +65,10 @@ define('io.ox/core/tk/flag-picker', [
     var that = {
 
         appendDropdown: function (node, data) {
-            node.after(
-                // drop down
-                preParsed.list.clone()
+            node.addClass('dropdown-toggle');
+            node.parent().addClass('dropdown flag-picker');
+
+            var list = preParsed.list.clone()
                 .on('click', 'a', { data: data }, that.change)
                 .append(
                     _(order).map(function (index, color) {
@@ -79,17 +81,13 @@ define('io.ox/core/tk/flag-picker', [
                             .attr('data-color', index)
                         );
                     })
-                )
+                );
 
-            );
-
-            node.addClass('dropdown-toggle').attr({
-                'aria-haspopup': 'true',
-                'data-toggle': 'dropdown',
-                'role': 'button'
-            });
-
-            node.parent().addClass('dropdown flag-picker');
+            new Dropdown({
+                el: node.parent(),
+                $toggle: node,
+                $ul: list
+            }).render();
         },
 
         draw: function (node, baton) {

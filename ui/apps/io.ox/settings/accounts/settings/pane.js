@@ -19,6 +19,7 @@ define('io.ox/settings/accounts/settings/pane', [
     'io.ox/core/folder/api',
     'io.ox/settings/util',
     'io.ox/core/notifications',
+    'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/disposable',
@@ -27,7 +28,7 @@ define('io.ox/settings/accounts/settings/pane', [
     'gettext!io.ox/settings/accounts',
     'io.ox/backbone/mini-views/settings-list-view',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, mini, listUtils, DisposableView, filestorageApi, coreSettings, gt, ListView) {
+], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, Dropdown, mini, listUtils, DisposableView, filestorageApi, coreSettings, gt, ListView) {
 
     'use strict';
 
@@ -63,12 +64,13 @@ define('io.ox/settings/accounts/settings/pane', [
 
             if (submodules.length === 0) return;
 
-            return $('<div class="btn-group col-md-4 col-xs-12">').append(
-                $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true">').append(
+            return new Dropdown({
+                className: 'btn-group col-md-4 col-xs-12',
+                $toggle: $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true">').append(
                     $.txt(gt('Add account')), $.txt(' '),
                     $('<span class="caret">')
                 ),
-                $('<ul class="dropdown-menu" role="menu">').append(
+                $ul: $('<ul class="dropdown-menu" role="menu">').append(
                    _(submodules).map(function (submodule) {
                        return $('<li role="presentation">').append(
                            $('<a href="#" role="menuitem">')
@@ -78,7 +80,7 @@ define('io.ox/settings/accounts/settings/pane', [
                        );
                    })
                )
-            );
+            }).render().$el;
         },
 
         drawCertificateValidation = function () {

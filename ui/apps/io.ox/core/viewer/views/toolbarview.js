@@ -242,23 +242,17 @@ define('io.ox/core/viewer/views/toolbarview', [
                         var self = this;
                         this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
-                        this.after(
-                            LinksPattern.DropdownLinks({
+                        new Dropdown({
+                            el: this.parent().addClass('dropdown'),
+                            $toggle: this,
+                            $ul: LinksPattern.DropdownLinks({
                                 ref: 'io.ox/files/links/toolbar/share',
                                 wrap: false,
                                 emptyCallback: function () {
                                     self.parent().hide();
                                 }
                             }, baton)
-                        );
-
-                        this.addClass('dropdown-toggle').attr({
-                            'aria-haspopup': 'true',
-                            'data-toggle': 'dropdown',
-                            'role': 'button'
-                        }).dropdown();
-
-                        this.parent().addClass('dropdown');
+                        }).render();
                     }
                 },
                 'sendbymail': {
