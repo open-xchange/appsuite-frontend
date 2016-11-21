@@ -237,6 +237,11 @@ define('io.ox/mail/settings/pane', [
                         'appendMailTextOnReply',
                         gt('Insert the original email text to a reply'),
                         new mini.CheckboxView({ name: 'appendMailTextOnReply', model: settings }).render().$el
+                    ),
+                    checkbox(
+                        'confirmReplyToMailingLists',
+                        gt('Confirm recipients when replying to a mailing list'),
+                        new mini.CheckboxView({ name: 'confirmReplyToMailingLists', model: settings }).render().$el
                     )
                     // $('<div class="checkbox">').append(
                     //     //#. this setting is about what happens when the user presses <enter>

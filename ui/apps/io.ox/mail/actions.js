@@ -95,6 +95,17 @@ define('io.ox/mail/actions', [
         }
     });
 
+    function reply(mode) {
+        return function (baton) {
+            var data = baton.first();
+            require(['io.ox/mail/compose/checks'], function (checks) {
+                checks.replyToMailingList(_.cid(data), mode, data).then(function (mode) {
+                    ox.registry.call('mail-compose', mode, data);
+                });
+            });
+        };
+    }
+
     new Action('io.ox/mail/actions/reply-all', {
         requires: function (e) {
             // must be top-level
@@ -108,9 +119,7 @@ define('io.ox/mail/actions', [
             // has sender? and not a draft mail
             return util.hasFrom(data) && !isDraftMail(data);
         },
-        action: function (baton) {
-            ox.registry.call('mail-compose', 'replyall', baton.first());
-        }
+        action: reply('replyall')
     });
 
     new Action('io.ox/mail/actions/reply', {
@@ -126,9 +135,7 @@ define('io.ox/mail/actions', [
             // has sender? and not a draft mail
             return util.hasFrom(data) && !isDraftMail(data);
         },
-        action: function (baton) {
-            ox.registry.call('mail-compose', 'reply', baton.first());
-        }
+        action: reply('reply')
     });
 
     new Action('io.ox/mail/actions/forward', {

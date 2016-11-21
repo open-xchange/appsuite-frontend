@@ -15,12 +15,23 @@ define('io.ox/mail/compose/checks', [
     'io.ox/mail/api',
     'io.ox/mail/util',
     'io.ox/core/tk/dialogs',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, util, dialogs, gt) {
+], function (api, util, dialogs, settings, gt) {
 
     function getSender(data) {
+        if (!data) return null;
+        var replyTo = getReplyTo(data.headers);
+        if (replyTo) return replyTo;
         if (_.isEmpty(data.from)) return null;
         return data.from[0];
+    }
+
+    function getReplyTo(headers) {
+        if (!headers) return null;
+        var str = $.trim(headers['Reply-To']);
+        if (!str) return null;
+        return util.parseRecipient(str);
     }
 
     function getList(data) {
@@ -40,24 +51,25 @@ define('io.ox/mail/compose/checks', [
         },
 
         // ask the user when replying
-        replyToMailingList: function (cid, data) {
+        replyToMailingList: function (cid, mode) {
 
-            var result = { mode: 'replyall', data: data };
+            // check setting
+            if (!settings.get('confirmReplyToMailingLists', true)) return $.when(mode);
 
-            // we get the original mail to check its headers (data only offers a small subset)
+            // we get the original mail to check its headers
             var original = api.pool.get('detail').get(cid);
-            if (!original) return result;
+            if (!original) return $.when(mode);
 
             // early return if it's not a mailing list
-            if (!this.isMailingList(original.toJSON())) return result;
+            if (!this.isMailingList(original.toJSON())) return $.when(mode);
 
             // also if we don't have any other sender
             var sender = getSender(original.toJSON());
-            if (!sender) return result;
+            if (!sender) return $.when(mode);
 
             var def = $.Deferred(),
                 list = '<b>' + _.escape(getList(original.toJSON())) + '</b>',
-                address = '<b>' + _.escape(util.getDisplayName(sender)) + '</b>';
+                address = '<b>' + _.escape(util.getDisplayName(sender, { showMailAddress: true })) + '</b>';
 
             new dialogs.ModalDialog({ easyOut: false })
                 .header(
@@ -73,16 +85,17 @@ define('io.ox/mail/compose/checks', [
                         gt('Do you really want to reply all or just %1$s?', address)
                     )
                 )
+                .addAlternativeButton('cancel', gt('Cancel'))
+                .addPrimaryButton('reply-all', gt('Reply all'))
                 .addPrimaryButton('reply', gt('Reply to sender'))
-                .addButton('reply-all', gt('Reply All'))
-                .on('reply', function () {
-                    data.to = [sender];
-                    data.cc = [];
-                    result.mode = 'reply';
-                    def.resolve(result);
-                })
                 .on('reply-all', function () {
-                    def.resolve(result);
+                    def.resolve('replyall');
+                })
+                .on('reply', function () {
+                    def.resolve('reply');
+                })
+                .on('cancel', function () {
+                    def.reject();
                 })
                 .show();
 

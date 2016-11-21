@@ -28,11 +28,10 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
-    'io.ox/mail/compose/checks',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil, checks) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil) {
 
     'use strict';
 
@@ -433,14 +432,6 @@ define('io.ox/mail/compose/view', [
 
             return mailAPI[mode](obj, this.messageFormat)
                 .then(accountAPI.getValidAddress)
-                .then(function checkReplyAll(data) {
-                    if (mode !== 'replyall') return data;
-                    if (!settings.get('features/confirmReplyToMailingLists', true)) return data;
-                    return checks.replyToMailingList(_.cid(obj), data).then(function (result) {
-                        mode = result.mode;
-                        return result.data;
-                    });
-                })
                 .then(function checkTruncated(data) {
                     //check for truncated message content, warn the user, provide alternative
                     if (data.attachments[0].truncated) {

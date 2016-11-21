@@ -44,7 +44,8 @@ define('io.ox/mail/settings/defaults', [], function () {
         'unread': false,
         'simpleLineBreaks': true,
         'notificationSoundName': 'bell',
-        'playSound': true
+        'playSound': true,
+        'confirmReplyToMailingLists': true
     };
 
     return settingsDefaults;
