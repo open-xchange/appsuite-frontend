@@ -37,7 +37,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         onReady: function () {
             if (this.smart === false && !this.$overlay) return;
-            this.$ul.css('height', 'auto');
+            if (!this.$el.hasClass('open')) return;
             this.adjustBounds();
         },
 
@@ -54,7 +54,9 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         setDropdownOverlay: function () {
             var self = this;
 
-            this.$overlay = $('<div class="smart-dropdown-container dropdown open">');
+            this.$overlay = $('<div class="smart-dropdown-container dropdown open">')
+                .addClass(this.$el.prop('className'))
+                .on('ready', this.onReady.bind(this));
             this.$ul.data('style', this.$ul.attr('style'));
             this.adjustBounds();
 
@@ -79,7 +81,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     top: bounds.top,
                     left: bounds.left,
                     width: bounds.width,
-                    height: bounds.height
+                    height: 'auto'
                 },
                 offset = this.$toggle.offset(),
                 width = this.$toggle.outerWidth(),
@@ -278,7 +280,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
             if (_.isString(label)) ariaLabel += (' ' + label);
             this.$el.append(
-                this.$toggle = this.options.$toggle || $('<a href="#" draggable="false" role="button" aria-haspopup="true" data-toggle="dropdown">').attr('aria-label', ariaLabel)
+                this.$toggle = this.options.$toggle || $('<a href="#" draggable="false">').attr('aria-label', ariaLabel)
                 .append(
                     // label
                     $('<span class="dropdown-label">').append(label),
@@ -301,7 +303,12 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         ensureA11y: function () {
             var items = this.$ul.children('li');
 
-            this.$toggle.attr({ 'aria-haspopup': true, 'aria-expanded': false });
+            this.$toggle.attr({
+                'aria-haspopup': true,
+                'aria-expanded': false,
+                role: 'button',
+                'data-toggle': 'dropdown'
+            });
 
             this.$ul
                 .not('[role]')
