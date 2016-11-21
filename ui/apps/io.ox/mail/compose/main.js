@@ -97,9 +97,6 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                         return app.view.fetchMail(data);
                     })
                     .then(function () {
-
-                    })
-                    .then(function () {
                         return app.view.setMail();
                     })
                     .done(function () {

@@ -13,7 +13,7 @@
 
 define('io.ox/backbone/mini-views/common', [
     'io.ox/backbone/mini-views/abstract',
-    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/dropdown'
 ], function (AbstractView, Dropdown) {
 
     'use strict';
