@@ -229,9 +229,9 @@ define('io.ox/mail/mobile-toolbar-actions', [
         draw: function (baton) {
             // hmmmm, should work for this easy case
             if (baton.data.length === 0) {
-                $('.mobile-toolbar-action', this).addClass('ui-disabled');
+                $('a.mobile-toolbar-action, .mobile-toolbar-action a', this).addClass('ui-disabled');
             } else {
-                $('.mobile-toolbar-action', this).removeClass('ui-disabled');
+                $('a.mobile-toolbar-action, .mobile-toolbar-action a', this).removeClass('ui-disabled');
             }
         }
     });
