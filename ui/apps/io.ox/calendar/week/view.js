@@ -860,7 +860,14 @@ define('io.ox/calendar/week/view', [
 
             // mattes: guess we don't need this any more in week and work week view
             if (!_.device('touch') && this.columns === 1) {
-                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
+                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment'))
+                    .addClass('day')
+                    .css('width', '100%')
+                    .attr({
+                        unselectable: 'on',
+                        // only used in dayview, so date is always  0
+                        date: 0
+                    }));
             }
 
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px' });
