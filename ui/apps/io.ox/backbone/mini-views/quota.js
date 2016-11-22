@@ -16,8 +16,9 @@ define('io.ox/backbone/mini-views/quota', [
     'io.ox/core/api/quota',
     'io.ox/core/strings',
     'io.ox/backbone/mini-views/upsell',
+    'io.ox/core/capabilities',
     'settings!io.ox/mail'
-], function (gt, quotaAPI, strings, UpsellView, settings) {
+], function (gt, quotaAPI, strings, UpsellView, capabilities, settings) {
 
     'use strict';
 
@@ -155,22 +156,25 @@ define('io.ox/backbone/mini-views/quota', [
         },
 
         render: function () {
-            var self = this;
+
+            // do not render for guests
+            if (capabilities.has('guest')) return this;
+
             this.getQuota().done(function (result) {
+
                 // do not render if quota fields are undefined
                 if (_.isUndefined(result.quota) || _.isUndefined(result.usage)) return;
                 // do not render when quota is unlimited
-                if (!self.options.renderUnlimited && result.quota <= 0) return;
+                if (!this.options.renderUnlimited && result.quota <= 0) return;
 
-                self.$el.empty();
-
-                self.renderTitle(result);
-                self.renderBar(result);
-                self.renderUpsell(result);
-
+                this.$el.empty();
+                this.renderTitle(result);
+                this.renderBar(result);
+                this.renderUpsell(result);
                 // show element after adding data
-                self.$el.show();
-            });
+                this.$el.show();
+
+            }.bind(this));
 
             return this;
         }
