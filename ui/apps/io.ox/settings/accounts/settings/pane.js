@@ -24,10 +24,12 @@ define('io.ox/settings/accounts/settings/pane', [
     'io.ox/backbone/disposable',
     'io.ox/core/api/filestorage',
     'settings!io.ox/core',
+    'settings!io.ox/mail',
+    'io.ox/core/api/account',
     'gettext!io.ox/settings/accounts',
     'io.ox/backbone/mini-views/settings-list-view',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, mini, listUtils, DisposableView, filestorageApi, coreSettings, gt, ListView) {
+], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, mini, listUtils, DisposableView, filestorageApi, coreSettings, mailSettings, accounts, gt, ListView) {
 
     'use strict';
 
@@ -158,6 +160,22 @@ define('io.ox/settings/accounts/settings/pane', [
             };
         })(),
 
+        dscError = function (data) {
+
+            var wrapper = $('<div class="account-error-wrapper">'),
+                node = $('<div class="account-error">'),
+                icon = $('<i class="account-error-icon fa fa-exclamation-triangle">');
+
+            accounts.getStatus(data.model.get('id')).done(function (status) {
+                if (status[data.model.get('id')].status !== 'ok') {
+                    wrapper.append(icon, node).show();
+                    node.text(status[data.model.get('id')].message);
+                }
+            });
+
+            return wrapper.hide();
+        },
+
         AccountSelectView = DisposableView.extend({
 
             tagName: 'li',
@@ -184,6 +202,7 @@ define('io.ox/settings/accounts/settings/pane', [
                 self.$el.append(
                     drawIcon(self.model.get('accountType')),
                     listUtils.makeTitle(title),
+                    dscError(this), // rename this maybe
                     listUtils.makeControls().append(
                         listUtils.appendIconText(
                             listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),

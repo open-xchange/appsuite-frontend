@@ -24,7 +24,8 @@ define('io.ox/core/api/account', [
         typeHash = {},
         // default separator
         separator = settings.get('defaultseparator', '/'),
-        altnamespace = settings.get('namespace', 'INBOX/') === '';
+        altnamespace = settings.get('namespace', 'INBOX/') === '',
+        dscPrefix = settings.get('dsc/folder');
 
     var process = function (data) {
 
@@ -125,6 +126,15 @@ define('io.ox/core/api/account', [
      */
     api.isExternal = function (id) {
         return api.isAccount(id) && !api.isPrimary(id);
+    };
+
+    /**
+     * is dsc folder
+     * @param  {string}  id (folder_id)
+     * @return { boolean }
+     */
+    api.isDSC = function (id) {
+        return id.startsWith(dscPrefix);
     };
 
     /**
@@ -434,7 +444,6 @@ define('io.ox/core/api/account', [
     };
 
     api.cache = {};
-
     if (ox.rampup && ox.rampup.accounts) {
         _(ox.rampup.accounts).each(function (data) {
             var account = process(http.makeObject(data, 'account'));
@@ -447,7 +456,6 @@ define('io.ox/core/api/account', [
      * @return { deferred} returns array of account object
      */
     api.all = function () {
-
         function load() {
             if (_(api.cache).size() > 0) {
                 // cache hit
@@ -475,7 +483,7 @@ define('io.ox/core/api/account', [
 
             idHash = {};
             typeHash = {};
-
+            // add check here
             _(list).each(function (account) {
                 // remember account id
                 idHash[account.id] = true;
@@ -709,6 +717,21 @@ define('io.ox/core/api/account', [
                 id: id
             },
             data: data
+        });
+    };
+
+    /**
+     * gets the status for one or all accounts
+     * @param  { string } id account id
+     * @return { deferred }
+     */
+    api.getStatus = function (id) {
+        var p = { action: 'status' };
+        if (id) p.id = id;
+
+        return http.GET({
+            module: 'account',
+            params: p
         });
     };
 
