@@ -106,10 +106,21 @@ define('io.ox/mail/write/view-main',
                 //files preview
                 view: this
             });
+
+            // add dynamic extensionpoint to trigger saveAsDraft on logout
+            this.logoutPointId = 'saveMailOnDraft' + this.app.id;
+            ext.point('io.ox/core/logout').extend({
+                id: this.logoutPointId,
+                index: 1000 + this.app.guid,
+                logout: function () {
+                    return app.app.autoSaveDraft();
+                }
+            });
         },
 
         destroy: function () {
             ViewClass.prototype.destroy.call(this);
+            ext.point('io.ox/core/logout').disable(this.logoutPointId);
             // too many internal references!
             this.sections = this.app = null;
             this.baton = this.baton.app = this.baton.view = null;
