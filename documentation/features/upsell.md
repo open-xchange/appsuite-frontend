@@ -181,7 +181,6 @@ upsell.php?user_id=$user_id&context_id=$context_id&language=$language&missing=$m
 | $context_id | context_id of current user                                                                                         |
 | $hostname   | hostname of current session, e.g. www.one-of-countless-virtual-hosts.com                                           |
 | $id         | The trigger's identifier, e.g. "io.ox/files". Can refer to an app, an inline action, or a portal plugin. See $type |
-| $imap_login | The current user's imap login                                                                                      |
 | $language   | The current user's language, e.g. de_DE or en_US                                                                   |
 | $mail       | The current user's primary email address                                                                           |
 | $missing    | The set of missing capabilities, comma separated, e.g. "files"                                                     |
