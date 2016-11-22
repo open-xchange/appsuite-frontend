@@ -492,17 +492,41 @@ define('io.ox/core/tk/tokenfield', [
                     revert: 0,
                     forcePlaceholderSize: true,
                     // update: _.bind(this.resort, this),
-                    stop: function () {
-                        self.resort();
+                    stop: function (e, ui) {
+                        if (this.isMultisort) {
+                            ui.item.after($(this).find('.active'));
+                            self.resort();
+                        }
+                    },
+                    start: function (e, ui) {
+                        // check for multisort
+                        if (ui.item.hasClass('active') && $(this).find('.active').length > 1) {
+                            // hide active tokens that are not dragged
+                            _($(this).find('.active')).each(function (item) {
+                                if (item !== ui.item[0]) {
+                                    $(item).hide();
+                                }
+                            });
+
+                            ui.item.append($('<span class="drag-counter badge">').text($(this).find('.active').length));
+                            // save data
+                            this.isMultisort = true;
+                            this.multisortData = _($(this).find('.active')).map(function (item) {
+                                return $(item).data().attrs.model;
+                            });
+                        } else {
+                            this.isMultisort = false;
+                            this.multisortData = [];
+                        }
                     },
                     receive: function (e, ui) {
-                        var tokenData = ui.item.data();
-                        self.collection.add(tokenData.attrs.model);
+                        var tokenData = ui.sender[0].isMultisort ? ui.sender[0].multisortData : ui.item.data().attrs.model;
+                        self.collection.add(tokenData);
                         self.resort();
                     },
                     remove: function (e, ui) {
-                        var tokenData = ui.item.data();
-                        self.collection.remove(tokenData.attrs.model);
+                        var tokenData = this.isMultisort ? this.multisortData : ui.item.data().attrs.model;
+                        self.collection.remove(tokenData);
                         self.resort();
                     }
                 }).droppable({
@@ -561,7 +585,9 @@ define('io.ox/core/tk/tokenfield', [
         resort: function () {
             var col = this.collection;
             _(this.$el.tokenfield('getTokens')).each(function (token, index) {
-                col.get({ cid: token.value }).index = index;
+                if (col.get({ cid: token.value })) {
+                    col.get({ cid: token.value }).index = index;
+                }
             });
             col.sort();
             this.redrawTokens();
