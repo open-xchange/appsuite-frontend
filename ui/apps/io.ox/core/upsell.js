@@ -181,6 +181,7 @@ define('io.ox/core/upsell', [
             // c.calendar = c.infostore = true;
             // c.caldav = c.carddav = c['boxcom || google || msliveconnect'] = false;
             // c.boxcom = c.google = c.msliveconnect = false;
+            // settings.set('upsell/premium/folderView/visible', true);
             settings.set('features/upsell/secondary-launcher', { icon: 'fa-star fa-star fa-star', color: '#ff0' });
             settings.set('features/upsell/portal-widget', { imageURL: 'http://lorempixel.com/400/300/' });
             settings.set('features/upsell/folderview/mail/i18n/en_US', { title: 'Custom english title for synchronizing mails.' });

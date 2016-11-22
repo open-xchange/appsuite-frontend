@@ -707,6 +707,21 @@ define('io.ox/core/folder/extensions', [
         // Upsell
         //
 
+        ext.point('io.ox/core/foldertree/contacts/links').extend({
+            index: 300,
+            id: 'upsell-contacts',
+            draw: function (baton) {
+
+                if (baton.context !== 'app') return;
+
+                this.append(new UpsellView({
+                    id: 'folderview/contacts',
+                    requires: 'carddav',
+                    title: gt('Synchronize with your tablet or smartphone')
+                }).render().$el);
+            }
+        });
+
         ext.point('io.ox/core/foldertree/calendar/links').extend({
             index: 300,
             id: 'upsell-calendar',
