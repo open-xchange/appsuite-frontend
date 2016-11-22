@@ -37,7 +37,7 @@ define('io.ox/mail/import', [
                         win.busy();
                     },
                     progress: function (item) {
-                        return api.importEML({ file: item.file, folder: item.options.folder })
+                        return api.importEML({ file: item.file, folder: item.options.folder, category_id: item.options.category_id })
                             .done(function (data) {
                                 var first = _(data.data || []).first() || {};
                                 // no clue if upper-case is correct here and if errors wind up here
@@ -71,7 +71,9 @@ define('io.ox/mail/import', [
                     app.listControl.$el.fadeIn('fast');
                 },
                 'drop': function (files) {
-                    app.queues.importEML.offer(files, { folder: app.folder.get() });
+                    // consider current category if tabbed inbox is used
+                    var category_id = app.props.get('categories') && app.props.get('category_id');
+                    app.queues.importEML.offer(files, { folder: app.folder.get(), category_id: category_id });
                 },
                 'invalid': function () {
                     notifications.yell('error', gt('Mail was not imported. Only .eml files are supported.'));
