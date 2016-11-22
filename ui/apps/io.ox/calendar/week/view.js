@@ -1026,8 +1026,14 @@ define('io.ox/calendar/week/view', [
 
             // only update if height differs from CSS default
             if (this.cellHeight !== this.minCellHeight) {
-                $('.timeslot', this.pane).height(this.cellHeight - 1);
-                $('.time', this.pane).height((this.cellHeight * this.gridSize) - 1);
+                var timeslots = $('.timeslot', this.pane),
+                    timeLabel = $('.time', this.pane);
+                timeslots.height(this.cellHeight - 1);
+                // compute the label height according to the actual height of the timeslot
+                // this can be different to 1 when dealing with scaled screen resolutions (see Bug 50195)
+                var timeslotHeight = timeslots.get(0).getBoundingClientRect().height,
+                    borderWidth = parseFloat(timeLabel.css('border-bottom-width'), 10);
+                timeLabel.height(timeslotHeight * this.gridSize - borderWidth);
                 // if the cell height changes we also need to redraw all appointments
                 if (redraw) this.renderAppointments();
             }
