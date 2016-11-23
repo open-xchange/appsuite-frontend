@@ -334,12 +334,14 @@ define('io.ox/mail/main', [
                 params = loader.getQueryParams({ folder: 'virtual/all-unseen' }),
                 collection = loader.getCollection(params);
 
+            // set special attributes
+            collection.gc = false;
+            collection.preserve = true;
+            collection.CUSTOM_PAGE_SIZE = 250;
+
             // register load listener which triggers complete
             collection.on('load', function () {
-                this.gc = false;
                 this.complete = true;
-                this.preserve = true;
-                this.CUSTOM_PAGE_SIZE = 250;
                 this.trigger('complete');
             });
 
