@@ -40,6 +40,8 @@ define('io.ox/mail/import', [
                         return api.importEML({ file: item.file, folder: item.options.folder })
                             .done(function (data) {
                                 var first = _(data.data || []).first() || {};
+                                // add response for external listeners
+                                item.response = first;
                                 // no clue if upper-case is correct here and if errors wind up here
                                 if ('Error' in first) {
                                     notifications.yell('error', first.Error);
