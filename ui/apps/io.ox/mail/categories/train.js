@@ -53,15 +53,16 @@ define('io.ox/mail/categories/train', [
     }
 
     function getQuestion(addresses) {
+        var uniquelist = getSenderList(addresses);
         return gt.format(
             //#. ask user to move all messages from the same sender to the mail category (tab)
             //#. %1$s represents a email address
             gt.ngettext(
                 'Do you want to move all messages from %1$s to that category?',
                 'Do you want to move all messages from selected senders to that category?',
-                addresses.length
+                uniquelist.length
             ),
-            '<b>' + _.escape(getSenderList(addresses)) + '</b>'
+            '<b>' + _.escape(uniquelist) + '</b>'
         );
     }
 
