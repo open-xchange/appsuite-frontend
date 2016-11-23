@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-15 09:25+0100\n"
+"PO-Revision-Date: 2016-11-23 15:03+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2924,7 +2924,6 @@ msgid "Link postal addresses with map service"
 msgstr "Postanschriften mit Kartendienst verknüpfen"
 
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Invite"
 msgstr "Einladen"
 
@@ -3190,6 +3189,21 @@ msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "In Ihrem Browser sind Cookies nicht aktiviert. Bitte aktivieren Sie diese "
 "Funktionalität. "
+
+#: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
+msgid "Warning!"
+msgstr "Warnhinweis"
+
+#: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
+msgid ""
+"This is a browser feature for developers. If you were asked to copy and "
+"paste anything here, somebody might want to take over your account. Do not "
+"enter any script code without knowing what it does."
+msgstr ""
+"Dies ist eine Browserfunktion für Entwickler. Wenn Sie aufgefordert wurden, "
+"etwas zu kopieren und hier einzufügen, könnte jemand Ihr Konto übernehmen "
+"wollen. Geben Sie keinen Script-Code ein, von dem Sie nicht wissen, was er "
+"bewirkt."
 
 #. number of selected item
 #. %1$s is the number surrounded by a tag
@@ -4073,6 +4087,14 @@ msgid "Sign out"
 msgstr "Abmelden"
 
 #: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"You forgot to sign out last time. Always use the sign-out button when you "
+"finished your work."
+msgstr ""
+"Sie haben letztes Mal vergessen, sich abzumelden. Verwenden Sie immer die "
+"Schaltfläche \"Abmelden\", wenn Sie Ihre Arbeit beendet haben."
+
+#: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Angemeldet als:"
 
@@ -4881,10 +4903,6 @@ msgstr "Rich-Text-Bereich. Drücken Sie ALT-F10 für Werkzeugleiste"
 #: apps/io.ox/core/tk/mobiscroll.js
 msgid "Clear"
 msgstr "Löschen"
-
-#: apps/io.ox/core/tk/dropdown-options.js module:io.ox/core
-msgid "close"
-msgstr "Schließen"
 
 #: apps/io.ox/core/tk/filestorageUtil.js module:io.ox/core
 msgid "Ignore warnings"
@@ -5806,6 +5824,11 @@ msgstr "OneDrive"
 msgid "Account added successfully"
 msgstr "Account erfolgreich hinzugefügt"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account could not be added"
+msgstr "Account konnte nicht hinzugefügt werden"
+
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
@@ -6282,14 +6305,6 @@ msgstr "Aufsteigend"
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Descending"
 msgstr "Absteigend"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"Invite people via email. Every recipient will get an individual link to "
-"access the shared files."
-msgstr ""
-"Laden Sie andere per E-Mail ein. Jeder Empfänger erhält einen individuellen "
-"Link zum Zugriff auf die geteilten Dateien."
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid ""
@@ -6919,6 +6934,7 @@ msgid "Reply"
 msgstr "Antworten"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply All"
 msgstr "Allen antworten"
 
@@ -7295,6 +7311,30 @@ msgstr "Das Versenden der Nachricht wurde abgebrochen."
 msgid "The email has been sent"
 msgstr "Die E-Mail wurde gesendet"
 
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Reply to mailing list"
+msgstr "An die Mailingliste antworten"
+
+#. %1$d is an email addresses
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "This message was sent via the mailing list %1$s."
+msgstr "Diese Nachricht wurde über die Mailingliste %1$s gesendet."
+
+#. %1$d is an email addresses
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "This message was sent via a mailing list."
+msgstr "Diese Nachricht wurde über eine Mailingliste gesendet."
+
+#. %1$d is an email addresses
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Do you really want to reply all or just %1$s?"
+msgstr "Wollen Sie wirklich allen antworten oder nur %1$s?"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
+msgid "Reply to sender"
+msgstr "Antwort an Absender"
+
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -7467,14 +7507,15 @@ msgid "Compose"
 msgstr "Verfassen"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 msgid "Mail"
 msgstr "Mail"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
-#: module:io.ox/core apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
+#: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #, c-format
 msgid "No subject"
 msgstr "Kein Betreff"
@@ -7958,11 +7999,6 @@ msgstr ""
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
-msgid "Reply to sender"
-msgstr "Antwort an Absender"
-
-#: apps/io.ox/mail/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js
 msgid "Reply to all recipients"
 msgstr "Antwort an alle Empfänger"
 
@@ -8364,10 +8400,6 @@ msgstr "Vorschau nicht verfügbar"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "New note"
 msgstr "Neue Notiz"
-
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account could not be added"
-msgstr "Account konnte nicht hinzugefügt werden"
 
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -10853,6 +10885,16 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "close"
+#~ msgstr "Schließen"
+
+#~ msgid ""
+#~ "Invite people via email. Every recipient will get an individual link to "
+#~ "access the shared files."
+#~ msgstr ""
+#~ "Laden Sie andere per E-Mail ein. Jeder Empfänger erhält einen "
+#~ "individuellen Link zum Zugriff auf die geteilten Dateien."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "
