@@ -1601,13 +1601,14 @@ define('io.ox/mail/api', [
         var form = new FormData();
         form.append('file', options.file);
 
-        // force=true means don't check from address!
-        var params = { action: 'import', folder: folder, force: true };
-        if (options.category_id) params.category_id = options.category_id;
-
         return http.UPLOAD({
             module: 'mail',
-            params: params,
+            params: {
+                action: 'import',
+                folder: folder,
+                // don't check from address!
+                force: true
+            },
             data: form,
             fixPost: true
         })
