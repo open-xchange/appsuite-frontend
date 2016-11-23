@@ -161,13 +161,16 @@ define('io.ox/mail/common-extensions', [
                 single = !data.threadSize || data.threadSize === 1,
                 field = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
                 // get folder data to check capabilities:
-                // if bit 4096 is set, the server sort by local part not display name
+                // if bit 4096 is set, the server sorts by display name; if unset, it sorts by local part.
                 capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
-                useDisplayName = baton.options.sort !== 'from-to' || !(capabilities & 4096);
+                isFromTo = baton.options.sort === 'from-to',
+                showDisplayName = !isFromTo || (capabilities & 4096),
+                unescapeDisplayName = !isFromTo,
+                reorderDisplayName = !isFromTo;
 
             this.append(
                 $('<div class="from">').append(
-                    util.getFrom(data, { field: field, reorderDisplayName: useDisplayName, showDisplayName: useDisplayName })
+                    util.getFrom(data, { field: field, reorderDisplayName: reorderDisplayName, showDisplayName: showDisplayName, unescapeDisplayName: unescapeDisplayName })
                 )
             );
         },
