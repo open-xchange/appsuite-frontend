@@ -31,6 +31,7 @@ define('io.ox/mail/detail/content', [
      */
 
     var markupQuotes = function (str) {
+
         var blockquoteStart = '<blockquote type="cite">',
             blockquoteEnd = '</blockquote>',
             regQuoted = /^&gt;( |$)/i,
@@ -584,10 +585,11 @@ define('io.ox/mail/detail/content', [
 
         text2html: (function () {
 
-            var regBlockquote = /^(> )+[^\n]*(\n> [^\n]*)*\n?/,
-                regIsUnordered = /^\* [^\n]*(\n\* [^\n]*)*\n?/,
-                regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*)*\n?/,
-                regText = /^[^\n]+\n?/;
+            var regBlockquote = /^(> )+[^\n]*(\n> [^\n]*)*/,
+                regIsUnordered = /^\* [^\n]*(\n\* [^\n]*|\n {2}\* [^\n]*)*/,
+                regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
+                regNewline = /^\n+/,
+                regText = /^[^\n]*(\n(?!\* |> |\d+\. )[^\n]*)*/;
 
             function exec(regex, str) {
                 var match = regex.exec(str);
@@ -603,28 +605,37 @@ define('io.ox/mail/detail/content', [
                     if (match = exec(regBlockquote, str)) {
                         str = str.substr(match.length);
                         match = match.replace(/^> /gm, '');
-                        out += '<blockquote type="cite">\n' + parse(match) + '</blockquote>\n';
+                        match = parse(match).replace(/(<br>)?(<\/?blockquote[^>]*>)(<br>)?/g, '$2').replace(/<br>$/, '');
+                        out += '<blockquote type="cite">' + match + '</blockquote>';
                         continue;
                     }
 
                     if (match = exec(regIsUnordered, str)) {
                         str = str.substr(match.length);
-                        match = _.escape(match).replace(/^\* (.+)$/gm, '<li>$1</li>');
-                        out += '<ul>\n' + match + '</ul>\n';
+                        match = match.replace(/^../gm, '');
+                        match = parse(match).replace(/<br><ul>/g, '<ul>').replace(/<br>/g, '</li><li>');
+                        out += '<ul><li>' + match + '</li></ul>';
                         continue;
                     }
 
                     if (match = exec(regIsOrdered, str)) {
                         str = str.substr(match.length);
                         start = parseInt(match, 10);
-                        match = _.escape(match).replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
-                        out += '<ol start="' + start + '">\n' + match + '\n</ol>\n';
+                        match = match.replace(/^\d+\. /gm, '');
+                        match = parse(match).replace(/<br>(<ol[^>]*>)/g, '$1').replace(/<br>/g, '</li><li>');
+                        out += '<ol start="' + start + '"><li>' + match + '</li></ol>';
+                        continue;
+                    }
+
+                    if (match = exec(regNewline, str)) {
+                        str = str.substr(match.length);
+                        out += match.replace(/\n/g, '<br>');
                         continue;
                     }
 
                     if (match = exec(regText, str)) {
                         str = str.substr(match.length);
-                        out += _.escape(match).replace(/\n$/, '<br>\n');
+                        out += _.escape(match).replace(/\n/g, '<br>');
                         continue;
                     }
 
@@ -639,6 +650,84 @@ define('io.ox/mail/detail/content', [
 
             return parse;
 
-        }())
+        }()),
+
+        // TODO: turn this into a spec
+        test_text2html: function () {
+
+            var i, o;
+
+            try {
+
+                // LINE BREAKS
+
+                i = 'Lorem ipsum';
+                o = 'Lorem ipsum';
+                if (this.text2html(i) !== o) throw i;
+
+                i = 'Lorem ipsum\ndolor sit amet';
+                o = 'Lorem ipsum<br>dolor sit amet';
+                if (this.text2html(i) !== o) throw i;
+
+                i = 'Lorem ipsum\ndolor\nsit\n';
+                o = 'Lorem ipsum<br>dolor<br>sit<br>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '\n';
+                o = '<br>';
+                if (this.text2html(i) !== o) throw i;
+
+                // QUOTES
+
+                i = '> Lorem ipsum';
+                o = '<blockquote type="cite">Lorem ipsum</blockquote>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '\n> Lorem ipsum\n> dolor sit';
+                o = '<br><blockquote type="cite">Lorem ipsum<br>dolor sit</blockquote>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '\n> Lorem ipsum\n> > dolor sit\n> amet';
+                o = '<br><blockquote type="cite">Lorem ipsum<blockquote type="cite">dolor sit</blockquote>amet</blockquote>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '> > Lorem ipsum\n> dolor sit\n> > amet';
+                o = '<blockquote type="cite"><blockquote type="cite">Lorem ipsum</blockquote>dolor sit<blockquote type="cite">amet</blockquote></blockquote>';
+                if (this.text2html(i) !== o) throw i;
+
+                // UNORDERED LISTS
+
+                i = '* Lorem ipsum';
+                o = '<ul><li>Lorem ipsum</li></ul>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '\n* Lorem ipsum\n* dolor sit';
+                o = '<br><ul><li>Lorem ipsum</li><li>dolor sit</li></ul>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '* Lorem\n  * ipsum\n  * dolor sit\n* amet';
+                o = '<ul><li>Lorem<ul><li>ipsum</li><li>dolor sit</li></ul></li><li>amet</li></ul>';
+                if (this.text2html(i) !== o) throw i;
+
+                // ORDERED LISTS
+
+                i = '1. Lorem ipsum';
+                o = '<ol start="1"><li>Lorem ipsum</li></ol>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '1. Lorem ipsum\n2. dolor sit';
+                o = '<ol start="1"><li>Lorem ipsum</li><li>dolor sit</li></ol>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '29. Lorem ipsum\n30. dolor sit';
+                o = '<ol start="29"><li>Lorem ipsum</li><li>dolor sit</li></ol>';
+                if (this.text2html(i) !== o) throw i;
+
+                console.info('All fine');
+
+            } catch (e) {
+                console.error('text2html', e);
+            }
+        }
     };
 });
