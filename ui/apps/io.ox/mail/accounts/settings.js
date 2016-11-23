@@ -175,9 +175,10 @@ define('io.ox/mail/accounts/settings', [
                 });
             } else {
                 // show classic wizard for DSC setups, bypass oauth accounts
-                baton.popup.getFooter().find('[data-action="add"]').show();
-                // invoke wizard
                 ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                _.defer(function () {
+                    baton.popup.getFooter().find('[data-action="add"]').show();
+                }, 1000);
             }
         }
     });
