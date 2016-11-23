@@ -15,9 +15,16 @@
 
     .vgrid-cell-checkbox { padding-top: 11px; }
 
+    .first-row {
+        display: flex;
+        display: -webkit-flex;
+    }
+
     .end_date {
         color: #777;
         margin-left: 0.5em;
+        margin-right: 0.5em;
+        overflow: visible;
         font-weight: 300;
         float: right;
 
@@ -46,9 +53,7 @@
         font-weight: 500;
         display: inline-block;
         white-space: nowrap;
-        width: 115px;
-
-        &.not-fulltime { width: 75px; }
+        flex-grow: 1;
     }
 
     .private-flag {
@@ -56,6 +61,8 @@
         font-size: 18px;
         margin-right: 3px;
         color: #aaa;
+        min-width: 12px;
+        max-width: 12px;
     }
 
     .second-row {
@@ -73,76 +80,6 @@
         width: 100px;
         height: 13px;
         margin: 0 1em 0 0;
-    }
-}
-// under 700 we can go bigger because the listview is spread over the whole screen
-@media (max-width: 700px) {
-    .vgrid-cell.tasks .title {
-        width: 325px;
-
-        &.not-fulltime { width: 285px; }
-    }
-
-    .vgrid.editable .vgrid-cell.tasks .title {
-        width: 275px;
-
-        &.not-fulltime { width: 235px; }
-    }
-}
-
-@media (max-width: 500px) {
-    .vgrid-cell.tasks .title {
-        width: 225px;
-
-        &.not-fulltime { width: 185px; }
-    }
-
-    .vgrid.editable .vgrid-cell.tasks .title {
-        width: 175px;
-
-        &.not-fulltime { width: 135px; }
-    }
-}
-
-@media (max-width: 400px) {
-    .vgrid-cell.tasks .title {
-        width: 190px;
-        &.not-fulltime {
-            width: 140px;
-        }
-    }
-
-    .vgrid.editable .vgrid-cell.tasks .title {
-        width: 140px;
-        &.not-fulltime {
-            width: 100px;
-        }
-    }
-}
-
-@media (min-width: 1300px) {
-    .vgrid-cell.tasks .title {
-        width: 195px;
-
-        &.not-fulltime { width: 155px; }
-    }
-
-    .tasks-detailview .dl-horizontal dt { width: 250px; }
-}
-
-@media (min-width: 1500px) {
-    .vgrid-cell.tasks .title {
-        width: 245px;
-
-        &.not-fulltime { width: 195px; }
-    }
-}
-
-@media (min-width: 1700px) {
-    .vgrid-cell.tasks .title {
-        width: 295px;
-
-        &.not-fulltime { width: 245px; }
     }
 }
 
