@@ -507,8 +507,26 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/sendmail', {
         requires: 'some',
         action: function (baton) {
-            var data = baton.data;
-            ox.registry.call('mail-compose', 'compose', { folder_id: data.folder_id, to: data.to.concat(data.cc).concat(data.from) });
+            require(['io.ox/core/api/user'], function (userAPI) {
+                account.getAllSenderAddresses().done(function (senderAddresses) {
+                    userAPI.getCurrentUser().done(function (user) {
+                        var data = baton.data,
+                            toAdresses = data.to.concat(data.cc).concat(data.bcc).concat(data.from),
+                            ownAddresses = _.compact([user.get('email1'), user.get('email2'), user.get('email3')]);
+
+                        ownAddresses = ownAddresses.concat(_(senderAddresses).pluck(1));
+                        var filtered = _(toAdresses).filter(function (addr) {
+                            return ownAddresses.indexOf(addr[1]) < 0;
+                        });
+                        if (filtered.length === 0) filtered = toAdresses;
+                        filtered = _(filtered).uniq(false, function (addr) {
+                            return addr[1];
+                        });
+
+                        ox.registry.call('mail-compose', 'compose', { folder_id: data.folder_id, to: filtered });
+                    });
+                });
+            });
         }
     });
 
