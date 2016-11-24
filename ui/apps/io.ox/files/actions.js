@@ -230,10 +230,12 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (e.collection.has('multiple')) return false;
             if (e.collection.has('folders')) return false;
-            // no 'open' menu entry for office documents, PDF and plain text
-            if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
-            if (api.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype)) return false;
-            if (api.Model.prototype.isText.call(this, e.baton.data.file_mimetype)) return false;
+            if (e.baton.data.file_mimetype) {
+                // no 'open' menu entry for office documents, PDF and plain text
+                if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
+                if (api.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype)) return false;
+                if (api.Model.prototype.isText.call(this, e.baton.data.file_mimetype)) return false;
+            }
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
