@@ -22,8 +22,9 @@ define('io.ox/mail/actions', [
     'io.ox/core/api/account',
     'io.ox/core/notifications',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail'
-], function (ext, links, api, util, folderAPI, print, account, notifications, settings, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/core/capabilities'
+], function (ext, links, api, util, folderAPI, print, account, notifications, settings, gt, capabilities) {
 
     'use strict';
 
@@ -542,8 +543,10 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/premium/actions/synchronize', {
-        capabilities: 'active_sync client-onboarding',
+        capabilities: 'active_sync',
         requires: function () {
+            // use client onboarding here, since it is a setting and not a capability
+            if (!capabilities.has('client-onboarding')) return false;
             return _.device('!smartphone');
         },
         action: function () {

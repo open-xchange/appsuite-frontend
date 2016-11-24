@@ -759,8 +759,10 @@ define('io.ox/files/actions', [
     });
 
     new Action('io.ox/files/premium/actions/synchronize', {
-        capabilities: 'client-onboarding (boxcom || google || msliveconnect)',
+        capabilities: 'boxcom || google || msliveconnect',
         requires: function () {
+            // use client onboarding here, since it is a setting and not a capability
+            if (!capabilities.has('client-onboarding')) return false;
             return _.device('!smartphone');
         },
         action: function () {

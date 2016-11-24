@@ -18,8 +18,9 @@ define('io.ox/calendar/actions', [
     'io.ox/calendar/util',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/print',
-    'gettext!io.ox/calendar'
-], function (ext, links, api, util, actions, print, gt) {
+    'gettext!io.ox/calendar',
+    'io.ox/core/capabilities'
+], function (ext, links, api, util, actions, print, gt, capabilities) {
 
     'use strict';
 
@@ -402,8 +403,10 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/premium/actions/share', {
-        capabilities: 'caldav client-onboarding',
+        capabilities: 'caldav',
         requires: function () {
+            // use client onboarding here, since it is a setting and not a capability
+            if (!capabilities.has('client-onboarding')) return false;
             return _.device('!smartphone');
         },
         action: function () {
