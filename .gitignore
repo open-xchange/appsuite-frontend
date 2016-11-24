@@ -2,7 +2,6 @@
 ui/.project
 ui/watch.sh
 ui/node_modules
-ui/.externalToolBuilders/OXBuild.launch
 ui/lib/bootstrap/node_modules
 *.sublime-*
 *~
@@ -10,4 +9,3 @@ ui/lib/bootstrap/node_modules
 *.kate-swp
 npm-debug.log
 nbproject
-oxbuild-binding/
