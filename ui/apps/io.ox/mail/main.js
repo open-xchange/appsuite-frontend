@@ -799,9 +799,7 @@ define('io.ox/mail/main', [
 
                 // defer so that all selection events are triggered (e.g. selection:all)
                 _.defer(function () {
-                    // tabbed inbox / mail categories: absolute tab count is unknown
-                    var inTab = categories.isVisible(),
-                        count = $('<span class="number">').text(list.length).prop('outerHTML');
+                    var count = $('<span class="number">').text(list.length).prop('outerHTML');
                     app.right.find('.multi-selection-message .message')
                         .empty()
                         .attr('id', 'mail-multi-selection-message')
@@ -813,13 +811,9 @@ define('io.ox/mail/main', [
                                 gt.format(gt.ngettext('%1$d message selected', '%1$d messages selected', count, count))
                             ),
                             // inline actions
-                            id && total > list.length && !search && !inTab && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
+                            id && total > list.length && !search && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
                                 $('<div class="inline-actions">').append(
-                                    gt(
-                                        'There are %1$d messages in this folder; not all messages are displayed in the list. ' +
-                                        'If you want to move or delete all messages, you find corresponding actions in the folder context menu.',
-                                        total
-                                    )
+                                    gt('There are %1$d messages in this folder; not all messages are displayed in the list currently.', total)
                                 )
                                 : $()
                         );
