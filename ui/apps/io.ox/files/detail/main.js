@@ -38,7 +38,13 @@ define('io.ox/files/detail/main', [
                     }));
 
                 require(['io.ox/core/viewer/main'], function (Viewer) {
-                    var launchParams = { files: [fileModel || data], app: app, container: app.getWindowNode(), standalone: true },
+                    var launchParams = {
+                            files: [fileModel || data],
+                            app: app,
+                            container: app.getWindowNode(),
+                            standalone: true,
+                            opt: { disableFolderInfo: !fileModel }
+                        },
                         viewer = new Viewer();
                     viewer.launch(launchParams);
                 });
