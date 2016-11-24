@@ -251,6 +251,13 @@ define('io.ox/core/folder/tree', [
                             $('<a href="#" class="io-ox-action-link" data-action="close-menu">').text(gt('Close'))
                         )
                     );
+                    if (ul.find('[role=menuitem]').length === 0) {
+                        ul.prepend(
+                            $('<li>').append(
+                                $('<div class="custom-dropdown-label">').text(gt('No action available'))
+                            )
+                        );
+                    }
                 }
                 if (_.device('smartphone')) ul.find('.divider').remove();
                 // remove unwanted dividers
