@@ -35,7 +35,6 @@ define('io.ox/files/detail/main', [
                 );
 
                 require(['io.ox/core/viewer/main'], function (Viewer) {
-                    debugger;
                     var launchParams = {
                             files: [fileModel || data],
                             app: app,
