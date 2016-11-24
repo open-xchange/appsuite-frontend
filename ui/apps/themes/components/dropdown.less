@@ -234,7 +234,7 @@ ul.dropdown-menu li a.disabled {
             margin: @marginSmall 5px;
             text-align: center;
 
-            a {
+            a, .custom-dropdown-label {
                 padding: (3px + @extraPadding) 20px;
             }
 
@@ -269,7 +269,7 @@ ul.dropdown-menu li a.disabled {
             // no clue why but there are empty <li> in system drop-down, for example
             &:empty { padding: 0; }
 
-            & > a, & > span {
+            & > a, & > span, & .custom-dropdown-label {
                 .ellipsis();
                 -webkit-tap-highlight-color: transparent;
                 -webkit-touch-callout: none;
@@ -278,6 +278,9 @@ ul.dropdown-menu li a.disabled {
                 font-size: 18px;
                 font-weight: 300;
                 max-width: none !important;
+            }
+            .custom-dropdown-label {
+                color: #999;
             }
         }
 
