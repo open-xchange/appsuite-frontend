@@ -728,8 +728,13 @@ define('io.ox/calendar/edit/extensions', [
 
                     if (appointment) {
                         data.dialog.close();
-                        e.data.model.set({ full_time: appointment.full_time });
-                        e.data.model.set({ start_date: appointment.start_date });
+                        // make sure we have correct dates. Do not change dates if a date is NaN
+                        var validDate = !(_.isNaN(appointment.start_date) || _.isNaN(appointment.end_date));
+
+                        if (validDate) {
+                            e.data.model.set({ full_time: appointment.full_time });
+                            e.data.model.set({ start_date: appointment.start_date });
+                        }
                         var models = [],
                             defs = [];
                         // add to participants collection instead of the model attribute to make sure the edit view is redrawn correctly
@@ -746,9 +751,11 @@ define('io.ox/calendar/edit/extensions', [
                             e.data.model._participants.addUniquely(models);
                         });
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
-                        e.data.model.set({
-                            end_date: appointment.end_date
-                        }, { validate: true });
+                        if (validDate) {
+                            e.data.model.set({
+                                end_date: appointment.end_date
+                            }, { validate: true });
+                        }
                     } else {
                         data.dialog.idle();
                         require(['io.ox/core/yell'], function (yell) {
