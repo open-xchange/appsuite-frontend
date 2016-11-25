@@ -244,7 +244,7 @@ define('io.ox/core/tk/list-dnd', [
 
         function getObjects(cid) {
             // simple id check for folders, prevents errors if folder id contains '.'
-            if (cid.startsWith('folder.')) {
+            if (cid.indexOf('folder.') === 0) {
                 return { folder_id: 'folder', id: cid.replace(/^folder./, '') };
             }
             return _.cid(cid.replace(/^thread./, ''));
