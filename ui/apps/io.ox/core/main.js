@@ -1081,7 +1081,7 @@ define('io.ox/core/main', [
             index: 2100,
             draw: function () {
                 var data, link;
-                if (session.isAutoLogin() && _.device('reload')) return;
+                if (!session.isAutoLogin() || _.device('reload')) return;
                 // disabled
                 data = _.clone(settings.get('features/logoutButtonHint', {}));
                 if (!data.enabled) return;
