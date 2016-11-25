@@ -1362,7 +1362,7 @@ define('io.ox/files/main', [
 
                 // simple id check for folders, prevents errors if folder id contains '.'
                 if (_.isString(item)) {
-                    if (item.startsWith('folder.')) {
+                    if (item.indexOf('folder.') === 0) {
                         return { folder_id: 'folder', id: item.replace(/^folder./, '') };
                     }
                     return _.cid(item);
