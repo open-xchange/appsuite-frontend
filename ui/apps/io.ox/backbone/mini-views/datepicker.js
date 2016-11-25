@@ -91,7 +91,8 @@ define('io.ox/backbone/mini-views/datepicker', [
                         if (!self.options.timezoneButton && !self.mobileMode) {
                             timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                         } else {
-                            timezoneContainer = self.nodes.timezoneField = $('<button class="timezone input-group-addon btn" data-toggle="popover">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
+                            // use <a> role button. If a real <button> is used we trigger a browser reload see 50299
+                            timezoneContainer = self.nodes.timezoneField = $('<a role="button" href="#" class="timezone input-group-addon btn" data-toggle="popover">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                             if (self.model.has('start_date') && self.model.has('end_date')) {
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
                                     calendarUtil.addTimezonePopover(
