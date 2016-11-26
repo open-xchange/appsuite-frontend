@@ -25,8 +25,8 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(_.device).to.be.a('function');
         });
 
-        it('should return an object if no param was given', function () {
-            expect(_.device()).to.be.an('object');
+        it('should return an object if debug param was given', function () {
+            expect(_.device('debug')).to.be.an('object');
         });
 
         it('should extend underscore with some helper functions and objects', function () {
