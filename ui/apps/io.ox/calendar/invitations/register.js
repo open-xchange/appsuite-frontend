@@ -129,7 +129,6 @@ define('io.ox/calendar/invitations/register', [
                 $('<div class="itip-details">'),
                 $('<div class="itip-annotations">'),
                 $('<div class="itip-changes">'),
-                $('<div class="itip-conflicts">'),
                 $('<div class="itip-comment">'),
                 $('<div class="itip-controls">')
             );
@@ -200,9 +199,6 @@ define('io.ox/calendar/invitations/register', [
         },
 
         renderChanges: function () {
-        },
-
-        renderConflicts: function () {
         },
 
         renderReminder: function () {
@@ -285,7 +281,6 @@ define('io.ox/calendar/invitations/register', [
 
             this.renderSummary();
             this.renderChanges();
-            this.renderConflicts();
 
             status = util.getConfirmationStatus(this.appointment);
             accepted = status === 1;
@@ -324,7 +319,6 @@ define('io.ox/calendar/invitations/register', [
 
         events: {
             'click .show-details': 'onShowDetails',
-            'click .show-conflicts': 'onShowConflicts',
             'click .itip-actions button': 'onAction',
             'keydown': 'onKeydown'
         },
@@ -340,59 +334,69 @@ define('io.ox/calendar/invitations/register', [
 
             var action = $(e.currentTarget).attr('data-action'), self = this;
 
-            http.PUT({
-                module: 'calendar/itip',
-                params: {
-                    action: action,
-                    dataSource: 'com.openexchange.mail.ical',
-                    descriptionFormat: 'html',
-                    message: this.getUserComment()
-                },
-                data: {
-                    'com.openexchange.mail.conversion.fullname': this.imip.mail.folder_id,
-                    'com.openexchange.mail.conversion.mailid': this.imip.mail.id,
-                    'com.openexchange.mail.conversion.sequenceid': this.imip.id
-                }
-            })
-            .then(
-                function done() {
-                    // api refresh
-                    var refresh = require(['io.ox/calendar/api']).then(
-                        function (api) {
-                            api.refresh();
-                            if (self.options.yell !== false) {
-                                notifications.yell('success', success[action]);
-                            }
-                        });
-
-                    if (settings.get('deleteInvitationMailAfterAction', false)) {
-                        // remove mail
-                        require(['io.ox/mail/api'], function (api) {
-                            api.remove([self.imip.mail]);
-                        });
-                    } else {
-                        // repaint only if there is something left to repaint
-                        refresh.then(function () {
-                            // if the delete action was succesfull we don't need the button anymore, see Bug 40852
-                            if (action === 'delete') {
-                                self.model.set('actions', _(self.model.get('actions')).without('delete'));
-                            }
-                            self.repaint();
-                        });
+            function performConfirm() {
+                http.PUT({
+                    module: 'calendar/itip',
+                    params: {
+                        action: action,
+                        dataSource: 'com.openexchange.mail.ical',
+                        descriptionFormat: 'html',
+                        message: self.getUserComment()
+                    },
+                    data: {
+                        'com.openexchange.mail.conversion.fullname': self.imip.mail.folder_id,
+                        'com.openexchange.mail.conversion.mailid': self.imip.mail.id,
+                        'com.openexchange.mail.conversion.sequenceid': self.imip.id
                     }
-                },
-                function fail(e) {
-                    notifications.yell(e);
-                    self.repaint();
-                }
-            );
-        },
+                })
+                .then(
+                    function done() {
+                        // api refresh
+                        var refresh = require(['io.ox/calendar/api']).then(
+                            function (api) {
+                                api.refresh();
+                                if (self.options.yell !== false) {
+                                    notifications.yell('success', success[action]);
+                                }
+                            });
 
-        onShowConflicts: function (e) {
-            e.preventDefault();
-            var data = $(e.currentTarget).data(), node = this.$el.find('.itip-conflicts');
-            ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                node.empty().append(conflictView.drawList(data.conflicts));
+                        if (settings.get('deleteInvitationMailAfterAction', false)) {
+                            // remove mail
+                            require(['io.ox/mail/api'], function (api) {
+                                api.remove([self.imip.mail]);
+                            });
+                        } else {
+                            // repaint only if there is something left to repaint
+                            refresh.then(function () {
+                                // if the delete action was succesfull we don't need the button anymore, see Bug 40852
+                                if (action === 'delete') {
+                                    self.model.set('actions', _(self.model.get('actions')).without('delete'));
+                                }
+                                self.repaint();
+                            });
+                        }
+                    },
+                    function fail(e) {
+                        notifications.yell(e);
+                        self.repaint();
+                    }
+                );
+            }
+
+            ox.load(['io.ox/calendar/actions/change-confirmation']).done(function (action) {
+                action(self.imip, {
+                    api: {
+                        checkConflicts: function () {
+                            var conflicts = [];
+                            _(self.model.get('changes')).each(function (change) {
+                                if (change.conflicts) conflicts = conflicts.concat(change.conflicts);
+                            });
+                            return $.when(conflicts);
+                        }
+                    }
+                }).done(performConfirm).fail(function (err) {
+                    if (err) notifications.yell(err);
+                });
             });
         },
 
@@ -447,23 +451,6 @@ define('io.ox/calendar/invitations/register', [
                 _(change.diffDescription).each(function (description) {
                     node.append($('<p>').html(description));
                 });
-            });
-        },
-
-        renderConflicts: function () {
-            var node = this.$el.find('.itip-conflicts');
-            _(this.model.get('changes')).each(function (change) {
-                if (!change.conflicts) return;
-                var text = gt.format(gt.ngettext('There is already %1$d appointment in this timeframe.',
-                    'There are already %1$d appointments in this timeframe.', change.conflicts.length), change.conflicts.length);
-                node.append(
-                    $('<div class="conflict">').append(
-                        $('<span>').text(text), $.txt(' '),
-                        $('<a href="#" class="show-conflicts">')
-                        .data({ conflicts: change.conflicts })
-                        .text(gt('Show conflicts'))
-                    )
-                );
             });
         },
 
@@ -561,7 +548,8 @@ define('io.ox/calendar/invitations/register', [
 
         onAction: function (e) {
 
-            var action = $(e.currentTarget).attr('data-action'),
+            var self = this,
+                action = $(e.currentTarget).attr('data-action'),
                 hash = { accept: 1, decline: 2, tentative: 3 },
                 confirmation = hash[action],
                 data = this.appointment || this.task,
@@ -571,14 +559,25 @@ define('io.ox/calendar/invitations/register', [
 
             this.reminder = accepted ? false : parseInt(this.$el.find('.reminder-select').val(), 10);
 
-            this.$el.busy(true);
+            function performConfirm() {
+                self.$el.busy(true);
 
-            this.api.confirm({
-                folder: data.folder_id,
-                id: data.id,
-                data: { confirmation: confirmation, confirmmessage: comment }
-            })
-            .then(this.onActionSuccess.bind(this, confirmation), this.onActionFail.bind(this, action));
+                self.api.confirm({
+                    folder: data.folder_id,
+                    id: data.id,
+                    data: { confirmation: confirmation, confirmmessage: comment }
+                })
+                .then(self.onActionSuccess.bind(self, confirmation), self.onActionFail.bind(self, action));
+            }
+
+            if (this.type === 'appointment') {
+                return ox.load(['io.ox/calendar/actions/change-confirmation']).done(function (action) {
+                    action(data).done(performConfirm).fail(function (err) {
+                        if (err) notifications.yell(err);
+                    });
+                });
+            }
+            performConfirm();
         },
 
         loadAppointment: function () {

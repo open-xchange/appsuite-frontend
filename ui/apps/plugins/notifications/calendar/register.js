@@ -52,7 +52,7 @@ define('plugins/notifications/calendar/register', [
                     e.stopPropagation();
                     var o = calAPI.reduce(model.attributes),
                         appointmentData = model.attributes;
-                    require(['io.ox/core/folder/api', 'settings!io.ox/calendar'], function (folderAPI, settings) {
+                    require(['io.ox/core/folder/api', 'settings!io.ox/calendar', 'io.ox/calendar/actions/change-confirmation'], function (folderAPI, settings, action) {
                         folderAPI.get(o.folder).done(function (folder) {
                             o.data = {
                                 // default reminder
@@ -64,41 +64,15 @@ define('plugins/notifications/calendar/register', [
                             if (folderAPI.is('shared', folder)) {
                                 o.data.id = folder.created_by;
                             }
-                            calAPI.checkConflicts(appointmentData).done(function (conflicts) {
-                                if (conflicts.length === 0) {
-                                    view.responsiveRemove(model);
-                                    calAPI.confirm(o).done(function () {
-                                        // remove model from hidden collection or new invitations when the appointment changes will not be displayed
-                                        view.hiddenCollection.remove(model);
-                                    }).fail(function () {
-                                        view.unHide(model);
-                                    });
-                                } else {
-                                    ox.load(['io.ox/calendar/conflicts/conflictList', 'io.ox/core/tk/dialogs']).done(function (conflictView, dialogs) {
-                                        var dialog = new dialogs.ModalDialog()
-                                            .header(conflictView.drawHeader());
 
-                                        dialog.append(conflictView.drawList(conflicts, dialog).addClass('additional-info'));
-                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore');
-
-                                        dialog.addButton('cancel', gt('Cancel'), 'cancel')
-                                            .show()
-                                            .done(function (action) {
-                                                if (action === 'cancel') {
-                                                    return;
-                                                }
-                                                if (action === 'ignore') {
-                                                    view.responsiveRemove(model);
-                                                    calAPI.confirm(o).done(function () {
-                                                        // remove model from hidden collection or new invitations when the appointment changes will not be displayed
-                                                        view.hiddenCollection.remove(model);
-                                                    }).fail(function () {
-                                                        view.unHide(model);
-                                                    });
-                                                }
-                                            });
-                                    });
-                                }
+                            action(appointmentData).done(function success() {
+                                view.responsiveRemove(model);
+                                calAPI.confirm(o).done(function () {
+                                    // remove model from hidden collection or new invitations when the appointment changes will not be displayed
+                                    view.hiddenCollection.remove(model);
+                                }).fail(function () {
+                                    view.unHide(model);
+                                });
                             });
                         });
                     });
