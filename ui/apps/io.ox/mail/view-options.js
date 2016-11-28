@@ -66,7 +66,7 @@ define('io.ox/mail/view-options', [
         index: 1000,
         draw: function (baton) {
 
-            var app = baton.app, model = app.props;
+            var app = baton.app, model = app.props, self = this;
 
             var dropdown = new Dropdown({
                 caret: true,
@@ -81,6 +81,13 @@ define('io.ox/mail/view-options', [
             }
 
             app.on('folder:change', toggle);
+
+            // ensure, that container is always in front (see Bug 50300)
+            dropdown.$el.on('shown.bs.dropdown', function () {
+                self.closest('.leftside').css('z-index', 3);
+            }).on('hidden.bs.dropdown', function () {
+                self.closest('.leftside').css('z-index', '');
+            });
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
             this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
