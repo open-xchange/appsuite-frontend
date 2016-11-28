@@ -44,6 +44,15 @@ module.exports = function (grunt) {
                         src: ['.htaccess'],
                         cwd: 'html/',
                         dest: 'dist/appsuite/'
+                    },
+                    {
+                        src: ['static/**/*.min.js'],
+                        cwd: 'build/',
+                        dest: 'dist/appsuite/',
+                        filter: function (f) {
+                            return !isTranslationModule(f) && grunt.file.isFile(f);
+                        },
+                        expand: true
                     }
                 ]
             },
@@ -67,7 +76,7 @@ module.exports = function (grunt) {
         uglify: {
             dist_rootfolder: {
                 files: [{
-                    src: ['*.js', 'static/**/*.js'],
+                    src: ['*.js'],
                     cwd: 'build/',
                     dest: 'dist/appsuite/',
                     filter: function (f) {
