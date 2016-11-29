@@ -66,9 +66,7 @@ define('io.ox/mail/settings/pane', [
             { label: 'Terminal', value: 'terminal, monaco, monospace' },
             { label: 'Times New Roman', value: '"times new roman", times, serif' },
             { label: 'Trebuchet MS', value: '"trebuchet ms", geneva, sans-serif' },
-            { label: 'Verdana', value: 'verdana, geneva, sans-serif' },
-            { label: 'Webdings', value: '"Helvetica Neue", Helvetica, Arial, sans-serif' },
-            { label: 'Wingdings', value: '"Helvetica Neue", Helvetica, Arial, sans-serif' }
+            { label: 'Verdana', value: 'verdana, geneva, sans-serif' }
         ],
 
         optionsFontsize = [
