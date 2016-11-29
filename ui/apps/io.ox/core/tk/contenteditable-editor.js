@@ -157,6 +157,14 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         ed.selection.select(dummySpan);
         // and delete it
         ed.execCommand('Delete', false, null);
+        // apply default font styles
+        ed.execCommand('fontSize', false, mailSettings.get('defaultFontStyle/size'));
+        ed.execCommand('fontName', false, mailSettings.get('defaultFontStyle/family'));
+
+        // when selecting transparent, tinyMCE does not make the text transparent, but set's the color to black. Preserve this behavior
+        if (mailSettings.get('defaultFontStyle/color') !== 'transparent') {
+            ed.execCommand('forecolor', false, mailSettings.get('defaultFontStyle/color'));
+        }
     }
 
     function isInsideBlockquote(range) {

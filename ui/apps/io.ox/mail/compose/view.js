@@ -947,11 +947,26 @@ define('io.ox/mail/compose/view', [
         },
 
         prependNewLine: function () {
-            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''),
-                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
-
             // Prepend newline in all modes except when editing draft
-            if (this.model.get('mode') !== 'edit') this.editor.setContent(nl + content);
+            if (this.model.get('mode') === 'edit') return;
+
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''),
+                css = {
+                    'color': settings.get('defaultFontStyle/color'),
+                    'font-family': settings.get('defaultFontStyle/family'),
+                    'font-size': settings.get('defaultFontStyle/size')
+                },
+                // br must be appended here. Or tinymce just deletes the span.
+                styleNode = $('<span>').append($('<br>')),
+                nl;
+            if (css.color === 'transparent') {
+                delete css.color;
+            }
+            styleNode.css(css).attr('data-mce-style', css);
+
+            nl = this.model.get('editorMode') === 'html' ? '<p>' + styleNode[0].outerHTML + '</p>' : '\n';
+
+            this.editor.setContent(nl + content);
         },
 
         setMail: function () {
