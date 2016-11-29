@@ -71,7 +71,7 @@ define('io.ox/core/folder/favorites', [
             delete invalid[model.id];
         });
 
-        collection.on('add remove', storeCollection);
+        collection.on('add remove change:id', storeCollection);
 
         // respond to collection remove event to sync favorites
         api.on('collection:remove', function (id, model) {
