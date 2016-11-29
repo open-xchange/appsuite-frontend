@@ -542,6 +542,7 @@ define('io.ox/mail/compose/extensions', [
                         view.$header.empty();
                         this.renderHeader();
                         view.invoke('render');
+                        view.$el.find('.io-ox-inline-links a.io-ox-action-link').focus();
                     };
 
                     view.extend({
