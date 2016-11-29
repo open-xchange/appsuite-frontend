@@ -434,6 +434,8 @@ define('io.ox/calendar/week/perspective', [
                     self.dialog.close();
                 })
                 .on('create update', function (e, obj) {
+                    var current = ox.ui.App.getCurrentApp().getName();
+                    if (!/^io.ox\/calendar/.test(current)) return;
                     if (obj.recurrence_type === 0) {
                         self.view.setStartDate(obj.start_date, obj.full_time);
                     }
