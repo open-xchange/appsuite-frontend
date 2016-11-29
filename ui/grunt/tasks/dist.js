@@ -72,21 +72,6 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.config.merge({
-        uglify: {
-            dist_rootfolder: {
-                files: [{
-                    src: ['*.js'],
-                    cwd: 'build/',
-                    dest: 'dist/appsuite/',
-                    filter: function (f) {
-                        return !isTranslationModule(f) && grunt.file.isFile(f);
-                    },
-                    expand: true
-                }]
-            }
-        }
-    });
 
     grunt.registerMultiTask('create_i18n_properties', 'Create properties files for i18n configuration', function () {
         this.files.forEach(function (file) {
