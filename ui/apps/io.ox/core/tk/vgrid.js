@@ -1236,10 +1236,6 @@ define('io.ox/core/tk/vgrid', [
             emptyMessage = fn;
         };
 
-        this.getEmptyMessage = function () {
-            return emptyMessage;
-        };
-
         this.updateTemplates = function () {
             _(pool).each(function (node) {
                 node.detach();
