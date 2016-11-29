@@ -725,6 +725,7 @@ define('io.ox/core/tk/vgrid', [
             if (list.length === 0 && loaded) {
                 detachPool();
                 self.selection.trigger('change', []);
+                var emptyMessage = self.getEmptyMessage();
                 scrollpane.append(
                     $.fail(emptyMessage ?
                         emptyMessage(self.getMode()) :
@@ -1234,6 +1235,10 @@ define('io.ox/core/tk/vgrid', [
 
         this.setEmptyMessage = function (fn) {
             emptyMessage = fn;
+        };
+
+        this.getEmptyMessage = function () {
+            return emptyMessage;
         };
 
         this.updateTemplates = function () {

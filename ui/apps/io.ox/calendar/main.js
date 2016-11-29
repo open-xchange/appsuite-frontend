@@ -560,9 +560,18 @@ define('io.ox/calendar/main', [
 
             var lastPerspective,
                 SEARCH_PERSPECTIVE = 'list',
-                find = app.get('find');
-            // additional handler: switch to list perspective (and back)
+                find = app.get('find'),
+                emptyMessage = function findResultEmptyMessage() { return gt('No matching items found.'); };
+
             if (find) {
+                // WORKAROUND: no suitable way other of wrapping getEmptyMessage
+                app.grid.getEmptyMessage = _.wrap(app.grid.getEmptyMessage, function (fn) {
+                    if (app.grid.getMode() === 'search') return emptyMessage;
+                    // return function set by grid.setEmptyMessage
+                    return fn.apply(fn);
+                });
+
+                // additional handler: switch to list perspective (and back)
                 find.on({
                     'find:query': function () {
                         // hide sort options
