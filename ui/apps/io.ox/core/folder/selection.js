@@ -194,7 +194,7 @@ define('io.ox/core/folder/selection', [], function () {
             items = items || this.getItems();
             items.filter('.selected')
                 .removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' })
-                .find('.folder-label').css('max-width', null);
+                .find('.folder-label').css('max-width', 'initial');
             return this;
         },
 
