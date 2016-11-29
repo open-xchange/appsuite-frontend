@@ -72,6 +72,27 @@ module.exports = function (grunt) {
         }
     });
 
+    var fileList = grunt.config('uglify.dist.files.0.src'),
+        ignoreList = [
+            'apps/pdfjs-dist/build/pdf.combined.js',
+            'apps/3rd.party/tinymce/tinymce.js',
+            'apps/io.ox/mail/compose/bundle.js',
+            'boot.js',
+            'precore.js'
+        ];
+    grunt.config('uglify.dist.files.0.src', fileList.concat(ignoreList.map(function (f) { return '!' + f; })));
+    grunt.config.merge({
+        uglify: {
+            dist_largeFiles: {
+                files: [{
+                    src: ignoreList,
+                    cwd: 'build/',
+                    dest: 'dist/appsuite/',
+                    expand: true
+                }]
+            }
+        }
+    });
 
     grunt.registerMultiTask('create_i18n_properties', 'Create properties files for i18n configuration', function () {
         this.files.forEach(function (file) {
