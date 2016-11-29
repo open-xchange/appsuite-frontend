@@ -210,7 +210,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'download': {
                     prio: 'hi',
-                    mobile: 'lo',
+                    mobile: _.device('ios') ? 'lo' : 'hi',
                     icon: 'fa fa-download',
                     label: gt('Download'),
                     section: 'export',
@@ -218,7 +218,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'open': {
                     prio: 'lo',
-                    mobile: 'hi',
+                    mobile: _.device('android') ? 'lo' : 'hi',
                     icon: 'fa fa-download',
                     label: gt('Open attachment'),
                     section: 'export',
