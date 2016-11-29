@@ -1397,8 +1397,9 @@ define('io.ox/mail/api', [
      * @param  {string} mode ('download', 'zip', 'email, 'view', 'open')
      * @return { string} url
      */
-    api.getUrl = function (data, mode) {
-        var url = ox.apiRoot + '/mail', first;
+    api.getUrl = function (data, mode, options) {
+        var opt = _.extend({ scaletype: 'contain' }, options),
+            url = ox.apiRoot + '/mail', first;
         if (mode === 'zip') {
             first = _(data).first();
             return url + '?' + $.param({
@@ -1436,7 +1437,9 @@ define('io.ox/mail/api', [
             return url;
         }
         // inject filename for more convenient file downloads
-        var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined;
+        var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
+            // scaling options
+            scaling = opt.width && opt.height ? '&scaleType=' + opt.scaletype + '&width=' + opt.width + '&height=' + opt.height : '';
         url += (data.filename ? '/' + encodeURIComponent(filename) : '') + '?' +
             $.param({
                 action: 'attachment',
@@ -1451,7 +1454,7 @@ define('io.ox/mail/api', [
         switch (mode) {
             case 'view':
             case 'open':
-                return url + '&delivery=view';
+                return url + '&delivery=view' + scaling;
             case 'download':
                 return url + '&delivery=download';
             default:
