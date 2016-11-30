@@ -55,7 +55,10 @@ define.async('io.ox/mail/compose/model', [
                 signatureId: '',
                 csid: mailAPI.csid(),
                 vcard: settings.get('appendVcard', false) ? 1 : 0,
-                infostore_ids_saved: []
+                infostore_ids_saved: [],
+                security: {
+                    encrypt: settings.get('defaultEncrypt', false)
+                }
             };
         },
 
@@ -275,7 +278,8 @@ define.async('io.ox/mail/compose/model', [
                 'initial',
                 'msgref',
                 'disp_notification_to',
-                'share_attachments'
+                'share_attachments',
+                'security'
             );
             result = _.extend(result, {
                 attachments:    _(attachmentCollection.mailAttachments()).reject(function (o) { return o.source === 'drive'; }),  // get all attachments without files from drive
