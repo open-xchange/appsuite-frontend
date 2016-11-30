@@ -69,7 +69,7 @@ define('io.ox/core/tk/tokenfield', [
     // workaround for 7.6.2: use more than one emailaddreses of a single user/contact
     function makeUnique (model) {
         // extend id by used email field
-        model.id = model.id + '_' + model.get('field');
+        model.id = model.id + '_' + model.get('field') + '_' + _.uniqueId();
         return model;
     }
 
