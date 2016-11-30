@@ -237,7 +237,7 @@ define('io.ox/files/main', [
             });
 
             var tree = new TreeView({ app: app, contextmenu: true, module: 'infostore', root: settings.get('rootFolderId', 9) });
-
+            app.treeView = tree;
             // initialize folder view
             FolderView.initialize({ app: app, tree: tree, firstResponder: 'main' });
             page.append(tree.render().$el);
