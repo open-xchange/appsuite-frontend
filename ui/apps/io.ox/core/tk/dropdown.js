@@ -100,6 +100,8 @@
             $parent = getParent($this),
             isActive = $parent.hasClass('open');
 
+        if ($this.is('.disabled, :disabled')) return;
+
         // on a phone detach the menu and attach it to the body again
         // with position fixed. Then it will be a modal menu in fullscreen
         if (phone) {
