@@ -497,6 +497,8 @@ define('io.ox/core/folder/node', [
             if (this.options.title) return;
             if (!this.model.has('title')) return;
             var data = this.model.toJSON(), summary = [];
+            // wrong counts for unifiedroot folder
+            if (account.isUnifiedRoot(this.model.get('id'))) data = _.pick(data, 'title');
             if (_.isNumber(data.total) && data.total >= 0) summary.push(gt('Total: %1$d', data.total));
             if (_.isNumber(data.unread) && data.unread >= 0) summary.push(gt('Unread: %1$d', data.unread));
             summary = summary.join(', ');
