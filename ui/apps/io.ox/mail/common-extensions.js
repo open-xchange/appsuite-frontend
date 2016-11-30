@@ -164,10 +164,15 @@ define('io.ox/mail/common-extensions', [
                 // if bit 4096 is set, the server sorts by display name; if unset, it sorts by local part.
                 capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
                 isFromTo = baton.options.sort === 'from-to',
+                mailAdress = data[field][0] ? data[field][0][1] : '',
                 showDisplayName = !isFromTo || (capabilities & 4096);
 
+            if (mailAdress === '') {
+                mailAdress = (field === 'from' ? gt('Unknown sender') : gt('No recipients'));
+            }
+
             this.append(
-                $('<div class="from">').append(
+                $('<div class="from">').attr('title', mailAdress).append(
                     util.getFrom(data, { field: field, reorderDisplayName: !isFromTo, showDisplayName: showDisplayName, unescapeDisplayName: !isFromTo })
                 )
             );
