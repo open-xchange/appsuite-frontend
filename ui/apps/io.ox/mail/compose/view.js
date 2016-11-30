@@ -950,21 +950,25 @@ define('io.ox/mail/compose/view', [
             // Prepend newline in all modes except when editing draft
             if (this.model.get('mode') === 'edit') return;
 
-            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''),
-                css = {
-                    'color': settings.get('defaultFontStyle/color'),
-                    'font-family': settings.get('defaultFontStyle/family'),
-                    'font-size': settings.get('defaultFontStyle/size')
-                },
-                // br must be appended here. Or tinymce just deletes the span.
-                styleNode = $('<span>').append($('<br>')),
-                nl;
-            if (css.color === 'transparent') {
-                delete css.color;
-            }
-            styleNode.css(css).attr('data-mce-style', css);
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''), nl;
+            // don't apply default styles on smartphones. There is no toolbar where a user could change it again.
+            if (_.device('smartphone')) {
+                var css = {
+                        'color': settings.get('defaultFontStyle/color'),
+                        'font-family': settings.get('defaultFontStyle/family'),
+                        'font-size': settings.get('defaultFontStyle/size')
+                    },
+                    // br must be appended here. Or tinymce just deletes the span.
+                    styleNode = $('<span>').append($('<br>'));
+                if (css.color === 'transparent') {
+                    delete css.color;
+                }
+                styleNode.css(css).attr('data-mce-style', css);
 
-            nl = this.model.get('editorMode') === 'html' ? '<p>' + styleNode[0].outerHTML + '</p>' : '\n';
+                nl = this.model.get('editorMode') === 'html' ? '<p>' + styleNode[0].outerHTML + '</p>' : '\n';
+            } else {
+                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
+            }
 
             this.editor.setContent(nl + content);
         },

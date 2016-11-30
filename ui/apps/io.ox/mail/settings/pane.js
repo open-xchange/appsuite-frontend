@@ -271,16 +271,21 @@ define('io.ox/mail/settings/pane', [
                     // update drop-down toggle
                     self.label();
                 },
-                fontFamilySelect = new Dropdown({ caret: true, model: settings, label: gt('Font'), tagName: 'div', className: 'dropdown fontnameSelectbox', update: update, name: 'defaultFontStyle/family' }),
-                fontSizeSelect = new Dropdown({ caret: true, model: settings, label: gt('Size'), tagName: 'div', className: 'dropdown fontsizeSelectbox', update: update, name: 'defaultFontStyle/size' }),
+                fontFamilySelect,
+                fontSizeSelect,
                 exampleText;
 
-            _(optionsFontName).each(function (item) {
-                fontFamilySelect.option('defaultFontStyle/family', item.value, item.label, { radio: true });
-            });
-            _(optionsFontsize).each(function (item) {
-                fontSizeSelect.option('defaultFontStyle/size', item.value, item.label, { radio: true });
-            });
+            if (!_.device('smartphone')) {
+                fontFamilySelect = new Dropdown({ caret: true, model: settings, label: gt('Font'), tagName: 'div', className: 'dropdown fontnameSelectbox', update: update, name: 'defaultFontStyle/family' });
+                fontSizeSelect = new Dropdown({ caret: true, model: settings, label: gt('Size'), tagName: 'div', className: 'dropdown fontsizeSelectbox', update: update, name: 'defaultFontStyle/size' });
+
+                _(optionsFontName).each(function (item) {
+                    fontFamilySelect.option('defaultFontStyle/family', item.value, item.label, { radio: true });
+                });
+                _(optionsFontsize).each(function (item) {
+                    fontSizeSelect.option('defaultFontStyle/size', item.value, item.label, { radio: true });
+                });
+            }
 
 
             this.append(
@@ -316,25 +321,28 @@ define('io.ox/mail/settings/pane', [
                     gt('Format emails as'),
                     new mini.RadioView({ list: optionsFormatAs, name: 'messageFormat', model: settings }).render().$el
                 ) : [],
-                $('<div>').addClass('settings sectiondelimiter'),
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').append(
-                        $('<h2>').text(gt('Default font style'))
-                    ),
-                    $('<dev class="col-xs-12 col-md-6">').append(
-                        $('<div class="row">').append(
-                            fontFamilySelect.render().$el,
-                            fontSizeSelect.render().$el,
-                            $('<div class="fontcolorButton">').append(
-                                new Colorpicker({ name: 'defaultFontStyle/color', model: settings, className: 'dropdown', label: gt('Color'), caret: true }).render().$el
-                            )
+
+                (_.device('smartphone') ? '' : [
+                    $('<div>').addClass('settings sectiondelimiter'),
+                    $('<fieldset>').append(
+                        $('<legend>').addClass('sectiontitle').append(
+                            $('<h2>').text(gt('Default font style'))
                         ),
-                        $('<div class="row">').append(exampleText = $('<div class="form-control example-text">').text(gt('Example text')).css({
-                            'font-size': settings.get('defaultFontStyle/size', '12pt'),
-                            'font-family': settings.get('defaultFontStyle/family', 'arial, helvetica, sans-serif'),
-                            'color': settings.get('defaultFontStyle/color', '#000')
-                        }))
-                    )
+                        $('<dev class="col-xs-12 col-md-6">').append(
+                            $('<div class="row">').append(
+                                fontFamilySelect.render().$el,
+                                fontSizeSelect.render().$el,
+                                $('<div class="fontcolorButton">').append(
+                                    new Colorpicker({ name: 'defaultFontStyle/color', model: settings, className: 'dropdown', label: gt('Color'), caret: true }).render().$el
+                                )
+                            ),
+                            $('<div class="row">').append(exampleText = $('<div class="form-control example-text">').text(gt('Example text')).css({
+                                'font-size': settings.get('defaultFontStyle/size', '12pt'),
+                                'font-family': settings.get('defaultFontStyle/family', 'arial, helvetica, sans-serif'),
+                                'color': settings.get('defaultFontStyle/color', '#000')
+                            }))
+                        )
+                    )]
                 ),
 
                 $('<div>').addClass('settings sectiondelimiter'),
@@ -359,23 +367,25 @@ define('io.ox/mail/settings/pane', [
                 )
             );
 
-            settings.on('change:defaultFontStyle/size change:defaultFontStyle/family change:defaultFontStyle/color', function () {
-                exampleText.css({
-                    'font-size': settings.get('defaultFontStyle/size', '12pt'),
-                    'font-family': settings.get('defaultFontStyle/family', 'arial, helvetica, sans-serif'),
-                    'color': settings.get('defaultFontStyle/color', '#000')
+            if (!_.device('smartphone')) {
+                settings.on('change:defaultFontStyle/size change:defaultFontStyle/family change:defaultFontStyle/color', function () {
+                    exampleText.css({
+                        'font-size': settings.get('defaultFontStyle/size', '12pt'),
+                        'font-family': settings.get('defaultFontStyle/family', 'arial, helvetica, sans-serif'),
+                        'color': settings.get('defaultFontStyle/color', '#000')
+                    });
+
+                    if (settings.get('defaultFontStyle/color') === 'transparent') {
+                        exampleText.css('color', '#000');
+                    }
+
+                    settings.save();
                 });
 
-                if (settings.get('defaultFontStyle/color') === 'transparent') {
-                    exampleText.css('color', '#000');
-                }
-
-                settings.save();
-            });
-
-            _(fontFamilySelect.$ul.find('a')).each(function (item) {
-                $(item).css('font-family', $(item).data('value'));
-            });
+                _(fontFamilySelect.$ul.find('a')).each(function (item) {
+                    $(item).css('font-family', $(item).data('value'));
+                });
+            }
         }
     });
 
