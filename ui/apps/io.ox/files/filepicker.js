@@ -29,6 +29,64 @@ define('io.ox/files/filepicker', [
 
     'use strict';
 
+    function isMimetypeImage(mimetype) {
+        return REGX__MIMETYPE_IMAGE.test(mimetype);
+    }
+    function getImageType(fileObject) {
+        var imageType;
+
+        return ({
+            gif: 'Gif',
+            png: 'Png',
+            jpg: 'Jpg',
+            jpeg: 'Jpg',
+            unknown: 'Unknown Image Type'
+        }[
+            ((imageType = REGX__IMAGE_EXTENSION.exec(fileObject.file_mimetype)) && imageType[1]) ||
+            ((imageType = REGX__IMAGE_EXTENSION.exec(fileObject.filetype)) && imageType[1]) ||
+            'unknown'
+        ]);
+    }
+    var
+        REGX__MIMETYPE_IMAGE  = (/(?:^image\/)|(?:(?:gif|png|jpg|jpeg)$)/),
+        REGX__IMAGE_EXTENSION = (/[./](gif|png|jpg|jpeg)$/);
+
+    function createPreviewPane($filesPane) {
+        var
+            $previewPane  = $('<div class="preview-pane"/>');
+
+        $previewPane.insertAfter($filesPane);
+
+        return $previewPane;
+    }
+
+    function renderImagePreview($previewPane, fileObject) {
+      //console.log('+++ renderImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
+        var
+            thumbnailUrl = filesAPI.getUrl(fileObject, 'thumbnail', {
+                scaletype:  'cover',  // - contain or cover or auto
+                height:     250,        // - image height in pixels
+                widht:      250,        // - image widht in pixels
+                version:    false       // - true/false. if false no version will be appended
+            }),
+            $elmImage = $([
+
+                '<img src="',
+                thumbnailUrl,
+                '" width="',
+                250,
+                '" height="',
+                250,
+                '" alt="',
+                (fileObject.filename || fileObject.title),
+                '" />'
+
+            ].join(''));
+
+        $previewPane.empty();
+        $previewPane.append($elmImage);
+    }
+
     var FilePicker = function (options) {
 
         options = _.extend({
@@ -59,7 +117,9 @@ define('io.ox/files/filepicker', [
             pages = new PageController({ appname: 'filepicker', toolbar: toolbar, navbar: navbar, container: pcContainer, disableAnimations: true }),
             containerHeight = $(window).height() - 200,
             hub = _.extend({}, Backbone.Events),
-            currentFolder;
+            currentFolder,
+            $previewPane,
+            isAllowPreviewPane = !_.device('smartphone');
 
         pages.addPage({
             name: 'folderTree',
@@ -113,6 +173,31 @@ define('io.ox/files/filepicker', [
         this.selection.on('change', function (e, list) {
             toggleOkButton(list.length > 0);
         });
+        this.selection.on('select', handleFileSelectionChange);
+
+        // - user story DOCS-589 :: User can see image preview in file picker
+        // - https://jira.open-xchange.com/browse/DOCS-589
+        // - according to some counseling from Olpe the required 3rd preview-pane is supposed to be hacked into this modal dialogue.
+        //
+        function handleFileSelectionChange(event, fileId, fileObject) {
+          //console.log('Filepicker::Selection::handleSelect - [event, fileId, fileObject] : ', event, fileId, fileObject);
+            if (isAllowPreviewPane) {
+
+                if (isMimetypeImage(fileObject.file_mimetype)) {
+                    console.log('+++ Filepicker::select:file:type:image - image type +++ : ', getImageType(fileObject));
+
+                    if (!$previewPane) {
+                        $previewPane = createPreviewPane(filesPane);
+                    }
+                    renderImagePreview($previewPane, fileObject);
+
+                } else {
+                    deletePreviewPane();
+                }
+            } else {
+                deletePreviewPane();
+            }
+        }
 
         function onFolderChange(id) {
 
@@ -223,6 +308,14 @@ define('io.ox/files/filepicker', [
             _(e.target.files).each(function (file) {
                 queue.offer(file, { folder: tree.selection.get(), filename: file.name });
             });
+        }
+
+        function deletePreviewPane() {
+            if ($previewPane) {
+
+                $previewPane.remove();
+                $previewPane = null;
+            }
         }
 
         picker({

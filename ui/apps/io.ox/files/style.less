@@ -491,6 +491,21 @@ ul.breadcrumb li.prefix { white-space: nowrap; }
 
 .io-ox-files-main .io-ox-dialog-popup .modal-body { overflow-x: hidden; }
 
+.io-ox-dialog-popup {   // - user story DOCS-589 :: User can see image preview in file picker
+    &.zero-padding {    // - https://jira.open-xchange.com/browse/DOCS-589
+                        // - according to some counseling from Olpe the required 3rd preview-pane is supposed to be hacked into this modal dialogue.
+        .modal-body {
+
+            > :first-child:nth-last-child(3),   // - model agnostic rules do work without css class names but depend entirely on structure then.
+            > :nth-child(2):nth-last-child(2),  //
+            > :nth-child(3):last-child {        //
+
+                width: 33%;
+            }
+        }
+    }
+}
+
 //io.ox/files/listview, io.ox/files/common-extensions
 .file-item {
 
