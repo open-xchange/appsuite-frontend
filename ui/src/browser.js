@@ -14,6 +14,11 @@
 
  /* global DocumentTouch */
 
+/**
+ * This lib is dependency free, do not use underscore or some
+ * other lib here
+ */
+
 (function () {
 
     var us = {},
@@ -55,7 +60,7 @@
         var memoize = function (key) {
             var cache = memoize.cache;
             var address = '' + (hasher ? hasher.apply(this, arguments) : key);
-            if (!hasOwnProperty.call(cache || {}, address)) cache[address] = func.apply(this, arguments);
+            if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
             return cache[address];
         };
         memoize.cache = {};
@@ -180,15 +185,15 @@
     // first detection
     detectBrowser(navigator);
 
-    function detectTouch() {
-
+    var detectTouch = memoize(function () {
         // Windows 8 Chrome does report touch events which leads to
         // a wrong feature set (disabled stuff) as AppSuite thinks
         // this is a Smartphone or tablet without a mouse.
         if (us.browser.chrome && us.browser.windows8) return false;
-
+        // don't report desktop browsers with pointerevent to be touch devices
+        if ('onpointerdown' in window && !us.browser.android && !us.browser.ios) return false;
         return ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
-    }
+    });
 
     // do media queries here
     // TODO define sizes to match pads and phones
