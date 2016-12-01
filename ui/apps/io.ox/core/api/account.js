@@ -22,10 +22,13 @@ define('io.ox/core/api/account', [
     // quick hash for sync checks
     var idHash = {},
         typeHash = {},
+        dscHash = {},
         // default separator
         separator = settings.get('defaultseparator', '/'),
         altnamespace = settings.get('namespace', 'INBOX/') === '',
-        dscPrefix = settings.get('dsc/folder');
+        // check for DSC (Dovecot Smart Cache) setup
+        dscPrefix = settings.get('dsc/folder', false),
+        isDSC = settings.get('dsc/enabled', false);
 
     var process = function (data) {
 
@@ -135,6 +138,15 @@ define('io.ox/core/api/account', [
      */
     api.isDSC = function (id) {
         return id.startsWith(dscPrefix);
+    };
+
+    /**
+     * get the id for a given DSC root folder
+     * @param  {string} folder (root_folder)
+     * @return { string } id
+     */
+    api.getIdForDSCRootFolder = function (folder) {
+        return dscHash[folder];
     };
 
     /**
@@ -250,6 +262,9 @@ define('io.ox/core/api/account', [
         if (typeof str === 'number') {
             // return number
             return str;
+        } else if (isDSC) {
+            // dsc accounts need special handling
+            return api.getIdForDSCRootFolder(str);
         } else if (/^default(\d+)/.test(String(str))) {
             // is not unified mail?
             if (!api.isUnified(str)) {
@@ -480,13 +495,17 @@ define('io.ox/core/api/account', [
         }
 
         return load().done(function (list) {
-
             idHash = {};
             typeHash = {};
+            dscHash = {};
             // add check here
             _(list).each(function (account) {
                 // remember account id
                 idHash[account.id] = true;
+                // fill DSC hash if needed
+                if (isDSC) {
+                    dscHash[account.root_folder] = account.id;
+                }
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
