@@ -525,8 +525,6 @@ define('io.ox/mail/compose/view', [
                             content = html;
                             def.resolve();
                         });
-                        // textproc.texttohtml(content).then(function (processed) {
-                        // });
                     } else {
                         // TODO
                         // In e.g. edit mode middleware wraps content in a div this should be solved in middleware!

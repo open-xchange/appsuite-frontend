@@ -496,11 +496,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             // clean up
             str = trimEnd(str);
             if (!str) return;
-            return textproc.texttohtml(str).then(function (content) {
-                if (/^<blockquote\>/.test(content)) {
-                    content = '<p><br></p>' + content;
-                }
-                set(content);
+            require(['io.ox/mail/detail/content'], function (proc) {
+                set(proc.text2html(str));
                 ed.undoManager.clear();
             });
         };
