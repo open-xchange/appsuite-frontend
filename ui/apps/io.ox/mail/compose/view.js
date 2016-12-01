@@ -489,7 +489,7 @@ define('io.ox/mail/compose/view', [
                         _(data.nested_msgs).each(function (obj) {
                             attachments.push({
                                 id: obj.id,
-                                filename: obj.subject,
+                                filename: obj.subject + '.eml',
                                 content_type: 'message/rfc822',
                                 msgref: obj.msgref
                             });
