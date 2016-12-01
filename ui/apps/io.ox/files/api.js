@@ -328,7 +328,7 @@ define('io.ox/files/api', [
     // options:
     // - scaletype: contain or cover or auto
     // - height: image height in pixels
-    // - widht: image widht in pixels
+    // - width: image widht in pixels
     // - version: true/false. if false no version will be appended
     api.getUrl = function (file, type, options) {
 
