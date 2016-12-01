@@ -12,6 +12,7 @@
  */
 
 define('io.ox/core/tk/attachments', [
+    'io.ox/backbone/disposable',
     'io.ox/core/api/attachment',
     'io.ox/core/folder/title',
     'io.ox/core/strings',
@@ -24,7 +25,7 @@ define('io.ox/core/tk/attachments', [
     'io.ox/core/notifications',
     'gettext!io.ox/core',
     'io.ox/core/pim/actions'
-], function (attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, links, settings, notifications, gt) {
+], function (DisposableView, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, links, settings, notifications, gt) {
 
     'use strict';
 
@@ -85,7 +86,7 @@ define('io.ox/core/tk/attachments', [
                         $('<div class="row-2">').append(
                             size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
                         ),
-                        removeFile = $('<a href="#" class="remove" tabindex="1">').attr('title', gt('Remove attachment')).append($('<i class="fa fa-trash-o">'))
+                        removeFile = $('<a href="#" class="remove">').attr('title', gt('Remove attachment')).append($('<i class="fa fa-trash-o">'))
                     )
                 );
 
@@ -290,17 +291,16 @@ define('io.ox/core/tk/attachments', [
 
         options = _.extend({
             buttontext: gt('Add attachments'),
-            tabindex: 1,
             drive: false,
             multi: true
         }, options);
 
         var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'form-group')),
             gguid = _.uniqueId('form-control-label-'),
-            label = $('<label>').attr('for', gguid).addClass('sr-only').text(options.buttontext),
-            input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr({ id: gguid, tabindex: options.tabindex }),
-            uploadButton = $('<span class="btn btn-default btn-file" role="button" tabindex="1">').append($.txt(options.buttontext)).append(label, input),
-            driveButton = $('<button type="button" class="btn btn-default" data-action="add-internal">').attr({ tabindex: options.tabindex }).text(gt('Add from Drive'));
+            label = $('<label class="sr-only">').attr('for', gguid).text(options.buttontext),
+            input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr('id', gguid),
+            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($.txt(options.buttontext)).append(label, input),
+            driveButton = $('<button type="button" class="btn btn-default" data-action="add-internal">').text(gt('Add from Drive'));
 
         input.on('focus', function () {
             uploadButton.addClass('active');
@@ -326,9 +326,48 @@ define('io.ox/core/tk/attachments', [
         return node;
     };
 
+    var progressView  = DisposableView.extend({
+        className: 'attachments-progress-view',
+        //#. headline for a progress bar
+        label: gt('Uploading attachments'),
+        initialize: function (options) {
+            var self = this;
+            // cid needed (create with _.ecid)
+            this.objectCid = options.cid;
+            attachmentAPI.on('progress:' + this.objectCid, this.updateProgress.bind(self));
+
+            options = options || {};
+            this.label = options.label || this.label;
+            this.callback = options.callback || $.noop;
+        },
+        render: function () {
+            this.$el.append($('<label>').text(this.label),
+                $('<div class="progress">').append(this.progress = $('<div class="progress-bar">'))
+            );
+            // for chaining
+            return this;
+        },
+        updateProgress: function (e, progressEvent) {
+
+            if (!progressEvent.total || !this.progress) {
+                return;
+            }
+            var width = Math.max(0, Math.min(100, Math.round(progressEvent.loaded / progressEvent.total * 100)));
+
+            this.progress.css('width', width + '%');
+            if (width === 100) {
+                this.callback();
+            }
+        },
+        dispose: function () {
+            attachmentAPI.off('progress: + this.objectCid');
+        }
+    });
+
     return {
         EditableAttachmentList: EditableAttachmentList,
         AttachmentList: AttachmentListOld,
-        fileUploadWidget: fileUploadWidget
+        fileUploadWidget: fileUploadWidget,
+        progressView: progressView
     };
 });

@@ -21,6 +21,7 @@
 // preview panes
 
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
+.window-container.mail-categories-visible .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height * 2; }
 
 .preview-right {
     .leftside  { width: 320px; }
@@ -408,11 +409,16 @@
     }
 
     .detail-view-row {
-        .date { float: right; margin-left: 16px; }
+        position: relative;
+
+        .date { float: right; margin-left: 16px; margin-right: 27px; }
         .recipients { float: left; }
         .priority { font-size: 14px; }
         .flag-picker {
-            margin-left: 16px;
+            float: none;
+            position: absolute;
+            top: 0;
+            right: 1px;
             width: 12px; // to match fa-bars
             text-align: right;
             a { color: #333; }
@@ -440,7 +446,7 @@
 
         .detail-view-row.row-4, .inplace-reply { display: none; }
 
-        .unread-toggle, .flag-picker > a, .recipients, .row-3 { opacity: 0.3; }
+        .unread-toggle, .flag-picker > a, .recipients, .row-3 { opacity: 0.6; }
 
         &.unread .unread-toggle { opacity: 1; }
 
@@ -628,7 +634,7 @@
 
     .account-name, .original-folder, .thread-size {
         font-size: 12px;
-        color: #777;
+        color: #767676;
         line-height: 14px;
         padding: 0 4px;
         margin: 2px 0 0 (@default-padding / 2);
@@ -658,6 +664,13 @@
         min-width: 24px;
 
         html.high-contrast & { color: @hc-gray; }
+    }
+
+    .selected {
+        .thread-size,
+        .account-name,
+        .original-folder,
+        .original-folder .breadcrumb-link { color: #555; }
     }
 
     &.visible-selection.has-focus .selected {
@@ -754,9 +767,6 @@
 
     & > .thread-view-header {
 
-        .flex-display(flex);
-        .flex-direction(row);
-
         & > * {
             .subject-base();
         }
@@ -767,22 +777,24 @@
         .subject {
             word-break: break-word;
             padding-bottom: 0;
-            .flex(1);
-
-            .summary {
-                color: #777;
-                font-size: 13px;
-                line-height: 16px;
-                font-weight: 300;
-                position: relative;
-                top: -5px;
-                margin: 0;
-                padding-top: 4px;
-                html.high-contrast & { color: @hc-gray; }
+            &.spacer {
+                padding-bottom: 20px;
             }
         }
 
-        .toggle-all {
+        .summary {
+            display: block;
+            color: #767676;
+            font-size: 13px;
+            line-height: 16px;
+            font-weight: 300;
+            margin: 0;
+            padding-top: 0;
+            padding-bottom: 4px;
+            html.high-contrast & { color: @hc-gray; }
+        }
+
+        .toggle-all, .toggle-big-screen {
             color: #767676;
             float: right;
             outline: 0;
@@ -958,9 +970,6 @@ textarea.inplace-editor {
     .detail-view-header { border-bottom: 0; }
 }
 
-
-
-
 // Detail view
 
 .rightside.mail-detail-pane {
@@ -986,9 +995,172 @@ textarea.inplace-editor {
     visibility: hidden;
 }
 
-@media (max-width: 700px) {
+// CATEGORIES
 
-    .thread-view-list { padding: 0; }
+.io-ox-alert .category-toast {
+    .status {
+        padding: 0 32px 0 0;
+    }
+    p {
+        margin-bottom: 16px;
+    }
+}
+
+.mail-categories-dialog {
+
+    .description {
+        padding-left: 34px;
+        padding-bottom: 6px;
+    }
+
+    .center-childs {
+        display: flex;
+        align-items: center;
+    }
+
+    .category-item {
+        padding-bottom: 6px;
+
+        .status {
+            height: 14px;
+            width: 14px;
+            margin: 0;
+            margin-right: 8px;
+            &.disabled {
+                visibility: hidden;
+            }
+        }
+        .name {
+            flex: 1;
+            display: inline-block;
+        }
+
+        label {
+            margin-bottom: 0;
+            width: 100%;
+            // adjust default style
+            .form-control {
+                box-shadow: none;
+                border: 0;
+            }
+        }
+    }
+
+    .hint { padding-top: 16px; }
+}
+
+// categories: available
+.window-container.mail-categories-visible {
+
+    &:not(.io-ox-find-active) {
+
+        .categories-toolbar-container {
+            display: flex;
+        }
+        .classic-toolbar-container .classic-toolbar {
+            top: 40px;
+        }
+
+        // layout: vertical, horizontal, list
+        .window-body.classic-toolbar-visible {
+            .abs.window-content {  top: 80px; }
+        }
+    }
+}
+
+
+// drag and drop helper text
+.categories-toolbar-container {
+    .link { line-height: 40px; }
+    .category-drop-helper { display: none; }
+}
+
+body.dragging .categories-toolbar-container {
+    .link { line-height: 20px; }
+    .category-drop-helper {
+        display: block;
+        padding: 0 16px;
+        font-size: 12px;
+        font-weight: 300;
+    }
+}
+
+.categories-toolbar-container {
+
+    display: none;
+    justify-content: flex-start;
+    align-items: center;
+
+    .classic-toolbar {
+        display: flex;
+        position: static;
+        border-bottom: 0;
+        width: 100%;
+    }
+
+    .free-space { flex: 1; }
+
+    .category:not(.selected), .free-space {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .category {
+        cursor: pointer;
+        background: #f5f5f5;
+        border-right: 1px solid #dddddd;
+        // arrange child
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        // vertical separation
+        max-width: 160px;
+        min-width: 0;
+
+        &.selected { background: white; }
+
+        .link {
+            padding: 0 16px;
+            display: flex;
+            width: 100%;
+            color: inherit;
+
+            &:focus { background-color: inherit; }
+
+            .category-icon { padding-right: 8px; }
+
+            .category-counter .counter {
+                padding-left: 8px;
+                color: @foldertree-counter-color;
+                font-weight: 700;
+            }
+
+            .category-icon, .category-name, .category-counter {
+                display: inline-block;
+            }
+
+            // hide empty child nodes (like counter)
+            div:empty, span:empty { display: none; }
+        }
+    }
+
+    .truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@media (max-width: 768px) {
+    .thread-view-list { padding: 8px; }
+}
+
+.touch {
+    &.ios, &.android {
+        .mail-detail .detail-view-header { overflow: hidden; }
+    }
+}
+
+@media (max-width: 700px) {
 
     .io-ox-mail-window .vsplit {
         width: 100%;
@@ -1015,6 +1187,12 @@ textarea.inplace-editor {
 
         padding: 0;
 
+        a.unread-toggle {
+            left: 16px;
+            float: left;
+            top: -3px;
+        }
+
         & > .thread-view-header {
             padding-bottom: 10px;
             background-color: #aaa;
@@ -1026,12 +1204,11 @@ textarea.inplace-editor {
 
             .subject {
                 line-height: 20px;
-
-                .summary {
-                    padding-top: 20px;
-                    font-size: @phone-font-size - 2;
-                    color: #fff;
-                }
+            }
+            .summary {
+                padding-top: 20px;
+                font-size: @phone-font-size - 2;
+                color: #fff;
             }
         }
         .row-3{
@@ -1041,8 +1218,8 @@ textarea.inplace-editor {
 
         .from, .recipients, .date {
             white-space: normal;
-            overflow: visible;
-            text-overflow: clip;
+            overflow: hidden;
+            text-overflow: ellipsis;
             font-size: @phone-font-size;
             line-height: @phone-line-height;
         }
@@ -1082,7 +1259,7 @@ textarea.inplace-editor {
             padding: 0;
             min-height: auto;
 
-            .from { padding: (@default-padding / 2) 8px 0 @default-padding; }
+            .from { padding: (@default-padding / 2) 8px 0 @default-padding + 8; }
 
             time  { padding: (@default-padding / 2) @default-padding 0 0; }
 

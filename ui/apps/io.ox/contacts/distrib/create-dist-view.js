@@ -47,11 +47,11 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 $('<div class="header">').append(
                     $('<h1 class="sr-only">').text(header),
                     // save/create button
-                    $('<button type="button" class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
+                    $('<button type="button" class="btn btn-primary" data-action="save">').text(buttonText).on('click', function () {
                         baton.model.save();
                     }),
                     // cancel button
-                    $('<button type="button" class="btn btn-default" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
+                    $('<button type="button" class="btn btn-default" data-action="discard">').text(gt('Discard')).on('click', function () {
                         // use this sneaky channel
                         $(this).trigger('controller:quit');
                     })
@@ -110,7 +110,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
 
             this.$el.append(new pViews.UserContainer({
                 collection: this.baton.member,
-                baton: this.baton
+                baton: this.baton,
+                isMail: true
             }).render().$el);
         }
     });
@@ -126,7 +127,9 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 },
                 placeholder: gt('Add contact') + ' \u2026',
                 label: gt('Add contact'),
-                collection: this.baton.member
+                collection: this.baton.member,
+                scrollIntoView: true,
+                isMail: true
             });
             this.$el.append(
                 view.$el

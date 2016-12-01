@@ -176,8 +176,8 @@ define('io.ox/mail/util', [
                         mail = remove(mail);
                     } else if (_.isArray(mail)) {
                         //array of nested mails
-                        _.each(mail, function (message) {
-                            message = that.removeChannelSuffix(message);
+                        mail = mail.map(function (message) {
+                            return that.removeChannelSuffix(message);
                         });
                     } else if (_.isObject(mail)) {
                         if (mail.from && _.isArray(mail.from[0]) && mail.from[0][1]) {
@@ -190,8 +190,8 @@ define('io.ox/mail/util', [
                         }
                         ///nestedm mail
                         if (_.isArray(mail.nested_msgs)) {
-                            _.each(mail.nested_msgs, function (message) {
-                                message = that.removeChannelSuffix(message);
+                            mail.nested_msgs = mail.nested_msgs.map(function (message) {
+                                return that.removeChannelSuffix(message);
                             });
                         }
                     }

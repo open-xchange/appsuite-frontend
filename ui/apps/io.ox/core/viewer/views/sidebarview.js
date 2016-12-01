@@ -59,7 +59,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         id: 'file-versions',
         index: 300,
         draw: function (baton) {
-            this.append(new FileVersionsView({ model: baton.model }).render().el);
+            this.append(new FileVersionsView({ model: baton.model, viewerEvents: baton.context.viewerEvents, isViewer: baton.context.isViewer }).render().el);
         }
     });
 
@@ -67,7 +67,7 @@ define('io.ox/core/viewer/views/sidebarview', [
         id: 'upload-new-version',
         index: 400,
         draw: function (baton) {
-            this.append(new UploadNewVersionView({ model: baton.model }).render().el);
+            this.append(new UploadNewVersionView({ model: baton.model, app: baton.app }).render().el);
         }
     }));
 
@@ -105,11 +105,13 @@ define('io.ox/core/viewer/views/sidebarview', [
             _.extend(this, {
                 viewerEvents: options.viewerEvents || _.extend({}, Backbone.Events),
                 standalone: options.standalone,
-                options: options
+                options: options,
+                isViewer: options.isViewer
             });
 
             this.model = null;
             this.zone = null;
+            this.app = options.app;
 
             // listen to slide change and set fresh model
             this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.setModel);
@@ -126,10 +128,10 @@ define('io.ox/core/viewer/views/sidebarview', [
         initTabNavigation: function () {
             // build tab navigation and its panes
             var tabsList = $('<ul class="viewer-sidebar-tabs">'),
-                detailTabLink = $('<a class="tablink" data-tab-id="detail" tabindex="1">').text(gt('Details')),
+                detailTabLink = $('<a class="tablink" data-tab-id="detail">').text(gt('Details')),
                 detailTab = $('<li class="viewer-sidebar-detailtab">').append(detailTabLink),
                 detailPane = $('<div class="viewer-sidebar-pane detail-pane" data-tab-id="detail">'),
-                thumbnailTabLink = $('<a class="tablink selected"  data-tab-id="thumbnail" tabindex="1">').text(gt('Thumbnails')),
+                thumbnailTabLink = $('<a class="tablink selected"  data-tab-id="thumbnail">').text(gt('Thumbnails')),
                 thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink),
                 thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane" data-tab-id="thumbnail">');
             tabsList.append(thumbnailTab, detailTab).hide();
@@ -161,7 +163,7 @@ define('io.ox/core/viewer/views/sidebarview', [
          */
         onTabKeydown: function (event) {
             event.stopPropagation();
-            switch (event.which || event.keyCode) {
+            switch (event.which) {
                 case 13: // enter
                     this.onTabClicked(event);
                     break;
@@ -243,6 +245,9 @@ define('io.ox/core/viewer/views/sidebarview', [
          */
         renderSections: function () {
 
+            // render sections only if side bar is open
+            if (!this.model || !this.open) return;
+
             var detailPane = this.$('.detail-pane'), folder = folderApi.pool.models[this.model.get('folder_id')];
             // remove previous sections
             detailPane.empty();
@@ -252,8 +257,6 @@ define('io.ox/core/viewer/views/sidebarview', [
                 this.zone.remove();
                 this.zone = null;
             }
-            // render sections only if side bar is open
-            if (!this.model || !this.open) return;
 
             // load file details
             this.loadFileDetails();
@@ -277,7 +280,9 @@ define('io.ox/core/viewer/views/sidebarview', [
             }
             ext.point('io.ox/core/viewer/views/sidebarview/detail').invoke('draw', detailPane, ext.Baton({
                 options: this.options,
+                isViewer: this.isViewer,
                 context: this,
+                app: this.app,
                 $el: detailPane,
                 model: this.model,
                 data: this.model.isFile() ? this.model.toJSON() : this.model.get('origData')
@@ -348,14 +353,19 @@ define('io.ox/core/viewer/views/sidebarview', [
                 notify({ error: gt('Drop only a single file as new version.') });
                 return;
             }
+            var self = this;
+            require(['io.ox/files/upload/main'], function (fileUpload) {
+                var data = {
+                    folder: self.model.get('folder_id'),
+                    id: self.model.get('id'),
+                    // If file already encrypted, update should also be encrypted
+                    params: self.model.isEncrypted() ? { 'cryptoAction': 'Encrypt' } : {}
+                };
+                var node = self.isViewer ? self.$el.parent().find('.viewer-displayer') : self.app.getWindowNode();
+                fileUpload.setWindowNode(node);
+                fileUpload.update.offer(_.first(files), data);
+            });
 
-            FilesAPI.versions.upload({
-                file: _.first(files),
-                id: this.model.get('id'),
-                folder: this.model.get('folder_id'),
-                version_comment: ''
-            })
-            .fail(notify);
         },
 
         /**

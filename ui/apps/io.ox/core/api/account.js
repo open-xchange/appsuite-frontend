@@ -649,12 +649,9 @@ define('io.ox/core/api/account', [
     api.autoconfig = function (data) {
         return http.POST({
             module: 'autoconfig',
-            params: {
-                action: 'get',
-                email: data.email,
-                password: data.password,
-                force_secure: data.force_secure
-            }
+            params: _.extend({
+                action: 'get'
+            }, data)
         });
     };
 

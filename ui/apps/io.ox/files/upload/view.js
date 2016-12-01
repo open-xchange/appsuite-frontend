@@ -77,28 +77,29 @@ define('io.ox/files/upload/view', [
                 var val = Math.round(this.model.get('progress') * 100),
                     removeIcon = $('<div class="remove-icon">');
 
-                this.$el.addClass('upload-entry').attr({ index: this.index });
-                this.$el.append(
-                    $('<div class="file-name">').text(this.model.get('file').name),
-                    $('<div class="file-size">').text(gt.format('%1$s\u00A0', strings.fileSize(this.model.get('file').size))),
-                    removeIcon,
-                    $('<div class="progress">').addClass(this.model.get('progress') < 1 ? '' : 'invisible').append(
-                        $('<div class="progress-bar progress-bar-striped active">')
-                            .attr({
-                                'role': 'progressbar',
-                                'aria-valuenow': val,
-                                'aria-valuemin': '0',
-                                'aria-valuemax': '100'
-                            })
-                            .css({ 'width': val + '%' })
-                            .append(
-                                $('<span class="sr-only">').text(
-                                    //#. %1$s progress of currently uploaded files in percent
-                                    gt('%1$s completed', val + '%')
+                this.$el.attr('data-cid', this.model.cid)
+                    .addClass('upload-entry')
+                    .append(
+                        $('<div class="file-name">').text(this.model.get('file').name),
+                        $('<div class="file-size">').text(gt.format('%1$s\u00A0', strings.fileSize(this.model.get('file').size))),
+                        removeIcon,
+                        $('<div class="progress">').addClass(this.model.get('progress') < 1 ? '' : 'invisible').append(
+                            $('<div class="progress-bar progress-bar-striped active">')
+                                .attr({
+                                    'role': 'progressbar',
+                                    'aria-valuenow': val,
+                                    'aria-valuemin': '0',
+                                    'aria-valuemax': '100'
+                                })
+                                .css({ 'width': val + '%' })
+                                .append(
+                                    $('<span class="sr-only">').text(
+                                        //#. %1$s progress of currently uploaded files in percent
+                                        gt('%1$s completed', val + '%')
+                                    )
                                 )
-                            )
-                    )
-                );
+                        )
+                    );
 
                 if (this.model.get('progress') < 1) {
                     removeIcon.append(
@@ -115,10 +116,7 @@ define('io.ox/files/upload/view', [
             },
             removeEntry: function (e) {
                 e.preventDefault();
-
-                var index = this.$el.attr('index');
-
-                fileUpload.abort(index);
+                fileUpload.abort(this.$el.attr('data-cid'));
             }
         }),
         show = function () {
@@ -130,7 +128,7 @@ define('io.ox/files/upload/view', [
             dialog.header($('<h4>').text(gt('Upload progress')));
             dialog.getBody().append(container);
             dialog
-                .addButton('cancel', gt('Close'), 'close', { 'tabIndex': '1' })
+                .addButton('cancel', gt('Close'), 'close')
                 .on('close', function () {
                     fileUpload.collection.each(function (model) {
                         //remove all change listeners from the models in the collection

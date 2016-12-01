@@ -30,7 +30,8 @@ define('io.ox/presenter/views/toolbarview', [
     var TOOLBAR_ID = 'io.ox/presenter/toolbar',
         TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links',
         TOOLBAR_ACTION_DROPDOWN_ID = 'io.ox/presenter/actions/toolbar/dropdown',
-        PRESENTER_ACTION_ID = 'io.ox/presenter/actions';
+        PRESENTER_ACTION_ID = 'io.ox/presenter/actions',
+        SMALL_DEVICE = $(window).width() < 580;
 
     // define extension points for this ToolbarView
     var toolbarPoint = Ext.point(TOOLBAR_ID),
@@ -40,7 +41,7 @@ define('io.ox/presenter/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 //#. button label for the 'start presentation' dropdown
-                label: gt('Start presentation'),
+                label: SMALL_DEVICE ? gt('Start') : gt('Start presentation'),
                 //#. button tooltip for 'start presentation' dropdown
                 title: gt('Start the presentation'),
                 drawDisabled: true,
@@ -73,7 +74,7 @@ define('io.ox/presenter/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 //#. button label for ending the presentation
-                label: gt('End presentation'),
+                label: SMALL_DEVICE ? gt('End') : gt('End presentation'),
                 //#. button tooltip for ending the presentation
                 title: gt('End the presentation'),
                 ref: PRESENTER_ACTION_ID + '/end',
@@ -88,7 +89,7 @@ define('io.ox/presenter/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 //#. button label for pausing the presentation
-                label: gt('Pause presentation'),
+                label: SMALL_DEVICE ? gt('Pause') : gt('Pause presentation'),
                 //#. button tooltip for pausing the presentation
                 title: gt('Pause the presentation'),
                 ref: PRESENTER_ACTION_ID + '/pause',
@@ -103,7 +104,7 @@ define('io.ox/presenter/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 //#. button label for continuing the presentation
-                label: gt('Continue presentation'),
+                label: SMALL_DEVICE ? gt('Continue') : gt('Continue presentation'),
                 //#. button tooltip for continuing the presentation
                 title: gt('Continue the presentation'),
                 ref: PRESENTER_ACTION_ID + '/continue',
@@ -119,7 +120,7 @@ define('io.ox/presenter/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 //#. button label for joining the presentation
-                label: gt('Join presentation'),
+                label: SMALL_DEVICE ? gt('Join') : gt('Join presentation'),
                 //#. button tooltip for joining the presentation
                 title: gt('Join the presentation'),
                 ref: PRESENTER_ACTION_ID + '/join',
@@ -134,7 +135,7 @@ define('io.ox/presenter/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 //#. button label for leaving the presentation
-                label: gt('Leave presentation'),
+                label: SMALL_DEVICE ? gt('Leave') : gt('Leave presentation'),
                 //#. button tooltip for leaving the presentation
                 title: gt('Leave the presentation'),
                 ref: PRESENTER_ACTION_ID + '/leave',

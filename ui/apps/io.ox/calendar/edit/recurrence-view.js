@@ -127,7 +127,7 @@ define('io.ox/calendar/edit/recurrence-view', [
             $anchor.on('click', function (e) {
                 e.preventDefault();
                 var type = (Modernizr.inputtypes.number && _.device('smartphone')) ? 'number' : 'text',
-                    $numberInput = $('<input type="' + type + '" size="4" tabindex="1">').css({
+                    $numberInput = $('<input size="4">').attr('type', type).css({
                         width: (Modernizr.inputtypes.number && _.device('smartphone')) ? '2em' : '1em',
                         marginBottom: 0,
                         padding: 0
@@ -217,7 +217,7 @@ define('io.ox/calendar/edit/recurrence-view', [
             _(options.options).each(function (label, value) {
                 value = parseInt(String(value).replace(/^bit_/, ''), 10);
                 if (label === '') {
-                    $menu.append('<li class="divider" role="presentation">');
+                    $menu.append('<li class="divider" role="separator">');
                 } else {
                     $menu.append(
                         $('<li role="presentation">').append(
@@ -280,9 +280,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                         return (nodes[day] = $('<li>').attr({
                             role: 'presentation'
                         }).append(
-                            $('<a>').attr({
-                                href: '#',
-                                role: 'menuitem',
+                            $('<a href="#" role="menuitem">').attr({
                                 tabindex: $anchor.attr('tabindex')
                             }).append(
                                 $('<i class="fa fa-check" aria-hidden="true">'),
@@ -372,20 +370,12 @@ define('io.ox/calendar/edit/recurrence-view', [
                         }).mobiscroll('show');
                     });
                 } else {
-                    require(['io.ox/core/tk/datepicker'], function () {
-                        $dateInput.datepicker({
-                            parentEl: self.$el,
-                            startDate: minDate
-                        });
+                    require(['io.ox/backbone/views/datepicker'], function (Picker) {
+                        new Picker({ date: minDate })
+                            .attachTo($dateInput)
+                            .on('select', updateValue);
                         $anchor.after($dateInput).hide();
-                        $dateInput.select().on({
-                            'hide': updateValue,
-                            'keydown': function (e) {
-                                if (e.which === 13) {
-                                    updateValue();
-                                }
-                            }
-                        });
+                        $dateInput.select().focus();
                     });
                 }
 
@@ -401,8 +391,6 @@ define('io.ox/calendar/edit/recurrence-view', [
                     try {
                         if (_.device('smartphone')) {
                             $dateInput.mobiscroll('destroy');
-                        } else {
-                            $dateInput.datepicker('remove');
                         }
                         $dateInput.remove();
                     } catch (e) {
@@ -432,7 +420,7 @@ define('io.ox/calendar/edit/recurrence-view', [
 
         this.ghost = function () {
             var $ghost = this.$el.clone(false);
-            $ghost.find('.no-clone, .datepicker')
+            $ghost.find('.no-clone, .date-picker')
                 .remove();
             $ghost
                 .find('*')
@@ -470,12 +458,12 @@ define('io.ox/calendar/edit/recurrence-view', [
 
     var RecurrenceView = function (options) {
         _.extend(this, {
-            tabindex: 1,
+            tabindex: 0,
             init: function () {
                 var self = this;
                 // Construct the UI
                 this.controls = {
-                    checkbox: $('<input tabindex="1" type="checkbox">'),
+                    checkbox: $('<input type="checkbox">'),
                     checkboxLabel: $('<label class="control-label">'),
                     detailToggle: $('<a href="#" class="recurrence-detail-toggle">').attr({
                         'role': 'button',
@@ -943,7 +931,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                     .empty()
                     .append(
                         $('<span>&nbsp;</span>'),
-                        sum = $('<a href="#" tabindex="' + this.tabindex + '">')
+                        sum = $('<a href="#">').attr('tabindex', this.tabindex)
                     );
                 if (this.model.get('recurrence_type') !== RECURRENCE_TYPES.NO_RECURRENCE) {
                     this.nodes.wrapper.css({ 'display': 'inline-block' });
@@ -1071,7 +1059,7 @@ define('io.ox/calendar/edit/recurrence-view', [
             },
             createGhost: function (sentence) {
                 var self = this;
-                return $('<span class="text-muted" tabindex="' + self.tabindex + '">')
+                return $('<span class="text-muted">').attr('tabindex', self.tabindex)
                     .append(sentence.ghost())
                     .on('click keydown', function (e) {
                         // hit space or enter

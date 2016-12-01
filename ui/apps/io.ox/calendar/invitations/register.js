@@ -223,7 +223,7 @@ define('io.ox/calendar/invitations/register', [
                     return _(actions).contains(action);
                 })
                 .map(function (action) {
-                    return $('<button type="button" class="btn btn-default" tabindex="1">')
+                    return $('<button type="button" class="btn btn-default">')
                         .attr('data-action', action)
                         .addClass(buttonClasses[action])
                         .text(i18n[action]);
@@ -261,7 +261,7 @@ define('io.ox/calendar/invitations/register', [
         renderComment: function () {
             if (!this.supportsComment()) return;
             this.$el.find('.itip-comment').append(
-                $('<input type="text" class="form-control" data-property="comment" tabindex="1">')
+                $('<input type="text" class="form-control" data-property="comment">')
                 .attr('placeholder', gt('Comment'))
                 .val(util.getConfirmationMessage(this.appointment))
             );
@@ -357,15 +357,29 @@ define('io.ox/calendar/invitations/register', [
             .then(
                 function done() {
                     // api refresh
-                    require(['io.ox/calendar/api']).then(function (api) {
-                        api.refresh();
-                        notifications.yell('success', success[action]);
-                        // if the delete action was succesfull we don't need the button anymore, see Bug 40852
-                        if (action === 'delete') {
-                            self.model.set('actions', _(self.model.attributes.actions).without('delete'));
-                        }
-                        self.repaint();
-                    });
+                    var refresh = require(['io.ox/calendar/api']).then(
+                        function (api) {
+                            api.refresh();
+                            if (self.options.yell !== false) {
+                                notifications.yell('success', success[action]);
+                            }
+                        });
+
+                    if (settings.get('deleteInvitationMailAfterAction', false)) {
+                        // remove mail
+                        require(['io.ox/mail/api'], function (api) {
+                            api.remove([self.imip.mail]);
+                        });
+                    } else {
+                        // repaint only if there is something left to repaint
+                        refresh.then(function () {
+                            // if the delete action was succesfull we don't need the button anymore, see Bug 40852
+                            if (action === 'delete') {
+                                self.model.set('actions', _(self.model.get('actions')).without('delete'));
+                            }
+                            self.repaint();
+                        });
+                    }
                 },
                 function fail(e) {
                     notifications.yell(e);
@@ -383,6 +397,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         initialize: function (options) {
+            this.options = _.extend({}, options);
             this.type = 'appointment';
             this.imip = options.imip;
             this.$el.hide();
@@ -453,7 +468,13 @@ define('io.ox/calendar/invitations/register', [
         },
 
         repaint: function () {
-            analyzeIMIPAttachment(this.imip).done(this.render.bind(this));
+            var self = this;
+            analyzeIMIPAttachment(this.imip)
+                .done(function (analyses) {
+                    var data = _(analyses).findWhere({ uid: self.model.get('uid') });
+                    this.model.set(data);
+                    this.render();
+                }.bind(this));
         }
     });
 
@@ -470,6 +491,7 @@ define('io.ox/calendar/invitations/register', [
         },
 
         initialize: function (options) {
+            this.options = _.extend({}, options);
             this.listenTo(this.model, 'change:headers', this.render);
             this.$el.on('dispose', this.dispose.bind(this));
             this.cid = options.cid;
@@ -512,9 +534,11 @@ define('io.ox/calendar/invitations/register', [
                 this.task = updated;
             }
 
-            if (this.settings.get('deleteInvitationMailAfterAction', false)) {
+            if (settings.get('deleteInvitationMailAfterAction', false)) {
                 // remove mail
-                notifications.yell('success', successInternal[action]);
+                if (this.options.yell !== false) {
+                    notifications.yell('success', successInternal[action]);
+                }
                 require(['io.ox/mail/api'], function (api) {
                     api.remove([this.model.toJSON()]);
                 }.bind(this));
@@ -606,7 +630,7 @@ define('io.ox/calendar/invitations/register', [
                 $('<div class="itip-reminder">').append(
                     $('<label class="control-label" for="reminderSelect">').text(gt('Reminder')),
                     $('<div class="controls">').append(
-                        $('<select id="reminderSelect" class="reminder-select form-control" data-property="reminder" tabindex="1">')
+                        $('<select id="reminderSelect" class="reminder-select form-control" data-property="reminder">')
                         .append(function () {
                             var self = $(this),
                                 options = util.getReminderOptions();
@@ -635,7 +659,8 @@ define('io.ox/calendar/invitations/register', [
 
         className: 'itip',
 
-        initialize: function () {
+        initialize: function (options) {
+            this.options = _.extend({}, options);
             // if headers are already available, call update()
             // otherwise wait for model change
             if (this.model.has('headers')) {
@@ -662,7 +687,8 @@ define('io.ox/calendar/invitations/register', [
 
         update: function () {
 
-            var headers, reminder, type, cid, $el = this.$el, imip;
+            var headers, reminder, type, cid, $el = this.$el, imip,
+                yell = this.options && this.options.yell;
 
             // external?
             if ((imip = this.getIMIPAttachment())) {
@@ -670,7 +696,11 @@ define('io.ox/calendar/invitations/register', [
                 return analyzeIMIPAttachment(imip).done(function (analyses) {
                     _(analyses).each(function (analysis) {
                         var model = new Backbone.Model(analysis),
-                            view = new ExternalView({ model: model, imip: imip });
+                            view = new ExternalView({
+                                model: model,
+                                imip: imip,
+                                yell: yell
+                            });
                         $el.append(view.render().$el);
                     });
                 });
@@ -687,7 +717,12 @@ define('io.ox/calendar/invitations/register', [
             cid = reminder[1] + '.' + reminder[0];
 
             this.$el.append(
-                new InternalView({ model: this.model, cid: cid, type: type }).render().$el
+                new InternalView({
+                    model: this.model,
+                    cid: cid,
+                    type: type,
+                    yell: yell
+                }).render().$el
             );
         },
 
@@ -705,7 +740,7 @@ define('io.ox/calendar/invitations/register', [
         index: 1000000000000,
         id: 'accept-decline',
         draw: function (baton) {
-            var view = new ItipView({ model: baton.model });
+            var view = new ItipView(_.extend({ model: baton.model }, baton.options));
             this.append(view.render().$el);
         }
     });

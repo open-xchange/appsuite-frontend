@@ -11,11 +11,11 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/find/view-placeholder', [], function () {
+define('io.ox/find/view-placeholder', ['io.ox/backbone/disposable'], function (DisposableView) {
 
     'use strict';
 
-    var PlaceholderView = Backbone.View.extend({
+    var PlaceholderView = DisposableView.extend({
 
         events: {
             'focusin': 'focused',
@@ -62,10 +62,10 @@ define('io.ox/find/view-placeholder', [], function () {
         },
 
         destroy: function () {
-            this.trigger('destroy');
+            if (this.disposed) return;
             this.hideSpinner();
-            this.stopListening();
-            this.off();
+            this.trigger('destroy');
+            this.dispose();
         }
     });
 

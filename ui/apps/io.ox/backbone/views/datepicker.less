@@ -1,0 +1,134 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.date-picker {
+
+    @black: #333;
+    @gray: #707070;
+    @hover: #eee;
+    @focus: #555;
+    @red:   #a00;
+
+    display: none;
+    position: absolute;
+    z-index: 1000000;
+    width: 290px;
+    min-height: 160px;
+    padding: 16px;
+    line-height: 16px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    outline: 0;
+    cursor: default;
+    .border-radius(3px);
+
+    &:focus {
+        border-color: rgba(0, 0, 0, 0.50);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.30);
+    }
+
+    &.open {
+        display: block;
+    }
+
+    .navigation {
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 8px;
+        button.btn-prev, button.btn-next {
+            width: 32px;
+        }
+    }
+
+    button {
+        color: @black;
+        background-color: white;
+        padding: 8px;
+        outline: 0;
+        border: 0;
+        margin: 0;
+        .border-radius(3px);
+        &:hover { background-color: @hover; }
+        &:focus { background-color: @focus; color: white; }
+    }
+
+    caption { display: inline-block; }
+
+    td, th {
+        color: @black;
+        padding: 4px 0;
+        width: 32px;
+        text-align: center;
+        line-height: 24px;
+        .border-radius(3px);
+    }
+
+    th {
+        &.weekday {
+            color: @black;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        &.cw {
+            color: @gray;
+            font-size: 10px;
+            font-weight: 300;
+        }
+        &.weekend { color: @red; }
+    }
+
+    td {
+        cursor: pointer;
+
+        &.outside {
+            color: @gray;
+            font-weight: 300;
+        }
+
+        &.today {
+            color: white;
+            background-color: @red;
+        }
+
+        &.weekend { color: @red; }
+        &.weekend.outside { color: @gray; }
+        &.weekend.today { color: white; }
+
+        &.month, &.year {
+            width: 84px;
+            text-align: center;
+            padding: 16px 0;
+        }
+    }
+
+    .grid {
+        clear: both;
+        outline: 0;
+        td:hover { background-color: @hover; color: @black; }
+        td.today:hover { background-color: darken(@red, 10%); color: white; }
+        td[aria-selected="true"] { background-color: #ccc; color: @black; }
+        td[aria-selected="true"]:hover { background-color: #aaa; color: @black; }
+        &:focus td[aria-selected="true"] { background-color: @focus; color: white; }
+    }
+
+    .btn-today {
+        color: @black;
+        font-size: 13px;
+        text-align: center;
+        display: block;
+        margin: 8px 0 0 0;
+        width: 100%;
+    }
+}

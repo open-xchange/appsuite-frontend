@@ -142,7 +142,10 @@ define('io.ox/core/folder/api', [
         // system folders don't matter
         // bubble through the tree in parent direction
         if (difference !== 0 && parent && parent.get('module') !== 'system' && pool.collections[parent.get('id')]) {
-            parent.set('subtotal', calculateSubtotal(parent));
+            // unified folders contain the mails of the child folders as duplicates, so we don't need to adjust the subtotal
+            if (!parent.is('unifiedfolder')) {
+                parent.set('subtotal', calculateSubtotal(parent));
+            }
         }
 
         // if this is a subfolder of a virtual folder we must bubble there too
@@ -313,7 +316,8 @@ define('io.ox/core/folder/api', [
             collection[type](models);
             collection.fetched = true;
             // some virtual folders have type undefined. Track subtotal for them too.
-            if (this.models[id] && (this.models[id].get('module') === 'mail' || this.models[id].get('module') === undefined)) {
+            // be carefull with unified folders, we don't track the subtotal for them because the subfolders are the folders from the non unified accounts. This would double the counters as the mails are tracked 2 times
+            if (this.models[id] && (this.models[id].get('module') === 'mail' || this.models[id].get('module') === undefined) && !this.models[id].is('unifiedfolder')) {
                 var subtotal = 0;
                 for (var i = 0; i < models.length; i++) {
                     // use account API so it works with non standard accounts as well
@@ -502,6 +506,12 @@ define('io.ox/core/folder/api', [
             });
         },
 
+        // reload single collection
+        reload: function (id) {
+            pool.getCollection(getCollectionId(id)).fetched = false;
+            this.list(id);
+        },
+
         refresh: function () {
             _(this.hash).invoke('list');
         },
@@ -513,11 +523,21 @@ define('io.ox/core/folder/api', [
         }
     };
 
+    function fail(error) {
+        error = { error: error, code: 'UI-FOLDER' };
+        console.warn('folder/api', error);
+        api.trigger('error error:' + error.code, error);
+        return $.Deferred().reject(error);
+    }
+
     //
     // Get a single folder
     //
 
     function get(id, options) {
+
+        // avoid undefined / yep, untranslated
+        if (id === undefined) return fail('Cannot fetch folder with undefined id');
 
         id = String(id);
         options = _.extend({ cache: true }, options);
@@ -529,9 +549,7 @@ define('io.ox/core/folder/api', [
 
         // fetch GAB but GAB is disabled?
         if (id === '6' && !capabilities.has('gab')) {
-            var error = gt('Accessing global address book is not permitted');
-            console.warn(error);
-            return $.Deferred().reject({ error: error });
+            return fail(gt('Accessing global address book is not permitted'));
         }
 
         return http.GET({
@@ -544,12 +562,15 @@ define('io.ox/core/folder/api', [
                 tree: tree(id)
             }
         })
-        .then(function (data) {
-            return renameDefaultCalendarFolders(data);
-        }, function (error) {
-            api.trigger('error error:' + error.code, error);
-            return error;
-        })
+        .then(
+            function (data) {
+                return renameDefaultCalendarFolders(data);
+            },
+            function (error) {
+                api.trigger('error error:' + error.code, error);
+                return error;
+            }
+        )
         .then(function (data) {
             // update/add model
             var model = pool.addModel(data);
@@ -741,16 +762,16 @@ define('io.ox/core/folder/api', [
 
         // already cached?
         var module = options.module,
-            collection = getFlatCollection(module, 'private');
+            collection = getFlatCollection(module, 'private'),
+            cached = {};
 
         if (collection.fetched && options.cache === true) {
-            return $.when({
-                'private': collection.toJSON(),
-                'public':  getFlatCollection(module, 'public').toJSON(),
-                'shared':  getFlatCollection(module, 'shared').toJSON(),
-                'sharing': getFlatCollection(module, 'sharing').toJSON(),
-                'hidden':  getFlatCollection(module, 'hidden').toJSON()
+            cached['private'] = collection.toJSON();
+            ['public', 'shared', 'sharing', 'hidden'].forEach(function (section) {
+                var collection = getFlatCollection(module, section);
+                if (collection.fetched) cached[section] = collection.toJSON();
             });
+            return $.when(cached);
         }
 
         return http.GET({
@@ -880,6 +901,7 @@ define('io.ox/core/folder/api', [
                     return list(model.get('folder_id'), { cache: false })
                             .then(function () {
                                 pool.getCollection(model.get('folder_id')).sort();
+                                if ('title' in changes) api.trigger('after:rename', id, model.toJSON());
                                 return newId;
                             });
                 }
@@ -1225,6 +1247,7 @@ define('io.ox/core/folder/api', [
     function refresh() {
         // pause http layer to get one multiple
         http.pause();
+        var defs = [];
         // loop over all non-flat folders, get all parent folders, apply unique, and reload if they have subfolders
         _(api.pool.models).chain()
             .filter(function (model) {
@@ -1232,16 +1255,21 @@ define('io.ox/core/folder/api', [
             })
             .invoke('get', 'folder_id').uniq().compact().without('0')
             .each(function (id) {
-                list(id, { cache: false });
+                defs.push(list(id, { cache: false }));
             });
         // loop over flat views
         _(getFlatViews()).each(function (module) {
-            flat({ module: module, cache: false });
+            defs.push(flat({ module: module, cache: false }));
         });
-        // go!
-        return http.resume().done(function () {
+
+        // we cannot use virtual.refresh right after the multiple returns, because it does not wait for the callback functions of the requests to finish. This would result in outdated models in the pool
+        // use always to keep the behavior of the multiple (ignores errors)
+        $.when.apply($, defs).always(function () {
             virtual.refresh();
         });
+
+        // go!
+        return http.resume();
     }
 
     ox.on('please:refresh refresh^', refresh);

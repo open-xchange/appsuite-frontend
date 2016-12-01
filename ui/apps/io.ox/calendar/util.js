@@ -141,6 +141,11 @@ define('io.ox/calendar/util', [
 
                 options = _.extend({ timeZoneLabel: { placement: 'top' }, a11y: false, output: 'markup' }, options);
 
+                if (options.container && options.container.parents('#io-ox-core').length < 1) {
+                    // view is not in core (happens with deep links)
+                    // add timezonepopover to body
+                    options.timeZoneLabel.container = 'body';
+                }
                 var startDate,
                     endDate,
                     dateStr,
@@ -178,7 +183,7 @@ define('io.ox/calendar/util', [
                     // time
                     $('<span class="time">').append(
                         timeStr ? $.txt(timeStr) : '',
-                        this.addTimezonePopover($('<span class="label label-default pointer" tabindex="1">').text(timeZoneStr), data, options.timeZoneLabel)
+                        this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(timeZoneStr), data, options.timeZoneLabel)
                     )
                 );
             }
@@ -346,7 +351,7 @@ define('io.ox/calendar/util', [
 
             parent.append(
                 $.txt(gt.noI18n(this.getTimeInterval(data))),
-                this.addTimezonePopover($('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.zoneAbbr())), data, options)
+                this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(gt.noI18n(current.zoneAbbr())), data, options)
             );
 
             return parent;
@@ -397,7 +402,7 @@ define('io.ox/calendar/util', [
             }
 
             parent.popover({
-                container: '#io-ox-core',
+                container: opt.container || '#io-ox-core',
                 viewport: {
                     selector: '#io-ox-core',
                     padding: 10

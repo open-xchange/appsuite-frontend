@@ -77,9 +77,7 @@ define('plugins/portal/linkedIn/register', [
 
     displayNameLink = function (person) {
         var dname = person.firstName + ' ' + person.lastName;
-        return $('<a tabindex="1" href="#" />')
-            .text(dname)
-            .on('click', person, fnClick);
+        return $('<a href="#">').text(dname).on('click', person, fnClick);
     };
 
     function filterActivity(activity) {
@@ -218,8 +216,9 @@ define('plugins/portal/linkedIn/register', [
                 baton.model.node.removeClass('requires-setup widget-color-custom color-linkedin');
                 refreshWidget();
             }, this);
-
-            this.find('h2 .title').replaceWith('<i class="fa fa-linkedin">');
+            if (this.hasClass('widget-color-custom')) return;
+            this.find('h2:first').prepend($('<i class="fa fa-linkedin">'));
+            this.find('h2 .title').removeClass('title').addClass('sr-only');
             this.addClass('widget-color-custom color-linkedin');
         },
 
@@ -265,7 +264,7 @@ define('plugins/portal/linkedIn/register', [
         },
 
         preview: function (baton) {
-            var content = $('<ul class="content list-unstyled" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the linkedin stream.') + '">');
+            var content = $('<ul class="content list-unstyled" tabindex="0" role="button">').attr('aria-label', gt('Press [enter] to jump to the linkedin stream.'));
 
             if (capabilities.has('linkedinPlus')) {
                 if (baton.data && baton.data.length) {

@@ -103,8 +103,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
         myView.dialog.append(
             myView.render().el
         )
-        .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
-        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
+        .addPrimaryButton('save', gt('Save'), 'save')
+        .addButton('cancel', gt('Cancel'), 'cancel');
 
         //disable save button if no action is set
         if (actionArray.length === 0) myView.dialog.getFooter().find('[data-action="save"]').prop('disabled', true);
@@ -158,11 +158,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
             }
 
             $(this).append(
-                listUtils.controlsToggle(texttoggle),
                 listUtils.controlsEdit({
                     'aria-label': gt('Edit %1$s', title),
                     'data-action': actionValue
                 }),
+                listUtils.controlsToggle(texttoggle),
                 listUtils.controlProcessSub({
                     faClass: faClass,
                     title: gt('Process subsequent rules of %1$s', title)
@@ -324,7 +324,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         //yell on reject
                         settingsUtil.yellOnReject(
                             api.update(self.model).done(function () {
-                                $(e.currentTarget).find('i').toggleClass('fa-ban fa-arrow-down');
+                                var target = $(e.target).closest('.list-item-controls').find('[data-action="toggle-process-subsequent"] i');
+                                if (containsStop(actioncmds)) {
+                                    target.removeClass('fa-arrow-down').addClass('fa-ban');
+                                } else {
+                                    target.removeClass('fa-ban').addClass('fa-arrow-down');
+                                }
                             })
                         );
                     },
@@ -336,8 +341,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                         new dialogs.ModalDialog()
                         .text(gt('Do you really want to delete this filter rule?'))
-                        .addPrimaryButton('delete', gt('Delete'), 'delete', { 'tabIndex': '1' })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+                        .addPrimaryButton('delete', gt('Delete'), 'delete')
+                        .addButton('cancel', gt('Cancel'), 'cancel')
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
@@ -399,11 +404,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     render: function () {
                         this.$el.append($('<h1>').addClass('pull-left').text(gt('Mail Filter Rules')),
                             $('<div>').addClass('btn-group pull-right').append(
-                                $('<button>').addClass('btn btn-primary').text(gt('Add new rule')).attr({
-                                    'data-action': 'add',
-                                    tabindex: 1,
-                                    type: 'button'
-                                })
+                                $('<button type="button" class="btn btn-primary" data-action="add">').addClass('btn btn-primary').text(gt('Add new rule'))
                             ),
                             $('<div class="clearfix">'),
                             $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId)
@@ -413,10 +414,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     },
 
                     renderFilter: function () {
-                        var self = this,
-                            list = self.$el.find('.widget-list').empty();
                         if (this.collection.length === 0) {
-                            list.append($('<div>').text(gt('There is no rule defined')));
+                            this.$el.append($('<div class="hint">').text(gt('There is no rule defined')));
                         } else {
                             this.$el.append(new ListView({
                                 collection: this.collection,

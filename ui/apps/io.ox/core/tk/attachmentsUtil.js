@@ -223,7 +223,7 @@ define('io.ox/core/tk/attachmentsUtil', [
                                 $.txt('\u00A0')
                             ),
                              // remove
-                            $('<a href="#" class="remove" tabindex="6">')
+                            $('<a href="#" class="remove">')
                             .attr('title', gt('Remove attachment'))
                             .append(
                                 $('<i class="fa fa-trash-o" aria-hidden="true">')

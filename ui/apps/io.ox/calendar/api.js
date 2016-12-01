@@ -35,6 +35,8 @@ define('io.ox/calendar/api', [
             upload: {}
         },
 
+        getInvitesSince: 0,
+
         reduce: factory.reduce,
 
         get: function (o, useCache) {
@@ -546,8 +548,7 @@ define('io.ox/calendar/api', [
          * @return { object} reduced copy of appointment object
          */
         removeRecurrenceInformation: function (obj) {
-            var recAttr = ['change_exceptions', 'delete_exceptions', 'days',
-                'day_in_month', 'month', 'interval', 'until', 'occurrences'],
+            var recAttr = ['change_exceptions', 'delete_exceptions', 'days', 'day_in_month', 'month', 'interval', 'until', 'occurrences'],
                 ret = _.clone(obj);
             for (var i = 0; i < recAttr.length; i++) {
                 if (ret[recAttr[i]]) {
@@ -573,7 +574,7 @@ define('io.ox/calendar/api', [
                 folder: 'all',
                 start: start,
                 end: end,
-                timestamp: 0,
+                timestamp: api.getInvitesSince || moment().subtract(5, 'years').valueOf(),
                 recurrence_master: true
             })
             .then(function (list) {
@@ -640,7 +641,9 @@ define('io.ox/calendar/api', [
                             type: obj.type,
                             start: options.start,
                             end: options.end,
-                            timezone: 'UTC'
+                            timezone: 'UTC',
+                            sort: 201,
+                            order: 'asc'
                         });
                     }
                 } else {

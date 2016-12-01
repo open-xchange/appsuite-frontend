@@ -97,8 +97,8 @@ define('io.ox/core/folder/picker', [
                     _.isString(o.title) ? $.txt(o.title) : o.title
                 )
             )
-            .addPrimaryButton('ok', o.button, 'ok', { tabIndex: 1 })
-            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
+            .addPrimaryButton('ok', o.button, 'ok')
+            .addButton('cancel', gt('Cancel'), 'cancel');
 
         if (o.alternativeButton) {
             dialog.addAlternativeButton('alternative', o.alternativeButton);
@@ -181,6 +181,7 @@ define('io.ox/core/folder/picker', [
                     // path might fail so we use always to con
                     .always(function () {
                         dialog.getBody().idle().prepend(tree.render().$el);
+                        // focus and trigger click on first element for proper keyboard a11y
                         tree.$('.tree-container .selectable:first').focus().trigger('click');
                         o.show(dialog, tree);
                     });

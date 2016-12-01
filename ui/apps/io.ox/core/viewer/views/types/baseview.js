@@ -73,17 +73,25 @@ define('io.ox/core/viewer/views/types/baseview', [
          * @returns {String} previewURL
          */
         getPreviewUrl: function (options) {
+            if (this.model.get('file_options')) {
+                options = _.extend(options, this.model.get('file_options'));
+            }
             if (this.model.isFile()) {
-                return FilesAPI.getUrl(this.model.toJSON(), 'thumbnail', options);
+                var modelJSON = this.model.toJSON();
+                if (options && !_.isEmpty(options.version)) {
+                    modelJSON.version = options.version;
+                }
+                return FilesAPI.getUrl(modelJSON, 'thumbnail', options);
 
             } else if (this.model.isMailAttachment()) {
                 return MailAPI.getUrl(this.model.get('origData'), 'view');
 
             } else if (this.model.isPIMAttachment()) {
-                return AttachmentAPI.getUrl(this.model.get('origData'), 'view');
+                return AttachmentAPI.getUrl(this.model.get('origData'), 'view', options);
 
             } else if (this.model.isEncrypted()) {
-                return (this.model.get('guardUrl'));
+                // Guard
+                return (this.model.get('guardUrl')); // Will eventually be removed
             }
             return null;
         },

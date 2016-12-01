@@ -270,7 +270,7 @@ define('io.ox/mail/settings/pane', [
                             new mini.SelectView({ list: optionsAutoSave, name: 'autoSaveDraftsAfter', model: settings, id: 'autoSaveDraftsAfter', className: 'form-control' }).render().$el
                         ),
                         $('<div class="row">').append(
-                            $('<label for="forwardmail">').text(gt('Always add the following recipient to blind carbon copy (BCC)')),
+                            $('<label for="autobcc">').text(gt('Always add the following recipient to blind carbon copy (BCC)')),
                             new mini.InputView({ name: 'autobcc', model: settings, className: 'form-control', id: 'autobcc' }).render().$el
                         )
                     )
@@ -314,47 +314,6 @@ define('io.ox/mail/settings/pane', [
         }
     });
 
-    // TODO: mail_categories
-    ext.point(POINT + '/pane').extend({
-        index: 450,
-        id: 'mail-categories',
-        draw: function () {
-
-            if (_.device('smartphone')) return;
-            if (!capabilities.has('mail_categories')) return;
-
-            var list = [
-                //#. possible setting for 'Should only the current message or all messages of the sender be moved'
-                { label: gt('Please ask me every time'), value: 'dialog' },
-                //#. possible setting for 'Should only the current message or all messages of the sender be moved'
-                { label: gt('Yes, always move them all'), value: 'always' },
-                //#. possible setting for 'Should only the current message or all messages of the sender be moved'
-                { label: gt('No, only move selected message(s)'), value: 'never' }
-            ];
-            if (!settings.get('categories-extra/generalize')) settings.set('categories-extra/generalize', _.first(list).value);
-
-            this.append(
-                fieldset(
-                    gt('Inbox Tabs'),
-                    // enable
-                    $('<div class="help-block">').text('Please note that conversations are not available when tabbed inbox is activated.'),
-                    settings.get('categories/forced') ? $() : checkbox(
-                        'categories/enabled',
-                        gt('Show Tabs for inbox'),
-                        new mini.CheckboxView({ name: 'categories/enabled', model: settings }).render().$el
-                    ),
-                    // default behavior after move
-                    $('<div class="col-xs-12 col-md-6">').append(
-                        $('<div class="row">').append(
-                            $('<label>').attr({ 'for': 'categories-generalize' }).text(gt('Should only the current message or all messages of the sender be moved')),
-                            new mini.SelectView({ list: list, name: 'categories-extra/generalize', model: settings, id: 'categories-generalize', className: 'form-control' }).render().$el
-                        )
-                    )
-                )
-            );
-        }
-    });
-
     // extension point with index 500 is in 'io.ox/mail/settings/signatures/register'
     // and displays signature settings
 
@@ -368,7 +327,7 @@ define('io.ox/mail/settings/pane', [
             this.append(
                 $('<fieldset>').append(
                     $('<div class="sectioncontent">').append(
-                        $('<button type="button" class="btn btn-primary" tabindex="1">')
+                        $('<button type="button" class="btn btn-primary">')
                         .on('click', changeIMAPSubscription)
                         .text(gt('Change IMAP subscriptions'))
                     )

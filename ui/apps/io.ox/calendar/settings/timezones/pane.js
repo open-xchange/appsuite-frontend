@@ -12,12 +12,12 @@
  */
 
 define('io.ox/calendar/settings/timezones/pane', [
-    'io.ox/calendar/settings/model',
+    'settings!io.ox/calendar',
     'gettext!io.ox/calendar',
     'io.ox/core/extensions',
     'io.ox/calendar/settings/timezones/favorite-view',
     'less!io.ox/calendar/settings/timezones/style.less'
-], function (model, gt, ext, FavoriteView) {
+], function (settings, gt, ext, FavoriteView) {
 
     'use strict';
 
@@ -59,7 +59,7 @@ define('io.ox/calendar/settings/timezones/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    new FavoriteView({ model: model }).render().$el
+                    new FavoriteView({ model: settings }).render().$el
                 )
             );
         }

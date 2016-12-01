@@ -224,7 +224,7 @@ define('io.ox/mail/compose/view', [
                 this.data('view')
                     .header(gt.pgettext('E-Mail', 'Priority'))
                     //#. E-Mail priority
-                    .option('priority', 0, gt.pgettext('E-Mail priority', 'High'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true })
+                    .option('priority', 1, gt.pgettext('E-Mail priority', 'High'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true })
                     //#. E-Mail priority
                     .option('priority', 3, gt.pgettext('E-Mail priority', 'Normal'), { prefix: gt.pgettext('E-Mail', 'Priority'), radio: true })
                     //#. E-Mail priority
@@ -414,6 +414,39 @@ define('io.ox/mail/compose/view', [
 
             return mailAPI[mode](obj, this.messageFormat)
                 .then(accountAPI.getValidAddress)
+                .then(function checkTruncated(data) {
+                    //check for truncated message content, warn the user, provide alternative
+                    if (data.attachments[0].truncated) {
+                        //only truncated if forwarded inline and too large
+                        var dialog = new dialogs.ModalDialog(),
+                            def = $.Deferred();
+
+                        dialog
+                            .header($('<h4>').text(gt('This message has been truncated due to size limitations.')))
+                            .append(gt('Loading the full mail might lead to performance problems.'))
+                            .addPrimaryButton('useInline', gt('Continue'), 'useInline')
+                            .addButton('useInlineComplete', gt('Load full mail'), 'useInlineComplete')
+                            .addButton('useAttachment', gt('Add original message as attachment'), 'useAttachment')
+                            .on('useAttachment', function () {
+                                obj.attachOriginalMessage = true;
+                                def.resolve(obj);
+                            })
+                            .on('useInline', def.reject)
+                            .on('useInlineComplete', function () {
+                                delete obj.max_size;
+                                def.resolve(obj);
+                            })
+                            .show();
+                        return def.always(function () {
+                            dialog.close();
+                        }).then(function (obj) {
+                            return mailAPI[mode](obj, this.messageFormat);
+                        }, function () {
+                            return $.when(data);
+                        });
+                    }
+                    return data;
+                })
                 .then(function (data) {
                     if (mode !== 'edit') {
                         data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
@@ -432,7 +465,8 @@ define('io.ox/mail/compose/view', [
 
                     delete data.attachments;
 
-                    if (mode === 'forward' || mode === 'edit') {
+                    //FIXME: remove this if statement? Should still work without it
+                    if (mode === 'forward' || mode === 'edit' || mode === 'reply' || mode === 'replyall') {
                         // move nested messages into attachment array
                         _(data.nested_msgs).each(function (obj) {
                             attachments.push({
@@ -591,6 +625,18 @@ define('io.ox/mail/compose/view', [
                 model = this.model,
                 mail = this.model.getMailForAutosave();
 
+            if (model.get('encrypt')) {
+                var view = this;
+                var baton = new ext.Baton({
+                    mail: mail,
+                    model: this.model,
+                    app: this.app,
+                    view: view
+                });
+                this.initAutoSaveAsDraft();
+                return ext.point('oxguard/mail/autosavedraft').invoke('action', this, baton);
+            }
+
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
@@ -623,7 +669,7 @@ define('io.ox/mail/compose/view', [
 
             var timeout = settings.get('autoSaveDraftsAfter', false),
                 timerScale = {
-                    //60s
+                    seconds: 1000,
                     minute: 60000,
                     minutes: 60000
                 },
@@ -691,9 +737,9 @@ define('io.ox/mail/compose/view', [
                     .text(gt('Do you really want to discard your message?'))
                     //#. "Discard message" appears in combination with "Cancel" (this action)
                     //#. Translation should be distinguishable for the user
-                    .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', { tabIndex: 1 })
-                    .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', { tabIndex: 1 })
-                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                    .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete')
+                    .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft')
+                    .addButton('cancel', gt('Cancel'), 'cancel')
                     .show()
                     .then(function (action) {
                         if (action === 'delete') {
@@ -930,9 +976,7 @@ define('io.ox/mail/compose/view', [
 
         unblockReuse: function (sendtype) {
             this.blocked[sendtype] = (this.blocked[sendtype] || 0) - 1;
-            if (this.blocked[sendtype] <= 0) {
-                delete this.blocked[sendtype];
-            }
+            if (this.blocked[sendtype] <= 0) delete this.blocked[sendtype];
         },
 
         focusEditor: function () {
@@ -942,14 +986,12 @@ define('io.ox/mail/compose/view', [
         flagSubjectField: function (e) {
             var node = $(e.target);
             // required for custom focus handling within inputs on enter
-            if ((e.keyCode || e.which) === 13) {
-                return node.attr('data-enter-keydown', true);
-            }
+            if (e.which === 13) return node.attr('data-enter-keydown', true);
         },
 
         focusSendButton: function (e) {
             // Focus send button on ctrl || meta + Enter (a11y + keyboardsupport)
-            if ((e.metaKey || e.ctrlKey) && ((e.keyCode || e.which) === 13)) {
+            if ((e.metaKey || e.ctrlKey) && e.which === 13) {
                 e.preventDefault();
                 this.$el.parents().find('button[data-action="send"]').focus();
             }
@@ -981,10 +1023,8 @@ define('io.ox/mail/compose/view', [
                         $(this).attr('data-ime', 'inactive');
                     },
                     keydown: function (e) {
-                        if (e.which === 13 && $(this).attr('data-ime') !== 'active') {
-                            // clear tokenfield input
-                            $(this).val('');
-                        }
+                        // clear tokenfield input
+                        if (e.which === 13 && $(this).attr('data-ime') !== 'active') $(this).val('');
                     },
                     // shortcuts (to/cc/bcc)
                     keyup: function (e) {
@@ -1005,9 +1045,7 @@ define('io.ox/mail/compose/view', [
                 });
             });
 
-            this.$el.append(
-                this.editorContainer
-            );
+            this.$el.append(this.editorContainer);
 
             this.initAutoSaveAsDraft();
 

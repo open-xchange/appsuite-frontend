@@ -285,8 +285,9 @@ define('plugins/portal/twitter/register', [
                 baton.model.node.removeClass('requires-setup widget-color-custom color-twitter');
                 refreshWidget();
             }, this);
-
-            this.find('h2 .title').replaceWith('<i class="fa fa-twitter">');
+            if (this.hasClass('widget-color-custom')) return;
+            this.find('h2:first').prepend($('<i class="fa fa-twitter" aria-hidden="true">'));
+            this.find('h2 .title').removeClass('title').addClass('sr-only');
             this.addClass('widget-color-custom color-twitter');
         },
 
@@ -309,7 +310,7 @@ define('plugins/portal/twitter/register', [
 
         preview: function (baton) {
             if (!baton.data) { return; }
-            var content = $('<ul class="content pointer list-unstyled" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the twitter feed.') + '">');
+            var content = $('<ul class="content pointer list-unstyled" tabindex="0" role="button">').attr('aria-label', gt('Press [enter] to jump to the twitter feed.'));
             baton.contentNode = content;
             drawPreview(baton);
             this.append(content);

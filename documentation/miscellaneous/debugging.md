@@ -65,7 +65,7 @@ require(['settings!io.ox/portal'], function(settings) {
 # Debug relogin
 
 ```javascript
-ox.autoLogoutRestartDebug();
+ox.autoLogout.debug();
 ```
 
 # Enable/disable capability via URL hash
@@ -94,7 +94,7 @@ If you want to get details of a specific folder, just inspect it via dev tools a
 Copy the id and run the following in console:
 
 ```javascript
-void require('io.ox/core/api/folder').get({ folder: 'default0/INBOX' }).always(_.inspect);
+void require('io.ox/core/folder/api').get('default0/INBOX').always(_.inspect);
 ```
 
 # Finding the version

@@ -70,7 +70,7 @@ define('io.ox/core/tk/list', [
             if (this.mousedown) {
                 return;
             }
-            this.$el.attr('tabindex', 1);
+            this.$el.attr('tabindex', 0);
             this.$el.removeClass('has-focus');
         },
 
@@ -128,6 +128,13 @@ define('io.ox/core/tk/list', [
 
         }, 20),
 
+        // ensure first selected node is not scrolled out
+        onSelect: function (ids) {
+            var id = ids[0], node = this.selection.getNode(id);
+            if (!node.length) return;
+            node.intoView(this.$el);
+        },
+
         onLoad: function () {
             this.idle();
             // trigger scroll event after initial load
@@ -178,11 +185,14 @@ define('io.ox/core/tk/list', [
             this.$el.append(
                 this.collection.map(this.renderListItem, this)
             );
-
             this.trigger('reset', this.collection, this.firstReset);
             if (this.firstReset) {
                 this.trigger('first-reset', this.collection);
                 this.firstReset = false;
+            }
+            if (this.firstContent && this.collection.length) {
+                this.trigger('first-content', this.collection);
+                this.firstContent = false;
             }
         },
 
@@ -231,8 +241,11 @@ define('io.ox/core/tk/list', [
             // build hash of all composite keys
             var hash = {};
             _(list).each(function (obj) {
-                var cid = obj.cid || _.cid(obj);
-                hash[cid] = true;
+                if (_.isObject(obj)) {
+                    var cid = obj.cid || _.cid(obj);
+                    hash[cid] = true;
+                } else hash[obj] = true;
+
             });
 
             // get all DOM nodes
@@ -446,7 +459,8 @@ define('io.ox/core/tk/list', [
                 draggable: false,
                 selection: true,
                 scrollable: true,
-                swipe: false
+                swipe: false,
+                scrollto: false
             }, options);
 
             var events = {}, dndEnabled = false, self = this;
@@ -501,6 +515,7 @@ define('io.ox/core/tk/list', [
             this.isBusy = false;
             this.complete = false;
             this.firstReset = true;
+            this.firstContent = true;
 
             this.delegateEvents(events);
 
@@ -535,6 +550,10 @@ define('io.ox/core/tk/list', [
             if (this.options.pagination) {
                 // respond to window resize (see bug 37728)
                 $(window).on('resize.list-view', this.onScroll.bind(this));
+            }
+
+            if (this.options.scrollto) {
+                this.on('selection:add', _.debounce(this.onSelect.bind(this), 100));
             }
 
             this.on('dispose', function () {
@@ -675,7 +694,7 @@ define('io.ox/core/tk/list', [
                 this.$el.attr({
                     'aria-multiselectable': true,
                     'role': 'listbox',
-                    'tabindex': 1
+                    'tabindex': 0
                 });
             }
             this.$el.attr('data-ref', this.ref);
@@ -741,6 +760,8 @@ define('io.ox/core/tk/list', [
 
                 // forward event
                 this.trigger('add', model, index);
+                // use raw cid here for non-listview listeners (see custom getCompositeKey)
+                this.trigger('add:' + model.cid, model, index);
 
             });
 

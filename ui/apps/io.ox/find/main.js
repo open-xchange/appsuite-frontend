@@ -111,6 +111,8 @@ define('io.ox/find/main', [
                 var parent = app.get('parent');
                 app.on({
                     'find:query:result': function () {
+                        // handle delayed result
+                        if (app.isActive() !== true) return;
                         parent.props.set('find-result', true);
                     },
                     'find:idle': function () {
@@ -162,12 +164,20 @@ define('io.ox/find/main', [
                 });
 
                 // events
+                var emptyMessageOriginal;
                 app.on({
                     'find:query': function () {
                         grid.setMode('search');
+                        emptyMessageOriginal = emptyMessageOriginal || grid.getEmptyMessage();
+                        grid.setEmptyMessage(function () {
+                            return gt('No matching items found.');
+                        });
                     },
                     'find:idle': function () {
-                        if (grid.getMode() !== 'all') grid.setMode('all');
+                        if (grid.getMode() !== 'all') {
+                            grid.setMode('all');
+                            grid.setEmptyMessage(emptyMessageOriginal);
+                        }
                     }
                 });
             },
@@ -559,6 +569,8 @@ define('io.ox/find/main', [
                     // inplace: use parents view window
                     app.view.render();
                     app.set('state', 'launched');
+                    // trigger global event
+                    ox.trigger('search:load', app);
                 });
                 // reset cache on contact changes
                 require(['io.ox/contacts/api'], function (contactsAPI) {

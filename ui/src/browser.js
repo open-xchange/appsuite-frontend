@@ -37,12 +37,12 @@
 
     // supported browsers
     us.browserSupport = {
-        'Chrome':    39,
-        'Safari':     7,
-        'Firefox':   33,
-        'IE':        10,
+        'Chrome':    50,
+        'Safari':     8,
+        'Firefox':   40,
+        'IE':        11,
         'Android':  4.2,
-        'iOS':      6.0
+        'iOS':      8.0
     };
 
     // helpers
@@ -76,10 +76,11 @@
             chromeIOS = ua.indexOf('CriOS/') > -1;
 
             // TODO: This needs to be updated, if better user agent is available
-            // Edge is no Chrome and no Webkit.
+            // Edge is no Chrome, Webkit or Android.
             if (edge) {
                 chrome = false;
                 webkit = false;
+                Android = false;
             }
 
             /*eslint no-nested-ternary: 0*/
@@ -265,8 +266,9 @@
             misc.touch = detectTouch();
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();
-            // no arguments?s
-            if (arguments.length === 0) {
+            misc.reload = (window.performance && window.performance.navigation.type === 1);
+            // debug
+            if (condition === 'debug' || condition === 1337) {
                 return _.extend({}, browserLC, display, misc);
             }
             // true for undefined, null, empty string
@@ -288,6 +290,7 @@
             }
         })
     };
+
     underscoreExtends.device.loadUA = function (nav) {
         detectBrowser(nav);
         underscoreExtends.recheckDevice();

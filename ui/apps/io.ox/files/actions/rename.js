@@ -68,10 +68,10 @@ define('io.ox/files/actions/rename', [
                 $('<h4>').text(gt('Rename'))
             )
             .append(
-                $('<input type="text" name="name" class="form-control" tabindex="1">')
+                $('<input type="text" name="name" class="form-control">')
             )
-            .addPrimaryButton('rename', gt('Rename'), 'rename', { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+            .addPrimaryButton('rename', gt('Rename'), 'rename')
+            .addButton('cancel', gt('Cancel'), 'cancel')
             .on('rename', function () {
                 var node = this.getContentNode(),
                     name = node.find('input[name="name"]').val();
@@ -80,9 +80,11 @@ define('io.ox/files/actions/rename', [
                 });
             })
             .show(function () {
+                // Test for Guard .suffix.pgp such as .jpg.pgp
+                var highlight = (/\.[a-z0-9]+\.pgp/i).test(filename) ? filename.replace('.pgp', '').lastIndexOf('.') : filename.lastIndexOf('.');
                 this.find('input[name="name"]')
                     .focus().val(filename)
-                    .get(0).setSelectionRange(0, filename.lastIndexOf('.'));
+                    .get(0).setSelectionRange(0, highlight > -1 ? highlight : filename.length);
             });
 
     };

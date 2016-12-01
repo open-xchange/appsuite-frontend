@@ -4,7 +4,7 @@
 <title>7.1. De Agenda Componenten</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="Groupware">
+<link rel="home" href="index.html" title="Gebruikershandleiding">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Hoofdstuk 7. Agenda">
 <link rel="prev" href="ox.appsuite.user.chap.calendar.html" title="Hoofdstuk 7. Agenda">
 <link rel="next" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Tonen van Afspraken">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.chap.calendar.html">Terug</a></li>
@@ -43,6 +43,7 @@
 <p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.content" title="Hoofdgebied">Hoofdgebied</a></p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Dag, Werkweek, Week of Maand overzicht."><span class="guilabel"><strong>Dag</strong></span>, <span class="guilabel"><strong>Werkweek</strong></span>, <span class="guilabel"><strong>Week</strong></span> of <span class="guilabel"><strong>Maand</strong></span> overzicht.</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="Datumkiezer">Datumkiezer</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="Pop-up">Pop-up</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="Lijst">Lijst</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="Detailoverzicht">Detailoverzicht</a></p></li>
@@ -50,40 +51,60 @@
 <p>
           </p>
 </li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.scheduling" title="Planningsoverzicht">Planningsoverzicht</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.create" title="Tonen voor aanmaken of bewerken">Tonen voor aanmaken of bewerken</a></p></li>
 </ul></div>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.search"></a><p class="title"><b>Zoekbalk</b></p>
+<a name="ox.appsuite.user.reference.calendar.gui.search"></a><h3 class="title">Zoekbalk</h3>
 <p>Laat u <a class="link" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. Zoeken naar Afspraken">zoeken</a> naar afspraken.</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.foldertree"></a><p class="title"><b>Mappenboom</b></p>
-<p>Toont de agendamappen. Maakt het mogelijk door de mappenboom te navigeren. Om de mappenboom te openen klikt u op het <span class="guibutton"><strong>Beeld</strong></span> pictogram in de <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.toolbar" title="Werkbalk">werkbalk</a>. Schakel <span class="guibutton"><strong>Mappenoverzicht</strong></span> in. Afhankelijk van de configuratie van de groupware bevat de mappenboom de volgende elementen: </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree"></a><h3 class="title">Mappenboom</h3>
+<p>Toont de agenda mappen.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree.entries"></a><p class="title">inhoud</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><span class="guilabel"><strong>Mijn agenda's</strong></span>. Bevat uw persoonlijke agenda's.</p></li>
 <li class="listitem"><p><span class="guilabel"><strong>Publieke agenda's</strong></span>. Bevat agenda's die gedeeld zijn met alle gebruikers.</p></li>
 <li class="listitem"><p><span class="guilabel"><strong>Gedeelde agenda's</strong></span>. Bevat agenda's die aan u gedeeld zijn door anderen.</p></li>
-</ul></div>
-<p> De volgende functies zijn beschikbaar: </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+</ul>
+</div>
+<p>Afhankelijk van de instellingen van de groupware, kan de inhoud afwijken van deze informatie.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree.functions"></a><p class="title">Functies</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Als u op een agenda klikt, worden de afspraken in deze agenda getoond.</p></li>
 <li class="listitem">
-<p>Het <span class="guibutton"><strong>Map-specifieke acties</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> naast de geselecteerde agenda's heeft functies voor gegevensbeheer,  gegevensuitwisseling en het veranderen van kleuren.</p>
+<p>Het <span class="guibutton"><strong>Map-specifieke acties</strong></span> pictogram<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> naast de geselecteerde agenda's heeft functies voor gegevensbeheer,  gegevensuitwisseling en het veranderen van kleuren.</p>
 <p><span class="phrase"><strong>Opmerking: </strong></span> De kleurselectie drop-down en de kleurenpictogrammen naast de mapnamen worden alleen getoond als <span class="guibutton"><strong>Aangepaste kleuren</strong></span> is ingeschakeld in het <span class="guibutton"><strong>Beeld</strong></span> menu in de werkbalk.</p>
 </li>
 <li class="listitem"><p>Knoppen in de mappenboom bieden de mogelijkheid voor het aanmaken van agenda's.</p></li>
 <li class="listitem"><p>De <span class="guibutton"><strong>Al mijn afspraken</strong></span> map bevat al uw afspraken uit alle agenda's.</p></li>
 <li class="listitem"><p>Afhankelijk van de instellingen van de groupware zijn extra knoppen beschikbaar onder de mappen. Deze knoppen maken het mogelijk om een wizard te starten om verschillende clients te configureren.</p></li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.foldertree.related"></a><p class="title">Gerelateerde onderwerpen</p>
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree.related"></a><p class="title">Zie ook</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Meer informatie over mappen kunt u vinden in <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Mappen">Mappen</a>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Instructies voor veel gebruikte acties kan u hier vinden:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.colors.html" title="7.6.5. Agendakleuren gebruiken">Agendakleuren gebruiken</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. Navigeren binnen de mappenstructuur">Navigeren binnen de mappenstructuur</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. Mappen aanmaken">Mappen aanmaken</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. Mappen hernoemen">Mappen hernoemen</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. Mappen verplaatsen">Mappen verplaatsen</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. Mappen wissen">Mappen wissen</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.colors.html" title="7.6.5. Agendakleuren gebruiken">Agendakleuren gebruiken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Mappen">Mappen</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. Navigeren binnen de mappenstructuur">Navigeren binnen de mappenstructuur</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. Mappen aanmaken">Mappen aanmaken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. Mappen hernoemen">Mappen hernoemen</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. Mappen verplaatsen">Mappen verplaatsen</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. Mappen wissen">Mappen wissen</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Toetsen en toetscombinaties">Toetsen en toetscombinaties</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>Overkoepelend thema: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. De Agenda Componenten">De <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span> Componenten</a></p></li>
 </ul>
 </div>
@@ -91,17 +112,17 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.toolbar"></a><p class="title"><b>Werkbalk</b></p>
+<a name="ox.appsuite.user.reference.calendar.gui.toolbar"></a><h3 class="title">Werkbalk</h3>
 <p>Bevat de volgende knoppen in het kalenderoverzicht:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><span class="guibutton"><strong>Nieuw</strong></span> knop. Maakt een nieuwe afspraak.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Planning</strong></span> knop. Opent een planningsoverzicht voor het plannen van afspraken met meerdere deelnemers.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Vandaag</strong></span> knop. Zet de tijdspanne op vandaag.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Nieuw</strong></span>. Maakt een nieuwe afspraak.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Planning</strong></span>. Opent een planningsoverzicht voor het plannen van afspraken met meerdere deelnemers.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Vandaag</strong></span>. Zet de tijdspanne op vandaag.</p></li>
 <li class="listitem">
-<p><span class="guibutton"><strong>Beeld</strong></span> knop. Opent een menu met selectievakken om het overzicht in te stellen.</p>
+<p><span class="guibutton"><strong>Beeld</strong></span>. Opent een menu met selectievakken om het overzicht in te stellen.</p>
 <div class="itemizedlist">
 <a name="ox.appsuite.user.reference.calendar.gui.toolbar.view"></a><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p><span class="guibutton"><strong>Dag</strong></span>, <span class="guibutton"><strong>Werkweek</strong></span>, <span class="guibutton"><strong>Week</strong></span> of <span class="guibutton"><strong>Maand</strong></span> selectievak. Maakt het mogelijk een <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Dag, Werkweek, Week of Maand overzicht.">agendaoverzicht</a>te configureren.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Dag</strong></span>, <span class="guibutton"><strong>Werkweek</strong></span>, <span class="guibutton"><strong>Week</strong></span> of <span class="guibutton"><strong>Maand</strong></span>. Maakt het mogelijk een <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Dag, Werkweek, Week of Maand overzicht.">agendaoverzicht</a>te configureren.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Lijst</strong></span> selectievak. Activeert het <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="Lijst">lijstoverzicht</a>.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Mapoverzicht</strong></span> selectievak. Opent en sluit de mappenboom.</p></li>
 <li class="listitem">
@@ -114,7 +135,7 @@
 <p> </p>
 </li>
 <li class="listitem"><p>Als het lijstoverzicht is gekozen: <span class="guibutton"><strong>Selectievakken</strong></span> selectievak. Toont een selectievak naast elke afspraak. Dit maakt het mogelijk om meerdere afspraken tegelijk te bewerken.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Afdrukken</strong></span> knop. Opent het afdrukvoorbeeld voor het afdrukken van een kalenderblad.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Afdrukken</strong></span>. Opent het afdrukvoorbeeld voor het afdrukken van een kalenderblad.</p></li>
 </ul>
 </div>
 <p> </p>
@@ -122,20 +143,39 @@
 </ul></div>
 <p>Als u een afspraak heeft geselecteerd in het lijstoverzicht worden de volgende extra elementen getoond:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><span class="guibutton"><strong>Bewerken</strong></span> knop. Bewerkt de afspraakgegevens.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Status</strong></span> knop. Veranderd de status van de afspraakbevestiging.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Verwijder</strong></span> knop. Verwijderd de geselecteerde afspraken. </p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Acties</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> . Opent een menu met meer functies:</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Bewerken</strong></span>. Bewerkt de afspraakgegevens.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Status</strong></span>. Veranderd de status van de afspraakbevestiging.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Verwijder</strong></span>. Verwijderd de geselecteerde afspraken. </p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Acties</strong></span> pictogram<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> . Opent een menu met meer functies:</p></li>
 </ul></div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.toolbar.related"></a><p class="title">Gerelateerde onderwerpen</p>
+<a name="ox.appsuite.user.reference.calendar.gui.toolbar.related"></a><p class="title">Zie ook</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Instructies voor de knoppen en pictogrammen kan u hier vinden:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Afspraken maken">Afspraken maken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.share.freebusy.html" title="7.8.5. Plannen met meerdere deelnemers">Plannen met meerdere deelnemers</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Wijzigen van de afspraakstatus">Wijzigen van de afspraakstatus</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Afspraken wissen">Afspraken wissen</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Instructies voor de functies in het <span class="guibutton"><strong>Acties</strong></span> menu<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.toolbar.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> kan u hier vinden:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Afdrukken van afspraken">Afdrukken van afspraken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Afspraken verplaatsen naar een andere map">Afspraken verplaatsen naar een andere map</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Bewerken van meerdere afspraken in één keer">Bewerken van meerdere afspraken in één keer</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>Instructies voor de knoppen en pictogrammen</p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Afspraken maken">Afspraken maken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.2. Plannen met meerdere deelnemers">Plannen met meerdere deelnemers</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Wijzigen van de afspraakstatus">Wijzigen van de afspraakstatus</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Afspraken wissen">Afspraken wissen</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Toetsen en toetscombinaties">Toetsen en toetscombinaties</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none">
+<p>Instructies voor de functies in het <span class="guibutton"><strong>Acties</strong></span> menu<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.toolbar.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span></p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Afdrukken van afspraken">Afdrukken van afspraken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Afspraken verplaatsen naar een andere map">Afspraken verplaatsen naar een andere map</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Bewerken van meerdere afspraken in één keer">Bewerken van meerdere afspraken in één keer</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>Overkoepelend thema: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. De Agenda Componenten">De <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span> Componenten</a></p></li>
 </ul>
 </div>
@@ -143,35 +183,49 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.content"></a><p class="title"><b>Hoofdgebied</b></p>
+<a name="ox.appsuite.user.reference.calendar.gui.content"></a><h3 class="title">Hoofdgebied</h3>
 <p>Dit toont een <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Dag, Werkweek, Week of Maand overzicht.">kalenderoverzicht</a> of een <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="Lijst">lijstoverzicht</a> van de afspraken. Om een overzicht te selecteren, klikt u op de <span class="guibutton"><strong>Beeld</strong></span> knop in de <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.toolbar" title="Werkbalk">werkbalk</a>.</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.calendarview"></a><p class="title"><b><span class="guilabel"><strong>Dag</strong></span>, <span class="guilabel"><strong>Werkweek</strong></span>, <span class="guilabel"><strong>Week</strong></span> of <span class="guilabel"><strong>Maand</strong></span> overzicht.</b></p>
+<a name="ox.appsuite.user.reference.calendar.gui.calendarview"></a><h3 class="title">
+<span class="guilabel"><strong>Dag</strong></span>, <span class="guilabel"><strong>Werkweek</strong></span>, <span class="guilabel"><strong>Week</strong></span> of <span class="guilabel"><strong>Maand</strong></span> overzicht.</h3>
 <p>Toont het agendaoverzicht voor de gekozen tijdsinterval.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>De <span class="guibutton"><strong>Blader</strong></span> pictogrammen<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.calendarview.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span> in de linkerbovenhoek van het agendablad maken het mogelijk door de agenda te navigeren.</p></li>
+<li class="listitem"><p>De <span class="guibutton"><strong>Blader</strong></span> pictogrammen<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.calendarview.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span> in de linkerbovenhoek van het agendablad maken het mogelijk door de agenda te navigeren.</p></li>
 <li class="listitem">
-<p>In het agendaoverzicht <span class="guilabel"><strong>Dag</strong></span>, <span class="guilabel"><strong>Werkweek</strong></span>, en <span class="guilabel"><strong>Week</strong></span>,wordt de datum getoond naast het <span class="guibutton"><strong>Blader</strong></span> pictogram.</p>
-<p>Als u op een datum klikt wordt een minikalender getoond die helpt bij het kiezen van een andere datum.</p>
-<p>Het gebied tussen dat datum en het agendablad kan gebruikt worden voor het <a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">aanmaken</a> van dagafspraken.</p>
+<p>In het agendaoverzicht <span class="guilabel"><strong>Dag</strong></span>, <span class="guilabel"><strong>Werkweek</strong></span>, en <span class="guilabel"><strong>Week</strong></span>, wordt de datum getoond naast het <span class="guibutton"><strong>Blader</strong></span> pictogram.</p>
+<p>Als u op een datum klikt wordt een minikalender getoond.</p>
+<p>Het gebied tussen de datum en het agendablad kan gebruikt worden voor het aanmaken van dagafspraken.</p>
 <p>Aan de linkerkant van het agendablad wordt de tijdzone getoond boven de datums. Om een extra kolom met datums in een andere tijdzone toe te voegen, klikt u op de tijdzone.</p>
 <p>De rode lijn in de agenda toont de huidige tijd.</p>
 </li>
 <li class="listitem"><p>In het <span class="guilabel"><strong>Werkweek</strong></span>, <span class="guilabel"><strong>Week</strong></span> en <span class="guilabel"><strong>Maand</strong></span> overzicht wordt de huidige dag gemarkeerd met een rode achtergrond.</p></li>
 <li class="listitem"><p>In het <span class="guilabel"><strong>Maand</strong></span> overzicht wordt de geselecteerde maand en het jaar getoond boven het agendablad.</p></li>
 <li class="listitem">
-<p> Afhankelijk van de bevestigingsstatus worden afspraken gemarkeerd met verschillende <a class="link" href="ox.appsuite.user.sect.calendar.view.appointments.html#ox.appsuite.user.concept.appointments.color">kleuren</a>.</p>
+<p> Afhankelijk van de bevestigingsstatus worden afspraken gemarkeerd met verschillende kleuren.</p>
 <p>Als er meer afspraken boven of onder het zichtbare agendablad zijn worden pijltjes getoond aan de boven of onderkant van de agenda voor de betreffende dag.</p>
 </li>
 </ul></div>
-<p>Als u klikt op een afspraak worden de gegevens getoond in de <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="Pop-up">pop-up</a>.</p>
+<p>Als u klikt op een afspraak worden de gegevens getoond in de pop-up.</p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.calendarview.related"></a><p class="title">Gerelateerde onderwerpen</p>
+<a name="ox.appsuite.user.reference.calendar.gui.calendarview.related"></a><p class="title">Zie ook</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>
-              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Tonen van Afspraken">Tonen van Afspraken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.view.appointments.html" title="7.2.4. Hoe worden afspraken getoond?">Hoe worden afspraken getoond?</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Afspraken maken">Afspraken maken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.html" title="7.6. Beheren van Afspraken">Beheren van Afspraken</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="Datumkiezer">Datumkiezer</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.scheduling" title="Planningsoverzicht">Planningsoverzicht</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="Pop-up">Pop-up</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Tonen van Afspraken">Tonen van Afspraken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.view.appointments.html" title="7.2.4. Hoe worden afspraken getoond?">Hoe worden afspraken getoond?</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Afspraken maken">Afspraken maken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.html" title="7.6. Beheren van Afspraken">Beheren van Afspraken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Toetsen en toetscombinaties">Toetsen en toetscombinaties</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>Overkoepelend thema: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. De Agenda Componenten">De <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span> Componenten</a></p></li>
 </ul>
 </div>
@@ -179,55 +233,43 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.popup"></a><p class="title"><b>Pop-up</b></p>
-<p>Als u op een afspraak klikt wordt een pop-up geopend. Deze toont de gegevens van de afspraak en de beschikbare functies:</p>
+<a name="ox.appsuite.user.reference.calendar.gui.datepicker"></a><h3 class="title">Datumkiezer</h3>
+<p>De volgende mogelijkheden openen de datumkiezer:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-<p>Knoppen <span class="guibutton"><strong>Bewerken</strong></span>, <span class="guibutton"><strong>Verander status</strong></span>, <span class="guibutton"><strong>Opvolgen</strong></span>, <span class="guibutton"><strong>Verwijderen</strong></span>.</p>
-<p><span class="phrase"><strong>Opmerking: </strong></span> Afhankelijk van de serverconfiguratie zijn de volgende limieten mogelijk van kracht: Sommige knoppen voor afspraken in uw privéagenda worden alleen getoond als u de juiste rechten heeft om de functie uit te voeren. Als u een deelnemer bent kan u een afspraak niet wijzigen of verwijderen. Als u de organisator bent, kan u de status niet wijzigen</p>
-</li>
-<li class="listitem"><p>Als u op het <span class="guibutton"><strong>Acties</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.popup.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> klikt, opent een menu met extra functies.</p></li>
-</ul></div>
-<p>Onder de knoppen wordt de zelfde informatie getoond als in het <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="Detailoverzicht">Detailoverzicht in het <span class="guilabel"><strong>Lijst </strong></span>overzicht</a>.</p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.popup.related"></a><p class="title">Gerelateerde onderwerpen</p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Instructies voor de knoppen en pictogrammen kan u hier vinden:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Wijzigen van de afspraakstatus">Wijzigen van de afspraakstatus</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.2. Een nieuwe vervolgafspraak maken">Een nieuwe vervolgafspraak maken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Afspraken wissen">Afspraken wissen</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Instructies voor de functies in het <span class="guibutton"><strong>Acties</strong></span> menu<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calebdar.gui.popup.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> kan u hier vinden:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Afdrukken van afspraken">Afdrukken van afspraken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Afspraken verplaatsen naar een andere map">Afspraken verplaatsen naar een andere map</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Bewerken van meerdere afspraken in één keer">Bewerken van meerdere afspraken in één keer</a></span>
-            </p></li>
-</ul>
-</div>
-<p>
-      </p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.list"></a><p class="title"><b>Lijst</b></p>
-<p>Toont een lijst met afspraken in de huidige gekozen map. De lijst bevat de volgende items:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Elke dag met afspraken toont een kop met de datum.</p></li>
-<li class="listitem"><p>De volgende details worden getoond voor elke afspraak: datum, tijd, kleur, privéafspraak pictogram, onderwerp en locatie.</p></li>
-<li class="listitem"><p>De tekst boven de lijst bevat de naam van de gekozen map. Het nummer komt overeen met het aantal objecten in de geselecteerde map.</p></li>
-</ul></div>
-<p>De volgende functies zijn beschikbaar:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Als u op een kop klikt,  wordt de eerste afspraak van deze tijdsinterval getoond.</p></li>
-<li class="listitem"><p>Na het klikken op een afspraak wordt de betrokken informatie getoond in het <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="Detailoverzicht">detailoverzicht</a>.</p></li>
-<li class="listitem">
-<p>U kan meerdere afspraken selecteren om deze tegelijk te bewerken. Hiervoor moet u de selectievakken naast de de taken inschakelen door de <span class="guibutton"><strong>Selectievakken</strong></span> optie in te schakelen vanuit het <span class="guibutton"><strong>Beeld</strong></span> drop-down menu in the toolbar. </p>
-<p>U kan de systeemfuncties gebruiken voor het selecteren van meerdere items.</p>
-<p>Om alle afspraken uit de huidige map te selecteren schakelt u het <span class="guibutton"><strong>Selecteer alles</strong></span> selectievak boven de lijst in.</p>
-</li>
-<li class="listitem"><p>Klik op het <span class="guibutton"><strong>Sorteren</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.sort"></a><img src="../../images/appsuite_user_icon_sort.png"></span> bovenaan de lijst, dit opent een menu dat het mogelijk maakt afspraken te sorteren.</p></li>
+<li class="listitem"><p>Als u op de datum in de linkerbovenhoek klikt in het <span class="guilabel"><strong>Dag</strong></span>, <span class="guilabel"><strong>Werkweek</strong></span> of <span class="guilabel"><strong>Week</strong></span> agendaoverzicht.</p></li>
+<li class="listitem"><p>Als u op de datum in de linkerbovenhoek klikt in het planningsoverzicht.</p></li>
+<li class="listitem"><p>Als u op een datuminvoerveld klikt als u een afspraak toevoegt of bewerkt.</p></li>
 </ul></div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.list.related"></a><p class="title">Gerelateerde onderwerpen</p>
+<a name="ox.appsuite.user.reference.calendar.gui.datepicker.entries"></a><p class="title">inhoud</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><span class="guibutton"><strong>Bladeren</strong></span> pictogram<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.datepicker.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span>. Afhankelijk van de geselecteerde tijdsperiode kan u door de maanden of jaren bladeren door op de pictogrammen te klikken.</p></li>
+<li class="listitem"><p>Kop. Toont de huidige maand.</p></li>
+<li class="listitem"><p>Agenda weken en de dagen van de maand. Als u op een dag klikt wordt de datumkiezer gesloten. De gekozen datum wordt gebruikt.</p></li>
+<li class="listitem">
+<p>Als u in de kop op de maandnaam klikt worden de maanden van het huidige jaar getoond.</p>
+<p>Als u klikt op het jaar in de kop, dan wordt deze getoond in een lijst met voorgaande en komende jaren. </p>
+</li>
+</ul>
+</div>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.datepicker.related"></a><p class="title">Zie ook</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>
-              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. Zoeken naar Afspraken">Zoeken naar Afspraken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Bewerken van meerdere afspraken in één keer">Bewerken van meerdere afspraken in één keer</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Dag, Werkweek, Week of Maand overzicht."><span class="guilabel"><strong>Dag</strong></span>, <span class="guilabel"><strong>Werkweek</strong></span>, <span class="guilabel"><strong>Week</strong></span> of <span class="guilabel"><strong>Maand</strong></span> overzicht.</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.create" title="Tonen voor aanmaken of bewerken">Tonen voor aanmaken of bewerken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. Nieuwe afspraken maken">Nieuwe afspraken maken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Toetsen en toetscombinaties">Toetsen en toetscombinaties</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>Overkoepelend thema: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. De Agenda Componenten">De <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span> Componenten</a></p></li>
 </ul>
 </div>
@@ -235,9 +277,113 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.detailview"></a><p class="title"><b>Detailoverzicht</b></p>
-<p>Na het klikken op een afspraak in de lijst, wordt de betrokken informatie getoond in het detailoverzicht met de beschikbare functies:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<a name="ox.appsuite.user.reference.calendar.gui.popup"></a><h3 class="title">Pop-up</h3>
+<p>Als u op een afspraak klikt wordt een pop-up geopend. Deze toont de gegevens van de afspraak en de beschikbare functies:</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.popup.entries"></a><p class="title">inhoud</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>Knoppen <span class="guibutton"><strong>Bewerken</strong></span>, <span class="guibutton"><strong>Verander status</strong></span>, <span class="guibutton"><strong>Opvolgen</strong></span>, <span class="guibutton"><strong>Verwijderen</strong></span>.</p>
+<p><span class="phrase"><strong>Opmerking: </strong></span> Afhankelijk van de serverconfiguratie zijn de volgende limieten mogelijk van kracht: Sommige knoppen voor afspraken in uw privéagenda worden alleen getoond als u de juiste rechten heeft om de functie uit te voeren. Als u een deelnemer bent kan u een afspraak niet wijzigen of verwijderen. Als u de organisator bent, kan u de status niet wijzigen</p>
+</li>
+<li class="listitem"><p>Als u op het <span class="guibutton"><strong>Acties</strong></span> pictogram<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.popup.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> klikt, opent een menu met extra functies.</p></li>
+</ul>
+</div>
+<p>Onder de knoppen wordt de zelfde informatie getoond als in het <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="Detailoverzicht">Detailoverzicht in het <span class="guilabel"><strong>Lijst </strong></span>overzicht</a>.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.popup.related"></a><p class="title">Zie ook</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Dag, Werkweek, Week of Maand overzicht."><span class="guilabel"><strong>Dag</strong></span>, <span class="guilabel"><strong>Werkweek</strong></span>, <span class="guilabel"><strong>Week</strong></span> of <span class="guilabel"><strong>Maand</strong></span> overzicht.</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Wijzigen van de afspraakstatus">Wijzigen van de afspraakstatus</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none">
+<p>Instructies voor de knoppen en pictogrammen</p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Wijzigen van de afspraakstatus">Wijzigen van de afspraakstatus</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.3. Een nieuwe vervolgafspraak maken">Een nieuwe vervolgafspraak maken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Afspraken wissen">Afspraken wissen</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none">
+<p>Instructies voor de functies in het <span class="guibutton"><strong>Acties</strong></span> menu<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calebdar.gui.popup.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span></p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Afdrukken van afspraken">Afdrukken van afspraken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Afspraken verplaatsen naar een andere map">Afspraken verplaatsen naar een andere map</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Bewerken van meerdere afspraken in één keer">Bewerken van meerdere afspraken in één keer</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Overkoepelend thema: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. De Agenda Componenten">De <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span> Componenten</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.calendar.gui.list"></a><h3 class="title">Lijst</h3>
+<p>Toont een lijst van afspraken in de momenteel geselecteerde map.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.list.entries"></a><p class="title">inhoud</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Elke dag met afspraken toont een kop met de datum.</p></li>
+<li class="listitem"><p>De volgende details worden getoond voor elke afspraak: datum, tijd, kleur, persoonlijke afspraak pictogram, onderwerp en locatie.</p></li>
+<li class="listitem"><p>De tekst boven de lijst bevat de naam van de gekozen map. Het nummer komt overeen met het aantal objecten in de geselecteerde map.</p></li>
+</ul>
+</div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.list.functions"></a><p class="title">Functies</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Als u op een kop klikt,  wordt de eerste afspraak van deze tijdsinterval getoond.</p></li>
+<li class="listitem"><p>Na het klikken op een afspraak wordt de betrokken informatie getoond in het <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="Detailoverzicht">detailoverzicht</a>.</p></li>
+<li class="listitem">
+<p>U kan meerdere afspraken selecteren door de <span class="guibutton"><strong>Selectievakken</strong></span> optie in te schakelen vanuit het <span class="guibutton"><strong>Beeld</strong></span> drop-down menu in the toolbar. </p>
+<p>U kan de systeemfuncties gebruiken voor het selecteren van meerdere items.</p>
+<p>Om alle afspraken uit de huidige map te selecteren schakelt u het <span class="guibutton"><strong>Selecteer alles</strong></span> selectievak boven de lijst in.</p>
+</li>
+<li class="listitem"><p>Klik op het <span class="guibutton"><strong>Sorteren</strong></span> pictogram<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.sort"></a><img src="../../images/appsuite_user_icon_sort.png"></span> bovenaan de lijst, dit opent een menu dat het mogelijk maakt afspraken te sorteren.</p></li>
+</ul>
+</div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.list.related"></a><p class="title">Zie ook</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. Zoeken naar Afspraken">Zoeken naar Afspraken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Bewerken van meerdere afspraken in één keer">Bewerken van meerdere afspraken in één keer</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Toetsen en toetscombinaties">Toetsen en toetscombinaties</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Overkoepelend thema: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. De Agenda Componenten">De <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span> Componenten</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.calendar.gui.detailview"></a><h3 class="title">Detailoverzicht</h3>
+<p>Na het klikken op een afspraak in de lijst, wordt de betrokken informatie getoond in het detailoverzicht.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.detailview.entries"></a><p class="title">inhoud</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Knoppen met bewerkfuncties</p></li>
 <li class="listitem"><p>Onderwerp</p></li>
 <li class="listitem"><p>Datum, tijd, tijdzone</p></li>
@@ -277,25 +423,96 @@
 <p>
             </p>
 </li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.detailview.related"></a><p class="title">Gerelateerde onderwerpen</p>
+<a name="ox.appsuite.user.reference.calendar.gui.detailview.related"></a><p class="title">Zie ook</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Instructies voor de knoppen en pictogrammen kan u hier vinden:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Wijzigen van de afspraakstatus">Wijzigen van de afspraakstatus</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Afspraken wissen">Afspraken wissen</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Instructies voor andere acties kan u hier vinden:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Afdrukken van afspraken">Afdrukken van afspraken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Afspraken verplaatsen naar een andere map">Afspraken verplaatsen naar een andere map</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Bewerken van meerdere afspraken in één keer">Bewerken van meerdere afspraken in één keer</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Wijzigen van de afspraakstatus">Wijzigen van de afspraakstatus</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Afspraken wissen">Afspraken wissen</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Afdrukken van afspraken">Afdrukken van afspraken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Afspraken verplaatsen naar een andere map">Afspraken verplaatsen naar een andere map</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Bewerken van meerdere afspraken in één keer">Bewerken van meerdere afspraken in één keer</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Toetsen en toetscombinaties">Toetsen en toetscombinaties</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Overkoepelend thema: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. De Agenda Componenten">De <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span> Componenten</a></p></li>
 </ul>
 </div>
 <p>
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.create"></a><p class="title"><b>Tonen voor aanmaken of bewerken</b></p>
-<p>Als u een nieuwe afspraak maakt of een bestaande afspraak bewerkt worden de volgende elementen getoond op een nieuwe pagina.</p>
+<a name="ox.appsuite.user.reference.calendar.gui.scheduling"></a><h3 class="title">Planningsoverzicht</h3>
+<p>U heeft de volgende mogelijkheden om het planningsoverzicht te openen:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>In de werkbalk: Klik op <span class="guibutton"><strong>Plannen</strong></span></p></li>
+<li class="listitem"><p>Op de aanmaken en wijzigen afspraken pagina: Klik op <span class="guibutton"><strong>Zoek een vrij moment</strong></span></p></li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.scheduling.entries"></a><p class="title">inhoud</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Een invoerveld voor deelnemers en bronnen.</p></li>
+<li class="listitem"><p>Pictogrammen <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.scheduling.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span> om per week te bladeren.</p></li>
+<li class="listitem"><p>Start en einddatum van de geselecteerde periode en de kalenderweek. Als u er op klikt wordt de datumselectie geopend waarmee u een andere periode kan selecteren.</p></li>
+<li class="listitem">
+<p><span class="guibutton"><strong>Opties</strong></span> knop. Als u op deze knop klikt, wordt en menu met meerdere functies geopend.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>Pas de zoomfactor van het agenda overzicht</p></li>
+<li class="listitem"><p>Pas de regelhoogte aan voor het tonen van de deelnemers en bronnen</p></li>
+<li class="listitem"><p>Stel de afspraaksoorten in die getoond moeten worden.</p></li>
+<li class="listitem"><p>Verberg tijden die buiten de werkuren liggen.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem"><p>Een lijst van deelnemers. De volgende informatie wordt getoond voor elke deelnemer: Naam, <span class="guibutton"><strong>Verwijderen</strong></span> pictogram <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.scheduling.participant.remove"></a><img src="../../images/appsuite_user_icon_trash.png"></span>afspraken</p></li>
+<li class="listitem"><p>Het agendaoverzicht van de geselecteerde periode.</p></li>
+<li class="listitem"><p>Schuifbalk. De schuifbalk maakt het mogelijk om een deel van de periode te laten zien.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Opslaan als distributielijst</strong></span> knop. Slaat de toegevoegde deelnemers op in een nieuwe distributielijst.</p></li>
+</ul>
+</div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.sheduling.related"></a><p class="title">Zie ook</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="Datumkiezer">Datumkiezer</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.2. Plannen met meerdere deelnemers">Plannen met meerdere deelnemers</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. Nieuwe afspraken maken">Nieuwe afspraken maken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Toetsen en toetscombinaties">Toetsen en toetscombinaties</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Overkoepelend thema: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. De Agenda Componenten">De <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span> Componenten</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.calendar.gui.create"></a><h3 class="title">Tonen voor aanmaken of bewerken</h3>
+<p>Dit overzicht wordt gebruikt als u een nieuw afspraak maakt of een bestaande wijzigt.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.create.entries"></a><p class="title">inhoud</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p>Afhankelijk van de instellingen van de groupware kunnen elementen zowel bovenaan als onderaan het scherm staan.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
@@ -309,7 +526,7 @@
 <li class="listitem"><p><span class="guibutton"><strong>Onderwerp</strong></span> invoerveld. Geef in dit veld het onderwerp. Het onderwerp wordt getoond als de titel van de afspraak in de overzichten.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Locatie</strong></span> knop. Hier kan u de locatie voor de afspraak opgeven.</p></li>
 <li class="listitem">
-<p><span class="guibutton"><strong>Start op</strong></span> en <span class="guibutton"><strong>Eindigt op</strong></span> invoervelden. Stelt de start- en einddatum in van de afspraak. Als u er op klikt wordt een dialoog voor datumselectie getoond. </p>
+<p><span class="guibutton"><strong>Start op</strong></span> en <span class="guibutton"><strong>Eindigt op</strong></span> invoervelden. Stelt de start- en einddatum in van de afspraak. Als u er op klikt wordt de datumkiezer getoond. </p>
 <p>Als het <span class="guibutton"><strong>Gehele dag</strong></span> selectievak  is uitgeschakeld kan u de start- en eindtijd opgeven.</p>
 <p>Als u op de tijdzone knop naast de tijd klikt wordt de tijd getoond in andere tijdzones. U kan veelgebruikte tijdzones <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. Favoriete tijdzones beheren">als favorieten</a> opgeven in de agendainstellingen.</p>
 </li>
@@ -323,14 +540,25 @@
 <li class="listitem"><p><span class="guibutton"><strong>Privé</strong></span> selectievak. Als u dit vak selecteert zien anderen het onderwerp en de omschrijving van de afspraak niet.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Deelnemer/bron toevoegen</strong></span> invoerveld. Geef de namen van de deelnemers die deel gaan nemen in de afspraak in dit veld.Als deelnemers een extra e-mailuitnodiging moeten ontvangen voor de afspraak schakelt u <span class="guibutton"><strong>Alle deelnemers informeren via e-mail</strong></span> in.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Bijlagen toevoegen</strong></span> knop onder de <span class="guibutton"><strong>Bijlagen</strong></span>. Klik op deze knop om één of meerdere bestanden toe te voegen aan de contactgegevens.</p></li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.create.related"></a><p class="title">Gerelateerde onderwerpen</p>
+<a name="ox.appsuite.user.reference.calendar.gui.create.related"></a><p class="title">Zie ook</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Dit overzicht wordt gebruikt voor de volgende acties:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. Nieuwe afspraken maken">Nieuwe afspraken maken</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="Datumkiezer">Datumkiezer</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. Nieuwe afspraken maken">Nieuwe afspraken maken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Afspraken bewerken">Afspraken bewerken</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Toetsen en toetscombinaties">Toetsen en toetscombinaties</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>Overkoepelend thema: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. De Agenda Componenten">De <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span> Componenten</a></p></li>
 </ul>
 </div>

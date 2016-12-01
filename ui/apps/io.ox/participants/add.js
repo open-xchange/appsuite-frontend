@@ -18,8 +18,12 @@ define('io.ox/participants/add', [
     'io.ox/core/tk/typeahead',
     'io.ox/mail/util',
     'io.ox/contacts/util',
-    'gettext!io.ox/core'
-], function (ext, pModel, pViews, Typeahead, util, contactsUtil, gt) {
+    'io.ox/core/util',
+    'io.ox/core/yell',
+    'gettext!io.ox/core',
+    // need jquery-ui for scrollParent
+    'static/3rd.party/jquery-ui.min.js'
+], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, yell, gt) {
 
     'use strict';
 
@@ -32,12 +36,13 @@ define('io.ox/participants/add', [
     ext.point('io.ox/participants/add/autoCompleteItem').extend({
         id: 'view',
         index: 100,
-        draw: function (participant) {
+        draw: function (participant, options) {
             var pview = new pViews.ParticipantEntryView({
                 model: participant,
                 closeButton: false,
                 halo: false,
-                field: true
+                field: true,
+                isMail: options.isMail
             });
             this.append(pview.render().$el);
         }
@@ -57,28 +62,32 @@ define('io.ox/participants/add', [
         },
 
         getInvalid: function (list) {
-
             var blacklist = this.options.blacklist;
-
-            return _(list).filter(function (item) {
-                // string, data, or model
-                if (_.isString(item)) item = { email1: item };
-                else if (item instanceof Backbone.Model) item = item.toJSON();
-                var address = contactsUtil.getMail(item);
+            return _(getAddresses(list)).filter(function (address) {
                 return !!blacklist[address];
             });
         },
 
         yell: function (list, invalid) {
-            var message = gt.format(
-              //#. %1$d a list of email addresses
-              //#, c-format
-              gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
-              gt.noI18n(invalid.join(', '))
-            );
-            require('io.ox/core/yell')('warning', message);
+            yell('warning', gt.format(
+                //#. %1$d a list of email addresses
+                //#, c-format
+                gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
+                gt.noI18n(invalid.join(', '))
+            ));
         }
     };
+
+    function getAddresses(list) {
+        return _(list).map(getAddress);
+    }
+
+    function getAddress(item) {
+        // string, data, or model
+        if (_.isString(item)) item = { email1: item };
+        else if (item instanceof Backbone.Model) item = item.toJSON();
+        return contactsUtil.getMail(item);
+    }
 
     var AddParticipantView = Backbone.View.extend({
 
@@ -119,12 +128,19 @@ define('io.ox/participants/add', [
                     return !col.get(model);
                 });
             }, this);
+
+            // ensure a fixed scroll position when adding participants/members
+            var scrollIntoView = _.debounce(function () {
+                this.typeahead.el.scrollIntoView();
+            }.bind(this), 0);
+
+            this.collection.on('render', scrollIntoView);
         },
 
         keyDown: function (e) {
             if (e.which !== 13) return;
             var val = this.typeahead.$el.typeahead('val'),
-                list = val.match(/('[^']*'|"[^"]*"|[^"',;]+)+/g),
+                list = coreUtil.getAddresses(val),
                 participants = [];
             // split based on comma or semi-colon as delimiter
             _.each(list, function (value) {
@@ -144,12 +160,25 @@ define('io.ox/participants/add', [
 
         addParticipant: function (e, data, value) {
             var list = [].concat(data),
+                // validate is just used to check against blacklist
                 error = this.validate ? this.validate(list) : false;
             // abort when blacklisted where found
             if (error) return;
+            // now really validate address
+            list = this.getValidAddresses(list);
             this.collection.add(list);
             // clean typeahad input
             if (value) this.typeahead.$el.typeahead('val', '');
+        },
+
+        getValidAddresses: function (list) {
+            return _(list).filter(function (item) {
+                var address = getAddress(item);
+                if (coreUtil.isValidMailAddress(address)) return true;
+                //#. %1$s is an email address
+                yell('error', gt('Cannot add participant/member with an invalid mail address: %1$s', address));
+                return false;
+            });
         },
 
         render: function () {
@@ -160,6 +189,19 @@ define('io.ox/participants/add', [
                 this.typeahead.$el.attr({ id: guid }).addClass('add-participant')
             );
             this.typeahead.render();
+            if (this.options.scrollIntoView) {
+                var $el = this.$el;
+                this.typeahead.on('typeahead-custom:dropdown-rendered', function () {
+                    var target = $el.find('.tt-dropdown-menu'),
+                        container = target.scrollParent(),
+                        pos = target.offset().top - container.offset().top;
+                    if (!target.is(':visible')) return;
+                    if ((pos < 0) || (pos + target.height() > container.height())) {
+                        // scroll to Node, leave 16px offset
+                        container.scrollTop(container.scrollTop() + pos - 16);
+                    }
+                });
+            }
             return this;
         }
     });

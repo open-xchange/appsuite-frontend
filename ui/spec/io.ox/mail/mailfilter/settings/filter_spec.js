@@ -139,7 +139,7 @@ define([
             expect(this.node.find('li[data-id="2"]').hasClass('disabled')).to.be.true;
             expect(this.node.find('li[data-id="3"]').hasClass('editable')).to.be.false;
             expect(this.node.find('li a.drag-handle')).to.have.length(4);
-            expect(this.node.find('li .widget-title')).to.have.length(4);
+            expect(this.node.find('li.settings-list-item')).to.have.length(4);
             expect(this.node.find('li [data-action="edit"]')).to.have.length(2);
             expect(this.node.find('li [data-action="edit-vacation"]')).to.have.length(1);
             expect(this.node.find('li [data-action="toggle"]')).to.have.length(3);
@@ -181,7 +181,7 @@ define([
             expect(this.node.find('h1')).to.have.length(1);
             expect(this.node.find('.btn-primary[data-action="add"]')).to.have.length(1);
             expect(this.node.find('h1')).to.have.length(1);
-            expect(this.node.find('ol div').text()).to.equal(gt('There is no rule defined'));
+            expect(this.node.find('div.hint').text()).to.equal(gt('There is no rule defined'));
 
         });
 

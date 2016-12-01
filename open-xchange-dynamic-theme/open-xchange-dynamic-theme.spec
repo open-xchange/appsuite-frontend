@@ -1,6 +1,6 @@
 Name:           open-xchange-dynamic-theme
 Version:        @OXVERSION@
-%define         ox_release 16
+%define         ox_release 5
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -58,30 +58,18 @@ if [ -x %{update} ]; then %{update} --later; fi
 %config(noreplace) /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
 
 %changelog
-* Fri Nov 18 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-11-21 (3731)
-* Mon Nov 07 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-11-07 (3678)
-* Wed Oct 19 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-10-24 (3630)
-* Thu Oct 06 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-10-10 (3597)
-* Wed Sep 28 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-09-27 (3590)
-* Mon Sep 19 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-09-26 (3572)
-* Thu Sep 08 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-09-14 (3562)
-* Mon Sep 05 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-09-12 (3547)
-* Tue Aug 23 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-08-29 (3522)
-* Mon Aug 15 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-08-16 (3513)
-* Mon Aug 08 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-08-15 (3490)
-* Fri Jul 22 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2016-08-01 (3467)
+* Tue Nov 29 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
+Second release candidate for 7.8.3 release
+* Thu Nov 24 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
+First release candidate for 7.8.3 release
+* Tue Nov 15 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
+Third preview for 7.8.3 release
+* Sat Oct 29 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
+Second preview for 7.8.3 release
+* Fri Oct 14 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
+First preview of 7.8.3 release
+* Tue Sep 06 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
+prepare for 7.8.3 release
 * Tue Jul 12 2016 Viktor Pracht <viktor.pracht@open-xchange.com>
 Second candidate for 7.8.2 release
 * Wed Jul 06 2016 Viktor Pracht <viktor.pracht@open-xchange.com>

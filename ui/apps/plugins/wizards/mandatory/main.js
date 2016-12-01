@@ -34,8 +34,7 @@ define.async('plugins/wizards/mandatory/main', [
             user.set('last_name');
 
             var tour = new Tour(),
-                def = $.Deferred(),
-                tzModel = settings.createModel(Backbone.Model);
+                def = $.Deferred();
 
             tour.on('stop', function (reason) {
                 if (reason && reason.cancel) {
@@ -52,7 +51,7 @@ define.async('plugins/wizards/mandatory/main', [
                 .mandatory()
                 .title(gt.format(gt('Welcome to %s'), ox.serverConfig.productName))
                 .content(gt('Before you can continue using the product, you have to enter some basic information. It will take less than a minute.'))
-                .footer($('<button class="btn wizard-close pull-left" tabindex="1">')
+                .footer($('<button class="btn wizard-close pull-left">')
                     .text(gt('Back to sign in'))
                     .on('click', function () {
                         def.reject();
@@ -91,7 +90,7 @@ define.async('plugins/wizards/mandatory/main', [
             .step()
                 .mandatory()
                 .title(gt('Your timezone'))
-                .content(new TimezonePicker({ name: 'timezone', model: tzModel }).render().$el)
+                .content(new TimezonePicker({ name: 'timezone', model: settings }).render().$el)
                 .end()
             .start();
 

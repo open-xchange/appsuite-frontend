@@ -18,9 +18,10 @@ define.async('io.ox/mail/compose/model', [
     'io.ox/core/api/account',
     'io.ox/core/attachments/backbone',
     'io.ox/mail/compose/signatures',
+    'io.ox/core/strings',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (mailAPI, mailUtil, capabilities, accountAPI, Attachments, signatureUtil, settings, gt) {
+], function (mailAPI, mailUtil, capabilities, accountAPI, Attachments, signatureUtil, strings, settings, gt) {
 
     'use strict';
 
@@ -41,8 +42,8 @@ define.async('io.ox/mail/compose/model', [
                 autosavedAsDraft: false,
                 // Autodismiss confirmation dialog
                 autoDismiss: false,
-                preferredEditorMode: settings.get('messageFormat', 'html'),
-                editorMode: settings.get('messageFormat', 'html'),
+                preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
+                editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
                 attachments: new Attachments.Collection(),
                 folder_id: 'default0/INBOX',
                 initial: true,
@@ -207,6 +208,10 @@ define.async('io.ox/mail/compose/model', [
         },
 
         getFailSave: function () {
+            if (!this.dirty()) return false;
+            var content = this.get('attachments').at(0).get('content');
+            // Fails silently if content size is over 512kb
+            if (strings.size(content) > 524288) return false;
             this.trigger('needsync');
             var mail = this.toJSON();
 

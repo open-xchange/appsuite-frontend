@@ -74,12 +74,15 @@ define('io.ox/core/relogin', [
         if (!ox.online) return;
 
         // don't ask anonymous users
-        if (ox.user === 'anonymous') {
+        if (capabilities.has('guest && anonymous')) {
             showSessionLostDialog(error);
             return;
         }
 
         if (!pending) {
+
+            var $blocker = $('#background-loader');
+            $blocker.css('z-index', 0);
 
             // enqueue last request
             queue = (request && deferred) ? [{ request: request, deferred: deferred }] : [];
@@ -104,6 +107,7 @@ define('io.ox/core/relogin', [
                 .on('cancel', function () {
                     ox.trigger('relogin:cancel');
                     gotoLogoutLocation();
+                    $blocker.css('z-index', '');
                 })
                 .on('relogin', function () {
                     var self = this.busy();
@@ -130,6 +134,7 @@ define('io.ox/core/relogin', [
                             // set flag
                             pending = false;
                             ox.trigger('relogin:success');
+                            $blocker.css('z-index', '');
                         },
                         function fail(e) {
                             // eloquentify standard error message ;-)

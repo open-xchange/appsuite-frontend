@@ -19,8 +19,9 @@ define('io.ox/core/settings/user', [
     'io.ox/core/tk/dialogs',
     'io.ox/contacts/util',
     'io.ox/core/yell',
+    'io.ox/core/a11y',
     'gettext!io.ox/contacts'
-], function (ext, api, contactModel, ViewForm, dialogs, util, yell, gt) {
+], function (ext, api, contactModel, ViewForm, dialogs, util, yell, a11y, gt) {
 
     'use strict';
 
@@ -42,18 +43,13 @@ define('io.ox/core/settings/user', [
                 maximize: true,
                 async: true
             })
-            .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
-            .addButton('discard', gt('Discard'), 'discard', { tabIndex: 1 });
+            .addPrimaryButton('save', gt('Save'), 'save')
+            .addButton('discard', gt('Discard'), 'discard');
 
             dialog.getContentControls()
                 .prepend(
                     $('<label class="checkbox-inline pull-left">').append(
-                        $('<input>')
-                            .addClass('toggle-check')
-                            .attr({
-                                type: 'checkbox',
-                                tabindex: 1
-                            })
+                        $('<input type="checkbox" class="toggle-check">')
                             .on('change', function (e) {
                                 e.preventDefault();
                                 view.toggle.call(view.$el);
@@ -75,6 +71,7 @@ define('io.ox/core/settings/user', [
                         var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user');
                         view = new UserEdit({ model: user });
                         $node.append(view.render().$el);
+                        a11y.getTabbable($node).first().focus();
 
                         user.on('change:first_name change:last_name', function () {
                             user.set('display_name', util.getFullName(user.toJSON(), { validate: true }));

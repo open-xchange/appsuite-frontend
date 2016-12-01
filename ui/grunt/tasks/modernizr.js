@@ -42,7 +42,8 @@ module.exports = function (grunt) {
                     'csstransforms3d',
                     'filereader',
                     'localstorage',
-                    'websqldatabase'
+                    'websqldatabase',
+                    'websockets'
                 ],
                 options: [
                     'prefixed',

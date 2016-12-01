@@ -12,6 +12,10 @@
  */
 
 .sr-only {
+    // make a11y plugin contrast warning happy
+    color: #000;
+    background-color: #fff;
+
     // avoid selection/copy of sr-only elements
     .user-select(none);
 }

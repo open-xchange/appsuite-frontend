@@ -59,9 +59,9 @@ define('io.ox/participants/views', [
             this.$el.append(
                 this.nodes.$img = $('<div>'),
                 this.nodes.$text = $('<div class="participant-name">'),
-                $('<div class="participant-email">').append(this.nodes.$mail = this.options.halo ? $('<a>') : $('<span>')),
-                $('<div class="extra-decorator">').append(this.nodes.$extra = $('<span>')),
-                $('<a href="#" class="remove" role="button" tabindex="1">').append(
+                this.options.hideMail ? '' : $('<div class="participant-email">').append(this.nodes.$mail = this.options.halo ? $('<a>') : $('<span>')),
+                this.options.hideMail ? '' : $('<div class="extra-decorator">').append(this.nodes.$extra = $('<span>')),
+                $('<a href="#" class="remove" role="button">').append(
                     $('<div class="icon">').append(
                         $('<i class="fa fa-trash-o" aria-hidden="true">'),
                         $('<span class="sr-only">').text(gt('Remove contact') + ' ' + this.model.getDisplayName())
@@ -73,14 +73,20 @@ define('io.ox/participants/views', [
             this.setDisplayName();
             this.setTypeStyle();
             this.options.customize.call(this);
+            this.trigger('render');
             return this;
         },
 
         setDisplayName: function () {
-            util.renderPersonalName({
-                $el: this.nodes.$text,
-                name: this.model.getDisplayName()
-            }, this.model.toJSON());
+            var options = {
+                $el: this.nodes.$text
+            };
+            if (this.options.asHtml) {
+                options.html = this.model.getDisplayName({ asHtml: true, isMail: this.options.isMail });
+            } else {
+                options.name = this.model.getDisplayName({ asHtml: false, isMail: this.options.isMail });
+            }
+            util.renderPersonalName(options, this.model.toJSON());
         },
 
         setCustomImage: function () {
@@ -92,15 +98,17 @@ define('io.ox/participants/views', [
                 data,
                 { width: 54, height: 54 }
             );
-            this.nodes.$img.addClass('participant-image ' + (this.IMG_CSS[parseInt(this.model.get('type'), 10)] || ''));
+            this.nodes.$img.attr('aria-hidden', true).addClass('participant-image ' + (this.IMG_CSS[parseInt(this.model.get('type'), 10)] || ''));
         },
 
         setRows: function (mail, extra) {
-            extra = extra || this.model.getTypeString() || '';
-            this.nodes.$mail.text(gt.noI18n(mail));
-            this.nodes.$extra.text(gt.noI18n(extra));
-            if (mail && extra) {
-                this.$el.addClass('three-rows');
+            if (!this.options.hideMail) {
+                extra = extra || this.model.getTypeString() || '';
+                this.nodes.$mail.text(gt.noI18n(mail));
+                this.nodes.$extra.text(gt.noI18n(extra));
+                if (mail && extra) {
+                    this.$el.addClass('three-rows');
+                }
             }
         },
 
@@ -141,20 +149,19 @@ define('io.ox/participants/views', [
 
                     if (mail && this.options.halo) {
                         this.nodes.$mail
-                            .attr({ href: '#', tabindex: '1' })
+                            .attr({ href: '#' })
                             .data({ email1: mail })
                             .addClass('halo-link');
                     }
                     break;
                 case 3:
-                    if (this.options.halo) {
+                    if (this.options.halo && !this.options.hideMail) {
                         var data = this.model.toJSON();
                         data.callbacks = {};
                         if (this.options.baton && this.options.baton.callbacks) {
                             data.callbacks = this.options.baton.callbacks;
                         }
-                        var link = $('<a>')
-                            .attr({ href: '#', tabindex: '1' })
+                        var link = $('<a href="#">')
                             .data(data)
                             .addClass('halo-resource-link');
                         this.nodes.$extra.replaceWith(link);
@@ -188,10 +195,12 @@ define('io.ox/participants/views', [
         initialize: function (options) {
             this.options = options;
             this.listenTo(this.collection, 'add', function (model) {
+                this.renderLabel();
                 this.renderEmptyLabel();
                 this.renderParticipant(model);
             });
             this.listenTo(this.collection, 'remove', function () {
+                this.renderLabel();
                 this.renderEmptyLabel();
             });
             this.listenTo(this.collection, 'reset', function () {
@@ -204,33 +213,50 @@ define('io.ox/participants/views', [
         render: function () {
             this.$el.append(
                 $('<fieldset>').append(
-                    $('<legend>').text(this.options.label || gt('Participants')).addClass(this.options.labelClass || ''),
+                    $('<legend>').addClass(this.options.labelClass || ''),
                     this.$ul = $('<ul class="list-unstyled">')
                 )
             );
-            return this.renderAll();
+            this.renderAll();
+            return this;
+        },
+
+        renderLabel: function () {
+            var count = this.collection.length,
+                label = this.options.label || gt('Participants (%1$d)', count);
+            this.$('fieldset > legend').text(label);
         },
 
         renderParticipant: function (participant) {
-            var self = this;
+
             var view = new ParticipantEntryView({
                 tagName: 'li',
                 model: participant,
-                baton: self.options.baton,
-                halo: self.options.halo !== undefined ? self.options.halo : true,
-                closeButton: true
-            }).render().$el.addClass(self.options.entryClass || 'col-xs-12 col-sm-6');
+                baton: this.options.baton,
+                halo: this.options.halo !== undefined ? this.options.halo : true,
+                closeButton: true,
+                hideMail: this.options.hideMail,
+                asHtml: this.options.asHtml,
+                isMail: this.options.isMail
+            });
+
+            view.on('render', function () {
+                this.collection.trigger('render');
+            }.bind(this));
+
+            view.render().$el.addClass(this.options.entryClass || 'col-xs-12 col-sm-6');
 
             // bring organizer up
-            if (participant.get('id') === self.options.baton.model.get('organizerId')) {
-                self.$ul.prepend(view);
+            if (participant.get('id') === this.options.baton.model.get('organizerId')) {
+                this.$ul.prepend(view.$el);
             } else {
-                self.$ul.append(view);
+                this.$ul.append(view.$el);
             }
         },
 
         renderAll: function () {
             var self = this;
+            this.renderLabel();
             this.renderEmptyLabel();
             this.collection.each(function (model) {
                 self.renderParticipant(model);
@@ -239,6 +265,9 @@ define('io.ox/participants/views', [
         },
 
         renderEmptyLabel: function () {
+            if (this.options.noEmptyLabel) {
+                return;
+            }
             if (this.collection.length === 0) {
                 this.$ul.append(this.$empty);
             } else {

@@ -56,7 +56,7 @@ define('io.ox/tours/intro', [
             .end()
         .step()
             .title(gt('The New objects icon'))
-            .content(gt('The New objects icon shows the number of unread E-Mails or other notifications. If clicking the icon, the info area opens.'))
+            .content(gt('The New objects icon shows the number of appointment reminders or other notifications. If clicking the icon, the info area opens.'))
             .hotspot('#io-ox-notifications-icon')
             .referTo('#io-ox-notifications')
             .on('before:show', function () { notifications.show(); $('#io-ox-notifications').show(); })

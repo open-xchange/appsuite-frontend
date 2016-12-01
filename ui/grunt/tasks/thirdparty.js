@@ -47,7 +47,7 @@ module.exports = function (grunt) {
                     {
                         // static lib
                         expand: true,
-                        src: ['jquery-ui.min.js', 'bootstrap-combobox.js'],
+                        src: ['jquery-ui.min.js', 'bootstrap-combobox.js', 'socket.io.js'],
                         cwd: 'lib/',
                         dest: 'build/static/3rd.party/'
                     },

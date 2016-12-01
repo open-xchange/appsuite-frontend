@@ -33,10 +33,10 @@ define('io.ox/core/tk/tokenfield', [
         delimiter = delimiter || this._firstDelimiter;
         beautify = (typeof beautify !== 'undefined' && beautify !== null) ? beautify : this.options.beautify;
 
-        var separator = delimiter + (beautify && delimiter !== ' ' ? ' ' : '');
+        var separator = delimiter + (beautify && delimiter !== ' ' ? ' ' : ''), self = this;
         return $.map(this.getTokens(active), function (token) {
             if (token.model) {
-                var displayname = token.model.getDisplayName(),
+                var displayname = token.model.getDisplayName({ isMail: self.options.isMail }),
                     email = token.model.getEmail ? token.model.getEmail() : undefined;
                 // make sure the displayname contains no outer quotes
                 return displayname === email ? email : '"' + util.removeQuotes(displayname) + '" <' + email + '>';
@@ -56,8 +56,9 @@ define('io.ox/core/tk/tokenfield', [
 
         if (typeof tokens === 'string') {
             if (this._delimiters.length) {
-                // Split based on comma or semi-colon as delimiter whilst ignoring comma in quotes
-                tokens = tokens.match(/('[^']*'|"[^"]*"|[^"',;]+)+/g);
+                // Split at delimiter; ignore delimiters in quotes
+                // delimiters are: comma, semi-colon, tab, newline
+                tokens = util.getAddresses(tokens);
             } else {
                 tokens = [tokens];
             }
@@ -90,7 +91,7 @@ define('io.ox/core/tk/tokenfield', [
                         return {
                             value: model.getTarget({ fallback: true }),
                             // fallback when firstname and lastname are empty strings
-                            label: model.getDisplayName().trim() || model.getEmail(),
+                            label: model.getDisplayName({ isMail: options.isMail }).trim() || model.getEmail(),
                             model: model
                         };
                     });
@@ -122,7 +123,7 @@ define('io.ox/core/tk/tokenfield', [
                     // add contact picture
                     $(this).prepend(
                         contactAPI.pictureHalo(
-                            $('<div class="contact-image">'),
+                            $('<div class="contact-image" aria-hidden="true">'),
                             model.toJSON(),
                             { width: 16, height: 16, scaleType: 'contain' }
                         )
@@ -137,7 +138,8 @@ define('io.ox/core/tk/tokenfield', [
                     var pview = new pViews.ParticipantEntryView({
                         model: data.model,
                         closeButton: false,
-                        halo: false
+                        halo: false,
+                        isMail: options.isMail
                     });
                     this.append(pview.render().$el);
                 }
@@ -160,8 +162,9 @@ define('io.ox/core/tk/tokenfield', [
             // lock for redraw action
             this.redrawLock = false;
 
-            // 100 to be not perceivable for the user
-            this.listenTo(this.collection, 'reset change', _.throttle(self.redrawTokens.bind(self), 100));
+            this.listenTo(this.collection, 'reset', function () {
+                self.redrawTokens();
+            });
         },
 
         dispose: function () {
@@ -213,12 +216,12 @@ define('io.ox/core/tk/tokenfield', [
                 var numberOfResults = dropdown.find('.tt-suggestions').children().length,
                     message;
 
-                if (numberOfResults === 0) message = gt('There are no matching autocomplete entries for this query.');
+                if (numberOfResults === 0) message = gt('No autocomplete entries found');
                 if (!message) {
                     message = gt.format(
                         //#. %1$d is the number of search results in the autocomplete field
                         //#, c-format
-                        gt.ngettext('There is one matching autocomplete entry for this query.', 'There are %1$d matching autocomplete entries for this query.', numberOfResults),
+                        gt.ngettext('One autocomplete entry found', '%1$d autocomplete entries found', numberOfResults),
                         gt.noI18n(numberOfResults)
                     );
                 }
@@ -334,22 +337,23 @@ define('io.ox/core/tk/tokenfield', [
                     if (e.attrs) {
                         var model = e.attrs.model || self.getModelByCID(e.attrs.value),
                             node = $(e.relatedTarget),
-                            label = node.find('.token-label'),
-                            token = model.get('token'),
-                            title = token.label;
-
-                        if (token.label !== token.value) {
-                            title = token.label ? token.label + ' <' + token.value + '>' : token.value;
-                        }
-
+                            label = node.find('.token-label');
                         // remove wrongly calculated max-width
                         if (label.css('max-width') === '0px') label.css('max-width', 'none');
-                        // a11y: set label (title is not read on div elements but needed for tooltip to function)
-                        node.attr({
-                            'aria-label': title + gt(' press backspace to remove this token'),
-                            'title': title
-                        });
 
+                        if (_.device('smartphone') && label.css('max-width') !== 'none') {
+                            // subtract size of right-aligned control (mail compose).
+                            label.css('max-width', label.width() - 16 + 'px');
+                        }
+                        // a11y: set title
+                        node.attr('title', function () {
+                            var token = model.get('token'),
+                                title = token.label;
+                            if (token.label !== token.value) {
+                                title = token.label ? token.label + ' <' + token.value + '>' : token.value;
+                            }
+                            return title;
+                        });
                         // customize token
                         ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e);
                     }
@@ -409,7 +413,8 @@ define('io.ox/core/tk/tokenfield', [
                     allowEditing: o.allowEditing,
                     typeahead: self.typeaheadOptions,
                     html: this.options.html || false,
-                    inputType: this.options.inputtype || 'email'
+                    inputType: this.options.inputtype || 'email',
+                    isMail: o.isMail
                 });
 
             this.register();
@@ -441,6 +446,22 @@ define('io.ox/core/tk/tokenfield', [
                     this.$menu.css({ left: left, width: width }).show();
                 };
             }
+
+            // custom callback function
+            this.hiddenapi.input._callbacks.enterKeyed.sync[0] = function onEnterKeyed(type, $e) {
+                var cursorDatum = this.dropdown.getDatumForCursor(),
+                    topSuggestionDatum = this.dropdown.getDatumForTopSuggestion(),
+                    hint = this.input.getHint();
+
+                // if the hint is not empty the user is just hovering over the cursorDatum and has not really selected it. Use topSuggestion (the hint value) instead.See Bug 48542
+                if (cursorDatum && _.isEmpty(hint)) {
+                    this._select(cursorDatum);
+                    $e.preventDefault();
+                } else if (this.autoselect && topSuggestionDatum) {
+                    this._select(topSuggestionDatum);
+                    $e.preventDefault();
+                }
+            }.bind(this.hiddenapi);
 
             // workaround: register handler for delayed autoselect
             if (this.options.delayedautoselect) {
@@ -509,7 +530,7 @@ define('io.ox/core/tk/tokenfield', [
                 }
             }).on('keydown', function (e) {
                 //Remove on cut
-                if ((e.ctrlKey || e.metaKey) && e.keyCode === 88) {
+                if ((e.ctrlKey || e.metaKey) && e.which === 88) {
                     $(this).find('.token.active').each(function () {
                         self.collection.remove($(this).data().attrs.model);
                     });
@@ -525,11 +546,11 @@ define('io.ox/core/tk/tokenfield', [
         },
 
         redrawTokens: function () {
-            var tokens = [];
+            var tokens = [], self = this;
             this.redrawLock = true;
             this.collection.each(function (model) {
                 tokens.push({
-                    label: model.getDisplayName(),
+                    label: model.getDisplayName({ isMail: self.options.isMail }),
                     value: model.cid,
                     model: model
                 });

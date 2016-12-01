@@ -159,8 +159,8 @@ define('io.ox/mail/compose/names', [
                     this.view = new EditRealNamesView({ collection: new Collection(list), el: this.getContentNode().get(0) });
                     this.view.render();
                 })
-                .addPrimaryButton('save', gt('Save'), 'save', { tabindex: 1 })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabindex: 1 })
+                .addPrimaryButton('save', gt('Save'), 'save')
+                .addButton('cancel', gt('Cancel'), 'cancel')
                 .on('save', function () {
                     this.view.save();
                     this.view = null;

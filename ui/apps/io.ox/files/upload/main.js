@@ -77,38 +77,23 @@ define('io.ox/files/upload/main', [
             currentSize = 0, //number of bytes, which are currently uploaded
             startTime, // time stamp, when the first file started uploading
             uploadCollection = new UploadCollection(),
-            $el, bottomToolbar, mainView, win, //some dom nodes needed for the view
+            $el, bottomToolbar, mainView, //some dom nodes needed for the view
             self = this,
             api = filesAPI;
 
-        this.update = upload.createQueue({
-            start: function () {
-                win.busy(0);
-            },
-            progress: function (item, position, files) {
-                var pct = position / files.length;
-                console.log(pct);
-                win.busy(pct, 0);
-                return api.versions.upload({
-                    file: item.file,
-                    //                 id: app.currentFile.id,
-                    //                 folder: app.currentFile.folder_id,
-                    timestamp: _.then()
-                })
-                .progress(function (e) {
-                    var sub = e.loaded / e.total;
-                    win.busy(pct + sub / files.length, sub);
-                    console.log(pct + sub / files.length, sub);
-                }).fail(function (e) {
-                    if (e && e.data && e.data.custom) {
-                        notifications.yell(e.data.custom.type, e.data.custom.text);
-                    }
-                });
-            },
-            stop: function () {
-                win.idle();
-            }
+        api.on('add:imp_version', function (title) {
+            notifications.yell('info', gt('A new version for "%1$s" has been added.', title));
         });
+
+        this.calculateTotalSíze = function () {
+            //update the total size for time estimation
+            if (!totalSize) {
+                uploadCollection.each(function (model) {
+                    totalSize += model.get('file').size;
+                });
+            }
+        };
+
         this.changed = function (item, position, files) {
             var uploadFiles = files.slice(uploadCollection.length, files.length)
                 .map(function (fileContainer) {
@@ -121,12 +106,9 @@ define('io.ox/files/upload/main', [
             }
             uploadCollection.add(uploadFiles);
 
-            //update the total size for time estimation
-            totalSize = 0;
-            uploadCollection.each(function (model) {
-                totalSize += model.get('file').size;
-            });
+            this.calculateTotalSíze();
         };
+
         this.progress = function (item, position, files) {
             var model = uploadCollection.at(position),
                 request = api.upload(
@@ -153,7 +135,7 @@ define('io.ox/files/upload/main', [
                 })
                 .fail(function (e) {
                     model.set({ abort: true });
-                    remove(position, model);
+                    remove(model);
 
                     if (e && e.data && e.data.custom && e.error !== '0 abort') {
                         notifications.yell(e.data.custom.type, e.data.custom.text);
@@ -169,6 +151,7 @@ define('io.ox/files/upload/main', [
             var requests = uploadCollection.map(function (file) {
                 return file.get('request');
             });
+            totalSize = 0;
             api.trigger('stop:upload', requests);
             api.trigger('refresh.all');
             totalProgress = 0;
@@ -195,20 +178,24 @@ define('io.ox/files/upload/main', [
         }
         this.getEstimatedTime = getEstimatedTime;
 
-        this.abort = function (index) {
-            var model = uploadCollection.at(index),
-                request = model.get('request');
-
-            if (model !== undefined) {
-                if (request === null) {
-                    //remove the model from the list
-                    model.set({ abort: true });
-                    remove(index, model);
-                } else if (request.state() === 'pending') {
-                    //abort the upload process
-                    request.abort();
-                }
-            }
+        this.abort = function (cid) {
+            uploadCollection.chain()
+                .filter(function (model) {
+                    return (cid === undefined) || (model.cid === cid);
+                })
+                .each(function (model) {
+                    var request = model.get('request');
+                    if (model !== undefined) {
+                        if (request === null) {
+                            //remove the model from the list
+                            model.set({ abort: true });
+                            remove(model);
+                        } else if (request.state() === 'pending') {
+                            //abort the upload process
+                            request.abort();
+                        }
+                    }
+                });
         };
 
         this.collection = uploadCollection;
@@ -236,16 +223,18 @@ define('io.ox/files/upload/main', [
                 self.create.remove(options.index);
             });
 
-        function remove(index, model) {
+        function remove(model) {
             currentSize -= model.get('loaded');
             totalSize -= model.get('file').size;
             uploadCollection.remove(model);
         }
 
         this.setWindowNode = function (node) {
-            win = node;
             bottomToolbar = node.find('.toolbar.bottom');
             mainView = node.find('.list-view-control');
+            if (mainView.length === 0) {
+                mainView = node;
+            }
         };
 
         this.setAPI = function (alternativeAPI) {
@@ -256,13 +245,13 @@ define('io.ox/files/upload/main', [
             .on('start', function () {
                 mainView.addClass('toolbar-bottom-visible');
                 $el = $('<div class="upload-wrapper">');
-                ext.point('io.ox/files/upload/toolbar').invoke('draw', $el);
+                ext.point('io.ox/files/upload/toolbar').invoke('draw', $el, ext.Baton({ fileupload: this }));
                 bottomToolbar.append($el);
-            })
+            }.bind(this))
             .on('progress', function (e, def, file) {
                 $('.upload-wrapper').find('.file-name').text(
                     //#. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-                    gt('Uploading %1$s', file.file.name)
+                    gt('Uploading "%1$s"', file.file.name)
                 );
             })
             .on('stop', function () {
@@ -272,6 +261,67 @@ define('io.ox/files/upload/main', [
                     $el.remove();
                 }
             });
+        this.update = upload.createQueue(_.extend({}, this, {
+            progress: function (item, position, files) {
+
+                var model = uploadCollection.at(position),
+                    request = api.versions.upload({
+                        file: item.file,
+                        id: item.options.id,
+                        folder: item.options.folder,
+                        timestamp: _.then(),
+                        params: item.options.params,
+                        version_commet: item.options.version_comment
+                    })
+                    .progress(function (e) {
+                        // update progress
+                        var sub = e.loaded / e.total;
+                        if (model) {
+                            var loaded = model.get('loaded');
+                            model.set({ progress: sub, loaded: e.loaded });
+
+                            currentSize += e.loaded - loaded;
+                        }
+
+                        totalProgress = (position + sub) / files.length;
+
+                        //update uploaded size for time estimation
+                        uploadCollection.trigger('progress', {
+                            progress: totalProgress,
+                            estimatedTime: getEstimatedTime()
+                        });
+                    })
+                    .fail(function (e) {
+                        model.set({ abort: true });
+                        remove(model);
+
+                        if (e && e.data && e.data.custom && e.error !== '0 abort') {
+                            notifications.yell(e.data.custom.type, e.data.custom.text);
+                        }
+                    });
+                uploadCollection.at(position).set({ request: request });
+
+                return request;
+            }
+        })).on('start', function () {
+            mainView.addClass('toolbar-bottom-visible');
+            $el = $('<div class="upload-wrapper">');
+            ext.point('io.ox/files/upload/toolbar').invoke('draw', $el, ext.Baton({ fileupload: this }));
+            bottomToolbar.append($el);
+        }.bind(this))
+        .on('progress', function (e, def, file) {
+            $('.upload-wrapper').find('.file-name').text(
+                //#. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
+                gt('Uploading "%1$s"', file.file.name)
+            );
+        })
+        .on('stop', function () {
+            mainView.removeClass('toolbar-bottom-visible');
+            // if something went wrong before the start (filesize to big etc.) there is no $el
+            if ($el) {
+                $el.remove();
+            }
+        });
     }
 
     /*
@@ -279,11 +329,11 @@ define('io.ox/files/upload/main', [
      * If several files are loaded this toolbar provides links to open an overview of all currently uploaded files.
      */
     ext.point('io.ox/files/upload/toolbar').extend({
-        draw: function () {
+        draw: function (baton) {
             this.append(
                 $('<div class="upload-title">').append(
-                    $('<span class="file-name">'),
-                    $('<span class="estimated-time">')
+                    $('<div class="estimated-time">'),
+                    $('<div class="file-name">')
                 ),
                 $('<div class="upload-details">').append(
                     $('<a href=#>').text(gt('Details')).click(function (e) {
@@ -292,6 +342,12 @@ define('io.ox/files/upload/main', [
                         require(['io.ox/files/upload/view'], function (uploadView) {
                             uploadView.show();
                         });
+                    })
+                ),
+                $('<div class="upload-cancel">').append(
+                    $('<a href=#>').text(gt('Cancel')).click(function (e) {
+                        e.preventDefault();
+                        baton.fileupload.abort();
                     })
                 ),
                 $('<div class="progress">').append(

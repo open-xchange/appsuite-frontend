@@ -47,7 +47,7 @@ define('io.ox/core/export/export', [
                 $('<label>').append(
                     $.txt(gt('Format')),
                     $('<br>'),
-                    baton.$.select = $('<select tabindex="1" aria-label="' + gt('select format') + '">')
+                    baton.$.select = $('<select>').attr('aria-label', gt('select format'))
                 )
             );
 
@@ -57,13 +57,11 @@ define('io.ox/core/export/export', [
     });
 
     function toggle(format) {
-        var note = this.find('.alert'), label = this.find('.include_distribution_lists');
+        var checkbox = this.find('.include_distribution_lists input');
         if (format === 'csv') {
-            note.hide();
-            label.show();
+            checkbox.prop('checked', 'checked');
         } else {
-            note.show();
-            label.hide();
+            checkbox.prop('checked', null);
         }
     }
 
@@ -75,9 +73,6 @@ define('io.ox/core/export/export', [
             if (baton.module !== 'contacts') return;
 
             this.append(
-                $('<div class="alert alert-info">').hide().text(
-                    gt('Note: The vCard format cannot contain distribution lists')
-                ),
                 // checkbox
                 $('<label class="checkbox include_distribution_lists">').append(
                     baton.$.include = $('<input type="checkbox" name="include_distribution_lists" checked="checked">'),
@@ -99,9 +94,8 @@ define('io.ox/core/export/export', [
     ext.point('io.ox/core/export/export/buttons').extend({
         id: 'default',
         draw: function () {
-            this
-                .addPrimaryButton('export', gt('Export'), 'export', { 'tabIndex': '1' })
-                .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' });
+            this.addPrimaryButton('export', gt('Export'), 'export')
+                .addButton('cancel', gt('Cancel'), 'cancel');
         }
     });
 
@@ -112,11 +106,7 @@ define('io.ox/core/export/export', [
         id: 'csv',
         index: 100,
         draw: function (baton) {
-            if (baton.module === 'contacts') {
-                this.append(
-                    $('<option value="csv">CSV</option>')
-                );
-            }
+            if (baton.module === 'contacts') this.append($('<option value="csv">CSV</option>'));
         }
     });
 
@@ -127,11 +117,7 @@ define('io.ox/core/export/export', [
         id: 'vcard',
         index: 200,
         draw: function (baton) {
-            if (baton.module === 'contacts') {
-                this.append(
-                    $('<option value="vcard">vCard</option>')
-                );
-            }
+            if (baton.module === 'contacts') this.append($('<option value="vcard">vCard</option>'));
         }
     });
 
@@ -142,11 +128,7 @@ define('io.ox/core/export/export', [
         id: 'ical',
         index: 400,
         draw: function (baton) {
-            if (baton.module === 'calendar' || baton.module === 'tasks') {
-                this.append(
-                    $('<option value="ical">iCalendar</option>')
-                );
-            }
+            if (baton.module === 'calendar' || baton.module === 'tasks') this.append($('<option value="ical">iCalendar</option>'));
         }
     });
 
@@ -177,10 +159,9 @@ define('io.ox/core/export/export', [
                             var format = baton.$.select.val() || '',
                                 include = (baton.$.include || $()).prop('checked') || false,
                                 options = $.extend({ include: include }, baton.options);
+
                             require(['io.ox/core/download'], function (download) {
-                                download.url(
-                                        api.getUrl(format, baton.folder, options)
-                                    );
+                                download.url(api.getUrl(format, baton.folder, options));
                             });
                         } else {
                             dialog = null;

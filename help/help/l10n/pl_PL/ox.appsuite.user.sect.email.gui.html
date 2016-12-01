@@ -4,7 +4,7 @@
 <title>5.1. Składniki aplikacji E-mail</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="Oprogramowanie do pracy grupowej">
+<link rel="home" href="index.html" title="podręcznik użytkownika">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="Rozdział 5. E-mail">
 <link rel="prev" href="ox.appsuite.user.chap.email.html" title="Rozdział 5. E-mail">
 <link rel="next" href="ox.appsuite.user.sect.email.view.html" title="5.2. Wyświetlanie wiadomości e-mail">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.chap.email.html">Poprzedni</a></li>
@@ -46,6 +46,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.list" title="Lista">Lista</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.detailview" title="Widok szczegółów">Widok szczegółów</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.popup" title="Wyskakujące okienko">Wyskakujące okienko</a></p></li>
 </ul></div>
 <p>
             </p>
@@ -56,96 +57,125 @@
     </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.email.gui.search"></a><p class="title"><b>Pasek wyszukiwania</b></p>
+<a name="ox.appsuite.user.reference.email.gui.search"></a><h3 class="title">Pasek wyszukiwania</h3>
 <p>Umożliwia <a class="link" href="ox.appsuite.user.sect.email.search.html" title="5.6. Wyszukiwanie wiadomości e-mail">wyszukiwanie</a> wiadomości e-mail</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.email.gui.foldertree"></a><p class="title"><b>Drzewo folderów</b></p>
-<p>Umożliwia wyświetlanie folderów poczty e-mail i poruszanie się po ich strukturze. Aby otworzyć drzewo folderów, kliknij przycisk <span class="guibutton"><strong>Widok</strong></span> na <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.toolbar" title="Pasek narzędzi">pasku narzędzi</a>. Włącz <span class="guibutton"><strong>Widok folderów</strong></span>. W zależności od konfiguracji oprogramowania do pracy grupowej drzewo folderów zawiera następujące elementy:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><span class="guilabel"><strong>Skrzynka odbiorcza</strong></span>. Domyślnie wszystkie przychodzące wiadomości e-mail są zapisywane w tym folderze.</p></li>
-<li class="listitem"><p><span class="guilabel"><strong>Wersje robocze</strong></span>. Zawiera wiadomości e-mail zapisane jako wersje robocze.</p></li>
-<li class="listitem"><p><span class="guilabel"><strong>Obiekty wysłane</strong></span>. Zawiera wysłane przez Ciebie wiadomości e-mail.</p></li>
-<li class="listitem"><p><span class="guilabel"><strong>Kosz</strong></span>. Zawiera usunięte przez Ciebie wiadomości e-mail.</p></li>
-<li class="listitem"><p><span class="guilabel"><strong>Archiwum</strong></span>. Zawiera zarchiwizowane przez Ciebie wiadomości e-mail.</p></li>
+<a name="ox.appsuite.user.reference.email.gui.foldertree"></a><h3 class="title">Drzewo folderów</h3>
+<p>Wyświetla foldery e-mail.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.foldertree.entries"></a><p class="title">zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><span class="guilabel"><strong>Skrzynka odbiorcza</strong></span>. W domyślnej konfiguracji do tej skrzynki trafia cała korespondencja.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Wersje robocze</strong></span>. Zawiera zapisane wersje robocze wiadomości e-mail.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Elementy wysłane</strong></span>. Zawiera wiadomości e-mail wysłane przez Ciebie.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Elementy usunięte</strong></span>. Zawiera wiadomości e-mail usunięte przez Ciebie.</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>Archiwum</strong></span>. Zawiera wiadomości e-mail zarchiwizowane przez Ciebie.</p></li>
 <li class="listitem"><p><span class="guilabel"><strong>Moje foldery</strong></span>. Zawiera utworzone przez Ciebie foldery poczty e-mail.</p></li>
-</ul></div>
-<p>Dostępne są następujące funkcje:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+</ul>
+</div>
+<p>Szczegóły zawartości w powyższym obszarze zależą od konfiguracji oprogramowania do pracy grupowej.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.foldertree.functions"></a><p class="title">Funkcje</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Aby wyświetlić liczbę wiadomości e-mail w folderze, zatrzymaj wskaźnik myszy na nazwie folderu. Pojawi się etykietka z liczbą wiadomości.</p></li>
 <li class="listitem"><p>Kliknięcie folderu powoduje wyświetlenie zawartych w nim wiadomości e-mail.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Działania specyficzne dla folderu</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> znajdująca się obok wybranego folderu udostępnia funkcje umożliwiające porządkowanie danych oraz funkcje dotyczące folderów dostępne w danej aplikacji.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Działania specyficzne dla folderu</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> znajdująca się obok wybranego folderu udostępnia funkcje umożliwiające porządkowanie danych oraz funkcje dotyczące folderów dostępne w danej aplikacji.</p></li>
 <li class="listitem"><p>Pod folderami znajduje się przycisk <span class="guibutton"><strong>Dodaj konto e-mail</strong></span> umożliwiający dodawanie kont e-mail.</p></li>
 <li class="listitem"><p>W aplikacji <span class="phrase"><span class="guilabel"><strong>Pliki</strong></span></span> przycisk <span class="guibutton"><strong>Pokaż wszystkie załączniki</strong></span> pod folderami umożliwia wyświetlenie wszystkich załączników odebranej lub wysłanej wiadomości e-mail.</p></li>
 <li class="listitem"><p>Przy pewnej konfiguracji oprogramowania do pracy grupowej poniżej przycisków dostępne są dodatkowe przyciski. Ich kliknięcie pozwala na uruchomienie kreatora i konfigurację dodatkowych klientów.</p></li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.email.gui.foldertree.related"></a><p class="title">Powiązane tematy</p>
+<a name="ox.appsuite.user.reference.email.gui.foldertree.related"></a><p class="title">Zobacz też</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Informacje na temat folderów można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Foldery">Foldery</a>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Instrukcje dotyczące często wykonywanych działań można znaleźć tutaj:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. Poruszanie się po strukturze folderów">Poruszanie się po strukturze folderów</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. Tworzenie folderów">Tworzenie folderów</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. Zmiana nazw folderów">Zmiana nazw folderów</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. Przenoszenie folderów">Przenoszenie folderów</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. Usuwanie folderów">Usuwanie folderów</a>, <a class="xref" href="ox.appsuite.user.sect.email.externalaccounts.manage.html" title="5.8.1. Konfiguracja i edycja ustawień kont e-mail">Konfiguracja i edycja ustawień kont e-mail</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Foldery">Foldery</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. Poruszanie się po strukturze folderów">Poruszanie się po strukturze folderów</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. Tworzenie folderów">Tworzenie folderów</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. Zmiana nazw folderów">Zmiana nazw folderów</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. Przenoszenie folderów">Przenoszenie folderów</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. Usuwanie folderów">Usuwanie folderów</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.externalaccounts.manage.html" title="5.8.1. Konfiguracja i edycja ustawień kont e-mail">Konfiguracja i edycja ustawień kont e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
 </ul>
 </div>
 <p>
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.email.gui.tabs"></a><p class="title"><b>Pasek Kategorie</b></p>
-<p>Umożliwia wyświetlenie zakładek z predefiniowanymi kategoriami wiadomości e-mail w folderze <span class="guilabel"><strong>Skrzynka odbiorcza</strong></span>. W zależności od ustawień przychodzące wiadomości e-mail są automatycznie sortowane według określonych kategorii. W obszarze <a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.9. Ustawienia poczty e-mail">Ustawienia poczty e-mail</a> można wskazać kategorie, które mają być używane. Dostępne są następujące funkcje:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Kliknięcie kategorii powoduje pokazanie w <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.content" title="Obszar wyświetlania">obszarze wyświetlania</a> tylko tych wiadomości e-mail, które są przypisane do tej kategorii.</p></li>
-<li class="listitem"><p>Kliknięcie ikony <span class="guibutton"><strong>Edytuj</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.tabs.edit"></a><img src="../../images/appsuite_user_icon_tabs_edit.png"></span> powoduje otwarcie okna umożliwiającego zmianę nazw lub wyłączenie kategorii.</p></li>
-</ul></div>
-<p><span class="phrase"><strong>Uwagi:</strong></span></p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>W zależności od konfiguracji oprogramowania do pracy grupowej kategorie mogą być niedostępne.</p></li>
-<li class="listitem"><p>W przypadku korzystania z kategorii wiadomości e-mail nie są sortowane według konwersacji.</p></li>
-</ul></div>
+<a name="ox.appsuite.user.reference.email.gui.tabs"></a><h3 class="title">Pasek Kategorie</h3>
+<p>Pokazuje predefiniowane kategorie dla wiadomości e-mail w folderze <span class="guilabel"><strong>Skrzynka odbiorcza</strong></span>. Pozwala to na przypisanie przychodzących wiadomości e-mail do niektórych kategorii posortowanych według nadawców.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.tabs.hints"></a><p class="title">Uwagi</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>W zależności od konfiguracji oprogramowania do pracy grupowej niektóre kategorie mogą nie być dostępne. Jeśli kategorie są dostępne, możesz pokazać lub ukryć pasek kategorii w menu <span class="guibutton"><strong>Widok</strong></span> na <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.toolbar" title="Pasek narzędzi">pasku narzędzi</a>.</p></li>
+<li class="listitem"><p>Numery, nazwy i kolejność kategorii są skonfigurowane z góry. Przy pewnych konfiguracjach serwera możliwa jest zmiana nazwy niektórych kategorii lub ich wyłączenie.</p></li>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.email.gui.tabs.related"></a><p class="title">Powiązane tematy</p>
+<a name="ox.appsuite.user.reference.email.gui.tabs.functions"></a><p class="title">Funkcje</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Po kliknięciu na kategorię w <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.content" title="Obszar wyświetlania">obszarze wyświetlania</a> wyświetlane są tylko przypisane do niej wiadomości e-mail.</p></li>
+<li class="listitem"><p>Po dwukrotnym kliknięciu kategorii lub kliknięciu jej prawym przyciskiem myszy pojawi się okno umożliwiające zmianę nazwy lub wyłączenie kategorii.</p></li>
+</ul>
+</div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.tabs.related"></a><p class="title">Zobacz też</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>
-              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.manage.categories.html" title="5.5.1. Praca z zakładkami">Praca z zakładkami</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.categories.html" title="5.5.1. Praca z zakładkami">Praca z zakładkami</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.view.html" title="5.2. Wyświetlanie wiadomości e-mail">Wyświetlanie wiadomości e-mail</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
 </ul>
 </div>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.email.gui.toolbar"></a><p class="title"><b>Pasek narzędzi</b></p>
+<a name="ox.appsuite.user.reference.email.gui.toolbar"></a><h3 class="title">Pasek narzędzi</h3>
 <p>Zawiera następujące elementy:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Utwórz e-mail</strong></span>. Umożliwia utworzenie nowej wiadomości e-mail.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Odpowiedz nadawcy</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.reply"></a><img src="../../images/appsuite_user_icon_reply.png"></span>. Umożliwia wysłanie odpowiedzi.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Odpowiedz wszystkim adresatom</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.replyall"></a><img src="../../images/appsuite_user_icon_replyall.png"></span>. Umożliwia wysłanie odpowiedzi do wszystkich adresatów.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Prześlij dalej</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.forward"></a><img src="../../images/appsuite_user_icon_forward.png"></span>. Umożliwia przesłanie wiadomości e-mail innym adresatom.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Usuń</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.delete"></a><img src="../../images/appsuite_user_icon_functionbar_trash.png"></span>. Umożliwia usunięcie wybranych wiadomości e-mail.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Ustaw kolor</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.label"></a><img src="../../images/appsuite_user_icon_label.png"></span>. Umożliwia otwarcie menu pozwalającego na przypisywanie kolorowych etykiet do wiadomości e-mail.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Archiwum</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.archive"></a><img src="../../images/appsuite_user_icon_archive.png"></span>. Umożliwia archiwizowanie wybranych wiadomości e-mail.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Działania</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>. Umożliwia otwarcie menu udostępniającego dodatkowe funkcje:</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Redagowanie</strong></span>. Tworzy nową wiadomość e-mail.</p></li>
+<li class="listitem"><p>Ikony <span class="guibutton"><strong>odpowiadania</strong></span> na wybraną wiadomość e-mail i <span class="guibutton"><strong>przekazywania jej dalej</strong></span>: <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.reply"></a><img src="../../images/appsuite_user_icon_reply.png"></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.replyall"></a><img src="../../images/appsuite_user_icon_replyall.png"></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.forward"></a><img src="../../images/appsuite_user_icon_forward.png"></span></p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Usuń</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.delete"></a><img src="../../images/appsuite_user_icon_functionbar_trash.png"></span>. Umożliwia usunięcie wybranych wiadomości e-mail.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Przenoszenie</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.moveto"></a><img src="../../images/appsuite_user_icon_moveto.png"></span>. Otwiera menu pozwalające na przeniesienie wiadomości e-mail do wskazanej kategorii. Ta ikona jest widoczna wyłącznie przy wyświetlonym pasku kategorii.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Ustaw kolor</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.label"></a><img src="../../images/appsuite_user_icon_label.png"></span>. Umożliwia otwarcie menu pozwalającego na przypisywanie kolorowych etykiet do wiadomości e-mail.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Archiwum</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.archive"></a><img src="../../images/appsuite_user_icon_archive.png"></span>. Umożliwia archiwizowanie wybranych wiadomości e-mail.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Działania</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>. Umożliwia otwarcie menu udostępniającego dodatkowe funkcje:</p></li>
 <li class="listitem">
-<p>Przycisk <span class="guibutton"><strong>Widok</strong></span>. Umożliwia otwarcie menu z polami wyboru pozwalającymi na sterowanie widokiem.</p>
+<p><span class="guibutton"><strong>Widok</strong></span>. Umożliwia otwarcie menu z polami wyboru umożliwiającymi kontrolowanie widoku.</p>
 <div class="itemizedlist">
 <a name="ox.appsuite.user.reference.email.gui.toolbar.view"></a><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p><span class="guibutton"><strong>Pionowo</strong></span>. Umożliwia wyrównanie w pionie listy wiadomości e-mail w widoku szczegółów. Funkcje umożliwiające wybieranie i sortowanie są wyświetlane pod paskiem narzędzi.</p></li>
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Kompaktowy</strong></span>. Umożliwia wyrównanie w pionie listy wiadomości e-mail w widoku szczegółów. Funkcje umożliwiające wybieranie i sortowanie są wyświetlane obok paska narzędzi.</p></li>
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Poziomo</strong></span>. Umożliwia wyrównanie w poziomie listy wiadomości e-mail w widoku szczegółów. </p></li>
-<li class="listitem">
-<p>Pole wyboru <span class="guibutton"><strong>Lista</strong></span>. Umożliwia wyświetlenie listy wiadomości e-mail. Aby włączyć widok szczegółów, kliknij wybraną wiadomość e-mail.</p>
-<p>Nad widokiem szczegółów znajduje się pasek nawigacyjny.</p>
-</li>
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Widok folderów</strong></span>. Umożliwia otwarcie lub zamknięcie drzewa folderów.</p></li>
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Pola wyboru</strong></span>. Umożliwia wyświetlenie pola wyboru obok każdej wiadomości e-mail na liście. Pozwala to na wybranie wielu wiadomości e-mail w celu ich jednoczesnej edycji.</p></li>
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Zdjęcia kontaktów</strong></span>. Powoduje, że obok każdej wiadomości e-mail na liście będzie wyświetlane zdjęcie nadawcy, pod warunkiem że nadawca zapisał takie zdjęcie w książce adresowej.</p></li>
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Dokładne daty</strong></span>. Pokazuje dokładną datę i godzinę odebrania wiadomości e-mail.</p></li>
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Pokaż rozmiar wiadomości</strong></span>. Umożliwia wyświetlenie rozmiaru wiadomości e-mail, zamiast daty i godziny.</p></li>
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Wszystkie załączniki</strong></span>. Umożliwia wyświetlenie wszystkich załączników wybranej wiadomości e-mail na nowej stronie.</p></li>
+<li class="listitem"><p>Definiowanie układu listy i widoku szczegółów: <span class="guibutton"><strong>Pionowo</strong></span>, <span class="guibutton"><strong>Kompaktowy</strong></span>, <span class="guibutton"><strong>Poziomo</strong></span></p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Lista</strong></span>. Wyświetla listę wiadomości e-mail. Aby wyświetlić widok szczegółów, kliknij wiadomość e-mail. Nad paskiem nawigacji pojawi się widok szczegółów.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Użyj kategorii</strong></span>. Otwiera lub zamyka pasek kategorii.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Konfiguruj</strong></span>. Otwiera okno dialogowe do konfiguracji paska kategorii.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Widok folderów</strong></span>. Umożliwia otwarcie lub zamknięcie drzewa folderów.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Pola wyboru</strong></span>. Umożliwia wyświetlenie pola wyboru obok każdego zadania na liście.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Zdjęcia kontaktów</strong></span>. Obok każdej wiadomości e-mail na liście będzie wyświetlane zdjęcie nadawcy (o ile nadawca je zapisał w książce adresowej).</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Data i godzina</strong></span>. Pokazuje dokładną datę i godzinę odebrania wiadomości e-mail.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Rozmiar wiadomości</strong></span>. Pokazuje rozmiar wiadomości e-mail zamiast jej daty i godziny.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Wszystkie załączniki</strong></span>. Wyświetla wszystkie wysłane lub odebrane załączniki w aplikacji <span class="phrase"><span class="guilabel"><strong>Pliki</strong></span></span>.</p></li>
 </ul>
 </div>
 <p>
@@ -155,96 +185,130 @@
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.email.gui.toolbar.related"></a><p class="title">Powiązane tematy</p>
+<a name="ox.appsuite.user.reference.email.gui.toolbar.related"></a><p class="title">Zobacz też</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Instrukcje dotyczące przycisków i ikon można znaleźć tutaj:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.send.new.html" title="5.4.1. Wysyłanie nowej wiadomości e-mail">Wysyłanie nowej wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. Odpowiadanie na wiadomości e-mail">Odpowiadanie na wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.forward.html" title="5.4.3. Przesyłanie wiadomości e-mail dalej">Przesyłanie wiadomości e-mail dalej</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.delete.html" title="5.5.15. Usuwanie wiadomości e-mail">Usuwanie wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.label.html" title="5.5.6. Kategoryzowanie wiadomości e-mail za pomocą kolorowych etykiet">Kategoryzowanie wiadomości e-mail za pomocą kolorowych etykiet</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.archive.html" title="5.5.14. Archiwizacja wiadomości e-mail">Archiwizacja wiadomości e-mail</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Instrukcje dotyczące funkcji dostępnych w menu <span class="guibutton"><strong>Działania</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.toolbar.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> można znaleźć tutaj:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.manage.mark.html" title="5.5.4. Oznaczanie wiadomości e-mail jako przeczytanych lub nieprzeczytanych">Oznaczanie wiadomości e-mail jako przeczytanych lub nieprzeczytanych</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.move.html" title="5.5.2. Przenoszenie wiadomości e-mail">Przenoszenie wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.copy.html" title="5.5.3. Kopiowanie wiadomości e-mail">Kopiowanie wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.print.html" title="5.5.13. Drukowanie wiadomości e-mail">Drukowanie wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.save.html" title="5.5.11. Zapisywanie wiadomości">Zapisywanie wiadomości</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.source.html" title="5.5.7. Wyświetlanie źródła wiadomości e-mail">Wyświetlanie źródła wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.reminder.html" title="5.5.9. Tworzenie przypomnień o wiadomościach e-mail">Tworzenie przypomnień o wiadomościach e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.addportal.html" title="5.5.10. Dodawanie wiadomości e-mail do portalu">Dodawanie wiadomości e-mail do portalu</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
-</ul>
-</div>
-<p>
-      </p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.email.gui.content"></a><p class="title"><b>Obszar wyświetlania</b></p>
-<p>Zawiera <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.list" title="Lista">listę</a> wiadomości e-mail oraz ich <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.detailview" title="Widok szczegółów">widok szczegółów</a>. Aby wybrać układ, kliknij przycisk <span class="guibutton"><strong>Widok</strong></span> na <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.toolbar" title="Pasek narzędzi">pasku narzędzi</a>. </p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.email.gui.list"></a><p class="title"><b>Lista</b></p>
-<p>Umożliwia wyświetlenie listy wiadomości e-mail w bieżącym folderze. W przypadku korzystania z <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.tabs" title="Pasek Kategorie">kategorii</a> wyświetlane są tylko wiadomości z bieżącego folderu należące do danej kategorii. Lista zawiera następujące pozycje: </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>W przypadku każdej wiadomości e-mail są wyświetlane następujące dane: nadawca, temat, data lub godzina odebrania albo rozmiar wiadomości e-mail. Nieprzeczytane wiadomości e-mail są oznaczone ikoną <span class="guilabel"><strong>Nieprzeczytane</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.list.unread"></a><img src="../../images/appsuite_user_icon_email_unread.png"></span> .</p></li>
-<li class="listitem"><p>Mogą też być pokazywane dodatkowe informacje (jeśli są dostępne): ikona załącznika, kolorowa etykieta, liczba wiadomości e-mail w konwersacji, priorytet.</p></li>
-</ul></div>
-<p>Dostępne są następujące funkcje:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-<p>Można wybrać wiele wiadomości e-mail w celu ich jednoczesnej edycji. Aby to zrobić, należy zaznaczyć pola wyboru obok wiadomości e-mail po włączeniu opcji <span class="guibutton"><strong>Pola wyboru</strong></span> z menu rozwijanego <span class="guibutton"><strong>Widok</strong></span> dostępnego na pasku narzędzi. </p>
-<p>Można też skorzystać z systemowych funkcji zaznaczania wielu elementów.</p>
-</li>
-<li class="listitem">
-<p>Aby zaznaczyć wszystkie wiadomości e-mail widoczne w aktualnie wybranym folderze, zaznacz pole wyboru <span class="guibutton"><strong>Wybierz wszystko</strong></span> nad listą.</p>
-<p><span class="phrase"><strong>Uwaga:</strong></span> pole wyboru <span class="guibutton"><strong>Wybierz wszystko</strong></span> powoduje zaznaczenie tylko widocznych wiadomości e-mail przechowywanych w danym folderze. Aby skrócić opóźnienia, serwer będzie wczytywać tylko pewien procent wiadomości e-mail z folderu, jeśli ich liczba przekracza wyznaczony limit. Aby wyświetlić wszystkie wiadomości e-mail przechowywane w folderze, przejdź na koniec listy. Poczekaj, aż serwer załaduje wszystkie wiadomości e-mail.</p>
-</li>
-<li class="listitem">
-<p>Kliknięcie przycisku <span class="guibutton"><strong>Sortuj wg</strong></span> nad listą powoduje otwarcie menu ułatwiającego sortowanie wiadomości e-mail.</p>
-<p>Aby połączyć wszystkie wiadomości e-mail z konwersacji w jedną pozycję listy, zaznacz pole wyboru <span class="guibutton"><strong>Konwersacje</strong></span> w polu <span class="guibutton"><strong>Sortuj wg</strong></span>.</p>
-<p><span class="phrase"><strong>Uwaga:</strong></span> w przypadku korzystania z <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.tabs" title="Pasek Kategorie">kategorii</a> wiadomości e-mail nie są sortowane według konwersacji.</p>
-<p>Ustawienie sortowania zostanie zastosowane do wybranego folderu poczty e-mail. W odniesieniu do poszczególnych folderów można używać różnych ustawień.</p>
-</li>
-<li class="listitem"><p>Kliknięcie wiadomości e-mail powoduje wyświetlenie jej zawartości w <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.detailview" title="Widok szczegółów">obszarze wyświetlania</a>.</p></li>
-</ul></div>
-<p>Aby dostosować szerokość listy, zatrzymaj wskaźnik myszy na linii między listą a widokiem szczegółów. Gdy pojawi się podwójna strzałka, przeciągnij obramowanie w lewo lub w prawo.</p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.reference.email.gui.list.related"></a><p class="title">Powiązane tematy</p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>
-              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.view.html" title="5.2. Wyświetlanie wiadomości e-mail">Wyświetlanie wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. Odpowiadanie na wiadomości e-mail">Odpowiadanie na wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.forward.html" title="5.4.3. Przesyłanie wiadomości e-mail dalej">Przesyłanie wiadomości e-mail dalej</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Porządkowanie wiadomości e-mail">Porządkowanie wiadomości e-mail</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
-</ul>
-</div>
-<p>
-      </p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.email.gui.detailview"></a><p class="title"><b>Widok szczegółów</b></p>
-<p>Umożliwia wyświetlenie wiadomości e-mail wybranej z listy. Widok szczegółów obejmuje następujące składniki i funkcje:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-<p>Temat.</p>
-<p>Jeśli wiadomości e-mail są posortowane według konwersacji, pod tematem wyświetlana jest liczba wiadomości e-mail w tej konwersacji. Aby otworzyć lub zamknąć wszystkie wiadomości e-mail w konwersacji, kliknij ikonę <span class="guibutton"><strong>Otwórz/zamknij wszystkie wiadomości</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.threadopen"></a><img src="../../images/appsuite_user_icon_thread_open.png"></span>. Kliknięcie pustego miejsca między nadawcą a datą odbioru powoduje otwarcie lub zamknięcie wiadomości e-mail.</p>
-</li>
-<li class="listitem"><p>Zdjęcie nadawcy, jeśli jest dostępne.</p></li>
-<li class="listitem"><p><a name="ox.appsuite.user.reference.email.gui.detailview.messenger"></a>W zależności od konfiguracji oprogramowania do pracy grupowej kolorowa kropka obok nazwy wskazuje status nadawcy lub odbiorcy w aplikacji <span class="phrase">Messenger</span>.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Przeczytane</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.read"></a><img src="../../images/appsuite_user_icon_email_read.png"></span>. Jej kliknięcie powoduje zmianę statusu z Przeczytane na Nieprzeczytane lub na odwrót.</p></li>
-<li class="listitem">
-<p>Imię i nazwisko (lub nazwa) nadawcy. Imiona i nazwiska (lub nazwy) dodatkowych adresatów wiadomości e-mail, jeśli występują. Kliknięcie nazwiska (lub nazwy) nadawcy powoduje otwarcie <span class="guilabel"><strong>wyskakującego okienka</strong></span> z następującymi elementami:</p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.reference.email.gui.detailview.popup"></a><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>Dane kontaktowe danej osoby.</p></li>
-<li class="listitem"><p>Jeśli dane kontaktowe są zapisane, będzie wyświetlana ich lokalizacja.</p></li>
-<li class="listitem"><p>Jeśli z tą osobą była już prowadzona korespondencja e-mail, zostanie ona wyświetlona w obszarze <span class="guilabel"><strong>Ostatnie konwersacje</strong></span>.</p></li>
-<li class="listitem"><p>Jeśli masz spotkania wspólne z tą osobą, będą one wyświetlane w obszarze <span class="guilabel"><strong>Wspólne spotkania</strong></span>.</p></li>
-<li class="listitem"><p>Dane tej osoby z sieci społecznościowych. Możesz otworzyć profil tej osoby za pomocą dostępnych przycisków.</p></li>
-</ul>
-</div>
+<li class="listitem" style="list-style-type: none">
+<p>Instrukcje dotyczące przycisków i ikon</p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.send.new.html" title="5.4.1. Wysyłanie nowej wiadomości e-mail">Wysyłanie nowej wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. Odpowiadanie na wiadomości e-mail">Odpowiadanie na wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.send.forward.html" title="5.4.3. Przesyłanie wiadomości e-mail dalej">Przesyłanie wiadomości e-mail dalej</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.delete.html" title="5.5.15. Usuwanie wiadomości e-mail">Usuwanie wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.label.html" title="5.5.6. Kategoryzowanie wiadomości e-mail za pomocą kolorowych etykiet">Kategoryzowanie wiadomości e-mail za pomocą kolorowych etykiet</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.archive.html" title="5.5.14. Archiwizacja wiadomości e-mail">Archiwizacja wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
 <p>
             </p>
 </li>
+<li class="listitem" style="list-style-type: none">
+<p>Instrukcje dotyczące przycisków i ikon w menu <span class="guibutton"><strong>Działania</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.toolbar.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span></p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.mark.html" title="5.5.4. Oznaczanie wiadomości e-mail jako przeczytanych lub nieprzeczytanych">Oznaczanie wiadomości e-mail jako przeczytanych lub nieprzeczytanych</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.move.html" title="5.5.2. Przenoszenie wiadomości e-mail">Przenoszenie wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.copy.html" title="5.5.3. Kopiowanie wiadomości e-mail">Kopiowanie wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.print.html" title="5.5.13. Drukowanie wiadomości e-mail">Drukowanie wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.save.html" title="5.5.11. Zapisywanie wiadomości">Zapisywanie wiadomości</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.source.html" title="5.5.7. Wyświetlanie źródła wiadomości e-mail">Wyświetlanie źródła wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.reminder.html" title="5.5.9. Tworzenie przypomnień o wiadomościach e-mail">Tworzenie przypomnień o wiadomościach e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.addportal.html" title="5.5.10. Dodawanie wiadomości e-mail do portalu">Dodawanie wiadomości e-mail do portalu</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.email.gui.content"></a><h3 class="title">Obszar wyświetlania</h3>
+<p>Zawiera <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.list" title="Lista">listę</a> wiadomości e-mail oraz ich <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.detailview" title="Widok szczegółów">widok szczegółów</a>. Aby wybrać układ, kliknij przycisk <span class="guibutton"><strong>Widok</strong></span> na <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.toolbar" title="Pasek narzędzi">pasku narzędzi</a>.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.content.related"></a><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li></ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.email.gui.list"></a><h3 class="title">Lista</h3>
+<p>Wyświetla listę wiadomości e-mail w wybranym folderze. Jeśli używasz <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.tabs" title="Pasek Kategorie">kategorii</a>, w skrzynce odbiorczej zostaną wyświetlone wiadomości z wybranej kategorii.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.list.entries"></a><p class="title">zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Dla każdej wiadomości wyświetlane są następujące informacje: nadawca, temat, data i godzina odebrania wiadomości oraz jej rozmiar.Nieprzeczytane wiadomości e-mail są oznaczone ikoną <span class="guilabel"><strong>Nieprzeczytane</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.list.unread"></a><img src="../../images/appsuite_user_icon_email_unread.png"></span> .</p></li>
+<li class="listitem"><p>Mogą też być pokazywane dodatkowe informacje (jeśli są dostępne): ikona załącznika, kolorowa etykieta, liczba wiadomości e-mail w konwersacji, priorytet. </p></li>
+</ul>
+</div>
+<p> </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.list.functions"></a><p class="title">Funkcje</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>Aby wybrać kilka wiadomości e-mail, zaznacz pole wyboru <span class="guibutton"><strong>Pola wyboru</strong></span> z listy rozwijanej <span class="guibutton"><strong>Widok</strong></span> na pasku narzędzi. </p>
+<p>Możesz też skorzystać z systemowych funkcji zaznaczania wielu elementów.</p>
+</li>
+<li class="listitem">
+<p>Aby zaznaczyć wszystkie widoczne wiadomości e-mail znajdujące się w aktualnie wybranym folderze, zaznacz dostępne nad listą pole wyboru <span class="guibutton"><strong>Wybierz wszystko</strong></span>.</p>
+<p><span class="phrase"><strong>Uwaga:</strong></span> Pole wyboru <span class="guibutton"><strong>Wybierz wszystko</strong></span> powoduje zaznaczenie tylko widocznych wiadomości e-mail przechowywanych w danym folderze. Aby skrócić opóźnienia, serwer będzie wczytywać tylko pewien procent wiadomości e-mail z folderu, jeśli ich liczba przekracza wyznaczony limit. Aby wyświetlić wszystkie wiadomości e-mail przechowywane w folderze, przejdź na koniec listy. Poczekaj, aż serwer wczyta wszystkie wiadomości e-mail.</p>
+</li>
+<li class="listitem">
+<p>Po kliknięciu przycisku <span class="guibutton"><strong>Sortuj wg</strong></span> nad listą pojawi się menu ułatwiające sortowanie wiadomości e-mail.</p>
+<p>Aby połączyć wszystkie wiadomości e-mail z konwersacji w jedną pozycję listy, zaznacz pole wyboru <span class="guibutton"><strong>Konwersacje</strong></span> w obszarze <span class="guibutton"><strong>Sortuj wg</strong></span>.</p>
+<p>Ustawienie sortowania zostanie zastosowane do wybranego folderu poczty e-mail. W odniesieniu do poszczególnych folderów można używać różnych ustawień.</p>
+</li>
+<li class="listitem"><p>Kliknięcie wiadomości e-mail spowoduje wyświetlenie jej zawartości w <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.detailview" title="Widok szczegółów">obszarze wyświetlania</a>.</p></li>
+</ul>
+</div>
+<p>Aby zmienić szerokość listy, ustaw kursor nad linią dzielącą widok listy od widoku szczegółów. Pojawi się podwójna strzałka. Przesuń podziałkę w lewo lub w prawo.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.list.related"></a><p class="title">Zobacz też</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.view.html" title="5.2. Wyświetlanie wiadomości e-mail">Wyświetlanie wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. Odpowiadanie na wiadomości e-mail">Odpowiadanie na wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.send.forward.html" title="5.4.3. Przesyłanie wiadomości e-mail dalej">Przesyłanie wiadomości e-mail dalej</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Porządkowanie wiadomości e-mail">Porządkowanie wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.email.gui.detailview"></a><h3 class="title">Widok szczegółów</h3>
+<p>Wyświetla wiadomości e-mail wybrane na liście.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.detailview.entries"></a><p class="title">zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>Temat</p>
+<p>Jeśli wiadomość e-mail są posortowane według konwersacji, pod tematem wyświetlana jest liczba wiadomości e-mail w tej konwersacji. Aby otworzyć lub zamknąć wszystkie wiadomości e-mail w konwersacji, kliknij ikonę <span class="guibutton"><strong>Otwórz/zamknij wszystkie wiadomości</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.threadopen"></a><img src="../../images/appsuite_user_icon_thread_open.png"></span>. Kliknięcie pustego miejsca między nadawcą a datą odbioru powoduje otwarcie lub zamknięcie wiadomości e-mail.</p>
+</li>
+<li class="listitem"><p>Zdjęcie nadawcy, jeśli jest dostępne.</p></li>
+<li class="listitem"><p><a name="ox.appsuite.user.reference.email.gui.detailview.messenger"></a>Przy pewnych konfiguracjach oprogramowania do pracy grupowej kolorowa kropka obok nazwy wskazuje status nadawcy lub odbiorcy w aplikacji <span class="phrase">Messenger</span>.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Przeczytane</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.read"></a><img src="../../images/appsuite_user_icon_email_read.png"></span>. Zmienia status wiadomości e-mail z przeczytanej na nieprzeczytaną lub na odwrót.</p></li>
+<li class="listitem"><p>Imię i nazwisko (lub nazwa) nadawcy. Imiona i nazwiska (lub nazwy) dodatkowych adresatów wiadomości e-mail, jeśli występują. Kliknięcie nazwiska (lub nazwy) nadawcy powoduje otwarcie <span class="guilabel"><strong>wyskakującego okienka</strong></span> z następującymi elementami:</p></li>
 <li class="listitem"><p>Data i godzina otrzymania.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Ustaw kolor</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.label"></a><img src="../../images/appsuite_user_icon_label.png"></span>. Umożliwia otwarcie menu pozwalającego na przypisywanie kolorowych etykiet do wiadomości e-mail. </p></li>
-<li class="listitem"><p>Przyciski najczęściej używanych funkcji: <span class="guibutton"><strong>Szybka odpowiedź</strong></span>, <span class="guibutton"><strong>Odpowiedz wszystkim</strong></span>, <span class="guibutton"><strong>Prześlij dalej</strong></span>, <span class="guibutton"><strong>Usuń</strong></span></p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Działania</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>. Jej kliknięcie powoduje otwarcie menu z funkcjami edycji, których można używać jako alternatywy dla funkcji edycji dostępnych na pasku narzędzi.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Ustaw kolor</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.label"></a><img src="../../images/appsuite_user_icon_label.png"></span>. Umożliwia otwarcie menu pozwalającego na przypisywanie kolorowych etykiet do wiadomości e-mail. </p></li>
+<li class="listitem"><p>Często używane funkcje: <span class="guibutton"><strong>Szybka odpowiedź</strong></span>, <span class="guibutton"><strong>Odpowiedz wszystkim</strong></span>, <span class="guibutton"><strong>Prześlij dalej</strong></span>, <span class="guibutton"><strong>Usuń</strong></span></p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Działania</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>. Otwiera menu z funkcjami edycji.</p></li>
 <li class="listitem">
 <p>Jeśli wiadomość e-mail ma załączniki, zostaną wyświetlone dodatkowe elementy:</p>
 <div class="itemizedlist">
 <a name="ox.appsuite.user.reference.email.gui.detailview.attachments"></a><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>Przycisk z ikoną <span class="guibutton"><strong>Załącznik</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.attachment"></a><img src="../../images/appsuite_user_icon_clip.png"></span> i liczbą załączników. Po jego kliknięciu załączniki zostaną wyświetlone jako ikony lub jako lista.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Załącznik</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.attachment"></a><img src="../../images/appsuite_user_icon_clip.png"></span>. Po jej kliknięciu załączniki zostaną wyświetlone jako ikony lub jako lista.</p></li>
 <li class="listitem"><p>Przyciski, które pozwalają na realizację jednej <a class="link" href="ox.appsuite.user.sect.email.attachments.html#ox.appsuite.user.concept.email.view.attachments">funkcji</a> w odniesieniu do wielu załączników naraz.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Kafelki</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.tiles"></a><img src="../../images/appsuite_user_icon_tiles.png"></span> lub <span class="guibutton"><strong>Lista</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.list"></a><img src="../../images/appsuite_user_icon_list.png"></span>. Po jej kliknięciu załączniki zostaną wyświetlone jako ikony lub jako lista. Aby zastosować <a class="link" href="ox.appsuite.user.sect.email.attachments.html#ox.appsuite.user.concept.email.view.attachments">funkcję</a> do określonego załącznika, w widoku listy kliknij jego nazwę.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Kwadraty</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.tiles"></a><img src="../../images/appsuite_user_icon_tiles.png"></span>, <span class="guibutton"><strong>Lista</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.list"></a><img src="../../images/appsuite_user_icon_list.png"></span> . Załączniki zostaną wyświetlone jako ikony lub jako lista. Aby zastosować <a class="link" href="ox.appsuite.user.sect.email.attachments.html#ox.appsuite.user.concept.email.view.attachments">funkcję</a> do określonego załącznika, w widoku listy kliknij jego nazwę.</p></li>
 </ul>
 </div>
 <p>
@@ -253,29 +317,92 @@
 <li class="listitem"><p>W przypadku wybrania w folderze <span class="guilabel"><strong>Elementy wysłane</strong></span> wiadomości e-mail z załącznikiem w postaci łącza u góry wiadomości pojawią się informacje o załączniku.</p></li>
 <li class="listitem">
 <p>Treść wiadomości e-mail.</p>
-<p>Cytaty z poprzednich wiadomości e-mail są poprzedzane pionową linią. Kliknięcie pozycji <span class="guibutton"><strong>Pokaż więcej</strong></span> spowoduje wyświetlenie całej cytowanej treści.</p>
+<p>Na początku wiersza oznaczone są cytaty z poprzednich wiadomości e-mail. Jeśli wyświetlony jest tylko fragment cytatu, a chcesz zobaczyć cały, kliknij ikonę <span class="guibutton"><strong>Pokaż cytowany tekst</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.showquoted"></a><img src="../../images/appsuite_user_icon_email_quote.png"></span>.</p>
 </li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.email.gui.detailview.related"></a><p class="title">Powiązane tematy</p>
+<a name="ox.appsuite.user.reference.email.gui.detailview.related"></a><p class="title">Zobacz też</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>
-              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.attachments.html" title="5.3. Wyświetlanie lub zapisywanie załączników wiadomości e-mail">Wyświetlanie lub zapisywanie załączników wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. Odpowiadanie na wiadomości e-mail">Odpowiadanie na wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.send.forward.html" title="5.4.3. Przesyłanie wiadomości e-mail dalej">Przesyłanie wiadomości e-mail dalej</a>, <a class="xref" href="ox.appsuite.user.sect.email.share.recipient_appointment.html" title="5.7.3. Zapraszanie wszystkich adresatów wiadomości e-mail na spotkanie">Zapraszanie wszystkich adresatów wiadomości e-mail na spotkanie</a>, <a class="xref" href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html" title="5.7.4. Zapisywanie wszystkich adresatów wiadomości e-mail jako listy dystrybucyjnej">Zapisywanie wszystkich adresatów wiadomości e-mail jako listy dystrybucyjnej</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Porządkowanie wiadomości e-mail">Porządkowanie wiadomości e-mail</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
+<li class="listitem" style="list-style-type: none">
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.popup" title="Wyskakujące okienko">Wyskakujące okienko</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.attachments.html" title="5.3. Wyświetlanie lub zapisywanie załączników wiadomości e-mail">Wyświetlanie lub zapisywanie załączników wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.send.reply.html" title="5.4.2. Odpowiadanie na wiadomości e-mail">Odpowiadanie na wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.send.forward.html" title="5.4.3. Przesyłanie wiadomości e-mail dalej">Przesyłanie wiadomości e-mail dalej</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.share.recipient_appointment.html" title="5.7.3. Zapraszanie wszystkich adresatów wiadomości e-mail na spotkanie">Zapraszanie wszystkich adresatów wiadomości e-mail na spotkanie</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html" title="5.7.4. Zapisywanie wszystkich adresatów wiadomości e-mail jako listy dystrybucyjnej">Zapisywanie wszystkich adresatów wiadomości e-mail jako listy dystrybucyjnej</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Porządkowanie wiadomości e-mail">Porządkowanie wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
 </ul>
 </div>
 <p>
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.email.gui.create"></a><p class="title"><b>Widok podczas tworzenia lub edycji</b></p>
-<p>W przypadku tworzenia nowej wiadomości e-mail lub edycji wersji roboczej wiadomości na nowej stronie zostaną wyświetlone niżej wymienione elementy.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<a name="ox.appsuite.user.reference.email.gui.popup"></a><h3 class="title">Wyskakujące okienko</h3>
+<p>Po kliknięciu nazwiska nadawcy w widoku szczegółów pojawi się wyskakujące okienko.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.popup.entries"></a><p class="title">zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>W zależności od konfiguracji oprogramowania do pracy grupowej elementy mogą być wyświetlane u góry lub u dołu ekranu.</p>
+<p>Przyciski często używanych funkcji:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>Jeśli kontakt nie należy jeszcze do książki adresowej, pojawi się przycisk <span class="guibutton"><strong>Dodaj do książki adresowej</strong></span>. Po kliknięciu tego przycisku pojawi się strona pozwalająca na utworzenie nowego kontaktu.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Wyślij wiadomość e-mail</strong></span>. Otwiera stronę pozwalającą na wysłanie nowej wiadomości e-mail.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Zaproś na spotkanie</strong></span>. Otwiera stronę do tworzenia spotkania z daną osobą.</p></li>
+<li class="listitem"><p>Jeśli kontakt zapisano już w książce adresowej, pojawi się przycisk <span class="guibutton"><strong>Edytuj</strong></span>. Po jego kliknięciu pojawi się strona pozwalająca na edycję danych kontaktu.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Usuń</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.popup.delete"></a><img src="../../images/appsuite_user_icon_functionbar_trash.png"></span>. Usuwa kontakt z książki adresowej widocznej w polu <span class="guilabel"><strong>Zapisano jako</strong></span>.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Dalsze działania</strong></span> icon<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.popup.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>. Po kliknięciu tego przycisku pojawi się menu z często używanymi funkcjami do porządkowania kontaktów.</p></li>
+<li class="listitem"><p>Dane kontaktowe danej osoby.</p></li>
+<li class="listitem"><p>Jeżeli dane kontaktowe tej osoby zostały zapisane, pojawi się ścieżka do książki adresowej z danymi kontaktu.</p></li>
+<li class="listitem"><p>Dane tej osoby z sieci społecznościowych. Za pomocą dostępnych przycisków możesz otworzyć profil tej osoby.</p></li>
+<li class="listitem"><p>Jeśli masz spotkania wspólne z tą osobą, będą one wyświetlane w obszarze <span class="guilabel"><strong>Wspólne spotkania</strong></span>.</p></li>
+<li class="listitem"><p>Jeśli z tą osobą była już prowadzona korespondencja e-mail, zostanie ona wyświetlona w obszarze <span class="guilabel"><strong>Ostatnie konwersacje</strong></span>.</p></li>
+</ul>
+</div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.popup.related"></a><p class="title">Zobacz też</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.detailview" title="Widok szczegółów">Widok szczegółów</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.contacts.add.create.html" title="6.5.1. Tworzenie nowego kontaktu">Tworzenie nowego kontaktu</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.send.new.html" title="5.4.1. Wysyłanie nowej wiadomości e-mail">Wysyłanie nowej wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. Tworzenie nowych spotkań">Tworzenie nowych spotkań</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.email.gui.create"></a><h3 class="title">Widok podczas tworzenia lub edycji</h3>
+<p>Ten widok jest używany podczas tworzenia nowej wiadomości e-mail lub edycji wersji roboczej wiadomości.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.email.gui.create.entries"></a><p class="title">zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>Przy pewnych konfiguracjach oprogramowania do pracy grupowej elementy mogą być wyświetlane u góry lub u dołu ekranu.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><span class="guibutton"><strong>Wyślij</strong></span>. Gdy skończysz pisać wiadomość e-mail, możesz ją wysłać, klikając ten przycisk.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Zapisz</strong></span>. Kliknięcie tego przycisku powoduje zapisanie bieżącej zawartości wiadomości e-mail w folderze <span class="guilabel"><strong>Wersje robocze</strong></span>.</p></li>
@@ -288,22 +415,32 @@
 <li class="listitem">
 <p>Pole wejściowe <span class="guibutton"><strong>Do</strong></span>. W tym polu należy wprowadzić co najmniej jednego adresata. Podczas wpisywania adresatów wyświetlane są pasujące sugestie. Aby wybrać jedną z nich, po prostu ją kliknij.</p>
 <p>Aby wysłać kopię do innych adresatów, kliknij pozycję <span class="guibutton"><strong>DW</strong></span> lub <span class="guibutton"><strong>UDW</strong></span> z prawej strony pola wejściowego. W odpowiednich polach wprowadź adresy adresatów kopii lub kopii ukrytej.</p>
+<p>Po kliknięciu przycisku <span class="guibutton"><strong>Do</strong></span>, <span class="guibutton"><strong>DW</strong></span> lub <span class="guibutton"><strong>UDW</strong></span> pojawi się lista umożliwiająca wybór odbiorców.</p>
 </li>
 <li class="listitem"><p>Pole wejściowe <span class="guibutton"><strong>Temat</strong></span>. W tym polu należy wpisać temat wiadomości e-mail.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Załącznik</strong></span>. Kliknij ten przycisk, aby dodać pliki lokalne lub pliki zapisane w aplikacji <span class="phrase"><span class="guilabel"><strong>Pliki</strong></span></span>.</p></li>
 <li class="listitem"><p>Przycisk <span class="guibutton"><strong>Podpisy</strong></span>. Umożliwia określenie, czy do treści wiadomości e-mail ma zostać dodany podpis. Kliknij ten przycisk, aby wybrać lub usunąć podpis. Podpisy można tworzyć lub edytować w ustawieniach poczty e-mail.</p></li>
 <li class="listitem"><p>Przycisk <span class="guibutton"><strong>Opcje</strong></span>. Kliknij ten przycisk, aby ustawić określone opcje: format tekstu, priorytet i potwierdzenie przeczytania wiadomości e-mail.</p></li>
 <li class="listitem"><p>Pole wejściowe na treść wiadomości e-mail. Wpisz treść w tym polu. Jeśli w sekcji <span class="guibutton"><strong>Opcje</strong></span> został wybrany format HTML, możesz formatować tekst lub dodać obrazy.</p></li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.email.gui.create.related"></a><p class="title">Powiązane tematy</p>
+<a name="ox.appsuite.user.reference.email.gui.create.related"></a><p class="title">Zobacz też</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>
-              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.email.send.new.html" title="5.4.1. Wysyłanie nowej wiadomości e-mail">Wysyłanie nowej wiadomości e-mail</a>, <a class="xref" href="ox.appsuite.user.sect.email.manage.draft.html" title="5.5.8. Praca z wersjami roboczymi wiadomości">Praca z wersjami roboczymi wiadomości</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.send.new.html" title="5.4.1. Wysyłanie nowej wiadomości e-mail">Wysyłanie nowej wiadomości e-mail</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.email.manage.draft.html" title="5.5.8. Praca z wersjami roboczymi wiadomości">Praca z wersjami roboczymi wiadomości</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny <a class="xref" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
 </ul>
 </div>
 <p>

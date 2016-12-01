@@ -51,7 +51,7 @@ define('io.ox/core/api/apps', [
     // TODO: Make favorites dynamic
     var allFavorites = [
         'io.ox/portal', 'io.ox/mail', 'io.ox/contacts',
-        'io.ox/calendar', 'io.ox/tasks', 'io.ox/files',
+        'io.ox/calendar', 'io.ox/tasks', 'io.ox/notes', 'io.ox/files',
         'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation'
     ];
 

@@ -56,6 +56,19 @@ define('io.ox/contacts/util', [
 
     }
 
+    function getFullNameFormatHelper(obj, isMail, htmlOutput) {
+        var copy = obj;
+        if (htmlOutput === true) {
+            copy = {};
+            _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
+                if (!$.trim(obj[id])) return;
+                var tagName = id === 'last_name' ? 'b' : 'span';
+                copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(obj[id]) + '</' + tagName + '>';
+            });
+        }
+        return isMail ? that.getMailFullNameFormat(obj) : that.getFullNameFormat(copy);
+    }
+
     var that = {
 
         // variant of getFullName without title, all lowercase
@@ -130,16 +143,7 @@ define('io.ox/contacts/util', [
         },
 
         getFullName: function (obj, htmlOutput) {
-            var copy = obj, fmt;
-            if (htmlOutput === true) {
-                copy = {};
-                _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
-                    if (!$.trim(obj[id])) return;
-                    var tagName = id === 'last_name' ? 'b' : 'span';
-                    copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(obj[id]) + '</' + tagName + '>';
-                });
-            }
-            fmt = this.getFullNameFormat(copy);
+            var fmt = getFullNameFormatHelper(obj, false, htmlOutput);
             return gt.format(fmt.format, fmt.params);
         },
 
@@ -204,8 +208,8 @@ define('io.ox/contacts/util', [
             return { format: _.noI18n(''), params: [] };
         },
 
-        getMailFullName: function (obj) {
-            var fmt = that.getMailFullNameFormat(obj);
+        getMailFullName: function (obj, htmlOutput) {
+            var fmt = getFullNameFormatHelper(obj, true, htmlOutput);
             return gt.format(fmt.format, fmt.params);
         },
 
@@ -338,9 +342,14 @@ define('io.ox/contacts/util', [
                 // yep, both first()
                 if (first_name && last_name) return first(first_name) + first(last_name);
                 if (display_name) return first(display_name) + last(display_name);
+
                 // again, first() only
                 if (last_name) return first(last_name);
                 if (first_name) return first(first_name);
+
+                // try mail address
+                var email = $.trim(obj.email1 || obj.email2 || obj.email3);
+                if (email) return first(email);
 
                 return '';
             }

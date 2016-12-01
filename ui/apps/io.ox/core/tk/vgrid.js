@@ -251,7 +251,7 @@ define('io.ox/core/tk/vgrid', [
                 obj['aria-label'] = options.containerLabel;
                 return obj;
             },
-            container = $('<div class="vgrid-scrollpane-container f6-target" role="listbox" tabindex="1">').attr(ariaAttributesContainer()).css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+            container = $('<div class="vgrid-scrollpane-container f6-target" role="listbox" tabindex="0">').attr(ariaAttributesContainer()).css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // mobile select mode
             mobileSelectMode = false,
 
@@ -260,13 +260,13 @@ define('io.ox/core/tk/vgrid', [
             },
 
             fnClickCheckbox = function (e) {
-                if (!(e.type === 'click' || e.keyCode === 32)) return;
+                if (!(e.type === 'click' || e.which === 32)) return;
                 e.preventDefault();
                 var grid = e.data.grid, checked = $(this).find('i').hasClass('fa-square-o');
                 if (checked) {
                     grid.selection.selectAll();
                     // Bugfix 38498
-                    _.defer(function () { container.children('[tabindex="1"]:first').focus(); });
+                    _.defer(function () { container.children('[tabindex="0"]:first').focus(); });
                     updateSelectAll(grid.selection.get());
                 } else {
                     grid.selection.clear();
@@ -294,7 +294,7 @@ define('io.ox/core/tk/vgrid', [
                     // show checkbox
                     options.showCheckbox === false ?
                         [] :
-                        $('<a href="#" class="select-all" role ="checkbox" aria-checked="false" tabindex="1">').append(
+                        $('<a href="#" class="select-all" role ="checkbox" aria-checked="false">').append(
                             $('<i class="fa fa-square-o" aria-hidden="true">')
                         )
                         .attr('title', gt('Select all'))
@@ -317,7 +317,6 @@ define('io.ox/core/tk/vgrid', [
             // counters
             numVisible = 0,
             numRows = 0,
-            numLabels = 0,
             // current mode
             currentMode = 'all',
             // default all & list request
@@ -389,7 +388,7 @@ define('io.ox/core/tk/vgrid', [
 
         // add label class
         this.multiselectId = _.uniqueId('multi-selection-message-');
-        template.node.addClass('selectable').attr('aria-describedby', this.multiselectId);
+        template.node.addClass('selectable'); //.attr('aria-describedby', this.multiselectId);
         label.node.addClass('vgrid-label').attr({ 'aria-hidden': 'true' });
 
         // fix mobile safari bug (all content other than position=static is cut off)
@@ -403,7 +402,14 @@ define('io.ox/core/tk/vgrid', [
         if (_.device('IE')) {
             container.on('click', function () {
                 var top = scrollpane.scrollTop();
+                // lock position: prevent ie to scroll to top
+                scrollpane.css('overflow-y', 'hidden');
+                container.css('top', top + 'px');
+                //focus
                 container.focus();
+                // unlock
+                container.css('top', 0);
+                scrollpane.css('overflow-y', 'auto');
                 scrollpane.scrollTop(top);
             });
         }
@@ -537,14 +543,12 @@ define('io.ox/core/tk/vgrid', [
                 index: {},
                 textIndex: {}
             };
-            numLabels = 0;
             // loop
             var i = 0, $i = all.length + 1, current = '', tmp = '';
             for (; i < $i; i++) {
                 tmp = self.requiresLabel(i, all[i], current, $i);
                 if (tmp !== false) {
                     labels.list.push({ top: 0, text: '', pos: i });
-                    numLabels++;
                     current = tmp;
                 }
             }
@@ -602,7 +606,7 @@ define('io.ox/core/tk/vgrid', [
                     row.appendTo(container);
                     // reset class name
 
-                    row.node.attr({ role: 'option', 'aria-posinset': offset + i + 1 });
+                    row.node.attr({ role: 'option', 'aria-posinset': offset + i + 1, 'aria-setsize': data.length });
                     node = row.node[0];
                     node.className = defaultClassName + ' ' + ((offset + i) % 2 ? 'odd' : 'even');
                     // update fields
@@ -697,7 +701,7 @@ define('io.ox/core/tk/vgrid', [
         };
 
         function initLabels() {
-            // process labels first (determines numLabels), then set height
+            // process labels first, then set height
             processLabels();
             return paintLabels().done(function (cumulatedLabelHeight) {
                 container.css({
@@ -1232,6 +1236,10 @@ define('io.ox/core/tk/vgrid', [
             emptyMessage = fn;
         };
 
+        this.getEmptyMessage = function () {
+            return emptyMessage;
+        };
+
         this.updateTemplates = function () {
             _(pool).each(function (node) {
                 node.detach();
@@ -1313,8 +1321,9 @@ define('io.ox/core/tk/vgrid', [
         // focus handling (adopted from newer list.js)
 
         function onContainerFocus() {
-            var tabbable = container.children('.selectable[tabindex="1"]:first');
-            if (tabbable.length) tabbable.focus(); else self.selection.selectFirst();
+            var items = container.children(),
+                tabbable = items.filter('[tabindex="0"]:first');
+            if (tabbable.length) tabbable.focus(); else items.first().click();
         }
 
         function onItemFocus() {
@@ -1322,7 +1331,7 @@ define('io.ox/core/tk/vgrid', [
         }
 
         function onItemBlur() {
-            container.attr('tabindex', 1);
+            container.attr('tabindex', 0);
         }
 
         if (!_.device('smartphone')) {

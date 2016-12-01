@@ -31,12 +31,7 @@ define('io.ox/search/autocomplete/extensions', [
 
             // input group and dropdown
             this.append(
-                $('<input type="text">')
-                .attr({
-                    class: 'form-control search-field',
-                    role: 'search',
-                    tabindex: 1
-                })
+                $('<input type="text" class="form-control search-field" role="search">')
             );
         },
 
@@ -282,10 +277,7 @@ define('io.ox/search/autocomplete/extensions', [
 
         a11y: function () {
             var text = this.find('.name').text() + ' ' + this.find('.detail').text();
-            this.attr({
-                'aria-label': text,
-                'tabIndex': 1
-            });
+            this.attr('aria-label', text);
         },
 
         select: function (baton) {

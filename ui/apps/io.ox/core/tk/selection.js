@@ -46,7 +46,6 @@ define('io.ox/core/tk/selection', [
             dropType: '',
             scrollpane: container,
             focus: '[tabindex]',
-            tabFix: 1,
             markable: false
         }, options);
 
@@ -392,12 +391,12 @@ define('io.ox/core/tk/selection', [
             selectedItems[key] = id;
             var $node = (node || getNode(key));
             // set focus?
-            if (container.has(document.activeElement).length && options.tabFix !== false) $node.focus();
+            if (container.has(document.activeElement).length) $node.focus();
             return $node
                 .addClass(self.classSelected)
                 .attr({
                     'aria-selected': 'true',
-                    'tabindex': options.tabFix !== false ? options.tabFix : null
+                    'tabindex': 0
                 })
                 .end();
         };
@@ -424,7 +423,7 @@ define('io.ox/core/tk/selection', [
                 .removeClass(self.classSelected)
                 .attr({
                     'aria-selected': 'false',
-                    tabindex: options.tabFix !== false ? -1 : null
+                    tabindex: -1
                 });
             self.trigger('deselect', key);
         };
@@ -470,7 +469,7 @@ define('io.ox/core/tk/selection', [
             // clear nodes
             container.find('.selectable.' + self.classSelected).removeClass(self.classSelected).attr({
                 'aria-selected': 'false',
-                'tabindex': options.tabFix !== false ? -1 : null
+                'tabindex': -1
             });
         };
 
@@ -497,13 +496,13 @@ define('io.ox/core/tk/selection', [
                 markedItem = id;
                 var $node = (node || getNode(key));
                 // set focus?
-                if (container.has(document.activeElement).length && options.tabFix !== false) $node.focus();
+                if (container.has(document.activeElement).length) $node.focus();
                 var guid = $node.attr('id') || _.uniqueId('option-');
 
                 return $node
                         .addClass(self.classMarked)
                         .attr({
-                            'tabindex': options.tabFix !== false ? options.tabFix : null,
+                            'tabindex': 0,
                             id: guid
                         })
                         // apply a11y
@@ -532,9 +531,7 @@ define('io.ox/core/tk/selection', [
                     markedItem = undefined;
                     getNode(key)
                         .removeClass(self.classMarked)
-                        .attr({
-                            tabindex: options.tabFix !== false ? -1 : null
-                        })
+                        .attr('tabindex', -1)
                         .parent('[role="listbox"]')
                         .removeAttr('aria-activedescendant');
                     markedItem = undefined;
@@ -595,15 +592,12 @@ define('io.ox/core/tk/selection', [
                 if (cid in hash) {
                     node.addClass(self.classSelected).attr({
                         'aria-selected': 'true',
-                        'tabindex': options.tabFix !== false ? options.tabFix : null
+                        'tabindex': 0
                     });
-                    if (options.tabFix !== false) {
-                        node.focus();
-                    }
                 } else {
                     node.removeClass(self.classSelected).attr({
                         'aria-selected': 'false',
-                        'tabindex': options.tabFix !== false ? -1 : null
+                        'tabindex': -1
                     });
                 }
             });

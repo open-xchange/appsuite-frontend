@@ -35,7 +35,7 @@ define('io.ox/core/import/import', [
 
             //lable and select
             nodes.label = $('<label>').text(gt('Format')).appendTo(nodes.row);
-            nodes.select = $('<select class="form-control" name="action" tabindex="1" aria-label="' + gt('select format') + '">').appendTo(nodes.row);
+            nodes.select = $('<select class="form-control" name="action">').attr('aria-label', gt('select format')).appendTo(nodes.row);
 
             //add option
             formats = ext.point('io.ox/core/import/format').invoke('draw', null, baton)._wrapped;
@@ -96,7 +96,6 @@ define('io.ox/core/import/import', [
             var label = $('<span class="filename">');
             this.append(
                 baton.nodes.file_upload = attachments.fileUploadWidget({
-                    tabindex: 0,
                     multi: false,
                     buttontext: gt('Upload file')
                 }).append(label)
@@ -124,7 +123,7 @@ define('io.ox/core/import/import', [
             this.append(
                 $('<div class="checkbox">').append(
                     $('<label>').append(
-                        $('<input type="checkbox" tabindex="1" name="ignore_uuids">'),
+                        $('<input type="checkbox" name="ignore_uuids">'),
                         baton.module === 'calendar' ?
                             gt('Ignore existing events. Helpful to import public holiday calendars, for example.') :
                             gt('Ignore existing events')
@@ -184,8 +183,8 @@ define('io.ox/core/import/import', [
 
                     ext.point('io.ox/core/import').invoke('draw', this.form, baton);
 
-                    this.addPrimaryButton('import', gt('Import'), 'import', { 'tabIndex': '1' })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' });
+                    this.addPrimaryButton('import', gt('Import'), 'import')
+                        .addButton('cancel', gt('Cancel'), 'cancel');
 
                     this.getPopup().addClass('import-dialog');
                 })

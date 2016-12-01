@@ -16,6 +16,8 @@ define('io.ox/calendar/edit/extensions', [
     'gettext!io.ox/calendar/edit/main',
     'io.ox/calendar/util',
     'io.ox/contacts/util',
+    'io.ox/mail/util',
+    'io.ox/core/util',
     'io.ox/backbone/views',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
@@ -30,7 +32,7 @@ define('io.ox/calendar/edit/extensions', [
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'less!io.ox/calendar/style'
-], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
+], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
 
     'use strict';
 
@@ -62,12 +64,14 @@ define('io.ox/calendar/edit/extensions', [
         id: 'save',
         draw: function (baton) {
             var oldFolder = baton.model.get('folder_id');
-            this.append($('<button type="button" class="btn btn-primary save" data-action="save" tabindex="1">')
+            this.append($('<button type="button" class="btn btn-primary save" data-action="save">')
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
                         fail = _.bind(baton.app.onError || _.noop, baton.app),
-                        folder = baton.model.get('folder_id');
+                        folder = baton.model.get('folder_id'),
+                        inputfieldVal = baton.parentView.$el.find('.add-participant.tt-input').val();
+
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
                         //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
@@ -83,7 +87,20 @@ define('io.ox/calendar/edit/extensions', [
                     var timezone = baton.model.get('endTimezone');
                     baton.model.unset('endTimezone', { silent: true });
                     baton.model.endTimezone = timezone;
-                    baton.model.save().then(save, fail);
+
+                    //check if participants inputfield contains a valid email address
+                    if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
+                        var participantModel = new baton.model._participants.model({
+                            display_name: mailUtil.parseRecipient(inputfieldVal)[0],
+                            email1: mailUtil.parseRecipient(inputfieldVal)[1],
+                            field: 'email1', type: 5
+                        });
+                        participantModel.loading.done(function () {
+                            baton.model._participants.oldAdd(participantModel);
+                        }).always(function () { baton.model.save().then(save, fail); });
+                    } else {
+                        baton.model.save().then(save, fail);
+                    }
                 })
             );
 
@@ -94,7 +111,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 200,
         id: 'discard',
         draw: function (baton) {
-            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" tabindex="1">')
+            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >')
                 .text(gt('Discard'))
                 .on('click', function (e) {
                     e.stopPropagation();
@@ -137,7 +154,7 @@ define('io.ox/calendar/edit/extensions', [
             var self = this;
 
             picker({
-                button: 'Select',
+                button: gt('Select'),
                 filter: function (id, model) {
                     return model.id !== 'virtual/all-my-appointments';
                 },
@@ -215,6 +232,7 @@ define('io.ox/calendar/edit/extensions', [
             this.$el.append(
                 $('<label class="control-label col-xs-12">').append(
                     $.txt(gt('Location')),
+                    // only trim on save
                     new mini.InputView({ name: 'location', model: this.model }).render().$el
                 )
             );
@@ -467,6 +485,7 @@ define('io.ox/calendar/edit/extensions', [
 
             var currentColor = parseInt(this.model.get('color_label'), 10) || 0;
 
+            // update color palette: different 'no-color' option for private appointents (white vs. dark grey)
             this.listenTo(this.model, 'change:private_flag', function (model, value) {
                 this.$el.find('.no-color').toggleClass('color-label-10', value);
             });
@@ -478,7 +497,7 @@ define('io.ox/calendar/edit/extensions', [
                         _.map(_.range(0, 11), function (color_label) {
                             return $('<label>').append(
                                 // radio button
-                                $('<input type="radio" tabindex="1" name="color">')
+                                $('<input type="radio" name="color">')
                                 .attr('aria-label', calendarUtil.getColorLabel(color_label))
                                 .val(color_label)
                                 .prop('checked', color_label === currentColor)
@@ -542,6 +561,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 1500,
         rowClass: 'collapsed',
         draw: function (baton) {
+
             var typeahead = new AddParticipantView({
                 apiOptions: {
                     contacts: true,
@@ -551,28 +571,12 @@ define('io.ox/calendar/edit/extensions', [
                     distributionlists: true
                 },
                 collection: baton.model.getParticipants(),
-                blacklist: settings.get('participantBlacklist') || false
+                blacklist: settings.get('participantBlacklist') || false,
+                scrollIntoView: true
             });
-            this.append(
-                typeahead.$el
-            );
+
+            this.append(typeahead.$el);
             typeahead.render().$el.addClass('col-md-6');
-
-            typeahead.typeahead.on('typeahead-custom:dropdown-rendered', function () {
-
-                var target = typeahead.$el.find('.tt-dropdown-menu'),
-                    container = target.scrollParent(),
-                    pos = target.offset().top - container.offset().top;
-
-                if (!target.is(':visible')) {
-                    return;
-                }
-
-                if ((pos < 0) || (pos + target.height() > container.height())) {
-                    // scroll to Node, leave 16px offset
-                    container.scrollTop(container.scrollTop() + pos - 16);
-                }
-            });
         }
     });
 
@@ -714,7 +718,7 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    /*function openFreeBusyView(e) {
+    function openFreeBusyView(e) {
         require(['io.ox/calendar/freetime/main'], function (freetime) {
             //#. Applies changes to an existing appointment, used in scheduling view
             freetime.showDialog({ label: gt('Apply changes'), parentModel: e.data.model }).done(function (data) {
@@ -737,7 +741,7 @@ define('io.ox/calendar/edit/extensions', [
                             defs.push(mod.loading);
                         });
                         $.when.apply($, defs).done(function () {
-                            // first reset then addUniquely collection might not reraw correctly otherwise in some cases
+                            // first reset then addUniquely collection might not redraw correctly otherwise in some cases
                             e.data.model._participants.reset([]);
                             e.data.model._participants.addUniquely(models);
                         });
@@ -754,9 +758,9 @@ define('io.ox/calendar/edit/extensions', [
                 });
             });
         });
-    }*/
+    }
 
-    function openFreeBusyView(e) {
+    /*function openFreeBusyView(e) {
         var app = e.data.app,
             model = e.data.model,
             start = model.get('start_date'),
@@ -782,7 +786,7 @@ define('io.ox/calendar/edit/extensions', [
             }),
             model: model
         });
-    }
+    }*/
 
     // link free/busy view
     point.basicExtend({
@@ -792,7 +796,7 @@ define('io.ox/calendar/edit/extensions', [
             // because that works
             if (capabilities.has('freebusy !alone')) {
                 this.parent().find('.find-free-time').append(
-                    $('<button type="button" class="btn btn-link" tabindex="1">').text(gt('Find a free time'))
+                    $('<button type="button" class="btn btn-link">').text(gt('Find a free time'))
                         .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
                 );
             }

@@ -77,7 +77,7 @@ define('plugins/administration/groups/settings/members', [
                 $('<i class="fa fa-user" aria-hidden="true">'),
                 $('<span class="name">').html(model.getFullNameHTML()),
                 this.editable ?
-                    $('<a href="#" role="button" class="close pull-right remove-member" tabindex="1"><span aria-hidden="true">&times;</span></a>')
+                    $('<a href="#" role="button" class="close pull-right remove-member"><span aria-hidden="true">&times;</span></a>')
                     .attr('title', gt('Remove member'))
                     //#. %1$s is the user name of the group member
                     .attr('aria-label', gt('Remove %1$s', model.getFullName())) :
@@ -96,6 +96,8 @@ define('plugins/administration/groups/settings/members', [
 
         constructor: function () {
             Backbone.Model.apply(this, arguments);
+            // fix missing display name
+            if (!this.attributes.display_name) this.attributes.display_name = this.attributes.email1;
             // typeahead needs "value"
             this.value = this.getFullName();
         },

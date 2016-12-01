@@ -43,8 +43,13 @@ define('io.ox/core/viewer/views/types/imageview', [
 
             // since this node is not yet part of the DOM we look
             // for the carousel's dimensions directly
-            var carousel = $('.viewer-displayer:visible'),
-                options = { scaleType: 'contain', width: carousel.width(), height: carousel.height() },
+            var retina = _.device('retina'),
+                RETINA_FACTOR = 2,
+                carousel = $('.viewer-displayer:visible'),
+                // on retina screen request larger previews to render sharp images
+                width = retina ? carousel.width() * RETINA_FACTOR : carousel.width(),
+                height = retina ? carousel.height() * RETINA_FACTOR : carousel.height(),
+                options = { scaleType: 'contain', width: width, height: height },
                 image = $('<img class="viewer-displayer-item viewer-displayer-image">'),
                 previewUrl = this.getPreviewUrl(options),
                 filename = this.model.get('filename') || '',
@@ -64,7 +69,7 @@ define('io.ox/core/viewer/views/types/imageview', [
                     var notification = self.createNotificationNode(gt('Sorry, there is no preview available for this image.'));
                     self.$el.idle().append(notification);
                 });
-                this.$el.append($('<div>').append(image));
+                this.$el.append($('<div class="viewer-displayer-item-container">').append(image));
             }
 
             return this;

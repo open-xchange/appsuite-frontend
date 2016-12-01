@@ -59,14 +59,12 @@ define('io.ox/core/notifications/subview', [
                         desktopNotifications.show(specific(model));
                     });
                 }
-                var node = $('<li class="item" tabindex="1" role="listitem">');
+                var node = $('<li class="item" tabindex="0" role="listitem">');
                 if (view.model.get('showHideSingleButton')) {
                     node.append(
                         $('<div class="notification-item-actions">').append(
-                            $('<button type="button" class="btn btn-link clear-single-button fa fa-times">')
+                            $('<button type="button" class="btn btn-link clear-single-button fa fa-times" data-action="clear-single">')
                                 .attr({
-                                    tabindex: 1,
-                                    'data-action': 'clear-single',
                                     'aria-label': gt('Hide this notification')
                                 }).on('click', function () {
                                     view.hide(requestedModel);
@@ -120,10 +118,9 @@ define('io.ox/core/notifications/subview', [
             var title =  baton.view.model.get('title');
             this.append(
                 $('<h1 class="section-title">').text(title),
-                baton.view.model.get('showHideAllButton') ? $('<button type="button" class="btn btn-link clear-button fa fa-times">')
+                baton.view.model.get('showHideAllButton') ?
+                    $('<button type="button" class="btn btn-link clear-button fa fa-times" data-action="clear-all">')
                         .attr({
-                            tabindex: 1,
-                            'data-action': 'clear-all',
                             'aria-label': baton.view.model.attributes.hideAllLabel
                         })
                     : ''
@@ -242,9 +239,28 @@ define('io.ox/core/notifications/subview', [
                 }
             }
         },
-        hideAll: function () {
-            this.hiddenCollection.add(this.collection.models);
+
+        hideAll: function (time) {
+            var models = this.collection.models,
+                self = this;
+            if (models.length === 0) {
+                return;
+            }
+            this.hiddenCollection.add(models);
             this.collection.reset();
+
+            // if a time is given, show notifcations again after the timeout
+            if (time) {
+                _(models).each(function (model) {
+                    setTimeout(function (hiddenModel) {
+                        self.hiddenCollection.remove(hiddenModel);
+                        //don't add twice
+                        if (!self.collection.get(hiddenModel.get('id'))) {
+                            self.addNotifications([hiddenModel]);
+                        }
+                    }, time, model);
+                });
+            }
         },
         hide: function (model, time) {
             //should work with models and objects with attributes

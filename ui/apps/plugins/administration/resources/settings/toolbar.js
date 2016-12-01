@@ -59,8 +59,8 @@ define('plugins/administration/resources/settings/toolbar', [
                 //#. %1$s is the resource name
                 gt('Do you really want to delete the resource "%1$s"? This action cannot be undone!', model.get('display_name'))
             )
-            .addPrimaryButton('delete', gt('Delete resource'), 'delete', { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+            .addPrimaryButton('delete', gt('Delete resource'), 'delete')
+            .addButton('cancel', gt('Cancel'), 'cancel')
             .on('delete', function () {
                 resourceAPI.remove(id);
             })
@@ -111,7 +111,7 @@ define('plugins/administration/resources/settings/toolbar', [
     return {
         create: function () {
 
-            var toolbar = new Toolbar({ title: '', tabindex: 1 });
+            var toolbar = new Toolbar({ title: '' });
 
             toolbar.update = function (data) {
                 // data is array of strings; convert to objects

@@ -61,6 +61,11 @@ define('io.ox/core/folder/extensions', [
             });
         });
 
+        api.on('after:rename', function (id, data) {
+            if (data.folder_id !== INBOX) return;
+            api.virtual.reload('virtual/myfolders');
+        });
+
         // remote folders
         api.virtual.add('virtual/remote', function () {
             return api.list('1').then(function (list) {
@@ -256,7 +261,7 @@ define('io.ox/core/folder/extensions', [
                 getAvailableServices().done(function (services) {
                     if (services.length > 0) {
                         links.empty().show().append(
-                            $('<a href="#" data-action="add-storage-account" tabindex="1" role="button">')
+                            $('<a href="#" data-action="add-storage-account" role="button">')
                             .text(gt('Add storage account'))
                             .on('click', function (e) {
                                 e.preventDefault();
@@ -289,7 +294,7 @@ define('io.ox/core/folder/extensions', [
 
             this.append(
                 $('<div class="links">').append(
-                    $('<a href="#" data-action="add-mail-account" tabindex="1" role="button">')
+                    $('<a href="#" data-action="add-mail-account" role="button">')
                     .text(gt('Add mail account'))
                     .on('click', function (e) {
                         e.preventDefault();
@@ -305,7 +310,7 @@ define('io.ox/core/folder/extensions', [
             if (!attachmentView.all) return;
             this.append(
                 $('<div class="links">').append(
-                    $('<a href="#" data-action="all-attachments" tabindex="1" role="button">')
+                    $('<a href="#" data-action="all-attachments" role="button">')
                     .text(gt('View all attachments'))
                     .on('click', function (e) {
                         e.preventDefault();
@@ -689,7 +694,7 @@ define('io.ox/core/folder/extensions', [
 
                     this.append(
                         $('<div>').append(
-                            $('<a href="#" tabindex="1" data-action="add-subfolder" role="button">')
+                            $('<a href="#" data-action="add-subfolder" role="button">')
                             .text(title)
                             .on('click', { folder: folder, module: module }, addFolder)
                         )

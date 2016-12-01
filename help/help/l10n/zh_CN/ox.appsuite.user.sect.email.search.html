@@ -4,7 +4,7 @@
 <title>5.6. 搜寻电子邮件</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="">
+<link rel="home" href="index.html" title="用户向导&gt;">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="第 5 章 电子邮件">
 <link rel="prev" href="ox.appsuite.user.sect.email.manage.mailfilter.html" title="5.5.19. 使用电子邮件过滤器">
 <link rel="next" href="ox.appsuite.user.sect.email.share.html" title="5.7. 团队里电子邮件">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.manage.mailfilter.html">上一页</a></li>
@@ -60,7 +60,7 @@
 <a name="ox.appsuite.user.task.email.search"></a><p class="title">如何搜索电子邮件：</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>单击<span class="guibutton"><strong>开始搜寻</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>或在搜寻条的输入字段里单击。文件夹按钮指示要搜寻的文件夹。</p>
+<p>单击<span class="guibutton"><strong>开始搜寻</strong></span>图标<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>或在搜寻条的输入字段里单击。文件夹按钮指示要搜寻的文件夹。</p>
 <div class="informalfigure">
 <a name="ox.appsuite.user.fig.email.search.start"></a><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_email_search_click.png" alt="输入字段"></div></div>
 </div>
@@ -68,7 +68,10 @@
 <li class="step">
 <p>要为搜寻选择一个文件夹，在文件夹按键上单击。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>如果您选择<span class="guibutton"><strong>所有文件夹</strong></span>会搜寻内部电子邮件户口的所有文件夹和子文件夹。</p></li>
+<li class="listitem">
+<p>如果您选择<span class="guibutton"><strong>所有文件夹</strong></span>会搜寻内部电子邮件户口的所有文件夹和子文件夹。</p>
+<p><span class="phrase"><strong>备注：</strong></span>视电子邮件服务器而定，此功能可能不可用。如是者，只有当前文件夹将会被搜寻，而子文件夹不会。</p>
+</li>
 <li class="listitem"><p>如果选择一个指定的文件夹或一个外部电子邮件户口的文件夹，只有搜寻此文件夹而不会搜寻子文件夹。</p></li>
 </ul></div>
 <p>
@@ -82,7 +85,7 @@
 <p>在搜寻菜单里单击一个项目，以定义要搜寻的数据来源。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>如果在搜寻词上单击或按下输入键，会搜寻以下数据来源：发送人、收件人、主题、电子邮件文本</p></li>
-<li class="listitem"><p>为了在一个指定的时间范围里搜寻电子邮件，使用一个有效时间范围成搜寻词。在一个有效时间范围在您的输入中被认出的同时，会在搜寻菜单里显示时间范围。在时段上单击</p></li>
+<li class="listitem"><p>为了在一个指定的时间范围里搜寻电子邮件，使用一个有效时间范围成搜寻词。在一个有效时间范围在您的输入中被认出的同时，会在搜寻菜单里显示时间范围。单击时间框。</p></li>
 <li class="listitem"><p>为了只以主题搜寻，单击 <span class="guibutton"><strong>主题</strong></span>。</p></li>
 <li class="listitem"><p>为了只以电子邮件文本搜寻，单击 <span class="guibutton"><strong>电子邮件文本</strong></span>。</p></li>
 <li class="listitem"><p>为了以发送人或收件人搜寻，单击一个名称。</p></li>
@@ -100,14 +103,14 @@
 <li class="step">
 <p>您有以下选项以调整搜寻结果：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>如果使用一人的名字作为搜寻词，您能定义要否在发送人、收件人、或两者中搜寻名字。为此，单击名字旁边的图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>。</p></li>
-<li class="listitem"><p>要重定搜寻结果，输入更多搜寻词：要移除一个搜寻词，单击搜寻词旁边的图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>。</p></li>
+<li class="listitem"><p>如果使用一人的名字作为搜寻词，您能定义要否在发送人、收件人、或两者中搜寻名字。为此，单击名字旁边的图标<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>。</p></li>
+<li class="listitem"><p>要重定搜寻结果，输入更多搜寻词：要移除一个搜寻词，单击搜寻词旁边的图标<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>。</p></li>
 <li class="listitem"><p>要在别的文件夹里搜寻，单击文件夹按钮。</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>为了结束搜寻，单击在输入字段里的<span class="guibutton"><strong>取消搜寻</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>。</p></li>
+<li class="step"><p>为了结束搜寻，单击在输入字段里的<span class="guibutton"><strong>取消搜寻</strong></span>图标<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>。</p></li>
 </ol></div>
 </div>
 </div>

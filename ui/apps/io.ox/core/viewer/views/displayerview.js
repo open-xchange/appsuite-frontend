@@ -68,6 +68,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.$el.on('mousemove click', _.throttle(this.blendNavigation.bind(this), 500));
             // listen to version change events
             this.listenTo(this.collection, 'change:version', this.onModelChangeVersion.bind(this));
+            // listen to version display events
+            this.listenTo(this.viewerEvents, 'viewer:display:version', this.onDisplayVersion.bind(this));
         },
 
         /**
@@ -86,8 +88,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
             var carouselRoot = $('<div id="viewer-carousel" class="swiper-container" role="listbox">'),
                 carouselInner = $('<div class="swiper-wrapper">'),
-                prevSlide = $('<a href="#" class="swiper-button-prev swiper-button-control left" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
-                nextSlide = $('<a href="#" class="swiper-button-next swiper-button-control right" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
+                prevSlide = $('<a href="#" role="button" class="swiper-button-prev swiper-button-control left" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
+                nextSlide = $('<a href="#" role="button" class="swiper-button-next swiper-button-control right" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
                 caption = $('<div class="viewer-displayer-caption">'),
                 startIndex = this.collection.getStartIndex(),
                 self = this,
@@ -128,8 +130,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.model = model;
 
             // init the carousel and preload neighboring slides on next/prev
-            prevSlide.attr({ title: gt('Previous'), tabindex: '1', role: 'button', 'aria-label': gt('Previous') });
-            nextSlide.attr({ title: gt('Next'), tabindex: '1', role: 'button', 'aria-label': gt('Next') });
+            prevSlide.attr({ title: gt('Previous'), 'aria-label': gt('Previous') });
+            nextSlide.attr({ title: gt('Next'), 'aria-label': gt('Next') });
             carouselRoot.attr('aria-label', gt('Use left/right arrow keys to navigate and escape key to exit the viewer.'));
             carouselRoot.append(carouselInner);
             if (this.collection.length > 1) {
@@ -175,7 +177,8 @@ define('io.ox/core/viewer/views/displayerview', [
             }, function fail() {
                 console.warn('DisplayerView.createSlides() - some errors occured:', arguments);
             });
-
+            // append bottom toolbar (used to diplay upload progress bars)
+            this.$el.append($('<div class="bottom toolbar">'));
             return this;
         },
 
@@ -286,7 +289,7 @@ define('io.ox/core/viewer/views/displayerview', [
                                 duplicateView.$el.attr('data-swiper-slide-index', swiperIndex);
 
                                 // only load duplicate slides which are not processed by the document converter
-                                if (!model.isOffice() && !model.isPDF() && !view.model.isVideo() && !view.model.isAudio()) duplicateView.prefetch(1);
+                                if (!model.isOffice() && !model.isPDF() && !view.model.isVideo() && !view.model.isAudio()) duplicateView.prefetch({ priority: 1 });
                             }
                         }
                     }
@@ -299,7 +302,7 @@ define('io.ox/core/viewer/views/displayerview', [
             return get().done(function (view) {
                 // prefetch data according to priority
                 if (!view.isPrefetched) {
-                    view.prefetch(self.getPrefetchPriority(index));
+                    view.prefetch({ priority: self.getPrefetchPriority(index) });
                 }
             });
         },
@@ -318,7 +321,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 if (view.isPrefetched) return;
 
                 var index = parseInt(key, 10);
-                view.prefetch(self.getPrefetchPriority(index));
+                view.prefetch({ priority: self.getPrefetchPriority(index) });
             });
         },
 
@@ -540,8 +543,52 @@ define('io.ox/core/viewer/views/displayerview', [
          *   The changed model.
          */
         onModelChangeVersion: function (model) {
-            var index = this.collection.indexOf(model),
-                slideNode = this.slideViews[index].$el;
+            this.displayVersion(model);
+        },
+
+        /**
+         * Handles display file version events.
+         * Loads the type model and renders the new slide content.
+         *
+         * @param {Object} versionData
+         *   The version data.
+         */
+        onDisplayVersion: function (versionData) {
+            if (!versionData) { return; }
+
+            var id = versionData.id;
+            var folder_id = versionData.folder_id;
+            var modified = versionData.last_modified;
+            var isToday = moment().isSame(moment(modified), 'day');
+            var dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-';
+            var model = this.collection.find(function (m) {
+                return (m.get('id') === id) && (m.get('folder_id') === folder_id);
+            });
+
+            this.displayVersion(model, versionData.version);
+
+            //#. information about the currently displayed file version in viewer
+            //#. %1$d - version date
+            this.blendCaption(gt('Version of %1$s', dateString), 5000);
+        },
+
+        /**
+         * Renders the slide content for the given file version.
+         * Uses the given version if present, otherwise the version defined within the model.
+         *
+         * @param {Object} model
+         *   The file model object.
+         *
+         * @param {String} [version]
+         *  The file version to display (optional).
+         */
+        displayVersion: function (model, version) {
+            if (!model) { return; }
+
+            var index = this.collection.indexOf(model);
+            var slideNode = this.slideViews[index].$el;
+            var versionParam = _.isEmpty(version) ? null : { version: version };
+            var prefetchParam = _.extend({ priority: 1 }, versionParam);
 
             // unload current slide content and dispose the view instance
             // the DOM node is re-used, so the dispose function won't be called automatically.
@@ -550,13 +597,14 @@ define('io.ox/core/viewer/views/displayerview', [
             TypesRegistry.getModelType(model)
             .then(function (ModelType) {
                 var view = new ModelType({ model: model, collection: this.collection, el: slideNode, viewerEvents: this.viewerEvents });
-                view.render().prefetch(1).show();
+                view.render().prefetch(prefetchParam).show(versionParam);
                 this.slideViews[index] = view;
             }.bind(this),
             function () {
                 console.warn('Cannot require a view type for', model.get('filename'));
             });
         },
+
         /**
          * Blends in the passed content element in a caption for a specific duration.
          *

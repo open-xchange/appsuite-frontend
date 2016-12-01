@@ -87,7 +87,8 @@ define('io.ox/core/api/attachment', [
                     attached: options.id,
                     folder: options.folder || options.folder_id
                 },
-                formData = new FormData();
+                formData = new FormData(),
+                cid = _.ecid(options);
 
             data = data || [];
             data = _.isArray(data) ? data : [data];
@@ -100,6 +101,8 @@ define('io.ox/core/api/attachment', [
                 params: params,
                 data: formData,
                 fixPost: true
+            }).progress(function (e) {
+                api.trigger('progress:' + cid, e);
             }).done(function () {
                 self.trigger('attach', {
                     module: options.module,
@@ -165,11 +168,16 @@ define('io.ox/core/api/attachment', [
          * builds URL to download/preview File
          * @param  {object} data
          * @param  {string} mode
+         * @param  {object} options
          * @return { string} url
          */
-        getUrl: function (data, mode) {
+        getUrl: function (data, mode, options) {
+            options = options || {};
 
-            var url = ox.apiRoot + '/attachment';
+            var url = ox.apiRoot + '/attachment',
+                // scaling options
+                scaling = options.width && options.height ? '&scaleType=' + options.scaleType + '&width=' + options.width + '&height=' + options.height : '';
+
             // inject filename for more convenient file downloads
             url += (data.filename ? '/' + encodeURIComponent(data.filename) : '') + '?' +
                 $.param({
@@ -185,7 +193,7 @@ define('io.ox/core/api/attachment', [
             switch (mode) {
                 case 'view':
                 case 'open':
-                    return url + '&delivery=view';
+                    return url + '&delivery=view' + scaling;
                 case 'download':
                     return url + '&delivery=download';
                 default:

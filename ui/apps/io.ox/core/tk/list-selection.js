@@ -133,7 +133,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.check(items);
 
             if (items.length) {
-                var node = items.last().attr('tabindex', '1');
+                var node = items.last().attr('tabindex', '0');
                 if (focus) node.focus();
             }
 
@@ -207,7 +207,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         resetTabIndex: function (items, skip) {
-            items = items.filter('[tabindex="1"]');
+            items = items.filter('[tabindex="0"]');
             items.not(skip).attr('tabindex', '-1');
         },
 
@@ -226,7 +226,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         focus: function (index, items) {
             items = items || this.getItems();
-            var node = items.eq(index).attr('tabindex', '1');
+            var node = items.eq(index).attr('tabindex', '0');
             // call focus deferred due to some issues in internet explorer
             _.defer(function () {
                 node.focus();
@@ -491,7 +491,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.view.mousedown = false;
         },
 
-        onClick: function (e) {
+        onClick: function (e, options) {
+            options = options || {};
+
             if (e.type === 'tap') {
                 // prevent ghostclicks
                 e.preventDefault();
@@ -514,6 +516,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             // range select / single select
             this.pick(index, items, e);
+
+            // support custom events
+            if (options.customEvents) return;
             // always trigger in multiple mode (sometimes only checkbox is changed)
             if (!_.isEqual(previous, this.get())) this.triggerChange(items);
         },
@@ -836,7 +841,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onFocus: function () {
 
             var items = this.getItems(),
-                first = items.filter('[tabindex="1"]:first'),
+                first = items.filter('[tabindex="0"]:first'),
                 index = items.index(first),
                 selectedItems = this.get();
             if (selectedItems.length <= 1) {
@@ -936,14 +941,20 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         onClick: function (e) {
-            var previous = this.get();
-            prototype.onClick.call(this, e);
+            var previous = this.get(),
+                mousedownSelect = (e.type === 'mousedown' && !this.isMultiple(e) && !$(e.currentTarget).is('.selected'));
+
+            prototype.onClick.call(this, e, { customEvents: mousedownSelect });
+            if (mousedownSelect) {
+                this.selectEvents();
+            }
             //trigger events (if only checkbox is changed the events are not triggered by normal function)
             if (_.isEqual(previous, this.get()) && e.type === 'mousedown' && this.isMultiple(e)) this.triggerChange(this.getItems());
         },
 
         // normal select now triggers selection:action instead of the usual events (item will be shown in detail view and checkbox is not checked)
         selectEvents: function (items) {
+            items = items || this.getItems();
             var layout = (this.view.app && this.view.app.props.get('layout')) || 'list';
             //in list layout we need the old events or mails open when they are not supposed to (for example when moving with arrow keys)
             if (layout === 'list') {
@@ -988,7 +999,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onFocus: function () {
 
             var items = this.getItems(),
-                first = items.filter('[tabindex="1"]:first'),
+                first = items.filter('[tabindex="0"]:first'),
                 index = items.index(first);
 
             this.focus(index > -1 ? index : 0, items);

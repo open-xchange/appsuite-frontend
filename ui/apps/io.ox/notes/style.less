@@ -1,0 +1,176 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.io-ox-notes-window {
+
+    //
+    // Folder view
+    //
+
+    .folder-icon.sticky-note i:before {
+        content: '\f249';
+    }
+
+    .section-header {
+        text-transform: uppercase;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 0 16px;
+        margin: 19px 0 4px 0;
+    }
+
+    //
+    // List view
+    //
+
+    .list-view {
+        .list-item {
+            padding-top: 9px;
+        }
+        .title {
+            font-weight: bold;
+            .ellipsis();
+        }
+        .last_modified {
+            float: right;
+        }
+        .preview {
+            height: 40px;
+            line-height: 16px;
+            padding-top: 7px;
+            margin-bottom: 5px;
+            word-break: break-all;
+            overflow: hidden;
+        }
+    }
+
+    //
+    // Detail view
+    //
+
+    .rightside {
+        padding: 16px;
+    }
+
+    .note {
+
+        color: #333;
+        padding: 0 32px;
+    }
+
+    .note-container {
+        //max-width: 700px;
+        width: 100%;
+    }
+
+    .note-header {
+        font-size: 13px;
+        padding-top: 11px;
+        height: 40px;
+    }
+
+    .note-caption {
+        color: #777;
+        float: right;
+    }
+
+    .note-title {
+
+        clear: both;
+
+        input {
+            width: 100%;
+            height: 40px;
+            padding-bottom: 5px;
+            border: 0;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 1px solid transparent;
+            outline: 0;
+        }
+
+        input:focus {
+            border: 0;
+            border-bottom: 1px solid @input-border-focus;
+            @color: fade(@input-border-focus, 60%);
+        }
+    }
+
+    .note-content {
+
+        font-size: 14px;
+        line-height: 20px;
+        background-color: white;
+        padding: 8px 0 32px 0;
+        outline: 0;
+
+        strike {
+            color: #a00;
+        }
+
+        u {
+            text-decoration: none;
+            background-color: rgba(255, 192, 0, 0.50);
+        }
+
+        ul, ol {
+            margin: 0;
+        }
+
+        a {
+            text-decoration: underline;
+        }
+
+        img {
+            margin: 8px auto;
+            max-width: 100%;
+            border: 0;
+        }
+
+        .todo {
+            list-style-type: none;
+            li {
+                position: relative;
+            }
+            li:before {
+                font-family: FontAwesome;
+                font-size: 14px;
+                color: #777;
+                content: '\f1db';
+                position: absolute;
+                left: -20px;
+                cursor: pointer;
+            }
+            li.checked:before {
+                color: @link-color;
+                content: '\f058';
+            }
+        }
+    }
+}
+
+.note-debug {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    width: 500px;
+    height: 350px;
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 16px;
+    white-space: pre-wrap;
+    overflow: auto;
+    font-family: monospace;
+    font-size: 13px;
+    .user-select(all);
+}

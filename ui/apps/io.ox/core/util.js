@@ -69,7 +69,7 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             // get node
             var node = options.$el || (
                 halo.email || halo.user_id ?
-                $('<a href="#" class="halo-link" tabindex="1">').attr('title', halo.email).data(halo) :
+                $('<a href="#" class="halo-link">').attr('title', halo.email).data(halo) :
                 $('<' + options.tagName + '>')
             );
 
@@ -221,6 +221,13 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
                 id = '&id=' + (/^[\d\/]+$/.test(data.id) ? data.id : encodeURIComponent(data.id));
             }
             return ox.abs + ox.root + '/#!&app=' + app + folder + id;
+        },
+
+        // recognize addresses in a string
+        // delimiters: comma, semi-colon, tab, newline, space; ignores delimiters in quotes
+        // returns array of addresses
+        getAddresses: function (str) {
+            return String(str).match(/((('[^']*'|"[^"]*"|\w[\w\x20]*)\s<[^>]+>)|("[^"]*"@)|[^"',;\x20\t\n]+)+/g);
         }
     };
 

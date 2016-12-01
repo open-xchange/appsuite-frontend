@@ -132,7 +132,7 @@ define('io.ox/settings/main', [
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
             //needed or mac voice over reads the whole settings pane when an input element is focused
             'role': 'main',
-            'tabindex': 1
+            'tabindex': 0
         }).scrollable();
 
         // Create extensions for the apps
@@ -256,43 +256,57 @@ define('io.ox/settings/main', [
         });
         tree.preselect(_.url.hash('folder'));
 
-        tree.on('virtual', function (id, item, baton) {
-            var focus = true,
-                refresh = (baton && baton.options) ? baton.options.refresh : false;
+        // select tree node on expand
+        tree.on('open', function (id) {
+            select(id, undefined, undefined, { focus: true, focusPane: true });
+        });
 
+        // select virtual node
+        tree.on('virtual', select);
+        function select(id, item, baton, options) {
+            // a11y - avoid this folder to avoid focus drop
+            if (id === 'virtual/settings') return;
+
+            var opt = _.extend({
+                focus: false,
+                focusPane: !!baton,
+                refresh: baton && baton.options && baton.options.refresh
+            }, options);
+
+            // different selections
             tree.selection.uncheck().preselect(id);
             app.folder.set(id);
-
             item = tree.selection.byId(id);
 
-            var view = item.closest('li').data('view');
-
             // view may not exists if the user does not have this setting
+            var view = item.closest('li').data('view');
             if (!view) return;
 
+            // expand subfolders
             folderUtil.open(view.options.parent);
+            // focus tree node
+            if (opt.focus) item.focus();
 
             // show subfolders on default
             if (view.hasSubFolders() && view.options.open !== 'open') view.toggle('open');
 
+            // show settings on changed selection or on forced refresh
             previousSelection = currentSelection;
             currentSelection = pool.getModel(id).get('meta');
-            if (!baton) {
-                baton = pool.getModel(id).get('meta');
-                focus = false;
-            }
 
-            if (previousSelection === null || previousSelection.id !== currentSelection.id || refresh) {
-                showSettings(baton, focus);
+            if (previousSelection === null || (previousSelection.id !== currentSelection.id) || opt.refresh) {
+                showSettings(baton || currentSelection, opt.focusPane);
             }
 
             left.trigger('select');
-            if (!ignoreChangeEvent) {
-                saveSettings('changeGrid');
-            }
-            ignoreChangeEvent = false;
 
-        });
+            // change event
+            if (ignoreChangeEvent) {
+                ignoreChangeEvent = false;
+                return;
+            }
+            saveSettings('changeGrid');
+        }
 
         // metrics
         tree.on('virtual', function (id) {

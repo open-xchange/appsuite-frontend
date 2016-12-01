@@ -203,7 +203,7 @@ define('io.ox/files/share/model', [
                     return api.invite(model.toJSON()).fail(yell);
                 case 'read':
                     return api.getLink(this.toJSON()).then(function (data, timestamp) {
-                        self.set(_.extend(data, { lastModified: timestamp }));
+                        self.set(_.extend(data, { lastModified: timestamp }), { '_inital': true });
                         self.setOriginal();
                         return data.url;
                     }).fail(yell);

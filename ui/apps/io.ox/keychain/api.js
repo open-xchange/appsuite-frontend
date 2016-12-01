@@ -131,8 +131,8 @@ define('io.ox/keychain/api', [
         }
     };
 
-    api.createInteractively = function (accountType, win) {
-        return invokeExtension(accountType, 'createInteractively', win);
+    api.createInteractively = function (accountType) {
+        return invokeExtension.apply(this, [accountType, 'createInteractively'].concat($.makeArray(arguments).slice(1)));
     };
 
     api.remove = function (account) {

@@ -48,12 +48,17 @@ define('io.ox/backbone/views/extensible', ['io.ox/backbone/views/disposable', 'i
             return this;
         },
 
-        invoke: function (type, $el) {
+        invoke: function (type) {
             var baton = new ext.Baton({ view: this, model: this.model });
-            this.point.invoke(type || 'render', this.options.invokeWithView ? this : $el || this.$el, baton);
+            this.point.invoke(type || 'render', this, baton);
             // close for further calls of extend
             closed[this.point.id] = true;
             return this;
+        },
+
+        // inject function to dialog instance
+        inject: function (functions) {
+            return _.extend(this, functions);
         },
 
         render: function () {

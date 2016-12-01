@@ -37,7 +37,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         draw: function (ed) {
             ed.on('keydown', function (e) {
                 // pressed enter?
-                if ((e.keyCode || e.which) === 13) {
+                if (e.which === 13) {
                     splitContent(ed, e);
                 }
             });
@@ -206,7 +206,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 'data-editor-id': editorId
             }).append(
                 toolbar = $('<div class="editable-toolbar">').attr('data-editor-id', editorId),
-                editor = $('<div class="editable" tabindex="1" role="textbox" aria-multiline="true">')
+                editor = $('<div class="editable" tabindex="0" role="textbox" aria-multiline="true">')
                     .attr({ 'aria-label': gt('Rich Text Area. Press ALT-F10 for toolbar') })
                     .css('margin-bottom', '32px')
             )
@@ -214,7 +214,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         opt = _.extend({
             toolbar1: 'undo redo | bold italic | emoji | bullist numlist outdent indent',
-            advanced: 'styleselect fontselect fontsizeselect | forecolor backcolor | link image',
+            advanced: 'styleselect | fontselect fontsizeselect | forecolor backcolor | link image',
             toolbar2: '',
             toolbar3: '',
             plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
@@ -385,10 +385,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 editor.css('min-height', h - top - bottomMargin + 'px');
                 if (opt.css) editor.css(opt.css);
 
-                var th = $(fixed_toolbar + ' > div').height(),
+                var t = $(fixed_toolbar + ' > div'),
                     w = $(fixed_toolbar).next().outerWidth();
 
-                if (th) $(fixed_toolbar).css('height', th);
+                if (t.height()) $(fixed_toolbar).css('height', t.outerHeight());
                 if (w) $(fixed_toolbar).css('width', w);
                 return;
             }, 30),
@@ -464,6 +464,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.focus = function () {
             if (_.device('ios')) return;
             _.defer(function () {
+                if (!ed) return;
                 ed.focus();
                 ed.execCommand('mceFocus', false, editorId);
             });

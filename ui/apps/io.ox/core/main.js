@@ -27,6 +27,7 @@ define('io.ox/core/main', [
     'io.ox/core/capabilities',
     'io.ox/core/ping',
     'io.ox/core/folder/api',
+    'io.ox/core/a11y',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/relogin',
@@ -34,7 +35,7 @@ define('io.ox/core/main', [
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, gt) {
 
     'use strict';
 
@@ -50,6 +51,12 @@ define('io.ox/core/main', [
             console.log.apply(console, args);
         };
     }
+
+    // general fix for flexbox scrolling issue (see bugs 43799, 44938, 45501, 46950, 47395)
+    $('#io-ox-windowmanager').on('scroll', function () {
+        // no infinite loop here. Only scroll if needed
+        if (this.scrollTop > 0) this.scrollTop = 0;
+    });
 
     debug('core: Loaded');
     ox.trigger('core:load');
@@ -210,27 +217,29 @@ define('io.ox/core/main', [
         $(window).trigger('offline');
     }
 
-    var topbar = $('#io-ox-topbar'),
+    var launcherDropdown,
+        topbar = $('#io-ox-topbar'),
         launchers = $('.launchers', topbar),
-        launcherDropdown = $('.launcher-dropdown ul', topbar);
+        launcherDropdownToggle;
 
-    topbar
-        // prevent dragging links
-        .on('dragstart', false)
-        // make system drop-down accessible
-        .find('a.dropdown-toggle').attr({
-            'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.'),
-            'role': 'button',
-            'aria-haspopup': 'true'
-        })
-        .end()
-        .find('i.fa-bars').removeClass('fa-bars').addClass('fa-angle-double-right ');
+    var launcherDropdownTab = $('<li class="launcher-dropdown dropdown" role="presentation">').append(
+        launcherDropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr({
+            'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.')
+        }).append(
+            $('<i class="fa fa-angle-double-right" aria-hidden="true">'),
+            $('<span class="sr-only">').text('Dropdown')
+        ),
+        launcherDropdown = $('<ul class="dropdown-menu" role="menu">')
+    );
 
-    launchers
-        .attr({
-            'role': 'navigation',
-            'aria-label': gt('Apps')
-        });
+    launcherDropdownToggle.dropdown();
+
+    // prevent dragging links
+    topbar.on('dragstart', false);
+
+    topbar.find('[role="navigation"]').attr({
+        'aria-label': gt('Apps')
+    });
 
     // whatever ...
     gt.pgettext('app', 'Portal');
@@ -252,7 +261,7 @@ define('io.ox/core/main', [
         // we don't show any launcher in top-bar on small devices
         if (_.device('smartphone') && !forceDesktopLaunchers) {
             items.hide();
-            launcherDropDownIcon.show();
+            launchers.append(launcherDropdownTab);
             return;
         }
 
@@ -268,7 +277,7 @@ define('io.ox/core/main', [
             launcherDropDownIconWidth = launcherDropDownIcon.width(),
             viewPortWidth = topbar.width() - launcherDropDownIconWidth;
 
-        launcherDropDownIcon.hide();
+        launcherDropdownTab.detach();
 
         itemsVisible.each(function () {
             // use native bounding client rect function to compute the width as floating point
@@ -286,20 +295,18 @@ define('io.ox/core/main', [
                 hidden++;
             }
         }
-        $('li', launcherDropdown).hide();
+        $('li', launcherDropdown).attr('role', 'menuitem').hide();
 
 
         if (hidden > 0) {
-            // a11y: dropdown menu should only have role menu if it is shown
-            $('.dropdown-menu', launcherDropdown).removeAttr('aria-hidden');
-            launcherDropDownIcon.show();
+            launchers.append(launcherDropdownTab);
             for (i = hidden; i > 0; i--) {
                 $('li', launcherDropdown).eq(-i).show();
             }
         } else {
-            // a11y: dropdown menu should only have role menu if it is shown
-            $('.dropdown-menu', launcherDropdown).attr('aria-hidden', true);
+            launcherDropdownTab.detach();
         }
+
     }, 100);
 
     // add launcher
@@ -330,15 +337,9 @@ define('io.ox/core/main', [
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" class="apptitle" tabindex="1">').text(/*#, dynamic*/gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle">').text(/*#, dynamic*/gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
-                return $('<a>', {
-                    href: '#',
-                    'class': 'apptitle',
-                    tabindex: 1,
-                    role: 'button',
-                    'aria-label': arialabel ? _.escape(arialabel) : null
-                }).append(label);
+                return $('<a href="#" class="apptitle" role="button">').attr('aria-label', arialabel ? _.escape(arialabel) : null).append(label);
             }
             return label;
         });
@@ -503,6 +504,9 @@ define('io.ox/core/main', [
                             node = $('<span>').text(getString(countdown)),
                             countdownTimer = setInterval(function () {
                                 if (countdown <= 0) {
+                                    //make sure, this does not run again in a second
+                                    clearInterval(countdownTimer);
+
                                     logout({ autologout: true });
                                 } else {
                                     countdown--;
@@ -586,7 +590,7 @@ define('io.ox/core/main', [
             logout: logout.bind(null, { autologout: true })
         };
 
-        settings.on('change:autoLogout', function (ev, val) {
+        settings.on('change:autoLogout', function (val) {
             if (parseInt(val, 10) === 0) return ox.autoLogout.stop();
             ox.autoLogout.start();
         });
@@ -644,8 +648,8 @@ define('io.ox/core/main', [
             var ariaBasicLabel =
                     //#. %1$s is app title/name
                     _.escape(gt('close for %1$s', model.get('title'))),
-                quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel + '">')
-                    .append($('<i class="fa fa-times" aria-hidden="true">'))
+                quitApp = $('<a href="#" class="closelink" role="button">').attr('aria-label', ariaBasicLabel)
+                    .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', ariaBasicLabel))
                     .on('click', function (e) {
                         e.preventDefault();
                         e.stopImmediatePropagation();
@@ -660,16 +664,14 @@ define('io.ox/core/main', [
         function addUserContent(model, launcher, first) {
             if (model.get('closable')) {
                 launcher.addClass('closable');
-                if (first) {
-                    launcher.find('a').after(quit(model));
-                }
+                if (first) launcher.find('a').after(quit(model));
             }
 
             if (model.get('userContent')) {
                 var cls = model.get('userContentClass') || '',
                     icon = model.get('userContentIcon') || '';
                 launcher.addClass('user-content').addClass(cls).children().first().prepend(
-                    $('<i class="' + icon + '">')
+                    $('<i aria-hidden="true">').addClass(icon)
                 );
             }
         }
@@ -716,23 +718,14 @@ define('io.ox/core/main', [
 
             // add list item
             node = $('<li>').append(
-                $('<a>', {
-                    href: '#',
+                $('<a href="#">').addClass(closable ? 'closable' : '').attr({
                     'data-app-name': name,
-                    'data-app-guid': model.guid,
-                    tabindex: 1,
-                    'role': 'menuitem'
-                })
-                .addClass(closable ? 'closable' : '')
-                .text(/*#, dynamic*/gt.pgettext('app', title))
+                    'data-app-guid': model.guid
+                }).text(/*#, dynamic*/gt.pgettext('app', title))
             );
 
-            if (closable) {
-                //add close button
-                node.append(
-                    quit(model)
-                );
-            }
+            //add close button
+            if (closable) node.append(quit(model));
 
             launcherDropdown.append(
                 node.on('click', function (e) {
@@ -745,34 +738,30 @@ define('io.ox/core/main', [
         });
 
         ox.ui.apps.on('remove', function (model) {
-            launchers.children('[data-app-guid="' + model.guid + '"]').remove();
-            launcherDropdown.children('[data-app-guid="' + model.guid + '"]').remove();
+            _([launchers, launcherDropdown]).each(function (node) {
+                node.children('[data-app-guid="' + model.guid + '"]').remove();
+            });
             tabManager();
         });
 
         ox.ui.apps.on('launch resume', function (model) {
+            if (_.device('smartphone') && !settings.get('forceDesktopLaunchers', false)) launchers.children('[role="tab"]').hide();
             // mark last active app
-            if (_.device('smartphone')) {
-                if (!settings.get('forceDesktopLaunchers', false)) {
-                    launchers.hide();
-                }
-            }
-            launchers.children().removeClass('active-app')
-                .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
+            _([launchers, launcherDropdown]).each(function (nodes) {
+                var node = nodes.children(),
+                    activeApp = node.filter('[data-app-guid="' + model.guid + '"]');
+                node.removeClass('active-app').find('span.sr-only').remove();
+                // A11y: Current app indicator for screen-readers
+                if (activeApp.length) activeApp.addClass('active-app').find('a').append($('<span class="sr-only">').text(gt('(current app)')));
+            });
 
-            launcherDropdown.children().removeClass('active-app')
-                .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
-
-            // A11y: Current app indicator for screen-readers
-            launchers.children().find('a > span.sr-only').remove();
-            launchers.children('.active-app').find('a').append($('<span class="sr-only">').text(gt('(current app)')));
         });
 
         ox.ui.apps.on('change:title', function (model, value) {
             var node = $('[data-app-guid="' + model.guid + '"]', launchers);
             $('a.apptitle', node).text(_.noI18n(value));
             addUserContent(model, node);
-            launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(_.noI18n(value));
+            launcherDropdown.find('li[data-app-guid="' + model.guid + '"] a:first').text(_.noI18n(value));
             tabManager();
         });
 
@@ -792,9 +781,7 @@ define('io.ox/core/main', [
                     }
                 });
 
-                if (view.visible) {
-                    this.append(view.render().$el);
-                }
+                if (view.visible) this.append(view.render().$el);
             }
         });
 
@@ -829,7 +816,7 @@ define('io.ox/core/main', [
             draw: function () {
                 if (capabilities.has('search') && _.device('smartphone')) {
                     this.append(
-                        addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
+                        addLauncher('right', $('<i class="fa fa-search launcher-icon" aria-hidden="true">'), function () {
                             require(['io.ox/search/main'], function (searchapp) {
                                 searchapp.run({ reset: true });
                             });
@@ -845,11 +832,15 @@ define('io.ox/core/main', [
             index: 200,
             draw: function () {
                 this.append(
-                    addLauncher('right', $('<i class="fa fa-refresh launcher-icon">').attr('aria-hidden', 'true'), function () {
-                        refresh();
-                        return $.when();
-                    }, gt('Refresh'))
-                    .attr('id', 'io-ox-refresh-icon')
+                    addLauncher(
+                        'right',
+                        $('<i class="fa fa-refresh launcher-icon" aria-hidden="true">').attr('title', gt('Refresh')),
+                        function () {
+                            refresh();
+                            return $.when();
+                        },
+                        gt('Refresh')
+                    ).attr('id', 'io-ox-refresh-icon')
                 );
             }
         });
@@ -863,7 +854,6 @@ define('io.ox/core/main', [
                 this.append(
                     addLauncher('right', new HelpView({
                         iconClass: 'launcher-icon',
-                        tabindex: '1',
                         href: getHelp
                     }).render().$el)
                 );
@@ -899,7 +889,7 @@ define('io.ox/core/main', [
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="settings" role="menuitem" tabindex="-1">').text(gt('Settings'))
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="settings" role="menuitem">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -918,7 +908,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem">')
                         //#. starts the client onboarding wizard that helps users
                         //#. to configure their devices to access/sync appsuites
                         //#. data (f.e. install ox mail app)
@@ -944,7 +934,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="my-contact-data" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="my-contact-data" role="menuitem">')
                         .text(gt('My contact data'))
                     )
                     .on('click', function (e) {
@@ -966,7 +956,7 @@ define('io.ox/core/main', [
 
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="password" role="menuitem" tabindex="-1">')
+                        $('<a href="#" data-app-name="io.ox/settings" data-action="password" role="menuitem">')
                         .text(gt('Change password'))
                     )
                     .on('click', function (e) {
@@ -986,15 +976,12 @@ define('io.ox/core/main', [
                 //replaced by module
                 var node = this;
                 node.append(
-                    $('<li class="divider" role="separator">'),
-                    $('<li role="presentation" class="io-ox-specificHelp">').append(
+                    $('<li class="divider" role="separator"></li>'),
+                    $('<li class="io-ox-specificHelp" role="presentation">').append(
                         new HelpView({
                             content: gt('Help'),
                             href: getHelp
-                        }).render().$el.attr({
-                            'role': 'menuitem',
-                            'tabindex': -1
-                        })
+                        }).render().$el.attr('role', 'menuitem')
                     )
                 );
             }
@@ -1016,7 +1003,7 @@ define('io.ox/core/main', [
             draw: function () {
                 this.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-action="about" role="menuitem" tabindex="-1">').text(gt('About'))
+                        $('<a href="#" data-action="about" role="menuitem">').text(gt('About'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -1035,7 +1022,7 @@ define('io.ox/core/main', [
                 this.append(
                     $('<li class="divider" role="separator">'),
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-action="logout" role="menuitem" tabindex="-1">').text(gt('Sign out'))
+                        $('<a href="#" data-action="logout" role="menuitem">').text(gt('Sign out'))
                     )
                     .on('click', function (e) {
                         e.preventDefault();
@@ -1052,10 +1039,8 @@ define('io.ox/core/main', [
                 var ul, a;
                 this.append(
                     $('<li id="io-ox-topbar-dropdown-icon" class="launcher dropdown" role="presentation">').append(
-                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="1">')
-                        .append(
-                            $('<i class="fa fa-bars launcher-icon" aria-hidden="true">'),
-                            $('<span class="sr-only">').text(gt('Settings'))
+                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
+                            $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
                         ),
                         ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
                     )
@@ -1074,7 +1059,9 @@ define('io.ox/core/main', [
                     var logoutButton = addLauncher('right', $('<i class="fa fa-sign-out launcher-icon" aria-hidden="true">'), function () {
                         logout();
                     }, gt('Sign out'));
-                    logoutButton.find('a').tooltip({
+                    logoutButton.find('a')
+                    .attr('data-action', 'sign-out')
+                    .tooltip({
                         title: gt('Sign out'),
                         placement: function (tip, el) {
                             return ($(window).width() - $(el).offset().left - el.offsetWidth) < 80 ? 'left' : 'auto';
@@ -1086,34 +1073,44 @@ define('io.ox/core/main', [
         }
 
         ext.point('io.ox/core/topbar/right').extend({
+            id: 'logout-button-hint',
+            index: 2100,
+            draw: function () {
+                var data, link;
+                if (!session.isAutoLogin() || _.device('reload')) return;
+                // disabled
+                data = _.clone(settings.get('features/logoutButtonHint', {}));
+                if (!data.enabled) return;
+                // banner action, topbar action, dropdown action
+                link = $('#io-ox-banner [data-action="logout"]');
+                if (!link.length) link = this.find('[data-action="sign-out"]');
+                if (!link.length) link = this.find('#io-ox-topbar-dropdown-icon > a');
+                // popover
+                link.popover({
+                    content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
+                    template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
+                    placement: 'bottom'
+                });
+                // prevent logout action when clicking hint
+                this.get(0).addEventListener('click', function (e) {
+                    if (e.target.classList.contains('popover-content-signout')) e.stopImmediatePropagation();
+                    link.popover('destroy');
+                }, true);
+                // close on click
+                $(document).one('click', link.popover.bind(link, 'destroy'));
+                // show
+                _.defer(link.popover.bind(link, 'show'));
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right').extend({
             id: 'logo',
             index: 10000,
             draw: function () {
                 // add small logo to top bar
                 this.append(
-                    $('<div id="io-ox-top-logo-small" aria-hidden="true">')
+                    $('<li id="io-ox-top-logo-small" aria-hidden="true">')
                 );
-            }
-        });
-
-        // launchpad
-        ext.point('io.ox/core/topbar/launchpad').extend({
-            id: 'default',
-            draw: function () {
-                if (capabilities.has('launchpad')) {
-                    addLauncher('left', $('<i class="fa fa-th">').attr('aria-label', gt('Your Applications')), function () {
-                        require(['io.ox/launchpad/main'], function (m) {
-                            launchers.children().removeClass('active-app');
-                            launcherDropdown.children().removeClass('active-app');
-                            launchers.children().first().addClass('active-app');
-                            m.show();
-                        });
-                    })
-                    // to match dimensions of side navigation
-                    .addClass('left-corner')
-                    // make QA happy (launchpad is not a "real" app, so no app-name, but should be accessible, too)
-                    .attr('data-app-name', 'launchpad');
-                }
             }
         });
 
@@ -1174,18 +1171,22 @@ define('io.ox/core/main', [
             id: 'default',
             draw: function () {
 
-                var rightbar = $('<ul class="launchers-secondary">').attr('aria-label', gt('Actions'));
+                var rightbar = $('<ul class="launchers-secondary" role="toolbar">')
+                    .attr('aria-label', gt('Actions'));
 
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', rightbar);
+
+                rightbar.find('> li').attr('role', 'presentation');
+                rightbar.find('> li > a').attr('role', 'button');
 
                 topbar.append(rightbar);
 
                 // refresh animation
                 initRefreshAnimation();
 
-                ext.point('io.ox/core/topbar/launchpad').invoke('draw');
                 ext.point('io.ox/core/topbar/favorites').invoke('draw');
+
                 $(window).resize(tabManager);
                 ox.on('recalculate-topbarsize', tabManager);
             }
@@ -1212,16 +1213,14 @@ define('io.ox/core/main', [
 
                 var content = banner.find('.banner-content');
 
-                // show current user (unless anonymous)
-                if (ox.user !== 'anonymous') {
-                    content.append(
-                        $('<label>').text(gt('Signed in as:')),
-                        $.txt(' '), $.txt(ox.user)
-                    );
-                }
+                // show current user
+                content.append(
+                    $('<label>').text(gt('Signed in as:')),
+                    $.txt(' '), $.txt(ox.user)
+                );
 
                 content.append(
-                    $('<a href="#" class="banner-action" data-action="logout" role="button" tabindex="1">')
+                    $('<a href="#" class="banner-action" data-action="logout" role="button">')
                     .attr('title', gt('Sign out'))
                     .append('<i class="fa fa-sign-out" aria-hidden="true">')
                     .on('click', function (e) {
@@ -1533,17 +1532,17 @@ define('io.ox/core/main', [
                         btn1, btn2;
 
                     $('#io-ox-core').append(
-                        dialog = $('<div class="io-ox-restore-dialog" tabindex="1">').append(
+                        dialog = $('<div class="io-ox-restore-dialog" tabindex="0" role="dialog">').append(
                             $('<div class="header">').append(
-                                $('<h3>').text(gt('Restore applications')),
+                                $('<h1>').text(gt('Restore applications')),
                                 $('<div>').text(
                                     gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
                                 )
                             ),
                             $('<ul class="list-unstyled content">'),
                             $('<div class="footer">').append(
-                                btn1 = $('<button type="button" class="cancel btn btn-default" tabindex="1">').text(gt('Cancel')),
-                                btn2 = $('<button type="button" class="continue btn btn-primary" tabindex="1">').text(gt('Continue'))
+                                btn1 = $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
+                                btn2 = $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
                             )
                         )
                     );
@@ -1562,7 +1561,7 @@ define('io.ox/core/main', [
                                 var version = item.version || '';
                                 version = version.split('.').slice(0, -2).join('.');
                                 if (version) {
-                                    versionInfo = $('<span>').addClass('oldversion').text(gt.noI18n('(' + version + ')'));
+                                    versionInfo = $('<span class="oldversion">').text(gt.noI18n('(' + version + ')'));
                                 }
                             }
                             this.append(
@@ -1570,7 +1569,7 @@ define('io.ox/core/main', [
                                     $('<a href="#" role="button" class="remove">').data(item).append(
                                         $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
-                                    item.icon ? $('<i class="' + item.icon + '">') : $(),
+                                    item.icon ? $('<i>').addClass(item.icon) : $(),
                                     $('<span>').text(gt.noI18n(info)),
                                     versionInfo
                                 )
@@ -1662,68 +1661,72 @@ define('io.ox/core/main', [
 
                     debug('Stage "load" > autoLaunch ...');
 
-                    // auto launch
-                    _(baton.autoLaunch)
-                    .chain()
-                    .map(function (id) {
-                        return getAutoLaunchDetails(id);
-                    })
-                    .filter(function (details) {
-                        //don’t autoload without manifest
-                        //don’t autoload disabled apps
-                        return ox.manifests.apps[details.app] !== undefined && !ox.manifests.isDisabled(details.app);
-                    })
-                    .each(function (details, index) {
-                        //only load first app on small devices
-                        if (_.device('smartphone') && index > 0) return;
-                        // split app/call
-                        var hash = _.url.hash(), launch, method, options = _(hash).pick('folder', 'id');
-                        debug('Auto launch:', details.app, options);
-                        launch = ox.launch(details.app, options);
-                        method = details.method;
-                        // TODO: all pretty hard-wired here; looks for better solution
-                        // special case: open viewer too?
-                        if (hash.app === 'io.ox/files' && hash.id !== undefined) {
-                            require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
-                                folderAPI.get(hash.folder)
-                                    .done(function () {
-                                        api.get(hash).done(function (data) {
-                                            new Viewer().launch({ files: [data], folder: hash.folder });
-                                        });
-                                    })
-                                    .fail(function (error) {
-                                        _.url.hash('id', null);
-                                        notifications.yell(error);
-                                    });
-                            });
-                        }
-                        // explicit call?
-                        if (method) {
-                            launch.done(function () {
-                                if (_.isFunction(this[method])) {
-                                    this[method]();
-                                }
-                            });
-                        }
-                        // non-app deeplinks
-                        var id = _.url.hash('reg');
-                        if (id && ox.registry.get(id)) {
-                            // normalise args
-                            var list = (_.url.hash('regopt') || '').split(','),
-                                data = {}, parts;
-                            // key:value, key:value... -> object
-                            _.each(list, function (str) {
-                                parts = str.split(':');
-                                data[parts[0]] = parts[1];
-                            });
-                            // call after app is ready
-                            launch.done(function () {
-                                ox.registry.call(id, 'client-onboarding', { data: data });
-                            });
-                        }
-                    });
+                    // store hash now or restored apps might have changed url
+                    var hash = _.copy(_.url.hash());
+
                     // restore apps
-                    ox.ui.App.restore();
+                    ox.ui.App.restore().always(function () {
+                        // auto launch
+                        _(baton.autoLaunch)
+                        .chain()
+                        .map(function (id) {
+                            return getAutoLaunchDetails(id);
+                        })
+                        .filter(function (details) {
+                            //don’t autoload without manifest
+                            //don’t autoload disabled apps
+                            return ox.manifests.apps[details.app] !== undefined && !ox.manifests.isDisabled(details.app);
+                        })
+                        .each(function (details, index) {
+                            //only load first app on small devices
+                            if (_.device('smartphone') && index > 0) return;
+                            // split app/call
+                            var launch, method, options = _(hash).pick('folder', 'id');
+                            debug('Auto launch:', details.app, options);
+                            launch = ox.launch(details.app, options);
+                            method = details.method;
+                            // TODO: all pretty hard-wired here; looks for better solution
+                            // special case: open viewer too?
+                            if (hash.app === 'io.ox/files' && hash.id !== undefined) {
+                                require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
+                                    folderAPI.get(hash.folder)
+                                        .done(function () {
+                                            api.get(hash).done(function (data) {
+                                                new Viewer().launch({ files: [data], folder: hash.folder });
+                                            });
+                                        })
+                                        .fail(function (error) {
+                                            _.url.hash('id', null);
+                                            notifications.yell(error);
+                                        });
+                                });
+                            }
+                            // explicit call?
+                            if (method) {
+                                launch.done(function () {
+                                    if (_.isFunction(this[method])) {
+                                        this[method]();
+                                    }
+                                });
+                            }
+                            // non-app deeplinks
+                            var id = _.url.hash('reg');
+                            if (id && ox.registry.get(id)) {
+                                // normalise args
+                                var list = (_.url.hash('regopt') || '').split(','),
+                                    data = {}, parts;
+                                // key:value, key:value... -> object
+                                _.each(list, function (str) {
+                                    parts = str.split(':');
+                                    data[parts[0]] = parts[1];
+                                });
+                                // call after app is ready
+                                launch.done(function () {
+                                    ox.registry.call(id, 'client-onboarding', { data: data });
+                                });
+                            }
+                        });
+                    });
 
                     baton.instantFadeOut = instantFadeOut;
                 })
@@ -1832,22 +1835,6 @@ define('io.ox/core/main', [
             // no default
         }
     });
-
-    function replacer(key, value) {
-        return value === undefined ? 'undefined' : value;
-    }
-
-    if (ox.debug && _.device('!karma')) {
-        ox.on('http:before:send', function (options) {
-            var json = _(['params', 'data']).reduce(function (str, id) {
-                return str + (_.isString(options[id]) ? options[id] : JSON.stringify(options[id], replacer));
-            }, '');
-            // look for missing id, folder, or folder_id
-            if (/"(id|folder|folder_id)":("undefined"|null)/.test(json)) {
-                console.error('Spotted undefined or null value for id, folder, or folder_id', options);
-            }
-        });
-    }
 
     // white list warninff codes
     var isValidWarning = (function () {

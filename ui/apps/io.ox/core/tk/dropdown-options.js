@@ -186,8 +186,8 @@ define('io.ox/core/tk/dropdown-options', [
             //create nodes
             _(data).each(function (item) {
                 $menu.append(
-                     nodes[item.name] = $('<li>').append($('<a href="#">')
-                        .attr({ tabindex: $anchor.attr('tabindex') })
+                     nodes[item.name] = $('<li role="presentation">').append(
+                        $('<a href="#">')
                         .append(
                             $('<i class="fa fa-fw" aria-hidden="true">'),
                             $.txt(item.label)
@@ -204,9 +204,9 @@ define('io.ox/core/tk/dropdown-options', [
             });
             //close action
             if (opt.addclose) {
-                $menu.append('<li class="divider" role="separator">');
+                $menu.append('<li class="divider" role="separator"></li>');
                 $menu.append($('<li style="text-align: center" role="presentation">').append(
-                        $('<a href="#" tabindex="-1">')
+                        $('<a href="#">')
                         .text(gt('close'))
                         .on('click', function (e) {
                             e.preventDefault();

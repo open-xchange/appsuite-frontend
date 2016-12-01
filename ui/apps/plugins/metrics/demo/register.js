@@ -30,7 +30,7 @@ define('plugins/metrics/demo/register', [
         RECIPIENT = settings.get('demo/recipient', 'matthias.biggeleben@open-xchange.com'),
         FILE = settings.get('demo/cloud-attachment', { folder_id: '13894', id: '63605' }),
         KEYWORD = settings.get('demo/search-keyword', 'automatic'),
-        MAIL_WITH_THUMBNAILS = settings.get('demo/message-with-thumbnails', { folder_id: 'default0/INBOX/Test', id: 85 }),
+        MAIL_WITH_THUMBNAILS = settings.get('demo/message-with-thumbnails', { folder_id: 'default0/INBOX/Test', id: 221 }),
         STORE_FOLDER = settings.get('demo/store-folder', 73407);
 
     // ensure normal selection mode
@@ -94,7 +94,7 @@ define('plugins/metrics/demo/register', [
                     var to = [['Myself', mailSettings.get('defaultSendAddress')]];
                     this.app.view.model.set('to', to);
                     // send
-                    this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
+                    this.app.getWindow().nodes.outer.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
                     ox.once('mail:send:stop', done);
                 });
@@ -154,7 +154,7 @@ define('plugins/metrics/demo/register', [
                     })
                     .done(done);
 
-                    var cid = 'thread.' + _.cid(this.message);
+                    var cid = _.cid(this.message);
                     this.app.listView.selection.set([cid]);
                     this.app.listView.selection.triggerChange();
                 });
@@ -195,7 +195,7 @@ define('plugins/metrics/demo/register', [
                 this.step('Wait for auto-complete', function (done) {
                     this.waitFor(function () {
                         var item = $('.tt-suggestion').filter(function () {
-                            return $(this).find('.email').text().indexOf(RECIPIENT) === 0;
+                            return $(this).find('.participant-email').text().indexOf(RECIPIENT) === 0;
                         });
                         item.click();
                         return item.length;
@@ -212,7 +212,7 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Send message', function (done) {
                     // send
-                    this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
+                    this.app.getWindow().nodes.outer.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
                     ox.once('mail:send:stop', done);
                 });
@@ -256,7 +256,7 @@ define('plugins/metrics/demo/register', [
                 this.step('Wait for auto-complete', function (done) {
                     this.waitFor(function () {
                         var item = $('.tt-suggestion').filter(function () {
-                            return $(this).find('.email').text().indexOf(RECIPIENT) === 0;
+                            return $(this).find('.participant-email').text().indexOf(RECIPIENT) === 0;
                         });
                         item.click();
                         return item.length;
@@ -273,7 +273,7 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Send message', function (done) {
                     // send
-                    this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
+                    this.app.getWindow().nodes.outer.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
                     ox.once('mail:send:stop', done);
                 });
@@ -310,7 +310,7 @@ define('plugins/metrics/demo/register', [
                 this.step('Wait for auto-complete', function (done) {
                     this.waitFor(function () {
                         var item = $('.tt-suggestion').filter(function () {
-                            return $(this).find('.email').text().indexOf(RECIPIENT) === 0;
+                            return $(this).find('.participant-email').text().indexOf(RECIPIENT) === 0;
                         });
                         item.click();
                         return item.length;
@@ -327,7 +327,7 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Send message', function (done) {
                     // send
-                    this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
+                    this.app.getWindow().nodes.outer.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
                     ox.once('mail:send:stop', done);
                 });
@@ -358,19 +358,12 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Focus search field to load related code', function (done) {
                     this.waitForEvent('search:load', done);
-                    $('.search-field').trigger('load');
+                    $('.tokenfield-placeholder').trigger('focusin');
                 });
 
                 this.step('Search for particular keyword', function () {
-                    $('.search-field').val(KEYWORD).trigger('search');
-                });
-
-                this.step('Wait for auto-complete', function (done) {
-
-                    this.waitFor(function () {
-                        return $('.autocomplete-item').eq(1).click().length;
-                    })
-                    .done(done);
+                    // this needs exactly this order: focusin -> val -> input -> enter
+                    $('.token-input.tt-input').trigger('focusin').val(KEYWORD).trigger('input').trigger($.Event('keydown', { keyCode: 13, which: 13 }));
                 });
 
                 this.step('Wait for list view to display results', function (done) {
@@ -398,7 +391,7 @@ define('plugins/metrics/demo/register', [
                 });
 
                 this.step('Select message', function () {
-                    var cid = 'thread.' + _.cid(MAIL_WITH_THUMBNAILS);
+                    var cid = _.cid(MAIL_WITH_THUMBNAILS);
                     this.app.listView.selection.set([cid]);
                     this.app.listView.selection.triggerChange();
                 });
@@ -410,7 +403,7 @@ define('plugins/metrics/demo/register', [
                 this.step('Open details and toggle mode', function () {
                     var list = $('.mail-attachment-list');
                     list.find('.toggle-details').click();
-                    list.find('.toggle-mode').click();
+                    if (!list.hasClass('show-preview')) list.find('.toggle-mode').click();
                 });
 
                 this.step('Wait for first thumbnail to load', function (done) {

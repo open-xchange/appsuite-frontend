@@ -13,26 +13,24 @@
 
 define('io.ox/contacts/settings/pane', [
     'settings!io.ox/contacts',
-    'io.ox/contacts/settings/model',
     'io.ox/core/extensions',
     'gettext!io.ox/contacts',
     'io.ox/backbone/mini-views',
     'io.ox/core/notifications',
     'io.ox/core/capabilities'
-], function (settings, contactsSettingsModel, ext, gt, mini, notifications, capabilities) {
+], function (settings, ext, gt, mini, notifications, capabilities) {
 
     'use strict';
 
     var POINT = 'io.ox/contacts/settings/detail', pane,
-        contactsModel =  settings.createModel(contactsSettingsModel),
         reloadMe = [];
 
-    contactsModel.on('change', function (model) {
-        var showNotice = _(reloadMe).any(function (attr) {
-            return model.changed[attr];
+    settings.on('change', function (setting) {
+        var showNotice = _(reloadMe).some(function (attr) {
+            return setting === attr;
         });
 
-        contactsModel.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
+        settings.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
 
             function success() {
 
@@ -83,7 +81,7 @@ define('io.ox/contacts/settings/pane', [
                         $('<div class="form-group">').append(
                             $('<div class="checkbox">').append(
                                 $('<label>').text(gt('Start in global address book')).prepend(
-                                    new mini.CheckboxView({ name: 'startInGlobalAddressbook', model: contactsModel }).render().$el
+                                    new mini.CheckboxView({ name: 'startInGlobalAddressbook', model: settings }).render().$el
                                 )
                             )
                         )
@@ -108,7 +106,7 @@ define('io.ox/contacts/settings/pane', [
                     $('<legend>').addClass('sectiontitle').append(
                         $('<h2>').text(gt('Display of names'))
                     ),
-                    new mini.RadioView({ list: preferences, name: 'fullNameFormat', model: contactsModel }).render().$el
+                    new mini.RadioView({ list: preferences, name: 'fullNameFormat', model: settings }).render().$el
                 )
             );
         }
@@ -132,7 +130,7 @@ define('io.ox/contacts/settings/pane', [
                     $('<legend class="sectiontitle">').append(
                         $('<h2>').text(gt('Link postal addresses with map service'))
                     ),
-                    new mini.RadioView({ list: options, name: 'mapService', model: contactsModel }).render().$el
+                    new mini.RadioView({ list: options, name: 'mapService', model: settings }).render().$el
                 )
             );
         }

@@ -66,14 +66,14 @@ define('io.ox/mail/compose/extensions', [
         buttons: {
             discard: function (baton) {
                 return (
-                    $('<button type="button" class="btn btn-default" data-action="discard" tabindex="1">')
+                    $('<button type="button" class="btn btn-default" data-action="discard">')
                         .on('click', function () { baton.view.app.quit(); })
                         .text(gt('Discard'))
                         .appendTo(this)
                 );
             },
             save: function (baton) {
-                this.append($('<button type="button" class="btn btn-default" data-action="save" tabindex="1">')
+                this.append($('<button type="button" class="btn btn-default" data-action="save">')
                     .on('click', function () {
                         if (baton.view.isSaving === true) return false;
                         baton.view.isSaving = true;
@@ -84,10 +84,10 @@ define('io.ox/mail/compose/extensions', [
                     .text(gt('Save')));
             },
             send: function (baton) {
-                this.append($('<button type="button" class="btn btn-primary" data-action="send" tabindex="1">')
+                this.append($('<button type="button" class="btn btn-primary" data-action="send">')
                     .on('click', function () { baton.view.send(); })
                     .on('keyup', function (e) {
-                        if ((e.keyCode || e.which) === 27) baton.view.focusEditor();
+                        if (e.which === 27) baton.view.focusEditor();
                     })
                     .text(gt('Send')));
             }
@@ -155,10 +155,30 @@ define('io.ox/mail/compose/extensions', [
                         function drawOptions() {
 
                             if (!list.sortedAddresses.length) return;
-                            var options = _(list.sortedAddresses).pluck('option');
 
-                            _(options).each(function (item) {
-                                item = applyDisplayName(item);
+                            var defaultAddress = sender.getDefaultSendAddress();
+
+                            var sortedAddresses = _(list.sortedAddresses)
+                                .chain()
+                                .map(function (address) {
+                                    var array = applyDisplayName(address.option);
+                                    return { key: _(array).compact().join(' ').toLowerCase(), array: array };
+                                })
+                                .sortBy('key')
+                                .pluck('array')
+                                .value();
+
+                            // draw default address first
+                            sortedAddresses = _(sortedAddresses).filter(function (item) {
+                                if (item[1] !== defaultAddress) return true;
+                                dropdown.option('from', [item], function () {
+                                    return renderFrom(item);
+                                });
+                                if (sortedAddresses.length > 1) dropdown.divider();
+                                return false;
+                            });
+
+                            _(sortedAddresses).each(function (item) {
                                 dropdown.option('from', [item], function () {
                                     return renderFrom(item);
                                 });
@@ -219,7 +239,7 @@ define('io.ox/mail/compose/extensions', [
 
         recipientActionLink: function (type) {
             return function () {
-                var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">');
+                var node = $('<a href="#" data-action="add" role="checkbox" aria-checked="false">');
                 if (type === 'cc') {
                     node.attr({ 'data-type': 'cc', 'aria-label': gt('Show carbon copy input field') }).text(gt('CC'));
                 } else {
@@ -230,7 +250,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         recipientActionLinkMobile: function () {
-            var node = $('<a href="#" tabindex="1" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-right">'));
+            var node = $('<a href="#" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-right">'));
             this.append(node);
         },
 
@@ -249,14 +269,14 @@ define('io.ox/mail/compose/extensions', [
 
             if (attr === 'reply_to' && settings.get('showReplyTo/configurable', false) === false) return;
 
-            function onClickLabel(e) {
+            function openAddressBookPicker(e) {
                 e.preventDefault();
                 var attr = e.data.attr, model = e.data.model;
                 require(['io.ox/contacts/addressbook/popup'], function (popup) {
                     popup.open(function (result) {
                         var list = model.get(attr) || [];
                         model.set(attr, list.concat(_(result).pluck('array')));
-                    });
+                    }, { isMail: true });
                 });
             }
 
@@ -271,6 +291,7 @@ define('io.ox/mail/compose/extensions', [
                         id: guid,
                         className: attr,
                         extPoint: POINT,
+                        isMail: true,
                         apiOptions: {
                             contacts: true,
                             distributionlists: true,
@@ -282,34 +303,42 @@ define('io.ox/mail/compose/extensions', [
                         ariaLabel: tokenfieldTranslations['aria' + attr]
                     });
 
-                var node = $('<div class="col-xs-11">').append(
-                    tokenfieldView.$el
-                );
+                var node = $('<div class="col-xs-11">').append(tokenfieldView.$el);
+
                 if (attr === 'to') {
                     ext.point(POINT + '/recipientActions').invoke('draw', node);
                 }
 
-                var title = gt('Click to select contacts');
                 var usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true);
+
+                if (usePicker) {
+                    node.addClass('has-picker').append(
+                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-plus" aria-hidden="true"></i></a>')
+                        .attr('aria-label', gt('Click to select contacts'))
+                        .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
+                    );
+                }
+
+                var title = gt('Click to select contacts');
 
                 this.append(
                     extNode = $('<div data-extension-id="' + attr + '">').addClass(cls)
                     .append(
                         usePicker ?
-                        // with picker
-                        $('<div class="maillabel col-xs-1">').append(
-                            $('<a href="#" role="button">')
-                            .text(tokenfieldTranslations[attr])
-                            .attr({
-                                // add aria label since tooltip takes away the title attribute
-                                'aria-label': title,
-                                'title': title
-                            })
-                            .on('click', { attr: attr, model: baton.model }, onClickLabel)
-                            .tooltip({ animation: false, delay: 0, placement: 'bottom', trigger: 'hover' })
-                        ) :
-                        // without picker
-                        $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
+                            // with picker
+                            $('<div class="maillabel col-xs-1">').append(
+                                $('<a href="#" role="button">')
+                                .text(tokenfieldTranslations[attr])
+                                .attr({
+                                    // add aria label since tooltip takes away the title attribute
+                                    'aria-label': title,
+                                    'title': title
+                                })
+                                .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
+                                .tooltip({ animation: false, delay: 0, placement: 'bottom', trigger: 'hover' })
+                            ) :
+                            // without picker
+                            $('<label class="maillabel col-xs-1">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
                     )
                     .append(node)
                 );

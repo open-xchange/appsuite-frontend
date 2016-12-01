@@ -154,10 +154,12 @@ define('io.ox/core/folder/node', [
         toggle: function (state) {
             // for whatever reason, this.options might be nulled (see bug 37483)
             if (this.options === null) return;
+            var isChange = (this.options.open !== state);
             this.options.open = state;
             this.onChangeSubFolders();
-            this.options.tree.trigger(state ? 'open' : 'close', this.folder);
             this.renderCounter();
+            if (!isChange) return;
+            this.options.tree.trigger(state ? 'open' : 'close', this.folder);
         },
 
         // open/close folder
@@ -236,10 +238,10 @@ define('io.ox/core/folder/node', [
 
         // respond to cursor left/right
         onKeydown: function (e) {
-            if (e.which !== 37 && e.which !== 39) return;
             // already processed?
             if (e.isDefaultPrevented()) return;
             // not cursor right/left?
+            if (e.which !== 37 && e.which !== 39) return;
             // avoid further processing
             e.preventDefault();
             // skip unless folder has subfolders
@@ -260,7 +262,7 @@ define('io.ox/core/folder/node', [
         getTreeNode: function (model) {
             var o = this.options,
                 level = o.headless || o.indent === false ? o.level : o.level + 1,
-                options = { folder: model.id, icons: this.options.icons, level: level, tree: o.tree, parent: this };
+                options = { folder: model.id, icons: this.options.icons, iconClass: this.options.iconClass, level: level, tree: o.tree, parent: this };
             return new TreeNodeView(o.tree.getTreeNodeOptions(options, model));
         },
 
@@ -307,6 +309,7 @@ define('io.ox/core/folder/node', [
                 empty: true,                    // show if empty, i.e. no subfolders?
                 headless: false,                // show folder row? root folder usually hidden
                 icons: false,                   // show folder icons
+                iconClass: undefined,           // use custom icon class
                 indent: true,                   // indent subfolders, i.e. increase level by 1
                 level: 0,                       // nesting / left padding
                 model_id: this.folder,          // use this id to load model data and subfolders
@@ -414,7 +417,10 @@ define('io.ox/core/folder/node', [
             }
 
             // Remove useless a11y nodes
-            if (_.isEmpty(this.options.a11yDescription)) this.$.a11y.remove();
+            if (_.isEmpty(this.options.a11yDescription)) {
+                this.$.a11y.remove();
+                this.$el.removeAttr('aria-describedby');
+            }
 
             // sortable
             if (o.sortable) this.$el.attr('data-sortable', true);
@@ -480,6 +486,9 @@ define('io.ox/core/folder/node', [
             //draw even if there is no description or old descriptions cannot be cleared
             if (!_.isEmpty(this.options.a11yDescription)) {
                 this.$.a11y.text(this.options.a11yDescription.join('. '));
+            } else {
+                this.$.a11y.remove();
+                this.$el.removeAttr('aria-describedby');
             }
         },
 
@@ -499,17 +508,13 @@ define('io.ox/core/folder/node', [
 
         renderContextControl: function () {
             this.$.selectable.append(
-                $('<a>')
-                .addClass('folder-options contextmenu-control')
+                $('<a href="#" role="button" class="folder-options contextmenu-control">')
                 .attr({
                     'data-contextmenu': this.options.contextmenu || 'default',
                     'aria-label': this.options.title || !this.model.has('title') ?
                         gt('Folder-specific actions') :
                         //#. %1$s is the name of the folder
-                        gt('Folder-specific actions for %1$s', this.model.get('title')),
-                    href: '#',
-                    role: 'button',
-                    tabindex: 1
+                        gt('Folder-specific actions for %1$s', this.model.get('title'))
                 })
                 .append(
                     $('<i class="fa fa-bars" aria-hidden="true">')
@@ -536,34 +541,43 @@ define('io.ox/core/folder/node', [
         },
 
         renderIcon: function () {
-            var o = this.options, type;
-            if ((o.tree.module !== 'infostore' && !o.icons) || (o.tree.module !== 'mail' && o.tree.module !== 'infostore')) return;
+
+            var o = this.options, type, iconClass = o.iconClass,
+                infostoreDefaultFolder, attachmentView, allAttachmentsFolder;
+
+            if ((o.tree.module !== 'infostore' && !o.icons) || !/^(mail|infostore|notes)$/.test(o.tree.module)) return;
+
             if (o.tree.module === 'mail') {
                 type = account.getType(this.folder) || 'default';
                 this.$.icon.addClass('visible ' + type);
                 return;
             }
 
-            var iconClass = '',
-                infostoreDefaultFolder = String(api.getDefaultFolder('infostore')),
-                attachmentView = settings.get('folder/mailattachments', {}),
+            if (!iconClass) {
+
+                infostoreDefaultFolder = String(api.getDefaultFolder('infostore'));
+                attachmentView = settings.get('folder/mailattachments', {});
                 allAttachmentsFolder = String(attachmentView.all);
 
-            switch (this.folder) {
-                case 'virtual/myshares':
-                    iconClass = 'visible myshares';
-                    break;
-                case allAttachmentsFolder:
-                    iconClass = 'visible attachments';
-                    break;
-                case infostoreDefaultFolder:
-                    iconClass = 'visible myfiles';
-                    break;
-                // no default
+                switch (this.folder) {
+                    case 'virtual/myshares':
+                        iconClass = 'visible myshares';
+                        break;
+                    case allAttachmentsFolder:
+                        iconClass = 'visible attachments';
+                        break;
+                    case infostoreDefaultFolder:
+                        iconClass = 'visible myfiles';
+                        break;
+                    // no default
+                }
+                if (!iconClass && api.is('trash', this.model.attributes) && this.model.get('standard_folder')) {
+                    iconClass = 'visible trash';
+                }
+            } else {
+                iconClass = 'visible ' + iconClass;
             }
-            if (iconClass === '' && api.is('trash', this.model.attributes) && this.model.get('standard_folder')) {
-                iconClass = 'visible trash';
-            }
+
             this.$.icon.addClass(iconClass);
         },
 

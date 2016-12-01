@@ -32,7 +32,11 @@ define('plugins/portal/mail/register', [
         require(['io.ox/mail/detail/view'], function (detail) {
             var obj = api.reduce(baton.item);
             api.get(obj).done(function (data) {
-                var view = new detail.View({ data: data });
+                var view = new detail.View({
+                    data: data,
+                    // no threads - no different subject
+                    disable: { 'io.ox/mail/detail/header/row3': 'different-subject' }
+                });
                 popup.idle().append(view.render().expand().$el.addClass('no-padding'));
                 data = null;
                 // response to "remove" event
@@ -238,18 +242,18 @@ define('plugins/portal/mail/register', [
                     this.getContentNode().append(
                         options.length > 1 ?
                             $('<div class="form-group">').append(
-                                $('<label for="' + accId + '">').text(gt('Account')),
-                                accSelect = $('<select id ="' + accId + '" class="form-control">').append(options)
+                                $('<label>').attr('for', accId).text(gt('Account')),
+                                accSelect = $('<select class="form-control">').attr('id', accId).append(options)
                             ) : $(),
                         $('<div class="form-group">').append(
-                            $('<label for="' + nameId + '">').text(gt('Description')),
-                            nameInput = $('<input id="' + nameId + '" type="text" class="form-control" tabindex="1">').val(props.name || gt('Inbox')),
+                            $('<label>').attr('for', nameId).text(gt('Description')),
+                            nameInput = $('<input type="text" class="form-control">').attr('id', nameId).val(props.name || gt('Inbox')),
                             $('<div class="alert alert-danger">').css('margin-top', '15px').hide()
                         )
                     );
                 })
-                .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                .addPrimaryButton('save', gt('Save'), 'save')
+                .addButton('cancel', gt('Cancel'), 'cancel')
                 .show(function () {
                     if (options.length > 1) {
                         if (!props.name) {

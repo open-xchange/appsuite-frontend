@@ -29,7 +29,8 @@ define('io.ox/presenter/views/navigationview', [
     var NAVIGATION_ID = 'io.ox/presenter/navigation',
         NAVIGATION_LINKS_ID = NAVIGATION_ID + '/links',
         NAVIGATION_DROPDOWN_ID = 'io.ox/presenter/actions/navigation/dropdown',
-        PRESENTER_ACTION_ID = 'io.ox/presenter/actions';
+        PRESENTER_ACTION_ID = 'io.ox/presenter/actions',
+        SMALL_DEVICE = $(window).width() < 580;
 
     /**
      * Creates the HTML mark-up for a slide navigation button.
@@ -41,7 +42,7 @@ define('io.ox/presenter/views/navigationview', [
      *  the button node.
      */
     function createNavigationButton(type) {
-        var button = $('<a href="#" class="presenter-navigation-slide-button" tabindex="1" role="menuitem" aria-disabled="false">'),
+        var button = $('<a href="#" class="presenter-navigation-slide-button" role="menuitem" aria-disabled="false">'),
             icon = $('<i class="fa" aria-hidden="true">');
 
         button.attr({ 'aria-label': (type === 'next') ? gt('Next slide') : gt('Previous slide') });
@@ -67,7 +68,7 @@ define('io.ox/presenter/views/navigationview', [
             prio: 'hi',
             mobile: 'lo',
             //#. button label for pausing the presentation
-            label: gt('Pause presentation'),
+            label: SMALL_DEVICE ? gt('Pause') : gt('Pause presentation'),
             //#. button tooltip for pausing the presentation
             title: gt('Pause the presentation'),
             ref: PRESENTER_ACTION_ID + '/pause',
@@ -83,7 +84,7 @@ define('io.ox/presenter/views/navigationview', [
             prio: 'hi',
             mobile: 'lo',
             //#. button label for continuing the presentation
-            label: gt('Continue presentation'),
+            label: SMALL_DEVICE ? gt('Continue') : gt('Continue presentation'),
             //#. button tooltip for continuing the presentation
             title: gt('Continue the presentation'),
             ref: PRESENTER_ACTION_ID + '/continue',
@@ -282,7 +283,7 @@ define('io.ox/presenter/views/navigationview', [
                 prev = createNavigationButton('prev'),
                 next = createNavigationButton('next'),
                 // slide input field
-                slideInput = $('<input type="text" class="presenter-navigation-slide" tabindex="1" role="textbox">'),
+                slideInput = $('<input type="text" class="presenter-navigation-slide" role="textbox">'),
                 slideInputWrapper = $('<div class="presenter-navigation-slide-wrapper">').append(slideInput),
                 // slide count display
                 slideCountDisplay = $('<div class="presenter-navigation-slide-total">'),
@@ -293,6 +294,12 @@ define('io.ox/presenter/views/navigationview', [
                 safariFullscreen = this.app.mainView.fullscreen && _.device('safari'),
                 self = this;
 
+            if (SMALL_DEVICE) {
+                prev.css({ 'min-width': '20px', padding: '0 4px' });
+                next.css({ 'min-width': '20px', padding: '0 4px' });
+                slideInputWrapper.css('margin-left', 0);
+            }
+
             function onPrevSlide(event) {
                 event.preventDefault();
                 self.app.mainView.showPreviousSlide();
@@ -301,12 +308,9 @@ define('io.ox/presenter/views/navigationview', [
                 event.preventDefault();
                 self.app.mainView.showNextSlide();
             }
-            function onInputKeydown(event) {
-                event.stopPropagation();
-                var keyCode = event.which;
-                if (keyCode === 13 || keyCode === 27) {
-                    self.$el.parent().focus();
-                }
+            function onInputKeydown(e) {
+                e.stopPropagation();
+                if (e.which === 13 || e.which === 27) self.$el.parent().focus();
             }
             function onInputChange() {
                 var newValue = parseInt($(this).val(), 10);

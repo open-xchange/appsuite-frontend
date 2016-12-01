@@ -17,10 +17,10 @@ Remark is used to lint and autofix the markdown files.
 # Installation
 
 ```
-npm install --global remark remark-lint
+npm i -g remark-cli remark-lint
 ```
 
-# Configration
+# Configuration
 
 - `/documentation/.remarkrc`
 

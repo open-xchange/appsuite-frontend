@@ -4,7 +4,7 @@
 <title>9.4.9. ファイルの削除</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="Groupware">
+<link rel="home" href="index.html" title="ユーザ ガイド">
 <link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.4. ファイルの管理">
 <link rel="prev" href="ox.appsuite.user.sect.files.manage.addportal.html" title="9.4.8. ポータルへのファイルの追加">
 <link rel="next" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.4.10. ファイルのロックおよびロックの解除">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.manage.addportal.html">戻る</a></li>
@@ -37,55 +37,103 @@
 <a class="indexterm" name="id-1.10.10.13.2"></a><a class="indexterm" name="id-1.10.10.13.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.delete"></a><p>１つまたは複数のファイルを削除できます。次のようなオプションの機能があります。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.delete" title="ファイルを削除する：">削除</a> ファイルファイルは<span class="guilabel"><strong>ゴミ箱</strong></span>フォルダに移動されます。</p></li>
-<li class="listitem"><p>削除されたファイルを <span class="guilabel"><strong>ゴミ箱</strong></span>フォルダから <a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.undelete" title="削除したメールを復元する：">復元</a> します。</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.delete" title="ファイルを削除する">削除</a> ファイルファイルは<span class="guilabel"><strong>ゴミ箱</strong></span>フォルダに移動されます。</p></li>
+<li class="listitem"><p>削除されたファイルを <span class="guilabel"><strong>ゴミ箱</strong></span>フォルダから <a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.undelete" title="削除したメールを復元する">復元</a> します。</p></li>
 <li class="listitem">
-<p><span class="guilabel"><strong>ゴミ箱</strong></span> フォルダのファイルを <a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.deleteforever" title="ファイルを完全に削除する：">完全に削除</a> します。<a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.emptytrash" title="ゴミ箱フォルダのファイルを完全に削除する：">ごみ箱を空にする</a>ことでフォルダ内のすべてのアイテムを完全に削除することもできます。</p>
+<p><span class="guilabel"><strong>ゴミ箱</strong></span>フォルダのファイルを<a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.deleteforever" title="ファイルを完全に削除する">完全に削除</a>します。<a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.emptytrash" title="ゴミ箱フォルダのファイルを完全に削除する：">ごみ箱を空にする</a>ことでフォルダ内のすべてのアイテムを完全に削除することもできます。</p>
 <p><span class="phrase"><strong>警告: </strong></span><span class="guilabel"><strong>ゴミ箱</strong></span> フォルダにあるファイルを削除すると、元に戻すことはできません。</p>
 </li>
 </ul></div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.delete"></a><p class="title">ファイルを削除する：</p>
-<div class="taskprerequisites">
-          <p></p>
-        </div>
+<a name="ox.appsuite.user.task.files.delete"></a><p class="title">ファイルを削除する</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>表示エリアで、１つまたは複数のファイルを選択します。ツールバーで、<span class="guibutton"><strong>削除</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.files.delete"></a><img src="../../images/appsuite_user_icon_functionbar_trash.png"></span> をクリックします。</p>
-<p>Office メニューバーの右側の<span class="guibutton"><strong>アクション</strong></span>アイコン<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.delete.viewer"></a><img src="../../images/appsuite_user_icon_viewer_menuebars.png"></span>を使うこともできます。</p>
+<p>表示エリアで、１つまたは複数のファイルを選択します。ツールバーで、<span class="guibutton"><strong>削除</strong></span>アイコン <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.files.delete"></a><img src="../../images/appsuite_user_icon_functionbar_trash.png"></span> をクリックします。</p>
+<p><span class="guilabel"><strong>ビューア</strong></span>でも <span class="guibutton"><strong>アクション</strong></span> アイコン <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.delete.viewer"></a><img src="../../images/appsuite_user_icon_viewer_menuebars.png"></span> を使用できます。</p>
 </li>
 <li class="step"><p>選択したファイルの削除を確定します。</p></li>
 </ol></div>
 <div class="taskrelated">
           <p><span class="phrase"><strong>結果：</strong></span>選択したファイルを削除します。</p>
+          <div class="itemizedlist">
+<a name="ox.appsuite.user.task.files.delete.related"></a><p class="title">詳細は、 を参照してください。</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+                </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.undelete" title="削除したメールを復元する">削除したメールを復元する</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.deleteforever" title="ファイルを完全に削除する">ファイルを完全に削除する</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.emptytrash" title="ゴミ箱フォルダのファイルを完全に削除する：">ゴミ箱フォルダのファイルを完全に削除する：</a></td></tr>
+</table>
+<p>
+              </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>親記事<a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.4. ファイルの管理">ファイルの管理</a></p></li>
+</ul>
+</div>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.undelete"></a><p class="title">削除したメールを復元する：</p>
+<a name="ox.appsuite.user.task.files.undelete"></a><p class="title">削除したメールを復元する</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p><span class="guilabel"><strong>ゴミ箱</strong></span>フォルダを開きます。</p></li>
-<li class="step"><p>１つまたは複数のファイルを選択します。</p></li>
-<li class="step"><p>ツールバーの<span class="guibutton"><strong>アクション</strong></span> アイコン<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.undelete"></a><img src="../../images/appsuite_user_icon_actions.png"></span>をクリックします。メニューで、<span class="guibutton"><strong>移動</strong></span> を選択します。</p></li>
+<li class="step"><p>1 つまたは複数のファイルを選択します。</p></li>
+<li class="step"><p>ツールバーの<span class="guibutton"><strong>アクション</strong></span> アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.undelete"></a><img src="../../images/appsuite_user_icon_actions.png"></span>をクリックします。メニューで、<span class="guibutton"><strong>移動</strong></span> を選択します。</p></li>
 <li class="step"><p><span class="guilabel"><strong>移動</strong></span> ウィンドウで、フォルダを選択します。<span class="guibutton"><strong>移動</strong></span> ボタンをクリックします。</p></li>
 </ol></div>
 <div class="taskrelated">
           <p><span class="phrase"><strong>結果: </strong></span> 選択されたフォルダにファイルが移動されます。</p>
+          <div class="itemizedlist">
+<a name="ox.appsuite.user.task.files.undelete.related"></a><p class="title">詳細は、 を参照してください。</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+                </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.delete" title="ファイルを削除する">ファイルを削除する</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.deleteforever" title="ファイルを完全に削除する">ファイルを完全に削除する</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.emptytrash" title="ゴミ箱フォルダのファイルを完全に削除する：">ゴミ箱フォルダのファイルを完全に削除する：</a></td></tr>
+</table>
+<p>
+              </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>親記事<a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.4. ファイルの管理">ファイルの管理</a></p></li>
+</ul>
+</div>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.deleteforever"></a><p class="title">ファイルを完全に削除する：</p>
+<a name="ox.appsuite.user.task.files.deleteforever"></a><p class="title">ファイルを完全に削除する</p>
 <div class="taskprerequisites">
           <p><span class="phrase"><strong>警告: </strong></span>完全に削除したファイルを元に戻すことは <span class="phrase"><strong>できません</strong></span>。ファイルを完全に削除する前にそのファイルが不要であるか必ず確認してください。</p>
         </div>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p><span class="guilabel"><strong>ゴミ箱</strong></span>フォルダを開きます。</p></li>
-<li class="step"><p>１つまたは複数のファイルを選択します。</p></li>
-<li class="step"><p><span class="guibutton"><strong>削除</strong></span>アイコンをクリックします。<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.files.deleteforever"></a><img src="../../images/appsuite_user_icon_functionbar_trash.png"></span></p></li>
+<li class="step"><p>1 つまたは複数のファイルを選択します。</p></li>
+<li class="step"><p><span class="guibutton"><strong>削除</strong></span> アイコン &lt;i1&gt;&lt;i2&gt;&lt;i3/&gt;&lt;/i2&gt; &lt;i4&gt;&lt;i5/&gt;&lt;/i4&gt;&lt;/i1&gt; をクリックします。<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.files.deleteforever"></a><img src="../../images/appsuite_user_icon_functionbar_trash.png"></span></p></li>
 <li class="step"><p>ファイルの削除を確定します。</p></li>
 </ol></div>
 <div class="taskrelated">
           <p><span class="phrase"><strong>結果: </strong></span> ファイルが完全に削除されます。</p>
+          <div class="itemizedlist">
+<a name="ox.appsuite.user.task.files.deleteforever.related"></a><p class="title">詳細は、 を参照してください。</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+                </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.delete" title="ファイルを削除する">ファイルを削除する</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.undelete" title="削除したメールを復元する">削除したメールを復元する</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.emptytrash" title="ゴミ箱フォルダのファイルを完全に削除する：">ゴミ箱フォルダのファイルを完全に削除する：</a></td></tr>
+</table>
+<p>
+              </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>親記事<a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.4. ファイルの管理">ファイルの管理</a></p></li>
+</ul>
+</div>
         </div>
 </div>
 <div class="task">
@@ -95,11 +143,28 @@
         </div>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p>フォルダツリーで、<span class="guilabel"><strong>ごみ箱</strong></span> フォルダを <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="フォルダを開く、または選択する：">選択</a>します。</p></li>
-<li class="step"><p>フォルダ名の隣にある <span class="guibutton"><strong>フォルダアクション</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.emptytrash.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> をクリックします。<span class="guibutton"><strong>フォルダを空にする</strong></span> をクリックします。</p></li>
+<li class="step"><p>フォルダ名の隣にある <span class="guibutton"><strong>フォルダ アクション</strong></span> アイコン <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.emptytrash.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> をクリックします。<span class="guibutton"><strong>フォルダを空にする</strong></span> をクリックします。</p></li>
 <li class="step"><p>フォルダを空にすることを確定します。</p></li>
 </ol></div>
 <div class="taskrelated">
           <p><span class="phrase"><strong>結果: </strong></span> ごみ箱内のオブジェクトが完全に削除されます。</p>
+          <div class="itemizedlist">
+<a name="ox.appsuite.user.task.files.emptytrash.related"></a><p class="title">詳細は、 を参照してください。</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+                </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.delete" title="ファイルを削除する">ファイルを削除する</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.undelete" title="削除したメールを復元する">削除したメールを復元する</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.task.files.deleteforever" title="ファイルを完全に削除する">ファイルを完全に削除する</a></td></tr>
+</table>
+<p>
+              </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>親記事<a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.4. ファイルの管理">ファイルの管理</a></p></li>
+</ul>
+</div>
         </div>
 </div>
 </div>

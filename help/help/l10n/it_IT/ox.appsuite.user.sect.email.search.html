@@ -4,7 +4,7 @@
 <title>5.6. Cercare messaggi di posta</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="Groupware">
+<link rel="home" href="index.html" title="Manuale utente">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="Capitolo 5. Posta elettronica">
 <link rel="prev" href="ox.appsuite.user.sect.email.manage.mailfilter.html" title="5.5.19. Utilizzare i filtri di posta elettronica">
 <link rel="next" href="ox.appsuite.user.sect.email.share.html" title="5.7. Messaggi di posta in una squadra">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.manage.mailfilter.html">Indietro</a></li>
@@ -60,7 +60,7 @@
 <a name="ox.appsuite.user.task.email.search"></a><p class="title">Come cercare i messaggi di posta:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>Fare clic sull'icona <span class="guibutton"><strong>Inizia la ricerca</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> o nel campo di inserimento nella barra di ricerca. Il pulsante della cartella indica le cartelle nelle quali sarà effettuata la ricerca.</p>
+<p>Fare clic sull'icona <span class="guibutton"><strong>Inizia la ricerca</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> o nel campo di inserimento nella barra di ricerca. Il pulsante della cartella indica le cartelle nelle quali sarà effettuata la ricerca.</p>
 <div class="informalfigure">
 <a name="ox.appsuite.user.fig.email.search.start"></a><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_email_search_click.png" alt="Il campo di inserimento"></div></div>
 </div>
@@ -68,7 +68,10 @@
 <li class="step">
 <p>Per selezionare una cartella per la ricerca, fare clic sul pulsante della cartella.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Se si seleziona <span class="guibutton"><strong>Tutte le cartelle</strong></span>, saranno analizzate tutte le cartelle e le sottocartelle dell'account di posta interno.</p></li>
+<li class="listitem">
+<p>Se si seleziona <span class="guibutton"><strong>Tutte le cartelle</strong></span>, saranno analizzate tutte le cartelle e le sottocartelle dell'account di posta interno.</p>
+<p><span class="phrase"><strong>Nota:</strong></span> in base al server di posta elettronica, questa funzione potrebbe non essere disponibile. In questo caso, la ricerca sarà eseguita solo sulla cartella corrente, non sulle sottocartelle.</p>
+</li>
 <li class="listitem"><p>Se si seleziona una cartella specifica o la cartella di un account di posta esterno, sarà analizzata solo questa cartella, ma non le sottocartelle.</p></li>
 </ul></div>
 <p>
@@ -100,14 +103,14 @@
 <li class="step">
 <p>Sono disponibili le seguenti opzioni per raffinare il risultato della ricerca:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Se si utilizza il nome di una persona come termine di ricerca, è possibile definire se cercare il nome nel mittente, nel destinatario o in entrambi. Per fare ciò, fare clic sull'icona <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>accanto al nome.</p></li>
-<li class="listitem"><p>Per raffinare il risultato della ricerca, digitare ulteriori termini di ricerca: per rimuovere un termine di ricerca, fare clic sull'icona <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>accanto al termine di ricerca. </p></li>
+<li class="listitem"><p>Se si utilizza il nome di una persona come termine di ricerca, è possibile definire se cercare il nome nel mittente, nel destinatario o in entrambi. Per fare ciò, fare clic sull'icona <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>accanto al nome.</p></li>
+<li class="listitem"><p>Per raffinare il risultato della ricerca, digitare ulteriori termini di ricerca: per rimuovere un termine di ricerca, fare clic sull'icona <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>accanto al termine di ricerca. </p></li>
 <li class="listitem"><p>Per cercare in un'altra cartella, fare clic sul pulsante della cartella.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>Per terminare la ricerca, fare clic sull'icona <span class="guibutton"><strong>Annulla ricerca</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>nel campo di inserimento.</p></li>
+<li class="step"><p>Per terminare la ricerca, fare clic sull'icona <span class="guibutton"><strong>Annulla ricerca</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>nel campo di inserimento.</p></li>
 </ol></div>
 </div>
 </div>

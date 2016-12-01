@@ -13,7 +13,6 @@
 
 define('io.ox/core/settings/pane', [
     'io.ox/core/extensions',
-    'io.ox/backbone/basicModel',
     'io.ox/backbone/views',
     'io.ox/backbone/mini-views/common',
     'io.ox/core/api/apps',
@@ -25,7 +24,7 @@ define('io.ox/core/settings/pane', [
     'settings!io.ox/core/settingOptions',
     'gettext!io.ox/core',
     'io.ox/backbone/mini-views/timezonepicker'
-], function (ext, BasicModel, views, miniViews, appAPI, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker) {
+], function (ext, views, miniViews, appAPI, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker) {
 
     'use strict';
 
@@ -37,14 +36,13 @@ define('io.ox/core/settings/pane', [
         index: 50,
         id: 'extensions',
         draw: function () {
-            var model = settings.createModel(BasicModel);
-            model.on('change:highcontrast', function (m, value) {
+            settings.on('change:highcontrast', function (value) {
                 $('html').toggleClass('high-contrast', value);
             });
-            model.on('change', function (model) {
+            settings.on('change', function (setting) {
 
-                var showNotice = _(reloadMe).any(function (attr) {
-                    return model.changed[attr];
+                var showNotice = _(reloadMe).some(function (attr) {
+                    return setting === attr;
                 });
 
                 settings.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
@@ -67,13 +65,13 @@ define('io.ox/core/settings/pane', [
                 .text(gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') + ' ')
                 .css('margin-bottom', '24px')
                 .append(
-                    $('<a href="#" role="button" tabindex="1" data-action="reload">')
+                    $('<a href="#" role="button" data-action="reload">')
                     .text(gt('Reload page'))
                     .on('click', function (e) { e.preventDefault(); location.reload(); })
                 )
             );
 
-            new SettingView({ model: model }).render().$el.attr('role', 'form').appendTo(this);
+            new SettingView({ model: settings }).render().$el.attr('role', 'form').appendTo(this);
         }
     });
 
@@ -94,7 +92,7 @@ define('io.ox/core/settings/pane', [
                     $('<div class="form-group">').append(
                         $('<label class="control-label col-sm-4">'),
                         $('<div class="col-sm-6">').append(
-                            $('<button type="button" class="btn btn-default" tabindex="1">')
+                            $('<button type="button" class="btn btn-default">')
                             .text(gt('My contact data') + ' ...')
                             .on('click', function () {
                                 require(['io.ox/core/settings/user'], function (userSettings) {
@@ -122,7 +120,7 @@ define('io.ox/core/settings/pane', [
                         $('<div class="form-group">').append(
                             $('<label class="control-label col-sm-4">'),
                             $('<div class="col-sm-6">').append(
-                                $('<button type="button" class="btn btn-default" tabindex="1">')
+                                $('<button type="button" class="btn btn-default">')
                                 .text(gt('Change password') + ' ...')
                                 .on('click', userSettings.changePassword)
                             )
@@ -139,7 +137,7 @@ define('io.ox/core/settings/pane', [
         className: 'form-group',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
-            this.listenTo(this.baton.model, 'change:language', function (model, language) {
+            this.listenTo(this.baton.model, 'change:language', function (language) {
                 _.setCookie('language', language);
             });
             this.$el.append(

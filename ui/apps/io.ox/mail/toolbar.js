@@ -21,11 +21,12 @@ define('io.ox/mail/toolbar', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/toolbar',
     'settings!io.ox/core',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, gt) {
+], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, mailsettings, gt) {
 
     'use strict';
 
@@ -96,12 +97,23 @@ define('io.ox/mail/toolbar', [
             label: gt('Not spam'),
             ref: 'io.ox/mail/actions/nospam'
         },
+        'category': {
+            prio: 'hi',
+            mobile: 'none',
+            icon: 'fa fa-folder-open-o',
+            label: gt('Set category'),
+            ref: 'io.ox/mail/actions/category',
+            customize: function (baton) {
+                require(['io.ox/mail/categories/picker'], function (picker) {
+                    picker(this, { props: baton.app.props, data: baton.data });
+                }.bind(this));
+            }
+        },
         'color': {
             prio: 'hi',
             mobile: 'none',
-            icon: 'fa fa-bookmark',
+            icon: 'fa fa-bookmark-o',
             label: gt('Set color'),
-            drawDisabled: true,
             ref: 'io.ox/mail/actions/color',
             customize: function (baton) {
                 flagPicker.attach(this, { data: baton.data });
@@ -186,6 +198,14 @@ define('io.ox/mail/toolbar', [
 
     // local dummy action
 
+    new actions.Action('io.ox/mail/actions/category', {
+        capabilities: 'mail_categories',
+        requires: function (e) {
+            return e.collection.has('some') && e.baton.app.props.get('categories');
+        },
+        action: $.noop
+    });
+
     new actions.Action('io.ox/mail/actions/color', {
         requires: 'some',
         action: $.noop
@@ -236,6 +256,12 @@ define('io.ox/mail/toolbar', [
         });
     }
 
+    function onConfigureCategories(props) {
+        require(['io.ox/mail/categories/edit'], function (dialog) {
+            dialog.open(props);
+        });
+    }
+
     // view dropdown
     ext.point('io.ox/mail/classic-toolbar').extend({
         id: 'view-dropdown',
@@ -252,13 +278,27 @@ define('io.ox/mail/toolbar', [
             if (_.device('desktop')) dropdown.option('layout', 'compact', gt('Compact'), { radio: true });
             dropdown.option('layout', 'horizontal', gt('Horizontal'), { radio: true })
             .option('layout', 'list', gt('List'), { radio: true })
-            .divider()
+            .divider();
+
+            // feature: tabbed inbox
+            if (capabilities.has('mail_categories')) {
+                dropdown
+                .header(gt('Inbox'))
+                .option('categories', true, gt('Use categories'))
+                 //#. term is followed by a space and three dots (' …')
+                 //#. the dots refer to the term 'Categories' right above this dropdown entry
+                 //#. so user reads it as 'Configure Categories'
+                .link('categories-config', gt('Configure') + ' …', _.bind(onConfigureCategories, this, baton.app.props), { icon: true })
+                .divider();
+            }
+
+            dropdown
             .header(gt('Options'))
             .option('folderview', true, gt('Folder view'))
             .option('checkboxes', true, gt('Checkboxes'))
             .option('contactPictures', true, gt('Contact pictures'))
             .option('exactDates', true, gt('Exact dates'))
-            .option('alwaysShowSize', true, gt('Show message size'))
+            .option('alwaysShowSize', true, gt('Message size'))
             .divider()
             .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
             .listenTo(baton.app.props, 'change:layout', updateContactPicture);
@@ -283,7 +323,7 @@ define('io.ox/mail/toolbar', [
 
             if (_.device('smartphone')) return;
 
-            var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+            var toolbarView = new Toolbar({ title: app.getTitle() });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbarView.render().$el
@@ -311,22 +351,6 @@ define('io.ox/mail/toolbar', [
         }
     });
 
-
-    // classic toolbar
-    ext.point('io.ox/mail/mediator').extend({
-        id: 'categories',
-        index: 10000,
-        setup: function (app) {
-            if (_.device('smartphone')) return;
-            if (!capabilities.has('mail_categories')) return;
-
-            // add placeholder
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                $('<div class="categories-toolbar-container categories-container">')
-            );
-        }
-    });
-
     ext.point('io.ox/mail/mediator').extend({
         id: 'update-toolbar',
         index: 10200,
@@ -339,5 +363,4 @@ define('io.ox/mail/toolbar', [
             });
         }
     });
-
 });

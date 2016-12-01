@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-04 10:40+0000\n"
+"POT-Creation-Date: 2016-10-18 12:46+0000\n"
 "PO-Revision-Date: 2015-05-29 13:25+0000\n"
 "Last-Translator: resellerclub <ameya.d@directi.com>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -134,8 +134,9 @@ msgstr "Çevrim dışı mod"
 #: apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/notes/toolbar.js
+#: module:io.ox/notes
 #: apps/io.ox/portal/main.js
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -173,7 +174,6 @@ msgstr "Sil"
 #: apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js
 #: apps/io.ox/mail/main.js
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 #: apps/io.ox/settings/accounts/settings/pane.js
@@ -221,6 +221,17 @@ msgstr "%1$s of %2$s"
 #: module:io.ox/core
 msgid "100%"
 msgstr "100%"
+
+#: apps/io.ox/backbone/mini-views/settings-list-view.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Use cursor keys to reorder items"
+msgstr "Özel bir isim kullanın"
+
+#: apps/io.ox/backbone/mini-views/settings-list-view.js
+#: module:io.ox/core
+msgid "%1$s moved to position %2$s of %3$s"
+msgstr ""
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js
 #: module:io.ox/core
@@ -297,6 +308,70 @@ msgstr "Lütfen geçerli bir nesne giriniz"
 msgid "Please enter a value"
 msgstr "Lütfen bir değer giriniz"
 
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Use cursor keys to navigate, press enter to select a date"
+msgstr "Özel bir isim kullanın"
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Today: %1$s"
+msgstr "Toplam: %1$d "
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Go to previous month"
+msgstr "Önceki"
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Go to next month"
+msgstr "bir ay"
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+msgid "CW"
+msgstr ""
+
+#. CW is calender week and %1$d is the week number
+#. %1$d = Calendar week
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+#: apps/io.ox/calendar/freetime/timeView.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js
+#: apps/io.ox/calendar/week/view.js
+msgid "CW %1$d"
+msgstr "CW %1$d"
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Go to previous year"
+msgstr "Önceki Gün"
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Go to next year"
+msgstr "bir yıl"
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Go to previous decade"
+msgstr "Bir önceki günü göster"
+
+#: apps/io.ox/backbone/views/datepicker.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Go to next decade"
+msgstr "Bir sonraki günü göster"
+
 #. button label for closing the Presenter app.
 #. button tooltip for closing the Presenter app.
 #: apps/io.ox/backbone/views/modal.js
@@ -331,7 +406,6 @@ msgstr "Lütfen bir değer giriniz"
 msgid "Close"
 msgstr "Kapat"
 
-#. button: move only current message from a sender to a tab
 #: apps/io.ox/backbone/views/modal.js
 #: module:io.ox/core
 #: apps/io.ox/calendar/actions.js
@@ -354,7 +428,6 @@ msgstr "Kapat"
 #: apps/io.ox/contacts/main.js
 #: apps/io.ox/core/desktop.js
 #: apps/io.ox/core/export/export.js
-#: apps/io.ox/core/folder/actions/add.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
@@ -384,6 +457,7 @@ msgstr "Kapat"
 #: apps/io.ox/files/actions/versions-delete.js
 #: apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/upload/main.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js
 #: module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js
@@ -394,7 +468,7 @@ msgstr "Kapat"
 #: module:io.ox/mail
 #: apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js
 #: apps/io.ox/mail/compose/names.js
@@ -419,7 +493,6 @@ msgstr "Kapat"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/edit.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/core/feedback/register.js
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
 #: apps/plugins/portal/flickr/register.js
@@ -448,6 +521,7 @@ msgstr "Ayrıntılar"
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/timeView.js
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Compact"
@@ -480,14 +554,6 @@ msgstr "Taşı"
 
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/edit/extensions.js
-#: module:io.ox/calendar/edit/main
-#, fuzzy
-msgid "Please select a time for the appointment"
-msgstr "Lütfen aktarılacak dosyayı seçiniz"
-
-#: apps/io.ox/calendar/actions.js
-#: module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgid "Change status"
 msgstr "Durumu değiştir"
@@ -507,7 +573,6 @@ msgstr "Takip et"
 #: apps/io.ox/contacts/toolbar.js
 #: apps/io.ox/core/print.js
 #: module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
@@ -529,6 +594,7 @@ msgstr "Yeni görüşmeye davet et"
 
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/freetime/main.js
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 msgid "Save as distribution list"
@@ -771,7 +837,7 @@ msgstr "Görüşme yarat"
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js
 #: module:io.ox/mail
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -817,6 +883,15 @@ msgstr "Oluştur"
 #: module:io.ox/tasks/edit
 msgid "Discard"
 msgstr "Çıkar"
+
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
+#: apps/io.ox/files/view-options.js
+#: module:io.ox/files
+#: apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
+msgid "Select"
+msgstr "Seç"
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
@@ -923,29 +998,33 @@ msgstr "Formu daralt"
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/freetime/timeView.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Reserved"
 msgstr "Saklıdır"
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/freetime/timeView.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Temporary"
 msgstr "Geçici"
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/freetime/timeView.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Absent"
 msgstr "Yok"
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/freetime/timeView.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/util.js
 msgid "Free"
 msgstr "Ücretsiz"
 
@@ -986,6 +1065,8 @@ msgstr "Tip"
 #: module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
+#: apps/io.ox/tasks/view-detail.js
+#: module:io.ox/tasks
 msgid "Private"
 msgstr "Kişisel"
 
@@ -1025,6 +1106,14 @@ msgstr ""
 #, fuzzy
 msgid "Apply changes"
 msgstr "Değişiklikleri kabul et"
+
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/freetime/main.js
+#: module:io.ox/calendar
+#, fuzzy
+msgid "Please select a time for the appointment"
+msgstr "Lütfen aktarılacak dosyayı seçiniz"
 
 #: apps/io.ox/calendar/edit/extensions.js
 #: module:io.ox/calendar/edit/main
@@ -1428,8 +1517,9 @@ msgstr "Değiştir"
 
 #: apps/io.ox/calendar/freebusy/templates.js
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Scheduling"
 msgstr "Planlama"
 
@@ -1517,33 +1607,67 @@ msgstr ""
 " \"%1$s\" da randevu oluşturmak için yetkiniz yok.Bu nedenle randevular "
 "sizin özel takviminizde oluşturulacaktır."
 
-#: apps/io.ox/calendar/freetime/main.js
+#: apps/io.ox/calendar/freetime/distributionListPopup.js
 #: module:io.ox/calendar
 #, fuzzy
-msgid "Appointment scheduling"
-msgstr "Randevu Listesi"
+msgid "Please select at least one participant"
+msgstr "Lütfen bir tanım ekleyiniz"
 
-#. text of a user list that shows the names of presenting user and participants.
-#. the dropdown button label for the participants dropdown.
-#. the participants section label.
+#: apps/io.ox/calendar/freetime/distributionListPopup.js
+#: module:io.ox/calendar
+#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js
+msgid "Create distribution list"
+msgstr "Dağıtım listesi oluştur"
+
+#. Name of distribution list
+#: apps/io.ox/calendar/freetime/distributionListPopup.js
+#: module:io.ox/calendar
+#: apps/io.ox/contacts/distrib/create-dist-view.js
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/view-detail.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#: apps/io.ox/files/share/view-options.js
+#: module:io.ox/files
+#: apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Name"
+msgstr "İsim"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js
+#: module:io.ox/calendar
+msgid "Please note that distribution lists cannot contain ressources."
+msgstr ""
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js
+#: module:io.ox/calendar
+#, fuzzy
+msgid "Create distibution list"
+msgstr "Dağıtım listesi oluştur"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js
+#: module:io.ox/calendar
+#: apps/io.ox/contacts/distrib/main.js
+#: module:io.ox/contacts
+msgid "Distribution list has been saved"
+msgstr "Dağıtım listesi kaydedilmiştir"
+
+#: apps/io.ox/calendar/freetime/distributionListPopup.js
+#: module:io.ox/calendar
+#, fuzzy
+msgid "Please enter a name for the distribution list"
+msgstr "Lütfen geçmişte olan bir tarih giriniz"
+
 #: apps/io.ox/calendar/freetime/participantsView.js
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/print-compact.js
-#: apps/io.ox/participants/detail.js
-#: module:io.ox/core
-#: apps/io.ox/participants/views.js
-#: apps/io.ox/presenter/views/navigationview.js
-#: module:io.ox/presenter
-msgid "Participants"
-msgstr "Katılımcılar"
-
-#. %1$d = Calendar week
-#: apps/io.ox/calendar/freetime/timeView.js
-#: module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js
-#: apps/io.ox/calendar/week/view.js
-msgid "CW %1$d"
-msgstr "CW %1$d"
+msgid "Add participant"
+msgstr "Katılımcı Ekle"
 
 #: apps/io.ox/calendar/freetime/timeView.js
 #: module:io.ox/calendar
@@ -1553,24 +1677,53 @@ msgstr "Önceki Gün"
 
 #: apps/io.ox/calendar/freetime/timeView.js
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/mobile-toolbar-actions.js
-#: apps/io.ox/calendar/toolbar.js
-#: apps/io.ox/calendar/util.js
-#: apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core
-#: apps/io.ox/find/date/patterns.js
-#: apps/io.ox/tasks/util.js
-#: module:io.ox/tasks
-#: apps/plugins/portal/birthdays/register.js
-#: module:plugins/portal
-msgid "Today"
-msgstr "Bugün"
-
-#: apps/io.ox/calendar/freetime/timeView.js
-#: module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
 msgid "Next Day"
 msgstr "Bir sonraki gün"
+
+#: apps/io.ox/calendar/freetime/timeView.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/contacts/toolbar.js
+#: module:io.ox/contacts
+#: apps/io.ox/core/emoji/view.js
+#: module:io.ox/mail/emoji
+#: apps/io.ox/files/toolbar.js
+#: module:io.ox/files
+#: apps/io.ox/find/extensions-facets.js
+#: module:io.ox/core
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/toolbar.js
+msgid "Options"
+msgstr "Seçenekler"
+
+#: apps/io.ox/calendar/freetime/timeView.js
+#: module:io.ox/calendar
+#: apps/io.ox/core/viewer/views/toolbarview.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Zoom"
+msgstr "büyütmek "
+
+#: apps/io.ox/calendar/freetime/timeView.js
+#: module:io.ox/calendar
+msgid "Rows"
+msgstr ""
+
+#: apps/io.ox/calendar/freetime/timeView.js
+#: module:io.ox/calendar
+#, fuzzy
+msgid "Appointment types"
+msgstr "Randevular"
+
+#: apps/io.ox/calendar/freetime/timeView.js
+#: module:io.ox/calendar
+#, fuzzy
+msgid "Hide non-working time"
+msgstr "Çalışma saatinin sonu"
 
 #: apps/io.ox/calendar/invitations/register.js
 #: module:io.ox/calendar/main
@@ -1802,6 +1955,21 @@ msgstr "Bir önceki günü göster"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/week/view.js
+#: apps/io.ox/core/tk/datepicker.js
+#: module:io.ox/core
+#: apps/io.ox/find/date/patterns.js
+#: apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
+#: apps/plugins/portal/birthdays/register.js
+#: module:plugins/portal
+msgid "Today"
+msgstr "Bugün"
+
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js
@@ -1884,6 +2052,18 @@ msgstr "Takvim görünüşü"
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Geçici)"
 
+#. text of a user list that shows the names of presenting user and participants.
+#. the dropdown button label for the participants dropdown.
+#. the participants section label.
+#: apps/io.ox/calendar/print-compact.js
+#: module:io.ox/calendar
+#: apps/io.ox/participants/detail.js
+#: module:io.ox/core
+#: apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter
+msgid "Participants"
+msgstr "Katılımcılar"
+
 #: apps/io.ox/calendar/print.js
 #: module:io.ox/calendar
 #: apps/io.ox/tasks/print.js
@@ -1914,6 +2094,7 @@ msgstr "Onaylanmadı"
 
 #: apps/io.ox/calendar/settings/model.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js
 #: apps/io.ox/contacts/settings/pane.js
 #: module:io.ox/contacts
 msgid "The setting has been saved and will become active when you enter the application the next time."
@@ -1944,7 +2125,6 @@ msgstr[0] "%d dakika%d dakika"
 #: module:io.ox/calendar
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Calendar"
@@ -2088,6 +2268,8 @@ msgstr "Durum"
 #: module:io.ox/contacts
 #: apps/io.ox/core/pim/actions.js
 #: module:io.ox/core
+#: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
+#: module:io.ox/core/viewer
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
 #: apps/io.ox/files/toolbar.js
@@ -2115,24 +2297,6 @@ msgstr "Düzen"
 #: module:io.ox/mail
 msgid "List"
 msgstr "Liste"
-
-#: apps/io.ox/calendar/toolbar.js
-#: module:io.ox/calendar
-#: apps/io.ox/contacts/toolbar.js
-#: module:io.ox/contacts
-#: apps/io.ox/core/emoji/view.js
-#: module:io.ox/mail/emoji
-#: apps/io.ox/files/toolbar.js
-#: module:io.ox/files
-#: apps/io.ox/find/extensions-facets.js
-#: module:io.ox/core
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
-msgid "Options"
-msgstr "Seçenekler"
 
 #: apps/io.ox/calendar/toolbar.js
 #: module:io.ox/calendar
@@ -2518,6 +2682,8 @@ msgstr "Oluşturuldu"
 #: module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
+#: apps/io.ox/notes/detail-view.js
+#: module:io.ox/notes
 msgid "Modified"
 msgstr "Değiştirilmiş"
 
@@ -2582,8 +2748,9 @@ msgstr "Önceki Hafta"
 
 #: apps/io.ox/calendar/week/view.js
 #: module:io.ox/calendar
-msgid "Click for whole day appointment"
-msgstr "Tüm gün görüşmesi için tıklayınız"
+#, fuzzy
+msgid "Create all-day appointment"
+msgstr "Görüşme yarat"
 
 #: apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts
@@ -2756,16 +2923,63 @@ msgstr "İletişim bilgisini sil"
 msgid "Search"
 msgstr "Arama"
 
-#. %1$d and %2$d are both numbers; usually > 100; never singular
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
-msgid "%1$d contacts found. This list is limited to %2$d items."
-msgstr ""
+#: apps/io.ox/search/facets/extensions.js
+#: module:io.ox/core
+msgid "All folders"
+msgstr "Tüm klasörler"
 
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
-msgid "Too many contacts in your address book."
-msgstr ""
+#, fuzzy
+msgid "All distribution lists"
+msgstr "Dağıtım listesi ekle"
+
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#, fuzzy
+msgid "All groups"
+msgstr "Grubu sil"
+
+#. %1$d is number of selected items (addresses/groups) in the list
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#, fuzzy
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "%1$d öğe seçildi%1$d öğe seçildi"
+
+#. %1$d is number of selected addresses
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#, fuzzy
+msgid "%1$d address selected"
+msgid_plural "%1$d addresses selected"
+msgstr[0] "%1$d mesajlar seçildi"
+
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#, fuzzy
+msgid "Clear selection"
+msgstr "Alanı temizle"
+
+#. search feature returns an empty result
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#: apps/io.ox/find/main.js
+#: module:io.ox/core
+#, fuzzy
+msgid "No matching items found."
+msgstr "Herhangi bir öge bulunamadı"
+
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js
+#: module:io.ox/mail
+msgid "Empty"
+msgstr "Boş"
 
 #. Context: Add selected contacts; German "Auswählen", for example
 #: apps/io.ox/contacts/addressbook/popup.js
@@ -2795,31 +3009,8 @@ msgstr "Liste oluştur"
 #: apps/io.ox/contacts/distrib/create-dist-view.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
-msgid "Create distribution list"
-msgstr "Dağıtım listesi oluştur"
-
-#: apps/io.ox/contacts/distrib/create-dist-view.js
-#: module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js
 msgid "Edit distribution list"
 msgstr "Dağıtım listesini düzenle"
-
-#. Name of distribution list
-#: apps/io.ox/contacts/distrib/create-dist-view.js
-#: module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
-#: apps/io.ox/contacts/view-detail.js
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer
-#: apps/io.ox/files/share/view-options.js
-#: module:io.ox/files
-#: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/dialogs.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Name"
-msgstr "İsim"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js
 #: module:io.ox/contacts
@@ -2832,11 +3023,6 @@ msgstr ""
 #: module:io.ox/contacts
 msgid "Distribution List"
 msgstr "Dağıtım listesi"
-
-#: apps/io.ox/contacts/distrib/main.js
-#: module:io.ox/contacts
-msgid "Distribution list has been saved"
-msgstr "Dağıtım listesi kaydedilmiştir"
 
 #: apps/io.ox/contacts/distrib/main.js
 #: module:io.ox/contacts
@@ -3585,6 +3771,13 @@ msgstr "%1$s %2$s"
 
 #: apps/io.ox/contacts/view-detail.js
 #: module:io.ox/contacts
+#, fuzzy
+msgid "Distribution list with 1 entry"
+msgid_plural "Distribution list with %1$d entries"
+msgstr[0] "Dağıtım listesi"
+
+#: apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts
 #: apps/io.ox/participants/model.js
 #: module:io.ox/core
 msgid "Resource"
@@ -3748,6 +3941,8 @@ msgstr "Kullanıcı adı"
 #: module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
 msgid "Password"
 msgstr "Şifre"
 
@@ -3755,6 +3950,14 @@ msgstr "Şifre"
 #: module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js
 #: module:io.ox/core
+msgid "Sign in"
+msgstr "Giriş Yapın"
+
+#. the noun not the verb
+#: apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot
+#, fuzzy
+msgctxt "word"
 msgid "Sign in"
 msgstr "Giriş Yapın"
 
@@ -4133,11 +4336,6 @@ msgstr "formatı seçin"
 
 #: apps/io.ox/core/export/export.js
 #: module:io.ox/core
-msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Not: vCard formatı dağıtım listelerini içermemektedir "
-
-#: apps/io.ox/core/export/export.js
-#: module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Dağıtım listesi dahil "
 
@@ -4193,6 +4391,12 @@ msgstr "Yeni klasör"
 
 #: apps/io.ox/core/folder/actions/add.js
 #: module:io.ox/core
+#: apps/io.ox/core/folder/actions/rename.js
+msgid "Folder name"
+msgstr "Klasör adı"
+
+#: apps/io.ox/core/folder/actions/add.js
+#: module:io.ox/core
 msgid "Add as public calendar"
 msgstr "Halka açık takvim olarak ekle"
 
@@ -4200,12 +4404,6 @@ msgstr "Halka açık takvim olarak ekle"
 #: module:io.ox/core
 msgid "Add as public folder"
 msgstr "Ortak dosya olarak ekle"
-
-#: apps/io.ox/core/folder/actions/add.js
-#: module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js
-msgid "Folder name"
-msgstr "Klasör adı"
 
 #: apps/io.ox/core/folder/actions/add.js
 #: module:io.ox/core
@@ -4243,11 +4441,8 @@ msgctxt "verb"
 msgid "Archive"
 msgstr "Arşiv"
 
-#. button: move all messages from a sender to a tab
 #: apps/io.ox/core/folder/actions/common.js
 #: module:io.ox/core
-#: apps/io.ox/mail/categories/dialogs.js
-#: module:io.ox/mail
 #, fuzzy
 msgid "Move all"
 msgstr "Taşı"
@@ -4309,7 +4504,14 @@ msgstr "Öğeleri sanal klasöre taşıyamazsınız"
 
 #: apps/io.ox/core/folder/actions/move.js
 #: module:io.ox/core
+msgid "Please wait for the previous operation to finish"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/move.js
+#: module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/mail/categories/train.js
+#: module:io.ox/mail
 msgid "Move all messages"
 msgstr "Bütün mesajları taşı"
 
@@ -4510,8 +4712,9 @@ msgstr "Gizle"
 
 #: apps/io.ox/core/folder/extensions.js
 #: module:io.ox/core
-#: apps/io.ox/files/share/view-options.js
+#: apps/io.ox/files/main.js
 #: module:io.ox/files
+#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr ""
 
@@ -4726,12 +4929,6 @@ msgstr "Daha fazlasını öğren"
 msgid "Import from file"
 msgstr "Dosyadan içeriye aktar"
 
-#. Error message if calendar import failed
-#: apps/io.ox/core/import/import.js
-#: module:io.ox/core
-msgid "There was no appointment data to import"
-msgstr "İçe aktarılacak bir görüşme verisi bulunamadı. "
-
 #. Error message if contact import failed
 #: apps/io.ox/core/import/import.js
 #: module:io.ox/core
@@ -4745,6 +4942,19 @@ msgstr "İçe aktarılacak bir görüşme verisi bulunamadı. "
 #, fuzzy
 msgid "There was no task data to import"
 msgstr "İçe aktarılacak bir görüşme verisi bulunamadı. "
+
+#. Error message if calendar import failed
+#: apps/io.ox/core/import/import.js
+#: module:io.ox/core
+msgid "There was no appointment data to import"
+msgstr "İçe aktarılacak bir görüşme verisi bulunamadı. "
+
+#. %1$d is line number, %2$s is an error message
+#: apps/io.ox/core/import/import.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Line %1$d: %2$s"
+msgstr "%1$d %2$s"
 
 #: apps/io.ox/core/import/import.js
 #: module:io.ox/core
@@ -4796,7 +5006,6 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
@@ -4804,7 +5013,6 @@ msgstr "Portal"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 #: apps/io.ox/search/view-template.js
@@ -4814,7 +5022,6 @@ msgstr "E posta"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
@@ -4822,7 +5029,6 @@ msgstr "Adres Defteri"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
@@ -4830,7 +5036,6 @@ msgstr "Planlama"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 #: apps/io.ox/tasks/settings/pane.js
 #: module:io.ox/tasks
@@ -4845,7 +5050,6 @@ msgstr "Görevler"
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js
 #: module:io.ox/files
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 #: apps/io.ox/search/view-template.js
@@ -4855,7 +5059,6 @@ msgstr "Drive"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-#: apps/io.ox/launchpad/main.js
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
@@ -4900,6 +5103,12 @@ msgstr "%1$s için kapat"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
+#, fuzzy
+msgid "(current app)"
+msgstr "Para birimi"
+
+#: apps/io.ox/core/main.js
+#: module:io.ox/core
 #: apps/io.ox/settings/main.js
 msgid "Settings"
 msgstr "Ayarlar"
@@ -4940,11 +5149,6 @@ msgstr "Çıkış Yapın"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-msgid "Your Applications"
-msgstr "Başvurularınız"
-
-#: apps/io.ox/core/main.js
-#: module:io.ox/core
 msgid "Signed in as:"
 msgstr "Olarak oturum açıldı:"
 
@@ -4972,8 +5176,14 @@ msgstr ""
 "Takip eden uygulamalar yeniden depolanabilir.  Yeniden depolanmasını "
 "istememeniz durumunda yeniden depola noktasını kaldırın."
 
+#. button label for continuing the presentation
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
+#: apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+#: apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue"
 msgstr "Devam et"
 
@@ -4998,8 +5208,14 @@ msgstr "Uyarılar"
 
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
-msgid "Hide all notifications"
-msgstr "Bütün bildirimleri gizle"
+#, fuzzy
+msgid "Close notification area"
+msgstr "Bildirim alanı açıldı"
+
+#: apps/io.ox/core/notifications.js
+#: module:io.ox/core
+msgid "Notify me again later"
+msgstr ""
 
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
@@ -5030,23 +5246,28 @@ msgstr ""
 msgid "You can manage desktop notifications at any time, by vitising your settings"
 msgstr ""
 
-#. %1$d number of notifications
+#. %1$d number of notifications in notification area
 #: apps/io.ox/core/notifications/badgeview.js
 #: module:io.ox/core
 #, c-format
-msgid "You have %1$d notification."
-msgid_plural "You have %1$d notifications."
+#, fuzzy, c-format
+msgid "%1$d notification."
+msgid_plural "%1$d notifications."
 msgstr[0] "%1$d  adet bildiriminiz var.%1$d  adet bildiriminiz var."
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js
 #: module:io.ox/core
-msgid "The notification area is open"
-msgstr "Bildirim alanı açıldı"
+#, fuzzy
+msgid "expanded"
+msgstr "genişlemek"
 
+#. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js
 #: module:io.ox/core
-msgid "The notification area is closed"
-msgstr "Bildirim alanı kapatıldı"
+#, fuzzy
+msgid "collapsed"
+msgstr "daralt"
 
 #: apps/io.ox/core/notifications/subview.js
 #: module:io.ox/core
@@ -5216,6 +5437,8 @@ msgstr "Eklentiler kaydedildi!"
 
 #: apps/io.ox/core/pim/actions.js
 #: module:io.ox/core
+#: apps/io.ox/files/actions.js
+#: module:io.ox/files
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 msgid "Open in browser"
@@ -5229,6 +5452,8 @@ msgstr "Tarayıcıda aç"
 #: apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
+#: apps/io.ox/notes/toolbar.js
+#: module:io.ox/notes
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
 #: apps/plugins/portal/updater/register.js
@@ -5256,6 +5481,7 @@ msgstr "Yazdır"
 #: apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub
 #: apps/io.ox/core/yell.js
+#: apps/io.ox/oauth/keychain.js
 msgid "Error"
 msgstr "Hata"
 
@@ -5892,6 +6118,13 @@ msgstr "Dosya ekle"
 msgid "Add from Drive"
 msgstr "Sürücüden Ekle"
 
+#. headline for a progress bar
+#: apps/io.ox/core/tk/attachments.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Uploading attachments"
+msgstr "Dosya ekle"
+
 #: apps/io.ox/core/tk/attachmentsUtil.js
 #: module:io.ox/core
 #: apps/io.ox/preview/main.js
@@ -6086,14 +6319,20 @@ msgstr "Buradan bir zaman seçin"
 msgid "OK"
 msgstr "Tamam"
 
+#. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js
 #: module:io.ox/core
-msgid "Close this reminder"
-msgstr "Bu hatırlatıcıyı kapat"
+#, fuzzy
+msgid "Close reminder for %1$s"
+msgstr "%1$s için kapat"
 
+#. %1$s is something like "in 5 minutes"
+#. don't know if that works for all languages but it has been
+#. a string concatenation before; at least now it's documented
 #: apps/io.ox/core/tk/reminder-util.js
 #: module:io.ox/core
-msgid "Remind me again "
+#, fuzzy
+msgid "Remind me again %1$s"
 msgstr "Tekrardan hatırlat"
 
 #: apps/io.ox/core/tk/reminder-util.js
@@ -6101,41 +6340,39 @@ msgstr "Tekrardan hatırlat"
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js
-msgid "Press [enter] to open"
-msgstr "Açmak için [giriş yapın] a tıklayın"
-
-#: apps/io.ox/core/tk/reminder-util.js
-#: module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
-msgid "end date "
-msgstr "bitiş tarihi"
-
-#: apps/io.ox/core/tk/reminder-util.js
-#: module:io.ox/core
-msgid "status "
-msgstr "statü"
+#, fuzzy
+msgid "Press to open Details"
+msgstr "Seçim ayrıntıları"
 
 #. %1$s task title
-#. %2$s task end date
-#. %3$s task status
 #: apps/io.ox/core/tk/reminder-util.js
 #: module:io.ox/core
-#: apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
 #, c-format
-msgid "%1$s %2$s %3$s."
-msgstr "%1$s %2$s %3$s."
+#, fuzzy, c-format
+msgid "Reminder for task %1$s."
+msgstr "Hatırlatma Tarihi %1$s"
 
-#. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
+#. %1$s appointment title
 #: apps/io.ox/core/tk/reminder-util.js
 #: module:io.ox/core
 #, c-format
-msgid "%1$s %2$s %3$s %4$s."
-msgstr "%1$s %2$s %3$s %4$s."
+#, fuzzy, c-format
+msgid "Reminder for appointment %1$s."
+msgstr "Hatırlatma Tarihi %1$s"
+
+#: apps/io.ox/core/tk/tokenfield.js
+#: module:io.ox/core
+#, fuzzy
+msgid "No autocomplete entries found"
+msgstr "Herhangi bir öge bulunamadı"
+
+#. %1$d is the number of search results in the autocomplete field
+#: apps/io.ox/core/tk/tokenfield.js
+#: module:io.ox/core
+#, c-format
+msgid "One autocomplete entry found"
+msgid_plural "%1$d autocomplete entries found"
+msgstr[0] ""
 
 #: apps/io.ox/core/tk/tokenfield.js
 #: module:io.ox/core
@@ -6326,6 +6563,14 @@ msgstr[0] "%1$d of %2$d"
 msgid "Cannot require a view type for %1$s"
 msgstr ""
 
+#. information about the currently displayed file version in viewer
+#. %1$d - version date
+#: apps/io.ox/core/viewer/views/displayerview.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Version of %1$s"
+msgstr "Sürümler (%1$d)"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Description text"
@@ -6382,16 +6627,7 @@ msgstr "Bu dosya portala yüklenemedi"
 msgid "This folder is shared with others"
 msgstr "Bu klasöre ait abonelikler bulunmaktadır"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer
-#: apps/io.ox/mail/actions/reminder.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/main.js
-#: apps/io.ox/mail/view-options.js
-msgid "From"
-msgstr "dan"
-
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
 #: apps/io.ox/mail/common-extensions.js
@@ -6407,14 +6643,24 @@ msgstr "Gönderilen kişi"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
-#, fuzzy
-msgid "Received"
-msgstr "Alınan epostalar"
+#: apps/io.ox/mail/actions/reminder.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/main.js
+#: apps/io.ox/mail/view-options.js
+msgid "From"
+msgstr "dan"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
 msgid "Sent"
 msgstr ""
+
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
+#, fuzzy
+msgid "Received"
+msgstr "Alınan epostalar"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
@@ -6541,12 +6787,6 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core
-#, fuzzy
-msgid "Zoom"
-msgstr "büyütmek "
-
-#: apps/io.ox/core/viewer/views/toolbarview.js
-#: module:io.ox/core
 msgid "Fit to screen size"
 msgstr ""
 
@@ -6582,6 +6822,18 @@ msgstr "Önizleme"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core
+#, fuzzy
+msgid "Open attachment"
+msgstr "Görüntü eki"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Print as PDF"
+msgstr "Görevleri yazdırın"
+
+#: apps/io.ox/core/viewer/views/toolbarview.js
+#: module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/toolbar.js
 #: module:io.ox/files
@@ -6601,6 +6853,8 @@ msgstr "Dosya olarak kaydet"
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
 #: apps/io.ox/files/toolbar.js
+#: apps/io.ox/notes/toolbar.js
+#: module:io.ox/notes
 msgid "Send by mail"
 msgstr "Posta ile gönder"
 
@@ -6608,12 +6862,6 @@ msgstr "Posta ile gönder"
 #: module:io.ox/core
 msgid "Open in browser tab"
 msgstr "Tarayıcı sekmesinde aç "
-
-#: apps/io.ox/core/viewer/views/toolbarview.js
-#: module:io.ox/core
-#, fuzzy
-msgid "Send as mail"
-msgstr "Eposta gönder"
 
 #. text of a presentation slide count display
 #. Example result: "of 10"
@@ -7134,6 +7382,12 @@ msgstr "Kaldır"
 #: apps/io.ox/files/actions/share.js
 #: module:io.ox/files
 #, fuzzy
+msgid "Send link"
+msgstr "Link edinin "
+
+#: apps/io.ox/files/actions/share.js
+#: module:io.ox/files
+#, fuzzy
 msgid "The link has been removed"
 msgstr "Bu öğe taşınmıştır"
 
@@ -7309,6 +7563,13 @@ msgstr "Lütfen eksik değişenleri tamamlayınız: "
 msgid "File quota"
 msgstr "Dosya kotası"
 
+#: apps/io.ox/files/main.js
+#: module:io.ox/files
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+msgid "Need more space?"
+msgstr ""
+
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js
 #: module:io.ox/files
@@ -7345,6 +7606,29 @@ msgstr "Listeyi göster"
 #: module:io.ox/files
 msgid "Show hidden files and folders"
 msgstr "Gizli dosyaları ve klasörleri göster"
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+#, fuzzy
+msgid "Add new version"
+msgstr "UI sürümü"
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+#, fuzzy
+msgid "Add new version and show notification"
+msgstr "Bu bildirimi gizle"
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+#, fuzzy
+msgid "Add separate file"
+msgstr "Yerel dosya ekle"
+
+#: apps/io.ox/files/settings/pane.js
+#: module:io.ox/files
+msgid "Adding files with identical names"
+msgstr ""
 
 #: apps/io.ox/files/share/listview.js
 #: module:io.ox/files
@@ -7808,6 +8092,12 @@ msgid "%1$d week"
 msgid_plural "%1$d weeks"
 msgstr[0] "%1$d hafta%1$d hafta"
 
+#: apps/io.ox/files/upload/main.js
+#: module:io.ox/files
+#, fuzzy
+msgid "A new version for \"%1$s\" has been added."
+msgstr "Hatırlatma oluşturuldu"
+
 #. %1$s progress of currently uploaded files in percent
 #: apps/io.ox/files/upload/main.js
 #: module:io.ox/files
@@ -7824,7 +8114,8 @@ msgstr "Kalan süre: %1$s"
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/upload/main.js
 #: module:io.ox/files
-msgid "Uploading %1$s"
+#, fuzzy
+msgid "Uploading \"%1$s\""
 msgstr "Yükleniyor %1$s"
 
 #: apps/io.ox/files/upload/view.js
@@ -7862,13 +8153,6 @@ msgstr "Onaylama"
 #: module:io.ox/files
 msgid "Adjust"
 msgstr "Ayarla "
-
-#: apps/io.ox/files/view-options.js
-#: module:io.ox/files
-#: apps/io.ox/mail/accounts/view-form.js
-#: module:io.ox/settings
-msgid "Select"
-msgstr "Seç"
 
 #: apps/io.ox/files/view-options.js
 #: module:io.ox/files
@@ -8027,13 +8311,6 @@ msgstr "Tüm Klasörler"
 msgid "Accounts"
 msgstr "Hesap"
 
-#. search feature returns an empty result
-#: apps/io.ox/find/main.js
-#: module:io.ox/core
-#, fuzzy
-msgid "No matching items found."
-msgstr "Herhangi bir öge bulunamadı"
-
 #: apps/io.ox/find/view-facets.js
 #: module:io.ox/core
 msgid "Search facets"
@@ -8077,35 +8354,6 @@ msgstr "Kurtarma"
 #: module:io.ox/keychain
 msgid "Failed to recover accounts"
 msgstr "Hesaplar kurtarılamadı."
-
-#: apps/io.ox/launchpad/main.js
-#: module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Settings"
-msgstr "Ayarlar"
-
-#: apps/io.ox/launchpad/main.js
-#: module:io.ox/core
-#: apps/io.ox/search/view-template.js
-msgctxt "app"
-msgid "Documents"
-msgstr "Belgeler"
-
-#: apps/io.ox/launchpad/main.js
-#: module:io.ox/core
-msgid "Running applications"
-msgstr "Çalışmakta olan uygulamalar"
-
-#: apps/io.ox/launchpad/main.js
-#: module:io.ox/core
-msgid "Your applications"
-msgstr "Uygulamalarınız"
-
-#: apps/io.ox/launchpad/main.js
-#: module:io.ox/core
-msgid "Manage applications"
-msgstr "Uygulamaları yönet"
 
 #: apps/io.ox/linkedIn/view-detail.js
 #: module:io.ox/portal
@@ -8152,6 +8400,11 @@ msgstr "mail adresin"
 #: module:io.ox/mail/accounts/settings
 msgid "Your password"
 msgstr "parolan"
+
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
+msgid "Your credentials will be sent over a secure connection only"
+msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
@@ -8536,6 +8789,12 @@ msgstr "Eklentiyi kaydet"
 #: apps/io.ox/mail/actions/copyMove.js
 #: module:io.ox/mail
 #, fuzzy
+msgid "unknown sender"
+msgstr "Bilinmeyen gönderen"
+
+#: apps/io.ox/mail/actions/copyMove.js
+#: module:io.ox/mail
+#, fuzzy
 msgid "All future messages from %1$s will be moved to the selected folder."
 msgstr "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
 
@@ -8653,93 +8912,76 @@ msgstr "Posta filtresi kuralları yüklenemedi."
 msgid "Couldn't load your auto forward."
 msgstr "Otomatik yönlendirmeniz yüklenemedi."
 
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories/edit.js
 #: module:io.ox/mail
 #, fuzzy
-msgid "Apply to all messages?"
-msgstr "Alt klasörlerin tümü için uygula"
+msgid "Configure categories"
+msgstr "E-posta adresi"
 
-#. %1$d is the number of mails
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories/edit.js
 #: module:io.ox/mail
-#, c-format
-#, fuzzy, c-format
-msgid "Selected message was moved successfully."
-msgid_plural "Selected messages has been moved successfully."
-msgstr[0] "Veri başarıyla taşındı"
-
-#. %1$s single mail address or comma separated list of multiple
-#. %2$s target mail category
-#: apps/io.ox/mail/categories/dialogs.js
-#: module:io.ox/mail
-#, c-format
-#, fuzzy, c-format
-msgid "Should all other past and future messages from %1$s also be moved to %2$s?"
-msgstr "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
-
-#. might be suitable to use 'tabs' rather than translating it
-#: apps/io.ox/mail/categories/dialogs.js
-#: module:io.ox/mail
-#, fuzzy
-msgid "Edit Tabs"
-msgstr "Görevi düzenle"
-
-#: apps/io.ox/mail/categories/dialogs.js
-#: module:io.ox/mail
-msgid "Please feel free to rename tabs to better match your needs. Use checkboxes to enable or disable specific tabs."
+msgid "You can enable categories again via the view dropdown on the right"
 msgstr ""
 
-#: apps/io.ox/mail/categories/dialogs.js
+#: apps/io.ox/mail/categories/edit.js
 #: module:io.ox/mail
-#, fuzzy
-msgid "Note that some of the tabs can not be disabled."
-msgstr "Dosyasız ögeler indirilemez."
-
-#: apps/io.ox/mail/categories/dialogs.js
-#: module:io.ox/mail
-msgid "The tabbed inbox can be completely disabled in the mail settings."
+msgid "Please note that some categories are predefined and you might not be able to rename or disable them."
 msgstr ""
 
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/edit.js
 #: module:io.ox/mail
 #, fuzzy
-msgid "Inbox tabs"
-msgstr "Gelen kutusu"
+msgid "Disable categories"
+msgstr "E-posta adresi"
 
-#: apps/io.ox/mail/categories/main.js
+#. mail categories feature: the update job is running that assigns
+#. some common mails (e.g. from twitter.com) to predefined categories
+#: apps/io.ox/mail/categories/mediator.js
 #: module:io.ox/mail
-msgid "Configure your inbox tabs"
+msgid "It may take some time until mails are assigned to the default categories."
 msgstr ""
 
-#. use as a fallback name in case a user enters a empty string as the name of tab
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/picker.js
 #: module:io.ox/mail
 #, fuzzy
-msgid "Unnamed"
-msgstr "Kullanıcı adı"
+msgid "Move to category"
+msgstr "Klasöre taşı"
 
-#: apps/io.ox/mail/categories/main.js
+#: apps/io.ox/mail/categories/picker.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Move to folder"
+msgstr "Klasöre taşı"
+
+#: apps/io.ox/mail/categories/tabs.js
+#: module:io.ox/mail
+#, fuzzy
+msgid "Inbox categories"
+msgstr "E-posta adresi"
+
+#: apps/io.ox/mail/categories/tabs.js
 #: module:io.ox/mail
 msgid "Drop here!"
 msgstr ""
 
-#. tabbed inbox feature: the update job is running that assigns some common mails (e.g. from twitter.com) to predefined tabs
-#: apps/io.ox/mail/categories/main.js
+#. successfully moved a message via drag&drop to another mail category (tab)
+#. %1$s represents the name if the target category
+#: apps/io.ox/mail/categories/train.js
 #: module:io.ox/mail
-msgid "It will take some time until common mails are assigned to the default tabs."
-msgstr ""
+#, fuzzy
+msgid "Message moved to category \"%1$s\"."
+msgid_plural "Messages moved to category \"%1$s\"."
+msgstr[0] "Klasöre taşı"
 
-#. tabbed inbox feature: in case the long running update job fails
-#: apps/io.ox/mail/categories/main.js
+#. ask user to move all messages from the same sender to the mail category (tab)
+#. %1$s represents a email address
+#: apps/io.ox/mail/categories/train.js
 #: module:io.ox/mail
-msgid "Sorry, common mails couldn't be assigned automatically."
-msgstr ""
-
-#. Helper text for mail tabs without content
-#: apps/io.ox/mail/categories/main.js
-#: module:io.ox/mail
-msgid "To fill this area please drag and drop mails to the title of this tab."
-msgstr ""
+#, fuzzy
+msgid "Do you want to move all messages from %1$s to that category?"
+msgid_plural "Do you want to move all messages from selected senders to that category?"
+msgstr[0] "Alt klasörlerin tümü için uygula"
 
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
@@ -8751,12 +8993,6 @@ msgstr "Okunmamış olarak işaretle"
 #: module:io.ox/mail
 msgid "has attachments"
 msgstr " ekleri var"
-
-#. empty message for list view
-#: apps/io.ox/mail/common-extensions.js
-#: module:io.ox/mail
-msgid "Empty"
-msgstr "Boş"
 
 #: apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail
@@ -8843,6 +9079,13 @@ msgstr ""
 msgid "The email has been sent"
 msgstr "E-posta gönderilmiştir"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens"
+msgstr ""
+
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -8850,6 +9093,7 @@ msgstr "E-posta gönderilmiştir"
 msgid "CC"
 msgstr "CC"
 
+#. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "BCC"
@@ -8872,6 +9116,8 @@ msgstr "Yeni eposta oluştur"
 #: module:io.ox/mail
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
 msgid "Send"
 msgstr "Gönder"
 
@@ -8967,6 +9213,22 @@ msgstr "altı ay"
 msgid "1 year"
 msgstr "bir yıl"
 
+#. text of a user list that shows the names of presenting user and participants.
+#. the text to display as presenter name if no user is presenting yet.
+#. the text to display as participants names if no users are listening yet.
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+#: apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter
+msgid "none"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+#, fuzzy
+msgid "delete if expired"
+msgstr "seansının süresi doldu"
+
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 #, fuzzy
@@ -8991,12 +9253,6 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
-#, fuzzy
-msgid "optional password"
-msgstr "eski parolan"
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
 msgid "Drop attachments here"
 msgstr "Eklentileri buraya yükleyiniz"
 
@@ -9015,6 +9271,8 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/inline-images.js
 #: module:io.ox/mail
+#: apps/io.ox/notes/detail-view.js
+#: module:io.ox/notes
 msgid "Insert"
 msgstr ""
 
@@ -9032,12 +9290,6 @@ msgstr "Lütfen içe aktarım için geçerli bir iCal dosyası seçiniz"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "Oluştur"
-
-#. %s is the product name
-#: apps/io.ox/mail/compose/model.js
-#: module:io.ox/mail
-msgid "Sent from %s via mobile"
-msgstr "Mobil aracılığı ile %s dan gönderilmiştir"
 
 #: apps/io.ox/mail/compose/model.js
 #: module:io.ox/mail
@@ -9078,6 +9330,12 @@ msgstr ""
 #: module:io.ox/mail
 msgid "Edit real names"
 msgstr "Gerçek isimleri düzenle"
+
+#. %s is the product name
+#: apps/io.ox/mail/compose/signatures.js
+#: module:io.ox/mail
+msgid "Sent from %s via mobile"
+msgstr "Mobil aracılığı ile %s dan gönderilmiştir"
 
 #: apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -9131,6 +9389,28 @@ msgstr "Vcard ekle"
 #: module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Okundu bilgisi iste"
+
+#: apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+#: apps/io.ox/mail/detail/mobileView.js
+#: apps/io.ox/mail/detail/view.js
+msgid "This message has been truncated due to size limitations."
+msgstr "Bu ileti boyut sınırlamaları nedeniyle kesilmiştir."
+
+#: apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+msgid "Loading the full mail might lead to performance problems."
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+msgid "Load full mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+msgid "Add original message as attachment"
+msgstr ""
 
 #: apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -9188,12 +9468,6 @@ msgstr "Özet çizelgesi "
 #: module:io.ox/mail
 msgid "Tasks"
 msgstr "Görevler"
-
-#: apps/io.ox/mail/detail/mobileView.js
-#: module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js
-msgid "This message has been truncated due to size limitations."
-msgstr "Bu ileti boyut sınırlamaları nedeniyle kesilmiştir."
 
 #: apps/io.ox/mail/detail/mobileView.js
 #: module:io.ox/mail
@@ -9276,25 +9550,15 @@ msgstr "Şunu kaldır: %1$s"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
-msgid "Use cursor keys to change the item position. Virtual cursor mode has to be disabled."
-msgstr ""
-"Öğe pozisyonunu değiştirmek için imleç tuşlarını kullanın. Sanal imleç "
-"modunun devre dışı bırakılması gerekmektedir."
+#, fuzzy
+msgid "Drag to reorder filter rules"
+msgstr "Aracı yeniden sipariş etmek için sürükleyiniz"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: module:io.ox/mail
 #, fuzzy
 msgid "Do you really want to delete this filter rule?"
 msgstr "Bu dosyayı silmek istediğinize emin misiniz?"
-
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: module:io.ox/mail
-#: apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal
-msgid "the item has been moved"
-msgstr "Bu öğe taşınmıştır"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: module:io.ox/mail
@@ -9424,11 +9688,6 @@ msgstr "Yönlendir"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-msgid "Move to folder"
-msgstr "Klasöre taşı"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
 msgid "Reject with reason"
 msgstr "Sebep belirterek reddet"
 
@@ -9530,11 +9789,6 @@ msgstr "E posta kotası"
 
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
-msgid "Need more space?"
-msgstr ""
-
-#: apps/io.ox/mail/main.js
-#: module:io.ox/mail
 #, fuzzy
 msgid "Messages"
 msgstr "Mesajlaşma"
@@ -9551,10 +9805,13 @@ msgstr "Mesaj (tercihi)"
 msgid "No message selected"
 msgstr "Herhangi bir mesaj seçilmedi"
 
+#. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
-msgid "%1$d messages selected"
-msgstr "%1$d mesajlar seçildi"
+#, fuzzy
+msgid "%1$d message selected"
+msgid_plural "%1$d messages selected"
+msgstr[0] "%1$d mesajlar seçildi"
 
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
@@ -9766,42 +10023,6 @@ msgstr "Alıntı içerisindeki satırları boya"
 msgid "Show requests for read receipts"
 msgstr "Okundu bilgileri için talepleri göster"
 
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Please ask me every time"
-msgstr ""
-
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Yes, always move them all"
-msgstr ""
-
-#. possible setting for 'Should only the current message or all messages of the sender be moved'
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-#, fuzzy
-msgid "No, only move selected message(s)"
-msgstr "Silinmiş mesajlar"
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-#, fuzzy
-msgid "Inbox Tabs"
-msgstr "Gelen kutusu"
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-#, fuzzy
-msgid "Show Tabs for inbox"
-msgstr "Gelen kutunuzda herhangi bir e-posta bulunmuyor"
-
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Should only the current message or all messages of the sender be moved"
-msgstr ""
-
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 #, fuzzy
@@ -9857,11 +10078,6 @@ msgstr "İçe aktarım sonrası eski imzaları sil"
 #: module:io.ox/mail
 msgid "Add new signature"
 msgstr "Yeni imza ekle"
-
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: module:io.ox/mail
-msgid "%1$s, %2$s"
-msgstr "%1$s, %2$s"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: module:io.ox/mail
@@ -9946,6 +10162,12 @@ msgstr "Yeni eposta oluştur"
 
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
+#, fuzzy
+msgid "Set category"
+msgstr "Girişim kategorisi"
+
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
 msgid "Vertical"
 msgstr "Dikey"
 
@@ -9953,6 +10175,30 @@ msgstr "Dikey"
 #: module:io.ox/mail
 msgid "Horizontal"
 msgstr "Yatay"
+
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+#: apps/io.ox/portal/widgets.js
+#: module:io.ox/portal
+#: apps/plugins/portal/mail/register.js
+#: module:plugins/portal
+msgid "Inbox"
+msgstr "Gelen kutusu"
+
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+#, fuzzy
+msgid "Use categories"
+msgstr "E-posta adresi"
+
+#. term is followed by a space and three dots (' …')
+#. the dots refer to the term 'Categories' right above this dropdown entry
+#. so user reads it as 'Configure Categories'
+#: apps/io.ox/mail/toolbar.js
+#: module:io.ox/mail
+#, fuzzy
+msgid "Configure"
+msgstr "Onaylanmadı"
 
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
@@ -9967,8 +10213,8 @@ msgstr "Kesin tarih"
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 #, fuzzy
-msgid "Show message size"
-msgstr "Resimleri göster"
+msgid "Message size"
+msgstr "Mesajlaşma"
 
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
@@ -10053,15 +10299,21 @@ msgstr "Tatil bildiriminiz yüklenemedi."
 msgid "Email addresses"
 msgstr "E posta adresleri"
 
+#. button label for the 'start presentation' dropdown
 #: apps/io.ox/mail/vacationnotice/settings/model.js
 #: module:io.ox/mail
+#: apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
 #: apps/io.ox/tasks/print.js
 #: module:io.ox/tasks
 msgid "Start"
 msgstr "Başla"
 
+#. button label for ending the presentation
 #: apps/io.ox/mail/vacationnotice/settings/model.js
 #: module:io.ox/mail
+#: apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
 msgid "End"
 msgstr "Son"
 
@@ -10080,11 +10332,34 @@ msgstr "Tatil bildiriminiz yüklenemedi."
 msgid "Conversations"
 msgstr "Konuşmalar"
 
+#: apps/io.ox/notes/mediator.js
+#: module:io.ox/notes
+msgid "Topics"
+msgstr ""
+
+#: apps/io.ox/notes/mediator.js
+#: module:io.ox/notes
+msgid "Preview not available"
+msgstr ""
+
+#: apps/io.ox/notes/toolbar.js
+#: module:io.ox/notes
+#, fuzzy
+msgid "New note"
+msgstr "Yeni Klasör"
+
 #: apps/io.ox/oauth/keychain.js
 #: module:io.ox/core
 #, fuzzy
 msgid "Account could not be added"
 msgstr "Görev silinemedi.Görevler silinemedi."
+
+#: apps/io.ox/oauth/keychain.js
+#: module:io.ox/core
+#: apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
+msgid "Reauthorize"
+msgstr "Yeniden Yetkilendirme"
 
 #: apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -10115,11 +10390,6 @@ msgstr "Hesap Ayarları"
 #: module:io.ox/settings
 msgid "Display Name"
 msgstr "Görünen İsim"
-
-#: apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
-msgid "Reauthorize"
-msgstr "Yeniden Yetkilendirme"
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
@@ -10380,6 +10650,12 @@ msgstr[0] "Bu E-posta adresi randevular için kullanılamaz"
 msgid "Add participant/resource"
 msgstr "Katılımcı/kaynak ekle"
 
+#. %1$s is an email address
+#: apps/io.ox/participants/add.js
+#: module:io.ox/core
+msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgstr ""
+
 #: apps/io.ox/participants/detail.js
 #: module:io.ox/core
 msgid "External participants"
@@ -10417,6 +10693,12 @@ msgstr "Harici iletişim bilgisi"
 #: module:io.ox/core
 msgid "Remove contact"
 msgstr "İletişim bilgisini kaldır"
+
+#: apps/io.ox/participants/views.js
+#: module:io.ox/core
+#, fuzzy
+msgid "Participants (%1$d)"
+msgstr "Katılımcılar"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js
@@ -10581,13 +10863,6 @@ msgstr "Widget özetini azalt"
 
 #: apps/io.ox/portal/widgets.js
 #: module:io.ox/portal
-#: apps/plugins/portal/mail/register.js
-#: module:plugins/portal
-msgid "Inbox"
-msgstr "Gelen kutusu"
-
-#: apps/io.ox/portal/widgets.js
-#: module:io.ox/portal
 msgid "Could not save settings."
 msgstr "Ayarlar yüklenemedi."
 
@@ -10680,6 +10955,13 @@ msgstr "Önceki Hafta"
 #: apps/io.ox/presenter/views/navigationview.js
 #: module:io.ox/presenter
 #: apps/io.ox/presenter/views/toolbarview.js
+msgid "Pause"
+msgstr ""
+
+#. button label for pausing the presentation
+#: apps/io.ox/presenter/views/navigationview.js
+#: module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 #, fuzzy
 msgid "Pause presentation"
 msgstr "Sunumlar"
@@ -10717,14 +10999,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle fullscreen"
 msgstr "Tam ekran"
-
-#. text of a user list that shows the names of presenting user and participants.
-#. the text to display as presenter name if no user is presenting yet.
-#. the text to display as participants names if no users are listening yet.
-#: apps/io.ox/presenter/views/navigationview.js
-#: module:io.ox/presenter
-msgid "none"
-msgstr ""
 
 #. text of a user list that shows the names of presenting user and participants.
 #. the presenter section label.
@@ -10854,8 +11128,10 @@ msgid "Leave presentation"
 msgstr "Sunumlar"
 
 #. label for the leave presentation button
+#. button label for leaving the presentation
 #: apps/io.ox/presenter/views/presentationview.js
 #: module:io.ox/presenter
+#: apps/io.ox/presenter/views/toolbarview.js
 msgid "Leave"
 msgstr ""
 
@@ -10920,6 +11196,12 @@ msgstr "Sunumlar"
 #. button label for joining the presentation
 #: apps/io.ox/presenter/views/toolbarview.js
 #: module:io.ox/presenter
+msgid "Join"
+msgstr ""
+
+#. button label for joining the presentation
+#: apps/io.ox/presenter/views/toolbarview.js
+#: module:io.ox/presenter
 #, fuzzy
 msgid "Join presentation"
 msgstr "Sunumlar"
@@ -10955,11 +11237,6 @@ msgstr "Açmak için tıklayın. İndirmek için masaüstünüze sürükleyin."
 msgid "Click to open."
 msgstr "Açmak için tıklayın. "
 
-#: apps/io.ox/search/facets/extensions.js
-#: module:io.ox/core
-msgid "All folders"
-msgstr "Tüm klasörler"
-
 #: apps/io.ox/search/items/view-template.js
 #: module:io.ox/core
 msgid "No items found"
@@ -10971,6 +11248,18 @@ msgid "The selected folder is virtual and can not be searched. Please select ano
 msgstr ""
 "Seçilen klasör sanal olduğu için aratılamıyor. Lütfen başka bir klasör "
 "aratınız. "
+
+#: apps/io.ox/search/view-template.js
+#: module:io.ox/core
+msgctxt "app"
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: apps/io.ox/search/view-template.js
+#: module:io.ox/core
+msgctxt "app"
+msgid "Documents"
+msgstr "Belgeler"
 
 #: apps/io.ox/search/view-template.js
 #: module:io.ox/core
@@ -10992,6 +11281,11 @@ msgstr "Şu anda gösterilen %1$s öğelerden fazlası bulundu"
 #: module:io.ox/settings/accounts
 msgid "Add account"
 msgstr "Hesap ekle"
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Allow connections with untrusted certificates"
+msgstr ""
 
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
@@ -11079,6 +11373,8 @@ msgstr "Bitiş tarihini değiştir"
 #: apps/io.ox/tasks/mobile-toolbar-actions.js
 #: apps/io.ox/tasks/toolbar.js
 #: module:io.ox/mail
+#: apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Mark as done"
 msgstr "Yapılmış olarak işaretle"
 
@@ -11781,7 +12077,8 @@ msgstr "Grubu sil"
 
 #: apps/plugins/administration/resources/settings/edit.js
 #: module:io.ox/core
-msgid "Resource name"
+#, fuzzy
+msgid "Resource name (mandatory)"
 msgstr "Kaynak Adı"
 
 #: apps/plugins/administration/resources/settings/edit.js
@@ -11813,37 +12110,59 @@ msgstr ""
 msgid "Delete resource"
 msgstr "Kaynağı sil"
 
-#. %1$d is current raiting
-#. %2$d is the maximum rating
+#. 1 of 5 star rating
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-#, c-format
-msgid "Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating."
+msgctxt "rating"
+msgid "It's really bad"
 msgstr ""
-"%2$d derecelendirmesi %1$d. Onaylamak için lütfen Giriş'e tıklatın ya da sağ "
-"ve sol ok tuşlarını kullanarak derecelendirmenizi ayarlayın."
 
+#. 2 of 5 star rating
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust your rating."
+msgctxt "rating"
+msgid "I don't like it"
 msgstr ""
-"%2$d derecelendirmesi %1$d onaylanmıştır. Derecelendirmenizi ayarlamak için "
-"sağ ve sol tuşlarını kullanın."
+
+#. 3 of 5 star rating
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
+msgctxt "rating"
+msgid "It's ok"
+msgstr ""
+
+#. 4 of 5 star rating
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
+#, fuzzy
+msgctxt "rating"
+msgid "I like it"
+msgstr "Bunu beğendiniz"
+
+#. 5 of 5 star rating
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
+msgctxt "rating"
+msgid "It's awesome"
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Feedback"
-msgstr "Geri bildirim "
+#, fuzzy
+msgid "%1$d of 5 stars"
+msgstr "%1$d of %2$d"
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Send feedback"
-msgstr "Geri bildirim gönderin"
+#, fuzzy
+msgid "Your feedback"
+msgstr "Geri bildirim brakın "
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Welcome. Please provide your feedback about this product"
-msgstr "Hoşgeldiniz. Lütfen bu ürün ile ilgili geri bildirimlerinizi belirtiniz"
+#, fuzzy
+msgid "Please rate this product"
+msgstr "Lütfen geçmişte olan bir tarih giriniz"
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
@@ -11852,7 +12171,8 @@ msgstr "Yorumlar ve Öneriler"
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Please note, that support requests cannot be handled via the feedback-formular. When you have questions or problems please contact our support directly"
+#, fuzzy
+msgid "Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly."
 msgstr ""
 "Lütfen, destek taleplerinin geri bildirim formu üzerinden yanıtlanmayacağını "
 "unutmayın. Herhangi bir sorunuz ya da sorununuz olması durumunda lütfen "
@@ -11860,13 +12180,13 @@ msgstr ""
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Your email address will be included when sending this feedback"
-msgstr "Bu geri bildirimi gönderdiğinizde e posta adresiniz dahil olacak "
+msgid "Thank you for your feedback"
+msgstr "Geri bildiriminiz için teşekkür ederiz"
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Thank you for your feedback"
-msgstr "Geri bildiriminiz için teşekkür ederiz"
+msgid "Feedback"
+msgstr "Geri bildirim "
 
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
@@ -12008,15 +12328,20 @@ msgstr ""
 "Anasayfadaki Ekrana Ekleyin'%4$s"
 
 #. %1$s Appointment title
-#. %2$s Appointment date
-#. %3$s Appointment time
-#. %4$s Appointment location
-#. %5$s Appointment Organizer
+#. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js
 #, c-format
-msgid "%1$s %2$s %3$s %4$s %5$s."
-msgstr "%1$s %2$s %3$s %4$s %5$s."
+#, fuzzy, c-format
+msgid "Invitation for %1$s."
+msgstr "Davetiye gönderildi"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js
+msgid "Accept/Decline"
+msgstr "Kabul Et/Geri Çevir"
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
@@ -12093,6 +12418,49 @@ msgstr "Randevu daveti aldınız"
 msgid "Hide all appointment invitations."
 msgstr "Bütün randevu davetlerini gizle"
 
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+msgid "New mail"
+msgstr "Yeni E-posta"
+
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+msgid "Bell"
+msgstr ""
+
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+msgid "Marimba"
+msgstr ""
+
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+msgid "Wood"
+msgstr ""
+
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+msgid "Chimes"
+msgstr ""
+
+#. Should be "töne" in german, used for notification sounds. Not "geräusch"
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+#, fuzzy
+msgid "Notification sounds"
+msgstr "Uyarılar"
+
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+#, fuzzy
+msgid "Play sound on incoming mail"
+msgstr "Yeni eposta gönder "
+
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+msgid "Sound"
+msgstr ""
+
 #. %1$d number of notifications
 #: apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
@@ -12117,19 +12485,6 @@ msgstr "Yeni e postalarınız  var"
 #, c-format
 msgid "Mail from %1$s, %2$s"
 msgstr "%1$s, %2$s dan e-posta"
-
-#: apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-msgid "New mail"
-msgstr "Yeni E-posta"
-
-#. %1$s task title
-#. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
-#, c-format
-msgid "%1$s %2$s."
-msgstr "%1$s %2$s."
 
 #: apps/plugins/notifications/tasks/register.js
 #: module:plugins/notifications
@@ -12187,11 +12542,6 @@ msgstr "Yeni görev hatırlatıcısı"
 #: module:plugins/notifications
 msgid "Hide all task reminders."
 msgstr "Tüm görev hatırlatmalarını sakla"
-
-#: apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
-msgid "Accept/Decline"
-msgstr "Kabul Et/Geri Çevir"
 
 #. Inviations (notifications) to tasks
 #: apps/plugins/notifications/tasks/register.js
@@ -13032,14 +13382,26 @@ msgstr " %s e/a davet et"
 msgid "Add on %s"
 msgstr "%s üzerine ekle"
 
+#~ msgid "%1$s %2$s %3$s %4$s %5$s."
+#~ msgstr "%1$s %2$s %3$s %4$s %5$s."
+
+#~ msgid "%1$s %2$s %3$s %4$s."
+#~ msgstr "%1$s %2$s %3$s %4$s."
+
+#~ msgid "%1$s %2$s %3$s."
+#~ msgstr "%1$s %2$s %3$s."
+
+#~ msgid "%1$s %2$s."
+#~ msgstr "%1$s %2$s."
+
+#~ msgid "%1$s, %2$s"
+#~ msgstr "%1$s, %2$s"
+
 #~ msgid "<b>%1$d</b> elements selected"
 #~ msgstr "<b>%1$d</b> öğe seçildi"
 
 #~ msgid "Add member"
 #~ msgstr "Üye ekle"
-
-#~ msgid "Add participant"
-#~ msgstr "Katılımcı Ekle"
 
 #~ msgid "Advanced Settings"
 #~ msgstr "Gelişmiş Ayarlar"
@@ -13052,6 +13414,10 @@ msgstr "%s üzerine ekle"
 
 #~ msgid "Advanced options"
 #~ msgstr "Gelişmiş Seçenekler"
+
+#, fuzzy
+#~ msgid "All contacts"
+#~ msgstr "Kişi ekle"
 
 #~ msgid "Applications"
 #~ msgstr "Uygulamalar"
@@ -13066,23 +13432,56 @@ msgstr "%s üzerine ekle"
 #~ msgid "Apply for mails from %1$s"
 #~ msgstr "%1$s: %2$s dan E-posta "
 
+#, fuzzy
+#~ msgid "Apply to all messages?"
+#~ msgstr "Alt klasörlerin tümü için uygula"
+
+#, fuzzy
+#~ msgid "Appointment scheduling"
+#~ msgstr "Randevu Listesi"
+
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Karakterden sonra düz metni otomatik olarak kaydır:"
 
 #~ msgid "Bcc"
 #~ msgstr "Gizli bilgi"
 
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Categories"
+#~ msgstr "E-posta adresi"
+
 #~ msgid "Change folder"
 #~ msgstr "Klasör değiştir"
 
+#~ msgid "Click for whole day appointment"
+#~ msgstr "Tüm gün görüşmesi için tıklayınız"
+
 #~ msgid "Click here for free trial."
 #~ msgstr "Bedava deneme için tıklayınız"
+
+#~ msgid "Close this reminder"
+#~ msgstr "Bu hatırlatıcıyı kapat"
+
+#, fuzzy
+#~| msgid "Compact"
+#~ msgid "Compact rows"
+#~ msgstr "Sıkıştır"
 
 #~ msgid "Day View"
 #~ msgstr "Gün Görüntüle"
 
 #~ msgid "Double click to rename"
 #~ msgstr "Yeniden adlandırmak için çift tıkla"
+
+#, fuzzy
+#~ msgid "Edit Tabs"
+#~ msgstr "Görevi düzenle"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Edit categories"
+#~ msgstr "E-posta adresi"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "Kabul Etme/Geri Çevirme için E-posta bildirimi"
@@ -13101,6 +13500,11 @@ msgstr "%s üzerine ekle"
 
 #~ msgid "Emptying folder... This may take a few seconds."
 #~ msgstr "Klasör boşaltılıyor... Bu bir kaç saniye süre alabilir"
+
+#, fuzzy
+#~| msgid "Mail address"
+#~ msgid "Enable categories"
+#~ msgstr "E-posta adresi"
 
 #~ msgid "Enabled"
 #~ msgstr "Etkinleştirilmiş"
@@ -13123,11 +13527,22 @@ msgstr "%s üzerine ekle"
 #~ msgid "Hide advanced filters"
 #~ msgstr "Gelişmiş filitreleri gizle"
 
+#~ msgid "Hide all notifications"
+#~ msgstr "Bütün bildirimleri gizle"
+
 #~ msgid "Hide comments"
 #~ msgstr "Yorumları sakla"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "IMAP dosya üyeliği"
+
+#, fuzzy
+#~ msgid "Inbox Tabs"
+#~ msgstr "Gelen kutusu"
+
+#, fuzzy
+#~ msgid "Inbox tabs"
+#~ msgstr "Gelen kutusu"
 
 #~ msgid "Invalid data"
 #~ msgstr "Geçersiz bilgi"
@@ -13147,13 +13562,11 @@ msgstr "%s üzerine ekle"
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "E-posta ve Sosyal Hesaplar"
 
-#, fuzzy
-#~| msgid "Mail address"
-#~ msgid "Mail categories"
-#~ msgstr "E-posta adresi"
-
 #~ msgid "Main window"
 #~ msgstr "E posta penceresi"
+
+#~ msgid "Manage applications"
+#~ msgstr "Uygulamaları yönet"
 
 #~ msgid "Mark as"
 #~ msgstr "Olarak işaretle"
@@ -13164,15 +13577,21 @@ msgstr "%s üzerine ekle"
 #~ msgid "Mark unread"
 #~ msgstr "Okunmamış olarak işaretle"
 
-#, fuzzy
-#~| msgid "Apply to all subfolders"
-#~ msgid "Move all mails from a sender"
-#~ msgstr "Alt klasörlerin tümü için uygula"
-
 #~ msgid "No items were found. Please adjust currently used facets."
 #~ msgstr ""
 #~ "Herhangi bir öge bulunamadı. Lütfen şu anda kullanılan özellikleri "
 #~ "düzenleyiniz. "
+
+#, fuzzy
+#~ msgid "No, only move selected message(s)"
+#~ msgstr "Silinmiş mesajlar"
+
+#, fuzzy
+#~ msgid "Note that some of the tabs can not be disabled."
+#~ msgstr "Dosyasız ögeler indirilemez."
+
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "Not: vCard formatı dağıtım listelerini içermemektedir "
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Haberyayınınızda herhangi bir şey bulunamadı."
@@ -13187,8 +13606,25 @@ msgstr "%s üzerine ekle"
 #~ msgid "Press [enter] to jump to the facebook stream."
 #~ msgstr "Facebook yayın akışına gitmek için lütfen [enter] tuşuna basın."
 
+#~ msgid "Press [enter] to open"
+#~ msgstr "Açmak için [giriş yapın] a tıklayın"
+
+#~ msgid ""
+#~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
+#~ "arrowkeys to adjust your rating."
+#~ msgstr ""
+#~ "%2$d derecelendirmesi %1$d. Onaylamak için lütfen Giriş'e tıklatın ya da "
+#~ "sağ ve sol ok tuşlarını kullanarak derecelendirmenizi ayarlayın."
+
+#, fuzzy
+#~ msgid "Rating %1$d of 5"
+#~ msgstr "%1$d of %2$d"
+
 #~ msgid "Remove facet"
 #~ msgstr "Özellliği kaldır"
+
+#~ msgid "Running applications"
+#~ msgstr "Çalışmakta olan uygulamalar"
 
 #~ msgid "Save to Drive"
 #~ msgstr "Drive'a kaydet"
@@ -13199,8 +13635,38 @@ msgstr "%s üzerine ekle"
 #~ msgid "Search here"
 #~ msgstr "Buradan arayın"
 
+#, fuzzy
+#~ msgid "Selected message was moved successfully."
+#~ msgid_plural "Selected messages has been moved successfully."
+#~ msgstr[0] "Veri başarıyla taşındı"
+
+#, fuzzy
+#~ msgid "Send as mail"
+#~ msgstr "Eposta gönder"
+
+#~ msgid "Send feedback"
+#~ msgstr "Geri bildirim gönderin"
+
+#, fuzzy
+#~ msgid ""
+#~ "Should all other past and future messages from %1$s also be moved to %2$s?"
+#~ msgstr "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
+
+#, fuzzy
+#~ msgid "Show Tabs for inbox"
+#~ msgstr "Gelen kutunuzda herhangi bir e-posta bulunmuyor"
+
 #~ msgid "Show comments"
 #~ msgstr "Yorumları göster"
+
+#, fuzzy
+#~ msgid "Show message size"
+#~ msgstr "Resimleri göster"
+
+#, fuzzy
+#~| msgid "Show names"
+#~ msgid "Show more"
+#~ msgstr "İsimleri göster"
 
 #~ msgid "Show more comments"
 #~ msgstr "Daha fazla yorum göster"
@@ -13236,6 +13702,9 @@ msgstr "%s üzerine ekle"
 #~ "\"%1$s\" dosyası maksimum dosya kota limiti %2$s i geçtiği için "
 #~ "yüklenememektedir"
 
+#~ msgid "The notification area is closed"
+#~ msgstr "Bildirim alanı kapatıldı"
+
 #~ msgid "The person %1$s is already in the list"
 #~ msgstr "%1$s kişisi zaten listede yer alıyor"
 
@@ -13262,8 +13731,17 @@ msgstr "%s üzerine ekle"
 #~ msgid "Toggle checkboxes"
 #~ msgstr "Onay kutularını değiştir"
 
+#, fuzzy
+#~ msgid "Unnamed"
+#~ msgstr "Kullanıcı adı"
+
 #~ msgid "Upgrade to premium"
 #~ msgstr "Premium'a yükseltin"
+
+#, fuzzy
+#~| msgid "Upload local file"
+#~ msgid "Upload handling"
+#~ msgstr "Yerel dosya yükleyin"
 
 #, fuzzy
 #~| msgid "Username"
@@ -13273,11 +13751,31 @@ msgstr "%s üzerine ekle"
 #~ msgid "Use SSL connection"
 #~ msgstr "SSL bağlantısını kullan"
 
+#~ msgid ""
+#~ "Use cursor keys to change the item position. Virtual cursor mode has to "
+#~ "be disabled."
+#~ msgstr ""
+#~ "Öğe pozisyonunu değiştirmek için imleç tuşlarını kullanın. Sanal imleç "
+#~ "modunun devre dışı bırakılması gerekmektedir."
+
+#, fuzzy
+#~| msgid ""
+#~| "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to "
+#~| "adjust your rating."
+#~ msgid "Use left and right cursor keys to adjust your rating."
+#~ msgstr ""
+#~ "%2$d derecelendirmesi %1$d onaylanmıştır. Derecelendirmenizi ayarlamak "
+#~ "için sağ ve sol tuşlarını kullanın."
+
 #~ msgid "View (New)"
 #~ msgstr "Görüntü (Yeni)"
 
 #~ msgid "Week View"
 #~ msgstr "Hafta Görünümü"
+
+#~ msgid "Welcome. Please provide your feedback about this product"
+#~ msgstr ""
+#~ "Hoşgeldiniz. Lütfen bu ürün ile ilgili geri bildirimlerinizi belirtiniz"
 
 #~ msgid ""
 #~ "When you select different timezones the timezone of the end date will not "
@@ -13286,23 +13784,36 @@ msgstr "%s üzerine ekle"
 #~ "Farklı zaman dilimleri seçtiğinizde bitiş tarihine ait olan zaman dilimi "
 #~ "kaydedilmeyecektir."
 
-#~ msgid "You like this"
-#~ msgstr "Bunu beğendiniz"
+#~ msgid "Your Applications"
+#~ msgstr "Başvurularınız"
 
-#~ msgid "collapse"
-#~ msgstr "daralt"
+#~ msgid "Your applications"
+#~ msgstr "Uygulamalarınız"
 
-#~ msgid "expand"
-#~ msgstr "genişlemek"
+#~ msgid "Your email address will be included when sending this feedback"
+#~ msgstr "Bu geri bildirimi gönderdiğinizde e posta adresiniz dahil olacak "
+
+#~ msgid "end date "
+#~ msgstr "bitiş tarihi"
 
 #~ msgid "next %1$s"
 #~ msgstr "sıradaki %1$s"
+
+#, fuzzy
+#~ msgid "optional password"
+#~ msgstr "eski parolan"
 
 #~ msgid "process subsequent rules"
 #~ msgstr "takip eden kurallar işlemi"
 
 #~ msgid "remove"
 #~ msgstr "kaldır"
+
+#~ msgid "status "
+#~ msgstr "statü"
+
+#~ msgid "the item has been moved"
+#~ msgstr "Bu öğe taşınmıştır"
 
 #~ msgid "the line length must be a number"
 #~ msgstr "Satır uzunluğu bir numara olmalıdır"

@@ -142,6 +142,12 @@ define('io.ox/contacts/main', [
 
         },
 
+        'subscription': function (app) {
+            app.subscription = {
+                wantedOAuthScopes: ['contacts_ro']
+            };
+        },
+
         'folder-view-mobile': function (app) {
 
             if (_.device('!smartphone')) return;
@@ -172,7 +178,7 @@ define('io.ox/contacts/main', [
             app.left = left;
             app.right = right.addClass('default-content-padding f6-target')
                 .attr({
-                    'tabindex': 1,
+                    'tabindex': 0,
                     'role': 'main',
                     'aria-label': gt('Contact Details')
                 }).scrollable();
@@ -269,6 +275,8 @@ define('io.ox/contacts/main', [
 
         'thumbindex': function (app) {
 
+            // A11y: This needs some work!
+
             var fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
             /**
@@ -287,7 +295,7 @@ define('io.ox/contacts/main', [
             }
 
             Thumb.prototype.draw = function (baton) {
-                var node = $('<div class="thumb-index">')
+                var node = $('<div class="thumb-index" aria-hidden="true">')
                     .text(this.label || _.noI18n(this.text));
                 if (this.enabled(baton)) {
                     node.data('text', this.text);
@@ -882,14 +890,6 @@ define('io.ox/contacts/main', [
 
         'metrics': function (app) {
 
-            function getFolderType(folder) {
-                if (folderAPI.is('shared', folder)) return 'shared';
-                if (folderAPI.is('private', folder)) return 'private';
-                if (folderAPI.is('public', folder)) return 'public';
-                if (folder.id === '6') return 'gab';
-                return 'unknown';
-            }
-
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
@@ -926,16 +926,15 @@ define('io.ox/contacts/main', [
                     });
                 });
                 // check for clicks in folder trew
-                app.on('folder:change', function (folder) {
-                    folderAPI
-                        .get(folder)
-                        .then(function (data) {
+                app.on('folder:change folder-virtual:change', function (folder) {
+                    metrics.getFolderFlags(folder)
+                        .then(function (list) {
                             metrics.trackEvent({
                                 app: 'contacts',
                                 target: 'folder',
                                 type: 'click',
                                 action: 'select',
-                                detail: getFolderType(data)
+                                detail: list.join('/')
                             });
                         });
                 });

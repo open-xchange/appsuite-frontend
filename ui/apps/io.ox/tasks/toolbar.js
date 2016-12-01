@@ -156,7 +156,7 @@ define('io.ox/tasks/toolbar', [
         index: 10000,
         setup: function (app) {
 
-            var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+            var toolbarView = new Toolbar({ title: app.getTitle() });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbarView.render().$el

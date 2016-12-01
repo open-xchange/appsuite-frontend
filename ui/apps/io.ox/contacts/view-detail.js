@@ -50,8 +50,15 @@ define('io.ox/contacts/view-detail', [
             return { format: _.noI18n('%' + index + '$s'), params: params };
         }
 
+        var count, desc;
+
         if (api.looksLikeDistributionList(data)) {
-            return single(7, gt('Distribution list'), true);
+            count = data.number_of_distribution_list;
+            //#. %1$d is a number of members in distribution list
+            desc = count === 0 ?
+                gt('Distribution list') :
+                gt.format(gt.ngettext('Distribution list with 1 entry', 'Distribution list with %1$d entries', count), count);
+            return single(7, desc, true);
         }
 
         if (api.looksLikeResource(data)) {
@@ -145,7 +152,8 @@ define('io.ox/contacts/view-detail', [
             }, baton.data);
 
             var job = createText(getDescription(baton.data), ['position', 'profession', 'type']),
-                company = $.trim(baton.data.company);
+                company = $.trim(baton.data.company),
+                container;
 
             this.append(
                 $('<div class="next-to-picture">').append(
@@ -154,8 +162,7 @@ define('io.ox/contacts/view-detail', [
                     name.children().length ? name.addClass('header-name') : [],
                     company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
                     job.length ? $('<h2 class="header-job">').append(job) : [],
-                    $('<section class="attachments-container clear-both">')
-                        .append($('<span class="attachments-in-progress">').busy())
+                    container = $('<section class="attachments-container clear-both">')
                         .hide()
                 )
             );
@@ -165,9 +172,10 @@ define('io.ox/contacts/view-detail', [
             }
 
             if (api.uploadInProgress(_.ecid(baton.data))) {
-                this.find('.attachments-container').show();
+                var progressview = new attachments.progressView({ cid: _.ecid(baton.data) });
+                container.append(progressview.render().$el).show();
             } else if (baton.data.number_of_attachments > 0) {
-                ext.point('io.ox/contacts/detail/attachments').invoke('draw', this.find('.attachments-container'), baton.data);
+                ext.point('io.ox/contacts/detail/attachments').invoke('draw', container, baton.data);
             }
         }
     });
@@ -232,7 +240,8 @@ define('io.ox/contacts/view-detail', [
                 new pViews.ParticipantEntryView({
                     tagName: 'li',
                     model: new pModel.Participant(data),
-                    halo: true
+                    halo: true,
+                    isMail: true
                 }).render().$el
             );
         }
@@ -243,27 +252,23 @@ define('io.ox/contacts/view-detail', [
         draw: function (baton) {
 
             var list = _.copy(baton.data.distribution_list || [], true),
-                hash = {},
-                $list = $('<ul class="member-list list-unstyled">');
+                count = list.length,
+                hash = {}, $list;
 
-            this.append($list);
+            this.append(
+                count === 0 ? $('<div class="list-count">').text(gt('This list has no contacts yet')) : $(),
+                $list = $('<ul class="member-list list-unstyled">')
+            );
 
             // if there are no members in the list
-            if (list.length === 0) {
-                this.append(
-                    $('<div>').text(gt('This list has no contacts yet'))
-                );
-                return;
-            }
+            if (!count) return;
 
             // remove duplicates to fix backend bug
             http.pause();
             _(list)
                 .chain()
                 .filter(function (member) {
-                    if (hash[member.mail]) {
-                        return false;
-                    }
+                    if (hash[member.mail]) return false;
                     return (hash[member.mail] = true);
                 })
                 .each(function (member) {
@@ -348,7 +353,10 @@ define('io.ox/contacts/view-detail', [
             $(this).append(
                 $('<dt>').text(label || model.fields[id]),
                 $('<dd>').append(
-                    $('<a>', { href: _.device('smartphone') ? 'tel:' + number : 'callto:' + number }).text(number)
+                    $('<a>').attr({
+                        href: _.device('smartphone') ? 'tel:' + number : 'callto:' + number,
+                        'aria-label': label || model.fields[id]
+                    }).text(number)
                 )
             );
         };
@@ -492,7 +500,11 @@ define('io.ox/contacts/view-detail', [
                         simple(data, 'marital_status'),
                         simple(data, 'number_of_children'),
                         simple(data, 'spouse_name'),
-                        simple(data, 'anniversary')
+                        row('anniversary', function () {
+                            if (baton.data.anniversary) {
+                                return new moment(1153440000000).utc().format('l');
+                            }
+                        })
                     )
                     .attr('data-block', 'personal')
                 );

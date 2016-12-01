@@ -16,11 +16,12 @@ define('io.ox/core/folder/tree', [
     'io.ox/core/folder/selection',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
+    'io.ox/core/a11y',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'io.ox/core/folder/favorites',
     'io.ox/core/folder/extensions'
-], function (DisposableView, Selection, api, ext, settings, gt) {
+], function (DisposableView, Selection, api, ext, a11y, settings, gt) {
 
     'use strict';
 
@@ -29,8 +30,7 @@ define('io.ox/core/folder/tree', [
         className: 'folder-tree',
 
         events: {
-            'click .contextmenu-control':                    'onToggleContextMenu',
-            'keydown .contextmenu-control':                  'onKeydown',
+            'click .contextmenu-control': 'onToggleContextMenu',
             'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu',
             'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys'
         },
@@ -90,6 +90,8 @@ define('io.ox/core/folder/tree', [
         // counter-part
         onAppear: function (id, handler) {
             id = String(id).replace(/\s/g, '_');
+            var node = this.getNodeView(id);
+            if (node) return handler.call(this, node);
             this.once('appear:' + id, handler);
         },
 
@@ -102,6 +104,15 @@ define('io.ox/core/folder/tree', [
             });
         },
 
+        // hint: doesn't cover 'sections'
+        traversePath: function (id, callback) {
+            var tree = this;
+            api.path(id).then(function (path) {
+                return _(path).pluck('id').forEach(callback.bind(tree));
+            });
+        },
+
+        // usually you want to use app.folder.set
         select: function (id) {
 
             var ids = [], tree = this;
@@ -184,15 +195,11 @@ define('io.ox/core/folder/tree', [
                     // use official method
                     .find('.dropdown-toggle').dropdown('toggle');
 
-                // specific flexbox/scrolling issue (see bugs 43799, 44938, 45501)
-                $('#io-ox-windowmanager').scrollTop(0);
-
             }.bind(this));
         },
 
         onToggleContextMenu: function (e) {
-
-            var target = $(e.currentTarget),
+            var target = ($(e.target).is('a') && e.type === 'keydown') ? $(e.target) : $(e.currentTarget),
                 // calculate proper position
                 offset = target.offset(),
                 top = offset.top - 7,
@@ -204,13 +211,16 @@ define('io.ox/core/folder/tree', [
         onKeydownMenuKeys: function (e) {
             // Needed for a11y, shift + F10 and the menu key open the contextmenu
             if (e.type === 'keydown') {
-                var shiftF10 = (e.shiftKey && e.keyCode === 121),
-                    menuKey = (_.device('windows') && e.keyCode === 93);
-                if (e.keyCode === 32 || e.keyCode === 13 || shiftF10 || menuKey) this.focusFirst = true;
-                if (shiftF10 || menuKey) {
+                var shiftF10 = (e.shiftKey && e.which === 121),
+                    menuKey = (_.device('windows') && e.which === 93);
+                if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
+                    this.focusFirst = true;
+                    if (/38|40/.test(e.which) && $(e.target).is('a')) this.onToggleContextMenu(e);
                     // e.preventDefault() is needed here to surpress browser menu
-                    e.preventDefault();
-                    this.onContextMenu(e);
+                    if (shiftF10 || menuKey) {
+                        e.preventDefault();
+                        this.onContextMenu(e);
+                    }
                 }
             }
         },
@@ -231,21 +241,6 @@ define('io.ox/core/folder/tree', [
             e.preventDefault();
             if (!this.$dropdown.hasClass('open')) return;
             this.$dropdown.find('.dropdown-toggle').dropdown('toggle');
-        },
-
-        onKeydown: function (e) {
-
-            var dropdown = this.$dropdown;
-            // done if not open
-            // if (!dropdown.hasClass('open')) return;
-            // shift-tab
-            // if (e.shiftKey && e.which === 9) return;
-            if (e.which === 40) {
-                // cursor down
-                e.preventDefault();
-                $(e.currentTarget).click();
-                return dropdown.find('.dropdown-menu > li:first > a').focus();
-            }
         },
 
         getContextMenuId: function (id) {
@@ -309,26 +304,16 @@ define('io.ox/core/folder/tree', [
                 if (node) node.parent().focus();
             }
 
-            function trapFocus(e) {
-                // a11y - trap focus in context menu - prevent tabbing out of context menu
-                if ((!e.shiftKey && e.which === 9 && $(e.target).parent().next().length === 0) ||
-                    (e.shiftKey && e.which === 9 && $(e.target).parent().prev().length === 0)) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                }
-            }
-
             return function () {
 
                 this.$el.after(
                     this.$dropdown = $('<div class="context-dropdown dropdown" data-action="context-menu" data-contextmenu="default">').append(
                         $('<div class="abs context-dropdown-overlay">').on('contextmenu', this.onCloseContextMenu.bind(this)),
-                        this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
+                        this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Folder options')),
                         this.$dropdownMenu = $('<ul class="dropdown-menu">')
                     )
                     .on('show.bs.dropdown', show.bind(this))
                     .on('hidden.bs.dropdown', hide.bind(this))
-                    .on('keydown.bs.dropdown.data-api', trapFocus)
                 );
                 this.$dropdownToggle.dropdown();
                 this.$dropdownMenu.removeAttr('role');

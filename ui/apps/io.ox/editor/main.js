@@ -151,34 +151,33 @@ define('io.ox/editor/main', [
         },
 
         render: function () {
-            var guid = _.uniqueId('form-control-label-');
+            var titleId = _.uniqueId('editor_title-'),
+                bodyId = _.uniqueId('editor_body-');
             this.$el.append(
                 $('<form role="form">').append(
                     $('<div class="row">').append(
                         // title
                         $('<div class="form-group col-xs-12 col-sm-8">').append(
-                            $('<label class="sr-only">').attr('for', guid).text(gt('Enter document title here')),
-                            $('<input class="title form-control">').attr({
-                                id: guid,
-                                placeholder: gt('Enter document title here'),
-                                maxlength: 350,
-                                tabindex: 1,
-                                type: 'text'
+                            $('<label class="sr-only">').attr('for', titleId).text(gt('Title')),
+                            $('<input type="text" maxlength="350" class="title form-control">').attr({
+                                id: titleId,
+                                placeholder: gt('Enter document title here')
                             })
                         ),
 
                         // save & close buttons
                         $('<div class="form-group col-xs-6 col-sm-2">').append(
-                            $('<button type="button" class="save btn btn-primary btn-block" tabindex="3">').text(gt('Save'))
+                            $('<button type="button" class="save btn btn-primary btn-block">').text(gt('Save'))
                         ),
                         $('<div class="form-group col-xs-6 col-sm-2">').append(
-                            $('<button type="button" class="quit btn btn-default btn-block" tabindex="4">').text(gt('Close'))
+                            $('<button type="button" class="quit btn btn-default btn-block">').text(gt('Close'))
                         )
                     ),
                     $('<div class="body row">').append(
                         $('<div class="col-md-12">').append(
                             // editor
-                            $('<textarea class="content form-control" tabindex="2">').val('')
+                            $('<label class="sr-only">').attr('for', bodyId).text(gt('Note')),
+                            $('<textarea class="content form-control">').attr('id', bodyId).val('')
                                 .attr('placeholder', _.device('ios || android') ? '' : gt('You can quick-save your changes via Ctrl+Enter.'))
                         )
                     )
@@ -213,9 +212,9 @@ define('io.ox/editor/main', [
 
             // set state
             if ('id' in options) {
-                app.load({ folder_id: options.folder, id: options.id });
+                app.load({ folder_id: options.folder, id: options.id, params: options.params });
             } else if (_.url.hash('id')) {
-                app.load({ folder_id: _.url.hash('folder'), id: _.url.hash('id') });
+                app.load({ folder_id: _.url.hash('folder'), id: _.url.hash('id'), params: options.params });
             } else {
                 app.create();
             }
@@ -284,7 +283,13 @@ define('io.ox/editor/main', [
                 // create or update?
                 if (model.has('id')) {
                     // update
-                    return api.versions.upload({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
+                    var params = {};
+                    if ((data.meta && data.meta.Encrypted) || data.filename.endsWith('.pgp')) {
+                        params = {
+                            cryptoAction: 'Encrypt'
+                        };
+                    }
+                    return api.versions.upload({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename, params: params })
                         .done(function () {
                             previous = model.toJSON();
                         })
@@ -330,7 +335,7 @@ define('io.ox/editor/main', [
                 win.busy();
                 $.when(
                     api.get(o).fail(notifications.yell),
-                    $.ajax({ type: 'GET', url: api.getUrl(o, 'view') + '&' + _.now(), dataType: 'text' })
+                    $.ajax({ type: 'GET', url: api.getUrl(o, 'view', o) + '&' + _.now(), dataType: 'text' })
                 )
                 .done(function (data, text) {
                     win.idle();

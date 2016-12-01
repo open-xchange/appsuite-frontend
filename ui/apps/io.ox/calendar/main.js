@@ -169,6 +169,12 @@ define('io.ox/calendar/main', [
 
         },
 
+        'subscription': function (app) {
+            app.subscription = {
+                wantedOAuthScopes: ['calendar_ro']
+            };
+        },
+
         /*
          * Early List view vsplit - we need that to get a Vgrid instance
          * Vsplit compatibilty
@@ -273,7 +279,7 @@ define('io.ox/calendar/main', [
                     //#. Label for a button which shows more upcoming
                     //#. appointments in a listview by extending the search
                     //#. by one month in the future
-                    $('<a href="#" tabindex="1">').text(gt('Expand timeframe by one month'))
+                    $('<a href="#">').text(gt('Expand timeframe by one month'))
                 );
                 return link;
             };
@@ -487,10 +493,7 @@ define('io.ox/calendar/main', [
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 // no animations on desktop
-                ox.ui.Perspective.show(app, value, { disableAnimations: true }).done(function () {
-                    // specific flexbox/scrolling issue (see bugs 43799, 44938, 45501, 46950)
-                    $('#io-ox-windowmanager').scrollTop(0);
-                });
+                ox.ui.Perspective.show(app, value, { disableAnimations: true });
             });
         },
 
@@ -655,13 +658,6 @@ define('io.ox/calendar/main', [
 
         'metrics': function (app) {
 
-            function getFolderType(folder) {
-                if (folderAPI.is('shared', folder)) return 'shared';
-                if (folderAPI.is('private', folder)) return 'private';
-                if (folderAPI.is('public', folder)) return 'public';
-                return 'unknown';
-            }
-
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
@@ -725,16 +721,15 @@ define('io.ox/calendar/main', [
                     });
                 });
                 // check for clicks in folder trew
-                app.on('folder:change', function (folder) {
-                    folderAPI
-                        .get(folder)
-                        .then(function (data) {
+                app.on('folder:change folder-virtual:change', function (folder) {
+                    metrics.getFolderFlags(folder)
+                        .then(function (list) {
                             metrics.trackEvent({
                                 app: 'calendar',
                                 target: 'folder',
                                 type: 'click',
                                 action: 'select',
-                                detail: getFolderType(data)
+                                detail: list.join('/')
                             });
                         });
                 });

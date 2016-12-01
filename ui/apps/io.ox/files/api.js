@@ -71,11 +71,8 @@ define('io.ox/files/api', [
                     source: 'pim'
                 };
 
-            } else if (_.isString(attributes.guardUrl)) {
-                // Guard
+            } else if (_.isString(attributes.guardUrl) || (attributes.source === 'guardDrive')) {
                 normalizedAttrs = attributes;
-                normalizedAttrs.source = 'guard';
-
             } else {
                 // drive
                 normalizedAttrs = attributes;
@@ -106,7 +103,7 @@ define('io.ox/files/api', [
         isFile: function () {
             // we cannot check for "filename", because there are files without a file; yep!
             // so we rather check if it's not a folder
-            return !this.isFolder() && this.get('source') === 'drive';
+            return !this.isFolder() && (this.get('source') === 'drive' || this.get('source') === 'guardDrive');
         },
 
         isImage: function (type) {
@@ -138,7 +135,7 @@ define('io.ox/files/api', [
         },
 
         isGuard: function () {
-            return this.get('source') === 'guard';
+            return /guard/.test(this.get('source'));
         },
 
         isEncrypted: function () {
@@ -175,6 +172,10 @@ define('io.ox/files/api', [
         getMimeType: function () {
             // split by ; because this field might contain further unwanted data
             var type = String(this.get('file_mimetype')).toLowerCase().split(';')[0];
+            // For Guard files, get the orig mime
+            if ((this.get('source') === 'guardDrive') && this.get('meta') && this.get('meta').OrigMime) {
+                type = this.get('meta').OrigMime;
+            }
             // unusable mime type?
             if (regUnusableType.test(type)) {
                 // return mime type based on file extension
@@ -186,6 +187,11 @@ define('io.ox/files/api', [
             return type;
         },
 
+        getGuardMimeType: function () {
+            if (this.get('meta') && this.get('meta').OrigMime) return this.get('meta').OrigMime;
+            return this.getMimeType();
+        },
+
         getFileType: function () {
             if (this.isFolder()) {
                 return 'folder';
@@ -193,6 +199,18 @@ define('io.ox/files/api', [
             var extension = this.getExtension();
             for (var type in this.types) {
                 if (this.types[type].test(extension)) return type;
+            }
+        },
+
+        getGuardType: function () {
+            var parts = String(this.get('filename') || '').split('.');
+            if (parts.length < 3) return this.getFileType();
+            // If has extension .xyz.pgp, remove the pgp and test extension
+            if (parts.pop().toLowerCase() === 'pgp') {
+                var extension = parts[parts.length - 1];
+                for (var type in this.types) {
+                    if (this.types[type].test(extension)) return type;
+                }
             }
         },
 
@@ -319,7 +337,7 @@ define('io.ox/files/api', [
         var url = ox.apiRoot + '/files',
             folder = encodeURIComponent(file.folder_id),
             id = encodeURIComponent(file.id),
-            sessionData = '&user=' + ox.user_id + '&context=' + ox.context_id + '&sequence=' + file.last_modified,
+            sessionData = '&user=' + ox.user_id + '&context=' + ox.context_id + '&sequence=' + (file.last_modified || 1),
             version = file.version !== undefined && options.version !== false && options.version !== null ? '&version=' + file.version : '',
             // basic URL
             query = '?action=document&folder=' + folder + '&id=' + id + version + sessionData,
@@ -333,6 +351,8 @@ define('io.ox/files/api', [
             buster = _([ox.user_id, ox.context_id, file.last_modified]).compact().join('.') || '';
 
         if (buster) query += '&' + buster;
+
+        if (options.params) query += '&' + _.serialize(options.params);
 
         switch (type) {
             case 'download':
@@ -414,6 +434,8 @@ define('io.ox/files/api', [
     api.collectionLoader = new CollectionLoader({
         module: 'files',
         getQueryParams: function (params) {
+            // Exit early on virtual folders
+            if (/^virtual\//.test(params.folder)) return false;
             return {
                 action: 'all',
                 folder: params.folder || coreSettings.get('folder/infostore'),
@@ -538,7 +560,7 @@ define('io.ox/files/api', [
             if (model && !model.get('expired') && model.has('description')) return $.when(model.toJSON());
         }
 
-        var params =  {
+        var params = {
             action: 'get',
             id: file.id,
             folder: file.folder_id || file.folder,
@@ -552,6 +574,11 @@ define('io.ox/files/api', [
             params: params
         })
         .then(function (data) {
+
+            // fix for Bug 49472 - 'Edit as new' for mail attachments broken: Mail is empty when resending
+            // 'origin' is a temporary entry for mail attachment, we want to keep this info as long as possible
+            if (file.origin) { data.origin = _.clone(file.origin); }
+
             return mergeDetailInPool(data);
         }, function (error) {
             api.trigger('error error:' + error.code, error);
@@ -725,7 +752,12 @@ define('io.ox/files/api', [
             // clear target folder
             _(pool.getByFolder(id)).each(function (collection) {
                 var files = collection.filter(function (model) { return isTrash || model.isFile(); });
-                collection.remove(files);
+                if (collection.length === files.length) {
+                    // use reset or listview removes files one by one and scrolls after each one (is very slow and blocks UI if there are many files)
+                    collection.reset();
+                } else {
+                    collection.remove(files);
+                }
             });
         },
         'remove:infostore': function () {
@@ -789,7 +821,7 @@ define('io.ox/files/api', [
             items = _(list).difference(folders);
 
         // move all files
-        if (items) {
+        if (items && items.length > 0) {
             http.PUT({
                 module: 'files',
                 params: {
@@ -811,20 +843,25 @@ define('io.ox/files/api', [
     function copy(list, targetFolderId, ignoreWarnings) {
         http.pause();
         _(list).map(function (item) {
+            var params = {
+                action: 'copy',
+                id: item.id,
+                folder: item.folder_id,
+                timestamp: item.timestamp || _.then(),
+                ignoreWarnings: ignoreWarnings
+            };
+            if (item.file_options && item.file_options.params) {
+                params = _.extend(params, item.file_options.params);
+            }
             return http.PUT({
                 module: 'files',
-                params: {
-                    action: 'copy',
-                    id: item.id,
-                    folder: item.folder_id,
-                    timestamp: item.timestamp || _.then(),
-                    ignoreWarnings: ignoreWarnings
-                },
+                params: params,
                 data: { folder_id: targetFolderId },
                 appendColumns: false
             });
         });
-        return http.resume();
+        // do not consolidate requests, show pending message instead
+        return http.resume({ consolidate: 'reject' });
     }
 
     function transfer(type, list, targetFolderId, ignoreWarnings) {
@@ -934,21 +971,29 @@ define('io.ox/files/api', [
         });
     };
 
-    function performUpload(options, data) {
+    function performUpload(action, options, data) {
 
         options = _.extend({
-            // used by api.version.upload to be different from api.upload
-            action: 'new',
+            addVersion: true,
             folder: coreSettings.get('folder/infostore'),
             // allow API consumers to override the module (like OX Guard will certainly do)
             module: 'files'
         }, options);
 
         var params = _.extend({
-            action: options.action,
-            filename: options.filename,
+            action: action,
             timestamp: _.then()
         }, options.params);
+
+        if (options.filename) params.filename = options.filename;
+        if (options.title) data.title = options.title;
+        if (options.preview) data.meta = _.extend({}, data.meta, { note_preview: options.preview });
+
+        if (action === 'new') {
+            params.extendedResponse = true;
+            params.try_add_version = options.addVersion !== false;
+            if (settings.get('uploadHandling') === 'newFile') params.try_add_version = false;
+        }
 
         var formData = new FormData();
 
@@ -984,18 +1029,28 @@ define('io.ox/files/api', [
      *     - promise can be aborted using promise.abort function
      */
     api.upload = function (options) {
-        var folder_id = options.folder_id || options.folder;
-        options.action = 'new';
 
-        var def = performUpload(options, {
+        var folder_id = options.folder_id || options.folder,
+            def = performUpload('new', options, {
                 folder_id: folder_id,
                 description: options.description || ''
             }),
             chain = def.then(function (result) {
-                // result.data just provides the new file id
-                api.propagate('add:file', { id: result.data, folder_id: folder_id });
-                // return id and folder id
-                return { id: result.data, folder_id: folder_id };
+                // return id and folder id only
+                var data = result.data.file,
+                    obj = _(data).pick('id', 'folder_id'),
+                    fileTitle = data.title || data.filename;
+                // trigger proper event
+                if (result.data.save_action === 'new_version') {
+                    // new version
+                    var model = api.pool.get('detail').get(_.cid(obj));
+                    if (model) model.set('id', data.id);
+                    if (options.addVersion !== false && result.data.save_action === 'new_version' && settings.get('uploadHandling') === 'announceNewVersion') api.trigger('add:imp_version', fileTitle);
+                    return api.propagate('add:version', data);
+                }
+                // new file
+                api.propagate('add:file', obj);
+                return data;
             });
 
         // we need to hand over the abort function to the deferred of the chain.
@@ -1023,19 +1078,20 @@ define('io.ox/files/api', [
          *     - promise can be aborted using promise.abort function
          */
         upload: function (options) {
-            options.action = 'update';
-            return performUpload(options, {
+
+            return performUpload('update', options, {
                 id: options.id,
                 folder_id: options.folder_id || options.folder,
                 version_comment: options.version_comment || ''
             })
-            .then(function (data) {
-                if (options.id !== data.data) {
+            .then(function (result) {
+                var id = result.data;
+                // id changed?
+                if (options.id !== id) {
                     var model = api.pool.get('detail').get(_.cid(options));
-                    model.set('id', data.data);
+                    model.set('id', id);
                     return api.propagate('add:version', model.toJSON());
                 }
-
                 return api.propagate('add:version', options);
             });
         },
@@ -1065,7 +1121,7 @@ define('io.ox/files/api', [
             .then(function (data) {
                 model.set({ versions: data, number_of_versions: data.length });
                 // make sure we always get the same result (just data; not timestamp)
-                return model.toJSON();
+                return data;
             });
         },
 
@@ -1112,6 +1168,28 @@ define('io.ox/files/api', [
                 // the mediator will reload the current collection
                 api.propagate('change:version', file);
             });
+        },
+
+        /**
+         * return a Deferred with bool if current version is true
+         *
+         * @return {Deferred} with a boolean
+         */
+        getCurrentState: function (file, options) {
+            return api.versions.load(file, options).then(function (versions) {
+                var currentVersion = false;
+                if (_.isArray(versions)) {
+                    // fix for Bug 49895, drive plugin without support for versions
+                    if (versions.length) {
+                        currentVersion = _.some(versions, function (item) {
+                            return item.current_version && item.version === file.version;
+                        });
+                    } else {
+                        currentVersion = true;
+                    }
+                }
+                return currentVersion;
+            });
         }
     };
 
@@ -1124,7 +1202,7 @@ define('io.ox/files/api', [
 
         return http.PUT({
             module: 'files',
-            params: _(options).pick('action', 'columns', 'sort', 'order', 'limit', 'folder'),
+            params: _(options).pick('action', 'columns', 'sort', 'order', 'limit', 'folder', 'includeSubfolders'),
             data: api.search.getData(query, options)
         })
         .done(function (d) {
@@ -1218,6 +1296,10 @@ define('io.ox/files/api', [
 
                 case 'copy':
                 case 'move':
+                    // cleanup folder
+                    list = _.reject(list, function (item) {
+                        return item.folder_id === 'folder';
+                    });
                     var targetFolderId = arguments[2];
                     // propagate proper event
                     api.trigger(type, list, targetFolderId);
@@ -1232,19 +1314,20 @@ define('io.ox/files/api', [
                     return api.getList(list, { cache: false });
 
                 case 'remove:file':
-                    api.trigger('remove:file', list);
-                    _(list).each(function (obj) {
-                        api.trigger('remove:file:' + _.ecid(obj));
-                    });
                     // file count changed, need to reload folder
                     folderAPI.reload(list);
                     // mark trash folders as expired
-                    var id = coreSettings.get('folder/trash');
+                    var id = settings.get('folder/trash');
+
                     if (id) {
                         _(pool.getByFolder(id)).each(function (collection) {
                             collection.expired = true;
                         });
                     }
+                    api.trigger('remove:file', list);
+                    _(list).each(function (obj) {
+                        api.trigger('remove:file:' + _.ecid(obj));
+                    });
                     break;
 
                 case 'remove:version':

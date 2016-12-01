@@ -84,7 +84,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Zoom out'),
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomout').attr({
-                        tabindex: '1',
+                        tabindex: '0',
                         'aria-label': gt('Zoom out')
                     });
                 }
@@ -97,7 +97,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/zoomin',
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomin').attr({
-                        tabindex: '1',
+                        tabindex: '0',
                         'aria-label': gt('Zoom in')
                     });
                 }
@@ -114,7 +114,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitwidth')
                         .attr({
-                            tabindex: '1',
+                            tabindex: '0',
                             'aria-label': gt('Fit to screen width')
                         });
                 }
@@ -128,7 +128,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">');
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitheight').attr({
-                            tabindex: '1',
+                            tabindex: '0',
                             'aria-label': gt('Fit to screen size')
                         });
                 }
@@ -137,12 +137,12 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 label: /*#. launch the presenter app */ gt.pgettext('presenter', 'Present'),
-                icon: 'fa fa-picture-o',
+                icon: 'fa fa fa-play-circle-o',
                 ref: TOOLBAR_ACTION_ID + '/launchpresenter',
                 customize: function () {
                     this.addClass('viewer-toolbar-launchpresenter')
                     .attr({
-                        tabindex: '1',
+                        tabindex: '0',
                         'aria-label': /*#. launch the presenter app */ gt.pgettext('presenter', 'Present')
                     });
                 }
@@ -156,7 +156,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-togglesidebar')
                         .attr({
-                            tabindex: '1',
+                            tabindex: '0',
                             'aria-label': gt('View details')
                         });
                 }
@@ -170,7 +170,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-popoutstandalone')
                         .attr({
-                            tabindex: '1',
+                            tabindex: '0',
                             'aria-label': gt('Pop out standalone viewer')
                         });
                 }
@@ -184,7 +184,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-close')
                         .attr({
-                            tabindex: '1',
+                            tabindex: '0',
                             'aria-label': gt('Close viewer')
                         })
                         .parent().addClass('pull-right');
@@ -227,7 +227,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'print': {
                     prio: 'lo',
                     mobile: 'lo',
-                    label: gt('Print'),
+                    label: gt('Print as PDF'),
                     section: 'export',
                     ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 },
@@ -310,13 +310,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                     //#. %1$s is usually "Drive" (product name; might be customized)
                     label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
                     ref: 'io.ox/mail/actions/save-attachment'
-                },
-                'sendmailattachmentasmail': {
-                    prio: 'lo',
-                    mobile: 'lo',
-                    section: 'share',
-                    label: gt('Send as mail'),
-                    ref: 'io.ox/core/viewer/actions/toolbar/sendasmail'
                 }
             },
             pim: {
@@ -340,7 +333,73 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: 'io.ox/core/tk/actions/save-attachment'
                 }
             },
-            guard: {
+            guardDrive: {
+                'rename': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Rename'),
+                    section: 'edit',
+                    ref: 'io.ox/files/actions/rename'
+                },
+                'eidt': {
+                    prio: 'hi',
+                    mobile: 'lo',
+                    label: gt('Edit'),
+                    ref: 'io.ox/files/actions/editor'
+                },
+                'editdescription': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Edit description'),
+                    section: 'edit',
+                    ref: 'io.ox/files/actions/edit-description'
+                },
+                'download': {
+                    prio: 'hi',
+                    mobile: 'lo',
+                    icon: 'fa fa-download',
+                    label: gt('Download'),
+                    section: 'export',
+                    ref: 'oxguard/download'
+                },
+                'open': {
+                    prio: 'lo',
+                    mobile: 'hi',
+                    icon: 'fa fa-download',
+                    label: gt('Open attachment'),
+                    section: 'export',
+                    ref: 'oxguard/open'
+                },
+                'sendbymail': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Send by mail'),
+                    section: 'share',
+                    ref: 'oxguard/sendcopy'
+                },
+                'addtoportal': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Add to portal'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/add-to-portal'
+                },
+                'uploadnewversion': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Upload new version'),
+                    section: 'import',
+                    ref: 'io.ox/files/actions/upload-new-version'
+                },
+                'delete': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Delete'),
+                    section: 'delete',
+                    ref: 'io.ox/files/actions/delete'
+                }
+            },
+            guardMail: {
             }
         };
     // create 3 extension points containing each sets of links for Drive, Mail, and PIM apps
@@ -366,9 +425,17 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
+        capabilities: 'document_preview',
         requires: function (e) {
+            if (!e.collection.has('one', 'read')) {
+                return false;
+            }
+
             var model = e.baton.model;
-            return e.baton.context.standalone && (model.isOffice() || model.isPDF() || model.isText());
+            var meta = model.get('meta');
+            var isError = meta && meta.document_conversion_error && meta.document_conversion_error.length > 0;
+
+            return (!isError && model.isFile() && (model.isOffice() || model.isPDF()));
         },
         action: function (baton) {
             var documentPDFUrl = DocConverterUtils.getEncodedConverterUrl(baton.context.model);
@@ -473,25 +540,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
             $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitheight');
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/sendasmail', {
-        requires: function (e) {
-            var model = e.baton.model;
-            return model.isOffice() || model.isPDF();
-        },
-        action: function (baton) {
-            var viewedAttachment = baton.data;
-            MailAPI.get({ id: viewedAttachment.mail.id, folder_id: viewedAttachment.mail.folder_id }).done(function (mail) {
-                ox.registry.call('mail-compose', 'replyall', mail).then(function (MailApp) {
-                    // look for currently viewed attachment in the list of attachments of the source email
-                    var attachmentToSend = _.find(mail.attachments, function (attachment) {
-                        return attachment.id === viewedAttachment.id;
-                    });
-                    MailApp.app.model.get('attachments').add(attachmentToSend);
-                });
-            });
         }
     });
 
@@ -708,7 +756,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     if (self.nextToDraw) {
                         var temp = self.nextToDraw;
                         self.nextToDraw = null;
-                        self.renderQueued.apply(self, temp);
+                        self.renderQueued(temp);
                     }
                 });
             }
@@ -718,13 +766,13 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Renders the document page navigation controls.
          */
         renderPageNavigation: function () {
-            var prev = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
+            var prev = $('<a class="viewer-toolbar-navigation-button" role="menuitem">')
                     .attr({ 'aria-label': gt('Previous page'), 'title': gt('Previous page') })
                     .append($('<i class="fa fa-arrow-up" aria-hidden="true">')),
-                next = $('<a class="viewer-toolbar-navigation-button" tabindex="1" role="menuitem">')
+                next = $('<a class="viewer-toolbar-navigation-button" role="menuitem">')
                     .attr({ 'aria-label': gt('Next page'), 'title': gt('Next page') })
                     .append($('<i class="fa fa-arrow-down" aria-hidden="true">')),
-                pageInput = $('<input type="text" class="viewer-toolbar-page" tabindex="1" role="textbox">'),
+                pageInput = $('<input type="text" class="viewer-toolbar-page" role="textbox">'),
                 pageInputWrapper = $('<div class="viewer-toolbar-page-wrapper">').append(pageInput),
                 totalPage = $('<div class="viewer-toolbar-page-total">'),
                 group = $('<li class="viewer-toolbar-navigation" role="presentation">'),
@@ -742,10 +790,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             function onNextPage() {
                 self.viewerEvents.trigger('viewer:document:next');
             }
-            function onInputKeydown(event) {
-                event.stopPropagation();
-                var keyCode = event.which;
-                if (keyCode === 13 || keyCode === 27) {
+            function onInputKeydown(e) {
+                e.stopPropagation();
+                if (e.which === 13 || e.which === 27) {
                     self.$el.parent().focus();
                 }
             }

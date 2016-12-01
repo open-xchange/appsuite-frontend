@@ -329,7 +329,7 @@ define('io.ox/calendar/month/view', [
                         return tmp;
                     })
                 ),
-                $('<div class="scrollpane f6-target" tabindex="1">')
+                $('<div class="scrollpane f6-target" tabindex="0">')
             );
     };
 
@@ -351,12 +351,11 @@ define('io.ox/calendar/month/view', [
                 }
             }
 
-            if (String(folder.id) === String(a.get('folder_id'))) {
+            var folder_id = a.get('folder_id');
+            if (String(folder.id) === String(folder_id)) {
                 addColorClasses(folder);
-            } else {
-                folderAPI.get(a.get('folder_id')).done(function (f) {
-                    addColorClasses(f);
-                });
+            } else if (folder_id !== undefined) {
+                folderAPI.get(folder_id).done(addColorClasses);
             }
 
             if (a.get('private_flag') && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
@@ -376,7 +375,7 @@ define('io.ox/calendar/month/view', [
             }
 
             this
-                .attr({ tabindex: 1 })
+                .attr({ tabindex: 0 })
                 .addClass(classes)
                 .append(
                     $('<div>')

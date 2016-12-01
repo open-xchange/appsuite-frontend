@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-.week-view, .freetime-view, .month-view {
+.week-view, .month-view {
 
     .toolbar {
         /* Mobile */
@@ -283,6 +283,13 @@
                     background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
                     background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
                     background-image: repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+
+                    &.private {
+                        &.hover {
+                            //in combination with private this get's to hard to read otherwise
+                            color: @white;
+                        }
+                    }
                 }
             }
         }

@@ -457,16 +457,26 @@ define('io.ox/core/viewer/views/types/documentview', [
          * "Prefetches" the document slide.
          * In order to save memory and network bandwidth only documents with highest prefetch priority are prefetched.
          *
-         * @param {Number} priority
-         *  the prefetch priority.
+         * @param {Object} options
+         *  @param {Object} options.version
+         *      an alternate version than the current version.
+         *  @param {Number} options.priority
+         *      the prefetch priority.
          *
          * @returns {DocumentView}
          *  the DocumentView instance.
          */
-        prefetch: function (priority) {
+        prefetch: function (options) {
+            var params = { async: true };
+
             // check for highest priority
-            if (priority === 1) {
-                $.ajax({ url: DocConverterUtils.getEncodedConverterUrl(this.model, { async: true }) });
+            if (options && options.priority === 1) {
+                // check for alternate version
+                if (options && !_.isEmpty(options.version)) {
+                    _.extend(params, { version: options.version });
+                }
+
+                $.ajax({ url: DocConverterUtils.getEncodedConverterUrl(this.model, params) });
                 this.isPrefetched = true;
             }
 
@@ -554,10 +564,14 @@ define('io.ox/core/viewer/views/types/documentview', [
         /**
          * "Shows" the document (Office, PDF) with the PDF.js library.
          *
+         * @param {Object} options
+         *  @param {Object} options.version
+         *      An alternate version than the current version.
+         *
          * @returns {DocumentView}
          *  the DocumentView instance.
          */
-        show: function () {
+        show: function (options) {
             // ignore already loaded documents
             if (this.$el.find('.document-page').length > 0) {
                 // document pages are drawn, but there is no visible page rendered yet
@@ -672,7 +686,9 @@ define('io.ox/core/viewer/views/types/documentview', [
                 return this;
             }
 
-            var documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model);
+            // additional document URL parameters
+            var params = (options && options.version) ? { version: options.version } : null;
+            var documentUrl = DocConverterUtils.getEncodedConverterUrl(this.model, params);
 
             // create a pdf document object with the document PDF url
             this.pdfDocument = new PDFDocument(documentUrl);

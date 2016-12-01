@@ -54,7 +54,7 @@ define('io.ox/core/viewer/views/mainview', [
             // create the event aggregator of this view.
             this.viewerEvents = _.extend({}, Backbone.Events);
             // create children views
-            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone, app: this.app, opt: this.opt };
+            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone, app: this.app, opt: this.opt, isViewer: true };
             this.toolbarView = new ToolbarView(childViewParams);
             this.displayerView = new DisplayerView(childViewParams);
             this.sidebarView = new SidebarView(childViewParams);
@@ -156,7 +156,7 @@ define('io.ox/core/viewer/views/mainview', [
                 // focus next action candidate
                 tabableActions.eq(nextElementIndex).focus();
             }
-            switch (event.which || event.keyCode) {
+            switch (event.which) {
                 case 9: // TAB key
                     tabHandler(event);
                     break;

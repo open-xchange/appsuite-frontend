@@ -12,9 +12,8 @@
  */
 
 define('io.ox/core/settings', [
-    'io.ox/core/http',
-    'io.ox/core/event'
-], function (http, Event) {
+    'io.ox/core/http'
+], function (http) {
 
     'use strict';
 
@@ -111,13 +110,15 @@ define('io.ox/core/settings', [
                 self.trigger('reset', tree);
             } else {
                 resolve(path, function (tmp, key) {
-                    var previous = tmp[key];
+                    var previous = tmp[key],
+                        isChange = JSON.stringify(value) !== JSON.stringify(previous);
                     if (value === undefined) {
                         delete tmp[key];
                     } else {
                         tmp[key] = value;
                     }
-                    self.trigger('change:' + path, value).trigger('change', path, value, previous);
+                    if (!isChange) return;
+                    self.trigger('change:' + path, value, previous).trigger('change', path, value, previous);
                 }, true);
             }
             return this;
@@ -144,7 +145,10 @@ define('io.ox/core/settings', [
             });
         };
 
+        // please note: doesn't trigger change events when manipulating
+        // properties of objects (#48456). Use `settings.on('change', cb)` instead.
         this.createModel = function (ModelClass) {
+            if (ox.debug) console.warn('createModel is deprecated');
             return new ModelClass(tree).on('change', change);
         };
 
@@ -319,7 +323,7 @@ define('io.ox/core/settings', [
             });
         };
 
-        Event.extend(this);
+        _.extend(this, Backbone.Events);
     };
 
     return {

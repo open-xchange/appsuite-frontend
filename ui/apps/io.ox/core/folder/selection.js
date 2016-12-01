@@ -71,8 +71,6 @@ define('io.ox/core/folder/selection', [], function () {
             var node = this.byId(id);
             if (node.length) {
                 node[0].scrollIntoView(true);
-                // specific flexbox/scrolling issue (see bugs 43799, 44938)
-                $('#io-ox-windowmanager').scrollTop(0);
                 this.view.trigger('scrollIntoView', id);
             }
         },
@@ -107,16 +105,11 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         onKeydown: function (e) {
+            if (!/38|40/.test(e.which)) return;
             // bubbling?
             if (!$(e.target).hasClass('selectable')) return;
-            // cursor up/down
-            switch (e.which) {
-                case 38:
-                case 40:
-                    this.onCursorUpDown(e);
-                    break;
-                // no default
-            }
+
+            this.onCursorUpDown(e);
         },
 
         onCursorUpDown: function (e) {
@@ -156,8 +149,9 @@ define('io.ox/core/folder/selection', [], function () {
             this.view.trigger('sort sort:' + folder, ids);
         },
 
-        pick: function (index, items) {
-            var node = this.focus(index, items);
+        pick: function (index, items, options) {
+            var opt = _.extend({ focus: true }, options);
+            var node = opt.focus ? this.focus(index, items) : (items || this.getItems()).eq(index);
             this.check(node);
             this.triggerChange(items);
         },
@@ -168,13 +162,13 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         resetTabIndex: function (items, skip) {
-            items = items.filter('[tabindex="1"]');
+            items = items.filter('[tabindex="0"]');
             items.not(skip).attr('tabindex', '-1');
         },
 
         focus: function (index, items) {
             items = items || this.getItems();
-            var node = items.eq(index).attr('tabindex', '1').focus();
+            var node = items.eq(index).attr('tabindex', '0').focus();
             // workaround for chrome's CSS bug:
             // styles of "selected" class are not applied if focus triggers scrolling.
             // idea taken from http://forrst.com/posts/jQuery_redraw-BGv
@@ -186,7 +180,7 @@ define('io.ox/core/folder/selection', [], function () {
             if (this.view.disposed) return $();
             var width = this.view.$el.width();
             return nodes.addClass('selected')
-                .attr({ 'aria-selected': true, tabindex: 1 })
+                .attr({ 'aria-selected': true, tabindex: 0 })
                 .find('.folder-label').each(function () {
                     // special handling for settings for now
                     if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;

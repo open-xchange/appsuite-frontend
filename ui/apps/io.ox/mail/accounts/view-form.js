@@ -144,8 +144,8 @@ define.async('io.ox/mail/accounts/view-form', [
                 var self = this;
                 model = self.model;
                 self.$el.empty().append(
-                    $('<div>').addClass('settings-detail-pane').append(
-                        $('<div>').addClass('io-ox-account-settings')
+                    $('<div class="settings-detail-pane">').append(
+                        $('<div class="io-ox-account-settings">')
                     )
                 );
 
@@ -222,6 +222,15 @@ define.async('io.ox/mail/accounts/view-form', [
                     //primary account does not allow editing besides display name and unified mail
                     self.$el.find('input, select').not('#personal, [name="unified_inbox_enabled"]').prop('disabled', true);
                 }
+
+                var isMail_oauth = _.isNumber(model.get('mail_oauth')) && model.get('mail_oauth') > -1,
+                    isTransport_oauth = _.isNumber(model.get('transport_oauth')) && model.get('transport_oauth') > -1;
+
+                // disable E-mail address if any oauth is used
+                if (isMail_oauth || isTransport_oauth) self.$el.find('#primary_address').prop('disabled', true);
+
+                if (isMail_oauth) self.$el.find('.data_incoming').hide();
+                if (isTransport_oauth) self.$el.find('.data_outgoing').hide();
 
                 return self;
             },
@@ -369,8 +378,6 @@ define.async('io.ox/mail/accounts/view-form', [
 
             onFolderSelect: function (e) {
 
-                if (this.model.get('id') === 0) return;
-
                 this.dialog.getPopup().hide();
 
                 var accountId = 'default' + this.model.get('id'),
@@ -426,7 +433,7 @@ define.async('io.ox/mail/accounts/view-form', [
             //
             // Incoming (IMAP/POP3)
             //
-            var serverSettingsIn = $('<fieldset>').append(
+            var serverSettingsIn = $('<fieldset class="data_incoming">').append(
                 $('<legend class="sectiontitle">').text(gt('Incoming server')),
                 $('<form class="form-horizontal" role="form">').append(
                     // server type
@@ -498,7 +505,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 )
             );
 
-            var serverSettingsOut = $('<fieldset>').append(
+            var serverSettingsOut = $('<fieldset class="data_outgoing">').append(
                 $('<legend class="sectiontitle">').text(gt('Outgoing server (SMTP)')),
                 $('<form class="form-horizontal" role="form">').append(
                     // server
@@ -559,7 +566,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 archive: gt.pgettext('folder', 'Archive')
             };
 
-            var serverSettingsFolder = $('<fieldset>').append(
+            var serverSettingsFolder = $('<fieldset class="data_folders">').append(
                 $('<legend class="sectiontitle">').text(gt('Standard folders')),
                 $('<form class="form-horizontal" role="form">').append(
                     // add four input fields
@@ -568,8 +575,8 @@ define.async('io.ox/mail/accounts/view-form', [
                         // skip archive if capability is missing
                         if (folder === 'archive' && !capabilities.has('archive_emails')) return;
 
-                        // neither 0 nor undefined
-                        var text = folderLabels[folder], id = model.get('id'), enabled = !!id;
+                        // offer folder selector if id is not undefined (i.e. while creating a new account)
+                        var text = folderLabels[folder], id = model.get('id'), enabled = id !== undefined;
                         folder = folder + '_fullname';
 
                         return group(
@@ -580,7 +587,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                 $('<div class="input-group folderselect enabled">').attr('data-property', folder).append(
                                     new InputView({ model: model, id: folder }).render().$el.prop('disabled', true),
                                     $('<span class="input-group-btn">').append(
-                                        $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Select'))
+                                        $('<button type="button" class="btn btn-default">').text(gt('Select'))
                                     )
                                 ) :
                                 // just show path
@@ -593,7 +600,7 @@ define.async('io.ox/mail/accounts/view-form', [
             );
 
             this.append(
-                $('<fieldset>').append(
+                $('<fieldset class="data_account">').append(
                     $('<legend class="sectiontitle">').text(gt('Account settings')),
                     $('<form class="form-horizontal" role="form">').append(
                         // account name

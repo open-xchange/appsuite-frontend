@@ -61,10 +61,9 @@ define('io.ox/files/share/wizard', [
                 formID = _.uniqueId('form-control-label-');
             this.append(
                 linkNode = $('<div class="form-group">').append(
-                    $('<label>').attr({ for: formID }).text(),
+                    $('<label>').attr('for', formID).text(),
                     $('<div class="input-group link-group">').append(
-                        $('<input class="form-control">').attr({ id: formID, type: 'text', tabindex: 1, readonly: 'readonly' })
-                        .val(link)
+                        $('<input type="text" class="form-control" readonly>').attr('id', formID).val(link)
                         .on('focus', function () {
                             _.defer(function () { $(this).select(); }.bind(this));
                         })
@@ -169,7 +168,7 @@ define('io.ox/files/share/wizard', [
 
             // bind collection to share model
             tokenfieldView.collection.on('change add remove sort', function () {
-                baton.model.set('recipients', this.toArray(), { silent: true });
+                baton.model.set('recipients', this.toArray());
             });
         }
     });
@@ -312,21 +311,21 @@ define('io.ox/files/share/wizard', [
                         $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
                         passInput = new miniViews.PasswordView({ name: 'password', model: baton.model })
                             .render().$el
-                            .attr({ id: guid, placeholder: gt('Password') })
+                            // see bug 49639
+                            .attr({ id: guid, placeholder: gt('Password'), autocomplete: 'new-password' })
+                            .removeAttr('name')
                             .prop('disabled', !baton.model.get('secured'))
                     )
                 )
             );
-            baton.view.listenTo(baton.model, 'change:password', function (model, val) {
+            baton.view.listenTo(baton.model, 'change:password', function (model, val, options) {
                 if (val && !model.get('secured')) {
-                    model.set('secured', true);
+                    model.set('secured', true, options);
                 }
             });
-            baton.view.listenTo(baton.model, 'change:secured', function (model, val) {
+            baton.view.listenTo(baton.model, 'change:secured', function (model, val, opt) {
                 passInput.prop('disabled', !val);
-                if (val) {
-                    passInput.focus();
-                }
+                if (!opt._inital) passInput.focus();
             });
         }
     });
@@ -335,8 +334,6 @@ define('io.ox/files/share/wizard', [
      * main view
      */
     var ShareWizard = DisposableView.extend({
-
-        tagName: 'form',
 
         className: 'share-wizard',
 
@@ -353,9 +350,7 @@ define('io.ox/files/share/wizard', [
 
         render: function () {
 
-            this.$el.attr({
-                role: 'form'
-            }).addClass(this.model.get('type'));
+            this.$el.addClass(this.model.get('type'));
 
             // draw all extensionpoints
             ext.point(POINT + '/fields').invoke('draw', this.$el, this.baton);

@@ -4,7 +4,7 @@
 <title>7.1. Składniki aplikacji Kalendarz</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="Oprogramowanie do pracy grupowej">
+<link rel="home" href="index.html" title="podręcznik użytkownika">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Rozdział 7. Kalendarz">
 <link rel="prev" href="ox.appsuite.user.chap.calendar.html" title="Rozdział 7. Kalendarz">
 <link rel="next" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Wyświetlanie spotkań">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.chap.calendar.html">Poprzedni</a></li>
@@ -43,6 +43,7 @@
 <p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.content" title="Obszar wyświetlania">Obszar wyświetlania</a></p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Widok kalendarza Dzień, Tydzień roboczy, Tydzień lub Miesiąc.">Widok kalendarza <span class="guilabel"><strong>Dzień</strong></span>, <span class="guilabel"><strong>Tydzień roboczy</strong></span>, <span class="guilabel"><strong>Tydzień</strong></span> lub <span class="guilabel"><strong>Miesiąc</strong></span>.</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="Narzędzie do wyboru daty">Narzędzie do wyboru daty</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="Wyskakujące okienko">Wyskakujące okienko</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="Lista">Lista</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="Widok szczegółów">Widok szczegółów</a></p></li>
@@ -50,40 +51,60 @@
 <p>
           </p>
 </li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.scheduling" title="Widok planowania">Widok planowania</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.create" title="Widok tworzenia lub edytowania">Widok tworzenia lub edytowania</a></p></li>
 </ul></div>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.search"></a><p class="title"><b>Pasek wyszukiwania</b></p>
+<a name="ox.appsuite.user.reference.calendar.gui.search"></a><h3 class="title">Pasek wyszukiwania</h3>
 <p>Umożliwia <a class="link" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. Wyszukiwanie spotkań">wyszukiwanie</a> spotkań.</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.foldertree"></a><p class="title"><b>Drzewo folderów</b></p>
-<p>Wyświetla foldery kalendarza. Pozwala na poruszanie się po ich strukturze. Aby otworzyć drzewo folderów, kliknij przycisk <span class="guibutton"><strong>Widok</strong></span> <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.toolbar" title="Pasek narzędzi">dostępny na pasku narzędzi</a>. Zaznacz opcję <span class="guibutton"><strong>Widok folderu</strong></span>. W zależności od konfiguracji oprogramowania do pracy grupowej dostępne są następujące funkcje: </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><span class="guilabel"><strong>Moje kalendarze</strong></span>. Zawiera wszystkie kalendarze osobiste. </p></li>
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree"></a><h3 class="title">Drzewo folderów</h3>
+<p>Umożliwia wyświetlenie folderów kalendarza.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree.entries"></a><p class="title">Zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><span class="guilabel"><strong>Moje kalendarze</strong></span>. Zawiera kalendarze osobiste.</p></li>
 <li class="listitem"><p><span class="guilabel"><strong>Kalendarze publiczne</strong></span>. Zawiera kalendarze udostępnione wszystkim użytkownikom.</p></li>
 <li class="listitem"><p><span class="guilabel"><strong>Kalendarze udostępnione</strong></span>. Zawiera kalendarze udostępnione przez Ciebie innym użytkownikom.</p></li>
-</ul></div>
-<p>Dostępne są następujące funkcje: </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+</ul>
+</div>
+<p>W zależności od konfiguracji oprogramowania do pracy grupowej zawartość może być inna od przedstawionej tutaj.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree.functions"></a><p class="title">Funkcje</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Kliknięcie kalendarza spowoduje wyświetlenie zawartych w nim spotkań.</p></li>
 <li class="listitem">
-<p>Ikona <span class="guibutton"><strong>Działania specyficzne dla folderu</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> obok wybranego folderu udostępnia funkcje umożliwiające porządkowanie danych, wymienianie się nimi i wybór koloru kalendarza.</p>
+<p>Ikona <span class="guibutton"><strong>Działania specyficzne dla folderu</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> obok wybranego folderu udostępnia funkcje umożliwiające porządkowanie danych, wymienianie się nimi i wybór koloru kalendarza.</p>
 <p><span class="phrase"><strong>Uwaga: </strong></span> Menu wyboru kolorów oraz ikony kolorów obok nazw folderu są wyświetlane wyłącznie po wybraniu opcji <span class="guibutton"><strong>Niestandardowe kolory</strong></span> w menu <span class="guibutton"><strong>Widok</strong></span> na pasku narzędzi.</p>
 </li>
 <li class="listitem"><p>Przyciski w drzewie folderów oferują funkcje pozwalające na tworzenie folderów.</p></li>
 <li class="listitem"><p>Folder <span class="guibutton"><strong>Wszystkie moje spotkania</strong></span> zawiera wszystkie spotkania ze wszystkich kalendarzy.</p></li>
 <li class="listitem"><p>Przy pewnej konfiguracji oprogramowania do pracy grupowej poniżej przycisków dostępne są dodatkowe przyciski. Ich kliknięcie pozwala na uruchomienie kreatora i konfigurację dodatkowych klientów.</p></li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.foldertree.related"></a><p class="title">Powiązane tematy</p>
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree.related"></a><p class="title">Zobacz też</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Informacje na temat folderów można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Foldery">Foldery</a>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Instrukcje dotyczące często wykonywanych działań można znaleźć tutaj: <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.colors.html" title="7.6.5. Używanie kolorów kalendarza">Używanie kolorów kalendarza</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. Poruszanie się po strukturze folderów">Poruszanie się po strukturze folderów</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. Tworzenie folderów">Tworzenie folderów</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. Zmiana nazw folderów">Zmiana nazw folderów</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. Przenoszenie folderów">Przenoszenie folderów</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. Usuwanie folderów">Usuwanie folderów</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.colors.html" title="7.6.5. Używanie kolorów kalendarza">Używanie kolorów kalendarza</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Foldery">Foldery</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. Poruszanie się po strukturze folderów">Poruszanie się po strukturze folderów</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. Tworzenie folderów">Tworzenie folderów</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. Zmiana nazw folderów">Zmiana nazw folderów</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. Przenoszenie folderów">Przenoszenie folderów</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. Usuwanie folderów">Usuwanie folderów</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Składniki aplikacji Kalendarz">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>Kalendarz </strong></span> </span>  </a></p></li>
 </ul>
 </div>
@@ -91,49 +112,68 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.toolbar"></a><p class="title"><b>Pasek narzędzi</b></p>
-<p>Zawiera następujące przyciski w widokach kalendarza: </p>
+<a name="ox.appsuite.user.reference.calendar.gui.toolbar"></a><h3 class="title">Pasek narzędzi</h3>
+<p>Zawiera następujące elementy w widokach kalendarza:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Nowe</strong></span>. Tworzy nowe spotkanie.</p></li>
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Planowanie</strong></span>. Otwiera widok umożliwiający planowanie spotkań z wieloma uczestnikami.</p></li>
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Dziś</strong></span>. Otwiera przedział czasu z bieżącym dniem.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Nowe</strong></span>. Tworzy nowe spotkanie.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Planowanie</strong></span>. Otwiera widok umożliwiający planowanie spotkań z wieloma uczestnikami.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Dziś</strong></span>. Wybiera przedział czasu z bieżącym dniem.</p></li>
 <li class="listitem">
-<p> Przycisk <span class="guibutton"><strong>Widok</strong></span>. Otwiera menu polami wyboru pozwalającymi na sterowanie widokami. </p>
+<p><span class="guibutton"><strong>Widok</strong></span>. Otwiera menu z polami wyboru pozwalającymi na sterowanie widokiem kalendarza. </p>
 <div class="itemizedlist">
 <a name="ox.appsuite.user.reference.calendar.gui.toolbar.view"></a><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><span class="guibutton"><strong>Dzień</strong></span>, <span class="guibutton"><strong>Tydzień roboczy</strong></span>, <span class="guibutton"><strong>Tydzień</strong></span> lub <span class="guibutton"><strong>Miesiąc</strong></span>. Umożliwia wybranie <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Widok kalendarza Dzień, Tydzień roboczy, Tydzień lub Miesiąc.">widoku kalendarza</a>.</p></li>
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Lista</strong></span>. Włącza widok <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="Lista">listy</a>.</p></li>
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Widok folderów</strong></span>. Umożliwia otwieranie i zamykanie drzewa folderów.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Lista</strong></span>. Włącza <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="Lista">widok listy</a>.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Widok folderu</strong></span>. Otwiera lub zamyka drzewo folderów.</p></li>
 <li class="listitem">
-<p>Pola wyboru kolorów spotkania.</p>
+<p>Kolory spotkań</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square; ">
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Klasyczne kolory</strong></span>. Powoduje wyświetlanie spotkań w jasnych kolorach.</p></li>
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Ciemne kolory</strong></span>. Powoduje wyświetlanie spotkań w ciemnych kolorach.</p></li>
-<li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Niestandardowe kolory</strong></span>. Możesz zdefiniować kolor wyświetlania spotkania.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Kolory klasyczne</strong></span>. Wyświetla spotkania w jasnych kolorach.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Ciemne kolory.</strong></span> Wyświetla spotkania w ciemnych kolorach.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Kolory niestandardowe.</strong></span> Możesz zdefiniować kolor wyświetlania spotkania.</p></li>
 </ul></div>
 </li>
-<li class="listitem"><p>Jeśli jest ustawiony widok listy: Pole wyboru <span class="guibutton"><strong>Pola wyboru</strong></span>. Powoduje wyświetlanie pola wyboru obok każdego spotkania na liście. Umożliwia wybranie kilku spotkań do jednoczesnej edycji.</p></li>
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Drukuj</strong></span>. Umożliwia wyświetlenie podglądu wydruku na potrzeby drukowania arkusza kalendarza.</p></li>
+<li class="listitem"><p>Jeśli jest ustawiony widok listy i włączono opcję <span class="guibutton"><strong>Pola wyboru</strong></span>, obok każdego spotkania na liście pojawią się pola wyboru.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Drukuj</strong></span>. Umożliwia wyświetlenie podglądu wydruku na potrzeby drukowania arkusza kalendarza.</p></li>
 </ul>
 </div>
 </li>
 </ul></div>
-<p>W widoku listy są dostępne jeszcze inne przyciski:</p>
+<p>Po wybraniu spotkania w widoku listy są dostępne jeszcze inne przyciski:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Edytuj</strong></span>. Edycja danych spotkania</p></li>
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Status.</strong></span> Zmiana statusu potwierdzenia spotkania.</p></li>
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Usuń</strong></span>. Usuwa wybrane spotkanie.</p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Działania</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>. Umożliwia otwarcie menu udostępniającego dodatkowe funkcje:</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Edytuj</strong></span>. Pozwala na edycję danych spotkania.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Status</strong></span>. Zmienia status potwierdzenia spotkania.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Usuń</strong></span>. Usuwa spotkanie wybrane przez użytkownika.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Działania</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>. Umożliwia otwarcie menu udostępniającego dodatkowe funkcje:</p></li>
 </ul></div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.toolbar.related"></a><p class="title">Powiązane tematy</p>
+<a name="ox.appsuite.user.reference.calendar.gui.toolbar.related"></a><p class="title">Zobacz też</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Instrukcje dotyczące przycisków i ikon można znaleźć tutaj: <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Tworzenie spotkań">Tworzenie spotkań</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.share.freebusy.html" title="7.8.5. Planowanie spotkań z kilkoma uczestnikami">Planowanie spotkań z kilkoma uczestnikami</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Edycja spotkań">Edycja spotkań</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Zmiana statusu spotkania">Zmiana statusu spotkania</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Usuwanie spotkań">Usuwanie spotkań</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Instrukcje dotyczące funkcji menu <span class="guibutton"><strong>Działania</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.toolbar.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> można znaleźć tutaj:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Drukowanie spotkań">Drukowanie spotkań</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Przenoszenie spotkań do innego folderu">Przenoszenie spotkań do innego folderu</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Edycja wielu spotkań jednocześnie">Edycja wielu spotkań jednocześnie</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>Instrukcje dotyczące przycisków i ikon</p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Tworzenie spotkań">Tworzenie spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.2. Planowanie spotkań z kilkoma uczestnikami">Planowanie spotkań z kilkoma uczestnikami</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Edycja spotkań">Edycja spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Zmiana statusu spotkania">Zmiana statusu spotkania</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Usuwanie spotkań">Usuwanie spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none">
+<p>Instrukcje dotyczące przycisków i ikon w menu <span class="guibutton"><strong>Działania</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.toolbar.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span></p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Drukowanie spotkań">Drukowanie spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Przenoszenie spotkań do innego folderu">Przenoszenie spotkań do innego folderu</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Edycja wielu spotkań jednocześnie">Edycja wielu spotkań jednocześnie</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Składniki aplikacji Kalendarz">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>Kalendarz </strong></span> </span>  </a></p></li>
 </ul>
 </div>
@@ -141,35 +181,48 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.content"></a><p class="title"><b>Obszar wyświetlania</b></p>
+<a name="ox.appsuite.user.reference.calendar.gui.content"></a><h3 class="title">Obszar wyświetlania</h3>
 <p>W obszarze wyświetlania znajduje się <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Widok kalendarza Dzień, Tydzień roboczy, Tydzień lub Miesiąc.">widok kalendarza</a> lub <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="Lista">widok listy</a> ze spotkaniami z kalendarza. Aby wybrać widok, kliknij przycisk <span class="guibutton"><strong>Widok</strong></span> na <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.toolbar" title="Pasek narzędzi">pasku narzędzi</a>.</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.calendarview"></a><p class="title"><b>Widok kalendarza <span class="guilabel"><strong>Dzień</strong></span>, <span class="guilabel"><strong>Tydzień roboczy</strong></span>, <span class="guilabel"><strong>Tydzień</strong></span> lub <span class="guilabel"><strong>Miesiąc</strong></span>.</b></p>
-<p>Wyświetla widok kalendarza dla wybranego przedziału czasu. </p>
+<a name="ox.appsuite.user.reference.calendar.gui.calendarview"></a><h3 class="title">Widok kalendarza <span class="guilabel"><strong>Dzień</strong></span>, <span class="guilabel"><strong>Tydzień roboczy</strong></span>, <span class="guilabel"><strong>Tydzień</strong></span> lub <span class="guilabel"><strong>Miesiąc</strong></span>.</h3>
+<p>Wyświetla widok kalendarza dla wybranego zakresu czasu. </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Ikony <span class="guibutton"><strong>Przeglądaj</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.calendarview.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span> z lewej strony u góry arkusza kalendarza pozwalają na poruszanie się po nim.</p></li>
+<li class="listitem"><p>Ikony <span class="guibutton"><strong>Przeglądaj</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.calendarview.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span> po lewej stronie na górze arkusza kalendarza pozwalają przejść do następnych lub poprzednich dni.</p></li>
 <li class="listitem">
-<p>W widokach kalendarza <span class="guilabel"><strong>Dzień</strong></span>, <span class="guilabel"><strong>Tydzień roboczy</strong></span> oraz <span class="guilabel"><strong>Tydzień</strong></span> obok ikony <span class="guibutton"><strong>Przeglądaj</strong></span> widoczna jest data i tydzień kalendarzowy.</p>
-<p>Kliknięcie daty powoduje otwarcie minikalendarza umożliwiającego wybranie innej daty.</p>
-<p>Obszar między datą i arkuszem kalendarza pozwala na <a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">tworzenie</a> spotkań całodniowych.</p>
-<p>Po lewej stronie arkusza kalendarza nad datami umieszczona jest strefa czasowa. Aby dodać nową kolumnę z godzinami w innej strefie czasowej, kliknij strefę czasową.</p>
-<p>Czerwona linia w arkuszu kalendarza przedstawia bieżącą godzinę.</p>
+<p>W widokach kalendarza <span class="guilabel"><strong>Dzień</strong></span>, <span class="guilabel"><strong>Tydzień roboczy</strong></span> i <span class="guilabel"><strong>Tydzień</strong></span> obok ikony <span class="guibutton"><strong>Przeglądaj</strong></span> pojawi się data i tydzień kalendarzowy.</p>
+<p>Po kliknięciu daty pojawi się narzędzie do wyboru daty.</p>
+<p>Obszar między datą i arkuszem kalendarza może służyć do tworzenia spotkań całodniowych.</p>
+<p>Po lewej stronie kalendarza nad datami widoczna jest strefa czasowa. Aby dodać kolumny z datami z innej strefy czasowej, kliknij ją.</p>
+<p>Czerwona linia w arkuszu kalendarza oznacza bieżącą godzinę.</p>
 </li>
-<li class="listitem"><p>W widokach <span class="guilabel"><strong>Tydzień roboczy</strong></span>, <span class="guilabel"><strong>Tydzień</strong></span> i <span class="guilabel"><strong>Miesiąc</strong></span> bieżący dzień w arkuszu kalendarza jest wyróżniony czerwonym tłem.</p></li>
-<li class="listitem"><p>W widoku <span class="guilabel"><strong>Miesiąc</strong></span> wybrany miesiąc i rok są pokazywane nad arkuszem kalendarza.</p></li>
+<li class="listitem"><p>W widokach <span class="guilabel"><strong>Tydzień roboczy</strong></span>, <span class="guilabel"><strong>Tydzień</strong></span> i <span class="guilabel"><strong>Miesiąc</strong></span> bieżący dzień w arkuszu kalendarza jest wyróżniony czerwoną linią.</p></li>
+<li class="listitem"><p>W widoku <span class="guilabel"><strong>Miesiąc</strong></span> wybrana data (miesiąc i rok) jest wybrana nad arkuszem kalendarza.</p></li>
 <li class="listitem">
-<p> <a class="link" href="ox.appsuite.user.sect.calendar.view.appointments.html#ox.appsuite.user.concept.appointments.color">Kolor</a> wyróżnienia spotkań zależy od statusu potwierdzenia i używanego motywu kolorów.</p>
-<p>Jeśli nad lub pod widocznym obszarem arkusza kalendarza są dostępne inne spotkania, u góry i u dołu arkusza kalendarza dla odpowiedniego dnia są widoczne strzałki.</p>
+<p> Spotkania są wyróżniane różnymi kolorami</p>
+<p> odpowiednio do statusu potwierdzenia oraz tematu kolorystycznego.</p>
 </li>
 </ul></div>
-<p> Po kliknięciu spotkania dane pojawią się w <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="Wyskakujące okienko">wyskakującym okienku</a>.</p>
+<p> Po kliknięciu spotkania jego data pojawi się w wyskakującym okienku.</p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.calendarview.related"></a><p class="title">Powiązane tematy</p>
+<a name="ox.appsuite.user.reference.calendar.gui.calendarview.related"></a><p class="title">Zobacz też</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>
-              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Wyświetlanie spotkań">Wyświetlanie spotkań</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.view.appointments.html" title="7.2.4. Jak są wyświetlane spotkania?">Jak są wyświetlane spotkania?</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Tworzenie spotkań">Tworzenie spotkań</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.html" title="7.6. Zarządzanie spotkaniami">Zarządzanie spotkaniami</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="Narzędzie do wyboru daty">Narzędzie do wyboru daty</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.scheduling" title="Widok planowania">Widok planowania</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="Wyskakujące okienko">Wyskakujące okienko</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Wyświetlanie spotkań">Wyświetlanie spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.view.appointments.html" title="7.2.4. Jak są wyświetlane spotkania?">Jak są wyświetlane spotkania?</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Tworzenie spotkań">Tworzenie spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.html" title="7.6. Zarządzanie spotkaniami">Zarządzanie spotkaniami</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Składniki aplikacji Kalendarz">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>Kalendarz </strong></span> </span>  </a></p></li>
 </ul>
 </div>
@@ -177,55 +230,43 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.popup"></a><p class="title"><b>Wyskakujące okienko</b></p>
-<p>Po kliknięciu spotkania w widoku kalendarz pojawi się wyskakujące okienko. Znajdują się w nim dane spotkania oraz dostępne funkcje: </p>
+<a name="ox.appsuite.user.reference.calendar.gui.datepicker"></a><h3 class="title">Narzędzie do wyboru daty</h3>
+<p>Narzędzie do wyboru daty jest wyświetlane po następujących działaniach:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-<p>przyciski <span class="guibutton"><strong>Edytuj</strong></span>, <span class="guibutton"><strong>Zmień status</strong></span>, <span class="guibutton"><strong>Dalsze działania</strong></span>, <span class="guibutton"><strong>Usuń</strong></span>.</p>
-<p><span class="phrase"><strong> Uwaga: </strong></span>przy niektórych konfiguracjach serwera dominujące mogą być następujące ograniczenia: Niektóre przyciski w kalendarzach prywatnych są wyświetlane wyłącznie u użytkowników, którzy mają uprawnienia do danych funkcji. Uczestnik nie może zmienić ani usunąć spotkania. Organizator nie może zmienić swojego statusu. </p>
-</li>
-<li class="listitem"><p>Po kliknięciu ikony <span class="guibutton"><strong>Działania</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.popup.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> pojawi się menu z dalszymi funkcjami.</p></li>
-</ul></div>
-<p>Poniżej przycisków wyświetlane są te same informacje, co w <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="Widok szczegółów">widoku szczegółów w widoku <span class="guilabel"><strong>Lista</strong></span></a>.</p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.popup.related"></a><p class="title">Powiązane tematy</p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Instrukcje dotyczące przycisków i ikon można znaleźć tutaj: <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Edycja spotkań">Edycja spotkań</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Zmiana statusu spotkania">Zmiana statusu spotkania</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.2. Tworzenie kolejnego spotkania">Tworzenie kolejnego spotkania</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Usuwanie spotkań">Usuwanie spotkań</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Instrukcje dotyczące funkcji menu <span class="guibutton"><strong>Działania</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calebdar.gui.popup.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> można znaleźć tutaj:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Drukowanie spotkań">Drukowanie spotkań</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Przenoszenie spotkań do innego folderu">Przenoszenie spotkań do innego folderu</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Edycja wielu spotkań jednocześnie">Edycja wielu spotkań jednocześnie</a></span>
-            </p></li>
-</ul>
-</div>
-<p>
-      </p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.list"></a><p class="title"><b>Lista</b></p>
-<p>Wyświetla listę spotkań z aktualnie wybranego folderu. Lista zawiera następujące pozycje: </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Każdy dzień ze spotkaniami ma nagłówek z datą.</p></li>
-<li class="listitem"><p>Dla każdego spotkania dostępne są następujące informacje: data, godzina, kolor, ikona spotkania prywatnego, temat i położenie.</p></li>
-<li class="listitem"><p>Tekst powyżej listy przedstawia nazwę wybranego folderu. Podana liczba określa liczbę obiektów w wybranym folderze.</p></li>
-</ul></div>
-<p>Dostępne są następujące funkcje:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Po kliknięciu nagłówka pojawi się pierwsze spotkanie z danego zakresu czasu.</p></li>
-<li class="listitem"><p>Kliknięcie spotkania powoduje wyświetlenie jego danych w <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="Widok szczegółów">widoku szczegółów</a>.</p></li>
-<li class="listitem">
-<p>Istnieje możliwość wybrania wielu spotkań do jednoczesnej edycji. Aby to zrobić, zaznacz pola wyboru obok spotkań. Pamiętaj, aby wcześniej włączyć opcję <span class="guibutton"><strong>Pola wyboru</strong></span> z menu rozwijanego <span class="guibutton"><strong>Widok</strong></span> na pasku narzędzi. </p>
-<p>Możesz też skorzystać z systemowych funkcji zaznaczania wielu elementów.</p>
-<p>Aby wybrać wszystkie spotkania z aktualnie wybranego folderu, zaznacz pole wyboru <span class="guibutton"><strong>Wybierz wszystko</strong></span> dostępne nad listą.</p>
-</li>
-<li class="listitem"><p>W przypadku kliknięcia ikony <span class="guibutton"><strong>Sortuj</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.sort"></a><img src="../../images/appsuite_user_icon_sort.png"></span> widocznej nad listą otworzy się menu ułatwiające sortowanie spotkań.</p></li>
+<li class="listitem"><p>Kliknięcie daty w lewym górnym rogu widoku kalendarza <span class="guilabel"><strong>Dzień</strong></span>, <span class="guilabel"><strong>Tydzień roboczy</strong></span> lub <span class="guilabel"><strong>Tydzień</strong></span>.</p></li>
+<li class="listitem"><p>Kliknięcie daty w lewym górnym rogu w widoku planowania.</p></li>
+<li class="listitem"><p>Kliknięcie pola wejściowego daty przy tworzeniu lub edycji spotkania.</p></li>
 </ul></div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.list.related"></a><p class="title">Powiązane tematy</p>
+<a name="ox.appsuite.user.reference.calendar.gui.datepicker.entries"></a><p class="title">zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Ikony <span class="guibutton"><strong>Przeglądaj</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.datepicker.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span>. W zależności od wybranego zakresu czasu za pomocą ikon można wybrać miesiąc lub rok.</p></li>
+<li class="listitem"><p>Nagłówek. Wyświetla bieżący miesiąc.</p></li>
+<li class="listitem"><p>Tygodnie kalendarza i dni miesiąca. Po kliknięciu daty narzędzie do wyboru daty zamyka się, a wybrana data zostaje wprowadzona.</p></li>
+<li class="listitem">
+<p>Po kliknięciu nazwy miesiąca w nagłówku pojawia się spis miesięcy z bieżącego roku.</p>
+<p>Po kliknięciu roku w nagłówku pojawia się lista w poprzednimi i następnymi latami. </p>
+</li>
+</ul>
+</div>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.datepicker.related"></a><p class="title">Zobacz też</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>
-              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. Wyszukiwanie spotkań">Wyszukiwanie spotkań</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Edycja wielu spotkań jednocześnie">Edycja wielu spotkań jednocześnie</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Widok kalendarza Dzień, Tydzień roboczy, Tydzień lub Miesiąc.">Widok kalendarza <span class="guilabel"><strong>Dzień</strong></span>, <span class="guilabel"><strong>Tydzień roboczy</strong></span>, <span class="guilabel"><strong>Tydzień</strong></span> lub <span class="guilabel"><strong>Miesiąc</strong></span>.</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.create" title="Widok tworzenia lub edytowania">Widok tworzenia lub edytowania</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. Tworzenie nowych spotkań">Tworzenie nowych spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Edycja spotkań">Edycja spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Składniki aplikacji Kalendarz">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>Kalendarz </strong></span> </span>  </a></p></li>
 </ul>
 </div>
@@ -233,9 +274,113 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.detailview"></a><p class="title"><b>Widok szczegółów</b></p>
-<p>Kliknięcie spotkania na liście powoduje wyświetlenie widoku szczegółów z danymi spotkania oraz dostępnymi funkcjami.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<a name="ox.appsuite.user.reference.calendar.gui.popup"></a><h3 class="title">Wyskakujące okienko</h3>
+<p>Po kliknięciu spotkania w widoku kalendarza pojawi się wyskakujące okienko. Znajdują się w nim dane spotkania. </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.popup.entries"></a><p class="title">zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>Przyciski <span class="guibutton"><strong>Edytuj</strong></span>, <span class="guibutton"><strong>Zmień status</strong></span>, <span class="guibutton"><strong>Dalsze działania</strong></span>, <span class="guibutton"><strong>Usuń</strong></span>.</p>
+<p><span class="phrase"><strong>Uwaga:</strong></span> przy niektórych konfiguracjach serwera dominujące mogą być następujące ograniczenia: Niektóre przyciski w kalendarzach prywatnych są wyświetlane wyłącznie u użytkowników, którzy mają uprawnienia do danych funkcji. Uczestnik nie może zmienić ani usunąć spotkania. Organizator nie może zmienić swojego statusu.</p>
+</li>
+<li class="listitem"><p>Po kliknięciu ikony <span class="guibutton"><strong>Działania</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.popup.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> pojawi się menu z dalszymi funkcjami.</p></li>
+</ul>
+</div>
+<p>Poniżej przycisków wyświetlane są te same informacje, co w <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="Widok szczegółów">widoku szczegółóww widoku <span class="guilabel"><strong>Lista</strong></span>.</a></p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.popup.related"></a><p class="title">Zobacz też</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="Widok kalendarza Dzień, Tydzień roboczy, Tydzień lub Miesiąc.">Widok kalendarza <span class="guilabel"><strong>Dzień</strong></span>, <span class="guilabel"><strong>Tydzień roboczy</strong></span>, <span class="guilabel"><strong>Tydzień</strong></span> lub <span class="guilabel"><strong>Miesiąc</strong></span>.</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Zmiana statusu spotkania">Zmiana statusu spotkania</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none">
+<p>Instrukcje dotyczące przycisków i ikon</p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Edycja spotkań">Edycja spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Zmiana statusu spotkania">Zmiana statusu spotkania</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.3. Tworzenie kolejnego spotkania">Tworzenie kolejnego spotkania</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Usuwanie spotkań">Usuwanie spotkań</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none">
+<p>Instrukcje dotyczące przycisków i ikon w menu <span class="guibutton"><strong>Działania</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calebdar.gui.popup.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span></p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Drukowanie spotkań">Drukowanie spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Przenoszenie spotkań do innego folderu">Przenoszenie spotkań do innego folderu</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Edycja wielu spotkań jednocześnie">Edycja wielu spotkań jednocześnie</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Składniki aplikacji Kalendarz">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>Kalendarz </strong></span> </span>  </a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.calendar.gui.list"></a><h3 class="title">Lista</h3>
+<p>Wyświetla listę spotkań w aktualnie wybranym folderze.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.list.entries"></a><p class="title">zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Każdy dzień ze spotkaniami wyświetla nagłówek z datą.</p></li>
+<li class="listitem"><p>Dla każdego spotkania wyświetlane są następujące informacje: data, godzina, kolor, ikona spotkania prywatnego, temat i lokalizacja.</p></li>
+<li class="listitem"><p>Tekst powyżej listy zawiera nazwę wybranego folderu. Podana liczba określa liczbę obiektów w wybranym folderze.</p></li>
+</ul>
+</div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.list.functions"></a><p class="title">Funkcje</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Po kliknięciu nagłówka pojawi się pierwsze spotkanie z danego zakresu czasu.</p></li>
+<li class="listitem"><p>Kliknięcie spotkania powoduje wyświetlenie jego danych w <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="Widok szczegółów">widoku szczegółów</a>.</p></li>
+<li class="listitem">
+<p>Aby wybrać kilka spotkań, zaznacz pole wyboru <span class="guibutton"><strong>Pola wyboru</strong></span> na dostępnej na pasku narzędzi liście rozwijanej <span class="guibutton"><strong>Widok</strong></span>. </p>
+<p>Możesz też skorzystać z systemowych funkcji zaznaczania wielu elementów.</p>
+<p>Aby wybrać wszystkie spotkania z aktualnie wybranego folderu, zaznacz pole wyboru <span class="guibutton"><strong>Wybierz wszystko</strong></span> dostępne nad listą.</p>
+</li>
+<li class="listitem"><p>W przypadku kliknięcia ikony <span class="guibutton"><strong>Sortuj</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.sort"></a><img src="../../images/appsuite_user_icon_sort.png"></span> widocznej nad listą otworzy się menu ułatwiające sortowanie spotkań.</p></li>
+</ul>
+</div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.list.related"></a><p class="title">Zobacz też</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. Wyszukiwanie spotkań">Wyszukiwanie spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Edycja wielu spotkań jednocześnie">Edycja wielu spotkań jednocześnie</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Składniki aplikacji Kalendarz">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>Kalendarz </strong></span> </span>  </a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.calendar.gui.detailview"></a><h3 class="title">Widok szczegółów</h3>
+<p>Kliknięcie spotkania na liście powoduje wyświetlenie widoku szczegółów z danymi spotkania.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.detailview.entries"></a><p class="title">zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Przyciski z funkcjami edycji</p></li>
 <li class="listitem"><p>Temat</p></li>
 <li class="listitem"><p>Data, godzina, strefa czasowa</p></li>
@@ -257,7 +402,7 @@
             </p>
 <p>Kliknięcie spotkania lub wiadomości e-mail spowoduje otwarcie dodatkowego wyskakującego okienka.</p>
 </li>
-<li class="listitem"><p><a name="ox.appsuite.user.reference.calendar.gui.detailview.messenger"></a>W zależności od konfiguracji oprogramowania do pracy grupowej, kolorowa kropka obok nazwy wskazuje status uczestnika w aplikacji <span class="phrase">Messenger</span>.</p></li>
+<li class="listitem"><p><a name="ox.appsuite.user.reference.calendar.gui.detailview.messenger"></a>Przy pewnych konfiguracjach oprogramowania do pracy grupowej kolorowa kropka obok nazwy wskazuje status uczestnika w aplikacji <span class="phrase">Messenger</span>.</p></li>
 <li class="listitem"><p>Jeśli spotkanie ma innych uczestników, zostaną wyświetlone następujące przyciski: <a class="link" href="ox.appsuite.user.sect.calendar.share.mail_participants.html#ox.appsuite.user.concept.calendar.mail_participants"> <span class="guibutton"><strong>Wyślij wiadomość do wszystkich uczestników</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html#ox.appsuite.user.concept.calendar.invite_newappointment"> <span class="guibutton"><strong>Zaproś na nowe spotkanie</strong></span> </a> oraz <a class="link" href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html#ox.appsuite.user.concept.calendar.distributionlist_participants"><span class="guibutton"><strong>Zapisz jako listę dystrybucyjną</strong></span></a>.</p></li>
 <li class="listitem"><p>Nazwy istniejących zasobów. Kliknięcie zasobu spowoduje otwarcie <span class="guilabel"><strong>wyskakującego okienka</strong></span>.</p></li>
 <li class="listitem"><p>Jeśli spotkanie obejmuje uczestników zewnętrznych, ich nazwiska będą wyświetlane w obszarze <span class="guilabel"><strong>Uczestnicy zewnętrzni</strong></span>.</p></li>
@@ -275,30 +420,101 @@
 <p>
             </p>
 </li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.detailview.related"></a><p class="title">Powiązane tematy</p>
+<a name="ox.appsuite.user.reference.calendar.gui.detailview.related"></a><p class="title">Zobacz też</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Instrukcje dotyczące przycisków i ikon można znaleźć tutaj: <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Edycja spotkań">Edycja spotkań</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Zmiana statusu spotkania">Zmiana statusu spotkania</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Usuwanie spotkań">Usuwanie spotkań</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>Instrukcje dotyczące dalszych działań można znaleźć tutaj: <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Drukowanie spotkań">Drukowanie spotkań</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Przenoszenie spotkań do innego folderu">Przenoszenie spotkań do innego folderu</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Edycja wielu spotkań jednocześnie">Edycja wielu spotkań jednocześnie</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Edycja spotkań">Edycja spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. Zmiana statusu spotkania">Zmiana statusu spotkania</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. Usuwanie spotkań">Usuwanie spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. Drukowanie spotkań">Drukowanie spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. Przenoszenie spotkań do innego folderu">Przenoszenie spotkań do innego folderu</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. Edycja wielu spotkań jednocześnie">Edycja wielu spotkań jednocześnie</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Składniki aplikacji Kalendarz">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>Kalendarz </strong></span> </span>  </a></p></li>
 </ul>
 </div>
 <p>
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.create"></a><p class="title"><b>Widok tworzenia lub edytowania</b></p>
-<p>Podczas tworzenia nowego spotkania lub edycji istniejącego na nowej stronie wyświetlane są następujące elementy.</p>
+<a name="ox.appsuite.user.reference.calendar.gui.scheduling"></a><h3 class="title">Widok planowania</h3>
+<p>Aby otworzyć widok planowania, należy wykonać jedną z poniższych czynności:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Na pasku narzędzi: kliknij przycisk <span class="guibutton"><strong>Planowanie</strong></span>.</p></li>
+<li class="listitem"><p>Na stronie tworzenia lub edycji spotkań: kliknij polecenie <span class="guibutton"><strong>Znajdź wolny czas</strong></span>.</p></li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.scheduling.entries"></a><p class="title">zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Pole wejściowe na uczestników i zasoby</p></li>
+<li class="listitem"><p>Ikony <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.scheduling.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span> do przeglądania wg tygodni.</p></li>
+<li class="listitem"><p>Data początkowa i końcowa z wybranego zakresu czasu oraz tygodnia kalendarzowego. Po kliknięciu daty pojawi się narzędzie do wyboru daty umożliwiającego wskazanie innego zakresu.</p></li>
 <li class="listitem">
-<p>W zależności od konfiguracji oprogramowania do pracy grupowej elementy mogą być wyświetlane u góry lub u dołu ekranu.</p>
+<p>Przycisk <span class="guibutton"><strong>Opcje</strong></span> Po jego kliknięciu wyświetli się menu z kilkoma funkcjami:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>Dostosowanie współczynnika powiększenia dla widoku arkusza kalendarza</p></li>
+<li class="listitem"><p>Dostosowanie wysokości linii do wyświetlania uczestników i zasobów</p></li>
+<li class="listitem"><p>Wybór typów spotkań do wyświetlenia</p></li>
+<li class="listitem"><p>Ukrycie godzin wypadających poza godzinami roboczymi</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem"><p>Lista uczestników. O każdym uczestniku wyświetlane są następujące informacje: imię i nazwisko, przycisk <span class="guibutton"><strong>Usuń</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.scheduling.participant.remove"></a><img src="../../images/appsuite_user_icon_trash.png"></span>spotkania</p></li>
+<li class="listitem"><p>Arkusz kalendarza dla wybranego zakresu czasu.</p></li>
+<li class="listitem"><p>Pasek przewijania. Umożliwia ustawienie wyświetlania części zakresu czasu.</p></li>
+<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Zapisz jako listę dystrybucyjną</strong></span>. Zapisuje dodanych uczestników na nową listę dystrybucyjną.</p></li>
+</ul>
+</div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.sheduling.related"></a><p class="title">Zobacz też</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="Narzędzie do wyboru daty">Narzędzie do wyboru daty</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.2. Planowanie spotkań z kilkoma uczestnikami">Planowanie spotkań z kilkoma uczestnikami</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. Tworzenie nowych spotkań">Tworzenie nowych spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Edycja spotkań">Edycja spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Składniki aplikacji Kalendarz">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>Kalendarz </strong></span> </span>  </a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.calendar.gui.create"></a><h3 class="title">Widok tworzenia lub edytowania</h3>
+<p>Ten widok jest używany podczas tworzenia nowych spotkań lub edycji istniejących.</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.create.entries"></a><p class="title">zawartość</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>Przy pewnych konfiguracjach oprogramowania do pracy grupowej elementy mogą być wyświetlane u góry lub u dołu ekranu.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p>Kliknięcie przycisku <span class="guibutton"><strong>Utwórz</strong></span> zapisuje bieżące dane spotkania i zamyka stronę edycji.</p></li>
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Odrzuć</strong></span>. Anuluje tworzenie lub edycję.</p></li>
+<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Odrzuć</strong></span>. Kliknij go, aby anulować proces tworzenia lub edycji.</p></li>
 <li class="listitem"><p>Przycisk obok <span class="guibutton"><strong>kalendarza</strong></span> wskazuje folder kalendarza, w którym zostanie utworzone spotkanie. Kliknij go, aby utworzyć spotkanie w innym folderze kalendarza.</p></li>
 </ul></div>
 <p>
@@ -307,7 +523,7 @@
 <li class="listitem"><p>Do pola <span class="guibutton"><strong>Temat</strong></span> wpisz temat spotkania, który będzie widoczny jako jego tytuł.</p></li>
 <li class="listitem"><p>Przycisk <span class="guibutton"><strong>Lokalizacja</strong></span> pozwalający na wprowadzenie miejsca, w którym ma dojść do spotkania.</p></li>
 <li class="listitem">
-<p>Pola <span class="guibutton"><strong>Zaczyna się o</strong></span> oraz <span class="guibutton"><strong>Kończy się o</strong></span> pozwalające na ustawienie godziny rozpoczęcia i zakończenia spotkania. Po ich kliknięciu pojawi się okno dialogowe wyboru dat. </p>
+<p>Pola wejściowe <span class="guibutton"><strong>Zaczyna się o</strong></span> oraz <span class="guibutton"><strong>Kończy się o</strong></span>. Ustawiają początek i koniec spotkania. Po kliknięciu tych pól pojawi się narzędzie do wyboru daty. </p>
 <p>Po wyłączeniu pola wyboru <span class="guibutton"><strong>Cały dzień</strong></span> można ustawić godzinę początkową i końcową.</p>
 <p>Po kliknięciu przycisku strefy czasowej obok godziny zobaczysz jej odpowiedniki w rożnych strefach czasowych. Często używane strefy czasowe można zapisać w ustawieniach kalendarza <a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. Zarządzanie ulubionymi strefami czasowymi">jako ulubione</a>.</p>
 </li>
@@ -321,14 +537,25 @@
 <li class="listitem"><p>Zaznaczenie pola wyboru <span class="guibutton"><strong>Prywatne</strong></span> wskazuje, że temat i opis spotkania ma być niewidoczny dla innych użytkowników.</p></li>
 <li class="listitem"><p>Do pola <span class="guibutton"><strong>Dodaj uczestnika/zasób</strong></span> można wpisać nazwy uczestników spotkania. Jeśli mają oni otrzymać powiadomienie e-mail o spotkaniu, zaznacz pole <span class="guibutton"><strong>Powiadom wszystkich uczestników pocztą e-mail</strong></span>.</p></li>
 <li class="listitem"><p>Kliknięcie przycisku <span class="guibutton"><strong>Dodaj załączniki</strong></span> dostępnego poniżej obszaru <span class="guibutton"><strong>Załączniki</strong></span> pozwala załączyć dowolną liczbę plików do danych kontaktowych.</p></li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.create.related"></a><p class="title">Powiązane tematy</p>
+<a name="ox.appsuite.user.reference.calendar.gui.create.related"></a><p class="title">Zobacz też</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Ten widok jest używany w następujących działaniach:<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. Tworzenie nowych spotkań">Tworzenie nowych spotkań</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Edycja spotkań">Edycja spotkań</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="Narzędzie do wyboru daty">Narzędzie do wyboru daty</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. Tworzenie nowych spotkań">Tworzenie nowych spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. Edycja spotkań">Edycja spotkań</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. Klawisze i kombinacje klawiszy">Klawisze i kombinacje klawiszy</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Składniki aplikacji Kalendarz">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>Kalendarz </strong></span> </span>  </a></p></li>
 </ul>
 </div>

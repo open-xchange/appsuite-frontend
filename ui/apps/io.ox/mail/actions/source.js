@@ -23,7 +23,7 @@ define('io.ox/mail/actions/source', [
         var data = baton.first();
         require(['io.ox/core/tk/dialogs'], function (dialogs) {
             new dialogs.ModalDialog({ width: 700 })
-                .addPrimaryButton('close', gt('Close'), 'close', { tabIndex: 1 })
+                .addPrimaryButton('close', gt('Close'), 'close')
                 .header(
                     $('<h4>').text(gt('Mail source') + ': ' + (data.subject || ''))
                 )

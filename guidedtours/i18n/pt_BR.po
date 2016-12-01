@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-07-02 17:42-0300\n"
-"Last-Translator: Aracele Torres <aracele@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2016-10-27 12:05-0200\n"
+"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
@@ -86,11 +86,11 @@ msgid "Creating the appointment"
 msgstr "Criando o compromisso"
 
 #: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
-msgid "To create the appointment, click on Create at the upper right side."
-msgstr "Para criar o compromisso, clique em Criar no lado superior direito."
+msgid "To create the appointment, click on Create at the lower left side."
+msgstr "Para criar um compromisso, clique em Criar no canto inferior esquerdo."
 
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:87
 msgid "Selecting a view"
 msgstr "Selecionando uma visualização"
 
@@ -103,11 +103,23 @@ msgstr ""
 "Visualizar na barra de ferramentas. Selecione um item do menu a partir da "
 "seção Layout."
 
-#: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:97 module:io.ox/tours
+msgid "The calendar views"
+msgstr "As visualizações em calendário"
+
+#: apps/io.ox/tours/calendar.js:98 module:io.ox/tours
+msgid ""
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
+msgstr ""
+"As visualizações em calendário exibem uma folha de calendário com os "
+"compromissos para o intervalo de tempo selecionado."
+
+#: apps/io.ox/tours/calendar.js:110 module:io.ox/tours
 msgid "The List view"
 msgstr "Visualização em Lista"
 
-#: apps/io.ox/tours/calendar.js:96 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:111 module:io.ox/tours
 msgid ""
 "The List view shows a list of the appointments in the current folder. If "
 "clicking on an appointment, the appointment's data and some functions are "
@@ -116,18 +128,6 @@ msgstr ""
 "A Visualização em Lista exibe uma lista dos compromissos na pasta atual. Se "
 "clicar em um compromisso, os dados do compromisso e algumas funções são "
 "exibidas na Visualização de detalhes"
-
-#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
-msgid "The calendar views"
-msgstr "As visualizações em calendário"
-
-#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
-msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
-msgstr ""
-"As visualizações em calendário exibem uma folha de calendário com os "
-"compromissos para o intervalo de tempo selecionado."
 
 #: apps/io.ox/tours/contacts.js:30 module:io.ox/tours
 msgid "Creating a new contact"
@@ -178,15 +178,15 @@ msgstr ""
 "clique em Visualizar > Caixas de Seleção no lado direito da barra de "
 "ferramentas."
 
-#: apps/io.ox/tours/files.js:53 module:io.ox/tours
+#: apps/io.ox/tours/files.js:59 module:io.ox/tours
 msgid "The Drive app tour.txt"
 msgstr "O tour.txt do aplicativo Drive"
 
-#: apps/io.ox/tours/files.js:59 module:io.ox/tours
+#: apps/io.ox/tours/files.js:66 module:io.ox/tours
 msgid "The Drive app"
 msgstr "Aplicativo Drive"
 
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
+#: apps/io.ox/tours/files.js:67 module:io.ox/tours
 msgid ""
 "Welcome to your cloud storage app. This Guided Tour will introduce you to "
 "your new online storage solution - your one point to access online stored "
@@ -199,11 +199,11 @@ msgstr ""
 "Este é o lugar onde você pode carregar e salvar seusarquivos, compartilhá-"
 "los e sincroniza-los com diferentes dispositivos."
 
-#: apps/io.ox/tours/files.js:66 module:io.ox/tours
+#: apps/io.ox/tours/files.js:73 module:io.ox/tours
 msgid "Folder tree"
 msgstr "Árvore de pastas"
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
+#: apps/io.ox/tours/files.js:74 module:io.ox/tours
 msgid ""
 "On the left you can see the folder tree. It displays your folder structure "
 "and allows you to navigate to specific folders and subfolders. To make your "
@@ -215,11 +215,11 @@ msgstr ""
 "a suavida mais fácil, já incluímos as pastas para os seus Documentos, Música,"
 "Fotos e Vídeos."
 
-#: apps/io.ox/tours/files.js:80 module:io.ox/tours
+#: apps/io.ox/tours/files.js:87 module:io.ox/tours
 msgid "Folder content"
 msgstr "Conteúdo da pasta"
 
-#: apps/io.ox/tours/files.js:81 module:io.ox/tours
+#: apps/io.ox/tours/files.js:88 module:io.ox/tours
 msgid ""
 "Clicking on a folder displays all the subfolders, documents, media and other "
 "files that it contains."
@@ -227,21 +227,21 @@ msgstr ""
 "Ao clicar em uma pasta exibe todas as subpastas, documentos, mídia e "
 "outrosarquivos que ela contém."
 
-#: apps/io.ox/tours/files.js:88 module:io.ox/tours
+#: apps/io.ox/tours/files.js:95 module:io.ox/tours
 msgid "Select a view"
 msgstr "Selecionando uma visualização"
 
-#: apps/io.ox/tours/files.js:89 module:io.ox/tours
+#: apps/io.ox/tours/files.js:96 module:io.ox/tours
 msgid "Different views are available. Just select the one you like best."
 msgstr ""
 "Diferentes visualizações estão disponíveis. Basta selecionar a que você mais "
 "gosta."
 
-#: apps/io.ox/tours/files.js:103 module:io.ox/tours
+#: apps/io.ox/tours/files.js:110 module:io.ox/tours
 msgid "Toolbar"
 msgstr "Barra de ferramentas"
 
-#: apps/io.ox/tours/files.js:104 module:io.ox/tours
+#: apps/io.ox/tours/files.js:111 module:io.ox/tours
 msgid ""
 "At the top you can find the toolbar with many functions and additional "
 "options. You can easily create new folders, new files and much more."
@@ -250,11 +250,11 @@ msgstr ""
 "opções adicionais. Você pode facilmente criar novas pastas, novos arquivos e "
 "muito mais."
 
-#: apps/io.ox/tours/files.js:116 module:io.ox/tours
+#: apps/io.ox/tours/files.js:123 module:io.ox/tours
 msgid "Upload a new file"
 msgstr "Enviando um novo arquivo"
 
-#: apps/io.ox/tours/files.js:117 module:io.ox/tours
+#: apps/io.ox/tours/files.js:124 module:io.ox/tours
 msgid ""
 "To upload a new file from your local device, simply click on Add local file "
 "and select the file you would like to upload. It is even easier if you just "
@@ -267,21 +267,21 @@ msgstr ""
 "no Drive. O arquivo enviado estáagora disponível no Drive em todos os seus "
 "dispositivos."
 
-#: apps/io.ox/tours/files.js:131 module:io.ox/tours
+#: apps/io.ox/tours/files.js:138 module:io.ox/tours
 msgid "Preview files"
 msgstr "Pré-visualização de arquivos"
 
-#: apps/io.ox/tours/files.js:132 module:io.ox/tours
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
 msgid "Clicking on the view icon leads you to a preview of the selected file."
 msgstr ""
 "Clicando no ícone de visualização você terá uma pré-visualização do arquivo "
 "selecionado."
 
-#: apps/io.ox/tours/files.js:142 module:io.ox/tours
+#: apps/io.ox/tours/files.js:149 module:io.ox/tours
 msgid "Preview mode"
 msgstr "Modo de pré-visualização"
 
-#: apps/io.ox/tours/files.js:143 module:io.ox/tours
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
 msgid ""
 "From preview you can also select other options to help you manage and work "
 "on your files."
@@ -289,11 +289,11 @@ msgstr ""
 "A partir de pré-visualização, você também pode selecionar outras opções para "
 "ajudá-lo a gerenciar e trabalharem seus arquivos."
 
-#: apps/io.ox/tours/files.js:156 module:io.ox/tours
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
 msgid "Share files"
 msgstr "Compartilhando arquivos"
 
-#: apps/io.ox/tours/files.js:157 module:io.ox/tours
+#: apps/io.ox/tours/files.js:164 module:io.ox/tours
 msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
 "also collaborate on a document and set different access rights."
@@ -302,11 +302,11 @@ msgstr ""
 "Você podetambém colaborar em um documento e definir diferentes direitos de "
 "acesso."
 
-#: apps/io.ox/tours/files.js:168 module:io.ox/tours
+#: apps/io.ox/tours/files.js:175 module:io.ox/tours
 msgid "Sharing options"
 msgstr "Opções de compartilhamento"
 
-#: apps/io.ox/tours/files.js:169 module:io.ox/tours
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
 msgid ""
 "Choose from two alternatives to share your files and folders. Use Invite "
 "people if you want to manage access rights and allow recipients to create "
@@ -319,11 +319,11 @@ msgstr ""
 "link para deixar os outros ver e fazer o download dosarquivos. Você pode "
 "usar uma data de expiração e senha de proteção, se quiser."
 
-#: apps/io.ox/tours/files.js:182 module:io.ox/tours
+#: apps/io.ox/tours/files.js:189 module:io.ox/tours
 msgid "Collaborating"
 msgstr "Colaborando"
 
-#: apps/io.ox/tours/files.js:183 module:io.ox/tours
+#: apps/io.ox/tours/files.js:190 module:io.ox/tours
 msgid ""
 "Sharing files by inviting people does not only offer your recipients the "
 "option to create and edit files. Internal and external participants are also "
@@ -335,11 +335,11 @@ msgstr ""
 "externos também sãocapazes de colaborar com você em documentos de texto e "
 "planilhas ao mesmotempo."
 
-#: apps/io.ox/tours/files.js:197 module:io.ox/tours
+#: apps/io.ox/tours/files.js:204 module:io.ox/tours
 msgid "Edit documents"
 msgstr "Editando documentos"
 
-#: apps/io.ox/tours/files.js:198 module:io.ox/tours
+#: apps/io.ox/tours/files.js:205 module:io.ox/tours
 msgid ""
 "Did you know that you can edit text documents and spreadsheets online? Drive "
 "will automatically update your edited file, but thanks to versioning the "
@@ -349,11 +349,11 @@ msgstr ""
 "Driveatualizará automaticamente o arquivo editado, mas graças ao "
 "versionamento oarquivo original permanece disponível."
 
-#: apps/io.ox/tours/files.js:205 module:io.ox/tours
+#: apps/io.ox/tours/files.js:212 module:io.ox/tours
 msgid "File details"
 msgstr "Lendo os detalhes"
 
-#: apps/io.ox/tours/files.js:206 module:io.ox/tours
+#: apps/io.ox/tours/files.js:213 module:io.ox/tours
 msgid ""
 "The file details side bar offers additional information about your files. "
 "Just enable the File details option from the View drop down menu and select "
@@ -363,11 +363,11 @@ msgstr ""
 "seus arquivos.Basta ativar a opção Detalhes do arquivo do menu suspenso de "
 "Visualização e selecionarum arquivo para ver os detalhes."
 
-#: apps/io.ox/tours/files.js:221 module:io.ox/tours
+#: apps/io.ox/tours/files.js:228 module:io.ox/tours
 msgid "Add another account"
 msgstr "Adicionar outra conta"
 
-#: apps/io.ox/tours/files.js:222 module:io.ox/tours
+#: apps/io.ox/tours/files.js:229 module:io.ox/tours
 msgid ""
 "Drive allows you to connect to other storage solutions if you already have a "
 "cloud storage account you use to save and sync your files. Simply click on "
@@ -378,11 +378,11 @@ msgstr ""
 "sincronizar seus arquivos. Basta clicar noo logotipo apropriado para acessar "
 "seus dados existentes."
 
-#: apps/io.ox/tours/files.js:231 module:io.ox/tours
+#: apps/io.ox/tours/files.js:238 module:io.ox/tours
 msgid "Restart Guided Tour"
 msgstr "Reiniciar Passeio Guiado"
 
-#: apps/io.ox/tours/files.js:232 module:io.ox/tours
+#: apps/io.ox/tours/files.js:239 module:io.ox/tours
 msgid ""
 "Hint: you can always restart guided tours, any time you need them, from the "
 "system menu."
@@ -427,15 +427,15 @@ msgstr ""
 
 #: apps/io.ox/tours/intro.js:58 module:io.ox/tours
 msgid "The New objects icon"
-msgstr "Ícone de Novos objetos"
+msgstr "O ícone de Novos objetos"
 
 #: apps/io.ox/tours/intro.js:59 module:io.ox/tours
 msgid ""
-"The New objects icon shows the number of unread E-Mails or other "
+"The New objects icon shows the number of appointment reminders or other "
 "notifications. If clicking the icon, the info area opens."
 msgstr ""
-"O ícone de Novo objeto exibe o número de e-mails não lidos ou outras "
-"notificações. Se clicar no ícone, a área de informação é aberta."
+"O ícone de Novos objetos mostra o número de lembretes de compromisso ou "
+"outras notificações. Se clicar no ícone, a área de informação irá abrir."
 
 #: apps/io.ox/tours/intro.js:65 module:io.ox/tours
 msgid "The info area"
@@ -595,25 +595,25 @@ msgstr ""
 "nas opções foi HTML, você poder formatar o texto do e-mail. Para fazer isso "
 "selecione uma parte do texto e clique em um ícone na barra de formatação."
 
-#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "Enviando o e-mail"
 
-#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:76 module:io.ox/tours
 msgid "To send the E-Mail, click on Send"
 msgstr "Para enviar o e-mail, clique em Enviar"
 
-#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
 msgid "Sorting your E-Mails"
 msgstr "Classificando seus e-mails"
 
-#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:81 module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr ""
 "Para classificar os e-mails, clique em Classificar por. Selecione um "
 "critério de classificação."
 
-#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:88 module:io.ox/tours
 msgid ""
 "To choose between the different views. click on View in the toolbar. Select "
 "a menu entry in the layout."
@@ -621,11 +621,11 @@ msgstr ""
 "Para escolher entre os diferentes visualizações. clique em Ver na barra de "
 "ferramentas. Selecionar uma entrada de menu no layout."
 
-#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:100 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
 msgstr "Abrindo e-mail em uma janela separada"
 
-#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid ""
 "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
 "separate window."
@@ -633,11 +633,11 @@ msgstr ""
 "Se clicar duas vezes em um e-mail na lista, o e-mail será aberto em uma "
 "janela separada."
 
-#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:105 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "Lendo as conversas de e-mail"
 
-#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid ""
 "To open or close an E-Mail in a conversation, click on a free area in the "
 "header."
@@ -645,11 +645,11 @@ msgstr ""
 "Para abrir ou fechar um e-mail em uma conversa, clique em uma área livre no "
 "cabeçalho."
 
-#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:110 module:io.ox/tours
 msgid "Halo view"
 msgstr "Visualização Halo"
 
-#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:111 module:io.ox/tours
 msgid ""
 "To receive information about the sender or other recipients, open the Halo "
 "view by clicking on a name."
@@ -657,11 +657,11 @@ msgstr ""
 "Para receber informações sobre o remetente ou outros destinatários, abra a "
 "visualização Halo clicando sobre um nome."
 
-#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:115 module:io.ox/tours
 msgid "Editing multiple E-Mails"
 msgstr "Editando vários e-mails"
 
-#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:116 module:io.ox/tours
 msgid ""
 "In order to edit multiple E-Mails at once, enable the checkboxes on the left "
 "side of the E-Mails. If the checkboxes are not displayed, click on View > "
@@ -671,11 +671,11 @@ msgstr ""
 "esquerdo dos E-mails. Se as caixas de seleção não forem exibidas, clique em "
 "Visualizar > Caixas de Seleção no lado direito da barra de ferramentas."
 
-#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:128 module:io.ox/tours
 msgid "Opening the E-Mail settings"
 msgstr "Abrindo as configurações de e-mail"
 
-#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:129 module:io.ox/tours
 msgid ""
 "To open the E-Mail settings, click the System menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on E-Mail on the left side."
@@ -754,11 +754,11 @@ msgstr ""
 "Para abrir as configurações, clique no ícone do menu Sistema no canto "
 "superior direito da barra de menu. Selecione Configurações."
 
-#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "Como as configurações são organizadas"
 
-#: apps/io.ox/tours/settings.js:37 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:45 module:io.ox/tours
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
 "Basic settings or E-Mail."
@@ -766,11 +766,11 @@ msgstr ""
 "As configurações estão organizadas em tópicos. Selecione o tópico no lado "
 "esquerdo, por exemplo, Configurações básicas ou E-mail."
 
-#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:51 module:io.ox/tours
 msgid "Editing settings"
 msgstr "Editando configurações"
 
-#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:52 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
 "activated immediately."
@@ -778,11 +778,11 @@ msgstr ""
 "Edite uma configuração no lado direito. Na maioria dos casos, as alterações "
 "são ativadas imediatamente."
 
-#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:56 module:io.ox/tours
 msgid "Opening the help"
 msgstr "Abrindo a ajuda"
 
-#: apps/io.ox/tours/settings.js:49 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:57 module:io.ox/tours
 msgid ""
 "To open the help, click the System menu icon on the upper right side of the "
 "menu bar. Select Help. The help for the currently selected app is displayed. "
@@ -794,11 +794,11 @@ msgstr ""
 "atualmente selecionado é exibida. Para navegar na ajuda completa, clique em "
 "Página inicial ou Tabela de conteúdo na parte superior da janela."
 
-#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:70 module:io.ox/tours
 msgid "Signing out"
 msgstr "Encerando a sessão"
 
-#: apps/io.ox/tours/settings.js:55 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:71 module:io.ox/tours
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
@@ -902,6 +902,16 @@ msgstr ""
 "lado esquerdo das tarefas. Se as caixas de seleção não forem exibidas, "
 "clique em Visualizar > Caixas de seleção no lado direito da barra de "
 "ferramentas."
+
+#~ msgid ""
+#~ "The New objects icon shows the number of unread E-Mails or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr ""
+#~ "O ícone de Novo objeto exibe o número de e-mails não lidos ou outras "
+#~ "notificações. Se clicar no ícone, a área de informação é aberta."
+
+#~ msgid "To create the appointment, click on Create at the upper right side."
+#~ msgstr "Para criar o compromisso, clique em Criar no lado superior direito."
 
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "

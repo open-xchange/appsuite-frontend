@@ -17,14 +17,15 @@ define('plugins/portal/recentfiles/register', [
     'io.ox/core/api/user',
     'gettext!plugins/portal',
     'settings!io.ox/core',
+    'settings!io.ox/files',
     'less!plugins/portal/recentfiles/style'
-], function (ext, filesAPI, userAPI, gt, settings) {
+], function (ext, filesAPI, userAPI, gt, settings, driveSettings) {
 
     'use strict';
 
     _(['recentfiles', 'myfiles']).each(function (type) {
 
-        var searchOptions = { sort: 5, order: 'desc', limit: _.device('smartphone') ? 5 : 10 };
+        var searchOptions = { includeSubfolders: true, limit: _.device('smartphone') ? 5 : 10, order: 'desc', sort: 5 };
 
         if (type === 'myfiles') {
             searchOptions.folder = settings.get('folder/infostore');
@@ -41,6 +42,13 @@ define('plugins/portal/recentfiles/register', [
 
             load: function (baton) {
                 return filesAPI.search('', searchOptions).then(function (files) {
+                    // don't show hidden files if disabled in settings
+                    if (driveSettings.get('showHidden') === false) {
+                        files = _(files).filter(function (file) {
+                            var title = (file ? file.title : '');
+                            return title.indexOf('.') !== 0;
+                        });
+                    }
                     // update baton
                     baton.data = files;
                     // get user ids
@@ -101,7 +109,7 @@ define('plugins/portal/recentfiles/register', [
                                 .replace(/^[0-9_\-\.]{5,}(\D)/i, '\u2026$1')
                                 .replace(/[0-9_\-\.]{5,}(\.\w+)?$/, '\u2026$1');
                         }
-                        return $('<li class="item" tabindex="1">')
+                        return $('<li class="item" tabindex="0">')
                             .data('item', file)
                             .append(
                                 $('<b>').text(_.noI18n(filename)), $.txt(' '),

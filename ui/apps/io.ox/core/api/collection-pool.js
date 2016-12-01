@@ -23,31 +23,36 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
     function propagateRemove(module, model) {
         if (skip || skipRemove) return;
-        _(collections[module]).each(function (entry) {
-            var target = entry.collection.get(model.cid);
-            if (target) {
+        try {
+            _(collections[module]).each(function (entry) {
+                var target = entry.collection.get(model.cid);
+                if (!target) return;
                 skip = true;
                 entry.collection.remove(target);
-            }
-        });
-        skip = false;
+            });
+        } finally {
+            // use try/finally to make sure we always reset 'skip'
+            skip = false;
+        }
     }
 
     function propagateChange(module, model) {
         if (skip) return;
-        _(collections[module]).each(function (entry) {
-            var cid = !!model.changed.cid ? model.previous('cid') : model.cid,
-                target = entry.collection.get(cid),
-                data;
-
-            if (target) {
+        try {
+            _(collections[module]).each(function (entry) {
+                var cid = !!model.changed.cid ? model.previous('cid') : model.cid,
+                    target = entry.collection.get(cid),
+                    data;
+                if (!target) return;
                 skip = true;
                 data = model.toJSON();
                 delete data.index;
                 target.set(data);
-            }
-        });
-        skip = false;
+            });
+        } finally {
+            // use try/finally to make sure we always reset 'skip'
+            skip = false;
+        }
     }
 
     function gc(hash) {

@@ -16,18 +16,21 @@ define('io.ox/mail/print', [
     'io.ox/mail/api',
     'io.ox/mail/util',
     'io.ox/mail/detail/content',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (print, api, util, content, gt) {
+], function (print, api, util, content, settings, gt) {
 
     'use strict';
 
-    var regImageSrc = /(<img[^>]+src=")\/ajax/g,
-        // TODO: add setting (html OR text)
-        type = 'html';
+    var regImageSrc = /(<img[^>]+src=")\/ajax/g;
+
+    function getType() {
+        return settings.get('allowHtmlMessages', true) ? 'html' : 'text';
+    }
 
     function getContent(data) {
         if (!_.isArray(data.attachments)) return '';
-        if (type === 'text') {
+        if (getType() === 'text') {
             var source = String(data.attachments[0].content || '');
             // replace images on source level
             source = source.replace(regImageSrc, '$1' + ox.apiRoot);
@@ -75,10 +78,15 @@ define('io.ox/mail/print', [
                     // is an embedded email?
                     if (util.isEmbedded(selection[0])) return $.Deferred().resolve(selection[0]);
                     // fetch normal message
-                    return api.get(_.extend({ view: type, unseen: true }, obj));
+                    return api.get(_.extend({ view: getType(), unseen: true }, obj));
                 },
 
                 title: selection.length === 1 ? selection[0].subject : undefined,
+
+                meta: {
+                    fixedWidthFont: settings.get('useFixedWidthFont', false) ? 'fixed-width-font' : '',
+                    format: getType()
+                },
 
                 i18n: {
                     to: gt('To'),
@@ -88,7 +96,7 @@ define('io.ox/mail/print', [
 
                 process: process,
                 selection: selection,
-                selector: '.mail' + '-' + type,
+                selector: '.mail',
                 sortBy: 'sort_date',
                 window: win
             });

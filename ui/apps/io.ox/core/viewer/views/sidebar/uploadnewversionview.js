@@ -18,25 +18,16 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     'io.ox/core/tk/dialogs',
     'io.ox/files/util',
     'io.ox/core/extensions',
+    'io.ox/files/upload/main',
     'settings!io.ox/files',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, FilesAPI, folderApi, Dialogs, util, ext, settings, gt) {
+], function (DisposableView, FilesAPI, folderApi, Dialogs, util, ext, fileUpload, settings, gt) {
 
     'use strict';
 
     var POINT = 'io.ox/core/viewer/upload-new-version',
         // TODO: switch to related capability when available
         COMMENTS = settings.get('features/comments', true);
-
-    /**
-     * notifications lazy load
-     */
-    function notify() {
-        var self = this, args = arguments;
-        require(['io.ox/core/notifications'], function (notifications) {
-            notifications.yell.apply(self, args);
-        });
-    }
 
     /**
      * dialog
@@ -57,7 +48,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         id: 'body',
         draw: function (baton) {
             baton.$.append(
-                $('<textarea rows="6" class="form-control comment" tabindex="1">')
+                $('<textarea rows="6" class="form-control comment">')
             );
         }
     });
@@ -67,7 +58,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         id: 'primary',
         draw: function (baton) {
             var self = this;
-            baton.$.addPrimaryButton('upload', gt('Upload'), 'upload', { 'tabIndex': '1' })
+            baton.$.addPrimaryButton('upload', gt('Upload'), 'upload')
                 .on('upload', function () {
                     var comment = baton.$.getContentNode().find('textarea.comment').val() || '';
                     // upload file
@@ -81,7 +72,7 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         id: 'cancel',
         draw: function (baton) {
             var self = this;
-            baton.$.addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+            baton.$.addButton('cancel', gt('Cancel'), 'cancel')
                 .on('cancel', function () {
                     // reset file input
                     _.first(self.$('input[type="file"]')).value = '';
@@ -137,22 +128,27 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
 
         upload: function (comment) {
             var data = {
-                file: this.getFile(),
-                id: this.model.get('id'),
-                folder: this.model.get('folder_id')
-            };
+                    folder: this.model.get('folder_id'),
+                    id: this.model.get('id'),
+                    // If file already encrypted, update should also be encrypted
+                    params: this.model.isEncrypted() ? { 'cryptoAction': 'Encrypt' } : {}
+                },
+                node = this.app ? this.app.getWindowNode() : this.$el.closest('.io-ox-viewer').find('.viewer-displayer');
 
             if (COMMENTS) data.version_comment = comment || '';
 
-            FilesAPI.versions.upload(data).fail(notify);
+            fileUpload.setWindowNode(node);
+            fileUpload.update.offer(this.getFile(), data);
         },
 
-        initialize: function () {
+        initialize: function (options) {
+            options = options || {};
             // attach event handlers
             this.on('dispose', this.disposeView.bind(this));
             if (!this.model || !this.model.isFile()) {
                 this.$el.hide();
             }
+            this.app = options.app;
         },
 
         render: function () {

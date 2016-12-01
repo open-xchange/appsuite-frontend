@@ -31,6 +31,7 @@ define('io.ox/mail/main', [
     'io.ox/core/folder/view',
     'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
+    'io.ox/mail/categories/mediator',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'io.ox/mail/actions',
@@ -40,7 +41,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, gt, settings) {
 
     'use strict';
 
@@ -55,6 +56,7 @@ define('io.ox/mail/main', [
     var openMessageByKeyboard = false;
 
     app.mediator({
+
         /*
          * Init pages for mobile use
          * Each View will get a single page with own
@@ -258,16 +260,6 @@ define('io.ox/mail/main', [
         },
 
         /*
-         * Convenience function to toggle folder view
-         */
-        'folder-view-toggle': function (app) {
-            if (_.device('smartphone')) return;
-            app.getWindow().nodes.main.on('dblclick', '.list-view-control .toolbar', function () {
-                app.folderView.toggle();
-            });
-        },
-
-        /*
          * Default application properties
          */
         'props': function (app) {
@@ -288,6 +280,8 @@ define('io.ox/mail/main', [
                 'contactPictures': _.device('smartphone') ? false : app.settings.get('showContactPictures', false),
                 'exactDates': app.settings.get('showExactDates', false),
                 'alwaysShowSize': app.settings.get('alwaysShowSize', false),
+                'categories': app.settings.get('categories/enabled', false),
+                'category_id': categories.getInitialCategoryId(),
                 'mobileFolderSelectMode': false
             });
         },
@@ -377,8 +371,11 @@ define('io.ox/mail/main', [
          */
         'list-view': function (app) {
             app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
-            app.listView.model.set({ folder: app.folder.get() });
-            app.listView.model.set('thread', true);
+            app.listView.model.set({
+                category_id: categories.getInitialCategoryId(),
+                folder: app.folder.get(),
+                thread: true
+            });
             // for debugging
             window.list = app.listView;
         },
@@ -504,7 +501,8 @@ define('io.ox/mail/main', [
                     .set('layout', data.layout)
                     .set('showContactPictures', data.contactPictures)
                     .set('showExactDates', data.exactDates)
-                    .set('alwaysShowSize', data.alwaysShowSize);
+                    .set('alwaysShowSize', data.alwaysShowSize)
+                    .set('categories/enabled', data.categories);
                 if (_.device('!smartphone')) {
                     app.settings.set('showCheckboxes', data.checkboxes);
                 }
@@ -800,7 +798,7 @@ define('io.ox/mail/main', [
                 // defer so that all selection events are triggered (e.g. selection:all)
                 _.defer(function () {
                     // tabbed inbox / mail categories: absolute tab count is unknown
-                    var inTab = app.categories && app.categories.props.get('enabled') && app.categories.props.get('visible'),
+                    var inTab = categories.isVisible(),
                         count = $('<span class="number">').text(list.length).prop('outerHTML');
                     app.right.find('.multi-selection-message .message')
                         .empty()
@@ -974,7 +972,7 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
             app.applyLayout = function () {
 
-                var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, className,
+                var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, categoriesToolbar, className,
                     savedWidth = app.settings.get('listview/width/' + _.display()),
                     savedHeight = app.settings.get('listview/height/' + _.display());
 
@@ -1006,13 +1004,21 @@ define('io.ox/mail/main', [
 
                 // relocate toolbar
                 toolbar = nodes.body.find('.classic-toolbar-container');
+                categoriesToolbar = nodes.body.find('.categories-toolbar-container');
                 className = 'classic-toolbar-visible';
+
                 if (layout === 'compact') {
                     nodes.body.removeClass(className);
                     app.right.addClass(className).prepend(toolbar);
+                    if (categoriesToolbar.length > 0) {
+                        app.right.prepend(categoriesToolbar);
+                    }
                 } else {
                     app.right.removeClass(className);
                     nodes.body.addClass(className).prepend(toolbar);
+                    if (categoriesToolbar.length > 0) {
+                        nodes.body.prepend(categoriesToolbar);
+                    }
                 }
 
                 if (layout !== 'list' && app.props.previousAttributes().layout === 'list' && !app.right.hasClass('preview-visible')) {
@@ -1173,16 +1179,13 @@ define('io.ox/mail/main', [
             }
 
             api.on('beforedelete', function (e, ids) {
-                var selection = app.listView.selection.get(), cids;
+                var selection = app.listView.selection.get();
                 if (isSingleThreadMessage(ids, selection)) return;
-                // intersection check for Bug 49086, 41861
-                cids = _(ids).map(_.cid);
-                if (_.intersection(cids, selection).length) {
-                    // change selection
+                // looks for intersection
+                ids = _(ids).map(_.cid);
+                if (_.intersection(ids, selection).length) {
                     app.listView.selection.dodge();
-                    // optimization for many items
                     if (ids.length === 1) return;
-                    // remove all DOM elements of current collection; keep the first item
                     app.listView.onBatchRemove(ids.slice(1));
                 }
             });
@@ -1544,7 +1547,7 @@ define('io.ox/mail/main', [
             });
             api.on('autosave send', function () {
                 var folder = app.folder.get();
-                if (folderAPI.is('drafts', folder)) app.listView.reload();
+                if (account.is('drafts', folder)) app.listView.reload();
             });
         },
 
@@ -1558,10 +1561,14 @@ define('io.ox/mail/main', [
                     var $el = $('<div class="generic-toolbar bottom mail-progress">')
                         .hide()
                         .append(
-                            $('<div class="progress"><div class="progress-bar"></div></div>'),
+                            $('<div class="progress">').append(
+                                $('<div class="progress-bar">')
+                            ),
                             $('<div class="caption">').append(
                                 $('<span>'),
-                                $('<a href="#" class="close" data-action="close" role="button" tabindex="1"><i class="fa fa-times"></i></a>')
+                                $('<a href="#" class="close" data-action="close" role="button">').attr('aria-label', gt('Close')).append(
+                                    $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))
+                                )
                             )
                        );
                     api.queue.collection.on('progress', function (data) {
@@ -1672,18 +1679,26 @@ define('io.ox/mail/main', [
                     });
                 });
                 // check for clicks in folder trew
-                app.on('folder:change', function (folder) {
-                    metrics.trackEvent({
-                        app: 'mail',
-                        target: 'folder',
-                        type: 'click',
-                        action: 'select',
-                        detail: account.isPrimary(folder) ? 'primary' : 'external'
-                    });
+                app.on('folder:change folder-virtual:change', function (folder, data) {
+                    data = data || {};
+                    metrics.getFolderFlags(folder)
+                        .then(function (list) {
+                            // unfied
+                            if (folderAPI.is('unifiedfolder', data)) list.unshift('unfified');
+                            // primary vs. external
+                            list.unshift(folderAPI.is('external', data) ? 'external' : 'primary');
+                            metrics.trackEvent({
+                                app: 'mail',
+                                target: 'folder',
+                                type: 'click',
+                                action: 'select',
+                                detail: list.join('/')
+                            });
+                        });
                 });
                 // selection in listview
                 app.listView.on({
-                    'selection:multiple selection:one': function (list) {
+                    'selection:multiple selection:one': _.throttle(function (list) {
                         metrics.trackEvent({
                             app: 'mail',
                             target: 'list/' + app.props.get('layout'),
@@ -1691,46 +1706,135 @@ define('io.ox/mail/main', [
                             action: 'select',
                             detail: list.length > 1 ? 'multiple' : 'one'
                         });
-                    }
+                    }, 100, { trailing: false })
                 });
             });
         },
 
-        'mail-categories': function (app) {
-            if (_.device('smartphone')) return;
-            if (!capabilities.has('mail_categories')) return;
+        'unified-folder-support': function () {
+            // only register if we have a unified mail account
+            account.getUnifiedMailboxName().done(function (unifiedMailboxName) {
+                if (!unifiedMailboxName) {
+                    return;
+                }
 
-            var mapper;
-            // register settings listener
-            if (settings.get('categories/enabled')) refresh();
-            settings.on('change:categories/enabled', refresh);
+                var checkForSync = function (model) {
+                    // check if we need to sync unified folders
+                    var accountId = api.getAccountIDFromFolder(model.get('folder_id')),
+                        folderTypes = {
+                            7: 'INBOX',
+                            9: 'Drafts',
+                            10: 'Sent',
+                            11: 'Spam',
+                            12: 'Trash'
+                        };
 
-            var Mapper = function (cat) {
-                var mapper = {
-                    initialize: function () {
-                        cat.init({ mail: app, pool: api.pool.get('detail') });
-                        this.categories = cat;
-                        return this;
-                    },
-                    refresh: function () {
-                        this.categories.config.load();
-                    }
+                    return account.get(accountId).then(function (accountData) {
+                        var folder, originalFolderId, unifiedFolderId, unifiedSubfolderId;
+                        if (!accountData) {
+                            folder = folderAPI.pool.models[model.get('folder_id')];
+                            // check if we are in the unified folder
+                            if (folder && folder.is('unifiedfolder')) {
+                                originalFolderId = model.get('id').replace(/\/\w*$/, '');
+                                unifiedSubfolderId = model.get('folder_id') + '/' + originalFolderId;
+                                // unified folder has special mail ids
+                                var id = model.get('id').replace(originalFolderId + '/', '');
+
+                                return [{ folder_id: originalFolderId, id: id }, { folder_id: unifiedSubfolderId, id: id }];
+                            }
+                            //check if we are in the unified folder's subfolder
+                            folder = folderAPI.pool.models[folder.get('folder_id')];
+                            if (folder && folder.is('unifiedfolder')) {
+                                unifiedFolderId = folder.id;
+                                originalFolderId = model.get('folder_id').replace(folder.id + '/', '');
+                                // unified folder has special mail ids
+
+                                return [{ folder_id: unifiedFolderId, id: originalFolderId + '/' + model.get('id') }, { folder_id: originalFolderId, id: model.get('id') }];
+                            }
+                            return $.Deferred().reject();
+                        // check if we are in a standard folder that needs to be synced to a unified folder
+                        } else if (accountData.unified_inbox_enabled) {
+                            folder = folderAPI.pool.models[model.get('folder_id')];
+                            var folderType = folderTypes[folder.get('standard_folder_type')];
+
+                            if (folderType) {
+                                unifiedFolderId = unifiedMailboxName + '/' + folderType;
+                                unifiedSubfolderId = unifiedFolderId + '/' + folder.get('id');
+                                // unified folder has special mail ids
+
+                                return [{ folder_id: unifiedFolderId, id: model.get('folder_id') + '/' + model.get('id') }, { folder_id: unifiedSubfolderId, id: model.get('id') }];
+                            }
+
+                            return $.Deferred().reject();
+                        }
+                        return $.Deferred().reject();
+                    });
                 };
-                return mapper.initialize();
-            };
 
-            // apply settings change (enable/disable)
-            function refresh() {
-                // refresh config (triggers show/hide internally)
-                if (mapper) return mapper.refresh();
-                // in case require not resolved in time
-                mapper = { refresh: $.noop };
-                // init on first call of 'apply'
-                require(['io.ox/mail/categories/main'], function (cat) {
-                    app.categories = cat;
-                    mapper = new Mapper(cat);
+                api.pool.get('detail').on('change:flags', function (model, value, options) {
+                    options = options || {};
+
+                    if (!model || options.unifiedSync) return;
+
+                    // get previous and current flags to determine if unseen bit has changed
+                    var previous = util.isUnseen(model.previous('flags')),
+                        current = util.isUnseen(model.get('flags'));
+                    if (previous === current) return;
+                    checkForSync(model).done(function (modelsToSync) {
+                        _(modelsToSync).each(function (mail) {
+                            var obj = api.pool.get('detail').get(_.cid(mail));
+
+                            if (obj) {
+                                var changes = {
+                                    flags: current ? obj.get('flags') & ~32 : obj.get('flags') | 32
+                                };
+                                if (!current) {
+                                    changes.unseen = false;
+                                }
+                                obj.set(changes, { unifiedSync: true });
+
+                                // update thread model
+                                api.threads.touch(obj.attributes);
+                                api.trigger('update:' + _.ecid(obj.attributes), obj.attributes);
+                            } else {
+                                // detail models not loaded yet. Just trigger folder manually
+                                folderAPI.changeUnseenCounter(mail.folder_id, current ? +1 : -1);
+                            }
+                            // mark folder as expired in pool (needed for listviews to draw correct)
+                            api.pool.resetFolder(mail.folder_id);
+                        });
+                    });
                 });
-            }
+
+                api.pool.get('detail').on('remove', function (model) {
+                    if (!model) return;
+                    // check if removed message was unseen
+                    var unseen = util.isUnseen(model.get('flags'));
+                    checkForSync(model).done(function (modelsToSync) {
+                        _(modelsToSync).each(function (mail) {
+                            if (unseen) {
+                                folderAPI.changeUnseenCounter(mail.folder_id, -1);
+                            }
+                            // mark folder as expired in pool (needed for listviews to draw correct)
+                            api.pool.resetFolder(mail.folder_id);
+                        });
+                    });
+                });
+            });
+        },
+
+        'sockets': function (app) {
+            ox.on('socket:mail:new', function (data) {
+                folderAPI.reload(data.folder);
+                // push arries, other folder selected
+                if (data.folder !== app.folder.get(data.folder)) {
+                    _(api.pool.getByFolder(data.folder)).each(function (collection) {
+                        collection.expired = true;
+                    });
+                } else {
+                    app.listView.reload();
+                }
+            });
         }
     });
 

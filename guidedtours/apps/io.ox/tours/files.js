@@ -36,6 +36,7 @@ define('io.ox/tours/files', [
             blob = new window.Blob([SAMPLE_CONTENT], { type: 'text/plain' }),
             standardFolder = settings.get('folder/infostore'),
             file,
+            key,
             current = {},
             tour = new Tour();
 
@@ -50,8 +51,14 @@ define('io.ox/tours/files', [
             app.props.set('layout', current.view);
         }
 
+        //define as function or key is undefined
+        function getSelector() {
+            return '.list-view li[data-cid="' + key + '"]';
+        }
+
         api.upload({ folder: standardFolder, file: blob, filename: gt('The Drive app tour.txt') }).done(function (data) {
             file = data;
+            key = _.cid(data);
             api.trigger('refresh.all');
         });
 
@@ -79,9 +86,9 @@ define('io.ox/tours/files', [
             .step()
                 .title(gt('Folder content'))
                 .content(gt('Clicking on a folder displays all the subfolders, documents, media and other files that it contains.'))
-                .waitFor('.list-view li .filename:contains("The Drive app tour.txt")')
-                .spotlight('.list-view li .filename:contains("The Drive app tour.txt")', { position: 'left' })
-                .hotspot('.list-view li .filename:contains("The Drive app tour.txt")')
+                .waitFor(getSelector)
+                .spotlight(getSelector, { position: 'left' })
+                .hotspot(getSelector)
                 .on('close', cleanup)
                 .end()
             .step()
@@ -131,7 +138,7 @@ define('io.ox/tours/files', [
                 .title(gt('Preview files'))
                 .content(gt('Clicking on the view icon leads you to a preview of the selected file.'))
                 .on('before:show', function () {
-                    $('.list-view li .filename:contains("The Drive app tour.txt")').click();
+                    $('.list-view li[data-cid="' + key + '"]').click();
                 })
                 .waitFor('.classic-toolbar-container [data-action="viewer"]')
                 .spotlight('.classic-toolbar-container [data-action="viewer"]', { position: 'right' })

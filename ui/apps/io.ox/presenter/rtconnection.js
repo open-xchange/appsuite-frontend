@@ -74,11 +74,14 @@ define('io.ox/presenter/rtconnection', [
             // rt channel id
             channelId = 'presenter',
 
+            // rt group id
+            groupId = 'synthetic.' + channelId + '://operations/' + encodeFileAsResourceId(file),
+
             // create the core real-time group instance for the document
-            rtGroup = RTGroups.getGroup('synthetic.' + channelId + '://operations/' + encodeFileAsResourceId(file)),
+            rtGroup = RTGroups.existsGroup(groupId) ? null : RTGroups.getGroup(groupId),
 
             // private event hub for internal event handling
-            eventHub = new Events(),
+            eventHub = null,
 
             // duration for the realtime framework collecting messages before sending
             realTimeDelay = initOptions && initOptions.realTimeDelay || 100,
@@ -678,55 +681,9 @@ define('io.ox/presenter/rtconnection', [
             return 'ox://' + ox.user_id + '@' + ox.context_id + '/' + this.getUuid();
         };
 
-        // initialization -----------------------------------------------------
-
-        RTConnection.log('RTConnection initialization');
-
-        // read traceable actions from page URL
-        if (_.url.hash('office:trace')) {
-            _.each(_.url.hash('office:trace').split(/\s*,\s*/), function (action) {
-                traceActions[action.toLowerCase()] = true;
-            });
-        }
-
-        // register the internal event hub for request events and custom runtime events
-        registerRTEvents(PUSH_EVENTS);
-
-        // forward runtime realtime events to own listeners
-        rtGroup.on(INTERNAL_EVENTS, function (event, data) {
-            // special handling for reset event
-            if (event.type === 'reset') {
-                if (joining) {
-                    // If we are joining, reset is an indicator that a re-enroll
-                    // has been done. In that case we have to try to join again.
-                    // This must be limited to error code 1007 which means that
-                    // we have to re-enroll. A reset after we received a reset with
-                    // data.code 1007 is also normal, ignore that, too.
-                    // See #40096, the error structure changed
-                    if ((!rejoinPossible && (data && data.code === 1007)) || rejoinPossible) {
-                        if (!rejoinPossible) {
-                            rejoinPossible = true;
-                        }
-                    } else {
-                        // trigger reset otherwise
-                        self.trigger(event.type);
-                    }
-                } else {
-                    // trigger reset outside of join
-                    self.trigger(event.type);
-                }
-            } else {
-                self.trigger(event.type);
-            }
-        });
-
-        // forward OX Documents runtime events to own listeners
-        eventHub.on(PUSH_EVENTS, function (event, data) {
-            if (event.type === 'update') {
-                debugLogUpdateNotification(data);
-            }
-            self.trigger(event.type, data);
-        });
+        this.isInitialized = function () {
+            return _.isObject(rtGroup);
+        };
 
         // disconnect from the RT object, no further calls should be made at this object from now on
         this.dispose = function () {
@@ -747,6 +704,66 @@ define('io.ox/presenter/rtconnection', [
             // remove references
             traceActions = null;
         };
+
+        // initialization -----------------------------------------------------
+
+        RTConnection.log('RTConnection initialization');
+
+        // read traceable actions from page URL
+        if (_.url.hash('office:trace')) {
+            _.each(_.url.hash('office:trace').split(/\s*,\s*/), function (action) {
+                traceActions[action.toLowerCase()] = true;
+            });
+        }
+
+        function init() {
+            // create private event hub for internal event handling
+            eventHub = new Events();
+
+            // register the internal event hub for request events and custom runtime events
+            registerRTEvents(PUSH_EVENTS);
+
+            // forward runtime realtime events to own listeners
+            rtGroup.on(INTERNAL_EVENTS, function (event, data) {
+                // special handling for reset event
+                if (event.type === 'reset') {
+                    if (joining) {
+                        // If we are joining, reset is an indicator that a re-enroll
+                        // has been done. In that case we have to try to join again.
+                        // This must be limited to error code 1007 which means that
+                        // we have to re-enroll. A reset after we received a reset with
+                        // data.code 1007 is also normal, ignore that, too.
+                        // See #40096, the error structure changed
+                        if ((!rejoinPossible && (data && data.code === 1007)) || rejoinPossible) {
+                            if (!rejoinPossible) {
+                                rejoinPossible = true;
+                            }
+                        } else {
+                            // trigger reset otherwise
+                            self.trigger(event.type);
+                        }
+                    } else {
+                        // trigger reset outside of join
+                        self.trigger(event.type);
+                    }
+                } else {
+                    self.trigger(event.type);
+                }
+            });
+
+            // forward OX Documents runtime events to own listeners
+            eventHub.on(PUSH_EVENTS, function (event, data) {
+                if (event.type === 'update') {
+                    debugLogUpdateNotification(data);
+                }
+                self.trigger(event.type, data);
+            });
+        }
+
+        if (rtGroup) {
+            init();
+        }
+
 
     } // class RTConnection
 

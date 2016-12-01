@@ -13,8 +13,9 @@
 
 define('io.ox/core/tk/wizard', [
     'io.ox/backbone/disposable',
+    'io.ox/core/tk/hotspot',
     'gettext!io.ox/core'
-], function (DisposableView, gt) {
+], function (DisposableView, hotspot, gt) {
 
     'use strict';
 
@@ -116,7 +117,7 @@ define('io.ox/core/tk/wizard', [
         this.on('step:hide', function () {
             _(overlays).invoke('detach');
             backdrop.detach();
-            $('.wizard-hotspot').remove();
+            hotspot.removeAll();
         });
 
         // focus trap
@@ -260,6 +261,10 @@ define('io.ox/core/tk/wizard', [
 
         spotlight: function (selector) {
             if (!selector) return;
+            // allow dynamic selectors
+            if (_.isFunction(selector)) {
+                selector = selector();
+            }
             var elem = $(selector).filter(':visible');
             if (!elem.length) return;
             var bounds = getBounds(elem);
@@ -273,27 +278,8 @@ define('io.ox/core/tk/wizard', [
         },
 
         toggleBackdrop: function (state, color) {
-            backdrop.css('backgroundColor', color || null);
+            backdrop.css('backgroundColor', color || '');
             $('body').append(backdrop.toggle(!!state));
-        },
-
-        addHotspot: function (selector, options) {
-            if (!selector) return;
-            options = _.extend({ top: 0, left: 0, tooltip: '', selector: selector }, options);
-            // get a fresh node
-            var hotspot = $('<div class="wizard-hotspot">').data('options', options);
-            if (options.tooltip) hotspot.tooltip({ placement: 'auto top', title: options.tooltip });
-            $('body').append(this.positionHotspot(hotspot, options));
-        },
-
-        positionHotspot: function (hotspot, options) {
-            var elem = $(options.selector).filter(':visible');
-            if (!elem.length) return elem;
-            var bounds = getBounds(elem);
-            return hotspot.css({
-                top: bounds.top - 4 + options.top,
-                left: (bounds.left || (bounds.width / 2 >> 0)) - 4 + options.left
-            });
         }
     });
 
@@ -335,13 +321,18 @@ define('io.ox/core/tk/wizard', [
         },
 
         onKeyUp: function (e) {
+
+            function isInput(e) {
+                return $(e.target).is(':input');
+            }
+
             switch (e.which) {
                 // check if "close" button exists
                 case 27: if (this.$('.wizard-close').length) this.trigger('close'); break;
                 // check if "back" button is enabled and available
-                case 37: if (this.$('[data-action="back"]:enabled').length) this.trigger('back'); break;
+                case 37: if (!isInput(e) && this.$('[data-action="back"]:enabled').length) this.trigger('back'); break;
                 // check if "next" button is enabled and available
-                case 39: if (this.$('[data-action="next"]:enabled').length) this.trigger('next'); break;
+                case 39: if (!isInput(e) && this.$('[data-action="next"]:enabled').length) this.trigger('next'); break;
                 // no default
             }
         },
@@ -421,12 +412,12 @@ define('io.ox/core/tk/wizard', [
             this.$el.attr({
                 role: 'dialog',
                 // as we have a focus trap (modal dialog) we use tabindex=1 in this case
-                tabindex: 1,
+                tabindex: 0,
                 'aria-labelledby': 'dialog-title'
             })
             .append(
                 $('<div class="wizard-header">').append(
-                    $('<button class="wizard-close close pull-right" tabindex="1" data-action="close">').append(
+                    $('<button class="wizard-close close pull-right" data-action="close">').append(
                         $('<span aria-hidden="true">&times;</span>'),
                         $('<span class="sr-only">').text(gt('Close'))
                     ),
@@ -472,10 +463,10 @@ define('io.ox/core/tk/wizard', [
         },
 
         // internal; just add a button
-        addButton: addControl('<button class="btn" tabindex="1">'),
+        addButton: addControl('<button class="btn">'),
 
         // internal; just add a link
-        addLink: addControl('<a href="#" role="button" tabindex="1">'),
+        addLink: addControl('<a href="#" role="button">'),
 
         getLabelNext: function () {
             // determine this button label at run-time
@@ -555,6 +546,10 @@ define('io.ox/core/tk/wizard', [
 
             function waitFor(counter) {
                 if (counter === 0) this.trigger('wait');
+                // allow dynamic selectors
+                if (_.isFunction(this.options.waitFor.selector)) {
+                    this.options.waitFor.selector = this.options.waitFor.selector();
+                }
                 if (resolveSelector(this.options.waitFor.selector)) return cont.call(this);
                 var max = _.isNumber(this.options.waitFor.timeout) ? (this.options.waitFor.timeout * 10) : 50;
                 if (counter < max) {
@@ -566,18 +561,10 @@ define('io.ox/core/tk/wizard', [
             }
 
             function addHotspots() {
-                _(this.options.hotspot).each(function (hotspot) {
-                    if (_.isString(hotspot)) hotspot = [hotspot, {}];
-                    this.parent.addHotspot(hotspot[0], hotspot[1] || {});
+                _(this.options.hotspot).each(function (spot) {
+                    if (_.isString(spot)) spot = [spot, {}];
+                    hotspot.add(spot[0], spot[1] || {});
                 }, this);
-            }
-
-            function repositionHotspots() {
-                var parent = this.parent;
-                $('.wizard-hotspot').each(function () {
-                    var node = $(this), options = node.data('options');
-                    parent.positionHotspot(node, options);
-                });
             }
 
             function cont() {
@@ -595,10 +582,10 @@ define('io.ox/core/tk/wizard', [
                 if (this.options.spotlight) {
                     // apply spotlight
                     this.parent.toggleBackdrop(false);
-                    this.parent.spotlight(this.options.spotlight);
+                    this.parent.spotlight(this.options.spotlight.selector);
                     // respond to window resize
                     $(window).on('resize.wizard.spotlight', _.debounce(function () {
-                        this.parent.spotlight(this.options.spotlight);
+                        this.parent.spotlight(this.options.spotlight.selector);
                     }.bind(this), 100));
                 } else {
                     // toggle backdrop
@@ -608,7 +595,6 @@ define('io.ox/core/tk/wizard', [
                 // show hotspot
                 if (this.options.hotspot) {
                     addHotspots.call(this);
-                    $(window).on('resize.wizard.hotspot', _.debounce(repositionHotspots.bind(this), 100));
                 }
 
                 // scroll?
@@ -691,6 +677,10 @@ define('io.ox/core/tk/wizard', [
 
         // show hotspot
         hotspot: function (selector, options) {
+            // allow dynamic selectors
+            if (_.isFunction(selector)) {
+                selector = selector();
+            }
             this.options.hotspot = _.isArray(selector) ? selector : [[selector, options]];
             this.options.backdropColor = 'rgba(255, 255, 255, 0.01)';
             return this;
@@ -710,7 +700,7 @@ define('io.ox/core/tk/wizard', [
 
         // wait for element for be visible
         waitFor: function (selector, timeout) {
-            this.options.waitFor = { selector: selector, timout: timeout };
+            this.options.waitFor = { selector: selector, timeout: timeout };
             return this;
         },
 
@@ -733,7 +723,7 @@ define('io.ox/core/tk/wizard', [
             // fall back to selector from referTo() or spotlight()
             if (!selector) {
                 if (this.options.referTo) return this.align(this.options.referTo);
-                if (this.options.spotlight) return this.align(this.options.spotlight);
+                if (this.options.spotlight) return this.align(this.options.spotlight.selector);
                 return;
             }
 

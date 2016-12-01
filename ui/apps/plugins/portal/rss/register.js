@@ -67,7 +67,7 @@ define('plugins/portal/rss/register', [
 
             var data = baton.data,
                 count = _.device('smartphone') ? 5 : 10,
-                $content = $('<ul class="content pointer list-unstyled" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the rss stream.') + '">');
+                $content = $('<ul class="content pointer list-unstyled" tabindex="0" role="button" aria-label="' + gt('Press [enter] to jump to the rss stream.') + '">');
 
             if (data.items.length === 0) {
                 $('<li class="item">').text(gt('No RSS feeds found.')).appendTo($content);
@@ -132,8 +132,8 @@ define('plugins/portal/rss/register', [
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true }),
-            $url = $('<textarea id="rss_url" class="form-control" rows="5">').attr({ placeholder: 'http://', tabindex: 1 }),
-            $description = $('<input id="rss_desc" type="text" class="form-control" tabindex="1">'),
+            $url = $('<textarea id="rss_url" class="form-control" rows="5" placeholder="http://">'),
+            $description = $('<input id="rss_desc" type="text" class="form-control">'),
             $error = $('<div class="alert alert-danger">').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
 
@@ -151,8 +151,8 @@ define('plugins/portal/rss/register', [
                     )
                 );
             })
-            .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
-            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+            .addPrimaryButton('save', gt('Save'), 'save')
+            .addButton('cancel', gt('Cancel'), 'cancel')
             .show(function () {
                 $url.focus();
             });

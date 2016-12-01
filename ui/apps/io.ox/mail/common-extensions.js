@@ -35,8 +35,8 @@ define('io.ox/mail/common-extensions', [
     'use strict';
 
     // little helper
-    function isSearchActive(baton) {
-        return !!baton.app && !!baton.app.get('find') && baton.app.get('find').isActive();
+    function isSearchResult(baton) {
+        return !!baton.app && !!baton.app.props.get('find-result');
     }
 
     var extensions = {
@@ -77,11 +77,14 @@ define('io.ox/mail/common-extensions', [
             var data = baton.data,
                 size = api.threads.size(data),
                 single = size <= 1,
-                addresses = single && !isSearchActive(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from;
+                addresses = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
+                // search result: use image based on 'addresses'
+                picture = isSearchResult ? undefined : data.picture;
+
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: data.picture || (addresses && addresses[0] && addresses[0][1]) },
+                    { email: picture || (addresses && addresses[0] && addresses[0][1]) },
                     { width: 40, height: 40, effect: 'fadeIn' }
                 )
             );
@@ -125,7 +128,7 @@ define('io.ox/mail/common-extensions', [
 
             var data = baton.data,
                 single = !data.threadSize || data.threadSize === 1,
-                field = single && !isSearchActive(baton) && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
+                field = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
                 // get folder data to check capabilities:
                 // if bit 4096 is set, the server sort by local part not display name
                 capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
@@ -292,7 +295,7 @@ define('io.ox/mail/common-extensions', [
         // add orignal folder as label to search result items
         folder: function (baton) {
             // missing data or find currently inactive
-            if (!baton.data.original_folder_id || !isSearchActive(baton)) return;
+            if (!baton.data.original_folder_id || !isSearchResult(baton)) return;
             // add container
             var node = $('<span class="original-folder">').appendTo(this);
             // add breadcrumb
@@ -507,8 +510,11 @@ define('io.ox/mail/common-extensions', [
                 view.renderInlineLinks();
 
                 view.$el.on('click', 'li.item', function (e) {
+                    var node = $(e.currentTarget),
+                        clickTarget = $(e.target), id, data, baton;
 
-                    var node = $(e.currentTarget), id, data, baton;
+                    // skip if click was on the dropdown
+                    if (!clickTarget.attr('data-original')) return;
 
                     // skip attachments without preview
                     if (!node.attr('data-original')) return;
@@ -559,7 +565,7 @@ define('io.ox/mail/common-extensions', [
                     var showUnreadToggle = folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data);
                     if (!showUnreadToggle) return;
                     self.append(
-                        $('<a href="#" role="button" class="unread-toggle" tabindex="1">')
+                        $('<a href="#" role="button" class="unread-toggle">')
                         .attr({
                             'aria-label': getAriaLabel(baton.data),
                             'aria-pressed': util.isUnseen(baton.data)
@@ -596,7 +602,7 @@ define('io.ox/mail/common-extensions', [
 
                 this.append(
                     $('<div class="notification-item external-images">').append(
-                        $('<button type="button" class="btn btn-default btn-sm" tabindex="1">').text(gt('Show images')),
+                        $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show images')),
                         $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
                     )
                 );
@@ -677,8 +683,8 @@ define('io.ox/mail/common-extensions', [
 
                 this.append(
                     $('<div class="alert alert-info disposition-notification">').append(
-                        $('<button type="button" class="close" data-dismiss="alert" tabindex="1">&times;</button>'),
-                        $('<button type="button" class="btn btn-primary btn-sm" tabindex="1">').text(
+                        $('<button type="button" class="close" data-dismiss="alert">&times;</button>'),
+                        $('<button type="button" class="btn btn-primary btn-sm">').text(
                             //#. Respond to a read receipt request; German "Lesebestätigung senden"
                             gt('Send a read receipt')
                         ),

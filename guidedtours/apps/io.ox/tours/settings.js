@@ -29,8 +29,16 @@ define('io.ox/tours/settings', [
         .step()
             .title(gt('Opening the settings'))
             .content(gt('To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings.'))
-            .spotlight('.launcher .fa-bars')
-            .hotspot('.launcher .fa-bars')
+            .hotspot('#topbar-settings-dropdown a[data-action="settings"]')
+            .spotlight('#topbar-settings-dropdown a[data-action="settings"]')
+            .referTo('#topbar-settings-dropdown')
+            .waitFor('#topbar-settings-dropdown a[data-action="settings"]')
+            .on('wait', function () {
+                $('#topbar-settings-dropdown').css('display', 'block');
+            })
+            .on('hide', function () {
+                $('#topbar-settings-dropdown').css('display', '');
+            })
             .end()
         .step()
             .title(gt('How the settings are organized'))
@@ -47,14 +55,30 @@ define('io.ox/tours/settings', [
         .step()
             .title(gt('Opening the help'))
             .content(gt('To open the help, click the System menu icon on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window.'))
-            .spotlight('#io-ox-topbar .launcher .fa-bars')
-            .hotspot('#io-ox-topbar .launcher .fa-bars')
+            .hotspot('#topbar-settings-dropdown a.io-ox-context-help')
+            .spotlight('#topbar-settings-dropdown a.io-ox-context-help')
+            .referTo('#topbar-settings-dropdown')
+            .waitFor('#topbar-settings-dropdown a.io-ox-context-help')
+            .on('wait', function () {
+                $('#topbar-settings-dropdown').css('display', 'block');
+            })
+            .on('hide', function () {
+                $('#topbar-settings-dropdown').css('display', '');
+            })
             .end()
         .step()
             .title(gt('Signing out'))
             .content(gt('To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out.'))
-            .spotlight('#io-ox-topbar .launcher .fa-bars')
-            .hotspot('#io-ox-topbar .launcher .fa-bars')
+            .hotspot('#topbar-settings-dropdown a[data-action="logout"]')
+            .spotlight('#topbar-settings-dropdown a[data-action="logout"]')
+            .referTo('#topbar-settings-dropdown')
+            .waitFor('#topbar-settings-dropdown a[data-action="logout"]')
+            .on('wait', function () {
+                $('#topbar-settings-dropdown').css('display', 'block');
+            })
+            .on('hide', function () {
+                $('#topbar-settings-dropdown').css('display', '');
+            })
             .end()
         .start();
     });

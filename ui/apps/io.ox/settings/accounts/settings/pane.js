@@ -19,15 +19,22 @@ define('io.ox/settings/accounts/settings/pane', [
     'io.ox/core/folder/api',
     'io.ox/settings/util',
     'io.ox/core/notifications',
+    'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/disposable',
     'io.ox/core/api/filestorage',
+    'settings!io.ox/core',
     'gettext!io.ox/settings/accounts',
     'io.ox/backbone/mini-views/settings-list-view',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, listUtils, DisposableView, filestorageApi, gt, ListView) {
+], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, mini, listUtils, DisposableView, filestorageApi, coreSettings, gt, ListView) {
 
     'use strict';
+
+    // make sure changes get saved
+    coreSettings.on('change:security/acceptUntrustedCertificates', function () {
+        this.save();
+    });
 
     var collection,
 
@@ -57,20 +64,30 @@ define('io.ox/settings/accounts/settings/pane', [
             if (submodules.length === 0) return;
 
             return $('<div class="btn-group col-md-4 col-xs-12">').append(
-                $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
+                $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true">').append(
                     $.txt(gt('Add account')), $.txt(' '),
                     $('<span class="caret">')
                 ),
                 $('<ul class="dropdown-menu" role="menu">').append(
                    _(submodules).map(function (submodule) {
                        return $('<li role="presentation">').append(
-                           $('<a href="#" role="menuitem" tabindex="1">')
+                           $('<a href="#" role="menuitem">')
                            .attr('data-actionname', submodule.actionName || submodule.id || '')
                            .text(submodule.displayName)
                            .on('click', { submodule: submodule }, onAddSubmodule)
                        );
                    })
                )
+            );
+        },
+
+        drawCertificateValidation = function () {
+            return $('<div class="form-group">').append(
+                $('<div class="checkbox">').append(
+                    $('<label class="control-label">').text(gt('Allow connections with untrusted certificates')).prepend(
+                        new mini.CheckboxView({ name: 'security/acceptUntrustedCertificates', model: coreSettings }).render().$el
+                    )
+                )
             );
         },
 
@@ -193,8 +210,8 @@ define('io.ox/settings/accounts/settings/pane', [
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({ async: true })
                     .text(gt('Do you really want to delete this account?'))
-                    .addPrimaryButton('delete', gt('Delete account'), 'delete', { tabIndex: 1 })
-                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                    .addPrimaryButton('delete', gt('Delete account'), 'delete')
+                    .addButton('cancel', gt('Cancel'), 'cancel')
                     .on('delete', function () {
                         var popup = this;
                         settingsUtil.yellOnReject(
@@ -273,6 +290,10 @@ define('io.ox/settings/accounts/settings/pane', [
                     });
 
                 $pane.append(accountsList.render().$el);
+
+                if (coreSettings.isConfigurable('security/acceptUntrustedCertificates')) {
+                    $pane.append(drawCertificateValidation());
+                }
 
                 if (collection.length > 1) {
                     $pane.append(drawRecoveryButtonHeadline(), drawRecoveryButton());

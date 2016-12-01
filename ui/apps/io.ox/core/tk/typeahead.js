@@ -46,7 +46,6 @@ define('io.ox/core/tk/typeahead', [
                 return this.api.search(query);
             },
             click: $.noop,
-            tabindex: 1,
             // Max limit for draw operation in dropdown
             maxResults: 25,
             // Select first element on result callback
@@ -143,7 +142,7 @@ define('io.ox/core/tk/typeahead', [
                 templates: {
                     suggestion: o.suggestion || function (result) {
                         var node = $('<div class="autocomplete-item">');
-                        ext.point(o.extPoint + '/autoCompleteItem').invoke('draw', node, result);
+                        ext.point(o.extPoint + '/autoCompleteItem').invoke('draw', node, result, o);
                         return node;
                     },
                     header: function (data) {
@@ -160,10 +159,10 @@ define('io.ox/core/tk/typeahead', [
                 self = this;
 
             this.$el.attr({
-                tabindex: this.options.tabindex,
                 placeholder: this.options.placeholder,
                 'aria-label': this.options.ariaLabel
-            }).on({
+            })
+            .on({
                 // dirty hack to get a reliable info about open/close state
                 'typeahead:closed': function () {
                     var dropdown = self.$el.closest('.twitter-typeahead').find('.tt-dropdown-menu');
@@ -183,6 +182,22 @@ define('io.ox/core/tk/typeahead', [
 
             if (this.options.init) {
                 this.$el.typeahead.apply(this.$el, this.typeaheadOptions);
+
+                // custom callback function
+                this.$el.data('ttTypeahead').input._callbacks.enterKeyed.sync[0] = function onEnterKeyed(type, $e) {
+                    var cursorDatum = this.dropdown.getDatumForCursor(),
+                        topSuggestionDatum = this.dropdown.getDatumForTopSuggestion(),
+                        hint = this.input.getHint();
+
+                    // if the hint is not empty the user is just hovering over the cursorDatum and has not really selected it. Use topSuggestion (the hint value) instead.See Bug 48542
+                    if (cursorDatum && _.isEmpty(hint)) {
+                        this._select(cursorDatum);
+                        $e.preventDefault();
+                    } else if (this.autoselect && topSuggestionDatum) {
+                        this._select(topSuggestionDatum);
+                        $e.preventDefault();
+                    }
+                }.bind(this.$el.data('ttTypeahead'));
             }
 
             return this;

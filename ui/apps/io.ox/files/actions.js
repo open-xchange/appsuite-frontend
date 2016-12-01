@@ -16,6 +16,7 @@ define('io.ox/files/actions', [
     'io.ox/core/folder/api',
     'io.ox/files/api',
     'io.ox/files/util',
+    'io.ox/core/api/filestorage',
 
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
@@ -24,7 +25,7 @@ define('io.ox/files/actions', [
     'settings!io.ox/files',
     'gettext!io.ox/files'
 
-], function (folderAPI, api, util, ext, links, capabilities, settings, gt) {
+], function (folderAPI, api, util, filestorageApi, ext, links, capabilities, settings, gt) {
 
     'use strict';
 
@@ -49,7 +50,7 @@ define('io.ox/files/actions', [
             elem.siblings('input').remove();
 
             elem.after(
-                input = $('<input type="file" name="file" capture="camera" multiple>')
+                input = $('<input type="file" name="file" multiple>')
                 .css('display', 'none')
                 .on('change', function (e) {
                     var app = baton.app;
@@ -60,8 +61,9 @@ define('io.ox/files/actions', [
                         _(e.target.files).each(function (file) {
                             list.push(_.extend(file, { group: 'file' }));
                         });
+                        var options = _.extend({ folder: app.folder.get() }, baton.file_options);
                         fileUpload.setWindowNode(app.getWindowNode());
-                        fileUpload.create.offer(list, { folder: app.folder.get() });
+                        fileUpload.create.offer(list, options);
                     });
                     input.remove();
                 })
@@ -76,28 +78,50 @@ define('io.ox/files/actions', [
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                return util.conditionChain(
-                    e.collection.has('one', 'modify'),
-                    !util.hasStatus('lockedByOthers', e),
-                    (/\.(csv|txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
-                    (e.baton.openedBy !== 'io.ox/mail/compose'),
-                    util.isFolderType('!trash', e.baton)
-                );
+                return api.versions.getCurrentState(e.baton.data).then(function (currentVersion) {
+                    return util.conditionChain(
+                        currentVersion,
+                        e.collection.has('one', 'modify'),
+                        !util.hasStatus('lockedByOthers', e),
+                        (/\.(csv|txt|js|css|md|tmpl|html?)(\.pgp)?$/i).test(e.context.filename),
+                        (!(/\.pgp$/i).test(e.context.filename) || capabilities.has('guard-drive')),  // if has .pgp, must have Guard capability
+                        (e.baton.openedBy !== 'io.ox/mail/compose'),
+                        util.isFolderType('!trash', e.baton)
+                    );
+                });
             },
             action: function (baton) {
-                if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) {
-                    // if this was opened from the viewer, close it now
-                    if (baton.context && baton.context.viewerEvents) {
-                        baton.context.viewerEvents.trigger('viewer:close');
+                var launch = function (params) {
+                    if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) {
+                        // if this was opened from the viewer, close it now
+                        if (baton.context && baton.context.viewerEvents) {
+                            baton.context.viewerEvents.trigger('viewer:close');
+                        }
+                        return;
                     }
+                    ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id, params: _.extend({}, params) }).done(function () {
+                        // if this was opened from the viewer, close it now
+                        if (baton.context && baton.context.viewerEvents) {
+                            baton.context.viewerEvents.trigger('viewer:close');
+                        }
+                    });
+                };
+
+                // Check if Guard file.  If so, do auth then call with parameters
+                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.endsWith('.pgp')) && capabilities.has('guard-drive')) {
+                    require(['io.ox/guard/auth/authorizer'], function (guardAuth) {
+                        guardAuth.authorize().then(function (auth) {
+                            var params = {
+                                cryptoAction: 'Decrypt',
+                                cryptoAuth: auth
+                            };
+                            launch(params);
+                        });
+                    });
                     return;
                 }
-                ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id }).done(function () {
-                    // if this was opened from the viewer, close it now
-                    if (baton.context && baton.context.viewerEvents) {
-                        baton.context.viewerEvents.trigger('viewer:close');
-                    }
-                });
+
+                launch();
             }
         });
 
@@ -206,6 +230,10 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (e.collection.has('multiple')) return false;
             if (e.collection.has('folders')) return false;
+            // no 'open' menu entry for office documents, PDF and plain text
+            if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
+            if (api.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype)) return false;
+            if (api.Model.prototype.isText.call(this, e.baton.data.file_mimetype)) return false;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
@@ -298,6 +326,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/viewer', {
         requires: function (e) {
+            if (e.collection.has('guard') && !capabilities.has('guard-drive')) return false;
             return e.collection.has('some', 'items');
         },
         action: function (baton) {
@@ -322,11 +351,26 @@ define('io.ox/files/actions', [
                 return false;
             }
             var model = e.baton.models[0];
-            return ((model.isPresentation() || model.isPDF()) && model.isFile());
+            var type = model.isEncrypted() ? model.getGuardMimeType() : model.getMimeType();
+            return ((model.isPresentation(type) || model.isPDF(type)) && model.isFile(type));
         },
         action: function (baton) {
             var fileModel = baton.models[0];
-            ox.launch('io.ox/presenter/main', fileModel);
+            if (fileModel.isEncrypted()) {
+                require(['io.ox/guard/auth/authorizer'], function (authorizer) {
+                    authorizer.authorize().then(function (auth) {
+                        var params = {
+                            cryptoAction: 'Decrypt',
+                            cryptoAuth: auth,
+                        };
+                        fileModel.set('file_options', { params: params });
+                        ox.launch('io.ox/presenter/main', fileModel);
+                    });
+                });
+            } else {
+                ox.launch('io.ox/presenter/main', fileModel);
+            }
+
         }
     });
 
@@ -464,6 +508,12 @@ define('io.ox/files/actions', [
             if (util.hasStatus('lockedByOthers', e)) return false;
             // hide in mail compose preview
             if (e.baton.openedBy === 'io.ox/mail/compose') return false;
+            // use highly advanced magic to check capabilities, use try/catch, just in case
+            try {
+                if (filestorageApi.getAccountsCache().findWhere({ qualifiedId: folderAPI.pool.getModel(e.baton.data.folder_id || e.baton.data[0].folder_id).get('account_id') }).get('capabilities').indexOf('EXTENDED_METADATA') === -1) return false;
+            } catch (e) {
+                if (ox.debug) console.error(e);
+            }
             // access on folder?
             if (e.collection.has('modify')) return true;
             // check object permission
@@ -495,6 +545,8 @@ define('io.ox/files/actions', [
                 if (!e.collection.has('some')) return false;
                 if (e.baton.openedBy === 'io.ox/mail/compose') return false;
                 if (util.hasStatus('lockedByOthers', e)) return false;
+                // anonymous guests just have one folder so no valid target folder (see bug 42621)
+                if (capabilities.has('guest && anonymous')) return false;
                 // copy
                 if (type === 'copy') return e.collection.has('some', 'items', 'read');
                 // move
@@ -571,6 +623,7 @@ define('io.ox/files/actions', [
             // use current folder
             id = e.baton.app.folder.get();
         }
+        if (e.collection.has('guard')) return false;  // Guard sharing not supported currently
         if (!id) return false;
         // general capability and folder check
         model = folderAPI.pool.getModel(id);
@@ -971,6 +1024,16 @@ define('io.ox/files/actions', [
         mobile: 'lo',
         label: gt('Open'),
         ref: 'io.ox/files/actions/open'
+    }));
+
+    ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
+        id: 'editor',
+        index: 150,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Edit'),
+        section: 'edit',
+        ref: 'io.ox/files/actions/editor'
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({

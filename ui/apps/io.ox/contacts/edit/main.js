@@ -21,8 +21,9 @@ define('io.ox/contacts/edit/main', [
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
     'io.ox/core/util',
+    'io.ox/core/a11y',
     'less!io.ox/contacts/edit/style'
-], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
+], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil, a11y) {
 
     'use strict';
 
@@ -81,9 +82,7 @@ define('io.ox/contacts/edit/main', [
                         );
                         // no autofocus on smartphone and for iOS in special (see bug #36921)
                         if (_.device('!smartphone && !iOS')) {
-                            container.find('input[type=text]:visible').eq(0).focus();
-                            // focus first_name if visible
-                            container.find('[data-field="first_name"] input').eq(0).focus();
+                            a11y.getTabbable(container).first().focus();
                         }
 
                         editView.on('save:start', function () {
@@ -260,8 +259,8 @@ define('io.ox/contacts/edit/main', [
                         .text(gt('Do you really want to discard your changes?'))
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { 'tabIndex': '1' })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete')
+                        .addButton('cancel', gt('Cancel'), 'cancel')
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

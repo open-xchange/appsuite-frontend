@@ -74,7 +74,33 @@ define('io.ox/core/sub/subscriptions', [
                         notifications.yell('busy', gt('Checking credentials ...'));
                         var folder = self.model.attributes.folder;
 
-                        self.model.save().then(
+
+                        require(['io.ox/oauth/keychain']).then(function (oauth) {
+                            // optionally request oauth scope incrementally
+                            var account = oauth.accounts.get(self.model.source().account),
+                                hasAllScopes = (self.model.get('wantedScopes') || []).reduce(function (acc, scope) {
+                                    return acc && account.hasScope(scope);
+                                }, !!account);
+                            if (hasAllScopes) return;
+
+                            var def = $.Deferred();
+
+                            account.listenTo(account, 'sync', def.resolve);
+                            account.listenTo(account, 'error', function (m, resp) {
+                                def.reject(resp);
+                            });
+
+                            account
+                                .enableScopes(self.model.get('wantedScopes'))
+                                .save();
+
+                            return def;
+                        }).then(function () {
+                            // do not send wantedScopes to server, because those are used internally only
+                            self.model.unset('wantedScopes');
+
+                            return self.model.save();
+                        }).then(
                             function saveSuccess(id) {
                                 //set id, if none is present (new model)
                                 if (!self.model.id) { self.model.id = id; }
@@ -160,6 +186,12 @@ define('io.ox/core/sub/subscriptions', [
                         return (service.formDescription || []).length;
                     });
 
+                    if (app.subscription && _.isArray(app.subscription.wantedOAuthScopes)) {
+                        // app requires some oauth scopes for subscriptions
+                        // TODO: should this info come from the backend?
+                        self.model.set('wantedScopes', app.subscription.wantedOAuthScopes);
+                    }
+
                     var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: services, popup: popup, newFolder: true });
 
                     if (services.length > 0) {
@@ -236,7 +268,7 @@ define('io.ox/core/sub/subscriptions', [
             $('<strong>').text(label),
             $.txt(' '),
             $('<span>').html(msg),
-            $('<button type="button" data-dismiss="alert" class="btn btn-default close" tabindex="1">').text('x'))
+            $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
         );
 
     }
@@ -258,7 +290,7 @@ define('io.ox/core/sub/subscriptions', [
 
         function oauth(accountType) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600, resizable=yes, scrollbars=yes');
-            return keychainAPI.createInteractively(accountType, win);
+            return keychainAPI.createInteractively(accountType, win, baton.model.get('wantedScopes') || []);
         }
 
         _.each(service.formDescription, function (fd) {
@@ -267,9 +299,9 @@ define('io.ox/core/sub/subscriptions', [
                 var accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
                 if (accounts.length === 1) {
                     setSource(accounts[0].id);
-                    controls = $('<button type="button" class="btn btn-default disabled" tabindex="1">').text(accounts[0].displayName);
+                    controls = $('<button type="button" class="btn btn-default disabled">').text(accounts[0].displayName);
                 } else if (accounts.length > 1) {
-                    controls = $('<select name="' + fd.name + '">').on('change', function () {
+                    controls = $('<select>').attr('name', fd.name).on('change', function () {
                         setSource($(this).val());
                     });
                     _.each(accounts, function (account) {
@@ -280,7 +312,7 @@ define('io.ox/core/sub/subscriptions', [
                     // set initially to first account in list
                     setSource(accounts[0].id);
                 } else {
-                    controls = $('<button type="button" class="btn btn-default btn-new-account" tabindex="1">').text(gt('Add new account')).on('click', function () {
+                    controls = $('<button type="button" class="btn btn-default btn-new-account">').text(gt('Add new account')).on('click', function () {
                         oauth(getAccountType(fd.options.type)).done(function () {
                             buildForm(node, baton);
                         });
@@ -289,12 +321,12 @@ define('io.ox/core/sub/subscriptions', [
 
             } else {
                 var input_type = fd.name === 'password' ? 'password' : 'text';
-                controls = $('<input class="form-control" type="' + input_type + '" name="' + fd.name + '" tabindex="1">');
+                controls = $('<input class="form-control">').attr({ 'type': input_type, 'name': fd.name });
             }
             node.append(
-                $('<div>').addClass('control-group').append(
-                    $('<label>').addClass('control-label').attr('for', fd.name).text((fd.name === 'account' ? gt('Account') : fd.displayName)),
-                    $('<div>').addClass('controls').append(controls)
+                $('<div class="control-group">').append(
+                    $('<label class="control-label">').attr('for', fd.name).text((fd.name === 'account' ? gt('Account') : fd.displayName)),
+                    $('<div class="controls">').append(controls)
                 )
             );
         });
@@ -317,10 +349,10 @@ define('io.ox/core/sub/subscriptions', [
         draw: function (baton) {
             var node, userform;
 
-            this.append($('<div>').addClass('control-group').append(
-                $('<label>').addClass('control-label').attr('for', 'service-value').text(gt('Source')),
-                $('<div>').addClass('controls').append(
-                    node = $('<select>').attr('name', 'service-value').addClass('form-control service-value').on('change', function () {
+            this.append($('<div class="control-group">').append(
+                $('<label class="control-label" for="service-value">').text(gt('Source')),
+                $('<div class="controls">').append(
+                    node = $('<select name="service-value" class="form-control service-value">').on('change', function () {
                         userform.parent().find('.alert-danger').remove();
                         userform.parent().find('.error').removeClass('error');
                         baton.model.setSource(findId(baton.services, node.val()));
@@ -337,7 +369,7 @@ define('io.ox/core/sub/subscriptions', [
                 node.val(baton.model.source().service.id);
             }
 
-            this.append(userform = $('<div>').addClass('userform'));
+            this.append(userform = $('<div class="userform">'));
             buildForm(userform, baton);
 
         }
@@ -349,8 +381,8 @@ define('io.ox/core/sub/subscriptions', [
         draw: function (baton) {
             var destructive = isDestructiveSubscription(baton);
             this.append(
-                $('<div>').addClass('control-group').append(
-                    $('<div>').addClass('controls checkbox').append(
+                $('<div class="control-group">').append(
+                    $('<div class="controls checkbox">').append(
                         $('<label>').append(
                             $('<input type="checkbox">')
                                 .prop('checked', true)
@@ -381,11 +413,11 @@ define('io.ox/core/sub/subscriptions', [
         id: 'durationinformation',
         index: 300,
         draw: function () {
-            var fullNode = $('<div>').addClass('alert alert-info').css({ 'margin-bottom': 0, 'margin-top': '10px' }).append(
-                $('<b>').addClass('privacy-label').text(gt('Approximate Duration for Subscriptions')),
-                        $('<div>').addClass('privacy-text').text(
+            var fullNode = $('<div class="alert alert-info">').css({ 'margin-bottom': 0, 'margin-top': '10px' }).append(
+                $('<b class="privacy-label">').text(gt('Approximate Duration for Subscriptions')),
+                        $('<div class="privacy-text">').text(
                             gt('Updating subscribed data takes time. Importing 100 contacts for example, may take up to 5 minutes. Please have some patience.')));
-            var link = $('<div>').addClass('control-group').append($('<a href="#">').addClass('controls').text(gt('Approximate Duration for Subscriptions')).on('click', function (e) {
+            var link = $('<div class="control-group">').append($('<a href="#" class="controls">').text(gt('Approximate Duration for Subscriptions')).on('click', function (e) {
                 e.preventDefault();
                 link.replaceWith(fullNode);
             }));

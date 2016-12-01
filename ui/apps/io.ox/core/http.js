@@ -342,7 +342,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '1042': 'archive_fullname',
                 '1043': 'transport_auth',
                 '1044': 'mail_starttls',
-                '1045': 'transport_starttls'
+                '1045': 'transport_starttls',
+                '1046': 'root_folder',
+                '1047': 'mail_oauth',
+                '1048': 'transport_oauth'
             },
             'attachment': {
                 '1': 'id',
@@ -380,8 +383,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         },
         // extended permissions
         idMappingExcludes = ['3060', '7010'],
-        // list of error codes, which are not logged
-        errorBlacklist = ['SVL-0003', 'LGI-0006'];
+        // list of error codes, which are not logged (see bug 46098)
+        errorBlacklist = ['SVL-0003', 'SVL-0015', 'LGI-0006'];
 
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
@@ -622,6 +625,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
         if (isError) {
             // forward all errors to respond to special codes
+            ox.trigger('http:error:' + response.code, response);
             ox.trigger('http:error', response);
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
@@ -894,6 +898,12 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 try { hash = JSON.stringify(r.xhr); } catch (e) { if (ox.debug) console.error(e); }
 
                 if (r.o.consolidate !== false && hash && _.isArray(requests[hash])) {
+
+                    if (r.o.consolidate === 'reject') {
+                        r.def.reject({ error: 'request is already pending and consolidate parameter is set to reject', code: 'UI_CONSREJECT' });
+                        return;
+                    }
+
                     // enqueue callbacks
                     requests[hash].push(r);
                     r = hash = null;
@@ -1251,7 +1261,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         /**
          * Resume HTTP API. Send all queued requests as one multiple
          */
-        resume: function () {
+        resume: function (options) {
+            options = options || {};
             var def = $.Deferred(),
                 q = queue.slice();
             if (paused === true) {
@@ -1281,7 +1292,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                         module: 'multiple',
                         'continue': true,
                         data: tmp,
-                        appendColumns: false
+                        appendColumns: false,
+                        consolidate: options.consolidate
                     })
                     .done(function (data) {
                         // orchestrate callbacks and their data

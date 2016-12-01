@@ -1,0 +1,11 @@
+{
+    "title": "Notes",
+    "company": "Open-Xchange",
+    "icon": "default.png",
+    "category": "Basic",
+    "settings": false,
+    "requires": "notes && infostore",
+    "refreshable": true,
+    "index": 900,
+    "device": "!smartphone"
+}

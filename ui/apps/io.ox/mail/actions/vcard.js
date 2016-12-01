@@ -15,8 +15,10 @@
 define('io.ox/mail/actions/vcard', [
     'io.ox/core/notifications',
     'settings!io.ox/core',
-    'gettext!io.ox/mail'
-], function (notifications, coreConfig, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/contacts/api',
+    'io.ox/core/http'
+], function (notifications, coreConfig, gt, contactAPI, http) {
 
     'use strict';
 
@@ -46,11 +48,25 @@ define('io.ox/mail/actions/vcard', [
 
                     var contact = data[0], folder = coreConfig.get('folder/contacts');
 
+                    function preloadParticipants() {
+                        var dfd = $.Deferred();
+                        http.pause();
+                        _.each(contact.distribution_list, function (obj, key) {
+                            contactAPI.getByEmailaddress(obj.mail).done(
+                                function () {
+                                    if (key === contact.distribution_list.length - 1) dfd.resolve();
+                                }
+                            );
+                        });
+                        http.resume();
+                        return dfd;
+                    }
+
                     if (contact.mark_as_distributionlist) {
                         // edit distribution list
                         require(['io.ox/contacts/distrib/main'], function (m) {
-                            m.getApp(contact).launch().done(function () {
-                                this.create(folder, contact);
+                            $.when(m.getApp(contact).launch(), preloadParticipants()).done(function () {
+                                this[0].create(folder, contact);
                             });
                         });
                     } else {

@@ -63,7 +63,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                             dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date') + ' (' + moment.localeData().longDateFormat('l') + ')'),
                             timezoneContainer;
 
-                        self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">').attr({
+                        self.nodes.dayField = $('<input type="text" class="form-control datepicker-day-field">').attr({
                             id: guid,
                             'aria-describedby': ariaID
                         });
@@ -78,9 +78,7 @@ define('io.ox/backbone/mini-views/datepicker', [
 
                         // render time input
                         guid = _.uniqueId('form-control-label-');
-                        self.nodes.timeField = $('<input class="form-control time-field">').attr({
-                            type: 'text',
-                            tabindex: 1,
+                        self.nodes.timeField = $('<input type="text" class="form-control time-field">').attr({
                             id: guid,
                             'aria-describedby': guid + '-aria'
                         });
@@ -93,7 +91,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         if (!self.options.timezoneButton && !self.mobileMode) {
                             timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                         } else {
-                            timezoneContainer = self.nodes.timezoneField = $('<a class="timezone input-group-addon btn" data-toggle="popover" tabindex="1">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
+                            timezoneContainer = self.nodes.timezoneField = $('<button type="button" class="timezone input-group-addon btn" data-toggle="popover">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                             if (self.model.has('start_date') && self.model.has('end_date')) {
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
                                     calendarUtil.addTimezonePopover(
@@ -101,7 +99,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                                         self.model.attributes,
                                         {
                                             placement: 'top',
-                                            trigger: 'focus'
+                                            trigger: 'click'
                                         }
                                     );
                                 });
@@ -109,13 +107,9 @@ define('io.ox/backbone/mini-views/datepicker', [
                         }
 
                         // add a11y
-                        self.nodes.a11yDate = $('<p>')
-                            .attr({ id: ariaID })
-                            .addClass('sr-only')
+                        self.nodes.a11yDate = $('<p class="sr-only">').attr('id', ariaID)
                             .text(gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.'));
-                        self.nodes.a11yTime = $('<p>')
-                            .attr({ id: guid + '-aria' })
-                            .addClass('sr-only')
+                        self.nodes.a11yTime = $('<p class="sr-only">').attr('id', guid + '-aria')
                             .text(gt('Use up and down keys to change the time. Close selection by pressing ESC key.'));
 
                         return [
@@ -153,15 +147,9 @@ define('io.ox/backbone/mini-views/datepicker', [
                     def.resolve();
                 });
             } else {
-                require(['io.ox/core/tk/datepicker'], function () {
-                    // get the right date format and init datepicker
-                    self.nodes.dayField.datepicker({
-                        clearBtn: self.options.clearButton,
-                        parentEl: self.$el
-                    }).on('clearDate', function () {
-                        // clear the timefield too if the clearbutton is pressed
-                        self.nodes.timeField.val('');
-                    });
+                require(['io.ox/backbone/views/datepicker', 'io.ox/core/tk/datepicker'], function (Picker) {
+
+                    new Picker({ date: self.model.get(self.attribute) }).attachTo(self.nodes.dayField);
 
                     // build and init timepicker based on combobox plugin
                     var hours_typeahead = [],
@@ -207,26 +195,18 @@ define('io.ox/backbone/mini-views/datepicker', [
             // clear if set to null
             if (_.isNull(this.model.get(this.attribute))) {
                 this.nodes.dayField.val('');
-                if (this.nodes.timeField) {
-                    this.nodes.timeField.val('');
-                }
+                if (this.nodes.timeField) this.nodes.timeField.val('');
             }
             var timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
             if (_.isNaN(timestamp)) return;
             timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
+            this.nodes.dayField.val(this.getDateStr(timestamp));
             if (!this.mobileMode) {
                 this.nodes.timeField.val(timestamp.format('LT'));
-                // check if datepicker plugin is not loaded and initialized
-                // if not initialized, the update call would create a new datepicker, using the standard values. So the clear button might be missing etc.
-                if (this.nodes.dayField.datepicker && this.nodes.dayField.data('datepicker')) {
-                    this.nodes.dayField.datepicker('update', this.getDateStr(timestamp));
-                } else {
-                    this.nodes.dayField.val(this.getDateStr(timestamp));
-                }
                 this.nodes.timezoneField.text(gt.noI18n(timestamp.zoneAbbr()));
-            } else {
-                this.nodes.dayField.val(this.getDateStr(timestamp));
             }
+            // trigger change after all fields are updated, not before. Otherwise we update the model with a wrong time value
+            this.nodes.dayField.trigger('change');
         },
 
         updateModel: function () {

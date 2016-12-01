@@ -79,8 +79,8 @@ define('io.ox/files/actions/delete', [
 
         dialog.text(deleteNotice)
             .append($('<p>').text(isShared() ? shareNotice : ''))
-            .addPrimaryButton('delete', gt('Delete'), 'delete', { 'tabIndex': '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' })
+            .addPrimaryButton('delete', gt('Delete'), 'delete')
+            .addButton('cancel', gt('Cancel'), 'cancel')
             .on('delete', function () {
                 _.defer(function () { process(list); });
             })

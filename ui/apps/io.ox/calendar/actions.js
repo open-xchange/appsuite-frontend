@@ -213,11 +213,11 @@ define('io.ox/calendar/actions', [
                         .append($('<h4>').text(gt('Do you want the appointments printed in detail or as a compact list?')));
 
                     //#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
-                    dialog.addPrimaryButton('detailed', gt('Detailed'), 'detailed', { tabIndex: '1' });
+                    dialog.addPrimaryButton('detailed', gt('Detailed'), 'detailed');
                     //#. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
-                    dialog.addButton('compact', gt('Compact'), 'compact', { tabIndex: '1' });
+                    dialog.addButton('compact', gt('Compact'), 'compact');
 
-                    dialog.addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' })
+                    dialog.addButton('cancel', gt('Cancel'), 'cancel')
                         .show()
                         .done(function (action) {
                             if (action === 'detailed') {
@@ -318,7 +318,7 @@ define('io.ox/calendar/actions', [
         }
     });
 
-    /*new Action('io.ox/calendar/actions/freebusy', {
+    new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone !guest',
         requires: function () {
             return _.device('!smartphone');
@@ -339,32 +339,12 @@ define('io.ox/calendar/actions', [
                     }
                 }
 
-                freetime.showDialog({ startDate: startDate, participants: [{ id: ox.user_id, type: 1 }] }).done(function (data) {
-                    var view = data.view;
-                    data.dialog.on('save', function () {
-                        var appointment = view.createAppointment();
-
-                        if (appointment) {
-                            data.dialog.close();
-                            appointment.folder = baton.app.folder.get();
-                            ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
-                                edit.getApp().launch().done(function () {
-                                    this.create(appointment);
-                                });
-                            });
-                        } else {
-                            data.dialog.idle();
-                            require(['io.ox/core/yell'], function (yell) {
-                                yell('info', gt('Please select a time for the appointment'));
-                            });
-                        }
-                    });
-                });
+                freetime.getApp().launch({ startDate: startDate, participants: [{ id: ox.user_id, type: 1 }] });
             });
         }
-    });*/
+    });
 
-    new Action('io.ox/calendar/actions/freebusy', {
+    /*new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone !guest',
         requires: function () {
             return _.device('!smartphone');
@@ -379,7 +359,7 @@ define('io.ox/calendar/actions', [
                 start_date: start_date
             });
         }
-    });
+    });*/
 
     // Actions mobile
     new Action('io.ox/calendar/actions/dayview/showNext', {

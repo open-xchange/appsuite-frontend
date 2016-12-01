@@ -11,8 +11,16 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-.taskNotification .status { float: right; }
-.taskNotification .info-wrapper { min-height: 19px;}
+.taskNotification  {
+    .status {
+        float: right;
+        margin-top: 4px;
+        margin-bottom: 2px;
+    }
+    .info-wrapper {
+        min-height: 24px;
+    }
+}
 #io-ox-notifications {
     #io-ox-notifications-confirmation-tasks {
         .stateselect{
@@ -22,5 +30,8 @@
         }
 
         .accept-decline-button { margin-right: 14px }
+    }
+    .end_date {
+        line-height: 24px;
     }
 }

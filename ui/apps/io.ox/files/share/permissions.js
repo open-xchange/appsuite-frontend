@@ -528,7 +528,7 @@ define('io.ox/files/share/permissions', [
                             baton.model.isUser() ? baton.model.getDisplayName(true) : $.txt(baton.model.getDisplayName())
                         ),
                         $('<div class="description">').append(
-                            url ? $('<a href="" target="_blank" tabindex="1">').attr('href', url).text(url) : $.txt(baton.view.description)
+                            url ? $('<a href="" target="_blank">').attr('href', url).text(url) : $.txt(baton.view.description)
                         )
                     )
                 );
@@ -943,8 +943,8 @@ define('io.ox/files/share/permissions', [
             if (supportsChanges) {
                 // add action buttons
                 dialog
-                    .addPrimaryButton('save', options.share ? gt('Share') : gt('Save'), 'save', { tabindex: 1 })
-                    .addButton('cancel', gt('Cancel'), 'cancel', { tabindex: 1 });
+                    .addPrimaryButton('save', options.share ? gt('Share') : gt('Save'), 'save')
+                    .addButton('cancel', gt('Cancel'), 'cancel');
             } else {
                 dialog.addPrimaryButton('cancel', gt('Close'));
             }

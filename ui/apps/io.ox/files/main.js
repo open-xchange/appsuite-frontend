@@ -52,7 +52,7 @@ define('io.ox/files/main', [
     var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
-        sidebarView = new Sidebarview({ closable: true });
+        sidebarView = new Sidebarview({ closable: true, app: app });
 
     app.mediator({
 
@@ -206,7 +206,14 @@ define('io.ox/files/main', [
             var quota = new QuotaView({
                 title: gt('File quota'),
                 renderUnlimited: false,
-                module: 'file'
+                module: 'file',
+                upsell: {
+                    title: gt('Need more space?'),
+                    requires: 'boxcom || google || msliveconnect',
+                    id: 'files-folderview-quota',
+                    icon: ''
+                },
+                upsellLimit: 5 * 1024 * 1024 // default upsell limit of 5 mb
             });
             // add some listeners
             folderAPI.on('clear', function () {
@@ -268,9 +275,11 @@ define('io.ox/files/main', [
 
             app.getViewOptions = function (folder) {
                 var options = app.settings.get(['viewOptions', folder], {}),
-                    defaultSort = folder === 'virtual/myshares' ? 5 : 702;
+                    defaultSort = folder === 'virtual/myshares' ? 5 : 702,
+                    defaultOrder = folder === 'virtual/myshares' ? 'desc' : 'asc';
+
                 if (!/^(list|icon|tile)/.test(options.layout)) options.layout = 'list';
-                return _.extend({ sort: defaultSort, order: 'asc', layout: 'list' }, options);
+                return _.extend({ sort: defaultSort, order: defaultOrder, layout: 'list' }, options);
             };
         },
 
@@ -298,7 +307,7 @@ define('io.ox/files/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true });
+            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true, scrollto: true });
             app.listView.model.set({ folder: app.folder.get(), sort: app.props.get('sort'), order: app.props.get('order') });
             // for debugging
             window.list = app.listView;
@@ -308,7 +317,7 @@ define('io.ox/files/main', [
          * Setup list view control
          */
         'list-view-control': function (app) {
-            app.listControl = new ListViewControl({ id: 'io.ox/files', listView: app.listView, app: app });
+            app.listControl = new ListViewControl({ id: 'io.ox/files/listviewcontrol', listView: app.listView, app: app });
             var node = _.device('smartphone') ? app.pages.getPage('main') : app.getWindow().nodes.main;
             node.append(
                 app.listControl.render().$el
@@ -380,7 +389,7 @@ define('io.ox/files/main', [
                     if (id !== 'virtual/myshares') return;
 
                     app.folder.unset();
-
+                    app.getWindow().setTitle(gt('My shares'));
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.show().siblings().hide();
                         return;
@@ -611,9 +620,13 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone')) return;
 
+            var resizePending = false;
+
             $(window).on('resize', function () {
 
                 var list = app.listView, width, layout, gridWidth, column;
+
+                resizePending = true;
 
                 // skip recalcucation if invisible
                 if (!list.$el.is(':visible')) return;
@@ -629,9 +642,15 @@ define('io.ox/files/main', [
                 // update class name
                 list.el.className = list.el.className.replace(/\s?grid\-\d+/g, '');
                 list.$el.addClass('grid-' + column).attr('grid-count', column);
+
+                resizePending = false;
             });
 
             $(window).trigger('resize');
+
+            app.on('resume', function () {
+                if (resizePending) $(window).trigger('resize');
+            });
         },
 
         /*
@@ -878,6 +897,12 @@ define('io.ox/files/main', [
 
             folderAPI.on('create', function (data) {
                 if (data.folder_id === app.folder.get()) app.listView.reload();
+
+                // select created folder
+                app.listView.on('add:' + _.cid(data), function (model) {
+                    var cid = app.listView.getCompositeKey(model);
+                    app.listView.selection.set([cid], true);
+                });
             });
 
             folderAPI.on('remove', function (id, data) {
@@ -1015,10 +1040,9 @@ define('io.ox/files/main', [
             side.find('.foldertree-container').addClass('bottom-toolbar');
             side.find('.foldertree-sidepanel').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button" tabindex="1">')
+                    $('<a href="#" class="toolbar-item" role="button">').attr('aria-label', gt('Close folder view'))
                     .append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
-                        $('<span class="sr-only">').text(gt('Close folder view'))
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                     )
                     .on('click', { app: app, state: false }, toggleFolderView)
                 )
@@ -1104,6 +1128,13 @@ define('io.ox/files/main', [
                     // remove all DOM elements of current collection; keep the first item
                     app.listView.onBatchRemove(ids.slice(1));
                 }
+            });
+        },
+
+        'remove-file': function (app) {
+            api.on('remove:file', function () {
+                // trigger scroll after remove, if files were removed with select all we need to trigger a redraw or we get an empty view
+                app.listView.$el.trigger('scroll');
             });
         },
 
@@ -1211,31 +1242,21 @@ define('io.ox/files/main', [
                     });
                 });
                 // check for clicks in folder trew
-                app.on('folder:change folder-virtual:change', function (folder, data) {
-                    var list = [];
-                    data = data || {};
-                    if (folderAPI.isVirtual(folder)) { list.push('virtual'); }
-                    // add folder types
-                    if (data.standard_folder_type && data.type) {
-                        // http://oxpedia.org/wiki/index.php?title=HTTP_API#DefaultTypes
-                        list.push(data.standard_folder_type, data.type);
-                    }
-                    // add filestorage data
-                    if (data.account_id) {
-                        // simplify: 'dropbox://164' -> ['dropbox', '164']
-                        list = list.concat(data.account_id.split('://'));
-                    }
-                    metrics.trackEvent({
-                        app: 'drive',
-                        target: 'folder',
-                        type: 'click',
-                        action: 'select',
-                        detail: list.join('/')
-                    });
+                app.on('folder:change folder-virtual:change', function (folder) {
+                    metrics.getFolderFlags(folder)
+                        .then(function (list) {
+                            metrics.trackEvent({
+                                app: 'drive',
+                                target: 'folder',
+                                type: 'click',
+                                action: 'select',
+                                detail: list.join('/')
+                            });
+                        });
                 });
                 // selection in listview
                 app.listView.on({
-                    'selection:multiple selection:one': function (list) {
+                    'selection:multiple selection:one': _.throttle(function (list) {
                         metrics.trackEvent({
                             app: 'drive',
                             target: 'list/' + app.props.get('layout'),
@@ -1243,7 +1264,7 @@ define('io.ox/files/main', [
                             action: 'select',
                             detail: list.length > 1 ? 'multiple' : 'one'
                         });
-                    }
+                    }, 100, { trailing: false })
                 });
                 // default action
                 ext.point('io.ox/files/actions/default').extend({

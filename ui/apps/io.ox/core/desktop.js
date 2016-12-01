@@ -161,8 +161,9 @@ define('io.ox/core/desktop', [
                     //remove data property
                     data.point.data = {};
                 }
-                //notify user
-                if (!('exceeded' in data)) {
+                //notify user if not mail compose. Mail compose is more likely to be hit,
+                //but are Save as draft and autosave to prevent data loss
+                if (!('exceeded' in data) && data.module !== 'io.ox/mail/compose') {
                     notifications.yell('warning', gt('Failed to automatically save current stage of work. Please save your work to avoid data loss in case the browser closes unexpectedly.'));
                     //flag to yell only once
                     data.exceeded = true;
@@ -583,7 +584,6 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.quit', win);
                     win.destroy();
                 }
-
                 // remove from list
                 ox.ui.apps.remove(self);
                 // mark as not running
@@ -644,6 +644,16 @@ define('io.ox/core/desktop', [
         }
     });
 
+    function saveRestoreEnabled() {
+        //no smartphones and feature toggle which is overridable by url parameter
+        var urlForceOff = typeof _.url.hash('restore') !== 'undefined' && /^(0|false)$/i.test(_.url.hash('restore')),
+            urlForceOn = typeof _.url.hash('restore') !== 'undefined' && /^(1|true)$/i.test(_.url.hash('restore'));
+
+        return urlForceOn ||
+            !urlForceOff &&
+            _.device('!smartphone') &&
+            coreConfig.get('features/storeSavePoints', true);
+    }
     // static methods
     _.extend(ox.ui.App, {
 
@@ -668,6 +678,9 @@ define('io.ox/core/desktop', [
         },
 
         getSavePoints: function () {
+
+            if (!saveRestoreEnabled()) return $.when([]);
+
             return appCache.get('savepoints').then(function (list) {
                 return _(list || []).filter(function (obj) {
                     var hasPoint = 'point' in obj,
@@ -999,14 +1012,13 @@ define('io.ox/core/desktop', [
                 for (i = 0, $i = windows.length; i < $i; i++) {
                     w = windows[i];
                     if (w !== win && w.state.open) {
-                        w.show();
+                        w.resume();
                         break;
                     }
                 }
-                //remove the window from cache if it's there
+                // remove the window from cache if it's there
                 appCache.get('windows').done(function (winCache) {
                     var index = _.indexOf(winCache, win.name);
-
                     if (index > -1) {
                         winCache.splice(index, 1);
                         appCache.add('windows', winCache || []);
@@ -1139,7 +1151,11 @@ define('io.ox/core/desktop', [
                     return this.nodes.header;
                 };
 
-                this.show = function (cont) {
+                this.resume = function () {
+                    this.show(_.noop, true);
+                };
+
+                this.show = function (cont, resume) {
                     var appchange = false;
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
                     if (currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
@@ -1148,7 +1164,7 @@ define('io.ox/core/desktop', [
                     // get node and its parent node
                     var node = this.nodes.outer, parent = node.parent();
                     // if not current window or if detached (via funny race conditions)
-                    if (!appchange && self && (currentWindow !== this || parent.length === 0)) {
+                    if ((!appchange || resume) && self && (currentWindow !== this || parent.length === 0)) {
                         // show
                         if (node.parent().length === 0) {
                             if (this.simple) {
@@ -1285,6 +1301,8 @@ define('io.ox/core/desktop', [
                             blocker.idle().find('.progress-bar').eq(0).css('width', (pct * 100) + '%').parent().show();
                             if (_.isNumber(sub)) {
                                 blocker.find('.progress-bar').eq(1).css('width', (sub * 100) + '%').parent().show();
+                            } else if (_.isString(sub)) {
+                                blocker.find('.footer').text(sub);
                             }
                             blocker.show();
                         } else {
@@ -1456,8 +1474,8 @@ define('io.ox/core/desktop', [
                         // blocker
                         win.nodes.blocker = $('<div class="abs window-blocker">').hide().append(
                             $('<div class="abs header">'),
-                            $('<div class="progress progress-striped active first"><div class="progress-bar" style="width:0"></div></div>').hide(),
-                            $('<div class="progress progress-striped progress-warning active second"><div class="progress-bar" style="width:0"></div></div>').hide(),
+                            $('<div class="progress first"><div class="progress-bar" style="width:0"></div></div>').hide(),
+                            $('<div class="progress second"><div class="progress-bar" style="width: 0"></div></div>').hide(),
                             $('<div class="abs footer">')
                         ),
                         // window HEAD
@@ -1536,22 +1554,17 @@ define('io.ox/core/desktop', [
                         // share data
                         _.extend(baton.data, {
                             label: gt('Search'),
-                            id:  win.name + '-search-field',
+                            id:  _.uniqueId(win.name + '-search-field'),
                             guid:  _.uniqueId('form-control-description-')
                         });
                         // search box form
-                        baton.$.group = $('<div class="form-group has-feedback">')
-                            .append(
-                                $('<input type="text">')
-                                .attr({
-                                    class: 'form-control has-feedback search-field tokenfield-placeholder f6-target',
-                                    tabindex: 1,
-                                    role: 'search',
-                                    id: baton.data.id,
-                                    placeholder: baton.data.label + '...',
-                                    'aria-describedby': baton.data.guid
-                                })
-                            );
+                        baton.$.group = $('<div class="form-group has-feedback">').append(
+                            $('<input type="text" role="search" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
+                                id: baton.data.id,
+                                placeholder: baton.data.label + '...',
+                                'aria-describedby': baton.data.guid
+                            })
+                        );
                         // add to searchbox area
                         baton.$.box.append(
                             baton.$.group
@@ -1654,7 +1667,7 @@ define('io.ox/core/desktop', [
                 buttonTimer = setTimeout(function () {
                     // add button to abort
                     if (!$blocker[0].firstChild) {
-                        var button = $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Cancel')).fadeIn();
+                        var button = $('<button type="button" class="btn btn-primary">').text(gt('Cancel')).fadeIn();
                         button.on('click', function () {
                             def.reject(true);
                             clear(blockerTimer);

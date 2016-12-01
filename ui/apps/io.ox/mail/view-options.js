@@ -96,7 +96,7 @@ define('io.ox/mail/view-options', [
     }
 
     function toggleSelection(e) {
-        if (e.type === 'click' || e.keyCode === 32) {
+        if (e.type === 'click' || e.which === 32) {
             e.preventDefault();
             var i = $(this).find('i'), selection = e.data.baton.app.listView.selection;
             if (i.hasClass('fa-check-square-o')) selection.selectNone(); else selection.selectAll();
@@ -110,7 +110,7 @@ define('io.ox/mail/view-options', [
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="toolbar-item select-all" role ="checkbox" aria-checked="false" tabindex="1">').append(
+                $('<a href="#" class="toolbar-item select-all" role ="checkbox" aria-checked="false">').append(
                     $('<i class="fa fa-square-o" aria-hidden="true">'),
                     $.txt(gt('Select all'))
                 )
@@ -158,10 +158,9 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
 
             this.append(
-                $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="open-folder-view">')
-                .attr('title', gt('Open folder view'))
-                .append($('<i class="fa fa-angle-double-right">'))
-                .on('click', { app: baton.app, state: true }, toggleFolderView)
+                $('<a href="#" role="button" class="toolbar-item" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
+                    $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
+                ).on('click', { app: baton.app, state: true }, toggleFolderView)
             );
 
             baton.app.on({
@@ -179,12 +178,9 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
             this.addClass('bottom-toolbar').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" role="button" class="toolbar-item" tabindex="1" data-action="close-folder-view">')
-                    .append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
-                        $('<span class="sr-only">').text(gt('Close folder view'))
-                    )
-                    .on('click', { app: baton.app, state: false }, toggleFolderView)
+                    $('<a href="#" role="button" class="toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
+                    ).on('click', { app: baton.app, state: false }, toggleFolderView)
                 )
             );
         }

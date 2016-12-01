@@ -31,8 +31,12 @@ define('plugins/halo/contacts/register', ['io.ox/core/extensions'], function (ex
 
                 // if no display name can be computed, use the name of the mail
                 if (util.getDisplayName(contact) === '') contact.display_name = baton.contact.name;
+                // investigate request does not convert birthdays from year 1 (used to store birthdays without a year) back to gregorian calendar so do it here
+                if (contact.birthday && moment.utc(contact.birthday).year() === 1) {
+                    contact.birthday = util.julianToGregorian(contact.birthday);
+                }
 
-                self.append(view.draw(baton.data[0]));
+                self.append(view.draw(contact));
                 def.resolve();
             });
 

@@ -4,7 +4,7 @@
 <title>5.6. Wyszukiwanie wiadomości e-mail</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="Oprogramowanie do pracy grupowej">
+<link rel="home" href="index.html" title="podręcznik użytkownika">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="Rozdział 5. E-mail">
 <link rel="prev" href="ox.appsuite.user.sect.email.manage.mailfilter.html" title="5.5.19. Korzystanie z filtrów poczty e-mail">
 <link rel="next" href="ox.appsuite.user.sect.email.share.html" title="5.7. Wiadomości e-mail w ramach zespołu">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.manage.mailfilter.html">Poprzedni</a></li>
@@ -51,7 +51,7 @@
 <p>
           </p>
 </li>
-<li class="listitem"><p>Określenie folderów do przeszukania.</p></li>
+<li class="listitem"><p>Foldery do przeszukania</p></li>
 </ul></div>
 <p>
     </p>
@@ -60,7 +60,7 @@
 <a name="ox.appsuite.user.task.email.search"></a><p class="title">Jak wyszukiwać wiadomości e-mail:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p>Kliknij ikonę <span class="guibutton"><strong>Rozpocznij wyszukiwanie</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> lub pole wejściowe na pasku wyszukiwania. Przycisk folderu wskazuje foldery, które mają zostać przeszukane.</p>
+<p>Kliknij ikonę <span class="guibutton"><strong>Rozpocznij wyszukiwanie</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> lub pole wejściowe na pasku wyszukiwania. Przycisk folderu wskazuje foldery, które mają zostać przeszukane.</p>
 <div class="informalfigure">
 <a name="ox.appsuite.user.fig.email.search.start"></a><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_email_search_click.png" alt="Pole wejściowe"></div></div>
 </div>
@@ -68,7 +68,10 @@
 <li class="step">
 <p>Aby wybrać folder do przeszukania, kliknij przycisk folderu.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>W przypadku wybrania opcji <span class="guibutton"><strong>Wszystkie foldery</strong></span> zostaną przeszukane wszystkie foldery i podfoldery wewnętrznego konta e-mail..</p></li>
+<li class="listitem">
+<p>W przypadku wybrania opcji <span class="guibutton"><strong>Wszystkie foldery</strong></span> zostaną przeszukane wszystkie foldery i podfoldery wewnętrznego konta e-mail..</p>
+<p><span class="phrase"><strong>Uwaga:</strong></span> Przy niektórych konfiguracjach serwera ta funkcja może być niedostępna. W takiej sytuacji przeszukany zostanie wyłącznie folder bieżący, bez podfolderów.</p>
+</li>
 <li class="listitem"><p>W przypadku zaznaczenia określonego folderu wewnętrznego lub zewnętrznego konta e-mail zostanie przeszukany tylko ten folder, ale nie jego podfoldery.</p></li>
 </ul></div>
 <p>
@@ -100,14 +103,14 @@
 <li class="step">
 <p>Dostępne są następujące możliwości dostosowania wyników wyszukiwania:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Aby dostosować kryterium wyszukiwania, kliknij ikonę <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>widoczną obok kryterium.</p></li>
-<li class="listitem"><p>Aby zawęzić wyniki wyszukiwania, wprowadź dodatkowe hasła do wyszukania. Aby usunąć szukane hasło, kliknij widoczną obok niego ikonę <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. </p></li>
+<li class="listitem"><p>Aby dostosować kryterium wyszukiwania, kliknij ikonę <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.adaptfilter"></a><img src="../../images/appsuite_user_icon_dropdown.png"></span>widoczną obok kryterium.</p></li>
+<li class="listitem"><p>Aby zawęzić wyniki wyszukiwania, wprowadź dodatkowe hasła do wyszukania. Aby usunąć szukane hasło, kliknij widoczną obok niego ikonę <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>. </p></li>
 <li class="listitem"><p>Aby przeszukać inny folder, kliknij przycisk folderu.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>Aby zakończyć wyszukiwanie, w polu wejściowym kliknij ikonę <span class="guibutton"><strong>Anuluj wyszukiwanie</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
+<li class="step"><p>Aby zakończyć wyszukiwanie, w polu wejściowym kliknij ikonę <span class="guibutton"><strong>Anuluj wyszukiwanie</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
 </div>

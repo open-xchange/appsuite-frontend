@@ -69,11 +69,13 @@
         // special screenreader class as divs gets read everytime and spans don't...so we use spans that behave like divs
         .span-to-div {
             display: block;
+            line-height: 24px;
         }
 
         .items{
             //prevent busy spinner from overlapping
             min-height: 20px;
+            margin-bottom: 8px;
         }
 
         .desktop-notification-info {
@@ -93,13 +95,16 @@
                 }
             }
         }
+        .notification-area-header {
+            margin: 0 0 9px 0;
+        }
 
         .notification-area-title {
             font-family: "Helvetica Neue", OpenSans, Helvetica, Arial, sans-serif;
             font-weight: 300;
             font-size: 16px;
-            line-height: 24px;
-            margin: 0 0 7px 0;
+            line-height: 20px;
+            margin: 0;
             padding: 0 14px;
             border: 0;
             display: inline-block;
@@ -107,11 +112,17 @@
 
         .clear-area-button {
              float: right;
-             line-height: 24px;
+             line-height: 20px;
              margin: 0 14px 0 0;
              padding: 0;
              color: #767676;
              font-size: 18px;
+        }
+
+        .hide-area-button {
+            padding: 3px 14px 0 14px;
+            display: block;
+            text-align: left;
         }
 
         .section-title {
@@ -120,7 +131,7 @@
             font-weight: 300;
             font-size: 16px;
             line-height: 24px;
-            margin: 14px 0 7px 0;
+            margin: 15px 0 1px 0;
             padding: 0 14px;
             border: 0;
             display: inline-block;
@@ -150,7 +161,7 @@
             }
 
             .notification-item-actions {
-                height: 15px;
+                height: 16px;
 
                 .clear-single-button {
                     float: right;
@@ -173,7 +184,7 @@
             }
 
             color: #767676;
-            padding: 10px 14px;
+            padding: 8px 14px;
 
             &:last-child {
                 border-bottom: 0;
@@ -228,12 +239,12 @@
             }
 
             .location {
-                color: #aaa;
+                color: #666;
             }
 
             .actions {
                 text-align: right;
-                margin: 5px 0 5px 0;
+                margin: 5px 0;
             }
         }
 
@@ -284,6 +295,7 @@
         .badge {
             top: initial;
             left: initial;
+            vertical-align: initial;
             padding: 2px 8px;
         }
     }

@@ -11,7 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/metrics/util', function () {
+define('io.ox/metrics/util', ['io.ox/core/folder/api'], function (folderAPI) {
 
     'use strict';
 
@@ -224,6 +224,90 @@ define('io.ox/metrics/util', function () {
         return userhash;
     }
 
+    var getFolderFlags = (function () {
+
+        var defaults = {
+                1: 'default',   // tasks
+                2: 'default',   // calendar
+                3: 'default',   // contacts
+                8: 'default'    // drive
+            },
+            types = {
+                20: 'pictures',
+                21: 'documents',
+                22: 'music',
+                23: 'videos',
+                24: 'templates'
+            },
+            standard = {
+                7: 'inbox',
+                9: 'drafts',
+                10: 'sent',
+                11: 'spam',
+                12: 'trash'
+            },
+            special = {
+                'virtual/all-my-appointments': 'all-my-appointments',
+                'virtual/myshares': 'all-my-shares',
+                'virtual/favorites/infostore': 'favorites',
+                'virtual/favorites/contacts': 'favorites',
+                'virtual/favorites/mail': 'favorites',
+                'virtual/myfolders': 'my-folders'
+            },
+            reSection = /virtual\/flat\/(\D+)\/(private|public|shared|hidden)/;
+
+        function getDefault(data) {
+            // drive: not precise so leave it out
+            if (data.module === 'infostore' && data.folder_id !== '9') return;
+            return defaults[data.standard_folder_type]
+        }
+
+        function getContent(data) {
+            // contacts: gab special
+            if (data.module === 'contacts' && data.id === '6') return 'gab';
+            // virtual section folders
+            var match = data.id.match(reSection)
+            if (match) return 'section-' + match[2];
+            // special, type and standard-type
+            return special[data.id] || types[data.type] || standard[data.standard_folder_type];
+        }
+
+        function gather(data) {
+            data = data || {};
+            var result = {};
+
+            // account: 'dropbox://164' -> ['dropbox', '164']
+            if (data.module === 'infostore' && data.account_id) result.account = data.account_id.split('://')[0];
+
+            // type: access
+            _.each(['shared', 'private', 'public', 'system'/*, 'unifiedfolder'*/], function (type) {
+                // drive: not precise so leave it
+                if (data.module === 'infostore') return;
+                if (!result.type && folderAPI.is(type, data)) result.type = type;
+            });
+            // real vs. virtual
+            if (folderAPI.isVirtual(data.id)) result.virtual = 'virtual'
+            // type: content
+            result.content = getContent(data) || (folderAPI.is('trash', data) ? 'trash' : undefined);
+            // type: default
+            result.default = getDefault(data);// || (folderAPI.is('defaultfolder', data) ? 'default' : undefined);
+            return result;
+        }
+
+        function listify (data) {
+            return _.compact([data.account, data.type, data.virtual, data.content, data.default]);
+        }
+
+        return function (folder) {
+            // ensure data is fully available
+            return folderAPI
+                .get(folder)
+                .then(gather)
+                .then(listify);
+        }
+
+    }());
+
     // stringified list to chunks (based on maximal number of chars)
     // TODO: edge case if first string in list is shorter than maxlength
     function toChunks(list, max, result) {
@@ -249,6 +333,7 @@ define('io.ox/metrics/util', function () {
         md5: md5,
         doNotTrack: doNotTrack,
         getUserHash: getUserHash,
+        getFolderFlags: getFolderFlags,
         toChunks: toChunks
     };
 

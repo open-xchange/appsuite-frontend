@@ -154,7 +154,7 @@ define('io.ox/files/toolbar', [
             'presenter': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-picture-o',
+                icon: 'fa fa-play-circle-o',
                 label: gt('Present'),
                 ref: 'io.ox/files/actions/launchpresenter'
             },
@@ -325,7 +325,7 @@ define('io.ox/files/toolbar', [
         index: 10000,
         setup: function (app) {
 
-            var toolbarView = new Toolbar({ title: app.getTitle(), tabindex: 1 });
+            var toolbarView = new Toolbar({ title: app.getTitle() });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbarView.render().$el

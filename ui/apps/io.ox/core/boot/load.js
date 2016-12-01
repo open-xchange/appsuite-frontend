@@ -19,8 +19,9 @@ define('io.ox/core/boot/load', [
     'settings!io.ox/mail',
     'io.ox/core/capabilities',
     'io.ox/core/manifests',
+    'io.ox/core/sockets',
     'io.ox/core/moment'
-], function (themes, util, http, coreSettings, mailSettings, capabilities, manifests) {
+], function (themes, util, http, coreSettings, mailSettings, capabilities, manifests, socket) {
 
     'use strict';
 
@@ -30,6 +31,7 @@ define('io.ox/core/boot/load', [
         util.cleanUp();
 
         prefetch();
+        setupSockets();
         applyHighContrast();
         loadUserTheme();
 
@@ -109,12 +111,18 @@ define('io.ox/core/boot/load', [
                 params = {
                     action: action,
                     folder: folder,
-                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652',
+                    columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
                     sort: sort,
                     order: mailSettings.get(['viewOptions', folder, 'order'], 'desc'),
+                    categoryid: 'general',
                     timezone: 'utc',
-                    limit: '0,30'
+                    limit: '0,' + mailSettings.get('listview/primaryPageSize', 50)
                 };
+
+            // mail categories (aka tabbed inbox)
+            if (_.device('smartphone') || !capabilities.has('mail_categories') || !mailSettings.get('categories/enabled')) {
+                delete params.categoryid;
+            }
 
             // edge case: no prefetch if sorting is 'from-to' (need to many data we don't have yet)
             if (sort === 'from-to') return;
@@ -127,6 +135,18 @@ define('io.ox/core/boot/load', [
                 ox.rampup['mail/' + _.param(params)] = data;
             });
         }
+    }
+
+    function setupSockets() {
+        // get connected socket
+        socket.getSocket().done(function (socket) {
+            if (capabilities.has('webmail')) {
+                socket.on('ox:mail:new', function (data) {
+                    // simple event forwarding
+                    ox.trigger('socket:mail:new', data);
+                });
+            }
+        });
     }
 
     function applyHighContrast() {

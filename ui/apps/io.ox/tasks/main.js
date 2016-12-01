@@ -230,7 +230,7 @@ define('io.ox/tasks/main', [
             app.left = left;
             app.right = right.addClass('default-content-padding f6-target task-detail-container')
             .attr({
-                'tabindex': 1,
+                'tabindex': 0,
                 'role': 'main',
                 'aria-label': gt('Task Details')
             })
@@ -653,13 +653,6 @@ define('io.ox/tasks/main', [
 
         'metrics': function (app) {
 
-            function getFolderType(folder) {
-                if (folderAPI.is('shared', folder)) return 'shared';
-                if (folderAPI.is('private', folder)) return 'private';
-                if (folderAPI.is('public', folder)) return 'public';
-                return 'unknown';
-            }
-
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
 
@@ -697,16 +690,15 @@ define('io.ox/tasks/main', [
                     });
                 });
                 // check for clicks in folder trew
-                app.on('folder:change', function (folder) {
-                    folderAPI
-                        .get(folder)
-                        .then(function (data) {
+                app.on('folder:change folder-virtual:change', function (folder) {
+                    metrics.getFolderFlags(folder)
+                        .then(function (list) {
                             metrics.trackEvent({
                                 app: 'tasks',
                                 target: 'folder',
                                 type: 'click',
                                 action: 'select',
-                                detail: getFolderType(data)
+                                detail: list.join('/')
                             });
                         });
                 });
@@ -849,7 +841,7 @@ define('io.ox/tasks/main', [
                 tagName: 'div',
                 caret: false,
                 label: function () {
-                    return [$('<i class="fa fa-arrow-down" aria-hidden="true">'), $('<i class="fa fa-arrow-up" aria-hidden="true">')];
+                    return [$('<i class="fa fa-arrow-down" aria-hidden="true">'), $('<i class="fa fa-arrow-up" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Sort options'))];
                 }
             })
                 .header(gt('Sort options'))

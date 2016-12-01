@@ -24,21 +24,34 @@ define('io.ox/mail/compose/inline-images', [
 
     var api = {
         inlineImage: function (data) {
-            if ('FormData' in window) {
-                var formData = new FormData();
-                formData.append('file', data.file);
-                return http.UPLOAD({
+            try {
+                if ('FormData' in window) {
+                    var formData = new FormData();
+                    // avoid the generic blob filename
+                    if (!data.file.name) {
+                        var type = data.file.type.replace('image/', '') || 'png';
+                        formData.append('file', data.file, 'image.' + type);
+                    } else {
+                        formData.append('file', data.file);
+                    }
+                    return http.UPLOAD({
+                        module: 'file',
+                        params: { action: 'new', module: 'mail', type: 'image' },
+                        data: formData,
+                        fixPost: true
+                    });
+                }
+                return http.FORM({
                     module: 'file',
-                    params: { action: 'new', module: 'mail', type: 'image' },
-                    data: formData,
-                    fixPost: true
+                    form: data.form,
+                    params: { module: 'mail', type: 'image' }
                 });
+            } catch (e) {
+                // print error to console for debugging
+                console.debug(e);
+                //#. generic erromessage if inserting an image into a mail failed.
+                return $.Deferred().reject({ error: e, message: gt('Error while uploading your image') });
             }
-            return http.FORM({
-                module: 'file',
-                form: data.form,
-                params: { module: 'mail', type: 'image' }
-            });
         },
         getInsertedImageUrl: function (data) {
             var url = ox.apiRoot + '/file',
@@ -65,7 +78,7 @@ define('io.ox/mail/compose/inline-images', [
     ext.point(POINT + 'file_upload').extend({
         id: 'default',
         draw: function (baton) {
-            baton.$.file_upload = attachments.fileUploadWidget({ tabindex: 0 });
+            baton.$.file_upload = attachments.fileUploadWidget();
             this.append(
                 baton.$.file_upload
             );
@@ -75,8 +88,8 @@ define('io.ox/mail/compose/inline-images', [
     ext.point(POINT + 'buttons').extend({
         id: 'default',
         draw: function () {
-            this.addPrimaryButton('insert', gt('Insert'), 'insert', { 'tabIndex': '1' })
-                .addButton('cancel', gt('Cancel'), 'cancel', { 'tabIndex': '1' });
+            this.addPrimaryButton('insert', gt('Insert'), 'insert')
+                .addButton('cancel', gt('Cancel'), 'cancel');
         }
     });
 

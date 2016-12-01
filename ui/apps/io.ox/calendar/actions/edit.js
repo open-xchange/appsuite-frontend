@@ -37,9 +37,9 @@ define('io.ox/calendar/actions/edit', [
                     .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
                     .addPrimaryButton('series',
                         //#. Use singular in this context
-                        gt('Series'), 'series', { tabIndex: 1 })
-                    .addButton('appointment', gt('Appointment'), 'appointment', { tabIndex: 1 })
-                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                        gt('Series'), 'series')
+                    .addButton('appointment', gt('Appointment'), 'appointment')
+                    .addButton('cancel', gt('Cancel'), 'cancel')
                     .show()
                     .done(function (action) {
 

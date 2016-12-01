@@ -4,7 +4,7 @@
 <title>7.1. 予定表の画面構成</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="Groupware">
+<link rel="home" href="index.html" title="ユーザ ガイド">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="第7章 予定表">
 <link rel="prev" href="ox.appsuite.user.chap.calendar.html" title="第7章 予定表">
 <link rel="next" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. アポイントの表示">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.chap.calendar.html">戻る</a></li>
@@ -37,12 +37,13 @@
 <a name="ox.appsuite.user.reference.calendar.elements"></a><p><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span> アプリケーションには下記を含めます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.search" title="検索バー">検索バー</a></p></li>
-<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.foldertree" title="フォルダツリー">フォルダツリー</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.foldertree" title="フォルダ ツリー">フォルダ ツリー</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.toolbar" title="ツールバー">ツールバー</a></p></li>
 <li class="listitem">
 <p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.content" title="表示エリア">表示エリア</a></p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="日、稼働日、週、月 の予定表ビュー"><span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>稼働日</strong></span>、<span class="guilabel"><strong>週</strong></span>、<span class="guilabel"><strong>月</strong></span> の予定表ビュー</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="日付ピッカー">日付ピッカー</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="ポップアップ">ポップアップ</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="リスト">リスト</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="詳細ビュー">詳細ビュー</a></p></li>
@@ -50,40 +51,60 @@
 <p>
           </p>
 </li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.scheduling" title="スケジューリングビュー">スケジューリングビュー</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.create" title="作成または編集の表示">作成または編集の表示</a></p></li>
 </ul></div>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.search"></a><p class="title"><b>検索バー</b></p>
+<a name="ox.appsuite.user.reference.calendar.gui.search"></a><h3 class="title">検索バー</h3>
 <p>アポイントの<a class="link" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. アポイントの検索">検索</a>ができます。</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.foldertree"></a><p class="title"><b>フォルダツリー</b></p>
-<p>フォルダツリーには、予定表フォルダが表示されます。フォルダ間を移動できます。フォルダツリーを表示するには、<a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.toolbar" title="ツールバー">ツールバー</a> の <span class="guibutton"><strong>ビュー</strong></span> ボタンをクリックします。<span class="guibutton"><strong>フォルダビュー</strong></span> を有効にします。グループウェアの構成によっては、フォルダツリーには次の項目が含まれます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree"></a><h3 class="title">フォルダ ツリー</h3>
+<p>フォルダ ツリーには、予定表フォルダが表示されます。</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree.entries"></a><p class="title">コンテンツ</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><span class="guilabel"><strong>予定表</strong></span>個人の予定表を含みます。</p></li>
 <li class="listitem"><p><span class="guilabel"><strong>パブリック予定表</strong></span>全てのユーザと共有する予定表が含まれます。</p></li>
 <li class="listitem"><p><span class="guilabel"><strong>共有予定表</strong></span>他のユーザがあなたと共有する予定表が含まれます。</p></li>
-</ul></div>
-<p>次の機能が利用できます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+</ul>
+</div>
+<p>グループウェアの構成に応じて、内容はこの情報と異なる場合があります。</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree.functions"></a><p class="title">関数</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>予定表をクリックして、その予定表にあるアポイントを表示します。</p></li>
 <li class="listitem">
-<p>選択した予定表の隣にある <span class="guibutton"><strong>フォルダアクション</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> を使用して、データの整理やデータの交換に関する機能を実行します。</p>
+<p>選択した予定表の隣にある <span class="guibutton"><strong>フォルダアクション</strong></span> アイコン <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> を使用して、データの整理やデータの交換に関する機能を実行します。</p>
 <p><span class="phrase"><strong>注：</strong></span>色選択ドロップダウンとフォルダ名横の色アイコンは、<span class="guibutton"><strong>カスタムカラー</strong></span>がツールバーの<span class="guibutton"><strong>ビュー</strong></span>メニューで有効な場合にのみ表示されます。</p>
 </li>
 <li class="listitem"><p>フォルダツリーの下にあるボタンを使用して、予定表の作成ができます。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>すべてのアポイント</strong></span>フォルダには、全ての予定表の全てのアポイントが含まれます。</p></li>
 <li class="listitem"><p>グループウェアの構成によっては、フォルダ下の追加ボタンもあります。ボタンで様々なクライエントの構成ウィザードを起動できます。</p></li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.foldertree.related"></a><p class="title">関連記事</p>
+<a name="ox.appsuite.user.reference.calendar.gui.foldertree.related"></a><p class="title">詳細は、 を参照してください。</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>フォルダの作成に関する詳細は、<a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. フォルダ">フォルダ</a> を参照してください。</p></li>
-<li class="listitem" style="list-style-type: none"><p>よく使用するアクションの手順については、こちらを参照してください。<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.colors.html" title="7.6.5. 予定表の色を使用する">予定表の色を使用する</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. フォルダ間の移動">フォルダ間の移動</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. フォルダの作成">フォルダの作成</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. フォルダ名の変更">フォルダ名の変更</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. フォルダの移動">フォルダの移動</a>, <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. フォルダの削除">フォルダの削除</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.colors.html" title="7.6.5. 予定表の色を使用する">予定表の色を使用する</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. フォルダ">フォルダ</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. フォルダ間の移動">フォルダ間の移動</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. フォルダの作成">フォルダの作成</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. フォルダ名の変更">フォルダ名の変更</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.move.html" title="11.1.7. フォルダの移動">フォルダの移動</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html" title="11.1.8. フォルダの削除">フォルダの削除</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. キーおよびキーの組み合わせ">キーおよびキーの組み合わせ</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>親記事：<a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. 予定表の画面構成"><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span>の画面構成</a></p></li>
 </ul>
 </div>
@@ -91,21 +112,21 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.toolbar"></a><p class="title"><b>ツールバー</b></p>
+<a name="ox.appsuite.user.reference.calendar.gui.toolbar"></a><h3 class="title">ツールバー</h3>
 <p>ツールバーには、予定表ビューに次の要素が表示されます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><span class="guibutton"><strong>完了</strong></span>ボタン新規アポイント を作成します。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>スケジューリング</strong></span> ボタン。複数の出席者のいるアポイント をスケジューリングするためのスケジューリングビューを開きます。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>完了</strong></span>ボタン現在の日付の時間軸を選択します。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>新規</strong></span>新規アポイント を作成します。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>スケジューリング</strong></span>複数の出席者のいるアポイント をスケジューリングするためのスケジューリング ビューを開きます。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>今日</strong></span>現在の日付の時間軸を選択します。</p></li>
 <li class="listitem">
-<p><span class="guibutton"><strong>ビュー</strong></span> ボタンビューを変更するチェックボックスのついたメニューが表示されます。</p>
+<p><span class="guibutton"><strong>表示</strong></span>ビューを変更するチェックボックスのついたメニューが表示されます。</p>
 <div class="itemizedlist">
 <a name="ox.appsuite.user.reference.calendar.gui.toolbar.view"></a><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p><span class="guibutton"><strong>日</strong></span>、<span class="guibutton"><strong>稼働日</strong></span>、<span class="guibutton"><strong>週</strong></span> または<span class="guibutton"><strong>月</strong></span>チェックボックス<a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="日、稼働日、週、月 の予定表ビュー">予定表ビュー</a> を選択できます。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>リスト</strong></span> チェックボックス。<a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="リスト">リストビュー</a> を有効にします。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>フォルダビュー</strong></span> チェックボックス。フォルダツリー を表示したり、非表示にします。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>日</strong></span>、<span class="guibutton"><strong>稼働日</strong></span>、<span class="guibutton"><strong>週</strong></span> または<span class="guibutton"><strong>月</strong></span><a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="日、稼働日、週、月 の予定表ビュー">予定表ビュー</a> を選択できます。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>リスト</strong></span><a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="リスト">リストビュー</a> を有効にします。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>フォルダビュー</strong></span>フォルダ ツリー を表示したり、非表示にします。</p></li>
 <li class="listitem">
-<p>アポイント色の選択チェックボックス</p>
+<p>アポイントの色</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square; ">
 <li class="listitem"><p><span class="guibutton"><strong>クラシック</strong></span>薄い色でアポイントを表示します。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>暗色</strong></span>暗色でアポイントを表示します。</p></li>
@@ -114,8 +135,8 @@
 <p>
                   </p>
 </li>
-<li class="listitem"><p>リストビューが設定されている場合：<span class="guibutton"><strong>チェックボックス</strong></span>チェックボックス一覧のそれぞれの仕事の隣にチェック ボックスを表示します。複数の連絡先を選択して、その連絡先を 一度に編集 できます。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>印刷</strong></span> ボタン。予定表シートの印刷プレビューを開きます。</p></li>
+<li class="listitem"><p>リストビューが選択され、<span class="guibutton"><strong>チェックボックス</strong></span>が有効な場合、オブジェクトに印を付けるチェックボックスが一覧に表示されます。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>印刷</strong></span>予定表シートの印刷プレビューを開きます。</p></li>
 </ul>
 </div>
 <p>
@@ -124,20 +145,39 @@
 </ul></div>
 <p>リストビューでアポイントを選択すると、追加要素が表示されます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><span class="guibutton"><strong>編集</strong></span> ボタンアポイントデータ を編集します。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>ステータス</strong></span> ボタン。アポイントの ステータスの変更 を行います。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>削除</strong></span>ボタン選択した アポイントの削除 を行います。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>アクション</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>追加機能のあるメニューが表示されます。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>編集</strong></span>アポイントデータ を編集します。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>ステータス</strong></span>アポイントの ステータスの変更 を行います。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>削除</strong></span>選択した アポイントの削除 を行います。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>アクション</strong></span> アイコン <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span> このアイコンをクリックすると、次の要素がメニューに表示されます。追加機能のあるメニューが表示されます。</p></li>
 </ul></div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.toolbar.related"></a><p class="title">関連記事</p>
+<a name="ox.appsuite.user.reference.calendar.gui.toolbar.related"></a><p class="title">詳細は、 を参照してください。</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>ボタンやアイコンの操作手順についてはこちらを参照してください。<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. アポイントの作成">アポイントの作成</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.share.freebusy.html" title="7.8.5. 複数の出席者とのアポイントのスケジューリング">複数の出席者とのアポイントのスケジューリング</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. アポイントの編集">アポイントの編集</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. アポイントのステータスの変更">アポイントのステータスの変更</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. アポイントの削除">アポイントの削除</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>アクション</strong></span>メニュー<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.toolbar.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>の機能についての操作手順は、こちらを参照してください。<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. アポイントの印刷">アポイントの印刷</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. 別のフォルダへのアポイントの移動">別のフォルダへのアポイントの移動</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. 複数のアポイントを一度に編集">複数のアポイントを一度に編集</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>ボタンとアイコンの操作手順</p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. アポイントの作成">アポイントの作成</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.2. 複数の出席者とのアポイントのスケジューリング">複数の出席者とのアポイントのスケジューリング</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. アポイントの編集">アポイントの編集</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. アポイントのステータスの変更">アポイントのステータスの変更</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. アポイントの削除">アポイントの削除</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. キーおよびキーの組み合わせ">キーおよびキーの組み合わせ</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none">
+<p><span class="guibutton"><strong>アクション</strong></span>メニューの昨日の操作手順<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.toolbar.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span></p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. アポイントの印刷">アポイントの印刷</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. 別のフォルダへのアポイントの移動">別のフォルダへのアポイントの移動</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. 複数のアポイントを一度に編集">複数のアポイントを一度に編集</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>親記事：<a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. 予定表の画面構成"><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span>の画面構成</a></p></li>
 </ul>
 </div>
@@ -145,35 +185,49 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.content"></a><p class="title"><b>表示エリア</b></p>
-<p>予定表のアポイントの <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="日、稼働日、週、月 の予定表ビュー">予定表ビュー</a> または <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="リスト">リストビュー</a> のいずれかを表示します。ビューを選択するには、<a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.toolbar" title="ツールバー">ツールバー</a> の <span class="guibutton"><strong>ビュー</strong></span> ボタンをクリックします。</p>
+<a name="ox.appsuite.user.reference.calendar.gui.content"></a><h3 class="title">表示エリア</h3>
+<p>予定表のアポイントの <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="日、稼働日、週、月 の予定表ビュー">予定表ビュー</a> または <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.list" title="リスト">リストビュー</a> のいずれかを表示します。ビューを選択するには、&lt;l2&gt;ツールバー&lt;/l2&gt; の &lt;g3&gt;ビュー&lt;/g3&gt; ボタンをクリックします。</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.calendarview"></a><p class="title"><b><span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>稼働日</strong></span>、<span class="guilabel"><strong>週</strong></span>、<span class="guilabel"><strong>月</strong></span> の予定表ビュー</b></p>
+<a name="ox.appsuite.user.reference.calendar.gui.calendarview"></a><h3 class="title">
+<span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>稼働日</strong></span>、<span class="guilabel"><strong>週</strong></span>、<span class="guilabel"><strong>月</strong></span> の予定表ビュー</h3>
 <p>選択した時間軸の予定表ビューを表示します。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>予定表シートの左側上の<span class="guibutton"><strong>ブラウズ</strong></span>アイコン<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.calendarview.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span>で予定表の中をブラウズできます。</p></li>
+<li class="listitem"><p>予定表シートの左側上の<span class="guibutton"><strong>ブラウズ</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.calendarview.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span>で予定表の中をブラウズできます。</p></li>
 <li class="listitem">
 <p><span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>稼働日</strong></span>、<span class="guilabel"><strong>週</strong></span> の各予定表ビューでは、現在の日付と週が<span class="guibutton"><strong>ブラウズ</strong></span>アイコンの隣に表示されます。</p>
-<p>日付をクリックすると、ミニカレンダーが表示されます。ミニカレンダーでは、他の日付をすばやく選択できます。</p>
-<p>日付と予定表シートの間のエリアは、終日アポイントの<a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">作成</a>に使用できます。</p>
+<p>日付をクリックすると、日付ピッカーが表示されます。</p>
+<p>日付と予定表シートの間のエリアは、終日アポイントの作成に使用できます。</p>
 <p>予定表シートの左側にタイムゾーンが日付の上に表示されます。別のタイムゾーンに日付ついた行を追加するには、タイムゾーンをクリックします。</p>
 <p>予定表シートの赤ラインは現在の時間を表示します。</p>
 </li>
 <li class="listitem"><p><span class="guilabel"><strong>稼働日</strong></span>、<span class="guilabel"><strong>週</strong></span>、<span class="guilabel"><strong>月</strong></span> の各ビューでは、現在の日付が赤色の背景で予定表シート上に表示されます。</p></li>
 <li class="listitem"><p><span class="guilabel"><strong>月</strong></span>ビューでは、選択された月と年が予定表上に表示されます。</p></li>
 <li class="listitem">
-<p>構成のステータスおよび色テーマによっては、アポイントが異なる <a class="link" href="ox.appsuite.user.sect.calendar.view.appointments.html#ox.appsuite.user.concept.appointments.color">色</a> で強調表示されます。</p>
+<p>確認ステータスおよび色テーマによっては、アポイントが異なる色で強調表示されます。</p>
 <p>表示されている予定表シートの上下にその他のアポイントがある場合は、その日の予定表シートの上と下に矢印が表示されます。</p>
 </li>
 </ul></div>
-<p>アポイントをクリックすると、データが <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="ポップアップ">ポップアップ</a> で表示されます。</p>
+<p>アポイントをクリックすると、データが ポップアップ で表示されます。</p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.calendarview.related"></a><p class="title">関連記事</p>
+<a name="ox.appsuite.user.reference.calendar.gui.calendarview.related"></a><p class="title">詳細は、 を参照してください。</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>
-              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. アポイントの表示">アポイントの表示</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.view.appointments.html" title="7.2.4. アポイントの色">アポイントの色</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. アポイントの作成">アポイントの作成</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.html" title="7.6. アポイントの管理">アポイントの管理</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="日付ピッカー">日付ピッカー</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.scheduling" title="スケジューリングビュー">スケジューリングビュー</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.popup" title="ポップアップ">ポップアップ</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. アポイントの表示">アポイントの表示</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.view.appointments.html" title="7.2.4. アポイントの色">アポイントの色</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. アポイントの作成">アポイントの作成</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.html" title="7.6. アポイントの管理">アポイントの管理</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. キーおよびキーの組み合わせ">キーおよびキーの組み合わせ</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>親記事：<a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. 予定表の画面構成"><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span>の画面構成</a></p></li>
 </ul>
 </div>
@@ -181,55 +235,43 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.popup"></a><p class="title"><b>ポップアップ</b></p>
-<p>予定表ビューで、アポイントをクリックすると、ポップアップが表示されます。次のアポイントのデータと機能が表示されます。</p>
+<a name="ox.appsuite.user.reference.calendar.gui.datepicker"></a><h3 class="title">日付ピッカー</h3>
+<p>日付ピッカーは次のアクションで表示されます：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-<p><span class="guibutton"><strong>編集</strong></span>、<span class="guibutton"><strong>ステータスを変更</strong></span>、<span class="guibutton"><strong>フォロー</strong></span>、<span class="guibutton"><strong>削除</strong></span>の各ボタン。</p>
-<p><span class="phrase"><strong>注：</strong></span>サーバの構成に応じて、次の制限事項がある可能性があります。個人用の予定表にあるアポイントを処理するボタンは、その機能を実行する権限があるときのみ表示されます。アポイントの参加者である場合、そのアポイントを変更したり、削除することはできません。アポイントの開催者である場合、ステータスを変更することはできません。</p>
-</li>
-<li class="listitem"><p><span class="guibutton"><strong>アクション</strong></span>アイコン<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.popup.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>をクリックすると、追加機能つきのメニューが表示されます。</p></li>
-</ul></div>
-<p>各ボタンの下に <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="詳細ビュー"><span class="guilabel"><strong>リスト</strong></span>ビュー</a> での詳細ビューと同じ情報が表示されます。</p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.popup.related"></a><p class="title">関連記事</p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>ボタンやアイコンの操作手順についてはこちらを参照してください。<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. アポイントの編集">アポイントの編集</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. アポイントのステータスの変更">アポイントのステータスの変更</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.2. フォローアポイントの作成">フォローアポイントの作成</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. アポイントの削除">アポイントの削除</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>アクション</strong></span>メニュー<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calebdar.gui.popup.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>の機能についての操作手順は、こちらを参照してください。<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. アポイントの印刷">アポイントの印刷</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. 別のフォルダへのアポイントの移動">別のフォルダへのアポイントの移動</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. 複数のアポイントを一度に編集">複数のアポイントを一度に編集</a></span>
-            </p></li>
-</ul>
-</div>
-<p>
-      </p>
-</div>
-<div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.list"></a><p class="title"><b>リスト</b></p>
-<p>現在選択されているフォルダにあるアポイントの一覧を表示します。一覧では、次の項目があります。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>およびアポイントが見出しと日付と共に表示されます。</p></li>
-<li class="listitem"><p>日付、時間、色、プライベートアポイントアイコン、件名、場所が各アポイントに表示されます。</p></li>
-<li class="listitem"><p>一覧の上に、選択されたフォルダの名前を表示(数字は、選択したフォルダにあるオブジェクトの数を表します)</p></li>
-</ul></div>
-<p>次の機能が利用できます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>見出しをクリックすると、この時間に予定されている一番目のアポイントが表示されます。</p></li>
-<li class="listitem"><p>アポイントをクリックして、<a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="詳細ビュー">詳細ビュー</a> にアポイントのデータを表示</p></li>
-<li class="listitem">
-<p>ツールバーのビュー ドロップダウン メニューにある チェックボックス オプションを有効にしてそれぞれのアポイントの隣にチェックボックスを表示させた後に複数のアポイントを選択して 一度に編集できます。そのためには、ツールバーの<span class="guibutton"><strong>表示</strong></span>ドロップダウンメニューから<span class="guibutton"><strong>チェックボックス</strong></span>オプションを有効にして、アポイントの隣のチェックボックスを有効にします。</p>
-<p>このとき、ご利用のシステムの複数選択機能を使用することもできます。</p>
-<p>現在選択しているフォルダ内に表示されているすべてのアポイントを選択するには、一覧の上にある <span class="guibutton"><strong>すべてを選択</strong></span> チェックボックスを有効にします。</p>
-</li>
-<li class="listitem"><p>一覧の上にある <span class="guibutton"><strong>ソート</strong></span> アイコン <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.sort"></a><img src="../../images/appsuite_user_icon_sort.png"></span> をクリックしてメニューからアポイントをソート</p></li>
+<li class="listitem"><p><span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>稼働日</strong></span>、または<span class="guilabel"><strong>週</strong></span>の予定表ビューの左上側の日付をクリックする。</p></li>
+<li class="listitem"><p>スケジューリングビューの左上側の日付をクリックする。</p></li>
+<li class="listitem"><p>アポイントの作成、または編集時に日付入力フィールドをクリックする。</p></li>
 </ul></div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.list.related"></a><p class="title">関連記事</p>
+<a name="ox.appsuite.user.reference.calendar.gui.datepicker.entries"></a><p class="title">コンテンツ</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><span class="guibutton"><strong>ブラウズ</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.datepicker.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span>選択した時間軸によっては、アイコンをクリックすると、月または年でブラウズできます。</p></li>
+<li class="listitem"><p>ヘッダ現在の月を表示します。</p></li>
+<li class="listitem"><p>予定表週と月の日。日付をクリックすると、日付ピッカーが非表示になります。選択した日付が使用されます。</p></li>
+<li class="listitem">
+<p>ヘッダの月名をクリックすると、現在の年の月が表示されます。</p>
+<p>ヘッダの年をクリックすると、前年と次の年の一覧内で表示されます。</p>
+</li>
+</ul>
+</div>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.datepicker.related"></a><p class="title">詳細は、 を参照してください。</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>
-              <span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. アポイントの検索">アポイントの検索</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. 複数のアポイントを一度に編集">複数のアポイントを一度に編集</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="日、稼働日、週、月 の予定表ビュー"><span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>稼働日</strong></span>、<span class="guilabel"><strong>週</strong></span>、<span class="guilabel"><strong>月</strong></span> の予定表ビュー</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.create" title="作成または編集の表示">作成または編集の表示</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. 新規アポイントの作成">新規アポイントの作成</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. アポイントの編集">アポイントの編集</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. キーおよびキーの組み合わせ">キーおよびキーの組み合わせ</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>親記事：<a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. 予定表の画面構成"><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span>の画面構成</a></p></li>
 </ul>
 </div>
@@ -237,11 +279,115 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.detailview"></a><p class="title"><b>詳細ビュー</b></p>
-<p>一覧にあるアポイントをクリックすると、詳細ビューには、次に示すようなアポイントのデータや利用可能な機能が表示されます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<a name="ox.appsuite.user.reference.calendar.gui.popup"></a><h3 class="title">ポップアップ</h3>
+<p>予定表ビューで、アポイントをクリックすると、ポップアップが表示されます。アポイントデータを表示します。</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.popup.entries"></a><p class="title">コンテンツ</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p><span class="guibutton"><strong>編集</strong></span>、<span class="guibutton"><strong>ステータスを変更</strong></span>、<span class="guibutton"><strong>フォロー</strong></span>、<span class="guibutton"><strong>削除</strong></span>の各ボタン。</p>
+<p><span class="phrase"><strong>注：</strong></span>サーバの構成に応じて、次の制限事項がある可能性があります。個人用の予定表にあるアポイントを処理するボタンは、その機能を実行する権限があるときのみ表示されます。アポイントの参加者である場合、そのアポイントを変更したり、削除することはできません。アポイントの開催者である場合、ステータスを変更することはできません。</p>
+</li>
+<li class="listitem"><p><span class="guibutton"><strong>アクション</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.popup.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>をクリックすると、追加機能つきのメニューが表示されます。</p></li>
+</ul>
+</div>
+<p>各ボタンの下に <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="詳細ビュー"><span class="guilabel"><strong>リスト</strong></span> ビュー</a> での詳細ビューと同じ情報が表示されます。</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.popup.related"></a><p class="title">詳細は、 を参照してください。</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.calendarview" title="日、稼働日、週、月 の予定表ビュー"><span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>稼働日</strong></span>、<span class="guilabel"><strong>週</strong></span>、<span class="guilabel"><strong>月</strong></span> の予定表ビュー</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. アポイントのステータスの変更">アポイントのステータスの変更</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none">
+<p>ボタンとアイコンの操作手順</p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. アポイントの編集">アポイントの編集</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. アポイントのステータスの変更">アポイントのステータスの変更</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.3. フォローアポイントの作成">フォローアポイントの作成</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. アポイントの削除">アポイントの削除</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none">
+<p><span class="guibutton"><strong>アクション</strong></span>メニューの昨日の操作手順<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calebdar.gui.popup.related.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span></p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. アポイントの印刷">アポイントの印刷</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. 別のフォルダへのアポイントの移動">別のフォルダへのアポイントの移動</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. 複数のアポイントを一度に編集">複数のアポイントを一度に編集</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>親記事：<a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. 予定表の画面構成"><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span>の画面構成</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.calendar.gui.list"></a><h3 class="title">リスト</h3>
+<p>現在選択されているフォルダにあるアポイントの一覧を表示します。</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.list.entries"></a><p class="title">コンテンツ</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>およびアポイントが見出しと日付と共に表示されます。</p></li>
+<li class="listitem"><p>日付、時間、色、プライベートアポイントアイコン、件名、場所が各アポイントに表示されます。</p></li>
+<li class="listitem"><p>一覧の上に、選択されたフォルダの名前を表示(数字は、選択したフォルダにあるオブジェクトの数を表します)</p></li>
+</ul>
+</div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.list.functions"></a><p class="title">関数</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>見出しをクリックすると、この時間に予定されている一番目のアポイントが表示されます。</p></li>
+<li class="listitem"><p>アポイントをクリックして、<a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="詳細ビュー">詳細ビュー</a> にアポイントのデータを表示</p></li>
+<li class="listitem">
+<p>複数のアポイントを選択するには、ツールバーの<span class="guibutton"><strong>ビュー</strong></span>ドロップダウンの<span class="guibutton"><strong>チェックボックス</strong></span>を有効にします。</p>
+<p>このとき、ご利用のシステムの複数選択機能を使用することもできます。</p>
+<p>現在選択しているフォルダ内に表示されているすべてのアポイントを選択するには、一覧の上にある <span class="guibutton"><strong>すべてを選択</strong></span> チェックボックスを有効にします。</p>
+</li>
+<li class="listitem"><p>一覧の上にある <span class="guibutton"><strong>ソート</strong></span> アイコン <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.sort"></a><img src="../../images/appsuite_user_icon_sort.png"></span> をクリックしてメニューからアポイントをソート</p></li>
+</ul>
+</div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.list.related"></a><p class="title">詳細は、 を参照してください。</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. アポイントの検索">アポイントの検索</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. 複数のアポイントを一度に編集">複数のアポイントを一度に編集</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. キーおよびキーの組み合わせ">キーおよびキーの組み合わせ</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>親記事：<a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. 予定表の画面構成"><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span>の画面構成</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.calendar.gui.detailview"></a><h3 class="title">詳細ビュー</h3>
+<p>一覧にあるアポイントをクリックすると、詳細ビューにアポイントのデータや利用可能な機能が表示されます。</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.detailview.entries"></a><p class="title">コンテンツ</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>機能を編集するためのボタン</p></li>
-<li class="listitem"><p>件名。</p></li>
+<li class="listitem"><p>件名</p></li>
 <li class="listitem"><p>日時、タイムゾーン</p></li>
 <li class="listitem"><p>繰り返しのタイプ（定期的なアポイントの場合）</p></li>
 <li class="listitem"><p>アポイントの場所 (入力されている場合)。</p></li>
@@ -279,31 +425,102 @@
 <p>
             </p>
 </li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.detailview.related"></a><p class="title">関連記事</p>
+<a name="ox.appsuite.user.reference.calendar.gui.detailview.related"></a><p class="title">詳細は、 を参照してください。</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>ボタンやアイコンの操作手順についてはこちらを参照してください。<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. アポイントの編集">アポイントの編集</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. アポイントのステータスの変更">アポイントのステータスの変更</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. アポイントの削除">アポイントの削除</a></span>
-            </p></li>
-<li class="listitem" style="list-style-type: none"><p>追加アクションの操作手順は、こちらを参照してください。<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. アポイントの印刷">アポイントの印刷</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. 別のフォルダへのアポイントの移動">別のフォルダへのアポイントの移動</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. 複数のアポイントを一度に編集">複数のアポイントを一度に編集</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. アポイントの編集">アポイントの編集</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.changestatus.html" title="7.6.3. アポイントのステータスの変更">アポイントのステータスの変更</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.6.8. アポイントの削除">アポイントの削除</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.print.html" title="7.6.7. アポイントの印刷">アポイントの印刷</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.move.html" title="7.6.6. 別のフォルダへのアポイントの移動">別のフォルダへのアポイントの移動</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.multiple.html" title="7.6.9. 複数のアポイントを一度に編集">複数のアポイントを一度に編集</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. キーおよびキーの組み合わせ">キーおよびキーの組み合わせ</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>親記事：<a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. 予定表の画面構成"><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span>の画面構成</a></p></li>
 </ul>
 </div>
 <p>
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.calendar.gui.create"></a><p class="title"><b>作成または編集の表示</b></p>
-<p>新規アポイントを作成または既存のアポイントを編集するとき、新規ページに次の要素が表示されます。</p>
+<a name="ox.appsuite.user.reference.calendar.gui.scheduling"></a><h3 class="title">スケジューリングビュー</h3>
+<p>次のオプションでスケジューリング ビューを表示します。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>ツールバー：<span class="guibutton"><strong>スケジューリング</strong></span>をクリックする。</p></li>
+<li class="listitem"><p>アポイントの作成または編集ページ：<span class="guibutton"><strong>空き時間を検索</strong></span>をクリックする。</p></li>
+</ul></div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.scheduling.entries"></a><p class="title">コンテンツ</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>出席者および設備用入力フィールド</p></li>
+<li class="listitem"><p>週でブラウズするためのアイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.scheduling.browse"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span></p></li>
+<li class="listitem"><p>選択した時間軸および予定表週の開始日と終了日。これをクリックすると、日付ピッカーが表示され、異なる時間軸が設定できます。</p></li>
+<li class="listitem">
+<p><span class="guibutton"><strong>オプション</strong></span> ボタンクリックすると、複数の機能付きのメニューが表示されます。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>予定表シートビューのズーム比を調整します。</p></li>
+<li class="listitem"><p>出席者と設備を表示する行の高さを調整します。</p></li>
+<li class="listitem"><p>表示するアポイントの種類を設定します。</p></li>
+<li class="listitem"><p>稼働時間以外の時間を非表示にします。</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem"><p>出席者の一覧各出席者について次の情報が表示されます：名前、<span class="guibutton"><strong>削除</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.scheduling.participant.remove"></a><img src="../../images/appsuite_user_icon_trash.png"></span>アポイント</p></li>
+<li class="listitem"><p>選択した時間軸の予定表シート</p></li>
+<li class="listitem"><p>スクロールバースクロールバーによって、時間軸の一部を表示するように設定できます。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>配布リストとして保存</strong></span>ボタン新規の配布リストに追加出席者を保存します。</p></li>
+</ul>
+</div>
+<p>
+        </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.sheduling.related"></a><p class="title">詳細は、 を参照してください。</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="日付ピッカー">日付ピッカー</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.2. 複数の出席者とのアポイントのスケジューリング">複数の出席者とのアポイントのスケジューリング</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. 新規アポイントの作成">新規アポイントの作成</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. アポイントの編集">アポイントの編集</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. キーおよびキーの組み合わせ">キーおよびキーの組み合わせ</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
+<li class="listitem" style="list-style-type: none"><p>親記事：<a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. 予定表の画面構成"><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span>の画面構成</a></p></li>
+</ul>
+</div>
+<p>
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.calendar.gui.create"></a><h3 class="title">作成または編集の表示</h3>
+<p>新規アポイントの作成や既存のアポイントを編集するときにこのビューを使用します。</p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.reference.calendar.gui.create.entries"></a><p class="title">コンテンツ</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p>グループウェアの構成によっては、その要素は画面の上または下にあります。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><span class="guibutton"><strong>作成</strong></span>ボタンこのボタンをクリックすると、現在のアポイントデータが保存され、編集ページが閉じます。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>破棄</strong></span>ボタン作成または編集をキャンセルするには、このボタンをクリックしてください。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>予定表</strong></span>の隣のボタンで、アポイントが作成される予定表フォルダが表示されます。別の予定表フォルダでアポイントを作成するには、このボタンをクリックします。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>予定表</strong></span>の横のボタンで、アポイントが作成される予定表フォルダが表示されます。別の予定表フォルダでアポイントを作成するには、このボタンをクリックします。</p></li>
 </ul></div>
 <p>
             </p>
@@ -311,9 +528,9 @@
 <li class="listitem"><p><span class="guibutton"><strong>件名</strong></span> 入力フィールドこのフィールドに件名を入力します。件名は、ビューのアポイントタイトルとして表示されます。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>場所</strong></span>ボタンここで、アポイントが実施される場所を入力できます。</p></li>
 <li class="listitem">
-<p><span class="guibutton"><strong>開始日時</strong></span>および<span class="guibutton"><strong>終了日時</strong></span>入力フィールドアポイントの開始日時と終了日時を設定します。クリックすると、日時を選択するダイアログが表示されます。</p>
+<p><span class="guibutton"><strong>開始日時</strong></span>および<span class="guibutton"><strong>終了日時</strong></span>入力フィールドアポイントの開始日時と終了日時を設定します。クリックすると、日付ピッカーが表示されます。</p>
 <p><span class="guibutton"><strong>終日</strong></span>チェックボックスが無効にすると、開始時刻と終了時刻を設定できます。</p>
-<p>時間の隣にあるタイムゾーンボタンをクリックすると、時間が異なるタイムゾーンで表示されます。予定表の設定で<a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. お気に入りのタイムゾーンの管理">お気に入り</a>としてよく使用するタイムゾーンを設定できます。</p>
+<p>時間の横にあるタイムゾーンボタンをクリックすると、時間が異なるタイムゾーンで表示されます。予定表の設定で<a class="link" href="ox.appsuite.user.sect.calendar.manage.timezones.html" title="7.6.4. お気に入りのタイムゾーンの管理">お気に入り</a>としてよく使用するタイムゾーンを設定できます。</p>
 </li>
 <li class="listitem"><p><span class="guibutton"><strong>終日</strong></span>チェックボックスアポイントが一日中続く場合、このチェックボックスを有効にします。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>空き時間を検索</strong></span>ボタンスケジューリングビューを直接表示します。このビューでは、複数の出席者のアポイントのスケジューリングのときに空き時間を検索できます。</p></li>
@@ -325,14 +542,25 @@
 <li class="listitem"><p><span class="guibutton"><strong>プライベート</strong></span>チェックボックス他のユーザがアポイントの件名および詳細を見れないようにする場合、このチェックボックスを有効にします。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>出席者/設備を追加</strong></span>入力フィールドこのフィールドのアポイントに参加する予定の出席者名を入力します。アポイントの追加招待メールを出席者が受け取るようにするには、<span class="guibutton"><strong>メールで全ての出席者に通知</strong></span>を有効にします。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>添付ファイル</strong></span>下の<span class="guibutton"><strong>添付ファイルを追加</strong></span>このボタンをクリックして、一つまたは複数のファイルを連絡先データに添付します。</p></li>
-</ul></div>
+</ul>
+</div>
 <p>
         </p>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.reference.calendar.gui.create.related"></a><p class="title">関連記事</p>
+<a name="ox.appsuite.user.reference.calendar.gui.create.related"></a><p class="title">詳細は、 を参照してください。</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>この表示は次のアクションに使用します。<span class="simplelist"><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. 新規アポイントの作成">新規アポイントの作成</a>, <a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. アポイントの編集">アポイントの編集</a></span>
-            </p></li>
+<li class="listitem" style="list-style-type: none">
+<p>
+              </p>
+<table border="0" summary="Simple list" class="simplelist">
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="日付ピッカー">日付ピッカー</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html" title="7.4.1. 新規アポイントの作成">新規アポイントの作成</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.manage.edit.html" title="7.6.1. アポイントの編集">アポイントの編集</a></td></tr>
+<tr><td><a class="xref" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html" title="3.2.1. キーおよびキーの組み合わせ">キーおよびキーの組み合わせ</a></td></tr>
+</table>
+<p>
+            </p>
+</li>
 <li class="listitem" style="list-style-type: none"><p>親記事：<a class="xref" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. 予定表の画面構成"><span class="phrase"><span class="guilabel"><strong>予定表</strong></span></span>の画面構成</a></p></li>
 </ul>
 </div>

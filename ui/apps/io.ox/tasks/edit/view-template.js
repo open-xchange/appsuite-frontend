@@ -52,7 +52,7 @@ define('io.ox/tasks/edit/view-template', [
                 //title
                 headline = $('<h1 class="sr-only">').text(headlineText),
                 //save button
-                saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save" tabindex="1">')
+                saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')
                     .text(saveBtnText)
                     .on('click', function () {
                         app.getWindow().busy();
@@ -73,7 +73,7 @@ define('io.ox/tasks/edit/view-template', [
 
                     }),
                 //cancel button
-                $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel" tabindex="1">')
+                $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')
                     .text(gt('Discard'))
                     .on('click', function (e) {
                         e.stopPropagation();
@@ -135,7 +135,7 @@ define('io.ox/tasks/edit/view-template', [
             }
             this.append(
                 $('<div class="col-lg-12">').append(
-                    $('<button type="button" tabindex="1" class="btn btn-link expand-link">').attr('aria-expanded', !baton.parentView.collapsed).text(text)
+                    $('<button type="button" class="btn btn-link expand-link">').attr('aria-expanded', !baton.parentView.collapsed).text(text)
                     .on('click', function () {
                         if (baton.parentView.collapsed) {
                             baton.parentView.$el.find('.collapsed').show();
@@ -246,7 +246,7 @@ define('io.ox/tasks/edit/view-template', [
     point.extend(new RecurrenceView({
         id: 'recurrence',
         className: 'col-sm-12 collapsed',
-        tabindex: 1,
+        tabindex: 0,
         index: 800
     }), { row: '6' });
 
@@ -258,7 +258,8 @@ define('io.ox/tasks/edit/view-template', [
         draw: function (baton) {
             var selector;
             this.append($('<div class="col-sm-6 collapsed">').append(
-                    $('<label>').text(gt('Reminder')).attr('for', 'task-edit-reminder-select'), selector = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('form-control')
+                    $('<label for="task-edit-reminder-select">').text(gt('Reminder')),
+                    selector = $('<select id="task-edit-reminder-select" class="form-control">')
                     .append($('<option>')
                     //#. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
                     .text(gt('Manual input')), taskUtil.buildDropdownMenu(),
@@ -595,9 +596,9 @@ define('io.ox/tasks/edit/view-template', [
                         //hide input field with file
                         $input.addClass('add-attachment').hide();
                         //create new input field
-                        $input = $('<input>', { type: 'file', name: 'file', tabindex: 1 })
-                                .on('change', changeHandler)
-                                .appendTo($input.parent());
+                        $input = $('<input type="file" name="file">')
+                            .on('change', changeHandler)
+                            .appendTo($input.parent());
                     }
                     // look if the quota is exceeded
                     baton.model.validate();
@@ -622,7 +623,7 @@ define('io.ox/tasks/edit/view-template', [
             }
             this.append(
                 $('<div class="col-lg-12 collapsed">').append(
-                    $('<button tabindex="1" class="btn btn-link expand-details-link">').attr('aria-expanded', !baton.parentView.detailsCollapsed).text(text)
+                    $('<button class="btn btn-link expand-details-link">').attr('aria-expanded', !baton.parentView.detailsCollapsed).text(text)
                     .on('click', function () {
                         baton.parentView.$el.find('.task-edit-details').toggle();
                         baton.parentView.detailsCollapsed = !baton.parentView.detailsCollapsed;

@@ -79,7 +79,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
          * @returns {jQuery} thumbnailLink
          */
         createThumbnailNode: function (pageNumber) {
-            var thumbnailLink = $('<a class="document-thumbnail-link" tabindex="1">'),
+            var thumbnailLink = $('<a class="document-thumbnail-link">'),
                 thumbnail = $('<div class="document-thumbnail">'),
                 thumbnailImage = this.createDocumentThumbnailImage('thumbnail-image'),
                 thumbnailPageNumber = $('<div class="page-number">').text(pageNumber + 1);
@@ -169,15 +169,15 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
          * - selects a thumbnail with ENTER or SPACE key.
          * @param {jQuery.Event} event
          */
-        onThumbnailKeydown: function (event) {
-            switch (event.which || event.keyCode) {
+        onThumbnailKeydown: function (e) {
+            switch (e.which) {
                 case 13: // enter
-                    event.stopPropagation();
-                    this.onThumbnailClicked(event);
+                    e.stopPropagation();
+                    this.onThumbnailClicked(e);
                     break;
                 case 32: // space
-                    event.stopPropagation();
-                    this.onThumbnailClicked(event);
+                    e.stopPropagation();
+                    this.onThumbnailClicked(e);
                     break;
                 // no default
             }

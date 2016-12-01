@@ -90,7 +90,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         append: function (fn) {
-            this.$ul.append($('<li>').attr({ role: 'presentation' }).append(fn));
+            this.$ul.append($('<li role="presentation">').append(fn));
             return this;
         },
 
@@ -105,12 +105,11 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 ariaLabel = options.prefix ? [options.prefix, plainText].join(' ') : undefined;
 
             return this.append(
-                $('<a href="#">')
+                $('<a href="#" draggable="false">')
                 .attr({
                     'role': role,
                     'aria-checked': checked,
                     'data-name': name,
-                    'draggable': false,
                     'data-value': this.stringify(value),
                     // you may use toggle with boolean values or provide a toggleValue ('togglevalue' is the option not checked value, 'value' is the option checked value)
                     'data-toggle': _.isBoolean(value) || options.toggleValue !== undefined,
@@ -128,12 +127,16 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             );
         },
 
-        link: function (name, text, callback) {
-            var link = $('<a href="#" draggable="false">')
+        link: function (name, text, callback, options) {
+            options = options || {};
+            var link = $('<a href="#" draggable="false" role="menuitem">')
                 .attr('data-name', name)
                 // in firefox draggable=false is not enough to prevent dragging...
                 .on('dragstart', false)
-                .text(text);
+                .append(
+                    options.icon ? $('<i class="fa fa-fw" aria-hidden="true">') : $(),
+                    text
+                );
             if (callback) link.on('click', {}, callback);
             return this.append(link);
         },
@@ -152,26 +155,15 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             var label = getLabel(this.options.label),
                 ariaLabel = this.options.aria ? this.options.aria : null,
                 toggle;
-            if (_.isString(label)) {
-                ariaLabel += (' ' + label);
-            }
+
+            if (_.isString(label)) ariaLabel += (' ' + label);
             this.$el.append(
-                toggle = $('<a>').attr({
-                    href: '#',
-                    tabindex: 1,
-                    draggable: false,
-                    role: 'button',
-                    'aria-haspopup': true,
-                    'aria-label': ariaLabel,
-                    'data-toggle': 'dropdown'
-                })
+                toggle = $('<a href="#" draggable="false" role="button" aria-haspopup="true" data-toggle="dropdown">').attr('aria-label', ariaLabel)
                 .append(
                     // label
-                    $('<span class="dropdown-label">').append(
-                        label
-                    ),
+                    $('<span class="dropdown-label">').append(label),
                     // caret
-                    this.options.caret ? $('<i aria-hidden="true" class="fa fa-caret-down">') : []
+                    this.options.caret ? $('<i class="fa fa-caret-down" aria-hidden="true">') : []
                 ),
                 this.$ul
             );
@@ -180,9 +172,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             // use smart drop-down? (fixed positioning)
             if (this.options.smart) toggle.addClass('smart-dropdown');
             // in firefox draggable=false is not enough to prevent dragging...
-            if (_.device('firefox')) {
-                toggle.attr('ondragstart', 'return false;');
-            }
+            if (_.device('firefox')) toggle.attr('ondragstart', 'return false;');
+
             toggle.dropdown();
             // update custom label
             this.label();

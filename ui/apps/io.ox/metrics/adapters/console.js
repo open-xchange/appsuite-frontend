@@ -21,57 +21,30 @@ define('io.ox/metrics/adapters/console', [
     if (!settings.get('tracking/console/enabled', false)) return;
 
     // localstorage event 'database'
-    var point = ext.point('io.ox/metrics/adapter'),
-        store = {
-            hash: JSON.parse(
-                localStorage.getItem('metrics.adapter.console.storage') || '{}'
-            ),
-            show: function () {
-                _.each(store.hash, function (list) {
-                    console.table(list);
-                });
-            },
-            save: function () {
-                localStorage.setItem(
-                    'metrics.adapter.console.storage',
-                    JSON.stringify(store.hash)
-                );
-            },
-            reset: function () {
-                store.hash = {};
-                store.save();
-            },
-            add: function (type, baton) {
-                baton = baton || {};
-                var id = baton.id || type,
-                    data = baton.data,
-                    entry =  [id, JSON.stringify(data)];
-                // add to store
-                store.hash[type] = store.hash[type] || [];
-                store.hash[type].push(entry);
-                // save to localstorage
-                store.save();
-                // output
-                console.log(entry);
-            }
-        };
+    var point = ext.point('io.ox/metrics/adapter');
 
-    // for debugging
-    window.metrics = store;
+    function log(type, baton) {
+        baton = baton || {};
+        var id = baton.id || type,
+            data = baton.data,
+            entry = [type, id, JSON.stringify(data)];
+        // output
+        console.log(entry);
+    }
 
     point.extend({
         id: 'console',
         setup: function () {
-            store.add('setup');
+            log('setup');
         },
         trackEvent: function (baton) {
-            store.add('trackEvent', baton);
+            log('trackEvent', baton);
         },
         trackVisit: function (baton) {
-            store.add('trackVisit', baton);
+            log('trackVisit', baton);
         },
         trackPage: function (baton) {
-            store.add('trackPage', baton);
+            log('trackPage', baton);
         }
     });
 

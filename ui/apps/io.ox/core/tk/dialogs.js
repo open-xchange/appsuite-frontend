@@ -15,8 +15,9 @@ define('io.ox/core/tk/dialogs', [
     'io.ox/core/event',
     'io.ox/core/extensions',
     'io.ox/core/a11y',
-    'io.ox/backbone/mini-views/help'
-], function (Events, ext, a11y, HelpView) {
+    'io.ox/backbone/mini-views/help',
+    'gettext!io.ox/core'
+], function (Events, ext, a11y, HelpView, gt) {
 
     'use strict';
 
@@ -196,7 +197,6 @@ define('io.ox/core/tk/dialogs', [
                         }
                         break;
                     case 9:
-                        // tab
                         if (o.tabTrap) a11y.trapFocus(this, e);
                         break;
                     default:
@@ -211,14 +211,14 @@ define('io.ox/core/tk/dialogs', [
              */
             ariaHideSiblings = function () {
                 // add aria-hidden="true" to all siblings of the wrapper and all parents of the wrapper
-                $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings().each(function () {
+                $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings(':not(script,noscript)').each(function () {
                     var el = $(this);
                     // save aria-hidden value for later restoring
                     el.data('ox-restore-aria-hidden', el.attr('aria-hidden'));
                 }).attr('aria-hidden', true);
                 self.on('close', function () {
                     // restore aria-hidden and remove restoring information
-                    $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings().removeAttr('aria-hidden').each(function () {
+                    $(nodes.wrapper).parentsUntil('body').add(nodes.wrapper).siblings(':not(script,noscript)').removeAttr('aria-hidden').each(function () {
                         var el = $(this);
                         if (el.data('ox-restore-aria-hidden')) el.attr('aria-hidden', el.data('ox-restore-aria-hidden'));
                         el.removeData('ox-restore-aria-hidden');
@@ -323,8 +323,7 @@ define('io.ox/core/tk/dialogs', [
                 click: options.click || invoke,
                 dataaction: dataaction,
                 purelink: options.purelink,
-                inverse: options.inverse,
-                tabIndex: options.tabIndex || options.tabindex
+                inverse: options.inverse
             };
 
             if (options.type) {
@@ -374,10 +373,10 @@ define('io.ox/core/tk/dialogs', [
 
         this.addCheckbox = function (label, action, status) {
             nodes.footer.prepend(
-                $('<div>').addClass('checkbox').append(
-                    $('<div>').addClass('controls'),
+                $('<div class="checkbox">').append(
+                    $('<div class="controls">'),
                     $('<label>').text(label).prepend(
-                        $('<input type="checkbox" tabindex="1">').attr({ 'data-action': action, 'checked': status })
+                        $('<input type="checkbox">').attr({ 'data-action': action, 'checked': status })
                     )
                 )
             );
@@ -423,13 +422,7 @@ define('io.ox/core/tk/dialogs', [
                 nodes.header.remove();
             }
 
-            if (o.help) {
-                nodes.header.addClass('help');
-                nodes.header.append(new HelpView({
-                    href: o.help,
-                    tabindex: '1'
-                }).render().$el);
-            }
+            if (o.help) nodes.header.addClass('help').append(new HelpView({ href: o.help }).render().$el);
 
             // show but keep invisible
             // this speeds up calculation of dimenstions
@@ -637,7 +630,8 @@ define('io.ox/core/tk/dialogs', [
             arrow: true,
             // closely positon to click/touch location
             closely: false,
-            tabTrap: true
+            tabTrap: true,
+            focus: true
         }, options || {});
 
         var open,
@@ -650,13 +644,13 @@ define('io.ox/core/tk/dialogs', [
 
             overlay,
 
-            sidepopuppane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="1">'),
+            sidepopuppane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<a href="#" class="close" data-action="close" role="button" tabindex="1">').append(
-                        $('<i class="fa fa-times">')
-                    )
-                ),
+                $('<a href="#" class="close" data-action="close" role="button">').attr('aria-label', gt('Close')).append(
+                    $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))
+                )
+            ),
 
             popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, sidepopuppane),
 
@@ -671,24 +665,7 @@ define('io.ox/core/tk/dialogs', [
             self = this,
 
             fnKey = function (e) {
-                var items, focus, index;
-                if (e.which === 9 && options.tabTrap) {
-
-                    items = $(this).find('[tabindex][disabled!="disabled"]:visible');
-                    if (items.length) {
-                        e.preventDefault();
-                        focus = $(document.activeElement);
-                        index = (items.index(focus) >= 0) ? items.index(focus) : 0;
-                        index += (e.shiftKey) ? -1 : 1;
-
-                        if (index >= items.length) {
-                            index = 0;
-                        } else if (index < 0) {
-                            index = items.length - 1;
-                        }
-                        items.eq(index).focus();
-                    }
-                }
+                if (e.which === 9 && options.tabTrap) a11y.trapFocus(this, e);
             },
 
             pane = sidepopuppane.scrollable();
@@ -783,7 +760,9 @@ define('io.ox/core/tk/dialogs', [
             })
             .on('keydown', function (e) {
                 // enter
-                if (e.which === 13) $(this).trigger('click');
+                if (e.which === 13) {
+                    $(this).trigger('click');
+                }
             });
 
         function getPct(x) {
@@ -907,8 +886,7 @@ define('io.ox/core/tk/dialogs', [
                     if (!options.modal) {
                         self.nodes.target.append(arrow);
                     }
-
-                    pane.parent().focus();
+                    closer.find('.close').focus();
                     self.trigger('show');
                 });
             }

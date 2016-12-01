@@ -118,15 +118,15 @@ define('io.ox/calendar/week/view', [
 
             // initialize main objects
             _.extend(this, {
-                pane:         $('<div>').addClass('scrollpane f6-target').attr({ tabindex: 1 }).on('scroll', this.updateHiddenIndicators.bind(this)),
-                fulltimePane: $('<div>').addClass('fulltime'),
-                fulltimeCon:  $('<div>').addClass('fulltime-container'),
-                fulltimeNote: $('<div>').addClass('note'),
-                timeline:     $('<div>').addClass('timeline'),
-                dayLabel:     $('<div>').addClass('footer'),
-                kwInfo:       _.device('smartphone') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info').on('click', $.preventDefault),
-                weekCon:      $('<div>').addClass('week-container'),
-                moreAppointmentsIndicators: $('<div>').addClass('more-appointments-container')
+                pane:         $('<div class="scrollpane f6-target" tabindex="0">').on('scroll', this.updateHiddenIndicators.bind(this)),
+                fulltimePane: $('<div class="fulltime">'),
+                fulltimeCon:  $('<div class="fulltime-container">'),
+                fulltimeNote: $('<div class="node">'),
+                timeline:     $('<div class="timeline">'),
+                dayLabel:     $('<div class="footer">'),
+                kwInfo:       _.device('smartphone') ? $('<div class="info">') : $('<a href="#" class="info">').on('click', $.preventDefault),
+                weekCon:      $('<div class="week-container">'),
+                moreAppointmentsIndicators: $('<div class="more-appointments-container">')
             });
 
             this.kwInfo.attr({
@@ -161,14 +161,13 @@ define('io.ox/calendar/week/view', [
 
             //append datepicker
             if (!_.device('smartphone')) {
-                require(['io.ox/core/tk/datepicker'], function () {
-                    self.kwInfo.datepicker({ parentEl: self.$el }).on('changeDate', function (e) {
-                        self.setStartDate(e.date.getTime());
-                        self.trigger('onRefresh');
-                    })
-                    .on('show', function () {
-                        $(this).datepicker('update', new Date(self.startDate.valueOf()));
-                    });
+                require(['io.ox/backbone/views/datepicker'], function (Picker) {
+                    new Picker({ date: self.startDate })
+                        .attachTo(self.kwInfo)
+                        .on('select', function (date) {
+                            self.setStartDate(date);
+                            self.trigger('onRefresh');
+                        });
                 });
             }
         },
@@ -274,7 +273,7 @@ define('io.ox/calendar/week/view', [
             this.gridSize = 60 / settings.get('interval', 30);
             this.workStart = settings.get('startTime', this.workStart);
             this.workEnd = settings.get('endTime', this.workEnd);
-            settings.on('change', function (e, key) {
+            settings.on('change', function (key) {
                 switch (key) {
                     case 'interval':
                         self.gridSize = 60 / settings.get('interval', 30);
@@ -675,16 +674,14 @@ define('io.ox/calendar/week/view', [
          * cleanUp all lasso data
          */
         cleanUpLasso: function () {
-            if (_.isObject(this.lasso)) {
-                var l = this.lasso.data();
-                // delete div and reset object
-                $.each(l.helper, function (i, el) {
-                    el.remove();
-                });
-                l = null;
-                this.lasso.remove();
-                this.lasso = false;
-            }
+            // more robost variant (see bug 47277)
+            var lasso = this.lasso instanceof $ ? this.lasso : $(),
+                data = lasso.data() || {};
+            $.each(data.helper || [], function (i, el) {
+                el.remove();
+            });
+            lasso.remove();
+            this.lasso = false;
         },
 
         renderTimeLabel: function (timezone, className) {
@@ -803,6 +800,7 @@ define('io.ox/calendar/week/view', [
                     self.timeLabelBar.css('width', ((list.length + 1) * 80) + 'px');
                     self.fulltimeCon.css('margin-left', ((list.length + 1) * 80) + 'px');
                     self.dayLabel.css('left', ((list.length + 1) * 80) + 'px');
+                    self.moreAppointmentsIndicators.css('left', ((list.length + 1) * 80) + 'px');
                 } else {
                     self.timeLabelBar.css('width', '');
                     self.fulltimeCon.css('margin-left', '');
@@ -810,15 +808,17 @@ define('io.ox/calendar/week/view', [
                 }
             }
 
-            var update = _.throttle(function (e) {
-                if (e.type === 'change:favoriteTimezones') {
-                    drawDropdown();
-                }
+            var update = _.throttle(function () {
+                drawTimezoneLabels();
+            }, 100, { trailing: false });
+
+            var updateAndDrawDropdown = _.throttle(function () {
+                drawDropdown();
                 drawTimezoneLabels();
             }, 100, { trailing: false });
 
             settings.on('change:renderTimezones', update);
-            settings.on('change:favoriteTimezones', update);
+            settings.on('change:favoriteTimezones', updateAndDrawDropdown);
 
             this.timeLabelBar = $('<div class="time-label-bar">');
             drawDropdown();
@@ -893,23 +893,15 @@ define('io.ox/calendar/week/view', [
             this.$el.empty().append(
                 $('<div class="toolbar">').append(
                     $('<div class="controls-container">').append(
-                        $('<a>').attr({
-                            href: '#',
-                            tabindex: 1,
-                            role: 'button',
-                            title: prevStr,
+                        $('<a href="#" role="button" class="control prev">').attr({
+                            title: prevStr, // TODO: Aria title vs. aria-label
                             'aria-label': prevStr
                         })
-                        .addClass('control prev')
                         .append($('<i class="fa fa-chevron-left" aria-hidden="true">')),
-                        $('<a>').attr({
-                            href: '#',
-                            tabindex: 1,
-                            role: 'button',
-                            title: nextStr,
+                        $('<a href="#" role="button" class="control next">').attr({
+                            title: nextStr, // TODO: Aria title vs. aria-label
                             'aria-label': nextStr
                         })
-                        .addClass('control next')
                         .append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
                     ),
                     this.kwInfo
@@ -1035,14 +1027,10 @@ define('io.ox/calendar/week/view', [
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
             for (var d = 0; d < this.columns; d++) {
-                var day = $('<a>')
-                    .addClass('weekday')
+                var day = $('<a href="#" class="weekday" role="button">')
                     .attr({
                         date: d,
-                        title: gt('Create all-day appointment'),
-                        role: 'button',
-                        tabindex: 1,
-                        href: '#'
+                        title: gt('Create all-day appointment')
                     })
                     .text(gt.noI18n(tmpDate.format('ddd D')))
                     .width(100 / this.columns + '%');
@@ -1126,7 +1114,9 @@ define('io.ox/calendar/week/view', [
                         fulltimeCount++;
                         var node = this.renderAppointment(model), row,
                             fulltimePos = moment(model.getDate('start_date')).diff(this.startDate, 'days'),
-                            fulltimeWidth = Math.max((moment(model.get('end_date')).diff(moment(model.get('start_date')), 'days') + Math.min(0, fulltimePos)), 1);
+                            // calculate difference in utc, otherwhise we get wrong results if the appointment starts before a daylight saving change and ends after
+                            fulltimeWidth = Math.max((moment(model.get('end_date')).utc().diff(moment(model.get('start_date')).utc(), 'days') + Math.min(0, fulltimePos)), 1);
+
                         // loop over all column positions
                         for (row = 0; row < fulltimeColPos.length; row++) {
                             if (fulltimeColPos[row] <= model.get('start_date')) {
@@ -1969,12 +1959,11 @@ define('io.ox/calendar/week/view', [
                 }
             }
 
-            if (String(folder.id) === String(a.get('folder_id'))) {
+            var folder_id = a.get('folder_id');
+            if (String(folder.id) === String(folder_id)) {
                 addColorClasses(folder);
-            } else {
-                folderAPI.get(a.get('folder_id')).done(function (f) {
-                    addColorClasses(f);
-                });
+            } else if (folder_id !== undefined) {
+                folderAPI.get(folder_id).done(addColorClasses);
             }
 
             if (a.get('private_flag') && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
@@ -1994,7 +1983,7 @@ define('io.ox/calendar/week/view', [
             }
 
             this
-                .attr({ tabindex: 1 })
+                .attr('tabindex', 0)
                 .addClass(classes)
                 .append(
                     $('<div class="appointment-content">').append(

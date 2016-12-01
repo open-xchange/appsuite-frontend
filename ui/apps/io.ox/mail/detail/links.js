@@ -349,7 +349,7 @@ define('io.ox/mail/detail/links', [
                     if (time && time.isValid()) timestamp.hour(time.hour()).minute(time.minute());
                 }
                 // return link
-                return '<a href="#" class="calendar-link" data-start-time="' + timestamp + '" role="button" tabindex="1">' + part + '</a>';
+                return '<a href="#" class="calendar-link" data-start-time="' + timestamp + '" role="button">' + part + '</a>';
             }
 
             function getRecentDate(str) {

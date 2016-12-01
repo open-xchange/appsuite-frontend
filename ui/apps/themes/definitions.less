@@ -59,7 +59,7 @@
 @badge-color:                           @white;
 @badge-bg:                              #aaa;   // used by folder tree for unread messages, for example
 @label-info-bg:                         #3a87ad;
-@label-default-bg:                      #767676;
+@label-default-bg:                      #666;
 
 // Basic colors
 //----------------------
@@ -135,6 +135,7 @@
 @foldertree-badge-background:           @badge-bg;
 @foldertree-badge-focus-background:     #006597;
 @foldertree-badge-color:                @badge-color;
+@foldertree-counter-color:              #0076b3;
 @foldertree-selected-focus-counter-color: rgba(255, 255, 255, 0.95);
 @foldertree-selected-focus-options-background: rgba(0, 0, 0, 0.20);
 
@@ -152,12 +153,14 @@
 @toolbar-button-accent:                 lighten(@link-color, 0%);
 @toolbar-button-color:                  #bbb;
 @toolbar-link-color:                    lighten(@toolbar, 25%);
+@toolbar-link-disabled-color:           @link-disabled-color;
 @toolbar-focus-color:                   #08c;
 @toolbar-background:                    #333;
 @toolbar-background-alt:                lighten(@toolbar-background, 10%);
 @toolbar-line-height:                   24px;
 @toolbar-vertical-padding:              8px;
 @toolbar-height:                        @toolbar-line-height + 2 * @toolbar-vertical-padding;
+@link-disabled-color:                   #aaa;
 @link-accent-color:                     #ffad00;
 
 // mail app
@@ -241,10 +244,13 @@
 @custom-color-pattern-pct:              3%;
 
 // wizard & tours
-@wizard-backdrop-color: rgba(90, 186, 255, 0.20);
-@wizard-hotspot-color: #FD057C;
-@wizard-pulse-color: fade(@wizard-hotspot-color, 70%);
-@wizard-pulse-border-color: @wizard-hotspot-color;
+@wizard-backdrop-color: rgba(0, 0, 0, 0.15);
+
+// hotspot
+@hotspot-color: #FD057C;
+@pulse-color: fade(@hotspot-color, 70%);
+@pulse-border-color: @hotspot-color;
+
 
 // mobile
 //----------------------

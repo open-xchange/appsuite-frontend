@@ -105,11 +105,6 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'i
                 expect(this.view.$el.attr('name')).to.equal('test');
             });
 
-            it('should have a default tabindex of 1', function () {
-                this.view.render();
-                expect(this.view.$el.attr('tabindex')).to.equal('1');
-            });
-
             it('should be empty', function () {
                 expect(this.view.$el.val()).to.be.empty;
                 expect(this.model.get('test')).to.be.empty;
@@ -224,11 +219,6 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'i
             it('should render a name attribute', function () {
                 this.view.render();
                 expect(this.view.$el.attr('name')).to.equal('test');
-            });
-
-            it('should have a default tabindex of 1', function () {
-                this.view.render();
-                expect(this.view.$el.attr('tabindex')).to.equal('1');
             });
 
             it('should have a autocomplete attribute set to off', function () {

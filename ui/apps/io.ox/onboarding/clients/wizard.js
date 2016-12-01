@@ -25,6 +25,9 @@ define('io.ox/onboarding/clients/wizard', [
 
     'use strict';
 
+    // deeplink example:
+    // &reg=client-onboarding&regopt=platform:apple,device:apple.iphone,scenario:mailappinstall
+
     var POINT = 'io.ox/onboarding/clients/views',
         //#. title for 1st and snd step of the client onboarding wizard
         //#. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
@@ -60,10 +63,8 @@ define('io.ox/onboarding/clients/wizard', [
         _getListItemBack: function (type) {
             if (!_.contains(['device', 'scenario'], type)) return;
             // tabindex needed (wizard tabtrap)
-            return $('<li class="option centered" data-value="back">')
-                    .append(
-                        $('<button tabindex="1" class="link box" role="menuitem">')
-                        .append(
+            return $('<li class="option centered" data-value="back">').append(
+                        $('<button class="link box" role="menuitem">').append(
                             $('<div class="icon-list">').append(options._getIcons('fa-angle-left')),
                             // a11y
                             options._getTitle({ title: gt('back') }).addClass('sr-only')
@@ -73,7 +74,7 @@ define('io.ox/onboarding/clients/wizard', [
 
         _getLink: function (obj) {
             // tabindex needed (wizard tabtrap)
-            return $('<button tabindex="1" class="link box" role="menuitem">')
+            return $('<button class="link box" role="menuitem">')
                 .addClass(obj.enabled ? '' : 'disabled')
                 .append(
                     options._getPremium(obj),

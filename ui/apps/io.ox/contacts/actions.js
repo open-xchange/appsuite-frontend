@@ -16,13 +16,12 @@ define('io.ox/contacts/actions', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/contacts/api',
-    'io.ox/portal/util',
     'io.ox/core/print',
     'settings!io.ox/contacts',
     'settings!io.ox/mail',
     'gettext!io.ox/contacts',
     'io.ox/core/pim/actions'
-], function (ext, links, actions, api, portalUtil, print, settings, mailSettings, gt) {
+], function (ext, links, actions, api, print, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -195,7 +194,7 @@ define('io.ox/contacts/actions', [
         }
     });
 
-    function addedToPortal(data) {
+    function addedToPortal(data, portalUtil) {
         var cid = _.cid(data);
         return _(portalUtil.getWidgetsByType('stickycontact')).any(function (widget) {
             return _.cid(widget.props) === cid;
@@ -206,8 +205,8 @@ define('io.ox/contacts/actions', [
         capabilities: 'portal',
         requires: function (e) {
             if (!e.collection.has('one') || !e.context.id || !e.context.folder_id) return false;
-            return api.get(api.reduce(e.context)).then(function (data) {
-                return !!data.mark_as_distributionlist && !addedToPortal(data);
+            return $.when(api.get(api.reduce(e.context)), ox.load(['io.ox/portal/util'])).then(function (data, portalUtil) {
+                return !!data.mark_as_distributionlist && !addedToPortal(data, portalUtil);
             });
         },
         action: function (baton) {

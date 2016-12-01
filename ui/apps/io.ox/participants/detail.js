@@ -65,7 +65,7 @@ define('io.ox/participants/detail', [
         }
 
         var isResource = looksLikeResource(obj);
-        node = $('<li class="participant" tabindex="1">')
+        node = $('<li class="participant" tabindex="0">')
             .addClass(isResource ? 'halo-resource-link' : 'halo-link')
             .on('keydown', function (e) {
                 if (e.which === 13) {

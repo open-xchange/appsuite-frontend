@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-06-30 23:41+0800\n"
+"PO-Revision-Date: 2016-10-27 18:22+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: apps/io.ox/tours/calendar.js:34 module:io.ox/tours
 msgid "Creating a new appointment"
@@ -78,11 +78,11 @@ msgid "Creating the appointment"
 msgstr "新增約會"
 
 #: apps/io.ox/tours/calendar.js:78 module:io.ox/tours
-msgid "To create the appointment, click on Create at the upper right side."
-msgstr "要建立約會，點選右上角的建立。"
+msgid "To create the appointment, click on Create at the lower left side."
+msgstr "要建立約會，點選左下角的「建立」。"
 
 #: apps/io.ox/tours/calendar.js:83 module:io.ox/tours
-#: apps/io.ox/tours/mail.js:86
+#: apps/io.ox/tours/mail.js:87
 msgid "Selecting a view"
 msgstr "選擇視圖"
 
@@ -93,11 +93,21 @@ msgid ""
 msgstr ""
 "要選擇日、月、清單等視圖，點選工具列中的視圖，然後點選版面段落中的選單項目。"
 
-#: apps/io.ox/tours/calendar.js:95 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:97 module:io.ox/tours
+msgid "The calendar views"
+msgstr "行事曆視圖"
+
+#: apps/io.ox/tours/calendar.js:98 module:io.ox/tours
+msgid ""
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
+msgstr "行事曆視圖將會顯示包含指定時間範圍中約會的行事曆。"
+
+#: apps/io.ox/tours/calendar.js:110 module:io.ox/tours
 msgid "The List view"
 msgstr "清單視圖"
 
-#: apps/io.ox/tours/calendar.js:96 module:io.ox/tours
+#: apps/io.ox/tours/calendar.js:111 module:io.ox/tours
 msgid ""
 "The List view shows a list of the appointments in the current folder. If "
 "clicking on an appointment, the appointment's data and some functions are "
@@ -105,16 +115,6 @@ msgid ""
 msgstr ""
 "清單視圖會顯示目前資料夾中的約會，點擊約會時，約會資料與一些功能將顯示於詳細"
 "視圖。"
-
-#: apps/io.ox/tours/calendar.js:105 module:io.ox/tours
-msgid "The calendar views"
-msgstr "行事曆視圖"
-
-#: apps/io.ox/tours/calendar.js:106 module:io.ox/tours
-msgid ""
-"The calendar views display a calendar sheet with the appointments for the "
-"selected time range."
-msgstr "行事曆視圖將會顯示包含指定時間範圍中約會的行事曆。"
 
 #: apps/io.ox/tours/contacts.js:30 module:io.ox/tours
 msgid "Creating a new contact"
@@ -157,15 +157,15 @@ msgstr ""
 "要一次編輯多個聯絡人，選取聯絡人左邊的選取盒。若選取盒未顯示，點選工具列右邊"
 "的視圖 > 選取盒圖示。"
 
-#: apps/io.ox/tours/files.js:53 module:io.ox/tours
+#: apps/io.ox/tours/files.js:59 module:io.ox/tours
 msgid "The Drive app tour.txt"
 msgstr "The Drive app tour.txt"
 
-#: apps/io.ox/tours/files.js:59 module:io.ox/tours
+#: apps/io.ox/tours/files.js:66 module:io.ox/tours
 msgid "The Drive app"
 msgstr "Drive 應用程式"
 
-#: apps/io.ox/tours/files.js:60 module:io.ox/tours
+#: apps/io.ox/tours/files.js:67 module:io.ox/tours
 msgid ""
 "Welcome to your cloud storage app. This Guided Tour will introduce you to "
 "your new online storage solution - your one point to access online stored "
@@ -176,11 +176,11 @@ msgstr ""
 "存取您所有帳號當中儲存的檔案的單一窗口。您可上傳並儲存檔案於此處，分享並在不"
 "同裝置間同步。"
 
-#: apps/io.ox/tours/files.js:66 module:io.ox/tours
+#: apps/io.ox/tours/files.js:73 module:io.ox/tours
 msgid "Folder tree"
 msgstr "資料夾樹"
 
-#: apps/io.ox/tours/files.js:67 module:io.ox/tours
+#: apps/io.ox/tours/files.js:74 module:io.ox/tours
 msgid ""
 "On the left you can see the folder tree. It displays your folder structure "
 "and allows you to navigate to specific folders and subfolders. To make your "
@@ -191,29 +191,29 @@ msgstr ""
 "料夾與子資料夾。為了方便您，我們已經為您的文件、音樂、相片、影片準備了專用資"
 "料夾。"
 
-#: apps/io.ox/tours/files.js:80 module:io.ox/tours
+#: apps/io.ox/tours/files.js:87 module:io.ox/tours
 msgid "Folder content"
 msgstr "資料夾內容"
 
-#: apps/io.ox/tours/files.js:81 module:io.ox/tours
+#: apps/io.ox/tours/files.js:88 module:io.ox/tours
 msgid ""
 "Clicking on a folder displays all the subfolders, documents, media and other "
 "files that it contains."
 msgstr "點擊資料夾後將會顯示當中包含所有的子資料夾、文件、媒體與其他檔案。"
 
-#: apps/io.ox/tours/files.js:88 module:io.ox/tours
+#: apps/io.ox/tours/files.js:95 module:io.ox/tours
 msgid "Select a view"
 msgstr "選擇視圖"
 
-#: apps/io.ox/tours/files.js:89 module:io.ox/tours
+#: apps/io.ox/tours/files.js:96 module:io.ox/tours
 msgid "Different views are available. Just select the one you like best."
 msgstr "可選擇不同的視圖，選擇您最喜歡的就好。"
 
-#: apps/io.ox/tours/files.js:103 module:io.ox/tours
+#: apps/io.ox/tours/files.js:110 module:io.ox/tours
 msgid "Toolbar"
 msgstr "工具列"
 
-#: apps/io.ox/tours/files.js:104 module:io.ox/tours
+#: apps/io.ox/tours/files.js:111 module:io.ox/tours
 msgid ""
 "At the top you can find the toolbar with many functions and additional "
 "options. You can easily create new folders, new files and much more."
@@ -221,11 +221,11 @@ msgstr ""
 "您可在頂端找到含有許多功能與選項的工具列。您可以簡單地建立新資料夾、新檔案，"
 "以及其他功能。"
 
-#: apps/io.ox/tours/files.js:116 module:io.ox/tours
+#: apps/io.ox/tours/files.js:123 module:io.ox/tours
 msgid "Upload a new file"
 msgstr "上傳新檔案"
 
-#: apps/io.ox/tours/files.js:117 module:io.ox/tours
+#: apps/io.ox/tours/files.js:124 module:io.ox/tours
 msgid ""
 "To upload a new file from your local device, simply click on Add local file "
 "and select the file you would like to upload. It is even easier if you just "
@@ -236,29 +236,29 @@ msgstr ""
 "可。另一個更簡單的方式是直接從您的電腦中拖曳至 Drive。上傳的檔案就可透過 "
 "Drive 在所有裝置中使用。"
 
-#: apps/io.ox/tours/files.js:131 module:io.ox/tours
+#: apps/io.ox/tours/files.js:138 module:io.ox/tours
 msgid "Preview files"
 msgstr "預覽檔案"
 
-#: apps/io.ox/tours/files.js:132 module:io.ox/tours
+#: apps/io.ox/tours/files.js:139 module:io.ox/tours
 msgid "Clicking on the view icon leads you to a preview of the selected file."
 msgstr "點擊檢視圖示，將帶您到選擇檔案的預覽畫面。"
 
-#: apps/io.ox/tours/files.js:142 module:io.ox/tours
+#: apps/io.ox/tours/files.js:149 module:io.ox/tours
 msgid "Preview mode"
 msgstr "預覽模式"
 
-#: apps/io.ox/tours/files.js:143 module:io.ox/tours
+#: apps/io.ox/tours/files.js:150 module:io.ox/tours
 msgid ""
 "From preview you can also select other options to help you manage and work "
 "on your files."
 msgstr "您也可在預覽畫面選擇其他選項來幫助管理與編輯檔案。"
 
-#: apps/io.ox/tours/files.js:156 module:io.ox/tours
+#: apps/io.ox/tours/files.js:163 module:io.ox/tours
 msgid "Share files"
 msgstr "分享檔案"
 
-#: apps/io.ox/tours/files.js:157 module:io.ox/tours
+#: apps/io.ox/tours/files.js:164 module:io.ox/tours
 msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
 "also collaborate on a document and set different access rights."
@@ -266,11 +266,11 @@ msgstr ""
 "您可在此與朋友及外部聯絡人分享檔案。您也可以一起編輯文件，並設定不同存取權"
 "限。"
 
-#: apps/io.ox/tours/files.js:168 module:io.ox/tours
+#: apps/io.ox/tours/files.js:175 module:io.ox/tours
 msgid "Sharing options"
 msgstr "分享選項"
 
-#: apps/io.ox/tours/files.js:169 module:io.ox/tours
+#: apps/io.ox/tours/files.js:176 module:io.ox/tours
 msgid ""
 "Choose from two alternatives to share your files and folders. Use Invite "
 "people if you want to manage access rights and allow recipients to create "
@@ -281,11 +281,11 @@ msgstr ""
 "輯檔案，請使用邀請成員功能；若只要將鏈結提供給其他人，即可檢視、下載您的檔"
 "案。若您希望的話，也可指定到期日，並加上密碼保護。"
 
-#: apps/io.ox/tours/files.js:182 module:io.ox/tours
+#: apps/io.ox/tours/files.js:189 module:io.ox/tours
 msgid "Collaborating"
 msgstr "協作"
 
-#: apps/io.ox/tours/files.js:183 module:io.ox/tours
+#: apps/io.ox/tours/files.js:190 module:io.ox/tours
 msgid ""
 "Sharing files by inviting people does not only offer your recipients the "
 "option to create and edit files. Internal and external participants are also "
@@ -295,11 +295,11 @@ msgstr ""
 "透過邀請成員來分享檔案不僅能讓受邀者建立、編輯檔案，內外部的其他參與者也能夠"
 "與您同時編輯文件與試算表。"
 
-#: apps/io.ox/tours/files.js:197 module:io.ox/tours
+#: apps/io.ox/tours/files.js:204 module:io.ox/tours
 msgid "Edit documents"
 msgstr "編輯文件"
 
-#: apps/io.ox/tours/files.js:198 module:io.ox/tours
+#: apps/io.ox/tours/files.js:205 module:io.ox/tours
 msgid ""
 "Did you know that you can edit text documents and spreadsheets online? Drive "
 "will automatically update your edited file, but thanks to versioning the "
@@ -308,11 +308,11 @@ msgstr ""
 "您知道您可直接在線上編輯文件與試算表嗎？Drive 將自動更新您編輯的檔案，受惠於"
 "版本功能，原始版本將永遠存在。"
 
-#: apps/io.ox/tours/files.js:205 module:io.ox/tours
+#: apps/io.ox/tours/files.js:212 module:io.ox/tours
 msgid "File details"
 msgstr "檔案詳情"
 
-#: apps/io.ox/tours/files.js:206 module:io.ox/tours
+#: apps/io.ox/tours/files.js:213 module:io.ox/tours
 msgid ""
 "The file details side bar offers additional information about your files. "
 "Just enable the File details option from the View drop down menu and select "
@@ -321,11 +321,11 @@ msgstr ""
 "檔案詳細資訊側邊欄提供關於檔案的更多資訊。只要在視圖下拉選單開啟檔案詳情選"
 "項，然後選擇檔案即可看到詳情。"
 
-#: apps/io.ox/tours/files.js:221 module:io.ox/tours
+#: apps/io.ox/tours/files.js:228 module:io.ox/tours
 msgid "Add another account"
 msgstr "新增其他帳號"
 
-#: apps/io.ox/tours/files.js:222 module:io.ox/tours
+#: apps/io.ox/tours/files.js:229 module:io.ox/tours
 msgid ""
 "Drive allows you to connect to other storage solutions if you already have a "
 "cloud storage account you use to save and sync your files. Simply click on "
@@ -334,11 +334,11 @@ msgstr ""
 "若您已經有了雲端儲存空間的帳號，用來儲存與同步檔案的話，您可直接將 Drive 連結"
 "至該線上儲存解決方案。只要點擊對應的圖示後登入即可存取您現有的資料。"
 
-#: apps/io.ox/tours/files.js:231 module:io.ox/tours
+#: apps/io.ox/tours/files.js:238 module:io.ox/tours
 msgid "Restart Guided Tour"
 msgstr "重新開始導覽"
 
-#: apps/io.ox/tours/files.js:232 module:io.ox/tours
+#: apps/io.ox/tours/files.js:239 module:io.ox/tours
 msgid ""
 "Hint: you can always restart guided tours, any time you need them, from the "
 "system menu."
@@ -380,9 +380,9 @@ msgstr "新物件圖示"
 
 #: apps/io.ox/tours/intro.js:59 module:io.ox/tours
 msgid ""
-"The New objects icon shows the number of unread E-Mails or other "
+"The New objects icon shows the number of appointment reminders or other "
 "notifications. If clicking the icon, the info area opens."
-msgstr "新物件圖示將會顯示未讀郵件或其他通知。點選圖示時將會開啟資訊區域。"
+msgstr "新物件圖示將會顯示約會提醒數量或其他通知。點選圖示時將會開啟資訊區域。"
 
 #: apps/io.ox/tours/intro.js:65 module:io.ox/tours
 msgid "The info area"
@@ -521,63 +521,63 @@ msgstr ""
 "在主要區域輸入郵件內文，若文字格式設定為 HTML，您將可以套用格式。若要這麼做請"
 "選擇一段文字，然後點擊格式列中的圖示。"
 
-#: apps/io.ox/tours/mail.js:74 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
 msgid "Sending the E-Mail"
 msgstr "寄送郵件"
 
-#: apps/io.ox/tours/mail.js:75 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:76 module:io.ox/tours
 msgid "To send the E-Mail, click on Send"
 msgstr "要傳送郵件，點擊傳送"
 
-#: apps/io.ox/tours/mail.js:79 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
 msgid "Sorting your E-Mails"
 msgstr "排序您的郵件"
 
-#: apps/io.ox/tours/mail.js:80 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:81 module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr "要排序郵件，點選右上角的排序依照，然後選擇排序條件。"
 
-#: apps/io.ox/tours/mail.js:87 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:88 module:io.ox/tours
 msgid ""
 "To choose between the different views. click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr "要選擇不同視圖，點擊工具列列中的視圖。在版面中選擇一個清單項目。"
 
-#: apps/io.ox/tours/mail.js:91 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:100 module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
 msgstr "在不同視窗開啟郵件"
 
-#: apps/io.ox/tours/mail.js:92 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
 msgid ""
 "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
 "separate window."
 msgstr "若雙擊清單中的郵件，將於不同視窗中開啟該郵件。"
 
-#: apps/io.ox/tours/mail.js:96 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:105 module:io.ox/tours
 msgid "Reading E-Mail conversations"
 msgstr "閱讀郵件討論串"
 
-#: apps/io.ox/tours/mail.js:97 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
 msgid ""
 "To open or close an E-Mail in a conversation, click on a free area in the "
 "header."
 msgstr "要開啟或關閉討論串中的郵件，點選檔頭旁的空白區域。"
 
-#: apps/io.ox/tours/mail.js:101 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:110 module:io.ox/tours
 msgid "Halo view"
 msgstr "Halo View"
 
-#: apps/io.ox/tours/mail.js:102 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:111 module:io.ox/tours
 msgid ""
 "To receive information about the sender or other recipients, open the Halo "
 "view by clicking on a name."
 msgstr "要取得寄件者或其他收件者的資訊，點選姓名中的 Halo View"
 
-#: apps/io.ox/tours/mail.js:106 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:115 module:io.ox/tours
 msgid "Editing multiple E-Mails"
 msgstr "編輯多封郵件"
 
-#: apps/io.ox/tours/mail.js:107 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:116 module:io.ox/tours
 msgid ""
 "In order to edit multiple E-Mails at once, enable the checkboxes on the left "
 "side of the E-Mails. If the checkboxes are not displayed, click on View > "
@@ -586,11 +586,11 @@ msgstr ""
 "要一次編輯多封郵件，點選郵件左邊的選取盒。若選取盒未顯示，點選工具列右邊的視"
 "圖 > 選取盒。"
 
-#: apps/io.ox/tours/mail.js:112 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:128 module:io.ox/tours
 msgid "Opening the E-Mail settings"
 msgstr "開啟郵件選項"
 
-#: apps/io.ox/tours/mail.js:113 module:io.ox/tours
+#: apps/io.ox/tours/mail.js:129 module:io.ox/tours
 msgid ""
 "To open the E-Mail settings, click the System menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on E-Mail on the left side."
@@ -659,31 +659,31 @@ msgid ""
 "the menu bar. Select Settings."
 msgstr "要開啟設定，點選選單列右上角的系統選單圖示，選擇設定。"
 
-#: apps/io.ox/tours/settings.js:36 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
 msgid "How the settings are organized"
 msgstr "設定如何整理"
 
-#: apps/io.ox/tours/settings.js:37 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:45 module:io.ox/tours
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
 "Basic settings or E-Mail."
 msgstr "設定依照主題排序顯示。點擊左邊的主題，例如「基礎設定」或「電子郵件」。"
 
-#: apps/io.ox/tours/settings.js:43 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:51 module:io.ox/tours
 msgid "Editing settings"
 msgstr "編輯選項"
 
-#: apps/io.ox/tours/settings.js:44 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:52 module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
 "activated immediately."
 msgstr "編輯右邊的設定，在大多數的情況下變更將會即時生效。"
 
-#: apps/io.ox/tours/settings.js:48 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:56 module:io.ox/tours
 msgid "Opening the help"
 msgstr "開啟說明"
 
-#: apps/io.ox/tours/settings.js:49 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:57 module:io.ox/tours
 msgid ""
 "To open the help, click the System menu icon on the upper right side of the "
 "menu bar. Select Help. The help for the currently selected app is displayed. "
@@ -693,11 +693,11 @@ msgstr ""
 "要開啟說明，點擊選單列右上角的系統選單圖示。選擇說明，將顯示目前選擇程式的說"
 "明。要瀏覽完整說明，點擊視窗頂端的開始頁或目錄。"
 
-#: apps/io.ox/tours/settings.js:54 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:70 module:io.ox/tours
 msgid "Signing out"
 msgstr "登出"
 
-#: apps/io.ox/tours/settings.js:55 module:io.ox/tours
+#: apps/io.ox/tours/settings.js:71 module:io.ox/tours
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
@@ -793,6 +793,14 @@ msgid ""
 msgstr ""
 "要一次編輯多個任務，點選任務左邊的選取盒。若選取盒未顯示，點選工具列右邊的視"
 "圖 > 選取盒。"
+
+#~ msgid ""
+#~ "The New objects icon shows the number of unread E-Mails or other "
+#~ "notifications. If clicking the icon, the info area opens."
+#~ msgstr "新物件圖示將會顯示未讀郵件或其他通知。點選圖示時將會開啟資訊區域。"
+
+#~ msgid "To create the appointment, click on Create at the upper right side."
+#~ msgstr "要建立約會，點選右上角的建立。"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s)"

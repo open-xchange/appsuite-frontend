@@ -51,7 +51,7 @@ define('io.ox/files/listview', [
     });
 
     // we redraw only if a relevant attribute changes (to avoid flickering)
-    FileListView.relevantAttributes = ['id', 'last_modified', 'locked_until', 'filename', 'file_mimetype', 'file_size', 'source', 'title', 'version'];
+    FileListView.relevantAttributes = ['index', 'id', 'last_modified', 'locked_until', 'filename', 'file_mimetype', 'file_size', 'source', 'title', 'version'];
 
     //
     // Extension for detail sidebar

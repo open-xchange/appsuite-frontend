@@ -89,9 +89,7 @@ define('plugins/portal/tumblr/register', [
                     }
                 });
                 this.addClass('photo-stream').append(
-                    $('<div class="content pointer decoration list-unstyled">').css('backgroundImage', 'url(' + url + ')').attr({
-                        'tabindex': '1',
-                        'role': 'button',
+                    $('<div class="content pointer decoration list-unstyled" tabindex="0" role="button">').css('backgroundImage', 'url(' + url + ')').attr({
                         'aria-label': gt('Press [enter] to jump to the tumblr feed.')
                     })
                 );
@@ -110,9 +108,7 @@ define('plugins/portal/tumblr/register', [
 
                 if (titles.length > 0) {
                     this.append(
-                        $('<ul class="content pointer">').attr({
-                            'tabindex': '1',
-                            'role': 'button',
+                        $('<ul class="content pointer" tabindex="0" role="button">').attr({
                             'aria-label': gt('Press [enter] to jump to the tumblr feed.')
                         }).append(titles)
                     );
@@ -231,8 +227,8 @@ define('plugins/portal/tumblr/register', [
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
-            $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com">'),
-            $description = $('<input id="tumblr_desc" type="text" class="form-control">'),
+            $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com" tabindex="0">'),
+            $description = $('<input id="tumblr_desc" type="text" class="form-control" tabindex="0">'),
             $error = $('<div>').addClass('alert alert-danger').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
 

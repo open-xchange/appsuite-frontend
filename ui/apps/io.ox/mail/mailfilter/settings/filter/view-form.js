@@ -139,9 +139,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
         setFocus = function (el, type) {
             var listelement = $(el).find('[data-' + type + '-id]').last();
-            if (type === 'test') listelement.find('[tabindex="1"]').first().focus();
+            if (type === 'test') listelement.find('input[tabindex="0"]').first().focus();
 
-            if (type === 'action') listelement.find('[tabindex="1"]').first().focus();
+            if (type === 'action') listelement.find('[tabindex="0"]').first().focus();
         },
 
         renderWarningForEmptyTests = function (node) {
@@ -188,11 +188,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 active = active + '<b class="caret">';
             }
             return $('<div class="action ' + options.toggle + ' value">').addClass(options.classes).append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').html(active),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
                         return $('<li>').append(
-                            $('<a href="#" data-action="change-dropdown-value" tabindex="1">').attr('data-value', value).data(options).text(name)
+                            $('<a href="#" data-action="change-dropdown-value">').attr('data-value', value).data(options).append(
+                                $.txt(name)
+                            )
                         );
                     })
                 )
@@ -441,7 +443,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 appliedConditions = baton.model.get('test'),
                 inputId,
                 drawDeleteButton = function (type) {
-                    return $('<a href="#" class="remove" tabindex="1" data-action="remove-' + type + '">').append($('<i class="fa fa-trash-o">'));
+                    return $('<a href="#" class="remove" tabindex="0">').attr('data-action', 'remove-' + type).append($('<i class="fa fa-trash-o">'));
                 };
 
             appliedConditions = appliedConditions.tests ? appliedConditions.tests : [appliedConditions];
@@ -791,13 +793,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     .addClass(flagclass)
                     .append(
                         // box
-                        $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">'),
+                        $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">'),
                         // drop down
                         $('<ul class="dropdown-menu" role="menu">')
                         .append(
                             _(colors).map(function (colorObject) {
                                 return $('<li>').append(
-                                    $('<a href="#">').attr({ 'data-action': 'change-color', 'tabindex': '1' }).append(
+                                    $('<a href="#" data-action="change-color">').append(
                                         colorObject.value > 0 ? $('<span class="flag-example">').addClass('flag_' + colorObject.value) : $(),
                                         $.txt(colorObject.text)
                                     )
@@ -822,7 +824,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                         $('<a href="#" class="folderselect">').text(gt('Select folder')).data({ 'model': o.inputOptions.model })
                                     ),
                                     $('<div class=" col-sm-8">').append(
-                                        $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
+                                        $('<label class="sr-only">').attr('for', o.inputId).text(o.inputLabel),
                                         new Input(o.inputOptions).render().$el.attr({ disabled: 'disabled' })
                                     )
                                 )
@@ -1074,14 +1076,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 },
 
                 drawcheckbox = function (value) {
-                    return $('<div class="control-group mailfilter checkbox">').append(
-                        $('<div class="controls">'),
+                    return $('<div>').addClass('control-group mailfilter checkbox').append(
+                        $('<div>').addClass('controls'),
                         $('<label>').text(gt('Process subsequent rules')).prepend(
-                            $('<input type="checkbox" data-action="check-for-stop" tabindex="1">').attr('checked', value)
+                            $('<input data-action="check-for-stop" type="checkbox" tabindex="0">').attr('checked', value)
                         )
                     );
                 },
-
                 target = baton.view.dialog.getFooter(),
                 arrayOfActions = baton.model.get('actioncmds');
 
@@ -1105,11 +1106,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             }
 
             toggleWarning();
-            _.defer(function () {
-                if (!target.find('[type="checkbox"]').length) {
+
+            if (!target.find('[type="checkbox"]').length) {
+                _.defer(function () {
                     target.prepend(drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));
-                }
-            });
+                });
+            }
 
         }
     });

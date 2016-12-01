@@ -106,9 +106,13 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
                 }
                 sidepopup.show(e, function (popup) {
                     popup.busy();
+                    // fix special id format
+                    if (/^\d+\/\d+.\d+$/.test(data.id)) {
+                        data = _.cid(data.id.replace(/\//, '.'));
+                    }
                     api.get(data).then(
                         function success(data) {
-                            popup.idle().append(view.draw(data));
+                            popup.idle().append(view.draw(data, { container: popup }));
                         },
                         function fail(e) {
                             sidepopup.close();

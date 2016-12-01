@@ -43,10 +43,15 @@
         .grid-options { padding: 0; }
 
         .grid-options > a {
-            color: #777;
+            color: #767676;
             display: block;
             padding-left: 16px;
             padding-right: 16px;
+
+            @media (max-width: 900px) {
+                padding-left: 0px;
+                padding-right: 8px;
+            }
         }
 
         a:not(.breadcrumb-link) {
@@ -58,7 +63,7 @@
         }
 
         .select-all {
-            color: #777;
+            color: #767676;
             cursor: pointer;
             white-space: nowrap;
             i {
@@ -68,6 +73,10 @@
                 font-size: 18px;
                 position: relative;
                 top: 2px;
+            }
+            @media (max-width: 900px) {
+
+                padding-right: 0px;
             }
         }
 
@@ -136,6 +145,20 @@
     .list-view {
         &.scrollpane {
             overflow-x: hidden;
+        }
+    }
+}
+
+.smartphone {
+    .list-view-control {
+        .toolbar {
+            a:not(.breadcrumb-link) {
+                &:focus, &:focus i {
+                    color: inherit;
+                    outline: inherit;
+                    background-color: inherit;
+                }
+            }
         }
     }
 }
