@@ -1407,7 +1407,7 @@ define('io.ox/core/main', [
                 deeplink = looksLikeDeepLink && manifest && manifest.deeplink,
                 mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
 
-            if (manifest && (manifest.refreshable || deeplink || mailto)) {
+            if (manifest && (manifest.refreshable || deeplink || (capabilities.has('webmail') && mailto))) {
                 baton.autoLaunch = appURL.split(/,/);
             } else {
                 // clear typical parameter?
