@@ -519,11 +519,14 @@ define('io.ox/mail/compose/view', [
 
                     var def = $.Deferred();
                     if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
-                        textproc.texttohtml(content).then(function (processed) {
+                        require(['io.ox/mail/detail/content'], function (proc) {
+                            var html = proc.text2html(content);
                             attachmentCollection.at(0).set('content_type', 'text/html');
-                            content = processed;
+                            content = html;
                             def.resolve();
                         });
+                        // textproc.texttohtml(content).then(function (processed) {
+                        // });
                     } else {
                         // TODO
                         // In e.g. edit mode middleware wraps content in a div this should be solved in middleware!
