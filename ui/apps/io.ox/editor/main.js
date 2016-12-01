@@ -120,13 +120,16 @@ define('io.ox/editor/main', [
 
         getFilename: function () {
             var title = this.getTitle(),
+                // if we have a predefined list of allowed extensions use it.
+                regex = (this.app.options.params && this.app.options.params.allowedFileExtensions) ? new RegExp('\\.(' + this.app.options.params.allowedFileExtensions.join('|') + '?)$', 'i') : new RegExp('\\.\\w{1,4}$'),
                 filename = String(title || this.getContent().substr(0, 20).split('.')[0]
                 //remove linebreaks
                 .replace(/(\r\n|\n|\r)/gm, '')
                 //remove unsupported characters
                 .replace(/[%&#\/$*!`´'"=:@+\^\\.+?{}|]/g, '_') || 'unnamed');
+
             // has file extension?
-            if (!/\.\w{1,4}$/.test(filename)) {
+            if (!regex.test(filename)) {
                 filename += '.txt';
             }
             return filename;
@@ -242,6 +245,9 @@ define('io.ox/editor/main', [
             win.show(function () {
                 if (_.device('!smartphone')) view.focus();
             });
+            if (opt.params) {
+                this.options.params = opt.params;
+            }
         };
 
         app.save = function () {
