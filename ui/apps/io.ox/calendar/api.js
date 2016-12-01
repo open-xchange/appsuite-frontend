@@ -799,7 +799,7 @@ define('io.ox/calendar/api', [
             });
             if (hasExternalParticipants) {
                 require(['io.ox/contacts/api'], function (contactsApi) {
-                    contactsApi.trigger('maybyNewContact');
+                    contactsApi.trigger('maybeNewContact');
                 });
             }
         }

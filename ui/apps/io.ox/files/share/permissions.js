@@ -1101,6 +1101,8 @@ define('io.ox/files/share/permissions', [
                         objModel.reload().then(
                             function () {
                                 dialog.close();
+                                // we might have new addresses
+                                contactsAPI.trigger('maybeNewContact');
                             },
                             function (error) {
                                 dialog.idle();

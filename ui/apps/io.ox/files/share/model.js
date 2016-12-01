@@ -240,7 +240,6 @@ define('io.ox/files/share/model', [
                 return 'Please set password';
             }
         }
-
     });
 
     return {

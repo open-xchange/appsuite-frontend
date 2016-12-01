@@ -1191,7 +1191,7 @@ define('io.ox/mail/api', [
 
         return deferred
             .done(function () {
-                contactsAPI.trigger('maybyNewContact');
+                contactsAPI.trigger('maybeNewContact');
                 api.trigger('send', { data: data, files: files, form: form });
                 ox.trigger('mail:send:stop', data, files);
                 if (data.share_attachments) ox.trigger('please:refresh refresh^');
