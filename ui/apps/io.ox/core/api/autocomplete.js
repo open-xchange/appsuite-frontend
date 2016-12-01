@@ -63,7 +63,7 @@ define('io.ox/core/api/autocomplete', [
         ext.point('io.ox/core/api/autocomplete/customize').invoke('customize', this);
 
         // If contacts auto-collector might have added new contacts
-        contactsAPI.on('maybyNewContact', function () {
+        contactsAPI.on('maybeNewContact', function () {
             that.cache = {};
         });
     }
