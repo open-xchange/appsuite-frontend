@@ -39,6 +39,8 @@ define('io.ox/files/filepicker', [
 
     'use strict';
 
+    // local module code - shared with or used by every `FilePicker` instance -----------------------------------
+
     //      - user story DOCS-589 :: User can see image preview in file picker.
     //      - for later use, in case of providing previews for every file/mine-type and not only for image types as with #DOCS-589.
     //
@@ -105,6 +107,13 @@ define('io.ox/files/filepicker', [
         REGX__MIMETYPE_IMAGE  = (/(?:^image\/)|(?:(?:gif|png|jpg|jpeg)$)/);
       //REGX__IMAGE_EXTENSION = (/[./](gif|png|jpg|jpeg)$/);
 
+    /**
+     * does create lazy on demand a filepicker's 3rd possible pane, the preview pane,
+     * that is the root node for all following preview render actions.
+     *
+     * @param $filesPane
+     * @returns {*|jQuery|HTMLElement}
+     */
     function createPreviewPane($filesPane) {
         var
             $previewPane  = $('<div class="preview-pane"></div>');
@@ -114,6 +123,12 @@ define('io.ox/files/filepicker', [
         return $previewPane;
     }
 
+    /**
+     * renders the preview image and all necessary file info data into a 3rd pane, the preview pane.
+     *
+     * @param $previewPane
+     * @param fileObject
+     */
     function renderImagePreview($previewPane, fileObject/*, previewStore*/) {
       //console.log('+++ renderImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
         var
@@ -150,6 +165,9 @@ define('io.ox/files/filepicker', [
                         }
                     });
 
+                //  - invoke `FileInfoView`s rendering service (extension point)
+                //    as of 'io.ox/core/viewer/views/sidebar/fileinfoview'
+                //
                 ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', $fileinfo, baton);
             }
             $previewPane.append($fileinfo);
@@ -157,6 +175,14 @@ define('io.ox/files/filepicker', [
         })/*.fail(function () { console.warn('Filepicker::renderImagePreview ... async loading did fail'); })*/;
     }
 
+    // Constructor ------------------------------------------------------------------
+
+    /**
+     *
+     * @param options
+     * @returns {*}
+     * @constructor FilePicker
+     */
     var FilePicker = function (options) {
 
         options = _.extend({
