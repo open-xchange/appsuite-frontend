@@ -466,7 +466,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
             // detail is the target of popoutstandalone, no support for mail attachments
-            return currentApp !== 'io.ox/files/detail';
+            return currentApp !== 'io.ox/mail/compose' && currentApp !== 'io.ox/files/detail';
         },
         action: function (baton) {
             var fileModel;
@@ -716,7 +716,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                         $el: toolbar,
                         model: model,
                         models: isDriveFile ? [model] : null,
-                        data: isDriveFile ? model.toJSON() : origData
+                        data: isDriveFile ? model.toJSON() : origData,
+                        openedBy: this.openedBy
                     }),
                     appName = model.get('source'),
                     self = this,

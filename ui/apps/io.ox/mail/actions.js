@@ -412,6 +412,9 @@ define('io.ox/mail/actions', [
                 if (baton.startItem) {
                     options.selection = baton.startItem;
                 }
+                if (baton.openedBy) {
+                    options.openedBy = baton.openedBy;
+                }
                 action(options);
             });
         }
