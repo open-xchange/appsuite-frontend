@@ -830,7 +830,8 @@ define('io.ox/files/api', [
                 module: 'files',
                 params: {
                     action: 'move',
-                    folder: targetFolderId
+                    folder: targetFolderId,
+                    ignoreWarnings: ignoreWarnings
                 },
                 data: items,
                 appendColumns: false

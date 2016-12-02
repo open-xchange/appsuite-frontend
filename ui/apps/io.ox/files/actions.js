@@ -562,7 +562,7 @@ define('io.ox/files/actions', [
                                 // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
                                 _(response).each(function (error) {
                                     if (error.error) {
-                                        if (error.error.categories === 'CONFLICT' && (error.error.code === 'FILE_STORAGE-0045' || error.error.code === 'FLD-1038')) {
+                                        if (error.error.categories === 'CONFLICT' && (error.error.code.indexOf('FILE_STORAGE') === 0 || error.error.code === 'FLD-1038')) {
                                             if (!conflicts.title) {
                                                 conflicts.title = error.error.error;
                                             }
@@ -581,6 +581,11 @@ define('io.ox/files/actions', [
                                         filestorageUtil.displayConflicts(conflicts, {
                                             callbackIgnoreConflicts: function () {
                                                 api[type](list, baton.target, true);
+                                            },
+                                            callbackCancel: function () {
+                                                if (baton.data[0].folder_id) {
+                                                    folderAPI.reload(baton.data[0].folder_id);
+                                                }
                                             }
                                         });
                                     });
