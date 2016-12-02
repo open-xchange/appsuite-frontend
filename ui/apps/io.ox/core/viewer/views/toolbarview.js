@@ -231,9 +231,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'export',
                     ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 },
+                // on smartphones the separate dropdown is broken up and the options are added to the actions dropdown
                 'share': {
                     prio: 'hi',
-                    mobile: 'hi',
                     icon: 'fa fa-user-plus',
                     label: gt('Share'),
                     title: gt('Share this file'),
@@ -254,6 +254,18 @@ define('io.ox/core/viewer/views/toolbarview', [
                             }, baton)
                         }).render();
                     }
+                },
+                'invite': {
+                    mobile: 'lo',
+                    label: gt('Invite people'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/invite'
+                },
+                'sharelink': {
+                    mobile: 'lo',
+                    label: gt('Get link'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/getalink'
                 },
                 'sendbymail': {
                     prio: 'lo',

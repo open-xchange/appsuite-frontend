@@ -239,7 +239,7 @@ define('io.ox/contacts/util', [
         getJob: function (obj) {
             // combine position and company
             var list = _([obj.company, obj.position]).compact();
-            return list.length ? list.join(', ') : (obj.email1 || '');
+            return list.length ? list.join(', ') : (obj.email1 || obj.email2 || obj.email3 || '');
         },
 
         nameSort: function (a, b) {

@@ -30,7 +30,13 @@ define('io.ox/files/actions', [
     'use strict';
 
     var Action = links.Action,
-        COMMENTS = settings.get('features/comments', true);
+        COMMENTS = settings.get('features/comments', true),
+        // used by text editor
+        allowedFileExtensions = ['csv', 'txt', 'js', 'css', 'md', 'tmpl', 'html'];
+
+    if (capabilities.has('guard-drive')) {
+        allowedFileExtensions.push('pgp');
+    }
 
     // actions
     new Action('io.ox/files/actions/upload', {
@@ -79,12 +85,14 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
                 return api.versions.getCurrentState(e.baton.data).then(function (currentVersion) {
+                    // build regex from list, pgp is added if guard is available
+                    var regex = new RegExp('\\.(' + allowedFileExtensions.join('|') + '?)$', 'i');
+
                     return util.conditionChain(
                         currentVersion,
                         e.collection.has('one', 'modify'),
                         !util.hasStatus('lockedByOthers', e),
-                        (/\.(csv|txt|js|css|md|tmpl|html?)(\.pgp)?$/i).test(e.context.filename),
-                        (!(/\.pgp$/i).test(e.context.filename) || capabilities.has('guard-drive')),  // if has .pgp, must have Guard capability
+                        regex.test(e.context.filename),
                         (e.baton.openedBy !== 'io.ox/mail/compose'),
                         util.isFolderType('!trash', e.baton)
                     );
@@ -99,7 +107,7 @@ define('io.ox/files/actions', [
                         }
                         return;
                     }
-                    ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id, params: _.extend({}, params) }).done(function () {
+                    ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id, params: _.extend({ allowedFileExtensions: allowedFileExtensions }, params) }).done(function () {
                         // if this was opened from the viewer, close it now
                         if (baton.context && baton.context.viewerEvents) {
                             baton.context.viewerEvents.trigger('viewer:close');
@@ -144,7 +152,7 @@ define('io.ox/files/actions', [
             },
             action: function (baton) {
                 ox.launch('io.ox/editor/main').done(function () {
-                    this.create({ folder: baton.app.folder.get() });
+                    this.create({ folder: baton.app.folder.get(), params: { allowedFileExtensions: allowedFileExtensions } });
                 });
             }
         });

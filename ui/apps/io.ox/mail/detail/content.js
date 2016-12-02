@@ -581,8 +581,7 @@ define('io.ox/mail/detail/content', [
 
         beautifyPlainText: function (str) {
             var plain = this.adjustPlainText(str);
-            console.log('plain', plain);
-            return this.text2html(plain, { blockquotes: true, links: true });
+            return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
         },
 
         // convert plain text to html
@@ -590,14 +589,15 @@ define('io.ox/mail/detail/content', [
         // note: this does not work with our pseudo text mails that still contain markup (e.g. <br> and <a href>)
         text2html: (function () {
 
-            var regBlockquote = /^(> )+[^\n]*(\n> [^\n]*)*/,
-                regIsUnordered = /^\* [^\n]*(\n\* [^\n]*|\n {2}\* [^\n]*)*/,
+            var regBlockquote = /^>+ [^\n]*(\n>+ [^\n]*)*/,
+                regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2}(\*|-) [^\n]*)*/,
                 regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
-                regText = /^[^\n]*(\n(?!\* |> |\d+\. )[^\n]*)*/,
+                regText = /^[^\n]*(\n(?!\* |\- |> |\d+\. )[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
-                regMailAddress = /(\w\S*@.*?\.\w+)/g,
-                defaults = { blockquote: true, lists: true, links: true };
+                regMailAddress = /([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
+                regRuler = /\n?(-|=|\u2014){10,}\n?/g,
+                defaults = { blockquotes: true, links: true, lists: true, rulers: true };
 
             function exec(regex, str) {
                 var match = regex.exec(str);
@@ -614,7 +614,7 @@ define('io.ox/mail/detail/content', [
 
                     if (options.blockquotes && (match = exec(regBlockquote, str))) {
                         str = str.substr(match.length);
-                        match = match.replace(/^> /gm, '');
+                        match = match.replace(/^(>(>)|> )/gm, '$2');
                         match = parse(match, options).replace(/(<br>)?(<\/?blockquote[^>]*>)(<br>)?/g, '$2').replace(/<br>$/, '');
                         out += '<blockquote type="cite">' + match + '</blockquote>';
                         continue;
@@ -644,13 +644,18 @@ define('io.ox/mail/detail/content', [
                     }
 
                     if (match = exec(regText, str)) {
-                        str = str.substr(match.length);
+                        // add 1 character to catch the next newline
+                        str = str.substr(match.length + 1);
                         // escape first
                         match = _.escape(match);
-                        // replace links & mail addresses
+                        // rulers
+                        if (options.rulers) {
+                            match = match.replace(regRuler, replaceRuler);
+                        }
+                        // links & mail addresses
                         if (options.links && /(http|@)/i.test(match)) {
                             match = match
-                                .replace(regLink, '<a href="$1" rel="noopener" target="_blank">$1</a>')
+                                .replace(regLink, '<a href="$1" rel="noopener" target="_blank">$1</a>$2')
                                 .replace(regMailAddress, '<a href="mailto:$1" rel="noopener" target="_blank">$1</a>');
                         }
                         // replace newlines
@@ -665,6 +670,15 @@ define('io.ox/mail/detail/content', [
                 }
 
                 return out;
+            }
+
+            function replaceRuler(str) {
+                switch (str[0]) {
+                    case '=':
+                        return '<hr style="height: 0; border: 0; border-top: 3px double #555; margin: 8px 0;">';
+                    default:
+                        return '<hr style="height: 0; border: 0; border-top: 1px solid #aaa; margin: 8px 0;">';
+                }
             }
 
             return parse;
@@ -714,6 +728,10 @@ define('io.ox/mail/detail/content', [
                 o = '<blockquote type="cite"><blockquote type="cite">Lorem ipsum</blockquote>dolor sit<blockquote type="cite">amet</blockquote></blockquote>';
                 if (this.text2html(i) !== o) throw i;
 
+                i = '>> Lorem\n>> ipsum';
+                o = '<blockquote type="cite"><blockquote type="cite">Lorem<br>ipsum</blockquote></blockquote>';
+                if (this.text2html(i) !== o) throw i;
+
                 // UNORDERED LISTS
 
                 i = '* Lorem ipsum';
@@ -722,6 +740,14 @@ define('io.ox/mail/detail/content', [
 
                 i = '\n* Lorem ipsum\n* dolor sit';
                 o = '<br><ul><li>Lorem ipsum</li><li>dolor sit</li></ul>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '\n- Lorem ipsum\n- dolor sit';
+                o = '<br><ul><li>Lorem ipsum</li><li>dolor sit</li></ul>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '- Lorem http://yeah.com\n- ipsum\n- dolor';
+                o = '<ul><li>Lorem <a href="http://yeah.com" rel="noopener" target="_blank">http://yeah.com</a></li><li>ipsum</li><li>dolor</li></ul>';
                 if (this.text2html(i) !== o) throw i;
 
                 i = '* Lorem\n  * ipsum\n  * dolor sit\n* amet';
@@ -740,6 +766,16 @@ define('io.ox/mail/detail/content', [
 
                 i = '29. Lorem ipsum\n30. dolor sit';
                 o = '<ol start="29"><li>Lorem ipsum</li><li>dolor sit</li></ol>';
+                if (this.text2html(i) !== o) throw i;
+
+                // LINKS & ADDRESSES
+
+                i = 'Lorem http://ip.sum! dolor';
+                o = 'Lorem <a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>! dolor';
+                if (this.text2html(i) !== o) throw i;
+
+                i = 'Lorem <ipsum@dolor.amet>';
+                o = 'Lorem &lt;<a href="mailto:ipsum@dolor.amet" rel="noopener" target="_blank">ipsum@dolor.amet</a>&gt;';
                 if (this.text2html(i) !== o) throw i;
 
                 console.info('All fine');
