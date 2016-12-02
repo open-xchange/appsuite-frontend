@@ -131,8 +131,6 @@ define('io.ox/find/extensions-api', [
                                 folders = _.filter(folders, function (folder) {
                                     return folder.account_id === data.get('qualifiedId');
                                 });
-                                // get account name for current selected account and adjust name of 'all folders' option
-                                allfolders.item.name = allfolders.item.name + ' (' + data.get('displayName') + ')';
                             }
                             def.resolve(accounts, folders);
                         });
@@ -297,7 +295,7 @@ define('io.ox/find/extensions-api', [
                     def.resolve();
                 }
 
-                var folder, allfolders;
+                var folder;
                 baton.data.unshift(folder = {
                     id: 'folder',
                     name: gt('Folder'),
@@ -315,7 +313,7 @@ define('io.ox/find/extensions-api', [
                         item: {
                             name: gt('Folder')
                         },
-                        options: [allfolders = {
+                        options: [{
                             account: undefined,
                             value: null,
                             id: 'disabled',
