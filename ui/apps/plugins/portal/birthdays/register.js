@@ -41,6 +41,12 @@ define('plugins/portal/birthdays/register', [
         return cid(name, birthday) in hash;
     }
 
+    // use same code to get the date (see bug 50414)
+    function getBirthday(contact) {
+        // birthday comes along in utc, so moment.utc(t); not moment(t).utc(true)
+        return moment.utc(contact.birthday).startOf('day');
+    }
+
     ext.point('io.ox/portal/widget/birthdays').extend({
 
         title: gt('Birthdays'),
@@ -91,7 +97,7 @@ define('plugins/portal/birthdays/register', [
                 $list.addClass('pointer');
                 _(contacts.slice(0, numOfItems)).each(function (contact) {
                     //just to be sure hours are the same
-                    var birthday = moment(contact.birthday).utc(true).startOf('day'),
+                    var birthday = getBirthday(contact),
                         birthdayText = '',
                         //it's not really today, its today in the year of the birthday
                         today = moment().utc(true).startOf('day').year(birthday.year()),
@@ -149,9 +155,11 @@ define('plugins/portal/birthdays/register', [
                         )
                     );
                 }
+
                 // loop
                 _(baton.data).each(function (contact) {
-                    var birthday = moment.utc(contact.birthday).local(true),
+
+                    var birthday = getBirthday(contact),
                         // we use fullname here to avoid having duplicates like "Jon Doe" and "Doe, Jon"
                         name = util.getFullName(contact);
 
