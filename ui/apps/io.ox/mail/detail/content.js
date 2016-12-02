@@ -590,10 +590,10 @@ define('io.ox/mail/detail/content', [
         text2html: (function () {
 
             var regBlockquote = /^>+ [^\n]*(\n>+ [^\n]*)*/,
-                regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2}(\*|-) [^\n]*)*/,
+                regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2,}(\*|-) [^\n]*)*/,
                 regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
-                regText = /^[^\n]*(\n(?!\* |\- |> |\d+\. )[^\n]*)*/,
+                regText = /^[^\n]*(\n(?![ ]*(\* |\- |> |\d+\. ))[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
                 regMailAddress = /([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
                 regRuler = /\n?(-|=|\u2014){10,}\n?/g,
@@ -752,6 +752,10 @@ define('io.ox/mail/detail/content', [
 
                 i = '* Lorem\n  * ipsum\n  * dolor sit\n* amet';
                 o = '<ul><li>Lorem<ul><li>ipsum</li><li>dolor sit</li></ul></li><li>amet</li></ul>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '* One\n  * Two\n    * Three\n* One';
+                o = '<ul><li>One<ul><li>Two<ul><li>Three</li></ul></li></ul></li><li>One</li></ul>';
                 if (this.text2html(i) !== o) throw i;
 
                 // ORDERED LISTS
