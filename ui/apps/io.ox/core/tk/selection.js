@@ -523,7 +523,8 @@ define('io.ox/core/tk/selection', [
                         lastValidIndex = lastIndex;
                     }
                     if (silent !== true) {
-                        self.trigger('mark', self.serialize(id));
+                        // append additional argument - the marked object that is named `id`.
+                        self.trigger('mark', self.serialize(id), id);
                     }
                 }
             };

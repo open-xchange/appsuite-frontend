@@ -270,6 +270,7 @@ define('io.ox/files/filepicker', [
         this.selection.on('change', function (e, list) {
             toggleOkButton(list.length > 0);
         });
+        this.selection.on('mark', handleFileSelectionChange);
         this.selection.on('select', handleFileSelectionChange);
 
         // - user story DOCS-589 :: User can see image preview in file picker
