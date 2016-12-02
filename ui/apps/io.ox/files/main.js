@@ -275,8 +275,13 @@ define('io.ox/files/main', [
 
             app.getViewOptions = function (folder) {
                 var options = app.settings.get(['viewOptions', folder], {}),
-                    defaultSort = folder === 'virtual/myshares' ? 5 : 702,
-                    defaultOrder = folder === 'virtual/myshares' ? 'desc' : 'asc';
+                    defaultSort = 702,
+                    defaultOrder = 'asc';
+
+                if (folder === 'virtual/myshares' || folderAPI.is('attachmentView', { id: folder })) {
+                    defaultSort = 5;
+                    defaultOrder = 'desc';
+                }
 
                 if (!/^(list|icon|tile)/.test(options.layout)) options.layout = 'list';
                 return _.extend({ sort: defaultSort, order: defaultOrder, layout: 'list' }, options);

@@ -162,7 +162,7 @@ define('io.ox/files/listview', [
             index: 300,
             draw: function (baton) {
                 if (_.device('smartphone')) return;
-                if (isAttachmentView(baton)) return;
+                if (isAttachmentView(baton) && baton.app.props.get('sort') !== 5) return;
                 var column = $('<div class="list-item-column column-3 gray">');
                 extensions.smartdate.call(column, baton);
                 this.append(column);
@@ -173,7 +173,7 @@ define('io.ox/files/listview', [
             index: 500,
             draw: function (baton) {
                 if (_.device('smartphone')) return;
-                if (isAttachmentView(baton)) return;
+                if (isAttachmentView(baton) && baton.app.props.get('sort') !== 704) return;
                 var column = $('<div class="list-item-column column-4 gray">');
                 extensions.size.call(column, baton);
                 this.append(column);
