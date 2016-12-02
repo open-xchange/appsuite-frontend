@@ -199,9 +199,19 @@ define('io.ox/files/listview', [
             index: 200,
             draw: extensions.locked
         },
+
+        {
+            id: 'file-icon',
+            index: 300,
+            draw: function (baton) {
+                var icon = $('<div class="filename-file-icon">');
+                extensions.fileTypeIcon.call(icon, baton);
+                this.append(icon);
+            }
+        },
         {
             id: 'filename',
-            index: 300,
+            index: 400,
             draw: function (baton) {
                 // use inner ellipsis for too long filenames
                 extensions.filename.call(this, baton, { max: 36, charpos: 'mid' });
