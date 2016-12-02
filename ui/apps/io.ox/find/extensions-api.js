@@ -259,7 +259,8 @@ define('io.ox/find/extensions-api', [
                         selected = _.findWhere(options, { value: current }),
                         standard = _.findWhere(options, { type: 'default' }),
                         // primary check
-                        isSelectedPrimary = selected.account === '0';
+                        isSelectedPrimary = selected.account === '0',
+                        ALLFOLDERS = settings.get('search/allfolders', { mail: false });
 
                     // prefer selected before default folder
                     preselect = selected || standard;
@@ -279,7 +280,7 @@ define('io.ox/find/extensions-api', [
                     isMandatory = baton.app.isMandatory('folder');
                     isDefault = preselect.type === 'default';
                     isVirtual = module === 'mail' ? !folderAPI.can('read', preselect.data) : isVirtualFolder(preselect.data);
-                    forceAllFolders = isDefault && settings.get('search/allFoldersAsDefault', false);
+                    forceAllFolders = isDefault && (ALLFOLDERS[module] !== false);
 
                     // conditions mapping
                     if (!isMandatory && (forceAllFolders || isVirtual)) {
