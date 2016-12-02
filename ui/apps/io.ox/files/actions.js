@@ -171,6 +171,9 @@ define('io.ox/files/actions', [
                     }
                 });
                 return result;
+            } else if (_(e.baton.data).has('internal_userid')) {
+                // check if this is a contact not a file, happens when contact is send as vcard
+                return false;
             }
 
             // 'description only' items
@@ -239,6 +242,8 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (e.collection.has('multiple')) return false;
             if (e.collection.has('folders')) return false;
+            // check if this is a contact not a file, happens when contact is send as vcard
+            if (_(e.baton.data).has('internal_userid')) return false;
             if (e.baton.data.file_mimetype) {
                 // no 'open' menu entry for office documents, PDF and plain text
                 if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
@@ -433,6 +438,8 @@ define('io.ox/files/actions', [
         requires: function (e) {
             return util.conditionChain(
                 e.collection.has('one', 'items'),
+                // check if this is a contact not a file, happens when contact is send as vcard
+                !_(e.baton.data).has('internal_userid'),
                 !_.isEmpty(e.baton.data),
                 util.isFolderType('!trash', e.baton)
             );
@@ -621,6 +628,8 @@ define('io.ox/files/actions', [
         var id, model;
         // not possible for multi-selection
         if (e.collection.has('multiple')) return false;
+        // check if this is a contact not a file, happens when contact is send as vcard
+        if (e.baton.data && _(e.baton.data).has('internal_userid')) return false;
         // get folder id
         if (e.collection.has('one')) {
             // use selected file or folders

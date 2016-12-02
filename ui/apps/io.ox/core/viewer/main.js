@@ -71,7 +71,7 @@ define('io.ox/core/viewer/main', [], function () {
                         self.fileCollection.setStartIndex(data.selection);
                     }
                     // create main view and append main view to core
-                    self.mainView = new MainView({ collection: self.fileCollection, el: el, app: data.app, standalone: data.standalone, opt: data.opt || {} });
+                    self.mainView = new MainView({ collection: self.fileCollection, el: el, app: data.app, standalone: data.standalone, opt: data.opt || {}, openedBy: data.openedBy });
 
                     self.mainView.on('dispose', function () {
                         siblings.removeAttr('aria-hidden').each(function () {
