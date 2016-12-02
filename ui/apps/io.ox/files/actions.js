@@ -191,7 +191,9 @@ define('io.ox/files/actions', [
             // no file-system, no download
             if (_.device('ios')) return false;
             // single folders only
-            return e.collection.has('one', 'folders');
+            if (!e.collection.has('one', 'folders')) return false;
+            //disable for external storages
+            return !filestorageApi.isExternal(e.baton.data);
         },
         action: function (baton) {
             require(['io.ox/files/api'], function (api) {
