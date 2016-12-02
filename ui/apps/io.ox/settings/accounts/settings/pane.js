@@ -65,7 +65,7 @@ define('io.ox/settings/accounts/settings/pane', [
 
             if (submodules.length === 0) return;
 
-            return $('<div class="btn-group col-md-4 col-xs-12">').append(
+            return $('<div class="btn-group col-md-4 col-xs-4">').append(
                 $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true">').append(
                     $.txt(gt('Add account')), $.txt(' '),
                     $('<span class="caret">')
@@ -122,7 +122,7 @@ define('io.ox/settings/accounts/settings/pane', [
         drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
                 $('<div>').addClass('row').append(
-                    $('<h1 class="col-md-8 col-xs-12">').text(gt('Accounts')),
+                    $('<h1 class="col-md-8 col-xs-8">').text(gt('Accounts')),
                     drawAddButton()
                 ),
                 $('<ul class="list-unstyled list-group widget-list">')
