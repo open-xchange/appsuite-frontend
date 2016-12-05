@@ -185,7 +185,6 @@ define('io.ox/mail/detail/view', [
             id: 'different-subject',
             index: 100,
             draw: function (baton) {
-
                 var data = baton.data, baseSubject, threadSubject, mailSubject;
 
                 // no thread?
