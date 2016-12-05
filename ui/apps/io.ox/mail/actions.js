@@ -584,7 +584,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'inplace-reply',
-        mobile: 'hi',
+        mobile: 'lo',
         //#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
         label: gt('Quick reply'),
         ref: 'io.ox/mail/actions/inplace-reply',
@@ -595,7 +595,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'lo',
         id: 'reply',
-        mobile: 'hi',
+        mobile: 'lo',
         label: gt('Reply'),
         ref: 'io.ox/mail/actions/reply',
         section: 'standard'
@@ -605,7 +605,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'reply-all',
-        mobile: 'hi',
+        mobile: 'lo',
         label: gt('Reply All'),
         ref: 'io.ox/mail/actions/reply-all',
         drawDisabled: true,
@@ -616,7 +616,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'forward',
-        mobile: 'hi',
+        mobile: 'lo',
         label: gt('Forward'),
         ref: 'io.ox/mail/actions/forward',
         section: 'standard'
@@ -627,7 +627,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'edit',
-        mobile: 'hi',
+        mobile: 'lo',
         label: gt('Edit'),
         ref: 'io.ox/mail/actions/edit',
         section: 'standard'
@@ -637,7 +637,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'delete',
-        mobile: 'hi',
+        mobile: 'lo',
         label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete',
         section: 'standard'
@@ -652,7 +652,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'lo',
-        mobile: 'hi',
+        mobile: 'lo',
         id: 'spam',
         label: gt('Mark as spam'),
         ref: 'io.ox/mail/actions/spam',
@@ -662,7 +662,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX + 1,
         prio: 'lo',
-        mobile: 'hi',
+        mobile: 'lo',
         id: 'nospam',
         label: gt('Not spam'),
         ref: 'io.ox/mail/actions/nospam',
@@ -723,7 +723,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'lo',
-        mobile: 'hi',
+        mobile: 'lo',
         id: 'archive',
         //#. Verb: (to) archive messages
         label: gt.pgettext('verb', 'Archive'),
