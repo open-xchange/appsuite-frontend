@@ -430,6 +430,9 @@ define('io.ox/core/viewer/views/displayerview', [
 
                     this.dummyList[0].load()
                         .done(function (view) {
+                            if (self.swiper) {
+                                self.swiper.updateSlidesSize();
+                            }
                             if (self.delayedRemove[index]) {
                                 self.delayedRemove[index].view.unload(index).dispose();
                                 self.delayedRemove[index].node.remove();
