@@ -513,6 +513,13 @@
             }
 
             .io-ox-busy::before { color: @viewer-busy-color; }
+
+            &.autoplay-permanently-disabled {
+                > .autoplay {
+
+                    display: none!important;
+                }
+            }
         }
 
         .viewer-displayer-item-container { max-height: 100%; }
@@ -653,6 +660,16 @@
 
             &:hover,
             &:focus { color: #FFFFFF; }
+
+            &.autoplay {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                right: auto;
+                bottom: auto;
+                z-index: 10;
+                cursor: pointer;
+            }
         }
 
         .viewer-displayer-notification {

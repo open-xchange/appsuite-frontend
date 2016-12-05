@@ -22,6 +22,43 @@ define('io.ox/core/viewer/views/displayerview', [
 
     'use strict';
 
+    function rerenderButtonAutoPlayModeRun($button) {
+        var
+            $icon = $button.children().eq(0);
+
+        $icon.addClass('fa-play');
+        $icon.removeClass('fa-pause');
+
+        $button.attr({
+            /*#. tooltip for getting auto-play mode run. */
+            'title':      gt('Run auto-play mode'),
+            'aria-label': gt('Run auto-play mode')
+        });
+    }
+    // function rerenderButtonAutoPlayModePause($button) {
+    //     var
+    //         $icon = $button.children().eq(0);
+    //
+    //     $icon.addClass('fa-pause');
+    //     $icon.removeClass('fa-play');
+    //
+    //     $button.attr({
+    //         /*#. tooltip for pausing auto-play mode. */
+    //         'title':      gt('Pause auto-play mode'),
+    //         'aria-label': gt('Pause auto-play mode')
+    //     });
+    // }
+
+    function handleVisibilityOfAutoplayControl(displayerView, slideIndex) {
+        if (displayerView.canAutoplayImages) {
+            var
+                isForceDisableVisibility = !displayerView.imageFileItemMap[slideIndex];
+
+          //displayerView.$el.toggleClass('autoplay-enabled', isDisplayControl);
+            displayerView.carouselRoot.toggleClass('autoplay-permanently-disabled', isForceDisableVisibility);
+        }
+    }
+
     /**
      * The displayer view is responsible for displaying preview images,
      * launching music or video players, or displaying pre-rendered OX Docs
@@ -57,6 +94,12 @@ define('io.ox/core/viewer/views/displayerview', [
             this.delayedRemove = {};
             // limit of how much slides are loaded simultaniously
             this.loadingLimit = 3;
+
+            // whether or not displayerview is able of auto-play mode that will display image-type file-items exclusively.
+            this.canAutoplayImages = false;
+            // key value object (map/index/registry) of all of a file-object collection's image-type's stored by theirs collection's index.
+            this.imageFileItemMap = {};
+
             // array to store dummys in use
             this.dummyList = [];
             // listen to blend caption events
@@ -71,6 +114,43 @@ define('io.ox/core/viewer/views/displayerview', [
             // listen to version display events
             this.listenTo(this.viewerEvents, 'viewer:display:version', this.onDisplayVersion.bind(this));
         },
+
+        initializeAutoplayImageModeData: function () {
+            var
+                fileObjectCollection  = this.collection,
+
+                imageFileItemMap      = fileObjectCollection.reduce(function (map, fileItem, idx/*, list*/) {
+                    if (fileItem.isImage()) {
+
+                        map[idx] = fileItem;
+                    }
+                    return map;
+
+                }, {});
+
+            if (Object.keys(imageFileItemMap).length >= 2) {
+
+                this.canAutoplayImages = true;
+                this.imageFileItemMap = imageFileItemMap;
+            }
+        },
+
+        // getNextImageInAutoplayMode: function () {
+        // },
+        //
+        // enableAutoplayMode: function () {
+        //
+        // },
+        // diableAutoplayMode: function () {
+        //
+        // },
+        //
+        // startAutoplay: function () {
+        //
+        // },
+        // stopAutoplay: function () {
+        //
+        // },
 
         /**
          * Renders this DisplayerView with the supplied model.
@@ -90,6 +170,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 carouselInner = $('<div class="swiper-wrapper">'),
                 prevSlide = $('<a href="#" role="button" class="swiper-button-prev swiper-button-control left" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
                 nextSlide = $('<a href="#" role="button" class="swiper-button-next swiper-button-control right" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
+                autoplay,
                 caption = $('<div class="viewer-displayer-caption">'),
                 startIndex = this.collection.getStartIndex(),
                 self = this,
@@ -134,8 +215,18 @@ define('io.ox/core/viewer/views/displayerview', [
             nextSlide.attr({ title: gt('Next'), 'aria-label': gt('Next') });
             carouselRoot.attr('aria-label', gt('Use left/right arrow keys to navigate and escape key to exit the viewer.'));
             carouselRoot.append(carouselInner);
+
             if (this.collection.length > 1) {
                 carouselRoot.append(prevSlide, nextSlide);
+
+                this.initializeAutoplayImageModeData();
+                if (this.canAutoplayImages) {
+
+                    autoplay = $('<a href="#" role="button" class="swiper-button-control autoplay"><i class="fa" aria-hidden="true"></i></a>');
+
+                    rerenderButtonAutoPlayModeRun(autoplay);
+                    carouselRoot.append(autoplay);
+                }
             }
 
             // append carousel to view
@@ -209,6 +300,8 @@ define('io.ox/core/viewer/views/displayerview', [
         createSlides: function (index) {
             var self = this,
                 indices = this.getSlideLoadRange(index, this.preloadOffset, 'both');
+
+            handleVisibilityOfAutoplayControl(this, index);
 
             return $.when.apply(this, _(indices).map(this.createView.bind(this))).then(function () {
                 // order slides according to index
@@ -751,6 +844,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 this.activeIndex = this.normalizeSlideIndex(this.activeIndex + (preloadDirection === 'right' ? 1 : -1));
                 this.loadSlide(preloadDirection);
             }
+            handleVisibilityOfAutoplayControl(this, this.activeIndex);
 
             //#. information about position of the current item in viewer
             //#. this will only be shown for more than one item
@@ -783,10 +877,20 @@ define('io.ox/core/viewer/views/displayerview', [
          * @param {Swiper} swiper
          *  the instance of the swiper plugin
          */
-        onSlideChangeStart: function () {
+        onSlideChangeStart: function (/*swiper*/) {
+            // if (swiper) {
+            //     var preloadDirection = (swiper.previousIndex < swiper.activeIndex) ? 'right' : 'left';
+            //
+            //     // increment active index
+            //     this.activeIndex = this.normalizeSlideIndex(this.activeIndex + (preloadDirection === 'right' ? 1 : -1));
+            //     this.loadSlide(preloadDirection);
+            // } else {
+            //
+            // }
             var previousSlide = this.getPreviousSlideNode(),
                 previousIndex = parseInt(previousSlide.data('index'), 10),
                 activeSlideView = this.slideViews[previousIndex];
+
             if (activeSlideView) {
                 var scrollPosition = activeSlideView.$el.scrollTop();
                 if (activeSlideView.pdfDocument) {
