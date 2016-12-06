@@ -97,11 +97,11 @@ function expandImports(css) {
         for (var i = 0; i < node.rules.length; i++) {
             var child = node.rules[i];
             if (child.type !== 'Import') continue;
-            if (child.skip) {
-                if (typeof child.skip !== 'function' || child.skip()) continue;
-            }
+            var skip = child.skip;
+            if (typeof skip == 'function') skip = child.skip();
             node.rules.splice.apply(node.rules,
-                [i, 1].concat(child.root.rules));
+                [i, 1].concat(skip ? [] : child.root.rules));
+            i--; // go back because of the one removed element
         }
     }).over(css);
 }

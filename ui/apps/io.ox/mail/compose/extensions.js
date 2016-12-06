@@ -542,6 +542,7 @@ define('io.ox/mail/compose/extensions', [
                         view.$header.empty();
                         this.renderHeader();
                         view.invoke('render');
+                        view.$el.find('.io-ox-inline-links a.io-ox-action-link').focus();
                     };
 
                     view.extend({
@@ -713,7 +714,8 @@ define('io.ox/mail/compose/extensions', [
                     }).map(function (a) {
                         return a.toJSON();
                     });
-                    baton = ext.Baton({ startItem: data, data: list });
+
+                    baton = ext.Baton({ startItem: data, data: list, openedBy: 'io.ox/mail/compose' });
 
                     actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
                 });

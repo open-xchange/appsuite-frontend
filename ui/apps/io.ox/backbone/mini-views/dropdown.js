@@ -161,7 +161,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             }
 
             // make sure event bubbles up
-            if (!e.isPropagationStopped() && this.$overlay && this.$placeholder) {
+            if (!e.isPropagationStopped() && this.$overlay && this.$placeholder && !this.options.noDetach) {
                 // to use jquery event bubbling, the element, which triggered the event must have the correct parents
                 // therefore, the target element is inserted at the original position before event bubbling
                 // the element only remains at that position while the event bubbles
@@ -182,7 +182,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             // if $ul pops out on the overlay, this line is also required
             this.$ul.on('click', 'a', $.proxy(this.onClick, this));
 
-            if (this.model) this.listenTo(this.model, 'change', this.update);
+            if (this.model) this.listenTo(this.model, 'change', this.options.update || this.update);
         },
 
         update: function () {

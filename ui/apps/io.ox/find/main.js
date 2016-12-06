@@ -164,20 +164,12 @@ define('io.ox/find/main', [
                 });
 
                 // events
-                var emptyMessageOriginal;
                 app.on({
                     'find:query': function () {
                         grid.setMode('search');
-                        emptyMessageOriginal = emptyMessageOriginal || grid.getEmptyMessage();
-                        grid.setEmptyMessage(function () {
-                            return gt('No matching items found.');
-                        });
                     },
                     'find:idle': function () {
-                        if (grid.getMode() !== 'all') {
-                            grid.setMode('all');
-                            grid.setEmptyMessage(emptyMessageOriginal);
-                        }
+                        if (grid.getMode() !== 'all') grid.setMode('all');
                     }
                 });
             },
@@ -190,9 +182,49 @@ define('io.ox/find/main', [
                     index: 100,
                     draw: function (baton) {
                         if (!baton.app.props.get('find-result')) return;
-                        baton.stopPropagation();
                         //#. search feature returns an empty result
                         this.text(gt('No matching items found.'));
+                    }
+                });
+            },
+
+            'listview-empty-message-action': function (app) {
+                // non-listview app OR no 'all folders' option
+                if (!app.get('parent').listView || app.isMandatory('folder')) return;
+                var ref = app.get('parent').listView.ref;
+                ext.point(ref + '/empty').extend({
+                    id: 'search-action',
+                    index: 200,
+                    draw: function (baton) {
+                        // is listview currently in 'search mode'?
+                        if (!baton.app.props.get('find-result')) return;
+                        var manager = baton.app.get('find').model.manager;
+                        // already searched in all folders?
+                        if (manager.get('folder') && manager.get('folder').get('values').get('custom').getOption().id === 'disabled') return;
+
+                        this.append(
+                            //#. text link action to run current search again wihout any folder limitations
+                            $('<a>').text(gt('Search in all folders?'))
+                                .attr({
+                                    'class': 'io-ox-action-link',
+                                    'href': '#',
+                                    'data-action': 'search-button',
+                                    'draggable': false,
+                                    'role': 'button'
+                                })
+                                .on('click', function () {
+                                    manager.activate('folder', 'custom', 'disabled');
+                                    require(['io.ox/metrics/main'], function (metrics) {
+                                        var name = baton.app.get('name') || 'unknown',
+                                            apptitle = _.last(name.split('/'));
+                                        metrics.trackEvent({
+                                            app: apptitle,
+                                            target: 'list/empty/search/filter/folder',
+                                            action: 'remove'
+                                        });
+                                    });
+                                })
+                        );
                     }
                 });
             },
@@ -407,13 +439,13 @@ define('io.ox/find/main', [
                     require(['io.ox/metrics/main'], function (metrics) {
                         var name = app.get('parent').get('name') || 'unknown',
                             apptitle = _.last(name.split('/')),
-                            facet = model.get('facet').get('id').split(':')[0];
+                            facet = model.get('facet').get('id').split(':')[0],
+                            isDisabled = state === 'deactivate' || model.get('facet') && model.get('facet').getValue().getOption().id === 'disabled';
                         // toolbar actions
                         metrics.trackEvent({
                             app: apptitle,
-                            target: apptitle + '/search/facet/' + facet,
-                            action: 'search',
-                            value: facet
+                            target: 'search/filter/' + facet,
+                            action: isDisabled ? 'remove' : 'add'
                         });
                     });
                 }, 10)

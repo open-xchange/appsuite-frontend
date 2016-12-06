@@ -34,6 +34,12 @@
 
     .datepicker-day-field { width: 120px; }
 
+    // in mobile mode only the day field is drawn and mobiscroll is used to pick dates. May be enabled on tablets as well, so separate from media query
+    &.mobile-mode .datepicker-day-field {
+        width: 100%;
+        border-radius: @border-radius-base;
+    }
+
     .timezone {
         width: auto;
         font-size: 12px;
@@ -55,8 +61,6 @@
 
         .datepicker-day-field {
             padding: 4px 6px;
-            width: 100%;
-            border-radius: @border-radius-base;
         }
     }
 }

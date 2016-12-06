@@ -30,32 +30,6 @@ define('io.ox/mail/detail/content', [
      * Helpers to beautify text mails
      */
 
-    var markupQuotes = function (str) {
-
-        var blockquoteStart = '<blockquote type="cite">',
-            blockquoteEnd = '</blockquote>',
-            regQuoted = /^&gt;( |$)/i,
-            level = 0;
-
-        if (!str) return;
-
-        var lines = str.split(/<br\s?\/?>/i);
-
-        _(lines).each(function (line, i) {
-            if (line.length > 0) {
-                var lineLevel = 0;
-                for (; line.match(regQuoted); lineLevel++) line = line.replace(regQuoted, '');
-                for (; lineLevel > level; level++) line = blockquoteStart + line;
-                for (; lineLevel < level; level--) lines[i - 1] = lines[i - 1] + blockquoteEnd;
-            }
-            lines[i] = line;
-        });
-
-        for (; level > 0; level--) lines.push(blockquoteEnd);
-
-        return lines.join('<br>').replace(/<br><\/blockquote>/g, '</blockquote>');
-    };
-
     var regHTML = /^text\/html$/i,
         regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&\s]+)&gt;/g, /* "name" <address> */
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
@@ -128,11 +102,9 @@ define('io.ox/mail/detail/content', [
                 return line;
             })
             .join('');
-        var hasBlockquotes = text.match(/(&gt; )+/g);
-        if (hasBlockquotes) {
-            text = markupQuotes(text);
 
-        }
+        text = that.beautifyPlainText(text);
+
         return text;
     };
 
@@ -502,7 +474,7 @@ define('io.ox/mail/detail/content', [
         });
     }
 
-    return {
+    var that = {
 
         get: function (data, options) {
 
@@ -583,46 +555,84 @@ define('io.ox/mail/detail/content', [
             return { content: content, isLarge: baton.isLarge, type: baton.type, processedEmoji: baton.processedEmoji };
         },
 
+        // convert pseudo-plain-text to real plain text
+        adjustPlainText: (function () {
+
+            var div;
+
+            return function (str) {
+
+                return String(str || '')
+                    // convert <br> into newline
+                    .replace(/<br\s?\/?>/gi, '\n')
+                    // simply remove tags
+                    .replace(/<[a-z\/].*?>/gi, '')
+                    // replace entities
+                    .replace(/&.*?;/g, decodeEntity);
+            };
+
+            function decodeEntity(str) {
+                div = div || document.createElement('div');
+                div.innerHTML = str;
+                return div.textContent;
+            }
+
+        }()),
+
+        beautifyPlainText: function (str) {
+            var plain = this.adjustPlainText(str);
+            return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
+        },
+
+        // convert plain text to html
+        // supports blockquotes and lists
+        // note: this does not work with our pseudo text mails that still contain markup (e.g. <br> and <a href>)
         text2html: (function () {
 
-            var regBlockquote = /^(> )+[^\n]*(\n> [^\n]*)*/,
-                regIsUnordered = /^\* [^\n]*(\n\* [^\n]*|\n {2}\* [^\n]*)*/,
+            var regBlockquote = /^>+ [^\n]*(\n>+ [^\n]*)*/,
+                regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2,}(\*|-) [^\n]*)*/,
                 regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
-                regText = /^[^\n]*(\n(?!\* |> |\d+\. )[^\n]*)*/;
+                regText = /^[^\n]*(\n(?![ ]*(\* |\- |> |\d+\. ))[^\n]*)*/,
+                regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
+                regMailAddress = /([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
+                regRuler = /\n?(-|=|\u2014){10,}\n?/g,
+                defaults = { blockquotes: true, links: true, lists: true, rulers: true };
 
             function exec(regex, str) {
                 var match = regex.exec(str);
                 return match && match[0];
             }
 
-            function parse(str) {
+            function parse(str, options) {
 
                 var out = '', match, start;
 
+                options = options || defaults;
+
                 while (str) {
 
-                    if (match = exec(regBlockquote, str)) {
+                    if (options.blockquotes && (match = exec(regBlockquote, str))) {
                         str = str.substr(match.length);
-                        match = match.replace(/^> /gm, '');
-                        match = parse(match).replace(/(<br>)?(<\/?blockquote[^>]*>)(<br>)?/g, '$2').replace(/<br>$/, '');
+                        match = match.replace(/^(>(>)|> )/gm, '$2');
+                        match = parse(match, options).replace(/(<br>)?(<\/?blockquote[^>]*>)(<br>)?/g, '$2').replace(/<br>$/, '');
                         out += '<blockquote type="cite">' + match + '</blockquote>';
                         continue;
                     }
 
-                    if (match = exec(regIsUnordered, str)) {
+                    if (options.lists && (match = exec(regIsUnordered, str))) {
                         str = str.substr(match.length);
                         match = match.replace(/^../gm, '');
-                        match = parse(match).replace(/<br><ul>/g, '<ul>').replace(/<br>/g, '</li><li>');
+                        match = parse(match, options).replace(/<br><ul>/g, '<ul>').replace(/<br>/g, '</li><li>');
                         out += '<ul><li>' + match + '</li></ul>';
                         continue;
                     }
 
-                    if (match = exec(regIsOrdered, str)) {
+                    if (options.lists && (match = exec(regIsOrdered, str))) {
                         str = str.substr(match.length);
                         start = parseInt(match, 10);
                         match = match.replace(/^\d+\. /gm, '');
-                        match = parse(match).replace(/<br>(<ol[^>]*>)/g, '$1').replace(/<br>/g, '</li><li>');
+                        match = parse(match, options).replace(/<br>(<ol[^>]*>)/g, '$1').replace(/<br>/g, '</li><li>');
                         out += '<ol start="' + start + '"><li>' + match + '</li></ol>';
                         continue;
                     }
@@ -634,8 +644,22 @@ define('io.ox/mail/detail/content', [
                     }
 
                     if (match = exec(regText, str)) {
-                        str = str.substr(match.length);
-                        out += _.escape(match).replace(/\n/g, '<br>');
+                        // add 1 character to catch the next newline
+                        str = str.substr(match.length + 1);
+                        // escape first
+                        match = _.escape(match);
+                        // rulers
+                        if (options.rulers) {
+                            match = match.replace(regRuler, replaceRuler);
+                        }
+                        // links & mail addresses
+                        if (options.links && /(http|@)/i.test(match)) {
+                            match = match
+                                .replace(regLink, '<a href="$1" rel="noopener" target="_blank">$1</a>$2')
+                                .replace(regMailAddress, '<a href="mailto:$1" rel="noopener" target="_blank">$1</a>');
+                        }
+                        // replace newlines
+                        out += match.replace(/\n/g, '<br>');
                         continue;
                     }
 
@@ -646,6 +670,15 @@ define('io.ox/mail/detail/content', [
                 }
 
                 return out;
+            }
+
+            function replaceRuler(str) {
+                switch (str[0]) {
+                    case '=':
+                        return '<hr style="height: 0; border: 0; border-top: 3px double #555; margin: 8px 0;">';
+                    default:
+                        return '<hr style="height: 0; border: 0; border-top: 1px solid #aaa; margin: 8px 0;">';
+                }
             }
 
             return parse;
@@ -695,6 +728,10 @@ define('io.ox/mail/detail/content', [
                 o = '<blockquote type="cite"><blockquote type="cite">Lorem ipsum</blockquote>dolor sit<blockquote type="cite">amet</blockquote></blockquote>';
                 if (this.text2html(i) !== o) throw i;
 
+                i = '>> Lorem\n>> ipsum';
+                o = '<blockquote type="cite"><blockquote type="cite">Lorem<br>ipsum</blockquote></blockquote>';
+                if (this.text2html(i) !== o) throw i;
+
                 // UNORDERED LISTS
 
                 i = '* Lorem ipsum';
@@ -705,8 +742,20 @@ define('io.ox/mail/detail/content', [
                 o = '<br><ul><li>Lorem ipsum</li><li>dolor sit</li></ul>';
                 if (this.text2html(i) !== o) throw i;
 
+                i = '\n- Lorem ipsum\n- dolor sit';
+                o = '<br><ul><li>Lorem ipsum</li><li>dolor sit</li></ul>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '- Lorem http://yeah.com\n- ipsum\n- dolor';
+                o = '<ul><li>Lorem <a href="http://yeah.com" rel="noopener" target="_blank">http://yeah.com</a></li><li>ipsum</li><li>dolor</li></ul>';
+                if (this.text2html(i) !== o) throw i;
+
                 i = '* Lorem\n  * ipsum\n  * dolor sit\n* amet';
                 o = '<ul><li>Lorem<ul><li>ipsum</li><li>dolor sit</li></ul></li><li>amet</li></ul>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '* One\n  * Two\n    * Three\n* One';
+                o = '<ul><li>One<ul><li>Two<ul><li>Three</li></ul></li></ul></li><li>One</li></ul>';
                 if (this.text2html(i) !== o) throw i;
 
                 // ORDERED LISTS
@@ -723,6 +772,16 @@ define('io.ox/mail/detail/content', [
                 o = '<ol start="29"><li>Lorem ipsum</li><li>dolor sit</li></ol>';
                 if (this.text2html(i) !== o) throw i;
 
+                // LINKS & ADDRESSES
+
+                i = 'Lorem http://ip.sum! dolor';
+                o = 'Lorem <a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>! dolor';
+                if (this.text2html(i) !== o) throw i;
+
+                i = 'Lorem <ipsum@dolor.amet>';
+                o = 'Lorem &lt;<a href="mailto:ipsum@dolor.amet" rel="noopener" target="_blank">ipsum@dolor.amet</a>&gt;';
+                if (this.text2html(i) !== o) throw i;
+
                 console.info('All fine');
 
             } catch (e) {
@@ -730,4 +789,6 @@ define('io.ox/mail/detail/content', [
             }
         }
     };
+
+    return that;
 });

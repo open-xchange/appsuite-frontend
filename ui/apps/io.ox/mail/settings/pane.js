@@ -21,8 +21,10 @@ define('io.ox/mail/settings/pane', [
     'io.ox/core/notifications',
     'gettext!io.ox/mail',
     'io.ox/core/api/account',
-    'io.ox/backbone/mini-views'
-], function (settings, userAPI, capabilities, contactsAPI, mailUtil, ext, notifications, gt, api, mini) {
+    'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/colorpicker'
+], function (settings, userAPI, capabilities, contactsAPI, mailUtil, ext, notifications, gt, api, mini, Dropdown, Colorpicker) {
 
     'use strict';
 
@@ -47,6 +49,34 @@ define('io.ox/mail/settings/pane', [
             { label: gt('3 minutes'), value: '3_minutes' },
             { label: gt('5 minutes'), value: '5_minutes' },
             { label: gt('10 minutes'), value: '10_minutes' }
+        ],
+
+        optionsFontName = [
+            { label: 'Andale Mono', value: '"andale mono", monospace' },
+            { label: 'Arial ', value: 'arial, helvetica, sans-serif' },
+            { label: 'Arial Black', value: '"arial black", sans-serif' },
+            { label: 'Book Antiqua', value: '"book antiqua", palatino, serif' },
+            { label: 'Comic Sans MS', value: '"comic sans ms", sans-serif' },
+            { label: 'Courier New', value: '"courier new", courier, monospace' },
+            { label: 'Georgia', value: 'georgia, palatino, serif' },
+            { label: 'Helvetica', value: 'helvetica, arial, sans-serif' },
+            { label: 'Impact', value: 'impact, sans-serif' },
+            { label: 'Symbol', value: 'symbol' },
+            { label: 'Tahoma', value: 'tahoma, arial, helvetica, sans-serif' },
+            { label: 'Terminal', value: 'terminal, monaco, monospace' },
+            { label: 'Times New Roman', value: '"times new roman", times, serif' },
+            { label: 'Trebuchet MS', value: '"trebuchet ms", geneva, sans-serif' },
+            { label: 'Verdana', value: 'verdana, geneva, sans-serif' }
+        ],
+
+        optionsFontsize = [
+            { label: '8pt', value: '8pt' },
+            { label: '10pt', value: '10pt' },
+            { label: '12pt', value: '12pt' },
+            { label: '14pt', value: '14pt' },
+            { label: '18pt', value: '18pt' },
+            { label: '24pt', value: '24pt' },
+            { label: '36pt', value: '36pt' }
         ];
 
     // not possible to set nested defaults, so do it here
@@ -226,6 +256,38 @@ define('io.ox/mail/settings/pane', [
         index: 300,
         id: 'compose',
         draw: function () {
+            var update = function () {
+                    var $ul = this.$ul,
+                        li = $ul.find('[data-name="' + this.options.name + '"]'),
+                        self = this;
+                    // clear check marks
+                    li.children('i').attr('class', 'fa fa-fw fa-none');
+                    // loop over list items also allow compare non-primitive values
+                    li.each(function () {
+                        var node = $(this);
+                        node.filter('[role=menuitemcheckbox][aria-checked]').attr({ 'aria-checked': _.isEqual(node.data('value'), self.model.get(self.options.name)) });
+                        if (_.isEqual(node.data('value'), self.model.get(self.options.name))) node.children('i').attr('class', 'fa fa-fw fa-check');
+                    });
+                    // update drop-down toggle
+                    self.label();
+                },
+                fontFamilySelect,
+                fontSizeSelect,
+                exampleText;
+
+            if (!_.device('smartphone')) {
+                fontFamilySelect = new Dropdown({ caret: true, model: settings, label: gt('Font'), tagName: 'div', className: 'dropdown fontnameSelectbox', update: update, name: 'defaultFontStyle/family' });
+                fontSizeSelect = new Dropdown({ caret: true, model: settings, label: gt('Size'), tagName: 'div', className: 'dropdown fontsizeSelectbox', update: update, name: 'defaultFontStyle/size' });
+
+                _(optionsFontName).each(function (item) {
+                    fontFamilySelect.option('defaultFontStyle/family', item.value, item.label, { radio: true });
+                });
+                _(optionsFontsize).each(function (item) {
+                    fontSizeSelect.option('defaultFontStyle/size', item.value, item.label, { radio: true });
+                });
+            }
+
+
             this.append(
                 fieldset(gt('Compose'),
                     checkbox(
@@ -260,6 +322,29 @@ define('io.ox/mail/settings/pane', [
                     new mini.RadioView({ list: optionsFormatAs, name: 'messageFormat', model: settings }).render().$el
                 ) : [],
 
+                (_.device('smartphone') ? '' : [
+                    $('<div>').addClass('settings sectiondelimiter'),
+                    $('<fieldset>').append(
+                        $('<legend>').addClass('sectiontitle').append(
+                            $('<h2>').text(gt('Default font style'))
+                        ),
+                        $('<dev class="col-xs-12 col-md-6">').append(
+                            $('<div class="row">').append(
+                                fontFamilySelect.render().$el,
+                                fontSizeSelect.render().$el,
+                                $('<div class="fontcolorButton">').append(
+                                    new Colorpicker({ name: 'defaultFontStyle/color', model: settings, className: 'dropdown', label: gt('Color'), caret: true }).render().$el
+                                )
+                            ),
+                            $('<div class="row">').append(exampleText = $('<div class="example-text">').text(gt('Example text')).css({
+                                'font-size': settings.get('defaultFontStyle/size', '12pt'),
+                                'font-family': settings.get('defaultFontStyle/family', 'arial, helvetica, sans-serif'),
+                                'color': settings.get('defaultFontStyle/color', '#000')
+                            }))
+                        )
+                    )]
+                ),
+
                 $('<div>').addClass('settings sectiondelimiter'),
                 $('<fieldset>').append(
                     $('<legend>').addClass('sectiontitle sr-only').append(
@@ -281,6 +366,26 @@ define('io.ox/mail/settings/pane', [
                     )
                 )
             );
+
+            if (!_.device('smartphone')) {
+                settings.on('change:defaultFontStyle/size change:defaultFontStyle/family change:defaultFontStyle/color', function () {
+                    exampleText.css({
+                        'font-size': settings.get('defaultFontStyle/size', '12pt'),
+                        'font-family': settings.get('defaultFontStyle/family', 'arial, helvetica, sans-serif'),
+                        'color': settings.get('defaultFontStyle/color', '#000')
+                    });
+
+                    if (settings.get('defaultFontStyle/color') === 'transparent') {
+                        exampleText.css('color', '#000');
+                    }
+
+                    settings.save();
+                });
+
+                _(fontFamilySelect.$ul.find('a')).each(function (item) {
+                    $(item).css('font-family', $(item).data('value'));
+                });
+            }
         }
     });
 

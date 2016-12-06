@@ -157,6 +157,16 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         ed.selection.select(dummySpan);
         // and delete it
         ed.execCommand('Delete', false, null);
+        if (!_.device('smartphone')) {
+            // apply default font styles
+            ed.execCommand('fontSize', false, mailSettings.get('defaultFontStyle/size'));
+            ed.execCommand('fontName', false, mailSettings.get('defaultFontStyle/family'));
+
+            // when selecting transparent, tinyMCE does not make the text transparent, but set's the color to black. Preserve this behavior
+            if (mailSettings.get('defaultFontStyle/color') !== 'transparent') {
+                ed.execCommand('forecolor', false, mailSettings.get('defaultFontStyle/color'));
+            }
+        }
     }
 
     function isInsideBlockquote(range) {
@@ -486,11 +496,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             // clean up
             str = trimEnd(str);
             if (!str) return;
-            return textproc.texttohtml(str).then(function (content) {
-                if (/^<blockquote\>/.test(content)) {
-                    content = '<p><br></p>' + content;
-                }
-                set(content);
+            require(['io.ox/mail/detail/content'], function (proc) {
+                set(proc.text2html(str));
                 ed.undoManager.clear();
             });
         };

@@ -231,9 +231,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'export',
                     ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 },
+                // on smartphones the separate dropdown is broken up and the options are added to the actions dropdown
                 'share': {
                     prio: 'hi',
-                    mobile: 'hi',
                     icon: 'fa fa-user-plus',
                     label: gt('Share'),
                     title: gt('Share this file'),
@@ -254,6 +254,18 @@ define('io.ox/core/viewer/views/toolbarview', [
                             }, baton)
                         }).render();
                     }
+                },
+                'invite': {
+                    mobile: 'lo',
+                    label: gt('Invite people'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/invite'
+                },
+                'sharelink': {
+                    mobile: 'lo',
+                    label: gt('Get link'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/getalink'
                 },
                 'sendbymail': {
                     prio: 'lo',
@@ -454,7 +466,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
             // detail is the target of popoutstandalone, no support for mail attachments
-            return currentApp !== 'io.ox/files/detail';
+            return currentApp !== 'io.ox/mail/compose' && currentApp !== 'io.ox/files/detail';
         },
         action: function (baton) {
             var fileModel;
@@ -704,7 +716,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                         $el: toolbar,
                         model: model,
                         models: isDriveFile ? [model] : null,
-                        data: isDriveFile ? model.toJSON() : origData
+                        data: isDriveFile ? model.toJSON() : origData,
+                        openedBy: this.openedBy
                     }),
                     appName = model.get('source'),
                     self = this,

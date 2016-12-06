@@ -26,11 +26,12 @@ define('io.ox/settings/main', [
     'io.ox/core/folder/util',
     'io.ox/core/api/mailfilter',
     'io.ox/core/notifications',
+    'io.ox/keychain/api',
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
     'less!io.ox/settings/style'
-], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, notifications) {
+], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, notifications, keychainAPI) {
 
     'use strict';
 
@@ -517,7 +518,13 @@ define('io.ox/settings/main', [
             id: 'io.ox/core'
         });
 
-        if (!capabilities.has('guest')) {
+        var submodules = _(keychainAPI.submodules).filter(function (submodule) {
+            return !submodule.canAdd || submodule.canAdd.apply(this);
+        });
+        // do not show accounts for guest
+        // show accounts if user has webmail
+        // show accounts if user has submodules which can be added
+        if (!capabilities.has('guest') && (capabilities.has('webmail') || submodules.length > 0)) {
             ext.point('io.ox/settings/pane/general').extend({
                 title: gt('Accounts'),
                 index: 200,

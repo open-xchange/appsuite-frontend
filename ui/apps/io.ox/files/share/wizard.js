@@ -344,6 +344,8 @@ define('io.ox/files/share/wizard', [
         },
 
         share: function () {
+            // we might have new addresses
+            contactsAPI.trigger('maybeNewContact');
             return $.when(this.model.save()).fail(yell);
         },
 

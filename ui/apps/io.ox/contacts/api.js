@@ -1134,10 +1134,11 @@ define('io.ox/contacts/api', [
 
     // clear update cache whenever a contact is added, changed, or removed
     api.on('create update delete', function () {
-        api.trigger('maybyNewContact');
+        api.trigger('maybeNewContact');
     });
 
-    api.on('maybyNewContact', function () {
+    api.on('maybeNewContact', function () {
+        if (ox.debug) console.info('Clearing autocomplete cache');
         api.autocomplete.cache = {};
     });
 

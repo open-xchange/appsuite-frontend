@@ -53,7 +53,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             var self = this,
                 def = $.Deferred();
 
-            this.$el.addClass('dateinput').append(
+            this.$el.addClass('dateinput').toggleClass('mobile-mode', self.mobileMode).append(
                 $('<legend>').addClass('simple control-label').text(this.options.label),
                 $('<div class="input-group form-inline">').append(
                     function () {

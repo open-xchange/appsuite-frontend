@@ -489,7 +489,7 @@ define('io.ox/mail/compose/view', [
                         _(data.nested_msgs).each(function (obj) {
                             attachments.push({
                                 id: obj.id,
-                                filename: obj.subject,
+                                filename: obj.subject + '.eml',
                                 content_type: 'message/rfc822',
                                 msgref: obj.msgref
                             });
@@ -519,9 +519,10 @@ define('io.ox/mail/compose/view', [
 
                     var def = $.Deferred();
                     if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
-                        textproc.texttohtml(content).then(function (processed) {
+                        require(['io.ox/mail/detail/content'], function (proc) {
+                            var html = proc.text2html(content);
                             attachmentCollection.at(0).set('content_type', 'text/html');
-                            content = processed;
+                            content = html;
                             def.resolve();
                         });
                     } else {
@@ -947,11 +948,30 @@ define('io.ox/mail/compose/view', [
         },
 
         prependNewLine: function () {
-            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''),
-                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
-
             // Prepend newline in all modes except when editing draft
-            if (this.model.get('mode') !== 'edit') this.editor.setContent(nl + content);
+            if (this.model.get('mode') === 'edit') return;
+
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''), nl;
+            // don't apply default styles on smartphones. There is no toolbar where a user could change it again.
+            if (!_.device('smartphone')) {
+                var css = {
+                        'color': settings.get('defaultFontStyle/color'),
+                        'font-family': settings.get('defaultFontStyle/family'),
+                        'font-size': settings.get('defaultFontStyle/size')
+                    },
+                    // br must be appended here. Or tinymce just deletes the span.
+                    styleNode = $('<span>').append($('<br>'));
+                if (css.color === 'transparent') {
+                    delete css.color;
+                }
+                styleNode.css(css).attr('data-mce-style', css);
+
+                nl = this.model.get('editorMode') === 'html' ? '<p>' + styleNode[0].outerHTML + '</p>' : '\n';
+            } else {
+                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
+            }
+
+            this.editor.setContent(nl + content);
         },
 
         setMail: function () {

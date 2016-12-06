@@ -30,7 +30,13 @@ define('io.ox/files/actions', [
     'use strict';
 
     var Action = links.Action,
-        COMMENTS = settings.get('features/comments', true);
+        COMMENTS = settings.get('features/comments', true),
+        // used by text editor
+        allowedFileExtensions = ['csv', 'txt', 'js', 'css', 'md', 'tmpl', 'html'];
+
+    if (capabilities.has('guard-drive')) {
+        allowedFileExtensions.push('pgp');
+    }
 
     // actions
     new Action('io.ox/files/actions/upload', {
@@ -79,12 +85,14 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
                 return api.versions.getCurrentState(e.baton.data).then(function (currentVersion) {
+                    // build regex from list, pgp is added if guard is available
+                    var regex = new RegExp('\\.(' + allowedFileExtensions.join('|') + '?)$', 'i');
+
                     return util.conditionChain(
                         currentVersion,
                         e.collection.has('one', 'modify'),
                         !util.hasStatus('lockedByOthers', e),
-                        (/\.(csv|txt|js|css|md|tmpl|html?)(\.pgp)?$/i).test(e.context.filename),
-                        (!(/\.pgp$/i).test(e.context.filename) || capabilities.has('guard-drive')),  // if has .pgp, must have Guard capability
+                        regex.test(e.context.filename),
                         (e.baton.openedBy !== 'io.ox/mail/compose'),
                         util.isFolderType('!trash', e.baton)
                     );
@@ -99,7 +107,7 @@ define('io.ox/files/actions', [
                         }
                         return;
                     }
-                    ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id, params: _.extend({}, params) }).done(function () {
+                    ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id, params: _.extend({ allowedFileExtensions: allowedFileExtensions }, params) }).done(function () {
                         // if this was opened from the viewer, close it now
                         if (baton.context && baton.context.viewerEvents) {
                             baton.context.viewerEvents.trigger('viewer:close');
@@ -108,7 +116,8 @@ define('io.ox/files/actions', [
                 };
 
                 // Check if Guard file.  If so, do auth then call with parameters
-                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.endsWith('.pgp')) && capabilities.has('guard-drive')) {
+                // do not use endsWith because of IE11
+                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.lastIndexOf('.pgp') === baton.data.filename.length - 4) && capabilities.has('guard-drive')) {
                     require(['io.ox/guard/auth/authorizer'], function (guardAuth) {
                         guardAuth.authorize().then(function (auth) {
                             var params = {
@@ -143,7 +152,7 @@ define('io.ox/files/actions', [
             },
             action: function (baton) {
                 ox.launch('io.ox/editor/main').done(function () {
-                    this.create({ folder: baton.app.folder.get() });
+                    this.create({ folder: baton.app.folder.get(), params: { allowedFileExtensions: allowedFileExtensions } });
                 });
             }
         });
@@ -162,6 +171,9 @@ define('io.ox/files/actions', [
                     }
                 });
                 return result;
+            } else if (_(e.baton.data).has('internal_userid')) {
+                // check if this is a contact not a file, happens when contact is send as vcard
+                return false;
             }
 
             // 'description only' items
@@ -179,7 +191,9 @@ define('io.ox/files/actions', [
             // no file-system, no download
             if (_.device('ios')) return false;
             // single folders only
-            return e.collection.has('one', 'folders');
+            if (!e.collection.has('one', 'folders')) return false;
+            //disable for external storages
+            return !filestorageApi.isExternal(e.baton.data);
         },
         action: function (baton) {
             require(['io.ox/files/api'], function (api) {
@@ -230,6 +244,8 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (e.collection.has('multiple')) return false;
             if (e.collection.has('folders')) return false;
+            // check if this is a contact not a file, happens when contact is send as vcard
+            if (_(e.baton.data).has('internal_userid')) return false;
             if (e.baton.data.file_mimetype) {
                 // no 'open' menu entry for office documents, PDF and plain text
                 if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
@@ -363,7 +379,7 @@ define('io.ox/files/actions', [
                     authorizer.authorize().then(function (auth) {
                         var params = {
                             cryptoAction: 'Decrypt',
-                            cryptoAuth: auth,
+                            cryptoAuth: auth
                         };
                         fileModel.set('file_options', { params: params });
                         ox.launch('io.ox/presenter/main', fileModel);
@@ -391,6 +407,8 @@ define('io.ox/files/actions', [
             return _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
+                // see if folder supports this
+                folderAPI.pool.getModel(e.baton.data.folder_id || e.baton.data[0].folder_id).supports('locks') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('!locked', e);
@@ -424,6 +442,8 @@ define('io.ox/files/actions', [
         requires: function (e) {
             return util.conditionChain(
                 e.collection.has('one', 'items'),
+                // check if this is a contact not a file, happens when contact is send as vcard
+                !_(e.baton.data).has('internal_userid'),
                 !_.isEmpty(e.baton.data),
                 util.isFolderType('!trash', e.baton)
             );
@@ -564,7 +584,7 @@ define('io.ox/files/actions', [
                                 // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
                                 _(response).each(function (error) {
                                     if (error.error) {
-                                        if (error.error.categories === 'CONFLICT' && (error.error.code === 'FILE_STORAGE-0045' || error.error.code === 'FLD-1038')) {
+                                        if (error.error.categories === 'CONFLICT' && (error.error.code.indexOf('FILE_STORAGE') === 0 || error.error.code === 'FLD-1038')) {
                                             if (!conflicts.title) {
                                                 conflicts.title = error.error.error;
                                             }
@@ -583,6 +603,11 @@ define('io.ox/files/actions', [
                                         filestorageUtil.displayConflicts(conflicts, {
                                             callbackIgnoreConflicts: function () {
                                                 api[type](list, baton.target, true);
+                                            },
+                                            callbackCancel: function () {
+                                                if (baton.data[0].folder_id) {
+                                                    folderAPI.reload(baton.data[0].folder_id);
+                                                }
                                             }
                                         });
                                     });
@@ -612,6 +637,8 @@ define('io.ox/files/actions', [
         var id, model;
         // not possible for multi-selection
         if (e.collection.has('multiple')) return false;
+        // check if this is a contact not a file, happens when contact is send as vcard
+        if (e.baton.data && _(e.baton.data).has('internal_userid')) return false;
         // get folder id
         if (e.collection.has('one')) {
             // use selected file or folders

@@ -99,6 +99,15 @@ define('io.ox/core/api/account', [
     };
 
     /**
+     * is unified root folder
+     * @param  {string}  id (folder_id)
+     * @return { boolean }
+     */
+    api.isUnifiedRoot = function (id) {
+        return api.isUnified(id) && id.split(separator).length === 1;
+    };
+
+    /**
      * is account folder
      * @param  {string}  id (folder_id)
      * @return { boolean }
