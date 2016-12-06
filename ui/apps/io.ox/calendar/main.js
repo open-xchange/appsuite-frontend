@@ -274,7 +274,8 @@ define('io.ox/calendar/main', [
                 },
                 savedWidth = app.settings.get('vgrid/width/' + _.display());
 
-            if (savedWidth) {
+            // do not apply on touch devices. it's not possible to change the width there
+            if (!_.device('touch') && savedWidth) {
                 app.right.css('left', savedWidth + 'px');
                 app.left.css('width', savedWidth + 'px');
             }
