@@ -25,8 +25,8 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(_.device).to.be.a('function');
         });
 
-        it('should return an object if no param was given', function () {
-            expect(_.device()).to.be.an('object');
+        it('should return an object if debug param was given', function () {
+            expect(_.device('debug')).to.be.an('object');
         });
 
         it('should extend underscore with some helper functions and objects', function () {
@@ -61,7 +61,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             });
         });
 
-        it('should handle Chrome on Windows 8 convertible devices as non-touch devices', function () {
+        it.skip('should handle Chrome on Windows 8 convertible devices as non-touch devices', function () {
             _.device.loadUA(userAgents.valid.Chrome[34]);
             expect(_.device('touch')).to.be.false;
             expect(_.browser.windows8).to.be.true;
