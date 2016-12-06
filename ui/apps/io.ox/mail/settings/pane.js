@@ -336,7 +336,7 @@ define('io.ox/mail/settings/pane', [
                                     new Colorpicker({ name: 'defaultFontStyle/color', model: settings, className: 'dropdown', label: gt('Color'), caret: true }).render().$el
                                 )
                             ),
-                            $('<div class="row">').append(exampleText = $('<div class="form-control example-text">').text(gt('Example text')).css({
+                            $('<div class="row">').append(exampleText = $('<div class="example-text">').text(gt('Example text')).css({
                                 'font-size': settings.get('defaultFontStyle/size', '12pt'),
                                 'font-family': settings.get('defaultFontStyle/family', 'arial, helvetica, sans-serif'),
                                 'color': settings.get('defaultFontStyle/color', '#000')
