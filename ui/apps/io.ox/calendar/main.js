@@ -265,13 +265,19 @@ define('io.ox/calendar/main', [
         'vgrid': function (app) {
 
             var gridOptions = {
-                settings: settings,
-                showToggle: _.device('smartphone'),
-                hideTopbar: _.device('smartphone'),
-                hideToolbar: _.device('smartphone'),
-                // if it's shown, it should be on the top
-                toolbarPlacement: 'top'
-            };
+                    settings: settings,
+                    showToggle: _.device('smartphone'),
+                    hideTopbar: _.device('smartphone'),
+                    hideToolbar: _.device('smartphone'),
+                    // if it's shown, it should be on the top
+                    toolbarPlacement: 'top'
+                },
+                savedWidth = app.settings.get('vgrid/width/' + _.display());
+
+            if (savedWidth) {
+                app.right.css('left', savedWidth + 'px');
+                app.left.css('width', savedWidth + 'px');
+            }
 
             // show "load more" link
             gridOptions.tail = function () {

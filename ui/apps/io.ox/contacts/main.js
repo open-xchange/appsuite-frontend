@@ -185,7 +185,13 @@ define('io.ox/contacts/main', [
         },
 
         'vgrid': function (app) {
-            var grid = app.grid;
+            var grid = app.grid,
+                savedWidth = app.settings.get('vgrid/width/' + _.display());
+
+            if (savedWidth) {
+                app.right.parent().css('left', savedWidth + 'px');
+                app.left.css('width', savedWidth + 'px');
+            }
 
             app.left.append(
                 // grid container
