@@ -158,6 +158,9 @@ define('io.ox/core/api/account', [
         return dscHash[folder];
     };
 
+    api.hasDSCAccount = function () {
+        return !_.isEmpty(dscHash);
+    };
     /**
      * get unified mailbox name
      * @return { deferred} returns array or null
@@ -513,7 +516,7 @@ define('io.ox/core/api/account', [
                 idHash[account.id] = true;
                 // fill DSC hash if needed
                 if (isDSC) {
-                    dscHash[account.root_folder] = account.id;
+                    if (account.id !== 0) dscHash[account.root_folder] = account.id;
                 }
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';

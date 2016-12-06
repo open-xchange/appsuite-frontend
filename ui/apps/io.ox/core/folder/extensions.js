@@ -72,9 +72,15 @@ define('io.ox/core/folder/extensions', [
             // use the setting for dsc here in if-else, also consider altnamespace
             var dsc = mailSettings.get('dsc/enabled', false),
                 id = mailSettings.get('dsc/folder');
+            // smart cache environment
             if (dsc) {
-                return api.list(id);
+                if (account.hasDSCAccount()) {
+                    return api.list(id);
+                }
+                // no account yet, return empty array
+                return $.Deferred().resolve([]);
             }
+            // standard environment
             return api.list('1').then(function (list) {
                 return _(list).filter(function (data) {
                     return account.isExternal(data.id);

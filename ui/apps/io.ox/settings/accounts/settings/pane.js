@@ -30,7 +30,7 @@ define('io.ox/settings/accounts/settings/pane', [
     'gettext!io.ox/settings/accounts',
     'io.ox/backbone/mini-views/settings-list-view',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, mini, listUtils, DisposableView, filestorageApi, coreSettings, mailSettings, accounts, gt, ListView) {
+], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, Dropdown, mini, listUtils, DisposableView, filestorageApi, coreSettings, mailSettings, accounts, gt, ListView) {
 
     'use strict';
 

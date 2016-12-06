@@ -116,7 +116,6 @@ define('io.ox/mail/accounts/settings', [
                 // normal mode for all setups not using DSC
                 require(['io.ox/oauth/keychain', 'io.ox/oauth/backbone']).then(function (oauthAPI, OAuth) {
                     var mailServices = new Backbone.Collection(oauthAPI.services.filter(function (service) {
-                            console.log('services', service);
                             return _(service.get('availableScopes')).contains('mail') &&
                                 oauthAPI.accounts.forService(service.id, { scope: 'mail' }).map(function (account) {
                                     return account.id;
