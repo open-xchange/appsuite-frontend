@@ -953,7 +953,7 @@ define('io.ox/mail/compose/view', [
 
             var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''), nl;
             // don't apply default styles on smartphones. There is no toolbar where a user could change it again.
-            if (_.device('smartphone')) {
+            if (!_.device('smartphone')) {
                 var css = {
                         'color': settings.get('defaultFontStyle/color'),
                         'font-family': settings.get('defaultFontStyle/family'),
