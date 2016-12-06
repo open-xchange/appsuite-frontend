@@ -4,7 +4,7 @@ stages:
   - prepare
   - build
   - test
-  - docker
+  - packaging
   - deploy
   - e2e
   - cleanup
@@ -42,6 +42,11 @@ variables:
 install_deps_ui:
   variables:
     PROJECT_PATH: ui
+  <<: *install_deps
+
+install_deps_update-themes:
+  variables:
+    PROJECT_PATH: update-themes
   <<: *install_deps
 
 install_deps_help:
@@ -101,7 +106,7 @@ docker_image_ui:
     - docker build -t ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG} ui/
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
     - docker push gitlab.open-xchange.com:4567/frontend/core:ui_${CI_COMMIT_REF_SLUG}
-  stage: docker
+  stage: packaging
   dependencies:
     - install_deps_ui
     - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
@@ -274,3 +279,86 @@ build_dynamic-theme:
   variables:
     PROJECT_PATH: open-xchange-dynamic-theme
   <<: *build_ui_plugin
+
+create project on OBS:
+  image: gitlab.open-xchange.com:4567/frontend/dev_env:ant
+  stage: test
+  dependencies: []
+  variables:
+    GIT_SUBMODULE_STRATEGY: normal
+  before_script:
+    - echo "${OBS_OSCRC}" >> ~/.oscrc
+  script:
+    - cd build
+    - ant -f buildAll.xml -DshortProductName=frontend -Dbranch=${CI_COMMIT_REF_SLUG} -DprojectSets=frontend-packages determineProject createProject
+  environment:
+    name: packages/$CI_COMMIT_REF_NAME
+    on_stop: "cleanup review"
+    url: http://buildservice.open-xchange.com/frontend-$CI_COMMIT_REF_SLUG/
+  only:
+    - /^feature\//
+    - /^poc\//
+    - /^bug\//
+
+.upload source packages template: &buildpkg_on_obs
+  image: gitlab.open-xchange.com:4567/frontend/dev_env:ant
+  stage: packaging
+  variables:
+    GIT_SUBMODULE_STRATEGY: normal
+  script:
+    - cd build
+    # optionally apply patch
+    - patch -p1 -N < ../noNode.patch || true
+    - export PACKAGE_NAME=$(echo $CI_JOB_NAME | sed "s,package ,,")
+    - ant -f build.xml -Dproject=frontend-${CI_COMMIT_REF_SLUG} -DpackageName=$PACKAGE_NAME -DkeepCache=true -Dnode=echo -DnoNode=true -Dnoclean=true debianSource upload
+  only:
+    - /^feature\//
+    - /^poc\//
+    - /^bug\//
+
+package open-xchange-appsuite:
+  dependencies:
+    - install_deps_ui
+    - install_deps_update-themes
+  <<: *buildpkg_on_obs
+
+package open-xchange-dynamic-theme:
+  dependencies:
+    - install_deps_dynamic-theme
+  <<: *buildpkg_on_obs
+
+package open-xchange-guidedtours:
+  dependencies:
+    - install_deps_guidedtours
+  <<: *buildpkg_on_obs
+
+package open-xchange-appsuite-help:
+  dependencies:
+    - install_deps_help
+  <<: *buildpkg_on_obs
+
+package open-xchange-appsuite-saml:
+  dependencies:
+    - install_deps_saml
+  <<: *buildpkg_on_obs
+
+package open-xchange-appsuite-spamexperts:
+  dependencies:
+    - install_deps_spamexperts
+  <<: *buildpkg_on_obs
+
+cleanup review:
+  image: gitlab.open-xchange.com:4567/frontend/osc_env:latest
+  stage: cleanup
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - echo "${OBS_OSCRC}" >> ~/.oscrc
+  script:
+    - for P in open-xchange-appsuite open-xchange-dynamic-theme open-xchange-guidedtours open-xchange-appsuite-help open-xchange-appsuite-saml open-xchange-appsuite-spamexperts; do osc rdelete frontend-${CI_COMMIT_REF_SLUG} $P -m "GitLab CI environment stopped for $P" || echo "Could not remove $P, ignoring"; done
+    - osc rdelete frontend-${CI_COMMIT_REF_SLUG} -m "GitLab CI environment stopped" || echo "Leaving non-empty project on OBS"
+  when: manual
+  environment:
+    name: packages/$CI_COMMIT_REF_NAME
+    action: stop

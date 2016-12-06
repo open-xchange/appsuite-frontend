@@ -1,0 +1,22 @@
+diff --git a/build-appsuite.xml b/build-appsuite.xml
+index d1950be..8d0e7e1 100644
+--- a/build-appsuite.xml
++++ b/build-appsuite.xml
+@@ -41,7 +41,7 @@
+         </exec>
+     </target>
+ 
+-    <target name="npmInstall" depends="whichNode">
++    <target name="npmInstall" depends="whichNode" unless="noNode">
+         <replace dir="${basedir}">
+             <include name="npm-shrinkwrap.json"/>
+             <replacefilter token="https://registry.npmjs.org" value="http://npm.open-xchange.com:8080"/>
+@@ -129,7 +129,7 @@
+         </replace>
+     </target>
+ 
+-    <target name="npm">
++    <target name="npm" unless="noNode">
+         <if>
+             <available file="node_modules" type="dir"/>
+             <then>
