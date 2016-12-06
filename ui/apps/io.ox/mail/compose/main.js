@@ -89,6 +89,8 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                             app.view.fetchMail(data).done(function () {
                                 app.view.setMail()
                                 .done(function () {
+                                    // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
+                                    win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
                                     // Set window and toolbars visible again
                                     win.nodes.header.removeClass('sr-only');
                                     win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
