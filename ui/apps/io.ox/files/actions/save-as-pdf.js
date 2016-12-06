@@ -16,17 +16,25 @@ define('io.ox/files/actions/save-as-pdf', [
     'io.ox/core/folder/api',
     'io.ox/files/api',
 
-    'io.ox/presenter/errormessages',
-
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/core/tk/doc-converter-utils',
 
     'gettext!io.ox/files'
 
-], function (FolderApi, FilesApi, ErrorMessages, ext, dialogs, ConverterUtils, gt) {
+], function (FolderApi, FilesApi, ext, dialogs, ConverterUtils, gt) {
 
     'use strict';
+
+    /**
+     * Document conversion error messages
+     * Taken from 'io.ox/office/presenter/errormessages'
+     */
+    var DOC_CONVERTER_ERROR_MESSAGES = {
+        importError: gt('An error occurred loading the document so it cannot be displayed.'),
+        filterError: gt('An error occurred converting the document so it cannot be displayed.'),
+        passwordProtected: gt('This document is password protected and cannot be displayed.')
+    };
 
     return function (baton) {
 
@@ -45,7 +53,9 @@ define('io.ox/files/actions/save-as-pdf', [
             filename = model.getDisplayName(),
 
             len      = filename.length,
-            idx      = filename.lastIndexOf('.');
+            idx      = filename.lastIndexOf('.'),
+
+            errorMessage;
 
         filename = filename.substring(0, ((idx >= 0) ? idx : len));
 
@@ -71,7 +81,8 @@ define('io.ox/files/actions/save-as-pdf', [
                         notify('info', 'The PDF has been saved to "/drive/myfiles/documents" due to not having write access for the current folder.');
                     }
                 } else {
-                    notify('error', ErrorMessages.getConversionErrorMessage(response));
+                    errorMessage = DOC_CONVERTER_ERROR_MESSAGES[response && response.cause] || DOC_CONVERTER_ERROR_MESSAGES.importError;
+                    notify('error', errorMessage);
                 }
             });
         }

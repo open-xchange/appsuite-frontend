@@ -82,7 +82,7 @@ define('io.ox/core/viewer/main', [], function () {
                         // remove id form URL hash (see bug 43410)
                         // use-case: viewer was opened via deep-link; a page-reload might surprise the user
                         // but don't remove the id from an OX Presenter URL
-                        if (_.url.hash('app') !== 'io.ox/presenter') {
+                        if (_.url.hash('app') !== 'io.ox/office/presenter') {
                             _.url.hash('id', null);
                         }
                     });
