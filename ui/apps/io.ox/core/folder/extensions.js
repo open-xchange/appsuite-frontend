@@ -72,7 +72,7 @@ define('io.ox/core/folder/extensions', [
             // use the setting for dsc here in if-else, also consider altnamespace
             var dsc = mailSettings.get('dsc/enabled', false),
                 id = mailSettings.get('dsc/folder');
-            if (dsc) {
+            if (dsc && account.hasDSCAccount()) {
                 return api.list(id);
             }
             return api.list('1').then(function (list) {
