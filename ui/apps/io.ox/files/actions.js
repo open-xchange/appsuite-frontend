@@ -379,7 +379,7 @@ define('io.ox/files/actions', [
                     authorizer.authorize().then(function (auth) {
                         var params = {
                             cryptoAction: 'Decrypt',
-                            cryptoAuth: auth,
+                            cryptoAuth: auth
                         };
                         fileModel.set('file_options', { params: params });
                         ox.launch('io.ox/presenter/main', fileModel);
@@ -407,6 +407,8 @@ define('io.ox/files/actions', [
             return _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
+                // see if folder supports this
+                folderAPI.pool.getModel(e.baton.data.folder_id || e.baton.data[0].folder_id).supports('locks') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('!locked', e);
