@@ -22,7 +22,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
     'use strict';
 
-    function rerenderButtonAutoPlayModeRun($button) {
+    function rerenderButtonAutoPlayModeDoRun($button) {
         var
             $icon = $button.children().eq(0);
 
@@ -30,34 +30,115 @@ define('io.ox/core/viewer/views/displayerview', [
         $icon.removeClass('fa-pause');
 
         $button.attr({
-            /*#. tooltip for getting auto-play mode run. */
+            /*#. tooltip for getting auto-play mode ready for running. */
             'title':      gt('Run auto-play mode'),
             'aria-label': gt('Run auto-play mode')
         });
     }
-    // function rerenderButtonAutoPlayModePause($button) {
-    //     var
-    //         $icon = $button.children().eq(0);
-    //
-    //     $icon.addClass('fa-pause');
-    //     $icon.removeClass('fa-play');
-    //
-    //     $button.attr({
-    //         /*#. tooltip for pausing auto-play mode. */
-    //         'title':      gt('Pause auto-play mode'),
-    //         'aria-label': gt('Pause auto-play mode')
-    //     });
-    // }
+    function rerenderButtonAutoPlayModeDoPause($button) {
+        var
+            $icon = $button.children().eq(0);
 
-    function handleVisibilityOfAutoplayControl(displayerView, slideIndex) {
+        $icon.addClass('fa-pause');
+        $icon.removeClass('fa-play');
+
+        $button.attr({
+            /*#. tooltip for getting auto-play mode ready for pausing. */
+            'title':      gt('Pause auto-play mode'),
+            'aria-label': gt('Pause auto-play mode')
+        });
+    }
+
+    function setAutoplayControlStateToWillPlay(displayerView) {
+        rerenderButtonAutoPlayModeDoRun(displayerView.carouselRoot.children('.autoplay').eq(0));
+    }
+    function setAutoplayControlStateToWillPause(displayerView) {
+        rerenderButtonAutoPlayModeDoPause(displayerView.carouselRoot.find('.autoplay').eq(0));
+    }
+
+    function setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibility) {
+        displayerView.carouselRoot.toggleClass('autoplay-permanently-disabled', isForceDisableVisibility);
+    }
+
+    function handleToggleAutoplayMode(event, displayerView, mode) {
+        mode = (
+            ((mode === 'running') || (mode === 'pausing') && mode) ||
+
+            ((displayerView.autoplayMode === 'pausing') && 'running') ||
+            ((displayerView.autoplayMode === 'running') && 'pausing') ||
+
+            'pausing'
+        );
+        if (mode === 'pausing') {
+            window.clearTimeout(displayerView.timeoutIdAutoplay);
+
+            // if (displayerView.collectionBackup) {
+            //     displayerView.onAutoplayStop();
+            // }
+            setAutoplayControlStateToWillPlay(displayerView);
+        } else {
+            setAutoplayControlStateToWillPause(displayerView);
+
+            displayerView.onAutoplayStart();
+          //triggerDisplayNextAutoplaySlide(displayerView, displayerView.activeIndex, AUTOPLAY_DELAY__WHILE_STARTING);
+        }
+        displayerView.autoplayMode = mode;
+    }
+
+    function handleInitialStateForEnabledAutoplayMode(displayerView, slideIndex) {
         if (displayerView.canAutoplayImages) {
             var
-                isForceDisableVisibility = !displayerView.imageFileItemMap[slideIndex];
+                isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileItemMap[slideIndex];
 
-          //displayerView.$el.toggleClass('autoplay-enabled', isDisplayControl);
-            displayerView.carouselRoot.toggleClass('autoplay-permanently-disabled', isForceDisableVisibility);
+            setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibilityOfAutoplayControl);
+
+            handleToggleAutoplayMode({}, displayerView, 'pausing');
         }
     }
+    function handleSlideChangeForEnabledAutoplayMode(displayerView, slideIndex) {
+        if (displayerView.canAutoplayImages) {
+            if (displayerView.autoplayMode !== 'running') {
+                var
+                    isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileItemMap[slideIndex];
+
+                setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibilityOfAutoplayControl);
+            } else {
+                triggerDisplayNextAutoplaySlide(displayerView, slideIndex, AUTOPLAY_DELAY__WHILST_RUNNING);
+            }
+        }
+    }
+
+    function triggerDisplayNextAutoplaySlide(displayerView, slideIndex, delay) {
+        var
+            displayNextAutoplaySlide,
+
+            slideItemIndexList  = Object.keys(displayerView.imageFileItemMap),
+            currentIndexInList  = slideItemIndexList.indexOf(slideIndex),
+            nextIndexInList     = currentIndexInList + 1;
+
+        if (nextIndexInList >= slideItemIndexList.length) {
+            nextIndexInList = 0;
+        }
+        slideIndex = slideItemIndexList[nextIndexInList];
+
+        displayNextAutoplaySlide = (function (swiper, slideIndex) {
+            return function () {
+
+                swiper.slideTo(slideIndex, 0, true);
+            };
+        }(displayerView.swiper, slideIndex));
+
+        displayerView.timeoutIdAutoplay = window.setTimeout(displayNextAutoplaySlide, delay);
+    }
+
+    function requireAutoplayDelayLazily() {
+        if (!AUTOPLAY_DELAY__WHILST_RUNNING) {
+            AUTOPLAY_DELAY__WHILST_RUNNING = 5000; // from user settings or by default/fallback according to https://jira.open-xchange.com/browse/DOCS-670
+        }
+    }
+    var
+        AUTOPLAY_DELAY__WHILST_RUNNING;
+      //AUTOPLAY_DELAY__WHILE_STARTING = 1000;
 
     /**
      * The displayer view is responsible for displaying preview images,
@@ -95,10 +176,16 @@ define('io.ox/core/viewer/views/displayerview', [
             // limit of how much slides are loaded simultaniously
             this.loadingLimit = 3;
 
+            // a backup of the current collection of every displayer file object
+            this.collectionBackup = null;
             // whether or not displayerview is able of auto-play mode that will display image-type file-items exclusively.
             this.canAutoplayImages = false;
             // key value object (map/index/registry) of all of a file-object collection's image-type's stored by theirs collection's index.
             this.imageFileItemMap = {};
+            // if able of auto-play mode, the current state of it, either "pausing" or "running".
+            this.autoplayMode = '';
+            // reference for setting and clearing autoplay timeout values.
+            this.timeoutIdAutoplay = null;
 
             // array to store dummys in use
             this.dummyList = [];
@@ -186,7 +273,8 @@ define('io.ox/core/viewer/views/displayerview', [
                     runCallbacksOnInit: false,
                     onSlideChangeEnd: this.onSlideChangeEnd.bind(this),
                     onSlideChangeStart: this.onSlideChangeStart.bind(this)
-                };
+                },
+                handleToggleAutoplayControl;
 
             // if the index is we want to start with is preloaded, we can use it.
             if (startIndex < this.preloadOffset || this.collection.length < 2 * this.preloadOffset + 1) {
@@ -223,9 +311,18 @@ define('io.ox/core/viewer/views/displayerview', [
                 if (this.canAutoplayImages) {
 
                     autoplay = $('<a href="#" role="button" class="swiper-button-control autoplay"><i class="fa" aria-hidden="true"></i></a>');
-
-                    rerenderButtonAutoPlayModeRun(autoplay);
                     carouselRoot.append(autoplay);
+
+                    handleToggleAutoplayControl = (function (displayerView) {
+                        return function (event) {
+
+                            handleToggleAutoplayMode(event, displayerView);
+                        };
+                    }(this));
+
+                    autoplay.on('click', handleToggleAutoplayControl);
+
+                    requireAutoplayDelayLazily();
                 }
             }
 
@@ -301,7 +398,7 @@ define('io.ox/core/viewer/views/displayerview', [
             var self = this,
                 indices = this.getSlideLoadRange(index, this.preloadOffset, 'both');
 
-            handleVisibilityOfAutoplayControl(this, index);
+            handleInitialStateForEnabledAutoplayMode(this, index);
 
             return $.when.apply(this, _(indices).map(this.createView.bind(this))).then(function () {
                 // order slides according to index
@@ -844,7 +941,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 this.activeIndex = this.normalizeSlideIndex(this.activeIndex + (preloadDirection === 'right' ? 1 : -1));
                 this.loadSlide(preloadDirection);
             }
-            handleVisibilityOfAutoplayControl(this, this.activeIndex);
+            handleSlideChangeForEnabledAutoplayMode(this, this.activeIndex);
 
             //#. information about position of the current item in viewer
             //#. this will only be shown for more than one item
@@ -962,6 +1059,82 @@ define('io.ox/core/viewer/views/displayerview', [
             });
         },
 
+        onAutoplayStart: function () {
+            var
+                self = this,
+                swiper = this.swiper,
+
+                imageFileModels = Object.keys(this.imageFileItemMap).map(function (key) {
+                    return self.imageFileItemMap[key];
+                });
+
+            this.collectionBackup = this.collection.clone();
+            this.collection.reset(imageFileModels);
+
+            this.slideViews = {};
+
+            swiper.destroyLoop();
+            swiper.wrapper.empty();
+
+            // recalculate active index (can change due to overflow)
+            this.activeIndex = this.normalizeSlideIndex(this.activeIndex);
+
+            // create slides from file collection and append them to the carousel
+            this.createSlides(this.activeIndex).done(function success() {
+                swiper.createLoop();
+
+                // recalculate swiper index
+                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
+
+                swiper.update(true);
+
+                self.onSlideChangeEnd(swiper);
+
+                if (self.collection.length <= 1) {
+                    swiper.destroyLoop();
+                    swiper.params.loop = false;
+                    swiper.fixLoop();
+                    swiper.update(true);
+                }
+            });
+        },
+
+        // onAutoplayStop: function () {
+        //     var
+        //         self = this,
+        //         swiper = this.swiper;
+        //
+        //     this.collection.reset(this.collectionBackup.models);
+        //     this.collectionBackup = null;
+        //
+        //     this.slideViews = {};
+        //
+        //     swiper.destroyLoop();
+        //     swiper.wrapper.empty();
+        //
+        //     // recalculate active index (can change due to overflow)
+        //     this.activeIndex = this.normalizeSlideIndex(this.activeIndex);
+        //
+        //     // create slides from file collection and append them to the carousel
+        //     this.createSlides(this.activeIndex).done(function success() {
+        //         swiper.createLoop();
+        //
+        //         // recalculate swiper index
+        //         swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
+        //
+        //         swiper.update(true);
+        //
+        //         self.onSlideChangeEnd(swiper);
+        //
+        //         if (self.collection.length <= 1) {
+        //             swiper.destroyLoop();
+        //             swiper.params.loop = false;
+        //             swiper.fixLoop();
+        //             swiper.update(true);
+        //         }
+        //     });
+        // },
+
         disposeView: function () {
             if (this.swiper) {
                 this.swiper.removeAllSlides();
@@ -971,6 +1144,12 @@ define('io.ox/core/viewer/views/displayerview', [
             this.captionTimeoutId = null;
             this.loadedSlides = null;
             this.slideViews = null;
+
+            this.canAutoplayImages = null;
+            this.imageFileItemMap = null;
+            this.autoplayMode = null;
+            this.timeoutIdAutoplay = null;
+
             return this;
         }
     });
