@@ -11,14 +11,20 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/displayerview', [
+
     'io.ox/files/api',
     'io.ox/core/viewer/views/types/typesregistry',
     'io.ox/backbone/disposable',
     'io.ox/core/viewer/util',
+
+    'static/3rd.party/bigscreen/bigscreen.min.js',
+
     'gettext!io.ox/core',
+
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-], function (FilesAPI, TypesRegistry, DisposableView, Util, gt) {
+
+], function (FilesAPI, TypesRegistry, DisposableView, Util, BigScreen, gt) {
 
     'use strict';
 
@@ -70,25 +76,25 @@ define('io.ox/core/viewer/views/displayerview', [
             'pausing'
         );
         if (mode === 'pausing') {
-            window.clearTimeout(displayerView.timeoutIdAutoplay);
+            if (displayerView.hasAutoplayStartAlreadyBeenTriggered()) { // only in case of autoplay start has already been triggered.
 
-            // if (displayerView.collectionBackup) {
-            //     displayerView.onAutoplayStop();
-            // }
+                deregisterAutoplayEventHandlingForPreviousNextControl(displayerView);
+                displayerView.onAutoplayStop();
+            }
             setAutoplayControlStateToWillPlay(displayerView);
         } else {
             setAutoplayControlStateToWillPause(displayerView);
 
             displayerView.onAutoplayStart();
-          //triggerDisplayNextAutoplaySlide(displayerView, displayerView.activeIndex, AUTOPLAY_DELAY__WHILE_STARTING);
+            registerAutoplayEventHandlingForPreviousNextControl(displayerView);
         }
         displayerView.autoplayMode = mode;
     }
 
     function handleInitialStateForEnabledAutoplayMode(displayerView, slideIndex) {
-        if (displayerView.canAutoplayImages) {
+        if (displayerView.canAutoplayImages && !displayerView.hasAutoplayStartAlreadyBeenTriggered()) { // only in case autoplay start has not yet been triggered.
             var
-                isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileItemMap[slideIndex];
+                isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileRegistry[slideIndex];
 
             setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibilityOfAutoplayControl);
 
@@ -99,7 +105,7 @@ define('io.ox/core/viewer/views/displayerview', [
         if (displayerView.canAutoplayImages) {
             if (displayerView.autoplayMode !== 'running') {
                 var
-                    isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileItemMap[slideIndex];
+                    isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileRegistry[slideIndex];
 
                 setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibilityOfAutoplayControl);
             } else {
@@ -110,25 +116,45 @@ define('io.ox/core/viewer/views/displayerview', [
 
     function triggerDisplayNextAutoplaySlide(displayerView, slideIndex, delay) {
         var
-            displayNextAutoplaySlide,
-
-            slideItemIndexList  = Object.keys(displayerView.imageFileItemMap),
-            currentIndexInList  = slideItemIndexList.indexOf(slideIndex),
-            nextIndexInList     = currentIndexInList + 1;
-
-        if (nextIndexInList >= slideItemIndexList.length) {
-            nextIndexInList = 0;
-        }
-        slideIndex = slideItemIndexList[nextIndexInList];
-
-        displayNextAutoplaySlide = (function (swiper, slideIndex) {
-            return function () {
-
-                swiper.slideTo(slideIndex, 0, true);
-            };
-        }(displayerView.swiper, slideIndex));
+            displayNextAutoplaySlide = (function (swiper) {
+                return function () {
+                                                      // - for [s.slideNext] see "swiper.js" line 1586.
+                    swiper.slideNext(true, 0, false); // - params{runCallbacks, speed, internal} ... for what {internal} does see "swiper.js" line 1513.
+                };
+            }(displayerView.swiper));
 
         displayerView.timeoutIdAutoplay = window.setTimeout(displayNextAutoplaySlide, delay);
+    }
+
+    function handlePreviousNextControlClickWhileRunningAutoplay(/*event*/) {
+        window.clearTimeout(this.timeoutIdAutoplay);
+    }
+
+    function registerAutoplayEventHandlingForPreviousNextControl(displayerView) {
+        var
+            $carouselRoot = displayerView.carouselRoot,
+
+            $buttonPrev   = $carouselRoot.children('.swiper-button-prev'),
+            $buttonNext   = $carouselRoot.children('.swiper-button-next'),
+
+            clickHandler  = handlePreviousNextControlClickWhileRunningAutoplay.bind(displayerView);
+
+        displayerView.previousNextControlClickWhileRunningAutoplayHandler = clickHandler;
+
+        $buttonPrev.on('click', clickHandler);
+        $buttonNext.on('click', clickHandler);
+    }
+    function deregisterAutoplayEventHandlingForPreviousNextControl(displayerView) {
+        var
+            $carouselRoot = displayerView.carouselRoot,
+
+            $buttonPrev   = $carouselRoot.children('.swiper-button-prev'),
+            $buttonNext   = $carouselRoot.children('.swiper-button-next'),
+
+            clickHandler  = displayerView.previousNextControlClickWhileRunningAutoplayHandler;
+
+        $buttonPrev.off('click', clickHandler);
+        $buttonNext.off('click', clickHandler);
     }
 
     function requireAutoplayDelayLazily() {
@@ -181,11 +207,13 @@ define('io.ox/core/viewer/views/displayerview', [
             // whether or not displayerview is able of auto-play mode that will display image-type file-items exclusively.
             this.canAutoplayImages = false;
             // key value object (map/index/registry) of all of a file-object collection's image-type's stored by theirs collection's index.
-            this.imageFileItemMap = {};
+            this.imageFileRegistry = {};
             // if able of auto-play mode, the current state of it, either "pausing" or "running".
             this.autoplayMode = '';
             // reference for setting and clearing autoplay timeout values.
             this.timeoutIdAutoplay = null;
+            // a reference to the currently used method that handles click events on a swiper's previous/next controls while it is running in autoplay mode.
+            this.previousNextControlClickWhileRunningAutoplayHandler = null;
 
             // array to store dummys in use
             this.dummyList = [];
@@ -200,13 +228,15 @@ define('io.ox/core/viewer/views/displayerview', [
             this.listenTo(this.collection, 'change:version', this.onModelChangeVersion.bind(this));
             // listen to version display events
             this.listenTo(this.viewerEvents, 'viewer:display:version', this.onDisplayVersion.bind(this));
+
+            // listen to full screen mode changes
+            BigScreen.onchange = this.onChangeFullScreen.bind(this);
         },
 
         initializeAutoplayImageModeData: function () {
             var
                 fileObjectCollection  = this.collection,
-
-                imageFileItemMap      = fileObjectCollection.reduce(function (map, fileItem, idx/*, list*/) {
+                imageFileRegistry     = fileObjectCollection.reduce(function (map, fileItem, idx/*, list*/) {
                     if (fileItem.isImage()) {
 
                         map[idx] = fileItem;
@@ -215,29 +245,12 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 }, {});
 
-            if (Object.keys(imageFileItemMap).length >= 2) {
+            if (Object.keys(imageFileRegistry).length >= 2) {
 
                 this.canAutoplayImages = true;
-                this.imageFileItemMap = imageFileItemMap;
+                this.imageFileRegistry = imageFileRegistry;
             }
         },
-
-        // getNextImageInAutoplayMode: function () {
-        // },
-        //
-        // enableAutoplayMode: function () {
-        //
-        // },
-        // diableAutoplayMode: function () {
-        //
-        // },
-        //
-        // startAutoplay: function () {
-        //
-        // },
-        // stopAutoplay: function () {
-        //
-        // },
 
         /**
          * Renders this DisplayerView with the supplied model.
@@ -974,20 +987,10 @@ define('io.ox/core/viewer/views/displayerview', [
          * @param {Swiper} swiper
          *  the instance of the swiper plugin
          */
-        onSlideChangeStart: function (/*swiper*/) {
-            // if (swiper) {
-            //     var preloadDirection = (swiper.previousIndex < swiper.activeIndex) ? 'right' : 'left';
-            //
-            //     // increment active index
-            //     this.activeIndex = this.normalizeSlideIndex(this.activeIndex + (preloadDirection === 'right' ? 1 : -1));
-            //     this.loadSlide(preloadDirection);
-            // } else {
-            //
-            // }
+        onSlideChangeStart: function () {
             var previousSlide = this.getPreviousSlideNode(),
                 previousIndex = parseInt(previousSlide.data('index'), 10),
                 activeSlideView = this.slideViews[previousIndex];
-
             if (activeSlideView) {
                 var scrollPosition = activeSlideView.$el.scrollTop();
                 if (activeSlideView.pdfDocument) {
@@ -1064,8 +1067,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 self = this,
                 swiper = this.swiper,
 
-                imageFileModels = Object.keys(this.imageFileItemMap).map(function (key) {
-                    return self.imageFileItemMap[key];
+                imageFileModels = Object.keys(this.imageFileRegistry).map(function (key) {
+                    return self.imageFileRegistry[key];
                 });
 
             this.collectionBackup = this.collection.clone();
@@ -1099,56 +1102,119 @@ define('io.ox/core/viewer/views/displayerview', [
             });
         },
 
-        // onAutoplayStop: function () {
-        //     var
-        //         self = this,
-        //         swiper = this.swiper;
+        onAutoplayStop: function () {
+            window.clearTimeout(this.timeoutIdAutoplay);
+
+            var
+                swiper = this.swiper,
+                self = this;
+
+            this.collection.reset(this.collectionBackup.models);
+            this.collectionBackup = null;
+
+            this.slideViews = {};
+
+            swiper.destroyLoop();
+            swiper.wrapper.empty();
+
+            // recalculate active index (can change due to overflow)
+            this.activeIndex = this.normalizeSlideIndex(this.activeIndex);
+
+            // create slides from file collection and append them to the carousel
+            this.createSlides(this.activeIndex).done(function success() {
+                swiper.createLoop();
+
+                // recalculate swiper index
+                swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
+
+                swiper.update(true);
+
+                self.onSlideChangeEnd(swiper);
+
+                if (self.collection.length <= 1) {
+                    swiper.destroyLoop();
+                    swiper.params.loop = false;
+                    swiper.fixLoop();
+                    swiper.update(true);
+                }
+            });
+        },
+
+        hasAutoplayStartAlreadyBeenTriggered: function () {
+            return ((this.autoplayMode === 'running') && !!this.collectionBackup); // autoplay start has already been triggered.
+        },
+
+        // copied directly from 'io.ox/presenter/views/mainview.js' ... see line 402
         //
-        //     this.collection.reset(this.collectionBackup.models);
-        //     this.collectionBackup = null;
+        /**
+         * Toggles full screen mode of the main view depending on the given state.
+         *  A state of 'true' starts full screen mode, 'false' exits the full screen mode and
+         *  'undefined' toggles the full screen state.
+         *
+         * You can only call this from a user-initiated event (click, key, or touch event),
+         * otherwise the browser will deny the request.
+         */
+        toggleFullscreen: function (state) {
+            if (BigScreen.enabled && _.device('!iOS')) {
+
+                if (_.isUndefined(state)) {
+                    BigScreen.toggle(this.carouselRoot[0]);
+                } else if (state) {
+                    BigScreen.request(this.carouselRoot[0]);
+                } else {
+                    BigScreen.exit();
+                }
+            }
+        },
+
+        // copied directly from 'io.ox/presenter/views/mainview.js' ... see line 423
         //
-        //     this.slideViews = {};
-        //
-        //     swiper.destroyLoop();
-        //     swiper.wrapper.empty();
-        //
-        //     // recalculate active index (can change due to overflow)
-        //     this.activeIndex = this.normalizeSlideIndex(this.activeIndex);
-        //
-        //     // create slides from file collection and append them to the carousel
-        //     this.createSlides(this.activeIndex).done(function success() {
-        //         swiper.createLoop();
-        //
-        //         // recalculate swiper index
-        //         swiper.activeIndex = parseInt(self.slideViews[self.activeIndex].$el.data('swiper-slide-index'), 10) + 1;
-        //
-        //         swiper.update(true);
-        //
-        //         self.onSlideChangeEnd(swiper);
-        //
-        //         if (self.collection.length <= 1) {
-        //             swiper.destroyLoop();
-        //             swiper.params.loop = false;
-        //             swiper.fixLoop();
-        //             swiper.update(true);
-        //         }
-        //     });
-        // },
+        /**
+         * Handle full screen mode change event.
+         *
+         * Note: BigScreen.onchange is the only event that works correctly with current Firefox.
+         *
+         * @param {DOM|null} element
+         *  The element that is currently displaying in full screen or null.
+         */
+        onChangeFullScreen: function (element) {
+            if (_.isNull(element)) {
+                // exit fullscreen
+                this.fullscreen = false;
+              //this.sidebarView.toggleSidebar(this.sidebarBeforeFullscreen);   // main view might be aware of sidebare view
+
+              //this.presenterEvents.trigger('presenter:fullscreen:exit');
+
+            } else if (element === this.carouselRoot[0]) {
+                // enter fullscreen
+                this.fullscreen = true;
+              //this.sidebarBeforeFullscreen = this.sidebarView.opened;         // main view might be aware of sidebare view
+              //this.sidebarView.toggleSidebar(false);                          //
+
+              //this.presenterEvents.trigger('presenter:fullscreen:enter');
+            }
+        },
 
         disposeView: function () {
+            window.clearTimeout(this.captionTimeoutId);
+            window.clearTimeout(this.navigationTimeoutId);
+            window.clearTimeout(this.timeoutIdAutoplay);
+
             if (this.swiper) {
                 this.swiper.removeAllSlides();
                 this.swiper.destroy();
                 this.swiper = null;
             }
             this.captionTimeoutId = null;
+            this.navigationTimeoutId = null;
             this.loadedSlides = null;
             this.slideViews = null;
 
             this.canAutoplayImages = null;
-            this.imageFileItemMap = null;
+            this.imageFileRegistry = null;
             this.autoplayMode = null;
             this.timeoutIdAutoplay = null;
+            this.previousNextControlClickWhileRunningAutoplayHandler = null;
 
             return this;
         }
