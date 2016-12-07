@@ -470,6 +470,8 @@ define('io.ox/files/api', [
                     limit = newStart + ',' + newStop;
                 // folders exceed upper limit?
                 if (folders.length >= stop) return folders.slice(start, stop);
+                // optimisation for "Drive" folder
+                if (params.folder === '9') return folders;
                 // fetch files
                 return http.GET({ module: module, params: _.extend({}, params, { limit: limit }) }).then(
                     function (files) {
