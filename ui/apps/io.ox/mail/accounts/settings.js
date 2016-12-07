@@ -146,7 +146,7 @@ define('io.ox/mail/accounts/settings', [
                     list.listenTo(list, 'select', function (service) {
                         if (service.id === 'wizard') return;
 
-                        var account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
+                        var account = new OAuth.Account.Model({
                             serviceId: service.id,
                             displayName: 'My ' + service.get('displayName') + ' account'
                         });
