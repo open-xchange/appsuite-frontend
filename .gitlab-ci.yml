@@ -130,7 +130,7 @@ docker_develop_image_ui:
   only:
     - develop
   stage: deploy
-  dependencies: # none
+  dependencies: [] # none
 
 .build_ui_plugin_template: &build_ui_plugin
   <<: *use_npm_proxy
