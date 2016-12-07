@@ -1195,3 +1195,18 @@ textarea.inplace-editor {
 
     .io-ox-sidepopup-pane .mail-detail.no-padding .detail-view-header { padding-left: 0; }
 }
+
+// simple workaround in case people try to print the entire window
+
+@media print {
+    // avoid absolute positioning; <body> needs to be the scrollpane otherwise we get no multipage print outs
+    .abs, .atb, .window-container, .window-body, .rightside { position: static; }
+    // hide everything we don't need
+    #io-ox-banner, #io-ox-topbar, .window-sidepanel, .categories-toolbar-container, .classic-toolbar-container,
+    .leftside, .back-navigation, ul.actions, .toggle-all, .contact-picture, .unread-toggle {
+        display: none !important;
+    }
+    .thread-view-list, .rightside { padding: 0 !important; overflow: visible !important; }
+    .thread-view.list-view .list-item { margin-bottom: 0; border-bottom: 1px solid #ddd; }
+    .detail-view-header { padding-left: 16px !important; }
+}
