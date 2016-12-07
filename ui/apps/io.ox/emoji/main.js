@@ -307,11 +307,11 @@ define('io.ox/emoji/main', [
                 if (text.substr(endpos, 7) === '</span>') {
                     endpos += 7;
                 }
-                var regex = new RegExp('("[^">]+)' + text.slice(pos, endpos), 'g');
+                var regex = new RegExp(text.slice(pos, endpos) + '(?=[^\<]*?\>)', 'g');
                 text = text
-                    // Replace with unicode character if match is in attribute (See Bug: 36796)
-                    .replace(regex, '$1' + unicode)
-                    // Replace with unicode character again if match is not in attribute
+                    // Replace with unicode character if match is not in content (but within a html tag) (See Bugs: 36796 and 49981)
+                    .replace(regex, unicode)
+                    // Replace with unicode character again if match is in content
                     .replace(text.slice(pos, endpos), createImageTag(css, unicode));
             }
 

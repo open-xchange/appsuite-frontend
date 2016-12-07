@@ -68,7 +68,7 @@ define('io.ox/core/folder/tree', [
             this.$el.append(this.$container);
 
             this.$el.attr({
-                'role': 'navigation',
+                'role': 'application',
                 'aria-label': gt('Folders')
             });
 
