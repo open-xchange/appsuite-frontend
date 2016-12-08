@@ -21,8 +21,9 @@ define('io.ox/calendar/week/view', [
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/print',
+    'less!io.ox/calendar/print-style',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, AppointmentModel, util, folderAPI, gt, settings, coreSettings, Dropdown, print) {
+], function (ext, AppointmentModel, util, folderAPI, gt, settings, coreSettings, Dropdown, print, printStyle) {
 
     'use strict';
 
@@ -1917,7 +1918,8 @@ define('io.ox/calendar/week/view', [
                     'workweek': 'cp_weekview_table_appsuite.tmpl',
                     'week': 'cp_weekview_table_appsuite.tmpl'
                 },
-                data = null;
+                data = null,
+                styleNode = $('<style type="text/css">').text(printStyle);
 
             if (folderID && folderID !== 'virtual/all-my-appointments') {
                 data = { folder_id: folderID };
@@ -1930,6 +1932,15 @@ define('io.ox/calendar/week/view', [
                 work_day_start_time: self.workStart * 36e5, // multiply with milliseconds
                 work_day_end_time: self.workEnd * 36e5
             });
+
+            if (this.app.props.get('colorScheme') === 'custom') {
+                // apply custom colors
+                win.onload = function () {
+                    $(win.document.head).append(styleNode);
+                    $(win.document.body).addClass('print-view-custom-colors');
+                    win.onload = null;
+                };
+            }
 
             if (_.browser.firefox) {
                 // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
