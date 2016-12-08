@@ -580,6 +580,10 @@ define('io.ox/mail/detail/content', [
         }()),
 
         beautifyPlainText: function (str) {
+
+            // currently this clashes with "color quotes" that are already injected server-side
+            if (settings.get('isColorQuoted', true)) return str;
+
             var plain = this.adjustPlainText(str);
             return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
         },
@@ -596,7 +600,7 @@ define('io.ox/mail/detail/content', [
                 regText = /^[^\n]*(\n(?![ ]*(\* |\- |> |\d+\. ))[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
                 regMailAddress = /([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
-                regRuler = /\n?(-|=|\u2014){10,}\n?/g,
+                regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
                 defaults = { blockquotes: true, links: true, lists: true, rulers: true };
 
             function exec(regex, str) {
