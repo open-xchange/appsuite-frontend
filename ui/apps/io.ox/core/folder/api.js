@@ -433,7 +433,6 @@ define('io.ox/core/folder/api', [
     var ready = $.when();
 
     function propagate(arg) {
-
         if (arg instanceof Backbone.Model) {
 
             var model = arg, data = model.toJSON(), id = data.id;
@@ -451,6 +450,17 @@ define('io.ox/core/folder/api', [
         }
 
         if (/^account:(create|delete|unified-enable|unified-disable)$/.test(arg)) {
+
+            if (mailSettings.get('dsc/enabled')) {
+
+                // need to refresh subfolders of default0
+                return list('default0', { cache: false }).done(function () {
+                    refresh();
+                    api.trigger('refresh');
+                });
+
+            }
+
             // need to refresh subfolders of root folder 1
             return list('1', { cache: false }).done(function () {
                 virtual.refresh();
