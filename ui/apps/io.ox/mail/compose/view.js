@@ -561,7 +561,7 @@ define('io.ox/mail/compose/view', [
             }).then(function (result, data) {
                 // Replace inline images in contenteditable with links from draft response
                 if (model.get('editorMode') === 'html') {
-                    $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                    $('<div>' + data.attachments[0].content + '</div>').find('img:not(.emoji)').each(function (index, el) {
                         $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
                     });
                 }
