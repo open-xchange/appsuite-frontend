@@ -203,7 +203,7 @@ define('io.ox/files/view-options', [
 
             if (_.device('smartphone')) return;
 
-            var view = new BreadcrumbView({ app: baton.app }).render().$el.addClass('toolbar-item'),
+            var view = new BreadcrumbView({ app: baton.app, rootAlwaysVisible: true }).render().$el.addClass('toolbar-item'),
                 results = $('<div class="toolbar-item">').text(gt('Search results')).hide();
 
             this.append(view, results);

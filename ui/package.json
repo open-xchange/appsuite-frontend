@@ -6,6 +6,9 @@
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
   "license": "CC-BY-NC-SA-2.5",
+  "scripts": {
+    "test": "grunt copy:specs karma:continuous"
+  },
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
     "eslint": "~2.12.0",

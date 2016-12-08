@@ -14,7 +14,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
     describe('Mail Compose', function () {
-        describe('sending a message', function () {
+        describe.skip('sending a message', function () {
 
             var app, pictureHalo, snippetsGetAll, getValidAddress;
 

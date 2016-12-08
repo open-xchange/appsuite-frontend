@@ -17,7 +17,7 @@ define([
 
     var capabilityWrapper = caputil.preset('none');
 
-    describe('Core capabilities', function () {
+    describe.skip('Core capabilities', function () {
 
         beforeEach(function () {
             return capabilityWrapper.enable(['webmail', 'contacts', 'foo.dot', 'foo-dash', 'foo/slash']);
