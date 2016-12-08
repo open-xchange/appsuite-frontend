@@ -589,7 +589,7 @@ define('io.ox/mail/detail/content', [
         // note: this does not work with our pseudo text mails that still contain markup (e.g. <br> and <a href>)
         text2html: (function () {
 
-            var regBlockquote = /^>+ [^\n]*(\n>+ [^\n]*)*/,
+            var regBlockquote = /^>+( [^\n]*|)(\n>+( [^\n]*|))*/,
                 regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2,}(\*|-) [^\n]*)*/,
                 regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
@@ -614,7 +614,7 @@ define('io.ox/mail/detail/content', [
 
                     if (options.blockquotes && (match = exec(regBlockquote, str))) {
                         str = str.substr(match.length);
-                        match = match.replace(/^(>(>)|> )/gm, '$2');
+                        match = match.replace(/^(>(>)|> |>$)/gm, '$2');
                         match = parse(match, options).replace(/(<br>)?(<\/?blockquote[^>]*>)(<br>)?/g, '$2').replace(/<br>$/, '');
                         out += '<blockquote type="cite">' + match + '</blockquote>';
                         continue;
@@ -730,6 +730,10 @@ define('io.ox/mail/detail/content', [
 
                 i = '>> Lorem\n>> ipsum';
                 o = '<blockquote type="cite"><blockquote type="cite">Lorem<br>ipsum</blockquote></blockquote>';
+                if (this.text2html(i) !== o) throw i;
+
+                i = '> Lorem\n>\n> ipsum\n>\n';
+                o = '<blockquote type="cite">Lorem<br><br>ipsum</blockquote><br>';
                 if (this.text2html(i) !== o) throw i;
 
                 // UNORDERED LISTS
