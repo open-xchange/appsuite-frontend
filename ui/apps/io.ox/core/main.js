@@ -1072,36 +1072,55 @@ define('io.ox/core/main', [
             });
         }
 
-        ext.point('io.ox/core/topbar/right').extend({
-            id: 'logout-button-hint',
-            index: 2100,
-            draw: function () {
-                var data, link;
-                if (!session.isAutoLogin() || _.device('reload')) return;
-                // disabled
-                data = _.clone(settings.get('features/logoutButtonHint', {}));
-                if (!data.enabled) return;
-                // banner action, topbar action, dropdown action
-                link = $('#io-ox-banner [data-action="logout"]');
-                if (!link.length) link = this.find('[data-action="sign-out"]');
-                if (!link.length) link = this.find('#io-ox-topbar-dropdown-icon > a');
-                // popover
-                link.popover({
-                    content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
-                    template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
-                    placement: 'bottom'
-                });
-                // prevent logout action when clicking hint
-                this.get(0).addEventListener('click', function (e) {
-                    if (e.target.classList.contains('popover-content-signout')) e.stopImmediatePropagation();
-                    link.popover('destroy');
-                }, true);
-                // close on click
-                $(document).one('click', link.popover.bind(link, 'destroy'));
-                // show
-                _.defer(link.popover.bind(link, 'show'));
-            }
-        });
+        (function logoutHint() {
+
+            var data = _.clone(settings.get('features/logoutButtonHint', {}));
+
+            if (!data.enabled) return;
+
+            ext.point('io.ox/core/topbar/right').extend({
+                id: 'logout-button-hint',
+                index: 2100,
+                draw: function () {
+                    settings.set('features/logoutButtonHint/active', true).save();
+                    // exit: first start with enabled feature
+                    if (!_.isBoolean(data.active)) return;
+                    // exit: logged out successfully
+                    if (!data.active) return;
+                    // exit: tab reload with autologin
+                    if (_.device('reload') && session.isAutoLogin()) return;
+
+                    // banner action, topbar action, dropdown action
+                    var link = $('#io-ox-banner [data-action="logout"]');
+                    if (!link.length) link = this.find('[data-action="sign-out"]');
+                    if (!link.length) link = this.find('#io-ox-topbar-dropdown-icon > a');
+                    // popover
+                    link.popover({
+                        content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
+                        template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
+                        placement: 'bottom'
+                    });
+                    // prevent logout action when clicking hint
+                    this.get(0).addEventListener('click', function (e) {
+                        if (e.target.classList.contains('popover-content-signout')) e.stopImmediatePropagation();
+                        link.popover('destroy');
+                    }, true);
+                    // close on click
+                    $(document).one('click', link.popover.bind(link, 'destroy'));
+                    // show
+                    _.defer(link.popover.bind(link, 'show'));
+                }
+            });
+
+            ext.point('io.ox/core/logout').extend({
+                id: 'logout-button-hint',
+                logout: function () {
+                    http.pause();
+                    settings.set('features/logoutButtonHint/active', false).save();
+                    return http.resume();
+                }
+            });
+        })();
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'logo',
