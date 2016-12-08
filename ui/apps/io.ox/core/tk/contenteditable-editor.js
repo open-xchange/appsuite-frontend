@@ -159,13 +159,11 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         ed.execCommand('Delete', false, null);
         if (!_.device('smartphone')) {
             // apply default font styles
-            ed.execCommand('fontSize', false, mailSettings.get('defaultFontStyle/size'));
-            ed.execCommand('fontName', false, mailSettings.get('defaultFontStyle/family'));
+            if (mailSettings.get('defaultFontStyle/size') && mailSettings.get('defaultFontStyle/size') !== 'browser-default') ed.execCommand('fontSize', false, mailSettings.get('defaultFontStyle/size'));
 
-            // when selecting transparent, tinyMCE does not make the text transparent, but set's the color to black. Preserve this behavior
-            if (mailSettings.get('defaultFontStyle/color') !== 'transparent') {
-                ed.execCommand('forecolor', false, mailSettings.get('defaultFontStyle/color'));
-            }
+            if (mailSettings.get('defaultFontStyle/family') && mailSettings.get('defaultFontStyle/family') !== 'browser-default') ed.execCommand('fontName', false, mailSettings.get('defaultFontStyle/family'));
+
+            if (mailSettings.get('defaultFontStyle/color') && mailSettings.get('defaultFontStyle/color') !== 'transparent') ed.execCommand('forecolor', false, mailSettings.get('defaultFontStyle/color'));
         }
     }
 
@@ -283,6 +281,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             remove_script_host: false,
 
             entity_encoding: 'raw',
+
+            fontsize_formats: '8pt 10pt 11pt 12pt 13pt 14pt 16pt 18pt 24pt 36pt',
 
             // simpleLineBreaks = true -> false -> enter insert <br>
             // simpleLineBreaks = false -> 'p' -> enter inserts new paragraph

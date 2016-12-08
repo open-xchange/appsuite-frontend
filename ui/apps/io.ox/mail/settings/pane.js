@@ -52,6 +52,7 @@ define('io.ox/mail/settings/pane', [
         ],
 
         optionsFontName = [
+            { label: gt('Use browser default'), value: 'browser-default' },
             { label: 'Andale Mono', value: '"andale mono", monospace' },
             { label: 'Arial ', value: 'arial, helvetica, sans-serif' },
             { label: 'Arial Black', value: '"arial black", sans-serif' },
@@ -70,13 +71,14 @@ define('io.ox/mail/settings/pane', [
         ],
 
         optionsFontsize = [
+            { label: gt('Use browser default'), value: 'browser-default' },
             { label: '8pt', value: '8pt' },
             { label: '10pt', value: '10pt' },
+            { label: '11pt', value: '11pt' },
             { label: '12pt', value: '12pt' },
+            { label: '13pt', value: '13pt' },
             { label: '14pt', value: '14pt' },
-            { label: '18pt', value: '18pt' },
-            { label: '24pt', value: '24pt' },
-            { label: '36pt', value: '36pt' }
+            { label: '16pt', value: '16pt' }
         ];
 
     // not possible to set nested defaults, so do it here
@@ -273,16 +275,33 @@ define('io.ox/mail/settings/pane', [
                 },
                 fontFamilySelect,
                 fontSizeSelect,
-                exampleText;
+                exampleText,
+                defaultStyleSection,
+                getCSS = function () {
+                    var css = {
+                        'font-size': settings.get('defaultFontStyle/size', 'browser-default'),
+                        'font-family': settings.get('defaultFontStyle/family', 'browser-default'),
+                        'color': settings.get('defaultFontStyle/color', 'transparent')
+                    };
+
+                    // using '' as a value removes the attribute and thus any previous styling
+                    if (css['font-size'] === 'browser-default') css['font-size'] = '';
+                    if (css['font-family'] === 'browser-default') css['font-family'] = '';
+                    if (css.color === 'transparent') css.color = '';
+
+                    return css;
+                };
 
             if (!_.device('smartphone')) {
                 fontFamilySelect = new Dropdown({ caret: true, model: settings, label: gt('Font'), tagName: 'div', className: 'dropdown fontnameSelectbox', update: update, name: 'defaultFontStyle/family' });
                 fontSizeSelect = new Dropdown({ caret: true, model: settings, label: gt('Size'), tagName: 'div', className: 'dropdown fontsizeSelectbox', update: update, name: 'defaultFontStyle/size' });
 
-                _(optionsFontName).each(function (item) {
+                _(optionsFontName).each(function (item, index) {
+                    if (index === 1) fontFamilySelect.divider();
                     fontFamilySelect.option('defaultFontStyle/family', item.value, item.label, { radio: true });
                 });
-                _(optionsFontsize).each(function (item) {
+                _(optionsFontsize).each(function (item, index) {
+                    if (index === 1) fontSizeSelect.divider();
                     fontSizeSelect.option('defaultFontStyle/size', item.value, item.label, { radio: true });
                 });
             }
@@ -322,13 +341,13 @@ define('io.ox/mail/settings/pane', [
                     new mini.RadioView({ list: optionsFormatAs, name: 'messageFormat', model: settings }).render().$el
                 ) : [],
 
-                (_.device('smartphone') ? '' : [
+                (_.device('smartphone') ? '' : defaultStyleSection = [
                     $('<div>').addClass('settings sectiondelimiter'),
                     $('<fieldset>').append(
                         $('<legend>').addClass('sectiontitle').append(
                             $('<h2>').text(gt('Default font style'))
                         ),
-                        $('<dev class="col-xs-12 col-md-6">').append(
+                        $('<dev class="col-xs-12 col-md-12">').append(
                             $('<div class="row">').append(
                                 fontFamilySelect.render().$el,
                                 fontSizeSelect.render().$el,
@@ -336,11 +355,7 @@ define('io.ox/mail/settings/pane', [
                                     new Colorpicker({ name: 'defaultFontStyle/color', model: settings, className: 'dropdown', label: gt('Color'), caret: true }).render().$el
                                 )
                             ),
-                            $('<div class="row">').append(exampleText = $('<div class="example-text">').text(gt('Example text')).css({
-                                'font-size': settings.get('defaultFontStyle/size', '12pt'),
-                                'font-family': settings.get('defaultFontStyle/family', 'arial, helvetica, sans-serif'),
-                                'color': settings.get('defaultFontStyle/color', '#000')
-                            }))
+                            $('<div class="row">').append(exampleText = $('<div class="example-text">').text(gt('This is how your font will look like.')).css(getCSS()))
                         )
                     )]
                 ),
@@ -369,21 +384,25 @@ define('io.ox/mail/settings/pane', [
 
             if (!_.device('smartphone')) {
                 settings.on('change:defaultFontStyle/size change:defaultFontStyle/family change:defaultFontStyle/color', function () {
-                    exampleText.css({
-                        'font-size': settings.get('defaultFontStyle/size', '12pt'),
-                        'font-family': settings.get('defaultFontStyle/family', 'arial, helvetica, sans-serif'),
-                        'color': settings.get('defaultFontStyle/color', '#000')
-                    });
-
-                    if (settings.get('defaultFontStyle/color') === 'transparent') {
-                        exampleText.css('color', '#000');
-                    }
+                    exampleText.css(getCSS());
 
                     settings.save();
                 });
 
-                _(fontFamilySelect.$ul.find('a')).each(function (item) {
+                _(fontFamilySelect.$ul.find('a')).each(function (item, index) {
+                    // index 0 is browser default
+                    if (index === 0) return;
                     $(item).css('font-family', $(item).data('value'));
+                });
+
+                _(defaultStyleSection).each(function (obj) {
+                    obj.toggle(settings.get('messageFormat') !== 'text');
+                });
+
+                settings.on('change:messageFormat', function (value) {
+                    _(defaultStyleSection).each(function (obj) {
+                        obj.toggle(value !== 'text');
+                    });
                 });
             }
         }
