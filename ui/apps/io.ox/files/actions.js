@@ -362,36 +362,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/actions/launchpresenter', {
-        capabilities: 'presenter document_preview',
-        requires: function (e) {
-            if (!e.collection.has('one')) {
-                return false;
-            }
-            var model = e.baton.models[0];
-            var type = model.isEncrypted() ? model.getGuardMimeType() : model.getMimeType();
-            return ((model.isPresentation(type) || model.isPDF(type)) && model.isFile(type));
-        },
-        action: function (baton) {
-            var fileModel = baton.models[0];
-            if (fileModel.isEncrypted()) {
-                require(['io.ox/guard/auth/authorizer'], function (authorizer) {
-                    authorizer.authorize().then(function (auth) {
-                        var params = {
-                            cryptoAction: 'Decrypt',
-                            cryptoAuth: auth
-                        };
-                        fileModel.set('file_options', { params: params });
-                        ox.launch('io.ox/presenter/main', fileModel);
-                    });
-                });
-            } else {
-                ox.launch('io.ox/presenter/main', fileModel);
-            }
-
-        }
-    });
-
     //drive action for double-click or enter in files
     new Action('io.ox/files/actions/default', {
         action: function (baton) {

@@ -158,13 +158,6 @@ define('io.ox/files/toolbar', [
                 label: gt('View'),
                 ref: 'io.ox/files/actions/viewer'
             },
-            'presenter': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-play-circle-o',
-                label: gt('Present'),
-                ref: 'io.ox/files/actions/launchpresenter'
-            },
             'download': {
                 prio: 'hi',
                 mobile: 'lo',
