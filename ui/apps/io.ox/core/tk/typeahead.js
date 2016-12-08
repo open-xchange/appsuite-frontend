@@ -94,6 +94,22 @@ define('io.ox/core/tk/typeahead', [
                 this.api.cache = {};
             });
 
+            // called with lfo
+            this.process = function (query, callback, data) {
+                $.when(data)
+                    .then(customEvent.bind(self, 'processing'))
+                    .then(o.reduce)
+                    .then(function (data) {
+                        if (o.maxResults) { data = data.slice(0, o.maxResults); }
+                        // order
+                        return o.placement === 'top' ? data.reverse() : data;
+                    })
+                    .then(o.harmonize)
+                    .then(customEvent.bind(self, 'finished'))
+                    .then(customEvent.bind(self, 'idle'))
+                    .then(callback);
+            };
+
             this.typeaheadOptions = [{
                 autoselect: o.autoselect,
                 // The minimum character length needed before suggestions start getting rendered
@@ -104,21 +120,8 @@ define('io.ox/core/tk/typeahead', [
             }, {
                 source: function (query, callback) {
                     customEvent.call(self, 'requesting');
-                    o.source.call(self, query)
-                        .then(customEvent.bind(self, 'processing'))
-                        .then(o.reduce)
-                        .then(function (data) {
-                            // max results
-                            if (o.maxResults) {
-                                data = data.slice(0, o.maxResults);
-                            }
-                            // order
-                            return o.placement === 'top' ? data.reverse() : data;
-                        })
-                        .then(o.harmonize)
-                        .then(customEvent.bind(self, 'finished'))
-                        .then(customEvent.bind(self, 'idle'))
-                        .then(callback);
+                    // process response via lfo
+                    o.source.call(self, query).then(_.lfo(self.process, query, callback));
                     // workaround: hack to get a reliable info about open/close state
                     if (!self.registered) {
                         var dateset = this;
