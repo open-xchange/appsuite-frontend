@@ -1381,10 +1381,15 @@ body.dragging .categories-toolbar-container {
     .abs, .atb, .window-container, .window-body, .rightside { position: static; }
     // hide everything we don't need
     #io-ox-banner, #io-ox-topbar, .window-sidepanel, .categories-toolbar-container, .classic-toolbar-container,
-    .leftside, .back-navigation, ul.actions, .toggle-all, .contact-picture, .unread-toggle {
+    .leftside, .back-navigation, ul.actions, .toggle-all, .contact-picture, .unread-toggle, .show-all-recipients {
         display: none !important;
     }
     .thread-view-list, .rightside { padding: 0 !important; overflow: visible !important; }
     .thread-view.list-view .list-item { margin-bottom: 0; border-bottom: 1px solid #ddd; }
-    .detail-view-header { padding-left: 16px !important; }
+    .detail-view-header {
+        padding-left: 16px !important;
+        .recipients {
+            .io-ox-label, .person-link, .delimiter { display: inline-block !important; }
+        }
+    }
 }
