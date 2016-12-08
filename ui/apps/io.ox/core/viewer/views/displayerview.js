@@ -103,7 +103,7 @@ define('io.ox/core/viewer/views/displayerview', [
     }
     function handleSlideChangeForEnabledAutoplayMode(displayerView, slideIndex) {
         if (displayerView.canAutoplayImages) {
-            if (displayerView.autoplayMode !== 'running') {
+            if (displayerView.autoplayMode !== 'running') { // only in case of autoplay is not running at all.
                 var
                     isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileRegistry[slideIndex];
 
@@ -126,8 +126,44 @@ define('io.ox/core/viewer/views/displayerview', [
         displayerView.timeoutIdAutoplay = window.setTimeout(displayNextAutoplaySlide, delay);
     }
 
+    function handleDisplayerItemEnterWhileRunningAutoplay(/*event*/) {
+        this.carouselRoot.addClass('autoplay-controls--visible');
+    }
+    function handleDisplayerItemLeaveWhileRunningAutoplay(/*event*/) {
+        this.carouselRoot.removeClass('autoplay-controls--visible');
+    }
+
     function handlePreviousNextControlClickWhileRunningAutoplay(/*event*/) {
         window.clearTimeout(this.timeoutIdAutoplay);
+    }
+
+    function registerAutoplayEventHandlingForUpdatedCarouselView(displayerView) {
+        if (displayerView.autoplayMode !== 'running') { // only in case of autoplay is not running at all.
+
+            // register:
+            // blend in navigation by user activity
+            displayerView.$el.on('mousemove click', displayerView.displayerviewMousemoveClickHandler);
+
+        } else if (displayerView.hasAutoplayStartAlreadyBeenTriggered()) { // only in case of autoplay start has already been triggered.
+
+            // deregister:
+            // blend in navigation by user activity
+            displayerView.$el.off('mousemove click', displayerView.displayerviewMousemoveClickHandler);
+
+            var
+                $carouselInner  = displayerView.carouselInner,
+
+                enterHandler    = handleDisplayerItemEnterWhileRunningAutoplay.bind(displayerView),
+                leaveHandler    = handleDisplayerItemLeaveWhileRunningAutoplay.bind(displayerView);
+
+          //displayerView.displayerItemEnterWhileRunningAutoplayHandler = enterHandler; // only in case for being in need of deregistering.
+          //displayerView.displayerItemLeaveWhileRunningAutoplayHandler = leaveHandler; //
+
+            $carouselInner.on('mouseenter', '.viewer-displayer-item-container', enterHandler);
+            $carouselInner.on('mouseleave', '.viewer-displayer-item-container', leaveHandler);
+
+            $carouselInner.on('mousemove click', '.viewer-displayer-item-container', displayerView.displayerviewMousemoveClickHandler);
+        }
     }
 
     function registerAutoplayEventHandlingForPreviousNextControl(displayerView) {
@@ -155,6 +191,23 @@ define('io.ox/core/viewer/views/displayerview', [
 
         $buttonPrev.off('click', clickHandler);
         $buttonNext.off('click', clickHandler);
+    }
+
+    function hideViewerControlsInCaseOfRunningAutoplayHasBeenTriggered(displayerView) {
+        if (displayerView.hasAutoplayStartAlreadyBeenTriggered()) { // only in case of autoplay start has already been triggered.
+
+            window.clearTimeout(displayerView.captionTimeoutId);
+            window.clearTimeout(displayerView.navigationTimeoutId);
+
+            var
+                $viewElement = displayerView.$el,
+
+                $slideCaption = $viewElement.find('.viewer-displayer-caption'),
+                $navigationArrows = $viewElement.find('.swiper-button-control');
+
+            $slideCaption.hide();
+            $navigationArrows.hide();
+        }
     }
 
     function requireAutoplayDelayLazily() {
@@ -219,11 +272,16 @@ define('io.ox/core/viewer/views/displayerview', [
             this.dummyList = [];
             // listen to blend caption events
             this.listenTo(this.viewerEvents, 'viewer:blendcaption', this.blendCaption);
-            this.listenTo(this.viewerEvents, 'viewer:blendnavigation', this.blendNavigation);
+            this.listenTo(this.viewerEvents, 'viewer:blendnavigation', this.blendNavigation);   // - directly access this view's navigation blend method.
             // listen to delete event propagation from FilesAPI
             this.listenTo(FilesAPI, 'remove:file', this.onFileRemoved.bind(this));
+
+            // a reference to a very own throttled and bound variant of this view's "mousemove" and "click" handler
+            // in order to also use it for deregistering purposes while running the autoplay mode.
+            this.displayerviewMousemoveClickHandler = _.throttle(this.blendNavigation.bind(this), 500);
             // blend in navigation by user activity
-            this.$el.on('mousemove click', _.throttle(this.blendNavigation.bind(this), 500));
+            //this.$el.on('mousemove click', this.displayerviewMousemoveClickHandler);          // - handle register/deregister in a more centralized way.
+
             // listen to version change events
             this.listenTo(this.collection, 'change:version', this.onModelChangeVersion.bind(this));
             // listen to version display events
@@ -426,6 +484,8 @@ define('io.ox/core/viewer/views/displayerview', [
                         })
                         .value()
                 );
+                hideViewerControlsInCaseOfRunningAutoplayHasBeenTriggered(self);
+                registerAutoplayEventHandlingForUpdatedCarouselView(self);
             });
         },
 
@@ -956,18 +1016,21 @@ define('io.ox/core/viewer/views/displayerview', [
             }
             handleSlideChangeForEnabledAutoplayMode(this, this.activeIndex);
 
-            //#. information about position of the current item in viewer
-            //#. this will only be shown for more than one item
-            //#. %1$d - position of current item
-            //#. %2$d - total amount of item
-            this.blendCaption(gt.ngettext(
-                '%1$d of %2$d item',
-                '%1$d of %2$d items',
-                this.collection.length,
-                this.activeIndex + 1,
-                this.collection.length
-            ));
-            this.blendNavigation();
+            if (this.autoplayMode !== 'running') {  // - only in case of autoplay is not running at all.
+
+                //#. information about position of the current item in viewer
+                //#. this will only be shown for more than one item
+                //#. %1$d - position of current item
+                //#. %2$d - total amount of item
+                this.blendCaption(gt.ngettext(      // - directly access this view's caption blend method.
+                    '%1$d of %2$d item',
+                    '%1$d of %2$d items',
+                    this.collection.length,
+                    this.activeIndex + 1,
+                    this.collection.length
+                ));
+                this.blendNavigation();             // - directly access this view's navigation blend method.
+            }
             // a11y
             activeSlideNode.attr('aria-selected', 'true');
             previousSlideNode.attr('aria-selected', 'false');
@@ -1215,6 +1278,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.autoplayMode = null;
             this.timeoutIdAutoplay = null;
             this.previousNextControlClickWhileRunningAutoplayHandler = null;
+
+            this.displayerviewMousemoveClickHandler = null;
 
             return this;
         }
