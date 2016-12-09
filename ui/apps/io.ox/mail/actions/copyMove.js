@@ -101,6 +101,7 @@ define('io.ox/mail/actions/copyMove', [
                             dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
 
                             checkbox = dialog.getFooter().find('[data-action="create-rule"]');
+                            checkbox.closest('.checkbox').addClass('checkbox-block text-left');
                             tree.on('change', function (id) {
                                 if (id.split('/')[0] !== 'default0') {
                                     checkbox.prop({ 'checked': false, 'disabled': true }).trigger('change');

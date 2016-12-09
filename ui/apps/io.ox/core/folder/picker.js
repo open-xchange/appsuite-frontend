@@ -88,8 +88,23 @@ define('io.ox/core/folder/picker', [
             close: $.noop,
             show: $.noop,
             alternative: $.noop,
-            cancel: $.noop
+            cancel: $.noop,
+            create: $.noop
         }, options);
+
+
+        function create() {
+            var id = tree.selection.get() || tree.root;
+            api.create(id)
+                .then(function (data) {
+                    // select created folder
+                    tree.selection.set(data.id);
+                    var view = tree.getNodeView(tree.selection.get());
+                    tree.onAppear(data.id, function () {
+                        view.$el.intoView(tree.$el.closest('.modal-body'), { ignore: 'bottom:partial' });
+                    });
+                });
+        }
 
         var dialog = new dialogs.ModalDialog({ async: o.async, addClass: o.addClass, width: o.width })
             .header(
@@ -97,6 +112,7 @@ define('io.ox/core/folder/picker', [
                     _.isString(o.title) ? $.txt(o.title) : o.title
                 )
             )
+            .addAlternativeButton('create', gt('Create Folder'), 'create', { click: create })
             .addPrimaryButton('ok', o.button, 'ok')
             .addButton('cancel', gt('Cancel'), 'cancel');
 
