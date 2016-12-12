@@ -56,14 +56,14 @@ define('io.ox/core/viewer/views/displayerview', [
     }
 
     function setAutoplayControlStateToWillPlay(displayerView) {
-        rerenderButtonAutoPlayModeDoRun(displayerView.carouselRoot.children('.autoplay').eq(0));
+        rerenderButtonAutoPlayModeDoRun(displayerView.carouselRoot.children('.autoplay-button').eq(0));
     }
     function setAutoplayControlStateToWillPause(displayerView) {
-        rerenderButtonAutoPlayModeDoPause(displayerView.carouselRoot.find('.autoplay').eq(0));
+        rerenderButtonAutoPlayModeDoPause(displayerView.carouselRoot.find('.autoplay-button').eq(0));
     }
 
     function setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibility) {
-        displayerView.carouselRoot.toggleClass('autoplay-permanently-disabled', isForceDisableVisibility);
+        displayerView.carouselRoot.toggleClass('autoplay-controls-disabled', isForceDisableVisibility);
     }
 
     function handleToggleAutoplayMode(event, displayerView, mode) {
@@ -78,15 +78,29 @@ define('io.ox/core/viewer/views/displayerview', [
         if (mode === 'pausing') {
             if (displayerView.hasAutoplayStartAlreadyBeenTriggered()) { // only in case of autoplay start has already been triggered.
 
-                deregisterAutoplayEventHandlingForPreviousNextControl(displayerView);
-                displayerView.onAutoplayStop();
+                if (displayerView.fullscreen) {
+
+                    window.clearTimeout(displayerView.timeoutIdAutoplay);
+                } else {
+
+                    deregisterAutoplayEventHandlingForPreviousNextControl(displayerView);
+                    displayerView.onAutoplayStop();
+                }
             }
             setAutoplayControlStateToWillPlay(displayerView);
         } else {
             setAutoplayControlStateToWillPause(displayerView);
 
-            displayerView.onAutoplayStart();
-            registerAutoplayEventHandlingForPreviousNextControl(displayerView);
+            if (displayerView.fullscreen) {
+
+                triggerDisplayNextAutoplaySlide(displayerView, 0, AUTOPLAY_DELAY__WHILE_STARTING);
+            } else {
+
+                displayerView.onAutoplayStart();
+                registerAutoplayEventHandlingForPreviousNextControl(displayerView);
+
+                displayerView.toggleFullscreen(true);
+            }
         }
         displayerView.autoplayMode = mode;
     }
@@ -126,11 +140,11 @@ define('io.ox/core/viewer/views/displayerview', [
         displayerView.timeoutIdAutoplay = window.setTimeout(displayNextAutoplaySlide, delay);
     }
 
-    function handleDisplayerItemEnterWhileRunningAutoplay(/*event*/) {
-        this.carouselRoot.addClass('autoplay-controls--visible');
+    function handleDisplayerItemEnter(/*event*/) {
+        this.carouselRoot.addClass('autoplay-controls-visible');
     }
-    function handleDisplayerItemLeaveWhileRunningAutoplay(/*event*/) {
-        this.carouselRoot.removeClass('autoplay-controls--visible');
+    function handleDisplayerItemLeave(/*event*/) {
+        this.carouselRoot.removeClass('autoplay-controls-visible');
     }
 
     function handlePreviousNextControlClickWhileRunningAutoplay(/*event*/) {
@@ -149,21 +163,19 @@ define('io.ox/core/viewer/views/displayerview', [
             // deregister:
             // blend in navigation by user activity
             displayerView.$el.off('mousemove click', displayerView.displayerviewMousemoveClickHandler);
-
-            var
-                $carouselInner  = displayerView.carouselInner,
-
-                enterHandler    = handleDisplayerItemEnterWhileRunningAutoplay.bind(displayerView),
-                leaveHandler    = handleDisplayerItemLeaveWhileRunningAutoplay.bind(displayerView);
-
-          //displayerView.displayerItemEnterWhileRunningAutoplayHandler = enterHandler; // only in case for being in need of deregistering.
-          //displayerView.displayerItemLeaveWhileRunningAutoplayHandler = leaveHandler; //
-
-            $carouselInner.on('mouseenter', '.viewer-displayer-item-container', enterHandler);
-            $carouselInner.on('mouseleave', '.viewer-displayer-item-container', leaveHandler);
-
-            $carouselInner.on('mousemove click', '.viewer-displayer-item-container', displayerView.displayerviewMousemoveClickHandler);
         }
+
+        // one way registering since the view that gets operated on will be build always from scratch.
+        var
+            $carouselInner  = displayerView.carouselInner,
+
+            enterHandler    = handleDisplayerItemEnter.bind(displayerView),
+            leaveHandler    = handleDisplayerItemLeave.bind(displayerView);
+
+        $carouselInner.on('mouseenter', '.viewer-displayer-item-container', enterHandler);
+        $carouselInner.on('mouseleave', '.viewer-displayer-item-container', leaveHandler);
+
+      //$carouselInner.on('mousemove click', '.viewer-displayer-item-container', displayerView.displayerviewMousemoveClickHandler);
     }
 
     function registerAutoplayEventHandlingForPreviousNextControl(displayerView) {
@@ -216,8 +228,8 @@ define('io.ox/core/viewer/views/displayerview', [
         }
     }
     var
-        AUTOPLAY_DELAY__WHILST_RUNNING;
-      //AUTOPLAY_DELAY__WHILE_STARTING = 1000;
+        AUTOPLAY_DELAY__WHILST_RUNNING,
+        AUTOPLAY_DELAY__WHILE_STARTING = 1000;
 
     /**
      * The displayer view is responsible for displaying preview images,
@@ -267,6 +279,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.timeoutIdAutoplay = null;
             // a reference to the currently used method that handles click events on a swiper's previous/next controls while it is running in autoplay mode.
             this.previousNextControlClickWhileRunningAutoplayHandler = null;
+            // with autoplay mode comes fullscreen mode too
+            this.fullscreen = false;
 
             // array to store dummys in use
             this.dummyList = [];
@@ -381,7 +395,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 this.initializeAutoplayImageModeData();
                 if (this.canAutoplayImages) {
 
-                    autoplay = $('<a href="#" role="button" class="swiper-button-control autoplay"><i class="fa" aria-hidden="true"></i></a>');
+                    autoplay = $('<a href="#" role="button" class="autoplay-button"><i class="fa" aria-hidden="true"></i></a>');
                     carouselRoot.append(autoplay);
 
                     handleToggleAutoplayControl = (function (displayerView) {
@@ -484,8 +498,9 @@ define('io.ox/core/viewer/views/displayerview', [
                         })
                         .value()
                 );
-                hideViewerControlsInCaseOfRunningAutoplayHasBeenTriggered(self);
                 registerAutoplayEventHandlingForUpdatedCarouselView(self);
+
+                hideViewerControlsInCaseOfRunningAutoplayHasBeenTriggered(self);
             });
         },
 
@@ -1204,7 +1219,7 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         hasAutoplayStartAlreadyBeenTriggered: function () {
-            return ((this.autoplayMode === 'running') && !!this.collectionBackup); // autoplay start has already been triggered.
+            return !!this.collectionBackup; // autoplay start has already been triggered.
         },
 
         // copied directly from 'io.ox/presenter/views/mainview.js' ... see line 402

@@ -487,6 +487,41 @@
         .item,
         .swiper-container { height: 100%; }
 
+        #viewer-carousel,
+        .swiper-container {
+
+            // copied directly from 'io.ox/presenter/style.less' ... see line 278
+            //
+            .fullscreen() {
+                top: 0;
+                background-color: black;
+
+                // #49797 - Presenting in full screen mode shows scroll bar
+                .swiper-container .swiper-wrapper .swiper-slide {
+                    overflow: hidden;
+                }
+            }
+
+            // The selectors for full screen need to be kept in separate declarations.
+            // For example if Firefox discovers ":-webkit-full-screen" it ignores the whole selector, same if Chrome discovers ":-moz-full-screen".
+            //
+            &:-webkit-full-screen {
+                .fullscreen()
+            }
+            &:-moz-full-screen {
+                .fullscreen()
+            }
+            &:-ms-fullscreen {
+                .fullscreen()
+            }
+            &:full-screen {
+                .fullscreen()
+            }
+            &:fullscreen {
+                .fullscreen()
+            }
+        }
+
         .swiper-container {
             width: 100%;
 
@@ -514,12 +549,19 @@
 
             .io-ox-busy::before { color: @viewer-busy-color; }
 
-            &.autoplay-permanently-disabled {
-                > .autoplay {
+            &.autoplay-controls-visible {
+                > .autoplay-button {
+
+                    opacity: 1;
+                }
+            }
+            &.autoplay-controls-disabled {
+                > .autoplay-button {
 
                     display: none!important;
                 }
             }
+
         }
 
         .viewer-displayer-item-container { max-height: 100%; }
@@ -642,9 +684,10 @@
             &.smartphone { bottom: 6px; }
         }
 
+        .autoplay-button,
         .swiper-button-control {
             display: none;
-            margin-top: -50px;
+            margin-top: -25px;
             color: @viewer-displayer-navigation-color;
             background: @viewer-displayer-navigation-bgcolor;
             outline: none;
@@ -660,16 +703,20 @@
 
             &:hover,
             &:focus { color: #FFFFFF; }
-
-            &.autoplay {
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                right: auto;
-                bottom: auto;
-                z-index: 10;
-                cursor: pointer;
-            }
+        }
+        .autoplay-button {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            right: auto;
+            bottom: auto;
+            margin-left: -25px;
+            z-index: 10;
+            cursor: pointer;
+            opacity: 0;
+            transition-property: opacity;
+            transition-duration: 0.5s;
         }
 
         .viewer-displayer-notification {
