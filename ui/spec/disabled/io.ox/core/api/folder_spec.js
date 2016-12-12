@@ -24,30 +24,30 @@ define([
 
     var setupFakeServer = function (server) {
 
-        server.respondWith('GET', /api\/folders\?action=get.+id=2&/,
-            [200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+        server.respondWith('GET', /api\/folders\?action=get.+id=2&/, [
+            200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
                 timestamp: 1368791630910,
                 data: { id: '2', folder_id: '1', module: 'infostore', title: 'two' }
             })]
         );
 
-        server.respondWith('GET', /api\/folders\?action=get.+id=21&/,
-            [200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+        server.respondWith('GET', /api\/folders\?action=get.+id=21&/, [
+            200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
                 timestamp: 1368791630910,
                 data: { id: '21', folder_id: '2', module: 'infostore', title: '.twenty-one' }
             })]
         );
 
-        server.respondWith('GET', /api\/folders\?action=get.+id=13&/,
-            [200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+        server.respondWith('GET', /api\/folders\?action=get.+id=13&/, [
+            200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
                 timestamp: 1368791630910,
                 data: { id: '13', folder_id: '2', module: 'infostore', title: '.thirteen' }
             })]
         );
 
         //sends a list of subfolders
-        server.respondWith('GET', /api\/folders\?action=list.+parent=2&/,
-            [200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+        server.respondWith('GET', /api\/folders\?action=list.+parent=2&/, [
+            200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
                 timestamp: 1368791630910,
                 data: [
                     { id: '3', folder_id: '2', title: 'three' },
@@ -57,8 +57,8 @@ define([
             })]
         );
 
-        server.respondWith('GET', /api\/folders\?action=list.+parent=13&/,
-            [200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+        server.respondWith('GET', /api\/folders\?action=list.+parent=13&/, [
+            200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
                 timestamp: 1368791630910,
                 data: []
             })]
