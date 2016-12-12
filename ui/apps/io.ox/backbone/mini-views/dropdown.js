@@ -145,6 +145,19 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             if (keep) e.stopPropagation();
             // ignore plain links
             if (node.hasClass('disabled')) return;
+
+            // make sure event bubbles up
+            if (!e.isPropagationStopped() && this.$overlay && this.$placeholder && !this.options.noDetach) {
+                // to use jquery event bubbling, the element, which triggered the event must have the correct parents
+                // therefore, the target element is inserted at the original position before event bubbling
+                // the element only remains at that position while the event bubbles
+                var $temp = $('<div class="hidden">');
+                node.before($temp).detach();
+                this.$placeholder.append(node);
+                this.$el.trigger(e);
+                $temp.replaceWith(node);
+            }
+
             if (value === undefined) return;
             if (this.model) {
                 var nextValue = value;
@@ -158,18 +171,6 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     }
                 }
                 this.model.set(name, nextValue);
-            }
-
-            // make sure event bubbles up
-            if (!e.isPropagationStopped() && this.$overlay && this.$placeholder && !this.options.noDetach) {
-                // to use jquery event bubbling, the element, which triggered the event must have the correct parents
-                // therefore, the target element is inserted at the original position before event bubbling
-                // the element only remains at that position while the event bubbles
-                var $temp = $('<div class="hidden">');
-                node.before($temp).detach();
-                this.$placeholder.append(node);
-                this.$el.trigger(e);
-                $temp.replaceWith(node);
             }
         },
 
