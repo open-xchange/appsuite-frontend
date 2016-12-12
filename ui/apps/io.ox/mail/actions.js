@@ -223,7 +223,13 @@ define('io.ox/mail/actions', [
                 filter.initialize().then(function (data, config, opt) {
                     var factory = opt.model.protectedMethods.buildFactory('io.ox/core/mailfilter/model', opt.api),
                         args = { data: { obj: factory.create(opt.model.protectedMethods.provideEmptyModel()) } },
-                        preparedTest = { id: 'allof', tests: [_.copy(opt.filterDefaults.tests.Subject), _.copy(opt.filterDefaults.tests.address)] };
+                        preparedTest = {
+                            id: 'allof',
+                            tests: [
+                                _.copy(opt.filterDefaults.tests.Subject),
+                                opt.filterDefaults.tests.address ? _.copy(opt.filterDefaults.tests.address) : _.copy(opt.filterDefaults.tests.From)
+                            ]
+                        };
 
                     preparedTest.tests[0].values = [baton.data.subject];
                     preparedTest.tests[1].values = [baton.data.from[0][1]];
