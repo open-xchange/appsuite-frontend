@@ -19,7 +19,7 @@ define(['io.ox/mail/detail/content'], function (content) {
         return content.text2html(str);
     }
 
-    describe.only('Text to HTML', function () {
+    describe('Text to HTML', function () {
 
         // LINE BREAKS
 
