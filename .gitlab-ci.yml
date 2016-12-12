@@ -14,6 +14,8 @@ variables:
   before_script:
     - export HTTP_PROXY=http://${PROXY_HOST}:8123/
     - export HTTPS_PROXY=http://${PROXY_HOST}:8123/
+    # may be, setting npm registry is not needed any longer
+    # using a simple https proxy should be enough for yarn (?)
     - npm config set registry http://${PROXY_HOST}:8080/
 
 .install_deps_template: &install_deps
@@ -22,7 +24,7 @@ variables:
   stage: prepare
   script:
     - cd ${PROJECT_PATH}
-    - npm i --silent
+    - yarn install
     - bower i --silent
   cache:
     # use one cache per project and branch
