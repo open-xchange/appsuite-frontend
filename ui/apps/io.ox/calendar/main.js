@@ -265,13 +265,20 @@ define('io.ox/calendar/main', [
         'vgrid': function (app) {
 
             var gridOptions = {
-                settings: settings,
-                showToggle: _.device('smartphone'),
-                hideTopbar: _.device('smartphone'),
-                hideToolbar: _.device('smartphone'),
-                // if it's shown, it should be on the top
-                toolbarPlacement: 'top'
-            };
+                    settings: settings,
+                    showToggle: _.device('smartphone'),
+                    hideTopbar: _.device('smartphone'),
+                    hideToolbar: _.device('smartphone'),
+                    // if it's shown, it should be on the top
+                    toolbarPlacement: 'top'
+                },
+                savedWidth = app.settings.get('vgrid/width/' + _.display());
+
+            // do not apply on touch devices. it's not possible to change the width there
+            if (!_.device('touch') && savedWidth) {
+                app.right.css('left', savedWidth + 'px');
+                app.left.css('width', savedWidth + 'px');
+            }
 
             // show "load more" link
             gridOptions.tail = function () {

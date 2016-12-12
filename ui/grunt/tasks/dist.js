@@ -44,6 +44,15 @@ module.exports = function (grunt) {
                         src: ['.htaccess'],
                         cwd: 'html/',
                         dest: 'dist/appsuite/'
+                    },
+                    {
+                        src: ['static/**/*.min.js'],
+                        cwd: 'build/',
+                        dest: 'dist/appsuite/',
+                        filter: function (f) {
+                            return !isTranslationModule(f) && grunt.file.isFile(f);
+                        },
+                        expand: true
                     }
                 ]
             },
@@ -63,16 +72,22 @@ module.exports = function (grunt) {
         }
     });
 
+    var fileList = grunt.config('uglify.dist.files.0.src'),
+        ignoreList = [
+            'apps/pdfjs-dist/build/pdf.combined.js',
+            'apps/3rd.party/tinymce/tinymce.js',
+            'apps/io.ox/mail/compose/bundle.js',
+            'boot.js',
+            'precore.js'
+        ];
+    grunt.config('uglify.dist.files.0.src', fileList.concat(ignoreList.map(function (f) { return '!' + f; })));
     grunt.config.merge({
         uglify: {
-            dist_rootfolder: {
+            dist_largeFiles: {
                 files: [{
-                    src: ['*.js', 'static/**/*.js'],
+                    src: ignoreList,
                     cwd: 'build/',
                     dest: 'dist/appsuite/',
-                    filter: function (f) {
-                        return !isTranslationModule(f) && grunt.file.isFile(f);
-                    },
                     expand: true
                 }]
             }

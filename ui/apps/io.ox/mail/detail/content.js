@@ -580,6 +580,10 @@ define('io.ox/mail/detail/content', [
         }()),
 
         beautifyPlainText: function (str) {
+
+            // currently this clashes with "color quotes" that are already injected server-side
+            if (settings.get('isColorQuoted', true)) return str;
+
             var plain = this.adjustPlainText(str);
             return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
         },
@@ -589,14 +593,14 @@ define('io.ox/mail/detail/content', [
         // note: this does not work with our pseudo text mails that still contain markup (e.g. <br> and <a href>)
         text2html: (function () {
 
-            var regBlockquote = /^>+ [^\n]*(\n>+ [^\n]*)*/,
+            var regBlockquote = /^>+( [^\n]*|)(\n>+( [^\n]*|))*/,
                 regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2,}(\*|-) [^\n]*)*/,
                 regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
                 regText = /^[^\n]*(\n(?![ ]*(\* |\- |> |\d+\. ))[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
                 regMailAddress = /([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
-                regRuler = /\n?(-|=|\u2014){10,}\n?/g,
+                regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
                 defaults = { blockquotes: true, links: true, lists: true, rulers: true };
 
             function exec(regex, str) {
@@ -614,7 +618,7 @@ define('io.ox/mail/detail/content', [
 
                     if (options.blockquotes && (match = exec(regBlockquote, str))) {
                         str = str.substr(match.length);
-                        match = match.replace(/^(>(>)|> )/gm, '$2');
+                        match = match.replace(/^(>(>)|> |>$)/gm, '$2');
                         match = parse(match, options).replace(/(<br>)?(<\/?blockquote[^>]*>)(<br>)?/g, '$2').replace(/<br>$/, '');
                         out += '<blockquote type="cite">' + match + '</blockquote>';
                         continue;
@@ -683,111 +687,7 @@ define('io.ox/mail/detail/content', [
 
             return parse;
 
-        }()),
-
-        // TODO: turn this into a spec
-        test_text2html: function () {
-
-            var i, o;
-
-            try {
-
-                // LINE BREAKS
-
-                i = 'Lorem ipsum';
-                o = 'Lorem ipsum';
-                if (this.text2html(i) !== o) throw i;
-
-                i = 'Lorem ipsum\ndolor sit amet';
-                o = 'Lorem ipsum<br>dolor sit amet';
-                if (this.text2html(i) !== o) throw i;
-
-                i = 'Lorem ipsum\ndolor\nsit\n';
-                o = 'Lorem ipsum<br>dolor<br>sit<br>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '\n';
-                o = '<br>';
-                if (this.text2html(i) !== o) throw i;
-
-                // QUOTES
-
-                i = '> Lorem ipsum';
-                o = '<blockquote type="cite">Lorem ipsum</blockquote>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '\n> Lorem ipsum\n> dolor sit';
-                o = '<br><blockquote type="cite">Lorem ipsum<br>dolor sit</blockquote>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '\n> Lorem ipsum\n> > dolor sit\n> amet';
-                o = '<br><blockquote type="cite">Lorem ipsum<blockquote type="cite">dolor sit</blockquote>amet</blockquote>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '> > Lorem ipsum\n> dolor sit\n> > amet';
-                o = '<blockquote type="cite"><blockquote type="cite">Lorem ipsum</blockquote>dolor sit<blockquote type="cite">amet</blockquote></blockquote>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '>> Lorem\n>> ipsum';
-                o = '<blockquote type="cite"><blockquote type="cite">Lorem<br>ipsum</blockquote></blockquote>';
-                if (this.text2html(i) !== o) throw i;
-
-                // UNORDERED LISTS
-
-                i = '* Lorem ipsum';
-                o = '<ul><li>Lorem ipsum</li></ul>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '\n* Lorem ipsum\n* dolor sit';
-                o = '<br><ul><li>Lorem ipsum</li><li>dolor sit</li></ul>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '\n- Lorem ipsum\n- dolor sit';
-                o = '<br><ul><li>Lorem ipsum</li><li>dolor sit</li></ul>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '- Lorem http://yeah.com\n- ipsum\n- dolor';
-                o = '<ul><li>Lorem <a href="http://yeah.com" rel="noopener" target="_blank">http://yeah.com</a></li><li>ipsum</li><li>dolor</li></ul>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '* Lorem\n  * ipsum\n  * dolor sit\n* amet';
-                o = '<ul><li>Lorem<ul><li>ipsum</li><li>dolor sit</li></ul></li><li>amet</li></ul>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '* One\n  * Two\n    * Three\n* One';
-                o = '<ul><li>One<ul><li>Two<ul><li>Three</li></ul></li></ul></li><li>One</li></ul>';
-                if (this.text2html(i) !== o) throw i;
-
-                // ORDERED LISTS
-
-                i = '1. Lorem ipsum';
-                o = '<ol start="1"><li>Lorem ipsum</li></ol>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '1. Lorem ipsum\n2. dolor sit';
-                o = '<ol start="1"><li>Lorem ipsum</li><li>dolor sit</li></ol>';
-                if (this.text2html(i) !== o) throw i;
-
-                i = '29. Lorem ipsum\n30. dolor sit';
-                o = '<ol start="29"><li>Lorem ipsum</li><li>dolor sit</li></ol>';
-                if (this.text2html(i) !== o) throw i;
-
-                // LINKS & ADDRESSES
-
-                i = 'Lorem http://ip.sum! dolor';
-                o = 'Lorem <a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>! dolor';
-                if (this.text2html(i) !== o) throw i;
-
-                i = 'Lorem <ipsum@dolor.amet>';
-                o = 'Lorem &lt;<a href="mailto:ipsum@dolor.amet" rel="noopener" target="_blank">ipsum@dolor.amet</a>&gt;';
-                if (this.text2html(i) !== o) throw i;
-
-                console.info('All fine');
-
-            } catch (e) {
-                console.error('text2html', e);
-            }
-        }
+        }())
     };
 
     return that;

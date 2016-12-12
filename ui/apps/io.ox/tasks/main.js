@@ -241,8 +241,14 @@ define('io.ox/tasks/main', [
 
             var grid = app.grid,
                 allRequest,
-                listRequest;
+                listRequest,
+                savedWidth = app.settings.get('vgrid/width/' + _.display());
 
+            // do not apply on touch devices. it's not possible to change the width there
+            if (!_.device('touch') && savedWidth) {
+                app.right.parent().css('left', savedWidth + 'px');
+                app.left.css('width', savedWidth + 'px');
+            }
             app.left.append(app.gridContainer);
             app.left.attr({
                 role: 'navigation',

@@ -21,8 +21,9 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/core/print',
     'io.ox/core/folder/api',
     'settings!io.ox/calendar',
-    'gettext!io.ox/calendar'
-], function (View, api, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt) {
+    'gettext!io.ox/calendar',
+    'less!io.ox/calendar/print-style'
+], function (View, api, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt, printStyle) {
 
     'use strict';
 
@@ -417,7 +418,9 @@ define('io.ox/calendar/month/perspective', [
          */
         print: function () {
             var win, data = null,
-                folderID = this.folder.id || this.folder.folder;
+                folderID = this.folder.id || this.folder.folder,
+                styleNode = $('<style type="text/css">').text(printStyle);
+
             if (folderID && folderID !== 'virtual/all-my-appointments') {
                 data = { folder_id: folderID };
             }
@@ -426,6 +429,16 @@ define('io.ox/calendar/month/perspective', [
                 start: moment(this.current).utc(true).valueOf(),
                 end: moment(this.current).add(1, 'month').utc(true).valueOf()
             });
+
+            if (this.app.props.get('colorScheme') === 'custom') {
+                // apply custom colors
+                win.onload = function () {
+                    $(win.document.head).append(styleNode);
+                    $(win.document.body).addClass('print-view-custom-colors');
+                    win.onload = null;
+                };
+            }
+
             // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
             if (_.browser.firefox) {
                 var limit = 50,

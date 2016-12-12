@@ -133,20 +133,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                         });
                 }
             },
-            'launchpresenter': {
-                prio: 'hi',
-                mobile: 'lo',
-                label: /*#. launch the presenter app */ gt.pgettext('presenter', 'Present'),
-                icon: 'fa fa fa-play-circle-o',
-                ref: TOOLBAR_ACTION_ID + '/launchpresenter',
-                customize: function () {
-                    this.addClass('viewer-toolbar-launchpresenter')
-                    .attr({
-                        tabindex: '0',
-                        'aria-label': /*#. launch the presenter app */ gt.pgettext('presenter', 'Present')
-                    });
-                }
-            },
             'togglesidebar': {
                 prio: 'hi',
                 mobile: 'hi',
@@ -478,25 +464,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             }
 
             ox.launch('io.ox/files/detail/main', fileModel);
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/launchpresenter', {
-        capabilities: 'presenter document_preview',
-        requires: function (e) {
-            if (!e.collection.has('one', 'read')) {
-                return false;
-            }
-
-            var model = e.baton.model;
-            var meta = model.get('meta');
-            var isError = meta && meta.document_conversion_error && meta.document_conversion_error.length > 0;
-
-            return (!isError && model.isFile() && (model.isPresentation() || model.isPDF()));
-        },
-        action: function (baton) {
-            var fileModel = baton.model;
-            ox.launch('io.ox/presenter/main', fileModel);
         }
     });
 

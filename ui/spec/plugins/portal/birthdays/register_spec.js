@@ -66,7 +66,7 @@ define([
                 expect($(this.node.find('.accent')[2]).text()).to.equal('Morgen');
             });
 
-            it('should should have a sidepopup drawn', function () {
+            it.skip('should should have a sidepopup drawn', function () {
                 ext.point('io.ox/portal/widget/birthdays').invoke('draw', this.node, this.baton);
                 return waitsFor(function () {
                     return this.node.find('.io-ox-portal-birthdays').length === 1;

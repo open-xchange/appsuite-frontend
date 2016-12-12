@@ -1,0 +1,27 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ */
+
+.print-view-custom-colors {
+    .generate-color-label(@counter) when (@counter > 0) {
+
+        .generate-color-label((@counter - 1));
+
+        .colorLabel-@{counter} {
+
+            @background: ~"color-label-bg-@{counter}";
+
+            background-color: @@background;
+        }
+    }
+    .generate-color-label(10);
+}

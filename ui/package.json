@@ -6,9 +6,12 @@
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
   "license": "CC-BY-NC-SA-2.5",
+  "scripts": {
+    "test": "grunt copy:specs karma:continuous"
+  },
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
-    "eslint": "~2.12.0",
+    "eslint": "~3.12.0",
     "eslint-config-open-xchange-appsuite": "^0.1.0",
     "grunt": "^0.4.5",
     "grunt-bump": "^0.3.0",
