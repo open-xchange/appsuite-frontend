@@ -588,6 +588,11 @@ define('io.ox/mail/detail/content', [
             return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
         },
 
+        transformForHTMLEditor: function (str) {
+            var plain = this.adjustPlainText(str);
+            return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
+        },
+
         // convert plain text to html
         // supports blockquotes and lists
         // note: this does not work with our pseudo text mails that still contain markup (e.g. <br> and <a href>)
@@ -599,7 +604,7 @@ define('io.ox/mail/detail/content', [
                 regNewline = /^\n+/,
                 regText = /^[^\n]*(\n(?![ ]*(\* |\- |> |\d+\. ))[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
-                regMailAddress = /([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
+                regMailAddress = /([^"\s<,:;\|\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
                 regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
                 defaults = { blockquotes: true, links: true, lists: true, rulers: true };
 

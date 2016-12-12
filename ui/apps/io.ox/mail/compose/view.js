@@ -520,7 +520,7 @@ define('io.ox/mail/compose/view', [
                     var def = $.Deferred();
                     if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
                         require(['io.ox/mail/detail/content'], function (proc) {
-                            var html = proc.text2html(content);
+                            var html = proc.transformForHTMLEditor(content);
                             attachmentCollection.at(0).set('content_type', 'text/html');
                             content = html;
                             def.resolve();
