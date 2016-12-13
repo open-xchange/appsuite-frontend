@@ -113,6 +113,10 @@ define('io.ox/core/api/autocomplete', [
 
                         if (/contact|custom|user/.test(module.type)) {
                             retData = self.processContactResults(retData, query);
+                            // results may exceed limit after processing
+                            if (options.limit) {
+                                retData = retData.slice(0, options.limit);
+                            }
                         }
                     });
                     // add to cache

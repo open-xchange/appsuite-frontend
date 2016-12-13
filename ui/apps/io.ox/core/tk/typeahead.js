@@ -47,8 +47,6 @@ define('io.ox/core/tk/typeahead', [
             },
             click: $.noop,
             tabindex: 1,
-            // Max limit for draw operation in dropdown
-            maxResults: 25,
             // Select first element on result callback
             autoselect: true,
             // Typeahead will not show a hint
@@ -74,6 +72,20 @@ define('io.ox/core/tk/typeahead', [
                 // [closed|open]
                 'dropdown': 'closed'
             });
+
+            if (o.apiOptions) {
+                // limit per autocomplete/search api
+                var limit  = o.apiOptions.limit !== undefined ? o.apiOptions.limit : 10;
+                o.apiOptions.limit = limit;
+
+                // overall limit
+                if (!o.maxResults) {
+                    // Max limit for draw operation in dropdown depending on used apis
+                    o.maxResults = limit * _(o.apiOptions).filter(function (val) { return val === true; }).length;
+                }
+            } else {
+                o.maxResults = 25;
+            }
 
             // use a clone instead of shared default-options-object
             o = this.options = $.extend({}, this.options, o || {});
