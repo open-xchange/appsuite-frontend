@@ -244,6 +244,13 @@ define('io.ox/files/api', [
         hasWritePermissions: function () {
             var array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
                 myself = _(array).findWhere({ entity: ox.user_id });
+
+            // check if there is a permission for a group, the user is a member of
+            // use max permissions available
+            if ((!myself || (myself && myself.bits < 2)) && _(array).findWhere({ group: true })) {
+                // use rampup data so this is not deferred
+                myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(ox.rampup.user.groups)[0] });
+            }
             return !!(myself && (myself.bits >= 2));
         }
     });

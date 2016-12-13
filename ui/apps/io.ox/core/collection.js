@@ -94,7 +94,9 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
             }
 
             function findUserPermissions(item) {
-                return item.group === false && item.entity === ox.user_id;
+                // see if user has direct permission or as a member of a group
+                // use rampup data for groups to avoid a request and making this deferred
+                return (item.group === false && item.entity === ox.user_id) || (item.group === true && _(ox.rampup.user.groups).contains(item.entity));
             }
 
             return api.multiple(folders).then(function (array) {
