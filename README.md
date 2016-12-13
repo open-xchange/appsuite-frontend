@@ -1,18 +1,18 @@
-Open-Xchange App Suite: UI Core
+# Open-Xchange App Suite: UI Core
 -------------------------------
 
-# Getting started
+## Getting started
 
 https://documentation.open-xchange.com/latest/ui
 
-# Project page
+## Project page
 
 https://gitlab.open-xchange.com/frontend/core
 
-# Demo
+## Demo
 
 https://gold.ox.io
 
-# Contribution Guide
+## Contribution Guide
 
 https://gitlab.open-xchange.com/frontend/core/blob/master/CONTRIBUTING.md
