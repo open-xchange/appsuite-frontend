@@ -85,6 +85,28 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     );
                 }.bind(this));
             }
+
+            $(document).on('focusin.ox.modal', $.proxy(this.keepFocus, this));
+            this.on('dispose', function () {
+                $(document).off('focusin.ox.modal');
+            });
+        },
+
+        keepFocus: function (e) {
+            var target = $(e.target);
+            // if child is target of this dialog, event handling is done by bootstrap
+            if (this.$el.has(target).length) return;
+
+            // we have to consider that two popups might be open
+            // so we cannot just refocus the current popup
+            var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window, .date-picker').length > 0;
+            // should not keep focus if smart dropdown is open
+            var smartDropdown = $('body > .smart-dropdown-container').length > 0;
+
+            // stop immediate propagation to prevent bootstrap modal event listener from getting the focus
+            if (insidePopup || smartDropdown) {
+                e.stopImmediatePropagation();
+            }
         },
 
         render: function () {

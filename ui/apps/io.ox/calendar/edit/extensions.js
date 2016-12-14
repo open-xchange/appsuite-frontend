@@ -22,7 +22,7 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
     'io.ox/core/tk/attachments',
-    'io.ox/calendar/edit/recurrence-view',
+    'io.ox/backbone/views/recurrence-view',
     'io.ox/calendar/api',
     'io.ox/participants/add',
     'io.ox/participants/views',
@@ -363,11 +363,16 @@ define('io.ox/calendar/edit/extensions', [
     // move recurrence view to collapsible area on mobile devices
     var recurrenceIndex = _.device('smartphone') ? 950 : 650;
     // recurrence
-    point.extend(new RecurrenceView({
+    point.extend({
         id: 'recurrence',
-        className: 'col-xs-12 recurrenceview',
-        index: recurrenceIndex
-    }), {
+        className: 'col-xs-12',
+        index: recurrenceIndex,
+        render: function () {
+            this.$el.append(new RecurrenceView({
+                model: this.model,
+            }).render().$el);
+        }
+    }, {
         rowClass: 'collapsed'
     });
 
