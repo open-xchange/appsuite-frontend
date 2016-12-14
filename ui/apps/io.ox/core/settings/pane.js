@@ -392,13 +392,35 @@ define('io.ox/core/settings/pane', [
             className: 'form-group',
             render: function () {
                 // don't show setting if not supported, to not confuse users
+                var self = this,
+                    // add ask now link (by design browsers only allow asking if there was no decision yet)
+                    //#. Opens popup to decide if desktop notifications should be shown
+                    requestLink = desktopNotifications.getPermissionStatus() === 'default' ? $('<a href="#" >').text(gt('Manage permission now')).css('margin-left', '8px').on('click', function (e) {
+                        e.preventDefault();
+                        desktopNotifications.requestPermission(function (result) {
+                            if (result === 'granted') {
+                                settings.set('showDesktopNotifications', true).save();
+                            } else if (result === 'denied') {
+                                settings.set('showDesktopNotifications', false).save();
+                            }
+                        });
+                    }) : false;
+
                 if (desktopNotifications.isSupported()) {
-                    this.baton.model.on('change:showDesktopNotifications', function (e, value) {
+                    this.baton.model.on('change:showDesktopNotifications', function (value) {
                         if (value === true) {
                             desktopNotifications.requestPermission(function (result) {
                                 // revert if user denied the permission
+                                // also yell message, because if a user pressed deny in the request permission dialog there is no way we can ask again.
+                                // The user has to do this in the browser settings, because the api blocks any further request permission dialogs.
                                 if (result === 'denied') {
-                                    this.baton.model.set('showDesktopNotifications', false);
+                                    notifications.yell('info', gt('Please check your browser settings and enable desktop notifications for this domain'));
+                                    self.baton.model.set('showDesktopNotifications', false);
+                                    if (requestLink) {
+                                        // remove request link because it is useless. We cannot trigger requestPermission if the user denied. It has to be enabled via the browser settings.
+                                        requestLink.remove();
+                                        requestLink = null;
+                                    }
                                 }
                             });
                         }
@@ -409,18 +431,7 @@ define('io.ox/core/settings/pane', [
                                 $('<label class="control-label">').text(gt('Show desktop notifications')).prepend(
                                     new miniViews.CheckboxView({ name: 'showDesktopNotifications', model: this.baton.model }).render().$el
                                 ),
-                                // add ask now link (by design browsers only allow asking if there was no decision yet)
-                                                                                                                   //#. Opens popup to decide if desktop notifications should be shown
-                                desktopNotifications.getPermissionStatus() === 'default' ? $('<a href="#" >').text(gt('Manage permission now')).css('margin-left', '8px').on('click', function (e) {
-                                    e.preventDefault();
-                                    desktopNotifications.requestPermission(function (result) {
-                                        if (result === 'granted') {
-                                            settings.set('showDesktopNotifications', true).save();
-                                        } else if (result === 'denied') {
-                                            settings.set('showDesktopNotifications', false).save();
-                                        }
-                                    });
-                                }) : []
+                                requestLink ? requestLink : ''
                             )
                         )
                     );
