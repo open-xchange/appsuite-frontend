@@ -93,6 +93,11 @@ define('io.ox/mail/compose/extensions', [
             }
         },
 
+        inlineYell: function () {
+            // role log is a special kind of live region for status messages, errors etc.
+            this.append($('<div role="log" aria-live="polite" class="inline-yell">'));
+        },
+
         sender: function (baton) {
 
             function editNames() {

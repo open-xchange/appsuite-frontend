@@ -74,6 +74,11 @@ define('io.ox/mail/compose/view', [
             draw: function (baton) {
                 ext.point(POINT + '/buttons').invoke('draw', this, baton);
             }
+        },
+        {
+            index: 200,
+            id: 'inlineYell',
+            draw: extensions.inlineYell
         }
     );
 
@@ -631,7 +636,9 @@ define('io.ox/mail/compose/view', [
                 model.set('msgref', result.data);
                 model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
                 model.dirty(false);
-                notifications.yell('success', gt('Mail saved as draft'));
+                //#. %1$s is the time, the draft was saved
+                //#, c-format
+                self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
                 return result;
             }).always(function () {
                 if (win) win.idle();
@@ -642,6 +649,7 @@ define('io.ox/mail/compose/view', [
 
             var def = new $.Deferred(),
                 model = this.model,
+                self = this,
                 mail = this.model.getMailForAutosave();
 
             if (model.get('encrypt')) {
@@ -668,7 +676,9 @@ define('io.ox/mail/compose/view', [
                         'infostore_ids_saved': [].concat(model.get('infostore_ids_saved'), mail.infostore_ids || [])
                     });
                     model.updateShadow();
-                    notifications.yell('success', gt('Mail saved as draft'));
+                    //#. %1$s is the time, the draft was saved
+                    //#, c-format
+                    self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
                     def.resolve(result);
                 }
             });
@@ -723,6 +733,10 @@ define('io.ox/mail/compose/view', [
 
             this.autosave = {};
             delay();
+        },
+
+        inlineYell: function (text) {
+            this.$el.parents().find('.inline-yell').stop().text(text).fadeIn().delay(10000).fadeOut();
         },
 
         clean: function () {
