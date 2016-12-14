@@ -164,6 +164,7 @@ define('io.ox/mail/accounts/settings', [
                         displayName: 'My ' + service.get('displayName') + ' account'
                     });
 
+                    ox.busy();
                     account.enableScopes('mail').save().then(function () {
                         api.autoconfig({
                             oauth: account.id
@@ -177,6 +178,8 @@ define('io.ox/mail/accounts/settings', [
                         }).then(function () {
                             oauthAPI.accounts.add(account, { merge: true });
                         }, notifications.yell);
+                    }).always(function () {
+                        ox.idle();
                     });
                 });
 
