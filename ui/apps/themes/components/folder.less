@@ -59,10 +59,6 @@
         }
     }
 
-    .folder-node {
-        height: @height;
-    }
-
     &.visible-selection {
 
         .selected > .folder-node {
@@ -109,6 +105,13 @@
     }
 
     .folder-node {
+
+        height: @height;
+
+        a.account-link {
+            padding: 0 8px;
+            color: @foldertree-account-link-color;
+        }
 
         .folder-arrow {
             color: #777;

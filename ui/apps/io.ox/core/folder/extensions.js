@@ -54,6 +54,7 @@ define('io.ox/core/folder/extensions', [
             var id = api.altnamespace ? 'default0' : INBOX;
             return api.list(id).then(function (list) {
                 return _(list).filter(function (data) {
+                    if (data.id.startsWith('default0/External accounts')) return false;
                     if (account.isStandardFolder(data.id)) return false;
                     if (api.is('public|shared', data)) return false;
                     return true;
@@ -68,11 +69,25 @@ define('io.ox/core/folder/extensions', [
 
         // remote folders
         api.virtual.add('virtual/remote', function () {
+            // use the setting for dsc here in if-else, also consider altnamespace
+            var dsc = mailSettings.get('dsc/enabled', false),
+                id = mailSettings.get('dsc/folder');
+
+            // smart cache environment
+            if (dsc) {
+                if (account.hasDSCAccount()) {
+                    return api.list(id);
+                }
+                // no account yet, return empty array
+                return $.Deferred().resolve([]);
+            }
+            // standard environment
             return api.list('1').then(function (list) {
                 return _(list).filter(function (data) {
                     return account.isExternal(data.id);
                 });
             });
+
         });
     }
 
@@ -188,6 +203,13 @@ define('io.ox/core/folder/extensions', [
             var defaultId = api.altnamespace ? 'default0' : INBOX;
 
             var node = new TreeNodeView({
+                filter: function (id, model) {
+                    // filtering for DSC folders
+                    if (account.isDSC(model.id)) {
+                        return false;
+                    }
+                    return true;
+                },
                 contextmenu: 'myfolders',
                 // always show the folder for altnamespace
                 // otherwise the user cannot create folders
@@ -212,13 +234,13 @@ define('io.ox/core/folder/extensions', [
         remoteAccounts: function (tree) {
             this.append(
                 new TreeNodeView({
-                    //empty: false,
                     folder: 'virtual/remote',
                     headless: true,
                     open: true,
                     icons: tree.options.icons,
                     tree: tree,
-                    parent: tree
+                    parent: tree,
+                    isRemote: true
                 })
                 .render().$el.addClass('remote-folders')
             );
@@ -380,7 +402,6 @@ define('io.ox/core/folder/extensions', [
                     return unfiltered && !api.isExternalFileStorage(model);
                 };
             }
-
             this.append(
                 new TreeNodeView(options).render().$el.addClass('root-folders')
             );
