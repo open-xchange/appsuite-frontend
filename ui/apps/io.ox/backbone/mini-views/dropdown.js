@@ -43,7 +43,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         resetDropdownOverlay: function () {
             if (!this.$overlay) return;
-            this.$placeholder.replaceWith(this.$ul);
+            this.$placeholder.before(this.$ul).detach();
             this.$el.removeClass('open');
             this.$ul.attr('style', this.$ul.data('style') || '').removeData('style');
             this.$overlay.remove();
