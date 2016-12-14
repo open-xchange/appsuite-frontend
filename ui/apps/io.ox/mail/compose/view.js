@@ -736,6 +736,11 @@ define('io.ox/mail/compose/view', [
         },
 
         inlineYell: function (text) {
+            // no inline yell on smartphones, use default yell as fallback
+            if (_.device('smartphone')) {
+                notifications.yell('success', text);
+                return;
+            }
             this.$el.parents().find('.inline-yell').stop().text(text).fadeIn().delay(10000).fadeOut();
         },
 
