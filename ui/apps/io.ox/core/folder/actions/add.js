@@ -52,7 +52,9 @@ define('io.ox/core/folder/actions/add', [
 
     function open(folder, opt) {
 
-        return new ModalDialog({
+        var def = $.Deferred();
+
+        new ModalDialog({
             async: true,
             context: { folder: folder, module: opt.module, supportsPublicFolders: opt.supportsPublicFolders },
             enter: 'add',
@@ -119,13 +121,18 @@ define('io.ox/core/folder/actions/add', [
                 var name = this.$('input[name="name"]').val(),
                     isPublic = this.$('input[name="public"]').prop('checked');
                 this.busy(true);
-                this.addFolder(isPublic ? '2' : folder, this.context.module, name).then(this.close, this.idle);
+                this.addFolder(isPublic ? '2' : folder, this.context.module, name)
+                    .then(def.resolve.bind(def))
+                    .then(this.close, this.idle);
             },
+            close: def.reject.bind(def),
             open: function () {
                 this.$('input[name="name"]').val(this.getName()).focus().select();
             }
         })
         .open();
+
+        return def;
     }
 
     /**
@@ -134,20 +141,19 @@ define('io.ox/core/folder/actions/add', [
      * to folder API
      */
     return function (folder, opt) {
-
-        if (!folder) return;
-
-        folder = String(folder);
         opt = opt || {};
 
-        if (/^(contacts|calendar|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders')) {
-            // only address book, calendar, and tasks do have a "public folder" section
-            api.get('2').done(function (public_folder) {
-                opt.supportsPublicFolders = api.can('create:folder', public_folder);
-                open(folder, opt);
-            });
-        } else {
-            open(folder, opt);
-        }
+        if (!folder || !opt.module) return $.when().reject();
+
+        // only address book, calendar, and tasks do have a "public folder" section
+        var hasPublic = /^(contacts|calendar|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders');
+
+        // resolves with created folder-id
+        return $.when(hasPublic ? api.get('2') : undefined)
+                .then(function (public_folder) {
+                    if (public_folder) opt.supportsPublicFolders = api.can('create:folder', public_folder);
+                    // returns deferred
+                    return open(String(folder), opt);
+                });
     };
 });
