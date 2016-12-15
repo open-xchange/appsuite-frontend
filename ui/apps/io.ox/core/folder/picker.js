@@ -92,18 +92,32 @@ define('io.ox/core/folder/picker', [
             create: $.noop
         }, options);
 
-
         function create() {
-            var id = tree.selection.get() || tree.root;
-            api.create(id)
-                .then(function (data) {
-                    // select created folder
-                    tree.selection.set(data.id);
-                    var view = tree.getNodeView(tree.selection.get());
-                    tree.onAppear(data.id, function () {
-                        view.$el.intoView(tree.$el.closest('.modal-body'), { ignore: 'bottom:partial' });
-                    });
-                });
+            var container = dialog.getBody().closest('.io-ox-dialog-wrapper'),
+                parentview = tree.getNodeView(tree.selection.get() || tree.root);
+            container.busy();
+            require(['io.ox/core/folder/actions/add'], function (add) {
+                container.hide().idle();
+                // request and open create-folder-dialog
+                add(parentview.folder, { module: o.module })
+                    .then(function (data) {
+                        // ensure create-folder-dialog is closed already
+                        _.defer(function () {
+                            container.show();
+                            tree.selection.set(data.id);
+                            // already sorted in (rough check)
+                            if (parentview.$el.find('[data-id="' + data.id + '"]').index() < parentview.collection.length - 1) {
+                                return tree.selection.scrollIntoView(data.id);
+                            }
+                            // onSort not happend yet (slightly more delayed as parentview.onSort)
+                            parentview.listenToOnce(parentview.collection, 'sort', _.debounce(function () {
+                                tree.selection.scrollIntoView(data.id);
+                            }, 15));
+                        });
+                    },
+                    container.show.bind(container)
+                );
+            });
         }
 
         var dialog = new dialogs.ModalDialog({ async: o.async, addClass: o.addClass, width: o.width })
