@@ -32,6 +32,7 @@ define('io.ox/mail/main', [
     'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
     'io.ox/mail/categories/mediator',
+    'io.ox/core/api/account',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'io.ox/mail/actions',
@@ -41,7 +42,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings) {
 
     'use strict';
 
@@ -229,6 +230,37 @@ define('io.ox/mail/main', [
             app.treeView = new TreeView({ app: app, module: 'mail', contextmenu: true });
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
+        },
+
+        'folder-view-dsc-events': function (app) {
+            // open accounts page on when the user clicks on error indicator
+            app.treeView.on('accountlink:dsc', function () {
+                ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/settings/accounts' });
+            });
+        },
+
+        'folder-view-dsc-error': function (app) {
+            function updateStatus() {
+                if (ox.debug) console.log('refreshing DSC status');
+                accountAPI.getStatus().done(function (s) {
+                    _(s).each(function (d, id) {
+                        if (d.status !== 'ok') {
+                            accountAPI.get(id).done(function (account) {
+                                var node = app.treeView.getNodeView(account.root_folder);
+                                if (node) node.showStatusIcon(d.message);
+                            });
+                        }
+                    });
+                });
+            }
+
+            if (settings.get('dsc/enabled')) {
+                api.on('refresh.all', function () {
+                    updateStatus();
+                });
+
+                app.updateDSCStatus = updateStatus;
+            }
         },
 
         'mail-quota': function (app) {

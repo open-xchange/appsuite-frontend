@@ -19,9 +19,10 @@ define('io.ox/mail/accounts/settings', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/notifications',
     'io.ox/core/a11y',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail/accounts/settings',
     'less!io.ox/settings/style'
-], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, a11y, gt) {
+], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, a11y, mailSettings, gt) {
 
     'use strict';
 
@@ -111,62 +112,74 @@ define('io.ox/mail/accounts/settings', [
         index: 100,
         draw: function (baton) {
             var $el = this;
-            require(['io.ox/oauth/keychain', 'io.ox/oauth/backbone']).then(function (oauthAPI, OAuth) {
-                var mailServices = new Backbone.Collection(oauthAPI.services.filter(function (service) {
-                        return _(service.get('availableScopes')).contains('mail') &&
-                            oauthAPI.accounts.forService(service.id, { scope: 'mail' }).map(function (account) {
-                                return account.id;
-                            }).reduce(function (acc, oauthId) {
-                                // make sure, no mail account using this oauth-account exists
-                                return acc && !_(api.cache).chain()
-                                    .values()
-                                    .map(function (account) {
-                                        return account.mail_oauth;
-                                    })
-                                    .any(oauthId)
-                                    .value();
-                            }, true);
-                    })), list = new OAuth.Views.ServicesListView({ collection: mailServices });
+            if (!mailSettings.get('dsc/enabled')) {
+                // normal mode for all setups not using DSC
+                require(['io.ox/oauth/keychain', 'io.ox/oauth/backbone']).then(function (oauthAPI, OAuth) {
+                    var mailServices = new Backbone.Collection(oauthAPI.services.filter(function (service) {
+                            console.log('services', service);
+                            return _(service.get('availableScopes')).contains('mail') &&
+                                oauthAPI.accounts.forService(service.id, { scope: 'mail' }).map(function (account) {
+                                    return account.id;
+                                }).reduce(function (acc, oauthId) {
+                                    // make sure, no mail account using this oauth-account exists
+                                    return acc && !_(api.cache).chain()
+                                        .values()
+                                        .map(function (account) {
+                                            return account.mail_oauth;
+                                        })
+                                        .any(oauthId)
+                                        .value();
+                                }, true);
+                        })), list = new OAuth.Views.ServicesListView({ collection: mailServices });
 
-                mailServices.push({
-                    id: 'wizard',
-                    displayName: gt('Other')
-                });
-                $el.append(
-                    $('<label>').text(gt('Please select your mail account provider')),
-                    list.render().$el
-                );
-
-                list.listenTo(list, 'select', function (service) {
-                    if (service.id === 'wizard') return;
-
-                    var account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
-                        serviceId: service.id,
-                        displayName: 'My ' + service.get('displayName') + ' account'
+                    // only valid for non dsc setups
+                    mailServices.push({
+                        id: 'wizard',
+                        displayName: gt('Other')
                     });
 
-                    account.enableScopes('mail').save().then(function () {
-                        api.autoconfig({
-                            oauth: account.id
-                        }).then(function (data) {
-                            var def = $.Deferred();
-                            // hopefully, login contains a valid mail address
-                            data.primary_address = data.login;
+                    $el.append(
+                        $('<label>').text(gt('Please select your mail account provider')),
+                        list.render().$el
+                    );
 
-                            validateMailaccount(data, baton.popup, def);
-                            return def;
-                        }).then(function () {
-                            oauthAPI.accounts.add(account, { merge: true });
-                        }, notifications.yell);
+                    list.listenTo(list, 'select', function (service) {
+                        if (service.id === 'wizard') return;
+
+                        var account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
+                            serviceId: service.id,
+                            displayName: 'My ' + service.get('displayName') + ' account'
+                        });
+
+                        account.enableScopes('mail').save().then(function () {
+                            api.autoconfig({
+                                oauth: account.id
+                            }).then(function (data) {
+                                var def = $.Deferred();
+                                // hopefully, login contains a valid mail address
+                                data.primary_address = data.login;
+
+                                validateMailaccount(data, baton.popup, def);
+                                return def;
+                            }).then(function () {
+                                oauthAPI.accounts.add(account, { merge: true });
+                            }, notifications.yell);
+                        });
+                    });
+
+                    list.listenTo(list, 'select:wizard', function () {
+                        baton.popup.getFooter().find('[data-action="add"]').show();
+                        // invoke wizard
+                        ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
                     });
                 });
-
-                list.listenTo(list, 'select:wizard', function () {
+            } else {
+                // show classic wizard for DSC setups, bypass oauth accounts
+                ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                _.defer(function () {
                     baton.popup.getFooter().find('[data-action="add"]').show();
-                    // invoke wizard
-                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
-                });
-            });
+                }, 1000);
+            }
         }
     });
 
