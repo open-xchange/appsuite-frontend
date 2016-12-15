@@ -212,6 +212,7 @@ define('io.ox/files/api', [
                     if (this.types[type].test(extension)) return type;
                 }
             }
+            return this.getFileType();
         },
 
         types: {
