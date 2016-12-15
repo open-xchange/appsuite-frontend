@@ -23,7 +23,7 @@ variables:
   stage: prepare
   script:
     - cd ${PROJECT_PATH}
-    - yarn install
+    - yarn
     - bower i --silent
   cache:
     # use one cache per project and branch
