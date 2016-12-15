@@ -8,7 +8,6 @@ powered-test
 docs
 doc
 website
-images
 assets
 
 # examples
@@ -29,7 +28,6 @@ Gruntfile.js
 .gitattributes
 .editorconfig
 .*ignore
-.eslintrc
 .jshintrc
 .flowconfig
 .documentup.json
