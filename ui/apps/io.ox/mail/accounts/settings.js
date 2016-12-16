@@ -164,8 +164,13 @@ define('io.ox/mail/accounts/settings', [
                         displayName: 'My ' + service.get('displayName') + ' account'
                     });
 
-                    ox.busy();
+                    list.$el.find('button').prop('disabled', true).addClass('disabled');
                     account.enableScopes('mail').save().then(function () {
+                        ox.busy();
+                        var busyMessage = $('<div class="alert-placeholder">');
+                        $el.append(busyMessage);
+                        drawBusy(busyMessage);
+
                         api.autoconfig({
                             oauth: account.id
                         }).then(function (data) {
@@ -177,9 +182,11 @@ define('io.ox/mail/accounts/settings', [
                             return def;
                         }).then(function () {
                             oauthAPI.accounts.add(account, { merge: true });
-                        }, notifications.yell);
+                        }, notifications.yell).always(function () {
+                            ox.idle();
+                        });
                     }).always(function () {
-                        ox.idle();
+                        list.$el.find('button').prop('disabled', false).removeClass('disabled');
                     });
                 });
 
