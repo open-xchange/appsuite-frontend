@@ -708,10 +708,5 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         editor.on('addInlineImage', function (e, id) { addKeepalive(id); });
     }
-
-    if (!window.tinyMCE) {
-        return require(['3rd.party/tinymce/jquery.tinymce.min'])
-            .then(function () { return Editor; });
-    }
     return $.Deferred().resolve(Editor);
 });
