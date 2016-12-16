@@ -24,6 +24,7 @@ variables:
   script:
     - cd ${PROJECT_PATH}
     - yarn
+    - yarn clean
     - bower i --silent
   cache:
     # use one cache per project and branch
