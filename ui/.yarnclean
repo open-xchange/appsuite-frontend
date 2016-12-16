@@ -8,6 +8,7 @@ powered-test
 docs
 doc
 website
+images !node_modules/clean-css/
 assets
 
 # examples
@@ -28,6 +29,7 @@ Gruntfile.js
 .gitattributes
 .editorconfig
 .*ignore
+.eslintrc !node_modules/eslint-config-open-xchange-appsuite/
 .jshintrc
 .flowconfig
 .documentup.json
