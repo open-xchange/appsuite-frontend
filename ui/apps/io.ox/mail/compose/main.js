@@ -113,6 +113,8 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                     .fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
                             notifications.yell(e);
+                            // makes no sense to show discard changes popup here
+                            app.model.dirty(false);
                             app.quit();
                             def.reject();
                         });

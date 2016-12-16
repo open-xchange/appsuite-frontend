@@ -881,6 +881,9 @@ define('io.ox/mail/compose/view', [
                 new Editor(self.editorContainer, options).done(function (editor) {
                     def.resolve(editor);
                 });
+            }, function () {
+                // something went wrong
+                def.reject({ error: gt("Couldn't load editor") });
             });
             return def.then(function (editor) {
                 self.editorHash[self.model.get('editorMode')] = editor;
