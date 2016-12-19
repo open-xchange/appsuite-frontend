@@ -50,7 +50,8 @@ define('io.ox/core/folder/favorites', [
                     // FLD-0003 -> permission denied
                     // ACC-0002 -> account not found (see bug 46481)
                     // FLD-1004 -> folder storage service no longer available (see bug 47089)
-                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003' || item.code === 'ACC-0002' || item.code === 'FLD-1004')) {
+                    // IMAP-1002 -> mail folder "..." could not be found on mail server (see bug 47847)
+                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003' || item.code === 'ACC-0002' || item.code === 'FLD-1004' || item.code === 'IMAP-1002')) {
                         invalid[item.id] = true;
                         return false;
                     }
@@ -70,7 +71,7 @@ define('io.ox/core/folder/favorites', [
             delete invalid[model.id];
         });
 
-        collection.on('add remove', storeCollection);
+        collection.on('add remove change:id', storeCollection);
 
         // respond to collection remove event to sync favorites
         api.on('collection:remove', function (id, model) {

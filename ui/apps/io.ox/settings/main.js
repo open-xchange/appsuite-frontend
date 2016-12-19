@@ -59,6 +59,36 @@ define('io.ox/settings/main', [
     //     }
     // }
 
+    ext.point('io.ox/settings/help/mapping').extend({
+        id: 'core',
+        index: 100,
+        list: function () {
+            _.extend(this, {
+                'virtual/settings/io.ox/settings/accounts': 'ox.appsuite.user.sect.email.externalaccounts.manage.html',
+                'virtual/settings/io.ox/portal': 'ox.appsuite.user.sect.portal.customize.settings.html',
+                'virtual/settings/io.ox/mail': 'ox.appsuite.user.sect.email.settings.html',
+                'virtual/settings/io.ox/vacation': 'ox.appsuite.user.sect.email.send.vacationnotice.html',
+                'virtual/settings/io.ox/autoforward': 'ox.appsuite.user.sect.email.send.autoforward.html',
+                'virtual/settings/io.ox/mailfilter': 'ox.appsuite.user.sect.email.manage.mailfilter.html',
+                'virtual/settings/io.ox/mail/settings/signatures': 'ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.signatures',
+                'virtual/settings/io.ox/contacts': 'ox.appsuite.user.sect.contacts.settings.html',
+                'virtual/settings/io.ox/calendar': 'ox.appsuite.user.sect.calendar.settings.html',
+                'virtual/settings/io.ox/timezones': 'ox.appsuite.user.sect.calendar.settings.html#ox.appsuite.user.reference.calendar.settings.timezones',
+                'virtual/settings/io.ox/tasks': 'ox.appsuite.user.sect.tasks.settings.html',
+                'virtual/settings/io.ox/files': 'ox.appsuite.user.sect.files.settings.html'
+            });
+        }
+    });
+
+    app.getContextualHelp = function () {
+        var id = this.folder.get(),
+            data = {};
+
+        ext.point('io.ox/settings/help/mapping').invoke('list', data);
+
+        return data[id] ? data[id] : 'ox.appsuite.user.sect.firststeps.globalsettings.html';
+    };
+
     app.setLauncher(function (options) {
 
         app.setWindow(win = ox.ui.createWindow({
