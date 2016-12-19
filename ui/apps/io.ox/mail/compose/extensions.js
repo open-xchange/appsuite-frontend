@@ -589,7 +589,7 @@ define('io.ox/mail/compose/extensions', [
                     });
 
                     ext.point('io.ox/mail/attachment/shareAttachments/dropdown').extend({
-                        id: 'expire-option',
+                        id: 'delete-option',
                         index: 300,
                         draw: function (baton) {
                             baton.dropdown.divider()
