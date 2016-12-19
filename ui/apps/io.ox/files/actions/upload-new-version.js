@@ -13,10 +13,11 @@
 
 define('io.ox/files/actions/upload-new-version', [
     'io.ox/files/api',
+    'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
     'io.ox/core/tk/attachments',
     'gettext!io.ox/files'
-], function (FilesAPI, Dialogs, Attachments, gt) {
+], function (FilesAPI, folderApi, Dialogs, Attachments, gt) {
 
     'use strict';
 
@@ -49,13 +50,18 @@ define('io.ox/files/actions/upload-new-version', [
          */
         function process(file, comment) {
             if (!file) { return $.Deferred().reject(); }
-            return FilesAPI.versions.upload({
+            var obj = {
                 file: file,
                 id: data.id,
                 folder: data.folder_id,
                 version_comment: comment || '',
                 params: isEncrypted() ? { 'cryptoAction': 'Encrypt' } : {} // If previous file encrypted new version should also be
-            })
+            };
+
+            if (folderApi.pool.getModel(data.folder_id).supports('extended_metadata')) {
+                obj.version_comment = comment || '';
+            }
+            return FilesAPI.versions.upload(obj)
             .fail(notify);
         }
 
@@ -78,14 +84,14 @@ define('io.ox/files/actions/upload-new-version', [
                     }
                 }),
                 filename,
-                $('<textarea rows="6" class="form-control">')
+                folderApi.pool.getModel(data.folder_id).supports('extended_metadata') ? $('<textarea rows="6" class="form-control">') : ''
             )
             .addPrimaryButton('upload', gt('Upload'), 'upload')
             .addButton('cancel', gt('Cancel'), 'cancel')
             .on('upload', function () {
                 var $node = this.getContentNode(),
                     files = $node.find('input[type="file"]')[0].files,
-                    comment = $node.find('textarea').val();
+                    comment = (folderApi.pool.getModel(data.folder_id).supports('extended_metadata') ? $node.find('textarea').val() : '');
 
                 process(_.first(files), comment).then(this.close, this.idle)
                 .fail(function () {

@@ -687,7 +687,7 @@ define('io.ox/tasks/api', [
                 });
                 if (hasExternalParticipants) {
                     require(['io.ox/contacts/api'], function (contactsApi) {
-                        contactsApi.trigger('maybyNewContact');
+                        contactsApi.trigger('maybeNewContact');
                     });
                 }
             }

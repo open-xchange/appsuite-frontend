@@ -162,9 +162,8 @@ define('io.ox/core/tk/tokenfield', [
             // lock for redraw action
             this.redrawLock = false;
 
-            this.listenTo(this.collection, 'reset', function () {
-                self.redrawTokens();
-            });
+            // 100 to be not perceivable for the user (see bugs 49951, 50412)
+            this.listenTo(this.collection, 'reset change:display_name', _.throttle(self.redrawTokens.bind(self), 100));
         },
 
         dispose: function () {
