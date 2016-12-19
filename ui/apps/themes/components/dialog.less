@@ -121,7 +121,10 @@
 
     .modal-footer > .btn { min-width: 5em; }
 
-    .modal-footer .help-block { text-align: left; }
+    .modal-footer .help-block {
+        text-align: left;
+        &:empty { display: none; }
+    }
 
     .io-ox-sidepopup {
         &.right { .border-radius(0 5px 5px 0); }
