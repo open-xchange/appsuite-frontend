@@ -12,23 +12,177 @@
  */
 
 define('io.ox/files/filepicker', [
-    'io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
-    'io.ox/core/folder/picker',
+
     'io.ox/core/cache',
-    'io.ox/files/api',
+    'io.ox/core/extensions',
+
     'io.ox/core/tk/selection',
-    'settings!io.ox/core',
-    'gettext!io.ox/files',
+    'io.ox/core/tk/dialogs',
     'io.ox/core/tk/upload',
-    'io.ox/core/notifications',
+
     'io.ox/core/folder/api',
+    'io.ox/core/folder/picker',
+
+    'io.ox/core/viewer/views/sidebar/fileinfoview',
+
+    'io.ox/files/api',
+    'io.ox/files/common-extensions',
+
+    'io.ox/core/notifications',
     'io.ox/core/page-controller',
-    'io.ox/core/toolbars-mobile'
-], function (ext, dialogs, picker, cache, filesAPI, Selection, settings, gt, upload, notifications, folderAPI, PageController, Bars) {
+    'io.ox/core/toolbars-mobile',
+
+    'settings!io.ox/core',
+    'gettext!io.ox/files'
+
+], function (cache, ext, Selection, dialogs, upload, folderAPI, picker, FileInfoView, filesAPI, filesExtensions, notifications, PageController, Bars, settings, gt) {
 
     'use strict';
 
+    // local module code - shared with or used by every `FilePicker` instance -----------------------------------
+
+    //      - user story DOCS-589 :: User can see image preview in file picker.
+    //      - for later use, in case of providing previews for every file/mine-type and not only for image types as with #DOCS-589.
+    //
+    // /**
+    //  *
+    //  * @constructor PreviewStore
+    //  *  sub typed key value store for caching jquerified preview images
+    //  *  in order to not always having them requested via the backend.
+    //  */
+    // function PreviewStore() {
+    //     var
+    //         store       = this,
+    //         registry    = {},
+    //
+    //       //$emptyImage = $('<img src="" width="auto" height="auto" />'),
+    //
+    //         isPreviewImage = function ($previewImage) {
+    //             return ($previewImage && $previewImage[0] && $previewImage[0].nodeName && ($previewImage[0].nodeName.toLowerCase() === 'img'));
+    //         };
+    //
+    //     store.get = function (previewType, previewKey) {
+    //         var
+    //             type = registry[String(previewType)],
+    //             $img = (type && type[String(previewKey)]);
+    //
+    //         return ($img && $img.clone()); // return a clone of the stored jquerified image object.
+    //     };
+    //     store.put = function (previewType, previewKey, $previewImage) {
+    //         var $img;
+    //         if (previewType && previewKey && isPreviewImage($previewImage = $($previewImage))) {
+    //
+    //             $img = $previewImage;
+    //
+    //             previewType = String(previewType);
+    //             previewKey = String(previewKey);
+    //
+    //             var type = registry[previewType] || (registry[previewType] = {});
+    //
+    //             type[previewKey] = $previewImage.clone(); // store a clone of the valid jquerified image object.
+    //         }
+    //         return $img; // return same valid jquerified image reference.
+    //     };
+    // }
+
+    function isMimetypeImage(mimetype) {
+        return REGX__MIMETYPE_IMAGE.test(mimetype);
+    }
+    // function getImageType(fileObject) {
+    //     var imageType;
+    //
+    //     return ({
+    //         gif: 'GIF',
+    //         png: 'PNG',
+    //         jpg: 'JPG',
+    //         jpeg: 'JPG',
+    //         unknown: 'Unknown Image Type'
+    //     }[
+    //         ((imageType = REGX__IMAGE_EXTENSION.exec(fileObject.file_mimetype)) && imageType[1]) ||
+    //         ((imageType = REGX__IMAGE_EXTENSION.exec(fileObject.filetype)) && imageType[1]) ||
+    //         'unknown'
+    //     ]);
+    // }
+    var
+        REGX__MIMETYPE_IMAGE  = (/(?:^image\/)|(?:(?:gif|png|jpg|jpeg)$)/);
+      //REGX__IMAGE_EXTENSION = (/[./](gif|png|jpg|jpeg)$/);
+
+    /**
+     * does create lazy on demand a filepicker's 3rd possible pane, the preview pane,
+     * that is the root node for all following preview render actions.
+     *
+     * @param $filesPane
+     * @returns {*|jQuery|HTMLElement}
+     */
+    function createPreviewPane($filesPane) {
+        var
+            $previewPane  = $('<div class="preview-pane"></div>');
+
+        $previewPane.insertAfter($filesPane);
+
+        return $previewPane;
+    }
+
+    /**
+     * renders the preview image and all necessary file info data into a 3rd pane, the preview pane.
+     *
+     * @param $previewPane
+     * @param fileObject
+     */
+    function renderImagePreview($previewPane, fileObject/*, previewStore*/) {
+      //console.log('+++ renderImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
+        var
+          //previewKey    = (fileObject.filename || fileObject.title),
+
+            $preview      = $('<div class="preview"></div>'),
+            $fileinfo     = $('<div class="fileinfo"><div class="sidebar-panel-body"></div></div>'),
+
+            thumbnailUrl  = filesAPI.getUrl(fileObject, 'thumbnail', {
+                scaletype:  'contain',  // - contain or cover or auto
+                height:     140,        // - image height in pixels
+                width:      250,        // - image widht in pixels
+                version:    false       // - true/false. if false no version will be appended
+            });
+
+        $preview.css('background-image', ('url(' + thumbnailUrl + ')'));
+
+        $previewPane.empty();
+        $previewPane.append($preview);
+
+        filesAPI.get(fileObject).done(function (fileDescriptor) {
+
+            var model = filesAPI.pool.get('detail').get(_.cid(fileDescriptor));
+            if (model) {
+                var
+                    jsonModel = model.toJSON(),
+                    baton     = ext.Baton({
+                        model:  model,
+                        data:   jsonModel,
+                        options: {
+                            disableFolderInfo:  true,
+                            disableSharesInfo:  true,
+                            disableLink:        true
+                        }
+                    });
+
+                //  - invoke `FileInfoView`s rendering service (extension point)
+                //    as of 'io.ox/core/viewer/views/sidebar/fileinfoview'
+                //
+                ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', $fileinfo, baton);
+            }
+            $previewPane.append($fileinfo);
+
+        })/*.fail(function () { console.warn('Filepicker::renderImagePreview ... async loading did fail'); })*/;
+    }
+
+    // Constructor ------------------------------------------------------------------
+
+    /**
+     *
+     * @param options
+     * @returns {*}
+     * @constructor FilePicker
+     */
     var FilePicker = function (options) {
 
         options = _.extend({
@@ -59,7 +213,10 @@ define('io.ox/files/filepicker', [
             pages = new PageController({ appname: 'filepicker', toolbar: toolbar, navbar: navbar, container: pcContainer, disableAnimations: true }),
             containerHeight = $(window).height() - 200,
             hub = _.extend({}, Backbone.Events),
-            currentFolder;
+            currentFolder,
+          //previewStore = new PreviewStore(),
+            $previewPane,
+            isAllowPreviewPane = !_.device('smartphone');
 
         pages.addPage({
             name: 'folderTree',
@@ -113,6 +270,32 @@ define('io.ox/files/filepicker', [
         this.selection.on('change', function (e, list) {
             toggleOkButton(list.length > 0);
         });
+        this.selection.on('mark', handleFileSelectionChange);
+        this.selection.on('select', handleFileSelectionChange);
+
+        // - user story DOCS-589 :: User can see image preview in file picker
+        // - https://jira.open-xchange.com/browse/DOCS-589
+        // - according to some counseling from Olpe the required 3rd preview-pane is supposed to be hacked into this modal dialogue.
+        //
+        function handleFileSelectionChange(event, fileId, fileObject) {
+          //console.log('Filepicker::Selection::handleSelect - [event, fileId, fileObject] : ', event, fileId, fileObject);
+            if (isAllowPreviewPane) {
+
+                if (isMimetypeImage(fileObject.file_mimetype)) {
+                  //console.log('+++ Filepicker::select:file:type:image - image type +++ : ', getImageType(fileObject));
+
+                    if (!$previewPane) {
+                        $previewPane = createPreviewPane(filesPane);
+                    }
+                    renderImagePreview($previewPane, fileObject/*, previewStore*/);
+
+                } else {
+                    deletePreviewPane();
+                }
+            } else {
+                deletePreviewPane();
+            }
+        }
 
         function onFolderChange(id) {
 
@@ -223,6 +406,14 @@ define('io.ox/files/filepicker', [
             _(e.target.files).each(function (file) {
                 queue.offer(file, { folder: tree.selection.get(), filename: file.name });
             });
+        }
+
+        function deletePreviewPane() {
+            if ($previewPane) {
+
+                $previewPane.remove();
+                $previewPane = null;
+            }
         }
 
         picker({

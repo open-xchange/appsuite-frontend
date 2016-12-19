@@ -182,13 +182,13 @@ define('io.ox/backbone/views/datepicker', [
             var headerId = _.uniqueId('header');
             this.$el.attr({ 'aria-labelledby': headerId, 'role': 'region', 'tabindex': 0 }).append(
                 $('<div class="navigation">').append(
-                    $('<button role="button" class="btn-prev pull-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
+                    $('<button type="button" class="btn-prev pull-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
                     $('<span role="header" aria-live="assertive" aria-atomic="true">').attr('id', headerId),
-                    $('<button role="button" class="btn-next pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
+                    $('<button type="button" class="btn-next pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
                 ),
                 this.$grid = $('<table class="grid" role="grid" tabindex="0">')
                     .attr('aria-label', gt('Use cursor keys to navigate, press enter to select a date')),
-                $('<button role="button" class="btn-today">')
+                $('<button type="button" class="btn-today">')
                     .attr('aria-label', 'Go to today')
                     .text(gt('Today: %1$s', moment().format('l')))
             );
@@ -221,7 +221,7 @@ define('io.ox/backbone/views/datepicker', [
                 m = current.clone();
 
             this.renderHeader(
-                $('<button role="button" class="switch-mode">')
+                $('<button type="button" class="switch-mode">')
                     .attr({
                         'data-mode': 'year',
                         'data-value': m.year()
@@ -293,7 +293,7 @@ define('io.ox/backbone/views/datepicker', [
                 m = this.date.clone().month(0);
 
             this.renderHeader(
-                $('<button role="button" class="switch-mode">')
+                $('<button type="button" class="switch-mode">')
                     .attr({
                         'data-mode': 'decade',
                         'data-value': m.year()

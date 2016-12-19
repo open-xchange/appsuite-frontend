@@ -29,6 +29,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             this.label = options.label;
             this.exclude = options.exclude;
             this.disable = options.disable;
+            this.rootAlwaysVisible = options.rootAlwaysVisible;
 
             // last item is a normal item (not a unclickable tail node)
             this.notail = options.notail;
@@ -87,14 +88,27 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             this.stopListening(api);
             _(path).each(this.listenToFolderChange, this);
 
-            this.$el.empty().append(
-                // ellipsis
-                $('<span class="breadcrumb-ellipsis" aria-hidden="true">&hellip;</span>').hide(),
-                // label
-                this.label ? $('<span class="breadcrumb-label">').text(this.label) : [],
-                // path
-                _(path).map(this.renderLink, this)
-            );
+            if (this.rootAlwaysVisible) {
+                this.$el.empty().append(
+
+                    this.renderLink(_.first(path), 0, path),
+                    // ellipsis
+                    $('<span class="breadcrumb-ellipsis" aria-hidden="true">&hellip;</span>').hide(),
+                    // label
+                    this.label ? $('<span class="breadcrumb-label">').text(this.label) : [],
+                    // path
+                    _(_.rest(path)).map(this.renderLink, this)
+                );
+            } else {
+                this.$el.empty().append(
+                    // ellipsis
+                    $('<span class="breadcrumb-ellipsis" aria-hidden="true">&hellip;</span>').hide(),
+                    // label
+                    this.label ? $('<span class="breadcrumb-label">').text(this.label) : [],
+                    // path
+                    _(path).map(this.renderLink, this)
+                );
+            }
 
             if (this.app) this.computeWidth();
         },
@@ -112,7 +126,13 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
             this.$el.addClass('invisible').children().show();
 
-            this.$el.children().toArray().slice(1).reverse().forEach(function (node, index) {
+            if (this.rootAlwaysVisible) {
+                this.$el.children().toArray().slice(0, 1).reverse().forEach(function (node) {
+                    childrenWidth += $(node).outerWidth(true);
+                });
+            }
+
+            this.$el.children().toArray().slice(this.rootAlwaysVisible ? 2 : 1).reverse().forEach(function (node, index) {
                 childrenWidth += $(node).outerWidth(true);
                 $(node).toggle(index === 0 || childrenWidth < maxWidth);
             });

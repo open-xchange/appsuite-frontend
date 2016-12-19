@@ -212,6 +212,7 @@ define('io.ox/files/api', [
                     if (this.types[type].test(extension)) return type;
                 }
             }
+            return this.getFileType();
         },
 
         types: {
@@ -244,6 +245,13 @@ define('io.ox/files/api', [
         hasWritePermissions: function () {
             var array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
                 myself = _(array).findWhere({ entity: ox.user_id });
+
+            // check if there is a permission for a group, the user is a member of
+            // use max permissions available
+            if ((!myself || (myself && myself.bits < 2)) && _(array).findWhere({ group: true })) {
+                // use rampup data so this is not deferred
+                myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(ox.rampup.user.groups)[0] });
+            }
             return !!(myself && (myself.bits >= 2));
         }
     });
@@ -328,7 +336,7 @@ define('io.ox/files/api', [
     // options:
     // - scaletype: contain or cover or auto
     // - height: image height in pixels
-    // - widht: image widht in pixels
+    // - width: image widht in pixels
     // - version: true/false. if false no version will be appended
     api.getUrl = function (file, type, options) {
 
@@ -470,6 +478,8 @@ define('io.ox/files/api', [
                     limit = newStart + ',' + newStop;
                 // folders exceed upper limit?
                 if (folders.length >= stop) return folders.slice(start, stop);
+                // optimisation for "Drive" folder
+                if (params.folder === '9') return folders;
                 // fetch files
                 return http.GET({ module: module, params: _.extend({}, params, { limit: limit }) }).then(
                     function (files) {
@@ -826,7 +836,8 @@ define('io.ox/files/api', [
                 module: 'files',
                 params: {
                     action: 'move',
-                    folder: targetFolderId
+                    folder: targetFolderId,
+                    ignoreWarnings: ignoreWarnings
                 },
                 data: items,
                 appendColumns: false

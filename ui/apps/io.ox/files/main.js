@@ -244,7 +244,7 @@ define('io.ox/files/main', [
             });
 
             var tree = new TreeView({ app: app, contextmenu: true, module: 'infostore', root: settings.get('rootFolderId', 9) });
-
+            app.treeView = tree;
             // initialize folder view
             FolderView.initialize({ app: app, tree: tree, firstResponder: 'main' });
             page.append(tree.render().$el);
@@ -275,8 +275,13 @@ define('io.ox/files/main', [
 
             app.getViewOptions = function (folder) {
                 var options = app.settings.get(['viewOptions', folder], {}),
-                    defaultSort = folder === 'virtual/myshares' ? 5 : 702,
-                    defaultOrder = folder === 'virtual/myshares' ? 'desc' : 'asc';
+                    defaultSort = 702,
+                    defaultOrder = 'asc';
+
+                if (folder === 'virtual/myshares' || folderAPI.is('attachmentView', { id: folder })) {
+                    defaultSort = 5;
+                    defaultOrder = 'desc';
+                }
 
                 if (!/^(list|icon|tile)/.test(options.layout)) options.layout = 'list';
                 return _.extend({ sort: defaultSort, order: defaultOrder, layout: 'list' }, options);
@@ -1308,6 +1313,26 @@ define('io.ox/files/main', [
                     app.folder.set(obj.folder_id);
                 }
             };
+        },
+
+        'a11y': function (app) {
+            // mail list: focus mail detail view on <enter>
+            // mail list: focus folder on <escape>
+            app.listView.$el.on('keydown', '.list-item', function (e) {
+                // if a message is selected (mouse or keyboard) the focus is set on body
+                if (e.which === 27) {
+                    app.folderView.tree.$('.folder.selected').focus();
+                    return false;
+                }
+            });
+            // folder tree: focus list view on <enter>
+            // folder tree: focus top-bar on <escape>
+            app.folderView.tree.$el.on('keydown', '.folder', function (e) {
+                // check if it's really the folder - not the contextmenu toggle
+                if (!$(e.target).hasClass('folder')) return;
+                if (e.which === 13) app.listView.restoreFocus(true);
+                if (e.which === 27) $('#io-ox-topbar .active-app > a').focus();
+            });
         }
     });
 
@@ -1342,7 +1367,7 @@ define('io.ox/files/main', [
 
                 // simple id check for folders, prevents errors if folder id contains '.'
                 if (_.isString(item)) {
-                    if (item.startsWith('folder.')) {
+                    if (item.indexOf('folder.') === 0) {
                         return { folder_id: 'folder', id: item.replace(/^folder./, '') };
                     }
                     return _.cid(item);

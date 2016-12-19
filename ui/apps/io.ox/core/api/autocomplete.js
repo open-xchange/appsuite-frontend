@@ -63,7 +63,7 @@ define('io.ox/core/api/autocomplete', [
         ext.point('io.ox/core/api/autocomplete/customize').invoke('customize', this);
 
         // If contacts auto-collector might have added new contacts
-        contactsAPI.on('maybyNewContact', function () {
+        contactsAPI.on('maybeNewContact', function () {
             that.cache = {};
         });
     }
@@ -113,6 +113,10 @@ define('io.ox/core/api/autocomplete', [
 
                         if (/contact|custom|user/.test(module.type)) {
                             retData = self.processContactResults(retData, query);
+                            // results may exceed limit after processing
+                            if (options.limit) {
+                                retData = retData.slice(0, options.limit);
+                            }
                         }
                     });
                     // add to cache

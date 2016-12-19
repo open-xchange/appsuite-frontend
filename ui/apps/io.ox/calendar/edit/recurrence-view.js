@@ -427,7 +427,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                 .each(function () {
                     $(this).replaceWith($.txt($(this).text()));
                 });
-            return $ghost.text();
+            return $('<span>').text($ghost.text());
         };
 
         _.extend(this, Backbone.Events);
@@ -481,7 +481,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                 this.nodes = {
                     wrapper: $('<div>').addClass('checkbox'),
                     recView: $('<form class="io-ox-recurrence-view form-inline">').hide(),
-                    summary: $('<span>'),
+                    summary: $('<span class="summary">'),
                     typeChoice: $('<div class="inset">'),
                     hint: $('<div class="text-muted inset">'),
                     alternative1: $('<div class="inset">'),
@@ -938,8 +938,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                     this.nodes.summary.show();
                     sum.append(
                         this.choice.ghost(),
-                        (this.choice && this.choice.id === 'no-choice') ? $() : this.endsChoice.ghost(),
-                        $('<span>&nbsp;</span>')
+                        (this.choice && this.choice.id === 'no-choice') ? $() : this.endsChoice.ghost()
                     );
                 } else {
                     this.nodes.wrapper.removeAttr('style');

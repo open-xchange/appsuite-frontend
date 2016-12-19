@@ -1,3 +1,27 @@
+open-xchange-dynamic-theme (7.8.4-0) unstable; urgency=medium
+
+  * prepare for 7.8.4 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Fri, 02 Dec 2016 14:00:24 +0100
+
+open-xchange-dynamic-theme (7.8.3-5) stable; urgency=medium
+
+  * Second release candidate for 7.8.3 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 29 Nov 2016 11:41:07 +0000
+
+open-xchange-dynamic-theme (7.8.3-4) stable; urgency=medium
+
+  * First release candidate for 7.8.3 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Thu, 24 Nov 2016 16:52:24 +0000
+
+open-xchange-dynamic-theme (7.8.3-3) stable; urgency=medium
+
+  * Third preview for 7.8.3 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 15 Nov 2016 16:08:59 +0000
+
 open-xchange-dynamic-theme (7.8.3-2) stable; urgency=medium
 
   * Second preview for 7.8.3 release

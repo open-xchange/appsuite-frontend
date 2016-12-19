@@ -52,7 +52,7 @@ The metrics module provide some simple API that enables you to track events.
 - type of event
 - _example: ‘click’_
 
- ### action
+### action
 
 - name/id of the action
 - _example: ‘delete’_

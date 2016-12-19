@@ -28,6 +28,115 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         tagName: 'div',
         className: 'dropdown',
 
+        events: {
+            'shown.bs.dropdown': 'onShown',
+            'hidden.bs.dropdown': 'resetDropdownOverlay',
+            'keydown *[data-toggle="dropdown"]': 'onKeyDown',
+            'ready': 'onReady'
+        },
+
+        onReady: function () {
+            if (this.smart === false && !this.$overlay) return;
+            if (!this.$el.hasClass('open')) return;
+            this.adjustBounds();
+        },
+
+        resetDropdownOverlay: function () {
+            if (!this.$overlay) return;
+            this.$placeholder.before(this.$ul).detach();
+            this.$el.removeClass('open');
+            this.$ul.attr('style', this.$ul.data('style') || '').removeData('style');
+            this.$overlay.remove();
+            this.$toggle.focus();
+            delete this.$overlay;
+        },
+
+        setDropdownOverlay: function () {
+            var self = this;
+
+            this.$overlay = $('<div class="smart-dropdown-container dropdown open">')
+                .addClass(this.$el.prop('className'))
+                .on('ready', this.onReady.bind(this));
+            this.$ul.data('style', this.$ul.attr('style'));
+            this.adjustBounds();
+
+            // replaceWith and detach ($.fn.replaceWith is replaceWith and remove)
+            this.$ul.before(this.$placeholder).detach();
+            $('body').append(
+                this.$overlay.append(
+                    $('<div class="abs">').on('mousewheel touchmove', false)
+                    .on('click', function (e) {
+                        e.stopPropagation();
+                        self.resetDropdownOverlay();
+                        return false;
+                    }),
+                    this.$ul
+                )
+            );
+        },
+
+        adjustBounds: function () {
+            var bounds = this.$ul.get(0).getBoundingClientRect(),
+                positions = {
+                    top: bounds.top,
+                    left: bounds.left,
+                    width: bounds.width,
+                    height: 'auto'
+                },
+                offset = this.$toggle.offset(),
+                width = this.$toggle.outerWidth(),
+                availableWidth = $(window).width(),
+                availableHeight = $(window).height(),
+                topbar = $('#io-ox-topbar');
+
+            // hits bottom ?
+            if (bounds.top + bounds.height > availableHeight + this.margin) {
+                // left or right?
+                if ((offset.left + width + bounds.width + this.margin) < availableWidth) {
+                    // enough room on right side
+                    positions.left = offset.left + width + this.margin;
+                } else {
+                    // position of left side
+                    positions.left = offset.left - bounds.width - this.margin;
+                }
+
+                // move dropdown up
+                positions.top = availableHeight - this.margin - bounds.height;
+                // don't overlap topbar or banner
+                positions.top = Math.max(positions.top, topbar.offset().top + topbar.height() + this.margin);
+
+                // adjust height
+                positions.height = Math.min(availableHeight - this.margin - positions.top, positions.height);
+            } else {
+                // outside viewport?
+                positions.left = Math.max(this.margin, positions.left);
+                positions.left = Math.min(availableWidth - positions.width - this.margin, positions.left);
+            }
+
+            if (this.$toggle.data('fixed')) positions.left = bounds.left;
+            this.$ul.css(positions);
+        },
+
+        onShown: function () {
+            if (this.smart === false) return;
+            if (_.device('smartphone')) return;
+            this.setDropdownOverlay();
+        },
+
+        onKeyDown: function (e) {
+            // select first or last item, if already open
+            if (!this.$el.hasClass('open') || !this.$overlay) return;
+            // special focus handling, because the $ul is no longer a child of the view
+            if (e.which === 40) $('a[role^="menuitem"]', this.$ul).first(':visible').focus();
+            if (e.which === 38) $('a[role^="menuitem"]', this.$ul).last(':visible').focus();
+            // special close handling on ESC
+            if (e.which === 27) {
+                this.$toggle.trigger('click');
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            }
+        },
+
         onClick: function (e) {
             e.preventDefault();
             var node = $(e.currentTarget),
@@ -40,6 +149,19 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             if (keep) e.stopPropagation();
             // ignore plain links
             if (node.hasClass('disabled')) return;
+
+            // make sure event bubbles up
+            if (!e.isPropagationStopped() && this.$overlay && this.$placeholder && !this.options.noDetach) {
+                // to use jquery event bubbling, the element, which triggered the event must have the correct parents
+                // therefore, the target element is inserted at the original position before event bubbling
+                // the element only remains at that position while the event bubbles
+                var $temp = $('<div class="hidden">');
+                node.before($temp).detach();
+                this.$placeholder.append(node);
+                this.$el.trigger(e);
+                $temp.replaceWith(node);
+            }
+
             if (value === undefined) return;
             if (this.model) {
                 var nextValue = value;
@@ -57,10 +179,15 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         setup: function () {
-            this.$ul = $('<ul class="dropdown-menu" role="menu">');
+            this.$ul = this.options.$ul || $('<ul class="dropdown-menu" role="menu">');
+            this.$placeholder = $('<div class="hidden">');
+            this.smart = this.options.smart;
+            this.margin = this.options.margin || 8;
             // not so nice but we need this for mobile support
+            // if $ul pops out on the overlay, this line is also required
             this.$ul.on('click', 'a', $.proxy(this.onClick, this));
-            if (this.model) this.listenTo(this.model, 'change', this.update);
+
+            if (this.model) this.listenTo(this.model, 'change', this.options.update || this.update);
         },
 
         update: function () {
@@ -137,6 +264,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     options.icon ? $('<i class="fa fa-fw" aria-hidden="true">') : $(),
                     text
                 );
+            if (options.data) link.data(options.data);
             if (callback) link.on('click', {}, callback);
             return this.append(link);
         },
@@ -153,12 +281,11 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         render: function () {
             var label = getLabel(this.options.label),
-                ariaLabel = this.options.aria ? this.options.aria : null,
-                toggle;
+                ariaLabel = this.options.aria ? this.options.aria : null;
 
             if (_.isString(label)) ariaLabel += (' ' + label);
             this.$el.append(
-                toggle = $('<a href="#" draggable="false" role="button" aria-haspopup="true" data-toggle="dropdown">').attr('aria-label', ariaLabel)
+                this.$toggle = this.options.$toggle || $('<a href="#" draggable="false">').attr('aria-label', ariaLabel)
                 .append(
                     // label
                     $('<span class="dropdown-label">').append(label),
@@ -168,17 +295,45 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 this.$ul
             );
             // add title?
-            if (this.options.title) toggle.attr('title', this.options.title);
-            // use smart drop-down? (fixed positioning)
-            if (this.options.smart) toggle.addClass('smart-dropdown');
+            if (this.options.title) this.$toggle.attr('title', this.options.title);
             // in firefox draggable=false is not enough to prevent dragging...
-            if (_.device('firefox')) toggle.attr('ondragstart', 'return false;');
+            if (_.device('firefox')) this.$toggle.attr('ondragstart', 'return false;');
 
-            toggle.dropdown();
             // update custom label
             this.label();
+            this.ensureA11y();
             return this;
+        },
+
+        ensureA11y: function () {
+            var items = this.$ul.children('li');
+
+            this.$toggle.attr({
+                'aria-haspopup': true,
+                'aria-expanded': false,
+                role: 'button',
+                'data-toggle': 'dropdown'
+            });
+
+            this.$ul
+                .not('[role]')
+                .attr({ role: 'menu' });
+
+            items
+                .filter(':not([role])')
+                .attr({ role: 'presentation' });
+
+            items
+                .find('a:not([role])')
+                .attr({ role: 'menuitem', tabIndex: '-1' });
+        },
+
+        dispose: function () {
+            // remove overlay if dropdown code is removed
+            if (this.$overlay) this.$overlay.remove();
+            AbstractView.prototype.dispose.call(this, arguments);
         }
+
     });
 
     return Dropdown;

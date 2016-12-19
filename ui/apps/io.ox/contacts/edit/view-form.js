@@ -235,7 +235,7 @@ define('io.ox/contacts/edit/view-form', [
             index: 100,
             id: 'save',
             draw: function (baton) {
-                this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
+                this.append($('<button type="button" class="btn btn-primary save" data-action="save">')
                     .text(gt('Save'))
                     .on('click', function () {
                         actions.invoke(ref + '/actions/edit/save', this, baton);
@@ -249,7 +249,7 @@ define('io.ox/contacts/edit/view-form', [
             index: 200,
             id: 'discard',
             draw: function (baton) {
-                this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >')
+                this.append($('<button type="button" class="btn btn-default discard" data-action="discard">')
                     .text(gt('Discard'))
                     .on('click', function () {
                         actions.invoke(ref + '/actions/edit/discard', this, baton);

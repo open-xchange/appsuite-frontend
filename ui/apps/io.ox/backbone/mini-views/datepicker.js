@@ -53,7 +53,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             var self = this,
                 def = $.Deferred();
 
-            this.$el.addClass('dateinput').append(
+            this.$el.addClass('dateinput').toggleClass('mobile-mode', self.mobileMode).append(
                 $('<legend>').addClass('simple control-label').text(this.options.label),
                 $('<div class="input-group form-inline">').append(
                     function () {
@@ -91,7 +91,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         if (!self.options.timezoneButton && !self.mobileMode) {
                             timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                         } else {
-                            timezoneContainer = self.nodes.timezoneField = $('<button class="timezone input-group-addon btn" data-toggle="popover">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
+                            timezoneContainer = self.nodes.timezoneField = $('<button type="button" class="timezone input-group-addon btn" data-toggle="popover">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
                             if (self.model.has('start_date') && self.model.has('end_date')) {
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
                                     calendarUtil.addTimezonePopover(

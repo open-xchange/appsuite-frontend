@@ -262,7 +262,7 @@ define('io.ox/onboarding/clients/wizard', [
         ext.point(POINT).invoke('draw', container, { $step: this.$el, scenarios: list, config: config, wizard: wizard });
         // max width: supress resizing in case description is quite long
         var space = ((list.length + 1) * 160) + 32;
-        this.$('.wizard-content').css('max-width', space > 560 ? space : 560);
+        container.find('.descriptions').css('max-width', space > 560 ? space : 560);
         // a11y
         this.$el.attr('aria-labelledby', descriptionId + '  dialog-title');
         this.$('.options').attr('aria-label', gt('list of available devices'));

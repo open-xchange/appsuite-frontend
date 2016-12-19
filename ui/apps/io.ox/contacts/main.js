@@ -185,7 +185,14 @@ define('io.ox/contacts/main', [
         },
 
         'vgrid': function (app) {
-            var grid = app.grid;
+            var grid = app.grid,
+                savedWidth = app.settings.get('vgrid/width/' + _.display());
+
+            // do not apply on touch devices. it's not possible to change the width there
+            if (!_.device('touch') && savedWidth) {
+                app.right.parent().css('left', savedWidth + 'px');
+                app.left.css('width', savedWidth + 'px');
+            }
 
             app.left.append(
                 // grid container

@@ -43,7 +43,8 @@ module.exports = function (grunt) {
                     'filereader',
                     'localstorage',
                     'websqldatabase',
-                    'websockets'
+                    'websockets',
+                    'pointerevents'
                 ],
                 options: [
                     'prefixed',

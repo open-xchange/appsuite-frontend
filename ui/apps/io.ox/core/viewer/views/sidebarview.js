@@ -51,6 +51,8 @@ define('io.ox/core/viewer/views/sidebarview', [
         id: 'file-description',
         index: 200,
         draw: function (baton) {
+            //check if supported
+            if (!(baton.model.isFile() && folderApi.pool.models[baton.data.folder_id] && folderApi.pool.models[baton.data.folder_id].supports('extended_metadata'))) return;
             this.append(new FileDescriptionView({ model: baton.model }).render().el);
         }
     });
@@ -59,6 +61,8 @@ define('io.ox/core/viewer/views/sidebarview', [
         id: 'file-versions',
         index: 300,
         draw: function (baton) {
+            //check if supported
+            if (!(baton.model.isFile() && folderApi.pool.models[baton.data.folder_id] && folderApi.pool.models[baton.data.folder_id].can('add:version'))) return;
             this.append(new FileVersionsView({ model: baton.model, viewerEvents: baton.context.viewerEvents, isViewer: baton.context.isViewer }).render().el);
         }
     });
@@ -67,6 +71,8 @@ define('io.ox/core/viewer/views/sidebarview', [
         id: 'upload-new-version',
         index: 400,
         draw: function (baton) {
+            //check if supported
+            if (!(baton.model.isFile() && folderApi.pool.models[baton.data.folder_id] && folderApi.pool.models[baton.data.folder_id].can('add:version'))) return;
             this.append(new UploadNewVersionView({ model: baton.model, app: baton.app }).render().el);
         }
     }));

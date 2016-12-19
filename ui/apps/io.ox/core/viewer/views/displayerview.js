@@ -88,8 +88,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
             var carouselRoot = $('<div id="viewer-carousel" class="swiper-container" role="listbox">'),
                 carouselInner = $('<div class="swiper-wrapper">'),
-                prevSlide = $('<a href="#" role="button" class="swiper-button-prev swiper-button-control left" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
-                nextSlide = $('<a href="#" role="button" class="swiper-button-next swiper-button-control right" role="button" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
+                prevSlide = $('<a href="#" role="button" class="swiper-button-prev swiper-button-control left" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
+                nextSlide = $('<a href="#" role="button" class="swiper-button-next swiper-button-control right" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
                 caption = $('<div class="viewer-displayer-caption">'),
                 startIndex = this.collection.getStartIndex(),
                 self = this,
@@ -430,6 +430,9 @@ define('io.ox/core/viewer/views/displayerview', [
 
                     this.dummyList[0].load()
                         .done(function (view) {
+                            if (self.swiper) {
+                                self.swiper.updateSlidesSize();
+                            }
                             if (self.delayedRemove[index]) {
                                 self.delayedRemove[index].view.unload(index).dispose();
                                 self.delayedRemove[index].node.remove();

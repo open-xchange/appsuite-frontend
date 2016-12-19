@@ -13,8 +13,9 @@
 
 define('io.ox/oauth/backbone', [
     'io.ox/core/http',
+    'gettext!io.ox/core',
     'less!io.ox/oauth/style'
-], function (http) {
+], function (http, gt) {
     'use strict';
 
     var generateId = function () {
@@ -186,25 +187,48 @@ define('io.ox/oauth/backbone', [
         }
     });
 
-    var iconsForService = {
-        'com.openexchange.oauth.google': 'fa-google',
-        'com.openexchange.oauth.yahoo': 'fa-yahoo'
+    var servicesMetaData = {
+        'com.openexchange.oauth.google': {
+            title: gt('Google Drive'),
+            className: 'logo-google'
+        },
+        'com.openexchange.oauth.dropbox': {
+            title: gt('Dropbox'),
+            className: 'logo-dropbox'
+        },
+        'com.openexchange.oauth.boxcom': {
+            title: gt('Box'),
+            className: 'logo-boxcom'
+        },
+        'com.openexchange.oauth.msliveconnect': {
+            title: gt('OneDrive'),
+            className: 'logo-onedrive'
+        },
+        'other': {
+            title: gt('Other'),
+            className: 'fa-envelope'
+        }
     };
+    function metaDataFor(id) {
+        var data = servicesMetaData[id];
+        return data || servicesMetaData.other;
+    }
 
     var ServiceItemView = Backbone.View.extend({
         tagName: 'li',
         className: 'service-item',
         render: function () {
-            this.$el.attr({
-                role: 'button',
-                tabindex: '0'
-            }).append(
-                $('<i class="service-icon fa">')
-                    .addClass(this.model.get('icon') || iconsForService[this.model.id] || 'fa-envelope'),
-                this.model.get('displayName')
-            ).data({
-                cid: this.model.cid
-            });
+            this.$el.append(
+                $('<button>').addClass('btn btn-default').append(
+                    $('<i class="service-icon fa">')
+                        .addClass(this.model.get('icon') || metaDataFor(this.model.id).className || 'fa-envelope'),
+                    $('<div>')
+                        .addClass('service-label')
+                        .text(this.model.get('displayName') || metaDataFor(this.model.id).title)
+                ).data({
+                    cid: this.model.cid
+                })
+            );
             return this;
         }
     });
@@ -212,8 +236,8 @@ define('io.ox/oauth/backbone', [
         tagName: 'ul',
         className: 'form-group list-unstyled services-list-view',
         events: {
-            'keypress li': 'select',
-            'click li': 'select'
+            'keypress button': 'select',
+            'click button': 'select'
         },
         ItemView: ServiceItemView,
         render: function () {

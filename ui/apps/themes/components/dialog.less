@@ -136,8 +136,8 @@
 
 // filepicker should always be 100% in width, also in landscape mode
 .ios.smartphone, .android.smartphone .picker-pc-container .modal-body {
-    & > div,
-    & > ul { width: 100%; }
+    > div,
+    > ul { width: 100%; }
 }
 // filepicker mobile
 .picker-pc-container .io-ox-pagecontroller.page { padding-top: 40px; }
@@ -190,18 +190,73 @@
         padding: 0;
         overflow: hidden;
 
-        & > div, & > ul {
+        > div,
+        > ul {
             display: inline-block;
+            overflow: auto;
             width: 50%;
             height: 100%;
-            vertical-align: top;
-            overflow: auto;
             margin: 0;
+            vertical-align: top;
+          //transition: width;
+          //transition-duration: .1s;
+        }
+
+        // - user story DOCS-589 :: User can see image preview in file picker
+        // - https://jira.open-xchange.com/browse/DOCS-589
+        // - according to some counseling from Olpe the required 3rd preview-pane is supposed to be hacked into this modal dialogue.
+        //
+        > :first-child:nth-last-child(3),   // - model agnostic rules do work without css class names but depend entirely on structure then.
+        > :nth-child(2):nth-last-child(2),  //
+        > :nth-child(3):last-child {        //
+
+            width: 33%;
+        }
+        > .preview-pane {
+
+            padding: 10px 3px 10px 10px;
+            border-left: 1px solid #ddd;
+
+            text-align: center;
+
+            > .preview {
+                display: block;
+
+                width: 100%;
+                height: 140px;
+
+                margin: 0 0 10px 0;
+
+                background-size: contain;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-attachment: scroll;
+            }
+            > .fileinfo {
+
+                //.sidebar-panel-body {
+                //
+                //}
+
+                dl {
+                    margin: 0;
+                }
+                dt {
+                    margin: 2px 0 -2px 0;
+                }
+                dd {
+                    &.modified {
+                        > span {
+                            display: block;
+                        }
+                    }
+                }
+            }
         }
 
         @media all and (max-width: 480px), all and (max-device-width: 480px) {
-            & > div,
-            & > ul { width: 100%; }
+            > div,
+            > ul { width: 100%; }
         }
 
         .folder-tree { border-right: 1px solid #ddd; }

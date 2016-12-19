@@ -307,6 +307,8 @@ define('io.ox/core/folder/api', [
             // update collection
             var collection = this.getCollection(id),
                 type = collection.fetched ? 'set' : 'reset';
+            // not expired
+            collection.expired = false;
             // remove old virtual parent references
             if (this.models[id] && isVirtual(id)) {
                 _(collection.models).each(function (model) {
@@ -345,6 +347,10 @@ define('io.ox/core/folder/api', [
         getCollection: function (id, all) {
             id = getCollectionId(id, all);
             return this.collections[id] || (this.collections[id] = new FolderCollection(id));
+        },
+
+        expire: function () {
+            _(this.collections).each(function (collection) { collection.expired = true; });
         },
 
         unfetch: function (id) {
@@ -433,7 +439,6 @@ define('io.ox/core/folder/api', [
     var ready = $.when();
 
     function propagate(arg) {
-
         if (arg instanceof Backbone.Model) {
 
             var model = arg, data = model.toJSON(), id = data.id;
@@ -451,6 +456,17 @@ define('io.ox/core/folder/api', [
         }
 
         if (/^account:(create|delete|unified-enable|unified-disable)$/.test(arg)) {
+
+            if (mailSettings.get('dsc/enabled')) {
+
+                // need to refresh subfolders of default0
+                return list('default0', { cache: false }).done(function () {
+                    refresh();
+                    api.trigger('refresh');
+                });
+
+            }
+
             // need to refresh subfolders of root folder 1
             return list('1', { cache: false }).done(function () {
                 virtual.refresh();
@@ -620,7 +636,7 @@ define('io.ox/core/folder/api', [
         // already cached?
         var collectionId = getCollectionId(id, options.all),
             collection = pool.getCollection(collectionId);
-        if (collection.fetched && options.cache === true) return $.when(collection.toJSON());
+        if (collection.fetched && !collection.expired && options.cache === true) return $.when(collection.toJSON());
 
         // use rampup data?
         if (rampup[id] && !options.all) {
@@ -1245,6 +1261,7 @@ define('io.ox/core/folder/api', [
     //
 
     function refresh() {
+        pool.expire();
         // pause http layer to get one multiple
         http.pause();
         var defs = [];

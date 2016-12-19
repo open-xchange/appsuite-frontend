@@ -21,7 +21,8 @@ define('io.ox/core/session', [
     'use strict';
 
     var TIMEOUTS = { AUTOLOGIN: 7000, LOGIN: 10000, FETCHCONFIG: 2000 },
-        CLIENT = 'open-xchange-appsuite';
+        CLIENT = 'open-xchange-appsuite',
+        isAutoLogin = false;
 
     var getBrowserLanguage = function () {
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
@@ -132,8 +133,8 @@ define('io.ox/core/session', [
             .then(
                 function success(data) {
                     ox.secretCookie = true;
-                    ox.flags = (ox.flags || []).concat('autologin');
                     ox.rampup = data.rampup || ox.rampup || {};
+                    isAutoLogin = true;
                     return data;
                 },
                 // If autologin fails, try token login
@@ -317,6 +318,8 @@ define('io.ox/core/session', [
                     params: {
                         action: 'logout'
                     }
+                }).then(function () {
+                    ox.trigger('logout');
                 });
             }
             return $.Deferred().resolve();
@@ -333,6 +336,10 @@ define('io.ox/core/session', [
         version: function () {
             // need to work with ox.version since we don't have the server config for auto-login
             return String(ox.version).split('.').slice(0, 3).join('.');
+        },
+
+        isAutoLogin: function () {
+            return isAutoLogin;
         },
 
         getBrowserLanguage: getBrowserLanguage

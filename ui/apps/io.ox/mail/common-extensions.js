@@ -24,13 +24,14 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/folder/title',
     'io.ox/core/notifications',
     'io.ox/contacts/api',
+    'io.ox/core/api/user',
     'io.ox/core/api/collection-pool',
     'io.ox/core/tk/flag-picker',
     'io.ox/core/capabilities',
     'settings!io.ox/mail',
     'io.ox/core/attachments/view',
     'gettext!io.ox/mail'
-], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
+], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, userAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
 
     'use strict';
 
@@ -75,31 +76,61 @@ define('io.ox/mail/common-extensions', [
             // - show picture of first recipient in "Sent items" and "Drafts"
             // - exception: always show sender in threaded messages
             var data = baton.data,
+                self = this,
                 size = api.threads.size(data),
                 single = size <= 1,
                 addresses = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
                 // search result: use image based on 'addresses'
                 picture = isSearchResult ? undefined : data.picture;
 
-            this.append(
-                contactsAPI.pictureHalo(
-                    $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: picture || (addresses && addresses[0] && addresses[0][1]) },
-                    { width: 40, height: 40, effect: 'fadeIn' }
-                )
-            );
+            if (picture) {
+                this.append(
+                    contactsAPI.pictureHalo(
+                        $('<div class="contact-picture" aria-hidden="true">'),
+                        { email: picture },
+                        { width: 40, height: 40, effect: 'fadeIn' }
+                    )
+                );
+                return;
+            }
+
+            // user should be in cache from rampup data
+            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
+            userAPI.get({ id: ox.user_id }).then(function (user) {
+                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
+                    address = addresses && addresses[0] && addresses[0][1],
+                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
+
+                self.append(
+                    contactsAPI.pictureHalo(
+                        $('<div class="contact-picture" aria-hidden="true">'),
+                        (useUserApi ? { id: ox.user_id } : { email: address }),
+                        { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
+                    )
+                );
+            });
         },
 
         senderPicture: function (baton) {
             // shows picture of sender see Bug 41023
-            var addresses = baton.data.from;
-            this.append(
-                contactsAPI.pictureHalo(
-                    $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: addresses && addresses[0] && addresses[0][1] },
-                    { width: 40, height: 40, effect: 'fadeIn' }
-                )
-            );
+            var addresses = baton.data.from,
+                self = this;
+
+            // user should be in cache from rampup data
+            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
+            userAPI.get({ id: ox.user_id }).then(function (user) {
+                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
+                    address = addresses && addresses[0] && addresses[0][1],
+                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
+
+                self.append(
+                    contactsAPI.pictureHalo(
+                        $('<div class="contact-picture" aria-hidden="true">'),
+                        (useUserApi ? { id: ox.user_id } : { email: address }),
+                        { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
+                    )
+                );
+            });
         },
 
         date: function (baton, options) {
@@ -130,13 +161,15 @@ define('io.ox/mail/common-extensions', [
                 single = !data.threadSize || data.threadSize === 1,
                 field = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
                 // get folder data to check capabilities:
-                // if bit 4096 is set, the server sort by local part not display name
+                // if bit 4096 is set, the server sorts by display name; if unset, it sorts by local part.
                 capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
-                useDisplayName = baton.options.sort !== 'from-to' || !(capabilities & 4096);
+                isFromTo = baton.options.sort === 'from-to',
+                mailAddress = util.getFrom(data, { field: field, showDisplayName: false }).text(),
+                showDisplayName = !isFromTo || (capabilities & 4096);
 
             this.append(
-                $('<div class="from">').append(
-                    util.getFrom(data, { field: field, reorderDisplayName: useDisplayName, showDisplayName: useDisplayName })
+                $('<div class="from">').attr('title', mailAddress).append(
+                    util.getFrom(data, { field: field, reorderDisplayName: !isFromTo, showDisplayName: showDisplayName, unescapeDisplayName: !isFromTo })
                 )
             );
         },
@@ -429,34 +462,6 @@ define('io.ox/mail/common-extensions', [
                     })
                     .draw.call(node, ext.Baton({ context: this.model.collection.toJSON(), data: data, $el: node }));
 
-                    // support for fixed position
-                    // TODO: introduce as general solution
-                    node.on('show.bs.dropdown', function (e) {
-                        var link = $(e.relatedTarget),
-                            offset = link.offset(),
-                            // need to use siblings() instead of next() due to funky backdrop injection on mobile devices (see bug 35863)
-                            menu = link.siblings('.dropdown-menu'),
-                            top, overlay;
-                        top = offset.top + link.height();
-                        menu.css({ top: offset.top + link.height(), bottom: 'auto', left: offset.left });
-                        if ((top + menu.height()) > $(window).height()) menu.css({ top: 'auto', bottom: '20px' });
-                        overlay = $('<div class="dropdown-overlay">').append(menu);
-                        // catch click manually (same idea as boostrap's dropdown-backdrop)
-                        if (_.device('touch')) {
-                            overlay.on('click', { link: link }, function (e) {
-                                e.data.link.dropdown('toggle');
-                            });
-                        }
-                        link.data('overlay', overlay);
-                        $('body').append(overlay);
-                    });
-
-                    node.on('hide.bs.dropdown', function (e) {
-                        var link = $(e.relatedTarget), overlay = link.data('overlay');
-                        link.parent().append(overlay.children());
-                        overlay.remove();
-                    });
-
                     url = api.getUrl(data, 'download');
                     contentType = (this.model.get('content_type') || 'unknown').split(/;/)[0];
 
@@ -535,7 +540,7 @@ define('io.ox/mail/common-extensions', [
         }()),
 
         flagPicker: function (baton) {
-            flagPicker.draw(this, baton, true);
+            flagPicker.draw(this, baton);
         },
 
         unreadToggle: (function () {

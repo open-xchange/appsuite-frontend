@@ -84,7 +84,7 @@ define('io.ox/core/viewer/views/types/baseview', [
                 return FilesAPI.getUrl(modelJSON, 'thumbnail', options);
 
             } else if (this.model.isMailAttachment()) {
-                return MailAPI.getUrl(this.model.get('origData'), 'view');
+                return MailAPI.getUrl(this.model.get('origData'), 'view', options);
 
             } else if (this.model.isPIMAttachment()) {
                 return AttachmentAPI.getUrl(this.model.get('origData'), 'view', options);

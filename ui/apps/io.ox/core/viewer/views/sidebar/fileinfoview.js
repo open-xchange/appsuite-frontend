@@ -49,6 +49,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             if (!baton.model) return;
 
             var model = baton.model,
+                options = baton.options || {},
                 name = model.getDisplayName() || '-',
                 size = model.get('file_size'),
                 sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
@@ -74,12 +75,13 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                      // modified
                     $('<dt>').text(gt('Modified')),
                     $('<dd class="modified">').append(
-                        $.txt(dateString), $('<br>'), UserAPI.getTextNode(modifiedBy)
+                        $('<span class="modifiedAt">').text(dateString),
+                        $('<span class="modifiedBy">').append(UserAPI.getTextNode(modifiedBy))
                     )
                 );
 
                 // folder info block
-                if (!baton.options.disableFolderInfo) {
+                if (!options.disableFolderInfo) {
                     dl.append(
                         // path; using "Folder" instead of "Save in" because that one
                         // might get quite long, e.g. "Gespeichert unter"
@@ -93,7 +95,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     );
                 }
 
-                if (!capabilities.has('alone') && !capabilities.has('guest')) {
+                if (!capabilities.has('alone') && !capabilities.has('guest') && !options.disableLink) {
                     folderAPI.get(folder_id).done(function (folderData) {
                         // only show links to infostore files, links to mail attachments would mean broken links, see bug 39752
                         if (folderAPI.is('infostore', folderData)) {
@@ -114,7 +116,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     model.get('object_permissions') || [] :
                     _(model.get('permissions')).filter(function (item) { return item.entity !== ox.user_id; });
 
-                if (capabilities.has('invite_guests')) {
+                if (capabilities.has('invite_guests') && !options.disableSharesInfo) {
                     dl.append(
                         //#. "Shares" in terms of "shared with others" ("Freigaben")
                         $('<dt>').text(gt('Shares')),

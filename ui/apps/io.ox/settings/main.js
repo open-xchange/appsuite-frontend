@@ -26,11 +26,12 @@ define('io.ox/settings/main', [
     'io.ox/core/folder/util',
     'io.ox/core/api/mailfilter',
     'io.ox/core/notifications',
+    'io.ox/keychain/api',
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
     'less!io.ox/settings/style'
-], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, notifications) {
+], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, notifications, keychainAPI) {
 
     'use strict';
 
@@ -58,6 +59,36 @@ define('io.ox/settings/main', [
     //         nodes.hide();
     //     }
     // }
+
+    ext.point('io.ox/settings/help/mapping').extend({
+        id: 'core',
+        index: 100,
+        list: function () {
+            _.extend(this, {
+                'virtual/settings/io.ox/settings/accounts': 'ox.appsuite.user.sect.email.externalaccounts.manage.html',
+                'virtual/settings/io.ox/portal': 'ox.appsuite.user.sect.portal.customize.settings.html',
+                'virtual/settings/io.ox/mail': 'ox.appsuite.user.sect.email.settings.html',
+                'virtual/settings/io.ox/vacation': 'ox.appsuite.user.sect.email.send.vacationnotice.html',
+                'virtual/settings/io.ox/autoforward': 'ox.appsuite.user.sect.email.send.autoforward.html',
+                'virtual/settings/io.ox/mailfilter': 'ox.appsuite.user.sect.email.manage.mailfilter.html',
+                'virtual/settings/io.ox/mail/settings/signatures': 'ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.signatures',
+                'virtual/settings/io.ox/contacts': 'ox.appsuite.user.sect.contacts.settings.html',
+                'virtual/settings/io.ox/calendar': 'ox.appsuite.user.sect.calendar.settings.html',
+                'virtual/settings/io.ox/timezones': 'ox.appsuite.user.sect.calendar.settings.html#ox.appsuite.user.reference.calendar.settings.timezones',
+                'virtual/settings/io.ox/tasks': 'ox.appsuite.user.sect.tasks.settings.html',
+                'virtual/settings/io.ox/files': 'ox.appsuite.user.sect.files.settings.html'
+            });
+        }
+    });
+
+    app.getContextualHelp = function () {
+        var id = this.folder.get(),
+            data = {};
+
+        ext.point('io.ox/settings/help/mapping').invoke('list', data);
+
+        return data[id] ? data[id] : 'ox.appsuite.user.sect.firststeps.globalsettings.html';
+    };
 
     app.setLauncher(function (options) {
 
@@ -131,7 +162,8 @@ define('io.ox/settings/main', [
 
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
             //needed or mac voice over reads the whole settings pane when an input element is focused
-            'role': 'main'
+            'role': 'main',
+            'tabindex': 0
         }).scrollable();
 
         // Create extensions for the apps
@@ -263,6 +295,8 @@ define('io.ox/settings/main', [
         // select virtual node
         tree.on('virtual', select);
         function select(id, item, baton, options) {
+            // a11y - avoid this folder to avoid focus drop
+            if (id === 'virtual/settings') return;
 
             var opt = _.extend({
                 focus: false,
@@ -484,7 +518,13 @@ define('io.ox/settings/main', [
             id: 'io.ox/core'
         });
 
-        if (!capabilities.has('guest')) {
+        var submodules = _(keychainAPI.submodules).filter(function (submodule) {
+            return !submodule.canAdd || submodule.canAdd.apply(this);
+        });
+        // do not show accounts for guest
+        // show accounts if user has webmail
+        // show accounts if user has submodules which can be added
+        if (!capabilities.has('guest') && (capabilities.has('webmail') || submodules.length > 0)) {
             ext.point('io.ox/settings/pane/general').extend({
                 title: gt('Accounts'),
                 index: 200,

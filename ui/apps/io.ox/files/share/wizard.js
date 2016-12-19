@@ -248,10 +248,19 @@ define('io.ox/files/share/wizard', [
             });
 
             baton.model.on('change:expires', function (model) {
-                model.set({
-                    'temporary': true,
-                    'expiry_date': model.getExpiryDate()
-                });
+                if (baton.model.get('expires') !== null) {
+                    model.set({
+                        'temporary': true,
+                        'expiry_date': model.getExpiryDate()
+                    });
+                }
+
+            });
+
+            baton.model.once('change', function () {
+                if (baton.model.get('expiry_date')) {
+                    baton.model.set('expires', null);
+                }
             });
 
         }
@@ -344,6 +353,8 @@ define('io.ox/files/share/wizard', [
         },
 
         share: function () {
+            // we might have new addresses
+            contactsAPI.trigger('maybeNewContact');
             return $.when(this.model.save()).fail(yell);
         },
 

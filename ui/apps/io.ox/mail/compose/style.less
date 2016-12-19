@@ -11,6 +11,16 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
+.io-ox-mail-compose-window {
+    .inline-yell {
+        display: inline-block;
+        float: right;
+        color: #447f00;
+        font-weight: 500;
+        margin: 0 8px;
+        padding-top: 6px;
+    }
+}
 .io-ox-mail-compose {
     // baseline adjustment
     padding-top: @default-padding;
@@ -202,8 +212,6 @@
     // Bootstrap Tokenfield overrides
     // space for cc/bcc toggle
     .tokenfield.form-control { padding-right: 40px; }
-    .tokenfield.form-control.to { padding-right: 80px; }
-    .has-picker .tokenfield.form-control.to { padding-right: 100px; }
 
     .hidden-file-picker {
         // same as .dropdown-menu > li > a
@@ -306,13 +314,18 @@
 
     }
 
-    .show-share-attachments .toggle-mode {
-        padding-top: 16px;
+    .show-share-attachments {
+
+        margin-top: -12px;
+
+        .toggle-mode {
+            padding-top: 12px;
+        }
     }
 
     .mail-attachment-list header .toggle-details {
-            padding-top: 3px;
-        }
+        padding-top: 3px;
+    }
 
 }
 

@@ -413,30 +413,38 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         return this;
                     },
 
-                    renderFilter: function () {
+                    handleEmptynotice: function () {
                         if (this.collection.length === 0) {
                             this.$el.append($('<div class="hint">').text(gt('There is no rule defined')));
                         } else {
-                            this.$el.append(new ListView({
-                                collection: this.collection,
-                                sortable: true,
-                                containment: this.$el,
-                                notification: this.$('#' + notificationId),
-                                childView: FilterSettingsView,
-                                update: function () {
-                                    var arrayOfFilters = $node.find('li[data-id]'),
-                                        data = _.map(arrayOfFilters, function (single) {
-                                            return parseInt($(single).attr('data-id'), 10);
-                                        });
-
-                                    //yell on reject
-                                    settingsUtil.yellOnReject(
-                                        api.reorder(data)
-                                    );
-                                    updatePositionInCollection(collection, data);
-                                }
-                            }).render().$el);
+                            this.$el.find('.hint').remove();
                         }
+                    },
+
+                    renderFilter: function () {
+                        this.handleEmptynotice();
+
+                        this.listenTo(this.collection, 'add remove', this.handleEmptynotice.bind(this));
+
+                        this.$el.append(new ListView({
+                            collection: this.collection,
+                            sortable: true,
+                            containment: this.$el,
+                            notification: this.$('#' + notificationId),
+                            childView: FilterSettingsView,
+                            update: function () {
+                                var arrayOfFilters = $node.find('li[data-id]'),
+                                    data = _.map(arrayOfFilters, function (single) {
+                                        return parseInt($(single).attr('data-id'), 10);
+                                    });
+
+                                //yell on reject
+                                settingsUtil.yellOnReject(
+                                    api.reorder(data)
+                                );
+                                updatePositionInCollection(collection, data);
+                            }
+                        }).render().$el);
                     },
 
                     events: {

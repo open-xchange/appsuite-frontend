@@ -224,7 +224,7 @@ define('io.ox/tasks/api', [
         requests: {
             all: {
                 folder: folderAPI.getDefaultFolder('tasks'),
-                columns: '1,5,20,101,200,203,220,300,301,317',
+                columns: '1,5,20,101,200,203,220,300,301,317,401',
                 extendColumns: 'io.ox/tasks/api/all',
                 sort: '317',
                 order: 'asc',
@@ -244,7 +244,7 @@ define('io.ox/tasks/api', [
             },
             search: {
                 action: 'search',
-                columns: '1,2,5,20,101,200,203,220,221,300,301,309,317',
+                columns: '1,2,5,20,101,200,203,220,221,300,301,309,317,401',
                 extendColumns: 'io.ox/tasks/api/all',
                 sort: '317',
                 order: 'asc',
@@ -687,7 +687,7 @@ define('io.ox/tasks/api', [
                 });
                 if (hasExternalParticipants) {
                     require(['io.ox/contacts/api'], function (contactsApi) {
-                        contactsApi.trigger('maybyNewContact');
+                        contactsApi.trigger('maybeNewContact');
                     });
                 }
             }

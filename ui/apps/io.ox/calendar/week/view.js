@@ -21,8 +21,9 @@ define('io.ox/calendar/week/view', [
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/print',
+    'less!io.ox/calendar/print-style',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, AppointmentModel, util, folderAPI, gt, settings, coreSettings, Dropdown, print) {
+], function (ext, AppointmentModel, util, folderAPI, gt, settings, coreSettings, Dropdown, print, printStyle) {
 
     'use strict';
 
@@ -685,7 +686,7 @@ define('io.ox/calendar/week/view', [
         cleanUpLasso: function () {
             // more robost variant (see bug 47277)
             var lasso = this.lasso instanceof $ ? this.lasso : $(),
-                data = lasso.data();
+                data = lasso.data() || {};
             $.each(data.helper || [], function (i, el) {
                 el.remove();
             });
@@ -860,7 +861,14 @@ define('io.ox/calendar/week/view', [
 
             // mattes: guess we don't need this any more in week and work week view
             if (!_.device('touch') && this.columns === 1) {
-                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
+                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment'))
+                    .addClass('day')
+                    .css('width', '100%')
+                    .attr({
+                        unselectable: 'on',
+                        // only used in dayview, so date is always  0
+                        date: 0
+                    }));
             }
 
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px' });
@@ -1019,8 +1027,14 @@ define('io.ox/calendar/week/view', [
 
             // only update if height differs from CSS default
             if (this.cellHeight !== this.minCellHeight) {
-                $('.timeslot', this.pane).height(this.cellHeight - 1);
-                $('.time', this.pane).height((this.cellHeight * this.gridSize) - 1);
+                var timeslots = $('.timeslot', this.pane),
+                    timeLabel = $('.time', this.pane);
+                timeslots.height(this.cellHeight - 1);
+                // compute the label height according to the actual height of the timeslot
+                // this can be different to 1 when dealing with scaled screen resolutions (see Bug 50195)
+                var timeslotHeight = timeslots.get(0).getBoundingClientRect().height,
+                    borderWidth = parseFloat(timeLabel.css('border-bottom-width'), 10);
+                timeLabel.height(timeslotHeight * this.gridSize - borderWidth);
                 // if the cell height changes we also need to redraw all appointments
                 if (redraw) this.renderAppointments();
             }
@@ -1928,7 +1942,8 @@ define('io.ox/calendar/week/view', [
                     'workweek': 'cp_weekview_table_appsuite.tmpl',
                     'week': 'cp_weekview_table_appsuite.tmpl'
                 },
-                data = null;
+                data = null,
+                styleNode = $('<style type="text/css">').text(printStyle);
 
             if (folderID && folderID !== 'virtual/all-my-appointments') {
                 data = { folder_id: folderID };
@@ -1941,6 +1956,15 @@ define('io.ox/calendar/week/view', [
                 work_day_start_time: self.workStart * 36e5, // multiply with milliseconds
                 work_day_end_time: self.workEnd * 36e5
             });
+
+            if (this.app.props.get('colorScheme') === 'custom') {
+                // apply custom colors
+                win.onload = function () {
+                    $(win.document.head).append(styleNode);
+                    $(win.document.body).addClass('print-view-custom-colors');
+                    win.onload = null;
+                };
+            }
 
             if (_.browser.firefox) {
                 // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)

@@ -62,10 +62,9 @@ define('io.ox/find/model', [
             this.set({
                 query: '',
                 start: 0
-            },
-                {
-                    silent: true
-                });
+            }, {
+                silent: true
+            });
             this.manager.reset();
             if (!opt.silent) this.trigger('reset');
         }

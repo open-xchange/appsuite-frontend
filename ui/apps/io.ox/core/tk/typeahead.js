@@ -46,8 +46,6 @@ define('io.ox/core/tk/typeahead', [
                 return this.api.search(query);
             },
             click: $.noop,
-            // Max limit for draw operation in dropdown
-            maxResults: 25,
             // Select first element on result callback
             autoselect: true,
             // Typeahead will not show a hint
@@ -74,6 +72,20 @@ define('io.ox/core/tk/typeahead', [
                 'dropdown': 'closed'
             });
 
+            if (o.apiOptions) {
+                // limit per autocomplete/search api
+                var limit  = o.apiOptions.limit !== undefined ? o.apiOptions.limit : 10;
+                o.apiOptions.limit = limit;
+
+                // overall limit
+                if (!o.maxResults) {
+                    // Max limit for draw operation in dropdown depending on used apis
+                    o.maxResults = limit * _(o.apiOptions).filter(function (val) { return val === true; }).length;
+                }
+            } else {
+                o.maxResults = 25;
+            }
+
             // use a clone instead of shared default-options-object
             o = this.options = $.extend({}, this.options, o || {});
 
@@ -94,6 +106,22 @@ define('io.ox/core/tk/typeahead', [
                 this.api.cache = {};
             });
 
+            // called with lfo
+            this.process = function (query, callback, data) {
+                $.when(data)
+                    .then(customEvent.bind(self, 'processing'))
+                    .then(o.reduce)
+                    .then(function (data) {
+                        if (o.maxResults) { data = data.slice(0, o.maxResults); }
+                        // order
+                        return o.placement === 'top' ? data.reverse() : data;
+                    })
+                    .then(o.harmonize)
+                    .then(customEvent.bind(self, 'finished'))
+                    .then(customEvent.bind(self, 'idle'))
+                    .then(callback);
+            };
+
             this.typeaheadOptions = [{
                 autoselect: o.autoselect,
                 // The minimum character length needed before suggestions start getting rendered
@@ -104,21 +132,8 @@ define('io.ox/core/tk/typeahead', [
             }, {
                 source: function (query, callback) {
                     customEvent.call(self, 'requesting');
-                    o.source.call(self, query)
-                        .then(customEvent.bind(self, 'processing'))
-                        .then(o.reduce)
-                        .then(function (data) {
-                            // max results
-                            if (o.maxResults) {
-                                data = data.slice(0, o.maxResults);
-                            }
-                            // order
-                            return o.placement === 'top' ? data.reverse() : data;
-                        })
-                        .then(o.harmonize)
-                        .then(customEvent.bind(self, 'finished'))
-                        .then(customEvent.bind(self, 'idle'))
-                        .then(callback);
+                    // process response via lfo
+                    o.source.call(self, query).then(_.lfo(self.process, query, callback));
                     // workaround: hack to get a reliable info about open/close state
                     if (!self.registered) {
                         var dateset = this;

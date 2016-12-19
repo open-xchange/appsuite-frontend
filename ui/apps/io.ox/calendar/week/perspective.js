@@ -375,8 +375,6 @@ define('io.ox/calendar/week/perspective', [
                 this.view.$el.show();
             }
 
-            this.view.pane.focus();
-
             // renew data
             this.refresh();
         },
@@ -387,6 +385,17 @@ define('io.ox/calendar/week/perspective', [
             var cid = _.url.hash('id'), e;
             if (cid) {
                 cid = cid.split(',', 1)[0];
+
+                // see if id is missing the folder
+                if (cid.indexOf('.') === -1) {
+                    if (_.url.hash('folder')) {
+                        // url has folder attribute. Add this
+                        cid = _.url.hash('folder') + '.' + cid;
+                    } else {
+                        // cid is missing folder appointment cannot be restored
+                        return;
+                    }
+                }
 
                 if (_.device('smartphone')) {
                     ox.launch('io.ox/calendar/detail/main', { cid: cid });
@@ -436,7 +445,11 @@ define('io.ox/calendar/week/perspective', [
                     self.dialog.close();
                 })
                 .on('create update', function (e, obj) {
+                    var current = ox.ui.App.getCurrentApp().getName();
+                    if (!/^io.ox\/calendar/.test(current)) return;
                     if (obj.recurrence_type === 0) {
+                        // select 'All my appointments' if appointment is not in the current folder
+                        if (app.folder.get() !== String(obj.folder_id)) app.folder.set('virtual/all-my-appointments');
                         self.view.setStartDate(obj.start_date, obj.full_time);
                     }
                 });

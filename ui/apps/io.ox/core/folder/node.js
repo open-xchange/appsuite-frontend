@@ -383,6 +383,7 @@ define('io.ox/core/folder/node', [
             );
 
             var a11yuid = _.uniqueId('description-');
+            var dsc = !!this.model.get('isDSC');
 
             // draw scaffold
             this.$el
@@ -428,6 +429,11 @@ define('io.ox/core/folder/node', [
             if (this.noSelect && o.level > 0) this.$el.addClass('no-select');
             if (this.isVirtual) this.$el.addClass('virtual');
 
+            // add special icon for DSC folders which will be shown in case an error occurs on the account
+            if (dsc) {
+                //this.renderStatusIcon();
+            }
+
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
             if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) {
                 this.$el.attr({ 'aria-haspopup': true });
@@ -466,6 +472,31 @@ define('io.ox/core/folder/node', [
             return this.options.count !== undefined ? this.options.count : (this.model.get('unread') || 0) + subtotal;
         },
 
+        showStatusIcon: function (error) {
+            var self = this;
+
+            if (this.$.accountLink) {
+                if (error) this.$.accountLink.attr('title', error);
+                return;
+            }
+
+            this.$.selectable.append(this.$.accountLink = $('<a href="#" class="account-link">')
+                .attr('data-dsc', this.options.model_id)
+                .append('<i class="fa fa-exclamation-triangle">'))
+                .on('click', function (e) {
+                    e.preventDefault();
+                    self.options.tree.trigger('accountlink:dsc', self.options.model_id);
+                });
+            if (error) {
+                this.$.accountLink.attr('title', error);
+            }
+        },
+
+        hideStatusIcon: function () {
+            this.$.accountLink.remove();
+            this.$.accountLink = null;
+        },
+
         renderCounter: function () {
             var value = this.getCounter();
             this.$.selectable.toggleClass('show-counter', value > 0);
@@ -497,6 +528,8 @@ define('io.ox/core/folder/node', [
             if (this.options.title) return;
             if (!this.model.has('title')) return;
             var data = this.model.toJSON(), summary = [];
+            // wrong counts for unifiedroot folder
+            if (account.isUnifiedRoot(this.model.get('id'))) data = _.pick(data, 'title');
             if (_.isNumber(data.total) && data.total >= 0) summary.push(gt('Total: %1$d', data.total));
             if (_.isNumber(data.unread) && data.unread >= 0) summary.push(gt('Unread: %1$d', data.unread));
             summary = summary.join(', ');

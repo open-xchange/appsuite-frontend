@@ -18,7 +18,7 @@ define('io.ox/tasks/edit/view-template', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
     'io.ox/tasks/edit/util',
-    'io.ox/calendar/edit/recurrence-view',
+    'io.ox/backbone/views/recurrence-view',
     'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/core/tk/attachments',
@@ -243,12 +243,18 @@ define('io.ox/tasks/edit/view-template', [
         }
     }, { row: '5' });
 
-    point.extend(new RecurrenceView({
+    point.extend({
         id: 'recurrence',
-        className: 'col-sm-12 collapsed',
+        className: 'col-xs-12 collapsed',
         tabindex: 0,
-        index: 800
-    }), { row: '6' });
+        index: 800,
+        render: function () {
+            this.$el.append(new RecurrenceView({
+                model: this.model,
+            }).render().$el);
+            this.$el.find('.recurrence-view checkbox').attr('tabindex', 0);
+        }
+    }, { row: 6 });
 
     //reminder selection
     point.basicExtend({

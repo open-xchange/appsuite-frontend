@@ -20,6 +20,7 @@ define('io.ox/core/main', [
     'io.ox/core/extPatterns/stage',
     'io.ox/core/notifications',
     'io.ox/backbone/mini-views/help',
+    'io.ox/backbone/mini-views/dropdown',
     // defines jQuery plugin
     'io.ox/core/commons',
     'io.ox/core/upsell',
@@ -35,7 +36,7 @@ define('io.ox/core/main', [
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, gt) {
 
     'use strict';
 
@@ -217,26 +218,27 @@ define('io.ox/core/main', [
         $(window).trigger('offline');
     }
 
-    var topbar = $('#io-ox-topbar'),
+    var launcherDropdown,
+        topbar = $('#io-ox-topbar'),
         launchers = $('.launchers', topbar),
-        launcherDropdown = $('.launcher-dropdown ul', topbar);
+        launcherDropdownToggle;
 
-    launcherDropdown.attr('role', 'menu');
+    var launcherDropdownTab = $('<li class="launcher-dropdown dropdown" role="presentation">').append(
+        launcherDropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr({
+            'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.')
+        }).append(
+            $('<i class="fa fa-angle-double-right" aria-hidden="true">'),
+            $('<span class="sr-only">').text('Dropdown')
+        ),
+        launcherDropdown = $('<ul class="dropdown-menu" role="menu">')
+    );
 
-    topbar
-        // prevent dragging links
-        .on('dragstart', false)
-        // make system drop-down accessible
-        .find('a.dropdown-toggle').attr({
-            'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.'),
-            'role': 'button',
-            'aria-haspopup': 'true'
-        })
-        .end()
-        .find('i.fa-bars').removeClass('fa-bars').addClass('fa-angle-double-right ');
+    launcherDropdownToggle.dropdown();
 
-    launchers.attr({
-        'role': 'tablist',
+    // prevent dragging links
+    topbar.on('dragstart', false);
+
+    topbar.find('[role="navigation"]').attr({
         'aria-label': gt('Apps')
     });
 
@@ -260,7 +262,7 @@ define('io.ox/core/main', [
         // we don't show any launcher in top-bar on small devices
         if (_.device('smartphone') && !forceDesktopLaunchers) {
             items.hide();
-            launcherDropDownIcon.show();
+            launchers.append(launcherDropdownTab);
             return;
         }
 
@@ -276,7 +278,7 @@ define('io.ox/core/main', [
             launcherDropDownIconWidth = launcherDropDownIcon.width(),
             viewPortWidth = topbar.width() - launcherDropDownIconWidth;
 
-        launcherDropDownIcon.hide();
+        launcherDropdownTab.detach();
 
         itemsVisible.each(function () {
             // use native bounding client rect function to compute the width as floating point
@@ -298,20 +300,19 @@ define('io.ox/core/main', [
 
 
         if (hidden > 0) {
-            $('.dropdown-menu', launcherDropdown).removeAttr('aria-hidden');
-            launcherDropDownIcon.show();
+            launchers.append(launcherDropdownTab);
             for (i = hidden; i > 0; i--) {
                 $('li', launcherDropdown).eq(-i).show();
             }
         } else {
-            $('.dropdown-menu', launcherDropdown).attr('aria-hidden', true);
+            launcherDropdownTab.detach();
         }
 
     }, 100);
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
-        var node = $('<li class="launcher" role="tab">');
+        var node = $('<li class="launcher">');
 
         if (fn) {
             node.on('click', function (e) {
@@ -671,7 +672,7 @@ define('io.ox/core/main', [
                 var cls = model.get('userContentClass') || '',
                     icon = model.get('userContentIcon') || '';
                 launcher.addClass('user-content').addClass(cls).children().first().prepend(
-                    $('<i>').addClass(icon)
+                    $('<i aria-hidden="true">').addClass(icon)
                 );
             }
         }
@@ -717,21 +718,15 @@ define('io.ox/core/main', [
             addUserContent(model, node, true);
 
             // add list item
-            node = $('<li role="tab">').append(
-                $('<a href="#">', {
+            node = $('<li>').append(
+                $('<a href="#">').addClass(closable ? 'closable' : '').attr({
                     'data-app-name': name,
                     'data-app-guid': model.guid
-                })
-                .addClass(closable ? 'closable' : '')
-                .text(/*#, dynamic*/gt.pgettext('app', title))
+                }).text(/*#, dynamic*/gt.pgettext('app', title))
             );
 
-            if (closable) {
-                //add close button
-                node.append(
-                    quit(model)
-                );
-            }
+            //add close button
+            if (closable) node.append(quit(model));
 
             launcherDropdown.append(
                 node.on('click', function (e) {
@@ -744,27 +739,23 @@ define('io.ox/core/main', [
         });
 
         ox.ui.apps.on('remove', function (model) {
-            launchers.children('[data-app-guid="' + model.guid + '"]').remove();
-            launcherDropdown.children('[data-app-guid="' + model.guid + '"]').remove();
+            _([launchers, launcherDropdown]).each(function (node) {
+                node.children('[data-app-guid="' + model.guid + '"]').remove();
+            });
             tabManager();
         });
 
         ox.ui.apps.on('launch resume', function (model) {
+            if (_.device('smartphone') && !settings.get('forceDesktopLaunchers', false)) launchers.children('[role="tab"]').hide();
             // mark last active app
-            if (_.device('smartphone')) {
-                if (!settings.get('forceDesktopLaunchers', false)) {
-                    launchers.hide();
-                }
-            }
-            launchers.children().removeClass('active-app')
-                .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
+            _([launchers, launcherDropdown]).each(function (nodes) {
+                var node = nodes.children(),
+                    activeApp = node.filter('[data-app-guid="' + model.guid + '"]');
+                node.removeClass('active-app').find('span.sr-only').remove();
+                // A11y: Current app indicator for screen-readers
+                if (activeApp.length) activeApp.addClass('active-app').find('a').append($('<span class="sr-only">').text(gt('(current app)')));
+            });
 
-            launcherDropdown.children().removeClass('active-app')
-                .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
-
-            // A11y: Current app indicator for screen-readers
-            launchers.children().find('a > span.sr-only').remove();
-            launchers.children('.active-app').find('a').append($('<span class="sr-only">').text(gt('(current app)')));
         });
 
         ox.ui.apps.on('change:title', function (model, value) {
@@ -1046,17 +1037,20 @@ define('io.ox/core/main', [
             id: 'dropdown',
             index: 1000,
             draw: function () {
-                var ul, a;
+                var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">'),
+                    a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
+                        $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
+                    );
                 this.append(
-                    $('<li id="io-ox-topbar-dropdown-icon" class="launcher dropdown" role="presentation">').append(
-                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
-                            $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
-                        ),
-                        ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
-                    )
+                    new Dropdown({
+                        tagName: 'li',
+                        id: 'io-ox-topbar-dropdown-icon',
+                        className: 'launcher dropdown',
+                        $ul: ul,
+                        $toggle: a
+                    }).render().$el
                 );
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
-                a.dropdown();
             }
         });
 
@@ -1080,30 +1074,36 @@ define('io.ox/core/main', [
                     this.append(logoutButton);
                 }
             });
+        }
 
-            var getMessage = function (data) {
-                var language = ox.language.substring(0, 2);
-                return data[language] || data.en || gt.noI18n('You forgot to sign out last time. Always use the sign-out button when you finished your work.');
-            };
+        (function logoutHint() {
+
+            var data = _.clone(settings.get('features/logoutButtonHint', {}));
+
+            if (!data.enabled) return;
 
             ext.point('io.ox/core/topbar/right').extend({
                 id: 'logout-button-hint',
                 index: 2100,
                 draw: function () {
-                    var data = _.clone(settings.get('features/dedicatedLogoutButtonHint', {}));
-                    if (!data.enabled) return;
-                    // reset
-                    settings.set('features/dedicatedLogoutButtonHint/active', true).save();
-                    if (!data.active || _(ox.flags || []).contains('autologin')) return;
-                    // init
-                    var link = this.find('a[data-action="sign-out"]')
-                        .popover({
-                            content: getMessage(data),
-                            template: '<div class="popover popover-signout" role="tooltip"><div class="popover-content popover-content-signout"></div></div>',
-                            placement: function (tip, el) {
-                                return ($(window).width() - $(el).offset().left - el.offsetWidth) < 80 ? 'bottom' : 'auto';
-                            }
-                        });
+                    settings.set('features/logoutButtonHint/active', true).save();
+                    // exit: first start with enabled feature
+                    if (!_.isBoolean(data.active)) return;
+                    // exit: logged out successfully
+                    if (!data.active) return;
+                    // exit: tab reload with autologin
+                    if (_.device('reload') && session.isAutoLogin()) return;
+
+                    // banner action, topbar action, dropdown action
+                    var link = $('#io-ox-banner [data-action="logout"]');
+                    if (!link.length) link = this.find('[data-action="sign-out"]');
+                    if (!link.length) link = this.find('#io-ox-topbar-dropdown-icon > a');
+                    // popover
+                    link.popover({
+                        content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
+                        template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
+                        placement: 'bottom'
+                    });
                     // prevent logout action when clicking hint
                     this.get(0).addEventListener('click', function (e) {
                         if (e.target.classList.contains('popover-content-signout')) e.stopImmediatePropagation();
@@ -1120,11 +1120,11 @@ define('io.ox/core/main', [
                 id: 'logout-button-hint',
                 logout: function () {
                     http.pause();
-                    settings.set('features/dedicatedLogoutButtonHint/active', false).save();
+                    settings.set('features/logoutButtonHint/active', false).save();
                     return http.resume();
                 }
             });
-        }
+        })();
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'logo',
@@ -1407,7 +1407,7 @@ define('io.ox/core/main', [
                 deeplink = looksLikeDeepLink && manifest && manifest.deeplink,
                 mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
 
-            if (manifest && (manifest.refreshable || deeplink || mailto)) {
+            if (manifest && (manifest.refreshable || deeplink || (capabilities.has('webmail') && mailto))) {
                 baton.autoLaunch = appURL.split(/,/);
             } else {
                 // clear typical parameter?

@@ -59,7 +59,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
             it('one week difference', function () {
                 var start = moment([2012, 10, 11]);
-                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.add(1, 'week').valueOf() })).to.equal('11.–18. Nov. 2012');
+                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.add(1, 'week').valueOf() })).to.equal('So., 11.11.2012 – So., 18.11.2012');
             });
 
         });
@@ -386,26 +386,26 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             describe('resolve appointment color class', function () {
                 it('with appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 0 };
+                        appointment = { color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
                 });
                 it('with appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 6 };
+                        appointment = { color_label: 6, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-6');
                 });
                 it('with private appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 0 };
+                        appointment = { private_flag: true, color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-10');
                 });
 
                 it('with private appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 5 };
+                        appointment = { private_flag: true, color_label: 5, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-5');
                 });
@@ -417,7 +417,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 });
                 it('with public folder', function () {
                     var folder = { meta: { color_label: 2 }, type: 2 },
-                        appointment = { color_label: 0, created_by: 377 };
+                        appointment = { color_label: 0, created_by: 377, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
                 });
@@ -425,26 +425,26 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             describe('detects, if appointment is editable', function () {
                 it('with appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 0 };
+                        appointment = { color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(true);
                 });
                 it('with appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 6 };
+                        appointment = { color_label: 6, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with private appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 0 };
+                        appointment = { private_flag: true, color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
 
                 it('with private appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 5 };
+                        appointment = { private_flag: true, color_label: 5, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });

@@ -19,9 +19,10 @@ define('io.ox/mail/accounts/settings', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/notifications',
     'io.ox/core/a11y',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail/accounts/settings',
     'less!io.ox/settings/style'
-], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, a11y, gt) {
+], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, a11y, mailSettings, gt) {
 
     'use strict';
 
@@ -107,6 +108,23 @@ define('io.ox/mail/accounts/settings', [
     });
 
     ext.point('io.ox/mail/add-account/preselect').extend({
+        id: 'dsc',
+        before: 'oauth',
+        draw: function (baton) {
+            if (!mailSettings.get('dsc/enabled')) {
+                // normal mode for all setups not using DSC
+                return;
+            }
+            // show classic wizard for DSC setups, bypass oauth accounts
+            ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+            _.defer(function () {
+                baton.popup.getFooter().find('[data-action="add"]').show();
+            }, 1000);
+
+            baton.stopPropagation();
+        }
+
+    }, {
         id: 'oauth',
         index: 100,
         draw: function (baton) {
@@ -132,6 +150,7 @@ define('io.ox/mail/accounts/settings', [
                     id: 'wizard',
                     displayName: gt('Other')
                 });
+
                 $el.append(
                     $('<label>').text(gt('Please select your mail account provider')),
                     list.render().$el
@@ -140,12 +159,18 @@ define('io.ox/mail/accounts/settings', [
                 list.listenTo(list, 'select', function (service) {
                     if (service.id === 'wizard') return;
 
-                    var account = oauthAPI.accounts.forService(service.id)[0] || new OAuth.Account.Model({
+                    var account = new OAuth.Account.Model({
                         serviceId: service.id,
                         displayName: 'My ' + service.get('displayName') + ' account'
                     });
 
+                    list.$el.find('button').prop('disabled', true).addClass('disabled');
                     account.enableScopes('mail').save().then(function () {
+                        ox.busy();
+                        var busyMessage = $('<div class="alert-placeholder">');
+                        $el.append(busyMessage);
+                        drawBusy(busyMessage);
+
                         api.autoconfig({
                             oauth: account.id
                         }).then(function (data) {
@@ -157,7 +182,11 @@ define('io.ox/mail/accounts/settings', [
                             return def;
                         }).then(function () {
                             oauthAPI.accounts.add(account, { merge: true });
-                        }, notifications.yell);
+                        }, notifications.yell).always(function () {
+                            ox.idle();
+                        });
+                    }).always(function () {
+                        list.$el.find('button').prop('disabled', false).removeClass('disabled');
                     });
                 });
 

@@ -16,9 +16,10 @@ define('io.ox/core/extPatterns/links', [
     'io.ox/core/extensions',
     'io.ox/core/collection',
     'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/a11y',
     'gettext!io.ox/core'
-], function (ext, Collection, actions, a11y, gt) {
+], function (ext, Collection, actions, MiniViewDropdown, a11y, gt) {
 
     'use strict';
 
@@ -400,25 +401,18 @@ define('io.ox/core/extPatterns/links', [
             if (isSmartphone) all.children().filter('[data-prio="none"]').parent().remove();
 
             if (lo.length > 1 && !allDisabled && (!multiple || extension.dropdown === true) && extension.dropdown !== false) {
-                var dd, node;
-                nav.append(
-                    $('<li class="dropdown">').append(
-                        dd = $('<a href="#" class="io-ox-action-link" draggable="false" role="button" data-toggle="dropdown" data-action="more" aria-haspopup="true">')
-                            .addClass(options.smart ? 'smart-dropdown' : '')
+                var dd = $('<a href="#" class="io-ox-action-link" draggable="false" role="button" data-toggle="dropdown" data-action="more" aria-haspopup="true">')
                             .attr('data-original-title', isSmartphone ? gt('Actions') : gt('More actions')).append(
                                 isSmartphone && !extension.compactDropdown ?
                                     $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
                                     $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
-                        )
-                        .on(_.device('touch') ? 'touchstart' : 'click', function () {
-                            // fix dropdown position on-the-fly
-                            var left = $(this).parent().position().left;
-                            $(this).next().attr('class', 'dropdown-menu' + (left < 200 ? '' : ' pull-right'));
-                        }),
-                        node = $('<ul class="dropdown-menu pull-right" role="menu">')
-                            .attr('aria-label', isSmartphone ? gt('Actions') : gt('More'))
-                            .append(lo)
-                    )
+                        ),
+                    node = $('<ul class="dropdown-menu pull-right" role="menu">')
+                        .attr('aria-label', isSmartphone ? gt('Actions') : gt('More'))
+                        .append(lo);
+
+                nav.append(
+                    new MiniViewDropdown({ tagName: 'li', $ul: node, $toggle: dd }).render().$el
                 );
 
                 // ugly workaround to prevent IE scrolling the parent object when Scrollbar is at the Top/Bottom and the Mousewheel/Touchpad is used
@@ -449,7 +443,6 @@ define('io.ox/core/extPatterns/links', [
                     dd.attr('ondragstart', 'return false;');
                 }
 
-                dd.dropdown();
                 injectDividers(nav.find('ul'));
             }
 
@@ -538,24 +531,22 @@ define('io.ox/core/extPatterns/links', [
         var label = baton.label || options.label,
             args = $.makeArray(arguments),
             node = baton.$el || $('<div>'),
-            ul;
+            ul = $('<ul class="dropdown-menu" role="menu">');
 
         // label: Use baton or String or DOM node
         label = _.isString(label) ? $.txt(label) : label;
         // build dropdown
-        this.append(
-            node.addClass('dropdown').append(
-                $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true">').attr({
-                    'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
-                })
-                .addClass(options.smart ? 'smart-dropdown' : '')
-                .append(
-                    options.icon ? $('<i aria-hidden="true">').addClass(options.icon).attr('title', label.textContent) : label,
-                    options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
-                ),
-                ul = $('<ul class="dropdown-menu" role="menu">')
-            )
-        );
+        this.append(new MiniViewDropdown({
+            el: node.addClass('dropdown'),
+            $toggle: $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true">').attr({
+                'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
+            })
+            .append(
+                options.icon ? $('<i aria-hidden="true">').addClass(options.icon).attr('title', label.textContent) : label,
+                options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
+            ),
+            $ul: ul
+        }).render().$el);
         // store reference to <ul>; we need that for mobile drop-downs
         node.data('ul', ul);
 
