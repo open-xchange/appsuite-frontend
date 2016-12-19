@@ -741,7 +741,8 @@ define('io.ox/mail/compose/view', [
                 notifications.yell('success', text);
                 return;
             }
-            this.$el.parents().find('.inline-yell').stop().text(text).fadeIn().delay(10000).fadeOut();
+            // only fade in once, then leave it there
+            this.$el.parents().find('.inline-yell').text(text).fadeIn();
         },
 
         clean: function () {
