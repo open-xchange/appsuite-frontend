@@ -163,6 +163,7 @@ define('io.ox/settings/accounts/settings/pane', [
         })(),
 
         dscError = function (data) {
+            if (data.model.get('type') !== 'mail' && mailSettings.get('dsc/enabled') === false) return $();
 
             var wrapper = $('<div class="account-error-wrapper">'),
                 node = $('<div class="account-error">'),
