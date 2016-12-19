@@ -126,10 +126,20 @@ define('io.ox/files/api', [
             return /^application\/pdf$/.test(type || this.getMimeType());
         },
 
+        isZIP: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPDF` that already did exist.
+            return (/^application\/zip$/).test(type || this.getMimeType());
+        },
+
         isText: function (type) {
             return /^(text\/plain|application\/rtf|text\/rtf)$/.test(type || this.getMimeType());
         },
 
+        isWordprocessing: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPresentation` that already did exist.
+            return (/^application\/(?:vnd\.(?:openxmlformats\-officedocument\.wordprocessingml\.)|(?:oasis\.opendocument\.text))|(?:msword$)/).test(type || this.getMimeType());
+        },
+        isSpreadsheet: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPresentation` that already did exist.
+            return (/^application\/vnd\.(?:openxmlformats\-officedocument\.spreadsheetml\.)|(?:oasis\.opendocument\.spreadsheet)|(?:ms-excel$)/).test(type || this.getMimeType());
+        },
         isPresentation: function (type) {
             return /^application\/(powerpoint|vnd.(ms-powerpoint|openxmlformats-officedocument.presentationml|oasis.opendocument.presentation))/.test(type || this.getMimeType());
         },
