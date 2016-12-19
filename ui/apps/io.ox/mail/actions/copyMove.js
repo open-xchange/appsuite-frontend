@@ -106,21 +106,21 @@ define('io.ox/mail/actions/copyMove', [
 
                         dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
                         var checkbox = dialog.getFooter().find('[data-action="create-rule"]'),
-                            notification = $('<div class="help-block">');
-                        // modify footer
-                        dialog.getFooter().prepend(notification);
-                        checkbox.closest('.checkbox').addClass('checkbox-block text-left').end();
+                            infoblock = $('<div class="help-block">');
+                        // modify footer and place infoblock
+                        checkbox.closest('.checkbox').addClass('checkbox-block text-left')
+                                .after(infoblock);
                         // change listeners
                         checkbox.on('change', function onStateChange() {
-                            if ($(this).prop('checked')) return notification.text(infoText);
-                            notification.empty();
+                            if ($(this).prop('checked')) return infoblock.text(infoText);
+                            infoblock.empty();
                         });
                         tree.on('change', function onFolderChange(id) {
                             var isDefaultAccount = id.split('/')[0] === 'default0';
                             checkbox.closest('.checkbox').toggleClass('disabled', !isDefaultAccount);
                             if (isDefaultAccount) return checkbox.prop('disabled', false);
                             checkbox.prop({ 'checked': false, 'disabled': true }).trigger('change');
-                            notification.empty();
+                            infoblock.empty();
                         });
                     },
                     pickerClose: function () {
