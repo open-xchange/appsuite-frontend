@@ -254,7 +254,7 @@ define('io.ox/core/folder/view', [
                         tree.dropdown.$('.dropdown-toggle').trigger('click', 'foldertree');
                     }
                     return;
-                } else if (targetFolder.is('.virtual') && targetFolder.data().id !== 'virtual/all-my-appointments') {
+                } else if (targetFolder.is('.virtual') && tree.selection.selectableVirtualFolders[targetFolder.data().id] !== true) {
                     // return here as we can not change the page to a virtual folder with the exception if the all-my-appointments folder
                     return;
                 }
