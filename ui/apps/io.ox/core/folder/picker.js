@@ -101,19 +101,12 @@ define('io.ox/core/folder/picker', [
                 // request and open create-folder-dialog
                 add(parentview.folder, { module: o.module })
                     .then(function (data) {
-                        // ensure create-folder-dialog is closed already
-                        _.defer(function () {
+                        // add additonal 5ms to tree nodes debounced onSort handler
+                        _.delay(function () {
                             container.show();
                             tree.selection.set(data.id);
-                            // already sorted in (rough check)
-                            if (parentview.$el.find('[data-id="' + data.id + '"]').index() < parentview.collection.length - 1) {
-                                return tree.selection.scrollIntoView(data.id);
-                            }
-                            // onSort not happend yet (slightly more delayed as parentview.onSort)
-                            parentview.listenToOnce(parentview.collection, 'sort', _.debounce(function () {
-                                tree.selection.scrollIntoView(data.id);
-                            }, 15));
-                        });
+                            tree.selection.scrollIntoView(data.id);
+                        }, 15);
                     },
                     container.show.bind(container)
                 );
@@ -128,7 +121,7 @@ define('io.ox/core/folder/picker', [
             )
             .addPrimaryButton('ok', o.button, 'ok')
             .addButton('cancel', gt('Cancel'), 'cancel')
-            .addAlternativeButton('create', gt('Create Folder'), 'create', { click: create });
+            .addAlternativeButton('create', gt('Create folder'), 'create', { click: create });
 
         if (o.alternativeButton) {
             dialog.addAlternativeButton('alternative', o.alternativeButton);
