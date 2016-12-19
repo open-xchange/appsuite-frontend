@@ -81,12 +81,14 @@
         .desktop-notification-info {
             padding: 5px 14px 10px 14px;
             background-color: rgba(0, 0, 0, 0.05);
-            .enable-button, .disable-button {
-                float: right;
-                margin-left: 5px;
+
+            .button-wrapper {
+                display: flex;
+                    justify-content: space-between;
             }
-            .later-button {
-                float: right;
+            .enable-button, .disable-button, .later-button {
+                // smaller padding so all buttons fit into one line
+                padding: 4px 8px;
             }
             &.clickable {
                 cursor: pointer;
