@@ -195,6 +195,33 @@ define('io.ox/mail/actions', [
         }
     });
 
+    new Action('io.ox/mail/actions/edit-copy', {
+        requires: function (e) {
+            // must be top-level
+            if (!e.collection.has('toplevel')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
+            // multiple and not a thread?
+            if (!e.collection.has('one') && !e.baton.isThread) return;
+            // get first mail
+            var data = e.baton.first();
+            // must be draft folder
+            return data && isDraftMail(data);
+        },
+        action: function (baton) {
+
+            var data = baton.first();
+
+            api.copy(data, data.folder_id).done(function (list) {
+                api.refresh();
+                ox.registry.call('mail-compose', 'edit', list[0]).done(function (window) {
+                    var model = window.app.model;
+                    model.set('subject', gt('Copy of %1$s', model.get('subject')));
+                });
+            });
+        }
+    });
+
     new Action('io.ox/mail/actions/source', {
         requires: function (e) {
             // must be at least one message and top-level
