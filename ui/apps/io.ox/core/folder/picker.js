@@ -126,9 +126,9 @@ define('io.ox/core/folder/picker', [
                     _.isString(o.title) ? $.txt(o.title) : o.title
                 )
             )
-            .addAlternativeButton('create', gt('Create Folder'), 'create', { click: create })
             .addPrimaryButton('ok', o.button, 'ok')
-            .addButton('cancel', gt('Cancel'), 'cancel');
+            .addButton('cancel', gt('Cancel'), 'cancel')
+            .addAlternativeButton('create', gt('Create Folder'), 'create', { click: create });
 
         if (o.alternativeButton) {
             dialog.addAlternativeButton('alternative', o.alternativeButton);
