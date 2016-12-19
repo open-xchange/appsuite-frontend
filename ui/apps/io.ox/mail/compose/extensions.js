@@ -470,16 +470,16 @@ define('io.ox/mail/compose/extensions', [
                 if (settings.get('compose/shareAttachments/enabled', false)) {
                     var locked = false;
 
-                    if (settings.get('compose/shareAttachments/limit', 0) || settings.get('compose/shareAttachments/driveLimit', 0)) {
+                    if (settings.get('compose/shareAttachments/limit', -1) !== -1 || settings.get('compose/shareAttachments/driveLimit', -1) !== -1) {
                         baton.model.get('attachments').on('add remove reset', function () {
-                            var limit = settings.get('compose/shareAttachments/limit', 0),
-                                driveMailLimit = settings.get('compose/shareAttachments/driveLimit', 0),
+                            var limit = settings.get('compose/shareAttachments/limit', -1),
+                                driveMailLimit = settings.get('compose/shareAttachments/driveLimit', -1),
                                 size = _(this.models).map(function (model) { return model.get('file_size') || 0; }).reduce(function (a, b) { return a + b; }, 0);
 
-                            locked = limit ? size > limit : false;
+                            locked = limit !== -1 ? size > limit : false;
                             view.settingsModel.set('enable', locked);
 
-                            if (driveMailLimit && size > driveMailLimit) {
+                            if (driveMailLimit !== -1 && size > driveMailLimit) {
                                 yell('warning', gt('Attachment size to large. Please remove attachments or reduce the file size.'));
                             }
                         });
