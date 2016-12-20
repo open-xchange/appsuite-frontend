@@ -613,7 +613,6 @@ define('io.ox/mail/compose/extensions', [
 
                         thresholdExceeded = threshold === 0 ? false : actualAttachmentSize > threshold;
                         locked = thresholdExceeded;
-                        view.settingsModel.set('enable', locked);
 
                         if (driveMailLimit !== -1 && actualAttachmentSize > driveMailLimit) {
                             yell('warning', gt('Attachment size to large. Please remove attachments or reduce the file size.'));
