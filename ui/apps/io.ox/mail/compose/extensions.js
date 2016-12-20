@@ -681,26 +681,23 @@ define('io.ox/mail/compose/extensions', [
                             }
                         },
                         renderPassword: function (baton) {
-                            var $links = baton.view.$header.find('.links'),
-                                passwordField = new mini.PasswordView({ name: 'password', model: baton.view.settingsModel, placeholder: gt('Password'), autocomplete: false });
-                            $links.append(
+                            var model = baton.view.settingsModel, passContainer;
+
+                            function toggleState() {
+                                if (model.get('usepassword')) return passContainer.find('input').removeAttr('disabled');
+                                passContainer.find('input').attr('disabled', 'disabled');
+                            }
+
+                            baton.view.$header.find('.links').append(
                                 $('<div class="input-group">').append(
                                     $('<span class="input-group-addon">').append(
-                                        new mini.CheckboxView({ name: 'usepassword', model: baton.view.settingsModel }).render().$el
+                                        new mini.CheckboxView({ name: 'usepassword', model: model }).render().$el
                                     ),
-                                    passwordField.render().$el
+                                    passContainer = new mini.PasswordViewToggle({ name: 'password', model: model, placeholder: gt('Password'), autocomplete: false }).render().$el
                                 )
                             );
-
-                            if (!baton.view.settingsModel.get('usepassword')) passwordField.$el.attr('disabled', 'disabled');
-
-                            baton.view.settingsModel.on('change:usepassword', function () {
-                                if (baton.view.settingsModel.get('usepassword')) {
-                                    passwordField.$el.removeAttr('disabled');
-                                } else {
-                                    passwordField.$el.attr('disabled', 'disabled');
-                                }
-                            });
+                            model.on('change:usepassword', toggleState);
+                            toggleState();
                         }
                     });
 
