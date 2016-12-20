@@ -100,10 +100,12 @@ define('plugins/notifications/mail/register', [
 
     // ensure we do not play a sound twice until the first sound has finished
     var playSound = _.throttle(function () {
+        if (_.device('smartphone')) return;
         sound.play();
     }, 2000);
 
     settingsModel.on('change:notificationSoundName', function () {
+        if (_.device('smartphone')) return;
         var s = settingsModel.get('notificationSoundName');
         loadSound(s).done(function (s) {
             // preview the selected sound by playing it on change
@@ -114,14 +116,17 @@ define('plugins/notifications/mail/register', [
     });
 
     // get and load stored sound
-    loadSound(settingsModel.get('notificationSoundName')).done(function (s) {
-        sound = s;
-    });
+    if (_.device('!smartphone')) {
+        loadSound(settingsModel.get('notificationSoundName')).done(function (s) {
+            sound = s;
+        });
+    }
 
     ext.point('io.ox/mail/settings/detail/pane').extend({
         index: 490,
         id: 'sounds',
         draw: function () {
+            if (_.device('smartphone')) return;
             // use this array to customize the sounds
             // copy new/other sounds to themefolder->sounds
             var sounds, list = [

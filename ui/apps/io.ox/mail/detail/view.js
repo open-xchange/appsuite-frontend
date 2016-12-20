@@ -185,7 +185,6 @@ define('io.ox/mail/detail/view', [
             id: 'different-subject',
             index: 100,
             draw: function (baton) {
-
                 var data = baton.data, baseSubject, threadSubject, mailSubject;
 
                 // no thread?
@@ -262,8 +261,8 @@ define('io.ox/mail/detail/view', [
             var $body;
             this.append(
                 $('<section class="attachments">'),
-                // must have tabindex=1, otherwise tabindex inside Shadow DOM doesn't work
-                $body = $('<section class="body user-select-text" tabindex="0">')
+                // must have tabindex=0, otherwise tabindex inside Shadow DOM doesn't work
+                $body = $('<section class="body user-select-text focusable" tabindex="0">')
             );
             // rendering mails in chrome is slow if we do not use a shadow dom
             if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
@@ -411,7 +410,7 @@ define('io.ox/mail/detail/view', [
 
         onChangeSubject: function () {
             var subject = this.$el.find('h1.subject');
-            subject.text(this.model.get('subject'));
+            subject.text(util.getSubject(this.model.get('subject')));
             return subject;
         },
 

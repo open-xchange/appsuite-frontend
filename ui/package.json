@@ -1,14 +1,17 @@
 {
   "name": "open-xchange-appsuite",
-  "version": "7.8.3-2",
+  "version": "7.8.4-0",
   "repository": {
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
   "license": "CC-BY-NC-SA-2.5",
+  "scripts": {
+    "test": "grunt copy:specs karma:continuous"
+  },
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
-    "eslint": "~2.12.0",
+    "eslint": "~3.12.0",
     "eslint-config-open-xchange-appsuite": "^0.1.0",
     "grunt": "^0.4.5",
     "grunt-bump": "^0.3.0",
@@ -17,7 +20,7 @@
     "grunt-contrib-concat": "^0.5.0",
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-jshint": "^0.11.0",
-    "grunt-contrib-uglify": "^0.8.0",
+    "grunt-contrib-uglify": "^2.0.0",
     "grunt-eslint": "^19.0.0",
     "grunt-jscs": "^2.1.0",
     "grunt-jsonlint": "^1.0.1",

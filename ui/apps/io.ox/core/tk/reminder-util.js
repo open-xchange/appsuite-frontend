@@ -14,8 +14,9 @@
 define('io.ox/core/tk/reminder-util', [
     'gettext!io.ox/core',
     'io.ox/calendar/util',
+    'io.ox/backbone/mini-views/dropdown',
     'less!io.ox/core/tk/reminder-util'
-], function (gt, util) {
+], function (gt, util, Dropdown) {
 
     'use strict';
 
@@ -37,52 +38,35 @@ define('io.ox/core/tk/reminder-util', [
                 );
         } else {
             // special link dropdown
-            var toggle, menu,
-                // super special function to have overflow scroll and dropdowns as popups see Bug 40962 and https://github.com/twbs/bootstrap/issues/7160
-                dropDownFixPosition = function (button, dropdown) {
-                    var dropDownTop = button.offset().top + button.outerHeight();
-                    dropdown.css('top', dropDownTop + 'px');
-                    dropdown.css('left', button.offset().left + 'px');
-                };
+            var toggle = $('<a role="button" data-action="remind-again" data-toggle="dropdown" aria-haspopup="true" class="refocus">')
+                .text(gt('Remind me again'))
+                .append(
+                    $('<i class="fa fa-chevron-down" aria-hidden="true">').css({ paddingLeft: '5px', textDecoration: 'none' })
+                ),
+                menu = $('<ul class="dropdown-menu dropdown-left" role="menu">')
+                .css({ minWidth: 'auto' })
+                .append(function () {
+                    return _(values).map(function (value) {
+                        return $('<li role="presentation">').append(
+                            $('<a href="#" role="menuitem" data-action="reminder">')
+                            .attr({
+                                //#. %1$s is something like "in 5 minutes"
+                                //#. don't know if that works for all languages but it has been
+                                //#. a string concatenation before; at least now it's documented
+                                'aria-label': gt('Remind me again %1$s', value[1]),
+                                'data-value': value[0]
+                            })
+                            .text(value[1])
+                        );
+                    });
+                });
 
             node.append(
-                $('<div class="dropdown">').css({ 'float': 'left' }).append(
-                    toggle = $('<a role="button" data-action="remind-again" data-toggle="dropdown" aria-haspopup="true" class="refocus">')
-                    .text(gt('Remind me again'))
-                    .append(
-                        $('<i class="fa fa-chevron-down" aria-hidden="true">').css({ paddingLeft: '5px', textDecoration: 'none' })
-                    ),
-                    menu = $('<ul class="dropdown-menu dropdown-left" role="menu">')
-                        .css({ minWidth: 'auto', position: 'fixed' })
-                        .append(function () {
-                            return _(values).map(function (value) {
-                                return $('<li role="presentation">').append(
-                                    $('<a href="#" role="menuitem" data-action="reminder">')
-                                    .attr({
-                                        //#. %1$s is something like "in 5 minutes"
-                                        //#. don't know if that works for all languages but it has been
-                                        //#. a string concatenation before; at least now it's documented
-                                        'aria-label': gt('Remind me again %1$s', value[1]),
-                                        'data-value': value[0]
-                                    })
-                                    .text(value[1])
-                                );
-                            });
-                        })
-                ),
+                new Dropdown({ $toggle: toggle, $ul: menu }).render().$el.css('float', 'left'),
                 $('<button type="button" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK'))
                     //#. %1$s appointment or task title
                     .attr('aria-label', gt('Close reminder for %1$s', model.get('title')))
             ).find('after').css('clear', 'both');
-            toggle.dropdown();
-
-            $(toggle).click(function () {
-                dropDownFixPosition(toggle, menu);
-                // close on scroll
-                $('#io-ox-notifications').one('scroll', function () {
-                    toggle.dropdown('toggle');
-                });
-            });
         }
     }
 

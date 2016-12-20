@@ -624,8 +624,8 @@ define.async('io.ox/mail/accounts/view-form', [
                                 new InputView({ model: model, id: 'primary_address' }).render().$el
                             )
                         ),
-                        // unified inbox
-                        capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') ?
+                        // unified inbox, disabled for DSC as well
+                        capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') || settings.get('dsc/enabled') ?
                         $() :
                         group(
                             checkbox(
@@ -665,10 +665,20 @@ define.async('io.ox/mail/accounts/view-form', [
                 changeTransportAuth.call(view);
             }
 
-            // don't show folder settings if this is a new account
-            if (model.get('id') !== undefined) {
+            // don't show folder settings if this is a new account or we are in a DSC environment
+            if (model.get('id') !== undefined && !settings.get('dsc/enabled')) {
                 this.append(serverSettingsFolder);
             }
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 200,
+        id: 'dsc',
+        draw: function (baton) {
+            if (!settings.get('dsc/enabled')) return;
+            console.log('draw', this, baton);
+
         }
     });
 

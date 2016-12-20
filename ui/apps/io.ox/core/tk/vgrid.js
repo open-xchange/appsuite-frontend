@@ -199,15 +199,18 @@ define('io.ox/core/tk/vgrid', [
         var left = $(this).closest('.leftside'),
             right = left.siblings('.rightside'),
             base = e.pageX - left.width(),
-            limitX = $(document).width() - 250;
+            limitX = $(document).width() - 250,
+            width;
+
         $(document).on({
             'mousemove.resize': function (e) {
-                var width = Math.max(250, Math.min(e.pageX, limitX) - base);
+                width = Math.max(250, Math.min(e.pageX, limitX) - base);
                 left.css('width', width);
                 right.css('left', width);
             },
             'mouseup.resize': function () {
                 $(this).off('mousemove.resize mouseup.resize');
+                e.data.updateSettings('width/' + _.display(), width);
             }
         });
     };
@@ -382,7 +385,7 @@ define('io.ox/core/tk/vgrid', [
         // make resizalbe (unless touch device)
         if (!_.device('touch')) {
             node.append(
-                $('<div class="resizebar">').on('mousedown', onResize)
+                $('<div class="resizebar">').on('mousedown', this, onResize)
             );
         }
 
@@ -725,6 +728,7 @@ define('io.ox/core/tk/vgrid', [
             if (list.length === 0 && loaded) {
                 detachPool();
                 self.selection.trigger('change', []);
+                var emptyMessage = self.getEmptyMessage();
                 scrollpane.append(
                     $.fail(emptyMessage ?
                         emptyMessage(self.getMode()) :

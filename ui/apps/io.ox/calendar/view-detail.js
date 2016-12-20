@@ -194,15 +194,14 @@ define('io.ox/calendar/view-detail', [
                 ),
                 $('<dd class="detail organizer">').append(
                     coreUtil.renderPersonalName(
-                        baton.data.organizerId ?
-                            {
-                                html: userAPI.getTextNode(baton.data.organizerId),
-                                user_id: baton.data.organizerId
-                            } : {
-                                name: baton.data.organizer,
-                                email: baton.data.organizer
-                            },
-                            baton.data
+                        baton.data.organizerId ? {
+                            html: userAPI.getTextNode(baton.data.organizerId),
+                            user_id: baton.data.organizerId
+                        } : {
+                            name: baton.data.organizer,
+                            email: baton.data.organizer
+                        },
+                        baton.data
                     )
                 )
             );

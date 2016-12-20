@@ -88,6 +88,36 @@ define('io.ox/mail/categories/mediator', [
             }
         },
         {
+            id: 'import',
+            // a little bit more than 'import-eml'
+            index: 1000000000010,
+            setup: function (app) {
+                if (!app.queues.importEML) return;
+                app.queues.importEML.on('stop', function (e, last, position, files) {
+                    var source = helper.getInitialCategoryId(),
+                        target = app.props.get('category_id'),
+                        imported;
+                    // stop when diabled or imported to 'general'
+                    if (!target || (source === target)) return;
+                    // pick successful reponses
+                    imported = _(files).chain()
+                                .pluck('response')
+                                .filter(function (response) { return !('Error' in response); })
+                                .value();
+                    // get full data and move to target category
+                    mailAPI.getList(imported).done(function (data) {
+                        api.move({
+                            source: source,
+                            target: target,
+                            sourcename: api.collection.get(source).get('name'),
+                            targetname: api.collection.get(target).get('name'),
+                            data: data
+                        }).fail(yell);
+                    });
+                });
+            }
+        },
+        {
             id: 'category-tabs',
             index: 20200,
             setup: function (app) {

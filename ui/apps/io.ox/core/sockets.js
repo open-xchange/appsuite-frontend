@@ -20,13 +20,21 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
         PATH = '/socket.io/appsuite',
         isConnected = false,
         supported = Modernizr.websockets && cap.has('websocket'),
-        debug = _.url.hash('socket-debug') || ox.debug;
+        debug = _.url.hash('socket-debug') || ox.debug,
+        options = {
+            path: PATH,
+            transports: ['websocket'],      // do not change, middleware only support sockets not http polling
+            reconnectionAttempts: 25,       // max retries, each retry doubles the reconnectionDelay
+            randomizationFactor: 0.0,       // randomize reconnect delay by +/- (factor * delay) ( 0 <= factor <= 1)
+            reconnectionDelay: 1000,        // delay for the first retry
+            reconnectionDelayMax: 10 * 60 * 1000      // 10 min. max delay between a reconnect (reached after aprox. 10 retries)
+        };
 
     function connectSocket() {
         var def = $.Deferred();
         // connect Websocket
         if (debug) console.log('Websocket trying to connect...');
-        socket = io.connect(URI + '/?session=' + ox.session, { transports: ['websocket'], path: PATH });
+        socket = io.connect(URI + '/?session=' + ox.session, options);
         // expose global variable for debugging
         if (debug) window.socket = socket;
         socket.on('connect', function () {
@@ -47,6 +55,10 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
         });
         socket.on('connect_error', function () {
             if (debug) console.log('Websocket connection error');
+            if (socket.io.backoff.attempts === options.reconnectionAttempts) {
+                ox.trigger('socket:maxreconnections:reached');
+                if (debug) console.log('Max reconnection attempts for socket reached, stopping reconnection.');
+            }
             def.reject();
         });
         socket.on('connect_timeout', function () {
@@ -75,6 +87,11 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capab
                     socket.connect();
                 }
             }
+        });
+        // disconnect on logout
+        ox.on('logout', function () {
+            if (debug) console.log('Websocket disconnected on logout');
+            if (socket.connected) socket.close();
         });
 
         return def;

@@ -22,7 +22,7 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
     'io.ox/core/tk/attachments',
-    'io.ox/calendar/edit/recurrence-view',
+    'io.ox/backbone/views/recurrence-view',
     'io.ox/calendar/api',
     'io.ox/participants/add',
     'io.ox/participants/views',
@@ -64,7 +64,7 @@ define('io.ox/calendar/edit/extensions', [
         id: 'save',
         draw: function (baton) {
             var oldFolder = baton.model.get('folder_id');
-            this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
+            this.append($('<button type="button" class="btn btn-primary save" data-action="save">')
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
@@ -363,11 +363,16 @@ define('io.ox/calendar/edit/extensions', [
     // move recurrence view to collapsible area on mobile devices
     var recurrenceIndex = _.device('smartphone') ? 950 : 650;
     // recurrence
-    point.extend(new RecurrenceView({
+    point.extend({
         id: 'recurrence',
-        className: 'col-xs-12 recurrenceview',
-        index: recurrenceIndex
-    }), {
+        className: 'col-xs-12',
+        index: recurrenceIndex,
+        render: function () {
+            this.$el.append(new RecurrenceView({
+                model: this.model,
+            }).render().$el);
+        }
+    }, {
         rowClass: 'collapsed'
     });
 
@@ -728,8 +733,13 @@ define('io.ox/calendar/edit/extensions', [
 
                     if (appointment) {
                         data.dialog.close();
-                        e.data.model.set({ full_time: appointment.full_time });
-                        e.data.model.set({ start_date: appointment.start_date });
+                        // make sure we have correct dates. Do not change dates if a date is NaN
+                        var validDate = !(_.isNaN(appointment.start_date) || _.isNaN(appointment.end_date));
+
+                        if (validDate) {
+                            e.data.model.set({ full_time: appointment.full_time });
+                            e.data.model.set({ start_date: appointment.start_date });
+                        }
                         var models = [],
                             defs = [];
                         // add to participants collection instead of the model attribute to make sure the edit view is redrawn correctly
@@ -746,9 +756,11 @@ define('io.ox/calendar/edit/extensions', [
                             e.data.model._participants.addUniquely(models);
                         });
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
-                        e.data.model.set({
-                            end_date: appointment.end_date
-                        }, { validate: true });
+                        if (validDate) {
+                            e.data.model.set({
+                                end_date: appointment.end_date
+                            }, { validate: true });
+                        }
                     } else {
                         data.dialog.idle();
                         require(['io.ox/core/yell'], function (yell) {

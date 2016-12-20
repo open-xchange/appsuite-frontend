@@ -686,6 +686,10 @@ define('io.ox/calendar/freetime/timeView', [
 
         createAppointment: function () {
             if (this.lassoStart !== this.lassoEnd && this.lassoStart !== undefined && this.lassoEnd !== undefined) {
+                // make sure times are set
+                if (!this.lassoStartTime || !this.lassoEndTime) {
+                    this.updateLasso(true);
+                }
                 var startTime = Math.min(this.lassoStartTime, this.lassoEndTime),
                     endTime = Math.max(this.lassoStartTime, this.lassoEndTime),
                     participants = this.model.get('participants').map(function (model) {

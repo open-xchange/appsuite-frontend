@@ -189,7 +189,7 @@ define('plugins/core/feedback/register', [
 
         drawButton: function () {
             $('#io-ox-core').append(
-                $('<button role="button" class="feedback-button">')
+                $('<button type="button" class="feedback-button">')
                 .text(gt('Feedback'))
                 .addClass(settings.get('feedback/position', 'right') + 'side-button')
                 .on('click', this.show)

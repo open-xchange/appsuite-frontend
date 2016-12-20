@@ -133,20 +133,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                         });
                 }
             },
-            'launchpresenter': {
-                prio: 'hi',
-                mobile: 'lo',
-                label: /*#. launch the presenter app */ gt.pgettext('presenter', 'Present'),
-                icon: 'fa fa fa-play-circle-o',
-                ref: TOOLBAR_ACTION_ID + '/launchpresenter',
-                customize: function () {
-                    this.addClass('viewer-toolbar-launchpresenter')
-                    .attr({
-                        tabindex: '0',
-                        'aria-label': /*#. launch the presenter app */ gt.pgettext('presenter', 'Present')
-                    });
-                }
-            },
             'togglesidebar': {
                 prio: 'hi',
                 mobile: 'hi',
@@ -210,7 +196,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'download': {
                     prio: 'hi',
-                    mobile: 'lo',
+                    mobile: _.device('ios') ? 'lo' : 'hi',
                     icon: 'fa fa-download',
                     label: gt('Download'),
                     section: 'export',
@@ -218,7 +204,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'open': {
                     prio: 'lo',
-                    mobile: 'hi',
+                    mobile: _.device('android') ? 'lo' : 'hi',
                     icon: 'fa fa-download',
                     label: gt('Open attachment'),
                     section: 'export',
@@ -231,9 +217,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'export',
                     ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 },
+                // on smartphones the separate dropdown is broken up and the options are added to the actions dropdown
                 'share': {
                     prio: 'hi',
-                    mobile: 'hi',
                     icon: 'fa fa-user-plus',
                     label: gt('Share'),
                     title: gt('Share this file'),
@@ -242,24 +228,30 @@ define('io.ox/core/viewer/views/toolbarview', [
                         var self = this;
                         this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
-                        this.after(
-                            LinksPattern.DropdownLinks({
+                        new Dropdown({
+                            el: this.parent().addClass('dropdown'),
+                            $toggle: this,
+                            $ul: LinksPattern.DropdownLinks({
                                 ref: 'io.ox/files/links/toolbar/share',
                                 wrap: false,
                                 emptyCallback: function () {
                                     self.parent().hide();
                                 }
                             }, baton)
-                        );
-
-                        this.addClass('dropdown-toggle').attr({
-                            'aria-haspopup': 'true',
-                            'data-toggle': 'dropdown',
-                            'role': 'button'
-                        }).dropdown();
-
-                        this.parent().addClass('dropdown');
+                        }).render();
                     }
+                },
+                'invite': {
+                    mobile: 'lo',
+                    label: gt('Invite people'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/invite'
+                },
+                'sharelink': {
+                    mobile: 'lo',
+                    label: gt('Get link'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/getalink'
                 },
                 'sendbymail': {
                     prio: 'lo',
@@ -460,7 +452,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
             // detail is the target of popoutstandalone, no support for mail attachments
-            return currentApp !== 'io.ox/files/detail';
+            return currentApp !== 'io.ox/mail/compose' && currentApp !== 'io.ox/files/detail';
         },
         action: function (baton) {
             var fileModel;
@@ -472,25 +464,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             }
 
             ox.launch('io.ox/files/detail/main', fileModel);
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/launchpresenter', {
-        capabilities: 'presenter document_preview',
-        requires: function (e) {
-            if (!e.collection.has('one', 'read')) {
-                return false;
-            }
-
-            var model = e.baton.model;
-            var meta = model.get('meta');
-            var isError = meta && meta.document_conversion_error && meta.document_conversion_error.length > 0;
-
-            return (!isError && model.isFile() && (model.isPresentation() || model.isPDF()));
-        },
-        action: function (baton) {
-            var fileModel = baton.model;
-            ox.launch('io.ox/presenter/main', fileModel);
         }
     });
 
@@ -710,7 +683,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                         $el: toolbar,
                         model: model,
                         models: isDriveFile ? [model] : null,
-                        data: isDriveFile ? model.toJSON() : origData
+                        data: isDriveFile ? model.toJSON() : origData,
+                        openedBy: this.openedBy
                     }),
                     appName = model.get('source'),
                     self = this,

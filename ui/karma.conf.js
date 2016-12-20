@@ -2,7 +2,7 @@
 // Generated on Fri Jun 28 2013 12:45:50 GMT+0200 (CEST)
 
 var fs = require('fs');
-var _ = require('lodash');
+var _ = require('underscore');
 var localConf = {};
 
 if (fs.existsSync('grunt/local.conf.json')) {
@@ -22,9 +22,9 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'spec/main-test.js',
-            {pattern: 'spec/**/*_spec.js', included: false },
-            {pattern: 'spec/fixtures/**/*.*', included: false, served: true },
-            {pattern: 'spec/shared/**/*.js' }
+            { pattern: 'spec/**/*_spec.js', included: false },
+            { pattern: 'spec/fixtures/**/*.*', included: false, served: true },
+            { pattern: 'spec/shared/**/*.js' }
         ],
 
         // list of files to exclude

@@ -113,12 +113,34 @@ define('io.ox/core/upsell', [
         // true if any item matches requires capabilites
         // true if any item does not match its requirements but is enabled for upsell
         // this function is used for any inline link, for example, to decide whether or not showing it
-        visible: function (array) {
-            if (!array) return true;
-            return _([].concat(array)).reduce(function (memo, capability) {
-                return memo || capability === undefined || that.enabled(capability) || that.has(capability);
-            }, false);
-        },
+        visible: (function () {
+            function isEnabled(cap) {
+                if (!_.isString(cap)) return false;
+
+                return !!enabled[cap];
+            }
+
+            function isEnabledOrHas(cap) {
+                var condition = cap.replace(/([^&\|]) ([^&\|])/gi, '$1 && $2');
+                if (ox.debug && /,/.test(condition)) return !!console.error('You can\'t use a comma in a condition use space instead.');
+                condition = condition.replace(/[\w:-]+/ig, function (match) {
+                    match = match.toLowerCase();
+                    return isEnabled(match) || that.has(match);
+                });
+                /*eslint no-new-func: 0*/
+                return new Function('return !!(' + condition + ')')();
+            }
+
+            return function (array) {
+                if (!array) return true;
+                return _([].concat(array)).reduce(function (memo, capability) {
+                    // consider egde cases here
+                    // for example 'active_sync clientonboarding' with cap['active_sync'] = false and cap['client-onboarding'] = true
+                    // and upsell['active_sync'] = true but upsell['cient-onboarding'] = false should return true
+                    return memo || capability === undefined || isEnabledOrHas(capability);
+                }, false);
+            };
+        })(),
 
         // checks if upsell is enabled for a set of capabilities
         // true if at least one set matches
@@ -181,6 +203,7 @@ define('io.ox/core/upsell', [
             // c.calendar = c.infostore = true;
             // c.caldav = c.carddav = c['boxcom || google || msliveconnect'] = false;
             // c.boxcom = c.google = c.msliveconnect = false;
+            // settings.set('upsell/premium/folderView/visible', true);
             settings.set('features/upsell/secondary-launcher', { icon: 'fa-star fa-star fa-star', color: '#ff0' });
             settings.set('features/upsell/portal-widget', { imageURL: 'http://lorempixel.com/400/300/' });
             settings.set('features/upsell/folderview/mail/i18n/en_US', { title: 'Custom english title for synchronizing mails.' });

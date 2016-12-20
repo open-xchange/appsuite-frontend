@@ -22,8 +22,9 @@ define('io.ox/mail/actions', [
     'io.ox/core/api/account',
     'io.ox/core/notifications',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail'
-], function (ext, links, api, util, folderAPI, print, account, notifications, settings, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/core/capabilities'
+], function (ext, links, api, util, folderAPI, print, account, notifications, settings, gt, capabilities) {
 
     'use strict';
 
@@ -95,6 +96,17 @@ define('io.ox/mail/actions', [
         }
     });
 
+    function reply(mode) {
+        return function (baton) {
+            var data = baton.first();
+            require(['io.ox/mail/compose/checks'], function (checks) {
+                checks.replyToMailingList(_.cid(data), mode, data).then(function (mode) {
+                    ox.registry.call('mail-compose', mode, data);
+                });
+            });
+        };
+    }
+
     new Action('io.ox/mail/actions/reply-all', {
         requires: function (e) {
             // must be top-level
@@ -108,9 +120,7 @@ define('io.ox/mail/actions', [
             // has sender? and not a draft mail
             return util.hasFrom(data) && !isDraftMail(data);
         },
-        action: function (baton) {
-            ox.registry.call('mail-compose', 'replyall', baton.first());
-        }
+        action: reply('replyall')
     });
 
     new Action('io.ox/mail/actions/reply', {
@@ -126,9 +136,7 @@ define('io.ox/mail/actions', [
             // has sender? and not a draft mail
             return util.hasFrom(data) && !isDraftMail(data);
         },
-        action: function (baton) {
-            ox.registry.call('mail-compose', 'reply', baton.first());
-        }
+        action: reply('reply')
     });
 
     new Action('io.ox/mail/actions/forward', {
@@ -187,6 +195,33 @@ define('io.ox/mail/actions', [
         }
     });
 
+    new Action('io.ox/mail/actions/edit-copy', {
+        requires: function (e) {
+            // must be top-level
+            if (!e.collection.has('toplevel')) return;
+            // multiple selection
+            if (e.baton.selection && e.baton.selection.length > 1) return;
+            // multiple and not a thread?
+            if (!e.collection.has('one') && !e.baton.isThread) return;
+            // get first mail
+            var data = e.baton.first();
+            // must be draft folder
+            return data && isDraftMail(data);
+        },
+        action: function (baton) {
+
+            var data = baton.first();
+
+            api.copy(data, data.folder_id).done(function (list) {
+                api.refresh();
+                ox.registry.call('mail-compose', 'edit', list[0]).done(function (window) {
+                    var model = window.app.model;
+                    model.set('subject', gt('Copy of %1$s', model.get('subject')));
+                });
+            });
+        }
+    });
+
     new Action('io.ox/mail/actions/source', {
         requires: function (e) {
             // must be at least one message and top-level
@@ -222,7 +257,13 @@ define('io.ox/mail/actions', [
                 filter.initialize().then(function (data, config, opt) {
                     var factory = opt.model.protectedMethods.buildFactory('io.ox/core/mailfilter/model', opt.api),
                         args = { data: { obj: factory.create(opt.model.protectedMethods.provideEmptyModel()) } },
-                        preparedTest = { id: 'allof', tests: [_.copy(opt.filterDefaults.tests.Subject), _.copy(opt.filterDefaults.tests.address)] };
+                        preparedTest = {
+                            id: 'allof',
+                            tests: [
+                                _.copy(opt.filterDefaults.tests.Subject),
+                                opt.filterDefaults.tests.address ? _.copy(opt.filterDefaults.tests.address) : _.copy(opt.filterDefaults.tests.From)
+                            ]
+                        };
 
                     preparedTest.tests[0].values = [baton.data.subject];
                     preparedTest.tests[1].values = [baton.data.from[0][1]];
@@ -404,6 +445,9 @@ define('io.ox/mail/actions', [
                 if (baton.startItem) {
                     options.selection = baton.startItem;
                 }
+                if (baton.openedBy) {
+                    options.openedBy = baton.openedBy;
+                }
                 action(options);
             });
         }
@@ -499,8 +543,26 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/sendmail', {
         requires: 'some',
         action: function (baton) {
-            var data = baton.data;
-            ox.registry.call('mail-compose', 'compose', { folder_id: data.folder_id, to: data.to.concat(data.cc).concat(data.from) });
+            require(['io.ox/core/api/user'], function (userAPI) {
+                account.getAllSenderAddresses().done(function (senderAddresses) {
+                    userAPI.getCurrentUser().done(function (user) {
+                        var data = baton.data,
+                            toAdresses = data.to.concat(data.cc).concat(data.bcc).concat(data.from),
+                            ownAddresses = _.compact([user.get('email1'), user.get('email2'), user.get('email3')]);
+
+                        ownAddresses = ownAddresses.concat(_(senderAddresses).pluck(1));
+                        var filtered = _(toAdresses).filter(function (addr) {
+                            return ownAddresses.indexOf(addr[1]) < 0;
+                        });
+                        if (filtered.length === 0) filtered = toAdresses;
+                        filtered = _(filtered).uniq(false, function (addr) {
+                            return addr[1];
+                        });
+
+                        ox.registry.call('mail-compose', 'compose', { folder_id: data.folder_id, to: filtered });
+                    });
+                });
+            });
         }
     });
 
@@ -535,8 +597,10 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/premium/actions/synchronize', {
-        capabilities: 'active_sync client-onboarding',
+        capabilities: 'active_sync',
         requires: function () {
+            // use client onboarding here, since it is a setting and not a capability
+            if (!capabilities.has('client-onboarding')) return false;
             return _.device('!smartphone');
         },
         action: function () {
@@ -553,7 +617,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'inplace-reply',
-        mobile: 'hi',
+        mobile: 'lo',
         //#. Quick reply to a message; maybe "Direkt antworten" or "Schnell antworten" in German
         label: gt('Quick reply'),
         ref: 'io.ox/mail/actions/inplace-reply',
@@ -564,7 +628,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'lo',
         id: 'reply',
-        mobile: 'hi',
+        mobile: 'lo',
         label: gt('Reply'),
         ref: 'io.ox/mail/actions/reply',
         section: 'standard'
@@ -574,7 +638,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'reply-all',
-        mobile: 'hi',
+        mobile: 'lo',
         label: gt('Reply All'),
         ref: 'io.ox/mail/actions/reply-all',
         drawDisabled: true,
@@ -585,7 +649,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'forward',
-        mobile: 'hi',
+        mobile: 'lo',
         label: gt('Forward'),
         ref: 'io.ox/mail/actions/forward',
         section: 'standard'
@@ -596,7 +660,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'edit',
-        mobile: 'hi',
+        mobile: 'lo',
         label: gt('Edit'),
         ref: 'io.ox/mail/actions/edit',
         section: 'standard'
@@ -606,7 +670,7 @@ define('io.ox/mail/actions', [
         index: INDEX += 100,
         prio: 'hi',
         id: 'delete',
-        mobile: 'hi',
+        mobile: 'lo',
         label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete',
         section: 'standard'
@@ -621,7 +685,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'lo',
-        mobile: 'hi',
+        mobile: 'lo',
         id: 'spam',
         label: gt('Mark as spam'),
         ref: 'io.ox/mail/actions/spam',
@@ -631,7 +695,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX + 1,
         prio: 'lo',
-        mobile: 'hi',
+        mobile: 'lo',
         id: 'nospam',
         label: gt('Not spam'),
         ref: 'io.ox/mail/actions/nospam',
@@ -692,7 +756,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'lo',
-        mobile: 'hi',
+        mobile: 'lo',
         id: 'archive',
         //#. Verb: (to) archive messages
         label: gt.pgettext('verb', 'Archive'),

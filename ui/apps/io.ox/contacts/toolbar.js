@@ -44,17 +44,11 @@ define('io.ox/contacts/toolbar', [
 
                 this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
-                this.after(
-                    links.DropdownLinks({ ref: 'io.ox/contacts/links/toolbar/default', wrap: false }, baton)
-                );
-
-                this.addClass('dropdown-toggle').attr({
-                    'aria-haspopup': 'true',
-                    'data-toggle': 'dropdown',
-                    'role': 'button'
-                });
-
-                this.parent().addClass('dropdown');
+                new Dropdown({
+                    el: this.parent().addClass('dropdown'),
+                    $toggle: this,
+                    $ul: links.DropdownLinks({ ref: 'io.ox/contacts/links/toolbar/default', wrap: false }, baton)
+                }).render();
             }
         },
         'send': {

@@ -21,9 +21,10 @@ define('io.ox/portal/settings/pane', [
     'settings!io.ox/portal',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/mini-views/settings-list-view',
+    'io.ox/backbone/mini-views/dropdown',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/portal/style'
-], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings, listUtils, ListView) {
+], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings, listUtils, ListView, Dropdown) {
 
     'use strict';
 
@@ -82,21 +83,23 @@ define('io.ox/portal/settings/pane', [
     }
 
     function drawAddButton() {
-        var button;
+        var $ul = $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget),
+            $toggle = $('<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').append(
+                $.txt(gt('Add widget')),
+                $.txt(' '),
+                $('<i class="fa fa-caret-down" aria-hidden="true">')
+            );
+
         this.append(
-            $('<div class="btn-group-portal pull-right">').append(
-                button = $('<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').append(
-                    $.txt(gt('Add widget')),
-                    $.txt(' '),
-                    $('<i class="fa fa-caret-down" aria-hidden="true">')
-                ),
-                $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget)
-            ),
+            new Dropdown({
+                className: 'btn-group-portal pull-right',
+                $ul: $ul,
+                $toggle: $toggle,
+            }).render().$el,
             $('<div class="clearfix">'),
             $('<div class="sr-only" role="log" aria-live="assertive" aria-relevant="additions text">').attr('id', notificationId)
         );
         repopulateAddButton();
-        button.dropdown();
     }
 
     function repopulateAddButton() {

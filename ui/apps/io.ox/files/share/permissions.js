@@ -32,9 +32,7 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/util',
     'gettext!io.ox/core',
-    'less!io.ox/files/share/style',
-    // todo: relocate smart-dropdown logic
-    'io.ox/core/tk/flag-picker'
+    'less!io.ox/files/share/style'
 ], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt) {
 
     'use strict';
@@ -1101,6 +1099,8 @@ define('io.ox/files/share/permissions', [
                         objModel.reload().then(
                             function () {
                                 dialog.close();
+                                // we might have new addresses
+                                contactsAPI.trigger('maybeNewContact');
                             },
                             function (error) {
                                 dialog.idle();

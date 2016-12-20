@@ -600,7 +600,7 @@ define('io.ox/mail/util', [
                             content_type: 'message/rfc822',
                             filename: obj.filename ||
                                 // remove consecutive white-space
-                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), { max: 50 }),
+                                (obj.subject || gt('message')).replace(/\s+/g, ' ') + '.eml',
                             title: obj.filename || obj.subject || '',
                             mail: mail,
                             parent: data.parent || mail,

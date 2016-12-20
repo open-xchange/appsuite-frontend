@@ -157,6 +157,14 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         ed.selection.select(dummySpan);
         // and delete it
         ed.execCommand('Delete', false, null);
+        if (!_.device('smartphone')) {
+            // apply default font styles
+            if (mailSettings.get('defaultFontStyle/size') && mailSettings.get('defaultFontStyle/size') !== 'browser-default') ed.execCommand('fontSize', false, mailSettings.get('defaultFontStyle/size'));
+
+            if (mailSettings.get('defaultFontStyle/family') && mailSettings.get('defaultFontStyle/family') !== 'browser-default') ed.execCommand('fontName', false, mailSettings.get('defaultFontStyle/family'));
+
+            if (mailSettings.get('defaultFontStyle/color') && mailSettings.get('defaultFontStyle/color') !== 'transparent') ed.execCommand('forecolor', false, mailSettings.get('defaultFontStyle/color'));
+        }
     }
 
     function isInsideBlockquote(range) {
@@ -273,6 +281,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             remove_script_host: false,
 
             entity_encoding: 'raw',
+
+            fontsize_formats: '8pt 10pt 11pt 12pt 13pt 14pt 16pt 18pt 24pt 36pt',
 
             // simpleLineBreaks = true -> false -> enter insert <br>
             // simpleLineBreaks = false -> 'p' -> enter inserts new paragraph
@@ -486,11 +496,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             // clean up
             str = trimEnd(str);
             if (!str) return;
-            return textproc.texttohtml(str).then(function (content) {
-                if (/^<blockquote\>/.test(content)) {
-                    content = '<p><br></p>' + content;
-                }
-                set(content);
+            require(['io.ox/mail/detail/content'], function (proc) {
+                set(proc.text2html(str));
                 ed.undoManager.clear();
             });
         };
@@ -700,11 +707,6 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         }
 
         editor.on('addInlineImage', function (e, id) { addKeepalive(id); });
-    }
-
-    if (!window.tinyMCE) {
-        return require(['3rd.party/tinymce/jquery.tinymce.min'])
-            .then(function () { return Editor; });
     }
     return $.Deferred().resolve(Editor);
 });

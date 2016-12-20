@@ -135,23 +135,25 @@ ul.dropdown-menu li a.disabled {
 }
 
 .smart-dropdown-container {
-    ul {
-        position: fixed;
-        overflow-y: auto;
-        z-index: 10002;
-    }
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 100000;
 
-    .abs {
-        overflow: hidden;
-        z-index: 10001;
-        position: fixed;
-        cursor: default;
+    ul {
+        overflow-y: auto;
     }
 }
 
 .tt-dropdown-menu {
     max-height: 200px;
     overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.smartphone .tt-dropdown-menu {
+    max-height: none;
+    overflow-x: auto;
     overflow-y: auto;
 }
 
@@ -234,7 +236,7 @@ ul.dropdown-menu li a.disabled {
             margin: @marginSmall 5px;
             text-align: center;
 
-            a {
+            a, .custom-dropdown-label {
                 padding: (3px + @extraPadding) 20px;
             }
 
@@ -269,7 +271,7 @@ ul.dropdown-menu li a.disabled {
             // no clue why but there are empty <li> in system drop-down, for example
             &:empty { padding: 0; }
 
-            & > a, & > span {
+            & > a, & > span, & .custom-dropdown-label {
                 .ellipsis();
                 -webkit-tap-highlight-color: transparent;
                 -webkit-touch-callout: none;
@@ -278,6 +280,9 @@ ul.dropdown-menu li a.disabled {
                 font-size: 18px;
                 font-weight: 300;
                 max-width: none !important;
+            }
+            .custom-dropdown-label {
+                color: #999;
             }
         }
 

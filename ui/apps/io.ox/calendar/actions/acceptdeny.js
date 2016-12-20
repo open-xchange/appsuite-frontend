@@ -191,7 +191,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                                             .addButton('cancel', gt('Cancel'), 'cancel')
                                             .show()
                                             .done(function (action) {
-                                                if (action === 'cancel') return;
+                                                if (action === 'cancel') return dialog.idle();
                                                 if (action === 'ignore') performConfirm();
                                             });
                                     });

@@ -32,6 +32,7 @@ define('io.ox/mail/main', [
     'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
     'io.ox/mail/categories/mediator',
+    'io.ox/core/api/account',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'io.ox/mail/actions',
@@ -41,7 +42,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings) {
 
     'use strict';
 
@@ -231,6 +232,37 @@ define('io.ox/mail/main', [
             app.folderView.resize.enable();
         },
 
+        'folder-view-dsc-events': function (app) {
+            // open accounts page on when the user clicks on error indicator
+            app.treeView.on('accountlink:dsc', function () {
+                ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/settings/accounts' });
+            });
+        },
+
+        'folder-view-dsc-error': function (app) {
+            function updateStatus() {
+                if (ox.debug) console.log('refreshing DSC status');
+                accountAPI.getStatus().done(function (s) {
+                    _(s).each(function (d, id) {
+                        if (d.status !== 'ok') {
+                            accountAPI.get(id).done(function (account) {
+                                var node = app.treeView.getNodeView(account.root_folder);
+                                if (node) node.showStatusIcon(d.message);
+                            });
+                        }
+                    });
+                });
+            }
+
+            if (settings.get('dsc/enabled')) {
+                api.on('refresh.all', function () {
+                    updateStatus();
+                });
+
+                app.updateDSCStatus = updateStatus;
+            }
+        },
+
         'mail-quota': function (app) {
 
             if (_.device('smartphone')) return;
@@ -334,12 +366,14 @@ define('io.ox/mail/main', [
                 params = loader.getQueryParams({ folder: 'virtual/all-unseen' }),
                 collection = loader.getCollection(params);
 
+            // set special attributes
+            collection.gc = false;
+            collection.preserve = true;
+            collection.CUSTOM_PAGE_SIZE = 250;
+
             // register load listener which triggers complete
             collection.on('load', function () {
-                this.gc = false;
                 this.complete = true;
-                this.preserve = true;
-                this.CUSTOM_PAGE_SIZE = 250;
                 this.trigger('complete');
             });
 
@@ -713,7 +747,7 @@ define('io.ox/mail/main', [
                     // set focus
                     var items = app.threadView.$('.list-item'),
                         index = items.index(items.filter('.expanded'));
-                    items.filter('.expanded:first').find('.body').focus();
+                    items.filter('.expanded:first').find('.body').visibleFocus();
                     // fix scroll position (focus might scroll down)
                     if (index === 0) app.threadView.$('.scrollable').scrollTop(0);
                 }
@@ -797,9 +831,7 @@ define('io.ox/mail/main', [
 
                 // defer so that all selection events are triggered (e.g. selection:all)
                 _.defer(function () {
-                    // tabbed inbox / mail categories: absolute tab count is unknown
-                    var inTab = categories.isVisible(),
-                        count = $('<span class="number">').text(list.length).prop('outerHTML');
+                    var count = $('<span class="number">').text(list.length).prop('outerHTML');
                     app.right.find('.multi-selection-message .message')
                         .empty()
                         .attr('id', 'mail-multi-selection-message')
@@ -811,13 +843,9 @@ define('io.ox/mail/main', [
                                 gt.format(gt.ngettext('%1$d message selected', '%1$d messages selected', count, count))
                             ),
                             // inline actions
-                            id && total > list.length && !search && !inTab && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
+                            id && total > list.length && !search && app.getWindowNode().find('.select-all').attr('aria-checked') === 'true' ?
                                 $('<div class="inline-actions">').append(
-                                    gt(
-                                        'There are %1$d messages in this folder; not all messages are displayed in the list. ' +
-                                        'If you want to move or delete all messages, you find corresponding actions in the folder context menu.',
-                                        total
-                                    )
+                                    gt('There are %1$d messages in this folder; not all messages are displayed in the list currently.', total)
                                 )
                                 : $()
                         );
@@ -1455,7 +1483,7 @@ define('io.ox/mail/main', [
             // detail view: return back to list view via <escape>
             app.threadView.$el.attr('tabindex', -1).on('keydown', function (e) {
                 if (e.which !== 27) return;
-                if ($(e.target).is('.smart-dropdown, .dropdown-toggle, :input')) return;
+                if ($(e.target).is('.dropdown-toggle, :input')) return;
                 // make sure the detail view closes in list layout
                 app.right.removeClass('preview-visible');
                 app.listView.restoreFocus(true);

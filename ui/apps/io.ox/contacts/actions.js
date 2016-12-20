@@ -20,8 +20,9 @@ define('io.ox/contacts/actions', [
     'settings!io.ox/contacts',
     'settings!io.ox/mail',
     'gettext!io.ox/contacts',
+    'io.ox/core/capabilities',
     'io.ox/core/pim/actions'
-], function (ext, links, actions, api, print, settings, mailSettings, gt) {
+], function (ext, links, actions, api, print, settings, mailSettings, gt, capabilities) {
 
     'use strict';
 
@@ -247,8 +248,10 @@ define('io.ox/contacts/actions', [
     });
 
     new Action('io.ox/contacts/premium/actions/synchronize', {
-        capabilities: 'carddav client-onboarding',
+        capabilities: 'carddav',
         requires: function () {
+            // use client onboarding here, since it is a setting and not a capability
+            if (!capabilities.has('client-onboarding')) return false;
             return _.device('!smartphone');
         },
         action: function () {

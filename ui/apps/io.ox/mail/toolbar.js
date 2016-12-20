@@ -51,6 +51,12 @@ define('io.ox/mail/toolbar', [
             label: gt('Edit draft'),
             ref: 'io.ox/mail/actions/edit'
         },
+        'edit-copy': {
+            prio: 'hi',
+            mobile: 'lo',
+            label: gt('Edit copy'),
+            ref: 'io.ox/mail/actions/edit-copy'
+        },
         'reply': {
             prio: 'hi',
             mobile: 'lo',

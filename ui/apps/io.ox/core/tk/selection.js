@@ -402,6 +402,7 @@ define('io.ox/core/tk/selection', [
         };
 
         select = function (id, silent) {
+            // `id` is not an identifier at all but the very selected object.
             if (id) {
                 fastSelect(id).intoViewport(options.scrollpane);
                 last = id;
@@ -411,7 +412,8 @@ define('io.ox/core/tk/selection', [
                     lastValidIndex = lastIndex;
                 }
                 if (silent !== true) {
-                    self.trigger('select', self.serialize(id));
+                    // append additional argument - the selected object that is named `id`.
+                    self.trigger('select', self.serialize(id), id);
                 }
             }
         };
@@ -521,7 +523,8 @@ define('io.ox/core/tk/selection', [
                         lastValidIndex = lastIndex;
                     }
                     if (silent !== true) {
-                        self.trigger('mark', self.serialize(id));
+                        // append additional argument - the marked object that is named `id`.
+                        self.trigger('mark', self.serialize(id), id);
                     }
                 }
             };
@@ -593,7 +596,7 @@ define('io.ox/core/tk/selection', [
                     node.addClass(self.classSelected).attr({
                         'aria-selected': 'true',
                         'tabindex': 0
-                    }).focus();
+                    });
                 } else {
                     node.removeClass(self.classSelected).attr({
                         'aria-selected': 'false',
@@ -778,6 +781,7 @@ define('io.ox/core/tk/selection', [
          * Select item
          */
         this.select = function (id) {
+            // `id` is not an identifier at all but the very selected object.
             select(id);
             changed();
             return this;

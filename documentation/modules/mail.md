@@ -3,17 +3,32 @@ title: Mail
 ---
 
 ```
-namespace:  io.ox/mail 
+namespace:  io.ox/mail
 settings:   io.ox/mail
 capability: webmail
 ```
 
-# Special configuration settings
+# Configuration settings
 
-**io.ox/mail//features/alwaysDeleteDraft**
+> Please note that only some special ones of the available settings are listed here.
 
-_values: true/false_
+| Path | Values | Description |
+|----------------------------------------|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **io.ox/mail//features/alwaysDeleteDraft** | true, false | Should drafts always be deleted when sending them. Please note that this will affect every draft - also drafts may used as templates. |
 
-This setting is used when drafts should always be deleted when sending them.
-This is useful if you don't want to manually delete your not needed drafts. 
-Keep in mind that this will affect every draft, with this setting drafts that were used as templates will also be deleted when sending.
+# Extension points
+
+> Please note that only some special ones of the available extensions points are listed here.
+
+**io.ox/mail/all/actions**
+
+The point for the "all" actions dropdown in the detail view of a selected mail.
+This place should be used for actions in context with all involved contacts.
+The baton is forwarded to the the single action functions.
+
+baton contains: data - holds the mail object of the current selected contact
+
+- data.threadKey
+- data.threadPosition
+- data.threadSize
+- tracker

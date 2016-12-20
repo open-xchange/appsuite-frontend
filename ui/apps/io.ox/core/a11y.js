@@ -20,20 +20,48 @@ define('io.ox/core/a11y', [], function () {
     //
 
     // fix for role="button"
-    $(document).on('keydown', 'a[role="button"]', function (e) {
+    $(document).on('keydown.role.button', 'a[role="button"]', function (e) {
         if (!/32/.test(e.which) || e.which === 13 && e.isDefaultPrevented()) return;
         e.preventDefault();
         $(this).click();
     });
 
     // focus folder tree from top-bar on <enter>
-    $(document).on('keydown', '#io-ox-topbar .active-app a', function (e) {
+    $(document).on('keydown.topbar', '#io-ox-topbar .active-app a', function (e) {
         if (e.which === 13) $('.folder-tree:visible .folder.selected').focus();
+    });
+
+    // focus active app from foldertree on <escape> and focus listview on <enter>
+    $(document).on('keydown.foldertree', '.folder-tree .folder.selected', function (e) {
+        if (!/13|27/.test(e.which)) return;
+        if (!$(e.target).is('li')) return;
+        var node = $(e.target).closest('.window-container');
+        if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
+        if (e.which === 27) $('#io-ox-topbar .active-app a').focus();
+        if (e.which === 13) {
+            node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
+        }
+    });
+
+    // Focus foldertree on <escape> when in list-view or vgrid
+    $(document).on('keydown.focusFolderTree', '.list-item, .vgrid-scrollpane-container', function (e) {
+        if (!/13|27/.test(e.which)) return;
+        var node = $(e.target).closest('.window-container');
+        if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
+        if (e.which === 27) node.find('.folder-tree .folder.selected').focus();
+        if (e.which === 13) node.find('.rightside, .list-item.focusable:first').last().visibleFocus();
+    });
+
+    $(document).on('keydown.rightside', '.rightside,.scrollpane.f6-target', function (e) {
+        if (e.which !== 27) return;
+        var node = $(e.target).closest('.window-container');
+        if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
+        node.find('.folder-tree .folder.selected, .list-item.selectable.selected, .vgrid-cell.selectable.selected:first, .vgrid-scrollpane-container').last().focus();
     });
 
     $(document).on('keydown.bs.dropdown.data-api', 'ul.dropdown-menu[role="menu"]', dropdownTrapFocus);
 
-    $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"]', menubarKeydown);
+    $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"], ul.launchers', menubarKeydown);
 
     $(document).on('mousedown', '.focusable, .scrollable[tabindex]', function (e) {
         respondToNonKeyboardFocus(e.currentTarget);
@@ -61,6 +89,10 @@ define('io.ox/core/a11y', [], function () {
         fnFocus.apply(this, arguments);
         if (document.activeElement === this[0]) respondToNonKeyboardFocus(this[0]);
         return this;
+    };
+
+    $.fn.visibleFocus = function () {
+        return fnFocus.apply(this);
     };
 
     //
@@ -109,7 +141,7 @@ define('io.ox/core/a11y', [], function () {
     function dropdownTrapFocus(e) {
 
         var dropdown = $(e.target).closest('ul.dropdown-menu'),
-            dropdownLinks = dropdown.find('> li > a'),
+            dropdownLinks = dropdown.find('> li:visible > a'),
             firstLink = dropdownLinks.first(),
             lastLink = dropdownLinks.last(),
             isLastLink = $(e.target).is(lastLink),
@@ -143,6 +175,7 @@ define('io.ox/core/a11y', [], function () {
         var nextFocus,
             a = el.map(function () {
                 var linkText = $(this).text() || $(this).attr('aria-label');
+                if (!linkText) return;
                 if (linkText.substring(0, 1).toLowerCase() === String.fromCharCode(e.which).toLowerCase()) return $(this);
             });
         if (!a.length) return; else if (a.length === 1) return a[0].focus();
@@ -164,7 +197,7 @@ define('io.ox/core/a11y', [], function () {
     function menubarKeydown(e) {
         if (e.which === 9 || e.which === 16 && e.shiftKey) return;
         if (e.which === 32) $(e.target).click(); // space
-        var links = $(e.currentTarget).find('> li > a');
+        var links = $(e.currentTarget).find('> li:visible > a');
         cursorHorizontalKeydown(e, links);
         hotkey(e, links);
     }

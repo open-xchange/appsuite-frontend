@@ -265,13 +265,20 @@ define('io.ox/calendar/main', [
         'vgrid': function (app) {
 
             var gridOptions = {
-                settings: settings,
-                showToggle: _.device('smartphone'),
-                hideTopbar: _.device('smartphone'),
-                hideToolbar: _.device('smartphone'),
-                // if it's shown, it should be on the top
-                toolbarPlacement: 'top'
-            };
+                    settings: settings,
+                    showToggle: _.device('smartphone'),
+                    hideTopbar: _.device('smartphone'),
+                    hideToolbar: _.device('smartphone'),
+                    // if it's shown, it should be on the top
+                    toolbarPlacement: 'top'
+                },
+                savedWidth = app.settings.get('vgrid/width/' + _.display());
+
+            // do not apply on touch devices. it's not possible to change the width there
+            if (!_.device('touch') && savedWidth) {
+                app.right.css('left', savedWidth + 'px');
+                app.left.css('width', savedWidth + 'px');
+            }
 
             // show "load more" link
             gridOptions.tail = function () {
@@ -560,9 +567,18 @@ define('io.ox/calendar/main', [
 
             var lastPerspective,
                 SEARCH_PERSPECTIVE = 'list',
-                find = app.get('find');
-            // additional handler: switch to list perspective (and back)
+                find = app.get('find'),
+                emptyMessage = function findResultEmptyMessage() { return gt('No matching items found.'); };
+
             if (find) {
+                // WORKAROUND: no suitable way other of wrapping getEmptyMessage
+                app.grid.getEmptyMessage = _.wrap(app.grid.getEmptyMessage, function (fn) {
+                    if (app.grid.getMode() === 'search') return emptyMessage;
+                    // return function set by grid.setEmptyMessage
+                    return fn.apply(fn);
+                });
+
+                // additional handler: switch to list perspective (and back)
                 find.on({
                     'find:query': function () {
                         // hide sort options

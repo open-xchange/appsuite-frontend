@@ -74,6 +74,11 @@ define('io.ox/mail/compose/view', [
             draw: function (baton) {
                 ext.point(POINT + '/buttons').invoke('draw', this, baton);
             }
+        },
+        {
+            index: 200,
+            id: 'inlineYell',
+            draw: extensions.inlineYell
         }
     );
 
@@ -367,7 +372,25 @@ define('io.ox/mail/compose/view', [
                 id: this.logoutPointId,
                 index: 1000 + this.app.guid,
                 logout: function () {
-                    return self.autoSaveDraft();
+                    return self.autoSaveDraft().then(function (result) {
+                        var base = _(result.split(mailAPI.separator)),
+                            id = base.last(),
+                            folder = base.without(id).join(mailAPI.separator),
+                            // use JSlob to save the draft ID so it can be used as a restore point.
+                            idSavePoints =  coreSettings.get('savepoints', []);
+
+                        idSavePoints.push({
+                            module: 'io.ox/mail/compose',
+                            // flag to indicate that this savepoint is non default but uses cid to restore the application
+                            restoreById: true,
+                            id: self.app.get('uniqueID'),
+                            description: gt('Mail') + ': ' + (self.model.get('subject') || gt('No subject')),
+                            // data that is send to restore function. Also include flag so it can detect the non default savepoint
+                            point: { id: id, folder_id: folder, restoreById: true }
+                        });
+
+                        return coreSettings.set('savepoints', idSavePoints).save();
+                    });
                 }
             });
         },
@@ -471,7 +494,7 @@ define('io.ox/mail/compose/view', [
                         _(data.nested_msgs).each(function (obj) {
                             attachments.push({
                                 id: obj.id,
-                                filename: obj.subject,
+                                filename: obj.subject + '.eml',
                                 content_type: 'message/rfc822',
                                 msgref: obj.msgref
                             });
@@ -501,9 +524,10 @@ define('io.ox/mail/compose/view', [
 
                     var def = $.Deferred();
                     if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
-                        textproc.texttohtml(content).then(function (processed) {
+                        require(['io.ox/mail/detail/content'], function (proc) {
+                            var html = proc.transformForHTMLEditor(content);
                             attachmentCollection.at(0).set('content_type', 'text/html');
-                            content = processed;
+                            content = html;
                             def.resolve();
                         });
                     } else {
@@ -595,7 +619,7 @@ define('io.ox/mail/compose/view', [
             }).then(function (result, data) {
                 // Replace inline images in contenteditable with links from draft response
                 if (model.get('editorMode') === 'html') {
-                    $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                    $('<div>' + data.attachments[0].content + '</div>').find('img:not(.emoji)').each(function (index, el) {
                         $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
                     });
                 }
@@ -612,7 +636,9 @@ define('io.ox/mail/compose/view', [
                 model.set('msgref', result.data);
                 model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
                 model.dirty(false);
-                notifications.yell('success', gt('Mail saved as draft'));
+                //#. %1$s is the time, the draft was saved
+                //#, c-format
+                self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
                 return result;
             }).always(function () {
                 if (win) win.idle();
@@ -623,6 +649,7 @@ define('io.ox/mail/compose/view', [
 
             var def = new $.Deferred(),
                 model = this.model,
+                self = this,
                 mail = this.model.getMailForAutosave();
 
             if (model.get('encrypt')) {
@@ -649,7 +676,9 @@ define('io.ox/mail/compose/view', [
                         'infostore_ids_saved': [].concat(model.get('infostore_ids_saved'), mail.infostore_ids || [])
                     });
                     model.updateShadow();
-                    notifications.yell('success', gt('Mail saved as draft'));
+                    //#. %1$s is the time, the draft was saved
+                    //#, c-format
+                    self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
                     def.resolve(result);
                 }
             });
@@ -704,6 +733,16 @@ define('io.ox/mail/compose/view', [
 
             this.autosave = {};
             delay();
+        },
+
+        inlineYell: function (text) {
+            // no inline yell on smartphones, use default yell as fallback
+            if (_.device('smartphone')) {
+                notifications.yell('success', text);
+                return;
+            }
+            // only fade in once, then leave it there
+            this.$el.parents().find('.inline-yell').text(text).fadeIn();
         },
 
         clean: function () {
@@ -843,6 +882,9 @@ define('io.ox/mail/compose/view', [
                 new Editor(self.editorContainer, options).done(function (editor) {
                     def.resolve(editor);
                 });
+            }, function () {
+                // something went wrong
+                def.reject({ error: gt("Couldn't load editor") });
             });
             return def.then(function (editor) {
                 self.editorHash[self.model.get('editorMode')] = editor;
@@ -929,11 +971,39 @@ define('io.ox/mail/compose/view', [
         },
 
         prependNewLine: function () {
-            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''),
-                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
-
             // Prepend newline in all modes except when editing draft
-            if (this.model.get('mode') !== 'edit') this.editor.setContent(nl + content);
+            if (this.model.get('mode') === 'edit') return;
+
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''), nl;
+            // don't apply default styles on smartphones. There is no toolbar where a user could change it again.
+            if (!_.device('smartphone')) {
+                var css = {
+                        'font-size': settings.get('defaultFontStyle/size', 'browser-default'),
+                        'font-family': settings.get('defaultFontStyle/family', 'browser-default'),
+                        'color': settings.get('defaultFontStyle/color', 'transparent')
+                    },
+                    styleNode;
+
+                // using '' as a value removes the attribute and thus any previous styling
+                if (css['font-size'] === 'browser-default') delete css['font-size'];
+                if (css['font-family'] === 'browser-default') delete css['font-family'];
+                if (css.color === 'transparent') delete css.color;
+
+                if (_.isEmpty(css)) {
+                    // no styles there so just a br
+                    styleNode = $('<br>');
+                } else {
+                    // br must be appended here. Or tinymce just deletes the span.
+                    styleNode = $('<span>').append($('<br>'));
+                    styleNode.css(css).attr('data-mce-style', css);
+                }
+
+                nl = this.model.get('editorMode') === 'html' ? '<p>' + styleNode[0].outerHTML + '</p>' : '\n';
+            } else {
+                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
+            }
+
+            this.editor.setContent(nl + content);
         },
 
         setMail: function () {

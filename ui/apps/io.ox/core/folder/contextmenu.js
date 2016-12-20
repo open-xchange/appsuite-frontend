@@ -589,7 +589,7 @@ define('io.ox/core/folder/contextmenu', [
                 if (!api.is('private', baton.data)) return;
 
                 if (baton.app && baton.app.props && baton.app.props.get('colorScheme') === 'custom') {
-                    var listItem;
+                    var listItem, container = this.parent();
 
                     this.append(
                         listItem = $('<li role="presentation">')
@@ -601,6 +601,8 @@ define('io.ox/core/folder/contextmenu', [
                                 model: api.pool.getModel(baton.data.id)
                             }).render(calendarUtil).$el
                         );
+                        // trigger ready to recompute bounds of smart dropdown
+                        container.trigger('ready');
                     });
                 }
             };

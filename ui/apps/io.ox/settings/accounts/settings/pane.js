@@ -19,15 +19,18 @@ define('io.ox/settings/accounts/settings/pane', [
     'io.ox/core/folder/api',
     'io.ox/settings/util',
     'io.ox/core/notifications',
+    'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/disposable',
     'io.ox/core/api/filestorage',
     'settings!io.ox/core',
+    'settings!io.ox/mail',
+    'io.ox/core/api/account',
     'gettext!io.ox/settings/accounts',
     'io.ox/backbone/mini-views/settings-list-view',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, mini, listUtils, DisposableView, filestorageApi, coreSettings, gt, ListView) {
+], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, Dropdown, mini, listUtils, DisposableView, filestorageApi, coreSettings, mailSettings, accounts, gt, ListView) {
 
     'use strict';
 
@@ -63,12 +66,13 @@ define('io.ox/settings/accounts/settings/pane', [
 
             if (submodules.length === 0) return;
 
-            return $('<div class="btn-group col-md-4 col-xs-12">').append(
-                $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true">').append(
+            return new Dropdown({
+                className: 'btn-group col-md-4 col-xs-4',
+                $toggle: $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true">').append(
                     $.txt(gt('Add account')), $.txt(' '),
                     $('<span class="caret">')
                 ),
-                $('<ul class="dropdown-menu" role="menu">').append(
+                $ul: $('<ul class="dropdown-menu" role="menu">').append(
                    _(submodules).map(function (submodule) {
                        return $('<li role="presentation">').append(
                            $('<a href="#" role="menuitem">')
@@ -78,7 +82,7 @@ define('io.ox/settings/accounts/settings/pane', [
                        );
                    })
                )
-            );
+            }).render().$el;
         },
 
         drawCertificateValidation = function () {
@@ -120,7 +124,7 @@ define('io.ox/settings/accounts/settings/pane', [
         drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
                 $('<div>').addClass('row').append(
-                    $('<h1 class="col-md-8 col-xs-12">').text(gt('Accounts')),
+                    $('<h1 class="col-md-8 col-xs-8">').text(gt('Accounts')),
                     drawAddButton()
                 ),
                 $('<ul class="list-unstyled list-group widget-list">')
@@ -158,6 +162,23 @@ define('io.ox/settings/accounts/settings/pane', [
             };
         })(),
 
+        dscError = function (data) {
+            if (data.model.get('type') !== 'mail' && mailSettings.get('dsc/enabled') === false) return $();
+
+            var wrapper = $('<div class="account-error-wrapper">'),
+                node = $('<div class="account-error">'),
+                icon = $('<i class="account-error-icon fa fa-exclamation-triangle">');
+
+            accounts.getStatus(data.model.get('id')).done(function (status) {
+                if (status[data.model.get('id')].status !== 'ok') {
+                    wrapper.append(icon, node).show();
+                    node.text(status[data.model.get('id')].message);
+                }
+            });
+
+            return wrapper.hide();
+        },
+
         AccountSelectView = DisposableView.extend({
 
             tagName: 'li',
@@ -184,6 +205,7 @@ define('io.ox/settings/accounts/settings/pane', [
                 self.$el.append(
                     drawIcon(self.model.get('accountType')),
                     listUtils.makeTitle(title),
+                    dscError(this), // rename this maybe
                     listUtils.makeControls().append(
                         listUtils.appendIconText(
                             listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),

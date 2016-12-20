@@ -251,11 +251,11 @@ define('io.ox/core/folder/view', [
                 if (mobileSelectMode === true) {
                     // ignore selection of non-labels in mobile edit mode
                     if ($(e.target).parent().hasClass('folder-label')) {
-                        tree.$dropdown.find('.dropdown-toggle').trigger('click', 'foldertree');
+                        tree.dropdown.$('.dropdown-toggle').trigger('click', 'foldertree');
                     }
                     return;
-                } else if (targetFolder.is('.virtual')) {
-                    // return here as we can not change the page to a virtual folder
+                } else if (targetFolder.is('.virtual') && tree.selection.selectableVirtualFolders[targetFolder.data().id] !== true) {
+                    // return here as we can not change the page to a virtual folder with the exception if the all-my-appointments folder
                     return;
                 }
                 // otherwise

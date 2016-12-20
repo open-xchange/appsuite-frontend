@@ -93,6 +93,11 @@ define('io.ox/mail/compose/extensions', [
             }
         },
 
+        inlineYell: function () {
+            // role log is a special kind of live region for status messages, errors etc.
+            this.append($('<div role="log" aria-live="polite" class="inline-yell">'));
+        },
+
         sender: function (baton) {
 
             function editNames() {
@@ -453,7 +458,7 @@ define('io.ox/mail/compose/extensions', [
             var $el = this,
                 def = $.Deferred();
 
-            require(['io.ox/core/attachments/view'], function (Attachments) {
+            require(['io.ox/core/attachments/view', 'io.ox/core/yell'], function (Attachments, yell) {
                 var view = new Attachments.List({
                     point: 'io.ox/mail/compose/attachment/header',
                     collection: baton.model.get('attachments'),
@@ -463,6 +468,22 @@ define('io.ox/mail/compose/extensions', [
                 });
 
                 if (settings.get('compose/shareAttachments/enabled', false)) {
+                    var locked = false;
+
+                    if (settings.get('compose/shareAttachments/limit', 0) || settings.get('compose/shareAttachments/driveLimit', 0)) {
+                        baton.model.get('attachments').on('add remove reset', function () {
+                            var limit = settings.get('compose/shareAttachments/limit', 0),
+                                driveMailLimit = settings.get('compose/shareAttachments/driveLimit', 0),
+                                size = _(this.models).map(function (model) { return model.get('file_size') || 0; }).reduce(function (a, b) { return a + b; }, 0);
+
+                            locked = limit ? size > limit : false;
+                            view.settingsModel.set('enable', locked);
+
+                            if (driveMailLimit && size > driveMailLimit) {
+                                yell('warning', gt('Attachment size to large. Please remove attachments or reduce the file size.'));
+                            }
+                        });
+                    }
 
                     new links.Action('io.ox/mail/compose/attachment/shareAttachmentsEnable', {
                         capabilities: 'infostore',
@@ -480,6 +501,12 @@ define('io.ox/mail/compose/extensions', [
                             return options.baton.view.shareAttachmentsIsActive();
                         },
                         multiple: function (list, baton) {
+                            // only uncheck if allowed (server setting can enforce drivemail if attachments are to large)
+                            if (locked) {
+                                //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                                yell('info', gt('Attachment file size to large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
+                                return;
+                            }
                             baton.model.set('enable', false);
                         }
                     });
@@ -501,8 +528,81 @@ define('io.ox/mail/compose/extensions', [
                         })
                     );
 
-                    var ShareModel = Backbone.Model.extend({}),
-                        requiredExpiration = settings.get('compose/shareAttachments/requiredExpiration', false);
+                    ext.point('io.ox/mail/attachment/shareAttachments/dropdown').extend({
+                        id: 'options',
+                        index: 100,
+                        draw: function (baton) {
+                            var now = _.now(),
+                                defaultVal = settings.get('compose/shareAttachments/defaultExpiryDate', '1M'),
+                                durationSeed = settings.get('compose/shareAttachments/expiryDates', ['1d', '1w', '1M', '3M', '6M', '1y']);
+
+                            _(durationSeed).each(function (seed) {
+                                var count = seed.slice(0, seed.length - 1),
+                                    unit = seed.slice(seed.length - 1, seed.length),
+                                    timestamp = moment(now).add(count, unit).valueOf(),
+                                    text = '';
+
+                                switch (unit) {
+                                    case 'd':
+                                        text = gt.format(gt.ngettext('%1$d day', '%1$d days', count), count);
+                                        break;
+                                    case 'w':
+                                        text = gt.format(gt.ngettext('%1$d week', '%1$d weeks', count), count);
+                                        break;
+                                    case 'M':
+                                        text = gt.format(gt.ngettext('%1$d month', '%1$d months', count), count);
+                                        break;
+                                    case 'y':
+                                        text = gt.format(gt.ngettext('%1$d year', '%1$d years', count), count);
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                baton.dropdown.option('expiry_date', timestamp, text);
+                                if (seed === defaultVal) {
+                                    baton.view.settingsModel.set('expiry_date', timestamp);
+                                }
+                            });
+                        }
+                    });
+
+                    ext.point('io.ox/mail/attachment/shareAttachments/dropdown').extend({
+                        id: 'none-option',
+                        index: 200,
+                        draw: function (baton) {
+                            if (settings.get('compose/shareAttachments/requiredExpiration', false)) return;
+
+                            var defaultVal = settings.get('compose/shareAttachments/defaultExpiryDate', '1M');
+                            if (!defaultVal && defaultVal === 'none') {
+                                baton.view.settingsModel.set('expiry_date', '');
+                            }
+
+                            baton.dropdown.option('expiry_date', '', gt('no expiry date'));
+                            if (!baton.view.settingsModel.get('autodelete', true)) {
+                                baton.view.settingsModel.on('change:expiry_date', function (settingsModel, value) {
+                                    // autodelete makes no sense if links cannot expire
+                                    if (value === '') baton.view.settingsModel.set('autodelete', false);
+                                });
+                            }
+                        }
+                    });
+
+                    ext.point('io.ox/mail/attachment/shareAttachments/dropdown').extend({
+                        id: 'expire-option',
+                        index: 300,
+                        draw: function (baton) {
+                            baton.dropdown.divider()
+                                .option('autodelete', true, gt('delete if expired'));
+
+                            if (baton.view.settingsModel.get('autodelete', true)) {
+                                // show disabled so user knows that the drive files are deleted, even if it cannot be changed
+                                baton.dropdown.$ul.find('[data-name="autodelete"]').attr('disabled', 'disabled').addClass('disabled');
+                            }
+                        }
+                    });
+
+                    var ShareModel = Backbone.Model.extend({});
 
                     view.settingsModel = new ShareModel({
                         'instruction_language': settingsCore.get('language'),
@@ -542,6 +642,7 @@ define('io.ox/mail/compose/extensions', [
                         view.$header.empty();
                         this.renderHeader();
                         view.invoke('render');
+                        view.$el.find('.io-ox-inline-links a.io-ox-action-link').focus();
                     };
 
                     view.extend({
@@ -565,24 +666,9 @@ define('io.ox/mail/compose/extensions', [
                         },
                         renderOptions: function (baton) {
                             var $links = baton.view.$header.find('.links'),
-                                defaultMoment = moment(_.now()).add(1, 'M').format('x'),
-                                dropdown = new Dropdown({ model: baton.view.settingsModel, label: gt('Expiration'), tagName: 'div', caret: true })
-                                .option('expiry_date', moment(_.now()).add(1, 'd').format('x'), gt('1 day'))
-                                .option('expiry_date', moment(_.now()).add(1, 'w').format('x'), gt('1 week'))
-                                .option('expiry_date', defaultMoment, gt('1 month'))
-                                .option('expiry_date', moment(_.now()).add(3, 'M').format('x'), gt('3 months'))
-                                .option('expiry_date', moment(_.now()).add(6, 'M').format('x'), gt('6 months'))
-                                .option('expiry_date', moment(_.now()).add(1, 'y').format('x'), gt('1 year'));
+                                dropdown = new Dropdown({ model: baton.view.settingsModel, label: gt('Expiration'), tagName: 'div', caret: true });
 
-                            if (baton.view.settingsModel.get('autodelete') || requiredExpiration) {
-                                baton.view.settingsModel.set('expiry_date', defaultMoment);
-                            } else {
-                                dropdown
-                                .option('expiry_date', '', gt('none'))
-                                .divider()
-                                .option('autodelete', true, gt('delete if expired'));
-                                baton.view.settingsModel.set('expiry_date', '');
-                            }
+                            ext.point('io.ox/mail/attachment/shareAttachments/dropdown').invoke('draw', this, ext.Baton({ view: baton.view, dropdown: dropdown }));
 
                             $links.append(dropdown.render().$el);
                         },
@@ -713,7 +799,8 @@ define('io.ox/mail/compose/extensions', [
                     }).map(function (a) {
                         return a.toJSON();
                     });
-                    baton = ext.Baton({ startItem: data, data: list });
+
+                    baton = ext.Baton({ startItem: data, data: list, openedBy: 'io.ox/mail/compose' });
 
                     actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
                 });

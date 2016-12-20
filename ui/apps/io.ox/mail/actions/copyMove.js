@@ -41,10 +41,24 @@ define('io.ox/mail/actions/copyMove', [
                             if (senderList.length > 1) {
                                 preparedTest = { id: 'anyof', tests: [] };
                                 _.each(senderList, function (item) {
-                                    preparedTest.tests.push({ comparison: 'all', headers: ['From'], id: 'address', values: [item] });
+                                    if (opt.filterDefaults.tests.address) {
+                                        preparedTest.tests.push({ comparison: 'all', headers: ['From'], id: 'address', values: [item] });
+                                    } else {
+                                        preparedTest.tests.push({ comparison: 'contains', headers: ['From'], id: 'header', values: [item] });
+                                    }
                                 });
                             } else {
-                                preparedTest = { comparison: 'all', headers: ['From'], id: 'address', values: [senderList[0]] };
+                                preparedTest = opt.filterDefaults.tests.address ? {
+                                    comparison: 'all',
+                                    headers: ['From'],
+                                    id: 'address',
+                                    values: [senderList[0]]
+                                } : {
+                                    comparison: 'contains',
+                                    headers: ['From'],
+                                    id: 'header',
+                                    values: [senderList[0]]
+                                };
                             }
 
                             args.data.obj.set('test', preparedTest);
@@ -57,7 +71,7 @@ define('io.ox/mail/actions/copyMove', [
                 var senderList = _.chain(folderAPI.ignoreSentItems(o.list))
                 .map(function (obj) {
                     var sender = gt('unknown sender');
-                    if (_.isArray(obj.from) && obj.from[0][1]) sender = obj.from[0][1];
+                    if (_.isArray(obj.from) && obj.from[0] && obj.from[0][1]) sender = obj.from[0][1];
                     return sender;
                 })
                 .uniq()
