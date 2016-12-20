@@ -85,7 +85,7 @@ define('io.ox/files/filepicker', [
     //     };
     // }
 
-    function isFileTypeDoc(mimeType) {
+    function isFileTypeDoc(mimeType, fileModel) {
         // 'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         // 'docm': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         // 'dotx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
@@ -96,12 +96,12 @@ define('io.ox/files/filepicker', [
         // 'odm':  'application/vnd.oasis.opendocument.text-master',
         // 'ott':  'application/vnd.oasis.opendocument.text-template',
         // 'oth':  'application/vnd.oasis.opendocument.text-web',
-      //return (/^application\/(?:vnd\.(?:openxmlformats\-officedocument\.wordprocessingml\.)|(?:oasis\.opendocument\.text))|(?:msword$)/).test(mimeType);
+      //return (/^application\/(?:msword|vnd\.(?:ms-word|openxmlformats-officedocument\.wordprocessingml|oasis\.opendocument\.text))/).test(mimeType);
 
         // ... with Dec.2016 implemented into Files-API similar to `isPresentation` that already did exist.
-        return filesAPI.Model.prototype.isWordprocessing.call(null, mimeType);
+        return filesAPI.Model.prototype.isWordprocessing.call((fileModel || null), mimeType);
     }
-    function isFileTypeXls(mimeType) {
+    function isFileTypeXls(mimeType, fileModel) {
         // 'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         // 'xlsm': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         // 'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
@@ -111,12 +111,12 @@ define('io.ox/files/filepicker', [
         // 'xlt':  'application/vnd.ms-excel',
         // 'ods':  'application/vnd.oasis.opendocument.spreadsheet',
         // 'ots':  'application/vnd.oasis.opendocument.spreadsheet-template',
-      //return (/^application\/vnd\.(?:openxmlformats\-officedocument\.spreadsheetml\.)|(?:oasis\.opendocument\.spreadsheet)|(?:ms-excel$)/).test(mimeType);
+      //return (/^application\/(?:powerpoint|vnd\.(?:ms-powerpoint|openxmlformats-officedocument\.presentationml|oasis\.opendocument\.presentation))/).test(mimeType);
 
         // ... with Dec.2016 implemented into Files-API similar to `isPresentation` that already did exist.
-        return filesAPI.Model.prototype.isSpreadsheet.call(null, mimeType);
+        return filesAPI.Model.prototype.isSpreadsheet.call((fileModel || null), mimeType);
     }
-    function isFileTypePpt(mimeType) {
+    function isFileTypePpt(mimeType, fileModel) {
         // 'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         // 'pptm': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         // 'ppsx': 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
@@ -130,34 +130,38 @@ define('io.ox/files/filepicker', [
       //return (/^application\/vnd\.(?:openxmlformats\-officedocument\.presentationml\.)|(?:oasis\.opendocument\.presentation)|(?:ms-powerpoint$)/).test(mimeType);
 
         // did already exist in Files-API:
-        return filesAPI.Model.prototype.isPresentation.call(null, mimeType);
+        return filesAPI.Model.prototype.isPresentation.call((fileModel || null), mimeType);
     }
 
-    function isFileTypePdf(mimeType) {
-        return filesAPI.Model.prototype.isPDF.call(null, mimeType);
+    function isFileTypePdf(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isPDF.call((fileModel || null), mimeType);
     }
-    function isFileTypeTxt(mimeType) {
-        return filesAPI.Model.prototype.isText.call(null, mimeType);
+    function isFileTypeTxt(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isText.call((fileModel || null), mimeType);
     }
 
-    function isFileTypeZip(mimeType) {
+    function isFileTypeZip(mimeType, fileModel) {
       //return (/^application\/zip$/).test(mimeType);
 
         // ... with Dec.2016 implemented into Files-API similar to `isPDF` that already did exist.
-        return filesAPI.Model.prototype.isZIP.call(null, mimeType);
+        return filesAPI.Model.prototype.isZIP.call((fileModel || null), mimeType);
     }
 
-    function isFileTypeAudio(mimeType) {
-        return filesAPI.Model.prototype.isAudio.call(null, mimeType);
+    function isFileTypeAudio(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isAudio.call((fileModel || null), mimeType);
     }
-    function isFileTypeVideo(mimeType) {
-        return filesAPI.Model.prototype.isVideo.call(null, mimeType);
+    function isFileTypeVideo(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isVideo.call((fileModel || null), mimeType);
+    }
+
+    function isFileTypeEncrypted(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isEncrypted.call((fileModel || null), mimeType);
     }
     // function isFileTypeImage(mimeType) {
     //     return filesAPI.Model.prototype.isImage.call(null, mimeType);
     // }
 
-    function isMimetypeImage(mimetype) {
+    function isMimetypeImage(mimetype/*, fileModel*/) {
         return REGX__MIMETYPE_IMAGE.test(mimetype);
     }
 
@@ -194,27 +198,31 @@ define('io.ox/files/filepicker', [
 
           //image: 'file-type-image',
             audio: 'file-type-audio',
-            video: 'file-type-video'
+            video: 'file-type-video',
 
-          //guard: 'file-type-guard',
-          //folder: 'file-type-folder',
+            guard: 'file-type-guard'
+          //folder: 'file-type-folder'
         };
 
-    function getFileTypeIconClassName(mimeType) {
+    function getFileTypeIconClassName(fileObject) {
+        var
+            mimeType  = fileObject.file_mimetype,
+            fileModel = new filesAPI.Model(fileObject);
+
         return (
+            (isFileTypeDoc(mimeType, fileModel) && fileTypeIconClassNameMap.doc) ||
+            (isFileTypeXls(mimeType, fileModel) && fileTypeIconClassNameMap.xls) ||
+            (isFileTypePpt(mimeType, fileModel) && fileTypeIconClassNameMap.ppt) ||
 
-            (isFileTypeDoc(mimeType) && fileTypeIconClassNameMap.doc) ||
-            (isFileTypeXls(mimeType) && fileTypeIconClassNameMap.xls) ||
-            (isFileTypePpt(mimeType) && fileTypeIconClassNameMap.ppt) ||
+            (isFileTypePdf(mimeType, fileModel) && fileTypeIconClassNameMap.pdf) ||
+            (isFileTypeTxt(mimeType, fileModel) && fileTypeIconClassNameMap.txt) ||
 
-            (isFileTypePdf(mimeType) && fileTypeIconClassNameMap.pdf) ||
-            (isFileTypeTxt(mimeType) && fileTypeIconClassNameMap.txt) ||
+            (isFileTypeZip(mimeType, fileModel) && fileTypeIconClassNameMap.zip) ||
 
-            (isFileTypeZip(mimeType) && fileTypeIconClassNameMap.zip) ||
+            (isFileTypeAudio(mimeType, fileModel) && fileTypeIconClassNameMap.audio) ||
+            (isFileTypeVideo(mimeType, fileModel) && fileTypeIconClassNameMap.video) ||
 
-            (isFileTypeAudio(mimeType) && fileTypeIconClassNameMap.audio) ||
-            (isFileTypeVideo(mimeType) && fileTypeIconClassNameMap.video) ||
-
+            (isFileTypeEncrypted(mimeType, fileModel) && fileTypeIconClassNameMap.guard) ||
             ''
         );
     }
@@ -301,7 +309,7 @@ define('io.ox/files/filepicker', [
 
         $preview.append(
             $fileTypeIcon.addClass(
-                getFileTypeIconClassName(fileObject.file_mimetype)
+                getFileTypeIconClassName(fileObject)
             )
         );
         $previewPane.empty();
