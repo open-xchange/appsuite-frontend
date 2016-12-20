@@ -1,3 +1,9 @@
+open-xchange-appsuite-help (7.8.2-19) stable; urgency=medium
+
+  * Build for patch 2017-01-09 (3848)
+
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 20 Dec 2016 19:15:42 +0000
+
 open-xchange-appsuite-help (7.8.2-18) stable; urgency=medium
 
   * Build for patch 2016-12-19 (3813)
