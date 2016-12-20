@@ -471,18 +471,7 @@ define('io.ox/mail/compose/extensions', [
                     var locked = false;
 
                     if (settings.get('compose/shareAttachments/limit', -1) !== -1 || settings.get('compose/shareAttachments/driveLimit', -1) !== -1) {
-                        baton.model.get('attachments').on('add remove reset', function () {
-                            var limit = settings.get('compose/shareAttachments/limit', -1),
-                                driveMailLimit = settings.get('compose/shareAttachments/driveLimit', -1),
-                                size = _(this.models).map(function (model) { return model.get('file_size') || 0; }).reduce(function (a, b) { return a + b; }, 0);
-
-                            locked = limit !== -1 ? size > limit : false;
-                            view.settingsModel.set('enable', locked);
-
-                            if (driveMailLimit !== -1 && size > driveMailLimit) {
-                                yell('warning', gt('Attachment size to large. Please remove attachments or reduce the file size.'));
-                            }
-                        });
+                        baton.model.get('attachments').on('add remove reset', view.shareAttachmentsIsActive);
                     }
 
                     new links.Action('io.ox/mail/compose/attachment/shareAttachmentsEnable', {
@@ -615,6 +604,7 @@ define('io.ox/mail/compose/extensions', [
                         if (_.isEmpty(view.getValidModels())) return false;
                         var actualAttachmentSize = 0,
                             threshold = settings.get('compose/shareAttachments/threshold', 0),
+                            driveMailLimit = settings.get('compose/shareAttachments/driveLimit', -1),
                             thresholdExceeded;
 
                         _.each(baton.model.get('attachments').models, function (model) {
@@ -622,6 +612,12 @@ define('io.ox/mail/compose/extensions', [
                         });
 
                         thresholdExceeded = threshold === 0 ? false : actualAttachmentSize > threshold;
+                        locked = thresholdExceeded;
+                        view.settingsModel.set('enable', locked);
+
+                        if (driveMailLimit !== -1 && actualAttachmentSize > driveMailLimit) {
+                            yell('warning', gt('Attachment size to large. Please remove attachments or reduce the file size.'));
+                        }
                         return thresholdExceeded || view.settingsModel.get('enable');
                     };
 
