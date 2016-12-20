@@ -57,24 +57,23 @@ define('io.ox/mail/categories/dialogs', [
                     );
                 },
                 'info-actions': function (baton) {
-                    var list = senderlist(baton.view.model.get('data'));
+                    var uniquelist = senderlist(baton.view.model.get('data'));
                     this.append(
                         $('<p>').html(
-                            //#. %1$s single mail address or comma separated list of multiple
-                            //#. %2$s target mail category
-                            //#, c-format
-                            gt('Should all other past and future messages from %1$s also be moved to %2$s?', '<b>' + list.join(', ') + '</b>', '<i>' + baton.view.model.get('targetname') + '</i>')
+                            gt.format(
+                                //#. ask user to move all messages from the same sender to the mail category (tab)
+                                //#. %1$s represents a email address
+                                gt.ngettext(
+                                    'Do you want to move all messages from %1$s to that category?',
+                                    'Do you want to move all messages from selected senders to that category?',
+                                    uniquelist.length
+                                ),
+                                '<b>' + _.escape(uniquelist) + '</b>',
+                                baton.view.model.get('targetname')
+                            )
                         )
                     );
                 },
-                // 'hint': function () {
-                //     this.append(
-                //         $('<p>').html(
-                //             //#, c-format
-                //             gt('Just in case you are unsure - usually you want to have all mails from a specific sender in the same tab.')
-                //         )
-                //     );
-                // },
                 register: function (baton) {
                     baton.view.on('generalize', function () {
                         var obj = _.pick(baton.view.model.toJSON(), 'data', 'targetname', 'target', 'source');
