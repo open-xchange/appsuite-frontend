@@ -398,6 +398,30 @@ html:not(.internet-explorer) .scrollable[tabindex] {
     justify-content: center;
 }
 
+.password-container {
+    // space for toggle action and caps-lock indicator
+    input.form-control { padding-right: 50px; }
+    .toggle-asterisks.form-control-feedback {
+        display: none;
+        height: 22px;
+        padding: 0px 16px;
+        top: 4px;
+        right: 4px;
+        bottom: 4px;
+        z-index: 3;
+        pointer-events: all;
+        background-color: #e6e6e6;
+        font-size: 16px;
+        &:focus {
+            color: #ffffff;
+            background-color: #3c73aa;
+        }
+    }
+    &.has-focus .toggle-asterisks {
+        display: flex;
+    }
+}
+
 // small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
