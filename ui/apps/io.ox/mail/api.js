@@ -1460,7 +1460,7 @@ define('io.ox/mail/api',
         return http.UPLOAD({
             module: 'mail',
             params: {
-                action: 'new',
+                action: 'new'
             },
             data: form,
             dataType: 'text'

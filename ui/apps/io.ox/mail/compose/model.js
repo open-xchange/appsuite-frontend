@@ -17,9 +17,10 @@ define('io.ox/mail/compose/model', [
     'io.ox/core/api/account',
     'io.ox/emoji/main',
     'io.ox/core/attachments/backbone',
+    'io.ox/mail/compose/signatures',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (mailAPI, mailUtil, accountAPI, emoji, Attachments, settings, gt) {
+], function (mailAPI, mailUtil, accountAPI, emoji, Attachments, signatureUtil, settings, gt) {
 
     'use strict';
 
@@ -56,8 +57,9 @@ define('io.ox/mail/compose/model', [
                 reply_to: '',
                 sendtype: mailAPI.SENDTYPE.NORMAL,
                 sent_date: '',
-                signature: _.device('smartphone') ? (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) : settings.get('defaultSignature'),
-                currentSignature: '',
+                defaultSignatureId: mailUtil.getDefaultSignature('compose'),
+                // identifier for empty signature (dropdown)
+                signatureId: '',
                 csid: mailAPI.csid(),
                 size: '',
                 subject: '',
@@ -69,6 +71,7 @@ define('io.ox/mail/compose/model', [
         },
 
         initialize: function () {
+            _.extend(this, signatureUtil.model, this);
             var list = this.get('attachments');
             if (_.isObject(list) && !_.isEmpty(list)) {
                 var editorMode = this.get('editorMode') === 'text' ? 'text' : 'html';
@@ -128,11 +131,10 @@ define('io.ox/mail/compose/model', [
                 }.bind(this));
             }
 
-            if (this.get('mode') === 'edit') {
-                this.set({ 'signature': '' });
-            }
-
             this.set('autoDismiss', this.get('mode') === 'edit');
+
+            if (!this.get('signatures')) this.set('signatures', this.getSignatures());
+
             this.updateShadow();
         },
 
@@ -199,6 +201,9 @@ define('io.ox/mail/compose/model', [
             // image URL fix
             if (mode === 'html') {
                 content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
+
+                // Remove wrapping div
+                content = content.replace(/^<div\sid="ox-\S+">/, '').replace(/<\/div>$/, '');
             }
 
             // convert different emoji encodings to unified

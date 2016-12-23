@@ -253,23 +253,46 @@ define('io.ox/mail/compose/extensions', [
 
         signature: function (baton) {
             if (_.device('smartphone')) return;
-            var self = this;
-            baton.view.signaturesLoading = $.Deferred();
-            require(['io.ox/core/api/snippets'], function (snippetAPI) {
-                snippetAPI.getAll('signature').always(function (signatures) {
-                    baton.view.signatures = signatures;
-                    baton.view.signaturesLoading.resolve(signatures);
-                    var sa = _.map(signatures, function (o) {
-                        return { 'id': o.id, 'displayName': o.displayname };
-                    });
+            baton.view.signaturesLoading = baton.model.initializeSignatures(this);
+        },
 
-                    if (sa.length >= 1) {
-                        _.each(sa, function (item) {
-                            self.data('view').option('signature', item.id, item.displayName);
+        signaturemenu: function (baton) {
+            if (_.device('smartphone')) return;
+
+            var self = this,
+                container = $('<div class="dropdown signatures text-left">');
+
+            // IEDA: move to view to have a reference or trigger a refresh?!
+
+            function draw() {
+                var dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true, el: container })
+                    .option('signatureId', '', gt('No signature'));
+
+                ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
+                dropdown.$ul.addClass('pull-right');
+                baton.view.signaturesLoading.done(function () {
+                    dropdown.divider();
+                    dropdown.link('settings', gt('Manage signatures'), function () {
+                        var options = { id: 'io.ox/mail/settings/signatures' };
+                        ox.launch('io.ox/settings/main', options).done(function () {
+                            this.setSettingsPane(options);
                         });
-                    }
+                    });
+                    dropdown.$ul.addClass('pull-right');
+                    dropdown.render();
                 });
+
+                container.empty().append(dropdown.$el);
+            }
+
+            require(['io.ox/core/api/snippets'], function (snippetAPI) {
+                // use normal event listeners since view.listenTo does not trigger correctly.
+                snippetAPI.on('refresh.all', draw);
+                baton.view.$el.one('dispose', function () { snippetAPI.off('refresh.all', draw); });
+
+                draw();
             });
+            self.append(container);
         },
 
         attachmentPreviewList: function (baton) {

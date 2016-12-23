@@ -28,9 +28,10 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/actions/attachmentEmpty',
     'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/tk/dialogs',
+    'io.ox/mail/compose/signatures',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style'
-], function (extensions, MailModel, Dropdown, ext, contactAPI, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs) {
+], function (extensions, MailModel, Dropdown, ext, contactAPI, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil) {
 
     'use strict';
 
@@ -326,6 +327,7 @@ define('io.ox/mail/compose/view', [
         initialize: function (options) {
             this.app = options.app;
             this.model = new MailModel(this.filterData(options.data));
+            _.extend(this, signatureUtil.view, this);
             this.editorHash = {};
             this.autosave = {};
             this.intervals = [];
@@ -356,10 +358,11 @@ define('io.ox/mail/compose/view', [
 
             this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
             this.listenTo(this.model, 'change:editorMode', this.changeEditorMode);
-            this.listenTo(this.model, 'change:signature', this.setSelectedSignature);
             this.listenTo(this.model, 'needsync', this.syncMail);
-
-            this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
+            // handler can be found in signatures.js
+            this.listenTo(this.model, 'change:signatureId', this.setSignature);
+            this.listenTo(this.model, 'change:signatures', this.updateSignatures);
+            this.listenTo(this.model, 'change:signature', this.redrawSignature);
 
             var mailto, params, self = this;
             // triggered by mailto?
@@ -528,8 +531,8 @@ define('io.ox/mail/compose/view', [
             }).then(function (result, data) {
                 // Replace inline images in contenteditable with links from draft response
                 if (model.get('editorMode') === 'html') {
-                    $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
-                        $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
+                    $('<div>' + data.attachments[0].content + '</div>').find('img:not(.emoji)').each(function (index, el) {
+                        $('img:not(.emoji):eq(' + index + ')', self.contentEditable.find('.editable')).attr('src', $(el).attr('src'));
                     });
                 }
 
@@ -948,92 +951,6 @@ define('io.ox/mail/compose/view', [
             }
 
             this.editor.setContent(content);
-            this.setSelectedSignature(this.model.get('signature'));
-        },
-
-        getMobileSignature: function () {
-            var value = settings.get('mobileSignature');
-            if (value === undefined) {
-                value =
-                    //#. %s is the product name
-                    gt('Sent from %s via mobile', ox.serverConfig.productName);
-            }
-            return value;
-        },
-
-        setSelectedSignature: function (model, id) {
-
-            if (_.isString(model)) id = model;
-
-            var newSignature = _.where(this.signatures, { id: String(id) })[0],
-                prevSignature = _.where(this.signatures, { id: _.isObject(model) ? model.previous('signature') : '' })[0],
-                hasContent = !!this.editor.getContent().length;
-
-            if (prevSignature) {
-                this.removeSignature(prevSignature);
-            }
-            if (newSignature) {
-                var ds = newSignature;
-                ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
-                this.setSignature(ds);
-            }
-            // do not add new line if sigs are simply exchanged
-            if (prevSignature && newSignature) return;
-            // otherwise a line would be added above user entered content
-            if (hasContent) return;
-            this.prependNewLine();
-        },
-
-        removeSignature: function (signature) {
-
-            var self = this,
-                isHTML = !!this.editor.find,
-                currentSignature = mailUtil.signatures.cleanAdd(signature.content, isHTML);
-
-            // remove current signature from editor
-            if (isHTML) {
-                this.editor.find('.io-ox-signature').each(function () {
-
-                    var node = $(this),
-                        text = node.text(),
-                        unchanged = _(self.signatures).find(function (signature) {
-                            return $('<div>').html(signature.content).text().replace(/\s+/g, '') === text.replace(/\s+/g, '');
-                        });
-
-                    // remove entire block unless it seems edited
-                    if (unchanged) node.remove(); else node.removeClass('io-ox-signature');
-                });
-            } else {
-                if (currentSignature) {
-                    this.editor.replaceParagraph(currentSignature, '');
-                }
-            }
-        },
-
-        isSignature: function (text) {
-            var isHTML = !!this.editor.find;
-            return mailUtil.signatures.is(text, this.signatures, isHTML);
-        },
-
-        setSignature: function (signature) {
-
-            var text,
-                isHTML = !!this.editor.find;
-
-            // add signature?
-            if (this.signatures.length > 0) {
-                text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
-                if (isHTML) text = this.getParagraph(text);
-                // signature wrapper
-                if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
-                if (signature.misc && signature.misc.insertion === 'below') {
-                    this.editor.appendContent(text);
-                    this.editor.scrollTop('bottom');
-                } else {
-                    this.editor.insertPrevCite(text);
-                    this.editor.scrollTop('top');
-                }
-            }
         },
 
         getParagraph: function (text) {
@@ -1074,7 +991,9 @@ define('io.ox/mail/compose/view', [
                         self.toggleTokenfield('cc');
                     }
                     self.setBody(self.model.getContent());
-                    self.model.dirty(false);
+                    // Set model as dirty only when attaching infostore ids initially (Send as pdf from text)
+                    self.model.dirty(self.model.get('mode') === 'compose' && !_.isEmpty(self.model.get('infostore_ids')));
+                    self.model.setInitialSignature();
                 }
             });
         },

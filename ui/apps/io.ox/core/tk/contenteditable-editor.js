@@ -512,6 +512,10 @@ define.async('io.ox/core/tk/contenteditable-editor',
             return $(ed.getDoc()).find(selector);
         };
 
+        this.children = function (selector) {
+            return $(ed.getBody()).children(selector);
+        };
+
         this.replaceContent = function (str, rep) {
 
             // adopted from tinyMCE's searchreplace plugin

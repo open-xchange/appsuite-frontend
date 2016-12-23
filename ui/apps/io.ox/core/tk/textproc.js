@@ -216,36 +216,43 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
     },
 
     htmltotext = function (string) {
-        var ELEMENTS = [{
-            patterns: 'p',
-            replacement: function(str, attrs, innerHTML) {
-                return innerHTML ? '\n\n' + innerHTML + '\n' : '';
-            }
-        },
-        {
-            patterns: ['br'],
-            type: 'void',
-            replacement: '\n'
-        },
-        {
-            patterns: 'h([1-6])',
-            replacement: function(str, hLevel, attrs, innerHTML) {
-                return '\n\n' + innerHTML + '\n';
-            }
-        },
-        {
-            patterns: 'hr',
-            type: 'void',
-            replacement: '\n\n- - -\n'
-        },
-        {
-            patterns: 'a',
-            replacement: function(str, attrs, innerHTML) {
-                var href = attrs.match(attrRegExp('href'));
-                if (/^mailto:/.test(href[1])) return href[1].substr(7).length ? href[1].substr(7) : '';
-                return href ? (innerHTML ? innerHTML : href[1]) : '';
-            }
-        }];
+        var ELEMENTS = [
+            {
+                patterns: 'p',
+                replacement: function (str, attrs, innerHTML) {
+                    return innerHTML ? '\n\n' + innerHTML + '\n' : '';
+                }
+            },
+            {
+                patterns: ['br'],
+                type: 'void',
+                replacement: '\n'
+            },
+            {
+                patterns: 'h([1-6])',
+                replacement: function (str, hLevel, attrs, innerHTML) {
+                    return '\n\n' + innerHTML + '\n';
+                }
+            },
+            {
+                patterns: 'hr',
+                type: 'void',
+                replacement: '\n\n---\n'
+            },
+            {
+                patterns: 'a',
+                replacement: function (str, attrs, innerHTML) {
+                    var href = attrs.match(attrRegExp('href'));
+
+                    if (href && href[1].indexOf('mailto:') === 0) {
+                        return href[1].substr(7);
+                    } else if (href && innerHTML === href[1]) {
+                        return innerHTML;
+                    }
+
+                    return '[' + (innerHTML || '') + '](' + (href && href[1] || '') + ')';
+                }
+            }];
 
         for (var i = 0, len = ELEMENTS.length; i < len; i++) {
             if (typeof ELEMENTS[i].patterns === 'string') {
@@ -259,16 +266,14 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
         function replaceEls(html, el) {
 
-            var pattern, regex, markdown;
-            /* jshint ignore:start */
-            pattern = el.type === 'void' ? '<' + el.tag + '\\b([^>]*)\\/?>' : '<' + el.tag + '\\b([^>]*)>([\\s\\S]*?)<\\/' + el.tag + '>',
-            /* jshint ignore:end */
-            regex = new RegExp(pattern, 'gi');
+            var markdown,
+                pattern = el.type === 'void' ? '<' + el.tag + '\\b([^>]*)\\/?>' : '<' + el.tag + '\\b([^>]*)>([\\s\\S]*?)<\\/' + el.tag + '>',
+                regex = new RegExp(pattern, 'gi');
 
             if (typeof el.replacement === 'string') {
                 markdown = html.replace(regex, el.replacement);
             } else {
-                markdown = html.replace(regex, function(str, p1, p2, p3) {
+                markdown = html.replace(regex, function (str, p1, p2, p3) {
                     return el.replacement.call(this, str, p1, p2, p3);
                 });
             }
@@ -281,7 +286,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
         // Pre code blocks
 
-        string = string.replace(/<pre\b[^>]*>`([\s\S]*?)`<\/pre>/gi, function(str, innerHTML) {
+        string = string.replace(/<pre\b[^>]*>`([\s\S]*?)`<\/pre>/gi, function (str, innerHTML) {
             var text = innerHTML;
             text = text.replace(/^\t+/g, '  '); // convert tabs to spaces (you know it makes sense)
             text = text.replace(/\n/g, '\n    ');
@@ -303,23 +308,24 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
         function replaceLists(html) {
 
-            html = html.replace(/<(ul|ol)\b[^>]*>([\s\S]*?)<\/\1>/gi, function(str, listType, innerHTML) {
+            html = html.replace(/<(ul|ol)\b[^>]*>([\s\S]*?)<\/\1>/gi, function (str, listType, innerHTML) {
+
                 var lis = innerHTML.split('</li>');
                 lis.splice(lis.length - 1, 1);
 
-                for (i = 0, len = lis.length; i < len; i++) {
+                function fixupList(str, innerHTML) {
+                    innerHTML = innerHTML
+                        .replace(/(^\s+|\n$)/g, '')
+                        .replace(/\n\n/g, '\n ')
+                        // indent nested lists
+                        .replace(/\n([ ]*)+(\*|\d+\.) /g, '\n$1  $2 ');
+                    return innerHTML;
+                }
+
+                for (var i = 0, len = lis.length; i < len; i++) {
                     if (lis[i]) {
-                        /* jshint ignore:start */
-                        var prefix = (listType === 'ol') ? (i + 1) + '.  ' : '*   ';
-                        lis[i] = lis[i].replace(/\s*<li[^>]*>([\s\S]*)/i, function(str, innerHTML) {
-                            innerHTML = innerHTML
-                                .replace(/^\s+/, '')
-                                .replace(/\n\n/g, '\n\n    ')
-                                // indent nested lists
-                                .replace(/\n([ ]*)+(\*|\d+\.) /g, '\n$1    $2 ');
-                            return prefix + innerHTML;
-                        });
-                        /* jshint ignore:end */
+                        var prefix = (listType === 'ol') ? (i + 1) + '. ' : '* ';
+                        lis[i] = prefix + lis[i].replace(/\s*<li[^>]*>([\s\S]*)/i, fixupList);
                     }
                     lis[i] = lis[i].replace(/(.) +$/m, '$1');
                 }
@@ -336,7 +342,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
         }
 
         function replaceBlockquotes(html) {
-            return html.replace(/<blockquote\b[^>]*>([\s\S]*?)<\/blockquote>/gi, function(string,  inner) {
+            return html.replace(/<blockquote\b[^>]*>([\s\S]*?)<\/blockquote>/gi, function (string, inner) {
                 inner = inner.replace(/^\s+|\s+$/g, '');
                 inner = cleanUp(inner);
                 inner = inner
@@ -348,19 +354,21 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
         function cleanUp(string) {
             return string
-                .replace(/&nbsp;/g, ' ')
-                .replace(/&gt;/g, '>')
-                .replace(/&lt;/g, '<')
                 .replace(/<!--(.*?)-->/g, '')             // Remove comments
                 .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1')
                 .replace(/(<\/?\w+(\s[^<>]*)?\/?>)/g, '') // Remove all remaining tags except mail addresses
                 .replace(/^[\t\r\n]+|[\t\r\n]+$/g, '')    // Trim leading/trailing whitespace
                 .replace(/\n\s+\n/g, '\n\n')
-                .replace(/\n{3,}/g, '\n\n');              // limit consecutive linebreaks to 2
+                .replace(/\n{3,}/g, '\n\n')              // limit consecutive linebreaks to 2
+                //replace html entities last, because things like &gt; and &lt; might get removed otherwise
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&gt;/g, '>')
+                .replace(/&lt;/g, '<')
+                .replace(/&amp;/g, '&');
         }
 
         string = cleanUp(string);
-        string = string.replace(/^\s+\n\n/,'\n');
+        string = string.replace(/^\s+\n\n/, '\n');
         // only insert newline when content starts with quote
         if (!/^\n\>\s/.test(string)) {
             string = string.replace(/^\n/, '');

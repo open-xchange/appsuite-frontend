@@ -11,7 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/text-editor', function () {
+define('io.ox/core/tk/text-editor', [
+    'io.ox/core/tk/textproc'
+], function (textproc) {
 
     'use strict';
 
@@ -78,8 +80,7 @@ define('io.ox/core/tk/text-editor', function () {
 
         // publish internal 'done'
         this.done = function (fn) {
-            def.done(fn);
-            return def;
+            return def.done(fn);
         };
 
         this.focus = function () {
@@ -108,10 +109,11 @@ define('io.ox/core/tk/text-editor', function () {
         };
 
         this.setCaretPosition = function () {
+            if (!textarea) return;
             var el = textarea.get(0);
-            // Prevent NS_ERROR_FAILURE in Firefox
-            _.defer(function () {
-                if (document.activeElement !== el) return;
+            function fnSetCaretPosition() {
+                // Prevent NS_ERROR_FAILURE in Firefox
+                if (!textarea || !textarea.is(':visible')) return;
                 if (el.setSelectionRange) {
                     el.setSelectionRange(0, 0);
                 } else if (el.createTextRange) {
@@ -119,18 +121,24 @@ define('io.ox/core/tk/text-editor', function () {
                     range.moveStart('character', 0);
                     range.select();
                 }
-                textarea.scrollTop(0);
-            });
+            }
+            fnSetCaretPosition();
+            // Defer is needed on Chrome, but causes Error in Firefox
+            if (_.browser.Chrome) _.defer(fnSetCaretPosition);
+            textarea.scrollTop(0);
         };
 
         this.appendContent = function (str) {
             var content = this.getContent();
+            // Remove whitespace above and below content and add newline before appended string
+            content = this.getContent().replace(/\n+$/, '').replace(/^\n+/, '');
             this.setContent(content + '\n\n' + str);
         };
 
         this.prependContent = function (str) {
-            var content = this.getContent();
-            this.setContent(str + '\n\n' + content);
+            // Remove whitespace above and below content and add newline before prepended string
+            var content = this.getContent().replace(/^\n+/, '').replace(/\n+$/, '');
+            this.setContent('\n' + str + '\n\n' + content);
         };
 
         this.setContentParts = function (data, type) {
@@ -168,17 +176,19 @@ define('io.ox/core/tk/text-editor', function () {
         };
 
         this.replaceParagraph = function (str, rep) {
-            var content = this.getContent(), pos, top;
-            // exists?
-            if ((pos = content.indexOf(str.trim())) > -1) {
-                // replace content
+            var content = this.getContent(), top,
+                length = content.length,
+                strSanitized = textproc.htmltotext(str);
+            // workaround: compose vs. edit (sanitized signature)
+            content = content.replace(str.trim(), (rep || ''));
+            content = content.replace(strSanitized, (rep || ''));
+            if (content.length !== length) {
                 top = this.scrollTop();
-                this.setContent(content.substr(0, pos) + (rep || '') + content.substr(pos + str.length));
+                this.setContent(content);
                 this.scrollTop(top);
                 return true;
-            } else {
-                return false;
             }
+            return false;
         };
 
         var resizeEditorMargin = (function () {
