@@ -71,8 +71,13 @@ define('io.ox/files/api', [
                     source: 'pim'
                 };
 
-            } else if (_.isString(attributes.guardUrl) || (attributes.source === 'guardDrive')) {
+            } else if (_.isString(attributes.guardUrl) || (attributes.source === 'guardDrive') || (attributes.source === 'guardMail')) {
                 normalizedAttrs = attributes;
+                // map content_type to file_mimetype for mail attachments
+                if (attributes.content_type && !normalizedAttrs.file_mimetype) {
+                    normalizedAttrs.file_mimetype = attributes.content_type;
+                }
+
             } else {
                 // drive
                 normalizedAttrs = attributes;
@@ -167,7 +172,7 @@ define('io.ox/files/api', [
         },
 
         isMailAttachment: function () {
-            return this.get('source') === 'mail';
+            return (this.get('source') === 'mail' || this.get('source') === 'guardMail');
         },
 
         isPIMAttachment: function () {
