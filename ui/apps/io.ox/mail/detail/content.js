@@ -11,6 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/* global blankshield:true */
+/*jshint scripturl:true*/
+
 define('io.ox/mail/detail/content',
     ['io.ox/mail/api',
      'io.ox/core/util',
@@ -365,6 +368,22 @@ define('io.ox/mail/detail/content',
             });
             // delegate
             $(this).on('click', '.blockquote-toggle', explandBlockquote);
+        }
+    });
+
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'form-submit',
+        index: 1200,
+        process: function () {
+            $(this).on('submit', 'form', function (e) {
+                e.preventDefault();
+                var name = _.uniqueId('blank');
+                /* eslint no-script-url: 2 */
+                blankshield.open('javascript:0', name);
+                /* eslint no-script-url: 0 */
+                this.target = name;
+                setTimeout(this.submit.bind(this));
+            });
         }
     });
 
