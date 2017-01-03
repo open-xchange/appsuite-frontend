@@ -11,6 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/* global blankshield:true */
 /*jshint scripturl:true*/
 
 define('io.ox/mail/detail/content', [
@@ -413,6 +414,22 @@ define('io.ox/mail/detail/content', [
             // if a mail contains a table, we assume that it is a mail with a lot of markup
             // and styles and things like max-width: 100% will destroy the layout
             if (container.find('table').length === 0) container.addClass('simple-mail');
+        }
+    });
+
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'form-submit',
+        index: 1200,
+        process: function () {
+            $(this).on('submit', 'form', function (e) {
+                e.preventDefault();
+                var name = _.uniqueId('blank');
+                /* eslint no-script-url: 2 */
+                blankshield.open('javascript:0', name);
+                /* eslint no-script-url: 0 */
+                this.target = name;
+                setTimeout(this.submit.bind(this));
+            });
         }
     });
 
