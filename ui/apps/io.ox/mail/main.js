@@ -232,6 +232,27 @@ define('io.ox/mail/main', [
             app.folderView.resize.enable();
         },
 
+        /*
+         * Folder view support mobile
+         */
+        'folder-view-mobile': function (app) {
+
+            if (_.device('!smartphone')) return app;
+
+            var nav = app.pages.getNavbar('folderTree'),
+                page = app.pages.getPage('folderTree');
+
+            nav.on('rightAction', function () {
+                app.toggleFolders();
+            });
+
+            var tree = new TreeView({ app: app, module: 'mail', root: '1', contextmenu: true });
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            page.append(tree.render().$el);
+            app.treeView = tree;
+        },
+
         'folder-view-dsc-events': function (app) {
             // open accounts page on when the user clicks on error indicator
             app.treeView.on('accountlink:dsc', function () {
@@ -334,27 +355,6 @@ define('io.ox/mail/main', [
             };
 
             app.toggleFolders = toggle;
-        },
-
-        /*
-         * Folder view support
-         */
-        'folder-view-mobile': function (app) {
-
-            if (_.device('!smartphone')) return app;
-
-            var nav = app.pages.getNavbar('folderTree'),
-                page = app.pages.getPage('folderTree');
-
-            nav.on('rightAction', function () {
-                app.toggleFolders();
-            });
-
-            var tree = new TreeView({ app: app, module: 'mail', root: '1', contextmenu: true });
-
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
-            page.append(tree.render().$el);
         },
 
         /*
