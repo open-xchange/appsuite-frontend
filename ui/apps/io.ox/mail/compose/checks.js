@@ -68,28 +68,37 @@ define('io.ox/mail/compose/checks', [
             if (!sender) return $.when(mode);
 
             var def = $.Deferred(),
-                list = '<b>' + _.escape(getList(original.toJSON())) + '</b>',
+                list = getList(original.toJSON()),
+                listHTML = '<b>' + _.escape(list) + '</b>',
                 address = '<b>' + _.escape(util.getDisplayName(sender, { showMailAddress: true })) + '</b>';
 
-            new dialogs.ModalDialog({ easyOut: false })
+            new dialogs.ModalDialog({ easyOut: false, width: 600 })
                 .header(
                     $('<h4>').text(gt('Reply to mailing list'))
                 )
                 .append(
                     $('<p>').html(
-                        //#. %1$d is an email addresses
-                        list ? gt('This message was sent via the mailing list %1$s.', list) : gt('This message was sent via a mailing list.')
+                        list ?
+                            //#. %1$s and %2$s are both email addresses
+                            gt('This message was sent by %1$s via the mailing list %2$s.', address, listHTML) :
+                            //#. %1$s is an email addresses
+                            gt('This message was sent by %1$s via a mailing list.', address)
                     ),
-                    $('<p>').html(
-                        //#. %1$d is an email addresses
-                        gt('Do you really want to reply all or just %1$s?', address)
+                    $('<p>').text(
+                        gt('Do you want to reply to the sender, to the mailing list, or to all?')
                     )
                 )
-                .addAlternativeButton('cancel', gt('Cancel'))
-                .addPrimaryButton('reply-all', gt('Reply all'))
-                .addPrimaryButton('reply', gt('Reply to sender'))
+                .build(function () {
+                    this.addAlternativeButton('cancel', gt('Cancel'));
+                    this.addPrimaryButton('reply-all', gt('Reply to all'));
+                    if (list) this.addPrimaryButton('reply-list', gt('Reply to list'));
+                    this.addPrimaryButton('reply', gt('Reply to sender'));
+                })
                 .on('reply-all', function () {
                     def.resolve('replyall');
+                })
+                .on('reply-list', function () {
+                    def.resolve('reply', { to: [[null, list]] });
                 })
                 .on('reply', function () {
                     def.resolve('reply');

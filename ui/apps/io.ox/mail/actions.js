@@ -100,8 +100,8 @@ define('io.ox/mail/actions', [
         return function (baton) {
             var data = baton.first();
             require(['io.ox/mail/compose/checks'], function (checks) {
-                checks.replyToMailingList(_.cid(data), mode, data).then(function (mode) {
-                    ox.registry.call('mail-compose', mode, data);
+                checks.replyToMailingList(_.cid(data), mode, data).then(function (mode, customData) {
+                    ox.registry.call('mail-compose', mode, data, customData);
                 });
             });
         };

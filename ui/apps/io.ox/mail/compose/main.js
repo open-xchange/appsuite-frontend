@@ -72,7 +72,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
 
         function compose(type) {
 
-            return function (obj) {
+            return function (obj, customData) {
 
                 var def = $.Deferred();
                 _.url.hash('app', 'io.ox/mail/compose:' + type);
@@ -94,7 +94,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                         app.model = new MailComposeModel(data);
                         app.view = new MailComposeView({ app: app, model: app.model });
                         win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                        return app.view.fetchMail(data);
+                        return app.view.fetchMail(data, customData);
                     })
                     .then(function () {
                         return app.view.setMail();

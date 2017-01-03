@@ -405,7 +405,8 @@ define('io.ox/mail/compose/view', [
             this.$('[data-extension-id="arialive"]').text(msg);
         },
 
-        fetchMail: function (obj) {
+        fetchMail: function (obj, customData) {
+
             // Empty compose (early exit)
             if (obj.mode === 'compose') return $.when();
 
@@ -471,6 +472,9 @@ define('io.ox/mail/compose/view', [
                     return data;
                 })
                 .then(function (data) {
+
+                    if (customData) _.extend(data, customData);
+
                     if (mode !== 'edit') {
                         data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
                     } else {
