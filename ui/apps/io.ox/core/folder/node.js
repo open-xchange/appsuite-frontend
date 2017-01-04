@@ -500,7 +500,7 @@ define('io.ox/core/folder/node', [
         renderCounter: function () {
             var value = this.getCounter();
             this.$.selectable.toggleClass('show-counter', value > 0);
-            if (value > 99) value = '99+';
+            if (value > 999) value = '999+';
             this.$.counter.text(value === 0 ? '' : value);
         },
 

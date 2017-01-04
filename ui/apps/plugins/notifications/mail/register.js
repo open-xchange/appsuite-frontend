@@ -182,7 +182,7 @@ define('plugins/notifications/mail/register', [
         }
 
         // don't let the badge grow infinite
-        if (count > 99) count = '99+';
+        if (count > 999) count = '999+';
 
         //#. %1$d number of notifications
         app.setCounter(count, { arialabel: gt('%1$d unread mails', count) });
