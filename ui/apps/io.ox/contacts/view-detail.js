@@ -256,7 +256,7 @@ define('io.ox/contacts/view-detail', [
                 hash = {}, $list;
 
             this.append(
-                count === 0 ? $('<div class="list-count">').text(gt('This list has no contacts yet')) : $(),
+                count === 0 ? $('<div class="list-count">').text(gt('This list has no members yet')) : $(),
                 $list = $('<ul class="member-list list-unstyled">')
             );
 

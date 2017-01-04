@@ -211,7 +211,9 @@ define('io.ox/participants/views', [
         className: 'participantsrow col-xs-12',
 
         initialize: function (options) {
-            this.options = options;
+            this.options = _.extend({
+                empty: gt('This list has no participants yet')
+            }, options);
             this.listenTo(this.collection, 'add', function (model) {
                 this.renderLabel();
                 this.renderEmptyLabel();
@@ -225,7 +227,10 @@ define('io.ox/participants/views', [
                 this.$ul.empty();
                 this.renderAll();
             });
-            this.$empty = $('<li>').text(gt('This list has no contacts yet'));
+            this.$empty = $('<li>').text(this.options.empty);
+            // duck typing
+            if (this.options.baton) return;
+            this.isDistributionList = this.options.baton.model.has('mark_as_distributionlist');
         },
 
         render: function () {
@@ -241,7 +246,7 @@ define('io.ox/participants/views', [
 
         renderLabel: function () {
             var count = this.collection.length,
-                label = this.options.label || gt('Participants (%1$d)', count);
+                label = this.options.label || (this.isDistributionList ? gt('Members (%1$d)', count) : gt('Participants (%1$d)', count));
             this.$('fieldset > legend').text(label);
         },
 

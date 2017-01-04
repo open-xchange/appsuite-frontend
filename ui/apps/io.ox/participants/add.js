@@ -83,7 +83,7 @@ define('io.ox/participants/add', [
     }
 
     function getAddress(item) {
-        // string, data, or model
+        // string, data or model
         if (_.isString(item)) item = { email1: item };
         else if (item instanceof Backbone.Model) item = item.toJSON();
         return contactsUtil.getMail(item);
@@ -100,8 +100,8 @@ define('io.ox/participants/add', [
         typeahead: null,
 
         options: {
-            placeholder: gt('Add participant/resource'),
-            label: gt('Add participant/resource'),
+            placeholder: gt('Add contact/resource') + ' \u2026',
+            label: gt('Add contact/resource'),
             extPoint: 'io.ox/participants/add',
             blacklist: false
         },
@@ -176,7 +176,7 @@ define('io.ox/participants/add', [
                 var address = getAddress(item);
                 if (coreUtil.isValidMailAddress(address)) return true;
                 //#. %1$s is an email address
-                yell('error', gt('Cannot add participant/member with an invalid mail address: %1$s', address));
+                yell('error', gt('Cannot add contact with an invalid mail address: %1$s', address));//
                 return false;
             });
         },

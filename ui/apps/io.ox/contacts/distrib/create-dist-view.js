@@ -111,7 +111,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
             this.$el.append(new pViews.UserContainer({
                 collection: this.baton.member,
                 baton: this.baton,
-                isMail: true
+                isMail: true,
+                empty: gt('This list has no members yet')
             }).render().$el);
         }
     });
