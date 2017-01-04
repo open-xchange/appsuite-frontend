@@ -1763,7 +1763,7 @@ define('io.ox/mail/main', [
                             folder = folderAPI.pool.models[model.get('folder_id')];
                             // check if we are in the unified folder
                             if (folder && folder.is('unifiedfolder')) {
-                                originalFolderId = model.get('id').replace(/\/\w*$/, '');
+                                originalFolderId = model.get('original_folder_id');
                                 unifiedSubfolderId = model.get('folder_id') + '/' + originalFolderId;
                                 // unified folder has special mail ids
                                 var id = model.get('id').replace(originalFolderId + '/', '');
