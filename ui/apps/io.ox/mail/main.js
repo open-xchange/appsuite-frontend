@@ -1766,7 +1766,7 @@ define('io.ox/mail/main', [
                                 originalFolderId = model.get('original_folder_id');
                                 unifiedSubfolderId = model.get('folder_id') + '/' + originalFolderId;
                                 // unified folder has special mail ids
-                                var id = model.get('id').replace(originalFolderId + '/', '');
+                                var id = model.get('original_id');
 
                                 return [{ folder_id: originalFolderId, id: id }, { folder_id: unifiedSubfolderId, id: id }];
                             }
@@ -1779,7 +1779,6 @@ define('io.ox/mail/main', [
 
                                 return [{ folder_id: unifiedFolderId, id: originalFolderId + '/' + model.get('id') }, { folder_id: originalFolderId, id: model.get('id') }];
                             }
-                            return $.Deferred().reject();
                         // check if we are in a standard folder that needs to be synced to a unified folder
                         } else if (accountData.unified_inbox_enabled) {
                             folder = folderAPI.pool.models[model.get('folder_id')];
@@ -1792,8 +1791,6 @@ define('io.ox/mail/main', [
 
                                 return [{ folder_id: unifiedFolderId, id: model.get('folder_id') + '/' + model.get('id') }, { folder_id: unifiedSubfolderId, id: model.get('id') }];
                             }
-
-                            return $.Deferred().reject();
                         }
                         return $.Deferred().reject();
                     });
