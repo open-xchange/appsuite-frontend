@@ -17,38 +17,35 @@ define('io.ox/participants/model', [
     'io.ox/core/api/resource',
     'io.ox/contacts/api',
     'io.ox/contacts/model',
-    'io.ox/contacts/util',
-    'io.ox/core/capabilities',
-    'io.ox/core/util',
-    'gettext!io.ox/core'
-], function (userAPI, groupAPI, resourceAPI, contactAPI, ContactModel, util, capabilities, coreUtil, gt) {
+    'io.ox/contacts/util'
+], function (userAPI, groupAPI, resourceAPI, contactAPI, ContactModel, util) {
 
     'use strict';
     // TODO: Bulk Loading
+
+    var TYPE = {
+            UNKNOWN: 0,
+            USER: 1,
+            USER_GROUP: 2,
+            RESOURCE: 3,
+            RESOURCE_GROUP: 4,
+            EXTERNAL_USER: 5,
+            DISTLIST: 6,
+        },
+        TYPE_PIDS = {
+            0: 'unknown',
+            1: 'internal',
+            2: 'usergroup',
+            3: 'resource',
+            4: 'resourcegroup',
+            5: 'external',
+            6: 'distlist'
+        };
 
     var Model = Backbone.Model.extend({
 
         idAttribute: 'pid',
 
-        TYPE_UNKNOWN: 0,
-        TYPE_USER: 1,
-        TYPE_USER_GROUP: 2,
-        TYPE_RESOURCE: 3,
-        TYPE_RESOURCE_GROUP: 4,
-        TYPE_EXTERNAL_USER: 5,
-        TYPE_DISTLIST: 6,
-
-        TYPE_LABEL: 'unknown internal usergroup resource resourcegroup external distlist'.split(' '),
-
-        TYPE_STRINGS: {
-            0: gt('Unknown'),
-            1: '',
-            2: gt('Group'),
-            3: gt('Resource'),
-            4: gt('Resource group'),
-            5: capabilities.has('gab') ? gt('External contact') : '',
-            6: gt('Distribution list')
-        },
 
         defaults: {
             display_name: '',
@@ -64,22 +61,22 @@ define('io.ox/participants/model', [
 
             // fix type attribute / for example autocomplete api
             if (_.isString(this.get('type'))) {
-                var newType = this.TYPE_UNKNOWN;
+                var newType = TYPE.UNKNOWN;
                 switch (this.get('type')) {
                     case 'user':
-                        newType = this.TYPE_USER;
+                        newType = TYPE.USER;
                         break;
                     case 'group':
-                        newType = this.TYPE_USER_GROUP;
+                        newType = TYPE.USER_GROUP;
                         break;
                     case 'resource':
-                        newType = this.TYPE_RESOURCE;
+                        newType = TYPE.RESOURCE;
                         break;
                     case 'contact':
                         if (this.get('mark_as_distributionlist')) {
-                            newType = this.TYPE_DISTLIST;
+                            newType = TYPE.DISTLIST;
                         } else {
-                            newType = this.TYPE_EXTERNAL_USER;
+                            newType = TYPE.EXTERNAL_USER;
                         }
                         break;
                     // no default
@@ -102,7 +99,7 @@ define('io.ox/participants/model', [
             // convert: special-contact -> user (usually used for distribution list)
             if (this.is('special-contact')) {
                 this.set({
-                    'type': this.TYPE_USER,
+                    'type': TYPE.USER,
                     'contact_id': this.get('id'),
                     'id': this.get('internal_userid')
                 });
@@ -110,7 +107,7 @@ define('io.ox/participants/model', [
             // convert: special-user -> contact (usually used for autocomplete dropdown)
             if (this.is('special-user')) {
                 this.set({
-                    'type': this.TYPE_EXTERNAL_USER,
+                    'type': TYPE.EXTERNAL_USER,
                     'internal_userid': this.get('id'),
                     'id': this.get('contact_id')
                 });
@@ -126,27 +123,26 @@ define('io.ox/participants/model', [
         },
 
         setPID: function () {
-            var pid = [this.TYPE_LABEL[this.get('type')], this.get('id'), this.get('field')].join('_');
+            var pid = [TYPE_PIDS[this.get('type')], this.get('id'), this.get('field')].join('_');
             this.set('pid', pid, { silent: true });
         },
-
 
         is: function (type) {
             switch (type) {
                 // a contact based on a user (f.e. secondary mail address)
                 case 'user':
-                    return this.get('type') === this.TYPE_USER;
+                    return this.get('type') === TYPE.USER;
                 // a contact without connection to a user
                 case 'contact':
-                    return this.get('type') === this.TYPE_EXTERNAL_USER;
+                    return this.get('type') === TYPE.EXTERNAL_USER;
                 case 'group':
-                    return this.get('type') === this.TYPE_USER_GROUP;
+                    return this.get('type') === TYPE.USER_GROUP;
                 case 'resource':
-                    return this.get('type') === this.TYPE_RESOURC;
+                    return this.get('type') === TYPE.RESOURCE;
                 case 'list':
-                    return this.get('type') === this.TYPE_DISTLIST;
+                    return this.get('type') === TYPE.DISTLIST;
                 case 'unknown':
-                    return this.get('type') === this.TYPE_UNKNOWN;
+                    return this.get('type') === TYPE.UNKNOWN;
                 // special: a contact but actually a user with it's email2 or email3
                 case 'special-contact':
                     return this.is('contact') && this.get('internal_userid') && this.get('field') === 'email1';
@@ -184,10 +180,6 @@ define('io.ox/participants/model', [
 
         getFieldString: function () {
             return this.has('field') ? ContactModel.fields[this.get('field')] : '';
-        },
-
-        getTypeString: function () {
-            return this.TYPE_STRINGS[this.get('type')] || '';
         },
 
         getFieldNumber: function () {
@@ -241,25 +233,25 @@ define('io.ox/participants/model', [
                 };
 
             switch (this.get('type')) {
-                case this.TYPE_USER:
+                case TYPE.USER:
                     if (this.get('display_name') && 'image1_url' in this.attributes) break;
                     return userAPI.get({ id: this.get('id') }).then(update);
-                case this.TYPE_USER_GROUP:
+                case TYPE.USER_GROUP:
                     if (this.get('display_name') && this.get('members')) break;
                     return groupAPI.get({ id: this.get('id') }).then(update);
-                case this.TYPE_RESOURCE:
+                case TYPE.RESOURCE:
                     if (this.get('display_name')) break;
                     return resourceAPI.get({ id: this.get('id') }).then(update);
-                case this.TYPE_RESOURCE_GROUP:
+                case TYPE.RESOURCE_GROUP:
                     this.set('display_name', 'resource group');
                     break;
-                case this.TYPE_EXTERNAL_USER:
+                case TYPE.EXTERNAL_USER:
                     if (this.get('display_name') && 'image1_url' in this.attributes) break;
                     if (this.get('id') && this.get('folder_id')) {
                         return contactAPI.get(this.pick('id', 'folder_id')).then(update);
                     }
                     return contactAPI.getByEmailaddress(this.getEmail()).then(partialUpdate);
-                case this.TYPE_DISTLIST:
+                case TYPE.DISTLIST:
                     if (this.get('display_name') && 'distribution_list' in this.attributes) break;
                     return contactAPI.get(this.pick('id', 'folder_id')).then(update);
                 // no default

@@ -14,19 +14,37 @@ define('io.ox/participants/views', [
     'io.ox/contacts/api',
     'io.ox/core/util',
     'io.ox/core/folder/api',
+    'io.ox/core/capabilities',
     'gettext!io.ox/core',
     'less!io.ox/participants/style'
-], function (api, util, folderAPI, gt) {
+], function (api, util, folderAPI, capabilities, gt) {
 
     'use strict';
+
+    var TYPE_LABELS = {
+            0: gt('Unknown'),
+            1: '',
+            2: gt('Group'),
+            3: gt('Resource'),
+            4: gt('Resource group'),
+            5: capabilities.has('gab') ? gt('External contact') : '',
+            6: gt('Distribution list')
+        },
+        TYPE_IMAGES = {
+            0: 'default-image',
+            1: 'contact-image',
+            2: 'group-image',
+            3: 'resource-image',
+            4: 'resource-image',
+            5: 'external-user-image',
+            6: 'group-image'
+        };
 
     var ParticipantEntryView = Backbone.View.extend({
 
         tagName: 'div',
 
         className: 'participant-wrapper',
-
-        IMG_CSS: 'default-image contact-image group-image resource-image resource-image external-user-image group-image'.split(' '),
 
         events: {
             'click .remove': 'onRemove',
@@ -98,12 +116,12 @@ define('io.ox/participants/views', [
                 data,
                 { width: 54, height: 54 }
             );
-            this.nodes.$img.attr('aria-hidden', true).addClass('participant-image ' + (this.IMG_CSS[parseInt(this.model.get('type'), 10)] || ''));
+            this.nodes.$img.attr('aria-hidden', true).addClass('participant-image ' + (TYPE_IMAGES[parseInt(this.model.get('type'), 10)] || ''));
         },
 
         setRows: function (mail, extra) {
             if (!this.options.hideMail) {
-                extra = extra || this.model.getTypeString() || '';
+                extra = extra || TYPE_LABELS[this.model.get('type')] || '';
                 this.nodes.$mail.text(gt.noI18n(mail));
                 this.nodes.$extra.text(gt.noI18n(extra));
                 if (mail && extra) {
