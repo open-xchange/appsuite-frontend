@@ -114,6 +114,10 @@ define('io.ox/settings/accounts/settings/pane', [
                 ),
                 $('<ul class="list-unstyled list-group widget-list">')
             );
+        },
+
+        hasOAuthCredentials = function hasOAuthCredentials(account) {
+            return account.has('mail_oauth') && account.get('mail_oauth') >= 0;
         };
 
     /**
@@ -144,7 +148,8 @@ define('io.ox/settings/accounts/settings/pane', [
                     accountsList = new ListView({
                         tagName: 'ul',
                         childView: AccountViews.ListItem,
-                        collection: collection
+                        collection: collection,
+                        filter: function (m) { return !hasOAuthCredentials(m); }
                     });
 
                 $pane.append(accountsList.render().$el);

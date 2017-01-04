@@ -173,6 +173,25 @@ define('io.ox/oauth/backbone', [
                     }).done(options.success).fail(options.error);
                 default:
             }
+        },
+        fetchRelatedAccounts: function () {
+            var self = this;
+            return require([
+                'io.ox/core/api/account',
+                'io.ox/core/api/filestorage'
+            ]).then(function (accountAPI, filestorageAPI) {
+                return $.when(accountAPI.all(), filestorageAPI.getAllAccounts());
+            }).then(function (accounts, storageAccounts) {
+                return [].concat(
+                    storageAccounts.toJSON().filter(function (account) {
+                        return account.configuration
+                            && String(account.configuration.account) === String(self.get('id'));
+                    }),
+                    accounts.filter(function isRelated(account) {
+                        return account.mail_oauth === self.get('id');
+                    })
+                );
+            });
         }
     });
 

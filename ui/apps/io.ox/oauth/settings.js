@@ -13,10 +13,13 @@
 define('io.ox/oauth/settings', [
     'io.ox/core/extensions',
     'io.ox/oauth/keychain',
+    'io.ox/oauth/backbone',
+    'io.ox/backbone/mini-views/settings-list-view',
+    'io.ox/settings/accounts/views',
     'io.ox/keychain/api',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/settings'
-], function (ext, oauthKeychain, keychain, dialogs, gt) {
+], function (ext, oauthKeychain, OAuth, ListView, AccountViews, keychain, dialogs, gt) {
 
     'use strict';
 
@@ -27,7 +30,16 @@ define('io.ox/oauth/settings', [
             var $form,
                 account = oauthKeychain.accounts.get(args.data.id),
                 $displayNameField,
-                dialog;
+                dialog,
+                relatedAccountsView = new ListView({
+                    tagName: 'ul',
+                    childView: AccountViews.ListItem,
+                    collection: new Backbone.Collection()
+                });
+
+            account.fetchRelatedAccounts().then(function (accounts) {
+                relatedAccountsView.collection.push(accounts);
+            });
 
             function closeDialog() {
                 if (dialog) {
@@ -69,6 +81,12 @@ define('io.ox/oauth/settings', [
                         $('<label for="displayName">').text(gt('Display Name')),
                         $('<div class="controls">').append(
                             $displayNameField = $('<input type="text" name="displayName" class="form-control">').val(account.get('displayName'))
+                        )
+                    ),
+                    $('<div class="control-group">').append(
+                        $('<label>').text(gt('Related accounts')),
+                        $('<div class="controls">').append(
+                            relatedAccountsView.render().$el
                         )
                     )
                 )
