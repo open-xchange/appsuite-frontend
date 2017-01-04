@@ -18,9 +18,10 @@ define('io.ox/participants/model', [
     'io.ox/contacts/api',
     'io.ox/contacts/model',
     'io.ox/contacts/util',
+    'io.ox/core/capabilities',
     'io.ox/core/util',
     'gettext!io.ox/core'
-], function (userAPI, groupAPI, resourceAPI, contactAPI, ContactModel, util, coreUtil, gt) {
+], function (userAPI, groupAPI, resourceAPI, contactAPI, ContactModel, util, capabilities, coreUtil, gt) {
 
     'use strict';
     // TODO: Bulk Loading
@@ -45,7 +46,7 @@ define('io.ox/participants/model', [
             2: gt('Group'),
             3: gt('Resource'),
             4: gt('Resource group'),
-            5: gt('External contact'),
+            5: capabilities.has('gab') ? gt('External contact') : '',
             6: gt('Distribution list')
         },
 
