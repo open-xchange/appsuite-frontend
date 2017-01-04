@@ -570,8 +570,8 @@ define('io.ox/mail/actions', [
         capabilities: 'contacts',
         requires: 'some',
         action: function (baton) {
-            require(['io.ox/mail/actions/createdistlist'], function (action) {
-                action(baton);
+            require(['io.ox/mail/actions/create'], function (action) {
+                action.createDistributionList(baton);
             });
         }
     });
@@ -580,8 +580,8 @@ define('io.ox/mail/actions', [
         capabilities: 'calendar',
         requires: 'some',
         action: function (baton) {
-            require(['io.ox/mail/actions/invite'], function (action) {
-                action(baton);
+            require(['io.ox/mail/actions/create'], function (action) {
+                action.createAppointment(baton);
             });
         }
     });
