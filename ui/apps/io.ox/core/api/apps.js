@@ -15,8 +15,9 @@ define('io.ox/core/api/apps', [
     'io.ox/core/event',
     'io.ox/core/extensions',
     'io.ox/core/manifests',
-    'io.ox/core/capabilities'
-], function (Events, ext, manifests, capabilities) {
+    'io.ox/core/capabilities',
+    'settings!io.ox/core',
+], function (Events, ext, manifests, capabilities, settings) {
 
     'use strict';
 
@@ -56,11 +57,17 @@ define('io.ox/core/api/apps', [
     ];
 
     ext.point('io.ox/core/apps/favorites/allFavorites').invoke('customize', allFavorites, allFavorites);
+
+    // hide address book? (e.g. for drive standalone)
+    if (settings.get('features/hideAddressBook')) {
+        allFavorites = _(allFavorites).without('io.ox/contacts');
+    }
+
     _(allFavorites).each(function (id) {
         var app = appData.apps[id];
-        if (app && !manifests.manager.isDisabled(app.path)) {
-            appData.favorites.push(id);
-        }
+        if (!app) return;
+        if (manifests.manager.isDisabled(app.path)) return;
+        appData.favorites.push(id);
     });
 
     var bless = function (obj, id) {

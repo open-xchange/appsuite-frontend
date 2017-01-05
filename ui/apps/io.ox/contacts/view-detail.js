@@ -26,10 +26,11 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/capabilities',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
+    'settings!io.ox/core',
     'io.ox/core/tk/attachments',
     'io.ox/core/http',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, attachments, http) {
+], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, links, coreUtil, capabilities, gt, settings, coreSettings, attachments, http) {
 
     'use strict';
 
@@ -106,9 +107,9 @@ define('io.ox/contacts/view-detail', [
         index: (INDEX += 100),
         id: 'inline-actions',
         draw: function (baton) {
-            if (!api.looksLikeResource(baton.data)) {
-                ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton);
-            }
+            if (api.looksLikeResource(baton.data)) return;
+            if (coreSettings.set('features/hideAddressBook')) return;
+            ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton);
         }
     });
 
@@ -746,6 +747,7 @@ define('io.ox/contacts/view-detail', [
 
             // this is also used by halo, so we might miss a folder id
             if (!id) return;
+            if (coreSettings.set('features/hideAddressBook')) return;
 
             // don't show folders path for folder 6 if global address book is disabled
             if (String(id) === '6' && !capabilities.has('gab')) return;
