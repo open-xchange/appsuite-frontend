@@ -184,7 +184,7 @@ define('io.ox/mail/compose/view', [
         draw: function (baton) {
             var optionDropdown    = new Dropdown({ model: baton.model, label: gt('Options'), caret: true }),
                 signatureDropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true })
-                .option('signature', '', gt('No signature'));
+                .option('signatureId', '', gt('No signature'));
 
             ext.point(POINT + '/menuoptions').invoke('draw', optionDropdown.$el, baton);
             ext.point(POINT + '/signatures').invoke('draw', signatureDropdown.$el, baton);
