@@ -25,7 +25,7 @@ define('io.ox/calendar/util', [
     'use strict';
 
     // day names
-    var n_count = [gt('last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('fifth / last')],
+    var n_count = [gt('fifth / last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('fifth / last')],
         // shown as
         n_shownAs = [gt('Reserved'), gt('Temporary'), gt('Absent'), gt('Free')],
         shownAsClass = 'reserved temporary absent free'.split(' '),
@@ -488,10 +488,10 @@ define('io.ox/calendar/util', [
                 // DAILY
                 case 1:
                     str = interval === 1 ?
-                    gt('Every day') :
+                    gt('Every day.') :
                     //#. recurrence string
                     //#. %1$d: numeric
-                    gt('Every %1$d days', interval);
+                    gt('Every %1$d days.', interval);
                     break;
 
                 // WEEKLY
@@ -499,7 +499,7 @@ define('io.ox/calendar/util', [
                     // special case: weekly but all days checked
                     if (days === 127) {
                         str = interval === 1 ?
-                        gt('Every day') :
+                        gt('Every day.') :
                         //#. recurrence string
                         //#. %1$d: numeric
                         gt('Every %1$d weeks on all days.', interval);
