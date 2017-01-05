@@ -162,9 +162,15 @@ define('io.ox/settings/accounts/settings/pane', [
             };
         })(),
 
-        dscError = function (data) {
-            if (data.model.get('type') !== 'mail' && mailSettings.get('dsc/enabled') === false) return $();
-
+        /**
+         * getAccountState
+         * Used to display a possible error message
+         * in a DSC environment. Returns a jQuery node
+         * containing the error. Will not be used in
+         * non-dsc setups (atm)
+         */
+        getAccountState = function (data) {
+            if (data.model.get('type') !== 'mail' && mailSettings.get('dsc/enabled', false) === false) return $();
             var wrapper = $('<div class="account-error-wrapper">'),
                 node = $('<div class="account-error">'),
                 icon = $('<i class="account-error-icon fa fa-exclamation-triangle">');
@@ -205,7 +211,7 @@ define('io.ox/settings/accounts/settings/pane', [
                 self.$el.append(
                     drawIcon(self.model.get('accountType')),
                     listUtils.makeTitle(title),
-                    dscError(this), // rename this maybe
+                    getAccountState(this), // show a possible account error
                     listUtils.makeControls().append(
                         listUtils.appendIconText(
                             listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
