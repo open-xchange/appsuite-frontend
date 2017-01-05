@@ -508,11 +508,7 @@ define('io.ox/core/api/account', [
                 idHash[account.id] = true;
                 // fill DSC hash if needed
                 if (isDSC) {
-<<<<<<< HEAD
                     if (account.id !== 0) dscHash[account.root_folder] = account.id;
-=======
-                    dscHash[account.root_folder] = account.id;
->>>>>>> 5d9be53... Fixed: Bug 50389 - DSC: External mail address is not selected by default
                 }
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
