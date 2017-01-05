@@ -557,8 +557,6 @@ define('io.ox/core/folder/contextmenu', [
                 e.preventDefault();
                 // hide/show
                 api.toggle(e.data.id, e.data.state);
-                // dropdown menu needs a redraw
-                e.data.view.renderContextMenuItems();
             }
 
             return function (baton) {
