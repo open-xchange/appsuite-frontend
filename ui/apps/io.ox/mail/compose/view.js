@@ -606,6 +606,7 @@ define('io.ox/mail/compose/view', [
             }).then(function (result) {
                 var opt = self.parseMsgref(result.data);
                 if (mail.attachments[0].content_type === 'text/plain') opt.view = 'raw';
+                if (mail.attachments[0].content_type === 'text/html') opt.view = 'html';
 
                 return $.when(
                     result,
