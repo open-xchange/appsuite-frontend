@@ -675,9 +675,7 @@
         max-width: 50%;
 
         .breadcrumb-link {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            .ellipsis();
             width: 100%;
         }
     }
@@ -1165,11 +1163,7 @@ body.dragging .categories-toolbar-container {
         }
     }
 
-    .truncate {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+    .truncate { .ellipsis(); }
 }
 
 @media (max-width: 768px) {
