@@ -29,7 +29,7 @@ define('plugins/upsell/bubbles/main', [
         initBubbles;
 
     if (_(bubbleSettings).isEmpty()) {
-        console.error('The upsell bubbles app does not work without settings for plugins/upsell//bubbles.');
+        console.warn('The upsell bubbles app does not work without settings for plugins/upsell//bubbles.');
         return;
     }
 
