@@ -60,6 +60,7 @@ define('plugins/portal/mail/register', [
         render: function (baton) {
             var self = this,
                 subjectNode,
+                subject = this.model.get('subject') ? _.noI18n(_.ellipsis(this.model.get('subject'), { max: 50 })) : gt('No subject'),
                 received = moment(this.model.get('received_date')).format('l');
 
             this.$el.empty()
@@ -71,7 +72,7 @@ define('plugins/portal/mail/register', [
                         }
                     })(),
                     $('<span class="bold">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' '),
-                    subjectNode = $('<span class="normal">').text(_.noI18n(_.ellipsis(this.model.get('subject'), { max: 50 }))), $.txt(' '),
+                    subjectNode = $('<span class="normal">').text(subject), $.txt(' '),
                     $('<span class="accent">').text(_.noI18n(received))
                 );
 
