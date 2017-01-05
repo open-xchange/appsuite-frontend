@@ -73,6 +73,19 @@ define('io.ox/core/folder/favorites', [
 
         collection.on('add remove change:id', storeCollection);
 
+        // response to rename for mail folders
+        if (module === 'mail') {
+            api.on('rename', function (id, data) {
+                if (data.module !== 'mail') return;
+                collection.each(function (model) {
+                    var path = model.get('id');
+                    if (path.indexOf(id + api.getMailFolderSeparator()) !== 0) return;
+                    model.set('id', data.id + path.substr(id.length));
+                    storeCollection();
+                });
+            });
+        }
+
         // respond to collection remove event to sync favorites
         api.on('collection:remove', function (id, model) {
             collection.remove(model);
