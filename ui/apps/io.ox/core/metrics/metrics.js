@@ -55,14 +55,14 @@ define('io.ox/core/metrics/metrics', ['io.ox/files/api', 'io.ox/core/http'], fun
                 // posix-style open
                 function open(folder, filename) {
 
-                    return api.getAll({ folder: folder }).then(function (list) {
+                    return api.getAll(folder).then(function (list) {
                         // look for a file with proper title
                         var match = _(list).find(function (item) {
                             return item.title === filename;
                         });
                         if (match) {
                             // just fetch if exists
-                            return api.get(api.reduce(match));
+                            return api.get({ id: match.id, folder: match.folder_id });
                         }
                         // create new file
                         return create(folder, filename).then(function (id) {
@@ -93,11 +93,10 @@ define('io.ox/core/metrics/metrics', ['io.ox/files/api', 'io.ox/core/http'], fun
 
                     return open(folder, filename).then(function (file) {
                         // append to description and save changes
-                        return api.update({
-                            folder_id: file.folder_id,
-                            id: file.id,
-                            description: (file.description || '') + '\n' + line
-                        });
+                        return api.update(
+                            { folder_id: file.folder_id, id: file.id },
+                            { description: (file.description || '') + '\n' + line }
+                        );
                     });
                 };
 
