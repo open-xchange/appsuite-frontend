@@ -234,7 +234,7 @@ define('io.ox/oauth/backbone', [
     });
     var ServicesListView = Backbone.View.extend({
         tagName: 'ul',
-        className: 'form-group list-unstyled services-list-view',
+        className: 'list-unstyled services-list-view',
         events: {
             'keypress button': 'select',
             'click button': 'select'
