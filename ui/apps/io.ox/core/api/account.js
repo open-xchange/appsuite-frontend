@@ -146,7 +146,7 @@ define('io.ox/core/api/account', [
      * @return { boolean }
      */
     api.isDSC = function (id) {
-        return id.startsWith(dscPrefix);
+        return id.indexOf(dscPrefix) === 0;
     };
 
     /**

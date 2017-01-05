@@ -82,7 +82,7 @@ define('io.ox/mail/accounts/settings', [
 
                 //disable fields for primary account again
                 if (myModel.get('id') === 0) {
-                    myView.$el.find('input, select').not('#personal, [data-property="unified_inbox_enabled"]').prop('disabled', true);
+                    myView.$el.find('input, select').not('#personal, #name, [data-property="unified_inbox_enabled"]').prop('disabled', true);
                 }
 
             }

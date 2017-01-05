@@ -16,11 +16,19 @@ define('io.ox/backbone/views/recurrence-view', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
     'gettext!io.ox/calendar/edit/main',
+    'io.ox/calendar/util',
     'less!io.ox/backbone/views/recurrence-view'
-], function (ext, ModalDialog, mini, MiniDatepickerView, gt) {
+], function (ext, ModalDialog, mini, MiniDatepickerView, gt, util) {
 
     var momentShorthands = ['d', 'w', 'M', 'y'],
-        INDEX = 0;
+        INDEX = 0,
+        NumberInputView = mini.InputView.extend({
+            onChange: function () {
+                var value = this.$el.val();
+                if (value.match(/^\d+$/)) value = parseInt(value, 10);
+                this.model.set(this.name, value, { validate: true });
+            },
+        });
 
     ext.point('io.ox/backbone/views/recurrence-view/dialog').extend({
         index: INDEX += 100,
@@ -28,8 +36,26 @@ define('io.ox/backbone/views/recurrence-view', [
         render: (function () {
             var NumberSelectView = mini.SelectView.extend({
                 onChange: function () {
-                    this.model.set(this.name, parseInt(this.$el.val(), 10));
-                }
+                    var value = this.$el.val(),
+                        recurrenceType = parseInt(value, 10),
+                        days = this.model.get('days');
+
+                    // special handling for work days (62 is bitmask for work days)
+                    if (value === '2:1') days = 62;
+                    if (this.model.get('every-weekday')) days = undefined;
+                    this.model.set({
+                        'recurrence_type': recurrenceType,
+                        'days': days,
+                        'every-weekday': value === '2:1',
+                        'interval': value === '2:1' ? 1 : this.model.get('interval')
+                    });
+                },
+                update: function () {
+                    var value = this.model.get(this.name);
+                    // special handling for weekly on weekdays
+                    if (this.model.get('every-weekday')) this.$el.val('2:1');
+                    else this.$el.val(value);
+                },
             });
 
             return function () {
@@ -41,6 +67,9 @@ define('io.ox/backbone/views/recurrence-view', [
                         list: [{
                             value: 1,
                             label: gt('Daily')
+                        }, {
+                            value: '2:1',
+                            label: gt('Daily on work days')
                         }, {
                             value: 2,
                             label: gt('Weekly')
@@ -92,7 +121,7 @@ define('io.ox/backbone/views/recurrence-view', [
                         }
                     };
 
-                input.listenTo(this.model, 'change:recurrence_type', update);
+                input.listenTo(this.model, 'change:recurrence_type change:every-weekday', update);
 
                 this.$body.append(
                     $('<div class="form-group">').append(
@@ -104,42 +133,6 @@ define('io.ox/backbone/views/recurrence-view', [
                 );
             };
         })()
-    });
-
-    ext.point('io.ox/backbone/views/recurrence-view/dialog').extend({
-        index: INDEX += 100,
-        id: 'interval',
-        render: function () {
-            var guid = _.uniqueId('form-control-label-'),
-                list = [gt('day(s)'), gt('week(s)'), gt('month(s)'), gt('year(s)')],
-                input = new mini.InputView({
-                    model: this.model,
-                    name: 'interval',
-                    id: guid
-                }), formGroup, label,
-                update = function (model) {
-                    var type = model.get('recurrence_type');
-                    formGroup.toggleClass('hidden', type === 0 || type === 4);
-                    label.text(list[type - 1]);
-                };
-
-            input.listenTo(this.model, 'change:recurrence_type', update);
-
-            this.$body.append(
-                formGroup = $('<div class="form-group">').append(
-                    $('<label class="control-label col-sm-4 col-xs-12">').attr('for', guid).text(gt('Interval')),
-                    $('<div class="col-xs-8">').append(
-                        input.render().$el.addClass('small'),
-                        label = $('<span class="extra-label">'),
-                        new mini.ErrorView({
-                            model: this.model,
-                            name: 'interval'
-                        }).render().$el
-                    )
-                )
-            );
-            update(this.model);
-        }
     });
 
     ext.point('io.ox/backbone/views/recurrence-view/dialog').extend({
@@ -235,6 +228,17 @@ define('io.ox/backbone/views/recurrence-view', [
                     setup: function (opt) {
                         this.bitmask = opt.bitmask;
                         mini.CheckboxView.prototype.setup.apply(this, arguments);
+                        this.$el.on('focusin', $.proxy(this.onFocus, this));
+                    },
+                    onFocus: function () {
+                        // prevent wrong focus from error view
+                        if (this.isModelChanged()) {
+                            var self = this;
+                            _.defer(function () {
+                                if (self.$el.is(':focus')) return;
+                                self.$el.focus();
+                            });
+                        }
                     },
                     onChange: function () {
                         var value = this.model.get(this.name);
@@ -246,6 +250,11 @@ define('io.ox/backbone/views/recurrence-view', [
                         var checked = this.isModelChecked();
                         this.$el.prop('checked', checked);
                         this.$el.parent().toggleClass('active', checked);
+                        if (this.isModelChanged()) this.$el.focus();
+                    },
+                    isModelChanged: function () {
+                        var prev = (this.model.previous(this.name) & this.bitmask) !== 0;
+                        return prev !== this.isModelChecked();
                     },
                     isModelChecked: function () {
                         return (this.model.get(this.name) & this.bitmask) !== 0;
@@ -259,10 +268,9 @@ define('io.ox/backbone/views/recurrence-view', [
                         var self = this;
                         this.$el.attr('data-toggle', 'buttons').append(
                             _(this.list).map(function (obj) {
-                                var View = obj.view || mini.CheckboxView,
-                                    view = new View(_.extend({
-                                        model: self.model
-                                    }, obj.options)).render();
+                                var view = new BitmaskCheckbox(_.extend({
+                                    model: self.model
+                                }, obj.options)).render();
                                 return $('<label class="btn btn-default">').toggleClass('active', view.$el.prop('checked')).append(
                                     view.$el,
                                     obj.label
@@ -280,7 +288,6 @@ define('io.ox/backbone/views/recurrence-view', [
                     firstDayOfWeek = moment.localeData().firstDayOfWeek(),
                     list = _(days).map(function (str, index) {
                         return {
-                            view: BitmaskCheckbox,
                             options: {
                                 bitmask: 1 << ((index + firstDayOfWeek) % 7),
                                 name: 'days'
@@ -289,28 +296,72 @@ define('io.ox/backbone/views/recurrence-view', [
                         };
                     }),
                     input = new CheckboxButtonsView({
-                        className: 'btn-group col-sm-8',
+                        className: 'btn-group',
                         model: this.model,
                         list: list
                     }),
                     formGroup,
                     update = function (model) {
                         var type = model.get('recurrence_type'),
-                            visible = (type === 2);
+                            visible = type === 2 && !model.get('every-weekday');
                         formGroup.toggleClass('hidden', !visible);
                     };
 
-                input.listenTo(this.model, 'change:recurrence_type', update);
+                input.listenTo(this.model, 'change:recurrence_type change:every-weekday', update);
 
                 this.$body.append(
                     formGroup = $('<div class="form-group hidden">').append(
                         $('<label class="control-label col-sm-4">').text(gt('Weekday')),
-                        input.render().$el
+                        $('<div class="col-sm-8">').append(
+                            input.render().$el,
+                            new mini.ErrorView({
+                                model: this.model,
+                                name: 'days'
+                            }).render().$el
+                        )
                     )
                 );
                 update(this.model);
             };
         })()
+    });
+
+    ext.point('io.ox/backbone/views/recurrence-view/dialog').extend({
+        index: INDEX += 100,
+        id: 'interval',
+        render: function () {
+            var guid = _.uniqueId('form-control-label-'),
+                list = [gt('day(s)'), gt('week(s)'), gt('month(s)'), gt('year(s)')],
+                input = new NumberInputView({
+                    model: this.model,
+                    name: 'interval',
+                    id: guid
+                }), formGroup, label,
+                update = function (model) {
+                    var type = model.get('recurrence_type'),
+                        correctType = type !== 0 && type !== 4,
+                        visible = correctType && !model.get('every-weekday');
+                    formGroup.toggleClass('hidden', !visible);
+                    label.text(list[type - 1]);
+                };
+
+            input.listenTo(this.model, 'change:recurrence_type change:every-weekday', update);
+
+            this.$body.append(
+                formGroup = $('<div class="form-group">').append(
+                    $('<label class="control-label col-sm-4 col-xs-12">').attr('for', guid).text(gt('Interval')),
+                    $('<div class="col-xs-8">').append(
+                        input.render().$el.addClass('small'),
+                        label = $('<span class="extra-label">'),
+                        new mini.ErrorView({
+                            model: this.model,
+                            name: 'interval'
+                        }).render().$el
+                    )
+                )
+            );
+            update(this.model);
+        }
     });
 
     ext.point('io.ox/backbone/views/recurrence-view/dialog').extend({
@@ -325,9 +376,8 @@ define('io.ox/backbone/views/recurrence-view', [
                 update: function () {
                     if (!this.model.checkValidation()) return;
 
-                    var baton = new ext.Baton({ view: this, model: this.model });
-                    ext.point('io.ox/backbone/views/recurrence-view/recurrence-string').invoke('action', null, baton);
-                    this.$el.text(baton.text);
+                    var data = this.model.toJSON();
+                    this.$el.text(util.getRecurrenceDescription(data));
                 },
                 render: function () {
                     this.update();
@@ -449,7 +499,7 @@ define('io.ox/backbone/views/recurrence-view', [
         id: 'occurrences',
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
-                input = new mini.InputView({
+                input = new NumberInputView({
                     model: this.model,
                     name: 'occurrences',
                     id: guid
@@ -520,176 +570,18 @@ define('io.ox/backbone/views/recurrence-view', [
         })()
     });
 
-    var nth = [
-        //#. used in concatenated string. Example: Every month on the first Tuesday
-        gt('first'),
-        //#. used in concatenated string. Example: Every month on the second Tuesday
-        gt('second'),
-        //#. used in concatenated string. Example: Every month on the third Tuesday
-        gt('third'),
-        //#. used in concatenated string. Example: Every month on the fourth Tuesday
-        gt('fourth'),
-        //#. used in concatenated string. Example: Every month on the fifth / last Tuesday
-        gt('fifth / last')
-    ];
-
-    ext.point('io.ox/backbone/views/recurrence-view/recurrence-string').extend({
-        index: 100,
-        id: 'daily',
-        action: function (baton) {
-            if (baton.model.get('recurrence_type') !== 1) return;
-            var interval = baton.model.get('interval');
-
-            baton.text = gt.format(gt.ngettext('Every day.', 'Every %1$s days.', interval), interval);
-        }
-    });
-
-    ext.point('io.ox/backbone/views/recurrence-view/recurrence-string').extend({
-        index: 200,
-        id: 'weekly',
-        action: function (baton) {
-            if (baton.model.get('recurrence_type') !== 2) return;
-            var interval = baton.model.get('interval'),
-                days = baton.model.get('days'),
-                firstDayOfWeek = moment.localeData().firstDayOfWeek(),
-                formattedDays = _(_.range(7)).chain().map(function (index) {
-                    var mask = 1 << ((index + firstDayOfWeek) % 7);
-                    if ((days & mask) !== 0) return moment().weekday(index).format('dddd');
-                }).compact().value().join(
-                    //#. This delimiter is used to concatenate a list of string
-                    //#. Example: Monday, Tuesday, Wednesday
-                    gt(', ')
-                );
-
-            if (interval === 1) {
-                //#. %1$s list of days
-                //#. Example: Every Monday, Wednesday, Friday
-                baton.text = gt('Every %1$s.', formattedDays);
-            } else {
-                //#. %1$s interval, when the appointment / task is repeated
-                //#. %2$s list of days
-                //#. Example: Every 3 weeks on Monday, Thursday
-                baton.text = gt('Every %1$s weeks on %2$s.', interval, formattedDays);
-            }
-        }
-    });
-
-    ext.point('io.ox/backbone/views/recurrence-view/recurrence-string').extend({
-        index: 300,
-        id: 'monthly',
-        action: function (baton) {
-            if (baton.model.get('recurrence_type') !== 3) return;
-
-            var interval = baton.model.get('interval'),
-                date = baton.model.get('day_in_month');
-
-            if (baton.model.has('days')) {
-                // repeat by weekday
-                var days = baton.model.get('days'),
-                    firstDayOfWeek = moment.localeData().firstDayOfWeek(),
-                    formattedDay = _(_.range(7)).chain().map(function (index) {
-                        var mask = 1 << ((index + firstDayOfWeek) % 7);
-                        if ((days & mask) !== 0) return moment().weekday(index).format('dddd');
-                    }).compact().first().value();
-
-                if (interval === 1) {
-                    //#. %1$s first, second, third, fourth or fifth / last
-                    //#. %2$s a day of the week
-                    //#. Example: Every month on the second Monday
-                    baton.text = gt('Every month on the %1$s %2$s.', nth[date - 1], formattedDay);
-                } else {
-                    //#. %1$s interval, how often appointment / task is repeated
-                    //#. %2$s first, second, third, fourth or fifth / last
-                    //#. %3$s a day of the week
-                    //#. Example Every 3 months on the second Tuesday
-                    baton.text = gt('Every %1$s months on the %2$s %3$s.', interval, nth[date - 1], formattedDay);
-                }
-            } else if (interval === 1) {
-                //#. %1$s day in the month
-                //#. Example: Every month on day 5
-                baton.text = gt('Every month on day %1$s.', date);
-            } else {
-                //#. %1$s interval, how often appointment / task is repeated
-                //#. %2$s day in the month
-                //#. Example: Every 5 months on day 18
-                baton.text = gt('Every %1$s months on day %2$s.', interval, date);
-            }
-        }
-    });
-
-    ext.point('io.ox/backbone/views/recurrence-view/recurrence-string').extend({
-        index: 400,
-        id: 'yearly',
-        action: function (baton) {
-            if (baton.model.get('recurrence_type') !== 4) return;
-
-            var month = moment().month(baton.model.get('month')).format('MMMM');
-
-            if (baton.model.has('days')) {
-                var date = baton.model.get('day_in_month'),
-                    days = baton.model.get('days'),
-                    firstDayOfWeek = moment.localeData().firstDayOfWeek(),
-                    formattedDay = _(_.range(7)).chain().map(function (index) {
-                        var mask = 1 << ((index + firstDayOfWeek) % 7);
-                        if ((days & mask) !== 0) return moment().weekday(index).format('dddd');
-                    }).compact().first().value();
-
-                //#. %1$s first, second, third, fourth or fifth / last
-                //#. %2$s a day of the week
-                //#. %3$s the month
-                //#. Example: Every year on the first Tuesday in December
-                baton.text = gt('Every year on the %1$s %2$s in %3$s.', nth[date - 1], formattedDay, month);
-            } else {
-                var day = baton.model.get('day_in_month');
-
-                //#. %1$s the month
-                //#. %2$s the day
-                //#. Example: Every year in December on day 3
-                baton.text = gt('Every year in %1$s on day %2$s.', month, day);
-            }
-        }
-    });
-
-    ext.point('io.ox/backbone/views/recurrence-view/end-string').extend({
-        index: 100,
-        id: 'never',
-        action: function (baton) {
-            if (baton.model.has('occurrences') || baton.model.has('until')) return;
-
-            baton.text = gt('The series never ends.');
-        }
-    });
-
-    ext.point('io.ox/backbone/views/recurrence-view/end-string').extend({
-        index: 200,
-        id: 'occurrences',
-        action: function (baton) {
-            if (!baton.model.has('occurrences')) return;
-
-            var occurrences = parseInt(baton.model.get('occurrences'), 10);
-            //#. %1$s The amount of occurrences, after the series ends
-            baton.text = gt.format(gt.ngettext('The series ends after one occurrence.', 'The series ends after %1$s occurrences.', occurrences), occurrences);
-        }
-    });
-
-    ext.point('io.ox/backbone/views/recurrence-view/end-string').extend({
-        index: 300,
-        id: 'until',
-        action: function (baton) {
-            if (!baton.model.has('until')) return;
-
-            //#. %1$s The date when the series ends
-            baton.text = gt('The series ends on %1$s.', moment(baton.model.get('until')).format('l'));
-        }
-    });
-
     var SerializeCheckboxView = mini.CheckboxView.extend({
             onChange: function () {
                 var val = this.$el.prop('checked'),
                     old = this.model.get('recurrence_type') > 0;
                 if (!old && val) {
-                    this.model.set('recurrence_type', 1);
-                    this.model.set('interval', 1);
+                    var startAttribute = this.model.get('start_time') || this.model.get('start_date'),
+                        startDate = moment(startAttribute);
+                    this.model.set({
+                        'recurrence_type': 2,
+                        'interval': 1,
+                        'days': 1 << startDate.day()
+                    });
                 }
                 if (old && !val) {
                     // cleanup
@@ -707,29 +599,52 @@ define('io.ox/backbone/views/recurrence-view', [
             }
         }),
         RecurrenceModel = Backbone.Model.extend({
-            initialize: function () {
-                this.on('change', this.checkValidation);
+            initialize: function (opt) {
+                this.on('change:interval', this.validateInterval);
+                this.on('change:occurrences', this.validateOccurences);
+                this.on('change:until', this.validateUntil);
+                this.on('change:days', this.validateDays);
+                // check if repeat every weekday
+                this.set('every-weekday', opt.recurrence_type === 2 && opt.days === 62);
             },
-            checkValidation: function () {
-                // check if interval is number
+            validateInterval: function () {
                 var interval = String(this.get('interval')),
-                    validInterval = (interval.match(/^\d+$/) && parseInt(interval, 10) > 0);
-                if (validInterval) this.trigger('valid:interval');
+                    valid = (interval.match(/^\d+$/) && parseInt(interval, 10) > 0);
+                if (valid) this.trigger('valid:interval');
                 else this.trigger('invalid:interval', gt('Please enter a positive number'));
-
-                // check if occurrences is number
+                return valid;
+            },
+            validateOccurences: function () {
                 var occurrences = String(this.get('occurrences')),
-                    validOccurrences = !this.has('occurrences') || (occurrences.match(/^\d+$/) && parseInt(occurrences, 10) > 0);
-                if (validOccurrences) this.trigger('valid:occurrences');
+                    valid = !this.has('occurrences') || (occurrences.match(/^\d+$/) && parseInt(occurrences, 10) > 0);
+                if (valid) this.trigger('valid:occurrences');
                 else this.trigger('invalid:occurrences', gt('Please enter a positive number'));
-
+                return valid;
+            },
+            validateUntil: function () {
                 var until = moment(this.get('until')),
                     start = moment(this.get('start_time') || this.get('start_date')),
-                    validUntil = !this.has('until') || until.isAfter(start, 'day') || until.isSame(start, 'day');
-                if (validUntil) this.trigger('valid:until');
+                    valid = !this.has('until') || until.isAfter(start, 'day') || until.isSame(start, 'day');
+                if (valid) this.trigger('valid:until');
                 else this.trigger('invalid:until', gt('Please insert a date after the start date'));
+                return valid;
+            },
+            validateDays: function () {
+                if (this.get('recurrence_type') !== 2) return true;
+                if (this.get('every-weekday')) return true;
 
-                return validInterval && validOccurrences && validUntil;
+                var days = this.get('days'),
+                    valid = days && days > 0;
+                if (valid) this.trigger('valid:days');
+                else this.trigger('invalid:days', gt('Please select at least one day'));
+                return valid;
+            },
+            checkValidation: function () {
+                if (!this.validateInterval()) return false;
+                if (!this.validateOccurences()) return false;
+                if (!this.validateUntil()) return false;
+                if (!this.validateDays()) return false;
+                return true;
             }
         });
 
@@ -780,6 +695,9 @@ define('io.ox/backbone/views/recurrence-view', [
                     return;
                 }
 
+                // remove own fields
+                self.model.unset('every-weekday');
+
                 self.model.set(this.model.toJSON());
                 this.close();
             })
@@ -813,11 +731,9 @@ define('io.ox/backbone/views/recurrence-view', [
                 visible = this.model.get('recurrence_type') > 0;
             this.$('.summary').toggleClass('hidden', !visible);
             if (visible) {
-                var baton = new ext.Baton({ view: this, model: this.model });
-                ext.point('io.ox/backbone/views/recurrence-view/recurrence-string').invoke('action', null, baton);
-                $recSummary.text(baton.text);
-                ext.point('io.ox/backbone/views/recurrence-view/end-string').invoke('action', null, baton);
-                $endSummary.text(baton.text);
+                var data = this.model.toJSON();
+                $recSummary.text(util.getRecurrenceDescription(data));
+                $endSummary.text(util.getRecurrenceEnd(data));
             }
         },
 

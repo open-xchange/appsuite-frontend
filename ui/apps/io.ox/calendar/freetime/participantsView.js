@@ -37,7 +37,7 @@ define('io.ox/calendar/freetime/participantsView', [
                     resources: true,
                     distributionlists: true
                 },
-                placeholder: gt('Add participant'),
+                placeholder: gt('Add participant') + ' \u2026',
                 collection: baton.model.get('participants')
             });
             this.append(

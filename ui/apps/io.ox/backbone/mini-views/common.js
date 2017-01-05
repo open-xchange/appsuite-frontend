@@ -143,7 +143,7 @@ define('io.ox/backbone/mini-views/common', [
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
-            this.$el.prop('checked', !!this.model.get(this.name));
+            this.$el.prop('checked', !!this.model.get(this.name, this.options.defaultVal));
         },
         render: function () {
             this.$el.attr({ name: this.name });

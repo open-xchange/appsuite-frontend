@@ -25,7 +25,7 @@ define('io.ox/calendar/util', [
     'use strict';
 
     // day names
-    var n_count = [gt('last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('last')],
+    var n_count = [gt('fifth / last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('fifth / last')],
         // shown as
         n_shownAs = [gt('Reserved'), gt('Temporary'), gt('Absent'), gt('Free')],
         shownAsClass = 'reserved temporary absent free'.split(' '),
@@ -448,35 +448,28 @@ define('io.ox/calendar/util', [
             return confirmTitles[status || 0];
         },
 
-        getRecurrenceString: function (data) {
-
+        getRecurrenceDescription: function (data) {
             function getCountString(i) {
                 return n_count[i + 1];
             }
 
-            function getDayString(i) {
-                var tmp = [];
-                if (i === 62) {
-                    tmp.push(
-                        //#. recurrence string
-                        gt('work days')
-                    );
-                } else {
-                    if ((i & that.days.SUNDAY) !== 0) tmp.push(moment.weekdays(0));
-                    if ((i & that.days.MONDAY) !== 0) tmp.push(moment.weekdays(1));
-                    if ((i & that.days.TUESDAY) !== 0) tmp.push(moment.weekdays(2));
-                    if ((i & that.days.WEDNESDAY) !== 0) tmp.push(moment.weekdays(3));
-                    if ((i & that.days.THURSDAY) !== 0) tmp.push(moment.weekdays(4));
-                    if ((i & that.days.FRIDAY) !== 0) tmp.push(moment.weekdays(5));
-                    if ((i & that.days.SATURDAY) !== 0) tmp.push(moment.weekdays(6));
-                }
+            function getDayString(days) {
+                var firstDayOfWeek = moment.localeData().firstDayOfWeek(),
+                    tmp = _(_.range(7)).chain().map(function (index) {
+                        var mask = 1 << ((index + firstDayOfWeek) % 7);
+                        if ((days & mask) !== 0) return moment().weekday(index).format('dddd');
+                    }).compact().value();
 
                 var and =
                     //#. recurrence string
                     //#. used to concatenate two weekdays, like Monday and Tuesday
-                    gt('and');
+                    gt(' and '),
+                    delimiter =
+                    //#. This delimiter is used to concatenate a list of string
+                    //#. Example: Monday, Tuesday, Wednesday
+                    gt(', ');
 
-                return tmp.length === 2 ? tmp.join(' ' + and + ' ') : tmp.join(', ');
+                return tmp.length === 2 ? tmp.join(and) : tmp.join(delimiter);
             }
 
             function getMonthString(i) {
@@ -495,10 +488,10 @@ define('io.ox/calendar/util', [
                 // DAILY
                 case 1:
                     str = interval === 1 ?
-                    gt('Every day') :
+                    gt('Every day.') :
                     //#. recurrence string
                     //#. %1$d: numeric
-                    gt('Every %1$d days', interval);
+                    gt('Every %1$d days.', interval);
                     break;
 
                 // WEEKLY
@@ -506,26 +499,36 @@ define('io.ox/calendar/util', [
                     // special case: weekly but all days checked
                     if (days === 127) {
                         str = interval === 1 ?
-                        gt('Every day') :
+                        gt('Every day.') :
                         //#. recurrence string
                         //#. %1$d: numeric
-                        gt('Every %1$d weeks on all days', interval);
+                        gt('Every %1$d weeks on all days.', interval);
                     } else if (days === 62) { // special case: weekly on work days
                         str = interval === 1 ?
                             //#. recurrence string
-                            gt('On work days') :
+                            gt('On work days.') :
                             //#. recurrence string
                             //#. %1$d: numeric
-                            gt('Every %1$d weeks on work days', interval);
+                            gt('Every %1$d weeks on work days.', interval);
+                    } else if (days === 65) {
+                        str = interval === 1 ?
+                            //#. recurrence string
+                            gt('Every weekend.') :
+                            //#. recurrence string
+                            //#. %1$d: numeric
+                            gt('Every %1$s weeks on weekends.', interval);
+                    } else if (days === 0) { // special case when no day is selected
+                        str = gt('Never.');
                     } else {
                         str = interval === 1 ?
                         //#. recurrence string
                         //#. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-                        gt('Weekly on %1$s', getDayString(days)) :
+                        //#. Example: Every Monday, Wednesday, Friday
+                        gt('Every %1$s.', getDayString(days)) :
                         //#. recurrence string
                         //#. %1$d: numeric
                         //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-                        gt('Every %1$d weeks on %2$s', interval, getDayString(days));
+                        gt('Every %1$d weeks on %2$s.', interval, getDayString(days));
                     }
 
                     break;
@@ -536,22 +539,26 @@ define('io.ox/calendar/util', [
                         str = interval === 1 ?
                         //#. recurrence string
                         //#. %1$d: numeric, day in month
-                        gt('Monthly on day %1$d', day_in_month) :
+                        //#. Example: Every month on day 5
+                        gt('Every month on day %1$d.', day_in_month) :
                         //#. recurrence string
                         //#. %1$d: numeric, interval
                         //#. %1$d: numeric, day in month
-                        gt('Every %1$d months on day %2$d', interval, day_in_month);
+                        //#. Example: Every 5 months on day 18
+                        gt('Every %1$d months on day %2$d.', interval, day_in_month);
                     } else {
                         str = interval === 1 ?
-                    //#. recurrence string
-                    //#. %1$s: count string, e.g. first, second, or last
-                    //#. %2$s: day string, e.g. Monday
-                    gt('Monthly on the %1$s %2$s', getCountString(day_in_month), getDayString(days)) :
-                    //#. recurrence string
-                    //#. %1$d: numeric, interval
-                    //#. %2$s: count string, e.g. first, second, or last
-                    //#. %3$s: day string, e.g. Monday
-                    gt('Every %1$d months on the %2$s %3$s', interval, getCountString(day_in_month), getDayString(days));
+                        //#. recurrence string
+                        //#. %1$s: count string, e.g. first, second, or last
+                        //#. %2$s: day string, e.g. Monday
+                        //#. Example: Every month on the second Monday
+                        gt('Every month on the %1$s %2$s.', getCountString(day_in_month), getDayString(days)) :
+                        //#. recurrence string
+                        //#. %1$d: numeric, interval
+                        //#. %2$s: count string, e.g. first, second, or last
+                        //#. %3$s: day string, e.g. Monday
+                        //#. Example Every 3 months on the second Tuesday
+                        gt('Every %1$d months on the %2$s %3$s.', interval, getCountString(day_in_month), getDayString(days));
                     }
 
                     break;
@@ -559,47 +566,46 @@ define('io.ox/calendar/util', [
                 // YEARLY
                 case 4:
                     if (days === null) {
-                        str = !interval || interval === 1 ?
+                        str =
                         //#. recurrence string
                         //#. %1$s: Month nane, e.g. January
                         //#. %2$d: Date, numeric, e.g. 29
-                        gt('Yearly on %1$s %2$d', getMonthString(month), day_in_month) :
-                        //#. recurrence string
-                        //#. %1$d: interval, numeric
-                        //#. %2$s: Month nane, e.g. January
-                        //#. %3$d: Date, numeric, e.g. 29
-                        gt('Every %1$d years on %2$s %3$d', interval, getMonthString(month), day_in_month);
+                        //#. Example: Every year in December on day 3
+                        gt('Every year in %1$s on day %2$d.', getMonthString(month), day_in_month);
                     } else {
-                        str = !interval || interval === 1 ?
-                    //#. recurrence string
-                    //#. %1$s: count string, e.g. first, second, or last
-                    //#. %2$s: day string, e.g. Monday
-                    //#. %3$s: month nane, e.g. January
-                    gt('Yearly on the %1$s %2$s of %3$d', getCountString(day_in_month), getDayString(days), getMonthString(month)) :
-                    //#. recurrence string
-                    //#. %1$d: interval, numeric
-                    //#. %2$s: count string, e.g. first, second, or last
-                    //#. %3$s: day string, e.g. Monday
-                    //#. %4$s: month nane, e.g. January
-                    gt('Every %1$d years on the %2$s %3$s of %4$d', interval, getCountString(day_in_month), getDayString(days), getMonthString(month));
+                        str =
+                        //#. recurrence string
+                        //#. %1$s: count string, e.g. first, second, or last
+                        //#. %2$s: day string, e.g. Monday
+                        //#. %3$s: month nane, e.g. January
+                        //#. Example: Every year on the first Tuesday in December
+                        gt('Every year on the %1$s %2$s in %3$d.', getCountString(day_in_month), getDayString(days), getMonthString(month));
                     }
 
                     break;
                 // no default
             }
 
-            if (data.recurrence_type > 0) {
-                if (data.until) {
-                    str += ' / ';
-                    str += gt('The series ends on %1$s', moment(data.until).format('l'));
-                }
-                if (data.occurrences) {
-                    var n = data.occurrences;
-                    str += ' / ';
-                    str += gt.format(gt.ngettext('The series ends after %1$d appointment', 'The series ends after %1$d appointments', n), n);
-                }
+            return str;
+        },
+
+        getRecurrenceEnd: function (data) {
+            var str;
+            if (data.until) {
+                str = gt('The series ends on %1$s.', moment(data.until).format('l'));
+            } else if (data.occurrences) {
+                var n = data.occurrences;
+                str = gt.format(gt.ngettext('The series ends after one occurrence.', 'The series ends after %1$d occurences.', n), n);
+            } else {
+                str = gt('The series never ends.');
             }
 
+            return str;
+        },
+
+        getRecurrenceString: function (data) {
+            var str = that.getRecurrenceDescription(data);
+            if (data.recurrence_type > 0 && (data.until || data.occurrences)) str += ' ' + that.getRecurrenceEnd(data);
             return str;
         },
 

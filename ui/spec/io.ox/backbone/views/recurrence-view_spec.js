@@ -12,17 +12,15 @@
  */
 
 define([
-    'io.ox/backbone/views/recurrence-view',
-    'gettext!io.ox/calendar/edit/main'
-], function (RecurrenceView, gt) {
+    'io.ox/backbone/views/recurrence-view'
+], function (RecurrenceView) {
 
     'use strict';
 
     describe('Recurrence view', function () {
 
         var model,
-            view,
-            firstDayOfWeek = moment.localeData().firstDayOfWeek();
+            view;
 
         beforeEach(function () {
             model = new Backbone.Model();
@@ -31,158 +29,11 @@ define([
             }).render();
         });
 
-        describe('shows correct recurrence strings', function () {
-
-            it('has daily appointment', function () {
-                model.set({
-                    'recurrence_type': 1,
-                    interval: 1
-                });
-
-                expect(view.$('.recurrence-summary').text()).to.equal(gt('Every day.'));
-            });
-
-            it('has appointment every two days', function () {
-                model.set({
-                    recurrence_type: 1,
-                    interval: 5
-                });
-
-                expect(view.$('.recurrence-summary').text()).to.equal(gt('Every %1$s days.', 5));
-            });
-
-            it('has weekly appointment on single day', function () {
-                model.set({
-                    recurrence_type: 2,
-                    interval: 1,
-                    days: 16 << firstDayOfWeek // bitmask 00010000
-                });
-
-                expect(view.$('.recurrence-summary').text()).to.equal(gt('Every %1$s.', moment().weekday(4).format('dddd')));
-            });
-
-            it('has weekly appointment on multiple days', function () {
-                model.set({
-                    recurrence_type: 2,
-                    interval: 1,
-                    days: 42 << firstDayOfWeek // bitmask 00101010
-                });
-
-                expect(view.$('.recurrence-summary').text()).to.equal(gt('Every %1$s.', [
-                    moment().weekday(1).format('dddd'),
-                    moment().weekday(3).format('dddd'),
-                    moment().weekday(5).format('dddd')
-                ].join(gt(', '))));
-            });
-
-            it('has monthly appointment on month day', function () {
-                model.set({
-                    recurrence_type: 3,
-                    interval: 1,
-                    day_in_month: 25
-                });
-
-                expect(view.$('.recurrence-summary').text()).to.equal(gt('Every month on day %1$s.', 25));
-            });
-
-            it('has every 17 month appointment on month day', function () {
-                model.set({
-                    recurrence_type: 3,
-                    interval: 17,
-                    day_in_month: 25
-                });
-
-                expect(view.$('.recurrence-summary').text()).to.equal(gt('Every %1$s months on day %2$s.', 17, 25));
-            });
-
-            it('has monthly appointment every second tuesday', function () {
-                model.set({
-                    recurrence_type: 3,
-                    interval: 1,
-                    day_in_month: 2,
-                    days: 4 << firstDayOfWeek // bitmask 00000100
-                });
-
-                expect(view.$('.recurrence-summary').text()).to.equal(gt('Every month on the %1$s %2$s.', gt('second'), moment().weekday(2).format('dddd')));
-            });
-
-            it('has appointment every 15 months on the third wednesday', function () {
-                model.set({
-                    recurrence_type: 3,
-                    interval: 15,
-                    day_in_month: 3,
-                    days: 8 << firstDayOfWeek // bitmask 00001000
-                });
-
-                expect(view.$('.recurrence-summary').text()).to.equal(gt('Every %1$s months on the %2$s %3$s.', 15, gt('third'), moment().weekday(3).format('dddd')));
-            });
-
-            it('has yearly appointment on month day', function () {
-                model.set({
-                    recurrence_type: 4,
-                    interval: 1,
-                    day_in_month: 13,
-                    month: 8
-                });
-
-                expect(view.$('.recurrence-summary').text()).to.equal(gt('Every year in %1$s on day %2$s.', moment().month(8).format('MMMM'), 13));
-            });
-
-            it('has yearly appointment on first friday in november', function () {
-                model.set({
-                    recurrence_type: 4,
-                    interval: 1,
-                    day_in_month: 1,
-                    month: 10,
-                    days: 32 << firstDayOfWeek // bitmask 00100000
-                });
-
-                expect(view.$('.recurrence-summary').text()).to.equal(gt(
-                    'Every year on the %1$s %2$s in %3$s.',
-                    gt('first'),
-                    moment().weekday(5).format('dddd'),
-                    moment().month(10).format('MMMM')
-                ));
-            });
-
-        });
-
-        describe('has correct string when recurrence ends', function () {
-
-            it('has single occurence repeat string', function () {
-                model.set({
-                    recurrence_type: 3,
-                    occurrences: 1
-                });
-
-                expect(view.$('.ends-summary').text()).to.equal(gt('The series ends after one occurrence.'));
-            });
-
-            it('has multiple occurence repeat string', function () {
-                model.set({
-                    recurrence_type: 3,
-                    occurrences: 13
-                });
-
-                expect(view.$('.ends-summary').text()).to.equal(gt('The series ends after %1$s occurrences.', 13));
-            });
-
-            it('has a date when the appointment ends', function () {
-                model.set({
-                    recurrence_type: 3,
-                    until: 1481720709550
-                });
-
-                expect(view.$('.ends-summary').text()).to.equal(gt('The series ends on %1$s.', moment(1481720709550).format('l')));
-            });
-
-        });
-
         it('set recurrence_type on checkbox toggle', function () {
             expect(model.get('recurrence_type')).to.be.undefined;
             // simulate click event for phantom
             view.$('input[type="checkbox"]').prop('checked', true).trigger('change');
-            expect(model.get('recurrence_type')).to.equal(1);
+            expect(model.get('recurrence_type')).to.equal(2);
             expect(model.get('interval')).to.equal(1);
         });
 

@@ -602,6 +602,9 @@ define('io.ox/core/desktop', [
         saveRestorePoint: function () {
             var self = this, uniqueID = self.get('uniqueID');
             if (this.failSave) {
+                // mail compose has a separate setting
+                if (this.get('name') === 'io.ox/mail/compose' && !coreConfig.get('features/storeMailSavePoints', true)) return $.when();
+
                 return ox.ui.App.getSavePoints().then(function (list) {
                     // might be null, so:
                     list = list || [];
@@ -699,6 +702,9 @@ define('io.ox/core/desktop', [
         storeSavePoints: _.noop,
 
         setSavePoints: function (list) {
+            if (!saveRestoreEnabled()) {
+                return $.Deferred().resolve([]);
+            }
             list = list || [];
             var pointsById = _(list).filter(function (point) {
                 return point.restoreById;

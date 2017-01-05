@@ -232,6 +232,27 @@ define('io.ox/mail/main', [
             app.folderView.resize.enable();
         },
 
+        /*
+         * Folder view support mobile
+         */
+        'folder-view-mobile': function (app) {
+
+            if (_.device('!smartphone')) return app;
+
+            var nav = app.pages.getNavbar('folderTree'),
+                page = app.pages.getPage('folderTree');
+
+            nav.on('rightAction', function () {
+                app.toggleFolders();
+            });
+
+            var tree = new TreeView({ app: app, module: 'mail', root: '1', contextmenu: true });
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            page.append(tree.render().$el);
+            app.treeView = tree;
+        },
+
         'folder-view-dsc-events': function (app) {
             // open accounts page on when the user clicks on error indicator
             app.treeView.on('accountlink:dsc', function () {
@@ -334,27 +355,6 @@ define('io.ox/mail/main', [
             };
 
             app.toggleFolders = toggle;
-        },
-
-        /*
-         * Folder view support
-         */
-        'folder-view-mobile': function (app) {
-
-            if (_.device('!smartphone')) return app;
-
-            var nav = app.pages.getNavbar('folderTree'),
-                page = app.pages.getPage('folderTree');
-
-            nav.on('rightAction', function () {
-                app.toggleFolders();
-            });
-
-            var tree = new TreeView({ app: app, module: 'mail', root: '1', contextmenu: true });
-
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
-            page.append(tree.render().$el);
         },
 
         /*
@@ -1763,10 +1763,10 @@ define('io.ox/mail/main', [
                             folder = folderAPI.pool.models[model.get('folder_id')];
                             // check if we are in the unified folder
                             if (folder && folder.is('unifiedfolder')) {
-                                originalFolderId = model.get('id').replace(/\/\w*$/, '');
+                                originalFolderId = model.get('original_folder_id');
                                 unifiedSubfolderId = model.get('folder_id') + '/' + originalFolderId;
                                 // unified folder has special mail ids
-                                var id = model.get('id').replace(originalFolderId + '/', '');
+                                var id = model.get('original_id');
 
                                 return [{ folder_id: originalFolderId, id: id }, { folder_id: unifiedSubfolderId, id: id }];
                             }
@@ -1779,7 +1779,6 @@ define('io.ox/mail/main', [
 
                                 return [{ folder_id: unifiedFolderId, id: originalFolderId + '/' + model.get('id') }, { folder_id: originalFolderId, id: model.get('id') }];
                             }
-                            return $.Deferred().reject();
                         // check if we are in a standard folder that needs to be synced to a unified folder
                         } else if (accountData.unified_inbox_enabled) {
                             folder = folderAPI.pool.models[model.get('folder_id')];
@@ -1792,8 +1791,6 @@ define('io.ox/mail/main', [
 
                                 return [{ folder_id: unifiedFolderId, id: model.get('folder_id') + '/' + model.get('id') }, { folder_id: unifiedSubfolderId, id: model.get('id') }];
                             }
-
-                            return $.Deferred().reject();
                         }
                         return $.Deferred().reject();
                     });

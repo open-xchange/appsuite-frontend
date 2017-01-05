@@ -475,7 +475,8 @@ define('io.ox/tasks/edit/view-template', [
             this.append(
                 new pViews.UserContainer({
                     collection: baton.model.getParticipants(),
-                    baton: baton
+                    baton: baton,
+                    empty: gt('This task has no participants yet')
                 }).render().$el.addClass('collapsed')
             );
         }
@@ -494,6 +495,8 @@ define('io.ox/tasks/edit/view-template', [
                     resources: false,
                     distributionlists: true
                 },
+                placeholder: gt('Add contact') + ' \u2026',
+                label: gt('Add contact'),
                 collection: baton.model.getParticipants()
             });
             this.append(

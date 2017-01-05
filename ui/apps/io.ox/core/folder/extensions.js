@@ -54,7 +54,7 @@ define('io.ox/core/folder/extensions', [
             var id = api.altnamespace ? 'default0' : INBOX;
             return api.list(id).then(function (list) {
                 return _(list).filter(function (data) {
-                    if (data.id.startsWith('default0/External accounts')) return false;
+                    if (data.id.indexOf('default0/External accounts') === 0) return false;
                     if (account.isStandardFolder(data.id)) return false;
                     if (api.is('public|shared', data)) return false;
                     return true;
@@ -375,6 +375,23 @@ define('io.ox/core/folder/extensions', [
             );
         },
 
+        myContactData: function () {
+            // check if users can edit their own data (see bug 34617)
+            if (settings.get('user/internalUserEdit', true) === false) return;
+
+            this.append($('<div>').append(
+                    $('<a href="#" data-action="my-contact-data" role="button">')
+                    .text(gt('My contact data'))
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        require(['io.ox/core/settings/user'], function (userSettings) {
+                            userSettings.openModalDialog();
+                        });
+                    })
+                )
+            );
+        },
+
         rootFolders: function (tree) {
             var options = {
                 folder: tree.root,
@@ -591,6 +608,18 @@ define('io.ox/core/folder/extensions', [
             id: 'remote-accounts',
             index: 300,
             draw: extensions.fileStorageAccounts
+        }
+    );
+
+    //
+    // Contacts
+    //
+
+    ext.point('io.ox/core/foldertree/contacts/links').extend(
+        {
+            id: 'my-contact-data',
+            index: 300,
+            draw: extensions.myContactData
         }
     );
 

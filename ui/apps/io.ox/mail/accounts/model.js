@@ -155,7 +155,7 @@ define('io.ox/mail/accounts/model', [
                     var changes = { id: id },
                         // primary mail account only allows editing of display name, unified mail and default folders
                         keys = id === 0 ?
-                            ['personal', 'unified_inbox_enabled', 'sent_fullname', 'trash_fullname', 'drafts_fullname', 'spam_fullname', 'archive_fullname'] :
+                            ['personal', 'name', 'unified_inbox_enabled', 'sent_fullname', 'trash_fullname', 'drafts_fullname', 'spam_fullname', 'archive_fullname'] :
                             this.keys();
 
                     // compare all attributes

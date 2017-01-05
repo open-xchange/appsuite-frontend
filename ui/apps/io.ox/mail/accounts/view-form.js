@@ -220,7 +220,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 } else {
 
                     //primary account does not allow editing besides display name and unified mail
-                    self.$el.find('input, select').not('#personal, [name="unified_inbox_enabled"]').prop('disabled', true);
+                    self.$el.find('input, select').not('#personal, #name, [name="unified_inbox_enabled"]').prop('disabled', true);
                 }
 
                 var isMail_oauth = _.isNumber(model.get('mail_oauth')) && model.get('mail_oauth') > -1,
@@ -672,7 +672,8 @@ define.async('io.ox/mail/accounts/view-form', [
         }
     });
 
-    ext.point(POINT + '/pane').extend({
+    // debugging
+    /*ext.point(POINT + '/pane').extend({
         index: 200,
         id: 'dsc',
         draw: function (baton) {
@@ -680,7 +681,7 @@ define.async('io.ox/mail/accounts/view-form', [
             console.log('draw', this, baton);
 
         }
-    });
+    });*/
 
     return accountAPI.getDefaultDisplayName().then(function (name) {
         defaultDisplayName = name;

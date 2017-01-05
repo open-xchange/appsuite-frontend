@@ -236,7 +236,7 @@ define('io.ox/core/tk/doc-converter-utils', [
             // the PIM module id
             moduleId = model.get('module');
 
-        if (model.isMailAttachment()) {
+        if (model.isMailAttachment() && !model.isEncrypted()) {
             return {
                 id: originalModel.mail.id,
                 source: 'mail',
