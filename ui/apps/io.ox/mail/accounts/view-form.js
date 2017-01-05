@@ -672,7 +672,8 @@ define.async('io.ox/mail/accounts/view-form', [
         }
     });
 
-    ext.point(POINT + '/pane').extend({
+    // debugging
+    /*ext.point(POINT + '/pane').extend({
         index: 200,
         id: 'dsc',
         draw: function (baton) {
@@ -680,7 +681,7 @@ define.async('io.ox/mail/accounts/view-form', [
             console.log('draw', this, baton);
 
         }
-    });
+    });*/
 
     return accountAPI.getDefaultDisplayName().then(function (name) {
         defaultDisplayName = name;
