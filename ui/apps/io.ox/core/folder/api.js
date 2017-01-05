@@ -1330,7 +1330,7 @@ define('io.ox/core/folder/api', [
     function getExistingFolder(type) {
         var defaultId = util.getDefaultFolder(type);
         if (defaultId) return $.Deferred().resolve(defaultId);
-        if (type === 'mail') return $.Deferred().resolve('default0' + mailSettings.get('defaultseparator', '/') + 'INBOX');
+        if (type === 'mail') return $.Deferred().resolve('default0' + getMailFolderSeparator() + 'INBOX');
         if (type === 'infostore') return $.Deferred().resolve(10);
         return flat({ module: type }).then(function (data) {
             for (var section in data) {
@@ -1340,6 +1340,10 @@ define('io.ox/core/folder/api', [
             }
             return null;
         });
+    }
+
+    function getMailFolderSeparator() {
+        return mailSettings.get('defaultseparator', '/');
     }
 
     // publish api
@@ -1377,6 +1381,7 @@ define('io.ox/core/folder/api', [
         getDefaultFolder: util.getDefaultFolder,
         getExistingFolder: getExistingFolder,
         getStandardMailFolders: getStandardMailFolders,
+        getMailFolderSeparator: getMailFolderSeparator,
         getTextNode: getTextNode,
         getDeepLink: getDeepLink,
         getFolderTitle: getFolderTitle,
