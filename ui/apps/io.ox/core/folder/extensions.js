@@ -54,7 +54,7 @@ define('io.ox/core/folder/extensions', [
             var id = api.altnamespace ? 'default0' : INBOX;
             return api.list(id).then(function (list) {
                 return _(list).filter(function (data) {
-                    if (data.id.startsWith('default0/External accounts')) return false;
+                    if (data.id.indexOf('default0/External accounts') === 0) return false;
                     if (account.isStandardFolder(data.id)) return false;
                     if (api.is('public|shared', data)) return false;
                     return true;
