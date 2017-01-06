@@ -189,19 +189,15 @@ define('io.ox/oauth/backbone', [
 
     var servicesMetaData = {
         'com.openexchange.oauth.google': {
-            title: gt('Google Drive'),
             className: 'logo-google'
         },
         'com.openexchange.oauth.dropbox': {
-            title: gt('Dropbox'),
             className: 'logo-dropbox'
         },
         'com.openexchange.oauth.boxcom': {
-            title: gt('Box'),
             className: 'logo-boxcom'
         },
         'com.openexchange.oauth.msliveconnect': {
-            title: gt('OneDrive'),
             className: 'logo-onedrive'
         },
         'other': {
