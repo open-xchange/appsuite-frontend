@@ -225,6 +225,13 @@ define('io.ox/core/api/account', [
      * @return { array} folders
      */
     api.getFoldersByType = function (type, accountId) {
+
+        if (isDSC && accountId !== undefined && accountId !== 0) {
+            // in DSC environment return nothing here for all
+            // types. DSC does not know a mapping for the standard
+            // folders.
+            return [];
+        }
         return _(typeHash)
             .chain()
             .map(function (value, key) {
@@ -508,7 +515,12 @@ define('io.ox/core/api/account', [
                 idHash[account.id] = true;
                 // fill DSC hash if needed
                 if (isDSC) {
-                    if (account.id !== 0) dscHash[account.root_folder] = account.id;
+                    if (account.id !== 0) {
+                        dscHash[account.root_folder] = account.id;
+                        // prevent filling wrong typeHash in DSC environment
+                        // return here early
+                        return;
+                    }
                 }
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
