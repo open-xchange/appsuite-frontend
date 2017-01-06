@@ -27,7 +27,7 @@ define('io.ox/mail/accounts/settings', [
     'use strict';
 
     function renderDetailView(evt, data) {
-        var myView, myModel, myViewNode;
+        var myView, myModel, myViewNode, ignoreValidationErrors = true;
 
         myViewNode = $('<div>').addClass('accountDetail');
         myModel = new AccountModel(data);
@@ -58,6 +58,7 @@ define('io.ox/mail/accounts/settings', [
             $form.find('.help-block').prev().removeAttr('aria-invalid aria-describedby');
             $form.find('.help-block').remove();
 
+            if (ignoreValidationErrors) return;
             _.each(error, function (message, key) {
                 var $field = myView.$el.find('#' + key).parent(),
                     $row = $field.closest('.form-group'),
@@ -73,6 +74,7 @@ define('io.ox/mail/accounts/settings', [
         });
 
         myView.dialog.on('save', function () {
+            ignoreValidationErrors = false;
             myModel.validate();
             if (myModel.isValid()) {
                 myView.dialog.getBody().find('.settings-detail-pane').trigger('save');
