@@ -174,7 +174,6 @@ define('io.ox/mail/accounts/settings', [
                         displayName: 'My ' + service.get('displayName') + ' account'
                     });
 
-                    list.$el.find('button').prop('disabled', true).addClass('disabled');
                     account.enableScopes('mail').save().then(function () {
                         ox.busy();
                         var busyMessage = $('<div class="alert-placeholder">');
@@ -195,8 +194,6 @@ define('io.ox/mail/accounts/settings', [
                         }, notifications.yell).always(function () {
                             ox.idle();
                         });
-                    }).always(function () {
-                        list.$el.find('button').prop('disabled', false).removeClass('disabled');
                     });
                 });
 
