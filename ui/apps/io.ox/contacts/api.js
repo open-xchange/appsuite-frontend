@@ -37,15 +37,17 @@ define('io.ox/contacts/api', [
         },
         convertResponseToGregorian = function (response) {
             if (response.id) {
-                // single contact: convert birthdays with year 1 from julian to gregorian calendar
-                if (response.birthday && moment.utc(response.birthday).year() === 1) {
+                // single contact: convert birthdays with year 1 or earlier from julian to gregorian calendar
+                // year might be 0 if birthday is on 1.1 or 1.2. (year 1 - 2days difference)
+                if (response.birthday && moment.utc(response.birthday).year() <= 1) {
                     response.birthday = util.julianToGregorian(response.birthday);
                 }
                 return response;
             }
-            // array of contacts: convert birthdays with year 1 from julian to gregorian calendar
+            // array of contacts: convert birthdays with year 1 or earlier from julian to gregorian calendar
+            // year might be 0 if birthday is on 1.1 or 1.2. (year 1 - 2days difference)
             _(response).each(function (contact) {
-                if (contact.birthday && moment.utc(contact.birthday).year() === 1) {
+                if (contact.birthday && moment.utc(contact.birthday).year() <= 1) {
                     // birthday without year
                     contact.birthday = util.julianToGregorian(contact.birthday);
                 }
