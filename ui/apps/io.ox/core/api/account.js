@@ -150,12 +150,29 @@ define('io.ox/core/api/account', [
     };
 
     /**
-     * get the id for a given DSC root folder
-     * @param  {string} folder (root_folder)
-     * @return { string } id
+     * get the account id for a given DSC root folder
+     * @param  { string } folder (root_folder)
+     * @return { int } id
      */
     api.getIdForDSCRootFolder = function (folder) {
         return dscHash[folder];
+    };
+
+    /**
+     * get the account id for a given folder which is
+     * child of a DSC account/rootfolder
+     * @param  { string } folder
+     * @return { int } account id
+     */
+    api.getIdForDSCFolder = function (folder) {
+        if (!folder) return;
+        var id;
+
+        _(dscHash).each(function (accountId, rootFolder) {
+            if (folder.indexOf(rootFolder) === 0) id = accountId;
+        });
+
+        return id;
     };
 
     api.hasDSCAccount = function () {
@@ -283,7 +300,7 @@ define('io.ox/core/api/account', [
             return str;
         } else if (isDSC) {
             // dsc accounts need special handling
-            return api.getIdForDSCRootFolder(str);
+            if (api.getIdForDSCFolder(str)) return api.getIdForDSCFolder(str);
         } else if (/^default(\d+)/.test(String(str))) {
             // is not unified mail?
             if (!api.isUnified(str)) {
@@ -314,7 +331,6 @@ define('io.ox/core/api/account', [
         return api.get(account_id || 0)
         .then(ensureDisplayName)
         .then(function (account) {
-
             if (!account) return $.Deferred().reject(account);
 
             // use user-setting for primary account and unified folders
