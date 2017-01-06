@@ -163,6 +163,8 @@ define('io.ox/mail/accounts/settings', [
                     $('<label>').text(gt('Please select your mail account provider')),
                     list.render().$el
                 );
+                // this code block runs deferred, need to focus the first element, again
+                a11y.getTabbable($el).first().focus();
 
                 list.listenTo(list, 'select', function (service) {
                     if (service.id === 'wizard') return;

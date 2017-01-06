@@ -17,12 +17,13 @@ define('io.ox/files/actions/add-storage-account', [
     'io.ox/core/tk/dialogs',
     'io.ox/metrics/main',
     'io.ox/core/yell',
+    'io.ox/core/a11y',
     'gettext!io.ox/files',
     // must be required here or popupblocker blocks the window while we require files
     'io.ox/oauth/keychain',
     'io.ox/core/api/filestorage',
     'io.ox/oauth/backbone'
-], function (dialogs, metrics, yell, gt, oauthAPI, filestorageApi, OAuth) {
+], function (dialogs, metrics, yell, a11y, gt, oauthAPI, filestorageApi, OAuth) {
 
     'use strict';
 
@@ -96,6 +97,8 @@ define('io.ox/files/actions/add-storage-account', [
             .header($('<h4>').text(gt('Add storage account')))
             .addPrimaryButton('close', gt('Close'), 'close')
             .build(drawContent)
-            .show();
+            .show(function () {
+                a11y.getTabbable(this).first().focus();
+            });
     };
 });
