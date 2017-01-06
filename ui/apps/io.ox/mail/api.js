@@ -256,8 +256,12 @@ define('io.ox/mail/api', [
     }
 
     function defaultView(obj) {
-        if (!settings.get('allowHtmlMessages', true)) return 'text';
-        return allowImages(obj) ? 'html' : 'noimg';
+        if (settings.get('allowHtmlMessages', true)) {
+            // html
+            return allowImages(obj) ? 'html' : 'noimg';
+        }
+        // text
+        return settings.get('beautifyPlainText') ? 'plain-text' : 'text';
     }
 
     api.get = function (obj, options) {

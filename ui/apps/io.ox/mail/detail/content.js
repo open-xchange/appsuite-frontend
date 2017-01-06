@@ -104,8 +104,6 @@ define('io.ox/mail/detail/content', [
             })
             .join('');
 
-        text = that.beautifyPlainText(text);
-
         return text;
     };
 
@@ -544,7 +542,7 @@ define('io.ox/mail/detail/content', [
                     // plain TEXT
                     content = document.createElement('DIV');
                     content.className = 'mail-detail-content plain-text noI18n';
-                    content.innerHTML = beautifyText(baton.source);
+                    content.innerHTML = settings.get('beautifyPlainText') ? that.beautifyPlainText(baton.source) : beautifyText(baton.source);
                     if (!baton.processedEmoji) {
                         emoji.processEmoji(baton.source, function (text, lib) {
                             baton.processedEmoji = !lib.loaded;
@@ -598,10 +596,10 @@ define('io.ox/mail/detail/content', [
 
         beautifyPlainText: function (str) {
 
-            // currently this clashes with "color quotes" that are already injected server-side
-            if (settings.get('isColorQuoted', true)) return str;
+            // looks like HTML?
+            if (/<br>/i.test(str)) return str;
 
-            var plain = this.adjustPlainText(str);
+            var plain = str.trim().replace(/\r/g, '');
             return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
         },
 
