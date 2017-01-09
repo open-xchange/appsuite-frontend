@@ -40,7 +40,7 @@ define('io.ox/backbone/views/recurrence-view', [
                         recurrenceType = parseInt(value, 10),
                         days = this.model.get('days');
 
-                    // special handling for work days (62 is bitmask for work days)
+                    // special handling for workdays (62 is bitmask for workdays)
                     if (value === '2:1') days = 62;
                     if (this.model.get('every-weekday')) days = undefined;
                     this.model.set({
@@ -69,7 +69,7 @@ define('io.ox/backbone/views/recurrence-view', [
                             label: gt('Daily')
                         }, {
                             value: '2:1',
-                            label: gt('Daily on work days')
+                            label: gt('Daily on workdays')
                         }, {
                             value: 2,
                             label: gt('Weekly')
@@ -228,17 +228,6 @@ define('io.ox/backbone/views/recurrence-view', [
                     setup: function (opt) {
                         this.bitmask = opt.bitmask;
                         mini.CheckboxView.prototype.setup.apply(this, arguments);
-                        this.$el.on('focusin', $.proxy(this.onFocus, this));
-                    },
-                    onFocus: function () {
-                        // prevent wrong focus from error view
-                        if (this.isModelChanged()) {
-                            var self = this;
-                            _.defer(function () {
-                                if (self.$el.is(':focus')) return;
-                                self.$el.focus();
-                            });
-                        }
                     },
                     onChange: function () {
                         var value = this.model.get(this.name);
@@ -316,6 +305,7 @@ define('io.ox/backbone/views/recurrence-view', [
                             input.render().$el,
                             new mini.ErrorView({
                                 model: this.model,
+                                focusSelector: 'input:focus',
                                 name: 'days'
                             }).render().$el
                         )
@@ -714,11 +704,7 @@ define('io.ox/backbone/views/recurrence-view', [
                         }).render().$el,
                         gt('Repeat')
                     ),
-                    $('<a href="#" class="summary">').append(
-                        $('<span class="recurrence-summary">'),
-                        ' ', // add a space here between. if use padding/margin, the text decoration is splitted
-                        $('<span class="ends-summary">')
-                    )
+                    $('<a href="#" class="summary">').append()
                 )
             );
             this.updateSummary();
@@ -726,14 +712,12 @@ define('io.ox/backbone/views/recurrence-view', [
         },
 
         updateSummary: function () {
-            var $recSummary = this.$('.recurrence-summary'),
-                $endSummary = this.$('.ends-summary'),
+            var $summary = this.$('.summary'),
                 visible = this.model.get('recurrence_type') > 0;
             this.$('.summary').toggleClass('hidden', !visible);
             if (visible) {
                 var data = this.model.toJSON();
-                $recSummary.text(util.getRecurrenceDescription(data));
-                $endSummary.text(util.getRecurrenceEnd(data));
+                $summary.text(util.getRecurrenceString(data));
             }
         },
 

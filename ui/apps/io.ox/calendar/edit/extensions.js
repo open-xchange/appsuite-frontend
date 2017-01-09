@@ -335,7 +335,7 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'full_time',
         index: 600,
-        className: 'col-md-6',
+        className: 'col-sm-6',
         render: function () {
             this.$el.append(
                 $('<div>').addClass('checkbox').append(

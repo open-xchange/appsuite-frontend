@@ -503,13 +503,13 @@ define('io.ox/calendar/util', [
                         //#. recurrence string
                         //#. %1$d: numeric
                         gt('Every %1$d weeks on all days.', interval);
-                    } else if (days === 62) { // special case: weekly on work days
+                    } else if (days === 62) { // special case: weekly on workdays
                         str = interval === 1 ?
                             //#. recurrence string
-                            gt('On work days.') :
+                            gt('On workdays.') :
                             //#. recurrence string
                             //#. %1$d: numeric
-                            gt('Every %1$d weeks on work days.', interval);
+                            gt('Every %1$d weeks on workdays.', interval);
                     } else if (days === 65) {
                         str = interval === 1 ?
                             //#. recurrence string
@@ -522,7 +522,7 @@ define('io.ox/calendar/util', [
                     } else {
                         str = interval === 1 ?
                         //#. recurrence string
-                        //#. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
+                        //#. %1$s day string, e.g. "workdays" or "Friday" or "Monday, Tuesday, Wednesday"
                         //#. Example: Every Monday, Wednesday, Friday
                         gt('Every %1$s.', getDayString(days)) :
                         //#. recurrence string

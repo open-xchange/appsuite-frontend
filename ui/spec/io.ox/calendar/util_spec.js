@@ -162,10 +162,10 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'gettext!io.ox/calendar'], f
                 expect(str).to.equal(gt('Every %1$s.', [moment().day(1).format('dddd'), moment().day(2).format('dddd'), moment().day(3).format('dddd')].join(gt(', '))));
             });
 
-            it('On work days', function () {
+            it('On workdays', function () {
                 data.days = 2 + 4 + 8 + 16 + 32;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal(gt('On work days.'));
+                expect(str).to.equal(gt('On workdays.'));
             });
 
             it('On weekends', function () {
@@ -195,10 +195,10 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'gettext!io.ox/calendar'], f
                 expect(str).to.equal(gt('Every %1$d weeks on %2$s.', 2, [moment().day(1).format('dddd'), moment().day(2).format('dddd'), moment().day(3).format('dddd')].join(gt(', '))));
             });
 
-            it('Every 2 weeks on work days', function () {
+            it('Every 2 weeks on workdays', function () {
                 data.days = 2 + 4 + 8 + 16 + 32;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal(gt('Every %1$d weeks on work days.', 2));
+                expect(str).to.equal(gt('Every %1$d weeks on workdays.', 2));
             });
 
             it('Every 2 weeks on weekends', function () {

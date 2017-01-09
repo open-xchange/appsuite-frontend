@@ -1,4 +1,9 @@
 .recurrence-view {
+
+    .checkbox {
+        margin-top: 0;
+    }
+
     label {
         margin-right: 5px;
     }
@@ -32,6 +37,10 @@
 
     .btn-group .btn.focus {
         z-index: 10;
+
+        &:not(.active) {
+            background-color: transparent;
+        }
     }
 
     @media (max-width: 480px), (max-device-width: 480px) {
