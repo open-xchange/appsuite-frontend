@@ -236,6 +236,7 @@ define('io.ox/calendar/month/perspective', [
                     folder: self.folder,
                     pane: this.pane,
                     app: this.app,
+                    perspective: this,
                     weekType: monthDelimiter ? 'last' : ''
                 });
                 views.push(view.render().el);
@@ -255,6 +256,7 @@ define('io.ox/calendar/month/perspective', [
                             folder: self.folder,
                             pane: this.pane,
                             app: this.app,
+                            perspective: this,
                             weekType: 'first'
                         }).render().el);
                     }

@@ -79,7 +79,7 @@ define('io.ox/calendar/week/view', [
             allowLasso: true
         },
 
-        // init values from prespective
+        // init values from perspective
         initialize: function (opt) {
             var self = this;
 
@@ -134,6 +134,7 @@ define('io.ox/calendar/week/view', [
             });
 
             this.app = opt.app;
+            this.perspective = opt.perspective;
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
             this.refDate = opt.refDate || moment();
@@ -1362,6 +1363,8 @@ define('io.ox/calendar/week/view', [
                     minHeight: self.cellHeight - 2,
                     containment: 'parent',
                     start: function (e, ui) {
+                        // close sidepopup so it doesn't interfere with dragging/resizing
+                        if (self.perspective && self.perspective.dialog) self.perspective.dialog.close();
                         var d = $(this).data('ui-resizable');
                         // get fresh dimensions as window size and/or timezone favorites might change
                         colWidth = self.$('.day:first').outerWidth();
@@ -1556,6 +1559,8 @@ define('io.ox/calendar/week/view', [
                         return false;
                     },
                     start: function (e, ui) {
+                        // close sidepopup so it doesn't interfere with dragging/resizing
+                        if (self.perspective && self.perspective.dialog) self.perspective.dialog.close();
                         // write all appointment divs to draggable object
                         var d = $(this).data('ui-draggable');
                         d.my = {

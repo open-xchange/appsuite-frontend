@@ -48,6 +48,7 @@ define('io.ox/calendar/month/view', [
             this.folder = options.folder;
             this.pane = options.pane;
             this.app = options.app;
+            this.perspective = options.perspective;
             this.weekType = options.weekType;
         },
 
@@ -288,6 +289,8 @@ define('io.ox/calendar/month/view', [
                     return false;
                 },
                 start: function () {
+                    // close sidepopup so it doesn't interfere with dragging/resizing
+                    if (self.perspective && self.perspective.dialog) self.perspective.dialog.close();
                     $(this).hide();
                 }
             });

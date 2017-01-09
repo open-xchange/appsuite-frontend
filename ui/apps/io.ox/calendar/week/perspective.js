@@ -334,6 +334,7 @@ define('io.ox/calendar/week/perspective', [
                     collection: this.collection,
                     mode: opt.perspective.split(':')[1],
                     refDate: this.app.refDate,
+                    perspective: this,
                     appExtPoint: 'io.ox/calendar/week/view/appointment'
                 });
                 switch (this.view.mode) {
