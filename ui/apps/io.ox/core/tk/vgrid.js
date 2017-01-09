@@ -476,10 +476,6 @@ define('io.ox/core/tk/vgrid', [
                 // data, index, id, prev, grid
                 defs = defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}, self));
                 text = clone.node.text();
-                // convert Umlauts
-                text = text.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
-                    .replace(/[ÖÒÓÔÕÖ]/g, 'O')
-                    .replace(/[ÜÙÚÛÜ]/g, 'U');
                 // add node
                 labels.nodes = labels.nodes.add(clone.node.appendTo(container));
                 // meta data

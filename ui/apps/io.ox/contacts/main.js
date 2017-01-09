@@ -250,7 +250,19 @@ define('io.ox/contacts/main', [
 
             // The label function can be overwritten by an extension.
             var getLabel = function (data) {
-                return $.trim(data.sort_name || '').slice(0, 1).toUpperCase();
+                return $.trim(data.sort_name || '').slice(0, 1).toUpperCase()
+                    // 'ß'.toUpperCase() === 'SS'
+                    .slice(0, 1)
+                    .replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
+                    .replace(/[Ç]/g, 'C')
+                    .replace(/[ÈÉÊË]/g, 'E')
+                    .replace(/[ÌÍÎÏ]/g, 'I')
+                    .replace(/[Ñ]/g, 'N')
+                    .replace(/[ÖÒÓÔÕÖØ]/g, 'O')
+                    .replace(/[ß]/g, 'S')
+                    .replace(/[ÜÙÚÛÜ]/g, 'U')
+                    .replace(/[ÝŸ]/g, 'Y')
+                    .replace(/[\/\\!"§$%&(){}<>=?´`~^°*+#'\-_.:,;@|]|\d/g, '#');
             };
             ext.point('io.ox/contacts/getLabel').each(function (extension) {
                 if (extension.getLabel) getLabel = extension.getLabel;
@@ -271,9 +283,6 @@ define('io.ox/contacts/main', [
             grid.requiresLabel = function (i, data, current) {
                 if (!data) { return false; }
                 var prefix = getLabel(data);
-                prefix = prefix.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
-                    .replace(/[ÖÒÓÔÕÖ]/g, 'O')
-                    .replace(/[ÜÙÚÛÜ]/g, 'U');
                 return (i === 0 || prefix !== current) ? prefix : false;
             };
 
@@ -284,7 +293,7 @@ define('io.ox/contacts/main', [
 
             // A11y: This needs some work!
 
-            var fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+            var fullIndex = '#ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
             /**
              * Thumb index
