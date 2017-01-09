@@ -15,124 +15,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     'io.ox/core/notifications',
     'gettext!io.ox/settings',
     'io.ox/core/extensions',
-    'io.ox/mail/mailfilter/settings/filter/defaults',
     'io.ox/backbone/mini-views',
-    'io.ox/core/folder/picker',
-    'io.ox/backbone/mini-views/datepicker',
-    'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/dropdown'
-], function (notifications, gt, ext, DEFAULTS, mini, picker, DatePicker, folderAPI, Dropdown) {
+], function (notifications, gt, ext, mini, Dropdown) {
 
     'use strict';
 
     var POINT = 'io.ox/mailfilter/settings/filter/detail',
         testCapabilities,
-
-        sizeValues = {
-            'over': gt('Is bigger than'),
-            'under': gt('Is smaller than')
-        },
-
-        flagValues = {
-            '\\deleted': gt('deleted'),
-            '\\seen': gt('seen')
-        },
-
-        containsValues = {
-            'contains': gt('Contains'),
-            'is': gt('Is exactly'),
-            'matches': gt('Matches'),
-            //needs no different translation
-            'regex': gt('Regex')
-        },
-
-        addressValues = {
-            'user': gt('User'),
-            'detail': gt('Detail'),
-            'all': gt('All'),
-            'localpart': gt('Localpart'),
-            'domain': gt('Domain')
-        },
-
-        timeValues = {
-            'ge': gt('Rule applies from'),
-            'le': gt('Rule applies until'),
-            //#. The filter rule will be applied on a specific date, which can be selected by the user
-            'is': gt('Rule applies on')
-        },
-
-        headerTranslation = {
-            'From': gt('Sender/From'),
-            'any': gt('Any recipient'),
-            'Subject': gt('Subject'),
-            'mailingList': gt('Mailing list'),
-            'To': gt('To'),
-            'Cc': gt('CC'),
-            'cleanHeader': gt('Header'),
-            'envelope': gt('Envelope - To'),
-            'size': gt('Size (bytes)'),
-            'body': gt('Content'),
-            'currentdate': gt('Date'),
-            'address': gt('Sender address')
-        },
-
-        conditionsMapping = {
-            'header': ['From', 'any', 'Subject', 'mailingList', 'To', 'Cc', 'cleanHeader'],
-            'envelope': ['envelope'],
-            'size': ['size'],
-            'body': ['body'],
-            'currentdate': ['currentdate'],
-            'address': ['address']
-        },
-
-        actionsTranslations = {
-            'keep': gt('Keep'),
-            'discard': gt('Discard'),
-            'redirect': gt('Redirect to'),
-            'move': gt('Move to folder'),
-            'reject': gt('Reject with reason'),
-            'markmail': gt('Mark mail as'),
-            'tag': gt('Tag mail with'),
-            'flag': gt('Flag mail with')
-        },
-
-        actionCapabilities = {
-            'keep': 'keep',
-            'discard': 'discard',
-            'redirect': 'redirect',
-            'move': 'move',
-            'reject': 'reject',
-            'markmail': 'addflags',
-            'tag': 'addflags',
-            'flag': 'addflags'
-        },
-
-        COLORS = {
-            NONE: { value: 0, text: gt('None') },
-            RED: { value: 1, text: gt('Red') },
-            ORANGE: { value: 7, text: gt('Orange') },
-            YELLOW: { value: 10, text: gt('Yellow') },
-            LIGHTGREEN: { value: 6, text: gt('Light green') },
-            GREEN: { value: 3, text: gt('Green') },
-            LIGHTBLUE: { value: 9, text: gt('Light blue') },
-            BLUE: { value: 2, text: gt('Blue') },
-            PURPLE: { value: 5, text: gt('Purple') },
-            PINK: { value: 8, text: gt('Pink') },
-            GRAY: { value: 4, text: gt('Gray') }
-        },
-
-        COLORFLAGS = {
-            '$cl_1': '1',
-            '$cl_2': '2',
-            '$cl_3': '3',
-            '$cl_4': '4',
-            '$cl_5': '5',
-            '$cl_6': '6',
-            '$cl_7': '7',
-            '$cl_8': '8',
-            '$cl_9': '9',
-            '$cl_10': '10'
-        },
         currentState = null,
 
         checkForMultipleTests = function (el) {
@@ -154,26 +44,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         renderWarningForEmptyActions = function (node) {
             var warning = $('<div>').addClass('alert alert-danger').text(gt('Please define at least one action.'));
             node.append(warning);
-        },
-
-        prepareFolderForDisplay = function (folder, input) {
-            folderAPI.get(folder).done(function (data) {
-                var arrayOfParts = folder.split('/');
-                arrayOfParts.shift();
-                if (data.standard_folder) {
-                    input.val(data.title);
-                } else {
-                    input.val(arrayOfParts.join('/'));
-                }
-            });
-        },
-
-        toggleSaveButton = function (footer, pane) {
-            if (pane.find('.has-error, .alert-danger').length === 0) {
-                footer.find('[data-action="save"]').prop('disabled', false);
-            } else {
-                footer.find('[data-action="save"]').prop('disabled', true);
-            }
         },
 
         filterValues = function (testType, possibleValues) {
@@ -212,28 +82,33 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             className: 'io-ox-mailfilter-edit',
 
             initialize: function (opt) {
+                this.conditionsTranslation = opt.conditionsTranslation;
+                this.actionsTranslations = opt.actionsTranslations;
+                this.defaults = opt.defaults;
+
                 testCapabilities = {};
                 _.each(opt.config.tests, function (value) {
                     testCapabilities[value.test] = value.comparison;
                 });
 
                 var unsupported = [];
-                _.each(actionCapabilities, function (val, key) {
+                _.each(opt.actionCapabilities, function (val, key) {
                     var index = _.indexOf(opt.config.actioncommands, val);
                     if (index === -1) {
                         unsupported.push(key);
                     }
                 });
-                actionsTranslations = _.omit(actionsTranslations, unsupported);
+                this.actionsTranslations = _.omit(this.actionsTranslations, unsupported);
 
-                _.each(conditionsMapping, function (list, conditionGroup) {
+                _.each(opt.conditionsMapping, function (list, conditionGroup) {
                     if (!_.has(testCapabilities, conditionGroup)) {
-                        _.each(conditionsMapping[conditionGroup], function (condition) {
-                            delete headerTranslation[condition];
+                        _.each(opt.conditionsMapping[conditionGroup], function (condition) {
+                            delete opt.conditionsTranslation[condition];
                         });
                     }
                 });
 
+                // is undefined?
                 this.listView = opt.listView;
             },
 
@@ -241,17 +116,27 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 var baton = ext.Baton({ model: this.model, view: this });
                 ext.point(POINT + '/view').invoke('draw', this.$el.empty(), baton);
-                toggleSaveButton(this.dialog.getFooter(), this.$el);
+
+                baton.view.$el.trigger('toggle:saveButton');
+
                 return this;
 
             },
             events: {
                 'save': 'onSave',
                 'click [data-action=change-dropdown-value]': 'onChangeDropdownValue',
-                'click .folderselect': 'onFolderSelect',
                 'click [data-action="change-color"]': 'onChangeColor',
                 'click [data-action="remove-test"]': 'onRemoveTest',
-                'click [data-action="remove-action"]': 'onRemoveAction'
+                'click [data-action="remove-action"]': 'onRemoveAction',
+                'toggle:saveButton': 'onToggleSaveButton'
+            },
+
+            onToggleSaveButton: function () {
+                if (this.$el.find('.has-error, .alert-danger').length === 0) {
+                    this.dialog.getFooter().find('[data-action="save"]').prop('disabled', false);
+                } else {
+                    this.dialog.getFooter().find('[data-action="save"]').prop('disabled', true);
+                }
             },
 
             onRemoveTest: function (e) {
@@ -355,22 +240,23 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                     var testArray =  _.copy(this.model.get('test'));
                     if (checkForMultipleTests(this.el).length > 1) {
-                        testArray.tests.push(_.copy(DEFAULTS.tests[data.value], true));
+                        testArray.tests.push(_.copy(this.defaults.tests[data.value], true));
 
                     } else if (checkForMultipleTests(this.el).length === 1) {
                         var createdArray = [testArray];
-                        createdArray.push(_.copy(DEFAULTS.tests[data.value], true));
+                        createdArray.push(_.copy(this.defaults.tests[data.value], true));
                         testArray = { id: 'allof' };
                         testArray.tests = createdArray;
                     } else {
 
-                        testArray = _.copy(DEFAULTS.tests[data.value], true);
+                        testArray = _.copy(this.defaults.tests[data.value], true);
                     }
 
                     this.model.set('test', testArray);
                 } else if (data.action === 'create') {
-                    var actionArray = _.copy(this.model.get('actioncmds'));
-                    actionArray.push(_.copy(DEFAULTS.actions[data.value], true));
+
+                    var actionArray = this.model.get('actioncmds');
+                    actionArray.push(_.copy(this.defaults.actions[data.value], true));
 
                     this.model.set('actioncmds', actionArray);
                 }
@@ -400,31 +286,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             },
 
-            onFolderSelect: function (e) {
-                e.preventDefault();
-
-                var self = this,
-                    model = $(e.currentTarget).data('model'),
-                    list = $(e.currentTarget).closest('li'),
-                    actionID = list.attr('data-action-id');
-
-                this.dialog.getPopup().hide();
-
-                picker({
-                    context: 'filter',
-                    done: function (id) {
-                        model.set('into', id);
-                    },
-                    close: function () {
-                        self.dialog.getPopup().show();
-                        self.$el.find('[data-action-id="' + actionID + '"] .folderselect').focus();
-                    },
-                    folder: model.get('into'),
-                    module: 'mail',
-                    root: '1'
-                });
-            },
-
             onChangeColor: function (e) {
                 e.preventDefault();
                 var list = $(e.currentTarget).closest('li[data-action-id]'),
@@ -448,15 +309,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             var conditionList = $('<ol class="widget-list list-unstyled tests">'),
                 actionList = $('<ol class="widget-list list-unstyled actions">'),
-                appliedConditions = baton.model.get('test'),
-                inputId,
-                drawDeleteButton = function (type) {
-                    return $('<a href="#" class="remove" tabindex="0">').attr('data-action', 'remove-' + type).append($('<i class="fa fa-trash-o">'));
-                };
+                appliedConditions = baton.model.get('test');
 
             appliedConditions = appliedConditions.tests ? appliedConditions.tests : [appliedConditions];
 
-            _(appliedConditions).each(function (condition, num) {
+            _(appliedConditions).each(function (condition, conditionKey) {
                 var ConditionModel = Backbone.Model.extend({
                         validate: function (attrs) {
                             if (_.has(attrs, 'size')) {
@@ -488,235 +345,21 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     cmodel = new ConditionModel(condition);
 
                 cmodel.on('change', function () {
-                    baton.view.setModel('test', cmodel, num);
+                    baton.view.setModel('test', cmodel, conditionKey);
                 });
 
-                var Input = mini.InputView.extend({
-                        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
-                        onChange: function () {
-                            if (this.name === 'size') {
-                                var isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
-                                if (isValid) {
-                                    this.model.set(this.name, parseInt(this.$el.val(), 10));
-                                    this.update();
-                                }
-                            }
-                            if (this.name === 'values' || this.name === 'headers') this.model.set(this.name, [this.$el.val()]);
-                        },
-                        onKeyup: function () {
-                            var state,
-                                isValid;
-                            if (this.name === 'size') {
-                                isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
-                                state = isValid ? 'valid:' : 'invalid:';
-                            } else {
-                                state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
-                            }
-                            this.model.trigger(state + this.name);
-                            toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
-                        }
-                    }), secondInputId;
+                // condition point
+                ext.point('io.ox/mail/mailfilter/tests').get(cmodel.get('id'), function (point) {
+                    point.invoke('draw', conditionList, baton, conditionKey, cmodel, filterValues, condition);
+                });
 
-                function drawCondition(o) {
-                    if (o.secondInputId) {
-                        return $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num }).append(
-                            $('<div>').addClass('col-sm-4 doubleline').append(
-                                $('<span>').addClass('list-title').text(o.title)
-                            ),
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('row').append(
-                                    $('<label for="' + o.inputId + '" class="col-sm-4 control-label" >').text(gt('Name')),
-                                    $('<div>').addClass('first-label inline-input col-sm-8').append(
-                                        new Input(o.inputOptions).render().$el,
-                                        o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
-                                    )
-                                ),
-                                $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-sm-4').append(
-                                        new mini.DropdownLinkView(o.dropdownOptions).render().$el
-                                    ),
-                                    $('<div class="col-sm-8">').append(
-                                        $('<label for="' + secondInputId + '" class="sr-only">').text(o.secondInputLabel),
-                                        new Input(o.secondInputOptions).render().$el,
-                                        o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
-                                    )
-                                )
-                            ),
-                            drawDeleteButton('test')
-                        );
-                    }
-                    return $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num }).append(
-                        $('<div>').addClass('col-sm-4 singleline').append(
-                            $('<span>').addClass('list-title').text(o.title)
-                        ),
-                        $('<div>').addClass('col-sm-8').append(
-                            $('<div>').addClass('row').append(
-                                $('<div>').addClass('col-sm-4').append(
-                                    new mini.DropdownLinkView(o.dropdownOptions).render().$el
-                                ),
-                                $('<div class="col-sm-8">').append(
-                                    $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
-                                    new Input(o.inputOptions).render().$el,
-                                    o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
-                                )
-                            )
-                        ),
-                        drawDeleteButton('test')
-                    );
-
-                }
-
-                switch (cmodel.get('id')) {
-                    case 'size':
-                        inputId = _.uniqueId('size');
-                        conditionList.append(
-                            drawCondition({
-                                inputId: inputId,
-                                title: headerTranslation.size,
-                                dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues('size', sizeValues) },
-                                inputLabel: headerTranslation.size + ' ' + sizeValues[cmodel.get('comparison')],
-                                inputOptions: { name: 'size', model: cmodel, className: 'form-control', id: inputId },
-                                errorView: true
-                            })
-                        );
-                        break;
-                    case 'body':
-                        inputId = _.uniqueId('values');
-                        conditionList.append(
-                            drawCondition({
-                                inputId: inputId,
-                                title: headerTranslation.body,
-                                dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues('body', containsValues) },
-                                inputLabel: headerTranslation.size + ' ' + sizeValues[cmodel.get('comparison')],
-                                inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                                errorView: true
-                            })
-                        );
-                        break;
-                    case 'currentdate':
-                        var ModifiedDatePicker = DatePicker.extend({
-                            updateModel: function () {
-                                var time = this.getTimestamp();
-                                if (_.isNull(time) || _.isNumber(time)) {
-                                    this.model[this.model.setDate ? 'setDate' : 'set'](this.attribute, [time], { validate: true });
-                                    this.model.trigger('valid');
-                                } else {
-                                    this.model.trigger('invalid:' + this.attribute, [gt('Please enter a valid date')]);
-                                }
-                            }
-                        });
-                        cmodel.on('change:datevalue', function () {
-                            if (cmodel.get('datevalue')[0] === null) {
-                                conditionList.find('[data-test-id="' + num + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
-                            } else {
-                                conditionList.find('[data-test-id="' + num + '"] input.datepicker-day-field').closest('.row').removeClass('has-error');
-                            }
-                            toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
-                        });
-
-                        conditionList.append(
-                            $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num }).append(
-                                $('<div>').addClass('col-sm-4 singleline').append(
-                                    $('<span>').addClass('list-title').text(headerTranslation[condition.id])
-                                ),
-                                $('<div>').addClass('col-sm-8').append(
-                                    $('<div>').addClass('row').append(
-                                        $('<div>').addClass('col-sm-4').append(
-                                            new mini.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues('currentdate', timeValues) }).render().$el
-                                        ),
-                                        $('<div class="col-sm-8">').append(
-                                            new ModifiedDatePicker({ model: cmodel, display: 'DATE', attribute: 'datevalue', label: gt('datepicker') }).render().$el
-                                        )
-                                    )
-                                ),
-                                drawDeleteButton('test')
-                            )
-                        ).find('legend').addClass('sr-only');
-                        if (cmodel.get('datevalue')[0] === null || cmodel.get('datevalue').length === 0) conditionList.find('[data-test-id="' + num + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
-                        break;
-                    case 'header':
-                        var title,
-                            translation;
-                        secondInputId = _.uniqueId('values');
-
-                        inputId = _.uniqueId('headers');
-
-                        if (cmodel.get('headers').length === 4) {
-                            title = headerTranslation.mailingList;
-                        } else if (cmodel.get('headers').length === 2) {
-                            title = headerTranslation.any;
-                        } else {
-
-                            translation = _.chain(headerTranslation).pick(function (value, key) {
-                                return cmodel.get('headers')[0].toUpperCase() === key.toUpperCase();
-                            }).values().first().value();
-
-                            title = cmodel.get('headers')[0] === '' ? headerTranslation.cleanHeader : translation;
-                        }
-
-                        if (cmodel.get('headers')[0] === '' || title === undefined) {
-                            title = headerTranslation.cleanHeader;
-
-                            conditionList.append(
-                                drawCondition({
-                                    inputId: inputId,
-                                    secondInputId: secondInputId,
-                                    title: title,
-                                    dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, containsValues) },
-                                    inputOptions: { name: 'headers', model: cmodel, className: 'form-control', id: inputId },
-                                    secondInputLabel: title + ' ' + containsValues[cmodel.get('comparison')],
-                                    secondInputOptions: { name: 'values', model: cmodel, className: 'form-control', id: secondInputId },
-                                    errorView: true
-                                })
-                            );
-                        } else {
-                            conditionList.append(
-                                drawCondition({
-                                    inputId: secondInputId,
-                                    title: title,
-                                    dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, containsValues) },
-                                    inputLabel: title + ' ' + containsValues[cmodel.get('comparison')],
-                                    inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: secondInputId },
-                                    errorView: true
-                                })
-                            );
-                        }
-                        break;
-                    case 'envelope':
-                        inputId = _.uniqueId('values');
-                        conditionList.append(
-                            drawCondition({
-                                inputId: inputId,
-                                title: headerTranslation.envelope,
-                                dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, containsValues) },
-                                inputLabel: headerTranslation.envelope + ' ' + containsValues[cmodel.get('comparison')],
-                                inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                                errorView: true
-                            })
-                        );
-                        break;
-                    case 'address':
-                        inputId = _.uniqueId('values');
-                        conditionList.append(
-                            drawCondition({
-                                inputId: inputId,
-                                title: headerTranslation.address,
-                                dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, addressValues) },
-                                inputLabel: headerTranslation.address + ' ' + addressValues[cmodel.get('comparison')],
-                                inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                                errorView: true
-                            })
-                        );
-                        break;
-                    // no default
-                }
-                // inintial validation to disable save button
+                 // inintial validation to disable save button
                 if (!cmodel.isValid()) {
-                    conditionList.find('[data-test-id=' + num + '] .row').addClass('has-error');
+                    conditionList.find('[data-test-id=' + conditionKey + '] .row').addClass('has-error');
                 }
             });
 
-            _(baton.model.get('actioncmds')).each(function (action, num) {
+            _(baton.model.get('actioncmds')).each(function (action, actionKey) {
 
                 var ActionModel = Backbone.Model.extend({
                         validate: function (attrs) {
@@ -748,242 +391,18 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     amodel = new ActionModel(action);
 
                 amodel.on('change', function () {
-                    baton.view.setModel('actioncmds', amodel, num);
+                    baton.view.setModel('actioncmds', amodel, actionKey);
                 });
 
-                var Input = mini.InputView.extend({
-                        events: { 'change': 'onChange', 'keyup': 'onKeyup' },
-                        onChange: function () {
-                            if (this.name === 'flags') {
-                                var value = (/customflag_/g.test(this.id)) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
-                                this.model.set(this.name, value);
-                            } else if (this.name === 'to') {
-                                this.model.set(this.name, this.$el.val().trim());
-                            } else {
-                                this.model.set(this.name, this.$el.val());
-                            }
-                        },
-                        update: function () {
-                            if (/customflag_/g.test(this.id)) {
-                                this.$el.val(this.model.get('flags')[0].replace(/^\$+/, ''));
-                            } else if (/move_/g.test(this.id)) {
-                                prepareFolderForDisplay(this.model.get('into'), this.$el);
-                            } else {
-                                this.$el.val($.trim(this.model.get(this.name)));
-                            }
-                        },
-                        onKeyup: function () {
-                            var state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
-                            this.model.trigger(state + this.name);
-                            toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
-                        }
-                    }),
-                    MarkAsDropdown = mini.DropdownLinkView.extend({
-                        onClick: function (e) {
-                            e.preventDefault();
-                            this.model.set(this.name, JSON.parse($(e.target).attr('data-value')));
-                        },
-                        render: function () {
-                            var self = this;
-                            Dropdown.prototype.render.apply(this, arguments);
-                            _(this.options.values).each(function (name, value) {
-                                self.option(self.name, [value], name, { radio: true });
-                            });
-                            this.updateLabel();
-                            return this;
-                        }
+                // action point
+                if (action.id !== 'stop') {
+                    ext.point('io.ox/mail/mailfilter/actions').get(amodel.get('id'), function (point) {
+                        point.invoke('draw', actionList, baton, actionKey, amodel, filterValues, action);
                     });
 
-                function drawColorDropdown(activeColor, colors, colorflags) {
-
-                    function changeLabel(e) {
-                        e.preventDefault();
-                        $(this).closest('.flag-dropdown').attr('data-color-value', e.data.color).removeClass(e.data.flagclass).addClass('flag_' + e.data.color);
-                    }
-
-                    var flagclass = 'flag_' + colorflags[activeColor];
-                    return $('<div class="dropup flag-dropdown clear-title flag">').attr({ 'data-color-value': activeColor })
-                    .addClass(flagclass)
-                    .append(
-                        // box
-                        $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">'),
-                        // drop down
-                        $('<ul class="dropdown-menu" role="menu">')
-                        .append(
-                            _(colors).map(function (colorObject) {
-                                return $('<li role="presentation">').append(
-                                    $('<a href="#" data-action="change-color" role="menuitem">').append(
-                                        colorObject.value > 0 ? $('<span class="flag-example">').addClass('flag_' + colorObject.value) : $(),
-                                        $.txt(colorObject.text)
-                                    )
-                                    .on('click', { color: colorObject.value, flagclass: flagclass }, changeLabel)
-                                );
-                            })
-                        )
-                    );
-                }
-
-                function drawAction(o) {
-                    var errorView = o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : [];
-
-                    if (o.activeLink) {
-                        return $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
-                            $('<div>').addClass('col-sm-4 singleline').append(
-                                $('<span>').addClass('list-title').text(o.title)
-                            ),
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-sm-4 rightalign').append(
-                                        $('<a href="#" class="folderselect">').text(gt('Select folder')).data({ 'model': o.inputOptions.model })
-                                    ),
-                                    $('<div class=" col-sm-8">').append(
-                                        $('<label class="sr-only">').attr('for', o.inputId).text(o.inputLabel),
-                                        new Input(o.inputOptions).render().$el.attr({ disabled: 'disabled' })
-                                    )
-                                )
-                            ),
-                            drawDeleteButton('action')
-                        );
-                    } else if (/markas_/g.test(inputId)) {
-                        return $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
-                            $('<div>').addClass('col-sm-4 singleline').append(
-                                $('<span>').addClass('list-title').text(o.title)
-                            ),
-
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('row').append(
-                                    $('<div>').addClass('col-sm-3 col-sm-offset-9 rightalign').append(
-                                        new MarkAsDropdown(o.dropdownOptions).render().$el
-                                    )
-                                )
-                            ),
-                            drawDeleteButton('action')
-                        );
-                    } else if (/discard_/g.test(inputId) || /keep_/g.test(inputId)) {
-                        return $('<li>').addClass('filter-settings-view ' + o.addClass + ' row').attr('data-action-id', num).append(
-                            $('<div>').addClass('col-sm-4 singleline').append(
-                                $('<span>').addClass('list-title').text(o.title)
-                            ),
-                            drawDeleteButton('action')
-                        );
-                    }
-                    return $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
-                        $('<div>').addClass('col-sm-4 singleline').append(
-                            $('<span>').addClass('list-title').text(o.title)
-                        ),
-                        $('<div>').addClass('col-sm-8').append(
-                            $('<div>').addClass('row').append(
-                                $('<div>').addClass('col-sm-8 col-sm-offset-4').append(
-                                    $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
-                                    new Input(o.inputOptions).render().$el,
-                                    errorView
-                                )
-                            )
-                        ),
-                        drawDeleteButton('action')
-                    );
-                }
-
-                if (action.id !== 'stop') {
-                    switch (action.id) {
-                        case 'redirect':
-                            inputId = _.uniqueId('redirect');
-                            actionList.append(
-                                drawAction({
-                                    inputId: inputId,
-                                    title: actionsTranslations[action.id],
-                                    inputLabel: actionsTranslations.redirect,
-                                    inputOptions: { name: 'to', model: amodel, className: 'form-control', id: inputId },
-                                    errorView: true
-                                })
-                            );
-                            break;
-                        case 'move':
-                            inputId = _.uniqueId('move_');
-                            actionList.append(
-                                drawAction({
-                                    inputId: inputId,
-                                    title: actionsTranslations[action.id],
-                                    activeLink: true,
-                                    inputLabel: actionsTranslations[action.id],
-                                    inputOptions: { name: 'into', model: amodel, className: 'form-control', id: inputId }
-                                })
-                            );
-                            break;
-                        case 'reject':
-                            inputId = _.uniqueId('reject');
-                            actionList.append(
-                                drawAction({
-                                    inputId: inputId,
-                                    title: actionsTranslations[action.id],
-                                    inputLabel: actionsTranslations.reject,
-                                    inputOptions: { name: 'text', model: amodel, className: 'form-control', id: inputId },
-                                    errorView: true
-                                })
-                            );
-                            break;
-                        case 'addflags':
-                            if (/delete|seen/.test(action.flags[0])) {
-                                inputId = _.uniqueId('markas_');
-                                actionList.append(
-                                    drawAction({
-                                        inputId: inputId,
-                                        title: actionsTranslations.markmail,
-                                        dropdownOptions: { name: 'flags', model: amodel, values: flagValues, id: inputId }
-                                    })
-                                );
-                            } else if (/^\$cl/.test(action.flags[0])) {
-                                inputId = _.uniqueId('colorflag_');
-                                actionList.append($('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num }).append(
-                                    $('<div>').addClass('col-sm-4 singleline').append(
-                                        $('<span>').addClass('list-title').text(actionsTranslations.flag)
-                                    ),
-                                    $('<div>').addClass('col-sm-8').append(
-                                        $('<div>').addClass('row').append(
-                                            $('<div>').addClass('col-sm-3 col-sm-offset-9 rightalign').append(
-                                                drawColorDropdown(action.flags[0], COLORS, COLORFLAGS)
-                                            )
-                                        )
-                                    ),
-                                    drawDeleteButton('action')
-                                ));
-                            } else {
-                                inputId = _.uniqueId('customflag_');
-                                actionList.append(
-                                    drawAction({
-                                        inputId: inputId,
-                                        title: actionsTranslations.tag,
-                                        inputLabel: actionsTranslations.tag,
-                                        inputOptions: { name: 'flags', model: amodel, className: 'form-control', id: inputId },
-                                        errorView: true
-                                    })
-                                );
-                            }
-                            break;
-                        case 'discard':
-                            inputId = _.uniqueId('discard_');
-                            actionList.append(
-                                drawAction({
-                                    inputId: inputId,
-                                    addClass: 'warning',
-                                    title: actionsTranslations[action.id]
-                                })
-                            );
-                            break;
-                        case 'keep':
-                            inputId = _.uniqueId('keep_');
-                            actionList.append(
-                                drawAction({
-                                    inputId: inputId,
-                                    title: actionsTranslations[action.id]
-                                })
-                            );
-                            break;
-                        // no default
-                    }
                     // inintial validation to disable save button
                     if (!amodel.isValid()) {
-                        actionList.find('[data-action-id=' + num + '] .row').addClass('has-error');
+                        actionList.find('[data-action-id=' + actionKey + '] .row').addClass('has-error');
                     }
                 }
             });
@@ -1004,12 +423,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             this.append(
                 headlineTest, notificationConditions, conditionList,
-                drawDropdown(gt('Add condition'), headerTranslation, {
+                drawDropdown(gt('Add condition'), baton.view.conditionsTranslation, {
                     test: 'create',
                     toggle: 'dropdown'
                 }),
                 headlineActions, notificationActions, actionList,
-                drawDropdown(gt('Add action'), actionsTranslations, {
+                drawDropdown(gt('Add action'), baton.view.actionsTranslations, {
                     action: 'create',
                     toggle: 'dropup'
                 })
@@ -1062,7 +481,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         self.find('.alert.alert-danger').remove();
                         renderWarningForEmptyActions(self.find('.notification-for-actions'));
                     }
-                    toggleSaveButton(baton.view.dialog.getFooter(), baton.view.$el);
+                    baton.view.$el.trigger('toggle:saveButton');
                 },
                 checkStopAction = function (e) {
                     currentState = $(e.currentTarget).find('[type="checkbox"]').prop('checked');
@@ -1132,4 +551,3 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
     return FilterDetailView;
 
 });
-

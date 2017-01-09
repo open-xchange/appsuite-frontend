@@ -32,7 +32,19 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
         collection,
-        notificationId = _.uniqueId('notification_');
+        notificationId = _.uniqueId('notification_'),
+        conditionsTranslation = {},
+        actionsTranslations = {},
+        defaults = {
+            tests: {
+                'true': {
+                    'id': 'true'
+                }
+            },
+            actions: {}
+        },
+        actionCapabilities = {},
+        conditionsMapping = {};
 
     function containsStop(actioncmds) {
         var stop = false;
@@ -74,7 +86,16 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 return tests;
             };
 
-        myView = new FilterDetailView({ model: data, listView: evt.data.listView, config: config });
+        myView = new FilterDetailView({
+            model: data,
+            listView: evt.data.listView,
+            config: config,
+            conditionsTranslation: conditionsTranslation,
+            actionsTranslations: actionsTranslations,
+            defaults: defaults,
+            actionCapabilities: actionCapabilities,
+            conditionsMapping: conditionsMapping
+        });
 
         if (myView.model.get('test').tests) {
             var conditionsCopy = myView.model.get('test');
@@ -207,6 +228,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
     return {
         editMailfilter: function ($node, baton) {
 
+            ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { conditionsTranslation: conditionsTranslation, defaults: defaults, conditionsMapping: conditionsMapping });
+            ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { actionsTranslations: actionsTranslations, defaults: defaults, actionCapabilities: actionCapabilities });
+
             var createExtpointForSelectedFilter = function (node, args, config) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
                 },
@@ -216,6 +240,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
             return this.initialize().then(function (data, config) {
                 data = data[0];
                 config = config[0];
+
+                // adds test for testcase
+                // config.tests.push({ test: 'newtest', comparison: ['regex', 'is', 'contains', 'matches', 'testValue'] });
 
                 collection = factory.createCollection(data);
                 collection.comparator = function (model) {
@@ -249,7 +276,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             var unknown = false;
                             _.each(actions, function (action) {
                                 if (!_.contains(['stop', 'vacation'], action.id)) {
-                                    unknown = _.isEmpty(_.where(DEFAULTS.actions, { id: action.id }));
+                                    unknown = _.isEmpty(_.where(defaults.actions, { id: action.id }));
                                 }
                             });
 
@@ -391,6 +418,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         e.data = {};
                         e.data.id = self.model.get('id');
                         e.data.obj = self.model;
+                        e.data.listView = this;
                         if (e.data.obj !== undefined) {
                             createExtpointForSelectedFilter(this.$el.parent(), e, config);
                         }
@@ -414,6 +442,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     },
 
                     render: function () {
+                        this.$el.empty();
                         this.$el.append($('<h1>').addClass('pull-left').text(gt('Mail Filter Rules')),
                             $('<div>').addClass('btn-group pull-right').append(
                                 $('<button type="button" class="btn btn-primary" data-action="add">').addClass('btn btn-primary').text(gt('Add new rule'))
@@ -484,7 +513,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
             var options = {
                 api: api,
                 model: mailfilterModel,
-                filterDefaults: DEFAULTS
+                filterDefaults: defaults
             };
             return $.when(api.getRules(), api.getConfig(), options);
         },
