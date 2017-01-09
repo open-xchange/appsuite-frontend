@@ -137,11 +137,11 @@ define('io.ox/backbone/views/datepicker', [
                 maxHeight = this.$parent.height();
             // exceeds screen bottom?
             if ((offset.top + targetHeight + this.$el.outerHeight()) > maxHeight) {
-                // above
-                this.$el.css({ top: 'auto', bottom: maxHeight - offset.top });
+                // above but in viewport
+                this.$el.css({ top: Math.max(0, offset.top - this.$el.outerHeight()) });
             } else {
                 // below
-                this.$el.css({ top: offset.top + targetHeight, bottom: 'auto' });
+                this.$el.css({ top: offset.top + targetHeight });
             }
             this.$el.css({ left: offset.left }).addClass('open');
             this.$target.attr('aria-expanded', true);
