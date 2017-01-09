@@ -558,6 +558,10 @@ define('io.ox/files/filepicker', [
         //     }
         // }
 
+        function focusButtons() {
+            this.getFooter().find('button').first().focus();
+        }
+
         picker({
 
             addClass: 'zero-padding add-infostore-file',
@@ -622,6 +626,10 @@ define('io.ox/files/filepicker', [
                         pages.changePage('fileList', { disableAnimations: true });
                     });
                 }
+
+                // fix for Bug 50587
+                focusButtons.call(dialog);
+                tree.once('change', focusButtons.bind(dialog));
 
                 tree.on('change', onFolderChange);
                 options.initialize(dialog);
