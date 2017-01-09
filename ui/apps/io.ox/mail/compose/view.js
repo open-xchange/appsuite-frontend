@@ -575,7 +575,6 @@ define('io.ox/mail/compose/view', [
         },
 
         saveDraft: function () {
-            this.model.set('autoDismiss', true);
             var win = this.app.getWindow();
             if (win) win.busy();
             // get mail
@@ -636,7 +635,7 @@ define('io.ox/mail/compose/view', [
 
                 model.set('msgref', result.data);
                 model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
-                model.dirty(false);
+                model.dirty(model.previous('sendtype') !== mailAPI.SENDTYPE.EDIT_DRAFT);
                 //#. %1$s is the time, the draft was saved
                 //#, c-format
                 self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
@@ -676,7 +675,7 @@ define('io.ox/mail/compose/view', [
                         'sendtype': mailAPI.SENDTYPE.EDIT_DRAFT,
                         'infostore_ids_saved': [].concat(model.get('infostore_ids_saved'), mail.infostore_ids || [])
                     });
-                    model.updateShadow();
+                    model.dirty(model.previous('sendtype') !== mailAPI.SENDTYPE.EDIT_DRAFT);
                     //#. %1$s is the time, the draft was saved
                     //#, c-format
                     self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
@@ -766,23 +765,28 @@ define('io.ox/mail/compose/view', [
 
         discard: function () {
             var self = this,
-                def = $.when();
+                def = $.when(),
+                isDraft = this.model.keepDraftOnClose();
 
             // This dialog gets automatically dismissed
-            if (this.model.dirty() || this.model.get('autosavedAsDraft') && !this.model.get('autoDismiss')) {
+            if ((this.model.dirty() || this.model.get('autosavedAsDraft') || isDraft) && !this.model.get('autoDismiss')) {
+                var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
+                    saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
+                    modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
                 // button texts may become quite large in some languages (e. g. french, see Bug 35581)
                 // add some extra space
                 // TODO maybe we could use a more dynamical approach
                 def = new dialogs.ModalDialog({ width: 550, container: _.device('smartphone') ? self.$el.closest('.window-container-center') : $('#io-ox-core') })
-                    .text(gt('Do you really want to discard your message?'))
+                    .text(modalText)
                     //#. "Discard message" appears in combination with "Cancel" (this action)
                     //#. Translation should be distinguishable for the user
-                    .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete')
-                    .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft')
+                    .addPrimaryButton('delete', discardText, 'delete')
+                    .addAlternativeButton('savedraft', saveText, 'savedraft')
                     .addButton('cancel', gt('Cancel'), 'cancel')
                     .show()
                     .then(function (action) {
                         if (action === 'delete') {
+                            if (isDraft) mailAPI.remove([self.parseMsgref(self.model.get('msgref'))]);
                             self.model.discard();
                         } else if (action === 'savedraft') {
                             return self.saveDraft();

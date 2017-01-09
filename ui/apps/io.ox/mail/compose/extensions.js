@@ -68,7 +68,7 @@ define('io.ox/mail/compose/extensions', [
                 return (
                     $('<button type="button" class="btn btn-default" data-action="discard">')
                         .on('click', function () { baton.view.app.quit(); })
-                        .text(gt('Discard'))
+                        .text(baton.model.keepDraftOnClose() ? gt('Delete') : gt('Discard'))
                         .appendTo(this)
                 );
             },
