@@ -270,9 +270,20 @@ div.hopscotch-bubble {
     -webkit-tap-highlight-color: transparent;
 }
 
-.scrollable[tabindex] {
+html:not(.internet-explorer) .scrollable[tabindex] {
     &:focus {
         box-shadow: inset 0 0 0 2px @link-color;
+    }
+}
+
+// Apparently IE does not manage to draw box shadows without leaving artifacts when scrolling
+// So we have to use boder and change the padding so the content does not move on focus. IE strikes again!
+.internet-explorer .scrollable[tabindex] {
+    &:focus {
+        border: 2px solid @link-color;
+        &.default-content-padding:not(.no-padding-adjustment) {
+            padding: 18px 28px;
+        }
     }
 }
 
@@ -372,7 +383,8 @@ div.hopscotch-bubble {
 }
 
 @media (max-width: 900px) {
-    .default-content-padding { padding: 26px 13px 26px 13px; }
+    .default-content-padding { padding: 26px 13px; }
+    .internet-explorer .scrollable[tabindex].default-content-padding:focus:not(.no-padding-adjustment) { padding: 24px 11px; }
 }
 
 .form-spacer { margin-top: 32px; }
@@ -386,8 +398,8 @@ div.hopscotch-bubble {
 // property
 @media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
-    .default-content-padding { padding: 5px 10px 5px 10px; }
-
+    .default-content-padding { padding: 5px 10px; }
+    .internet-explorer .scrollable[tabindex].default-content-padding:focus:not(.no-padding-adjustment) { padding: 3px 8px; }
     .form-control {padding: 4px; }
 
     // flat input fields
