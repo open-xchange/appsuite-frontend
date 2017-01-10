@@ -143,7 +143,7 @@ define('io.ox/backbone/mini-views/common', [
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
-            this.$el.prop('checked', !!this.model.get(this.name));
+            this.$el.prop('checked', !!this.model.get(this.name, this.options.defaultVal));
         },
         render: function () {
             this.$el.attr({ name: this.name });
@@ -217,6 +217,9 @@ define('io.ox/backbone/mini-views/common', [
     var ErrorView =  AbstractView.extend({
         tagName: 'span',
         className: 'help-block',
+        setup: function (opt) {
+            this.focusSelector = opt.focusSelector || 'input';
+        },
         getContainer: function () {
             if (this.options.selector) {
                 if (_.isString(this.options.selector)) return this.$el.closest(this.options.selector);
@@ -244,7 +247,7 @@ define('io.ox/backbone/mini-views/common', [
                             'aria-describedby': errorId
                         });
                         _.defer(function () {
-                            $(container).find('input').focus();
+                            $(container).find(self.focusSelector).focus();
                         });
                     },
                     valid: function () {

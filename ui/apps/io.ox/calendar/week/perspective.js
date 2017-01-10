@@ -334,6 +334,7 @@ define('io.ox/calendar/week/perspective', [
                     collection: this.collection,
                     mode: opt.perspective.split(':')[1],
                     refDate: this.app.refDate,
+                    perspective: this,
                     appExtPoint: 'io.ox/calendar/week/view/appointment'
                 });
                 switch (this.view.mode) {
@@ -385,6 +386,17 @@ define('io.ox/calendar/week/perspective', [
             var cid = _.url.hash('id'), e;
             if (cid) {
                 cid = cid.split(',', 1)[0];
+
+                // see if id is missing the folder
+                if (cid.indexOf('.') === -1) {
+                    if (_.url.hash('folder')) {
+                        // url has folder attribute. Add this
+                        cid = _.url.hash('folder') + '.' + cid;
+                    } else {
+                        // cid is missing folder appointment cannot be restored
+                        return;
+                    }
+                }
 
                 if (_.device('smartphone')) {
                     ox.launch('io.ox/calendar/detail/main', { cid: cid });

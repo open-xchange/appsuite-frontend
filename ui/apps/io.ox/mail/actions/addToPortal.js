@@ -27,7 +27,7 @@ define('io.ox/mail/actions/addToPortal', [
                 props: $.extend({
                     id: baton.data.id,
                     folder_id: baton.data.folder_id,
-                    title: baton.data.subject
+                    title: baton.data.subject ? baton.data.subject : gt('No subject')
                 }, baton.data.parent || {})
             });
             notifications.yell('success', gt('This mail has been added to the portal'));

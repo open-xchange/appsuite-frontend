@@ -74,6 +74,11 @@ define('io.ox/mail/compose/view', [
             draw: function (baton) {
                 ext.point(POINT + '/buttons').invoke('draw', this, baton);
             }
+        },
+        {
+            index: 200,
+            id: 'inlineYell',
+            draw: extensions.inlineYell
         }
     );
 
@@ -237,7 +242,7 @@ define('io.ox/mail/compose/view', [
             draw: function () {
                 this.data('view')
                     .header(gt('Options'))
-                    .option('vcard', 1, gt('Attach Vcard'), gt('Options'), 0)
+                    .option('vcard', 1, gt('Attach Vcard'), { prefix: gt('Options'), toggleValue: 0 })
                     .option('disp_notification_to', true, gt('Request read receipt'), { prefix: gt('Options') });
             }
         }
@@ -520,7 +525,7 @@ define('io.ox/mail/compose/view', [
                     var def = $.Deferred();
                     if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {
                         require(['io.ox/mail/detail/content'], function (proc) {
-                            var html = proc.text2html(content);
+                            var html = proc.transformForHTMLEditor(content);
                             attachmentCollection.at(0).set('content_type', 'text/html');
                             content = html;
                             def.resolve();
@@ -570,7 +575,6 @@ define('io.ox/mail/compose/view', [
         },
 
         saveDraft: function () {
-            this.model.set('autoDismiss', true);
             var win = this.app.getWindow();
             if (win) win.busy();
             // get mail
@@ -601,6 +605,7 @@ define('io.ox/mail/compose/view', [
             }).then(function (result) {
                 var opt = self.parseMsgref(result.data);
                 if (mail.attachments[0].content_type === 'text/plain') opt.view = 'raw';
+                if (mail.attachments[0].content_type === 'text/html') opt.view = 'html';
 
                 return $.when(
                     result,
@@ -630,8 +635,10 @@ define('io.ox/mail/compose/view', [
 
                 model.set('msgref', result.data);
                 model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
-                model.dirty(false);
-                notifications.yell('success', gt('Mail saved as draft'));
+                model.dirty(model.previous('sendtype') !== mailAPI.SENDTYPE.EDIT_DRAFT);
+                //#. %1$s is the time, the draft was saved
+                //#, c-format
+                self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
                 return result;
             }).always(function () {
                 if (win) win.idle();
@@ -642,6 +649,7 @@ define('io.ox/mail/compose/view', [
 
             var def = new $.Deferred(),
                 model = this.model,
+                self = this,
                 mail = this.model.getMailForAutosave();
 
             if (model.get('encrypt')) {
@@ -667,8 +675,10 @@ define('io.ox/mail/compose/view', [
                         'sendtype': mailAPI.SENDTYPE.EDIT_DRAFT,
                         'infostore_ids_saved': [].concat(model.get('infostore_ids_saved'), mail.infostore_ids || [])
                     });
-                    model.updateShadow();
-                    notifications.yell('success', gt('Mail saved as draft'));
+                    model.dirty(model.previous('sendtype') !== mailAPI.SENDTYPE.EDIT_DRAFT);
+                    //#. %1$s is the time, the draft was saved
+                    //#, c-format
+                    self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
                     def.resolve(result);
                 }
             });
@@ -725,6 +735,16 @@ define('io.ox/mail/compose/view', [
             delay();
         },
 
+        inlineYell: function (text) {
+            // no inline yell on smartphones, use default yell as fallback
+            if (_.device('smartphone')) {
+                notifications.yell('success', text);
+                return;
+            }
+            // only fade in once, then leave it there
+            this.$el.parents().find('.inline-yell').text(text).fadeIn();
+        },
+
         clean: function () {
             // mark as not dirty
             this.model.dirty(false);
@@ -745,23 +765,28 @@ define('io.ox/mail/compose/view', [
 
         discard: function () {
             var self = this,
-                def = $.when();
+                def = $.when(),
+                isDraft = this.model.keepDraftOnClose();
 
             // This dialog gets automatically dismissed
-            if (this.model.dirty() || this.model.get('autosavedAsDraft') && !this.model.get('autoDismiss')) {
+            if ((this.model.dirty() || this.model.get('autosavedAsDraft') || isDraft) && !this.model.get('autoDismiss')) {
+                var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
+                    saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
+                    modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
                 // button texts may become quite large in some languages (e. g. french, see Bug 35581)
                 // add some extra space
                 // TODO maybe we could use a more dynamical approach
                 def = new dialogs.ModalDialog({ width: 550, container: _.device('smartphone') ? self.$el.closest('.window-container-center') : $('#io-ox-core') })
-                    .text(gt('Do you really want to discard your message?'))
+                    .text(modalText)
                     //#. "Discard message" appears in combination with "Cancel" (this action)
                     //#. Translation should be distinguishable for the user
-                    .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete')
-                    .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft')
+                    .addPrimaryButton('delete', discardText, 'delete')
+                    .addAlternativeButton('savedraft', saveText, 'savedraft')
                     .addButton('cancel', gt('Cancel'), 'cancel')
                     .show()
                     .then(function (action) {
                         if (action === 'delete') {
+                            if (isDraft) mailAPI.remove([self.parseMsgref(self.model.get('msgref'))]);
                             self.model.discard();
                         } else if (action === 'savedraft') {
                             return self.saveDraft();
@@ -862,6 +887,9 @@ define('io.ox/mail/compose/view', [
                 new Editor(self.editorContainer, options).done(function (editor) {
                     def.resolve(editor);
                 });
+            }, function () {
+                // something went wrong
+                def.reject({ error: gt("Couldn't load editor") });
             });
             return def.then(function (editor) {
                 self.editorHash[self.model.get('editorMode')] = editor;

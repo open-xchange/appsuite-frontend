@@ -27,10 +27,15 @@ define('io.ox/mail/view-options', [
     ext.point('io.ox/mail/view-options').extend({
         id: 'sort',
         index: 100,
-        draw: function (batton) {
+        draw: function (baton) {
+            this.data('view').listenTo(baton.app, 'folder:change', function () {
+                var link = this.$('a[data-value="from-to"]'),
+                    textNode = link.contents().last();
+                textNode.replaceWith(account.is('sent|drafts', baton.app.folder.get()) ? gt('To') : gt('From'));
+            });
             this.data('view')
                 .option('sort', 610, gt('Date'), { radio: true })
-                .option('sort', 'from-to', account.is('sent|drafts', batton.app.folder.get()) ? gt('To') : gt('From'), { radio: true })
+                .option('sort', 'from-to', account.is('sent|drafts', baton.app.folder.get()) ? gt('To') : gt('From'), { radio: true })
                 .option('sort', 651, gt('Unread'), { radio: true })
                 .option('sort', 608, gt('Size'), { radio: true })
                 .option('sort', 607, gt('Subject'), { radio: true })
@@ -83,7 +88,7 @@ define('io.ox/mail/view-options', [
             app.on('folder:change', toggle);
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
+            this.append(dropdown.render().$el.addClass('grid-options toolbar-item').on('dblclick', function (e) {
                 e.stopPropagation();
             }));
 

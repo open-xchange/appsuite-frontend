@@ -203,6 +203,60 @@ define('io.ox/mail/settings/pane', [
 
     ext.point(POINT + '/pane').extend({
         index: 200,
+        id: 'display',
+        draw: function () {
+            this.append(fieldset(
+                gt('Display'),
+                // html
+                checkbox(
+                    'allowHtmlMessages',
+                    gt('Allow html formatted emails'),
+                    new mini.CheckboxView({ name: 'allowHtmlMessages', model: settings }).render().$el
+                ),
+                // images
+                checkbox(
+                    'allowHtmlImages',
+                    gt('Allow pre-loading of externally linked images'),
+                    new mini.CheckboxView({ name: 'allowHtmlImages', model: settings }).render().$el
+                ),
+                // emojis
+                checkbox(
+                    'displayEmoticons',
+                    gt('Display emoticons as graphics in text emails'),
+                    new mini.CheckboxView({ name: 'displayEmoticons', model: settings }).render().$el
+                ),
+                // colored quotes
+                checkbox(
+                    'isColorQuoted',
+                    gt('Color quoted lines'),
+                    new mini.CheckboxView({ name: 'isColorQuoted', model: settings }).render().$el
+                ),
+                // fixed width
+                checkbox(
+                    'useFixedWidthFont',
+                    gt('Use fixed-width font for text mails'),
+                    new mini.CheckboxView({ name: 'useFixedWidthFont', model: settings }).render().$el
+                ),
+                // beautify plain text
+                checkbox(
+                    'beautifyPlainText',
+                    //#. prettify or beautify
+                    //#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
+                    gt('Prettify plain text mails'),
+                    new mini.CheckboxView({ name: 'beautifyPlainText', model: settings }).render().$el
+                ),
+                // read receipts
+                checkbox(
+                    'sendDispositionNotification',
+                    gt('Show requests for read receipts'),
+                    new mini.CheckboxView({ name: 'sendDispositionNotification', model: settings }).render().$el
+                )
+            ));
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 300,
         id: 'common',
         draw: function () {
 
@@ -226,12 +280,6 @@ define('io.ox/mail/settings/pane', [
                         gt('Automatically collect contacts in the folder "Collected addresses" while reading'),
                         new mini.CheckboxView({ name: 'contactCollectOnMailAccess', model: settings }).render().$el
                     ) : [],
-                    // fixed width
-                    checkbox(
-                        'useFixedWidthFont',
-                        gt('Use fixed-width font for text mails'),
-                        new mini.CheckboxView({ name: 'useFixedWidthFont', model: settings }).render().$el
-                    ),
                     // mailto handler registration
                     checkbox(
                         'features/registerProtocolHandler',
@@ -255,7 +303,7 @@ define('io.ox/mail/settings/pane', [
     });
 
     ext.point(POINT + '/pane').extend({
-        index: 300,
+        index: 400,
         id: 'compose',
         draw: function () {
             var update = function () {
@@ -355,7 +403,7 @@ define('io.ox/mail/settings/pane', [
                                     new Colorpicker({ name: 'defaultFontStyle/color', model: settings, className: 'dropdown', label: gt('Color'), caret: true }).render().$el
                                 )
                             ),
-                            $('<div class="row">').append(exampleText = $('<div class="example-text">').text(gt('This is how your font will look like.')).css(getCSS()))
+                            $('<div class="row">').append(exampleText = $('<div class="example-text">').text(gt('This is how your message text will look like.')).css(getCSS()))
                         )
                     )]
                 ),
@@ -405,41 +453,6 @@ define('io.ox/mail/settings/pane', [
                     });
                 });
             }
-        }
-    });
-
-    ext.point(POINT + '/pane').extend({
-        index: 400,
-        id: 'display',
-        draw: function () {
-            this.append(fieldset(
-                gt('Display'),
-                checkbox(
-                    'allowHtmlMessages',
-                    gt('Allow html formatted emails'),
-                    new mini.CheckboxView({ name: 'allowHtmlMessages', model: settings }).render().$el
-                ),
-                checkbox(
-                    'allowHtmlImages',
-                    gt('Allow pre-loading of externally linked images'),
-                    new mini.CheckboxView({ name: 'allowHtmlImages', model: settings }).render().$el
-                ),
-                checkbox(
-                    'displayEmoticons',
-                    gt('Display emoticons as graphics in text emails'),
-                    new mini.CheckboxView({ name: 'displayEmoticons', model: settings }).render().$el
-                ),
-                checkbox(
-                    'isColorQuoted',
-                    gt('Color quoted lines'),
-                    new mini.CheckboxView({ name: 'isColorQuoted', model: settings }).render().$el
-                ),
-                checkbox(
-                    'sendDispositionNotification',
-                    gt('Show requests for read receipts'),
-                    new mini.CheckboxView({ name: 'sendDispositionNotification', model: settings }).render().$el
-                )
-            ));
         }
     });
 

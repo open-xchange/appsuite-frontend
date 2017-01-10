@@ -55,9 +55,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         },
 
         timeValues = {
-            'ge': gt('starts on'),
-            'le': gt('ends on'),
-            'is': gt('is on')
+            'ge': gt('Rule applies from'),
+            'le': gt('Rule applies until'),
+            'is': gt('Rule applies on')
         },
 
         headerTranslation = {
@@ -71,7 +71,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'envelope': gt('Envelope - To'),
             'size': gt('Size (bytes)'),
             'body': gt('Content'),
-            'currentdate': gt('Current Date'),
+            'currentdate': gt('Date'),
             'address': gt('Sender address')
         },
 

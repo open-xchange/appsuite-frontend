@@ -439,7 +439,6 @@ define('io.ox/core/folder/api', [
     var ready = $.when();
 
     function propagate(arg) {
-
         if (arg instanceof Backbone.Model) {
 
             var model = arg, data = model.toJSON(), id = data.id;
@@ -457,6 +456,17 @@ define('io.ox/core/folder/api', [
         }
 
         if (/^account:(create|delete|unified-enable|unified-disable)$/.test(arg)) {
+
+            if (mailSettings.get('dsc/enabled')) {
+
+                // need to refresh subfolders of default0
+                return list('default0', { cache: false }).done(function () {
+                    refresh();
+                    api.trigger('refresh');
+                });
+
+            }
+
             // need to refresh subfolders of root folder 1
             return list('1', { cache: false }).done(function () {
                 virtual.refresh();
@@ -1320,7 +1330,7 @@ define('io.ox/core/folder/api', [
     function getExistingFolder(type) {
         var defaultId = util.getDefaultFolder(type);
         if (defaultId) return $.Deferred().resolve(defaultId);
-        if (type === 'mail') return $.Deferred().resolve('default0' + mailSettings.get('defaultseparator', '/') + 'INBOX');
+        if (type === 'mail') return $.Deferred().resolve('default0' + getMailFolderSeparator() + 'INBOX');
         if (type === 'infostore') return $.Deferred().resolve(10);
         return flat({ module: type }).then(function (data) {
             for (var section in data) {
@@ -1330,6 +1340,10 @@ define('io.ox/core/folder/api', [
             }
             return null;
         });
+    }
+
+    function getMailFolderSeparator() {
+        return mailSettings.get('defaultseparator', '/');
     }
 
     // publish api
@@ -1367,6 +1381,7 @@ define('io.ox/core/folder/api', [
         getDefaultFolder: util.getDefaultFolder,
         getExistingFolder: getExistingFolder,
         getStandardMailFolders: getStandardMailFolders,
+        getMailFolderSeparator: getMailFolderSeparator,
         getTextNode: getTextNode,
         getDeepLink: getDeepLink,
         getFolderTitle: getFolderTitle,

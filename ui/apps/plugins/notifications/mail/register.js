@@ -101,7 +101,7 @@ define('plugins/notifications/mail/register', [
     // ensure we do not play a sound twice until the first sound has finished
     var playSound = _.throttle(function () {
         if (_.device('smartphone')) return;
-        sound.play();
+        if (sound) sound.play();
     }, 2000);
 
     settingsModel.on('change:notificationSoundName', function () {
@@ -109,8 +109,10 @@ define('plugins/notifications/mail/register', [
         var s = settingsModel.get('notificationSoundName');
         loadSound(s).done(function (s) {
             // preview the selected sound by playing it on change
-            s.play();
-            sound = s;
+            if (s) {
+                s.play();
+                sound = s;
+            }
         });
         settingsModel.saveAndYell();
     });
@@ -182,7 +184,7 @@ define('plugins/notifications/mail/register', [
         }
 
         // don't let the badge grow infinite
-        if (count > 99) count = '99+';
+        if (count > 999) count = '999+';
 
         //#. %1$d number of notifications
         app.setCounter(count, { arialabel: gt('%1$d unread mails', count) });

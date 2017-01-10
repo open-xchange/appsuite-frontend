@@ -430,6 +430,14 @@ define('io.ox/files/actions', [
         if (!_.isObject(data)) return false;
         var array = data.object_permissions || data['com.openexchange.share.extendedObjectPermissions'],
             myself = _(array).findWhere({ entity: ox.user_id });
+
+        // check if there is a permission for a group, the user is a member of
+        // use max permissions available
+        if ((!myself || (myself && myself.bits < 2)) && _(array).findWhere({ group: true })) {
+            // use rampup data so this is not deferred
+            myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(ox.rampup.user.groups)[0] });
+        }
+
         return !!(myself && (myself.bits >= 2));
     }
 

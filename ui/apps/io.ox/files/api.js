@@ -33,7 +33,7 @@ define('io.ox/files/api', [
     // Backbone Model & Collection for Files
     //
 
-    var regUnusableType = /^application\/(force-download|binary|x-download|octet-stream|vnd|vnd.ms-word.document.12|odt|x-pdf)$/i;
+    var regUnusableType = (/^application\/(force-download|binary|x-download|octet-stream|vnd|vnd.ms-word.document.12|odt|x-pdf)$/i);
 
     // basic model with custom cid
     api.Model = backbone.Model.extend({
@@ -71,8 +71,13 @@ define('io.ox/files/api', [
                     source: 'pim'
                 };
 
-            } else if (_.isString(attributes.guardUrl) || (attributes.source === 'guardDrive')) {
+            } else if (_.isString(attributes.guardUrl) || (attributes.source === 'guardDrive') || (attributes.source === 'guardMail')) {
                 normalizedAttrs = attributes;
+                // map content_type to file_mimetype for mail attachments
+                if (attributes.content_type && !normalizedAttrs.file_mimetype) {
+                    normalizedAttrs.file_mimetype = attributes.content_type;
+                }
+
             } else {
                 // drive
                 normalizedAttrs = attributes;
@@ -107,41 +112,59 @@ define('io.ox/files/api', [
         },
 
         isImage: function (type) {
-            return /^image\//.test(type || this.getMimeType());
+            return (/^image\//).test(type || this.getMimeType());
         },
 
         isAudio: function (type) {
-            return /^audio\//.test(type || this.getMimeType());
+            return (/^audio\//).test(type || this.getMimeType());
         },
 
         isVideo: function (type) {
-            return /^video\//.test(type || this.getMimeType());
+            return (/^video\//).test(type || this.getMimeType());
         },
 
         isOffice: function (type) {
-            return /^application\/(msword|excel|powerpoint|vnd\.(ms-word|ms-excel|ms-powerpoint|oasis|openxmlformats))/.test(type || this.getMimeType());
+            return (/^application\/(msword|excel|powerpoint|vnd\.(ms-word|ms-excel|ms-powerpoint|oasis|openxmlformats))/).test(type || this.getMimeType());
         },
 
         isPDF: function (type) {
-            return /^application\/pdf$/.test(type || this.getMimeType());
+            return (/^application\/pdf$/).test(type || this.getMimeType());
+        },
+
+        isZIP: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPDF` that already did exist.
+            return (/^application\/zip$/).test(type || this.getMimeType());
         },
 
         isText: function (type) {
             return /^(text\/plain|application\/rtf|text\/rtf)$/.test(type || this.getMimeType());
         },
 
+        isWordprocessing: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPresentation` that already did exist.
+            return (/^application\/(?:msword|vnd\.(?:ms-word|openxmlformats-officedocument\.wordprocessingml|oasis\.opendocument\.text))/).test(type || this.getMimeType());
+        },
+        isSpreadsheet: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPresentation` that already did exist.
+            return (/^application\/(?:excel|vnd\.(?:ms-excel|openxmlformats-officedocument\.spreadsheetml|oasis\.opendocument\.spreadsheet))/).test(type || this.getMimeType());
+        },
         isPresentation: function (type) {
-            return /^application\/(powerpoint|vnd.(ms-powerpoint|openxmlformats-officedocument.presentationml|oasis.opendocument.presentation))/.test(type || this.getMimeType());
+            return (/^application\/(?:powerpoint|vnd\.(?:ms-powerpoint|openxmlformats-officedocument\.presentationml|oasis\.opendocument\.presentation))/).test(type || this.getMimeType());
         },
 
+        isPgp: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPDF` that already did exist.
+            return (/^application\/pgp(?:\-encrypted)*$/).test(type || this.getMimeType());
+        },
         isGuard: function () {
-            return /guard/.test(this.get('source'));
+            return (/guard/).test(this.get('source'));
         },
 
         isEncrypted: function () {
-            if (this.isGuard()) return (true);
-            // check if file has "guard" file extension
-            return /\.(grd|grd2|pgp)$/.test(this.get('filename'));
+            return (
+
+                this.isGuard() ||
+                this.isPgp() ||
+
+                // check if file has "guard" file extension
+                (/\.(grd|grd2|pgp)$/).test(this.get('filename'))
+            );
         },
 
         isLocked: function () {
@@ -149,7 +172,7 @@ define('io.ox/files/api', [
         },
 
         isMailAttachment: function () {
-            return this.get('source') === 'mail';
+            return (this.get('source') === 'mail' || this.get('source') === 'guardMail');
         },
 
         isPIMAttachment: function () {
@@ -212,20 +235,21 @@ define('io.ox/files/api', [
                     if (this.types[type].test(extension)) return type;
                 }
             }
+            return this.getFileType();
         },
 
         types: {
-            image: /^(gif|bmp|tiff|jpe?g|gmp|png)$/,
-            audio: /^(aac|mp3|m4a|m4b|ogg|opus|wav)$/,
-            video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm|wmv)$/,
-            vcf:   /^(vcf)$/,
-            doc:   /^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/,
-            xls:   /^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb|ods|ots)$/,
-            ppt:   /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa|odg|otg)$/,
-            pdf:   /^pdf$/,
-            zip:   /^(zip|tar|gz|rar|7z|bz2)$/,
-            txt:   /^(txt|md)$/,
-            guard: /^(grd|grd2|pgp)$/
+            image: (/^(gif|bmp|tiff|jpe?g|gmp|png)$/),
+            audio: (/^(aac|mp3|m4a|m4b|ogg|opus|wav)$/),
+            video: (/^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm|wmv)$/),
+            vcf:   (/^(vcf)$/),
+            doc:   (/^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/),
+            xls:   (/^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb|ods|ots)$/),
+            ppt:   (/^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa|odg|otg)$/),
+            pdf:   (/^pdf$/),
+            zip:   (/^(zip|tar|gz|rar|7z|bz2)$/),
+            txt:   (/^(txt|md)$/),
+            guard: (/^(grd|grd2|pgp)$/)
         },
 
         supportsPreview: function () {
@@ -244,6 +268,13 @@ define('io.ox/files/api', [
         hasWritePermissions: function () {
             var array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
                 myself = _(array).findWhere({ entity: ox.user_id });
+
+            // check if there is a permission for a group, the user is a member of
+            // use max permissions available
+            if ((!myself || (myself && myself.bits < 2)) && _(array).findWhere({ group: true })) {
+                // use rampup data so this is not deferred
+                myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(ox.rampup.user.groups)[0] });
+            }
             return !!(myself && (myself.bits >= 2));
         }
     });
@@ -326,13 +357,13 @@ define('io.ox/files/api', [
 
     // get URL to open, download, or preview a file
     // options:
-    // - scaletype: contain or cover or auto
+    // - scaleType: contain or cover or auto
     // - height: image height in pixels
     // - width: image widht in pixels
     // - version: true/false. if false no version will be appended
     api.getUrl = function (file, type, options) {
 
-        options = _.extend({ scaletype: 'contain' }, options);
+        options = _.extend({ scaleType: 'contain' }, options);
 
         var url = ox.apiRoot + '/files',
             folder = encodeURIComponent(file.folder_id),
@@ -344,7 +375,7 @@ define('io.ox/files/api', [
             // file name
             name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
             // scaling options
-            scaling = options.width && options.height ? '&scaleType=' + options.scaletype + '&width=' + options.width + '&height=' + options.height : '',
+            scaling = options.width && options.height ? '&scaleType=' + options.scaleType + '&width=' + options.width + '&height=' + options.height : '',
             // avoid having identical URLs across contexts (rather edge case)
             // also inject last_modified if available; needed for "revisionless save"
             // the content might change without creating a new version (which would be part of the URL)
@@ -420,7 +451,7 @@ define('io.ox/files/api', [
                 type: 'error',
                 text: gt('This file could not be uploaded.') +
                     // add native error message unless generic "0 An unknown error occurred"
-                    (!/^0 /.test(e.error) ? '\n' + e.error : '')
+                    (!(/^0 /).test(e.error) ? '\n' + e.error : '')
             };
         }
         return e;
@@ -435,7 +466,9 @@ define('io.ox/files/api', [
         module: 'files',
         getQueryParams: function (params) {
             // Exit early on virtual folders
-            if (/^virtual\//.test(params.folder)) return false;
+            if ((/^virtual\//).test(params.folder)) {
+                return false;
+            }
             return {
                 action: 'all',
                 folder: params.folder || coreSettings.get('folder/infostore'),
@@ -524,7 +557,7 @@ define('io.ox/files/api', [
 
         function map(cid) {
             // return either folder or file models
-            if (/^folder\./.test(cid)) {
+            if ((/^folder\./).test(cid)) {
                 // convert folder model to file model
                 var data = folderAPI.pool.getModel(cid.substr(7)).toJSON();
                 data.folder_id = 'folder';

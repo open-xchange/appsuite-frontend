@@ -94,11 +94,16 @@ define.async('io.ox/oauth/keychain', [
                 names[account.displayName] = 1;
             });
 
-            name = 'My ' + service.displayName + ' account';
+            //#. %1$s is the display name of the account
+            //#. e.g. My Xing account
+            name = gt('My %1$s account', service.displayName);
 
             while (names[name]) {
                 counter++;
-                name = 'My ' + service.displayName + ' account (' + counter + ')';
+                //#. %1$s is the display name of the account
+                //#. %2$d number, if more than one account of the same service
+                //#. e.g. My Xing account
+                name = gt('My %1$s account (%2$d)', service.displayName, counter);
             }
             return name;
         }

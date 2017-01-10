@@ -25,7 +25,7 @@ define('io.ox/oauth/settings', [
 
         this.draw = function (args) {
             var $form,
-                account = keychain.get(serviceId, args.data.id),
+                account = oauthKeychain.accounts.get(args.data.id),
                 $displayNameField,
                 dialog;
 
@@ -50,16 +50,16 @@ define('io.ox/oauth/settings', [
             }
 
             function doSave() {
-                if (account.displayName !== $displayNameField.val()) {
-                    account.displayName = $displayNameField.val();
-                    keychain.update(account).done(displaySuccess(gt('Changes have been saved.'))).fail(displayError(gt('Something went wrong saving your changes.')));
-                }
+                account.set('displayName', $displayNameField.val());
+                account.save()
+                    .then(displaySuccess(gt('Changes have been saved.')), displayError(gt('Something went wrong saving your changes.')));
                 closeDialog();
             }
 
             function doReauthorize() {
-                account.displayName = $displayNameField.val();
-                keychain.submodules[serviceId].reauthorize(account).done(displaySuccess(gt('You have reauthorized this account.'))).fail(displayError(gt('Something went wrong reauthorizing the account.')));
+                account.set('displayName', $displayNameField.val());
+                account.save()
+                    .then(displaySuccess(gt('You have reauthorized this account.')), displayError(gt('Something went wrong reauthorizing the account.')));
             }
 
             $form = $('<div class="settings-detail-pane">').append(
@@ -68,7 +68,7 @@ define('io.ox/oauth/settings', [
                     $('<div class="control-group">').append(
                         $('<label for="displayName">').text(gt('Display Name')),
                         $('<div class="controls">').append(
-                            $displayNameField = $('<input type="text" name="displayName" class="form-control">').val(account.displayName)
+                            $displayNameField = $('<input type="text" name="displayName" class="form-control">').val(account.get('displayName'))
                         )
                     )
                 )

@@ -85,9 +85,86 @@ define('io.ox/files/filepicker', [
     //     };
     // }
 
-    function isMimetypeImage(mimetype) {
+    function isFileTypeDoc(mimeType, fileModel) {
+        // 'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        // 'docm': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        // 'dotx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+        // 'dotm': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+        // 'doc':  'application/msword',
+        // 'dot':  'application/msword',
+        // 'odt':  'application/vnd.oasis.opendocument.text',
+        // 'odm':  'application/vnd.oasis.opendocument.text-master',
+        // 'ott':  'application/vnd.oasis.opendocument.text-template',
+        // 'oth':  'application/vnd.oasis.opendocument.text-web',
+      //return (/^application\/(?:msword|vnd\.(?:ms-word|openxmlformats-officedocument\.wordprocessingml|oasis\.opendocument\.text))/).test(mimeType);
+
+        // ... with Dec.2016 implemented into Files-API similar to `isPresentation` that already did exist.
+        return filesAPI.Model.prototype.isWordprocessing.call((fileModel || null), mimeType);
+    }
+    function isFileTypeXls(mimeType, fileModel) {
+        // 'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        // 'xlsm': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        // 'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+        // 'xltm': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+        // 'xls':  'application/vnd.ms-excel',
+        // 'xlb':  'application/vnd.ms-excel',
+        // 'xlt':  'application/vnd.ms-excel',
+        // 'ods':  'application/vnd.oasis.opendocument.spreadsheet',
+        // 'ots':  'application/vnd.oasis.opendocument.spreadsheet-template',
+      //return (/^application\/(?:powerpoint|vnd\.(?:ms-powerpoint|openxmlformats-officedocument\.presentationml|oasis\.opendocument\.presentation))/).test(mimeType);
+
+        // ... with Dec.2016 implemented into Files-API similar to `isPresentation` that already did exist.
+        return filesAPI.Model.prototype.isSpreadsheet.call((fileModel || null), mimeType);
+    }
+    function isFileTypePpt(mimeType, fileModel) {
+        // 'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        // 'pptm': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        // 'ppsx': 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+        // 'potx': 'application/vnd.openxmlformats-officedocument.presentationml.template',
+        // 'potm': 'application/vnd.openxmlformats-officedocument.presentationml.template',
+        // 'ppt':  'application/vnd.ms-powerpoint',
+        // 'pot':  'application/vnd.ms-powerpoint',
+        // 'pps':  'application/vnd.ms-powerpoint'
+        // 'odp':  'application/vnd.oasis.opendocument.presentation',
+        // 'otp':  'application/vnd.oasis.opendocument.presentation-template',
+      //return (/^application\/vnd\.(?:openxmlformats\-officedocument\.presentationml\.)|(?:oasis\.opendocument\.presentation)|(?:ms-powerpoint$)/).test(mimeType);
+
+        // did already exist in Files-API:
+        return filesAPI.Model.prototype.isPresentation.call((fileModel || null), mimeType);
+    }
+
+    function isFileTypePdf(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isPDF.call((fileModel || null), mimeType);
+    }
+    function isFileTypeTxt(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isText.call((fileModel || null), mimeType);
+    }
+
+    function isFileTypeZip(mimeType, fileModel) {
+      //return (/^application\/zip$/).test(mimeType);
+
+        // ... with Dec.2016 implemented into Files-API similar to `isPDF` that already did exist.
+        return filesAPI.Model.prototype.isZIP.call((fileModel || null), mimeType);
+    }
+
+    function isFileTypeAudio(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isAudio.call((fileModel || null), mimeType);
+    }
+    function isFileTypeVideo(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isVideo.call((fileModel || null), mimeType);
+    }
+
+    function isFileTypeEncrypted(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isEncrypted.call((fileModel || null), mimeType);
+    }
+    // function isFileTypeImage(mimeType) {
+    //     return filesAPI.Model.prototype.isImage.call(null, mimeType);
+    // }
+
+    function isMimetypeImage(mimetype/*, fileModel*/) {
         return REGX__MIMETYPE_IMAGE.test(mimetype);
     }
+
     // function getImageType(fileObject) {
     //     var imageType;
     //
@@ -103,9 +180,52 @@ define('io.ox/files/filepicker', [
     //         'unknown'
     //     ]);
     // }
+
     var
-        REGX__MIMETYPE_IMAGE  = (/(?:^image\/)|(?:(?:gif|png|jpg|jpeg)$)/);
-      //REGX__IMAGE_EXTENSION = (/[./](gif|png|jpg|jpeg)$/);
+      //REGX__IMAGE_EXTENSION = (/[./](gif|png|jpg|jpeg)$/),
+        REGX__MIMETYPE_IMAGE  = (/(?:^image\/)|(?:(?:gif|png|jpg|jpeg)$)/),
+
+        fileTypeIconClassNameMap = {
+
+            doc: 'file-type-doc',
+            xls: 'file-type-xls',
+            ppt: 'file-type-ppt',
+
+            pdf: 'file-type-pdf',
+            txt: 'file-type-txt',
+
+            zip: 'file-type-zip',
+
+          //image: 'file-type-image',
+            audio: 'file-type-audio',
+            video: 'file-type-video',
+
+            guard: 'file-type-guard'
+          //folder: 'file-type-folder'
+        };
+
+    function getFileTypeIconClassName(fileObject) {
+        var
+            mimeType  = fileObject.file_mimetype,
+            fileModel = new filesAPI.Model(fileObject);
+
+        return (
+            (isFileTypeDoc(mimeType, fileModel) && fileTypeIconClassNameMap.doc) ||
+            (isFileTypeXls(mimeType, fileModel) && fileTypeIconClassNameMap.xls) ||
+            (isFileTypePpt(mimeType, fileModel) && fileTypeIconClassNameMap.ppt) ||
+
+            (isFileTypePdf(mimeType, fileModel) && fileTypeIconClassNameMap.pdf) ||
+            (isFileTypeTxt(mimeType, fileModel) && fileTypeIconClassNameMap.txt) ||
+
+            (isFileTypeZip(mimeType, fileModel) && fileTypeIconClassNameMap.zip) ||
+
+            (isFileTypeAudio(mimeType, fileModel) && fileTypeIconClassNameMap.audio) ||
+            (isFileTypeVideo(mimeType, fileModel) && fileTypeIconClassNameMap.video) ||
+
+            (isFileTypeEncrypted(mimeType, fileModel) && fileTypeIconClassNameMap.guard) ||
+            ''
+        );
+    }
 
     /**
      * does create lazy on demand a filepicker's 3rd possible pane, the preview pane,
@@ -123,31 +243,8 @@ define('io.ox/files/filepicker', [
         return $previewPane;
     }
 
-    /**
-     * renders the preview image and all necessary file info data into a 3rd pane, the preview pane.
-     *
-     * @param $previewPane
-     * @param fileObject
-     */
-    function renderImagePreview($previewPane, fileObject/*, previewStore*/) {
-      //console.log('+++ renderImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
-        var
-          //previewKey    = (fileObject.filename || fileObject.title),
-
-            $preview      = $('<div class="preview"></div>'),
-            $fileinfo     = $('<div class="fileinfo"><div class="sidebar-panel-body"></div></div>'),
-
-            thumbnailUrl  = filesAPI.getUrl(fileObject, 'thumbnail', {
-                scaletype:  'contain',  // - contain or cover or auto
-                height:     140,        // - image height in pixels
-                width:      250,        // - image widht in pixels
-                version:    false       // - true/false. if false no version will be appended
-            });
-
-        $preview.css('background-image', ('url(' + thumbnailUrl + ')'));
-
-        $previewPane.empty();
-        $previewPane.append($preview);
+    function appendFileInfoToPreviewPane($previewPane, $fileinfo, fileObject) {
+      //console.log('+++ appendFileInfoToPreviewPane +++ [$previewPane, $fileinfo, fileObject] : ', $previewPane, $fileinfo, fileObject);
 
         filesAPI.get(fileObject).done(function (fileDescriptor) {
 
@@ -173,6 +270,52 @@ define('io.ox/files/filepicker', [
             $previewPane.append($fileinfo);
 
         })/*.fail(function () { console.warn('Filepicker::renderImagePreview ... async loading did fail'); })*/;
+    }
+
+    /**
+     * renders the preview image and all necessary file info data into a 3rd pane, the preview pane.
+     *
+     * @param $previewPane
+     * @param fileObject
+     */
+    function renderImagePreview($previewPane, fileObject/*, previewStore*/) {
+      //console.log('+++ renderImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
+        var
+            $preview      = $('<div class="preview"></div>'),
+            $fileinfo     = $('<div class="fileinfo"><div class="sidebar-panel-body"></div></div>'),
+
+            thumbnailUrl  = filesAPI.getUrl(fileObject, 'thumbnail', {
+                scaleType:  'contain',  // - contain or cover or auto
+                height:     140,        // - image height in pixels
+                width:      250,        // - image widht in pixels
+                version:    false       // - true/false. if false no version will be appended
+            });
+
+        $preview.css('background-image', ('url(' + thumbnailUrl + ')'));
+
+        $previewPane.empty();
+        $previewPane.append($preview);
+
+        appendFileInfoToPreviewPane($previewPane, $fileinfo, fileObject);
+    }
+
+    function renderNonImagePreview($previewPane, fileObject/*, previewStore*/) {
+      //console.log('+++ renderNonImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
+        var
+            $preview      = $('<div class="preview"></div>'),
+            $fileinfo     = $('<div class="fileinfo"><div class="sidebar-panel-body"></div></div>'),
+
+            $fileTypeIcon = $('<div><i class="fa file-type-icon" aria-hidden="true"></i></div>');
+
+        $preview.append(
+            $fileTypeIcon.addClass(
+                getFileTypeIconClassName(fileObject)
+            )
+        );
+        $previewPane.empty();
+        $previewPane.append($preview);
+
+        appendFileInfoToPreviewPane($previewPane, $fileinfo, fileObject);
     }
 
     // Constructor ------------------------------------------------------------------
@@ -270,8 +413,11 @@ define('io.ox/files/filepicker', [
         this.selection.on('change', function (e, list) {
             toggleOkButton(list.length > 0);
         });
-        this.selection.on('mark', handleFileSelectionChange);
-        this.selection.on('select', handleFileSelectionChange);
+        if (isAllowPreviewPane) {
+
+            this.selection.on('mark', handleFileSelectionChange);
+            this.selection.on('select', handleFileSelectionChange);
+        }
 
         // - user story DOCS-589 :: User can see image preview in file picker
         // - https://jira.open-xchange.com/browse/DOCS-589
@@ -279,21 +425,17 @@ define('io.ox/files/filepicker', [
         //
         function handleFileSelectionChange(event, fileId, fileObject) {
           //console.log('Filepicker::Selection::handleSelect - [event, fileId, fileObject] : ', event, fileId, fileObject);
-            if (isAllowPreviewPane) {
+            if (!$previewPane) {
+                $previewPane = createPreviewPane(filesPane);
+            }
+            if (isMimetypeImage(fileObject.file_mimetype)) {
+              //console.log('+++ Filepicker::select:file:type:image - image type +++ : ', getImageType(fileObject));
 
-                if (isMimetypeImage(fileObject.file_mimetype)) {
-                  //console.log('+++ Filepicker::select:file:type:image - image type +++ : ', getImageType(fileObject));
-
-                    if (!$previewPane) {
-                        $previewPane = createPreviewPane(filesPane);
-                    }
-                    renderImagePreview($previewPane, fileObject/*, previewStore*/);
-
-                } else {
-                    deletePreviewPane();
-                }
+                renderImagePreview($previewPane, fileObject/*, previewStore*/);
             } else {
-                deletePreviewPane();
+                renderNonImagePreview($previewPane, fileObject/*, previewStore*/);
+
+              //deletePreviewPane();
             }
         }
 
@@ -408,12 +550,16 @@ define('io.ox/files/filepicker', [
             });
         }
 
-        function deletePreviewPane() {
-            if ($previewPane) {
+        // function deletePreviewPane() {
+        //     if ($previewPane) {
+        //
+        //         $previewPane.remove();
+        //         $previewPane = null;
+        //     }
+        // }
 
-                $previewPane.remove();
-                $previewPane = null;
-            }
+        function focusButtons() {
+            this.getFooter().find('button').first().focus();
         }
 
         picker({
@@ -480,6 +626,10 @@ define('io.ox/files/filepicker', [
                         pages.changePage('fileList', { disableAnimations: true });
                     });
                 }
+
+                // fix for Bug 50587
+                focusButtons.call(dialog);
+                tree.once('change', focusButtons.bind(dialog));
 
                 tree.on('change', onFolderChange);
                 options.initialize(dialog);

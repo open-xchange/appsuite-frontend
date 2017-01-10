@@ -748,7 +748,7 @@ define('io.ox/files/legacy_api', [
      * @return { string} url
      */
     api.getUrl = function (file, mode, options) {
-        options = $.extend({ scaletype: 'contain' }, options || {});
+        options = $.extend({ scaleType: 'contain' }, options || {});
         var url = ox.apiRoot + '/files',
             // basic URL
             query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
@@ -757,7 +757,7 @@ define('io.ox/files/legacy_api', [
             name = (file.filename ? '/' + encodeURIComponent(file.filename) : ''),
             // scaling options
             thumbnail = 'thumbnailWidth' in options && 'thumbnailHeight' in options ?
-                '&scaleType=' + options.scaletype + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '',
+                '&scaleType=' + options.scaleType + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '',
             // avoid having identical URLs across contexts (rather edge case)
             userContext = '&' + $.param({
                 context: [String(ox.user_id), '_', String(ox.context_id)].join()

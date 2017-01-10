@@ -132,7 +132,7 @@ define('io.ox/contacts/main', [
             app.pages.addPage({
                 name: 'listView',
                 container: app.getWindow().nodes.main,
-                classes: 'leftside'
+                classes: 'leftside border-right'
             });
             app.pages.addPage({
                 name: 'detailView',

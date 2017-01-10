@@ -12,19 +12,44 @@
  */
 
 .services-list-view {
-    .service-item {
-        padding-left: 8px;
-        margin-bottom: 8px;
-        line-height: 32px;
-        height: 32px;
-        background-color: #f5f5f5;
+    margin-bottom: 0;
 
-        &:hover {
-            background-color: #ddd;
+    .service-item {
+        display: inline-block;
+        padding: 0;
+        line-height: 28px;
+        margin: 0 16px 7px 0;
+
+        .service-label {
+            color: #555;
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+
+        &:last-child { margin-right: 0; }
+
+        &:focus, &:active { background-color: white; }
+
+        &:hover { background-color: #f5f5f5; }
+
+        > button {
+            height: 115px;
+            width: 130px;
+        }
+
         .service-icon {
-            margin-right: 16px;
-            width: 16px;
+            margin: 15px 20px 0;
+            text-align: center;
+            width: 64px;
+            height: 64px;
+            font-size: 64px; //font awesome icons
+            background-size: cover;
+
+            &.logo-google   { background-image: url(apps/themes/default/google-letter_logo.png); }
+            &.logo-boxcom   { background-image: url(apps/themes/default/box_logo128.png);         }
+            &.logo-onedrive { background-image: url(apps/themes/default/onedrive_logo128.png);    }
+            &.logo-dropbox  { background-image: url(apps/themes/default/dropbox_logo128.png);     }
         }
     }
 }

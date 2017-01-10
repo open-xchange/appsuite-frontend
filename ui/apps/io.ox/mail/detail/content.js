@@ -11,6 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/* global blankshield:true */
 /*jshint scripturl:true*/
 
 define('io.ox/mail/detail/content', [
@@ -102,8 +103,6 @@ define('io.ox/mail/detail/content', [
                 return line;
             })
             .join('');
-
-        text = that.beautifyPlainText(text);
 
         return text;
     };
@@ -416,6 +415,22 @@ define('io.ox/mail/detail/content', [
         }
     });
 
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'form-submit',
+        index: 1200,
+        process: function () {
+            $(this).on('submit', 'form', function (e) {
+                e.preventDefault();
+                var name = _.uniqueId('blank');
+                /* eslint no-script-url: 2 */
+                blankshield.open('javascript:0', name);
+                /* eslint no-script-url: 0 */
+                this.target = name;
+                setTimeout(this.submit.bind(this));
+            });
+        }
+    });
+
     // commented out DUE TO BUGS! (27.01.2016)
     // ext.point('io.ox/mail/detail/content').extend({
     //     id: 'lazyload-images',
@@ -527,7 +542,7 @@ define('io.ox/mail/detail/content', [
                     // plain TEXT
                     content = document.createElement('DIV');
                     content.className = 'mail-detail-content plain-text noI18n';
-                    content.innerHTML = beautifyText(baton.source);
+                    content.innerHTML = settings.get('beautifyPlainText') ? that.beautifyPlainText(baton.source) : beautifyText(baton.source);
                     if (!baton.processedEmoji) {
                         emoji.processEmoji(baton.source, function (text, lib) {
                             baton.processedEmoji = !lib.loaded;
@@ -581,9 +596,14 @@ define('io.ox/mail/detail/content', [
 
         beautifyPlainText: function (str) {
 
-            // currently this clashes with "color quotes" that are already injected server-side
-            if (settings.get('isColorQuoted', true)) return str;
+            // looks like HTML?
+            if (/<br>/i.test(str)) return str;
 
+            var plain = str.trim().replace(/\r/g, '');
+            return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
+        },
+
+        transformForHTMLEditor: function (str) {
             var plain = this.adjustPlainText(str);
             return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
         },
@@ -599,7 +619,7 @@ define('io.ox/mail/detail/content', [
                 regNewline = /^\n+/,
                 regText = /^[^\n]*(\n(?![ ]*(\* |\- |> |\d+\. ))[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
-                regMailAddress = /([^"\s<,:;\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
+                regMailAddress = /([^"\s<,:;\|\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
                 regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
                 defaults = { blockquotes: true, links: true, lists: true, rulers: true };
 

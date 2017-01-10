@@ -19,14 +19,15 @@ define('io.ox/mail/accounts/settings', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/notifications',
     'io.ox/core/a11y',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail/accounts/settings',
     'less!io.ox/settings/style'
-], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, a11y, gt) {
+], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, a11y, mailSettings, gt) {
 
     'use strict';
 
     function renderDetailView(evt, data) {
-        var myView, myModel, myViewNode;
+        var myView, myModel, myViewNode, ignoreValidationErrors = true;
 
         myViewNode = $('<div>').addClass('accountDetail');
         myModel = new AccountModel(data);
@@ -57,6 +58,7 @@ define('io.ox/mail/accounts/settings', [
             $form.find('.help-block').prev().removeAttr('aria-invalid aria-describedby');
             $form.find('.help-block').remove();
 
+            if (ignoreValidationErrors) return;
             _.each(error, function (message, key) {
                 var $field = myView.$el.find('#' + key).parent(),
                     $row = $field.closest('.form-group'),
@@ -72,6 +74,7 @@ define('io.ox/mail/accounts/settings', [
         });
 
         myView.dialog.on('save', function () {
+            ignoreValidationErrors = false;
             myModel.validate();
             if (myModel.isValid()) {
                 myView.dialog.getBody().find('.settings-detail-pane').trigger('save');
@@ -81,7 +84,7 @@ define('io.ox/mail/accounts/settings', [
 
                 //disable fields for primary account again
                 if (myModel.get('id') === 0) {
-                    myView.$el.find('input, select').not('#personal, [data-property="unified_inbox_enabled"]').prop('disabled', true);
+                    myView.$el.find('input, select').not('#personal, #name, [data-property="unified_inbox_enabled"]').prop('disabled', true);
                 }
 
             }
@@ -107,6 +110,23 @@ define('io.ox/mail/accounts/settings', [
     });
 
     ext.point('io.ox/mail/add-account/preselect').extend({
+        id: 'dsc',
+        before: 'oauth',
+        draw: function (baton) {
+            if (!mailSettings.get('dsc/enabled')) {
+                // normal mode for all setups not using DSC
+                return;
+            }
+            // show classic wizard for DSC setups, bypass oauth accounts
+            ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+            _.defer(function () {
+                baton.popup.getFooter().find('[data-action="add"]').show();
+            }, 1000);
+
+            baton.stopPropagation();
+        }
+
+    }, {
         id: 'oauth',
         index: 100,
         draw: function (baton) {
@@ -128,24 +148,40 @@ define('io.ox/mail/accounts/settings', [
                             }, true);
                     })), list = new OAuth.Views.ServicesListView({ collection: mailServices });
 
+                if (mailServices.length === 0) {
+                    baton.popup.getFooter().find('[data-action="add"]').show();
+                    // invoke wizard, there are no OAuth options to choose from
+                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                    return;
+                }
                 mailServices.push({
                     id: 'wizard',
                     displayName: gt('Other')
                 });
+
                 $el.append(
                     $('<label>').text(gt('Please select your mail account provider')),
                     list.render().$el
                 );
+                // this code block runs deferred, need to focus the first element, again
+                a11y.getTabbable($el).first().focus();
 
                 list.listenTo(list, 'select', function (service) {
                     if (service.id === 'wizard') return;
 
                     var account = new OAuth.Account.Model({
                         serviceId: service.id,
-                        displayName: 'My ' + service.get('displayName') + ' account'
+                        //#. %1$s is the display name of the account
+                        //#. e.g. My Xing account
+                        displayName: gt('My %1$s account', service.get('displayName'))
                     });
 
                     account.enableScopes('mail').save().then(function () {
+                        ox.busy();
+                        var busyMessage = $('<div class="alert-placeholder">');
+                        $el.append(busyMessage);
+                        drawBusy(busyMessage);
+
                         api.autoconfig({
                             oauth: account.id
                         }).then(function (data) {
@@ -157,7 +193,9 @@ define('io.ox/mail/accounts/settings', [
                             return def;
                         }).then(function () {
                             oauthAPI.accounts.add(account, { merge: true });
-                        }, notifications.yell);
+                        }, notifications.yell).always(function () {
+                            ox.idle();
+                        });
                     });
                 });
 

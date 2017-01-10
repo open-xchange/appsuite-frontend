@@ -70,7 +70,15 @@ define('io.ox/core/a11y', [], function () {
     function respondToNonKeyboardFocus(node) {
         node = $(node);
         if (node.is('.scrollable[tabindex]')) {
-            node.css('box-shadow', 'none').on('blur', removeBoxShadow);
+            // IE uses borders because it cannot render box-shadows without leaving artifacts all over the place on scrolling (edge doesn't render the shadows at all if there are scrollbars). IE strikes again...
+            if (!_.device('ie')) {
+                node.css('box-shadow', 'none').on('blur', removeBoxShadow);
+            } else {
+                node.css('border-style', 'none').on('blur', removeBorder);
+                if (node.hasClass('default-content-padding')) {
+                    node.addClass('no-padding-adjustment');
+                }
+            }
         } else if (node.is('.focusable')) {
             node.css('outline', 0).on('blur', removeOutline);
         }
@@ -82,6 +90,11 @@ define('io.ox/core/a11y', [], function () {
 
     function removeBoxShadow() {
         $(this).css('box-shadow', '');
+    }
+
+    function removeBorder() {
+        $(this).css('border-style', '');
+        $(this).removeClass('no-padding-adjustment');
     }
 
     var fnFocus = $.fn.focus;

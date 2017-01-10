@@ -279,7 +279,8 @@ define('io.ox/core/attachments/view', [
         },
 
         attributes: function () {
-            return { 'data-id': this.model.get('id') };
+            //previews don't have an id. use cid instead. Otherwise preview in mail compose breaks.
+            return { 'data-id': this.model.get('id') || this.model.cid };
         },
 
         initialize: function (options) {

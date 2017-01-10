@@ -22,9 +22,13 @@ define('io.ox/core/api/account', [
     // quick hash for sync checks
     var idHash = {},
         typeHash = {},
+        dscHash = {},
         // default separator
         separator = settings.get('defaultseparator', '/'),
-        altnamespace = settings.get('namespace', 'INBOX/') === '';
+        altnamespace = settings.get('namespace', 'INBOX/') === '',
+        // check for DSC (Dovecot Smart Cache) setup
+        dscPrefix = settings.get('dsc/folder', false),
+        isDSC = settings.get('dsc/enabled', false);
 
     var process = function (data) {
 
@@ -137,6 +141,44 @@ define('io.ox/core/api/account', [
     };
 
     /**
+     * is dsc folder
+     * @param  {string}  id (folder_id)
+     * @return { boolean }
+     */
+    api.isDSC = function (id) {
+        return id.indexOf(dscPrefix) === 0;
+    };
+
+    /**
+     * get the account id for a given DSC root folder
+     * @param  { string } folder (root_folder)
+     * @return { int } id
+     */
+    api.getIdForDSCRootFolder = function (folder) {
+        return dscHash[folder];
+    };
+
+    /**
+     * get the account id for a given folder which is
+     * child of a DSC account/rootfolder
+     * @param  { string } folder
+     * @return { int } account id
+     */
+    api.getIdForDSCFolder = function (folder) {
+        if (!folder) return;
+        var id;
+
+        _(dscHash).each(function (accountId, rootFolder) {
+            if (folder.indexOf(rootFolder) === 0) id = accountId;
+        });
+
+        return id;
+    };
+
+    api.hasDSCAccount = function () {
+        return !_.isEmpty(dscHash);
+    };
+    /**
      * get unified mailbox name
      * @return { deferred} returns array or null
      */
@@ -208,6 +250,13 @@ define('io.ox/core/api/account', [
      * @return { array} folders
      */
     api.getFoldersByType = function (type, accountId) {
+
+        if (isDSC && accountId !== undefined && accountId !== 0) {
+            // in DSC environment return nothing here for all
+            // types. DSC does not know a mapping for the standard
+            // folders.
+            return [];
+        }
         return _(typeHash)
             .chain()
             .map(function (value, key) {
@@ -249,6 +298,9 @@ define('io.ox/core/api/account', [
         if (typeof str === 'number') {
             // return number
             return str;
+        } else if (isDSC) {
+            // dsc accounts need special handling
+            if (api.getIdForDSCFolder(str)) return api.getIdForDSCFolder(str);
         } else if (/^default(\d+)/.test(String(str))) {
             // is not unified mail?
             if (!api.isUnified(str)) {
@@ -279,7 +331,6 @@ define('io.ox/core/api/account', [
         return api.get(account_id || 0)
         .then(ensureDisplayName)
         .then(function (account) {
-
             if (!account) return $.Deferred().reject(account);
 
             // use user-setting for primary account and unified folders
@@ -443,7 +494,6 @@ define('io.ox/core/api/account', [
     };
 
     api.cache = {};
-
     if (ox.rampup && ox.rampup.accounts) {
         _(ox.rampup.accounts).each(function (data) {
             var account = process(http.makeObject(data, 'account'));
@@ -456,7 +506,6 @@ define('io.ox/core/api/account', [
      * @return { deferred} returns array of account object
      */
     api.all = function () {
-
         function load() {
             if (_(api.cache).size() > 0) {
                 // cache hit
@@ -481,13 +530,22 @@ define('io.ox/core/api/account', [
         }
 
         return load().done(function (list) {
-
             idHash = {};
             typeHash = {};
-
+            dscHash = {};
+            // add check here
             _(list).each(function (account) {
                 // remember account id
                 idHash[account.id] = true;
+                // fill DSC hash if needed
+                if (isDSC) {
+                    if (account.id !== 0) {
+                        dscHash[account.root_folder] = account.id;
+                        // prevent filling wrong typeHash in DSC environment
+                        // return here early
+                        return;
+                    }
+                }
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
@@ -718,6 +776,21 @@ define('io.ox/core/api/account', [
                 id: id
             },
             data: data
+        });
+    };
+
+    /**
+     * gets the status for one or all accounts
+     * @param  { string } id account id
+     * @return { deferred }
+     */
+    api.getStatus = function (id) {
+        var p = { action: 'status' };
+        if (id) p.id = id;
+
+        return http.GET({
+            module: 'account',
+            params: p
         });
     };
 

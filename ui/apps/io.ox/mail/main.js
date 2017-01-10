@@ -32,6 +32,7 @@ define('io.ox/mail/main', [
     'io.ox/core/folder/api',
     'io.ox/backbone/mini-views/quota',
     'io.ox/mail/categories/mediator',
+    'io.ox/core/api/account',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'io.ox/mail/actions',
@@ -41,7 +42,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings) {
 
     'use strict';
 
@@ -231,6 +232,58 @@ define('io.ox/mail/main', [
             app.folderView.resize.enable();
         },
 
+        /*
+         * Folder view support mobile
+         */
+        'folder-view-mobile': function (app) {
+
+            if (_.device('!smartphone')) return app;
+
+            var nav = app.pages.getNavbar('folderTree'),
+                page = app.pages.getPage('folderTree');
+
+            nav.on('rightAction', function () {
+                app.toggleFolders();
+            });
+
+            var tree = new TreeView({ app: app, module: 'mail', root: '1', contextmenu: true });
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            page.append(tree.render().$el);
+            app.treeView = tree;
+        },
+
+        'folder-view-dsc-events': function (app) {
+            // open accounts page on when the user clicks on error indicator
+            app.treeView.on('accountlink:dsc', function () {
+                ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/settings/accounts' });
+            });
+        },
+
+        'folder-view-dsc-error': function (app) {
+            function updateStatus() {
+                if (ox.debug) console.log('refreshing DSC status');
+                accountAPI.getStatus().done(function (s) {
+                    _(s).each(function (d, id) {
+                        if (d.status !== 'ok') {
+                            accountAPI.get(id).done(function (account) {
+                                var node = app.treeView.getNodeView(account.root_folder);
+                                if (node) node.showStatusIcon(d.message);
+                            });
+                        }
+                    });
+                });
+            }
+
+            if (settings.get('dsc/enabled')) {
+                api.on('refresh.all', function () {
+                    updateStatus();
+                });
+
+                app.updateDSCStatus = updateStatus;
+            }
+        },
+
         'mail-quota': function (app) {
 
             if (_.device('smartphone')) return;
@@ -302,27 +355,6 @@ define('io.ox/mail/main', [
             };
 
             app.toggleFolders = toggle;
-        },
-
-        /*
-         * Folder view support
-         */
-        'folder-view-mobile': function (app) {
-
-            if (_.device('!smartphone')) return app;
-
-            var nav = app.pages.getNavbar('folderTree'),
-                page = app.pages.getPage('folderTree');
-
-            nav.on('rightAction', function () {
-                app.toggleFolders();
-            });
-
-            var tree = new TreeView({ app: app, module: 'mail', root: '1', contextmenu: true });
-
-            // initialize folder view
-            FolderView.initialize({ app: app, tree: tree });
-            page.append(tree.render().$el);
         },
 
         /*
@@ -629,9 +661,7 @@ define('io.ox/mail/main', [
                 // marker so the change:sort listener does not change other attributes (which would be wrong in that case)
                 app.changingFolders = true;
 
-                var options = app.getViewOptions(id),
-                    fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
-                    showTo = account.is('sent|drafts', id);
+                var options = app.getViewOptions(id);
 
                 app.props.set(_.pick(options, 'sort', 'order', 'thread'));
 
@@ -642,7 +672,6 @@ define('io.ox/mail/main', [
 
                 app.listView.model.set('folder', id);
                 app.folder.getData();
-                fromTo.text(showTo ? gt('To') : gt('From'));
                 app.changingFolders = false;
             });
         },
@@ -1731,10 +1760,10 @@ define('io.ox/mail/main', [
                             folder = folderAPI.pool.models[model.get('folder_id')];
                             // check if we are in the unified folder
                             if (folder && folder.is('unifiedfolder')) {
-                                originalFolderId = model.get('id').replace(/\/\w*$/, '');
+                                originalFolderId = model.get('original_folder_id');
                                 unifiedSubfolderId = model.get('folder_id') + '/' + originalFolderId;
                                 // unified folder has special mail ids
-                                var id = model.get('id').replace(originalFolderId + '/', '');
+                                var id = model.get('original_id');
 
                                 return [{ folder_id: originalFolderId, id: id }, { folder_id: unifiedSubfolderId, id: id }];
                             }
@@ -1747,7 +1776,6 @@ define('io.ox/mail/main', [
 
                                 return [{ folder_id: unifiedFolderId, id: originalFolderId + '/' + model.get('id') }, { folder_id: originalFolderId, id: model.get('id') }];
                             }
-                            return $.Deferred().reject();
                         // check if we are in a standard folder that needs to be synced to a unified folder
                         } else if (accountData.unified_inbox_enabled) {
                             folder = folderAPI.pool.models[model.get('folder_id')];
@@ -1760,8 +1788,6 @@ define('io.ox/mail/main', [
 
                                 return [{ folder_id: unifiedFolderId, id: model.get('folder_id') + '/' + model.get('id') }, { folder_id: unifiedSubfolderId, id: model.get('id') }];
                             }
-
-                            return $.Deferred().reject();
                         }
                         return $.Deferred().reject();
                     });

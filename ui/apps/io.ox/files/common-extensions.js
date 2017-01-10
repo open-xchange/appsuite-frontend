@@ -184,7 +184,7 @@ define('io.ox/files/common-extensions', [
                     var retina = false,
                         width = retina ? 400 : 200,
                         height = retina ? 300 : 150,
-                        url = baton.model.getUrl(preview, { width: width, height: height, scaletype: 'cover' }),
+                        url = baton.model.getUrl(preview, { width: width, height: height, scaleType: 'cover' }),
                         img = $('<img class="dummy-image invisible">').data('retry', 0);
 
                     // fix URL - would be cool if we had just one call for thumbnails ...

@@ -256,8 +256,12 @@ define('io.ox/mail/api', [
     }
 
     function defaultView(obj) {
-        if (!settings.get('allowHtmlMessages', true)) return 'text';
-        return allowImages(obj) ? 'html' : 'noimg';
+        if (settings.get('allowHtmlMessages', true)) {
+            // html
+            return allowImages(obj) ? 'html' : 'noimg';
+        }
+        // text
+        return settings.get('beautifyPlainText') ? 'plain-text' : 'text';
     }
 
     api.get = function (obj, options) {
@@ -1398,7 +1402,7 @@ define('io.ox/mail/api', [
      * @return { string} url
      */
     api.getUrl = function (data, mode, options) {
-        var opt = _.extend({ scaletype: 'contain' }, options),
+        var opt = _.extend({ scaleType: 'contain' }, options),
             url = ox.apiRoot + '/mail', first;
         if (mode === 'zip') {
             first = _(data).first();
@@ -1439,7 +1443,7 @@ define('io.ox/mail/api', [
         // inject filename for more convenient file downloads
         var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
             // scaling options
-            scaling = opt.width && opt.height ? '&scaleType=' + opt.scaletype + '&width=' + opt.width + '&height=' + opt.height : '';
+            scaling = opt.width && opt.height ? '&scaleType=' + opt.scaleType + '&width=' + opt.width + '&height=' + opt.height : '';
         url += (data.filename ? '/' + encodeURIComponent(filename) : '') + '?' +
             $.param({
                 action: 'attachment',

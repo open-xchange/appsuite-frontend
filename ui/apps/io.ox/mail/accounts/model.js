@@ -39,7 +39,7 @@ define('io.ox/mail/accounts/model', [
             primary_address: [
                 {
                     required: true,
-                    msg: gt('This field has to be filled')
+                    msg: gt('This field is mandatory')
                 }, {
                     fn: _.noI18n('isMailAddress')
                 }
@@ -47,27 +47,27 @@ define('io.ox/mail/accounts/model', [
             login: function (value) {
                 //for setups without any explicit login name for primary account
                 if (this.attributes.id !== 0 && $.trim(value) === '') {
-                    return gt('This field has to be filled');
+                    return gt('This field is mandatory');
                 }
             },
             password: function (value) {
                 //if we have an id we are in edit mode, not create new account mode. Here we don't get the password from the server, so this field may be empty.
                 if (this.attributes.id === undefined && (!value || value === '')) {
-                    return gt('This field has to be filled');
+                    return gt('This field is mandatory');
                 }
             },
             mail_server: {
                 required: function () {
                     return !this.isHidden();
                 },
-                msg: gt('This field has to be filled')
+                msg: gt('This field is mandatory')
             },
             mail_port: [
                 {
                     required: function () {
                         return !this.isHidden();
                     },
-                    msg: gt('This field has to be filled')
+                    msg: gt('This field is mandatory')
                 },
                 {
                     fn: function (val) {
@@ -84,14 +84,14 @@ define('io.ox/mail/accounts/model', [
                 required: function () {
                     return !this.isHidden();
                 },
-                msg: gt('This field has to be filled')
+                msg: gt('This field is mandatory')
             },
             transport_port: [
                 {
                     required: function () {
                         return !this.isHidden();
                     },
-                    msg: gt('This field has to be filled')
+                    msg: gt('This field is mandatory')
                 },
                 {
                     fn: function (val) {
@@ -155,7 +155,7 @@ define('io.ox/mail/accounts/model', [
                     var changes = { id: id },
                         // primary mail account only allows editing of display name, unified mail and default folders
                         keys = id === 0 ?
-                            ['personal', 'unified_inbox_enabled', 'sent_fullname', 'trash_fullname', 'drafts_fullname', 'spam_fullname', 'archive_fullname'] :
+                            ['personal', 'name', 'unified_inbox_enabled', 'sent_fullname', 'trash_fullname', 'drafts_fullname', 'spam_fullname', 'archive_fullname'] :
                             this.keys();
 
                     // compare all attributes

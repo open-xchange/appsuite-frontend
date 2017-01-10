@@ -43,7 +43,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         resetDropdownOverlay: function () {
             if (!this.$overlay) return;
-            this.$placeholder.replaceWith(this.$ul);
+            this.$placeholder.before(this.$ul).detach();
             this.$el.removeClass('open');
             this.$ul.attr('style', this.$ul.data('style') || '').removeData('style');
             this.$overlay.remove();
@@ -107,6 +107,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
                 // adjust height
                 positions.height = Math.min(availableHeight - this.margin - positions.top, positions.height);
+            } else {
+                // outside viewport?
+                positions.left = Math.max(this.margin, positions.left);
+                positions.left = Math.min(availableWidth - positions.width - this.margin, positions.left);
             }
 
             if (this.$toggle.data('fixed')) positions.left = bounds.left;
@@ -145,6 +149,19 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             if (keep) e.stopPropagation();
             // ignore plain links
             if (node.hasClass('disabled')) return;
+
+            // make sure event bubbles up
+            if (!e.isPropagationStopped() && this.$overlay && this.$placeholder && !this.options.noDetach) {
+                // to use jquery event bubbling, the element, which triggered the event must have the correct parents
+                // therefore, the target element is inserted at the original position before event bubbling
+                // the element only remains at that position while the event bubbles
+                var $temp = $('<div class="hidden">');
+                node.before($temp).detach();
+                this.$placeholder.append(node);
+                this.$el.trigger(e);
+                $temp.replaceWith(node);
+            }
+
             if (value === undefined) return;
             if (this.model) {
                 var nextValue = value;
@@ -158,18 +175,6 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     }
                 }
                 this.model.set(name, nextValue);
-            }
-
-            // make sure event bubbles up
-            if (!e.isPropagationStopped() && this.$overlay && this.$placeholder && !this.options.noDetach) {
-                // to use jquery event bubbling, the element, which triggered the event must have the correct parents
-                // therefore, the target element is inserted at the original position before event bubbling
-                // the element only remains at that position while the event bubbles
-                var $temp = $('<div class="hidden">');
-                node.before($temp).detach();
-                this.$placeholder.append(node);
-                this.$el.trigger(e);
-                $temp.replaceWith(node);
             }
         },
 

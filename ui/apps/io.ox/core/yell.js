@@ -150,7 +150,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             alert = $('.io-ox-alert');
             //prevent double binding
             //we can not use an event listener that always listens. Otherwise we might run into opening clicks and close our notifications, when they should not. See Bug 34339
-            //not using click here, since that sometimes shows odd behavior (clicking, then binding then listener -> listener runs code although he should not)
+            //not using click here, since that sometimes shows odd behavior (clicking, then binding then listener -> listener runs code although it should not)
             $(document).off('.yell');
             _.defer(function () {
                 // use defer not to run into drag&drop

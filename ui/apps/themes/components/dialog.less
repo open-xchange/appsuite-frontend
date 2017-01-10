@@ -220,6 +220,7 @@
             text-align: center;
 
             > .preview {
+                position: relative;
                 display: block;
 
                 width: 100%;
@@ -231,6 +232,15 @@
                 background-position: center center;
                 background-repeat: no-repeat;
                 background-attachment: scroll;
+
+                .file-type-icon {
+                    position: absolute;
+                    bottom: 25px;
+                    margin-left: -50px;
+                    width: 100px;
+                    font-size: 70px;
+                    font-weight: 100;
+                }
             }
             > .fileinfo {
 
@@ -245,6 +255,10 @@
                     margin: 2px 0 -2px 0;
                 }
                 dd {
+                    &.file-name {
+                        word-wrap: break-word;
+                        word-break: break-all;
+                    }
                     &.modified {
                         > span {
                             display: block;
