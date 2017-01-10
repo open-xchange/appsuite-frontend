@@ -23,7 +23,7 @@ define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar', 'io.ox/parti
                 currentWeek: now,
                 compact: settings.get('scheduling/compact', false),
                 zoom: settings.get('scheduling/zoom', '100'),
-                onlyWorkingHours: settings.get('scheduling/OnlyWorkingHours', true),
+                onlyWorkingHours: settings.get('scheduling/onlyWorkingHours', true),
                 startHour: Math.max(parseInt(settings.get('startTime', 8), 10) - 1, 0),
                 endHour: Math.min(parseInt(settings.get('endTime', 18), 10), 24),
                 participants: new participantsModel.Participants([], { splitGroups: true }),
