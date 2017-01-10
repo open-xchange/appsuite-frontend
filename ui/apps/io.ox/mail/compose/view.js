@@ -751,6 +751,7 @@ define('io.ox/mail/compose/view', [
             // clean up editors
             for (var id in this.editorHash) {
                 this.editorHash[id].destroy();
+                delete this.editorHash[id];
             }
             // clear timer for autosave
             this.stopAutoSave();
@@ -761,6 +762,7 @@ define('io.ox/mail/compose/view', [
             ext.point('io.ox/core/logout').disable(this.logoutPointId);
             this.stopListening();
             this.model = null;
+            delete this.editor;
         },
 
         discard: function () {
