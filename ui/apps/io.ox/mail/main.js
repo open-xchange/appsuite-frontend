@@ -661,9 +661,7 @@ define('io.ox/mail/main', [
                 // marker so the change:sort listener does not change other attributes (which would be wrong in that case)
                 app.changingFolders = true;
 
-                var options = app.getViewOptions(id),
-                    fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
-                    showTo = account.is('sent|drafts', id);
+                var options = app.getViewOptions(id);
 
                 app.props.set(_.pick(options, 'sort', 'order', 'thread'));
 
@@ -674,7 +672,6 @@ define('io.ox/mail/main', [
 
                 app.listView.model.set('folder', id);
                 app.folder.getData();
-                fromTo.text(showTo ? gt('To') : gt('From'));
                 app.changingFolders = false;
             });
         },
