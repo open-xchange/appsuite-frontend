@@ -497,14 +497,17 @@ define('io.ox/mail/detail/content', [
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
-            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content;
+            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content,
+                beautifyPlainText = settings.get('beautifyPlainText'),
+                isTextOrHTML = /^text\/(plain|html)$/i,
+                isImage = /^image\//i;
 
             try {
 
                 // find first text/html attachment that is not displaytype attachment or none to determine content type
                 _(data.attachments).find(function (obj) {
-                    if ((obj.disp !== 'attachment' && obj.disp !== 'none') && (/^text\/(plain|html)$/i).test(obj.content_type)) {
-                        baton.type = obj.content_type;
+                    if ((obj.disp !== 'attachment' && obj.disp !== 'none') && isTextOrHTML.test(obj.content_type)) {
+                        baton.type = obj.content_type.toLowerCase();
                         return true;
                     }
                     return false;
@@ -512,8 +515,15 @@ define('io.ox/mail/detail/content', [
 
                 // add other parts?
                 _(data.attachments).each(function (attachment) {
-                    if (attachment.disp === 'inline' && attachment.content_type === baton.type) {
+                    if (attachment.disp !== 'inline') return;
+                    if (attachment.content_type === baton.type) {
+                        // add content parts
                         baton.source += attachment.content;
+                    } else if (baton.type === 'text/plain' && beautifyPlainText && isImage.test(attachment.content_type)) {
+                        // add images if text and using beautifyPlainText
+                        baton.source += '\n!(api/image/mail/picture?' +
+                            $.param({ folder: data.folder_id, id: data.id, uid: attachment.filename, scaleType: 'contain', width: 1024 }) +
+                            ')\n';
                     }
                 });
 
@@ -542,7 +552,7 @@ define('io.ox/mail/detail/content', [
                     // plain TEXT
                     content = document.createElement('DIV');
                     content.className = 'mail-detail-content plain-text noI18n';
-                    content.innerHTML = settings.get('beautifyPlainText') ? that.beautifyPlainText(baton.source) : beautifyText(baton.source);
+                    content.innerHTML = beautifyPlainText ? that.beautifyPlainText(baton.source) : beautifyText(baton.source);
                     if (!baton.processedEmoji) {
                         emoji.processEmoji(baton.source, function (text, lib) {
                             baton.processedEmoji = !lib.loaded;
@@ -595,12 +605,9 @@ define('io.ox/mail/detail/content', [
         }()),
 
         beautifyPlainText: function (str) {
-
-            // looks like HTML?
-            if (/<br>/i.test(str)) return str;
-
-            var plain = str.trim().replace(/\r/g, '');
-            return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
+            console.log('Soooo', str.trim());
+            var plain = str.trim().replace(/\r/g, '').replace(/\n{3,}/g, '\n\n');
+            return this.text2html(plain, { blockquotes: true, images: true, links: true, lists: true, rulers: true });
         },
 
         transformForHTMLEditor: function (str) {
@@ -621,7 +628,8 @@ define('io.ox/mail/detail/content', [
                 regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
                 regMailAddress = /([^"\s<,:;\|\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
                 regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
-                defaults = { blockquotes: true, links: true, lists: true, rulers: true };
+                regImage = /^!\([^\)]+\)$/gm,
+                defaults = { blockquotes: true, images: true, links: true, lists: true, rulers: true };
 
             function exec(regex, str) {
                 var match = regex.exec(str);
@@ -676,6 +684,10 @@ define('io.ox/mail/detail/content', [
                         if (options.rulers) {
                             match = match.replace(regRuler, replaceRuler);
                         }
+                        // images
+                        if (options.images) {
+                            match = match.replace(regImage, replaceImage);
+                        }
                         // links & mail addresses
                         if (options.links && /(http|@)/i.test(match)) {
                             match = match
@@ -703,6 +715,10 @@ define('io.ox/mail/detail/content', [
                     default:
                         return '<hr style="height: 0; border: 0; border-top: 1px solid #aaa; margin: 8px 0;">';
                 }
+            }
+
+            function replaceImage(str) {
+                return '<img src="' + str.substr(2, str.length - 3) + '" alt="">';
             }
 
             return parse;

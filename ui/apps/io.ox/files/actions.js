@@ -85,8 +85,13 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
                 return api.versions.getCurrentState(e.baton.data).then(function (currentVersion) {
+                    var model = _.first(e.baton.models);
+                    var isEncrypted = model && model.isEncrypted();
+                    var encryptionPart = isEncrypted ? '\\.pgp' : '';
+                    // the pgp extension is added separately to the regex, remove it from the file extension list
+                    var fileExtensions = _.without(allowedFileExtensions, 'pgp');
                     // build regex from list, pgp is added if guard is available
-                    var regex = new RegExp('\\.(' + allowedFileExtensions.join('|') + '?)$', 'i');
+                    var regex = new RegExp('\\.(' + fileExtensions.join('|') + '?)' + encryptionPart + '$', 'i');
 
                     return util.conditionChain(
                         currentVersion,

@@ -191,7 +191,7 @@ define('io.ox/portal/settings/pane', [
             this
                 .addClass(data.protectedWidget && data.protectedWidget === true ? ' protected' : ' draggable')
                 .append(
-                    data.protectedWidget && data.protectedWidget === true ? $() :
+                    data.protectedWidget && data.protectedWidget === true ? $('<div class="spacer">') :
                     listUtils.dragHandle(gt('Drag to reorder widget'), baton.model.collection.length <= 1 ? 'hidden' : '')
                 );
         }

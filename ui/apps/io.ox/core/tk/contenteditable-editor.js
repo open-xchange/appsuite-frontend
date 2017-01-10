@@ -72,6 +72,32 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         }
     });
 
+    ext.point(POINT + '/setup').extend({
+        id: 'sanitize',
+        index: INDEX += 100,
+        draw: function (ed) {
+            var sanitizeAttributes = function (e) {
+                if (!e.content) return;
+                var tmp = document.createElement('DIV');
+                tmp.innerHTML = e.content;
+                var nodes = tmp.querySelectorAll('*');
+                for (var i = 0; i < nodes.length; i++) {
+                    var node = nodes[i], ai = 0, attr;
+                    while (attr = node.attributes[ai++]) {
+                        if (/^on/i.test(attr.name)) { node.removeAttribute(attr.name); }
+                    }
+                }
+                e.content = tmp.innerHTML;
+                tmp = null;
+            };
+            if (ed.oxContext && ed.oxContext.signature) {
+                ed.on('BeforeSetContent', sanitizeAttributes);
+            }
+
+            ed.on('BeforePastePreProcess', sanitizeAttributes);
+        }
+    });
+
     function splitContent_W3C(ed) {
         // get current range
         var range = ed.selection.getRng();
@@ -331,12 +357,6 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 ed.on('BeforeRenderUI', function () {
                     rendered.resolve();
                 });
-
-                if (ed.oxContext && ed.oxContext.signature) {
-                    ed.on('BeforeSetContent', sanitizeAttributes);
-                }
-
-                ed.on('BeforePastePreProcess', sanitizeAttributes);
             }
         };
 
@@ -353,21 +373,6 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 // replace all data-mce-* attributes which are written with single or double quotes
                 return match.replace(/\sdata-mce-\S+=("[^"]*"|'[^']*')/g, '');
             });
-        };
-
-        var sanitizeAttributes = function (e) {
-            if (!e.content) return;
-            var tmp = document.createElement('DIV');
-            tmp.innerHTML = e.content;
-            var nodes = tmp.querySelectorAll('*');
-            for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i], ai = 0, attr;
-                while (attr = node.attributes[ai++]) {
-                    if (/^on/i.test(attr.name)) { node.removeAttribute(attr.name); }
-                }
-            }
-            e.content = tmp.innerHTML;
-            tmp = null;
         };
 
         var resizeEditor = _.debounce(function () {
@@ -686,13 +691,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.destroy = function () {
             this.hide();
             clearKeepalive();
-            if (editor.tinymce()) {
-                //empty node before removing because tiny saves the contents before.
-                //this might cause server errors if there were inline images (those only exist temporarily and are already removed)
-                editor.empty();
-                editor.tinymce().remove();
-            }
-            el = editor = editor.tinymce = initialized = rendered = ed = null;
+            tinyMCE.EditorManager.remove(ed);
+            ed = undefined;
         };
 
         var intervals = [];

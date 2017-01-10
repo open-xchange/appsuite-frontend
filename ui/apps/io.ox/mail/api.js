@@ -256,12 +256,8 @@ define('io.ox/mail/api', [
     }
 
     function defaultView(obj) {
-        if (settings.get('allowHtmlMessages', true)) {
-            // html
-            return allowImages(obj) ? 'html' : 'noimg';
-        }
-        // text
-        return settings.get('beautifyPlainText') ? 'plain-text' : 'text';
+        if (!settings.get('allowHtmlMessages', true)) return 'text';
+        return allowImages(obj) ? 'html' : 'noimg';
     }
 
     api.get = function (obj, options) {
@@ -278,6 +274,9 @@ define('io.ox/mail/api', [
 
         // limit default size
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
+
+        // do not process plain text if we prettify text client-side
+        obj.process_plain_text = !settings.get('beautifyPlainText');
 
         // never use factory's internal cache, therefore always 'false' at this point
         return get.call(api, obj, false).done(function (data) {
