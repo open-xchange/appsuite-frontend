@@ -357,13 +357,13 @@ define('io.ox/files/api', [
 
     // get URL to open, download, or preview a file
     // options:
-    // - scaletype: contain or cover or auto
+    // - scaleType: contain or cover or auto
     // - height: image height in pixels
     // - width: image widht in pixels
     // - version: true/false. if false no version will be appended
     api.getUrl = function (file, type, options) {
 
-        options = _.extend({ scaletype: 'contain' }, options);
+        options = _.extend({ scaleType: 'contain' }, options);
 
         var url = ox.apiRoot + '/files',
             folder = encodeURIComponent(file.folder_id),
@@ -375,7 +375,7 @@ define('io.ox/files/api', [
             // file name
             name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
             // scaling options
-            scaling = options.width && options.height ? '&scaleType=' + options.scaletype + '&width=' + options.width + '&height=' + options.height : '',
+            scaling = options.width && options.height ? '&scaleType=' + options.scaleType + '&width=' + options.width + '&height=' + options.height : '',
             // avoid having identical URLs across contexts (rather edge case)
             // also inject last_modified if available; needed for "revisionless save"
             // the content might change without creating a new version (which would be part of the URL)

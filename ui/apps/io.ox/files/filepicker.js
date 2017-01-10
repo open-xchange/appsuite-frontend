@@ -285,7 +285,7 @@ define('io.ox/files/filepicker', [
             $fileinfo     = $('<div class="fileinfo"><div class="sidebar-panel-body"></div></div>'),
 
             thumbnailUrl  = filesAPI.getUrl(fileObject, 'thumbnail', {
-                scaletype:  'contain',  // - contain or cover or auto
+                scaleType:  'contain',  // - contain or cover or auto
                 height:     140,        // - image height in pixels
                 width:      250,        // - image widht in pixels
                 version:    false       // - true/false. if false no version will be appended
