@@ -171,7 +171,9 @@ define('io.ox/mail/accounts/settings', [
 
                     var account = new OAuth.Account.Model({
                         serviceId: service.id,
-                        displayName: 'My ' + service.get('displayName') + ' account'
+                        //#. %1$s is the display name of the account
+                        //#. e.g. My Xing account
+                        displayName: gt('My %1$s account', service.get('displayName'))
                     });
 
                     account.enableScopes('mail').save().then(function () {

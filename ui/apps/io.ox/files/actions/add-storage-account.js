@@ -30,7 +30,9 @@ define('io.ox/files/actions/add-storage-account', [
     function createAccount(service) {
         var account = new OAuth.Account.Model({
             serviceId: service.id,
-            displayName: 'My ' + service.get('displayName') + ' account'
+            //#. %1$s is the display name of the account
+            //#. e.g. My Xing account
+            displayName: gt('My %1$s account', service.get('displayName'))
         });
 
         // if only the filestorage account is missing there is no need for Oauth authorization.
