@@ -189,6 +189,13 @@
         blockquote blockquote blockquote blockquote blockquote  { .blockquote(#777);    }
     }
 
+    &.disable-links a[href] {
+        color: #aaa !important;;
+        text-decoration: line-through !important;;
+        cursor: default !important;;
+        pointer-events: none !important;;
+    }
+
     .collapsed-blockquote {
         display: none;
     }

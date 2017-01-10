@@ -11,7 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/mail/detail/content'], function (content) {
+define([
+    'io.ox/mail/detail/content'
+], function (content) {
 
     'use strict';
 
@@ -135,5 +137,52 @@ define(['io.ox/mail/detail/content'], function (content) {
             var html = process('29. Lorem ipsum\n30. dolor sit');
             expect(html).to.equal('<ol start="29"><li>Lorem ipsum</li><li>dolor sit</li></ol>');
         });
+    });
+
+    describe('Link Processor', function () {
+        var cases = {
+            local: '<a href  =  "#some-anchor">',
+            common: '<a href="www.ox.io" target="_blank">',
+            styled: '<a href="http://ox.io" style = "color: #333; text-decoration: underline">',
+            different: "<a style='text-decoration:   underline;background-color:#333;color:#333' href='http://ox.io'>"
+        };
+
+        it('sets proper protocol and target', function () {
+            var baton = { source: cases.common };
+            content.extensions.linkTarget(baton);
+            expect(baton.source)
+                .to.match(/href="http:\/\/www\.ox\.io"/g)
+                .to.match(/target="_blank"/g);
+        });
+
+        it('sets proper disabled state', function () {
+            _(cases).each(function (source) {
+                expect(content.extensions.linkDisable(source)).to.match(/\sdisabled="disabled" aria-disabled="true"/g);
+            });
+        });
+
+        it('removes the hypertext reference', function () {
+            _(cases).each(function (source) {
+                expect(content.extensions.linkRemoveRef(source)).to.match(/href[\s]*=[\s]*["']#["']/g);
+            });
+        });
+
+        it('removes related inline style properties', function () {
+            _(cases).each(function (source) {
+                expect(content.extensions.linkRemoveStyle(source))
+                    .to.not.match(/text-decoration/g)
+                    .to.not.match(/[^-]color/g);
+            });
+        });
+    });
+
+    describe('Image Processor', function () {
+
+        it('ensures ox.apiRoot is used', function () {
+            var baton = { source: '<img src="/ajax">' };
+            content.extensions.images(baton);
+            expect(baton.source).to.equal('<img src="/api">');
+        });
+
     });
 });
