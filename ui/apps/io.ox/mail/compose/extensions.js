@@ -789,10 +789,19 @@ define('io.ox/mail/compose/extensions', [
 
                     id = node.attr('data-id');
                     data = view.collection.get(id).toJSON();
+
+                    if (data.group === 'localFile') {
+                        data.fileObj = view.collection.get(id).fileObj;
+                    }
+
                     list = view.collection.filter(function (a) {
                         return a.get('disp') === 'attachment';
                     }).map(function (a) {
-                        return a.toJSON();
+                        var obj = a.toJSON();
+                        if (obj.group === 'localFile') {
+                            obj.fileObj = a.fileObj;
+                        }
+                        return obj;
                     });
 
                     baton = ext.Baton({ startItem: data, data: list, openedBy: 'io.ox/mail/compose' });
