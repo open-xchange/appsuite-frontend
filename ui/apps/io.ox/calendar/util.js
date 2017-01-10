@@ -516,7 +516,7 @@ define('io.ox/calendar/util', [
                             gt('Every weekend.') :
                             //#. recurrence string
                             //#. %1$d: numeric
-                            gt('Every %1$s weeks on weekends.', interval);
+                            gt('Every %1$d weeks on weekends.', interval);
                     } else if (days === 0) { // special case when no day is selected
                         str = gt('Never.');
                     } else {

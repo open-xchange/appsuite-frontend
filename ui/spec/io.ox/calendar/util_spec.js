@@ -138,7 +138,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'gettext!io.ox/calendar'], f
             it('Every 10 days', function () {
                 data.interval = 10;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal(gt('Every %1$s days.', 10));
+                expect(str).to.equal(gt('Every %1$d days.', 10));
             });
 
             // Weekly
