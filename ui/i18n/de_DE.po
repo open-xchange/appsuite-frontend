@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-05 15:34+0100\n"
+"PO-Revision-Date: 2017-01-10 09:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -267,6 +267,7 @@ msgstr "Online-Hilfe"
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/actions/delete.js
+#: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes apps/io.ox/portal/main.js
@@ -527,6 +528,10 @@ msgid "Daily"
 msgstr "Täglich"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+msgid "Daily on workdays"
+msgstr "Täglich an Werktagen"
+
+#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Weekly"
 msgstr "Wöchentlich"
 
@@ -542,6 +547,14 @@ msgstr "Jährlich"
 #: apps/io.ox/calendar/edit/recurrence-view.js
 msgid "Repeat"
 msgstr "Wiederholen"
+
+#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+msgid "Weekday"
+msgstr "Wochentag"
+
+#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+msgid "Repeat by"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "day(s)"
@@ -562,14 +575,6 @@ msgstr "Jahr(e)"
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Interval"
 msgstr "Intervall"
-
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Weekday"
-msgstr "Wochentag"
-
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Repeat by"
-msgstr ""
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
@@ -600,132 +605,6 @@ msgstr "Ereignisse"
 msgid "Ends on"
 msgstr "Endet am"
 
-#. used in concatenated string. Example: Every month on the first Tuesday
-#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: first week or first Monday
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgid "first"
-msgstr "ersten"
-
-#. used in concatenated string. Example: Every month on the second Tuesday
-#. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: second week or second Monday
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgid "second"
-msgstr "zweiten"
-
-#. used in concatenated string. Example: Every month on the third Tuesday
-#. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: third week or third Monday
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgid "third"
-msgstr "dritten"
-
-#. used in concatenated string. Example: Every month on the fourth Tuesday
-#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: fourth week or fourth Monday
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgid "fourth"
-msgstr "vierten"
-
-#. used in concatenated string. Example: Every month on the fifth / last Tuesday
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "fifth / last"
-msgstr "fünften / letzten"
-
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Every day."
-msgid_plural "Every %1$s days."
-msgstr[0] "Jeden Tag."
-msgstr[1] "Alle %1$s Tage."
-
-#. This delimiter is used to concatenate a list of string
-#. Example: Monday, Tuesday, Wednesday
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ", "
-msgstr ","
-
-#. %1$s list of days
-#. Example: Every Monday, Wednesday, Friday
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Every %1$s."
-msgstr "Jeden %1$s."
-
-#. %1$s interval, when the appointment / task is repeated
-#. %2$s list of days
-#. Example: Every 3 weeks on Monday, Thursday
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Every %1$s weeks on %2$s."
-msgstr "Alle %1$s Wochen am %2$s."
-
-#. %1$s first, second, third, fourth or fifth / last
-#. %2$s a day of the week
-#. Example: Every month on the second Monday
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Every month on the %1$s %2$s."
-msgstr "Jeden Monat am %1$s %2$s."
-
-#. %1$s interval, how often appointment / task is repeated
-#. %2$s first, second, third, fourth or fifth / last
-#. %3$s a day of the week
-#. Example Every 3 months on the second Tuesday
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Every %1$s months on the %2$s %3$s."
-msgstr "Alle %1$d Monate am %2$s %3$s."
-
-#. %1$s day in the month
-#. Example: Every month on day 5
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Every month on day %1$s."
-msgstr "Jeden Monat am Tag %1$s."
-
-#. %1$s interval, how often appointment / task is repeated
-#. %2$s day in the month
-#. Example: Every 5 months on day 18
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Every %1$s months on day %2$s."
-msgstr "Alle %1$d Monate am Tag %2$s."
-
-#. %1$s first, second, third, fourth or fifth / last
-#. %2$s a day of the week
-#. %3$s the month
-#. Example: Every year on the first Tuesday in December
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Every year on the %1$s %2$s in %3$s."
-msgstr "Jedes Jahr am %1$s %2$s im %3$s."
-
-#. %1$s the month
-#. %2$s the day
-#. Example: Every year in December on day 3
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Every year in %1$s on day %2$s."
-msgstr "Jedes Jahr im %1$s am Tag %2$s."
-
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "The series never ends."
-msgstr "Die Serie endet nie."
-
-#. %1$s The amount of occurrences, after the series ends
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#, fuzzy
-msgid "The series ends after one occurrence."
-msgid_plural "The series ends after %1$s occurrences."
-msgstr[0] "Die Serie endet nach einem Ereignis."
-msgstr[1] "Die Serie endet nach %1$s Ereignissen."
-
-#. %1$s The date when the series ends
-#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "The series ends on %1$s."
-msgstr "Die Serie endet am %1$s."
-
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Please enter a positive number"
 msgstr "Bitte geben Sie eine positive Zahl ein"
@@ -733,6 +612,10 @@ msgstr "Bitte geben Sie eine positive Zahl ein"
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Please insert a date after the start date"
 msgstr "Bitte geben Sie ein Datum nach dem Startdatum ein"
+
+#: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+msgid "Please select at least one day"
+msgstr "Bitte wählen Sie mindestens einen Tag"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Edit recurrence"
@@ -1360,9 +1243,36 @@ msgstr ""
 #. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: last week or last Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "last"
 msgstr "letzten"
+
+#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
+#. as in: first week or first Monday
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "first"
+msgstr "ersten"
+
+#. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
+#. as in: second week or second Monday
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "second"
+msgstr "zweiten"
+
+#. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
+#. as in: third week or third Monday
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "third"
+msgstr "dritten"
+
+#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
+#. as in: fourth week or fourth Monday
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "fourth"
+msgstr "vierten"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "day of the week"
@@ -2169,6 +2079,10 @@ msgid "Custom colors"
 msgstr "Benutzerdefinierte Farben"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "fifth / last"
+msgstr "fünften / letzten"
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "unconfirmed"
 msgstr "nicht bestätigt"
 
@@ -2289,125 +2203,136 @@ msgstr[0] "%1$d Woche"
 msgstr[1] "%1$d Wochen"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "work days"
-msgstr "Arbeitstage"
-
-#. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "and"
-msgstr "und"
+msgid " and "
+msgstr " und "
+
+#. This delimiter is used to concatenate a list of string
+#. Example: Monday, Tuesday, Wednesday
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid ", "
+msgstr ","
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Every day"
-msgstr "Jeden Tag"
-
-#. recurrence string
-#. %1$d: numeric
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Every %1$d days"
-msgstr "Alle %1$d Tage"
-
-#. recurrence string
-#. %1$d: numeric
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Every %1$d weeks on all days"
-msgstr "Alle %1$d Wochen an allen Tagen"
-
-#. recurrence string
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "On work days"
-msgstr "An Arbeitstagen"
+msgid "Every day."
+msgstr "Jeden Tag."
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Every %1$d weeks on work days"
-msgstr "Alle %1$d Wochen an Arbeitstagen"
+msgid "Every %1$d days."
+msgstr "Alle %1$d Tage."
 
 #. recurrence string
-#. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
+#. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Weekly on %1$s"
-msgstr "Wöchentlich am %1$s"
+msgid "Every %1$d weeks on all days."
+msgstr "Alle %1$d Wochen an allen Tagen."
+
+#. recurrence string
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "On workdays."
+msgstr "An Werktagen."
+
+#. recurrence string
+#. %1$d: numeric
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Every %1$d weeks on workdays."
+msgstr "Alle %1$d Wochen an Werktagen."
+
+#. recurrence string
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Every weekend."
+msgstr "Jedes Wochenende."
+
+#. recurrence string
+#. %1$d: numeric
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Every %1$s weeks on weekends."
+msgstr "Alle %1$d Wochen an Wochenenden."
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Never."
+msgstr "Nie."
+
+#. recurrence string
+#. %1$s day string, e.g. "workdays" or "Friday" or "Monday, Tuesday, Wednesday"
+#. Example: Every Monday, Wednesday, Friday
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "Every %1$s."
+msgstr "Jeden %1$s."
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Every %1$d weeks on %2$s"
-msgstr "Alle %1$d Wochen am %2$s"
+msgid "Every %1$d weeks on %2$s."
+msgstr "Alle %1$d Wochen am %2$s."
 
 #. recurrence string
 #. %1$d: numeric, day in month
+#. Example: Every month on day 5
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Monthly on day %1$d"
-msgstr "Jeden %1$d. Tag im Monat"
+msgid "Every month on day %1$d."
+msgstr "Jeden Monat am Tag %1$d."
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
+#. Example: Every 5 months on day 18
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Every %1$d months on day %2$d"
-msgstr "Alle %1$d Monate am %2$d. Tag"
+msgid "Every %1$d months on day %2$d."
+msgstr "Alle %1$d Monate an Tag %2$d."
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
+#. Example: Every month on the second Monday
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Monthly on the %1$s %2$s"
-msgstr "Am %1$s %2$s jeden Monats"
+msgid "Every month on the %1$s %2$s."
+msgstr "Jeden Monat am %1$s %2$s."
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
+#. Example Every 3 months on the second Tuesday
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Every %1$d months on the %2$s %3$s"
-msgstr "Alle %1$d Monate am %2$s %3$s"
+msgid "Every %1$d months on the %2$s %3$s."
+msgstr "Alle %1$d Monate am %2$s %3$s."
 
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
+#. Example: Every year in December on day 3
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Yearly on %1$s %2$d"
-msgstr "Jährlich am %2$d. %1$s"
-
-#. recurrence string
-#. %1$d: interval, numeric
-#. %2$s: Month nane, e.g. January
-#. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Every %1$d years on %2$s %3$d"
-msgstr "Alle %1$d Jahre am %3$d. %2$s"
+msgid "Every year in %1$s on day %2$d."
+msgstr "Jedes Jahr im %1$s an Tag %2$d."
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
+#. Example: Every year on the first Tuesday in December
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Yearly on the %1$s %2$s of %3$d"
-msgstr "Jährlich am %1$s %2$s im %3$d"
-
-#. recurrence string
-#. %1$d: interval, numeric
-#. %2$s: count string, e.g. first, second, or last
-#. %3$s: day string, e.g. Monday
-#. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Every %1$d years on the %2$s %3$s of %4$d"
-msgstr "Alle %1$d Jahre am %2$s %3$s im %4$d"
+msgid "Every year on the %1$s %2$s in %3$d."
+msgstr "Jedes Jahr am %1$s %2$s im %3$d."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "The series ends on %1$s"
-msgstr "Die Serie endet am %1$s"
+msgid "The series ends on %1$s."
+msgstr "Die Serie endet am %1$s."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "The series ends after %1$d appointment"
-msgid_plural "The series ends after %1$d appointments"
-msgstr[0] "Die Serie endet nach %1$d Termin"
-msgstr[1] "Die Serie endet nach %1$d Terminen"
+#, fuzzy
+msgid "The series ends after one occurrence."
+msgid_plural "The series ends after %1$d occurences."
+msgstr[0] "Die Serie endet nach einem Ereignis."
+msgstr[1] "Die Serie endet nach %1$s Ereignissen."
+
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+msgid "The series never ends."
+msgstr "Die Serie endet nie."
 
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
@@ -2522,6 +2447,7 @@ msgstr "Kontakt wurde kopiert"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Kontakt hinzufügen"
 
@@ -2583,7 +2509,7 @@ msgstr "Wollen Sie diesen Kontakt wirklich löschen?"
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/contacts/common-extensions.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
-#: apps/io.ox/participants/model.js module:io.ox/core
+#: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Distribution list"
 msgstr "Verteilerliste"
 
@@ -2680,6 +2606,11 @@ msgstr "Liste anlegen"
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Edit distribution list"
 msgstr "Verteilerliste bearbeiten"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
+msgid "This list has no members yet"
+msgstr "Diese Liste hat noch keine Mitglieder"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 msgid ""
@@ -3292,7 +3223,7 @@ msgstr[0] "Verteilerliste mit 1 Eintrag"
 msgstr[1] "Verteilerliste mit %1$d Einträgen"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#: apps/io.ox/participants/model.js module:io.ox/core
+#: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Resource"
 msgstr "Ressource"
 
@@ -3306,11 +3237,6 @@ msgstr "Alle Anhänge"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Could not load attachments for this contact."
 msgstr "Die Anhänge zu diesem Kontakt konnten nicht geladen werden."
-
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#: apps/io.ox/participants/views.js module:io.ox/core
-msgid "This list has no contacts yet"
-msgstr "Diese Liste hat noch keine Mitglieder"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Messenger"
@@ -4110,6 +4036,12 @@ msgid "Synchronize with your tablet or smartphone"
 msgstr "Mit Ihrem Tablet oder Smartphone synchronisieren"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/main.js apps/io.ox/core/settings/pane.js
+#: apps/plugins/portal/userSettings/register.js
+msgid "My contact data"
+msgstr "Meine Kontaktdaten"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden address books"
 msgstr "Versteckte Adressbücher"
 
@@ -4404,11 +4336,6 @@ msgstr "Einstellungen"
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Ihr Gerät verbinden"
-
-#: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/settings/pane.js
-#: apps/plugins/portal/userSettings/register.js
-msgid "My contact data"
-msgstr "Meine Kontaktdaten"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
@@ -4985,16 +4912,6 @@ msgstr ""
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Show desktop notifications"
 msgstr "Desktop-Benachrichtigungen anzeigen"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-msgid "Enable app restore points"
-msgstr "App-Wiederherstellungspunkte aktivieren"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-msgid "Enable app restore points for mail compose"
-msgstr "App-Wiederherstellungspunkte für Mail Compose aktivieren"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -6419,7 +6336,7 @@ msgid "Internal user"
 msgstr "Interner Benutzer"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/participants/model.js
+#: apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Gruppe"
 
@@ -6966,8 +6883,9 @@ msgid "The account must be named"
 msgstr "Der Account muss benannt werden"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
-msgid "This field has to be filled"
-msgstr "Dieses Feld muss ausgefüllt werden"
+#, fuzzy
+msgid "This field is mandatory"
+msgstr "Dieses Feld muss ausgefüllt werden."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -7267,6 +7185,17 @@ msgstr "Zum Importieren der E-Mail hier ablegen"
 msgid "Synchronize with Outlook"
 msgstr "Mit Outlook synchronisieren"
 
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/util.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/plugins/portal/mail/register.js module:plugins/portal
+#, c-format
+msgid "No subject"
+msgstr "Kein Betreff"
+
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr "Diese E-Mail wurde dem Portal hinzugefügt"
@@ -7352,6 +7281,11 @@ msgstr ""
 "Alle zukünftigen Nachrichten von den Absendern der ausgewählten E-Mails "
 "werden in den ausgewählten Ordner verschoben."
 
+#: apps/io.ox/mail/actions/create.js module:io.ox/core
+msgid "Error while resolving mail addresses. Please try again."
+msgstr ""
+"Fehler beim Auflösen der E-Mail-Adressen. Bitte versuchen Sie es erneut."
+
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Do you want to permanently delete this mail?"
 msgid_plural "Do you want to permanently delete these mails?"
@@ -7372,11 +7306,6 @@ msgstr ""
 #: apps/io.ox/mail/actions/ical.js module:io.ox/mail
 msgid "The appointment has been added to your calendar"
 msgstr "Der Termin wurde Ihrem Kalender hinzugefügt"
-
-#: apps/io.ox/mail/actions/invite.js module:io.ox/core
-msgid "Error while resolving mail addresses. Please try again."
-msgstr ""
-"Fehler beim Auflösen der E-Mail-Adressen. Bitte versuchen Sie es erneut."
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
@@ -7805,15 +7734,6 @@ msgstr "Verfassen"
 msgid "Mail"
 msgstr "Mail"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/util.js module:io.ox/core
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, c-format
-msgid "No subject"
-msgstr "Kein Betreff"
-
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Benutzerdefinierten Namen verwenden"
@@ -7908,19 +7828,30 @@ msgid "Draft saved at %1$s"
 msgstr "Entwurf gespeichert unter %1$s"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to discard your message?"
-msgstr "Wollen Sie Ihre Nachricht wirklich verwerfen?"
+msgctxt "dialog"
+msgid "Delete draft"
+msgstr "Entwurf löschen"
 
-#. "Discard message" appears in combination with "Cancel" (this action)
-#. Translation should be distinguishable for the user
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Nachricht verwerfen"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Keep draft"
+msgstr "Entwurf behalten"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Save as draft"
 msgstr "Als Entwurf speichern"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Do you really want to delete this draft?"
+msgstr "Wollen Sie diesen Entwurf wirklich löschen?"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Do you really want to discard your message?"
+msgstr "Wollen Sie Ihre Nachricht wirklich verwerfen?"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Couldn't load editor"
@@ -8355,6 +8286,41 @@ msgid "Could not save settings"
 msgstr "Einstellungen konnten nicht gespeichert werden."
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Display"
+msgstr "Anzeigen"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Allow html formatted emails"
+msgstr "HTML-formatierte Nachrichten zulassen"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Allow pre-loading of externally linked images"
+msgstr "Laden extern verlinkter Bilder erlauben"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Display emoticons as graphics in text emails"
+msgstr "In Text-E-Mails Emoticons als Bilder darstellen"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Color quoted lines"
+msgstr "Zitierte Zeilen farbig hervorheben "
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Use fixed-width font for text mails"
+msgstr "Schrift mit fester Breite für Text-E-Mails verwenden"
+
+#. prettify or beautify
+#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+msgid "Prettify plain text mails"
+msgstr "Reine Textnachrichten verschönern"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Show requests for read receipts"
+msgstr "Anfragen für Lesebestätigungen anzeigen"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Common"
 msgstr "Allgemein"
 
@@ -8376,10 +8342,6 @@ msgid ""
 "reading"
 msgstr ""
 "Beim Lesen Kontakte automatisch im Ordner \"Gesammelte Adressen\" speichern"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Use fixed-width font for text mails"
-msgstr "Schrift mit fester Breite für Text-E-Mails verwenden"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Ask for mailto link registration"
@@ -8437,30 +8399,6 @@ msgstr "E-Mail-Entwürfe automatisch speichern"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr "Den folgenden Empfänger immer zu Blind Carbon Copy (BCC) hinzufügen"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Display"
-msgstr "Anzeigen"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Allow html formatted emails"
-msgstr "HTML-formatierte Nachrichten zulassen"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Allow pre-loading of externally linked images"
-msgstr "Laden extern verlinkter Bilder erlauben"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Display emoticons as graphics in text emails"
-msgstr "In Text-E-Mails Emoticons als Bilder darstellen"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Color quoted lines"
-msgstr "Zitierte Zeilen farbig hervorheben "
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Show requests for read receipts"
-msgstr "Anfragen für Lesebestätigungen anzeigen"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Change IMAP subscriptions"
@@ -8721,22 +8659,6 @@ msgstr "Vorschau nicht verfügbar"
 msgid "New note"
 msgstr "Neue Notiz"
 
-#: apps/io.ox/oauth/backbone.js module:io.ox/core
-msgid "Google Drive"
-msgstr "Google Drive"
-
-#: apps/io.ox/oauth/backbone.js module:io.ox/core
-msgid "Dropbox"
-msgstr "Dropbox"
-
-#: apps/io.ox/oauth/backbone.js module:io.ox/core
-msgid "Box"
-msgstr "Box"
-
-#: apps/io.ox/oauth/backbone.js module:io.ox/core
-msgid "OneDrive"
-msgstr "OneDrive"
-
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
 msgid "Reauthorize"
@@ -8977,15 +8899,15 @@ msgstr[0] "Diese E-Mail-Adresse kann nicht verwendet werden."
 msgstr[1] "Diese E-Mail-Adressen können nicht verwendet werden: %1$d"
 
 #: apps/io.ox/participants/add.js module:io.ox/core
-msgid "Add participant/resource"
-msgstr "Teilnehmer/Ressource hinzufügen"
+msgid "Add contact/resource"
+msgstr "Kontakt/Ressource hinzufügen"
 
 #. %1$s is an email address
 #: apps/io.ox/participants/add.js module:io.ox/core
-msgid "Cannot add participant/member with an invalid mail address: %1$s"
+msgid "Cannot add contact with an invalid mail address: %1$s"
 msgstr ""
-"Teilnehmer / Mitglied mit einer ungültigen E-Mail-Adresse kann nicht "
-"hinzugefügt werden: %1$s"
+"Kontakt mit einer ungültigen E-Mail-Adresse kann nicht hinzugefügt werden: "
+"%1$s"
 
 #: apps/io.ox/participants/detail.js module:io.ox/core
 msgid "External participants"
@@ -9001,21 +8923,29 @@ msgstr "Ressourcen"
 msgid "Summary"
 msgstr "Übersicht"
 
-#: apps/io.ox/participants/model.js module:io.ox/core
+#: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: apps/io.ox/participants/model.js module:io.ox/core
+#: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Resource group"
 msgstr "Ressourcengruppe"
 
-#: apps/io.ox/participants/model.js module:io.ox/core
+#: apps/io.ox/participants/views.js module:io.ox/core
 msgid "External contact"
 msgstr "Externer Kontakt"
 
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Remove contact"
 msgstr "Kontakt entfernen"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+msgid "This list has no participants yet"
+msgstr "Diese Liste hat noch keine Teilnehmer"
+
+#: apps/io.ox/participants/views.js module:io.ox/core
+msgid "Members (%1$d)"
+msgstr "Mitglieder (%1$d)"
 
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Participants (%1$d)"
@@ -9455,6 +9385,10 @@ msgstr "Hoch"
 msgctxt "Tasks"
 msgid "Priority"
 msgstr "Priorität"
+
+#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
+msgid "This task has no participants yet"
+msgstr "Diese Aufgabe hat noch keine Teilnehmer"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Show details"
@@ -10902,6 +10836,117 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Every %1$s weeks on %2$s."
+#~ msgstr "Alle %1$s Wochen am %2$s."
+
+#~ msgid "Every %1$s months on the %2$s %3$s."
+#~ msgstr "Alle %1$d Monate am %2$s %3$s."
+
+#~ msgid "Every month on day %1$s."
+#~ msgstr "Jeden Monat am Tag %1$s."
+
+#~ msgid "Every %1$s months on day %2$s."
+#~ msgstr "Alle %1$d Monate am Tag %2$s."
+
+#~ msgid "Every year on the %1$s %2$s in %3$s."
+#~ msgstr "Jedes Jahr am %1$s %2$s im %3$s."
+
+#~ msgid "Every year in %1$s on day %2$s."
+#~ msgstr "Jedes Jahr im %1$s am Tag %2$s."
+
+#~ msgid "work days"
+#~ msgstr "Arbeitstage"
+
+#~ msgid "and"
+#~ msgstr "und"
+
+#~ msgid "Every day"
+#~ msgstr "Jeden Tag"
+
+#~ msgid "Every %1$d days"
+#~ msgstr "Alle %1$d Tage"
+
+#~ msgid "Every %1$d weeks on all days"
+#~ msgstr "Alle %1$d Wochen an allen Tagen"
+
+#~ msgid "On work days"
+#~ msgstr "An Arbeitstagen"
+
+#~ msgid "Every %1$d weeks on work days"
+#~ msgstr "Alle %1$d Wochen an Arbeitstagen"
+
+#~ msgid "Weekly on %1$s"
+#~ msgstr "Wöchentlich am %1$s"
+
+#~ msgid "Every %1$d weeks on %2$s"
+#~ msgstr "Alle %1$d Wochen am %2$s"
+
+#~ msgid "Monthly on day %1$d"
+#~ msgstr "Jeden %1$d. Tag im Monat"
+
+#~ msgid "Every %1$d months on day %2$d"
+#~ msgstr "Alle %1$d Monate am %2$d. Tag"
+
+#~ msgid "Monthly on the %1$s %2$s"
+#~ msgstr "Am %1$s %2$s jeden Monats"
+
+#~ msgid "Every %1$d months on the %2$s %3$s"
+#~ msgstr "Alle %1$d Monate am %2$s %3$s"
+
+#~ msgid "Yearly on %1$s %2$d"
+#~ msgstr "Jährlich am %2$d. %1$s"
+
+#~ msgid "Every %1$d years on %2$s %3$d"
+#~ msgstr "Alle %1$d Jahre am %3$d. %2$s"
+
+#~ msgid "Yearly on the %1$s %2$s of %3$d"
+#~ msgstr "Jährlich am %1$s %2$s im %3$d"
+
+#~ msgid "Every %1$d years on the %2$s %3$s of %4$d"
+#~ msgstr "Alle %1$d Jahre am %2$s %3$s im %4$d"
+
+#~ msgid "The series ends on %1$s"
+#~ msgstr "Die Serie endet am %1$s"
+
+#~ msgid "The series ends after %1$d appointment"
+#~ msgid_plural "The series ends after %1$d appointments"
+#~ msgstr[0] "Die Serie endet nach %1$d Termin"
+#~ msgstr[1] "Die Serie endet nach %1$d Terminen"
+
+#~ msgid "This list has no contacts yet"
+#~ msgstr "Diese Liste hat noch keine Mitglieder"
+
+#, fuzzy
+#~ msgid "Enable app restore points"
+#~ msgstr "App-Wiederherstellungspunkte aktivieren"
+
+#, fuzzy
+#~ msgid "Enable app restore points for mail compose"
+#~ msgstr "App-Wiederherstellungspunkte für Mail Compose aktivieren"
+
+#~ msgid "This field has to be filled"
+#~ msgstr "Dieses Feld muss ausgefüllt werden"
+
+#~ msgid "Google Drive"
+#~ msgstr "Google Drive"
+
+#~ msgid "Dropbox"
+#~ msgstr "Dropbox"
+
+#~ msgid "Box"
+#~ msgstr "Box"
+
+#~ msgid "OneDrive"
+#~ msgstr "OneDrive"
+
+#~ msgid "Add participant/resource"
+#~ msgstr "Teilnehmer/Ressource hinzufügen"
+
+#~ msgid "Cannot add participant/member with an invalid mail address: %1$s"
+#~ msgstr ""
+#~ "Teilnehmer / Mitglied mit einer ungültigen E-Mail-Adresse kann nicht "
+#~ "hinzugefügt werden: %1$s"
 
 #~ msgid "Add %1$s account"
 #~ msgstr "%1$s-Account hinzufügen"
