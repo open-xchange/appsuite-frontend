@@ -561,7 +561,12 @@
                     display: none!important;
                 }
             }
+        }
+        &.fullscreen-mode {
+            .fullscreen-button {
 
+                display: block;
+            }
         }
 
         .viewer-displayer-item-container { max-height: 100%; }
@@ -717,6 +722,21 @@
             opacity: 0;
             transition-property: opacity;
             transition-duration: 0.5s;
+        }
+        .fullscreen-button {
+          //display: block;
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            width: 40px;
+            height: 40px;
+            padding: 10px 0 0 0;
+            text-align: center;
+            font-size: 18px;
+            line-height: 18px;
+            color: #999;
+            z-index: 1;
         }
 
         .viewer-displayer-notification {

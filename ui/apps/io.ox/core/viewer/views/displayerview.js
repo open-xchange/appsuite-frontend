@@ -143,8 +143,13 @@ define('io.ox/core/viewer/views/displayerview', [
     function handleDisplayerItemEnter(/*event*/) {
         this.carouselRoot.addClass('autoplay-controls-visible');
     }
-    function handleDisplayerItemLeave(/*event*/) {
-        this.carouselRoot.removeClass('autoplay-controls-visible');
+    function handleDisplayerItemLeave(event) {
+        var
+            $toElement = $(event.toElement);
+
+        if (!$toElement.hasClass('autoplay-button') && !$toElement.hasClass('fa-play') && !$toElement.hasClass('fa-pause')) {
+            this.carouselRoot.removeClass('autoplay-controls-visible');
+        }
     }
 
     function handlePreviousNextControlClickWhileRunningAutoplay(/*event*/) {
@@ -220,6 +225,20 @@ define('io.ox/core/viewer/views/displayerview', [
             $slideCaption.hide();
             $navigationArrows.hide();
         }
+    }
+
+    function handleEnterFullscreen(displayerView) {
+        displayerView.fullscreen = true;
+        displayerView.$el.addClass('fullscreen-mode');
+    }
+    function handleExitFullscreen(displayerView) {
+        displayerView.fullscreen = false;
+        displayerView.$el.removeClass('fullscreen-mode');
+
+        handleToggleAutoplayMode({}, displayerView, 'pausing');
+        handleDisplayerItemLeave.call(displayerView, {});
+
+        displayerView.$el.focus();
     }
 
     function requireAutoplayDelayLazily() {
@@ -343,6 +362,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 prevSlide = $('<a href="#" role="button" class="swiper-button-prev swiper-button-control left" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
                 nextSlide = $('<a href="#" role="button" class="swiper-button-next swiper-button-control right" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
                 autoplay,
+                fullscreen,
                 caption = $('<div class="viewer-displayer-caption">'),
                 startIndex = this.collection.getStartIndex(),
                 self = this,
@@ -359,7 +379,8 @@ define('io.ox/core/viewer/views/displayerview', [
                     onSlideChangeEnd: this.onSlideChangeEnd.bind(this),
                     onSlideChangeStart: this.onSlideChangeStart.bind(this)
                 },
-                handleToggleAutoplayControl;
+                handleToggleAutoplayControl,
+                handleToggleFullscreenControl;
 
             // if the index is we want to start with is preloaded, we can use it.
             if (startIndex < this.preloadOffset || this.collection.length < 2 * this.preloadOffset + 1) {
@@ -396,7 +417,9 @@ define('io.ox/core/viewer/views/displayerview', [
                 if (this.canAutoplayImages) {
 
                     autoplay = $('<a href="#" role="button" class="autoplay-button"><i class="fa" aria-hidden="true"></i></a>');
+                    fullscreen = $('<a href="#" role="button" class="fullscreen-button"><i class="fa fa-arrows-alt" aria-hidden="true"></i></a>');
                     carouselRoot.append(autoplay);
+                    carouselRoot.append(fullscreen);
 
                     handleToggleAutoplayControl = (function (displayerView) {
                         return function (event) {
@@ -405,7 +428,15 @@ define('io.ox/core/viewer/views/displayerview', [
                         };
                     }(this));
 
+                    handleToggleFullscreenControl = (function (displayerView) {
+                        return function (/*event*/) {
+
+                            displayerView.toggleFullscreen();
+                        };
+                    }(this));
+
                     autoplay.on('click', handleToggleAutoplayControl);
+                    fullscreen.on('click', handleToggleFullscreenControl);
 
                     requireAutoplayDelayLazily();
                 }
@@ -1256,20 +1287,16 @@ define('io.ox/core/viewer/views/displayerview', [
          *  The element that is currently displaying in full screen or null.
          */
         onChangeFullScreen: function (element) {
-            if (_.isNull(element)) {
-                // exit fullscreen
-                this.fullscreen = false;
-              //this.sidebarView.toggleSidebar(this.sidebarBeforeFullscreen);   // main view might be aware of sidebare view
+            var
+                displayerView = this;
 
-              //this.presenterEvents.trigger('presenter:fullscreen:exit');
+            if (_.isNull(element)) {
+
+                handleExitFullscreen(displayerView);
 
             } else if (element === this.carouselRoot[0]) {
-                // enter fullscreen
-                this.fullscreen = true;
-              //this.sidebarBeforeFullscreen = this.sidebarView.opened;         // main view might be aware of sidebare view
-              //this.sidebarView.toggleSidebar(false);                          //
 
-              //this.presenterEvents.trigger('presenter:fullscreen:enter');
+                handleEnterFullscreen(displayerView);
             }
         },
 
