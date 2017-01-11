@@ -423,7 +423,7 @@ define('io.ox/core/folder/api', [
         // only define if the user actually has mail
         // otherwise the folder refresh tries to fetch 'default0'
         pool.addModel({
-            folder_id: 'default0',
+            folder_id: 'default0/INBOX',
             id: 'virtual/all-unseen',
             module: 'mail',
             title: gt('Unread messages')
@@ -875,6 +875,8 @@ define('io.ox/core/folder/api', [
         // update model
         options = _.extend({ silent: false }, options);
         var model = pool.getModel(id).set(changes, { silent: options.silent });
+
+        if (isVirtual(id)) return $.when();
 
         // build data object
         var data = { folder: changes };
