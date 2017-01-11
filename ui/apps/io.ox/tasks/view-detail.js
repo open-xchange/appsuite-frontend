@@ -176,32 +176,32 @@ define('io.ox/tasks/view-detail', [
         draw: function (task) {
             if (task.end_time) {
                 this.append(
-                        $('<div>').addClass('end-date').text(
-                            //#. %1$s due date of a task
-                            //#, c-format
-                            gt('Due %1$s', _.noI18n(task.end_time))
-                        )
+                    $('<div>').addClass('end-date').text(
+                        //#. %1$s due date of a task
+                        //#, c-format
+                        gt('Due %1$s', _.noI18n(task.end_time))
+                    )
                 );
             }
 
             //alarm makes no sense if reminders are disabled
             if (task.alarm) {
                 this.append(
-                        $('<div>').addClass('alarm-date').text(
-                            //#. %1$s reminder date of a task
-                            //#, c-format
-                            gt('Reminder date %1$s', _.noI18n(task.alarm))
-                        )
+                    $('<div>').addClass('alarm-date').text(
+                        //#. %1$s reminder date of a task
+                        //#, c-format
+                        gt('Reminder date %1$s', _.noI18n(task.alarm))
+                    )
                 );
             }
             if (task.percent_completed && task.percent_completed !== 0) {
                 this.append(
-                        $('<div>').addClass('task-progress').text(
-                            //#. %1$s how much of a task is completed in percent, values from 0-100
-                            //#, c-format
-                            gt('Progress %1$s %', _.noI18n(task.percent_completed))
-                        )
-                    );
+                    $('<div>').addClass('task-progress').text(
+                        //#. %1$s how much of a task is completed in percent, values from 0-100
+                        //#, c-format
+                        gt('Progress %1$s %', _.noI18n(task.percent_completed))
+                    )
+                );
             }
             this.append(
                 // status
