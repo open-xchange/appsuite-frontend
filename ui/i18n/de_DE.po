@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-10 09:34+0100\n"
+"PO-Revision-Date: 2017-01-11 13:18+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2249,7 +2249,7 @@ msgstr "Jedes Wochenende."
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-msgid "Every %1$s weeks on weekends."
+msgid "Every %1$d weeks on weekends."
 msgstr "Alle %1$d Wochen an Wochenenden."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -5431,6 +5431,16 @@ msgstr "Die ersten 90 Tage sind kostenlos."
 msgid "Get free upgrade"
 msgstr "Freies Upgrade holen"
 
+#. tooltip for getting auto-play mode ready for running.
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Run auto-play mode"
+msgstr "Automatischen Wiedergabemodus starten"
+
+#. tooltip for getting auto-play mode ready for pausing.
+#: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
+msgid "Pause auto-play mode"
+msgstr "Automatischen Wiedergabemodus anhalten"
+
 #: apps/io.ox/core/viewer/views/displayerview.js module:io.ox/core
 msgid ""
 "Use left/right arrow keys to navigate and escape key to exit the viewer."
@@ -5509,7 +5519,7 @@ msgstr "Dieser Ordner wird mit anderen geteilt"
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/main.js apps/io.ox/mail/print.js
+#: module:io.ox/settings apps/io.ox/mail/print.js
 #: apps/io.ox/mail/view-options.js
 msgid "To"
 msgstr "An"
@@ -5517,7 +5527,7 @@ msgstr "An"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/main.js apps/io.ox/mail/view-options.js
+#: apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "Von"
 
@@ -6008,6 +6018,14 @@ msgstr ""
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Share your folders"
 msgstr "Ihre Ordner freigeben"
+
+#. %1$s is the display name of the account
+#. e.g. My Xing account
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "My %1$s account"
+msgstr "Mein %1$s-Account"
 
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
@@ -8659,6 +8677,13 @@ msgstr "Vorschau nicht verfügbar"
 msgid "New note"
 msgstr "Neue Notiz"
 
+#. %1$s is the display name of the account
+#. %2$d number, if more than one account of the same service
+#. e.g. My Xing account
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "My %1$s account (%2$d)"
+msgstr "Mein %1$s-Account (%2$d)"
+
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
 msgid "Reauthorize"
@@ -10836,6 +10861,9 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Every %1$s weeks on weekends."
+#~ msgstr "Alle %1$d Wochen an Wochenenden."
 
 #~ msgid "Every %1$s weeks on %2$s."
 #~ msgstr "Alle %1$s Wochen am %2$s."
