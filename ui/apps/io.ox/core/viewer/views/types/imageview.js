@@ -17,6 +17,8 @@ define('io.ox/core/viewer/views/types/imageview', [
 
     'use strict';
 
+    var RETINA_FACTOR = 2;
+
     /**
      * The image file type. Implements the ViewerType interface.
      *
@@ -40,20 +42,12 @@ define('io.ox/core/viewer/views/types/imageview', [
          *  the ImageView instance.
          */
         render: function () {
-
-            // since this node is not yet part of the DOM we look
-            // for the carousel's dimensions directly
-            var retina = _.device('retina'),
-                RETINA_FACTOR = 2,
-                carousel = $('.viewer-displayer:visible'),
-                // on retina screen request larger previews to render sharp images
-                width = retina ? carousel.width() * RETINA_FACTOR : carousel.width(),
-                height = retina ? carousel.height() * RETINA_FACTOR : carousel.height(),
-                options = { scaleType: 'contain', width: width, height: height },
-                image = $('<img class="viewer-displayer-item viewer-displayer-image">'),
-                previewUrl = this.getPreviewUrl(options),
-                filename = this.model.get('filename') || '',
-                self = this;
+            var image      = $('<img class="viewer-displayer-item viewer-displayer-image">');
+            var imageSize  = this.getImageSize();
+            var options    = _.extend({ scaleType: 'contain' }, imageSize);
+            var previewUrl = this.getPreviewUrl(options);
+            var filename   = this.model.get('filename') || '';
+            var self       = this;
 
             this.$el.empty();
 
@@ -76,18 +70,78 @@ define('io.ox/core/viewer/views/types/imageview', [
         },
 
         /**
+         * Returns an object with the width and the height to apply to the image.
+         *
+         * @returns {Object}
+         *  And object containing the width and the height for the image.
+         */
+        getImageSize: function () {
+            // since this node is not yet part of the DOM we look
+            // for the carousel's dimensions directly
+            var retina   = _.device('retina');
+            var carousel = $('.viewer-displayer:visible');
+            // on retina screen request larger previews to render sharp images
+            var width    = retina ? carousel.width() * RETINA_FACTOR : carousel.width();
+            var height   = retina ? carousel.height() * RETINA_FACTOR : carousel.height();
+            var size     = { width: width, height: height };
+
+            return size;
+        },
+
+        /**
+         * Generates a Base64 preview URL for files that have been added
+         * from local file system but are not yet uploaded to the server.
+         *
+         * @return {$.Promise}
+         *  A Promise that if resolved contains the Base64 preview URL.
+         */
+        getLocalFilePreviewUrl: function () {
+            var fileObj = this.model.get('fileObj');
+            var size    = this.getImageSize();
+
+            return require(['io.ox/contacts/widgets/canvasresize']).then(function (canvasResize) {
+
+                var def = $.Deferred();
+
+                var options = _.extend({
+                    crop: false,
+                    quality: 80,
+                    callback: callback
+                }, size);
+
+                function callback(data) {
+                    def.resolve(data);
+                }
+
+                canvasResize(fileObj, options);
+
+                return def;
+            });
+        },
+
+        /**
          * "Prefetches" the image slide by transferring the image source from the 'data-src'
-         *  to the 'src' attribute of the <img> HTMLElement.
+         *  to the 'src' attribute of the <img> HTMLElement, or by generating a Base64 URL
+         *  for local files.
          *
          * @returns {ImageView}
          *  the ImageView instance.
          */
         prefetch: function () {
-            //console.warn('ImageView.prefetch()', this.model.get('filename'));
-
             var image = this.$el.find('img.viewer-displayer-image');
             if (image.length > 0) {
-                image.attr('src', image.attr('data-src'));
+                // handle local file that has not yet been uploaded to the server
+                if (this.model.get('group') === 'localFile') {
+                    this.getLocalFilePreviewUrl().done(function (previewUrl) {
+                        if (previewUrl) {
+                            image.attr('src', previewUrl);
+                        }
+                    });
+
+                } else {
+                    image.attr('src', image.attr('data-src'));
+                }
+
                 this.isPrefetched = true;
             }
 
@@ -102,7 +156,6 @@ define('io.ox/core/viewer/views/types/imageview', [
          *  the ImageView instance.
          */
         show: function () {
-            //console.warn('ImageView.show()', this.model.get('filename'));
             return this;
         },
 
@@ -114,7 +167,6 @@ define('io.ox/core/viewer/views/types/imageview', [
          *  the ImageView instance.
          */
         unload: function () {
-            //console.warn('ImageView.unload()', this.model.get('filename'));
             var imageToUnLoad;
             // never unload slide duplicates
             if (!this.$el.hasClass('swiper-slide-duplicate')) {
