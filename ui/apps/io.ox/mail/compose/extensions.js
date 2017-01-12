@@ -792,6 +792,8 @@ define('io.ox/mail/compose/extensions', [
 
                     if (data.group === 'localFile') {
                         data.fileObj = view.collection.get(id).fileObj;
+                        // generate pseudo id so multiple localFile attachments do not overwrite themselves in the Viewer collection
+                        data.id = 'localFileAttachment-' + id;
                     }
 
                     list = view.collection.filter(function (a) {
@@ -800,6 +802,8 @@ define('io.ox/mail/compose/extensions', [
                         var obj = a.toJSON();
                         if (obj.group === 'localFile') {
                             obj.fileObj = a.fileObj;
+                            // generate pseudo id so multiple localFile attachments do not overwrite themselves in the Viewer collection
+                            obj.id = 'localFileAttachment-' + a.cid;
                         }
                         return obj;
                     });
