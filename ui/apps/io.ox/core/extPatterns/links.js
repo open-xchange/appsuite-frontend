@@ -477,7 +477,8 @@ define('io.ox/core/extPatterns/links', [
             }
 
             var def = drawLinks(extension, new Collection(baton.data), baton.$.temp || this, baton, $.makeArray(arguments), true);
-            if (baton.extension.noLfo) {
+
+            if (extension.noLfo) {
                 def.done(_.partial(processItems, baton));
             } else {
                 def.done(_.lfo(true, processItems, baton));
