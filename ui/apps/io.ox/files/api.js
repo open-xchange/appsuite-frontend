@@ -112,6 +112,9 @@ define('io.ox/files/api', [
         },
 
         isImage: function (type) {
+            // bypass SVG as they can contain malicious XML
+            // See Bug #50748
+            if ((/^image\/svg/).test(type)) return false;
             return (/^image\//).test(type || this.getMimeType());
         },
 
