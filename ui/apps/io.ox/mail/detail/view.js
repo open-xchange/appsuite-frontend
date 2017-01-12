@@ -94,6 +94,8 @@ define('io.ox/mail/detail/view', [
         ariaLabel: gt('Actions'),
         icon: _.device('smartphone') ? undefined : 'fa fa-bars',
         noCaret: true,
+        // lfo breaks thread toolbars under certan conditions see ( bug 50939)
+        noLfo: true,
         ref: 'io.ox/mail/links/inline',
         smart: true
     }));
