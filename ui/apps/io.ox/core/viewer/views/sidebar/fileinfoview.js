@@ -95,7 +95,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     );
                 }
 
-                if (!capabilities.has('alone') && !capabilities.has('guest') && !options.disableLink) {
+                if (!_.isEmpty(folder_id) && !capabilities.has('alone') && !capabilities.has('guest') && !options.disableLink) {
                     folderAPI.get(folder_id).done(function (folderData) {
                         // only show links to infostore files, links to mail attachments would mean broken links, see bug 39752
                         if (folderAPI.is('infostore', folderData)) {

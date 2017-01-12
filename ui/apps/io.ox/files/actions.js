@@ -168,10 +168,15 @@ define('io.ox/files/actions', [
             // no file-system, no download
             if (_.device('ios')) return false;
 
+            function isValid(file) {
+                // locally added but not yet uploaded,   'description only' items
+                return ((file.group !== 'localFile') && (!_.isEmpty(file.filename) || file.file_size > 0));
+            }
+
             if (e.collection.has('multiple')) {
                 var result = true;
                 _.each(e.baton.data, function (obj) {
-                    if (!obj.filename || !obj.file_size) {
+                    if (!isValid(obj)) {
                         result = false;
                     }
                 });
@@ -181,8 +186,7 @@ define('io.ox/files/actions', [
                 return false;
             }
 
-            // 'description only' items
-            return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
+            return isValid(e.baton.data);
         },
         multiple: function (list) {
             ox.load(['io.ox/files/actions/download']).done(function (action) {
@@ -251,6 +255,8 @@ define('io.ox/files/actions', [
             if (e.collection.has('folders')) return false;
             // check if this is a contact not a file, happens when contact is send as vcard
             if (_(e.baton.data).has('internal_userid')) return false;
+            // locally added but not yet uploaded
+            if (e.baton.data.group === 'localFile') { return false; }
             if (e.baton.data.file_mimetype) {
                 // no 'open' menu entry for office documents, PDF and plain text
                 if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
