@@ -605,7 +605,6 @@ define('io.ox/mail/detail/content', [
         }()),
 
         beautifyPlainText: function (str) {
-            console.log('Soooo', str.trim());
             var plain = str.trim().replace(/\r/g, '').replace(/\n{3,}/g, '\n\n');
             return this.text2html(plain, { blockquotes: true, images: true, links: true, lists: true, rulers: true });
         },
