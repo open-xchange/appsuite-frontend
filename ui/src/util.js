@@ -450,12 +450,37 @@
         /**
          * Lastest function only
          * Works with non-anonymous functions only
+         * accepts an options object with id and sync attributes as first parameter
+         * the id parameter is used to manage multiple lfo's for the same function
+         */
+        lfo2: function () {
+            var curry = slice.call(arguments), fn, count, opt = {};
+            // first param option object?
+            if (!_.isFunction(curry[0])) { _.extend(opt, curry.shift()); }
+            // get function and count
+            fn = curry.shift() || $.noop;
+            fn.count = fn.count || {};
+            count = (fn.count[opt.id] = (fn.count[opt.id] || 0) + 1);
+            console.log(count);
+            // wrap
+            return function () {
+                var args = slice.call(arguments);
+                function cont() {
+                    if (count === fn.count[opt.id]) {
+                        fn.apply(fn, curry.concat(args));
+                    }
+                }
+                if (opt.sync) cont(); else setTimeout(cont, 0);
+            };
+        },
+
+        /**
+         * Lastest function only
+         * Works with non-anonymous functions only
          */
         lfo: function () {
             // call counter
-            var curry = slice.call(arguments), sync = false, fn, count;
-            // sync or async (default)
-            if (curry[0] === true) { curry.shift(); sync = true; }
+            var curry = slice.call(arguments), fn, count;
             // get function and count
             fn = curry.shift() || $.noop;
             count = (fn.count = (fn.count || 0) + 1);
@@ -467,7 +492,7 @@
                         fn.apply(fn, curry.concat(args));
                     }
                 }
-                if (sync) cont(); else setTimeout(cont, 0);
+                setTimeout(cont, 0);
             };
         },
 

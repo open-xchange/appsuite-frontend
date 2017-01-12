@@ -588,7 +588,13 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/reminder', {
         capabilities: 'tasks',
-        requires: 'one toplevel',
+        requires: function () {
+            var def = $.Deferred();
+            setTimeout(function () {
+                def.resolve(true);
+            }, 3000);
+            return def;
+        },
         action: function (baton) {
             require(['io.ox/mail/actions/reminder'], function (action) {
                 action(baton);
