@@ -104,24 +104,28 @@ define('io.ox/files/api', [
         isFolder: function () {
             return this.has('standard_folder');
         },
-
         isFile: function () {
             // we cannot check for "filename", because there are files without a file; yep!
             // so we rather check if it's not a folder
             return !this.isFolder() && (this.get('source') === 'drive' || this.get('source') === 'guardDrive');
         },
 
+        isSVG: function (type) {
+            return (/^image\/svg/).test(type || this.getMimeType());
+        },
         isImage: function (type) {
-            // bypass SVG as they can contain malicious XML
-            // See Bug #50748
-            if ((/^image\/svg/).test(type)) return false;
-            return (/^image\//).test(type || this.getMimeType());
+            return (
+                (/^image\//).test(type || this.getMimeType()) &&
+
+                // bypass SVG as they can contain malicious XML
+                // See Bug #50748
+                !this.isSVG(type)
+            );
         },
 
         isAudio: function (type) {
             return (/^audio\//).test(type || this.getMimeType());
         },
-
         isVideo: function (type) {
             return (/^video\//).test(type || this.getMimeType());
         },
