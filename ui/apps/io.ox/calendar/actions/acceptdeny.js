@@ -174,17 +174,12 @@ define('io.ox/calendar/actions/acceptdeny', [
                             _.extend(apiData, { occurrence: o.recurrence_position });
                         }
 
-                        var previousConfirmation = 0;
-                        for (var i = 0; i < appointmentData.users.length; i++) {
-                            if (appointmentData.users[i].id === ox.user_id) {
-                                //confirmed or tentative
-                                previousConfirmation = appointmentData.users[i].confirmation;
-                            }
-                        }
+                        var previousConfirmation = _(appointmentData.users).findWhere({ id: ox.user_id });
+
                         // no conflicts possible if you decline the appointment
                         // no conflicts possible for free appointments
                         // don't check if confirmation status did not change
-                        if (action === 'declined' || appointmentData.shown_as === 4 || apiData.data.confirmation === previousConfirmation) {
+                        if (action === 'declined' || appointmentData.shown_as === 4 || (previousConfirmation && apiData.data.confirmation === previousConfirmation.confirmation)) {
                             checkConflicts = false;
                         }
 
