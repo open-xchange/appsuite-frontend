@@ -181,6 +181,25 @@ define('io.ox/mail/listview', [
             draw: extensions.sharedAttachement
         },
         {
+            id: 'subject',
+            index: 1000,
+            draw: extensions.subject
+        }
+    );
+
+    ext.point('io.ox/mail/listview/item/small/col7').extend({
+        id: 'date',
+        index: 100,
+        draw: extensions.date
+    });
+
+    ext.point('io.ox/mail/listview/item/small/col8').extend(
+        {
+            id: 'colorflag',
+            index: 200,
+            draw: extensions.colorflag
+        },
+        {
             id: 'pgp-encrypted',
             index: 600,
             draw: extensions.pgp.encrypted
@@ -275,9 +294,9 @@ define('io.ox/mail/listview', [
             draw: extensions.folderName
         },
         {
-            id: 'flag',
+            id: 'colorflag',
             index: 200,
-            draw: extensions.flag
+            draw: extensions.colorflag
         },
         {
             id: 'optionalSize',

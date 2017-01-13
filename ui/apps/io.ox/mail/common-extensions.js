@@ -215,12 +215,11 @@ define('io.ox/mail/common-extensions', [
             this.parent().toggleClass('deleted', util.isDeleted(baton.data));
         },
 
-        flag: function (baton) {
-
+        colorflag: function (baton) {
+            //if (!settings.get('features/color')) return;
             var color = baton.data.color_label;
             // 0 and a buggy -1
             if (color <= 0) return;
-
             this.append(
                 $('<i class="flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')
             );
