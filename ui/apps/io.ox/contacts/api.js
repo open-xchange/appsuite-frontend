@@ -39,17 +39,26 @@ define('io.ox/contacts/api', [
             if (response.id) {
                 // single contact: convert birthdays with year 1 or earlier from julian to gregorian calendar
                 // year might be 0 if birthday is on 1.1 or 1.2. (year 1 - 2days difference)
+                // same for anniversary
                 if (response.birthday && moment.utc(response.birthday).year() <= 1) {
                     response.birthday = util.julianToGregorian(response.birthday);
+                }
+                if (response.anniversary && moment.utc(response.anniversary).year() <= 1) {
+                    response.anniversary = util.julianToGregorian(response.anniversary);
                 }
                 return response;
             }
             // array of contacts: convert birthdays with year 1 or earlier from julian to gregorian calendar
             // year might be 0 if birthday is on 1.1 or 1.2. (year 1 - 2days difference)
+            // same for anniversary
             _(response).each(function (contact) {
                 if (contact.birthday && moment.utc(contact.birthday).year() <= 1) {
                     // birthday without year
                     contact.birthday = util.julianToGregorian(contact.birthday);
+                }
+                if (contact.anniversary && moment.utc(contact.anniversary).year() <= 1) {
+                    // birthday without year
+                    contact.anniversary = util.julianToGregorian(contact.anniversary);
                 }
             });
             return response;
@@ -323,9 +332,13 @@ define('io.ox/contacts/api', [
         wat(data, 'email2');
         wat(data, 'email3');
 
-        if (data.birthday && moment.utc(data.birthday).local(true).year() === 1) {
+        if (data.birthday && moment.utc(data.birthday).local(true).year() <= 1) {
             // convert birthdays with year 1 (birthdays without year) from gregorian to julian calendar
             data.birthday = util.gregorianToJulian(data.birthday);
+        }
+        if (data.anniversary && moment.utc(data.anniversary).local(true).year() <= 1) {
+            // convert anniversary with year 1 (anniversaries without year) from gregorian to julian calendar
+            data.anniversary = util.gregorianToJulian(data.anniversary);
         }
 
         var method,
@@ -408,9 +421,15 @@ define('io.ox/contacts/api', [
             return $.when();
         }
         // convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
-        if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() === 1) {
+        if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() <= 1) {
             o.data.birthday = util.gregorianToJulian(o.data.birthday);
         }
+
+        // convert anniversaries with year 1(birthdays without year) from gregorian to julian calendar
+        if (o.data.anniversary && moment.utc(o.data.anniversary).local(true).year() <= 1) {
+            o.data.anniversary = util.gregorianToJulian(o.data.anniversary);
+        }
+
         // go!
         return http.PUT({
             module: 'contacts',
