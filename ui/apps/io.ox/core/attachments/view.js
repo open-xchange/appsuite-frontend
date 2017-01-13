@@ -331,7 +331,7 @@ define('io.ox/core/attachments/view', [
 
         renderFileSize: function () {
             var size = this.model.getSize();
-            if (size) this.$('.filesize').text(' (' + strings.fileSize(size) + ')');
+            if (size) this.$('.filesize').text(' (' + strings.fileSize(size, 1) + ')');
         },
 
         renderContent: function () {

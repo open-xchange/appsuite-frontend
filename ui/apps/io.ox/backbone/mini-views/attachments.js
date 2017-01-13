@@ -77,7 +77,7 @@ define('io.ox/backbone/mini-views/attachments', [
 
         renderAttachment: function (attachment) {
 
-            var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size) : '\u00A0';
+            var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size, 1) : '\u00A0';
             return $('<div class="attachment">').append(
                 $('<i class="fa fa-paperclip" aria-hidden="true">'),
                 $('<div class="row-1">').text(attachment.filename),
