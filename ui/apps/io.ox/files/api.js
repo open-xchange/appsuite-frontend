@@ -157,18 +157,15 @@ define('io.ox/files/api', [
         },
 
         isPgp: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPDF` that already did exist.
-            return (/^application\/pgp(?:\-encrypted)*$/).test(type || this.getMimeType());
+            return (/^application\/pgp(?:\-encrypted)*$/).test(type) || this.isGuard();
         },
         isGuard: function () {
-            return (/guard/).test(this.get('source'));
+            return (/^guard/).test(this.get('source'));
         },
 
         isEncrypted: function () {
             return (
-
-                this.isGuard() ||
                 this.isPgp() ||
-
                 // check if file has "guard" file extension
                 (/\.(grd|grd2|pgp)$/).test(this.get('filename'))
             );
