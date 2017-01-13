@@ -126,7 +126,7 @@ define('plugins/notifications/mail/register', [
         index: 490,
         id: 'sounds',
         draw: function () {
-            if (_.device('smartphone')) return;
+            if (_.device('smartphone') || !cap.has('websocket')) return;
             // use this array to customize the sounds
             // copy new/other sounds to themefolder->sounds
             var sounds, list = [
