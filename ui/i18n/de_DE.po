@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-11 13:18+0100\n"
+"PO-Revision-Date: 2017-01-13 14:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -7843,7 +7843,7 @@ msgstr "Ursprüngliche Nachricht als Anhang hinzufügen"
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 #, c-format
 msgid "Draft saved at %1$s"
-msgstr "Entwurf gespeichert unter %1$s"
+msgstr "Entwurf gespeichert um %1$s"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -9987,6 +9987,11 @@ msgid ""
 msgstr ""
 "Installieren Sie diese Web-Applikation auf Ihrem %1$s:  Tippen Sie auf %2$s, "
 "gefolgt von %3$s'Zum Home-Bildschirm hinzufügen'%4$s"
+
+#: apps/plugins/notifications/calendar/register.js module:plugins/notifications
+msgid ""
+"Invitation accepted but insufficient permissions to set default reminder"
+msgstr ""
 
 #. %1$s Appointment title
 #. %1$s task title
