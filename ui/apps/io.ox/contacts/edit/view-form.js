@@ -666,7 +666,8 @@ define('io.ox/contacts/edit/view-form', [
                         var value = baton.model.get(field),
                             isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
                             isRare = _(meta.rare).indexOf(field) > -1,
-                            hasContent = !!value,
+                            // anniversary is a date so timestamp 0 aka 1.1.1970 is valid
+                            hasContent = (field === 'anniversary' ? _.isNumber(value) : !!value),
                             node,
                             options = {
                                 index: index,
