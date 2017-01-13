@@ -318,7 +318,7 @@ define('io.ox/mail/main', [
         'props': function (app) {
 
             function getLayout() {
-                // enforece vertical on smartphones
+                // enforce vertical on smartphones
                 if (_.device('smartphone')) return 'vertical';
                 var layout = app.settings.get('layout', 'vertical');
                 // 'compact' only works on desktop properly
@@ -475,13 +475,6 @@ define('io.ox/mail/main', [
                     // set proper order first
                     model.set('order', (/^(610|608)$/).test(value) ? 'desc' : 'asc', { silent: true });
                     app.props.set('order', model.get('order'));
-                    // turn off conversation mode for any sort order but date (610)
-                    if (value !== 610) app.props.set('thread', false);
-                }
-                if (value === 610 && !app.props.get('thread')) {
-                    // restore thread when it was disabled by force
-                    var options = app.getViewOptions(app.folder.get());
-                    app.props.set('thread', options.threadrestore || false);
                 }
                 // now change sort columns
                 model.set({ sort: value });
@@ -501,18 +494,11 @@ define('io.ox/mail/main', [
          * Respond to conversation mode changes
          */
         'change:thread': function (app) {
-            app.props.on('change:thread', function (model, value, opt) {
+            app.props.on('change:thread', function (model, value) {
                 if (!app.changingFolders && app.listView.collection) {
                     app.listView.collection.expired = true;
                 }
-                if (value === true) {
-                    app.props.set('sort', 610);
-                    app.listView.model.set('thread', true);
-                } else {
-                    // remember/remove thread state for restoring
-                    opt.viewOptions = app.props.get('sort') === 610 ? { threadrestore: undefined } : { threadrestore: true };
-                    app.listView.model.set('thread', false);
-                }
+                app.listView.model.set('thread', !!value);
             });
         },
 
