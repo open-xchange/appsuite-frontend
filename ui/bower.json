@@ -18,7 +18,7 @@
     "bootstrap": "3.3.6",
     "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#tag-1.3.1",
     "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#720cdc6385b8ee5ebe8225e89bc59a83f007b19c",
-    "font-awesome": "4.4.0",
+    "font-awesome": "4.7.0",
     "jquery": "2.1.4",
     "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git#3e616c19ad3bb32e4e62679a348f8b18a80790d2",
     "marked": "0.3.5",

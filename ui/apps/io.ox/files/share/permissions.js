@@ -32,8 +32,10 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/util',
     'gettext!io.ox/core',
+    'settings!io.ox/contacts',
+    'io.ox/backbone/mini-views/addresspicker',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView) {
 
     'use strict';
 
@@ -965,7 +967,33 @@ define('io.ox/files/share/permissions', [
                     }
                 });
 
-                var module = objModel.get('module');
+                var module = objModel.get('module'),
+                    usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true),
+                    click = function (e, member) {
+                        // build extended permission object
+                        var isInternal = member.get('type') === 2 || member.get('type') === 1,
+                            isGuest = member.get('type') === 5,
+                            obj = {
+                                bits: isInternal ? 4227332 : getBitsExternal(objModel), // Author : (Viewer for folders: Viewer for files)
+                                group: member.get('type') === 2,
+                                type: member.get('type') === 2 ? 'group' : 'user',
+                                new: true
+                            };
+                        if (isInternal) {
+                            obj.entity = member.get('id');
+                        }
+                        obj.contact = member.toJSON();
+                        obj.display_name = member.getDisplayName();
+                        if (isGuest) {
+                            obj.type = 'guest';
+                            obj.contact_id = member.get('id');
+                            obj.folder_id = member.get('folder_id');
+                            obj.field = member.get('field');
+                            // guests don't have a proper entity id yet, so we have to check by email
+                            if (permissionsView.collection.isAlreadyGuest(obj)) return;
+                        }
+                        permissionsView.collection.add(new Permission(obj));
+                    };
 
                 var typeaheadView = new Typeahead({
                         apiOptions: {
@@ -988,35 +1016,20 @@ define('io.ox/files/share/permissions', [
                                 return !permissionsView.collection.get(model.id);
                             });
                         },
-                        click: function (e, member) {
-                            // build extended permission object
-                            var isInternal = member.get('type') === 2 || member.get('type') === 1,
-                                isGuest = member.get('type') === 5,
-                                obj = {
-                                    bits: isInternal ? 4227332 : getBitsExternal(objModel), // Author : (Viewer for folders: Viewer for files)
-                                    group: member.get('type') === 2,
-                                    type: member.get('type') === 2 ? 'group' : 'user',
-                                    new: true
-                                };
-                            if (isInternal) {
-                                obj.entity = member.get('id');
-                            }
-                            obj.contact = member.toJSON();
-                            obj.display_name = member.getDisplayName();
-                            if (isGuest) {
-                                obj.type = 'guest';
-                                obj.contact_id = member.get('id');
-                                obj.folder_id = member.get('folder_id');
-                                obj.field = member.get('field');
-                                // guests don't have a proper entity id yet, so we have to check by email
-                                if (permissionsView.collection.isAlreadyGuest(obj)) return;
-                            }
-                            permissionsView.collection.add(new Permission(obj));
-                        },
+                        click: click,
                         extPoint: POINT
                     }),
-                    guid = _.uniqueId('form-control-label-');
-
+                    guid = _.uniqueId('form-control-label-'),
+                    assembledGroup = $('<div class="form-group">').append(
+                        $('<div class="input-group has-picker">').append(
+                            $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
+                            typeaheadView.$el.attr({ id: guid }),
+                            usePicker ? new AddressPickerView({
+                                isPermission: true,
+                                process: click,
+                            }).render().$el : []
+                        )
+                    );
                 if (objModel.isFolder() && options.nested) {
                     dialog.getFooter().append(
                         $('<div>').addClass('form-group cascade').append(
@@ -1030,6 +1043,7 @@ define('io.ox/files/share/permissions', [
                 dialog.getFooter().prepend(
                     $('<div class="share-options">').append(
                         $('<div class="autocomplete-controls">').append(
+                            usePicker ? assembledGroup :
                             $('<div class="form-group">').append(
                                 $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
                                 typeaheadView.$el.attr({ id: guid })

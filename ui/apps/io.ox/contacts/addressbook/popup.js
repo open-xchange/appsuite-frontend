@@ -166,8 +166,13 @@ define('io.ox/contacts/addressbook/popup', [
                 limit: LIMITS.fetch
             }, options);
 
-            if (options.folder === 'all') delete options.folder;
+            var data = {
+                exclude_folders: options.exclude,
+                last_name: '*'
+            };
 
+            if (options.folder === 'all') delete options.folder;
+            if (options.useGABOnly) data.folder = ['6'];
             return http.PUT({
                 module: 'contacts',
                 params: {
@@ -178,10 +183,7 @@ define('io.ox/contacts/addressbook/popup', [
                     sort: 609
                 },
                 // emailAutoComplete doesn't work; need to clean up client-side anyway
-                data: {
-                    exclude_folders: options.exclude,
-                    last_name: '*'
-                }
+                data: data
             });
         }
 
@@ -370,7 +372,9 @@ define('io.ox/contacts/addressbook/popup', [
         'shared':  gt('Shared address books')
     };
 
-    function open(callback) {
+    function open(callback, useGABOnly) {
+
+        if (useGABOnly) folder = 'folder/6';
 
         // avoid parallel popups
         if (isOpen) return;
@@ -381,7 +385,8 @@ define('io.ox/contacts/addressbook/popup', [
             focus: '.search-field',
             maximize: 600,
             point: 'io.ox/contacts/addressbook-popup',
-            title: gt('Select contacts')
+            title: gt('Select contacts'),
+            useGABOnly: useGABOnly
         })
         .inject({
             renderFolders: function (folders) {
@@ -391,6 +396,9 @@ define('io.ox/contacts/addressbook/popup', [
                 if (!useGlobalAddressBook && folders['public']) {
                     folders['public'] = _(folders['public']).reject({ id: '6' });
                 }
+                if (this.options.useGABOnly) {
+                    folders = _.pick(folders, 'public');
+                }
                 $dropdown.append(
                     _(folders).map(function (section, id) {
                         // skip empty and (strange) almost empty folders
@@ -399,6 +407,7 @@ define('io.ox/contacts/addressbook/popup', [
                         return $('<optgroup>').attr('label', sections[id]).append(
                             _(section).map(function (folder) {
                                 count++;
+                                console.log(folder.title); // hier
                                 return $('<option>').val('folder/' + folder.id).text(folder.title);
                             })
                         );
@@ -454,7 +463,7 @@ define('io.ox/contacts/addressbook/popup', [
                         ),
                         $('<div class="col-xs-6">').append(
                             $('<select class="form-control folder-dropdown invisible">').append(
-                                $('<option value="all">').text(gt('All folders')),
+                                this.options.useGABOnly ? [] : $('<option value="all">').text(gt('All folders')),
                                 useLabels ? $() : $('<option value="all_lists">').text(gt('All distribution lists')),
                                 useLabels ? $('<option value="all_labels">').text(gt('All groups')) : $()
                             )
@@ -512,8 +521,8 @@ define('io.ox/contacts/addressbook/popup', [
 
                 this.on('open', function () {
                     _.defer(function () {
-                        if (cachedResponse) return success.call(this, cachedResponse);
-                        getAllMailAddresses().then(success.bind(this), fail.bind(this));
+                        if (cachedResponse && !this.options.useGABOnly) return success.call(this, cachedResponse);
+                        getAllMailAddresses({ useGABOnly: this.options.useGABOnly }).then(success.bind(this), fail.bind(this));
                     }.bind(this));
                 });
             },

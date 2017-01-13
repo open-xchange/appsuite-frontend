@@ -21,8 +21,11 @@ define('io.ox/files/share/wizard', [
     'io.ox/core/tk/tokenfield',
     'io.ox/core/yell',
     'gettext!io.ox/files',
+    'settings!io.ox/contacts',
+    'io.ox/core/capabilities',
+    'io.ox/backbone/mini-views/addresspicker',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt) {
+], function (DisposableView, ext, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView) {
 
     'use strict';
 
@@ -132,7 +135,8 @@ define('io.ox/files/share/wizard', [
         id: 'recipients-tokenfield',
         index: INDEX += 100,
         draw: function (baton) {
-            var guid = _.uniqueId('form-control-label-');
+            var guid = _.uniqueId('form-control-label-'),
+                usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true);
 
             // add autocomplete
             var tokenfieldView = new Tokenfield({
@@ -149,16 +153,36 @@ define('io.ox/files/share/wizard', [
 
             this.append(
                 $('<div class="form-group">').append(
-                    $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
-                    tokenfieldView.$el
+                    $('<div class="input-group has-picker">').append(
+                        $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
+                        tokenfieldView.$el,
+                        usePicker ? new AddressPickerView({
+                            isPermission: true,
+                            process: function (e, member, singleData) {
+                                var token = {
+                                        label: singleData.array[0],
+                                        value: singleData.array[1]
+                                    }, list = baton.model.get('recipients') || [];
+                                member.set('token', token);
+                                baton.model.set('recipients', list.concat([member]));
+                            }
+                        }).render().$el : []
+                    )
                 )
             );
 
             tokenfieldView.render();
 
+            tokenfieldView.listenTo(baton.model, 'change:recipients', function (mailModel, recipients) {
+                if (tokenfieldView.redrawLock) return;
+                tokenfieldView.collection.reset(recipients);
+            });
+
             // bind collection to share model
             tokenfieldView.collection.on('change add remove sort', function () {
+                tokenfieldView.redrawLock = true;
                 baton.model.set('recipients', this.toArray());
+                tokenfieldView.redrawLock = false;
             });
         }
     });
