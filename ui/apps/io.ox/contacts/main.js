@@ -250,7 +250,7 @@ define('io.ox/contacts/main', [
 
             // The label function can be overwritten by an extension.
             var getLabel = function (data) {
-                return $.trim(data.sort_name || '').slice(0, 1).toUpperCase()
+                return $.trim(data.sort_name || 'Ω').slice(0, 1).toUpperCase()
                     // 'ß'.toUpperCase() === 'SS'
                     .slice(0, 1)
                     .replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
@@ -258,11 +258,13 @@ define('io.ox/contacts/main', [
                     .replace(/[ÈÉÊË]/g, 'E')
                     .replace(/[ÌÍÎÏ]/g, 'I')
                     .replace(/[Ñ]/g, 'N')
-                    .replace(/[ÖÒÓÔÕÖØ]/g, 'O')
+                    .replace(/[ÖÒÓÔÕØ]/g, 'O')
                     .replace(/[ß]/g, 'S')
-                    .replace(/[ÜÙÚÛÜ]/g, 'U')
+                    .replace(/[ÜÙÚÛ]/g, 'U')
                     .replace(/[ÝŸ]/g, 'Y')
-                    .replace(/[\/\\!"§$%&(){}<>=?´`~^°*+#'\-_.:,;@|]|\d/g, '#');
+                    // digits, punctuation and others
+                    .replace(/[[\u0000-\u0040\u005B-\u017E]/g, '#')
+                    .replace(/[^A-Z#]/, 'Ω');
             };
             ext.point('io.ox/contacts/getLabel').each(function (extension) {
                 if (extension.getLabel) getLabel = extension.getLabel;
@@ -371,7 +373,16 @@ define('io.ox/contacts/main', [
                     });
                 },
                 getIndex: function (baton) {
+                    var keys = _(baton.labels).keys();
                     baton.data = _.map(fullIndex, baton.Thumb);
+
+                    // add omaga thumb for any other leading chars
+                    if (!_(keys).any(function (char) { return char === 'Ω'; })) return;
+                    baton.data.push(new baton.Thumb({
+                        label: _.noI18n('Ω'),
+                        text: 'Ω',
+                        enabled: _.constant(true)
+                    }));
                 }
             });
         },
