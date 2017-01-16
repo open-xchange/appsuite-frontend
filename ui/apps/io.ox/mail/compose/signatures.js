@@ -114,6 +114,7 @@ define('io.ox/mail/compose/signatures', [
             }.bind(this));
 
             if (!signature) {
+                if (this.get('mode') === 'edit') return;
                 return this.set('signatureId', this.getDefaultSignature(), { silent: false });
             }
             // special handling for edit draft
