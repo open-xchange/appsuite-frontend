@@ -1405,10 +1405,14 @@ define('io.ox/core/main', [
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
                 deeplink = looksLikeDeepLink && manifest && manifest.deeplink,
-                mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
+                mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose') + ':compose');
 
-            if (manifest && (manifest.refreshable || deeplink || (capabilities.has('webmail') && mailto))) {
+            if (manifest && (manifest.refreshable || deeplink)) {
                 baton.autoLaunch = appURL.split(/,/);
+                // no manifest for mail compose, capabilities check is sufficient
+            } else if (capabilities.has('webmail') && mailto) {
+                // launch main mail app for mailto links
+                baton.autoLaunch = ['io.ox/mail/main'];
             } else {
                 // clear typical parameter?
                 if (manifest) _.url.hash({ app: null, folder: null, id: null });
