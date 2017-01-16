@@ -184,6 +184,11 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                     extensions.push(extension);
                     sort();
 
+                    if ('enabled' in extension) {
+                        if (!extension.enabled) this.disable(extension.id);
+                        delete extension.enabled;
+                    }
+
                     if (!extension.metadata) {
                         extension.metadata = function (name, args) {
                             if (this[name]) {
