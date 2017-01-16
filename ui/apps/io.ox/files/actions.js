@@ -316,24 +316,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/actions/showlink', {
-        requires: function (e) {
-            return util.conditionChain(
-                capabilities.has('!alone !guest'),
-                _.device('!smartphone'),
-                !_.isEmpty(e.baton.data),
-                e.collection.has('some', 'items'),
-                util.isFolderType('!attachmentView', e.baton),
-                util.isFolderType('!trash', e.baton)
-            );
-        },
-        multiple: function (list) {
-            ox.load(['io.ox/files/actions/showlink']).done(function (action) {
-                action(list);
-            });
-        }
-    });
-
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
             // hide in mail compose preview
@@ -917,16 +899,6 @@ define('io.ox/files/actions', [
         mobile: 'lo',
         label: gt('Send as internal link'),
         ref: 'io.ox/files/actions/sendlink',
-        section: 'share'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'showlink',
-        index: index += 100,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Show internal link'),
-        ref: 'io.ox/files/actions/showlink',
         section: 'share'
     }));
 

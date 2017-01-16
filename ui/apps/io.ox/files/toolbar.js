@@ -217,13 +217,6 @@ define('io.ox/files/toolbar', [
                 ref: 'io.ox/files/actions/sendlink',
                 section: 'share'
             },
-            'showlink': {
-                prio: 'lo',
-                mobile: 'lo',
-                label: gt('Show internal link'),
-                ref: 'io.ox/files/actions/showlink',
-                section: 'share'
-            },
             'add-to-portal': {
                 prio: 'lo',
                 mobile: 'lo',

@@ -65,7 +65,11 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             dl.append(
                 // filename
                 $('<dt>').text(gt('Name')),
-                $('<dd class="file-name">').text(name),
+                $('<dd class="file-name">').append(
+                    $('<a href="#" target="_blank" style="word-break: break-all">')
+                    .attr('href', link)
+                    .text(name)
+                ),
                 // size
                 $('<dt>').text(gt('Size')),
                 $('<dd class="size">').text(sizeString)
@@ -93,23 +97,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                             .on('click', { id: folder_id }, setFolder)
                         )
                     );
-                }
-
-                if (!_.isEmpty(folder_id) && !capabilities.has('alone') && !capabilities.has('guest') && !options.disableLink) {
-                    folderAPI.get(folder_id).done(function (folderData) {
-                        // only show links to infostore files, links to mail attachments would mean broken links, see bug 39752
-                        if (folderAPI.is('infostore', folderData)) {
-                            dl.append(
-                                // deep link
-                                $('<dt>').text(gt('Link')),
-                                $('<dd class="link">').append(
-                                    $('<a href="#" target="_blank" style="word-break: break-all">')
-                                    .attr('href', link)
-                                    .text(link)
-                                )
-                            );
-                        }
-                    });
                 }
 
                 var permissions = model.isFile() ?
