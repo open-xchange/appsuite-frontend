@@ -196,6 +196,20 @@ define('io.ox/files/api', [
             return parts.length === 1 ? '' : parts.pop().toLowerCase();
         },
 
+        getGuardExtension: function () {
+            var extension;
+            var parts = String(this.get('filename') || '').split('.');
+
+            // If has extension .xyz.pgp, remove the pgp and return extension
+            if ((parts.length > 2) && (parts.pop().toLowerCase() === 'pgp')) {
+                extension = parts[parts.length - 1];
+            } else {
+                extension = '';
+            }
+
+            return extension;
+        },
+
         getMimeType: function () {
             // split by ; because this field might contain further unwanted data
             var type = String(this.get('file_mimetype')).toLowerCase().split(';')[0];
@@ -215,8 +229,16 @@ define('io.ox/files/api', [
         },
 
         getGuardMimeType: function () {
-            if (this.get('meta') && this.get('meta').OrigMime) return this.get('meta').OrigMime;
-            return this.getMimeType();
+            var meta = this.get('meta');
+            var origMime = meta && meta.OrigMime;
+
+            // no original mime or unusable mime type?
+            if (!origMime || regUnusableType.test(origMime)) {
+                // return mime type based on file extension
+                origMime = api.mimeTypes[this.getGuardExtension()] || this.getMimeType();
+            }
+
+            return origMime;
         },
 
         getFileType: function () {
@@ -230,13 +252,10 @@ define('io.ox/files/api', [
         },
 
         getGuardType: function () {
-            var parts = String(this.get('filename') || '').split('.');
-            if (parts.length < 3) return this.getFileType();
-            // If has extension .xyz.pgp, remove the pgp and test extension
-            if (parts.pop().toLowerCase() === 'pgp') {
-                var extension = parts[parts.length - 1];
+            var extension = this.getGuardExtension();
+            if (extension) {
                 for (var type in this.types) {
-                    if (this.types[type].test(extension)) return type;
+                    if (this.types[type].test(extension)) { return type; }
                 }
             }
             return this.getFileType();
