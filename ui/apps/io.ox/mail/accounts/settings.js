@@ -169,7 +169,9 @@ define('io.ox/mail/accounts/settings', [
                 list.listenTo(list, 'select', function (service) {
                     if (service.id === 'wizard') return;
 
-                    var account = new OAuth.Account.Model({
+                    var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
+                        return !account.hasScope('mail');
+                    })[0] || new OAuth.Account.Model({
                         serviceId: service.id,
                         //#. %1$s is the display name of the account
                         //#. e.g. My Xing account
