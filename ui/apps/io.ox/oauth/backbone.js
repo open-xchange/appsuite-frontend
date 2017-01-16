@@ -186,6 +186,9 @@ define('io.ox/oauth/backbone', [
                     storageAccounts.toJSON().filter(function (account) {
                         return account.configuration
                             && String(account.configuration.account) === String(self.get('id'));
+                    }).map(function addAccountType(model) {
+                        model.accountType = model.accountType || 'fileStorage';
+                        return model;
                     }),
                     accounts.filter(function isRelated(account) {
                         return account.mail_oauth === self.get('id');

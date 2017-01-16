@@ -39,7 +39,8 @@ define('io.ox/settings/accounts/views', [
                 yahoo: 'fa-yahoo',
                 linkedin: 'fa-linkedin',
                 dropbox: 'fa-dropbox',
-                msliveconnect: 'fa-windows'
+                msliveconnect: 'fa-windows',
+                fileStorage: 'fa-folder'
             };
             return function (type) {
                 var icon = $('<i class="account-icon fa" aria-hidden="true">');
