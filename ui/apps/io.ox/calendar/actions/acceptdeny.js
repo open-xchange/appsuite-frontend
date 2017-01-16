@@ -48,6 +48,10 @@ define('io.ox/calendar/actions/acceptdeny', [
 
             $.when(api.get(apiData), folderAPI.get(apiData.folder)).then(function (data, folderData) {
                 appointmentData = data;
+                // check if the response is of type [data, timestamp]
+                if (_.isArray(data) && data.length === 2 && _.isNumber(data[1])) {
+                    appointmentData = data[0];
+                }
                 folder = folderData;
 
                 // check if user is allowed to set the reminder time

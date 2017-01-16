@@ -176,6 +176,11 @@ define('io.ox/calendar/actions', [
             }
 
             var app = e.baton.data;
+
+            // cannot confirm appointments without proper id (happens when detail view was opened from mail invitation from external calendar)
+            // must use buttons in invitation mail instead
+            if (!app.id) return false;
+
             // incomplete
             if (app.id && !app.users) {
                 return api.get(app).then(cont);
