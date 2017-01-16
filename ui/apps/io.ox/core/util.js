@@ -225,9 +225,13 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
 
         // recognize addresses in a string
         // delimiters: comma, semi-colon, tab, newline, space; ignores delimiters in quotes
+        // display name can contain a-z plus \u00C0-\u024F, i.e. Latin supplement, Latin Extended-A, and Latin Extended-B
         // returns array of addresses
         getAddresses: function (str) {
-            return String(str).match(/((('[^']*'|"[^"]*"|\w[\w\x20]*)\s<[^>]+>)|("[^"]*"@)|[^"',;\x20\t\n]+)+/g);
+            var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F\-]+)@[^,;\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
+            return addresses.map(function (str) {
+                return str.replace(/^([^"]+)\s</, '"$1" <');
+            });
         }
     };
 
