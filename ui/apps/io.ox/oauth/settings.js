@@ -113,5 +113,41 @@ define('io.ox/oauth/settings', [
         ext.point('io.ox/settings/accounts/' + serviceId + '/settings/detail').extend(new OAuthAccountDetailExtension(serviceId));
     });
 
+    ext.point('io.ox/settings/accounts/fileStorage/settings/detail').extend({
+        id: 'fileStorage',
+        draw: function (args) {
+            var $displayNameField,
+                account = args.data.model,
+                $form = $('<div class="settings-detail-pane">').append(
+                    $('<legend class="sectiontitle">').text(gt('Account Settings')),
+                    $('<div class="form-horizontal">').append(
+                        $('<div class="control-group">').append(
+                            $('<label for="displayName">').text(gt('Display Name')),
+                            $('<div class="controls">').append(
+                                $displayNameField = $('<input type="text" name="displayName" class="form-control">').val(account.get('displayName'))
+                            )
+                        )
+                    )
+                ),
+                dialog = new dialogs.ModalDialog();
+
+            dialog
+                .append($form)
+                .addPrimaryButton('save', gt('Save'), 'save')
+                .addButton('cancel', gt('Cancel'), 'cancel')
+                .show()
+                .done(function (action) {
+                    if (action === 'save') {
+                        account.set('displayName', $displayNameField.val());
+                        require(['io.ox/core/api/filestorage']).then(function (fsAPI) {
+                            return fsAPI.updateAccount(account.toJSON());
+                        }).always(function () {
+                            dialog.close();
+                        });
+                    }
+                });
+        }
+    });
+
     return {};
 });
