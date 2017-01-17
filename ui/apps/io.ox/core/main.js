@@ -1322,9 +1322,13 @@ define('io.ox/core/main', [
                 autoStart = _([].concat(settings.get('autoStart'), 'io.ox/mail', favoritePaths))
                     .chain()
                     .filter(function (o) {
-                        return !_.isUndefined(o) && !_.isNull(o) && favoritePaths.indexOf(/main$/.test(o) ? o : o + '/main') >= 0;
+                        if (_.isUndefined(o)) return false;
+                        if (_.isNull(o)) return false;
+                        // special case to start in settings (see Bug 50987)
+                        if (o === 'io.ox/settings/main') return true;
+                        return favoritePaths.indexOf(/main$/.test(o) ? o : o + '/main') >= 0;
                     })
-                    .first(1)
+                    .first(1) // use 1 here to return an array
                     .value();
             }
 
@@ -1423,7 +1427,6 @@ define('io.ox/core/main', [
         var baton = ext.Baton({ block: $.Deferred() });
 
         appCheck(baton);
-
         baton.autoLaunchApps = _(baton.autoLaunch)
         .chain()
         .map(function (m) {
