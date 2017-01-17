@@ -281,7 +281,7 @@ define('io.ox/mail/compose/extensions', [
                     popup.open(function (result) {
                         var list = model.get(attr) || [];
                         model.set(attr, list.concat(_(result).pluck('array')));
-                    }, { isMail: true });
+                    });
                 });
             }
 
@@ -318,7 +318,7 @@ define('io.ox/mail/compose/extensions', [
 
                 if (usePicker) {
                     node.addClass('has-picker').append(
-                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-plus" aria-hidden="true"></i></a>')
+                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-address-book" aria-hidden="true"></i></a>')
                         .attr('aria-label', gt('Select contacts'))
                         .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
                     );

@@ -53,7 +53,7 @@ define('io.ox/backbone/mini-views/addresspicker', [
 
         render: function () {
             this.$el.addClass('input-group-btn').append(
-                $('<button class="btn btn-default">').append(
+                $('<button role="button" class="btn btn-default">').append(
                     $('<i class="fa fa-address-book-o" aria-hidden="true">')
                 )
             );

@@ -121,6 +121,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
     point.extend({
         id: 'add-participant',
         index: 400,
+        className: 'row',
         render: function () {
             var view = new AddParticipantView({
                 apiOptions: {
@@ -135,15 +136,20 @@ define('io.ox/contacts/distrib/create-dist-view', [
             this.$el.append(
                 view.$el
             );
-            view.render();
+            view.render().$el.addClass('col-md-6');
         }
     });
 
     point.extend({
         id: 'notice',
         index: 400,
+        className: 'row',
         render: function () {
-            this.$el.addClass('help-block').text(gt('To add contacts manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)'));
+            this.$el.append(
+                $('<div class="col-md-6">').append(
+                    $('<div class="help-block">').text(gt('To add contacts manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)'))
+                )
+            );
         }
     });
 

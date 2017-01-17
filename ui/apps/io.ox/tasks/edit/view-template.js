@@ -485,6 +485,7 @@ define('io.ox/tasks/edit/view-template', [
     point.basicExtend({
         id: 'add_participant',
         index: 1700,
+        className: 'row',
         row: '11',
         draw: function (baton) {
             var view = new AddParticipantView({
@@ -502,7 +503,7 @@ define('io.ox/tasks/edit/view-template', [
             this.append(
                 view.$el
             );
-            view.render().$el.addClass('col-xs-12 collapsed');
+            view.render().$el.addClass('col-md-6 collapsed');
             view.$el.find('input.add-participant').addClass('task-participant-input-field');
 
             view.typeahead.on('typeahead-custom:dropdown-rendered', function () {

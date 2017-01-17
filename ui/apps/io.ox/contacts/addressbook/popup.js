@@ -151,7 +151,7 @@ define('io.ox/contacts/addressbook/popup', [
             )
             .then(function (contacts, labels) {
                 var result = [], hash = {};
-                processAddresses(contacts[0], result, hash);
+                processAddresses(contacts[0], result, hash, options);
                 if (useLabels) processLabels(labels[0], result, hash);
                 return { items: result, hash: hash, index: buildIndex(result) };
             });
@@ -200,7 +200,7 @@ define('io.ox/contacts/addressbook/popup', [
             });
         }
 
-        function processAddresses(list, result, hash) {
+        function processAddresses(list, result, hash, opt) {
 
             list.forEach(function (item) {
                 // remove quotes from display name (common in collected addresses)
@@ -227,6 +227,7 @@ define('io.ox/contacts/addressbook/popup', [
                         result.push((hash[obj.cid] = obj));
                     }
                 } else {
+                    if (opt.useGABOnly) addresses = ['email1'];
                     // get a match for each address
                     addresses.forEach(function (address, i) {
                         var obj = process(item, sort_name, (item[address] || '').toLowerCase(), i);
@@ -391,7 +392,7 @@ define('io.ox/contacts/addressbook/popup', [
         .inject({
             renderFolders: function (folders) {
                 var $dropdown = this.$('.folder-dropdown'),
-                    count = 0;
+                    count = 0, self = this;
                 // remove global address book?
                 if (!useGlobalAddressBook && folders['public']) {
                     folders['public'] = _(folders['public']).reject({ id: '6' });
@@ -407,7 +408,7 @@ define('io.ox/contacts/addressbook/popup', [
                         return $('<optgroup>').attr('label', sections[id]).append(
                             _(section).map(function (folder) {
                                 count++;
-                                console.log(folder.title); // hier
+                                if (self.options.useGABOnly && folder.id !== '6') return;
                                 return $('<option>').val('folder/' + folder.id).text(folder.title);
                             })
                         );
@@ -463,8 +464,8 @@ define('io.ox/contacts/addressbook/popup', [
                         ),
                         $('<div class="col-xs-6">').append(
                             $('<select class="form-control folder-dropdown invisible">').append(
-                                this.options.useGABOnly ? [] : $('<option value="all">').text(gt('All folders')),
-                                useLabels ? $() : $('<option value="all_lists">').text(gt('All distribution lists')),
+                                this.options.useGABOnly ? $() : $('<option value="all">').text(gt('All folders')),
+                                this.options.useGABOnly || useLabels ? $() : $('<option value="all_lists">').text(gt('All distribution lists')),
                                 useLabels ? $('<option value="all_labels">').text(gt('All groups')) : $()
                             )
                         )
