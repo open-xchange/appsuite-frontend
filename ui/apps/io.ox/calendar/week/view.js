@@ -1047,6 +1047,9 @@ define('io.ox/calendar/week/view', [
                 var timeslotHeight = timeslots.get(0).getBoundingClientRect().height,
                     borderWidth = parseFloat(timeLabel.css('border-bottom-width'), 10);
                 timeLabel.height(timeslotHeight * this.gridSize - borderWidth);
+                // get actual cellHeight from timeslot. This can be different to the computed size due to scaling inside the browser (see Bug 50976)
+                // it is important to use getBoundingClientRect as this contains the decimal places of the actual height ($.fn.height does not)
+                this.cellHeight = timeslots.get(0).getBoundingClientRect().height;
                 // if the cell height changes we also need to redraw all appointments
                 if (redraw) this.renderAppointments();
             }
