@@ -277,13 +277,17 @@ define('io.ox/calendar/week/view', [
             settings.on('change', function (key) {
                 switch (key) {
                     case 'interval':
-                        // save scroll ratio
-                        var scrollRatio = (self.pane.scrollTop() + self.pane.height() / 2) / self.height(),
-                            calculateTimescale =  function () {
-                                // reset height of .time fields, since the initial height comes from css
-                                $('.time', self.pane).css('height', '');
-                                self.adjustCellHeight(false);
-                            };
+                        var calculateTimescale = function () {
+                            // save scroll ratio
+                            var scrollRatio = (self.pane.scrollTop() + self.pane.height() / 2) / self.height();
+                            // reset height of .time fields, since the initial height comes from css
+                            $('.time', self.pane).css('height', '');
+                            self.adjustCellHeight(false);
+                            self.renderAppointments();
+                            // restore scroll position from ratio
+                            self.pane.scrollTop(scrollRatio * self.height() - self.pane.height() / 2);
+                        };
+
                         self.gridSize = 60 / settings.get('interval', 30);
                         self.renderTimeslots();
                         self.applyTimeScale();
@@ -295,9 +299,6 @@ define('io.ox/calendar/week/view', [
                         } else {
                             calculateTimescale();
                         }
-                        self.renderAppointments();
-                        // restore scroll position from ratio
-                        self.pane.scrollTop(scrollRatio * self.height() - self.pane.height() / 2);
                         break;
                     case 'startTime':
                     case 'endTime':
