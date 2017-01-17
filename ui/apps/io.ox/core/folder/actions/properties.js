@@ -56,7 +56,7 @@ define('io.ox/core/folder/actions/properties', [
                     group(
                         gt('Folder type'), ucfirst(module)
                     ),
-                    model.supports('COUNTABLE_FOLDER') ?
+                    model.supports('count_total') ?
                     group(
                         module === 'mail' ?
                             //#. number of messages in a folder (mail only)

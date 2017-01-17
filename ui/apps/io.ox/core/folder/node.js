@@ -529,7 +529,7 @@ define('io.ox/core/folder/node', [
             if (!this.model.has('title')) return;
             var summary = [];
 
-            if (this.model.supports('COUNTABLE_FOLDER')) {
+            if (this.model.supports('count_total')) {
                 var data = this.model.toJSON();
                 // wrong counts for unifiedroot folder
                 if (account.isUnifiedRoot(this.model.get('id'))) data = _.pick(data, 'title');
