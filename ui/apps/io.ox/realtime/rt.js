@@ -11,44 +11,40 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/realtime/rt',
-    [
-        'io.ox/core/extensions',
-        'io.ox/core/capabilities'
-    ],
-function (ext, caps) {
+define.async('io.ox/realtime/rt', [
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities'
+], function (ext, caps) {
+
     'use strict';
-    ext.point('io.ox/realtime/transport').extend({
+
+    var POINT = ext.point('io.ox/realtime/transport'),
+        def = null;
+
+    POINT.extend({
         id: 'polling',
         index: 100,
-        enabled: function () {
-            return true; // Always works
-        },
+        enabled: true,
         getModule: function () {
             return require(['io.ox/realtime/polling_transport']);
         }
     });
 
-    ext.point('io.ox/realtime/transport').extend({
+    POINT.extend({
         id: 'noop',
+        // before 'last'
         index: 0,
-        enabled: function () {
-            return !caps.has('rt');
-        },
+        enabled: !caps.has('rt'),
         getModule: function () {
             console.error('Backend does not support realtime communication.');
             return require(['io.ox/realtime/noop_transport']);
         }
     });
 
-    var def = null;
-
     ext.point('io.ox/realtime/transport').each(function (transport) {
-        if (!def && transport.enabled()) {
-            def = transport.getModule();
-        }
+        if (def || !POINT.isEnabled(transport.id)) return;
+        def = transport.getModule();
     });
 
     return def;
-
 });
