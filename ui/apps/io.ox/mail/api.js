@@ -1644,12 +1644,16 @@ define('io.ox/mail/api', [
         });
     };
 
-    // change API's default options if allowHtmlMessages changes
-    settings.on('change:allowHtmlMessages', function (value) {
-        api.options.requests.get.view = value ? 'noimg' : 'text';
+    // some settings need a reset of the mail content cache
+    settings.on('change:allowHtmlMessages change:allowHtmlImages change:isColorQuoted change:beautifyPlainText', function () {
         pool.get('detail').each(function (model) {
             model.unset('attachments', { silent: true });
         });
+    });
+
+    // change API's default options if allowHtmlMessages changes
+    settings.on('change:allowHtmlMessages', function (value) {
+        api.options.requests.get.view = value ? 'noimg' : 'text';
     });
 
     accountAPI.on('refresh.all create:account', function () {
