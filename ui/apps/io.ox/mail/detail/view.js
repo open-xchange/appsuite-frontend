@@ -619,7 +619,6 @@ define('io.ox/mail/detail/view', [
                 'data-cid': this.model.cid,
                 'aria-expanded': 'false',
                 'data-loaded': 'false',
-                'role': 'article',
                 'aria-label': title
             });
 
