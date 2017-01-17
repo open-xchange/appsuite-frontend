@@ -69,7 +69,7 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             // get node
             var node = options.$el || (
                 halo.email || halo.user_id ?
-                $('<a href="#" class="halo-link">').attr('title', halo.email).data(halo) :
+                $('<a href="#" role="button" class="halo-link">').attr('title', halo.email).data(halo) :
                 $('<' + options.tagName + '>')
             );
 

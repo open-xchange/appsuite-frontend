@@ -431,7 +431,7 @@ define('io.ox/mail/common-extensions', [
                     container.children().slice(4).hide();
                     container.append(
                         //#. %1$d - number of other recipients (names will be shown if string is clicked)
-                        $('<a href="#" class="show-all-recipients">').text(gt('and %1$d others', items.length - 2))
+                        $('<a role="button" href="#" class="show-all-recipients">').text(gt('and %1$d others', items.length - 2))
                         .on('click', showAllRecipients)
                     );
                 }

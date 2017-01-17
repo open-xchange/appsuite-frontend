@@ -274,13 +274,11 @@ define('io.ox/mail/util', [
                     delivery: 'download'
                 });
                 tmp = tmp.add(
-                    $('<a>', { href: href, target: '_blank' })
-                    .addClass('attachment-link').text(_.noI18n(filename))
+                    $('<a class="attachment-link" target="_blank">').attr('href', href).text(_.noI18n(filename))
                 );
                 if (i < $i - 1) {
                     tmp = tmp.add(
-                        $('<span>').addClass('delimiter')
-                            .append($.txt(_.noI18n('\u00A0\u2022 ')))
+                        $('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2022 ')))
                     );
                 }
             }

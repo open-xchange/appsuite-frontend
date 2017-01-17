@@ -109,8 +109,8 @@ define('io.ox/core/notifications', [
                 self.$el.prepend(
                     $('<div class=notification-area-header>').append(
                         $('<h1 class="notification-area-title">').text(gt('Notifications')),
-                        $('<button class="btn btn-link clear-area-button fa fa-times">').attr('aria-label', gt('Close notification area')),
-                        $('<a role=button class="btn btn-link hide-area-button">').text(gt('Notify me again later'))
+                        $('<button type="button" class="btn btn-link clear-area-button fa fa-times">').attr('aria-label', gt('Close notification area')),
+                        $('<a role="button" class="btn btn-link hide-area-button">').text(gt('Notify me again later'))
                     )
                 );
             }

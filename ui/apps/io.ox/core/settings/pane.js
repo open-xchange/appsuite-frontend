@@ -71,7 +71,7 @@ define('io.ox/core/settings/pane', [
                 )
             );
 
-            new SettingView({ model: settings }).render().$el.attr('role', 'form').appendTo(this);
+            new SettingView({ model: settings }).render().$el.appendTo(this);
         }
     });
 

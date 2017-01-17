@@ -166,7 +166,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 left = o.placement === 'left', fn = left ? 'prepend' : 'append';
             if (left) o.className += ' pull-left';
             this.$('.modal-footer')[fn](
-                $('<button class="btn">')
+                $('<button type="button" class="btn">')
                     .addClass(o.className)
                     .attr('data-action', o.action)
                     .text(o.label)
