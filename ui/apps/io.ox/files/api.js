@@ -1064,6 +1064,8 @@ define('io.ox/files/api', [
 
         // add data
         formData.append('json', JSON.stringify(data));
+        // store folder here for error handling. cannot restore data from formData in Safari or IE
+        formData.folder = data.folder_id;
 
         return http.UPLOAD({
             module: options.module,
