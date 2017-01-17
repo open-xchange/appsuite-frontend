@@ -50,6 +50,12 @@ define('io.ox/contacts/widgets/pictureUpload', [
 
                 var fileData = {}, $input = $(input);
 
+                // check for valid image type. especially, svg is not allowed (see Bug 50748)
+                if (input.files.length > 0 && !/(jpg|jpeg|gif|bmp|png)/i.test(input.files[0].type)) {
+                    notifications.yell('error', gt('This filetype is not supported as contact picture. Only image types (JPG, GIF, BMP or PNG) are supported.'));
+                    return;
+                }
+
                 if (this.oldMode) {
                     if ($input.val()) {
                         fileData = $input.parent();
