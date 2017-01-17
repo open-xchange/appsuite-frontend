@@ -625,8 +625,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
         if (isError) {
             // forward all errors to respond to special codes
-            ox.trigger('http:error:' + response.code, response);
-            ox.trigger('http:error', response);
+            ox.trigger('http:error:' + response.code, response, o);
+            ox.trigger('http:error', response, o);
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
                 isLogin = o.module === 'login' && o.data && /^(login|autologin|store|tokens)$/.test(o.data.action);
@@ -826,6 +826,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     processResponse(r.def, response, r.o, r.o.type);
                 } else if (r.xhr.dataType === 'json' && response.error !== undefined) {
                     // error handling if JSON (e.g. for UPLOAD)
+                    response.folder = r.o.data.folder;
+                    ox.trigger('http:error:' + response.code, response, r.o);
+                    ox.trigger('http:error', response, r.o);
                     r.def.reject(response);
                 } else if (_.isArray(response.data)) {
                     // Skip Warnings (category: 13)
