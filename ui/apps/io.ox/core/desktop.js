@@ -1177,7 +1177,7 @@ define('io.ox/core/desktop', [
                 ext.point(name + '/window-toolbar').extend({
                     id: 'default',
                     draw: function () {
-                        return $('<nav class="window-toolbar">')
+                        return $('<ul class="window-toolbar">')
                             .addClass('f6-target')
                             .attr({
                                 'role': 'toolbar',

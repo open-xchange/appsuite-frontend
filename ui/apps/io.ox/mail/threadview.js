@@ -49,7 +49,7 @@ define('io.ox/mail/threadview', [
                             $('<i class="fa fa-chevron-down" aria-hidden="true">')
                         )
                     )
-                ).attr('role', 'toolbar')
+                ).attr('role', 'navigation')
             );
         }
     });
