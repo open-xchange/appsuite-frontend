@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-13 14:30+0100\n"
+"PO-Revision-Date: 2017-01-17 13:00+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -184,7 +184,6 @@ msgid "Light sky blue"
 msgstr "Helles Himmelblau"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
-#, fuzzy
 msgid "Plum"
 msgstr "Pflaumenfarben"
 
@@ -453,12 +452,11 @@ msgstr "Zu nächstem Jahrzehnt gehen"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#: apps/io.ox/files/actions/share.js apps/io.ox/files/actions/showlink.js
-#: apps/io.ox/files/mediaplayer.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
-#: apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/files/actions/share.js apps/io.ox/files/mediaplayer.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/source.js module:io.ox/mail apps/io.ox/mail/main.js
+#: apps/io.ox/mail/statistics.js apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "Schließen"
@@ -583,7 +581,6 @@ msgid "Never"
 msgstr "Nie"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#, fuzzy
 msgid "After a number of occurrences"
 msgstr "Nach einer Anzahl von Ereignissen"
 
@@ -596,7 +593,6 @@ msgid "Ends"
 msgstr "Endet"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#, fuzzy
 msgid "Occurrences"
 msgstr "Ereignisse"
 
@@ -2324,7 +2320,6 @@ msgid "The series ends on %1$s."
 msgstr "Die Serie endet am %1$s."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
 msgid "The series ends after one occurrence."
 msgid_plural "The series ends after %1$d occurences."
 msgstr[0] "Die Serie endet nach einem Ereignis."
@@ -2359,7 +2354,6 @@ msgid "Folder"
 msgstr "Ordner"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
-#: apps/io.ox/files/actions/showlink.js module:io.ox/files
 msgid "Direct link"
 msgstr "Direkter Link"
 
@@ -2617,7 +2611,7 @@ msgid ""
 "To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
-"Zum manuellen HInzufügen von Teilnehmern geben Sie einfach eine gültige E-"
+"Zum manuellen Hinzufügen von Teilnehmern geben Sie einfach eine gültige E-"
 "Mail-Adresse an (z.B. john.doe@beispiel.com oder \"John Doe\" <jd@beispiel."
 "com>)"
 
@@ -5493,11 +5487,6 @@ msgstr "Beschreibung hinzufügen"
 msgid "Size"
 msgstr "Größe"
 
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/mail/detail/links.js module:io.ox/mail
-msgid "Link"
-msgstr "Link"
-
 #. "Shares" in terms of "shared with others" ("Freigaben")
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
@@ -5972,10 +5961,6 @@ msgstr ""
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Send as internal link"
 msgstr "Als internen Link versenden"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Show internal link"
-msgstr "Internen Link anzeigen"
 
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Lock"
@@ -6901,9 +6886,8 @@ msgid "The account must be named"
 msgstr "Der Account muss benannt werden"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
-#, fuzzy
 msgid "This field is mandatory"
-msgstr "Dieses Feld muss ausgefüllt werden."
+msgstr "Dieses Feld muss ausgefüllt werden"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "This is not a valid email address"
@@ -7900,6 +7884,10 @@ msgstr "Tabellendokument"
 msgid "Tasks"
 msgstr "Aufgaben"
 
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
+msgid "Link"
+msgstr "Link"
+
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js
 msgid "Show entire message"
@@ -8330,9 +8318,8 @@ msgstr "Schrift mit fester Breite für Text-E-Mails verwenden"
 #. prettify or beautify
 #. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
 msgid "Prettify plain text mails"
-msgstr "Reine Textnachrichten verschönern"
+msgstr "Reine Textmails verschönern"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show requests for read receipts"
@@ -8370,9 +8357,8 @@ msgid "Register now"
 msgstr "Jetzt registrieren"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
 msgid "Font"
-msgstr "Schrift"
+msgstr "Schriftart"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
@@ -9992,6 +9978,8 @@ msgstr ""
 msgid ""
 "Invitation accepted but insufficient permissions to set default reminder"
 msgstr ""
+"Einladung akzeptiert. Jedoch unzureichende Berechtigungen zum Einstellen der "
+"Standarderinnerung."
 
 #. %1$s Appointment title
 #. %1$s task title
@@ -10866,6 +10854,9 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Show internal link"
+#~ msgstr "Internen Link anzeigen"
 
 #~ msgid "Every %1$s weeks on weekends."
 #~ msgstr "Alle %1$d Wochen an Wochenenden."
