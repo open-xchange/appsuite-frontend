@@ -35,7 +35,11 @@ define('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/handle
                     .addClass('secure' + (block ? ' block' : ''));
             };
         }
-        $.get(ox.apiRoot + '/saml/init?flow=login').done(function (data) {
+        var samlPath = '/saml';
+            if (ox.serverConfig.samlPath) {
+                samlPath = '/saml/' + ox.serverConfig.samlPath;
+            }
+        $.get(ox.apiRoot + samlPath + '/init?flow=login').done(function (data) {
             var baton = new ext.Baton({data: data});
             ext.point('io.ox.saml/login').invoke('handle', baton, baton);
         }).fail(function(jqXHR, textStatus, errorThrown) {
