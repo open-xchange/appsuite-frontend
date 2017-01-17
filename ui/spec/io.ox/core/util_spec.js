@@ -241,6 +241,12 @@ define(['io.ox/core/util'], function (util) {
                     .to.deep.equal(['"name" <email1@domain.tld>', '"another-name" <email2@domain.tld>', '"AND another-näme" <email3@domain.tld>']);
             });
 
+            it('recognizes addresses with special characters in local part', function () {
+                // full list: . ! # $ % & ' * + - / = ? ^ _ ` { | } ~
+                expect(util.getAddresses('email.1@x, email!2@x, email#3@x, email$4@x, email\'5@x, email/6@x, email{7}@x, email|8@x, email~9@x'))
+                    .to.deep.equal(['email.1@x', 'email!2@x', 'email#3@x', 'email$4@x', 'email\'5@x', 'email/6@x', 'email{7}@x', 'email|8@x', 'email~9@x']);
+            });
+
             it('recognizes addresses with escaped local part', function () {
                 expect(util.getAddresses('email1@domain.tld "email2"@domain.tld email3@domain.tld'))
                     .to.deep.equal(['email1@domain.tld', '"email2"@domain.tld', 'email3@domain.tld']);
