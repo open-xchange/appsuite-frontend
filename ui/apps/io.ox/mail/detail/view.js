@@ -448,7 +448,7 @@ define('io.ox/mail/detail/view', [
 
         onToggle: function (e) {
 
-            if (e.type === 'keydown' && e.which !== 13) return;
+            if (e.type === 'keydown' && e.which !== 13 && e.which !== 32) return;
 
             // ignore click on/inside <a> tags
             if ($(e.target).closest('a').length) return;
@@ -521,7 +521,6 @@ define('io.ox/mail/detail/view', [
         },
 
         toggle: function (state) {
-
             var $li = this.$el;
 
             if (state === undefined) {
