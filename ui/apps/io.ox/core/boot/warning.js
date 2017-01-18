@@ -25,7 +25,7 @@ define('io.ox/core/boot/warning', [
             if (ox.debug) return;
             var warning = gt('Warning!'),
                 message = gt('This is a browser feature for developers. If you were asked to copy and paste anything here, somebody might want to take over your account. Do not enter any script code without knowing what it does.');
-            console.log('%c' + warning, 'font-size: 32px; color: #ff0000');
+            console.log('%c' + warning, 'font-size: 32px; color: #df0000');
             console.log('%c' + message, 'font-size: 20px;');
         }
     });

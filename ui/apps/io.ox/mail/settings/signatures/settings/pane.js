@@ -193,7 +193,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             }
         })
         .on('close', function () {
-            baton.editor.destroy();
+            if (baton.editor) baton.editor.destroy();
         })
         .show();
 
