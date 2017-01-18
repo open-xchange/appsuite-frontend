@@ -122,23 +122,37 @@ define('io.ox/mail/common-extensions', [
         },
 
         from: function (baton) {
-
-            var data = baton.data,
-                single = !data.threadSize || data.threadSize === 1,
-                field = single && !isSearchActive(baton) && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
-                // get folder data to check capabilities:
-                // if bit 4096 is set, the server sorts by display name; if unset, it sorts by local part.
-                capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
-                isFromTo = baton.options.sort === 'from-to',
-                showDisplayName = !isFromTo || (capabilities & 4096),
-                unescapeDisplayName = !isFromTo,
-                reorderDisplayName = !isFromTo;
-
+            var opt = { folder: baton.data.folder_id, field: 'from', showDisplayName: true };
+            // push options through fromPipeline
+            _.each(extensions.fromPipeline, function (fn) { fn.call(this, baton, opt); });
             this.append(
                 $('<div class="from">').append(
-                    util.getFrom(data, { field: field, reorderDisplayName: reorderDisplayName, showDisplayName: showDisplayName, unescapeDisplayName: unescapeDisplayName })
+                    util.getFrom(baton.data, _.pick(opt, 'field', 'reorderDisplayName', 'showDisplayName', 'unescapeDisplayName'))
                 )
             );
+        },
+
+        fromPipeline: {
+            // field: from vs. to
+            field: function (baton, opt) {
+                if (baton.data.threadSize > 1) return;
+                if (account.is('sent|drafts', opt.folder)) opt.field = 'to';
+            },
+            // field: from vs. to
+            fieldSearch: function (baton, opt) {
+                if (!isSearchActive(baton)) return;
+                var app = baton.app && baton.app.get('find');
+                opt.field = app && account.is('sent|drafts', app.getFolderFacetValue()) ? 'to' : 'from';
+            },
+            // showDisplayName, reorderDisplayName and unescapeDisplayName
+            displayName: function (baton, opt) {
+                opt.reorderDisplayName = opt.unescapeDisplayName = (baton.options.sort !== 'from-to');
+                if (baton.options.sort !== 'from-to') return;
+                // get folder data to check capabilities:
+                // if bit 4096 is set, the server sorts by display name; if unset, it sorts by local part.
+                var capabilities = folderAPI.pool.getModel(opt.folder).get('capabilities') || 0;
+                opt.showDisplayName = (capabilities & 4096);
+            }
         },
 
         size: function (baton) {

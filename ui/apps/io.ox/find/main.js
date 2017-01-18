@@ -374,6 +374,12 @@ define('io.ox/find/main', [
             return (list[key] || []).indexOf(module) >= 0;
         };
 
+        app.getFolderFacetValue = function () {
+            if (!app.isActive()) return;
+            var facet = _(app.model.manager.getRequest()).findWhere({ facet: 'folder' });
+            return (facet || {}).value;
+        };
+
         // register event listeners
         function register() {
             var model = app.model,
