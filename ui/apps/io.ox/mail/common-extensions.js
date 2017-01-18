@@ -156,22 +156,41 @@ define('io.ox/mail/common-extensions', [
         },
 
         from: function (baton) {
-
-            var data = baton.data,
-                single = !data.threadSize || data.threadSize === 1,
-                field = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? 'to' : 'from',
-                // get folder data to check capabilities:
-                // if bit 4096 is set, the server sorts by display name; if unset, it sorts by local part.
-                capabilities = folderAPI.pool.getModel(data.folder_id).get('capabilities') || 0,
-                isFromTo = baton.options.sort === 'from-to',
-                mailAddress = util.getFrom(data, { field: field, showDisplayName: false }).text(),
-                showDisplayName = !isFromTo || (capabilities & 4096);
-
+            var opt = { folder: baton.data.folder_id, field: 'from', showDisplayName: true };
+            // push options through fromPipeline
+            _.each(extensions.fromPipeline, function (fn) { fn.call(this, baton, opt); });
             this.append(
-                $('<div class="from">').attr('title', mailAddress).append(
-                    util.getFrom(data, { field: field, reorderDisplayName: !isFromTo, showDisplayName: showDisplayName, unescapeDisplayName: !isFromTo })
+                $('<div class="from">').attr('title', opt.mailAddress).append(
+                    util.getFrom(baton.data, _.pick(opt, 'field', 'reorderDisplayName', 'showDisplayName', 'reorderDisplayName', 'unescapeDisplayName'))
                 )
             );
+        },
+
+        fromPipeline: {
+            // field: from vs. to
+            field: function (baton, opt) {
+                if (baton.data.threadSize > 1) return;
+                if (account.is('sent|drafts', opt.folder)) opt.field = 'to';
+            },
+            // field: from vs. to
+            fieldSearch: function (baton, opt) {
+                if (!isSearchResult(baton)) return;
+                var app = baton.app && baton.app.get('find');
+                opt.field = app && account.is('sent|drafts', app.getFolderFacetValue()) ? 'to' : 'from';
+            },
+            // showDisplayName, reorderDisplayName and unescapeDisplayName
+            displayName: function (baton, opt) {
+                opt.reorderDisplayName = opt.unescapeDisplayName = (baton.options.sort !== 'from-to');
+                if (baton.options.sort !== 'from-to') return;
+                // get folder data to check capabilities:
+                // if bit 4096 is set, the server sorts by display name; if unset, it sorts by local part.
+                var capabilities = folderAPI.pool.getModel(opt.folder).get('capabilities') || 0;
+                opt.showDisplayName = (capabilities & 4096);
+            },
+            // mailAddress
+            address: function (baton, opt) {
+                opt.mailAddress = util.getFrom(baton.data, { field: opt.field, showDisplayName: false }).text();
+            }
         },
 
         size: function (baton) {
