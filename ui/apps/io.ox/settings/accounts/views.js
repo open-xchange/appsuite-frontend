@@ -96,18 +96,21 @@ define('io.ox/settings/accounts/views', [
             },
 
             initialize: function () {
-                this.model.on('change', this.render, this);
+                // mail accounts are special, displayName might be different from account name, want account name, here
+                this.titleAttribute = this.model.get('accountType') === 'mail' ? 'name' : 'displayName';
+
+                this.listenTo(this.model, 'change', this.render);
             },
 
             render: function () {
                 var self = this,
-                    title = self.model.get('displayName');
+                    title = self.model.get(this.titleAttribute);
                 self.$el.attr({
                     'data-id': self.model.get('id'),
                     'data-accounttype': self.model.get('accountType')
                 });
 
-                self.$el.append(
+                self.$el.empty().append(
                     drawIcon(self.model.get('accountType')),
                     listUtils.makeTitle(title),
                     getAccountState(this), // show a possible account error
@@ -181,6 +184,7 @@ define('io.ox/settings/accounts/views', [
                 e.data = {
                     id: this.model.get('id'),
                     accountType: this.model.get('accountType'),
+                    model: this.model,
                     node: this.el
                 };
                 createExtpointForSelectedAccount(e);

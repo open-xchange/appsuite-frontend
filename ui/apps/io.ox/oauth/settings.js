@@ -41,39 +41,6 @@ define('io.ox/oauth/settings', [
                 relatedAccountsView.collection.push(accounts);
             });
 
-            function closeDialog() {
-                if (dialog) {
-                    dialog.close();
-                    dialog = null;
-                }
-            }
-
-            function displaySuccess() {
-                return function () {
-                    // TODO: Once we know how to notify user about results
-                    closeDialog();
-                };
-            }
-
-            function displayError() {
-                return function () {
-                    // TODO: Once we know how to notify user about results
-                };
-            }
-
-            function doSave() {
-                account.set('displayName', $displayNameField.val());
-                account.save()
-                    .then(displaySuccess(gt('Changes have been saved.')), displayError(gt('Something went wrong saving your changes.')));
-                closeDialog();
-            }
-
-            function doReauthorize() {
-                account.set('displayName', $displayNameField.val());
-                account.save()
-                    .then(displaySuccess(gt('You have reauthorized this account.')), displayError(gt('Something went wrong reauthorizing the account.')));
-            }
-
             $form = $('<div class="settings-detail-pane">').append(
                 $('<legend class="sectiontitle">').text(gt('OAuth application overview')),
                 $('<div class="form-horizontal">').append(
@@ -100,11 +67,14 @@ define('io.ox/oauth/settings', [
                 .addButton('cancel', gt('Cancel'), 'cancel')
                 .show()
                 .done(function (action) {
-                    if (action === 'save') {
-                        doSave();
-                    } else if (action === 'reauthorize') {
-                        doReauthorize();
-                    }
+                    if (action === 'cancel') return dialog.close();
+
+                    account.reauthorize({ force: action === 'reauthorize' }).then(function () {
+                        account.set('displayName', $displayNameField.val());
+                        return account.save();
+                    }).then(function () {
+                        dialog.close();
+                    });
                 });
         };
     }
