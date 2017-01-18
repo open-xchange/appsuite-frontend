@@ -142,6 +142,11 @@ define('io.ox/core/tk/flag-picker', [
         // attach flag-picker behavior on existing node
         attach: function (node, options) {
             this.appendDropdown(node, options.data);
+        },
+
+        colorName: function (val) {
+            if (!_.isNumber(val)) return;
+            return colorNames[_.invert(order)[val]];
         }
     };
 

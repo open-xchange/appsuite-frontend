@@ -51,6 +51,7 @@ define('io.ox/mail/common-extensions', [
                 a11yLabel;
 
             if (util.isUnseen(data)) parts.push(gt('Unread'));
+            if (baton.data.color_label) parts.push(gt('Flagged') + ' ' + flagPicker.colorName(baton.data.color_label));
             parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.received_date));
             if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
             if (data.attachment) parts.push(gt('has attachments'));
