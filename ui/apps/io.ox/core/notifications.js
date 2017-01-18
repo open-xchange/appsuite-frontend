@@ -353,8 +353,8 @@ define('io.ox/core/notifications', [
             this.badgeview.onToggle(true);
 
             $(document).on('keydown.notification', $.proxy(function (e) {
-                if (e.which === 27 && !(this.model.get('sidepopup'))) {
-                    // escapekey and no open sidepopup (escapekey closes the sidepopup then)
+                // if esc is pressed inside a dropdown menu we close the dropdown menu not the notificion are. Same goes for the sidepopup
+                if (e.which === 27 && !(this.model.get('sidepopup')) && !$(e.target).closest('.dropdown-menu', this.nodes.main).length) {
                     this.hide();
                 }
             }, this));

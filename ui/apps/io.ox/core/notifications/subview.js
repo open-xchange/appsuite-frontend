@@ -400,7 +400,7 @@ define('io.ox/core/notifications/subview', [
                 return;
             }
 
-            var cid = String($(e.currentTarget).parent().data('cid')),
+            var cid = e.which === 13 ? String($(e.currentTarget).data('cid')) : String($(e.currentTarget).parent().data('cid')),
                 api = this.model.get('api'),
                 fullModel = this.model.get('fullModel'),
                 sidepopupNode = notifications.nodes.sidepopup,

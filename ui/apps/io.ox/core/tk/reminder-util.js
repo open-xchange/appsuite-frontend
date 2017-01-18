@@ -38,7 +38,7 @@ define('io.ox/core/tk/reminder-util', [
                 );
         } else {
             // special link dropdown
-            var toggle = $('<a role="button" data-action="remind-again" data-toggle="dropdown" aria-haspopup="true" class="refocus">')
+            var toggle = $('<button type="button" data-action="remind-again" data-toggle="dropdown" aria-haspopup="true" class="refocus btn, btn-link">')
                 .text(gt('Remind me again'))
                 .append(
                     $('<i class="fa fa-chevron-down" aria-hidden="true">').css({ paddingLeft: '5px', textDecoration: 'none' })
