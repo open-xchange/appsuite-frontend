@@ -87,8 +87,8 @@ define('io.ox/core/attachments/view', [
                 // preview list
                 $('<div class="preview-container">').append(
                     $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
-                    $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>'),
-                    this.$preview
+                    this.$preview,
+                    $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
                 )
             );
 
@@ -102,14 +102,14 @@ define('io.ox/core/attachments/view', [
         renderHeader: function () {
 
             this.$header.append(
-                $('<a href="#" class="pull-right toggle-mode">')
-                    .append('<i class="fa" aria-hidden="true">'),
                 $('<a href="#" class="toggle-details">').append(
                     $('<i class="fa toggle-caret" aria-hidden="true">'),
                     $('<i class="fa fa-paperclip" aria-hidden="true">'),
                     $('<span class="summary">')
                 ),
-                $('<span class="links">')
+                $('<span class="links">'),
+                $('<a href="#" class="pull-right toggle-mode">')
+                    .append('<i class="fa" aria-hidden="true">')
             );
 
             this.renderSummary();
@@ -197,7 +197,7 @@ define('io.ox/core/attachments/view', [
 
         getScrollIndex: function () {
             // make sure we're always at a multiple of 120 (this.scrollStep)
-            return Math.round(this.$preview.scrollLeft() / this.scrollStep);
+            return Math.ceil(this.$preview.scrollLeft() / this.scrollStep);
         },
 
         getMaxScrollIndex: function () {
@@ -216,6 +216,10 @@ define('io.ox/core/attachments/view', [
     var Preview = Backbone.View.extend({
 
         className: 'preview',
+
+        events: {
+            'keydown': 'onKeydown',
+        },
 
         initialize: function () {
             this.listenTo(this.model, 'change:meta', function () {
@@ -265,8 +269,17 @@ define('io.ox/core/attachments/view', [
             } else {
                 this.fallback();
             }
+            this.$el.attr('tabindex', '0');
             return this;
-        }
+        },
+
+        onKeydown: function (e) {
+            if (e.which !== 13 && e.which !== 32) return;
+            $(e.target).trigger('click');
+            e.preventDefault();
+            e.stopPropagation();
+        },
+
     });
 
     var View = Backbone.View.extend({
