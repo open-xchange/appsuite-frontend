@@ -808,8 +808,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         $('<ul class="dropdown-menu" role="menu">')
                         .append(
                             _(colors).map(function (colorObject) {
-                                return $('<li>').append(
-                                    $('<a href="#" data-action="change-color">').append(
+                                return $('<li role="presentation">').append(
+                                    $('<a href="#" data-action="change-color" role="menuitem">').append(
                                         colorObject.value > 0 ? $('<span class="flag-example">').addClass('flag_' + colorObject.value) : $(),
                                         $.txt(colorObject.text)
                                     )

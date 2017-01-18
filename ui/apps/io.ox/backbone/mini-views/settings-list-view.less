@@ -9,6 +9,10 @@
             padding: 13px;
         }
 
+        &:focus {
+            outline: 2px solid #3c73aa;
+        }
+
         .list-item-title {
             .flex(1);
             .ellipsis();
@@ -37,17 +41,30 @@
                 display: inline-block;
             }
 
+            .dropdown-toggle, .action {
+                padding: 13px 16px;
+                margin:0;
+
+                &:focus {
+                    outline: 2px solid #3c73aa;
+                    text-decoration: underline;
+                }
+            }
+
             .remove {
 
                 padding: 13px 16px;
                 margin: 0;
                 margin-left: 10px;
 
-                &:hover {
+                &:hover, &:focus {
                     text-decoration: none;
                     background-color: #c00;
 
                     i { color: #fff; }
+                }
+                &:focus {
+                    outline: 2px solid #3c73aa;
                 }
 
                 i { color: #aaa; }

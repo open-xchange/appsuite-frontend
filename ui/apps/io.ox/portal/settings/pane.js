@@ -159,7 +159,7 @@ define('io.ox/portal/settings/pane', [
                 ),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(colorNames).map(function (name, color) {
-                        return $('<li>').append(
+                        return $('<li role="presentation">').append(
                             $('<a href="#" data-action="change-color" role="menuitem">').attr('data-color', color).append(
                                 $('<span class="color-example">').addClass('color-' + color),
                                 $.txt(name)
