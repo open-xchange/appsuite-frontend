@@ -105,21 +105,25 @@ define('io.ox/core/viewer/views/displayerview', [
         displayerView.autoplayMode = mode;
     }
 
-    function handleInitialStateForEnabledAutoplayMode(displayerView, slideIndex) {
+    function handleInitialStateForEnabledAutoplayMode(displayerView, fileId) {
         if (displayerView.canAutoplayImages && !displayerView.hasAutoplayStartAlreadyBeenTriggered()) { // only in case autoplay start has not yet been triggered.
             var
-                isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileRegistry[slideIndex];
+                isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileRegistry[fileId];
 
             setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibilityOfAutoplayControl);
 
             handleToggleAutoplayMode({}, displayerView, 'pausing');
         }
     }
-    function handleSlideChangeForEnabledAutoplayMode(displayerView, slideIndex) {
+    function handleSlideChangeForEnabledAutoplayMode(displayerView) {
         if (displayerView.canAutoplayImages) {
+            var
+                slideIndex = displayerView.activeIndex;
+
             if (displayerView.autoplayMode !== 'running') { // only in case of autoplay is not running at all.
                 var
-                    isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileRegistry[slideIndex];
+                    fileId = displayerView.collection.models[slideIndex].attributes.id,
+                    isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileRegistry[fileId];
 
                 setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibilityOfAutoplayControl);
             } else {
@@ -145,9 +149,9 @@ define('io.ox/core/viewer/views/displayerview', [
     }
     function handleDisplayerItemLeave(event) {
         var
-            $toElement = $(event.toElement);
+            $relatedTarget = $(event.relatedTarget); // chrome: `toElement` vs ffx: `relatedTarget`
 
-        if (!$toElement.hasClass('autoplay-button') && !$toElement.hasClass('fa-play') && !$toElement.hasClass('fa-pause')) {
+        if (!$relatedTarget.hasClass('autoplay-button') && !$relatedTarget.hasClass('fa-play') && !$relatedTarget.hasClass('fa-pause')) {
             this.carouselRoot.removeClass('autoplay-controls-visible');
         }
     }
@@ -326,11 +330,11 @@ define('io.ox/core/viewer/views/displayerview', [
 
         initializeAutoplayImageModeData: function () {
             var
-                fileObjectCollection  = this.collection,
-                imageFileRegistry     = fileObjectCollection.reduce(function (map, fileItem, idx/*, list*/) {
-                    if (fileItem.isImage()) {
+                fileModelList     = this.collection.models,
+                imageFileRegistry = fileModelList.reduce(function (map, fileModel/*, idx, list*/) {
+                    if (fileModel.isImage()) {
 
-                        map[idx] = fileItem;
+                        map[fileModel.attributes.id] = fileModel;
                     }
                     return map;
 
@@ -510,11 +514,11 @@ define('io.ox/core/viewer/views/displayerview', [
          * @returns {jQuery.Promise}
          *  a Promise of a Deferred object that will be resolved with a jQuery object
          */
-        createSlides: function (index) {
+        createSlides: function (index, fileId) {
             var self = this,
                 indices = this.getSlideLoadRange(index, this.preloadOffset, 'both');
 
-            handleInitialStateForEnabledAutoplayMode(this, index);
+            handleInitialStateForEnabledAutoplayMode(this, fileId);
 
             return $.when.apply(this, _(indices).map(this.createView.bind(this))).then(function () {
                 // order slides according to index
@@ -1060,7 +1064,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 this.activeIndex = this.normalizeSlideIndex(this.activeIndex + (preloadDirection === 'right' ? 1 : -1));
                 this.loadSlide(preloadDirection);
             }
-            handleSlideChangeForEnabledAutoplayMode(this, this.activeIndex);
+            handleSlideChangeForEnabledAutoplayMode(this);
 
             if (this.autoplayMode !== 'running') {  // - only in case of autoplay is not running at all.
 
@@ -1173,26 +1177,30 @@ define('io.ox/core/viewer/views/displayerview', [
 
         onAutoplayStart: function () {
             var
-                self = this,
-                swiper = this.swiper,
+                self    = this,
+                swiper  = this.swiper,
 
-                imageFileModels = Object.keys(this.imageFileRegistry).map(function (key) {
+                imageFileModelList = Object.keys(this.imageFileRegistry).map(function (key) {
                     return self.imageFileRegistry[key];
+                }),
+                fileModelList = this.collection.models,
+                activeFileId = fileModelList[this.activeIndex].attributes.id,
+                activeIndex = imageFileModelList.findIndex(function (fileModel/*, idx, list*/) {
+                    return (fileModel.attributes.id === activeFileId);
                 });
 
             this.collectionBackup = this.collection.clone();
-            this.collection.reset(imageFileModels);
+            this.collection.reset(imageFileModelList);
 
             this.slideViews = {};
 
             swiper.destroyLoop();
             swiper.wrapper.empty();
 
-            // recalculate active index (can change due to overflow)
-            this.activeIndex = this.normalizeSlideIndex(this.activeIndex);
+            this.activeIndex = activeIndex + 1; // Note: all of a sudden Zero based index changes to swiper index style thatb is based on 0+1.
 
             // create slides from file collection and append them to the carousel
-            this.createSlides(this.activeIndex).done(function success() {
+            this.createSlides(this.activeIndex, activeFileId).done(function success() {
                 swiper.createLoop();
 
                 // recalculate swiper index
@@ -1201,13 +1209,6 @@ define('io.ox/core/viewer/views/displayerview', [
                 swiper.update(true);
 
                 self.onSlideChangeEnd(swiper);
-
-                if (self.collection.length <= 1) {
-                    swiper.destroyLoop();
-                    swiper.params.loop = false;
-                    swiper.fixLoop();
-                    swiper.update(true);
-                }
             });
         },
 
@@ -1215,8 +1216,15 @@ define('io.ox/core/viewer/views/displayerview', [
             window.clearTimeout(this.timeoutIdAutoplay);
 
             var
-                swiper = this.swiper,
-                self = this;
+                self    = this,
+                swiper  = this.swiper,
+
+                imageFileModelList = this.collection.models,
+                fileModelList = this.collectionBackup.models,
+                activeFileId = imageFileModelList[this.activeIndex].attributes.id,
+                activeIndex = fileModelList.findIndex(function (fileModel/*, idx, list*/) {
+                    return (fileModel.attributes.id === activeFileId);
+                });
 
             this.collection.reset(this.collectionBackup.models);
             this.collectionBackup = null;
@@ -1226,8 +1234,7 @@ define('io.ox/core/viewer/views/displayerview', [
             swiper.destroyLoop();
             swiper.wrapper.empty();
 
-            // recalculate active index (can change due to overflow)
-            this.activeIndex = this.normalizeSlideIndex(this.activeIndex);
+            this.activeIndex = activeIndex + 1; // Note: all of a sudden Zero based index changes to swiper index style thatb is based on 0+1.
 
             // create slides from file collection and append them to the carousel
             this.createSlides(this.activeIndex).done(function success() {
@@ -1239,13 +1246,6 @@ define('io.ox/core/viewer/views/displayerview', [
                 swiper.update(true);
 
                 self.onSlideChangeEnd(swiper);
-
-                if (self.collection.length <= 1) {
-                    swiper.destroyLoop();
-                    swiper.params.loop = false;
-                    swiper.fixLoop();
-                    swiper.update(true);
-                }
             });
         },
 
