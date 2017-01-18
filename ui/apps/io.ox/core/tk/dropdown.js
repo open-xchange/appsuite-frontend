@@ -75,7 +75,7 @@
                 }
             }
 
-            $this.attr('aria-expanded', 'false');
+            $this.attr('aria-expanded', false);
             $parent.removeClass('open').trigger($.Event('hidden.bs.dropdown', relatedTarget));
         });
     }
@@ -161,7 +161,7 @@
 
             if (e.isDefaultPrevented()) return;
 
-            $this.attr('aria-expanded', 'true');
+            $this.attr('aria-expanded', true);
 
             $parent
                 .toggleClass('open')
