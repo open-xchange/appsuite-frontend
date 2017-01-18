@@ -28,6 +28,13 @@ define('io.ox/files/settings/pane', [
         return settings.isConfigurable(id);
     }
 
+    function optionsAutoplayPause() {
+        return _.map([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30, 35, 40, 50, 60], function (i) {
+            i = String(i);
+            return { label: gt.noI18n(i), value: i };
+        });
+    }
+
     var POINT = 'io.ox/files/settings/detail';
 
     settings.on('change', function () {
@@ -99,6 +106,34 @@ define('io.ox/files/settings/pane', [
                         $('<h2>').text(gt('Adding files with identical names'))
                     ),
                     new mini.RadioView({ list: preferences, name: 'uploadHandling', model: settings }).render().$el
+                )
+            );
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 400,
+        id: 'displayerviewAutoplay',
+        draw: function () {
+            var preferences = [
+                { label: gt('Loop once only'), value: 'loopOnceOnly' },
+                { label: gt('Keep looping endlessly'), value: 'loopEndlessly' }
+            ];
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle expertmode').append(
+                        $('<h2>').text(gt('Slideshow / Autoplay mode'))
+                    ),
+                    new mini.RadioView({ list: preferences, name: 'autoplayLoopMode', model: settings }).render().$el,
+
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('row').append(
+                            $('<label>').attr('for', 'autoplayPause').addClass('control-label col-sm-4').text(gt('Autoplay pause in seconds')),
+                            $('<div>').addClass('col-sm-4').append(
+                                new mini.SelectView({ list: optionsAutoplayPause(), name: 'autoplayPause', model: settings, id: 'autoplayPause', className: 'form-control' }).render().$el
+                            )
+                        )
+                    )
                 )
             );
         }

@@ -19,12 +19,13 @@ define('io.ox/core/viewer/views/displayerview', [
 
     'static/3rd.party/bigscreen/bigscreen.min.js',
 
+    'settings!io.ox/files',
     'gettext!io.ox/core',
 
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
 
-], function (FilesAPI, TypesRegistry, DisposableView, Util, BigScreen, gt) {
+], function (FilesAPI, TypesRegistry, DisposableView, Util, BigScreen, FilesSettings, gt) {
 
     'use strict';
 
@@ -126,8 +127,31 @@ define('io.ox/core/viewer/views/displayerview', [
                     isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileRegistry[fileId];
 
                 setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibilityOfAutoplayControl);
+
+            } else if (IS_LOOP_ONCE_ONLY && (typeof displayerView.autoplaySlideCount === 'number')) {
+
+                displayerView.autoplaySlideCount = (displayerView.autoplaySlideCount + 1);
+                if (displayerView.autoplaySlideCount === displayerView.collection.length) {
+
+                    window.clearTimeout(displayerView.timeoutIdAutoplay);
+
+                    displayerView.timeoutIdAutoplay = window.setTimeout((function (displayerView) {
+                        return function () {
+                            if (displayerView.fullscreen) {
+
+                                displayerView.toggleFullscreen(false);
+                            } else {
+                                deregisterAutoplayEventHandlingForPreviousNextControl(displayerView);
+                                displayerView.onAutoplayStop();
+                            }
+                        };
+                    }(displayerView)), AUTOPLAY_PAUSE__WHILST_RUNNING);
+
+                } else {
+                    triggerDisplayNextAutoplaySlide(displayerView, slideIndex, AUTOPLAY_PAUSE__WHILST_RUNNING);
+                }
             } else {
-                triggerDisplayNextAutoplaySlide(displayerView, slideIndex, AUTOPLAY_DELAY__WHILST_RUNNING);
+                triggerDisplayNextAutoplaySlide(displayerView, slideIndex, AUTOPLAY_PAUSE__WHILST_RUNNING);
             }
         }
     }
@@ -245,13 +269,21 @@ define('io.ox/core/viewer/views/displayerview', [
         displayerView.$el.focus();
     }
 
-    function requireAutoplayDelayLazily() {
-        if (!AUTOPLAY_DELAY__WHILST_RUNNING) {
-            AUTOPLAY_DELAY__WHILST_RUNNING = 5000; // from user settings or by default/fallback according to https://jira.open-xchange.com/browse/DOCS-670
+    function requireAutoplayUserSettings() {
+        // from user settings or by default/fallback according to https://jira.open-xchange.com/browse/DOCS-670
+
+        IS_LOOP_ENDLESSLY = (String(FilesSettings.get('autoplayLoopMode')).toLowerCase() === 'loopendlessly'); // default value equals true.
+        IS_LOOP_ONCE_ONLY = !IS_LOOP_ENDLESSLY;
+
+        AUTOPLAY_PAUSE__WHILST_RUNNING = (Number(FilesSettings.get('autoplayPause')) * 1000); // value of 'autoplayPause' in seconds
+        if (!isFinite(AUTOPLAY_PAUSE__WHILST_RUNNING)) {
+            AUTOPLAY_PAUSE__WHILST_RUNNING = 5000; // default/fallback value.
         }
     }
     var
-        AUTOPLAY_DELAY__WHILST_RUNNING,
+        IS_LOOP_ENDLESSLY,
+        IS_LOOP_ONCE_ONLY,
+        AUTOPLAY_PAUSE__WHILST_RUNNING,
         AUTOPLAY_DELAY__WHILE_STARTING = 1000;
 
     /**
@@ -292,6 +324,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
             // a backup of the current collection of every displayer file object
             this.collectionBackup = null;
+            // number value based slide counter for auto exiting in case autoplay is supposed to loop only once.
+            this.autoplaySlideCount = null;
             // whether or not displayerview is able of auto-play mode that will display image-type file-items exclusively.
             this.canAutoplayImages = false;
             // key value object (map/index/registry) of all of a file-object collection's image-type's stored by theirs collection's index.
@@ -442,7 +476,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     autoplay.on('click', handleToggleAutoplayControl);
                     fullscreen.on('click', handleToggleFullscreenControl);
 
-                    requireAutoplayDelayLazily();
+                    requireAutoplayUserSettings(); // call every time for settings might have been changed.
                 }
             }
 
@@ -1209,6 +1243,10 @@ define('io.ox/core/viewer/views/displayerview', [
                 swiper.update(true);
 
                 self.onSlideChangeEnd(swiper);
+
+                if (IS_LOOP_ONCE_ONLY) {
+                    self.autoplaySlideCount = 0;
+                }
             });
         },
 
@@ -1245,6 +1283,9 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 swiper.update(true);
 
+                if (IS_LOOP_ONCE_ONLY) {
+                    self.autoplaySlideCount = null;
+                }
                 self.onSlideChangeEnd(swiper);
             });
         },
@@ -1315,13 +1356,17 @@ define('io.ox/core/viewer/views/displayerview', [
             this.loadedSlides = null;
             this.slideViews = null;
 
+            this.collectionBackup = null;
+            this.autoplaySlideCount = null;
+
             this.canAutoplayImages = null;
             this.imageFileRegistry = null;
             this.autoplayMode = null;
             this.timeoutIdAutoplay = null;
-            this.previousNextControlClickWhileRunningAutoplayHandler = null;
 
+            this.previousNextControlClickWhileRunningAutoplayHandler = null;
             this.displayerviewMousemoveClickHandler = null;
+            this.fullscreen = null;
 
             return this;
         }
