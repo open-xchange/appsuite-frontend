@@ -47,9 +47,15 @@ define('io.ox/core/notifications', [
             self.handledNotificationInfo = false;
             this.badgeview = new badgeview.view({ model: new badgeview.model() });
             this.badgeview.$el.on('keydown', function (e) {
-                // toggle on space key, just like a dropdown
-                if (e.which === 32) {
-                    self.toggle();
+                // open space key and down arrow, just like a dropdown
+                // if already open, focus first item
+                if (e.which === 32 || e.which === 40) {
+                    if (self.isOpen()) {
+                        // try to focus first item
+                        var firstItem = self.nodes.main.find(':tabbable').first();
+                        if (firstItem.length > 0) firstItem.focus();
+                    }
+                    self.show();
                 }
             });
             //close when clicked outside, since we don't have the overlay anymore
@@ -360,7 +366,7 @@ define('io.ox/core/notifications', [
             }, this));
 
             // try to focus first item; focus badge otherwise
-            var firstItem = this.nodes.main.find('[tabindex="0"]').first();
+            var firstItem = this.nodes.main.find(':tabbable').first();
             if (firstItem.length > 0) firstItem.focus(); else this.badgeview.$el.focus();
 
             this.model.set('status', 'open');
