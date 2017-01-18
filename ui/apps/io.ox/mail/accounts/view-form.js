@@ -435,7 +435,7 @@ define.async('io.ox/mail/accounts/view-form', [
             //
             var serverSettingsIn = $('<fieldset class="data_incoming">').append(
                 $('<legend class="sectiontitle">').text(gt('Incoming server')),
-                $('<form class="form-horizontal" role="form">').append(
+                $('<form class="form-horizontal">').append(
                     // server type
                     group(
                         label('mail_protocol', gt('Server type')),
@@ -507,7 +507,7 @@ define.async('io.ox/mail/accounts/view-form', [
 
             var serverSettingsOut = $('<fieldset class="data_outgoing">').append(
                 $('<legend class="sectiontitle">').text(gt('Outgoing server (SMTP)')),
-                $('<form class="form-horizontal" role="form">').append(
+                $('<form class="form-horizontal">').append(
                     // server
                     group(
                         label('transport_server', gt('Server name')),
@@ -568,7 +568,7 @@ define.async('io.ox/mail/accounts/view-form', [
 
             var serverSettingsFolder = $('<fieldset class="data_folders">').append(
                 $('<legend class="sectiontitle">').text(gt('Standard folders')),
-                $('<form class="form-horizontal" role="form">').append(
+                $('<form class="form-horizontal">').append(
                     // add four input fields
                     _('sent trash drafts spam archive'.split(' ')).map(function (folder) {
 
@@ -602,7 +602,7 @@ define.async('io.ox/mail/accounts/view-form', [
             this.append(
                 $('<fieldset class="data_account">').append(
                     $('<legend class="sectiontitle">').text(gt('Account settings')),
-                    $('<form class="form-horizontal" role="form">').append(
+                    $('<form class="form-horizontal">').append(
                         // account name
                         group(
                             label('name', gt('Account name')),

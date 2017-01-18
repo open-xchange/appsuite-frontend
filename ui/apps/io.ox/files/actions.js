@@ -623,6 +623,7 @@ define('io.ox/files/actions', [
         // general capability and folder check
         model = folderAPI.pool.getModel(id);
         if (!model.isShareable()) return false;
+        if (model.is('trash')) return false;
         return type === 'invite' ? model.supportsInviteGuests() : true;
     }
 

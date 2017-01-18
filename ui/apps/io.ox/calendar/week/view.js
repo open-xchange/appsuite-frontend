@@ -277,13 +277,17 @@ define('io.ox/calendar/week/view', [
             settings.on('change', function (key) {
                 switch (key) {
                     case 'interval':
-                        // save scroll ratio
-                        var scrollRatio = (self.pane.scrollTop() + self.pane.height() / 2) / self.height(),
-                            calculateTimescale =  function () {
-                                // reset height of .time fields, since the initial height comes from css
-                                $('.time', self.pane).css('height', '');
-                                self.adjustCellHeight(false);
-                            };
+                        var calculateTimescale = function () {
+                            // save scroll ratio
+                            var scrollRatio = (self.pane.scrollTop() + self.pane.height() / 2) / self.height();
+                            // reset height of .time fields, since the initial height comes from css
+                            $('.time', self.pane).css('height', '');
+                            self.adjustCellHeight(false);
+                            self.renderAppointments();
+                            // restore scroll position from ratio
+                            self.pane.scrollTop(scrollRatio * self.height() - self.pane.height() / 2);
+                        };
+
                         self.gridSize = 60 / settings.get('interval', 30);
                         self.renderTimeslots();
                         self.applyTimeScale();
@@ -295,9 +299,6 @@ define('io.ox/calendar/week/view', [
                         } else {
                             calculateTimescale();
                         }
-                        self.renderAppointments();
-                        // restore scroll position from ratio
-                        self.pane.scrollTop(scrollRatio * self.height() - self.pane.height() / 2);
                         break;
                     case 'startTime':
                     case 'endTime':
@@ -1046,6 +1047,9 @@ define('io.ox/calendar/week/view', [
                 var timeslotHeight = timeslots.get(0).getBoundingClientRect().height,
                     borderWidth = parseFloat(timeLabel.css('border-bottom-width'), 10);
                 timeLabel.height(timeslotHeight * this.gridSize - borderWidth);
+                // get actual cellHeight from timeslot. This can be different to the computed size due to scaling inside the browser (see Bug 50976)
+                // it is important to use getBoundingClientRect as this contains the decimal places of the actual height ($.fn.height does not)
+                this.cellHeight = timeslots.get(0).getBoundingClientRect().height;
                 // if the cell height changes we also need to redraw all appointments
                 if (redraw) this.renderAppointments();
             }

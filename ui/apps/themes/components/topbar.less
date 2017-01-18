@@ -357,7 +357,7 @@
     }
 
     i.fa-refresh {
-        @color: rgba(255, 255, 255, 0.9);
+        @color: #fff;
 
         color: @color;
         .transition(color 0.2s linear);
@@ -365,7 +365,7 @@
         /* http://stackoverflow.com/questions/7947385/hovering-over-css-transition-in-safari-lightens-certain-font-color */
         -webkit-transform: translateZ(0);
 
-        &.fa-spin { color: #fff; }
+        &.fa-spin { color: @color; }
 
         &.fa-spin-paused {
             -webkit-animation-play-state: paused;

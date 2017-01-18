@@ -99,27 +99,31 @@ define('io.ox/mail/compose/signatures', [
             var content = this.get('attachments').at(0).get('content'),
                 signatures = this.get('signatures'), signature;
 
-            // get id of currently drawn signature
-            signature = _.find(signatures, function (signature) {
-                var raw = getRaw(signature);
-                // ignore empty signatures (match empty content)
-                if (_.isEmpty(raw)) return;
-                // HTML: node content matches signature
-                if (this.get('editorMode') === 'html') {
-                    var node = $('<div>').append(content).children('div[class$="io-ox-signature"]:last');
-                    return stripWhitespace(node.text()) === raw;
-                }
-                // TEXT: contains
-                return stripWhitespace(content).indexOf(raw) > -1;
-            }.bind(this));
+            // when editing a draft we might have a signature
+            if (this.get('mode') === 'edit') {
 
-            if (!signature) {
-                if (this.get('mode') === 'edit') return;
-                return this.set('signatureId', this.getDefaultSignature(), { silent: false });
+                // get id of currently drawn signature
+                signature = _.find(signatures, function (signature) {
+                    var raw = getRaw(signature);
+                    // ignore empty signatures (match empty content)
+                    if (_.isEmpty(raw)) return;
+                    // HTML: node content matches signature
+                    if (this.get('editorMode') === 'html') {
+                        var node = $('<div>').append(content).children('div[class$="io-ox-signature"]:last');
+                        return stripWhitespace(node.text()) === raw;
+                    }
+                    // TEXT: contains
+                    return stripWhitespace(content).indexOf(raw) > -1;
+                }.bind(this));
+
+                if (signature) {
+                    this.set('signatureIsRendered', true);
+                    this.set('signatureId', signature.id, { silent: false });
+                }
+            } else {
+                // if not editing a draft we add the default signature (if it exists)
+                this.set('signatureId', this.getDefaultSignature(), { silent: false });
             }
-            // special handling for edit draft
-            this.set('signatureIsRendered', true);
-            this.set('signatureId', signature.id, { silent: false });
         },
 
         // set default signature dependant on mode, there are settings that correspond to this

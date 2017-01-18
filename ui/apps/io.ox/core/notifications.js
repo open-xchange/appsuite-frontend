@@ -37,13 +37,27 @@ define('io.ox/core/notifications', [
         id: 'io-ox-notifications-display',
         events: {
             'click .clear-area-button': 'hide',
-            'click .hide-area-button': 'hideAll'
+            'click .hide-area-button': 'hideAll',
+            'keydown :tabbable': 'onKeydown',
+            'focus :tabbable': 'focusHover'
         },
         initialize: function () {
             var self = this;
             self.bannerHeight = 0;
             self.handledNotificationInfo = false;
             this.badgeview = new badgeview.view({ model: new badgeview.model() });
+            this.badgeview.$el.on('keydown', function (e) {
+                // open space key and down arrow, just like a dropdown
+                // if already open, focus first item
+                if (e.which === 32 || e.which === 40) {
+                    if (self.isOpen()) {
+                        // try to focus first item
+                        var firstItem = self.nodes.main.find(':tabbable').first();
+                        if (firstItem.length > 0) firstItem.focus();
+                    }
+                    self.show();
+                }
+            });
             //close when clicked outside, since we don't have the overlay anymore
             //does not work with some dropdowns though (they prevent event bubbling), but the notification popup is in the background then
             $(document.body).on('click', function (e) {
@@ -109,8 +123,8 @@ define('io.ox/core/notifications', [
                 self.$el.prepend(
                     $('<div class=notification-area-header>').append(
                         $('<h1 class="notification-area-title">').text(gt('Notifications')),
-                        $('<button class="btn btn-link clear-area-button fa fa-times">').attr('aria-label', gt('Close notification area')),
-                        $('<a role=button class="btn btn-link hide-area-button">').text(gt('Notify me again later'))
+                        $('<button type="button" class="btn btn-link clear-area-button fa fa-times">').attr('aria-label', gt('Close notification area')),
+                        $('<button type="button" class="btn btn-link hide-area-button">').text(gt('Notify me again later'))
                     )
                 );
             }
@@ -225,7 +239,47 @@ define('io.ox/core/notifications', [
             } else {
                 cont();
             }
+        },
 
+        onKeydown: function (e) {
+            var items = [];
+            switch (e.which) {
+                // left or up arrow
+                case 37:
+                case 38:
+                    items = this.nodes.main.find(':tabbable');
+                    // add length once to avoid negative modulo operation, javascript has some issues with these
+                    var prevIndex = (_(items).indexOf(e.target) - 1 + items.length) % items.length;
+                    items[prevIndex].focus();
+                    break;
+                // right or down arrow
+                case 39:
+                case 40:items = this.nodes.main.find(':tabbable');
+                    var nextIndex = (_(items).indexOf(e.target) + 1) % items.length;
+                    items[nextIndex].focus();
+                    break;
+                // tab
+                case 9:
+                    // build a tabTrap so the menu behaves like a dropdown
+                    items = this.nodes.main.find(':tabbable');
+                    if (e.shiftKey && items[0] === e.target) {
+                        e.preventDefault();
+                        items[items.length - 1].focus();
+                    }
+                    if (!e.shiftKey && items.length && items[items.length - 1] === e.target) {
+                        e.preventDefault();
+                        items[0].focus();
+                    }
+                    break;
+                // no default
+            }
+            items = null;
+        },
+
+        // focus on an element inside an item should highlight the item as if the mouse hovers over it
+        focusHover: function (e) {
+            this.nodes.main.find('.item').removeClass('has-focus');
+            $(e.target).closest('.item', this.nodes.main).addClass('has-focus');
         },
 
         onCloseSidepopup: function () {
@@ -305,14 +359,14 @@ define('io.ox/core/notifications', [
             this.badgeview.onToggle(true);
 
             $(document).on('keydown.notification', $.proxy(function (e) {
-                if (e.which === 27 && !(this.model.get('sidepopup'))) {
-                    // escapekey and no open sidepopup (escapekey closes the sidepopup then)
+                // if esc is pressed inside a dropdown menu we close the dropdown menu not the notificion are. Same goes for the sidepopup
+                if (e.which === 27 && !(this.model.get('sidepopup')) && !$(e.target).closest('.dropdown-menu', this.nodes.main).length) {
                     this.hide();
                 }
             }, this));
 
             // try to focus first item; focus badge otherwise
-            var firstItem = this.nodes.main.find('[tabindex="0"]').first();
+            var firstItem = this.nodes.main.find(':tabbable').first();
             if (firstItem.length > 0) firstItem.focus(); else this.badgeview.$el.focus();
 
             this.model.set('status', 'open');

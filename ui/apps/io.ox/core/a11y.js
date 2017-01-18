@@ -61,7 +61,7 @@ define('io.ox/core/a11y', [], function () {
 
     $(document).on('keydown.bs.dropdown.data-api', 'ul.dropdown-menu[role="menu"]', dropdownTrapFocus);
 
-    $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"], ul.launchers', menubarKeydown);
+    $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"]:not(.classic-toolbar), ul.launchers', menubarKeydown);
 
     $(document).on('mousedown', '.focusable, .scrollable[tabindex]', function (e) {
         respondToNonKeyboardFocus(e.currentTarget);

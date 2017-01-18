@@ -40,7 +40,7 @@ define('io.ox/mail/categories/tabs', [
             this.collection = api.collection;
 
             // a11y
-            this.$el.attr({ 'role': 'navigation', 'aria-label': gt('Inbox categories') });
+            this.$el.attr({ 'role': 'toolbar', 'aria-label': gt('Inbox categories') });
 
             // dnd
             dnd.enable({ draggable: true, container: this.$el, selection: this.selection, delegate: true, dropzone: true, dropzoneSelector: '.category' });

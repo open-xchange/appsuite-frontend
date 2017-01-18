@@ -55,6 +55,7 @@ define('plugins/portal/quota/register', [
                 usage: quota.mail.countuse,
                 quotaField: 'countquota',
                 usageField: 'countuse',
+                renderUnlimited: false,
                 name: 'mailcount',
                 title: gt('Mail count quota'),
                 sizeFunction: function (name) {

@@ -30,7 +30,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         },
 
         createToolbar: function () {
-            return $('<ul class="classic-toolbar" role="navigation">')
+            return $('<ul class="classic-toolbar" role="toolbar">')
                 //#. screenreader label for main toolbar
                 .attr({ 'aria-label': this.options.title ? gt('%1$s Toolbar', this.options.title) : gt('Actions. Use cursor keys to navigate.') })
                 .tooltip({
@@ -57,7 +57,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         },
 
         getButtons: function () {
-            return this.$el.find('ul.classic-toolbar > li > a');
+            return this.$el.find('ul.classic-toolbar > li > a').not(':hidden');
         },
 
         disableButtons: function () {
@@ -92,30 +92,17 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
             if (!/(37|38|39|40)/.test(e.which) || e.altKey || e.ctrlKey || e.shiftKey) {
                 return;
             }
+            // Refresh buttons
+            this.$links = this.getButtons();
 
             var index = (this.$links.index($(document.activeElement)) || 0);
 
             if (index < 0) return;
 
-            switch (e.which) {
-
-                // LEFT and UP
-                case 37:
-                case 38:
-                    index -= 1;
-                    break;
-
-                // RIGHT
-                case 39:
-                    index += 1;
-                    break;
-
-                // DOWN
-                // case 40: don't use down button because of dropdowns
-
-                default:
-                    break;
-            }
+            // LEFT and UP
+            if (/37|38/.test(e.which)) index -= 1;
+            // RIGHT / DOWN (DOWN except if dropdown)
+            else if (/39|40/.test(e.which) && $(e.currentTarget).not('[data-toggle="dropdown"]')) index += 1;
 
             this.$links
                 .attr('tabindex', -1)

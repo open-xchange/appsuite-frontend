@@ -437,6 +437,8 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (_.device('smartphone')) return;
+                // trash or subfolders do not support sharing or permission changes
+                if (api.is('trash', baton.data)) return;
 
                 // check if folder can be shared
                 var id = String(baton.data.id),

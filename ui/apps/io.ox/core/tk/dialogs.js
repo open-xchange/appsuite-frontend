@@ -335,7 +335,6 @@ define('io.ox/core/tk/dialogs', [
             var button = $.button(opt);
             nodes.buttons.push(button);
             return button.addClass(options.classes).attr({
-                role: 'button',
                 type: 'button'
             });
         };
