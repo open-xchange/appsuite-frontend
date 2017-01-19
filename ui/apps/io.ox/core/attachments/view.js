@@ -107,13 +107,13 @@ define('io.ox/core/attachments/view', [
         renderHeader: function () {
 
             this.$header.append(
-                $('<a href="#" class="toggle-details" aria-expanded="false">').append(
+                $('<a href="#" class="toggle-details" aria-expanded="false" role="button">').append(
                     $('<i class="fa toggle-caret" aria-hidden="true">'),
                     $('<i class="fa fa-paperclip" aria-hidden="true">'),
                     $('<span class="summary">')
                 ),
                 $('<span class="links">'),
-                $('<a href="#" class="pull-right toggle-mode">')
+                $('<a href="#" class="pull-right toggle-mode" role="button">')
                     .append('<i class="fa" aria-hidden="true">')
             );
 
