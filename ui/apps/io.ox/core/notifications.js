@@ -47,8 +47,8 @@ define('io.ox/core/notifications', [
             self.handledNotificationInfo = false;
             this.badgeview = new badgeview.view({ model: new badgeview.model() });
             this.badgeview.$el.on('keydown', function (e) {
-                // open space key and down arrow, just like a dropdown
-                // if already open, focus first item
+                // open on space key, up and down arrow, just like a dropdown
+                // if already open, focus first item (last on arrow up)
                 if (e.which === 32 || e.which === 40) {
                     if (self.isOpen()) {
                         // try to focus first item
@@ -56,6 +56,13 @@ define('io.ox/core/notifications', [
                         if (firstItem.length > 0) firstItem.focus();
                     }
                     self.show();
+                } else if (e.which === 38) {
+                    if (self.isOpen()) {
+                        // try to focus last item
+                        var lastItem = self.nodes.main.find(':tabbable').last();
+                        if (lastItem.length > 0) lastItem.focus();
+                    }
+                    self.show({ focus: 'last' });
                 }
             });
             //close when clicked outside, since we don't have the overlay anymore
@@ -242,20 +249,31 @@ define('io.ox/core/notifications', [
         },
 
         onKeydown: function (e) {
-            var items = [];
+            var items = [],
+                closest = null;
             switch (e.which) {
                 // left or up arrow
                 case 37:
                 case 38:
-                    items = this.nodes.main.find(':tabbable');
-                    // add length once to avoid negative modulo operation, javascript has some issues with these
-                    var prevIndex = (_(items).indexOf(e.target) - 1 + items.length) % items.length;
+                    items = this.nodes.main.find('.item');
+                    closest = $(e.target).closest('.item', this.nodes.main);
+                    var prevIndex = items.length - 1;
+                    if (closest.length) {
+                        // add length once to avoid negative modulo operation, javascript has some issues with these
+                        prevIndex = (_(items).indexOf(closest[0]) - 1 + items.length) % items.length;
+                    }
+
                     items[prevIndex].focus();
                     break;
                 // right or down arrow
                 case 39:
-                case 40:items = this.nodes.main.find(':tabbable');
-                    var nextIndex = (_(items).indexOf(e.target) + 1) % items.length;
+                case 40:
+                    items = this.nodes.main.find('.item');
+                    closest = $(e.target).closest('.item', this.nodes.main);
+                    var nextIndex = 0;
+                    if (closest.length) {
+                        nextIndex = (_(items).indexOf(closest[0]) + 1) % items.length;
+                    }
                     items[nextIndex].focus();
                     break;
                 // tab
@@ -333,7 +351,8 @@ define('io.ox/core/notifications', [
             if (this.isOpen()) this.hide(); else this.show();
         },
 
-        show: function () {
+        show: function (options) {
+            options = options || {};
             // if it's open already we're done
             if (this.isOpen()) return;
 
@@ -365,9 +384,14 @@ define('io.ox/core/notifications', [
                 }
             }, this));
 
-            // try to focus first item; focus badge otherwise
-            var firstItem = this.nodes.main.find(':tabbable').first();
-            if (firstItem.length > 0) firstItem.focus(); else this.badgeview.$el.focus();
+            // set initial focus on first or last item; focus badge otherwise
+            var focusItem = this.nodes.main.find(':tabbable');
+            if (options.focus === 'last') {
+                focusItem = focusItem.last();
+            } else {
+                focusItem = focusItem.first();
+            }
+            if (focusItem.length > 0) focusItem.focus(); else this.badgeview.$el.focus();
 
             this.model.set('status', 'open');
             this.trigger('show');
