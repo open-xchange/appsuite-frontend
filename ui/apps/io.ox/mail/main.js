@@ -1042,8 +1042,12 @@ define('io.ox/mail/main', [
             };
 
             app.props.on('change:layout', function () {
+                // check if view dropdown has focus and restore the focus after rendering
+                var body = app.getWindow().nodes.body,
+                    focus = body.find('*[data-dropdown="view"] a:first').is(':focus');
                 app.applyLayout();
                 app.listView.redraw();
+                if (focus) body.find('*[data-dropdown="view"] a:first').focus();
             });
 
             app.getWindow().on('show:initial', function () {

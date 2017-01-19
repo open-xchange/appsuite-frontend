@@ -67,10 +67,20 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         },
 
         replaceToolbar: function (toolbar) {
+            // identify focused element and try to focus the same element later
+            var focus = $.contains(this.el, document.activeElement), selector;
+            if (focus) {
+                var activeElement = $(document.activeElement),
+                    action = activeElement.data('action');
+                if (action) selector = '*[data-action="' + action + '"]';
+                // try to select the element at the same position as before
+                else selector = '>> li:eq(' + activeElement.closest('li').index() + ') ' + activeElement.prop('tagName') + ':first';
+            }
             // A11y: This is needed to maintain source order, otherwise the focus order is not correct
             // TODO: Extensionpoints should be rendered in source order so this is unnecessary
             toolbar.append(toolbar.children('.pull-right'));
             this.$el.find('ul.classic-toolbar').tooltip('hide').replaceWith(toolbar);
+            if (selector) this.$(selector).focus();
             return this;
         },
 
