@@ -83,7 +83,7 @@ define('io.ox/core/folder/actions/move', [
                         if (_.isArray(response)) response = _(response).compact()[0];
                         // custom callback?
                         if (options.successCallback) {
-                            options.successCallback(response);
+                            options.successCallback(response, { input: input, target: target, options: options.all });
                         } else if (_.isObject(response) && response.error) {
                             // fail?
                             notifications.yell(response);
