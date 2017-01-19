@@ -559,12 +559,13 @@ define('io.ox/files/actions', [
                                             if (!conflicts.title) {
                                                 conflicts.title = error.error.error;
                                             }
-                                            if (_.isObject(error.error.warnings)) {
-                                                conflicts.warnings.push(error.error.warnings.error);
-                                            } else {
+
+                                            if (_.isArray(error.error.warnings)) {
                                                 _(error.error.warnings).each(function (warning) {
                                                     conflicts.warnings.push(warning.error);
                                                 });
+                                            } else {
+                                                conflicts.warnings.push(error.error.warnings.error);
                                             }
                                         }
                                     }
