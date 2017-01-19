@@ -33,6 +33,12 @@ define('io.ox/core/cache', [
         };
 
     ox.cache = {
+
+        usePersistence: function () {
+            if (ox.serverConfig.persistence === 'always') return true;
+            return ox.secretCookie === true && ox.serverConfig.persistence !== false;
+        },
+
         clear: function () {
             return $.when.apply($,
                 ext.point('io.ox/core/cache/storage').map(function (storage) {
@@ -73,7 +79,7 @@ define('io.ox/core/cache', [
                 persistentCache = storages[opt.persistent],
                 fluentCache = storages[opt.fluent],
                 // use persistent storage?
-                persist = (persistent === true && ox.secretCookie === true && ox.serverConfig.persistence !== false && persistentCache.isUsable() && _.url.hash('persistence') !== 'false' ?
+                persist = (persistent === true && ox.cache.usePersistence() && persistentCache.isUsable() && _.url.hash('persistence') !== 'false' ?
                         function () {
                             return ox.user !== '';
                         } :
