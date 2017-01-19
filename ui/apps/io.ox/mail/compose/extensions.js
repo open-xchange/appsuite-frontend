@@ -319,12 +319,12 @@ define('io.ox/mail/compose/extensions', [
                 if (usePicker) {
                     node.addClass('has-picker').append(
                         $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-plus" aria-hidden="true"></i></a>')
-                        .attr('aria-label', gt('Click to select contacts'))
+                        .attr('aria-label', gt('Select contacts'))
                         .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
                     );
                 }
 
-                var title = gt('Click to select contacts');
+                var title = gt('Select contacts');
 
                 this.append(
                     extNode = $('<div data-extension-id="' + attr + '">').addClass(cls)
