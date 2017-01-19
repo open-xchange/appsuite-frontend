@@ -552,7 +552,7 @@ define('io.ox/core/folder/node', [
                     'aria-label': this.options.title || !this.model.has('title') ?
                         gt('Folder-specific actions') :
                         //#. %1$s is the name of the folder
-                        gt('Folder-specific actions for %1$s', this.model.get('title'))
+                        gt('Actions for %1$s', this.model.get('title'))
                 })
                 .append(
                     $('<i class="fa fa-bars" aria-hidden="true">')
