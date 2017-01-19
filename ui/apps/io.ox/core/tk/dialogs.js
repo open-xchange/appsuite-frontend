@@ -293,9 +293,14 @@ define('io.ox/core/tk/dialogs', [
         };
 
         this.text = function (str) {
-            var p = nodes.body;
+            var p = nodes.body,
+                id = _.uniqueId('label-');
             p.find('.plain-text').remove();
-            p.append($('<h4 class="plain-text">').text(str || ''));
+            p.append($('<h4 class="plain-text">').attr('id', id).text(str || ''));
+            nodes.popup.attr({
+                'aria-labelledby': id,
+                role: 'alertdialog',
+            });
             return this;
         };
 
