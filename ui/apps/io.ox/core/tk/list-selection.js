@@ -376,10 +376,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 current = $(document.activeElement),
                 index = (items.index(current) || 0);
 
-            // don't cross the edge on cursor left/right
             var width = parseInt(this.view.$el.attr('grid-count') || 1, 10),
                 column = index % width;
-            if ((column === 0 && e.which === 37) || (column === width - 1 && e.which === 39)) return;
 
             // compute new index
             var cursorUpDown = e.which === 38 || e.which === 40,
