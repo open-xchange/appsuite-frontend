@@ -75,17 +75,20 @@ define('io.ox/core/attachments/view', [
 
         render: function () {
 
+            var listId = _.uniqueId('list-container-'),
+                previewId = _.uniqueId('preview-container-');
+
             this.renderHeader();
 
             this.$el.append(
                 // header
                 this.$header,
                 // short list
-                $('<div class="list-container">').append(
+                $('<div class="list-container">').attr('id', listId).append(
                     this.$list
                 ),
                 // preview list
-                $('<div class="preview-container">').append(
+                $('<div class="preview-container">').attr('id', previewId).append(
                     $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
                     this.$preview,
                     $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
@@ -95,6 +98,8 @@ define('io.ox/core/attachments/view', [
             if (this.openByDefault) this.toggleDetails();
 
             this.updateScrollControls();
+            this.updateAriaControls();
+            this.$header.find('.toggle-mode').attr('aria-controls', [listId, previewId].join(' '));
 
             return this;
         },
@@ -102,7 +107,7 @@ define('io.ox/core/attachments/view', [
         renderHeader: function () {
 
             this.$header.append(
-                $('<a href="#" class="toggle-details">').append(
+                $('<a href="#" class="toggle-details" aria-expanded="false">').append(
                     $('<i class="fa toggle-caret" aria-hidden="true">'),
                     $('<i class="fa fa-paperclip" aria-hidden="true">'),
                     $('<span class="summary">')
@@ -156,8 +161,16 @@ define('io.ox/core/attachments/view', [
             return this.collection.filter(this.filter, this);
         },
 
+        updateAriaControls: function () {
+            var id;
+            if (this.$el.hasClass('show-preview')) id = this.$('.preview-container').attr('id');
+            else id = this.$('.list-container').attr('id');
+            this.$header.find('.toggle-details').attr('aria-controls', id);
+        },
+
         toggleDetails: function () {
             this.$el.toggleClass('open');
+            this.$header.find('.toggle-details').attr('aria-expanded', this.$el.hasClass('open'));
             if (!this.isListRendered) this.renderList();
         },
 
@@ -174,6 +187,7 @@ define('io.ox/core/attachments/view', [
             // to provoke lazyload
             this.$preview.trigger('scroll');
             this.updateScrollControls();
+            this.updateAriaControls();
             $(window).trigger('resize');
         },
 
