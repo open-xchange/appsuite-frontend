@@ -508,7 +508,7 @@ define('io.ox/files/actions', [
                         type: type,
                         label: label,
                         success: success,
-                        successCallback: function (response) {
+                        successCallback: function (response, apiInput) {
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] };
                                 if (_.isObject(response)) {
@@ -536,7 +536,8 @@ define('io.ox/files/actions', [
                                     require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
                                         filestorageUtil.displayConflicts(conflicts, {
                                             callbackIgnoreConflicts: function () {
-                                                api[type](list, baton.target, true);
+                                                // if folderpicker is used baton.target is undefined (that's why the folderpicker is needed), use the previous apiInput to get the correct folder
+                                                api[type](list, baton.target || apiInput.target, true);
                                             },
                                             callbackCancel: function () {
                                                 if (baton.data[0].folder_id) {
