@@ -1605,7 +1605,7 @@ define('io.ox/core/desktop', [
                     id: 'view',
                     index: 100,
                     draw: function (baton) {
-                        baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find">');
+                        baton.$.viewnode = $('<div class="generic-toolbar top io-ox-find" role="search">');
 
                         // add nodes
                         this.nodes.sidepanel
@@ -1638,7 +1638,7 @@ define('io.ox/core/desktop', [
                         });
                         // search box form
                         baton.$.group = $('<div class="form-group has-feedback">').append(
-                            $('<input type="text" role="search" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
+                            $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
                                 id: baton.data.id,
                                 placeholder: baton.data.label + '...',
                                 'aria-describedby': baton.data.guid
