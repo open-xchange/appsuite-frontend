@@ -433,15 +433,9 @@
     .detail-view-row {
         position: relative;
 
-        .date { float: right; margin-left: 16px; margin-right: 27px; }
         .recipients { float: left; }
         .priority { font-size: 14px; }
         .flag-picker {
-            float: none;
-            position: absolute;
-            top: 0;
-            right: 1px;
-            width: 12px; // to match fa-bars
             text-align: right;
             a { color: #333; }
         }
@@ -455,6 +449,12 @@
                 font-size: 14px;
             }
         }
+    }
+
+    .detail-view-row.row-1 {
+        display: flex;
+        .from { flex: 1; }
+        & > *:not(:first-child) { padding-left: @default-padding; }
     }
 
     &:not(.expanded) {

@@ -133,16 +133,6 @@ define('io.ox/mail/detail/view', [
     //
     ext.point('io.ox/mail/detail/header/row1').extend(
         {
-            id: 'date',
-            index: INDEX_header += 100,
-            draw: extensions.fulldate
-        },
-        {
-            id: 'priority',
-            index: INDEX_header += 100,
-            draw: extensions.priority
-        },
-        {
             // from is last one in the list for proper ellipsis effect
             id: 'from',
             index: INDEX_header += 100,
@@ -153,6 +143,16 @@ define('io.ox/mail/detail/view', [
                     )
                 );
             }
+        },
+        {
+            id: 'priority',
+            index: INDEX_header += 100,
+            draw: extensions.priority
+        },
+        {
+            id: 'date',
+            index: INDEX_header += 100,
+            draw: extensions.fulldate
         },
         {
             id: 'flag-picker',
