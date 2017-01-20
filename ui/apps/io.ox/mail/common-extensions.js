@@ -276,11 +276,10 @@ define('io.ox/mail/common-extensions', [
         },
 
         priority: function (baton) {
-            var data = baton.data;
+            var node = util.getPriority(baton.data);
+            if (!node.length) return;
             this.append(
-                $('<span class="priority" aria-hidden="true">').append(
-                    util.getPriority(data)
-                )
+                $('<span class="priority" aria-hidden="true">').append(node)
             );
         },
 
