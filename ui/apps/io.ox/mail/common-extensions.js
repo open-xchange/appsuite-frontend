@@ -221,7 +221,7 @@ define('io.ox/mail/common-extensions', [
             // 0 and a buggy -1
             if (color <= 0) return;
             this.append(
-                $('<i class="flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')
+                $('<i class="color-flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')
             );
         },
 
