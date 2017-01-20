@@ -26,12 +26,15 @@ define('io.ox/mail/accounts/settings', [
 
     'use strict';
 
-    function renderDetailView(evt, data) {
+    function renderDetailView(evt, data, apiModel) {
         var myView, myModel, myViewNode, ignoreValidationErrors = true;
 
         myViewNode = $('<div>').addClass('accountDetail');
         myModel = new AccountModel(data);
         myView = new AccountDetailView({ model: myModel, node: myViewNode });
+        myView.listenTo(myModel, 'sync', function (model) {
+            apiModel.set(model.attributes);
+        });
 
         myView.dialog = new dialogs.ModalDialog({
             width: 700,
@@ -106,10 +109,10 @@ define('io.ox/mail/accounts/settings', [
         draw: function (evt) {
             if (evt.data.id >= 0) {
                 api.get(evt.data.id).done(function (obj) {
-                    renderDetailView(evt, obj);
+                    renderDetailView(evt, obj, evt.data.model);
                 });
             } else {
-                renderDetailView(evt, evt.data);
+                renderDetailView(evt, evt.data, evt.data.model);
             }
         }
     });
