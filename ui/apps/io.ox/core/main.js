@@ -1658,6 +1658,7 @@ define('io.ox/core/main', [
                     debug('Stage "load" > autoLaunch ...');
 
                     // auto launch
+                    var allUnavailable = true;
                     _(baton.autoLaunch)
                     .chain()
                     .map(function (id) {
@@ -1670,6 +1671,7 @@ define('io.ox/core/main', [
                     })
                     .each(function (details, index) {
                         //only load first app on small devices
+                        if (index === 0) allUnavailable = false;
                         if (_.device('smartphone') && index > 0) return;
                         // split app/call
                         var hash = _.url.hash(), launch, method, options = _(hash).pick('folder', 'id');
@@ -1710,6 +1712,11 @@ define('io.ox/core/main', [
                             });
                         }
                     });
+                    if (allUnavailable || (ox.rampup && ox.rampup.errors)) {
+                        var message = _.pluck(ox.rampup.errors, 'error').join('\n\n');
+                        message = message || gt('The requested application is not available at this moment.');
+                        notifications.yell({ type: 'error', error: message, duration: -1 });
+                    }
                     // restore apps
                     ox.ui.App.restore();
 
