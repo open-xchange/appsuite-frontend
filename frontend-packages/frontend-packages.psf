@@ -9,5 +9,3 @@
 <project reference="1.0,https://gitlab.open-xchange.com/frontend/core,develop,open-xchange-guidedtours"/>
 </provider>
 </psf>
-
-https://gitlab.open-xchange.com/frontend/core.git
