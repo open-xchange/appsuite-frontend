@@ -73,6 +73,11 @@ define('io.ox/mail/accounts/settings', [
             });
         });
 
+        // validate on change, so errormessages and aria-invalid states are updated
+        myModel.on('change', function (model) {
+            model.validate();
+        });
+
         myView.dialog.on('save', function () {
             ignoreValidationErrors = false;
             myModel.validate();
@@ -214,12 +219,20 @@ define('io.ox/mail/accounts/settings', [
         id: 'address',
         index: 100,
         draw: function () {
+            var input, self = this;
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="add-mail-account-address">').text(gt('Your mail address')),
-                    $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address">')
+                    input = $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address">')
                 )
             );
+
+            input.on('change', function () {
+                var alert = self.find('.alert');
+                if (alert.length && alert.attr('errorAttributes').indexOf('address') !== -1) {
+                    alert.remove();
+                }
+            });
         }
     });
 
@@ -227,12 +240,20 @@ define('io.ox/mail/accounts/settings', [
         id: 'password',
         index: 200,
         draw: function () {
+            var input, self = this;
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="add-mail-account-password">').text(gt('Your password')),
-                    $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password">')
+                    input = $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password">')
                 )
             );
+
+            input.on('change', function () {
+                var alert = self.find('.alert');
+                if (alert.length && alert.attr('errorAttributes').indexOf('password') !== -1) {
+                    alert.remove();
+                }
+            });
         }
     });
 
@@ -267,11 +288,13 @@ define('io.ox/mail/accounts/settings', [
             return popup.getContentNode().find('.alert-placeholder');
         },
 
-        drawAlert = function (alertPlaceholder, message) {
+        drawAlert = function (alertPlaceholder, message, options) {
+            options = options || {};
             alertPlaceholder.find('.alert').remove();
             alertPlaceholder.find('.busynotice').remove();
             alertPlaceholder.append(
-                $.alert({ message: message, dismissable: true }).one('click', '.close', function () {
+                // errorAttributes is used to dynamically remove the errormessage on attribute change
+                $.alert({ message: message, dismissable: true }).attr('errorAttributes', options.errorAttributes || '').one('click', '.close', function () {
                     alertPlaceholder.empty();
                 })
             );
@@ -322,7 +345,7 @@ define('io.ox/mail/accounts/settings', [
                         );
                     } else {
                         var message = responseobject.error ? responseobject.error : gt('There was no suitable server found for this mail/password combination');
-                        drawAlert(getAlertPlaceholder(popup), message);
+                        drawAlert(getAlertPlaceholder(popup), message, { errorAttributes: 'address password' });
                         popup.idle();
                         popup.getBody().find('a.close').focus();
                     }
@@ -430,7 +453,7 @@ define('io.ox/mail/accounts/settings', [
                         autoconfigApiCall(args, newMailaddress, newPassword, this, def, true);
                     } else {
                         var message = gt('This is not a valid mail address');
-                        drawAlert(alertPlaceholder, message);
+                        drawAlert(alertPlaceholder, message, { errorAttributes: 'address' });
                         content.find('.add-mail-account-password').focus();
                         this.idle();
                     }

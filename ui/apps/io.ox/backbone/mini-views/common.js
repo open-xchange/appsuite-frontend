@@ -54,6 +54,7 @@ define('io.ox/backbone/mini-views/common', [
             this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr('id', this.id);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
+            if (this.options.mandatory) this.$el.attr('aria-required', true);
             this.update();
             return this;
         }
@@ -87,6 +88,7 @@ define('io.ox/backbone/mini-views/common', [
             });
             if (this.id) this.$el.attr('id', this.id);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
+            if (this.options.mandatory) this.$el.attr('aria-required', true);
             this.update();
             return this;
         }

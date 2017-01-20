@@ -447,7 +447,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('mail_server', gt('Server name')),
                         div(
-                            new InputView({ model: model, id: 'mail_server' }).render().$el
+                            new InputView({ model: model, id: 'mail_server', mandatory: model.get('id') !== 0 }).render().$el
                         )
                     ),
                     // secure
@@ -461,21 +461,21 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('mail_port', gt('Server port')),
                         $('<div class="col-sm-3">').append(
-                            new InputView({ model: model, id: 'mail_port' }).render().$el
+                            new InputView({ model: model, id: 'mail_port', mandatory: model.get('id') !== 0 }).render().$el
                         )
                     ),
                     // login
                     group(
                         label('login', gt('Username')),
                         div(
-                            new InputView({ model: model, id: 'login' }).render().$el
+                            new InputView({ model: model, id: 'login', mandatory: model.get('id') !== 0 }).render().$el
                         )
                     ),
                     // password
                     group(
                         label('password', gt('Password')),
                         div(
-                            new PasswordView({ model: model, id: 'password' }).render().$el
+                            new PasswordView({ model: model, id: 'password', mandatory: model.get('id') === undefined }).render().$el
                         )
                     ),
                     // refresh rate (pop3 only)
@@ -512,7 +512,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('transport_server', gt('Server name')),
                         div(
-                            new InputView({ model: model, id: 'transport_server' }).render().$el
+                            new InputView({ model: model, id: 'transport_server', mandatory: model.get('id') !== 0 }).render().$el
                         )
                     ),
                     // secure
@@ -526,7 +526,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('transport_port', gt('Server port')),
                         $('<div class="col-sm-3">').append(
-                            new InputView({ model: model, id: 'transport_port' }).render().$el
+                            new InputView({ model: model, id: 'transport_port', mandatory: model.get('id') !== 0 }).render().$el
                         )
                     ),
                     // Auth type
@@ -607,7 +607,7 @@ define.async('io.ox/mail/accounts/view-form', [
                         group(
                             label('name', gt('Account name')),
                             div(
-                                new InputView({ model: model, id: 'name' }).render().$el
+                                new InputView({ model: model, id: 'name', mandatory: true }).render().$el
                             )
                         ),
                         // personal
@@ -621,7 +621,7 @@ define.async('io.ox/mail/accounts/view-form', [
                         group(
                             label('primary_address', gt('Email address')),
                             div(
-                                new InputView({ model: model, id: 'primary_address' }).render().$el
+                                new InputView({ model: model, id: 'primary_address', mandatory: true }).render().$el
                             )
                         ),
                         // unified inbox, disabled for DSC as well
