@@ -30,6 +30,13 @@ define('io.ox/core/boot/config', [
 
         ox.serverConfig = data || {};
 
+        // see bug 48361
+        if (ox.rampup && ox.rampup.errors && ox.rampup.errors['MSG-0113']) {
+            ox.serverConfig.capabilities = _.filter(ox.serverConfig.capabilities, function (cap) {
+                return cap.id !== 'webmail';
+            });
+        }
+
         // transform language array (hash keeps insertion order if keys are not array indexes)
         if (_.isArray(ox.serverConfig.languages)) {
             ox.serverConfig.languages = _(ox.serverConfig.languages).object();
