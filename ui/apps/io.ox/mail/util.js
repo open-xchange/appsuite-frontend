@@ -487,6 +487,11 @@ define('io.ox/mail/util', [
             return _.isNumber(data) ? (data & 32) !== 32 : undefined;
         },
 
+        isFlagged: function (data) {
+            data = _.isObject(data) ? data.flags : data;
+            return _.isNumber(data) ? (data & 8) === 8 : undefined;
+        },
+
         isDeleted: function (data) {
             return data && _.isNumber(data.flags) ? (data.flags & 2) === 2 : undefined;
         },

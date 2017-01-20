@@ -720,6 +720,42 @@ define('io.ox/mail/api', [
         });
     };
 
+     /**
+     * marks list of mails as flagged/unflagged
+     * @param {array} list
+     * @fires api#refresh.list
+     * @return { deferred }
+     */
+    api.flag = function (list, value) {
+        list = [].concat(list);
+
+        if (_.isUndefined(value)) {
+            // at least one elem is unflagged -> flag
+            value = _(list).reduce(function (memo, obj) {
+                // already false?
+                if (memo === true) return true;
+                return !util.isFlagged(obj);
+            }, false);
+        }
+
+        _(list).each(function (obj) {
+            obj.flags = value ? obj.flags | 8 : obj.flags & ~8;
+            pool.propagate('change', {
+                id: obj.id,
+                folder_id: obj.folder_id,
+                flags: obj.flags
+            });
+            // update thread model
+            api.threads.touch(obj);
+            api.trigger('update:' + _.ecid(obj), obj);
+            api.trigger('refresh.flag', list);
+        });
+        return update(list, { flags: api.FLAGS.FLAGGED, value: value }).done(function () {
+            unsetSorted(list, 651);
+            folderAPI.reload(list);
+        });
+    };
+
     /**
      * marks list of mails unread
      * @param {array} list

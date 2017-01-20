@@ -40,6 +40,12 @@ define('io.ox/mail/detail/view', [
     });
 
     ext.point('io.ox/mail/detail').extend({
+        id: 'flagged-class',
+        index: INDEX += 100,
+        draw: extensions.flaggedClass
+    });
+
+    ext.point('io.ox/mail/detail').extend({
         id: 'subject',
         index: INDEX += 100,
         draw: function (baton) {
@@ -381,6 +387,7 @@ define('io.ox/mail/detail/view', [
         onChangeFlags: function () {
             // update unread state
             this.$el.toggleClass('unread', util.isUnseen(this.model.get('flags')));
+            this.$el.toggleClass('flagged', util.isFlagged(this.model.get('flags')));
         },
 
         onChangeAttachments: function () {

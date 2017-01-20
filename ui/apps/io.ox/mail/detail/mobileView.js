@@ -34,6 +34,12 @@ define('io.ox/mail/detail/mobileView', [
     });
 
     ext.point('io.ox/mail/mobile/detail').extend({
+        id: 'flagged-class',
+        index: INDEX += 100,
+        draw: extensions.flaggedClass
+    });
+
+    ext.point('io.ox/mail/mobile/detail').extend({
         id: 'header',
         index: INDEX += 100,
         draw: function (baton) {

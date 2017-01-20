@@ -69,6 +69,11 @@ define('io.ox/mail/listview', [
             draw: extensions.unreadClass
         },
         {
+            id: 'flagged',
+            index: 115,
+            draw: extensions.flaggedClass
+        },
+        {
             id: 'deleted',
             index: 120,
             draw: extensions.deleted
@@ -247,6 +252,11 @@ define('io.ox/mail/listview', [
             id: 'unread',
             index: 110,
             draw: extensions.unreadClass
+        },
+        {
+            id: 'flagged',
+            index: 115,
+            draw: extensions.flaggedClass
         },
         {
             id: 'deleted',
@@ -456,6 +466,11 @@ define('io.ox/mail/listview', [
                 return memo || util.isUnseen(obj);
             }, false);
             data.flags = unseen ? data.flags & ~32 : data.flags | 32;
+            // get flagged flag for entire thread
+            var flagged = _(thread).reduce(function (memo, obj) {
+                return memo || util.isFlagged(obj);
+            }, false);
+            data.flags = flagged ? data.flags | 8 : data.flags & ~8;
             // get color_label for entire thread
             var color = _(thread).reduce(function (memo, obj) {
                 return memo || parseInt(obj.color_label || 0, 10);

@@ -225,6 +225,12 @@ define('io.ox/mail/common-extensions', [
             );
         },
 
+        // list view
+        flaggedClass: function (baton) {
+            if (!settings.get('features/flag')) return;
+            this.closest('.list-item').toggleClass('flagged', util.isFlagged(baton.data));
+        },
+
         threadSize: function (baton) {
             // only consider thread-size if app is in thread-mode
             var isThreaded = baton.app && baton.app.isThreaded();
