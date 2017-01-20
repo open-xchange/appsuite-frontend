@@ -295,6 +295,8 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/send', {
         capabilities: 'webmail',
         requires: function (e) {
+            if (!capabilities.has(this.capabilities)) { return; }
+
             var list = _.getArray(e.context);
             return util.conditionChain(
                 _.device('!smartphone'),
