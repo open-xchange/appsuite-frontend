@@ -642,6 +642,11 @@
         color: rgba(0, 0, 0, 0.20);
     }
 
+    .list-item.flagged  {
+        .flag.fa:before {
+            content: "\f005"; // fa-star (default: fa-star-o)
+        }
+    }
 
     &.visible-selection.has-focus .list-item.selected {
         i {

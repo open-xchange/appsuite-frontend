@@ -162,6 +162,7 @@ define('io.ox/mail/common-extensions', [
             _.each(extensions.fromPipeline, function (fn) { fn.call(this, baton, opt); });
             this.append(
                 $('<div class="from">').attr('title', opt.mailAddress).append(
+                    $('<span class="flags">'),
                     util.getFrom(baton.data, _.pick(opt, 'field', 'reorderDisplayName', 'showDisplayName', 'reorderDisplayName', 'unescapeDisplayName'))
                 )
             );
@@ -223,6 +224,16 @@ define('io.ox/mail/common-extensions', [
             this.append(
                 $('<i class="color-flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')
             );
+        },
+
+        star: function () {
+            this.append($('<i class="flag fa fa-star-o" aria-hidden="true">'));
+        },
+
+        // list view
+        flag: function (baton) {
+            if (!settings.get('features/flag')) return;
+            if (util.isFlagged(baton.data)) extensions.star.call(this);
         },
 
         // list view

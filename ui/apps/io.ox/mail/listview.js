@@ -283,7 +283,11 @@ define('io.ox/mail/listview', [
         {
             id: 'from',
             index: 300,
-            draw: extensions.from
+            draw: function (baton) {
+                extensions.from.call(this, baton);
+                var node = this.find('.flags');
+                extensions.flag.call(node, baton);
+            }
         }
     );
 
