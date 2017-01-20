@@ -291,6 +291,15 @@ define('io.ox/mail/actions', [
         }
     });
 
+    new Action('io.ox/mail/actions/flag', {
+        requires: function (e) {
+            return settings.get('features/flag') && e.collection.has('some');
+        },
+        action: function (baton) {
+            api.flag(baton.data);
+        }
+    });
+
     new Action('io.ox/mail/actions/archive', {
         capabilities: 'archive_emails',
         requires: function (e) {
@@ -702,6 +711,17 @@ define('io.ox/mail/actions', [
         id: 'nospam',
         label: gt('Not spam'),
         ref: 'io.ox/mail/actions/nospam',
+        section: 'flags'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'lo',
+        mobile: 'lo',
+        id: 'flag',
+        //#. Verb: (to) flag messages
+        label: gt.pgettext('verb', 'Flag'),
+        ref: 'io.ox/mail/actions/flag',
         section: 'flags'
     }));
 

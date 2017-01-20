@@ -125,6 +125,14 @@ define('io.ox/mail/toolbar', [
                 flagPicker.attach(this, { data: baton.data });
             }
         },
+        'flag': {
+            prio: 'hi',
+            mobile: 'lo',
+            icon: 'fa fa-star-o',
+            //#. Verb: (to) flag messages
+            label: gt.pgettext('verb', 'Flag'),
+            ref: 'io.ox/mail/actions/flag'
+        },
         'archive': {
             prio: 'hi',
             mobile: 'lo',
