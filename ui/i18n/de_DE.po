@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-17 13:00+0100\n"
+"PO-Revision-Date: 2017-01-20 16:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -293,7 +293,7 @@ msgstr "Löschen"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -505,7 +505,7 @@ msgstr "Schließen"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions/delete.js
 #: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js
 #: apps/io.ox/tasks/edit/main.js apps/io.ox/tasks/main.js
@@ -2523,6 +2523,7 @@ msgid "Shared address books"
 msgstr "Geteilte Adressbücher"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Select contacts"
 msgstr "Kontakte auswählen"
 
@@ -3281,6 +3282,15 @@ msgstr "In Beschreibung kopieren"
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Saved in:"
 msgstr "Gespeichert unter:"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+msgid ""
+"This filetype is not supported as contact picture. Only image types (JPG, "
+"GIF, BMP or PNG) are supported."
+msgstr ""
+"Dieser Dateityp wird nicht als Kontaktbild unterstützt. Nur Bildtypen (JPG, "
+"GIF, BMP oder PNG) werden unterstützt."
 
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Your selected picture will be displayed after saving"
@@ -4110,8 +4120,8 @@ msgstr "Ordnerspezifische Aktionen"
 
 #. %1$s is the name of the folder
 #: apps/io.ox/core/folder/node.js module:io.ox/core
-msgid "Folder-specific actions for %1$s"
-msgstr "Ordnerspezifische Aktionen für %1$s"
+msgid "Actions for %1$s"
+msgstr "Aktionen für %1$s"
 
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
@@ -4435,16 +4445,6 @@ msgid "%1$d notification."
 msgid_plural "%1$d notifications."
 msgstr[0] "%1$d Benachrichtigung."
 msgstr[1] "%1$d Benachrichtigungen."
-
-#. open closed state of the notification area, used in aria label
-#: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "expanded"
-msgstr "ausgeklappt"
-
-#. open closed state of the notification area, used in aria label
-#: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
-msgid "collapsed"
-msgstr "eingeklappt"
 
 #: apps/io.ox/core/notifications/subview.js module:io.ox/core
 msgid "Hide this notification"
@@ -6307,6 +6307,23 @@ msgstr "Separate Datei hinzufügen"
 msgid "Adding files with identical names"
 msgstr "Hinzufügen von Dateien mit identischen Namen"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Loop once only"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Keep looping endlessly"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+msgid "Slideshow / Autoplay mode"
+msgstr "Diashow / Autoplay-Modus"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Autoplay pause in seconds"
+msgstr ""
+
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
 msgstr "Interne Benutzer"
@@ -7453,6 +7470,11 @@ msgid "Unread"
 msgstr "Ungelesen"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+#, fuzzy
+msgid "Flagged"
+msgstr "Markiert"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "has attachments"
 msgstr "enthält Anhänge"
 
@@ -7616,10 +7638,6 @@ msgstr "Cc-Eingabefeld anzeigen"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show blind carbon copy input field"
 msgstr "Bcc-Eingabefeld anzeigen"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Click to select contacts"
-msgstr "Zum Auswählen von Kontakten bitte klicken"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js
@@ -7931,7 +7949,7 @@ msgstr "Regel bearbeiten"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Edit %1$s"
 msgstr "%1$s bearbeiten"
 
@@ -9158,15 +9176,15 @@ msgstr ""
 "können Sie Ihr altes Passwort zum Wiederherstellen aller Account-Passwörter "
 "verwenden:"
 
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Delete %1$s"
 msgstr "%1$s löschen"
 
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Do you really want to delete this account?"
 msgstr "Wollen Sie diesen Account wirklich löschen?"
 
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "Account löschen"
 
@@ -10109,6 +10127,12 @@ msgstr "Sie haben neue E-Mails"
 msgid "Mail from %1$s, %2$s"
 msgstr "E-Mail von %1$s, %2$s"
 
+#. %1$s task title
+#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#, c-format
+msgid "Overdue Task %1$s."
+msgstr "Überfällige Aufgabe %1$s."
+
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Overdue Tasks"
 msgstr "Überfällige Aufgaben"
@@ -10854,6 +10878,18 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Folder-specific actions for %1$s"
+#~ msgstr "Ordnerspezifische Aktionen für %1$s"
+
+#~ msgid "expanded"
+#~ msgstr "ausgeklappt"
+
+#~ msgid "collapsed"
+#~ msgstr "eingeklappt"
+
+#~ msgid "Click to select contacts"
+#~ msgstr "Zum Auswählen von Kontakten bitte klicken"
 
 #~ msgid "Show internal link"
 #~ msgstr "Internen Link anzeigen"
