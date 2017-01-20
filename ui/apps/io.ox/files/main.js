@@ -579,18 +579,17 @@ define('io.ox/files/main', [
                     );
                 } else {
 
-                    var item = app.listView.selection.get()[0], folder, model;
+                    var item = app.listView.selection.get()[0];
+                    var model;
 
                     if (/^folder\./.test(item)) {
                         // get folder
-                        folder = folderAPI.pool.getModel(item.replace(/^folder\./, ''));
-                        model = new api.Model(folder.attributes);
+                        model = new api.Model(folderAPI.pool.getModel(item.replace(/^folder\./, '')).attributes);
                     } else {
                         model = app.listView.collection.get(item);
                     }
 
                     sidebarView.render(model);
-                    sidebarView.renderSections();
                     sidebarView.$('img').trigger('appear.lazyload');
                     sidebarView.$('.sidebar-panel-thumbnail').attr('aria-label', gt('thumbnail'));
                 }
