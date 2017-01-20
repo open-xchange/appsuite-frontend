@@ -143,6 +143,7 @@
 .picker-pc-container .io-ox-pagecontroller.page { padding-top: 40px; }
 
 .add-infostore-file {
+
     .picker-pc-container {
         position: relative;
         height: 350px;
@@ -276,7 +277,6 @@
         .folder-tree { border-right: 1px solid #ddd; }
 
         .io-ox-fileselection {
-
             li.file {
                 outline: none;
                 line-height: 30px;
@@ -290,7 +290,10 @@
                     float: left;
                 }
 
-                .name { .ellipsis(); }
+                .name { 
+                    .ellipsis(); 
+                     padding-left: 0.5em;
+                }
 
                 &.selected {
                     background-color: @foldertree-selected-focus-background;
@@ -303,9 +306,24 @@
 
                     * { color: @foldertree-focused-label-color; }
                 }
+
+                .checkbox-inline { display: none; }
             }
 
-            &.singleselect li.file .name { padding-left: 0.5em; }
+            .touch &.multiselect li.file {
+                 .checkbox-inline {
+                    display: block;
+                    height: 20px;
+                    background: transparent;
+                    margin-top: 2px;
+
+                    input[type=checkbox] {
+                        height: 20px;
+                        cursor: pointer;
+                    }
+                }
+                .name { padding-left: 0; }
+            }
         }
     }
 
