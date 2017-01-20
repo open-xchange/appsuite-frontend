@@ -188,7 +188,7 @@ define('plugins/metrics/demo/register', [
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
                     this.app.view.model.set('subject', SUBJECT);
                     this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS)
-                        .trigger('input').trigger($.Event('keydown.tt', { keyCode: 13, which: 13 }));
+                        .trigger('input').trigger('keydown').trigger($.Event('keydown.tt', { keyCode: 13, which: 13 }));
                     done();
                 });
 
