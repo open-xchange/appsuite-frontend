@@ -264,7 +264,7 @@ define('io.ox/mail/api', [
 
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
             model = pool.get('detail').get(cid),
-            cache = options && options.cache ? options.cache : true;
+            cache = options && (options.cache !== undefined) ? options.cache : true;
 
         // TODO: make this smarter
         if (cache && !obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
