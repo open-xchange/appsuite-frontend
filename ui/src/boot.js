@@ -91,7 +91,7 @@ $(window).load(function () {
     // Prevent Content Spoofing
     // See: https://mathiasbynens.github.io/rel-noopener/
     // and: https://github.com/danielstjules/blankshield
-    $(document).on('click', 'a[rel="noopener"]', function (e) {
+    $(document).on('click', 'a[rel="noopener"], area[target="_blank"]', function (e) {
         e.preventDefault();
         blankshield.open($(this).attr('href'));
     });
