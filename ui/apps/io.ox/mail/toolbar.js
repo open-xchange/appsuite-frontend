@@ -122,6 +122,7 @@ define('io.ox/mail/toolbar', [
             label: gt('Set color'),
             ref: 'io.ox/mail/actions/color',
             customize: function (baton) {
+                if (!mailsettings.get('features/color')) return;
                 flagPicker.attach(this, { data: baton.data });
             }
         },
@@ -221,7 +222,9 @@ define('io.ox/mail/toolbar', [
     });
 
     new actions.Action('io.ox/mail/actions/color', {
-        requires: 'some',
+        requires: function (e) {
+            return mailsettings.get('features/color') && e.collection.has('some');
+        },
         action: $.noop
     });
 

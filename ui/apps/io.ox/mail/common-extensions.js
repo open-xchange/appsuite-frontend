@@ -51,7 +51,7 @@ define('io.ox/mail/common-extensions', [
                 a11yLabel;
 
             if (util.isUnseen(data)) parts.push(gt('Unread'));
-            if (baton.data.color_label) parts.push(gt('Flagged') + ' ' + flagPicker.colorName(baton.data.color_label));
+            if (baton.data.color_label && settings.get('features/color')) parts.push(gt('Flagged') + ' ' + flagPicker.colorName(baton.data.color_label));
             parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.received_date));
             if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
             if (data.attachment) parts.push(gt('has attachments'));
@@ -217,7 +217,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         colorflag: function (baton) {
-            //if (!settings.get('features/color')) return;
+            if (!settings.get('features/color')) return;
             var color = baton.data.color_label;
             // 0 and a buggy -1
             if (color <= 0) return;
@@ -615,6 +615,7 @@ define('io.ox/mail/common-extensions', [
         }()),
 
         flagPicker: function (baton) {
+            if (!settings.get('features/color')) return;
             flagPicker.draw(this, baton);
         },
 
