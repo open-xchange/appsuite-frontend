@@ -66,6 +66,13 @@ define('io.ox/core/viewer/views/displayerview', [
     function setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibility) {
         displayerView.carouselRoot.toggleClass('autoplay-controls-disabled', isForceDisableVisibility);
     }
+    function updateVisibilityOfAutoplayControl(displayerView, slideIndex) {
+        var
+            fileId = displayerView.collection.models[slideIndex].attributes.id,
+            isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileRegistry[fileId];
+
+        setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibilityOfAutoplayControl);
+    }
 
     function handleToggleAutoplayMode(event, displayerView, mode) {
         mode = (
@@ -122,11 +129,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 slideIndex = displayerView.activeIndex;
 
             if (displayerView.autoplayMode !== 'running') { // only in case of autoplay is not running at all.
-                var
-                    fileId = displayerView.collection.models[slideIndex].attributes.id,
-                    isForceDisableVisibilityOfAutoplayControl = !displayerView.imageFileRegistry[fileId];
 
-                setVisibilityOfAutoplayControl(displayerView, isForceDisableVisibilityOfAutoplayControl);
+                updateVisibilityOfAutoplayControl(displayerView, slideIndex);
 
             } else if (IS_LOOP_ONCE_ONLY && (typeof displayerView.autoplaySlideCount === 'number')) {
 
@@ -516,11 +520,15 @@ define('io.ox/core/viewer/views/displayerview', [
                 self.blendNavigation();
                 // focus first active slide initially
                 self.focusActiveSlide();
+
+                updateVisibilityOfAutoplayControl(self, self.activeIndex);
+
             }, function fail() {
                 console.warn('DisplayerView.createSlides() - some errors occured:', arguments);
             });
             // append bottom toolbar (used to diplay upload progress bars)
             this.$el.append($('<div class="bottom toolbar">'));
+
             return this;
         },
 
@@ -1223,6 +1231,9 @@ define('io.ox/core/viewer/views/displayerview', [
                     return (fileModel.attributes.id === activeFileId);
                 });
 
+            if (IS_LOOP_ONCE_ONLY) {
+                this.autoplaySlideCount = -1;
+            }
             this.collectionBackup = this.collection.clone();
             this.collection.reset(imageFileModelList);
 
@@ -1243,10 +1254,6 @@ define('io.ox/core/viewer/views/displayerview', [
                 swiper.update(true);
 
                 self.onSlideChangeEnd(swiper);
-
-                if (IS_LOOP_ONCE_ONLY) {
-                    self.autoplaySlideCount = 0;
-                }
             });
         },
 
@@ -1264,6 +1271,9 @@ define('io.ox/core/viewer/views/displayerview', [
                     return (fileModel.attributes.id === activeFileId);
                 });
 
+            if (IS_LOOP_ONCE_ONLY) {
+                this.autoplaySlideCount = null;
+            }
             this.collection.reset(this.collectionBackup.models);
             this.collectionBackup = null;
 
@@ -1283,9 +1293,6 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 swiper.update(true);
 
-                if (IS_LOOP_ONCE_ONLY) {
-                    self.autoplaySlideCount = null;
-                }
                 self.onSlideChangeEnd(swiper);
             });
         },
