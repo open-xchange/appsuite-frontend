@@ -131,7 +131,13 @@ define('io.ox/mail/detail/mobileView', [
     });
 
     ext.point('io.ox/mail/mobile/detail/header/flags').extend({
-        id: 'flag-picker',
+        id: 'flag-toggle',
+        index: INDEX_header += 100,
+        draw: extensions.flagToggle
+    });
+
+    ext.point('io.ox/mail/mobile/detail/header/flags').extend({
+        id: 'color-picker',
         index: INDEX_header += 100,
         draw: extensions.flagPicker
     });

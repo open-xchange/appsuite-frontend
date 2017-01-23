@@ -1402,10 +1402,9 @@ body.dragging .categories-toolbar-container {
                     display: inline-block;
                     float: right;
                     margin-right: @default-padding;
-
-                    .flag-picker {
-                        display: inline-block;
+                    & > * {
                         margin-left: 8px;
+                        float: none;
                     }
                 }
                 .priority {

@@ -562,7 +562,7 @@ define('io.ox/mail/threadview', [
                 disable: {
                     'io.ox/mail/detail': ['subject', 'actions'],
                     'io.ox/mail/detail/header': ['paper-clip'],
-                    'io.ox/mail/detail/header/row1': ['flag-picker']
+                    'io.ox/mail/detail/header/row1': ['color-picker', 'flag-toggle']
                 }
             });
 
