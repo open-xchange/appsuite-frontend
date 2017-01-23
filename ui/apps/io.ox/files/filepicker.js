@@ -378,8 +378,15 @@ define('io.ox/files/filepicker', [
 
         toggleOkButton(false);
 
-        this.selection.on('change', function (e, list) {
-            toggleOkButton(list.length > 0);
+        this.selection.on('change', function (e, selectedFiles) {
+
+            toggleOkButton(selectedFiles.length > 0);
+
+            // workaround for Bug 50500, instead of a real fix, we should use the NEW list from mail or drive
+            filesPane.find('input[type=checkbox]').prop('checked', false);
+            selectedFiles.forEach(function (selectedFile) {
+                filesPane.find('li.file[data-obj-id="' + _.cid(selectedFile) + '"] input').prop('checked', true);
+            });
         });
         if (isAllowPreviewPane) {
 
@@ -445,7 +452,7 @@ define('io.ox/files/filepicker', [
                                 $('<label class="checkbox-inline sr-only">')
                                     .attr('title', title)
                                     .append(
-                                        $('<input type="checkbox" class="reflect-selection" tabindex="-1">')
+                                        $('<input type="checkbox" tabindex="-1">')
                                             .val(file.id).data('file', file)
                                     ),
                                 $('<div class="name">').text(title)
