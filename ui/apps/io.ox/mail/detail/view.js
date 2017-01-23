@@ -161,7 +161,12 @@ define('io.ox/mail/detail/view', [
             draw: extensions.fulldate
         },
         {
-            id: 'flag-picker',
+            id: 'flag-toggle',
+            index: INDEX_header += 100,
+            draw: extensions.flagToggle
+        },
+        {
+            id: 'color-picker',
             index: INDEX_header += 100,
             draw: extensions.flagPicker
         }

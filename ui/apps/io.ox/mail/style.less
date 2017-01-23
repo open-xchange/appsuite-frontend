@@ -13,6 +13,9 @@
 
 // definitions
 @icon-size: 16px;
+@flag-color: #ffd54f;
+@flag-icon: "\f005"; // fa-star
+@flag-icon-unset: "\f006"; // fa-star-o
 
 // phone
 @phone-font-size: 16px;
@@ -523,8 +526,6 @@
     }
 }
 
-// ListView
-
 .mail-item {
 
     .contact-picture {
@@ -640,12 +641,6 @@
     .list-item.deleted {
         text-decoration: line-through;
         color: rgba(0, 0, 0, 0.20);
-    }
-
-    .list-item.flagged  {
-        .flag.fa:before {
-            content: "\f005"; // fa-star (default: fa-star-o)
-        }
     }
 
     &.visible-selection.has-focus .list-item.selected {
@@ -834,6 +829,21 @@
             .flex(0 0 auto);
             .align-self(flex-start);
         }
+    }
+}
+
+//
+// Flag
+//
+
+.list-item {
+    .flag {
+        color: rgba(0, 0, 0, 0.5);
+        .fa:before { content: @flag-icon-unset; }
+    }
+    &.flagged .flag {
+        color: @flag-color;
+        .fa:before { content: @flag-icon; }
     }
 }
 

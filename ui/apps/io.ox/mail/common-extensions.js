@@ -226,14 +226,17 @@ define('io.ox/mail/common-extensions', [
             );
         },
 
-        star: function () {
-            this.append($('<i class="flag fa fa-star-o" aria-hidden="true">'));
+        flag: function () {
+            if (!settings.get('features/flag')) return;
+            //if (util.isFlagged(baton.data))
+            this.append($('<span class="flag">').append(
+                extensions.flagIcon.call(this)
+            ));
         },
 
-        // list view
-        flag: function (baton) {
-            if (!settings.get('features/flag')) return;
-            if (util.isFlagged(baton.data)) extensions.star.call(this);
+        flagIcon: function () {
+            // icon is set via css
+            return $('<i class="fa fa-fw" aria-hidden="true">');
         },
 
         // list view
@@ -241,6 +244,43 @@ define('io.ox/mail/common-extensions', [
             if (!settings.get('features/flag')) return;
             this.closest('.list-item').toggleClass('flagged', util.isFlagged(baton.data));
         },
+
+        flagToggle: (function () {
+
+            function getAriaLabel(data) {
+                return util.isFlagged(data) ? gt('Flagged') : gt('Not flagged');
+            }
+
+            function toggle(e) {
+                e.preventDefault();
+                var data = e.data.model.toJSON();
+                // toggle 'flagged' bit
+                if (util.isFlagged(data)) api.flag(data, false); else api.flag(data, true);
+                $(this).attr({
+                    'aria-label': getAriaLabel(data),
+                    'aria-pressed': util.isFlagged(data)
+                });
+            }
+
+            return function (baton) {
+                if (!settings.get('features/flag') || util.isEmbedded(baton.data)) return;
+                if (util.isEmbedded(baton.data)) return;
+                var self = this;
+                folderAPI.get(baton.data.folder_id).done(function (data) {
+                    // see if the user is allowed to modify the flag status - always allows for unified folder
+                    if (!folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data)) return;
+                    self.append(
+                        $('<a href="#" role="button" class="flag">')
+                        .attr({
+                            'aria-label': getAriaLabel(baton.data),
+                            'aria-pressed': util.isFlagged(baton.data)
+                        })
+                        .append(extensions.flagIcon.call(this))
+                        .on('click', { model: baton.view.model }, toggle)
+                    );
+                });
+            };
+        }()),
 
         threadSize: function (baton) {
             // only consider thread-size if app is in thread-mode
