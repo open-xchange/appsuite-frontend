@@ -31,8 +31,8 @@ define('plugins/metrics/demo/register', [
         FILE = settings.get('demo/cloud-attachment', { folder_id: '13894', id: '63605' }),
         KEYWORD = settings.get('demo/search-keyword', 'automatic'),
         MAIL_WITH_THUMBNAILS = settings.get('demo/message-with-thumbnails', { folder_id: 'default0/INBOX/Test', id: 221 }),
-        STORE_FOLDER = settings.get('demo/store-folder', 73407);
-
+        STORE_FOLDER = settings.get('demo/store-folder', 73407),
+        TRASH = settings.get('demo/trash-folder', 'default0/INBOX/Trash');
     // ensure normal selection mode
     coreSettings.set('selectionMode', 'normal');
 
@@ -164,8 +164,30 @@ define('plugins/metrics/demo/register', [
                     this.waitForEvent(api, 'delete', done);
                 });
 
-                this.step('Empty trash', function () {
-                    // TODO!
+                this.step('Empty trash', function (done) {
+                    var self = this;
+                    this.waitForFolder(TRASH, function () {
+                        var c0, c1;
+                        self.waitFor(function () {
+                            var item0 = $('a.folder-options.contextmenu-control');
+                            if (item0.length && !c0) {
+                                item0.focus().click();
+                                c0 = true;
+                            }
+                            var item1 = $('[data-action="clearfolder"]');
+                            if (item1.length && !c1) {
+                                item1.focus().click();
+                                item0.click();
+
+                                c1 = true;
+                            }
+                            var item2 = $('div.modal-footer [data-action="delete"]');
+                            // dangerous!! use with care
+                            //item2.focus().click();
+                            return item2.length;
+
+                        }).done(done);
+                    });
                 });
             });
 
@@ -179,7 +201,7 @@ define('plugins/metrics/demo/register', [
 
                     ox.once('mail:compose:ready', function (data, app) {
                         this.app = app;
-                        done();
+                        setTimeout(done, 500);
                     }.bind(this));
 
                     ox.registry.call('mail-compose', 'compose');
@@ -188,7 +210,7 @@ define('plugins/metrics/demo/register', [
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
                     this.app.view.model.set('subject', SUBJECT);
                     this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS)
-                        .trigger('input').trigger('keydown').trigger($.Event('keydown.tt', { keyCode: 13, which: 13 }));
+                        .trigger('input').trigger($.Event('keydown.tt', { keyCode: 13, which: 13 }));
                     done();
                 });
 
@@ -293,7 +315,7 @@ define('plugins/metrics/demo/register', [
 
                     ox.once('mail:compose:ready', function (data, app) {
                         this.app = app;
-                        done();
+                        setTimeout(done, 500);
                     }.bind(this));
 
                     var file = _.extend({ group: 'infostore', filename: 'test.jpg' }, FILE);
