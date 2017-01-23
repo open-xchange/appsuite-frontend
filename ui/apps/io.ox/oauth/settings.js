@@ -14,12 +14,13 @@ define('io.ox/oauth/settings', [
     'io.ox/core/extensions',
     'io.ox/oauth/keychain',
     'io.ox/oauth/backbone',
+    'io.ox/backbone/mini-views/common',
     'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/settings/accounts/views',
     'io.ox/keychain/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/settings'
-], function (ext, oauthKeychain, OAuth, ListView, AccountViews, keychain, dialogs, gt) {
+], function (ext, oauthKeychain, OAuth, MiniViews, ListView, AccountViews, keychain, ModalDialog, gt) {
 
     'use strict';
 
@@ -27,55 +28,72 @@ define('io.ox/oauth/settings', [
         this.id = serviceId;
 
         this.draw = function (args) {
-            var $form,
-                account = oauthKeychain.accounts.get(args.data.id),
-                $displayNameField,
-                dialog,
-                relatedAccountsView = new ListView({
-                    tagName: 'ul',
-                    childView: AccountViews.ListItem,
-                    collection: new Backbone.Collection()
-                });
+            var account = oauthKeychain.accounts.get(args.data.id),
+                collection = new Backbone.Collection();
 
             account.fetchRelatedAccounts().then(function (accounts) {
-                relatedAccountsView.collection.push(accounts);
+                collection.push(accounts);
             });
 
-            $form = $('<div class="settings-detail-pane">').append(
-                $('<legend class="sectiontitle">').text(gt('OAuth application overview')),
-                $('<div class="form-horizontal">').append(
-                    $('<div class="control-group">').append(
-                        $('<label for="displayName">').text(gt('Display Name')),
-                        $('<div class="controls">').append(
-                            $displayNameField = $('<input type="text" name="displayName" class="form-control">').val(account.get('displayName'))
-                        )
-                    ),
-                    $('<div class="control-group">').append(
-                        $('<label>').text(gt('Related accounts')),
-                        $('<div class="controls">').append(
+            new ModalDialog({
+                async: true,
+                title: gt('OAuth application overview'),
+                point: 'io.ox/settings/accounts/' + serviceId + '/settings/detail/dialog',
+                relatedAccountsCollection: collection,
+                account: account,
+                parentAccount: args.data.model
+            })
+            .extend({
+                text: function () {
+                    var guid,
+                        relatedAccountsView = new ListView({
+                            tagName: 'ul',
+                            childView: AccountViews.ListItem,
+                            collection: this.options.relatedAccountsCollection
+                        });
+                    this.$body.addClass('settings-detail-pane').append(
+                        $('<div class="form-group">').append(
+                            $('<label>', { 'for': guid = _.uniqueId('input') }).text(gt('Display Name')),
+                            new MiniViews.InputView({ name: 'displayName', model: this.options.account, id: guid }).render().$el
+                        ),
+                        $('<div class="form-group">').append(
+                            $('<legend>').text(gt('Related accounts')),
                             relatedAccountsView.render().$el
                         )
-                    )
-                )
-            );
-
-            dialog = new dialogs.ModalDialog();
-            dialog
-                .append($form)
-                .addPrimaryButton('save', gt('Save'), 'save')
-                .addAlternativeButton('reauthorize', gt('Reauthorize'), 'reauthorize')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .show()
-                .done(function (action) {
-                    if (action === 'cancel') return dialog.close();
-
-                    account.reauthorize({ force: action === 'reauthorize' }).then(function () {
-                        account.set('displayName', $displayNameField.val());
-                        return account.save();
-                    }).then(function () {
-                        dialog.close();
-                    });
+                    );
+                }
+            })
+            .addCancelButton()
+            .addButton({
+                action: 'save',
+                label: gt('Save')
+            })
+            .addAlternativeButton({
+                action: 'reauthorize',
+                label: gt('Reauthorize')
+            })
+            .on('edit', function () {
+                // handle edit action of related accounts view
+                this.close();
+            })
+            .on('reauthorize', function () {
+                this.options.account.reauthorize();
+                // reauthorization is always independent, because it kicks of an external process and we don't always get a response
+                // however, there might be unsaved changes to the model, so do not close the dialog, yet.
+                this.idle();
+            })
+            .on('save', function () {
+                var dialog = this,
+                    account = this.options.account,
+                    parentAccount = this.options.parentAccount;
+                account.save().then(function () {
+                    parentAccount.set(account.attributes);
+                    dialog.close();
+                }, function () {
+                    dialog.idle();
                 });
+            })
+            .open();
         };
     }
 
@@ -86,36 +104,41 @@ define('io.ox/oauth/settings', [
     ext.point('io.ox/settings/accounts/fileStorage/settings/detail').extend({
         id: 'fileStorage',
         draw: function (args) {
-            var $displayNameField,
-                account = args.data.model,
-                $form = $('<div class="settings-detail-pane">').append(
-                    $('<legend class="sectiontitle">').text(gt('Account Settings')),
-                    $('<div class="form-horizontal">').append(
-                        $('<div class="control-group">').append(
-                            $('<label for="displayName">').text(gt('Display Name')),
-                            $('<div class="controls">').append(
-                                $displayNameField = $('<input type="text" name="displayName" class="form-control">').val(account.get('displayName'))
-                            )
+            new ModalDialog({
+                async: true,
+                title: gt('Account Settings'),
+                point: 'io.ox/settings/accounts/fileStorage/settings/detail/dialog',
+                account: args.data.model
+            })
+            .extend({
+                text: function () {
+                    var account = this.options.account,
+                        guid = _.uniqueId('input');
+                    this.$body.addClass('settings-detail-pane').append(
+                        $('<div class="form-group">').append(
+                            $('<label>', { 'for': guid }).text(gt('Display Name')),
+                            new MiniViews.InputView({ name: 'displayName', model: account, id: guid }).render().$el
                         )
-                    )
-                ),
-                dialog = new dialogs.ModalDialog();
-
-            dialog
-                .append($form)
-                .addPrimaryButton('save', gt('Save'), 'save')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .show()
-                .done(function (action) {
-                    if (action === 'save') {
-                        account.set('displayName', $displayNameField.val());
-                        require(['io.ox/core/api/filestorage']).then(function (fsAPI) {
-                            return fsAPI.updateAccount(account.toJSON());
-                        }).always(function () {
-                            dialog.close();
-                        });
-                    }
+                    );
+                }
+            })
+            .addCancelButton()
+            .addButton({
+                action: 'save',
+                label: gt('Save')
+            })
+            .on('save', function () {
+                var dialog = this,
+                    account = this.options.account;
+                require(['io.ox/core/api/filestorage']).then(function (fsAPI) {
+                    return fsAPI.updateAccount(account.toJSON());
+                }).then(function () {
+                    dialog.close();
+                }, function () {
+                    dialog.idle();
                 });
+            })
+            .open();
         }
     });
 
