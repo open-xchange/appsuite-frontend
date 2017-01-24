@@ -1379,11 +1379,15 @@ body.dragging .categories-toolbar-container {
                     display: inline-block;
                     float: none;
                 }
-                .flag-picker {
+                .flags {
                     display: inline-block;
-                    float: none;
-                    position: absolute;
-                    right: @default-padding;
+                    float: right;
+                    margin-right: @default-padding;
+
+                    .flag-picker {
+                        display: inline-block;
+                        margin-left: 8px;
+                    }
                 }
                 .priority {
                     margin-right: @default-padding;
