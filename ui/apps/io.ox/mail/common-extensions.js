@@ -226,9 +226,8 @@ define('io.ox/mail/common-extensions', [
             );
         },
 
-        flag: function () {
-            if (!settings.get('features/flag')) return;
-            //if (util.isFlagged(baton.data))
+        flag: function (baton) {
+            if (!settings.get('features/flag') || !util.isFlagged(baton.data)) return;
             this.append($('<span class="flag">').append(
                 extensions.flagIcon.call(this)
             ));
