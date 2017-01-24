@@ -204,7 +204,9 @@ define('io.ox/core/settings/pane', [
                     var guid = _.uniqueId('form-control-label-'),
                         list = _(availableThemes).chain().map(function (key, val) {
                             return { label: key, value: val };
-                        }).sortBy('label').value();
+                        }).sortBy(function (obj) {
+                            return obj.label.toLowerCase();
+                        }).value();
                     this.$el.append(
                         $('<label>').attr({
                             class: 'control-label col-sm-4',
