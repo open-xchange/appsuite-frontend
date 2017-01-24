@@ -153,9 +153,11 @@
         &.column-1 { width: @icon-width; text-align: center; }
         &.column-2 { width: @icon-width; text-align: center; }
         &.column-3 { width: @icon-width; text-align: center; }
-        &.column-4 { width: 35%; padding-right: 10px; }
-        &.column-5 { width: 55%; padding-right: 10px; }
-        &.column-6 { width: 140px; text-align: right; }
+        &.column-4 { width: @icon-width; text-align: center; }
+        &.column-5 { width: 35%; padding-left: 10px; padding-right: 10px; }
+        &.column-6 { width: 55%; padding-right: 10px; }
+        &.column-7 { width: 140px; text-align: right; }
+        &.column-8 { width: 3 * @icon-width; text-align: center; }
     }
 
     &.list-view .list-item {
@@ -433,15 +435,9 @@
     .detail-view-row {
         position: relative;
 
-        .date { float: right; margin-left: 16px; margin-right: 27px; }
         .recipients { float: left; }
         .priority { font-size: 14px; }
         .flag-picker {
-            float: none;
-            position: absolute;
-            top: 0;
-            right: 1px;
-            width: 12px; // to match fa-bars
             text-align: right;
             a { color: #333; }
         }
@@ -455,6 +451,12 @@
                 font-size: 14px;
             }
         }
+    }
+
+    .detail-view-row.row-1 {
+        display: flex;
+        .from { flex: 1; }
+        & > *:not(:first-child) { margin-left: @default-padding; }
     }
 
     &:not(.expanded) {
@@ -1264,9 +1266,11 @@ body.dragging .categories-toolbar-container {
         .mail-detail:not(.expanded) .recipients { max-height: initial; }
     }
 
-    .mail-item  {
-
+    .mail-detail {
         .subject { margin-right: 32px; }
+    }
+
+    .mail-item  {
 
         .unread-toggle {
             display: inline-block;
@@ -1363,8 +1367,7 @@ body.dragging .categories-toolbar-container {
                 li.item { line-height: 35px; }
                 &.preview li.item .file { display: block; }
             }
-            .list-unstyled.io-ox-inline-links { display:none; }
-            .links { display: block; }
+            .links { display:none; }
         }
 
         &:not(.expanded) .recipients { opacity: 1; }

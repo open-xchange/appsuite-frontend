@@ -318,7 +318,7 @@ define('io.ox/mail/main', [
         'props': function (app) {
 
             function getLayout() {
-                // enforece vertical on smartphones
+                // enforce vertical on smartphones
                 if (_.device('smartphone')) return 'vertical';
                 var layout = app.settings.get('layout', 'vertical');
                 // 'compact' only works on desktop properly
@@ -475,13 +475,6 @@ define('io.ox/mail/main', [
                     // set proper order first
                     model.set('order', (/^(610|608)$/).test(value) ? 'desc' : 'asc', { silent: true });
                     app.props.set('order', model.get('order'));
-                    // turn off conversation mode for any sort order but date (610)
-                    if (value !== 610) app.props.set('thread', false);
-                }
-                if (value === 610 && !app.props.get('thread')) {
-                    // restore thread when it was disabled by force
-                    var options = app.getViewOptions(app.folder.get());
-                    app.props.set('thread', options.threadrestore || false);
                 }
                 // now change sort columns
                 model.set({ sort: value });
@@ -501,18 +494,11 @@ define('io.ox/mail/main', [
          * Respond to conversation mode changes
          */
         'change:thread': function (app) {
-            app.props.on('change:thread', function (model, value, opt) {
+            app.props.on('change:thread', function (model, value) {
                 if (!app.changingFolders && app.listView.collection) {
                     app.listView.collection.expired = true;
                 }
-                if (value === true) {
-                    app.props.set('sort', 610);
-                    app.listView.model.set('thread', true);
-                } else {
-                    // remember/remove thread state for restoring
-                    opt.viewOptions = app.props.get('sort') === 610 ? { threadrestore: undefined } : { threadrestore: true };
-                    app.listView.model.set('thread', false);
-                }
+                app.listView.model.set('thread', !!value);
             });
         },
 
@@ -661,9 +647,7 @@ define('io.ox/mail/main', [
                 // marker so the change:sort listener does not change other attributes (which would be wrong in that case)
                 app.changingFolders = true;
 
-                var options = app.getViewOptions(id),
-                    fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
-                    showTo = account.is('sent|drafts', id);
+                var options = app.getViewOptions(id);
 
                 app.props.set(_.pick(options, 'sort', 'order', 'thread'));
 
@@ -674,7 +658,6 @@ define('io.ox/mail/main', [
 
                 app.listView.model.set('folder', id);
                 app.folder.getData();
-                fromTo.text(showTo ? gt('To') : gt('From'));
                 app.changingFolders = false;
             });
         },
@@ -1059,8 +1042,12 @@ define('io.ox/mail/main', [
             };
 
             app.props.on('change:layout', function () {
+                // check if view dropdown has focus and restore the focus after rendering
+                var body = app.getWindow().nodes.body,
+                    focus = body.find('*[data-dropdown="view"] a:first').is(':focus');
                 app.applyLayout();
                 app.listView.redraw();
+                if (focus) body.find('*[data-dropdown="view"] a:first').focus();
             });
 
             app.getWindow().on('show:initial', function () {
@@ -1516,50 +1503,12 @@ define('io.ox/mail/main', [
         /*
          * change to default folder on no permission or folder not found errors
          */
-        'no-permission': function (app) {
-            // use debounce, so errors from folder and app api are only handled once.
-            var handleError = _.debounce(function (error) {
-                // work with (error) and (event, error) arguments
-                if (error && !error.error) {
-                    if (arguments[1] && arguments[1].error) {
-                        error = arguments[1];
-                    } else {
-                        return;
-                    }
-                }
-                // only change if folder is currently displayed
-                if (error.error_params[0] && String(app.folder.get()) !== String(error.error_params[0])) {
-                    return;
-                }
-                require(['io.ox/core/yell'], function (yell) {
-                    yell(error);
-                    // try to load the default folder
-                    // guests do not have a default folder, so the first visible one is chosen
-                    app.folder.setDefault();
-                });
-            }, 300);
-
+        'folder-errors': function (app) {
             // will be thrown if the external mail account server somehow does not support starttls anymore
             folderAPI.on('error:MSG-0092', function (error) {
-                require(['io.ox/core/yell'], function (yell) {
-                    yell(error);
-                });
+                notifications.yell(error);
             });
-            folderAPI.on('error:FLD-0008', handleError);
-            api.on('error:FLD-0008', handleError);
-            api.on('error:IMAP-2041', function (e, error) {
-                // check if folder is currently displayed
-                if (String(app.folder.get()) !== String(error.error_params[1])) {
-                    return;
-                }
-                // see if we can still access the folder, although we are not allowed to view the contents
-                // this is important because otherwise we would not be able to change permissions (because the view jumps to the default folder all the time)
-                folderAPI.get(app.folder.get(), { cache: false }).fail(function (error) {
-                    if (error.code === 'FLD-0003') {
-                        handleError(error);
-                    }
-                });
-            });
+            app.folder.handleErrors();
         },
 
         'save-draft': function (app) {

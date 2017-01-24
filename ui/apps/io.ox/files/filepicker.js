@@ -86,50 +86,14 @@ define('io.ox/files/filepicker', [
     // }
 
     function isFileTypeDoc(mimeType, fileModel) {
-        // 'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        // 'docm': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        // 'dotx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
-        // 'dotm': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
-        // 'doc':  'application/msword',
-        // 'dot':  'application/msword',
-        // 'odt':  'application/vnd.oasis.opendocument.text',
-        // 'odm':  'application/vnd.oasis.opendocument.text-master',
-        // 'ott':  'application/vnd.oasis.opendocument.text-template',
-        // 'oth':  'application/vnd.oasis.opendocument.text-web',
-      //return (/^application\/(?:msword|vnd\.(?:ms-word|openxmlformats-officedocument\.wordprocessingml|oasis\.opendocument\.text))/).test(mimeType);
-
         // ... with Dec.2016 implemented into Files-API similar to `isPresentation` that already did exist.
         return filesAPI.Model.prototype.isWordprocessing.call((fileModel || null), mimeType);
     }
     function isFileTypeXls(mimeType, fileModel) {
-        // 'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        // 'xlsm': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        // 'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
-        // 'xltm': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
-        // 'xls':  'application/vnd.ms-excel',
-        // 'xlb':  'application/vnd.ms-excel',
-        // 'xlt':  'application/vnd.ms-excel',
-        // 'ods':  'application/vnd.oasis.opendocument.spreadsheet',
-        // 'ots':  'application/vnd.oasis.opendocument.spreadsheet-template',
-      //return (/^application\/(?:powerpoint|vnd\.(?:ms-powerpoint|openxmlformats-officedocument\.presentationml|oasis\.opendocument\.presentation))/).test(mimeType);
-
         // ... with Dec.2016 implemented into Files-API similar to `isPresentation` that already did exist.
         return filesAPI.Model.prototype.isSpreadsheet.call((fileModel || null), mimeType);
     }
     function isFileTypePpt(mimeType, fileModel) {
-        // 'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-        // 'pptm': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-        // 'ppsx': 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
-        // 'potx': 'application/vnd.openxmlformats-officedocument.presentationml.template',
-        // 'potm': 'application/vnd.openxmlformats-officedocument.presentationml.template',
-        // 'ppt':  'application/vnd.ms-powerpoint',
-        // 'pot':  'application/vnd.ms-powerpoint',
-        // 'pps':  'application/vnd.ms-powerpoint'
-        // 'odp':  'application/vnd.oasis.opendocument.presentation',
-        // 'otp':  'application/vnd.oasis.opendocument.presentation-template',
-      //return (/^application\/vnd\.(?:openxmlformats\-officedocument\.presentationml\.)|(?:oasis\.opendocument\.presentation)|(?:ms-powerpoint$)/).test(mimeType);
-
-        // did already exist in Files-API:
         return filesAPI.Model.prototype.isPresentation.call((fileModel || null), mimeType);
     }
 
@@ -141,8 +105,6 @@ define('io.ox/files/filepicker', [
     }
 
     function isFileTypeZip(mimeType, fileModel) {
-      //return (/^application\/zip$/).test(mimeType);
-
         // ... with Dec.2016 implemented into Files-API similar to `isPDF` that already did exist.
         return filesAPI.Model.prototype.isZIP.call((fileModel || null), mimeType);
     }
@@ -157,13 +119,17 @@ define('io.ox/files/filepicker', [
     function isFileTypeEncrypted(mimeType, fileModel) {
         return filesAPI.Model.prototype.isEncrypted.call((fileModel || null), mimeType);
     }
-    // function isFileTypeImage(mimeType) {
-    //     return filesAPI.Model.prototype.isImage.call(null, mimeType);
-    // }
 
-    function isMimetypeImage(mimetype/*, fileModel*/) {
-        return REGX__MIMETYPE_IMAGE.test(mimetype);
+    function isFileTypeSvg(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isSVG.call((fileModel || null), mimeType);
     }
+    function isFileTypeImage(mimeType, fileModel) {
+        return filesAPI.Model.prototype.isImage.call((fileModel || null), mimeType);
+    }
+
+    // function isMimetypeImage(mimetype) {
+    //     return REGX__MIMETYPE_IMAGE.test(mimetype);
+    // }
 
     // function getImageType(fileObject) {
     //     var imageType;
@@ -183,7 +149,7 @@ define('io.ox/files/filepicker', [
 
     var
       //REGX__IMAGE_EXTENSION = (/[./](gif|png|jpg|jpeg)$/),
-        REGX__MIMETYPE_IMAGE  = (/(?:^image\/)|(?:(?:gif|png|jpg|jpeg)$)/),
+      //REGX__MIMETYPE_IMAGE  = (/(?:^image\/)|(?:(?:gif|png|jpg|jpeg)$)/),
 
         fileTypeIconClassNameMap = {
 
@@ -193,6 +159,7 @@ define('io.ox/files/filepicker', [
 
             pdf: 'file-type-pdf',
             txt: 'file-type-txt',
+            svg: 'file-type-svg',
 
             zip: 'file-type-zip',
 
@@ -216,6 +183,7 @@ define('io.ox/files/filepicker', [
 
             (isFileTypePdf(mimeType, fileModel) && fileTypeIconClassNameMap.pdf) ||
             (isFileTypeTxt(mimeType, fileModel) && fileTypeIconClassNameMap.txt) ||
+            (isFileTypeSvg(mimeType, fileModel) && fileTypeIconClassNameMap.svg) ||
 
             (isFileTypeZip(mimeType, fileModel) && fileTypeIconClassNameMap.zip) ||
 
@@ -285,7 +253,7 @@ define('io.ox/files/filepicker', [
             $fileinfo     = $('<div class="fileinfo"><div class="sidebar-panel-body"></div></div>'),
 
             thumbnailUrl  = filesAPI.getUrl(fileObject, 'thumbnail', {
-                scaletype:  'contain',  // - contain or cover or auto
+                scaleType:  'contain',  // - contain or cover or auto
                 height:     140,        // - image height in pixels
                 width:      250,        // - image widht in pixels
                 version:    false       // - true/false. if false no version will be appended
@@ -335,7 +303,7 @@ define('io.ox/files/filepicker', [
             primaryButtonText: gt('Save'),
             // cancelButtonText: gt('Cancel'), // really?
             multiselect: true,
-            width: window.innerWidth * 0.8,
+            width: window.innerWidth * 0.8 > 1300 ? 1300 : Math.round(window.innerWidth * 0.8), // limit width to 1300px
             uploadButton: false,
             tree: {
                 // must be noop (must return undefined!)
@@ -410,8 +378,15 @@ define('io.ox/files/filepicker', [
 
         toggleOkButton(false);
 
-        this.selection.on('change', function (e, list) {
-            toggleOkButton(list.length > 0);
+        this.selection.on('change', function (e, selectedFiles) {
+
+            toggleOkButton(selectedFiles.length > 0);
+
+            // workaround for Bug 50500, instead of a real fix, we should use the NEW list from mail or drive
+            filesPane.find('input[type=checkbox]').prop('checked', false);
+            selectedFiles.forEach(function (selectedFile) {
+                filesPane.find('li.file[data-obj-id="' + _.cid(selectedFile) + '"] input').prop('checked', true);
+            });
         });
         if (isAllowPreviewPane) {
 
@@ -428,8 +403,11 @@ define('io.ox/files/filepicker', [
             if (!$previewPane) {
                 $previewPane = createPreviewPane(filesPane);
             }
-            if (isMimetypeImage(fileObject.file_mimetype)) {
-              //console.log('+++ Filepicker::select:file:type:image - image type +++ : ', getImageType(fileObject));
+            var
+                mimeType  = fileObject.file_mimetype,
+                fileModel = new filesAPI.Model(fileObject);
+
+            if (isFileTypeImage(mimeType, fileModel)) {
 
                 renderImagePreview($previewPane, fileObject/*, previewStore*/);
             } else {
@@ -474,7 +452,7 @@ define('io.ox/files/filepicker', [
                                 $('<label class="checkbox-inline sr-only">')
                                     .attr('title', title)
                                     .append(
-                                        $('<input type="checkbox" class="reflect-selection" tabindex="-1">')
+                                        $('<input type="checkbox" tabindex="-1">')
                                             .val(file.id).data('file', file)
                                     ),
                                 $('<div class="name">').text(title)
@@ -558,6 +536,10 @@ define('io.ox/files/filepicker', [
         //     }
         // }
 
+        function focusButtons() {
+            this.getFooter().find('button').first().focus();
+        }
+
         picker({
 
             addClass: 'zero-padding add-infostore-file',
@@ -622,6 +604,10 @@ define('io.ox/files/filepicker', [
                         pages.changePage('fileList', { disableAnimations: true });
                     });
                 }
+
+                // fix for Bug 50587
+                focusButtons.call(dialog);
+                tree.once('change', focusButtons.bind(dialog));
 
                 tree.on('change', onFolderChange);
                 options.initialize(dialog);

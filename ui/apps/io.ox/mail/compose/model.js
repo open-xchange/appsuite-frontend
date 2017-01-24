@@ -115,7 +115,8 @@ define.async('io.ox/mail/compose/model', [
                 }.bind(this));
             }
 
-            this.set('autoDismiss', this.get('mode') === 'edit');
+            // check if it is a draft. then do not set autoDismiss to true
+            if (!this.keepDraftOnClose()) this.set('autoDismiss', this.get('mode') === 'edit');
 
             if (!this.get('signatures')) this.set('signatures', this.getSignatures());
 
@@ -339,7 +340,12 @@ define.async('io.ox/mail/compose/model', [
         }),
         attachFiles: function attachFiles(files) {
             this.get('attachments').add(files);
-        }
+        },
+
+        keepDraftOnClose: function () {
+            if (settings.get('features/deleteDraftOnClose') !== true) return false;
+            return this.get('sendtype') === mailAPI.SENDTYPE.EDIT_DRAFT || (this.get('flags') & 4) > 0;
+        },
     });
 
     var def = $.Deferred();

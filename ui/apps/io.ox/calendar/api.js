@@ -716,6 +716,10 @@ define('io.ox/calendar/api', [
                     // clear caches
                     api.caches.all = {};
                     api.caches.get = {};
+                    // clear freebusy cache too
+                    if (capabilities.has('freebusy')) {
+                        api.caches.freebusy = {};
+                    }
                     // trigger local refresh
                     api.trigger('refresh.all');
                 });
@@ -789,6 +793,19 @@ define('io.ox/calendar/api', [
             });
         }
     };
+
+    // removes entries from the freebusy cache that belong to the current user
+    var cleanupFreeBusyCache = function () {
+        api.caches.freebusy = _(api.caches.freebusy).pick(function (value, key) {
+            //keys start with '1-', '3-' etc depending on type, so the id is at index 2
+            return key.indexOf(ox.user_id) !== 2;
+        });
+    };
+
+    // clear freebusy cache for current user
+    if (capabilities.has('freebusy')) {
+        api.on('create update delete', cleanupFreeBusyCache);
+    }
 
     api.on('create update', function (e, obj) {
         // has participants?

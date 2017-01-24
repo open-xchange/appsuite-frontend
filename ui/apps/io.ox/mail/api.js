@@ -275,6 +275,9 @@ define('io.ox/mail/api', [
         // limit default size
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
 
+        // do not process plain text if we prettify text client-side
+        obj.process_plain_text = !settings.get('beautifyPlainText');
+
         // never use factory's internal cache, therefore always 'false' at this point
         return get.call(api, obj, false).done(function (data) {
             // don't save raw data in our models. We only want preformated content there
@@ -1398,7 +1401,7 @@ define('io.ox/mail/api', [
      * @return { string} url
      */
     api.getUrl = function (data, mode, options) {
-        var opt = _.extend({ scaletype: 'contain' }, options),
+        var opt = _.extend({ scaleType: 'contain' }, options),
             url = ox.apiRoot + '/mail', first;
         if (mode === 'zip') {
             first = _(data).first();
@@ -1439,7 +1442,7 @@ define('io.ox/mail/api', [
         // inject filename for more convenient file downloads
         var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
             // scaling options
-            scaling = opt.width && opt.height ? '&scaleType=' + opt.scaletype + '&width=' + opt.width + '&height=' + opt.height : '';
+            scaling = opt.width && opt.height ? '&scaleType=' + opt.scaleType + '&width=' + opt.width + '&height=' + opt.height : '';
         url += (data.filename ? '/' + encodeURIComponent(filename) : '') + '?' +
             $.param({
                 action: 'attachment',
@@ -1641,12 +1644,16 @@ define('io.ox/mail/api', [
         });
     };
 
-    // change API's default options if allowHtmlMessages changes
-    settings.on('change:allowHtmlMessages', function (value) {
-        api.options.requests.get.view = value ? 'noimg' : 'text';
+    // some settings need a reset of the mail content cache
+    settings.on('change:allowHtmlMessages change:allowHtmlImages change:isColorQuoted change:beautifyPlainText', function () {
         pool.get('detail').each(function (model) {
             model.unset('attachments', { silent: true });
         });
+    });
+
+    // change API's default options if allowHtmlMessages changes
+    settings.on('change:allowHtmlMessages', function (value) {
+        api.options.requests.get.view = value ? 'noimg' : 'text';
     });
 
     accountAPI.on('refresh.all create:account', function () {
@@ -1868,7 +1875,7 @@ define('io.ox/mail/api', [
                     action: 'threadedAll',
                     folder: params.folder,
                     columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
-                    sort: '610',
+                    sort: params.sort || '610',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
                     max: (params.offset || 0) + 300,

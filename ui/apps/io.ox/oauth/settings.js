@@ -63,7 +63,7 @@ define('io.ox/oauth/settings', [
             }
 
             $form = $('<div class="settings-detail-pane">').append(
-                $('<legend class="sectiontitle">').text(gt('Account Settings')),
+                $('<legend class="sectiontitle">').text(gt('OAuth application overview')),
                 $('<div class="form-horizontal">').append(
                     $('<div class="control-group">').append(
                         $('<label for="displayName">').text(gt('Display Name')),

@@ -216,7 +216,10 @@ define('io.ox/mail/actions', [
                 api.refresh();
                 ox.registry.call('mail-compose', 'edit', list[0]).done(function (window) {
                     var model = window.app.model;
-                    model.set('subject', gt('Copy of %1$s', model.get('subject')));
+                    //#. If the user selects 'copy of' in the drafts folder, the subject of the email is prefixed with [Copy].
+                    //#. Please make sure that this is a prefix in every translation since it will be removed when the mail is sent.
+                    //#. %1$s the original subject of the mail
+                    model.set('subject', gt('[Copy] %1$s', model.get('subject')));
                 });
             });
         }

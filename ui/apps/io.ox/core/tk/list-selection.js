@@ -224,13 +224,15 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             return !!nodes.length;
         },
 
-        focus: function (index, items) {
+        focus: function (index, items, focus) {
             items = items || this.getItems();
             var node = items.eq(index).attr('tabindex', '0');
             // call focus deferred due to some issues in internet explorer
-            _.defer(function () {
-                node.focus();
-            });
+            if (focus !== false) {
+                _.defer(function () {
+                    node.focus();
+                });
+            }
             // workaround for chrome's CSS bug:
             // styles of "selected" class are not applied if focus triggers scrolling.
             // idea taken from http://forrst.com/posts/jQuery_redraw-BGv
@@ -238,7 +240,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             return node;
         },
 
-        pick: function (index, items, e) {
+        pick: function (index, items, e, focus) {
             var node;
 
             items = items || this.getItems();
@@ -249,7 +251,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             } else {
                 // single select
                 items.removeClass('precursor');
-                node = this.focus(index, items).addClass('precursor');
+                node = this.focus(index, items, focus).addClass('precursor');
                 if (this.isMultiple(e)) this.pickMultiple(node, items); else this.pickSingle(node);
             }
         },
@@ -281,12 +283,12 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         // just select one item (no range; no multiple)
-        select: function (index, items) {
+        select: function (index, items, focus) {
             items = items || this.getItems();
             if (index >= items.length) return;
             this.resetCheckmark(items);
             this.resetTabIndex(items, items.eq(index));
-            this.pick(index, items);
+            this.pick(index, items, null, focus);
             this.selectEvents(items);
         },
 
@@ -341,21 +343,22 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 last = items.index(selected.last()),
                 tail = items.length - 1,
                 apply = this.select.bind(this),
-                direction = this.getDirection();
+                direction = this.getDirection(),
+                focus = $.contains(this.view.el, document.activeElement);
 
             // All: if all items are selected we dodge by clearing the entire selection
             if (items.length === length) return this.clear();
 
             // up and enough room
-            if (direction === 'up' && first > 0) return apply(first - 1, items);
+            if (direction === 'up' && first > 0) return apply(first - 1, items, focus);
 
             // down and enough room
-            if (direction === 'down' && last < tail) return apply(last + 1, items);
+            if (direction === 'down' && last < tail) return apply(last + 1, items, focus);
 
             // otherwise: iterate over list to find a free spot
             items.slice(first).each(function (index) {
                 if (!$(this).hasClass('selected')) {
-                    apply(first + index, items);
+                    apply(first + index, items, focus);
                     return false;
                 }
             });
@@ -373,10 +376,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 current = $(document.activeElement),
                 index = (items.index(current) || 0);
 
-            // don't cross the edge on cursor left/right
             var width = parseInt(this.view.$el.attr('grid-count') || 1, 10),
                 column = index % width;
-            if ((column === 0 && e.which === 37) || (column === width - 1 && e.which === 39)) return;
 
             // compute new index
             var cursorUpDown = e.which === 38 || e.which === 40,

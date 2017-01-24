@@ -21,7 +21,9 @@ define('io.ox/files/settings/defaults', function () {
         audioEnabled: true,
         rootFolderId: 9,
         showHidden: false,
-        uploadHandling: 'announceNewVersion'
+        uploadHandling: 'announceNewVersion',
+        autoplayPause: 5,
+        autoplayLoopMode: 'loopEndlessly'
     };
 
     return settingsDefaults;

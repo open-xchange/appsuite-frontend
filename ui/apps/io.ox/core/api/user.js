@@ -26,8 +26,12 @@ define('io.ox/core/api/user', [
         //we have only one user
         if (response.id) {
             //convert birthdays with year 1 from julian to gregorian calendar
-            if (response.birthday && moment.utc(response.birthday).local(true).year() === 1) {
+            if (response.birthday && moment.utc(response.birthday).local(true).year() <= 1) {
                 response.birthday = util.julianToGregorian(response.birthday);
+            }
+            //convert anniversaries with year 1 from julian to gregorian calendar
+            if (response.anniversary && moment.utc(response.anniversary).local(true).year() <= 1) {
+                response.anniversary = util.julianToGregorian(response.anniversary);
             }
             return response;
         }
@@ -35,8 +39,12 @@ define('io.ox/core/api/user', [
         //convert birthdays with year 1 from julian to gregorian calendar
         _(response).each(function (contact) {
             //birthday without year
-            if (contact.birthday && moment.utc(contact.birthday).local(true).year() === 1) {
+            if (contact.birthday && moment.utc(contact.birthday).local(true).year() <= 1) {
                 contact.birthday = util.julianToGregorian(contact.birthday);
+            }
+            //convert anniversaries with year 1 from julian to gregorian calendar
+            if (response.anniversary && moment.utc(response.anniversary).local(true).year() <= 1) {
+                response.anniversary = util.julianToGregorian(response.anniversary);
             }
         });
         return response;
@@ -100,8 +108,12 @@ define('io.ox/core/api/user', [
 
         return require(['io.ox/contacts/api']).then(function (contactsApi) {
             //convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
-            if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() === 1) {
+            if (o.data.birthday && moment.utc(o.data.birthday).local(true).year() <= 1) {
                 o.data.birthday = util.gregorianToJulian(o.data.birthday);
+            }
+            //convert anniversaries with year 1(birthdays without year) from gregorian to julian calendar
+            if (o.data.anniversary && moment.utc(o.data.anniversary).local(true).year() <= 1) {
+                o.data.anniversary = util.gregorianToJulian(o.data.anniversary);
             }
             return http.PUT({
                 module: 'user',

@@ -56,7 +56,7 @@ define('io.ox/core/boot/fixes', [], function () {
     // Prevent Content Spoofing
     // See: https://mathiasbynens.github.io/rel-noopener/
     // and: https://github.com/danielstjules/blankshield
-    $(document).on('click', 'a[rel="noopener"]', function (e) {
+    $(document).on('click', 'a[rel="noopener"], area[target="_blank"]', function (e) {
         e.preventDefault();
         blankshield.open($(this).attr('href'));
     });
@@ -124,6 +124,12 @@ define('io.ox/core/boot/fixes', [], function () {
             e.preventDefault();
             return false;
         };
+    }
+
+    // IE
+    // so we can add browser specific css (currently only needed for IE)
+    if (_.device('ie')) {
+        $('html').addClass('internet-explorer');
     }
 
     //

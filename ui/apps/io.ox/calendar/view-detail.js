@@ -272,8 +272,7 @@ define('io.ox/calendar/view-detail', [
                         $('<a role="button">').attr({
                             href: url,
                             target: '_blank',
-                            class: 'deep-link btn btn-primary btn-xs',
-                            style: 'font-family: Arial; color: white; text-decoration: none; height: 16px; line-height: 16px; box-sizing: content-box;'
+                            class: 'deep-link btn btn-primary btn-xs'
                         }).text(gt('Appointment')).on('click', function (e) {
                             e.preventDefault();
 

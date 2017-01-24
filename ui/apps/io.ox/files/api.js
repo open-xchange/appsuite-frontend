@@ -104,21 +104,28 @@ define('io.ox/files/api', [
         isFolder: function () {
             return this.has('standard_folder');
         },
-
         isFile: function () {
             // we cannot check for "filename", because there are files without a file; yep!
             // so we rather check if it's not a folder
             return !this.isFolder() && (this.get('source') === 'drive' || this.get('source') === 'guardDrive');
         },
 
+        isSVG: function (type) {
+            return (/^image\/svg/).test(type || this.getMimeType());
+        },
         isImage: function (type) {
-            return (/^image\//).test(type || this.getMimeType());
+            return (
+                (/^image\//).test(type || this.getMimeType()) &&
+
+                // bypass SVG as they can contain malicious XML
+                // See Bug #50748
+                !this.isSVG(type)
+            );
         },
 
         isAudio: function (type) {
             return (/^audio\//).test(type || this.getMimeType());
         },
-
         isVideo: function (type) {
             return (/^video\//).test(type || this.getMimeType());
         },
@@ -150,18 +157,15 @@ define('io.ox/files/api', [
         },
 
         isPgp: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPDF` that already did exist.
-            return (/^application\/pgp(?:\-encrypted)*$/).test(type || this.getMimeType());
+            return (/^application\/pgp(?:\-encrypted)*$/).test(type) || this.isGuard();
         },
         isGuard: function () {
-            return (/guard/).test(this.get('source'));
+            return (/^guard/).test(this.get('source'));
         },
 
         isEncrypted: function () {
             return (
-
-                this.isGuard() ||
                 this.isPgp() ||
-
                 // check if file has "guard" file extension
                 (/\.(grd|grd2|pgp)$/).test(this.get('filename'))
             );
@@ -192,6 +196,20 @@ define('io.ox/files/api', [
             return parts.length === 1 ? '' : parts.pop().toLowerCase();
         },
 
+        getGuardExtension: function () {
+            var extension;
+            var parts = String(this.get('filename') || '').split('.');
+
+            // If has extension .xyz.pgp, remove the pgp and return extension
+            if ((parts.length > 2) && (parts.pop().toLowerCase() === 'pgp')) {
+                extension = parts[parts.length - 1];
+            } else {
+                extension = '';
+            }
+
+            return extension;
+        },
+
         getMimeType: function () {
             // split by ; because this field might contain further unwanted data
             var type = String(this.get('file_mimetype')).toLowerCase().split(';')[0];
@@ -211,8 +229,16 @@ define('io.ox/files/api', [
         },
 
         getGuardMimeType: function () {
-            if (this.get('meta') && this.get('meta').OrigMime) return this.get('meta').OrigMime;
-            return this.getMimeType();
+            var meta = this.get('meta');
+            var origMime = meta && meta.OrigMime;
+
+            // no original mime or unusable mime type?
+            if (!origMime || regUnusableType.test(origMime)) {
+                // return mime type based on file extension
+                origMime = api.mimeTypes[this.getGuardExtension()] || this.getMimeType();
+            }
+
+            return origMime;
         },
 
         getFileType: function () {
@@ -226,13 +252,10 @@ define('io.ox/files/api', [
         },
 
         getGuardType: function () {
-            var parts = String(this.get('filename') || '').split('.');
-            if (parts.length < 3) return this.getFileType();
-            // If has extension .xyz.pgp, remove the pgp and test extension
-            if (parts.pop().toLowerCase() === 'pgp') {
-                var extension = parts[parts.length - 1];
+            var extension = this.getGuardExtension();
+            if (extension) {
                 for (var type in this.types) {
-                    if (this.types[type].test(extension)) return type;
+                    if (this.types[type].test(extension)) { return type; }
                 }
             }
             return this.getFileType();
@@ -357,13 +380,13 @@ define('io.ox/files/api', [
 
     // get URL to open, download, or preview a file
     // options:
-    // - scaletype: contain or cover or auto
+    // - scaleType: contain or cover or auto
     // - height: image height in pixels
     // - width: image widht in pixels
     // - version: true/false. if false no version will be appended
     api.getUrl = function (file, type, options) {
 
-        options = _.extend({ scaletype: 'contain' }, options);
+        options = _.extend({ scaleType: 'contain' }, options);
 
         var url = ox.apiRoot + '/files',
             folder = encodeURIComponent(file.folder_id),
@@ -375,7 +398,7 @@ define('io.ox/files/api', [
             // file name
             name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
             // scaling options
-            scaling = options.width && options.height ? '&scaleType=' + options.scaletype + '&width=' + options.width + '&height=' + options.height : '',
+            scaling = options.width && options.height ? '&scaleType=' + options.scaleType + '&width=' + options.width + '&height=' + options.height : '',
             // avoid having identical URLs across contexts (rather edge case)
             // also inject last_modified if available; needed for "revisionless save"
             // the content might change without creating a new version (which would be part of the URL)
@@ -1041,6 +1064,8 @@ define('io.ox/files/api', [
 
         // add data
         formData.append('json', JSON.stringify(data));
+        // store folder here for error handling. cannot restore data from formData in Safari or IE
+        formData.folder = data.folder_id;
 
         return http.UPLOAD({
             module: options.module,

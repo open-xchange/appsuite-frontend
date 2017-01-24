@@ -52,7 +52,7 @@ define('plugins/notifications/tasks/register', [
                 'data-cid': _.cid(data),
                 //#. %1$s task title
                 //#, c-format
-                'aria-label': gt('Invitation for %1$s.', _.noI18n(data.title))
+                'aria-label': gt('Overdue Task %1$s.', _.noI18n(data.title))
             })
             .append($('<a class="notification-info" role="button">').append(
                     $('<span class="span-to-div title">').text(_.noI18n(data.title)),

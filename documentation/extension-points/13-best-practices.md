@@ -1,10 +1,10 @@
 ---
 title: Best practices
-description: 
+description:
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Extending_the_UI_(best_practices)
 ---
 
-The extension points system allows different strategies to realize the desired behavior. 
+The extension points system allows different strategies to realize the desired behavior.
 This is a list of solutions for common scenarios pointing out also some disadvantages of different solutions.
 
 # scenario: writing extension in general
@@ -14,18 +14,32 @@ _separate extension declaration and logic for reusability_
 example: io.ox/mail/common-extensions.js and io.ox/mail/detail/view.js
 
 ```javascript
-var fnProcess = function (baton) { ... };
-// use function within some extension
-ext.point('io.ox/mail/detail/content').extend({
-   id: 'links',
-   index: 100,
-   process: fnProcess
-});
-// use function within another extension
-ext.point('io.ox/mail/detail/content').extend({
-    id: 'images',
-    index: 100,
-    process: fnProcess
+define('plugins/core/foobar/register', [
+    'io.ox/core/extensions'
+], function (ext) {
+
+    var extensions = {
+        fnProcess:  function (baton) {
+            console.log('foobar');
+        }
+    };
+
+    // use function within some extension
+    ext.point('io.ox/mail/detail/content').extend({
+       id: 'links',
+       index: 100,
+       process: extensions.fnProcess
+    });
+
+    // use same function within another extension
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'images',
+        index: 100,
+        process: extensions.fnProcess
+    });
+
+    // return extensions to allow reuse in other files/classes
+    return extensions;
 });
 ```
 
@@ -72,10 +86,10 @@ _using ext.point(...).replace_
 
 ```javascript
  // please do not use replace to overwrite 'requires'
-ext.point('io.ox/mail/actions/compose').replace({ 
+ext.point('io.ox/mail/actions/compose').replace({
     requires: function () {
         // my custom logic
-    } 
+    }
 })
 ```
 
@@ -111,6 +125,6 @@ ext.point('io.ox/mail/actions/compose').extend({
 });
 ```
 
-**hint** 
+**hint**
 
 In case the condition for a single action target (f.e. a mail item) do not change you can use 'baton.preventDefault()' alternatively when you condition is met.

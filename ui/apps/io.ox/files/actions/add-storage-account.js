@@ -17,19 +17,24 @@ define('io.ox/files/actions/add-storage-account', [
     'io.ox/core/tk/dialogs',
     'io.ox/metrics/main',
     'io.ox/core/yell',
+    'io.ox/core/a11y',
     'gettext!io.ox/files',
     // must be required here or popupblocker blocks the window while we require files
     'io.ox/oauth/keychain',
     'io.ox/core/api/filestorage',
     'io.ox/oauth/backbone'
-], function (dialogs, metrics, yell, gt, oauthAPI, filestorageApi, OAuth) {
+], function (dialogs, metrics, yell, a11y, gt, oauthAPI, filestorageApi, OAuth) {
 
     'use strict';
 
     function createAccount(service) {
-        var account = new OAuth.Account.Model({
+        var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
+            return !account.hasScope('drive');
+        })[0] || new OAuth.Account.Model({
             serviceId: service.id,
-            displayName: 'My ' + service.get('displayName') + ' account'
+            //#. %1$s is the display name of the account
+            //#. e.g. My Xing account
+            displayName: gt('My %1$s account', service.get('displayName'))
         });
 
         // if only the filestorage account is missing there is no need for Oauth authorization.
@@ -96,6 +101,8 @@ define('io.ox/files/actions/add-storage-account', [
             .header($('<h4>').text(gt('Add storage account')))
             .addPrimaryButton('close', gt('Close'), 'close')
             .build(drawContent)
-            .show();
+            .show(function () {
+                a11y.getTabbable(this).first().focus();
+            });
     };
 });

@@ -112,8 +112,7 @@ define('io.ox/calendar/view-grid-template', [
                         if (participant.type === 3) {
                             resourceAPI.get({ id: participant.id }).done(function (resource) {
                                 conflicts.append(
-                                    $('<span>')
-                                        .addClass('resource-link')
+                                    $('<span class="resource-link">')
                                         .text(gt.noI18n(resource.display_name))
                                         .css('margin-left', '4px')
                                 );
@@ -122,17 +121,16 @@ define('io.ox/calendar/view-grid-template', [
                         // internal user
                         if (participant.type === 1) {
                             conflicts.append(
-                                $('<a>')
+                                $('<a class="person-link" role="button">')
                                     .append(userAPI.getTextNode(participant.id))
-                                    .addClass('person-link ' + util.getConfirmationClass(participant.confirmation))
+                                    .addClass(util.getConfirmationClass(participant.confirmation))
                                     .css('margin-left', '4px')
                                     .on('click', { internal_userid: participant.id }, fnClickPerson)
                             );
                         }
                         // separator
                         if (index < (list.length - 1)) {
-                            conflicts.append($('<span>').addClass('delimiter')
-                                .append($.txt(_.noI18n('\u00A0\u2022 '))));
+                            conflicts.append($('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2022 '))));
                         }
                     });
                     fields.conflicts.show();

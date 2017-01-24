@@ -1322,9 +1322,13 @@ define('io.ox/core/main', [
                 autoStart = _([].concat(settings.get('autoStart'), 'io.ox/mail', favoritePaths))
                     .chain()
                     .filter(function (o) {
-                        return !_.isUndefined(o) && !_.isNull(o) && favoritePaths.indexOf(/main$/.test(o) ? o : o + '/main') >= 0;
+                        if (_.isUndefined(o)) return false;
+                        if (_.isNull(o)) return false;
+                        // special case to start in settings (see Bug 50987)
+                        if (o === 'io.ox/settings/main') return true;
+                        return favoritePaths.indexOf(/main$/.test(o) ? o : o + '/main') >= 0;
                     })
-                    .first(1)
+                    .first(1) // use 1 here to return an array
                     .value();
             }
 
@@ -1405,10 +1409,14 @@ define('io.ox/core/main', [
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
                 deeplink = looksLikeDeepLink && manifest && manifest.deeplink,
-                mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
+                mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose') + ':compose');
 
-            if (manifest && (manifest.refreshable || deeplink || (capabilities.has('webmail') && mailto))) {
+            if (manifest && (manifest.refreshable || deeplink)) {
                 baton.autoLaunch = appURL.split(/,/);
+                // no manifest for mail compose, capabilities check is sufficient
+            } else if (capabilities.has('webmail') && mailto) {
+                // launch main mail app for mailto links
+                baton.autoLaunch = ['io.ox/mail/main'];
             } else {
                 // clear typical parameter?
                 if (manifest) _.url.hash({ app: null, folder: null, id: null });
@@ -1419,7 +1427,6 @@ define('io.ox/core/main', [
         var baton = ext.Baton({ block: $.Deferred() });
 
         appCheck(baton);
-
         baton.autoLaunchApps = _(baton.autoLaunch)
         .chain()
         .map(function (m) {
@@ -1479,6 +1486,11 @@ define('io.ox/core/main', [
             id: 'first',
             index: 100,
             run: function () {
+                if (ox.rampup && ox.rampup.errors && ox.rampup.errors['MSG-0113']) {
+                    ox.serverConfig.capabilities = _.filter(ox.serverConfig.capabilities, function (cap) {
+                        return cap.id !== 'webmail';
+                    });
+                }
                 debug('Stage "first"');
             }
         });
@@ -1689,6 +1701,7 @@ define('io.ox/core/main', [
 
                     // restore apps
                     ox.ui.App.restore().always(function () {
+                        var allUnavailable = true;
                         // auto launch
                         _(baton.autoLaunch)
                         .chain()
@@ -1702,6 +1715,7 @@ define('io.ox/core/main', [
                         })
                         .each(function (details, index) {
                             //only load first app on small devices
+                            if (index === 0) allUnavailable = false;
                             if (_.device('smartphone') && index > 0) return;
                             // split app/call
                             var launch, method, options = _(hash).pick('folder', 'id');
@@ -1749,6 +1763,11 @@ define('io.ox/core/main', [
                                 });
                             }
                         });
+                        if (allUnavailable || (ox.rampup && ox.rampup.errors)) {
+                            var message = _.pluck(ox.rampup.errors, 'error').join('\n\n');
+                            message = message || gt('The requested application is not available at this moment.');
+                            notifications.yell({ type: 'error', error: message, duration: -1 });
+                        }
                     });
 
                     baton.instantFadeOut = instantFadeOut;
@@ -1865,7 +1884,9 @@ define('io.ox/core/main', [
             reCodes = [
                 // sharing warnings
                 /^SHR_NOT-\d{4}$/,
-                /^RSS-0007/
+                /^RSS-0007/,
+                // IMAP-specific on unified inbox folders (see Bug 50799)
+                /^MSG-1001/
             ];
         return function (code) {
             // return true in case at least one regex matched

@@ -101,7 +101,7 @@ define('plugins/notifications/mail/register', [
     // ensure we do not play a sound twice until the first sound has finished
     var playSound = _.throttle(function () {
         if (_.device('smartphone')) return;
-        sound.play();
+        if (sound) sound.play();
     }, 2000);
 
     settingsModel.on('change:notificationSoundName', function () {
@@ -109,8 +109,10 @@ define('plugins/notifications/mail/register', [
         var s = settingsModel.get('notificationSoundName');
         loadSound(s).done(function (s) {
             // preview the selected sound by playing it on change
-            s.play();
-            sound = s;
+            if (s) {
+                s.play();
+                sound = s;
+            }
         });
         settingsModel.saveAndYell();
     });
@@ -126,7 +128,7 @@ define('plugins/notifications/mail/register', [
         index: 490,
         id: 'sounds',
         draw: function () {
-            if (_.device('smartphone')) return;
+            if (_.device('smartphone') || !cap.has('websocket') || !Modernizr.websockets) return;
             // use this array to customize the sounds
             // copy new/other sounds to themefolder->sounds
             var sounds, list = [

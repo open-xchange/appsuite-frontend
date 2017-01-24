@@ -36,6 +36,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         onReady: function () {
+            if (_.device('smartphone')) return;
             if (this.smart === false && !this.$overlay) return;
             if (!this.$el.hasClass('open')) return;
             this.adjustBounds();
@@ -47,7 +48,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$el.removeClass('open');
             this.$ul.attr('style', this.$ul.data('style') || '').removeData('style');
             this.$overlay.remove();
-            this.$toggle.focus();
+            this.$toggle.attr('aria-expanded', false).focus();
             delete this.$overlay;
         },
 

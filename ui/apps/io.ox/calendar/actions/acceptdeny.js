@@ -33,6 +33,8 @@ define('io.ox/calendar/actions/acceptdeny', [
                 appointmentData,
                 //use different api if provided (tasks use this)
                 api = options.api || calApi,
+                folder,
+                canModify,
                 reminderSelect = $(),
                 inputid = _.uniqueId('dialog'),
                 defaultReminder = calSettings.get('defaultReminder', 15),
@@ -44,9 +46,25 @@ define('io.ox/calendar/actions/acceptdeny', [
                 apiData.recurrence_position = o.recurrence_position;
             }
 
-            api.get(apiData).then(function (data) {
+            $.when(api.get(apiData), folderAPI.get(apiData.folder)).then(function (data, folderData) {
                 appointmentData = data;
-                if (showReminderSelect) {
+                // check if the response is of type [data, timestamp]
+                if (_.isArray(data) && data.length === 2 && _.isNumber(data[1])) {
+                    appointmentData = data[0];
+                }
+                folder = folderData;
+
+                // check if user is allowed to set the reminder time
+                // tasks don't have a default reminder
+                canModify = options.taskmode ? 0 : folderAPI.bits(folder, 14);
+                // only own objects
+                if (canModify === 1) {
+                    canModify = appointmentData.organizerId === ox.user_id;
+                } else {
+                    canModify = canModify > 1;
+                }
+
+                if (showReminderSelect && canModify) {
                     reminderSelect = $('<div class="form-group">').append(
                         $('<label>').attr('for', 'reminderSelect').text(gt('Reminder')),
                         $('<select id="reminderSelect" class="form-control" data-property="reminder">').append(function () {
@@ -132,73 +150,65 @@ define('io.ox/calendar/actions/acceptdeny', [
                             confirmmessage: $.trim(this.getContentNode().find('[data-property="comment"]').val())
                         };
 
-                        folderAPI.get(apiData.folder).done(function (folder) {
+                        // add current user id in shared or public folder
+                        if (folderAPI.is('shared', folder)) {
+                            apiData.data.id = folder.created_by;
+                        }
 
-                            // add current user id in shared or public folder
-                            if (folderAPI.is('shared', folder)) {
-                                apiData.data.id = folder.created_by;
-                            }
+                        switch (action) {
+                            case 'accepted':
+                                apiData.data.confirmation = 1;
+                                break;
+                            case 'declined':
+                                apiData.data.confirmation = 2;
+                                break;
+                            case 'tentative':
+                                apiData.data.confirmation = 3;
+                                break;
+                            default:
+                                return;
+                        }
 
-                            switch (action) {
-                                case 'accepted':
-                                    apiData.data.confirmation = 1;
-                                    break;
-                                case 'declined':
-                                    apiData.data.confirmation = 2;
-                                    break;
-                                case 'tentative':
-                                    apiData.data.confirmation = 3;
-                                    break;
-                                default:
-                                    return;
-                            }
+                        // set (default) reminder?
+                        if (showReminderSelect && canModify) {
+                            apiData.data.alarm = parseInt(reminderSelect.find('select').val(), 10);
+                        }
 
-                            // set (default) reminder?
-                            if (showReminderSelect) {
-                                apiData.data.alarm = parseInt(reminderSelect.find('select').val(), 10);
-                            }
+                        if (!options.taskmode && !series && o.recurrence_position) {
+                            _.extend(apiData, { occurrence: o.recurrence_position });
+                        }
 
-                            if (!options.taskmode && !series && o.recurrence_position) {
-                                _.extend(apiData, { occurrence: o.recurrence_position });
-                            }
+                        var previousConfirmation = _(appointmentData.users).findWhere({ id: ox.user_id });
 
-                            var previousConfirmation = 0;
-                            for (var i = 0; i < appointmentData.users.length; i++) {
-                                if (appointmentData.users[i].id === ox.user_id) {
-                                    //confirmed or tentative
-                                    previousConfirmation = appointmentData.users[i].confirmation;
-                                }
-                            }
-                            // no conflicts possible if you decline the appointment
-                            // no conflicts possible for free appointments
-                            // don't check if confirmation status did not change
-                            if (action === 'declined' || appointmentData.shown_as === 4 || apiData.data.confirmation === previousConfirmation) {
-                                checkConflicts = false;
-                            }
+                        // no conflicts possible if you decline the appointment
+                        // no conflicts possible for free appointments
+                        // don't check if confirmation status did not change
+                        if (action === 'declined' || appointmentData.shown_as === 4 || (previousConfirmation && apiData.data.confirmation === previousConfirmation.confirmation)) {
+                            checkConflicts = false;
+                        }
 
-                            if (!checkConflicts) return performConfirm();
+                        if (!checkConflicts) return performConfirm();
 
-                            api.checkConflicts(appointmentData)
-                                .done(function (conflicts) {
+                        api.checkConflicts(appointmentData)
+                            .done(function (conflicts) {
 
-                                    if (conflicts.length === 0) return performConfirm();
+                                if (conflicts.length === 0) return performConfirm();
 
-                                    ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                                        new dialogs.ModalDialog()
-                                            .header(conflictView.drawHeader())
-                                            .append(conflictView.drawList(conflicts, dialog).addClass('additional-info'))
-                                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore')
-                                            .addButton('cancel', gt('Cancel'), 'cancel')
-                                            .show()
-                                            .done(function (action) {
-                                                if (action === 'cancel') return dialog.idle();
-                                                if (action === 'ignore') performConfirm();
-                                            });
-                                    });
-                                })
-                                .fail(notifications.yell)
-                                .fail(dialog.close);
-                        });
+                                ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                                    new dialogs.ModalDialog()
+                                        .header(conflictView.drawHeader())
+                                        .append(conflictView.drawList(conflicts, dialog).addClass('additional-info'))
+                                        .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore')
+                                        .addButton('cancel', gt('Cancel'), 'cancel')
+                                        .show()
+                                        .done(function (action) {
+                                            if (action === 'cancel') return dialog.idle();
+                                            if (action === 'ignore') performConfirm();
+                                        });
+                                });
+                            })
+                            .fail(notifications.yell)
+                            .fail(dialog.close);
                     })
                     .show(function () {
                         // do not focus on mobiles. No, never, please. It does simply not work!

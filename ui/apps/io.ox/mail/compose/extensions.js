@@ -68,7 +68,7 @@ define('io.ox/mail/compose/extensions', [
                 return (
                     $('<button type="button" class="btn btn-default" data-action="discard">')
                         .on('click', function () { baton.view.app.quit(); })
-                        .text(gt('Discard'))
+                        .text(baton.model.keepDraftOnClose() ? gt('Delete') : gt('Discard'))
                         .appendTo(this)
                 );
             },
@@ -319,12 +319,12 @@ define('io.ox/mail/compose/extensions', [
                 if (usePicker) {
                     node.addClass('has-picker').append(
                         $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-plus" aria-hidden="true"></i></a>')
-                        .attr('aria-label', gt('Click to select contacts'))
+                        .attr('aria-label', gt('Select contacts'))
                         .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
                     );
                 }
 
-                var title = gt('Click to select contacts');
+                var title = gt('Select contacts');
 
                 this.append(
                     extNode = $('<div data-extension-id="' + attr + '">').addClass(cls)
@@ -789,10 +789,23 @@ define('io.ox/mail/compose/extensions', [
 
                     id = node.attr('data-id');
                     data = view.collection.get(id).toJSON();
+
+                    if (data.group === 'localFile') {
+                        data.fileObj = view.collection.get(id).fileObj;
+                        // generate pseudo id so multiple localFile attachments do not overwrite themselves in the Viewer collection
+                        data.id = 'localFileAttachment-' + id;
+                    }
+
                     list = view.collection.filter(function (a) {
                         return a.get('disp') === 'attachment';
                     }).map(function (a) {
-                        return a.toJSON();
+                        var obj = a.toJSON();
+                        if (obj.group === 'localFile') {
+                            obj.fileObj = a.fileObj;
+                            // generate pseudo id so multiple localFile attachments do not overwrite themselves in the Viewer collection
+                            obj.id = 'localFileAttachment-' + a.cid;
+                        }
+                        return obj;
                     });
 
                     baton = ext.Baton({ startItem: data, data: list, openedBy: 'io.ox/mail/compose' });

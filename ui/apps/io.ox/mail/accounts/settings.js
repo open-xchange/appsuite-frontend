@@ -27,7 +27,7 @@ define('io.ox/mail/accounts/settings', [
     'use strict';
 
     function renderDetailView(evt, data) {
-        var myView, myModel, myViewNode;
+        var myView, myModel, myViewNode, ignoreValidationErrors = true;
 
         myViewNode = $('<div>').addClass('accountDetail');
         myModel = new AccountModel(data);
@@ -58,6 +58,7 @@ define('io.ox/mail/accounts/settings', [
             $form.find('.help-block').prev().removeAttr('aria-invalid aria-describedby');
             $form.find('.help-block').remove();
 
+            if (ignoreValidationErrors) return;
             _.each(error, function (message, key) {
                 var $field = myView.$el.find('#' + key).parent(),
                     $row = $field.closest('.form-group'),
@@ -72,7 +73,13 @@ define('io.ox/mail/accounts/settings', [
             });
         });
 
+        // validate on change, so errormessages and aria-invalid states are updated
+        myModel.on('change', function (model) {
+            model.validate();
+        });
+
         myView.dialog.on('save', function () {
+            ignoreValidationErrors = false;
             myModel.validate();
             if (myModel.isValid()) {
                 myView.dialog.getBody().find('.settings-detail-pane').trigger('save');
@@ -146,6 +153,12 @@ define('io.ox/mail/accounts/settings', [
                             }, true);
                     })), list = new OAuth.Views.ServicesListView({ collection: mailServices });
 
+                if (mailServices.length === 0) {
+                    baton.popup.getFooter().find('[data-action="add"]').show();
+                    // invoke wizard, there are no OAuth options to choose from
+                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                    return;
+                }
                 mailServices.push({
                     id: 'wizard',
                     displayName: gt('Other')
@@ -155,16 +168,21 @@ define('io.ox/mail/accounts/settings', [
                     $('<label>').text(gt('Please select your mail account provider')),
                     list.render().$el
                 );
+                // this code block runs deferred, need to focus the first element, again
+                a11y.getTabbable($el).first().focus();
 
                 list.listenTo(list, 'select', function (service) {
                     if (service.id === 'wizard') return;
 
-                    var account = new OAuth.Account.Model({
+                    var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
+                        return !account.hasScope('mail');
+                    })[0] || new OAuth.Account.Model({
                         serviceId: service.id,
-                        displayName: 'My ' + service.get('displayName') + ' account'
+                        //#. %1$s is the display name of the account
+                        //#. e.g. My Xing account
+                        displayName: gt('My %1$s account', service.get('displayName'))
                     });
 
-                    list.$el.find('button').prop('disabled', true).addClass('disabled');
                     account.enableScopes('mail').save().then(function () {
                         ox.busy();
                         var busyMessage = $('<div class="alert-placeholder">');
@@ -185,8 +203,6 @@ define('io.ox/mail/accounts/settings', [
                         }, notifications.yell).always(function () {
                             ox.idle();
                         });
-                    }).always(function () {
-                        list.$el.find('button').prop('disabled', false).removeClass('disabled');
                     });
                 });
 
@@ -203,12 +219,20 @@ define('io.ox/mail/accounts/settings', [
         id: 'address',
         index: 100,
         draw: function () {
+            var input, self = this;
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="add-mail-account-address">').text(gt('Your mail address')),
-                    $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address">')
+                    input = $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address">')
                 )
             );
+
+            input.on('change', function () {
+                var alert = self.find('.alert');
+                if (alert.length && alert.attr('errorAttributes').indexOf('address') !== -1) {
+                    alert.remove();
+                }
+            });
         }
     });
 
@@ -216,12 +240,20 @@ define('io.ox/mail/accounts/settings', [
         id: 'password',
         index: 200,
         draw: function () {
+            var input, self = this;
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="add-mail-account-password">').text(gt('Your password')),
-                    $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password">')
+                    input = $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password">')
                 )
             );
+
+            input.on('change', function () {
+                var alert = self.find('.alert');
+                if (alert.length && alert.attr('errorAttributes').indexOf('password') !== -1) {
+                    alert.remove();
+                }
+            });
         }
     });
 
@@ -256,11 +288,13 @@ define('io.ox/mail/accounts/settings', [
             return popup.getContentNode().find('.alert-placeholder');
         },
 
-        drawAlert = function (alertPlaceholder, message) {
+        drawAlert = function (alertPlaceholder, message, options) {
+            options = options || {};
             alertPlaceholder.find('.alert').remove();
             alertPlaceholder.find('.busynotice').remove();
             alertPlaceholder.append(
-                $.alert({ message: message, dismissable: true }).one('click', '.close', function () {
+                // errorAttributes is used to dynamically remove the errormessage on attribute change
+                $.alert({ message: message, dismissable: true }).attr('errorAttributes', options.errorAttributes || '').one('click', '.close', function () {
                     alertPlaceholder.empty();
                 })
             );
@@ -311,7 +345,7 @@ define('io.ox/mail/accounts/settings', [
                         );
                     } else {
                         var message = responseobject.error ? responseobject.error : gt('There was no suitable server found for this mail/password combination');
-                        drawAlert(getAlertPlaceholder(popup), message);
+                        drawAlert(getAlertPlaceholder(popup), message, { errorAttributes: 'address password' });
                         popup.idle();
                         popup.getBody().find('a.close').focus();
                     }
@@ -419,7 +453,7 @@ define('io.ox/mail/accounts/settings', [
                         autoconfigApiCall(args, newMailaddress, newPassword, this, def, true);
                     } else {
                         var message = gt('This is not a valid mail address');
-                        drawAlert(alertPlaceholder, message);
+                        drawAlert(alertPlaceholder, message, { errorAttributes: 'address' });
                         content.find('.add-mail-account-password').focus();
                         this.idle();
                     }

@@ -85,8 +85,9 @@ define('plugins/portal/birthdays/register', [
 
             // ignore broken birthdays
             contacts = _(contacts).filter(function (contact) {
-                // null, undefined, empty string, 0 (yep 1.1.1970).
-                return !!contact.birthday;
+                // null, undefined, empty string
+                // 0 is valid (1.1.1970)
+                return _.isNumber(contact.birthday);
             });
 
             if (contacts.length === 0) {

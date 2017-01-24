@@ -73,6 +73,25 @@ define('io.ox/core/folder/favorites', [
 
         collection.on('add remove change:id', storeCollection);
 
+        // response to rename for mail folders
+        if (module === 'mail') {
+
+            api.on('rename', function (id, data) {
+                if (data.module !== 'mail') return;
+                getAffectedSubfolders(collection, id).forEach(function (model) {
+                    model.set('id', data.id + model.get('id').substr(id.length));
+                    storeCollection();
+                });
+            });
+
+            api.on('remove:mail', function (data) {
+                getAffectedSubfolders(collection, data.id).forEach(function (model) {
+                    collection.remove(model);
+                    storeCollection();
+                });
+            });
+        }
+
         // respond to collection remove event to sync favorites
         api.on('collection:remove', function (id, model) {
             collection.remove(model);
@@ -106,6 +125,12 @@ define('io.ox/core/folder/favorites', [
         ext.point('io.ox/core/foldertree/' + module + '/app').extend(_.extend({}, extension));
         ext.point('io.ox/core/foldertree/' + module + '/popup').extend(_.extend({}, extension));
     });
+
+    function getAffectedSubfolders(collection, id) {
+        return collection.filter(function (model) {
+            return model.get('id').indexOf(id + api.getMailFolderSeparator()) === 0;
+        });
+    }
 
     //
     // Add to contextmenu

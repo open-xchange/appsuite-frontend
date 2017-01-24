@@ -11,7 +11,7 @@
   },
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
-    "eslint": "~3.12.0",
+    "eslint": "^3.14.0",
     "eslint-config-open-xchange-appsuite": "^0.1.0",
     "grunt": "^0.4.5",
     "grunt-bump": "^0.3.0",
@@ -39,7 +39,7 @@
     "grunt-modernizr": "~1.0.2",
     "grunt-require-check": "^0.1.1",
     "grunt-zip": "~0.16.2",
-    "karma": "^1.3.0",
+    "karma": "^1.4.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-junit-reporter": "^1.2.0",

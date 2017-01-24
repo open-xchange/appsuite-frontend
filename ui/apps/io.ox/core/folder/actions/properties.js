@@ -56,6 +56,7 @@ define('io.ox/core/folder/actions/properties', [
                     group(
                         gt('Folder type'), ucfirst(module)
                     ),
+                    model.supports('count_total') ?
                     group(
                         module === 'mail' ?
                             //#. number of messages in a folder (mail only)
@@ -63,7 +64,7 @@ define('io.ox/core/folder/actions/properties', [
                             //#. number of items in a folder
                             gt('Number of items'),
                         total
-                    )
+                    ) : ''
                 );
                 // show CalDAV URL for calendar and task folders
                 // users requires "caldav" capability

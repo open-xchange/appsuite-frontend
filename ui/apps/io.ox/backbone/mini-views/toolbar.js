@@ -30,7 +30,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         },
 
         createToolbar: function () {
-            return $('<ul class="classic-toolbar" role="navigation">')
+            return $('<ul class="classic-toolbar" role="toolbar">')
                 //#. screenreader label for main toolbar
                 .attr({ 'aria-label': this.options.title ? gt('%1$s Toolbar', this.options.title) : gt('Actions. Use cursor keys to navigate.') })
                 .tooltip({
@@ -57,7 +57,7 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         },
 
         getButtons: function () {
-            return this.$el.find('ul.classic-toolbar > li > a');
+            return this.$el.find('ul.classic-toolbar > li > a').not(':hidden');
         },
 
         disableButtons: function () {
@@ -67,10 +67,20 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         },
 
         replaceToolbar: function (toolbar) {
+            // identify focused element and try to focus the same element later
+            var focus = $.contains(this.el, document.activeElement), selector;
+            if (focus) {
+                var activeElement = $(document.activeElement),
+                    action = activeElement.data('action');
+                if (action) selector = '*[data-action="' + action + '"]';
+                // try to select the element at the same position as before
+                else selector = '>> li:eq(' + activeElement.closest('li').index() + ') ' + activeElement.prop('tagName') + ':first';
+            }
             // A11y: This is needed to maintain source order, otherwise the focus order is not correct
             // TODO: Extensionpoints should be rendered in source order so this is unnecessary
             toolbar.append(toolbar.children('.pull-right'));
             this.$el.find('ul.classic-toolbar').tooltip('hide').replaceWith(toolbar);
+            if (selector) this.$(selector).focus();
             return this;
         },
 
@@ -92,30 +102,17 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
             if (!/(37|38|39|40)/.test(e.which) || e.altKey || e.ctrlKey || e.shiftKey) {
                 return;
             }
+            // Refresh buttons
+            this.$links = this.getButtons();
 
             var index = (this.$links.index($(document.activeElement)) || 0);
 
             if (index < 0) return;
 
-            switch (e.which) {
-
-                // LEFT and UP
-                case 37:
-                case 38:
-                    index -= 1;
-                    break;
-
-                // RIGHT
-                case 39:
-                    index += 1;
-                    break;
-
-                // DOWN
-                // case 40: don't use down button because of dropdowns
-
-                default:
-                    break;
-            }
+            // LEFT and UP
+            if (/37|38/.test(e.which)) index -= 1;
+            // RIGHT / DOWN (DOWN except if dropdown)
+            else if (/39|40/.test(e.which) && $(e.currentTarget).not('[data-toggle="dropdown"]')) index += 1;
 
             this.$links
                 .attr('tabindex', -1)

@@ -31,7 +31,7 @@ define('io.ox/search/autocomplete/extensions', [
 
             // input group and dropdown
             this.append(
-                $('<input type="text" class="form-control search-field" role="search">')
+                $('<input type="text" class="form-control search-field">')
             );
         },
 

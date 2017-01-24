@@ -89,7 +89,8 @@ define('io.ox/core/viewer/main', [], function () {
                 });
             }
 
-            if (data.folder) {
+            // Bug 50839 - Viewer opens arbitrary document -> don't expand folder for sharing
+            if (data.folder && data.folder !== '10') {
                 require(['io.ox/files/api'], function (api) {
                     api.getAll(data.folder).then(function success(files) {
                         data.selection = data.files[0];

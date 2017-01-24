@@ -283,6 +283,11 @@ define('io.ox/calendar/freetime/timeView', [
                         appointmentNode = $('<div class="appointment" draggable="false">')
                             .addClass(availabilityClasses[appointment.shown_as])
                             .css({ left: left + '%', right: right + '%' });
+
+                    // appointment has a width of 0 it doesn't need to be drawn (happens if appointment is in non-working-times and the option to display them is deactivated)
+                    if (100 - left - right === 0) {
+                        return;
+                    }
                     appointmentNode.css('z-index', 1 + zIndexbase[availabilityClasses[appointment.shown_as]] + index + (appointment.full_time ? 0 : 4000));
 
                     if (appointment.title) {

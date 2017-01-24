@@ -423,7 +423,7 @@ define('io.ox/core/folder/api', [
         // only define if the user actually has mail
         // otherwise the folder refresh tries to fetch 'default0'
         pool.addModel({
-            folder_id: 'default0',
+            folder_id: 'default0/INBOX',
             id: 'virtual/all-unseen',
             module: 'mail',
             title: gt('Unread messages')
@@ -875,6 +875,8 @@ define('io.ox/core/folder/api', [
         // update model
         options = _.extend({ silent: false }, options);
         var model = pool.getModel(id).set(changes, { silent: options.silent });
+
+        if (isVirtual(id)) return $.when();
 
         // build data object
         var data = { folder: changes };
@@ -1330,7 +1332,7 @@ define('io.ox/core/folder/api', [
     function getExistingFolder(type) {
         var defaultId = util.getDefaultFolder(type);
         if (defaultId) return $.Deferred().resolve(defaultId);
-        if (type === 'mail') return $.Deferred().resolve('default0' + mailSettings.get('defaultseparator', '/') + 'INBOX');
+        if (type === 'mail') return $.Deferred().resolve('default0' + getMailFolderSeparator() + 'INBOX');
         if (type === 'infostore') return $.Deferred().resolve(10);
         return flat({ module: type }).then(function (data) {
             for (var section in data) {
@@ -1340,6 +1342,10 @@ define('io.ox/core/folder/api', [
             }
             return null;
         });
+    }
+
+    function getMailFolderSeparator() {
+        return mailSettings.get('defaultseparator', '/');
     }
 
     // publish api
@@ -1377,6 +1383,7 @@ define('io.ox/core/folder/api', [
         getDefaultFolder: util.getDefaultFolder,
         getExistingFolder: getExistingFolder,
         getStandardMailFolders: getStandardMailFolders,
+        getMailFolderSeparator: getMailFolderSeparator,
         getTextNode: getTextNode,
         getDeepLink: getDeepLink,
         getFolderTitle: getFolderTitle,

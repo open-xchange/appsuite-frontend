@@ -21,12 +21,13 @@ define('io.ox/mail/detail/view', [
     'io.ox/mail/detail/content',
     'io.ox/core/extPatterns/links',
     'io.ox/core/emoji/util',
+    'io.ox/core/a11y',
     'gettext!io.ox/mail',
     'less!io.ox/mail/detail/content',
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
-], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, gt, shadowStyle) {
+], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, a11y, gt, shadowStyle) {
 
     'use strict';
 
@@ -94,6 +95,8 @@ define('io.ox/mail/detail/view', [
         ariaLabel: gt('Actions'),
         icon: _.device('smartphone') ? undefined : 'fa fa-bars',
         noCaret: true,
+        // lfo breaks thread toolbars under certan conditions see ( bug 50939)
+        noLfo: true,
         ref: 'io.ox/mail/links/inline',
         smart: true
     }));
@@ -130,16 +133,6 @@ define('io.ox/mail/detail/view', [
     //
     ext.point('io.ox/mail/detail/header/row1').extend(
         {
-            id: 'date',
-            index: INDEX_header += 100,
-            draw: extensions.fulldate
-        },
-        {
-            id: 'priority',
-            index: INDEX_header += 100,
-            draw: extensions.priority
-        },
-        {
             // from is last one in the list for proper ellipsis effect
             id: 'from',
             index: INDEX_header += 100,
@@ -150,6 +143,16 @@ define('io.ox/mail/detail/view', [
                     )
                 );
             }
+        },
+        {
+            id: 'priority',
+            index: INDEX_header += 100,
+            draw: extensions.priority
+        },
+        {
+            id: 'date',
+            index: INDEX_header += 100,
+            draw: extensions.fulldate
         },
         {
             id: 'flag-picker',
@@ -446,10 +449,16 @@ define('io.ox/mail/detail/view', [
 
         onToggle: function (e) {
 
-            if (e.type === 'keydown' && e.which !== 13) return;
+            if (e.type === 'keydown' && e.which !== 13 && e.which !== 32) return;
 
             // ignore click on/inside <a> tags
+            // this is required even if a-tags are tabbable elements since some links are removed from dom on click
             if ($(e.target).closest('a').length) return;
+
+            // ignore clicks on tabbable elements
+            var tabbable = a11y.getTabbable(this.$el);
+            if (tabbable.index(e.target) >= 0) return;
+            if (tabbable.find($(e.target)).length) return;
 
             // ignore click on dropdowns
             if ($(e.target).hasClass('dropdown-menu')) return;
@@ -519,7 +528,6 @@ define('io.ox/mail/detail/view', [
         },
 
         toggle: function (state) {
-
             var $li = this.$el;
 
             if (state === undefined) {
@@ -617,7 +625,6 @@ define('io.ox/mail/detail/view', [
                 'data-cid': this.model.cid,
                 'aria-expanded': 'false',
                 'data-loaded': 'false',
-                'role': 'article',
                 'aria-label': title
             });
 

@@ -293,9 +293,14 @@ define('io.ox/core/tk/dialogs', [
         };
 
         this.text = function (str) {
-            var p = nodes.body;
+            var p = nodes.body,
+                id = _.uniqueId('label-');
             p.find('.plain-text').remove();
-            p.append($('<h4 class="plain-text">').text(str || ''));
+            p.append($('<h4 class="plain-text">').attr('id', id).text(str || ''));
+            nodes.popup.attr({
+                'aria-labelledby': id,
+                role: 'alertdialog',
+            });
             return this;
         };
 
@@ -335,7 +340,6 @@ define('io.ox/core/tk/dialogs', [
             var button = $.button(opt);
             nodes.buttons.push(button);
             return button.addClass(options.classes).attr({
-                role: 'button',
                 type: 'button'
             });
         };
@@ -649,13 +653,21 @@ define('io.ox/core/tk/dialogs', [
 
             sidepopuppane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs">'),
 
+            id = _.uniqueId('sidepopup-'),
+
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                $('<a href="#" class="close" data-action="close" role="button">').attr('aria-label', gt('Close')).append(
+                $('<a href="#" class="close" data-action="close" role="button">').attr({
+                    'aria-label': gt('Close'),
+                    'aria-controls': id
+                }).append(
                     $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))
                 )
             ),
 
-            popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, sidepopuppane),
+            popup = $('<div class="io-ox-sidepopup abs">').attr({
+                role: 'dialog',
+                id: id
+            }).append(closer, sidepopuppane),
 
             arrow = options.arrow === false ? $() :
                 $('<div class="io-ox-sidepopup-arrow">').append(

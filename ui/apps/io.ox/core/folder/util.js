@@ -41,6 +41,10 @@ define('io.ox/core/folder/util', [
 
         var result, i = 0, id = '', $i, folders;
 
+        if (!data || !type) {
+            return false;
+        }
+
         // check multiple folder?
         if (_.isArray(data)) {
             // for multiple folders, all folders must satisfy the condition

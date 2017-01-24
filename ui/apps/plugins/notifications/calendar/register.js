@@ -65,11 +65,25 @@ define('plugins/notifications/calendar/register', [
                                 o.data.id = folder.created_by;
                             }
 
+                            // check if user is allowed to set the reminder time
+                            var modifyBits = folderAPI.bits(folder, 14),
+                                message = false;
+                            // only own objects if bit is 1
+                            if (modifyBits === 0 || (modifyBits === 1 && appointmentData.organizerId !== ox.user_id)) {
+                                delete o.data.alarm;
+                                message = true;
+                            }
+
                             action(appointmentData).done(function success() {
                                 view.responsiveRemove(model);
                                 calAPI.confirm(o).done(function () {
                                     // remove model from hidden collection or new invitations when the appointment changes will not be displayed
                                     view.hiddenCollection.remove(model);
+                                    if (message) {
+                                        require(['io.ox/core/yell'], function (yell) {
+                                            yell('warning', gt('Invitation accepted but insufficient permissions to set default reminder'));
+                                        });
+                                    }
                                 }).fail(function () {
                                     view.unHide(model);
                                 });

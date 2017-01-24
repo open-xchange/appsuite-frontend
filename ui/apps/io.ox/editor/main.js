@@ -157,7 +157,7 @@ define('io.ox/editor/main', [
             var titleId = _.uniqueId('editor_title-'),
                 bodyId = _.uniqueId('editor_body-');
             this.$el.append(
-                $('<form role="form">').append(
+                $('<form>').append(
                     $('<div class="row">').append(
                         // title
                         $('<div class="form-group col-xs-12 col-sm-8">').append(

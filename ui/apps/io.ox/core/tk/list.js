@@ -62,7 +62,7 @@ define('io.ox/core/tk/list', [
         ),
 
         onItemFocus: function () {
-            this.$el.removeAttr('tabindex');
+            this.$el.attr('tabindex', -1);
             this.$el.addClass('has-focus');
         },
 

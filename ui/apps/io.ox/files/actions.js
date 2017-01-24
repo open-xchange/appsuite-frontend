@@ -85,8 +85,13 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
                 return api.versions.getCurrentState(e.baton.data).then(function (currentVersion) {
+                    var model = _.first(e.baton.models);
+                    var isEncrypted = model && model.isEncrypted();
+                    var encryptionPart = isEncrypted ? '\\.pgp' : '';
+                    // the pgp extension is added separately to the regex, remove it from the file extension list
+                    var fileExtensions = _.without(allowedFileExtensions, 'pgp');
                     // build regex from list, pgp is added if guard is available
-                    var regex = new RegExp('\\.(' + allowedFileExtensions.join('|') + '?)$', 'i');
+                    var regex = new RegExp('\\.(' + fileExtensions.join('|') + '?)' + encryptionPart + '$', 'i');
 
                     return util.conditionChain(
                         currentVersion,
@@ -163,10 +168,15 @@ define('io.ox/files/actions', [
             // no file-system, no download
             if (_.device('ios')) return false;
 
+            function isValid(file) {
+                // locally added but not yet uploaded,   'description only' items
+                return ((file.group !== 'localFile') && (!_.isEmpty(file.filename) || file.file_size > 0));
+            }
+
             if (e.collection.has('multiple')) {
                 var result = true;
                 _.each(e.baton.data, function (obj) {
-                    if (!obj.filename || !obj.file_size) {
+                    if (!isValid(obj)) {
                         result = false;
                     }
                 });
@@ -176,8 +186,7 @@ define('io.ox/files/actions', [
                 return false;
             }
 
-            // 'description only' items
-            return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
+            return isValid(e.baton.data);
         },
         multiple: function (list) {
             ox.load(['io.ox/files/actions/download']).done(function (action) {
@@ -246,6 +255,8 @@ define('io.ox/files/actions', [
             if (e.collection.has('folders')) return false;
             // check if this is a contact not a file, happens when contact is send as vcard
             if (_(e.baton.data).has('internal_userid')) return false;
+            // locally added but not yet uploaded
+            if (e.baton.data.group === 'localFile') { return false; }
             if (e.baton.data.file_mimetype) {
                 // no 'open' menu entry for office documents, PDF and plain text
                 if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
@@ -284,6 +295,8 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/send', {
         capabilities: 'webmail',
         requires: function (e) {
+            if (!capabilities.has(this.capabilities)) { return; }
+
             var list = _.getArray(e.context);
             return util.conditionChain(
                 _.device('!smartphone'),
@@ -301,24 +314,6 @@ define('io.ox/files/actions', [
                 var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
                 if (filtered_list.length === 0) return;
                 ox.registry.call('mail-compose', 'compose', { infostore_ids: filtered_list });
-            });
-        }
-    });
-
-    new Action('io.ox/files/actions/showlink', {
-        requires: function (e) {
-            return util.conditionChain(
-                capabilities.has('!alone !guest'),
-                _.device('!smartphone'),
-                !_.isEmpty(e.baton.data),
-                e.collection.has('some', 'items'),
-                util.isFolderType('!attachmentView', e.baton),
-                util.isFolderType('!trash', e.baton)
-            );
-        },
-        multiple: function (list) {
-            ox.load(['io.ox/files/actions/showlink']).done(function (action) {
-                action(list);
             });
         }
     });
@@ -553,7 +548,7 @@ define('io.ox/files/actions', [
                         type: type,
                         label: label,
                         success: success,
-                        successCallback: function (response) {
+                        successCallback: function (response, apiInput) {
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] };
                                 if (_.isObject(response)) {
@@ -566,12 +561,13 @@ define('io.ox/files/actions', [
                                             if (!conflicts.title) {
                                                 conflicts.title = error.error.error;
                                             }
-                                            if (_.isObject(error.error.warnings)) {
-                                                conflicts.warnings.push(error.error.warnings.error);
-                                            } else {
+
+                                            if (_.isArray(error.error.warnings)) {
                                                 _(error.error.warnings).each(function (warning) {
                                                     conflicts.warnings.push(warning.error);
                                                 });
+                                            } else {
+                                                conflicts.warnings.push(error.error.warnings.error);
                                             }
                                         }
                                     }
@@ -580,7 +576,8 @@ define('io.ox/files/actions', [
                                     require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
                                         filestorageUtil.displayConflicts(conflicts, {
                                             callbackIgnoreConflicts: function () {
-                                                api[type](list, baton.target, true);
+                                                // if folderpicker is used baton.target is undefined (that's why the folderpicker is needed), use the previous apiInput to get the correct folder
+                                                api[type](list, baton.target || apiInput.target, true);
                                             },
                                             callbackCancel: function () {
                                                 if (baton.data[0].folder_id) {
@@ -630,6 +627,7 @@ define('io.ox/files/actions', [
         // general capability and folder check
         model = folderAPI.pool.getModel(id);
         if (!model.isShareable()) return false;
+        if (model.is('trash')) return false;
         return type === 'invite' ? model.supportsInviteGuests() : true;
     }
 
@@ -906,16 +904,6 @@ define('io.ox/files/actions', [
         mobile: 'lo',
         label: gt('Send as internal link'),
         ref: 'io.ox/files/actions/sendlink',
-        section: 'share'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'showlink',
-        index: index += 100,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Show internal link'),
-        ref: 'io.ox/files/actions/showlink',
         section: 'share'
     }));
 
