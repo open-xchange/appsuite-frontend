@@ -147,7 +147,7 @@ define('io.ox/contacts/edit/view-form', [
     });
 
     // Remove attachment handling when infostore is not present
-    if (!capabilities.has('infostore')) {
+    if (!capabilities.has('filestore')) {
         delete meta.sections.attachments;
         delete meta.i18n.attachments;
     }
