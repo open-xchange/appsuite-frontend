@@ -100,7 +100,10 @@ define('io.ox/core/tk/typeahead', [
                 }
             });
 
-            this.api = new AutocompleteAPI(o.apiOptions);
+            this.api = new AutocompleteAPI(_.extend({
+                // only pass to autocomplete api if non default extPoint
+                extPoint: /^io\.ox\/core\/tk\/(typeahead|tokenfield)$/.test(o.extPoint) ? undefined : o.extPoint
+            }, o.apiOptions));
 
             this.listenTo(ox, 'refresh^', function () {
                 this.api.cache = {};
@@ -163,6 +166,8 @@ define('io.ox/core/tk/typeahead', [
                     }
                 }
             }];
+
+            ext.point(o.extPoint + '/typeahead/customize').invoke('customize', this);
         },
 
         // hint: called with custom context via prototype

@@ -145,6 +145,8 @@ define('io.ox/core/tk/tokenfield', [
                 }
             });
 
+            ext.point(options.extPoint + '/tokenfield/customize').invoke('customize', this, options);
+
             // call super constructor
             Typeahead.prototype.initialize.call(this, options);
             var Participants = Backbone.Collection.extend({
