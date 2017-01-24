@@ -425,7 +425,8 @@ define('io.ox/find/main', [
         // register event listeners
         function register() {
             var model = app.model,
-                manager = model.manager;
+                manager = model.manager,
+                isDrive = app.getModuleParam() === 'files';
 
             /**
              * find:query   list of active facets changed
@@ -435,6 +436,7 @@ define('io.ox/find/main', [
                 'active': _.debounce(function (count) {
                     // ignore folder facet not combined with another facet
                     if (app.model.manager.isFolderOnly()) count = 0;
+                    if (isDrive && app.model.manager.isAccountOnly()) count = 0;
                     app.trigger(count ? 'find:query' : 'find:idle');
                 }, 10)
             });
