@@ -121,7 +121,6 @@ define('io.ox/mail/detail/mobileView', [
         draw: function (baton) {
             var node = $('<span class="flags">').appendTo(this);
             ext.point('io.ox/mail/mobile/detail/header/flags').invoke('draw', node, baton);
-            //this.append(node);
         }
     });
 
