@@ -126,16 +126,17 @@ define('io.ox/core/viewer/views/displayerview', [
     function handleSlideChangeForEnabledAutoplayMode(displayerView) {
         if (displayerView.canAutoplayImages) {
             var
-                slideIndex = displayerView.activeIndex;
+                slideIndex          = displayerView.activeIndex,
+                autoplaySlideCount  = displayerView.autoplaySlideCount;
 
             if (displayerView.autoplayMode !== 'running') { // only in case of autoplay is not running at all.
 
                 updateVisibilityOfAutoplayControl(displayerView, slideIndex);
 
-            } else if (IS_LOOP_ONCE_ONLY && (typeof displayerView.autoplaySlideCount === 'number')) {
+            } else if (IS_LOOP_ONCE_ONLY && (typeof autoplaySlideCount === 'number')) {
 
-                displayerView.autoplaySlideCount = (displayerView.autoplaySlideCount + 1);
-                if (displayerView.autoplaySlideCount === displayerView.collection.length) {
+                displayerView.autoplaySlideCount = autoplaySlideCount = (autoplaySlideCount + 1);
+                if (autoplaySlideCount >= displayerView.collection.length) {
 
                     window.clearTimeout(displayerView.timeoutIdAutoplay);
 
