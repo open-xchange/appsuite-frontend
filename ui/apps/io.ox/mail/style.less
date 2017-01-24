@@ -18,8 +18,13 @@
 @phone-font-size: 16px;
 @phone-line-height: 26px;
 
-// preview panes
+// helper
+.fixed-width {
+    width: 1.28571429em;
+    text-align: center;
+}
 
+// preview panes
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
 .window-container.mail-categories-visible .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height * 2; }
 
@@ -1374,6 +1379,8 @@ body.dragging .categories-toolbar-container {
 
         & > header {
             &.mobile-detail-view-mail {
+                // use fa-fw for mobile
+                .fa { .fixed-width; }
                 .date {
                     margin-left: 0;
                     display: inline-block;
