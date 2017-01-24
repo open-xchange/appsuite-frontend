@@ -1321,7 +1321,7 @@ define('io.ox/core/main', [
                         if (_.isUndefined(o)) return false;
                         if (_.isNull(o)) return false;
                         // special case to start in settings (see Bug 50987)
-                        if (o === 'io.ox/settings/main') return true;
+                        if (/^io.ox\/settings(\/main)?$/.test(o)) return true;
                         return favoritePaths.indexOf(/main$/.test(o) ? o : o + '/main') >= 0;
                     })
                     .first(1) // use 1 here to return an array
