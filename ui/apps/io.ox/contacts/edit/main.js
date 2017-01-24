@@ -158,7 +158,7 @@ define('io.ox/contacts/edit/main', [
                             app.quit();
                         });
 
-                        if ((_.browser.IE === undefined || _.browser.IE > 9) && capabilities.has('infostore')) {
+                        if ((_.browser.IE === undefined || _.browser.IE > 9) && capabilities.has('filestore')) {
 
                             app.dropZone = new dnd.UploadZone({
                                 ref: 'io.ox/contacts/edit/dnd/actions'

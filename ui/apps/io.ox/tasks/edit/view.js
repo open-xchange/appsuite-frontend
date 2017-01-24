@@ -92,7 +92,7 @@ define('io.ox/tasks/edit/view', [
             self.baton.app = app;
 
             //hide stuff
-            if (!capabilities.has('infostore')) {
+            if (!capabilities.has('filestore')) {
                 ext.point('io.ox/tasks/edit/view').disable('attachment_list');
                 ext.point('io.ox/tasks/edit/view').disable('attachment_upload');
                 ext.point('io.ox/tasks/edit/view').disable('attachments_legend');
