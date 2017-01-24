@@ -799,7 +799,7 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    if (!capabilities.has('infostore')) {
+    if (!capabilities.has('filestore')) {
         ext.point('io.ox/calendar/edit/section')
             .disable('attachments_legend')
             .disable('attachments_upload');
