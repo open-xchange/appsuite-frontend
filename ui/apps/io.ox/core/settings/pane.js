@@ -201,7 +201,10 @@ define('io.ox/core/settings/pane', [
                 index: 400,
                 className: 'form-group',
                 render: function () {
-                    var guid = _.uniqueId('form-control-label-');
+                    var guid = _.uniqueId('form-control-label-'),
+                        list = _(availableThemes).chain().map(function (key, val) {
+                            return { label: key, value: val };
+                        }).sortBy('label').value();
                     this.$el.append(
                         $('<label>').attr({
                             class: 'control-label col-sm-4',
@@ -209,7 +212,7 @@ define('io.ox/core/settings/pane', [
                         }).text(gt('Theme')),
                         $('<div>').addClass('col-sm-6').append(
                             new miniViews.SelectView({
-                                list: _.map(availableThemes, function (key, val) { return { label: key, value: val }; }),
+                                list: list,
                                 name: 'theme',
                                 model: this.baton.model,
                                 id: guid,
