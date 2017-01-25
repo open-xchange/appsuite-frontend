@@ -31,25 +31,26 @@ define('io.ox/core/a11y', [], function () {
         if (e.which === 13) $('.folder-tree:visible .folder.selected').focus();
     });
 
-    // focus active app from foldertree on <escape> and focus listview on <enter>
+    // focus active app from foldertree on <escape> and focus listview on <enter> and <space>
     $(document).on('keydown.foldertree', '.folder-tree .folder.selected', function (e) {
-        if (!/13|27/.test(e.which)) return;
+        if (!/13|32|27/.test(e.which)) return;
         if (!$(e.target).is('li')) return;
         var node = $(e.target).closest('.window-container');
         if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
         if (e.which === 27) $('#io-ox-topbar .active-app a').focus();
-        if (e.which === 13) {
+        if (/13|32/.test(e.which)) {
+            e.preventDefault();
             node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
         }
     });
 
     // Focus foldertree on <escape> when in list-view or vgrid
     $(document).on('keydown.focusFolderTree', '.list-item, .vgrid-scrollpane-container', function (e) {
-        if (!/13|27/.test(e.which)) return;
+        if (!/13|32|27/.test(e.which)) return;
         var node = $(e.target).closest('.window-container');
         if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
         if (e.which === 27) node.find('.folder-tree .folder.selected').focus();
-        if (e.which === 13) node.find('.rightside, .list-item.focusable:first').last().visibleFocus();
+        if (/13|32/.test(e.which)) node.find('.rightside, .list-item.focusable:first').last().visibleFocus();
     });
 
     $(document).on('keydown.rightside', '.rightside,.scrollpane.f6-target', function (e) {

@@ -595,6 +595,11 @@ define('io.ox/calendar/month/perspective', [
                             // enter
                             $(e.target).click();
                             break;
+                        case 32:
+                            // space
+                            e.preventDefault();
+                            $(e.target).click();
+                            break;
                         default:
                             break;
                     }

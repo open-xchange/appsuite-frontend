@@ -442,6 +442,11 @@ define('io.ox/calendar/week/view', [
                     // enter
                     this.onClickAppointment(e);
                     break;
+                case 32:
+                    // space
+                    e.preventDefault();
+                    this.onClickAppointment(e);
+                    break;
                 default:
                     break;
             }
