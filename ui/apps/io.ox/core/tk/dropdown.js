@@ -206,7 +206,8 @@
         if (e.which === 27) return clearMenus();
 
         if (!/(38|40)/.test(e.which)) return;
-
+        // Needs preventDefault(), otherwise scrolling occurs on pages that exceed view port.
+        e.preventDefault();
         var $target = $(e.target),
             $menu = $target.closest('ul'),
             $list = $menu.find('a:visible[role^="menuitem"]'),
