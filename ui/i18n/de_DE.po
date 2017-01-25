@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-20 16:10+0100\n"
+"PO-Revision-Date: 2017-01-25 16:22+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -492,13 +492,13 @@ msgstr "Schließen"
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
-#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
-#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/files/upload/view.js apps/io.ox/keychain/secretRecoveryDialog.js
+#: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings apps/io.ox/mail/actions/attachmentEmpty.js
+#: module:io.ox/mail apps/io.ox/mail/actions/delete.js
+#: apps/io.ox/mail/actions/reminder.js apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -3284,13 +3284,12 @@ msgid "Saved in:"
 msgstr "Gespeichert unter:"
 
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-#, fuzzy
 msgid ""
 "This filetype is not supported as contact picture. Only image types (JPG, "
 "GIF, BMP or PNG) are supported."
 msgstr ""
-"Dieser Dateityp wird nicht als Kontaktbild unterstützt. Nur Bildtypen (JPG, "
-"GIF, BMP oder PNG) werden unterstützt."
+"Dieser Dateityp wird für Kontaktbilder nicht unterstützt. Nur Bildformate "
+"(JPG, GIF, BMP oder PNG) werden unterstützt."
 
 #: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
 msgid "Your selected picture will be displayed after saving"
@@ -4391,6 +4390,10 @@ msgstr ""
 #: module:io.ox/mail
 msgid "Continue"
 msgstr "Fortfahren"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "The requested application is not available at this moment."
+msgstr "Die gewünschte Anwendung ist im Moment nicht verfügbar."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -6308,21 +6311,24 @@ msgid "Adding files with identical names"
 msgstr "Hinzufügen von Dateien mit identischen Namen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
 msgid "Loop once only"
-msgstr ""
+msgstr "nur eine Programmschleife"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
 msgid "Keep looping endlessly"
-msgstr ""
+msgstr "Endlosschleife beibehalten"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #, fuzzy
 msgid "Slideshow / Autoplay mode"
-msgstr "Diashow / Autoplay-Modus"
+msgstr "Diashow / Automatische Wiedergabe"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
 msgid "Autoplay pause in seconds"
-msgstr ""
+msgstr "Pause der automatischen Wiedergabe in Sekunden"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
@@ -7121,9 +7127,12 @@ msgstr "E-Mail-Adresse"
 msgid "Use unified mail for this account"
 msgstr "Unified Mail für diesen Account verwenden"
 
+#. If the user selects 'copy of' in the drafts folder, the subject of the email is prefixed with [Copy].
+#. Please make sure that this is a prefix in every translation since it will be removed when the mail is sent.
+#. %1$s the original subject of the mail
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Copy of %1$s"
-msgstr "Kopie von %1$s"
+msgid "[Copy] %1$s"
+msgstr "[Kopie] %1$s"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Mails have been moved"
@@ -7470,7 +7479,6 @@ msgid "Unread"
 msgstr "Ungelesen"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-#, fuzzy
 msgid "Flagged"
 msgstr "Markiert"
 
@@ -7872,6 +7880,13 @@ msgstr "Wollen Sie diesen Entwurf wirklich löschen?"
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Wollen Sie Ihre Nachricht wirklich verwerfen?"
+
+#. This is a prefix of a copied draft and will be removed
+#. This string must equal the prefix, which is prepended before the subject on copy
+#. It is important, that the space is also translated, as the space will also be removed
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "[Copy] "
+msgstr "[Kopie] "
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Couldn't load editor"
@@ -8710,8 +8725,8 @@ msgid "Something went wrong reauthorizing the account."
 msgstr "Beim erneuten Autorisieren des Account trat ein Fehler auf."
 
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Account Settings"
-msgstr "Account-Einstellungen"
+msgid "OAuth application overview"
+msgstr "OAuth-Applikationsübersicht"
 
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Display Name"
@@ -10878,6 +10893,12 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Copy of %1$s"
+#~ msgstr "Kopie von %1$s"
+
+#~ msgid "Account Settings"
+#~ msgstr "Account-Einstellungen"
 
 #~ msgid "Folder-specific actions for %1$s"
 #~ msgstr "Ordnerspezifische Aktionen für %1$s"
