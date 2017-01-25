@@ -105,6 +105,8 @@ define('io.ox/core/boot/util', [], function () {
                             .attr('href', error.error_params[0])
                     ];
                 });
+            } else if (error && error.code === 'LGI-0016' && (error.error_params || []).length === 1) {
+                window.location.href = error.error_params[0];
             } else {
                 this.feedback('error', $.txt(_.formatError(error, '%1$s (%2$s)')));
             }
