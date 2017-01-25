@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-03 11:56+0100\n"
+"PO-Revision-Date: 2017-01-18 12:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -4487,14 +4487,22 @@ msgstr "deaktivieren"
 msgid "Automatic opening of notification area"
 msgstr "Infobereich automatisch öffnen"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Desktop-Benachrichtigungen anzeigen"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Berechtigung jetzt verwalten"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Bitte überprüfen Sie Ihre Browsereinstellungen und aktivieren Sie Desktop-"
+"Benachrichtigungen für diese Domain"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Desktop-Benachrichtigungen anzeigen"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -7804,12 +7812,10 @@ msgstr[1] "%1$d Nachrichten markiert"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"Es gibt %1$d Nachrichten in diesem Ordner. Nicht alle Nachrichten werden in "
-"der Liste angezeigt. Wenn Sie alle Nachrichten verschieben oder löschen "
-"möchten, finden Sie entsprechende Funktionen im Kontextmenü des Ordners."
+"Dieser Ordner enthält %1$d Nachrichten. Nicht alle Nachrichten werden "
+"derzeit in der Liste angezeigt."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -10638,6 +10644,16 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Es gibt %1$d Nachrichten in diesem Ordner. Nicht alle Nachrichten werden "
+#~ "in der Liste angezeigt. Wenn Sie alle Nachrichten verschieben oder "
+#~ "löschen möchten, finden Sie entsprechende Funktionen im Kontextmenü des "
+#~ "Ordners."
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-03 12:02+0100\n"
+"PO-Revision-Date: 2017-01-18 15:38+0100\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -3717,7 +3717,7 @@ msgstr "Labi"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
-msgstr ""
+msgstr "Darbības nav pieejamas"
 
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -4487,14 +4487,22 @@ msgstr "atspējot"
 msgid "Automatic opening of notification area"
 msgstr "Automātiski atvērt paziņojuma apgabalu"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Rādīt darbvirsmas paziņojumus"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Pārvaldīt ziņojumu darbības"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Lūdzu pārbaudiet pārlūkprogrammas iestatījumus un šai vietnei iespējojiet "
+"darbvirsmas paziņojumus"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Rādīt darbvirsmas paziņojumus"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -6890,7 +6898,7 @@ msgstr "Saglabāt pievienojumu"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "unknown sender"
-msgstr ""
+msgstr "nezināms sūtītājs"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
@@ -7018,9 +7026,13 @@ msgstr[2] "Izvēlētie ziņojumi ir veiksmīgi pārvietoti."
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
-msgstr[0] ""
+msgstr[0] "Vai vēlaties visus ziņojumus no %1$s pārvietot uz šo kategoriju?"
 msgstr[1] ""
+"Vai vēlaties visus ziņojumus no izvēlētajiem sūtītājiem pārvietot uz šo "
+"kategoriju?"
 msgstr[2] ""
+"Vai vēlaties visus ziņojumus no izvēlētajiem sūtītājiem pārvietot uz šo "
+"kategoriju?"
 
 #. might be suitable to use 'tabs' rather than translating it
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
@@ -7577,17 +7589,17 @@ msgstr "Regex"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Detail"
-msgstr ""
+msgstr "Detaļas"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Localpart"
-msgstr ""
+msgstr "Lokālā daļa"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Domain"
-msgstr ""
+msgstr "Domēns"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7647,7 +7659,7 @@ msgstr "Pašreizējais datums"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Sender address"
-msgstr ""
+msgstr "Sūtītāja adrese"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7786,12 +7798,8 @@ msgstr[2] "Izvēlēti %1$d zinojumi"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"Šajā mapē ir %1$d ziņojumi. Sarakstā nav parādīti visi ziņojumi. Ja vēlaties "
-"pārvietot vai izdzēst visus ziņojumus, atbilstošās darbības var tikt "
-"izpildītas, izmantojot mapes konteksta saīsnes."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -10596,6 +10604,15 @@ msgstr "Uzaicināt %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pievienot %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Šajā mapē ir %1$d ziņojumi. Sarakstā nav parādīti visi ziņojumi. Ja "
+#~ "vēlaties pārvietot vai izdzēst visus ziņojumus, atbilstošās darbības var "
+#~ "tikt izpildītas, izmantojot mapes konteksta saīsnes."
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"

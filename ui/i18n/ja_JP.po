@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-03 12:01+0100\n"
+"PO-Revision-Date: 2017-01-24 13:03+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -3663,7 +3663,7 @@ msgstr "OK"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
-msgstr ""
+msgstr "利用可能なアクションはありません"
 
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -4423,14 +4423,22 @@ msgstr "無効"
 msgid "Automatic opening of notification area"
 msgstr "通知エリアを自動的に表示"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "デスクトップ通知を表示"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "今権限を管理する"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"ブラウザ設定をチェックして、このドメイン用のデスクトップ通知を有効にしてくだ"
+"さい"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "デスクトップ通知を表示"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -6775,7 +6783,7 @@ msgstr "添付ファイルを保存"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "unknown sender"
-msgstr ""
+msgstr "差出人が不明です。"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
@@ -6899,7 +6907,7 @@ msgstr[0] "選択したメッセージの移動ができました。"
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
-msgstr[0] ""
+msgstr[0] "全てのメッセージを%1$sからそのカテゴリのに移動しますか？"
 
 #. might be suitable to use 'tabs' rather than translating it
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
@@ -7452,17 +7460,17 @@ msgstr "次の文字列と一致 (正規表現)"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Detail"
-msgstr ""
+msgstr "詳細"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Localpart"
-msgstr ""
+msgstr "ローカル部"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Domain"
-msgstr ""
+msgstr "ドメイン"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7522,7 +7530,7 @@ msgstr "現在の日付"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Sender address"
-msgstr ""
+msgstr "差出人アドレス"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7659,12 +7667,10 @@ msgstr[0] "%1$d 件のメッセージが選択されています。"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"このフォルダにメッセージが %1$d 通あります；メッセージがすべてリストに表示さ"
-"れるわけではありません。すべてのメッセージを移動または削除したい場合は、フォ"
-"ルダのコンテキストメニューで対応するアクションを選んでください。"
+"このフォルダにメッセージが %1$d 通あります；現在メッセージがすべてリストに表"
+"示されるわけではありません。"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -10439,6 +10445,15 @@ msgstr "%s に出席依頼"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s に追加"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "このフォルダにメッセージが %1$d 通あります；メッセージがすべてリストに表示"
+#~ "されるわけではありません。すべてのメッセージを移動または削除したい場合は、"
+#~ "フォルダのコンテキストメニューで対応するアクションを選んでください。"
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"

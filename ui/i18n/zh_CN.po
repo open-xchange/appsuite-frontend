@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-03 12:06+0100\n"
+"PO-Revision-Date: 2017-01-24 13:04+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -3638,7 +3638,7 @@ msgstr "确定"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
-msgstr ""
+msgstr "无可用动作"
 
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -4389,14 +4389,20 @@ msgstr "停用"
 msgid "Automatic opening of notification area"
 msgstr "自动打开通知区域"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "显示桌面通知"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "现在管理权限"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr "请检查您的浏览器设置并启用此域的桌面通知"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "显示桌面通知"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -6704,7 +6710,7 @@ msgstr "保存附件"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "unknown sender"
-msgstr ""
+msgstr "未知发送人"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
@@ -6825,8 +6831,8 @@ msgstr[1] "选定消息移动成功。"
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "您要从 %1$s 移动所有消息到那个类别吗？"
+msgstr[1] "您要从选中的发送人移动所有消息到那个类别吗？"
 
 #. might be suitable to use 'tabs' rather than translating it
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
@@ -7371,17 +7377,17 @@ msgstr "正则表达式"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Detail"
-msgstr ""
+msgstr "详情"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Localpart"
-msgstr ""
+msgstr "本地部分"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Domain"
-msgstr ""
+msgstr "域"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7441,7 +7447,7 @@ msgstr "当前日期"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Sender address"
-msgstr ""
+msgstr "发送者地址"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7577,11 +7583,8 @@ msgstr[1] "已选择 %1$d 个消息"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
-msgstr ""
-"此文件夹里有 %1$d 个消息。不是所有消息都在列表里显示。如果您要移动或删除所有"
-"数据，您会"
+"the list currently."
+msgstr "此文件夹里有 %1$d 条消息，现在并不是所有消息皆于列表里显示。"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -10331,6 +10334,14 @@ msgstr "邀请到 %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "在 %s 上添加"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "此文件夹里有 %1$d 个消息。不是所有消息都在列表里显示。如果您要移动或删除所"
+#~ "有数据，您会"
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"

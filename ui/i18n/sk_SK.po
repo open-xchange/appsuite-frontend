@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-03 12:05+0100\n"
+"PO-Revision-Date: 2017-01-24 13:04+0100\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -3717,7 +3717,7 @@ msgstr "OK"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
-msgstr ""
+msgstr "Nie je dostupná žiadna operácia"
 
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -4487,14 +4487,22 @@ msgstr "vypnúť"
 msgid "Automatic opening of notification area"
 msgstr "Automatické otvorenie oblasti oznámení"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Zobraziť oznámenia na ploche"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Spravovať oprávnenia teraz"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Prosím, skontrolujte nastavenia svojho prehliadača a zapnite oznámenia "
+"pracovného prostredia pre túto doménu"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Zobraziť oznámenia na ploche"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -6891,7 +6899,7 @@ msgstr "Uložiť prílohu"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "unknown sender"
-msgstr ""
+msgstr "neznámy odosielateľ"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
@@ -7019,9 +7027,11 @@ msgstr[2] "Vybrané správy boli úspešne presunuté."
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
-msgstr[0] ""
+msgstr[0] "Chcete presunúť všetky správy od %1$s do tejto kategórie?"
 msgstr[1] ""
+"Chcete presunúť všetky správy od vybraných odosielateľov do tejto kategórie?"
 msgstr[2] ""
+"Chcete presunúť všetky správy od vybraných odosielateľov do tejto kategórie?"
 
 #. might be suitable to use 'tabs' rather than translating it
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
@@ -7575,17 +7585,17 @@ msgstr "reg. výraz"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Detail"
-msgstr ""
+msgstr "Podrobnosti"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Localpart"
-msgstr ""
+msgstr "lokálna časť"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Domain"
-msgstr ""
+msgstr "doména"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7645,7 +7655,7 @@ msgstr "Aktuálny dátum"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Sender address"
-msgstr ""
+msgstr "Adresa odosielateľa"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7784,12 +7794,9 @@ msgstr[2] "%1$d vybraných správ"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"Tento priečinok obsahuje %1$d správ. Nie všetky správy sú zobrazené v "
-"zozname. Ak chcete presunúť alebo zmazať všetky správy, zodpovedajúcu "
-"operáciu nájdete v kontextovom menu priečinka."
+"V tomto priečinku je %1$d správ. Nie všetky správy sú zobrazené v zozname."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -10602,6 +10609,15 @@ msgstr "Pozvať na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pridať na %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Tento priečinok obsahuje %1$d správ. Nie všetky správy sú zobrazené v "
+#~ "zozname. Ak chcete presunúť alebo zmazať všetky správy, zodpovedajúcu "
+#~ "operáciu nájdete v kontextovom menu priečinka."
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"

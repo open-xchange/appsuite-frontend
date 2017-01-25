@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-03 12:02+0100\n"
+"PO-Revision-Date: 2017-01-24 13:00+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com>\n"
 "Language-Team: Dutch <ivar>\n"
 "Language: nl_NL\n"
@@ -3718,7 +3718,7 @@ msgstr "Ok"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
-msgstr ""
+msgstr "Geen actie beschikbaar"
 
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -4485,14 +4485,22 @@ msgstr "uitschakelen"
 msgid "Automatic opening of notification area"
 msgstr "Automatisch het meldingengebied openen"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Toon desktopkennisgevingen"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Nu rechten beheren"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Controleer alstublieft uw browserinstellingen en sta bureaubladmeldingen toe "
+"voor dit domein"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Toon desktopkennisgevingen"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -6886,7 +6894,7 @@ msgstr "Bijlage opslaan"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "unknown sender"
-msgstr ""
+msgstr "onbekende verzender"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
@@ -7014,8 +7022,10 @@ msgstr[1] "Geselecteerde berichten zijn succesvol verplaatst."
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
-msgstr[0] ""
+msgstr[0] "Wilt u alle berichten van %1$s naar deze categorie verplaatsen?"
 msgstr[1] ""
+"Wilt u alle berichten van de geselecteerde verzenders naar deze categorie "
+"verplaatsen?"
 
 #. might be suitable to use 'tabs' rather than translating it
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
@@ -7577,17 +7587,17 @@ msgstr "Reguliere expressie"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Detail"
-msgstr ""
+msgstr "Detail"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Localpart"
-msgstr ""
+msgstr "Lokaal deel"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Domain"
-msgstr ""
+msgstr "Domein"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7647,7 +7657,7 @@ msgstr "Huidige datum"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Sender address"
-msgstr ""
+msgstr "Verzendadres"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7785,12 +7795,10 @@ msgstr[1] "%1$d berichten geselecteerd"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"Er zijn %1$d berichten in deze map: niet alle berichten worden getoond in de "
-"lijst. Als u alle berichten wilt verplaatsen of verwijderen kan u deze "
-"functies vinden in het contextmenu van de map."
+"Er zijn %1$d berichten in deze map: momenteel worden niet alle berichten in "
+"de lijst  getoond."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -10606,6 +10614,15 @@ msgstr "Uitnodigingen voor %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Er zijn %1$d berichten in deze map: niet alle berichten worden getoond in "
+#~ "de lijst. Als u alle berichten wilt verplaatsen of verwijderen kan u deze "
+#~ "functies vinden in het contextmenu van de map."
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"

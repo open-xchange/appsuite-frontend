@@ -3702,7 +3702,7 @@ msgstr "Aceptar"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
-msgstr ""
+msgstr "No hay ninguna acción disponible"
 
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -4470,14 +4470,22 @@ msgstr "desactivar"
 msgid "Automatic opening of notification area"
 msgstr "Apertura automática del área de notificación"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Mostrar notificaciones de escritorio"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Administrar permisos ahora"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Por favor, revise los ajustes de su navegador y active las notificaciones de "
+"escritorio para este dominio"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Mostrar notificaciones de escritorio"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -6874,7 +6882,7 @@ msgstr "Guardar adjunto"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "unknown sender"
-msgstr ""
+msgstr "remitente desconocido"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
@@ -7003,8 +7011,10 @@ msgstr[1] "Los mensajes seleccionados se trasladaron correctamente."
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
-msgstr[0] ""
+msgstr[0] "¿Desea mover todos los mensajes de %1$s a esa categoría?"
 msgstr[1] ""
+"¿Desea mover todos los mensajes de los remitentes seleccionados a esa "
+"categoría?"
 
 #. might be suitable to use 'tabs' rather than translating it
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
@@ -7566,17 +7576,17 @@ msgstr "Expresión regular"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Detail"
-msgstr ""
+msgstr "Detalle"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Localpart"
-msgstr ""
+msgstr "Parte local"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Domain"
-msgstr ""
+msgstr "Dominio"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7636,7 +7646,7 @@ msgstr "Fecha actual"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Sender address"
-msgstr ""
+msgstr "Dirección de remite"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7774,12 +7784,10 @@ msgstr[1] "%1$d mensajes seleccionados"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"Hay %1$d mensajes en esta carpeta; no se muestran todos los mensajes en la "
-"lista.Si desea mover o eliminar todos los mensajes, puede encontrar las "
-"acciones correspondientes en el menú contextual de la carpeta."
+"Hay %1$d mensajes en esta carpeta; no todos los mensajes se muestra en la "
+"lista actualmente."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -10595,6 +10603,15 @@ msgstr "Invitar a %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Añadir a %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Hay %1$d mensajes en esta carpeta; no se muestran todos los mensajes en "
+#~ "la lista.Si desea mover o eliminar todos los mensajes, puede encontrar "
+#~ "las acciones correspondientes en el menú contextual de la carpeta."
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"

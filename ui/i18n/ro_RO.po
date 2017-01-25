@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-03 12:04+0100\n"
+"PO-Revision-Date: 2017-01-24 13:02+0100\n"
 "Last-Translator: daiana <xdaiana@yahoo.com>\n"
 "Language-Team: Romanian <ro@bureau-cornavin.com>\n"
 "Language: ro_RO\n"
@@ -3722,7 +3722,7 @@ msgstr "Ok"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
-msgstr ""
+msgstr "Nicio acțiune disponibilă"
 
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -4494,14 +4494,22 @@ msgstr "dezactivează"
 msgid "Automatic opening of notification area"
 msgstr "Deschidere automată a zonei de notificare"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Afișează notificările desktop."
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Gestionați permisiunile acum"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Verificați setările navigatorului și activați notificările desktop pentru "
+"acest domeniu"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Afișează notificările desktop."
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -6905,7 +6913,7 @@ msgstr "Salvează fișierul atașat"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "unknown sender"
-msgstr ""
+msgstr "expeditor necunoscut"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
@@ -7033,9 +7041,13 @@ msgstr[2] "Mesajele selectate au fost mutate cu succes."
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
-msgstr[0] ""
+msgstr[0] "Doriți să mutați toate mesajele de la %1$s în această categorie?"
 msgstr[1] ""
+"Doriți să mutați toate mesajele de la expeditorii selectați în această "
+"categorie?"
 msgstr[2] ""
+"Doriți să mutați toate mesajele de la expeditorii selectați în această "
+"categorie?"
 
 #. might be suitable to use 'tabs' rather than translating it
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
@@ -7592,17 +7604,17 @@ msgstr "Expresie regulată"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Detail"
-msgstr ""
+msgstr "Detaliu"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Localpart"
-msgstr ""
+msgstr "Parte locală"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Domain"
-msgstr ""
+msgstr "Domeniu"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7662,7 +7674,7 @@ msgstr "Data curentă"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Sender address"
-msgstr ""
+msgstr "Adresă expeditor"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7801,12 +7813,9 @@ msgstr[2] "%1$d de mesaje selectate"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"Dosarul conține %1$d mesaje; nu toate sunt afișate în listă. Dacă doriți să "
-"mutați sau să ștergeți toate mesajele, utilizați acțiunile corespunzătoare "
-"din meniul de context al dosarului."
+"Sunt %1$d mesaje în dosar, nu toate mesajele sunt afișate corect în listă."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -10626,6 +10635,15 @@ msgstr "Invită la %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Dosarul conține %1$d mesaje; nu toate sunt afișate în listă. Dacă doriți "
+#~ "să mutați sau să ștergeți toate mesajele, utilizați acțiunile "
+#~ "corespunzătoare din meniul de context al dosarului."
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"

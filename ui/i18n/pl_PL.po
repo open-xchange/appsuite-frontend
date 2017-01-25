@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-03 12:03+0100\n"
+"PO-Revision-Date: 2017-01-24 13:00+0100\n"
 "Last-Translator: jolanta <kontekst@kontekst.biz>\n"
 "Language-Team: Polish <>\n"
 "Language: pl_PL\n"
@@ -2154,16 +2154,16 @@ msgstr "Wszystkie grupy"
 msgid "%1$d item selected"
 msgid_plural "%1$d items selected"
 msgstr[0] "Wybrano %1$d element"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "Wybrano %1$s elementy"
+msgstr[2] "Wybrano %1$s elementów"
 
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
 msgstr[0] "Wybrano %1$d adres"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "Wybrano %1$d adresy"
+msgstr[2] "Wybrano %1$d adresów"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "Clear selection"
@@ -3723,7 +3723,7 @@ msgstr "OK"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
-msgstr ""
+msgstr "Brak dostępnego działania"
 
 #. generic error message
 #: apps/io.ox/core/http_errors.js module:io.ox/core
@@ -4037,8 +4037,8 @@ msgstr "Powiadomienia na pulpicie możesz w dowolnym momencie skonfigurować."
 msgid "%1$d notification."
 msgid_plural "%1$d notifications."
 msgstr[0] "%1$d powiadomienie."
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "%1$d powiadomienia."
+msgstr[2] "%1$d powiadomień."
 
 #. open closed state of the notification area, used in aria label
 #: apps/io.ox/core/notifications/badgeview.js module:io.ox/core
@@ -4497,14 +4497,22 @@ msgstr "wyłącz"
 msgid "Automatic opening of notification area"
 msgstr "Automatyczne otwieranie obszaru powiadomień"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Pokaz powiadomienia na pulpicie"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Zarządzaj uprawnieniami"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Sprawdź ustawienia przeglądarki i włącz powiadomienia na pulpicie dla tej "
+"domeny"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Pokaz powiadomienia na pulpicie"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -6907,7 +6915,7 @@ msgstr "Zapisz załącznik"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "unknown sender"
-msgstr ""
+msgstr "nieznany nadawca"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
@@ -7037,9 +7045,11 @@ msgstr[2] "Wybrane wiadomości zostały pomyślnie przeniesione."
 msgid "Do you want to move all messages from %1$s to that category?"
 msgid_plural ""
 "Do you want to move all messages from selected senders to that category?"
-msgstr[0] ""
+msgstr[0] "Chcesz przenieść wszystkie wiadomości z %1$s do tej kategorii?"
 msgstr[1] ""
+"Chcesz przenieść wszystkie wiadomości od wybranych nadawców do tej kategorii?"
 msgstr[2] ""
+"Chcesz przenieść wszystkie wiadomości od wybranych nadawców do tej kategorii?"
 
 #. might be suitable to use 'tabs' rather than translating it
 #: apps/io.ox/mail/categories/dialogs.js module:io.ox/mail
@@ -7597,17 +7607,17 @@ msgstr "Wyrażanie regularne"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Detail"
-msgstr ""
+msgstr "Szczegóły"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Localpart"
-msgstr ""
+msgstr "Element lokalny"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Domain"
-msgstr ""
+msgstr "Domena"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7667,7 +7677,7 @@ msgstr "Bieżąca data"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Sender address"
-msgstr ""
+msgstr "Adres nadawcy"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7806,13 +7816,10 @@ msgstr[2] "Wybrano %1$d wiadomości"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"W folderze znajdują się wiadomości: %1$d. Nie wszystkie wiadomości są "
-"wyświetlane na liście. Jeśli chcesz przenieść lub usunąć wszystkie "
-"wiadomości, odpowiednie polecenia czynności znajdziesz w menu kontekstowym "
-"folderu."
+"Liczba wiadomości w folderze: %1$d. Nie wszystkie wiadomości są w tej chwili "
+"wyświetane na liście."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -10627,6 +10634,16 @@ msgstr "Zaproś na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Dodaj w serwisie %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "W folderze znajdują się wiadomości: %1$d. Nie wszystkie wiadomości są "
+#~ "wyświetlane na liście. Jeśli chcesz przenieść lub usunąć wszystkie "
+#~ "wiadomości, odpowiednie polecenia czynności znajdziesz w menu "
+#~ "kontekstowym folderu."
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"
