@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-18 15:38+0100\n"
+"PO-Revision-Date: 2017-01-25 11:24+0100\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -7800,6 +7800,7 @@ msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
 "the list currently."
 msgstr ""
+"Mapē ir %1$d ziņojumi; pašlaik parādītajā sarakstā tie visi nav uzrādīti."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
