@@ -283,11 +283,7 @@ define('io.ox/mail/listview', [
         {
             id: 'from',
             index: 300,
-            draw: function (baton) {
-                extensions.from.call(this, baton);
-                var node = this.find('.flags');
-                extensions.flag.call(node, baton);
-            }
+            draw: extensions.from
         }
     );
 
@@ -311,6 +307,11 @@ define('io.ox/mail/listview', [
             id: 'colorflag',
             index: 200,
             draw: extensions.colorflag
+        },
+        {
+            id: 'flag',
+            index: 210,
+            draw: extensions.flag
         },
         {
             id: 'optionalSize',
