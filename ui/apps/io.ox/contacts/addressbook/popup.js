@@ -651,13 +651,13 @@ define('io.ox/contacts/addressbook/popup', [
                 '  <div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"></i></div>' +
                 '  <div class="list-item-content">' +
                 '    <% if (item.list) { %>' +
-                '      <div class="contact-picture distribution-list" aria-label="hidden"><i class="fa fa-align-justify"></i></div>' +
+                '      <div class="contact-picture distribution-list" aria-hidden="true"><i class="fa fa-align-justify"></i></div>' +
                 '    <% } else if (item.label) { %>' +
-                '      <div class="contact-picture label" aria-label="hidden"><i class="fa fa-users"></i></div>' +
+                '      <div class="contact-picture label" aria-hidden="true"><i class="fa fa-users"></i></div>' +
                 '    <% } else if (item.image) { %>' +
-                '      <div class="contact-picture image" data-original="<%= item.image %>" aria-label="hidden"></div>' +
+                '      <div class="contact-picture image" data-original="<%= item.image %>" aria-hidden="true"></div>' +
                 '    <% } else { %>' +
-                '      <div class="contact-picture initials <%= item.initial_color %>" aria-label="hidden"><%- item.initials %></div>' +
+                '      <div class="contact-picture initials <%= item.initial_color %>" aria-hidden="true"><%- item.initials %></div>' +
                 '    <% } %>' +
                 '    <div class="name">' +
                 '       <%= item.full_name_html || item.email || "\u00A0" %>' +
