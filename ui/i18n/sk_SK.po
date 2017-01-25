@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-09 23:08+0200\n"
+"PO-Revision-Date: 2017-01-20 11:50+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -3849,6 +3849,10 @@ msgid "Ok"
 msgstr "OK"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "No action available"
+msgstr "Nie je dostupná žiadna operácia"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "Folder options"
 msgstr "Možnosti priečinka"
 
@@ -4074,6 +4078,14 @@ msgstr "O aplikácii"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out"
 msgstr "Odhlásiť sa"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"You forgot to sign out last time. Always use the sign-out button when you "
+"finished your work."
+msgstr ""
+"Naposledy ste sa zabudli odhlásiť. Vždy použite tlačidlo odhlásiť sa, keď "
+"dokončíte svoju prácu."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4619,14 +4631,22 @@ msgstr "vypnúť"
 msgid "Automatic opening of notification area"
 msgstr "Automatické otvorenie oblasti oznámení"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Zobraziť oznámenia na ploche"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Spravovať oprávnenia teraz"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Prosím, skontrolujte nastavenia svojho prehliadača a zapnite oznámenia "
+"pracovného prostredia pre túto doménu"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Zobraziť oznámenia na ploche"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -5797,6 +5817,11 @@ msgstr "OneDrive"
 msgid "Account added successfully"
 msgstr "Účet úspešne pridaný"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account could not be added"
+msgstr "Účet sa nepodarilo pridať"
+
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
@@ -6958,6 +6983,16 @@ msgstr "Poštu importujete pretiahnutím sem"
 msgid "Synchronize with Outlook"
 msgstr "Synchronizovať s programom Outlook"
 
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/plugins/portal/mail/register.js module:plugins/portal
+#, c-format
+msgid "No subject"
+msgstr "Bez predmetu"
+
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr "Tento email bol pridaný do portálu"
@@ -7455,15 +7490,6 @@ msgstr "Napísať správu"
 msgid "Mail"
 msgstr "Pošta"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
-#: module:io.ox/core apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-#, c-format
-msgid "No subject"
-msgstr "Bez predmetu"
-
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Použiť vlastné meno"
@@ -7914,12 +7940,9 @@ msgstr[2] "%1$d správ vybraných"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"Tento priečinok obsahuje %1$d správ. Nie všetky správy sú zobrazené v "
-"zozname. Ak chcete presunúť alebo zmazať všetky správy, zodpovedajúcu "
-"operáciu nájdete v kontextovom menu priečinka."
+"V tomto priečinku je %1$d správ. Nie všetky správy sú zobrazené v zozname."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8345,10 +8368,6 @@ msgstr "Náhľad nie je k dispozícii"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "New note"
 msgstr "Nová poznámka"
-
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account could not be added"
-msgstr "Účet sa nepodarilo pridať"
 
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -10821,6 +10840,15 @@ msgstr "Pozvať na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pridať na %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Tento priečinok obsahuje %1$d správ. Nie všetky správy sú zobrazené v "
+#~ "zozname. Ak chcete presunúť alebo zmazať všetky správy, zodpovedajúcu "
+#~ "operáciu nájdete v kontextovom menu priečinka."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "

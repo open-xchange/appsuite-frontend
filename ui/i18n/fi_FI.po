@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-12 12:50+0200\n"
+"PO-Revision-Date: 2017-01-23 16:23+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -3815,6 +3815,10 @@ msgid "Ok"
 msgstr "Ok"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "No action available"
+msgstr "Toimintoa ei saatavilla"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "Folder options"
 msgstr "Kansiovalinnat"
 
@@ -4042,6 +4046,14 @@ msgstr "Tietoja"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out"
 msgstr "Kirjaudu ulos"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"You forgot to sign out last time. Always use the sign-out button when you "
+"finished your work."
+msgstr ""
+"Unohdit kirjautua ulos viimeksi. Käytä aina uloskirjautumispainiketta kun "
+"olet lopettanut työskentelyn."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4584,14 +4596,21 @@ msgstr "Kytke pois päältä"
 msgid "Automatic opening of notification area"
 msgstr "Ilmoitusalueen automaattinen avaus"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Näytä työpöytäilmoitukset"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Hallinnoi oikeuksiasi"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Tarkista selainasetuksesi ja kytke päälle tämän domainin työpöytäilmoitukset."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Näytä työpöytäilmoitukset"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -5762,6 +5781,11 @@ msgstr "OneDrive"
 msgid "Account added successfully"
 msgstr "Tili onnistuneesti päivitetty"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account could not be added"
+msgstr "Tiliä ei voitu lisätä"
+
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
@@ -6906,6 +6930,16 @@ msgstr "Tiputa tähän tuodaksesi tämä viesti"
 msgid "Synchronize with Outlook"
 msgstr "Synkronoi Outlookin kanssa"
 
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/plugins/portal/mail/register.js module:plugins/portal
+#, c-format
+msgid "No subject"
+msgstr "Ei aihetta"
+
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr "Tämä viesti on lisätty portaaliin"
@@ -7393,15 +7427,6 @@ msgstr "Uusi viesti"
 msgid "Mail"
 msgstr "Sähköposti"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
-#: module:io.ox/core apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-#, c-format
-msgid "No subject"
-msgstr "Ei aihetta"
-
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Käytä mukautettua nimiä"
@@ -7852,12 +7877,8 @@ msgstr[1] "%1$d viestiä valittuna"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
-msgstr ""
-"Tässä kansiossa on %1$d liitettä; kaikki viestit eivät näy luettelossa. Jos "
-"haluat siirtää tai poistaa kaikki viestit, toiminnot löytyvät kansion "
-"kontekstivalikosta."
+"the list currently."
+msgstr "Kansiossa on %1$d  viestiä. Kaikki viestit eivät näy luettelossa."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8283,10 +8304,6 @@ msgstr "Esikatselu ei saatavissa"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "New note"
 msgstr "Uusi huomautus"
-
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account could not be added"
-msgstr "Tiliä ei voitu lisätä"
 
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -10771,6 +10788,15 @@ msgstr "Kutsu %s:in"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s lisää"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Tässä kansiossa on %1$d liitettä; kaikki viestit eivät näy luettelossa. "
+#~ "Jos haluat siirtää tai poistaa kaikki viestit, toiminnot löytyvät kansion "
+#~ "kontekstivalikosta."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "

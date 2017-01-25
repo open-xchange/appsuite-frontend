@@ -1,12 +1,12 @@
 # Anneli Axelsson <anneli@bureau-cornavin.com>, 2008, 2009.
 # Samantha Whitsitt <samantha@bureau-cornavin.com>, 2008.
-# Arve Eriksson <arve@bureau-cornavin.com>, 2013, 2014, 2015, 2016.
+# Arve Eriksson <arve@bureau-cornavin.com>, 2013, 2014, 2015, 2016, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-09 05:49+0100\n"
+"PO-Revision-Date: 2017-01-20 17:53+0100\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <ox@bureau-cornavin.com>\n"
 "Language: sv_SE\n"
@@ -3810,6 +3810,10 @@ msgid "Ok"
 msgstr "Ok"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "No action available"
+msgstr "Ingen åtgärd tillgänglig"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "Folder options"
 msgstr "Mappalternativ"
 
@@ -4032,6 +4036,14 @@ msgstr "Om"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out"
 msgstr "Logga ut"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"You forgot to sign out last time. Always use the sign-out button when you "
+"finished your work."
+msgstr ""
+"Du glömde logga ut tidigare. Använd alltid logga ut-knappen när du har "
+"arbetat färdigt."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4576,14 +4588,22 @@ msgstr "avaktivera"
 msgid "Automatic opening of notification area"
 msgstr "Öppna aviseringsområdet automatiskt"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Visa skrivbordsaviseringar"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Hantera rättighet nu"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Kontrollera dina webbläsarinställningar och aktivera skrivbordsaviseringar "
+"för den här domänen."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Visa skrivbordsaviseringar"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -5751,6 +5771,11 @@ msgstr "OneDrive"
 msgid "Account added successfully"
 msgstr "Kontot lades till"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account could not be added"
+msgstr "Kontot kunde inte läggas till"
+
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
@@ -6896,6 +6921,16 @@ msgstr "Släpp här för att importera meddelandet"
 msgid "Synchronize with Outlook"
 msgstr "Synkronisera med Outlook"
 
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/plugins/portal/mail/register.js module:plugins/portal
+#, c-format
+msgid "No subject"
+msgstr "Inget ämne"
+
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr "Meddelandet har lagts till i portalen"
@@ -7384,15 +7419,6 @@ msgstr "Skriv"
 msgid "Mail"
 msgstr "E-post"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
-#: module:io.ox/core apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-#, c-format
-msgid "No subject"
-msgstr "Inget ämne"
-
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Använd anpassat namn"
@@ -7842,12 +7868,8 @@ msgstr[1] "%1$d meddelanden markerade"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
-msgstr ""
-"Det finns %1$d meddelanden i den här mappen; alla meddelanden visas inte i "
-"listan. Om du vill flytta eller radera alla meddelanden hittar du "
-"motsvarande åtgärder i mappens snabbmeny."
+"the list currently."
+msgstr "Det finns %1$d meddelanden i den här mappen; listan visar inte alla."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8270,10 +8292,6 @@ msgstr "Ingen förhandsgranskning tillgänglig"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "New note"
 msgstr "Ny anteckning"
-
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account could not be added"
-msgstr "Kontot kunde inte läggas till"
 
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -10726,6 +10744,15 @@ msgstr "Bjud in till %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Lägg till på %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Det finns %1$d meddelanden i den här mappen; alla meddelanden visas inte "
+#~ "i listan. Om du vill flytta eller radera alla meddelanden hittar du "
+#~ "motsvarande åtgärder i mappens snabbmeny."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "

@@ -1,11 +1,11 @@
 # Antje Faber <antje.faber@open-xchange.com>, 2010, 2011, 2013.
-# Ivar Snaaijer <ivar@bureau-cornavin.com>, 2010, 2011, 2012, 2013, 2015, 2016.
+# Ivar Snaaijer <ivar@bureau-cornavin.com>, 2010, 2011, 2012, 2013, 2015, 2016, 2017.
 # Reinout van Schouwen <reinout@bureau-cornavin.com>, 2012, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-12 22:00+0100\n"
+"PO-Revision-Date: 2017-01-19 20:44+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -3853,6 +3853,10 @@ msgid "Ok"
 msgstr "Ok"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "No action available"
+msgstr "Geen actie beschikbaar"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "Folder options"
 msgstr "Mapopties"
 
@@ -4074,6 +4078,14 @@ msgstr "Over"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out"
 msgstr "Afmelden"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"You forgot to sign out last time. Always use the sign-out button when you "
+"finished your work."
+msgstr ""
+"U heeft de vorige keer niet afgemeld. Gebruik altijd de afmeld-knop als uw "
+"werkzaamheden voltooid zijn."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4620,14 +4632,22 @@ msgstr "uitschakelen"
 msgid "Automatic opening of notification area"
 msgstr "Automatisch het meldingengebied openen"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Toon desktopkennisgevingen"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Nu rechten beheren"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Controleer alstublieft uw browserinstellingen en sta bureaubladmeldingen toe "
+"voor dit domein"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Toon desktopkennisgevingen"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -5809,6 +5829,11 @@ msgstr "OneDrive"
 msgid "Account added successfully"
 msgstr "Account is succesvol toegevoegd"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account could not be added"
+msgstr "Account kan niet worden toegevoegd"
+
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
@@ -6968,6 +6993,16 @@ msgstr "Sleep hierheen om deze e-mail te importeren"
 msgid "Synchronize with Outlook"
 msgstr "Synchroniseer met Outlook"
 
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/plugins/portal/mail/register.js module:plugins/portal
+#, c-format
+msgid "No subject"
+msgstr "Geen onderwerp"
+
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr "Dit e-mailbericht is toegevoegd aan het portaal"
@@ -7465,15 +7500,6 @@ msgstr "Nieuw bericht"
 msgid "Mail"
 msgstr "E-mail"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
-#: module:io.ox/core apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-#, c-format
-msgid "No subject"
-msgstr "Geen onderwerp"
-
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Gebruik de zelfbedachte naam"
@@ -7928,12 +7954,10 @@ msgstr[1] "%1$d berichten geselecteerd"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"Er zijn %1$d berichten in deze map: niet alle berichten worden getoond in de "
-"lijst. Als u alle berichten wilt verplaatsen of verwijderen kan u deze "
-"functies vinden in het contextmenu van de map."
+"Er zijn %1$d berichten in deze map: momenteel worden niet alle berichten in"
+" de lijst  getoond."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8365,10 +8389,6 @@ msgstr "Voorbeeld niet beschikbaar"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "New note"
 msgstr "Nieuwe notitie"
-
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account could not be added"
-msgstr "Account kan niet worden toegevoegd"
 
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -10839,6 +10859,15 @@ msgstr "Uitnodigingen voor %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Er zijn %1$d berichten in deze map: niet alle berichten worden getoond in "
+#~ "de lijst. Als u alle berichten wilt verplaatsen of verwijderen kan u deze "
+#~ "functies vinden in het contextmenu van de map."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "
