@@ -51,7 +51,7 @@ define('io.ox/mail/common-extensions', [
                 a11yLabel;
 
             if (util.isUnseen(data)) parts.push(gt('Unread'));
-            if (baton.data.color_label && settings.get('features/color')) parts.push(gt('Flagged') + ' ' + flagPicker.colorName(baton.data.color_label));
+            if (baton.data.color_label && settings.get('features/flag/color')) parts.push(gt('Flagged') + ' ' + flagPicker.colorName(baton.data.color_label));
             parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.received_date));
             if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
             if (data.attachment) parts.push(gt('has attachments'));
@@ -217,7 +217,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         colorflag: function (baton) {
-            if (!settings.get('features/color')) return;
+            if (!settings.get('features/flag/color')) return;
             var color = baton.data.color_label;
             // 0 and a buggy -1
             if (color <= 0) return;
@@ -227,7 +227,7 @@ define('io.ox/mail/common-extensions', [
         },
 
         flag: function (baton) {
-            if (!settings.get('features/flag') || !util.isFlagged(baton.data)) return;
+            if (!settings.get('features/flag/star') || !util.isFlagged(baton.data)) return;
             this.append($('<span class="flag">').append(
                 extensions.flagIcon.call(this)
             ));
@@ -240,7 +240,7 @@ define('io.ox/mail/common-extensions', [
 
         // list view
         flaggedClass: function (baton) {
-            if (!settings.get('features/flag')) return;
+            if (!settings.get('features/flag/star')) return;
             this.closest('.list-item').toggleClass('flagged', util.isFlagged(baton.data));
         },
 
@@ -262,7 +262,7 @@ define('io.ox/mail/common-extensions', [
             }
 
             return function (baton) {
-                if (!settings.get('features/flag') || util.isEmbedded(baton.data)) return;
+                if (!settings.get('features/flag/star') || util.isEmbedded(baton.data)) return;
                 if (util.isEmbedded(baton.data)) return;
                 var self = this;
                 folderAPI.get(baton.data.folder_id).done(function (data) {
@@ -614,7 +614,7 @@ define('io.ox/mail/common-extensions', [
         }()),
 
         flagPicker: function (baton) {
-            if (!settings.get('features/color')) return;
+            if (!settings.get('features/flag/color')) return;
             flagPicker.draw(this, baton);
         },
 

@@ -293,7 +293,7 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/flag', {
         requires: function (e) {
-            return settings.get('features/flag') && e.collection.has('some');
+            return settings.get('features/flag/star') && e.collection.has('some');
         },
         action: function (baton) {
             api.flag(baton.data);
