@@ -741,7 +741,7 @@ define('io.ox/files/main', [
             });
         },
 
-        //open on pressing enter
+        //open on pressing enter / space
         'selection-enter': function (app) {
             if (_.device('smartphone')) {
                 return;
@@ -749,7 +749,8 @@ define('io.ox/files/main', [
 
             // folders
             app.listView.$el.on('keydown', '.file-type-folder', function (e) {
-                if (e.which === 13) {
+                if (/13|32/.test(e.which)) {
+                    e.preventDefault();
                     // simple id check for folders, prevents errors if folder id contains '.'
                     var id = $(e.currentTarget).attr('data-cid').replace(/^folder./, '');
 
@@ -762,7 +763,8 @@ define('io.ox/files/main', [
 
             // files
             app.listView.$el.on('keydown', '.list-item:not(.file-type-folder)', function (e) {
-                if (e.which === 13) {
+                if (/13|32/.test(e.which)) {
+                    e.preventDefault();
                     var cid = app.listView.selection.get()[0],
                         selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                         baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app, options: { eventname: 'selection-enter' } });
