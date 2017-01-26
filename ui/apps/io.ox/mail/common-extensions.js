@@ -51,7 +51,8 @@ define('io.ox/mail/common-extensions', [
                 a11yLabel;
 
             if (util.isUnseen(data)) parts.push(gt('Unread'));
-            if (baton.data.color_label && settings.get('features/flag/color')) parts.push(gt('Flagged') + ' ' + flagPicker.colorName(baton.data.color_label));
+            if (util.isFlagged(data)) parts.push(gt('Flagged'));
+            if (baton.data.color_label && settings.get('features/flag/color')) parts.push(flagPicker.colorName(baton.data.color_label));
             parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.received_date));
             if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
             if (data.attachment) parts.push(gt('has attachments'));
@@ -229,7 +230,7 @@ define('io.ox/mail/common-extensions', [
         flag: function (baton) {
             if (!settings.get('features/flag/star') || !util.isFlagged(baton.data)) return;
             this.append($('<span class="flag">').append(
-                extensions.flagIcon.call(this)
+                extensions.flagIcon.call(this).attr('title', gt('Flagged'))
             ));
         },
 
@@ -246,8 +247,10 @@ define('io.ox/mail/common-extensions', [
 
         flagToggle: (function () {
 
-            function getAriaLabel(data) {
-                return util.isFlagged(data) ? gt('Flagged') : gt('Not flagged');
+            function makeAccessible(data, index, node) {
+                var label = util.isFlagged(data) ? gt('Flagged') : gt('Not flagged');
+                $(node).attr({ 'aria-label': label, 'aria-pressed': util.isFlagged(data) })
+                       .find('.fa').attr('title', label);
             }
 
             function toggle(e) {
@@ -255,10 +258,7 @@ define('io.ox/mail/common-extensions', [
                 var data = e.data.model.toJSON();
                 // toggle 'flagged' bit
                 if (util.isFlagged(data)) api.flag(data, false); else api.flag(data, true);
-                $(this).attr({
-                    'aria-label': getAriaLabel(data),
-                    'aria-pressed': util.isFlagged(data)
-                });
+                $(this).each(_.partial(makeAccessible, data));
             }
 
             return function (baton) {
@@ -270,11 +270,8 @@ define('io.ox/mail/common-extensions', [
                     if (!folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data)) return;
                     self.append(
                         $('<a href="#" role="button" class="flag">')
-                        .attr({
-                            'aria-label': getAriaLabel(baton.data),
-                            'aria-pressed': util.isFlagged(baton.data)
-                        })
                         .append(extensions.flagIcon.call(this))
+                        .each(_.partial(makeAccessible, baton.data))
                         .on('click', { model: baton.view.model }, toggle)
                     );
                 });
@@ -339,12 +336,12 @@ define('io.ox/mail/common-extensions', [
         },
 
         envelope: function () {
-            this.append($('<i class="fa seen-unseen-indicator" aria-hidden="true">'));
+            return $('<i class="fa seen-unseen-indicator" aria-hidden="true">').appendTo(this);
         },
 
         unread: function (baton) {
             var isUnseen = util.isUnseen(baton.data);
-            if (isUnseen) extensions.envelope.call(this);
+            if (isUnseen) extensions.envelope.call(this).attr('title', 'Unread');
         },
 
         answered: function (baton) {
@@ -620,8 +617,10 @@ define('io.ox/mail/common-extensions', [
 
         unreadToggle: (function () {
 
-            function getAriaLabel(data) {
-                return util.isUnseen(data) ? gt('Unread') : gt('Read');
+            function makeAccessible(data, index, node) {
+                var label = util.isUnseen(data) ? gt('Unread') : gt('Read');
+                $(node).attr({ 'aria-label': label, 'aria-pressed': util.isUnseen(data) })
+                       .find('.fa').attr('title', label);
             }
 
             function toggle(e) {
@@ -629,10 +628,7 @@ define('io.ox/mail/common-extensions', [
                 var data = e.data.model.toJSON();
                 // toggle 'unseen' bit
                 if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
-                $(this).attr({
-                    'aria-label': getAriaLabel(data),
-                    'aria-pressed': util.isUnseen(data)
-                });
+                $(this).each(_.partial(makeAccessible, data));
             }
 
             return function (baton) {
@@ -646,11 +642,8 @@ define('io.ox/mail/common-extensions', [
                     if (!showUnreadToggle) return;
                     self.append(
                         $('<a href="#" role="button" class="unread-toggle">')
-                        .attr({
-                            'aria-label': getAriaLabel(baton.data),
-                            'aria-pressed': util.isUnseen(baton.data)
-                        })
                         .append('<i class="fa" aria-hidden="true">')
+                        .each(_.partial(makeAccessible, baton.data))
                         .on('click', { model: baton.view.model }, toggle)
                     );
                 });
