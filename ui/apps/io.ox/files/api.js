@@ -20,10 +20,11 @@ define('io.ox/files/api', [
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
+    'io.ox/core/util',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, coreSettings, settings, gt) {
+], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, util, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -388,7 +389,7 @@ define('io.ox/files/api', [
 
         options = _.extend({ scaleType: 'contain' }, options);
 
-        var url = ox.apiRoot + '/files',
+        var url = '/files',
             folder = encodeURIComponent(file.folder_id),
             id = encodeURIComponent(file.id),
             sessionData = '&user=' + ox.user_id + '&context=' + ox.context_id + '&sequence=' + (file.last_modified || 1),
@@ -410,19 +411,27 @@ define('io.ox/files/api', [
 
         switch (type) {
             case 'download':
-                return (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
+                url = (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
+                break;
             case 'thumbnail':
-                return (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
+                url = (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
+                break;
             case 'preview':
-                return (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
+                url = (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
+                break;
             case 'cover':
-                return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
+                url = ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
+                break;
             case 'play':
-                return url + query + '&delivery=view';
+                url = url + query + '&delivery=view';
+                break;
             // open/view
             default:
-                return url + name + query + '&delivery=view';
+                url = url + name + query + '&delivery=view';
+                break;
         }
+
+        return util.getShardingRoot(url);
     };
 
     //

@@ -26,8 +26,9 @@ define('io.ox/mail/api', [
     'io.ox/core/tk/visibility-api-util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
-    'io.ox/core/capabilities'
-], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/core/util'
+], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, coreUtil) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -1437,18 +1438,20 @@ define('io.ox/mail/api', [
      * @return { string} url
      */
     api.getUrl = function (data, mode, options) {
+
         var opt = _.extend({ scaleType: 'contain' }, options),
-            url = ox.apiRoot + '/mail', first;
+            url = '/mail', first;
+
         if (mode === 'zip') {
             first = _(data).first();
-            return url + '?' + $.param({
+            return coreUtil.getShardingRoot(url + '?' + $.param({
                 action: 'zip_attachments',
                 folder: (first.parent || first.mail).folder_id,
                 id: (first.parent || first.mail).id,
                 attachment: _(data).pluck('id').join(','),
                 // required here!
                 session: ox.session
-            });
+            }));
         } else if (mode === 'eml:reference') {
             //if eml stored as reference use parent object
             return this.getUrl(_([].concat(data)).first().parent, 'eml');
@@ -1458,12 +1461,12 @@ define('io.ox/mail/api', [
             // multiple?
             if (data.length > 1) {
                 // zipped
-                return url + '?' + $.param({
+                return coreUtil.getShardingRoot(url + '?' + $.param({
                     action: 'zip_messages',
                     folder: first.folder_id,
                     id: _(data).pluck('id').join(','),
                     session: ox.session
-                });
+                }));
             }
             // single EML
             url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:\/]/g, '_') + '.eml') : '') + '?' +
@@ -1473,7 +1476,7 @@ define('io.ox/mail/api', [
                     save: 1,
                     session: ox.session
                 }));
-            return url;
+            return coreUtil.getShardingRoot(url);
         }
         // inject filename for more convenient file downloads
         var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
@@ -1493,12 +1496,15 @@ define('io.ox/mail/api', [
         switch (mode) {
             case 'view':
             case 'open':
-                return url + '&delivery=view' + scaling;
+                url += '&delivery=view' + scaling;
+                break;
             case 'download':
-                return url + '&delivery=download';
+                url += '&delivery=download';
+                break;
             default:
-                return url;
+                break;
         }
+        return coreUtil.getShardingRoot(url);
     };
 
     /**

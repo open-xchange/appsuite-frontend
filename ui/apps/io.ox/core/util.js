@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], function (ext, settings) {
 
     'use strict';
 
@@ -233,7 +233,22 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             return addresses.map(function (str) {
                 return str.replace(/^([^"]+)\s</, '"$1" <');
             });
-        }
+        },
+
+        getShardingRoot: (function () {
+            var hosts = [].concat(settings.get('shardingHosts', location.host + ox.apiRoot));
+            function sum(s) {
+                var i = s.length - 1, sum = 0;
+                for (; i; i--) sum += s.charCodeAt(i);
+                return sum;
+            }
+            return function (url) {
+                var index = 0;
+                if (hosts.length > 1) index = sum(url) % hosts.length;
+                if (!/^\//.test(url)) url = '/' + url;
+                return '//' + hosts[index] + url;
+            };
+        }())
     };
 
     return that;

@@ -315,7 +315,7 @@ define('io.ox/contacts/util', [
                 options.height *= 2;
             }
 
-            return arg.replace(/^https?\:\/\/[^\/]+/i, '').replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(options);
+            return util.getShardingRoot(arg.replace(/^https?\:\/\/[^\/]+/i, '').replace(/^\/ajax/, '') + '&' + $.param(options));
         },
 
         getInitials: (function () {

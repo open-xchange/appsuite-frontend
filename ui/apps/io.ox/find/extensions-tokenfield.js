@@ -13,8 +13,9 @@
 
 define('io.ox/find/extensions-tokenfield', [
     'io.ox/core/extensions',
+    'io.ox/core/util',
     'io.ox/contacts/api'
-], function (ext, api) {
+], function (ext, util, api) {
 
     'use strict';
 
@@ -46,7 +47,8 @@ define('io.ox/find/extensions-tokenfield', [
                 // construct url
                 image = (image ? image + '&height=42&scaleType=contain' : defaultimage)
                     .replace(/^https?\:\/\/[^\/]+/i, '')
-                    .replace(/^\/ajax/, ox.apiRoot);
+                    .replace(/^\/ajax/, '');
+                image = util.getShardingRoot(image);
 
                 // add image node
                 this.append(
