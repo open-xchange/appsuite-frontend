@@ -91,12 +91,8 @@ define('io.ox/mail/listview', [
             id: 'col2',
             index: 200,
             draw: function (baton) {
-                var column = $('<div class="list-item-column column-2">');
-                extensions.answered.call(column, baton);
-                if (column.children().length === 0) {
-                    // horizontal view: only show forwarded icon if answered flag not set
-                    extensions.forwarded.call(column, baton);
-                }
+                var column = $('<div class="list-item-column column-3">');
+                extensions.paperClip.call(column, baton);
                 this.append(column);
             }
         },
@@ -123,7 +119,11 @@ define('io.ox/mail/listview', [
             index: 500,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-5">');
-                ext.point('io.ox/mail/listview/item/small/col5').invoke('draw', column, baton);
+                extensions.answered.call(column, baton);
+                if (column.children().length === 0) {
+                    // horizontal view: only show forwarded icon if answered flag not set
+                    extensions.forwarded.call(column, baton);
+                }
                 this.append(column);
             }
         },
@@ -135,6 +135,15 @@ define('io.ox/mail/listview', [
                 ext.point('io.ox/mail/listview/item/small/col6').invoke('draw', column, baton);
                 this.append(column);
             }
+        },
+        {
+            id: 'col7',
+            index: 700,
+            draw: function (baton) {
+                var column = $('<div class="list-item-column column-7">');
+                ext.point('io.ox/mail/listview/item/small/col7').invoke('draw', column, baton);
+                this.append(column);
+            }
         }
     );
 
@@ -144,7 +153,7 @@ define('io.ox/mail/listview', [
         draw: extensions.from
     });
 
-    ext.point('io.ox/mail/listview/item/small/col5').extend(
+    ext.point('io.ox/mail/listview/item/small/col6').extend(
         {
             id: 'account',
             index: 100,
@@ -174,11 +183,6 @@ define('io.ox/mail/listview', [
             id: 'thread-size',
             index: 300,
             draw: extensions.threadSize
-        },
-        {
-            id: 'paper-clip',
-            index: 400,
-            draw: extensions.paperClip
         },
         {
             id: 'shared-attachement',
@@ -221,7 +225,7 @@ define('io.ox/mail/listview', [
         }
     );
 
-    ext.point('io.ox/mail/listview/item/small/col6').extend({
+    ext.point('io.ox/mail/listview/item/small/col7').extend({
         id: 'date',
         index: 100,
         draw: extensions.date
