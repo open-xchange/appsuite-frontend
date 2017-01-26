@@ -689,7 +689,7 @@ define('io.ox/mail/compose/extensions', [
                                     $('<span class="input-group-addon">').append(
                                         new mini.CheckboxView({ name: 'usepassword', model: baton.view.settingsModel }).render().$el
                                     ),
-                                    passwordField.render().$el
+                                    passwordField.render().$el.attr({ autocomplete: 'new-password' }).removeAttr('name')
                                 )
                             );
 
