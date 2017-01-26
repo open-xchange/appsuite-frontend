@@ -809,7 +809,7 @@ define('io.ox/mail/compose/view', [
             //#. This string must equal the prefix, which is prepended before the subject on copy
             //#. It is important, that the space is also translated, as the space will also be removed
             var str = gt('[Copy] ');
-            if (this.model.get('subject').indexOf(str) === 0) {
+            if ((this.model.get('subject') || '').indexOf(str) === 0) {
                 var subject = this.model.get('subject');
                 subject = subject.replace(str, '');
                 this.model.set('subject', subject);
