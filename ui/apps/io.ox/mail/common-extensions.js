@@ -236,7 +236,7 @@ define('io.ox/mail/common-extensions', [
 
         flagIcon: function () {
             // icon is set via css
-            return $('<i class="fa fa-fw" aria-hidden="true">');
+            return $('<i class="fa" aria-hidden="true">');
         },
 
         // list view
