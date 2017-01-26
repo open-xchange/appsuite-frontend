@@ -163,7 +163,7 @@ define('io.ox/mail/common-extensions', [
             this.append(
                 $('<div class="from">').attr('title', opt.mailAddress).append(
                     $('<span class="flags">'),
-                    util.getFrom(baton.data, _.pick(opt, 'field', 'reorderDisplayName', 'showDisplayName', 'reorderDisplayName', 'unescapeDisplayName'))
+                    util.getFrom(baton.data, _.pick(opt, 'field', 'reorderDisplayName', 'showDisplayName', 'unescapeDisplayName'))
                 )
             );
         },
