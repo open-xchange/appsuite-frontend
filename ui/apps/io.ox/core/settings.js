@@ -134,7 +134,7 @@ define('io.ox/core/settings', [
 
         var applyDefaults = function () {
             return require([path + '/settings/defaults']).then(function (defaults) {
-                tree = _.extend(defaults, tree);
+                tree = _.extend({}, defaults, tree);
             });
         };
 
@@ -207,6 +207,25 @@ define('io.ox/core/settings', [
             // offline
             self.detach();
             return $.Deferred().resolve({ tree: tree, meta: meta });
+        };
+
+        // reload settings from server
+        // this does not trigger any change events!
+        this.reload = function () {
+
+            if (detached) return $.when();
+
+            return http.PUT({ module: 'jslob', params: { action: 'list' }, data: [path] })
+                .done(function (data) {
+                    tree = data[0].tree;
+                    meta = data[0].meta;
+                    saved = JSON.parse(JSON.stringify(tree));
+                    applyDefaults();
+                })
+                .then(function () {
+                    self.trigger('reload', tree, meta);
+                    return { tree: tree, meta: meta };
+                });
         };
 
         this.clear = function () {
