@@ -18,11 +18,11 @@ define([
 
     'use strict';
 
-    var capabilities = caputil.preset('common').init('io.ox/mail/util', util);
-
     describe('Mail Utilities:', function () {
 
         describe('has some capability depending msisdn methods that', function () {
+
+            var capabilities = caputil.preset('common').init('io.ox/mail/util', util);
 
             beforeEach(function (done) {
                 capabilities.reset().done(function () {
@@ -265,6 +265,7 @@ define([
             });
 
             it('should return a date string for valid date', function () {
+                moment.tz.setDefault('Europe/Berlin');
                 expect(util.getTime(1379508350), 'getTime').to.be.equal('17.1.1970');
                 expect(util.getDateTime(1379508350), 'getDateTime').to.be.equal('17.1.1970 00:11');
                 expect(util.getFullDate(1379508350), 'getFullDate').to.be.equal('17.1.1970 00:11');
@@ -322,35 +323,6 @@ define([
                 expect(util.count([{}, {}, { thread: [1, 2] }]))
                     .to.be.a('number').and
                     .to.equal(4);
-            });
-        });
-
-        describe('signature handling', function () {
-            describe('for HTML mails', function () {
-                it('should clean plain text signatures containing < and >', function () {
-                    var clean = util.signatures.cleanAdd('Test <test@example.com>', true);
-                    expect(clean).to.equal('Test &lt;test@example.com&gt;');
-                });
-                it('should clean HTML signatures', function () {
-                    var clean = util.signatures.cleanAdd('<p>Test &lt;test@example.com&gt;</p>', true);
-                    expect(clean).to.equal('<p>Test &lt;test@example.com&gt;</p>');
-                });
-            });
-            describe('for text mails', function () {
-                it('should clean plain text signatures containing < and >', function () {
-                    var clean = util.signatures.cleanAdd('Test <test@example.com>', false);
-                    expect(clean).to.equal('Test <test@example.com>');
-                });
-
-                it('should clean HTML signatures', function () {
-                    var clean = util.signatures.cleanAdd('<p>Test &lt;test@example.com&gt;</p>', false);
-                    expect(clean).to.equal('Test <test@example.com>');
-                });
-
-                it('should "trim" signatures (remove trailing white-space)', function () {
-                    var clean = util.signatures.cleanAdd('<p>Test &lt;test@example.com&gt;</p>\n ', false);
-                    expect(clean).to.equal('Test <test@example.com>');
-                });
             });
         });
     });

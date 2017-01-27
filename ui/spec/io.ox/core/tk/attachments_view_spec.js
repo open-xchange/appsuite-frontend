@@ -17,7 +17,7 @@ define([
 
     'use strict';
 
-    describe('Attachments Views:', function () {
+    describe('Core Attachments Views:', function () {
         it('API should provide an AttachmentList view', function () {
             expect(Attachments.List).to.exist;
         });
@@ -253,15 +253,16 @@ define([
 
                     list.render().onToggleDetails({ preventDefault: sinon.stub() });
                     list.collection.add(new Model());
-                    expect(list.$('header').text(), 'header text').to.contain('3 Anlagen');
+                    expect(list.$('header').text(), 'header text').to.contain('3 Anhänge');
                 });
             });
         });
     });
 
-    describe.skip('Attachment View:', function () {
+    describe('Core Attachment View:', function () {
         var FakeModel = Backbone.Model.extend({
             needsUpload: sinon.stub().returns(false),
+            getTitle: sinon.stub.returns('TestTitle'),
             getShortTitle: sinon.stub().returns('TestTitle'),
             getSize: sinon.stub().returns(65535)
         });
