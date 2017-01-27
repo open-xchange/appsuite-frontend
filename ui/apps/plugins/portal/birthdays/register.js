@@ -163,19 +163,20 @@ define('plugins/portal/birthdays/register', [
 
                     var birthday = getBirthday(contact),
                         // we use fullname here to avoid having duplicates like "Jon Doe" and "Doe, Jon"
-                        name = util.getFullName(contact);
+                        name = util.getFullName(contact),
+                        now = moment();
 
                     if (!isDuplicate(name, birthday, hash)) {
 
-                        var nextBirthday = moment().month(birthday.month()).date(birthday.date()),
-                            delta = nextBirthday.diff(moment(), 'day');
+                        var nextBirthday = now.clone().month(birthday.month()).date(birthday.date()),
+                            delta = nextBirthday.diff(now, 'day');
                         //avoid negative deltas to not display negative days till birthday (-300 for example)
                         //delta -1 is ok, we display this as yesterday
                         if (delta < -1) {
                             //increase Birthday by one year to be sure it's in the future and calculate again
                             //we don't just do a + 365 days here because we we don't know if it's a leapyear
                             nextBirthday.add(1, 'year');
-                            delta = nextBirthday.diff(moment(), 'day');
+                            delta = nextBirthday.diff(now, 'day');
                         }
                         /*eslint no-nested-ternary: 0*/
                         delta = delta === 0 ? gt('Today') : delta === 1 ? gt('Tomorrow') : delta === -1 ? gt('Yesterday') : gt('In %1$d days', Math.ceil(delta));
