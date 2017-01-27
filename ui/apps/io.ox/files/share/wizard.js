@@ -327,11 +327,9 @@ define('io.ox/files/share/wizard', [
                     $.txt(' '),
                     $('<div>').addClass('form-group').append(
                         $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
-                        passInput = new miniViews.PasswordView({ name: 'password', model: baton.model })
+                        passInput = new miniViews.PasswordView({ name: 'password', model: baton.model, autocomplete: false })
                             .render().$el
-                            // see bug 49639
-                            .attr({ id: guid, placeholder: gt('Password'), autocomplete: 'new-password' })
-                            .removeAttr('name')
+                            .attr({ id: guid, placeholder: gt('Password') })
                             .prop('disabled', !baton.model.get('secured'))
                     )
                 )

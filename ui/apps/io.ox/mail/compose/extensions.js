@@ -682,14 +682,13 @@ define('io.ox/mail/compose/extensions', [
                         },
                         renderPassword: function (baton) {
                             var $links = baton.view.$header.find('.links'),
-                                passwordField = new mini.PasswordView({ name: 'password', model: baton.view.settingsModel, placeholder: gt('Password') });
-
+                                passwordField = new mini.PasswordView({ name: 'password', model: baton.view.settingsModel, placeholder: gt('Password'), autocomplete: false });
                             $links.append(
                                 $('<div class="input-group">').append(
                                     $('<span class="input-group-addon">').append(
                                         new mini.CheckboxView({ name: 'usepassword', model: baton.view.settingsModel }).render().$el
                                     ),
-                                    passwordField.render().$el.attr({ autocomplete: 'new-password' }).removeAttr('name')
+                                    passwordField.render().$el
                                 )
                             );
 

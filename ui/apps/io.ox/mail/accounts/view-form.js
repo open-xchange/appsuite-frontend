@@ -475,7 +475,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('password', gt('Password')),
                         div(
-                            new PasswordView({ model: model, id: 'password', mandatory: model.get('id') === undefined }).render().$el
+                            new PasswordView({ model: model, id: 'password', mandatory: model.get('id') === undefined, autocomplete: false }).render().$el
                         )
                     ),
                     // refresh rate (pop3 only)
@@ -547,7 +547,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('transport_password', gt('Password')),
                         div(
-                            new PasswordView({ model: model, id: 'transport_password' }).render().$el
+                            new PasswordView({ model: model, id: 'transport_password', autocomplete: false }).render().$el
                         )
                     )
                 )

@@ -89,6 +89,8 @@ define('io.ox/backbone/mini-views/common', [
             if (this.id) this.$el.attr('id', this.id);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             if (this.options.mandatory) this.$el.attr('aria-required', true);
+            // see bug 49639, 51204
+            if (_.isBoolean(this.options.autocomplete) && !this.options.autocomplete) this.$el.attr('autocomplete', 'new-password').removeAttr('name');
             this.update();
             return this;
         }
