@@ -37,7 +37,7 @@ define('io.ox/oauth/settings', [
 
             new ModalDialog({
                 async: true,
-                title: gt('OAuth application overview'),
+                title: account.get('displayName'),
                 point: 'io.ox/settings/accounts/' + serviceId + '/settings/detail/dialog',
                 relatedAccountsCollection: collection,
                 account: account,
@@ -51,13 +51,12 @@ define('io.ox/oauth/settings', [
                             childView: AccountViews.ListItem,
                             collection: this.options.relatedAccountsCollection
                         });
-                    this.$body.addClass('settings-detail-pane').append(
+                    this.$body.append(
                         $('<div class="form-group">').append(
                             $('<label>', { 'for': guid = _.uniqueId('input') }).text(gt('Display Name')),
                             new MiniViews.InputView({ name: 'displayName', model: this.options.account, id: guid }).render().$el
                         ),
                         $('<div class="form-group">').append(
-                            $('<legend>').text(gt('Related accounts')),
                             relatedAccountsView.render().$el
                         )
                     );
@@ -106,7 +105,7 @@ define('io.ox/oauth/settings', [
         draw: function (args) {
             new ModalDialog({
                 async: true,
-                title: gt('Account Settings'),
+                title: args.data.model.get('displayName'),
                 point: 'io.ox/settings/accounts/fileStorage/settings/detail/dialog',
                 account: args.data.model
             })
@@ -114,7 +113,7 @@ define('io.ox/oauth/settings', [
                 text: function () {
                     var account = this.options.account,
                         guid = _.uniqueId('input');
-                    this.$body.addClass('settings-detail-pane').append(
+                    this.$body.append(
                         $('<div class="form-group">').append(
                             $('<label>', { 'for': guid }).text(gt('Display Name')),
                             new MiniViews.InputView({ name: 'displayName', model: account, id: guid }).render().$el
