@@ -296,7 +296,12 @@ define('io.ox/mail/settings/pane', [
                                 'mailto', url + '#app=' + ox.registry.get('mail-compose') + ':compose&mailto=%s', ox.serverConfig.productNameMail
                             );
                         }) : []
-                    )
+                    ),
+                    settings.get('features/unseenFolder', false) ? checkbox(
+                        'unseenMessagesFolder',
+                        gt('Show folder with all unseen messages'),
+                        new mini.CheckboxView({ name: 'unseenMessagesFolder', model: settings }).render().$el
+                    ) : []
                 )
             );
         }

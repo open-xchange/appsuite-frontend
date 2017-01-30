@@ -181,20 +181,25 @@ define('io.ox/core/folder/extensions', [
         },
 
         standardFolders: function (tree) {
+            var view = new TreeNodeView({
+                filter: function (id, model) {
+                    // do not filter unseen messages folder if enabled
+                    if (model.id === 'virtual/all-unseen' && mailSettings.get('unseenMessagesFolder', true)) return true;
+                    return account.isStandardFolder(model.id);
+                },
+                folder: 'virtual/standard',
+                headless: true,
+                open: true,
+                tree: tree,
+                parent: tree
+            });
             this.append(
-                // standard folders
-                new TreeNodeView({
-                    filter: function (id, model) {
-                        return account.isStandardFolder(model.id) || model.id === 'virtual/all-unseen';
-                    },
-                    folder: 'virtual/standard',
-                    headless: true,
-                    open: true,
-                    tree: tree,
-                    parent: tree
-                })
-                .render().$el.addClass('standard-folders')
+                view.render().$el.addClass('standard-folders')
             );
+            // show / hide folder on setting change
+            view.listenTo(mailSettings, 'change:unseenMessagesFolder', function () {
+                view.onReset();
+            });
         },
 
         localFolders: function (tree) {
