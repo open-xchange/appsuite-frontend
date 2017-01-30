@@ -1486,11 +1486,6 @@ define('io.ox/core/main', [
             id: 'first',
             index: 100,
             run: function () {
-                if (ox.rampup && ox.rampup.errors && ox.rampup.errors['MSG-0113']) {
-                    ox.serverConfig.capabilities = _.filter(ox.serverConfig.capabilities, function (cap) {
-                        return cap.id !== 'webmail';
-                    });
-                }
                 debug('Stage "first"');
             }
         });
