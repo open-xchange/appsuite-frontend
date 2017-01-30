@@ -108,6 +108,17 @@ define('io.ox/mail/accounts/settings', [
         return myView.node;
     }
 
+    function createUnifiedMailboxInput(data) {
+        data = _.defaults({ unified_inbox_enabled: false }, data);
+        return $('<div class="form-group checkbox">').append(
+            $('<label for="unified_inbox_enabled">').append(
+                $('<input type="checkbox" name="unified_inbox_enabled">')
+                    .prop('checked', data.unified_inbox_enabled),
+                gt('Use unified mail for this account')
+            )
+        );
+    }
+
     ext.point('io.ox/settings/accounts/mail/settings/detail').extend({
         index: 200,
         id: 'emailaccountssettings',
@@ -174,7 +185,8 @@ define('io.ox/mail/accounts/settings', [
 
                 $el.append(
                     $('<label>').text(gt('Please select your mail account provider')),
-                    list.render().$el
+                    list.render().$el,
+                    createUnifiedMailboxInput()
                 );
                 // this code block runs deferred, need to focus the first element, again
                 a11y.getTabbable($el).first().focus();
@@ -203,6 +215,7 @@ define('io.ox/mail/accounts/settings', [
                             var def = $.Deferred();
                             // hopefully, login contains a valid mail address
                             data.primary_address = data.login;
+                            data.unified_inbox_enabled = $el.find('input[name="unified_inbox_enabled"]').prop('checked') === true;
 
                             validateMailaccount(data, baton.popup, def);
                             return def;
@@ -217,7 +230,9 @@ define('io.ox/mail/accounts/settings', [
                 list.listenTo(list, 'select:mailwizard', function () {
                     baton.popup.getFooter().find('[data-action="add"]').show();
                     // invoke wizard
-                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                    var data = {};
+                    data.unified_inbox_enabled = $el.find('input[name="unified_inbox_enabled"]').prop('checked') === true;
+                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty(), data);
                 });
             });
         }
@@ -275,6 +290,14 @@ define('io.ox/mail/accounts/settings', [
     });
 
     ext.point('io.ox/mail/add-account/wizard').extend({
+        id: 'unified-mail',
+        index: 400,
+        draw: function (data) {
+            this.append(createUnifiedMailboxInput(data));
+        }
+    });
+
+    ext.point('io.ox/mail/add-account/wizard').extend({
         id: 'feedback',
         index: 1000000000000,
         draw: function () {
@@ -328,6 +351,11 @@ define('io.ox/mail/accounts/settings', [
         },
 
         validateMailaccount = function (data, popup, def, options) {
+            var node = popup.getContentNode().find('input[name="unified_inbox_enabled"]');
+
+            if (node.length > 0 && node.prop('checked')) {
+                data.unified_inbox_enabled = true;
+            }
             myModel.validationCheck(data, { ignoreInvalidTransport: true }).then(
                 function success(response, responseobject) {
                     if (response === true) {
@@ -480,6 +508,10 @@ define('io.ox/mail/accounts/settings', [
                 .on('skip', function () {
                     // primary address needs to be provided, why? fails without
                     args.data = { primary_address: this.getContentNode().find('.add-mail-account-address').val() };
+
+                    if (this.getContentNode().find('input[name="unified_inbox_enabled"]').length > 0) {
+                        args.data.unified_inbox_enabled = this.getContentNode().find('input[name="unified_inbox_enabled"]').prop('checked');
+                    }
                     // close
                     this.close();
                     def.reject();
