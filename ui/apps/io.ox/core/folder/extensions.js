@@ -184,7 +184,7 @@ define('io.ox/core/folder/extensions', [
             var view = new TreeNodeView({
                 filter: function (id, model) {
                     // do not filter unseen messages folder if enabled
-                    if (model.id === 'virtual/all-unseen' && mailSettings.get('unseenMessagesFolder', true)) return true;
+                    if (model.id === 'virtual/all-unseen' && mailSettings.get('unseenMessagesFolder')) return true;
                     return account.isStandardFolder(model.id);
                 },
                 folder: 'virtual/standard',
