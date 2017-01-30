@@ -156,6 +156,11 @@ define('io.ox/mail/detail/view', [
             draw: extensions.priority
         },
         {
+            id: 'security',
+            index: INDEX_header += 100,
+            draw: extensions.security
+        },
+        {
             id: 'date',
             index: INDEX_header += 100,
             draw: extensions.fulldate
