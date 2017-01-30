@@ -410,14 +410,13 @@ define('io.ox/mail/compose/extensions', [
             if (_.device('smartphone')) return;
 
             var self = this,
-                container = $('<div class="dropdown signatures text-left">');
+                dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true })
+                .option('signatureId', '', gt('No signature'));
 
             // IEDA: move to view to have a reference or trigger a refresh?!
 
             function draw() {
-                var dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true, el: container })
-                    .option('signatureId', '', gt('No signature'));
-
+                dropdown.prepareReuse();
                 ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
                 dropdown.$ul.addClass('pull-right');
                 baton.view.signaturesLoading.done(function () {
@@ -431,8 +430,6 @@ define('io.ox/mail/compose/extensions', [
                     dropdown.$ul.addClass('pull-right');
                     dropdown.render();
                 });
-
-                container.empty().append(dropdown.$el);
             }
 
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
@@ -442,7 +439,7 @@ define('io.ox/mail/compose/extensions', [
 
                 draw();
             });
-            self.append(container);
+            self.append(dropdown.$el.addClass('signatures text-left'));
         },
 
         optionsmenu: function (baton) {

@@ -329,6 +329,11 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 .attr({ role: 'menuitem', tabIndex: '-1' });
         },
 
+        prepareReuse: function () {
+            if (this.$toggle) this.$toggle.remove();
+            if (this.$ul) this.$ul.empty();
+        },
+
         dispose: function () {
             // remove overlay if dropdown code is removed
             if (this.$overlay) this.$overlay.remove();
