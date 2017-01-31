@@ -151,7 +151,7 @@ define('io.ox/core/folder/node', [
             this.repaint();
         },
 
-        toggle: function (state) {
+        toggle: function (state, autoOpen) {
             // for whatever reason, this.options might be nulled (see bug 37483)
             if (this.options === null) return;
             var isChange = (this.options.open !== state);
@@ -159,7 +159,7 @@ define('io.ox/core/folder/node', [
             this.onChangeSubFolders();
             this.renderCounter();
             if (!isChange) return;
-            this.options.tree.trigger(state ? 'open' : 'close', this.folder);
+            this.options.tree.trigger(state ? 'open' : 'close', this.folder, autoOpen);
         },
 
         // open/close folder

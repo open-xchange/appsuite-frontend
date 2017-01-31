@@ -288,7 +288,8 @@ define('io.ox/settings/main', [
         tree.preselect(_.url.hash('folder'));
 
         // select tree node on expand
-        tree.on('open', function (id) {
+        tree.on('open', function (id, autoOpen) {
+            if (autoOpen) return;
             select(id, undefined, undefined, { focus: true, focusPane: true });
         });
 

@@ -413,7 +413,7 @@ define('io.ox/mail/compose/extensions', [
                 dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true })
                 .option('signatureId', '', gt('No signature'));
 
-            // IEDA: move to view to have a reference or trigger a refresh?!
+            // IDEA: move to view to have a reference or trigger a refresh?!
 
             function draw() {
                 dropdown.prepareReuse();

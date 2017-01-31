@@ -287,7 +287,7 @@ define('io.ox/core/folder/util', [
         if (!view) return;
         if (!view.toggle) return;
 
-        view.toggle('open');
+        view.toggle('open', true);
         if (view.options) open(view.options.parent);
     }
 
