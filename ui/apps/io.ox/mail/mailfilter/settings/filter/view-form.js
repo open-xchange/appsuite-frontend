@@ -57,6 +57,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         timeValues = {
             'ge': gt('Rule applies from'),
             'le': gt('Rule applies until'),
+            //#. The filter rule will be applied on a specific date, which can be selected by the user
             'is': gt('Rule applies on')
         },
 

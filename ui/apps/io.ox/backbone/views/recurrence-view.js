@@ -209,7 +209,11 @@ define('io.ox/backbone/views/recurrence-view', [
 
                 this.$body.append(
                     formGroup = $('<div class="form-group">').append(
-                        $('<label class="control-label col-sm-4">').attr('for', guid).text(gt('Repeat by')),
+                        $('<label class="control-label col-sm-4">').attr('for', guid).text(
+                            //#. Used as label for the following selection: 'date' or 'weekday'
+                            //#. Thus an appointment/task will be repeated by date (e.g. every 4th of a month) or by weekday (e.g. every second tuesday)
+                            gt('Repeat by')
+                        ),
                         $('<div class="btn-group col-sm-8">').append(
                             input.render().$el
                         )
