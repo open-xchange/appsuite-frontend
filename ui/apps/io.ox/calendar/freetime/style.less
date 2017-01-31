@@ -59,6 +59,7 @@
         display: flex;
         display: -webkit-flex;
         height: 100%;
+        overflow-y: auto;
     }
     .freetime-time-view-header {
         &.row1 {
@@ -326,6 +327,12 @@
     }
 }
 
+// special fix for IE
+.internet-explorer .freetime-view-body .freetime-time-view-body {
+    flex: auto;
+    -webkit-flex: auto;
+}
+
 .freetime-view-body {
     display: flex;
     display: -webkit-flex;
@@ -333,12 +340,14 @@
 
     .freetime-participants-view-body {
         width: 255px;
+        min-width: 255px;
         font-size: 13px;
         overflow-y: hidden;
         min-height: auto;
 
         @media all and (max-width: 850px) {
             width: 185px;
+            min-width: 185px;
         }
 
         .participantsrow {
