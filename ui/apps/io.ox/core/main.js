@@ -1875,7 +1875,7 @@ define('io.ox/core/main', [
         }
     });
 
-    // white list warninff codes
+    // white list warning codes
     var isValidWarning = (function () {
         var check = function (code, regex) { return regex.test(code); },
             reCodes = [
@@ -1883,7 +1883,9 @@ define('io.ox/core/main', [
                 /^SHR_NOT-\d{4}$/,
                 /^RSS-0007/,
                 // IMAP-specific on unified inbox folders (see Bug 50799)
-                /^MSG-1001/
+                /^MSG-1001/,
+                // auth problem for external accounts
+                /^MSG-0114/
             ];
         return function (code) {
             // return true in case at least one regex matched
