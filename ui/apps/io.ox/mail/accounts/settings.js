@@ -322,8 +322,7 @@ define('io.ox/mail/accounts/settings', [
             );
         },
 
-        validateMailaccount = function (data, popup, def) {
-
+        validateMailaccount = function (data, popup, def, options) {
             myModel.validationCheck(data, { ignoreInvalidTransport: true }).then(
                 function success(response, responseobject) {
                     if (response === true) {
@@ -346,11 +345,16 @@ define('io.ox/mail/accounts/settings', [
                                 failDialog(response.error);
                             }
                         );
+                    } else if (options && options.onValidationError) {
+                        options.onValidationError(response, responseobject);
                     } else {
+                        // this will not work if called from the "add account" autoconfig part, in this case
+                        // the callback from the options will be called (see above)
                         var message = responseobject.error ? responseobject.error : gt('There was no suitable server found for this mail/password combination');
                         drawAlert(getAlertPlaceholder(popup), message, { errorAttributes: 'address password' });
                         popup.idle();
                         popup.getBody().find('a.close').focus();
+
                     }
                 },
                 function fail() {
@@ -391,7 +395,14 @@ define('io.ox/mail/accounts/settings', [
                     // make sure not to set the SMTP credentials
                     delete data.transport_login;
                     delete data.transport_password;
-                    validateMailaccount(data, popup, def);
+
+                    validateMailaccount(data, popup, def, { onValidationError: function () {
+                        // in case the validation fails this callback will be executed
+                        configureManuallyDialog(args, newMailaddress);
+                        popup.close();
+                        def.reject();
+                    } });
+
                 } else if (forceSecure) {
                     new dialogs.ModalDialog({ async: true, width: 400 })
                         .text(gt('Cannot establish secure connection. Do you want to proceed anyway?'))
