@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-25 16:22+0100\n"
+"PO-Revision-Date: 2017-02-01 14:15+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -552,7 +552,7 @@ msgstr "Wochentag"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Repeat by"
-msgstr ""
+msgstr "Wiederholen am"
 
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "day(s)"
@@ -4128,6 +4128,10 @@ msgstr "Aktionen für %1$s"
 msgid "Ok"
 msgstr "OK"
 
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "Create folder"
+msgstr "Ordner anlegen"
+
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
 msgstr "Keine Aktion verfügbar"
@@ -6313,7 +6317,7 @@ msgstr "Hinzufügen von Dateien mit identischen Namen"
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #, fuzzy
 msgid "Loop once only"
-msgstr "nur eine Programmschleife"
+msgstr "Nur eine Programmschleife"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #, fuzzy
@@ -6326,7 +6330,6 @@ msgid "Slideshow / Autoplay mode"
 msgstr "Diashow / Automatische Wiedergabe"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
 msgid "Autoplay pause in seconds"
 msgstr "Pause der automatischen Wiedergabe in Sekunden"
 
@@ -7179,6 +7182,12 @@ msgstr "Als Spam markieren"
 msgid "Not spam"
 msgstr "Kein Spam"
 
+#. Verb: (to) flag messages
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+msgctxt "verb"
+msgid "Flag"
+msgstr "Markieren"
+
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Neue E-Mail versenden"
@@ -7295,19 +7304,19 @@ msgstr "Anhang speichern"
 msgid "unknown sender"
 msgstr "unbekannter Absender"
 
+#. informs user about the consequences when creating a rule for selected mails
+#. %1$s represents a email address
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 msgid "All future messages from %1$s will be moved to the selected folder."
-msgstr ""
-"Alle zukünftigen Nachrichten von %1$s werden in den ausgewählten Ordner "
-"verschoben."
-
-#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-msgid ""
+msgid_plural ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
-msgstr ""
-"Alle zukünftigen Nachrichten von den Absendern der ausgewählten E-Mails "
-"werden in den ausgewählten Ordner verschoben."
+msgstr[0] ""
+"Alle zukünftigen Nachrichten von %1$s werden in den ausgewählten Ordner "
+"verschoben."
+msgstr[1] ""
+"Alle zukünftigen Nachrichten der Absender der markierten E-Mails werden in "
+"den ausgewählten Ordner verschoben."
 
 #: apps/io.ox/mail/actions/create.js module:io.ox/core
 msgid "Error while resolving mail addresses. Please try again."
@@ -7485,6 +7494,10 @@ msgstr "Markiert"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "has attachments"
 msgstr "enthält Anhänge"
+
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Not flagged"
+msgstr "Nicht markiert"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #: apps/io.ox/mail/print.js
@@ -10374,13 +10387,13 @@ msgstr "Die Inbox enthält keine E-Mails"
 msgid "You have no unread messages"
 msgstr "Sie haben keine neuen Nachrichten"
 
+#. %1$d is the number of mails
 #: apps/plugins/portal/mail/register.js module:plugins/portal
-msgid "You have 1 unread message"
-msgstr "Sie haben 1 neue Nachricht"
-
-#: apps/plugins/portal/mail/register.js module:plugins/portal
-msgid "You have %1$d unread messages"
-msgstr "Sie haben %1$d neue Nachrichten"
+#, c-format
+msgid "You have %1$d unread message"
+msgid_plural "You have %1$d unread messages"
+msgstr[0] "Sie haben %1$d ungelesene Nachricht"
+msgstr[1] "Sie haben %1$d ungelesene Nachrichten"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "your platform"
@@ -10893,6 +10906,19 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid ""
+#~ "All future messages from the senders of the selected mails will be moved "
+#~ "to the selected folder."
+#~ msgstr ""
+#~ "Alle zukünftigen Nachrichten von den Absendern der ausgewählten E-Mails "
+#~ "werden in den ausgewählten Ordner verschoben."
+
+#~ msgid "You have 1 unread message"
+#~ msgstr "Sie haben 1 neue Nachricht"
+
+#~ msgid "You have %1$d unread messages"
+#~ msgstr "Sie haben %1$d neue Nachrichten"
 
 #~ msgid "Copy of %1$s"
 #~ msgstr "Kopie von %1$s"
