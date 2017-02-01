@@ -11,13 +11,60 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
+.rating-view {
+    display: -webkit-flex;
+    display: flex;
+
+    margin: 0 0 8px 0;
+    outline: 0;
+
+    caption {
+        color: @black;
+        font-size: 14px;
+        font-weight: bold;
+    }
+}
+
+.nps-rating {
+
+    @score-color: #ccc;
+    @score-color-checked: #3c73aa;
+
+    justify-content: space-between;
+
+    label {
+        padding-right: 4px;
+        vertical-align: top;
+
+        .score {
+            // don't make the circles too small since those are buttons as well
+            font-size: 24px;
+            line-height: 32px;
+            cursor: pointer;
+            color: @score-color;
+
+            &.checked { color: @score-color-checked; }
+        }
+
+        .score-number {
+            text-align: center;
+        }
+    }
+
+    input[type="radio"]:focus + .score {
+        text-shadow: 0 0 4px #000;
+    }
+
+}
+
 .star-rating {
 
     @star-color: #ccc;
     @star-color-checked: #FDD835;
 
-    margin: 0 0 8px 0;
-    outline: 0;
+    label {
+        vertical-align: middle;
+    }
 
     .star {
         // don't make the stars too small since those are buttons as well
@@ -30,21 +77,14 @@
 
     .checked { color: @star-color-checked; }
 
+    caption {
+        margin-left: 16px;
+    }
+
     input[type="radio"]:focus + .star {
         text-shadow: 0 0 4px #000;
     }
 
-    label {
-        vertical-align: middle;
-    }
-
-    caption {
-        display: inline-block;
-        margin-left: 16px;
-        color: @black;
-        font-size: 14px;
-        font-weight: bold;
-    }
 }
 
 .feedback-note {
