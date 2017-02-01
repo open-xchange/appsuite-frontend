@@ -410,13 +410,13 @@ define('io.ox/mail/compose/extensions', [
             if (_.device('smartphone')) return;
 
             var self = this,
-                dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true })
-                .option('signatureId', '', gt('No signature'));
+                dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true });
 
             // IDEA: move to view to have a reference or trigger a refresh?!
 
             function draw() {
                 dropdown.prepareReuse();
+                dropdown.option('signatureId', '', gt('No signature'));
                 ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
                 dropdown.$ul.addClass('pull-right');
                 baton.view.signaturesLoading.done(function () {
