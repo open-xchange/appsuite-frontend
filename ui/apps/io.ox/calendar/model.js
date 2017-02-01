@@ -277,18 +277,6 @@ define('io.ox/calendar/model', [
     });
 
     ext.point('io.ox/calendar/model/validation').extend({
-        id: 'max-length',
-        validate: function (attributes) {
-            if (attributes.location && attributes.location.length > 255) {
-                this.add('location', gt('Maximum length of 255 characters exceeded.'));
-            }
-            if (attributes.title && attributes.title.length > 255) {
-                this.add('title', gt('Maximum length of 255 characters exceeded.'));
-            }
-        }
-    });
-
-    ext.point('io.ox/calendar/model/validation').extend({
         id: 'upload-quota',
         validate: function (attributes) {
             if (attributes.quotaExceeded) {

@@ -340,7 +340,7 @@ define('io.ox/calendar/edit/main', [
             onSave: function (data) {
                 if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
-                        fail = _.bind(this.onError, this),
+                        fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true }),
                         self = this;
                     //update last modified parameter not to run into a conflict error
                     this.model.set('last_modified', data.last_modified, { silent: true });
@@ -359,7 +359,7 @@ define('io.ox/calendar/edit/main', [
                 }
             },
 
-            onError: function (error) {
+            onError: function (error, options) {
                 // conflicts have their own special handling
                 if (error.conflicts) return;
 
@@ -375,7 +375,8 @@ define('io.ox/calendar/edit/main', [
                 }
                 delete this.moveAfterSave;
                 this.getWindow().idle();
-                if (error) notifications.yell(error);
+                // avoid double yells and only yell errors caused by move operation. Errors from update, create requests are handled by the onBackendError listener
+                if (options && options.isMoveOperation && error) notifications.yell(error);
             },
 
             failSave: function () {
