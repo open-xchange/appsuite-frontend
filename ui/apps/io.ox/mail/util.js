@@ -506,6 +506,10 @@ define('io.ox/mail/util', [
             }, false).value();
         },
 
+        isDecrypted: function (data) {
+            return data && data.security && data.security.decrypted;
+        },
+
         isForwarded: function () {
             return _.chain(arguments || []).flatten().compact().reduce(function (memo, data) {
                 return memo || (data.flags & 256) === 256;

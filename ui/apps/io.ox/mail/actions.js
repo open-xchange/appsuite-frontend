@@ -66,8 +66,8 @@ define('io.ox/mail/actions', [
             if (!e.collection.has('toplevel', 'one')) return;
             // get first mail
             var data = e.baton.first();
-            // has sender? and not a draft mail
-            return util.hasFrom(data) && !isDraftMail(data);
+            // has sender? not a draft mail and not a decrypted mail
+            return util.hasFrom(data) && !isDraftMail(data) && !util.isDecrypted(data);
         },
         action: function (baton) {
 
