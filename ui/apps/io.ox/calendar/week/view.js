@@ -68,8 +68,8 @@ define('io.ox/calendar/week/view', [
         folderData:     {},     // current folder object
         restoreCache:   null,   // object, which contains data for save and restore functions
         extPoint:       null,   // appointment extension
-        dayLabelRef:    null,	// used to manage redraw on daychange
-        startLabelRef:  null,	// used to manage redraw on weekchange
+        dayLabelRef:    null,   // used to manage redraw on daychange
+        startLabelRef:  null,   // used to manage redraw on weekchange
 
         // startup options
         options:        {
@@ -654,9 +654,14 @@ define('io.ox/calendar/week/view', [
             if (_.device('!large')) return;
 
             function drawOption() {
+                // this = timezone name (string)
                 var timezone = moment.tz(this);
 
-                return $('<span class="offset">').text(timezone.format('Z')).prop('outerHTML') + $('<span class="timezone-abbr">').text(timezone.zoneAbbr()).prop('outerHTML') + this;
+                return [
+                    $('<span class="offset">').text(timezone.format('Z')),
+                    $('<span class="timezone-abbr">').text(timezone.zoneAbbr()),
+                    _.escape(this)
+                ];
             }
 
             function drawDropdown() {
