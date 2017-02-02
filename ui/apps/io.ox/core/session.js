@@ -47,6 +47,9 @@ define('io.ox/core/session', [
         if ('context_id' in data) ox.context_id = data.context_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
         ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
+        // we have to clear the hashed value for the chosen language in the device function or there might be invalid return values (see Bug 51405)
+        delete _.device.cache[ox.language.toLowerCase()];
+        delete _.device.cache[ox.language.split('_')[0] + '_*'];
         _.setCookie('language', ox.language);
         manifests.reset();
         $('html').attr('lang', ox.language.split('_')[0]);

@@ -32,6 +32,9 @@ define('io.ox/core/boot/login/auto', [
                 ox.trigger('server:up');
                 // set user language - see bug #31433
                 ox.language = data.locale;
+                // we have to clear the hashed value for the chosen language in the device function or there might be invalid return values (see Bug 51405)
+                delete _.device.cache[ox.language.toLowerCase()];
+                delete _.device.cache[ox.language.split('_')[0] + '_*'];
                 _.setCookie('language', ox.language);
                 // event
                 ox.trigger('login:success', data);
