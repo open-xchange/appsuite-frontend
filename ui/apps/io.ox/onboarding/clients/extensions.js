@@ -539,10 +539,6 @@ define('io.ox/onboarding/clients/extensions', [
                 $('<fieldset class="action form-group">')
                 .attr('data-action', action.id)
             );
-            // device specific
-            this.device = this.config.getDevice();
-            this.link = action[this.device.id].link;
-            this.type = action[this.device.id].type;
         },
 
         hash: {

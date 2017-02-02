@@ -229,6 +229,7 @@ define('io.ox/onboarding/clients/config', [
             return _.chain(this.actions)
                     .filter(function (obj) { return matching.actions.indexOf(obj.id) >= 0; })
                     .sortBy(function (obj) { return matching.actions.indexOf(obj.id); })
+                    .map(function (obj) { return _.extend(_.pick(obj, 'id', 'default', 'data'), { 'scenario': cid }, obj[config.getDevice().id] || {}); })
                     .value();
         },
 
