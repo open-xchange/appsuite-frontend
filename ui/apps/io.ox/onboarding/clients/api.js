@@ -19,10 +19,13 @@ define('io.ox/onboarding/clients/api', [
 
     return {
 
-        config: function () {
+        config: function (device) {
             return http.GET({
                 module: 'onboarding',
-                params: { action: 'config' }
+                params: {
+                    action: 'config',
+                    client: device
+                }
             });
         },
 

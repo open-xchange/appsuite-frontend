@@ -36,6 +36,11 @@ define('io.ox/onboarding/clients/config', [
         return this.order[obj.id] || 1000;
     }
 
+    var mobiledevice = (function () {
+        if (_.device('android')) return _.device('smartphone') ? 'android.phone' : 'android.tablet';
+        if (_.device('ios')) return _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
+    })();
+
     var config = {
 
         hash: {},
@@ -110,7 +115,7 @@ define('io.ox/onboarding/clients/config', [
         },
 
         load: function () {
-            return api.config().then(function (data) {
+            return api.config(mobiledevice).then(function (data) {
                 // reoder devices and scenarios
                 data.platforms = _.sortBy(data.platforms, getIndexFor, this);
                 data.devices = _.sortBy(data.devices, getIndexFor, this);
@@ -142,7 +147,7 @@ define('io.ox/onboarding/clients/config', [
         },
 
         getScenarioCID: function () {
-            return _cid(this.model.get('device'), this.model.get('scenario'));
+            return _cid(config.getDevice().id, this.model.get('scenario'));
         },
 
         // remove invalid values
@@ -164,10 +169,12 @@ define('io.ox/onboarding/clients/config', [
         // user states
 
         getPlatform: function () {
+            if (this.platforms.length === 1) return this.platforms[0];
             return this.hash.platforms[this.model.get('platform')];
         },
 
         getDevice: function () {
+            if (this.devices.length === 1) return this.devices[0];
             return this.hash.devices[this.model.get('device')];
         },
 
@@ -211,7 +218,7 @@ define('io.ox/onboarding/clients/config', [
         },
 
         getActions: function (scenario) {
-            var cid = _cid(this.model.get('device'), scenario || this.model.get('scenario')),
+            var cid = _cid(config.getDevice().id, scenario || this.model.get('scenario')),
                 matching = this.hash.matching[cid];
 
             // TODO: remove after backend added check
