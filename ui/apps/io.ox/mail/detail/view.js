@@ -420,6 +420,18 @@ define('io.ox/mail/detail/view', [
                 this.model.previous('attachments')[0].content !== this.model.get('attachments')[0].content) this.onChangeContent();
         },
 
+        onChangeSecurity: function () {
+            var data = this.model.toJSON(),
+                baton = ext.Baton({
+                    view: this,
+                    model: this.model,
+                    data: data,
+                    attachments: util.getAttachments(data)
+                }),
+                node = this.$el.find('header.detail-view-header').empty();
+            ext.point('io.ox/mail/detail/header').invoke('draw', node, baton);
+        },
+
         getEmptyBodyNode: function () {
             // get shadow DOM or body node
             var body = this.$el.find('section.body'),
@@ -513,13 +525,14 @@ define('io.ox/mail/detail/view', [
             // done
             this.$el.find('section.body').removeClass('loading');
             this.trigger('load:done');
-
             // draw
             // nested mails do not have a subject before loading, so trigger change as well
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
-
+            if (data.security) {
+                this.onChangeSecurity();
+            }
             // process unseen flag
             if (unseen) {
                 this.onUnseen();
