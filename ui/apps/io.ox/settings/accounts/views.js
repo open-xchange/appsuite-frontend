@@ -47,20 +47,13 @@ define('io.ox/settings/accounts/views', [
          * containing the error. Will not be used in
          * non-dsc setups (atm)
          */
-        getAccountState = function (data) {
-            if (data.model.get('type') !== 'mail' && mailSettings.get('dsc/enabled', false) === false) return $();
-            var wrapper = $('<div class="account-error-wrapper">'),
-                node = $('<div class="account-error">'),
-                icon = $('<i class="account-error-icon fa fa-exclamation-triangle">');
+        drawAccountState = function (model) {
+            if ((typeof model.get('status') === 'undefined') || model.get('status') === 'ok') return;
 
-            accounts.getStatus(data.model.get('id')).done(function (status) {
-                if (status[data.model.get('id')].status !== 'ok') {
-                    wrapper.append(icon, node).show();
-                    node.text(status[data.model.get('id')].message);
-                }
-            });
-
-            return wrapper.hide();
+            return $('<div class="error-wrapper">').append(
+                $('<i class="error-icon fa fa-exclamation-triangle">'),
+                $('<div class="error-message">').text(model.get('status').message)
+            );
         },
         SettingsAccountListItemView = DisposableView.extend({
 
@@ -91,7 +84,6 @@ define('io.ox/settings/accounts/views', [
                 self.$el.empty().append(
                     drawIcon(self.model),
                     listUtils.makeTitle(title),
-                    getAccountState(this), // show a possible account error
                     listUtils.makeControls().append(
                         listUtils.appendIconText(
                             listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
@@ -100,9 +92,7 @@ define('io.ox/settings/accounts/views', [
                         ),
                         self.model.get('id') !== 0 ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : $('<div class="remove-placeholder">')
                     ),
-                    // some Filestorage accounts may contain errors, if thats the case show them
-                    // support for standard and oauth accounts
-                    self.model.get('accountType') !== 'mail' ? listUtils.drawError(filestorageApi.getAccountsCache().get(self.model) || filestorageApi.getAccountForOauth(self.model)) : ''
+                    drawAccountState(this.model) // show a possible account error
                 );
 
                 return self;

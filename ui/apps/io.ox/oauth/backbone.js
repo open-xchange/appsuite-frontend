@@ -187,6 +187,10 @@ define('io.ox/oauth/backbone', [
                             && String(account.configuration.account) === String(self.get('id'));
                     }).map(function addAccountType(model) {
                         model.accountType = model.accountType || 'fileStorage';
+
+                        // handle possible error messages for fileStorage accounts
+                        if (model.error) model.status = { message: model.error };
+
                         return model;
                     }),
                     accounts.filter(function isRelated(account) {

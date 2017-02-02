@@ -126,6 +126,17 @@ define('io.ox/settings/accounts/settings/pane', [
                         filter: function (m) { return !hasOAuthCredentials(m); }
                     });
 
+                require(['io.ox/core/api/account']).then(function (accountAPI) {
+                    return accountAPI.getStatus();
+                }).then(function (status) {
+                    for (var id in status) {
+                        var m = collection.get(id),
+                            s = status[id];
+                        if (!m) return;
+
+                        m.set('status', s.status !== 'ok' ? s : s.status);
+                    }
+                });
                 $pane.append(accountsList.render().$el);
 
                 if (coreSettings.isConfigurable('security/acceptUntrustedCertificates')) {
