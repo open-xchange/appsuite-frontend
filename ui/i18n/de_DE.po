@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-01 14:15+0100\n"
+"PO-Revision-Date: 2017-02-02 11:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -190,6 +190,12 @@ msgstr "Pflaumenfarben"
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "No color"
 msgstr "Keine Farbe"
+
+#. title of toggle button within password field
+#: apps/io.ox/backbone/mini-views/common.js module:io.ox/core
+#, fuzzy
+msgid "toggle password visibility"
+msgstr "Passwort-Sichtbarkeit umschalten"
 
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
 msgid "Year"
@@ -503,7 +509,7 @@ msgstr "Schließen"
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
-#: apps/io.ox/oauth/settings.js apps/io.ox/portal/main.js module:io.ox/portal
+#: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/apps/settings/pane.js apps/io.ox/tasks/actions/delete.js
@@ -550,6 +556,8 @@ msgstr "Wiederholen"
 msgid "Weekday"
 msgstr "Wochentag"
 
+#. Used as label for the following selection: 'date' or 'weekday'
+#. Thus an appointment/task will be repeated by date (e.g. every 4th of a month) or by weekday (e.g. every second tuesday)
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Repeat by"
 msgstr "Wiederholen am"
@@ -4333,6 +4341,7 @@ msgid "(current app)"
 msgstr "(aktuelle App)"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
+#: apps/plugins/core/feedback/register.js
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -8077,6 +8086,7 @@ msgstr "Die Regel gilt ab"
 msgid "Rule applies until"
 msgstr "Die Regel gilt bis"
 
+#. The filter rule will be applied on a specific date, which can be selected by the user
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 #, fuzzy
@@ -8403,6 +8413,10 @@ msgid "Register now"
 msgstr "Jetzt registrieren"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Show folder with all unseen messages"
+msgstr "Ordner mit allen ungelesenen Nachrichten anzeigen"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Font"
 msgstr "Schriftart"
 
@@ -8720,26 +8734,6 @@ msgstr "Mein %1$s-Account (%2$d)"
 #: module:io.ox/settings
 msgid "Reauthorize"
 msgstr "Erneut autorisieren"
-
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Changes have been saved."
-msgstr "Die Änderungen wurden gespeichert."
-
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Something went wrong saving your changes."
-msgstr "Beim Speichern Ihrer Änderungen trat ein Fehler auf."
-
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "You have reauthorized this account."
-msgstr "Sie haben diesen Account neu autorisiert."
-
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Something went wrong reauthorizing the account."
-msgstr "Beim erneuten Autorisieren des Account trat ein Fehler auf."
-
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "OAuth application overview"
-msgstr "OAuth-Applikationsübersicht"
 
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Display Name"
@@ -9877,12 +9871,40 @@ msgid "%1$d of 5 stars"
 msgstr "%1$d von 5 Sternen"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Your feedback"
-msgstr "Ihr Feedback"
+#, fuzzy
+msgid "Not likely at all"
+msgstr "Sehr unwahrscheinlich"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "%1$d of 10 points."
+msgstr "%1$d von 10 Punkten."
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+msgid "Extremly likely"
+msgstr "Sehr wahrscheinlich"
+
+#. %1$s is the product name, for example 'OX App Suite'
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "How likely is it you would recommend %1$s to a friend?"
+msgstr "Wie wahrscheinlich ist es, dass Sie %1$s einem Freund weiterempfehlen?"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please rate this product"
 msgstr "Bitte bewerten Sie dieses Produkt"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Please rate the following application:"
+msgstr "Bitte bewerten Sie die folgende Applikation:"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Your feedback"
+msgstr "Ihr Feedback"
+
+#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "General"
+msgstr "Allgemein"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Comments and suggestions"
@@ -10906,6 +10928,21 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Changes have been saved."
+#~ msgstr "Die Änderungen wurden gespeichert."
+
+#~ msgid "Something went wrong saving your changes."
+#~ msgstr "Beim Speichern Ihrer Änderungen trat ein Fehler auf."
+
+#~ msgid "You have reauthorized this account."
+#~ msgstr "Sie haben diesen Account neu autorisiert."
+
+#~ msgid "Something went wrong reauthorizing the account."
+#~ msgstr "Beim erneuten Autorisieren des Account trat ein Fehler auf."
+
+#~ msgid "OAuth application overview"
+#~ msgstr "OAuth-Applikationsübersicht"
 
 #~ msgid ""
 #~ "All future messages from the senders of the selected mails will be moved "
