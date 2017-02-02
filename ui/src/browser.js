@@ -285,7 +285,9 @@
             misc.reload = (window.performance && window.performance.navigation.type === 1);
             // debug
             if (condition === 'debug' || condition === 1337) {
-                return Object.assign({}, browserLC, display, misc);
+                // fallback to _.extend if Object.assign does not exist
+                var assign = Object.assign || _.extend;
+                return assign({}, browserLC, display, misc);
             }
             // true for undefined, null, empty string
             if (!condition) return true;
