@@ -614,8 +614,7 @@ define('io.ox/mail/actions', [
         capabilities: 'active_sync',
         requires: function () {
             // use client onboarding here, since it is a setting and not a capability
-            if (!capabilities.has('client-onboarding')) return false;
-            return _.device('!smartphone');
+            return capabilities.has('client-onboarding');
         },
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {

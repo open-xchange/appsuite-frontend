@@ -766,8 +766,7 @@ define('io.ox/files/actions', [
         capabilities: 'boxcom || google || msliveconnect',
         requires: function () {
             // use client onboarding here, since it is a setting and not a capability
-            if (!capabilities.has('client-onboarding')) return false;
-            return _.device('!smartphone');
+            return capabilities.has('client-onboarding');
         },
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
