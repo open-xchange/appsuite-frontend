@@ -59,23 +59,12 @@ define('io.ox/onboarding/clients/config', [
             'android': 102,
             'apple': 103,
             // devices
-            'apple.iphone': 101,
-            'apple.ipad': 102,
-            'apple.mac': 103,
+            'windows.desktop': 101,
             'android.phone': 201,
             'android.tablet': 202,
-            // scenarios
-            'eassync': 101,
-            'emclientinstall': 102,
-            'mailappinstall': 201,
-            'mailsync': 202,
-            'mailmanual': 203,
-            'syncappinstall': 301,
-            'davsync': 302,
-            'davmanual': 303,
-            'drivewindowsclientinstall': 401,
-            'driveappinstall': 402,
-            'drivemacinstall': 403
+            'apple.iphone': 301,
+            'apple.ipad': 302,
+            'apple.mac': 303
         },
 
         defaults: {
@@ -119,7 +108,6 @@ define('io.ox/onboarding/clients/config', [
                 // reoder devices and scenarios
                 data.platforms = _.sortBy(data.platforms, getIndexFor, this);
                 data.devices = _.sortBy(data.devices, getIndexFor, this);
-                data.scenarios = _.sortBy(data.scenarios, getIndexFor, this);
                 // extend
                 _.extend(this, data);
                 // user inputs and step progress
@@ -205,16 +193,13 @@ define('io.ox/onboarding/clients/config', [
         },
 
         getScenarios: function () {
-            var device = this.getDevice(),
-                scenarios = this.scenarios;
-            if (device) {
-                var scenarioIds = device.scenarios;
-                return _.filter(scenarios, function (obj) {
-                    var cid = _cid(device.id, obj.id);
-                    return scenarioIds.indexOf(cid) >= 0;
-                });
-            }
-            return scenarios;
+            var device = this.getDevice();
+            if (!device) return this.scenarios;
+            // respect order for device
+            return _.map(device.scenarios, function (id) {
+                var base = id.split('/')[1];
+                return config.hash.scenarios[base];
+            });
         },
 
         getActions: function (scenario) {
