@@ -1865,6 +1865,7 @@ define('io.ox/core/main', [
             // INUSE (see bug 37218)
             // falls through
             case 'MSG-1031':
+            case 'MSG-0114':
                 notifications.yell(error);
                 break;
             case 'LGI-0016':
@@ -1883,9 +1884,7 @@ define('io.ox/core/main', [
                 /^SHR_NOT-\d{4}$/,
                 /^RSS-0007/,
                 // IMAP-specific on unified inbox folders (see Bug 50799)
-                /^MSG-1001/,
-                // auth problem for external accounts
-                /^MSG-0114/
+                /^MSG-1001/
             ];
         return function (code) {
             // return true in case at least one regex matched
