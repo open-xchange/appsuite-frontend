@@ -199,7 +199,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Learn how to <a class="link" href="ox.appsuite.user.sect.firststeps.personaldata.html#ox.appsuite.user.task.personaldata" title="How to change your personal contact data:">change your personal data</a>.</p></li>
 <li class="listitem"><p>Learn how to <a class="link" href="ox.appsuite.user.sect.firststeps.globalsettings.html#ox.appsuite.user.task.globalsettings" title="How to customize the basic settings:">customize the basic settings</a>.</p></li>
-<li class="listitem"><p>Learn how to <a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html#ox.appsuite.user.concept.email.externalaccounts">set up additional E-Mail accounts</a>.</p></li>
+<li class="listitem"><p>Learn how to <a class="link" href="ox.appsuite.user.sect.email.accounts.html#ox.appsuite.user.concept.email.accounts">set up additional E-Mail accounts</a>.</p></li>
 </ul></div>
 <p>
           </p>
@@ -250,7 +250,7 @@
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>A:</b></p></td>
-<td align="left" valign="top"><p>If there are new E-Mails or appointment notifications, the <span class="guilabel"><strong>Unread Badge</strong></span> icon<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.practice.unreadbadge"></a><img src="../../images/appsuite_user_icon_unreadbadge.png"></span> to the right side of the menu bar shows the number of new objects. Click the icon to open the <span class="guilabel"><strong>Notification Area</strong></span>. It contains information about the new objects. From there you can also directly activate functions, e.g. read the new E-Mail or confirm the new appointment. Information can be found in <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. The User Interface">The User Interface</a>.</p></td>
+<td align="left" valign="top"><p>If there are new E-Mails or appointment notifications, the <span class="guilabel"><strong>Unread Badge</strong></span> icon<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.practice.unreadbadge"></a><img src="../../images/appsuite_user_icon_unreadbadge.png"></span> to the right side of the menu bar shows the number of new objects. Click the icon to open the <span class="guilabel"><strong>Notification Area</strong></span>. It contains information about the new objects. From there you can also directly activate functions, e.g. read the new E-Mail or confirm the new appointment. Information can be found in <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. The user interface">The user interface</a>.</p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
@@ -351,7 +351,7 @@
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>A:</b></p></td>
-<td align="left" valign="top"><p>For many E-Mail service providers you can set up external E-Mail accounts, e.g. for Google Mail. You only need your account data for the respective provider. As soon as you set up the external E-Mail account you have access to the E-Mails from within the folder tree. Information can be found in <a class="xref" href="ox.appsuite.user.sect.email.externalaccounts.html" title="5.8. E-Mail Accounts">E-Mail Accounts</a>. </p></td>
+<td align="left" valign="top"><p>For many E-Mail service providers you can set up external E-Mail accounts, e.g. for Google Mail. You only need your account data for the respective provider. As soon as you set up the external E-Mail account you have access to the E-Mails from within the folder tree. Information can be found in <a class="xref" href="ox.appsuite.user.sect.email.accounts.html" title="5.8. E-Mail Accounts">E-Mail Accounts</a>. </p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
@@ -364,7 +364,7 @@
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>A:</b></p></td>
-<td align="left" valign="top"><p>Enable the function <span class="guilabel"><strong>Auto Forward</strong></span> in the settings. Information can be found in <a class="xref" href="ox.appsuite.user.sect.email.send.autoforward.html" title="5.4.4. Automatically forwarding E-Mails">Automatically forwarding E-Mails</a>. </p></td>
+<td align="left" valign="top"><p>Enable the function <span class="guilabel"><strong>Auto Forward</strong></span> in the settings. Information can be found in <a class="xref" href="ox.appsuite.user.sect.email.send.autoforward.html" title="5.4.10. Automatically forwarding E-Mails">Automatically forwarding E-Mails</a>. </p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
@@ -534,61 +534,72 @@
 <tr class="answer">
 <td align="left" valign="top"><p><b>A:</b></p></td>
 <td align="left" valign="top">
-<p><span class="phrase"><strong>Example 1:</strong></span> An appointment or a task should take place each second day. It should start on 07-01-2013 and should take place five times.</p>
-<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Starts on 07-01-2013</p></li>
-<li class="listitem" style="list-style-type: none"><p>Daily</p></li>
-<li class="listitem" style="list-style-type: none"><p>The event is repeated every 2 days.</p></li>
-<li class="listitem" style="list-style-type: none"><p>The series ends after 5 appointments or tasks.</p></li>
+<p><span class="phrase"><strong>Example 1:</strong></span> An appointment or a task should take place each second day. It should start on 04-01-2017. and should take place five times.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Repeat <span class="guibutton"><strong>Daily</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Interval <span class="guibutton"><strong>2</strong></span> days</p></li>
+<li class="listitem" style="list-style-type: none"><p>Ends <span class="guibutton"><strong>After a number of occurrences</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Occurrences <span class="guibutton"><strong>5</strong></span></p></li>
 </ul></div>
+<p>
+          </p>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>A:</b></p></td>
 <td align="left" valign="top">
-<p><span class="phrase"><strong>Example 2:</strong></span> An appointment or a task should take place each Tuesday and Friday. It should start on 08-01-2013. </p>
-<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Starts on 08-01-2013</p></li>
-<li class="listitem" style="list-style-type: none"><p>Weekly</p></li>
-<li class="listitem" style="list-style-type: none"><p>The event is repeated every week on Tuesday, Friday.</p></li>
-<li class="listitem" style="list-style-type: none"><p>The series never ends.</p></li>
+<p><span class="phrase"><strong>Example 2:</strong></span> An appointment or a task should take place each Tuesday and Friday. It should start on 10-01-2017.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Repeat <span class="guibutton"><strong>Weekly</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Weekday <span class="guibutton"><strong>Tue</strong></span>, <span class="guibutton"><strong>Fr</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Interval <span class="guibutton"><strong>1</strong></span> week(s)</p></li>
+<li class="listitem" style="list-style-type: none"><p>Ends <span class="guibutton"><strong>Never</strong></span></p></li>
 </ul></div>
+<p>
+          </p>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>A:</b></p></td>
 <td align="left" valign="top">
-<p><span class="phrase"><strong>Example 3:</strong></span> An appointment or a task should take place every second Wednesday. It should start on 09-01-2013. The last appointment should be on 27-03-2013. </p>
-<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Starts on 09-01-2013</p></li>
-<li class="listitem" style="list-style-type: none"><p>Weekly</p></li>
-<li class="listitem" style="list-style-type: none"><p>The event is repeated every 2 weeks on Wednesday.</p></li>
-<li class="listitem" style="list-style-type: none"><p>The series ends on 27-03-2013.</p></li>
+<p><span class="phrase"><strong>Example 3:</strong></span> An appointment or a task should take place every second Wednesday. It should start on 11-01-2017. The last appointment should be on 08-03-2017.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Repeat <span class="guibutton"><strong>Weekly</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Weekday <span class="guibutton"><strong>Wed</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Interval <span class="guibutton"><strong>2</strong></span> week(s)</p></li>
+<li class="listitem" style="list-style-type: none"><p>Ends <span class="guibutton"><strong>On specific date</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Ends on <span class="guibutton"><strong>08-03-2017</strong></span></p></li>
 </ul></div>
+<p>
+          </p>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>A:</b></p></td>
 <td align="left" valign="top">
-<p><span class="phrase"><strong>Example 4:</strong></span> An appointment or a task should take place on the first Monday of a month. It should start on 04-02-2013. The event should take place twelve times.</p>
-<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Starts on 04-02-2013</p></li>
-<li class="listitem" style="list-style-type: none"><p>Monthly</p></li>
-<li class="listitem" style="list-style-type: none"><p>The event is repeated on the first Monday of each month.</p></li>
-<li class="listitem" style="list-style-type: none"><p>The series ends after 12 appointments.</p></li>
+<p><span class="phrase"><strong>Example 4:</strong></span> An appointment or a task should take place on the first Monday of a month. It should start on 06-02-2017. The event should take place twelve times.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Repeat <span class="guibutton"><strong>Monthly</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Repeat by <span class="guibutton"><strong>Date</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Interval <span class="guibutton"><strong>1</strong></span> month(s)</p></li>
+<li class="listitem" style="list-style-type: none"><p>Ends <span class="guibutton"><strong>After a number of occurrences</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Occurrences <span class="guibutton"><strong>12</strong></span></p></li>
 </ul></div>
+<p>
+          </p>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>A:</b></p></td>
 <td align="left" valign="top">
-<p><span class="phrase"><strong>Example 5:</strong></span> An appointment or a task should take place each year on the last Friday in November. It should start on 29-11-2013.</p>
-<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Starts on 29-11-2013</p></li>
-<li class="listitem" style="list-style-type: none"><p>Yearly</p></li>
-<li class="listitem" style="list-style-type: none"><p>The event is repeated every last Friday in November.</p></li>
-<li class="listitem" style="list-style-type: none"><p>The series never ends.</p></li>
+<p><span class="phrase"><strong>Example 5:</strong></span> An appointment or a task should take place each year on the last Friday in November. It should start on 24-11-2017.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Repeat <span class="guibutton"><strong>Yearly</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Repeat by <span class="guibutton"><strong>Weekday</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>Ends <span class="guibutton"><strong>Never</strong></span></p></li>
 </ul></div>
+<p>
+          </p>
 </td>
 </tr>
 <tr class="question">
@@ -602,7 +613,7 @@
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>A:</b></p></td>
-<td align="left" valign="top"><p>Click on <span class="guibutton"><strong>Find a free time</strong></span> when creating an appointment or click the <span class="guibutton"><strong>Scheduling</strong></span> icon<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.practice.scheduling"></a><img src="../../images/appsuite_user_icon_toolbar_schedule.png"></span> in the toolbar. Information can be found in <a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.2. Scheduling appointments with several participants">Scheduling appointments with several participants</a>. </p></td>
+<td align="left" valign="top"><p>Click on <span class="guibutton"><strong>Find a free time</strong></span> when creating an appointment or click on <span class="guibutton"><strong>Scheduling</strong></span> in the toolbar. Information can be found in <a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.7. Using the scheduling view">Using the scheduling view</a>. </p></td>
 </tr>
 <tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title">
 <a name="ox.appsuite.user.practice.dataexchange"></a>13.4. Questions about data organization and team work</h3></td></tr>
