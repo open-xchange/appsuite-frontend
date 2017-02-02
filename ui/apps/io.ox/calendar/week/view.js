@@ -769,6 +769,7 @@ define('io.ox/calendar/week/view', [
                     }),
                     model = new TimezoneModel(favorites),
                     dropdown = new Dropdown({
+                        className: 'dropdown timezone-label-dropdown',
                         model: model,
                         label: moment().tz(coreSettings.get('timezone')).zoneAbbr(),
                         tagName: 'div'
