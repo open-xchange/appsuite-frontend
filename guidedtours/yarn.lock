@@ -1683,11 +1683,11 @@ grunt-jsonlint@^1.0.4:
     jsonlint "1.6.2"
     strip-json-comments "^2.0.0"
 
-grunt-karma@^0.8.2:
-  version "0.8.3"
-  resolved "https://registry.yarnpkg.com/grunt-karma/-/grunt-karma-0.8.3.tgz#e9ecf718153af1914aa53602a37f85de04310e7f"
+grunt-karma@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/grunt-karma/-/grunt-karma-2.0.0.tgz#753583d115dfdc055fe57e58f96d6b3c7e612118"
   dependencies:
-    lodash "~2.4.1"
+    lodash "^3.10.1"
 
 grunt-legacy-log-utils@~0.1.1:
   version "0.1.1"
@@ -2434,7 +2434,7 @@ lodash@3.7.x:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.7.0.tgz#3678bd8ab995057c07ade836ed2ef087da811d45"
 
-lodash@^3.10.0, lodash@^3.2.0, lodash@^3.5.0, lodash@^3.7.0, lodash@^3.8.0, lodash@^3.9.3, lodash@~3.10.0:
+lodash@^3.10.0, lodash@^3.10.1, lodash@^3.2.0, lodash@^3.5.0, lodash@^3.7.0, lodash@^3.8.0, lodash@^3.9.3, lodash@~3.10.0:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
