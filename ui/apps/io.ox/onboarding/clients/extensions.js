@@ -157,27 +157,6 @@ define('io.ox/onboarding/clients/extensions', [
 
     var DisplayActionView = Backbone.View.extend({
 
-        labels: {
-            // card
-            'caldav_url': gt('CalDAV URL'),
-            'caldav_login': gt('CalDAV Login'),
-            'carddav_url': gt('CardDAV URL'),
-            'carddav_login': gt('CardDAV Login'),
-            // smtp
-            'smtpServer': gt('SMTP Server'),
-            'smtpPort': gt('SMTP Port'),
-            'smtpLogin': gt('SMTP Login'),
-            'smtpSecure': gt('SMTP Secure'),
-            // imap
-            'imapServer': gt('IMAP Server'),
-            'imapPort': gt('IMAP Port'),
-            'imapLogin': gt('IMAP Login'),
-            'imapSecure': gt('IMAP Secure'),
-            // eas
-            'eas_url': gt('EAS URL'),
-            'eas_login': gt('EAS Login')
-        },
-
         order: (function () {
             var list = [
                 // card
@@ -238,8 +217,9 @@ define('io.ox/onboarding/clients/extensions', [
                         )
                 );
             // sort
-            var list = Object.keys(this.data);
-            list = _.sortBy(list, this.order);
+            var list = _(Object.keys(this.data)).sortBy(function (key) {
+                return this.config.order[key] || 1000;
+            }.bind(this));
             // add rows
             _.each(list, function (key) {
                 var value = self.data[key],
@@ -248,7 +228,7 @@ define('io.ox/onboarding/clients/extensions', [
                 group.append(
                     $('<label class="control-label display-label col-sm-3">')
                         .attr('id', id)
-                        .text(self.labels[key] || key),
+                        .text(this.config.labels[key] || key),
                     $('<div class="col-sm-9">').append(
                         $('<input class="form-control" readonly>')
                             .attr('aria-labelledby', id)
@@ -259,7 +239,7 @@ define('io.ox/onboarding/clients/extensions', [
                     )
                 );
                 form.append(group);
-            });
+            }.bind(this));
             return this;
         }
     });

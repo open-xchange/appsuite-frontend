@@ -11,22 +11,89 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
+
+/**
+ * :MIXINS
+ */
+.mixin-unstyled-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mixin-expanded {
+    .content { display: block; }
+    .fa-chevron-right { display: none; }
+    .fa-chevron-down { display: inline-block; }
+}
+
+.client-onboarding-mobile.modal.flex {
+
+    @space: 16px;
+
+    .modal-dialog {
+        // scroll
+        max-height: 100%;
+        overflow: scroll;
+        // fixed transparent border
+        max-width: 100%;
+        padding: 16px;
+
+        .modal-header {
+            display: flex;
+
+            .modal-title {
+                margin-left: 32px;
+                width: 100%;
+                text-align: center;
+            }
+
+            .modal-action { margin-left: @space; }
+        }
+
+        .modal-body {
+
+            .title { margin-top: 0; }
+
+            .scenario {
+                .title { font-size: 16px; }
+                & > .description { padding-bottom: @space; }
+            }
+
+            .action {
+                padding-bottom: 16px;
+
+                .title {
+                    font-size: 14px;
+                    font-weight: 700;
+                }
+
+                pre {
+                    margin: 0;
+                    &.config {
+                        font-size: 14px;
+                        display: flex;
+                        .property, .value { padding: 4px 8px 0 0; }
+                        .property { font-weight: 700; }
+                    }
+                }
+
+                .store-icon { max-width: 40vw; }
+
+                &:empty { display: none; }
+            }
+
+            hr.divider {
+                border-top-width: 2px;
+                max-width: 30vw;
+            }
+        }
+
+        .modal-footer { display: none; }
+    }
+}
+
 .wizard-step {
-
-    /**
-     * :MIXINS
-     */
-    .mixin-unstyled-list {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .mixin-expanded {
-        .content { display: block; }
-        .fa-chevron-right { display: none; }
-        .fa-chevron-down { display: inline-block; }
-    }
 
     .box-shadow (@string) {
         -webkit-box-shadow: @string;

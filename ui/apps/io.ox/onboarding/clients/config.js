@@ -14,8 +14,10 @@
 define('io.ox/onboarding/clients/config', [
     'io.ox/onboarding/clients/api',
     'io.ox/core/api/user',
-    'io.ox/onboarding/clients/codes'
-], function (api, userAPI, codes) {
+    'io.ox/onboarding/clients/codes',
+    'gettext!io.ox/core/onboarding'
+
+], function (api, userAPI, codes, gt) {
 
     'use strict';
 
@@ -53,6 +55,27 @@ define('io.ox/onboarding/clients/config', [
             scenario: 'scenarios'
         },
 
+        labels: {
+            // card
+            'caldav_url': gt('CalDAV URL'),
+            'caldav_login': gt('CalDAV Login'),
+            'carddav_url': gt('CardDAV URL'),
+            'carddav_login': gt('CardDAV Login'),
+            // imap
+            'imapServer': gt('IMAP Server'),
+            'imapPort': gt('IMAP Port'),
+            'imapLogin': gt('IMAP Login'),
+            'imapSecure': gt('IMAP Secure'),
+            // eas
+            // smtp
+            'smtpServer': gt('SMTP Server'),
+            'smtpPort': gt('SMTP Port'),
+            'smtpLogin': gt('SMTP Login'),
+            'smtpSecure': gt('SMTP Secure'),
+            'eas_url': gt('EAS URL'),
+            'eas_login': gt('EAS Login')
+        },
+
         order: {
             // os
             'windows': 101,
@@ -64,7 +87,25 @@ define('io.ox/onboarding/clients/config', [
             'android.tablet': 202,
             'apple.iphone': 301,
             'apple.ipad': 302,
-            'apple.mac': 303
+            'apple.mac': 303,
+            // data
+            'caldav_url': 401,
+            'caldav_login': 402,
+            'carddav_url': 403,
+            'carddav_login': 404,
+            // imap
+            'imapServer': 411,
+            'imapPort': 412,
+            'imapLogin': 413,
+            'imapSecure': 414,
+            // smtp
+            'smtpServer': 421,
+            'smtpPort': 422,
+            'smtpLogin': 423,
+            'smtpSecure': 424,
+            // eas
+            'eas_url': 431,
+            'eas_login': 432
         },
 
         defaults: {

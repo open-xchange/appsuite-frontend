@@ -303,7 +303,8 @@ define('io.ox/onboarding/clients/wizard', [
         run: function () {
             if (capabilities.has('!client-onboarding')) return;
             if (_.device('smartphone')) {
-                return yell('info', 'Currently unavailable');
+                require(['io.ox/onboarding/clients/view-mobile'], function (dialog) { dialog.get().open(); });
+                return this;
             }
             // wrapper for wizard registry
             Wizard.registry.run(this.opt.id);

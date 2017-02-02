@@ -43,10 +43,11 @@ define('io.ox/onboarding/clients/api', [
             });
         },
 
-        getUrl: function (scenario, action) {
+        getUrl: function (scenario, action, client) {
             return ox.apiRoot + '/onboarding?action=execute' +
                     '&id=' + scenario +
                     '&action_id=' + action +
+                    '&client=' + (client || '') +
                     '&session=' + ox.session;
         }
     };
