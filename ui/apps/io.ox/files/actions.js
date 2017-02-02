@@ -273,25 +273,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/actions/sendlink', {
-        capabilities: 'webmail !alone',
-        requires: function (e) {
-            return util.conditionChain(
-                _.device('!smartphone'),
-                !_.isEmpty(e.baton.data),
-                e.collection.has('some', 'items'),
-                e.baton.openedBy !== 'io.ox/mail/compose',
-                util.isFolderType('!attachmentView', e.baton),
-                util.isFolderType('!trash', e.baton)
-            );
-        },
-        multiple: function (list) {
-            ox.load(['io.ox/files/actions/sendlink']).done(function (action) {
-                action(list);
-            });
-        }
-    });
-
     new Action('io.ox/files/actions/send', {
         capabilities: 'webmail',
         requires: function (e) {
@@ -900,16 +881,6 @@ define('io.ox/files/actions', [
         mobile: 'lo',
         label: gt('Send by mail'),
         ref: 'io.ox/files/actions/send',
-        section: 'share'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'sendlink',
-        index: index += 100,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Send as internal link'),
-        ref: 'io.ox/files/actions/sendlink',
         section: 'share'
     }));
 
