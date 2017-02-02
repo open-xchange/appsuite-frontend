@@ -48,9 +48,6 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util', 'io.ox/co
                 });
                 // Set Cookie
                 _.setCookie('language', (ox.language = id));
-                // we have to clear the hashed value for the chosen language in the device function or there might be invalid return values (see Bug 51405)
-                delete _.device.cache[ox.language.toLowerCase()];
-                delete _.device.cache[ox.language.split('_')[0] + '_*'];
                 ox.trigger('language', id, util.gt);
             });
         },

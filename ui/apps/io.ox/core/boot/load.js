@@ -46,6 +46,8 @@ define('io.ox/core/boot/load', [
 
     function loadUserTheme() {
 
+        // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)
+        _.device.cache = {};
         var theme = _.url.hash('theme') || coreSettings.get('theme') || 'default',
             loadTheme = themes.set(theme),
             //"core" namespace has now a very similar timing to "io.ox/core/main" namespace
