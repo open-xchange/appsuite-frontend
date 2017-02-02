@@ -311,7 +311,8 @@ define('io.ox/mail/common-extensions', [
         pgp: {
             encrypted: function (baton) {
                 //simple check for encrypted mail
-                if (!/^multipart\/encrypted/.test(baton.data.content_type)) return;
+                if (!/^multipart\/encrypted/.test(baton.data.content_type) &&
+                        !(baton.model.get('security') && baton.model.get('security').decrypted)) return;
 
                 this.append(
                     $('<i class="fa fa-lock encrypted" aria-hidden="true">')
@@ -319,7 +320,8 @@ define('io.ox/mail/common-extensions', [
             },
             signed: function (baton) {
                 //simple check for signed mail
-                if (!/^multipart\/signed/.test(baton.data.content_type)) return;
+                if (!/^multipart\/signed/.test(baton.data.content_type) &&
+                    !(baton.model.get('security') && baton.model.get('security').signatures)) return;
 
                 this.append(
                     $('<i class="fa fa-pencil-square-o signed" aria-hidden="true">')
