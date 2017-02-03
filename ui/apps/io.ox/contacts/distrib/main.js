@@ -161,12 +161,12 @@ define('io.ox/contacts/distrib/main', [
             }));
 
             function fnToggleSave(isDirty) {
-                app.getWindow().nodes.header.find('.btn[data-action="save"]').prop('disabled', !isDirty);
+                app.getWindow().nodes.footer.find('.btn[data-action="save"]').prop('disabled', !isDirty);
             }
 
             win.on('show', function () {
                 if (!container.find('[data-extension-id="displayname"] input').val()) {
-                    app.getWindow().nodes.header.find('.btn[data-action="save"]').prop('disabled', true);
+                    app.getWindow().nodes.footer.find('.btn[data-action="save"]').prop('disabled', true);
                 }
                 // no autofocus on smartphone and for iOS in special (see bug #36921)
                 if (_.device('!smartphone && !iOS')) {
