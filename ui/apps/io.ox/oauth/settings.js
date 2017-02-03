@@ -71,10 +71,6 @@ define('io.ox/oauth/settings', [
                 action: 'reauthorize',
                 label: gt('Reauthorize')
             })
-            .on('edit', function () {
-                // handle edit action of related accounts view
-                this.close();
-            })
             .on('reauthorize', function () {
                 this.options.account.reauthorize();
                 // reauthorization is always independent, because it kicks of an external process and we don't always get a response
