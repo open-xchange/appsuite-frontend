@@ -1,0 +1,63 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author York Richter <york.richter@open-xchange.com>
+ */
+
+.list-view-control:not(.upside-down).toolbar-top-visible .list-view.myfavorites-list { top: 80px; }
+
+.myfavorites-list-control .secondary-toolbar { top: 40px; }
+
+.myfavorites-list-control [data-ref="io.ox/files/favorite/back"] { display:none; }
+
+.smartphone .myfavorites-list-control [data-ref="io.ox/files/favorite/back"] {
+    display:block;
+    position: absolute;
+    left: -12px;
+    top: 2px;
+    font-size: 15px;
+    &:before {
+        font: normal normal normal 14px/1 FontAwesome;
+        content: "\f053";
+        margin-right: 3px;
+    }
+}
+.myfavorites-list {
+
+    &.visible-selection.has-focus .list-item.selected a,
+    &.visible-selection.has-focus .list-item.selected .type i:not(.gray) { color: white; }
+
+    .list-item-content {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+
+        .displayname { .ellipsis(); }
+
+        .breadcrumb-view {
+            overflow: hidden;
+            a { color: #333; }
+        }
+
+        .list-item-column.column-2,
+        .list-item-column.column-3 {
+            width: 50%;
+            padding:0;
+            text-align: left;
+        }
+        
+        .list-item-column.column-2 {
+            width: 30%;
+        }
+
+        .list-item-column.type { width: 20px; }
+    }
+}
+

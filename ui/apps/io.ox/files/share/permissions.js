@@ -21,8 +21,6 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/folder/api',
     'io.ox/files/api',
     'io.ox/files/share/api',
-    'io.ox/core/api/user',
-    'io.ox/core/api/group',
     'io.ox/contacts/api',
     'io.ox/core/tk/dialogs',
     'io.ox/contacts/util',
@@ -35,7 +33,7 @@ define('io.ox/files/share/permissions', [
     'settings!io.ox/contacts',
     'io.ox/backbone/mini-views/addresspicker',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView) {
 
     'use strict';
 

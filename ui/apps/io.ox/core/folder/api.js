@@ -685,6 +685,35 @@ define('io.ox/core/folder/api', [
         });
     }
 
+    /**
+     * Get multiple lists.
+     */
+    function multipleLists(ids, options) {
+        try {
+            http.pause();
+            return $.when.apply($,
+                _(ids).map(function (id) {
+                    return list(id).then(
+                        null,
+                        function fail(error) {
+                            error.id = id;
+                            return $.when(options.errors ? error : undefined);
+                        }
+                    );
+                })
+            )
+            .then(function () {
+                var lists = [];
+                _(arguments).toArray().forEach(function (list) {
+                    Array.prototype.push.apply(lists, list);
+                });
+                return lists;
+            });
+        } finally {
+            http.resume();
+        }
+    }
+
     //
     // Get folder path
     //
@@ -1396,7 +1425,8 @@ define('io.ox/core/folder/api', [
         Bitmask: Bitmask,
         propagate: propagate,
         altnamespace: altnamespace,
-        injectIndex: injectIndex
+        injectIndex: injectIndex,
+        multipleLists: multipleLists
     });
 
     return api;

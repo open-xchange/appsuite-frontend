@@ -20,7 +20,6 @@ define('io.ox/files/main', [
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
     'io.ox/core/folder/tree',
-    'io.ox/core/folder/node',
     'io.ox/core/folder/view',
     'io.ox/files/listview',
     'io.ox/core/tk/list-control',
@@ -41,10 +40,10 @@ define('io.ox/files/main', [
     'less!io.ox/core/viewer/style',
     'io.ox/files/toolbar',
     'io.ox/files/share/toolbar',
+    'io.ox/files/favorite/toolbar',
     'io.ox/files/upload/dropzone',
-    'io.ox/core/folder/breadcrumb',
-    'gettext!io.ox/core/viewer'
-], function (commons, gt, settings, coreSettings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
+    'io.ox/core/folder/breadcrumb'
+], function (commons, gt, settings, coreSettings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
 
     'use strict';
 
@@ -484,6 +483,101 @@ define('io.ox/files/main', [
                 app.folderView.tree.selection.getItems().removeClass('selected');
                 app.folderView.tree.selection.set(folderAPI.getDefaultFolder('infostore'));
                 app.mysharesListViewControl.$el.hide().siblings().show();
+            });
+        },
+
+        /*
+         * Respond to virtual favorites
+         */
+        'myfavorites-listview': function (app) {
+
+            var loading = false;
+
+            app.folderView.tree.on({
+                'virtual': function (id) {
+                    if (id !== 'virtual/favorites/infostore') return;
+
+                    app.folder.unset();
+                    app.getWindow().setTitle(gt('Favorites'));
+                    if (app.myFavoritesListViewControl) {
+                        app.myFavoritesListViewControl.$el.show().siblings().hide();
+                        return;
+                    }
+
+                    app.getWindow().nodes.body.busy().children().hide();
+                    if (loading) return;
+                    loading = true;
+
+                    require(['io.ox/files/favorite/listview'], function (MyFavoriteView) {
+
+                        app.myFavoriteListView = new MyFavoriteView({
+                            app: app,
+                            pagination: false,
+                            draggable: false,
+                            ignoreFocus: true,
+                            noSwipe: true,
+                            noPullToRefresh: true
+                        });
+
+                        app.myFavoritesListViewControl = new ListViewControl({
+                            id: 'io.ox/files/favorite/myfavorites',
+                            listView: app.myFavoriteListView,
+                            app: app
+                        });
+
+                        var toolbar = new Toolbar({ title: app.getTitle() });
+
+                        app.getWindow().nodes.body.prepend(
+                            app.myFavoritesListViewControl.render().$el
+                                .hide()
+                                .addClass('myfavorites-list-control')
+                                .append(toolbar.render().$el)
+                        );
+
+                        app.updateMyFavoritesToolbar = _.debounce(function (list) {
+                            var baton = ext.Baton({
+                                    $el: toolbar.$list,
+                                    data: app.myFavoriteListView.collection.get(list),
+                                    collection: app.myFavoriteListView.collection,
+                                    model: app.myFavoriteListView.collection.get(app.myFavoriteListView.collection.get(list))
+                                }),
+                                ret = ext.point('io.ox/files/favorite/classic-toolbar')
+                                .invoke('draw', toolbar.$list.empty(), baton);
+
+                            $.when.apply($, ret.value()).then(function () {
+                                toolbar.initButtons();
+                            });
+                        }, 10);
+
+                        app.updateMyFavoritesToolbar([]);
+                        // update toolbar on selection change as well as any model change
+                        app.myFavoriteListView.on('selection:change change', function () {
+                            app.updateMyFavoritesToolbar(app.myFavoriteListView.selection.get());
+                        });
+
+                        // show? (maybe user switched folder meanwhile)
+                        if (app.folder.get() === null) {
+                            app.myFavoritesListViewControl.$el.show().siblings().hide();
+                        }
+
+                        loading = false;
+                    });
+                },
+                'change': function () {
+                    if (app.myFavoritesListViewControl) {
+                        app.myFavoritesListViewControl.$el.hide().siblings().show();
+                        app.myFavoriteListView.selection.clear();
+                    }
+                    if (loading) {
+                        app.getWindow().nodes.body.idle().children().show();
+                    }
+                }
+            });
+
+            app.pages.getPage('main').on('myfavorites-folder-back', function () {
+                app.folderView.tree.selection.getItems().removeClass('selected');
+                app.folderView.tree.selection.set(folderAPI.getDefaultFolder('infostore'));
+                app.myFavoritesListViewControl.$el.hide().siblings().show();
             });
         },
 

@@ -513,7 +513,74 @@ define('io.ox/files/api', [
                 timezone: 'utc'
             };
         },
+        fetch: function (params) {
+
+            var module = this.module,
+                key = module + '/' + _.param(_.extend({ session: ox.session }, params)),
+                rampup = ox.rampup[key],
+                noSelect = this.noSelect(params),
+                virtual = this.virtual(params),
+                self = this;
+
+            if (rampup) {
+                delete ox.rampup[key];
+                return $.when(rampup);
+            }
+
+            if (noSelect) {
+                var model = folderAPI.pool.getModel(params.folder);
+                if (model.attributes.own_rights === 1) {
+                    params.tree = 1;
+                    params.parent = params.folder;
+                    module = 'folders';
+                    params.action = 'list';
+                }
+            }
+            if (virtual) {
+                return $.when(virtual);
+            }
+
+            return http.wait().then(function () {
+                return self.httpGet(module, params).then(function (data) {
+                    // apply filter
+                    if (self.filter) data = _(data).filter(self.filter);
+                    // useSlice helps if server request doesn't support "limit"
+                    return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
+                });
+            });
+        },
+
         httpGet: function (module, params) {
+
+            if (params.folder === '9') {
+                var folders = [];
+                // add all folders and favorites for the "Drive" folder list view
+                return folderAPI.get('virtual/favorites/infostore').then(function (favorites) {
+                    folders.push(favorites);
+                    return folderAPI.multipleLists(['virtual/drive/private', 'virtual/drive/public', 'virtual/filestorage']).then(function (driveFolders) {
+                        folders = folders.concat(driveFolders);
+                        switch (String(params.sort)) {
+                            // Name
+                            case '702':
+                                folders = _(folders).sortBy('title');
+                                break;
+                            // Date
+                            case '5':
+                                folders = _.sortBy(folders, function (folder) {
+                                    return folder.last_modified ? folder.last_modified : 0;
+                                });
+                                break;
+                            default:
+                                // do nothing
+                        }
+                        if (params.order === 'desc') {
+                            folders.reverse();
+                        }
+                        return folders;
+                    });
+                });
+            }
+
             // since we don't have a unified API for files and folders
             // we fetch folders first to see how many we get.
             // we always have to do that even if the offset is > 0
@@ -535,8 +602,6 @@ define('io.ox/files/api', [
                     limit = newStart + ',' + newStop;
                 // folders exceed upper limit?
                 if (folders.length >= stop) return folders.slice(start, stop);
-                // optimisation for "Drive" folder
-                if (params.folder === '9') return folders;
                 // fetch files
                 return http.GET({ module: module, params: _.extend({}, params, { limit: limit }) }).then(
                     function (files) {

@@ -30,6 +30,8 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             this.exclude = options.exclude;
             this.disable = options.disable;
             this.rootAlwaysVisible = options.rootAlwaysVisible;
+            // render folder as link although the user has only a read right
+            this.linkReadOnly = options.linkReadOnly;
 
             // last item is a normal item (not a unclickable tail node)
             this.notail = options.notail;
@@ -147,7 +149,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
             var length = all.length,
                 isLast = index === length - 1,
-                missingPrivileges = !api.can('read', data),
+                missingPrivileges = !api.can('read', data) && (!this.linkReadOnly || data.own_rights !== 1),
                 isDisabled = missingPrivileges || (this.disable && _(this.disable).indexOf(data.id) > -1),
                 node;
 
