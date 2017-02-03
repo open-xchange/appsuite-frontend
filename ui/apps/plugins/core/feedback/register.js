@@ -207,7 +207,7 @@ define('plugins/core/feedback/register', [
                             apps.unshift($('<option>').val('general').text(gt('General')));
                             apps.push($('<option>').val('io.ox/settings').text(gt('Settings')));
                             this.$body.append(
-                                this.appSelect = $('<select class="form-control">').append(apps)
+                                this.appSelect = $('<select class="feedback-select-box form-control">').append(apps)
                             );
                             this.appSelect.val(currentApp.id || apps[0].val());
                             return;
