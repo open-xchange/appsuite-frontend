@@ -2808,10 +2808,6 @@ msgstr "Details"
 msgid "Direct link"
 msgstr "Directe link"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Directe link: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3996,10 +3992,6 @@ msgstr "Bestandsquota"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "Bestandsversieoverzicht, de eerste rij is de huidige versie."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Bestand: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6841,6 +6833,12 @@ msgstr "Selecteer alstublieft uw e-maildienstverlener"
 msgid "Please set day and month properly"
 msgstr "Stel alstublieft de dag en de maand op de juiste manier in"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Voer alstublieft uw wachtwoord in."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Meld opnieuw aan om door te gaan"
@@ -7896,10 +7894,6 @@ msgstr "Verzenden"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Verzend een leesbevestiging"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Verstuur als interne link"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11636,6 +11630,9 @@ msgstr "yyyy"
 #~ "Gedetailleerde uitleg voor alle modulen kan u vinden in de help sectie "
 #~ "van de instellingen."
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Directe link: %1$s"
+
 #~ msgid "Disabled"
 #~ msgstr "Uitgeschakeld"
 
@@ -11855,6 +11852,9 @@ msgstr "yyyy"
 
 #~ msgid "File names must not contain slashes"
 #~ msgstr "Bestandsnamen mogen geen schuine streep bevatten"
+
+#~ msgid "File: %1$s"
+#~ msgstr "Bestand: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Bestandsnaam"
@@ -12533,6 +12533,9 @@ msgstr "yyyy"
 #~ msgid_plural "Selected messages has been moved successfully."
 #~ msgstr[0] "Geselecteerd bericht is succesvol verplaatst."
 #~ msgstr[1] "Geselecteerde berichten zijn succesvol verplaatst."
+
+#~ msgid "Send as internal link"
+#~ msgstr "Verstuur als interne link"
 
 #~ msgid "Send as mail"
 #~ msgstr "Verzenden als e-mailbericht"

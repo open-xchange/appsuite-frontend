@@ -2797,10 +2797,6 @@ msgstr "Részletek"
 msgid "Direct link"
 msgstr "Közvetlen hivatkozás"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Közvetlen hivatkozás: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3974,10 +3970,6 @@ msgstr "Fájlkvóta"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "Fájlverzió táblázata, az első sor mutatja a jelenlegi verziót."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Fájl: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6797,6 +6789,12 @@ msgstr "Válassza ki a levelezés szolgáltatóját"
 msgid "Please set day and month properly"
 msgstr "Adja meg helyesen a napot és a hónapot"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Adja meg jelszavát."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Jelentkezzen be újra a folytatáshoz"
@@ -7848,10 +7846,6 @@ msgstr "Küldés"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Tértivevény küldése"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Küldés belső hivatkozásként"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11260,6 +11254,9 @@ msgstr "yyyy"
 #~ msgid "Delete all messages in this folder"
 #~ msgstr "Összes üzenet törlése ebben a mappában"
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Közvetlen hivatkozás: %1$s"
+
 #, fuzzy
 #~| msgid "About"
 #~ msgid "Djibouti"
@@ -11346,6 +11343,9 @@ msgstr "yyyy"
 #~ msgctxt "app"
 #~ msgid "Favorite timezone"
 #~ msgstr "Kedvenc időzóná"
+
+#~ msgid "File: %1$s"
+#~ msgstr "Fájl: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Fájlnév"
@@ -11643,6 +11643,9 @@ msgstr "yyyy"
 #~ msgid_plural "Selected messages has been moved successfully."
 #~ msgstr[0] "A kijelölt üzenet mozgatása sikeres volt."
 #~ msgstr[1] "A kijelölt üzenetek mozgatása sikeres volt."
+
+#~ msgid "Send as internal link"
+#~ msgstr "Küldés belső hivatkozásként"
 
 #~ msgid "Send as mail"
 #~ msgstr "Küldés e-mailként"

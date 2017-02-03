@@ -2756,10 +2756,6 @@ msgstr "详细信息"
 msgid "Direct link"
 msgstr "直接链接"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "直接链接：%1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3904,10 +3900,6 @@ msgstr "文件限额"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "文件版本表格，第一行代表当前版本。"
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "文件：%1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6704,6 +6696,12 @@ msgstr "请选择您的邮件户口提供者"
 msgid "Please set day and month properly"
 msgstr "请正确设置月和日"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "请输入您的密码。"
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "请再登录继续"
@@ -7742,10 +7740,6 @@ msgstr "发送"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "发送一个送达回执"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "作为内部链接发送"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -12311,6 +12305,9 @@ msgstr "年"
 #~ msgid "Details:"
 #~ msgstr "详细信息："
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "直接链接：%1$s"
+
 #~ msgid "Disable all"
 #~ msgstr "全部禁用"
 
@@ -12903,6 +12900,9 @@ msgstr "年"
 
 #~ msgid "File..."
 #~ msgstr "文件..."
+
+#~ msgid "File: %1$s"
+#~ msgstr "文件：%1$s"
 
 #~ msgid "Filename"
 #~ msgstr "文件名"
@@ -14020,6 +14020,9 @@ msgstr "年"
 #~ msgid_plural "Selected messages has been moved successfully."
 #~ msgstr[0] "选定消息移动成功。"
 #~ msgstr[1] "选定消息移动成功。"
+
+#~ msgid "Send as internal link"
+#~ msgstr "作为内部链接发送"
 
 #~ msgid "Send as mail"
 #~ msgstr "以邮件方式发送"

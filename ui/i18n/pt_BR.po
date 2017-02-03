@@ -2797,10 +2797,6 @@ msgstr "Detalhes"
 msgid "Direct link"
 msgstr "Link direto"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Link direto: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3972,10 +3968,6 @@ msgstr "Cota de arquivo"
 msgid "File version table, the first row represents the current version."
 msgstr ""
 "Tabela de versão do arquivo, a primeira linha representa a versão atual."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Arquivo: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6811,6 +6803,12 @@ msgstr "Selecione seu provedor de conta de e-mail "
 msgid "Please set day and month properly"
 msgstr "Defina o dia e mês corretamente"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Insira sua senha."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Inicie a sessão novamente para continuar"
@@ -7861,10 +7859,6 @@ msgstr "Enviar"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Enviar uma confirmação de leitura"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Enviar como link interno"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -12396,6 +12390,9 @@ msgstr "aaaa"
 #~ msgid "Details:"
 #~ msgstr "Detalhes:"
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Link direto: %1$s"
+
 #~ msgid "Disable all"
 #~ msgstr "Desabilitar tudo"
 
@@ -12942,6 +12939,9 @@ msgstr "aaaa"
 
 #~ msgid "File..."
 #~ msgstr "Arquivo..."
+
+#~ msgid "File: %1$s"
+#~ msgstr "Arquivo: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Nome do arquivo"
@@ -14950,6 +14950,9 @@ msgstr "aaaa"
 
 #~ msgid "Send E-Mail about this publication"
 #~ msgstr "Enviar e-mail sobre essa publicação"
+
+#~ msgid "Send as internal link"
+#~ msgstr "Enviar como link interno"
 
 #~ msgid "Send as mail"
 #~ msgstr "Enviar como e-mail"

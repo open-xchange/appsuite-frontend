@@ -2785,10 +2785,6 @@ msgstr "Detaljer"
 msgid "Direct link"
 msgstr "Direktlänk"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Direktlänk: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3951,10 +3947,6 @@ msgstr "Filkvot"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "Filens versionstabell; den första raden visar nuvarande version."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Fil: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6772,6 +6764,12 @@ msgstr "Välj din e-postleverantör"
 msgid "Please set day and month properly"
 msgstr "Ange rimlig dag och månad"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Skriv ditt lösenord."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Logga in igen för att fortsätta"
@@ -7820,10 +7818,6 @@ msgstr "Skicka"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Skicka ett läskvitto"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Skicka som intern länk"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -12605,6 +12599,9 @@ msgstr "yyyy"
 #~ "Detaljerade guider för alla moduler finns i hjälpavsnittet bland "
 #~ "inställningarna."
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Direktlänk: %1$s"
+
 #~ msgid "Disabled"
 #~ msgstr "Avaktiverad"
 
@@ -13058,6 +13055,9 @@ msgstr "yyyy"
 
 #~ msgid "File upload failed: %1$s"
 #~ msgstr "Filöverföring misslyckades: %1$s"
+
+#~ msgid "File: %1$s"
+#~ msgstr "Fil: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Filnamn"
@@ -14932,6 +14932,9 @@ msgstr "yyyy"
 #~ msgid_plural "Selected messages has been moved successfully."
 #~ msgstr[0] "Det valda meddelandet flyttades."
 #~ msgstr[1] "De valda meddelandena flyttades."
+
+#~ msgid "Send as internal link"
+#~ msgstr "Skicka som intern länk"
 
 #~ msgid "Send as mail"
 #~ msgstr "Skicka som e-post"

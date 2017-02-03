@@ -2741,10 +2741,6 @@ msgstr ""
 msgid "Direct link"
 msgstr ""
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr ""
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3882,10 +3878,6 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
-msgstr ""
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
 msgstr ""
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
@@ -6638,6 +6630,12 @@ msgstr "Зөв нэг утгыг оруулна уу"
 msgid "Please set day and month properly"
 msgstr "Зөв нэг утгыг оруулна уу"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Нууц үгээ оруулна уу."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr ""
@@ -7658,10 +7656,6 @@ msgstr ""
 #. Respond to a read receipt request; German "Lesebestätigung senden"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
-msgstr ""
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
 msgstr ""
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts

@@ -2830,10 +2830,6 @@ msgstr "Detalii"
 msgid "Direct link"
 msgstr "Legătură directă"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Legătură directă: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -4010,10 +4006,6 @@ msgstr "Cotă de fișier"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "Tabel de versiuni de fișiere, prima linie conține versiunea curentă."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Fișier: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6854,6 +6846,12 @@ msgstr "Selectați providerul contului dumneavostră de mail"
 msgid "Please set day and month properly"
 msgstr "Setați ziua și luna corect"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Introduceți parola."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Autentificați-vă din nou pentru a continua"
@@ -7909,10 +7907,6 @@ msgstr "Trimite"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Trimite o confirmare de citire"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Trimite ca legătură internă"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -12720,6 +12714,9 @@ msgstr "aaaa"
 #~ msgid "Details:"
 #~ msgstr "Detalii:"
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Legătură directă: %1$s"
+
 #~ msgid "Disable all"
 #~ msgstr "Dezactivează tot"
 
@@ -13341,6 +13338,9 @@ msgstr "aaaa"
 
 #~ msgid "File..."
 #~ msgstr "Fișier..."
+
+#~ msgid "File: %1$s"
+#~ msgstr "Fișier: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Nume fișier"
@@ -15627,6 +15627,9 @@ msgstr "aaaa"
 
 #~ msgid "Send as E-Mail"
 #~ msgstr "Trimite ca e-mail"
+
+#~ msgid "Send as internal link"
+#~ msgstr "Trimite ca legătură internă"
 
 #~ msgid "Send as mail"
 #~ msgstr "Trimite ca mail"

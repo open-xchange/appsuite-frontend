@@ -2785,10 +2785,6 @@ msgstr "Detaljer"
 msgid "Direct link"
 msgstr "Direktelenke"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Direkte kobling: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3953,10 +3949,6 @@ msgstr "Filkvote"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "Versjonstabell - den første raden representerer gjeldende versjon."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Fil: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6780,6 +6772,12 @@ msgstr "Velg korrekt dag og måned"
 msgid "Please set day and month properly"
 msgstr "Velg korrekt dag og måned"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Skriv inn ditt passord."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Logg deg på igjen for å fortsette"
@@ -7826,10 +7824,6 @@ msgstr "Send"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Send en lesebekreftelse"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Send som intern kobling"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11308,6 +11302,9 @@ msgstr "yyyy"
 #~ msgid "Delete all messages in this folder"
 #~ msgstr "Slett alle meldingene i denne mappen"
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Direkte kobling: %1$s"
+
 #~ msgid "Dropbox"
 #~ msgstr "Dropbox"
 
@@ -11386,6 +11383,9 @@ msgstr "yyyy"
 
 #~ msgid "Facebook reported an error:"
 #~ msgstr "Facebook rapporterte en feil:"
+
+#~ msgid "File: %1$s"
+#~ msgstr "Fil: %1$s"
 
 #, fuzzy
 #~| msgid "Folder name"
@@ -11705,6 +11705,9 @@ msgstr "yyyy"
 #~ msgid_plural "Selected messages has been moved successfully."
 #~ msgstr[0] "Den valgte meldingen ble flyttet."
 #~ msgstr[1] "De valgte meldingene ble flyttet."
+
+#~ msgid "Send as internal link"
+#~ msgstr "Send som intern kobling"
 
 #~ msgid "Send as mail"
 #~ msgstr "Send som epost"

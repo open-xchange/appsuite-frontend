@@ -2813,10 +2813,6 @@ msgstr "Podrobnosti"
 msgid "Direct link"
 msgstr "Přímý odkaz"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Přímý odkaz: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3981,10 +3977,6 @@ msgstr "Souborový limit"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "Tabulka verzí souboru. Aktuální verze je v prvním řádku."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Soubor: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6819,6 +6811,12 @@ msgstr "Vyberte, prosím, poskytovatele vašeho poštovního účtu"
 msgid "Please set day and month properly"
 msgstr "Zadejte, prosím, správný den a měsíc"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Zadejte, prosím, své heslo."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Chcete-li pokračovat, přihlaste se, prosím, znovu"
@@ -7869,10 +7867,6 @@ msgstr "Poslat"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Poslat potvrzení o doručení"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Odeslat jako interní odkaz"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -14239,6 +14233,9 @@ msgstr "rrrr"
 #~ msgid "Details:"
 #~ msgstr "Podrobnosti:"
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Přímý odkaz: %1$s"
+
 #~ msgid "Disable all"
 #~ msgstr "Zakázat vše"
 
@@ -15057,6 +15054,9 @@ msgstr "rrrr"
 
 #~ msgid "File:"
 #~ msgstr "Soubor:"
+
+#~ msgid "File: %1$s"
+#~ msgstr "Soubor: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Název souboru"
@@ -17729,6 +17729,9 @@ msgstr "rrrr"
 
 #~ msgid "Send as E-Mail"
 #~ msgstr "Poslat jako e-mail"
+
+#~ msgid "Send as internal link"
+#~ msgstr "Odeslat jako interní odkaz"
 
 #~ msgid "Send as mail"
 #~ msgstr "Poslat jako zprávu"

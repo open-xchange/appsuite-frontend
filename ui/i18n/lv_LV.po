@@ -2820,10 +2820,6 @@ msgstr "Detaļas"
 msgid "Direct link"
 msgstr "Tieša saite"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Tiešā saite: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -4002,10 +3998,6 @@ msgstr "Failu kvota"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "Faila versiju tabula. Pirmajā rindā ir uzrādīta pašreizējā versija."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Fails: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6844,6 +6836,12 @@ msgstr "Lūdzu izvēlieties savu pasta pakalpojumu nodrošinātāju"
 msgid "Please set day and month properly"
 msgstr "Lūdzu pareizi norādiet dienu un mēnesi"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Lūdzu ievadiet paroli."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Lai turpinātu lūdzu pieslēdzieties no jauna"
@@ -7897,10 +7895,6 @@ msgstr "Sūtīt"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Nosūtīt lasīšanas apstiprinājumu"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Sūtīt kā iekšēju saiti"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -12682,6 +12676,9 @@ msgstr "yyyy"
 #~ msgid "Details:"
 #~ msgstr "Detaļas:"
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Tiešā saite: %1$s"
+
 #~ msgid "Disable all"
 #~ msgstr "Atspējot visu"
 
@@ -13294,6 +13291,9 @@ msgstr "yyyy"
 
 #~ msgid "File..."
 #~ msgstr "Fails..."
+
+#~ msgid "File: %1$s"
+#~ msgstr "Fails: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Faila vārds"
@@ -15564,6 +15564,9 @@ msgstr "yyyy"
 
 #~ msgid "Send as E-Mail"
 #~ msgstr "Sūtīt kā e-pastu"
+
+#~ msgid "Send as internal link"
+#~ msgstr "Sūtīt kā iekšēju saiti"
 
 #~ msgid "Send as mail"
 #~ msgstr "Sūtīt kā e-pastu"

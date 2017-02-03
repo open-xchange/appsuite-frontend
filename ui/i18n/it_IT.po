@@ -2800,10 +2800,6 @@ msgstr "Dettagli"
 msgid "Direct link"
 msgstr "Collegamento diretto"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Collegamento diretto: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3980,10 +3976,6 @@ msgid "File version table, the first row represents the current version."
 msgstr ""
 "Tabella della versione dei file, la prima riga rappresenta la versione "
 "attuale."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "File: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6822,6 +6814,12 @@ msgstr "Seleziona il fornitore del tuo account di posta"
 msgid "Please set day and month properly"
 msgstr "Imposta correttamente il giorno e il mese"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Digita la tua password."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Accedi nuovamente per continuare"
@@ -7875,10 +7873,6 @@ msgstr "Invia"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Invia una conferma di lettura"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Invia come collegamento interno"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -12660,6 +12654,9 @@ msgstr "aaaa"
 #~ msgid "Details:"
 #~ msgstr "Dettagli:"
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Collegamento diretto: %1$s"
+
 #~ msgid "Disable all"
 #~ msgstr "Disabilita tutto"
 
@@ -13252,6 +13249,9 @@ msgstr "aaaa"
 
 #~ msgid "File versions"
 #~ msgstr "Versioni del file"
+
+#~ msgid "File: %1$s"
+#~ msgstr "File: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Nome file"
@@ -14332,6 +14332,9 @@ msgstr "aaaa"
 #~ msgid_plural "Selected messages has been moved successfully."
 #~ msgstr[0] "Il messaggio selezionato è stato spostato correttamente."
 #~ msgstr[1] "I messaggi selezionati sono stati spostati correttamente."
+
+#~ msgid "Send as internal link"
+#~ msgstr "Invia come collegamento interno"
 
 #~ msgid "Send as mail"
 #~ msgstr "Invia come messaggio di posta"

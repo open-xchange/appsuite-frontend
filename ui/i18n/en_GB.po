@@ -2783,10 +2783,6 @@ msgstr "Details"
 msgid "Direct link"
 msgstr "Direct link"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Direct link: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3960,10 +3956,6 @@ msgstr "File quota"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "File version table, the first row represents the current version."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "File: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6783,6 +6775,12 @@ msgstr "Please select your e-mail account provider"
 msgid "Please set day and month properly"
 msgstr "Please set day and month properly"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Please enter your password."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Please sign in again to continue"
@@ -7832,10 +7830,6 @@ msgstr "Send"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Send a read receipt"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Send as internal link"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11598,6 +11592,9 @@ msgstr "yyyy"
 #~ "Detailed guides for all modules are located in the help section of the "
 #~ "settings."
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Direct link: %1$s"
+
 #~ msgid "Disabled"
 #~ msgstr "Disabled"
 
@@ -11853,6 +11850,9 @@ msgstr "yyyy"
 
 #~ msgid "File names must not contain slashes"
 #~ msgstr "File names must not contain slashes"
+
+#~ msgid "File: %1$s"
+#~ msgstr "File: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Filename"
@@ -12652,6 +12652,9 @@ msgstr "yyyy"
 #~ msgid_plural "Selected messages has been moved successfully."
 #~ msgstr[0] "Selected message was moved successfully."
 #~ msgstr[1] "Selected messages have been moved successfully."
+
+#~ msgid "Send as internal link"
+#~ msgstr "Send as internal link"
 
 #~ msgid "Send as mail"
 #~ msgstr "Send as email"

@@ -2776,10 +2776,6 @@ msgstr "Details"
 msgid "Direct link"
 msgstr "Direkter Link"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Direkter Link: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3927,10 +3923,6 @@ msgstr "Datei-Speicherplatz"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "Dateiversionstabelle. Die erste Zeile enthält die aktuelle Version."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Datei: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6730,6 +6722,12 @@ msgstr "Bitte wählen Sie Ihren Mail-Account-Provider"
 msgid "Please set day and month properly"
 msgstr "Bitte geben Sie einen gültigen Tag und Monat ein"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Geben Sie bitte Ihr Passwort ein."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Zum Fortfahren bitte erneut anmelden"
@@ -7770,10 +7768,6 @@ msgstr "Senden"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Lesebestätigung senden"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Als internen Link versenden"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -12130,6 +12124,9 @@ msgstr "JJJJ"
 #~ "Ausführliche Anleitungen zu allen Apps finden Sie im Systemmenü, Eintrag "
 #~ "Hilfe."
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Direkter Link: %1$s"
+
 #~ msgid "Disabled"
 #~ msgstr "Deaktiviert"
 
@@ -12581,6 +12578,9 @@ msgstr "JJJJ"
 
 #~ msgid "File names must not contain slashes"
 #~ msgstr "Dateinamen dürfen keine Schrägstriche enthalten."
+
+#~ msgid "File: %1$s"
+#~ msgstr "Datei: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Dateiname"
@@ -14105,6 +14105,9 @@ msgstr "JJJJ"
 
 #~ msgid "Selecting a view"
 #~ msgstr "Eine Ansicht wählen"
+
+#~ msgid "Send as internal link"
+#~ msgstr "Als internen Link versenden"
 
 #~ msgid "Send as mail"
 #~ msgstr "Als E-Mail versenden"

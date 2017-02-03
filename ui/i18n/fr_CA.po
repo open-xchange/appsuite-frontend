@@ -2810,10 +2810,6 @@ msgstr "Détails"
 msgid "Direct link"
 msgstr "Lien direct"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Lien direct : %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -4005,10 +4001,6 @@ msgid "File version table, the first row represents the current version."
 msgstr ""
 "Tableau des versions du fichier ; la première ligne représente la version "
 "actuelle."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Fichier : %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6857,6 +6849,12 @@ msgstr "Veuillez sélectionner votre fournisseur de compte de courrier"
 msgid "Please set day and month properly"
 msgstr "Veuillez saisir le jour et le mois convenablement"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Veuillez saisir votre mot de passe."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Veuillez vous reconnecter pour continuer"
@@ -7910,10 +7908,6 @@ msgstr "Envoyer"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Envoyer un accusé de réception"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Envoyer en tant que lien interne"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11896,6 +11890,9 @@ msgstr "aaaa"
 #~ "Vous trouverez des guides détaillés de tous les modules dans la section "
 #~ "d'aide des réglages."
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Lien direct : %1$s"
+
 #~ msgid "Disabled"
 #~ msgstr "Désactivé"
 
@@ -12215,6 +12212,9 @@ msgstr "aaaa"
 
 #~ msgid "File versions"
 #~ msgstr "Versions de fichier"
+
+#~ msgid "File: %1$s"
+#~ msgstr "Fichier : %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Nom de fichier"
@@ -13126,6 +13126,9 @@ msgstr "aaaa"
 #~ msgid_plural "Selected messages has been moved successfully."
 #~ msgstr[0] "Les messages sélectionnés ont été convenablement déplacés."
 #~ msgstr[1] "Les messages sélectionnés ont été convenablement déplacés."
+
+#~ msgid "Send as internal link"
+#~ msgstr "Envoyer en tant que lien interne"
 
 #~ msgid "Send as mail"
 #~ msgstr "Envoyer en tant que courriel"

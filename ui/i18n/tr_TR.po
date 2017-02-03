@@ -2809,10 +2809,6 @@ msgstr "Ayrıntılar"
 msgid "Direct link"
 msgstr "Link yönlendir"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Link yönlendir: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -4012,10 +4008,6 @@ msgstr "Dosya kotası"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "Dosya sürüm masasında, ilk satır şuanki sürümü temsil eder."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Dosya: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 #, fuzzy
@@ -6891,6 +6883,12 @@ msgstr "Lütfen aktarılacak dosyayı seçiniz"
 msgid "Please set day and month properly"
 msgstr "Lütfen aktarılacak dosyayı seçiniz"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Lütfen şifrenizi giriniz"
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Devam etmek için lütfen tekrar giriş yapınız"
@@ -7975,10 +7973,6 @@ msgstr "Gönder"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Bir okundu bilgisi gönder"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Dahili link olarak gönder"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11425,6 +11419,9 @@ msgstr "yyyy"
 #~ msgid "Day View"
 #~ msgstr "Gün Görüntüle"
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Link yönlendir: %1$s"
+
 #~ msgid "Double click to rename"
 #~ msgstr "Yeniden adlandırmak için çift tıkla"
 
@@ -11482,6 +11479,9 @@ msgstr "yyyy"
 
 #~ msgid "Facebook reported an error:"
 #~ msgstr "Facebook bir hata bildirdi:"
+
+#~ msgid "File: %1$s"
+#~ msgstr "Dosya: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Dosya Adı "
@@ -11698,6 +11698,9 @@ msgstr "yyyy"
 #~ msgid "Selected message was moved successfully."
 #~ msgid_plural "Selected messages has been moved successfully."
 #~ msgstr[0] "Veri başarıyla taşındı"
+
+#~ msgid "Send as internal link"
+#~ msgstr "Dahili link olarak gönder"
 
 #, fuzzy
 #~ msgid "Send as mail"

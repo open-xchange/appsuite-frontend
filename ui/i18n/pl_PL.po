@@ -2837,10 +2837,6 @@ msgstr "Szczegóły"
 msgid "Direct link"
 msgstr "Łącze bezpośrednie"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Łącze bezpośrednie: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -4020,10 +4016,6 @@ msgstr "Ograniczenie miejsca na pliki"
 msgid "File version table, the first row represents the current version."
 msgstr ""
 "Tabela z wersjami plików. W pierwszym wierszu znajduje się bieżąca wersja."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Plik: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6849,6 +6841,12 @@ msgstr "Wybierz dostawcę konta pocztowego"
 msgid "Please set day and month properly"
 msgstr "Ustaw prawidłowo dzień i miesiąc"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Wprowadź hasło."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Aby kontynuować, podpisz ponownie"
@@ -7902,10 +7900,6 @@ msgstr "Wyślij"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Wyślij potwierdzenie przeczytania"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Wyślij jako łącze wewnętrzne"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11737,6 +11731,9 @@ msgstr "rrrr"
 #~ "Szczegółowe wskazówki dotyczące wszystkich modułów znajdują się w pomocy "
 #~ "do ustawień."
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Łącze bezpośrednie: %1$s"
+
 #~ msgid "Disabled"
 #~ msgstr "Wyłączone"
 
@@ -11989,6 +11986,9 @@ msgstr "rrrr"
 
 #~ msgid "File names must not contain slashes"
 #~ msgstr "Nazwy plików nie mogą zawierać ukośników"
+
+#~ msgid "File: %1$s"
+#~ msgstr "Plik: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Nazwa pliku"
@@ -12788,6 +12788,9 @@ msgstr "rrrr"
 #~ msgstr[0] "Wybrana wiadomość została pomyślnie przeniesiona."
 #~ msgstr[1] "Wybrane wiadomości zostały pomyślnie przeniesione."
 #~ msgstr[2] "Wybrane wiadomości zostały pomyślnie przeniesione."
+
+#~ msgid "Send as internal link"
+#~ msgstr "Wyślij jako łącze wewnętrzne"
 
 #~ msgid "Send as mail"
 #~ msgstr "Wyślij jako wiadomość"

@@ -2819,10 +2819,6 @@ msgstr "Подробности"
 msgid "Direct link"
 msgstr "Прямая ссылка"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Прямая ссылка: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3990,10 +3986,6 @@ msgstr "Квота файлов"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "Таблица версий. Текущая версия показана в первой строке."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Файл: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6817,6 +6809,12 @@ msgstr "Выберите поставщика почтовой учетной з
 msgid "Please set day and month properly"
 msgstr "Введите действительный день и месяц"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Введите пароль."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Авторизуйтесь для продолжения"
@@ -7862,10 +7860,6 @@ msgstr "Отправить"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Отправить уведомление о прочтении"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Отправить как внутреннюю ссылку"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -11674,6 +11668,9 @@ msgstr "гггг"
 #~ "settings."
 #~ msgstr "Подробную информацию о модулях можно найти в секции справки."
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Прямая ссылка: %1$s"
+
 #~ msgid "Disabled"
 #~ msgstr "Отключено"
 
@@ -11926,6 +11923,9 @@ msgstr "гггг"
 
 #~ msgid "File names must not contain slashes"
 #~ msgstr "Имя файла не может содержать «/»"
+
+#~ msgid "File: %1$s"
+#~ msgstr "Файл: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Имя файла"
@@ -12736,6 +12736,9 @@ msgstr "гггг"
 #~ msgstr[0] "Выбранное сообщение было перемещено."
 #~ msgstr[1] "Выбранные сообщения были перемещены."
 #~ msgstr[2] "Выбранные сообщения были перемещены."
+
+#~ msgid "Send as internal link"
+#~ msgstr "Отправить как внутреннюю ссылку"
 
 #~ msgid "Send as mail"
 #~ msgstr "Отправить по почте"

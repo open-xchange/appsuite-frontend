@@ -2801,10 +2801,6 @@ msgstr "Detalles"
 msgid "Direct link"
 msgstr "Enlace directo"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "Enlace directo: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3984,10 +3980,6 @@ msgstr "Cuota de archivos"
 msgid "File version table, the first row represents the current version."
 msgstr ""
 "Tabla de versiones del archivo, la primera fila representa la versión actual."
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "Archivo: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6836,6 +6828,12 @@ msgstr "Por favor seleccione su proveedor de correo electrónico"
 msgid "Please set day and month properly"
 msgstr "Por favor, indique el día y el mes adecuadamente"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "Por favor, introduzca su contraseña."
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "Por favor, inicie de nuevo la sesión para continuar"
@@ -7891,10 +7889,6 @@ msgstr "Enviar"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Enviar una confirmación de lectura"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "Enviar como enlace interno"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -14272,6 +14266,9 @@ msgstr "yyyy"
 #~ msgid "Details:"
 #~ msgstr "Detalles:"
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Enlace directo: %1$s"
+
 #~ msgid "Disable all"
 #~ msgstr "Desactivar todo"
 
@@ -15095,6 +15092,9 @@ msgstr "yyyy"
 
 #~ msgid "File:"
 #~ msgstr "Fichero:"
+
+#~ msgid "File: %1$s"
+#~ msgstr "Archivo: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "Nombre de fichero"
@@ -17792,6 +17792,9 @@ msgstr "yyyy"
 
 #~ msgid "Send as E-Mail"
 #~ msgstr "Enviar como E-Mail"
+
+#~ msgid "Send as internal link"
+#~ msgstr "Enviar como enlace interno"
 
 #~ msgid "Send as mail"
 #~ msgstr "Enviar como correo electrónico"

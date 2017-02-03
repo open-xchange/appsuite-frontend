@@ -2743,10 +2743,6 @@ msgstr "次に示す詳細情報。"
 msgid "Direct link"
 msgstr "ダイレクトリンク"
 
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "Direct link: %1$s"
-msgstr "ダイレクトリンク: %1$s"
-
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -3914,10 +3910,6 @@ msgstr "ファイル割当量"
 #: module:io.ox/core/viewer
 msgid "File version table, the first row represents the current version."
 msgstr "ファイルバージョンの表、最初の列は現在のバージョンを表します。"
-
-#: apps/io.ox/files/actions/sendlink.js module:io.ox/files
-msgid "File: %1$s"
-msgstr "ファイル: %1$s"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Files"
@@ -6742,6 +6734,12 @@ msgstr "お使いのメールアカウントプロバイダを選択してくだ
 msgid "Please set day and month properly"
 msgstr "月日を適切に設定してください。"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please set password"
+msgstr "パスワードを入力してください。"
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Please sign in again to continue"
 msgstr "続行するには、再度サインインしてください。"
@@ -7784,10 +7782,6 @@ msgstr "送信"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "開封通知を送信"
-
-#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
-msgid "Send as internal link"
-msgstr "内部リンクとして送信"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
@@ -13190,6 +13184,9 @@ msgstr "yyyy"
 #~ msgid "Direct Link:"
 #~ msgstr "ダイレクト リンク"
 
+#~ msgid "Direct link: %1$s"
+#~ msgstr "ダイレクトリンク: %1$s"
+
 #~ msgid "Disable all"
 #~ msgstr "すべてを無効"
 
@@ -13960,6 +13957,9 @@ msgstr "yyyy"
 
 #~ msgid "File..."
 #~ msgstr "ファイル..."
+
+#~ msgid "File: %1$s"
+#~ msgstr "ファイル: %1$s"
 
 #~ msgid "Filename"
 #~ msgstr "ファイル名"
@@ -16503,6 +16503,9 @@ msgstr "yyyy"
 
 #~ msgid "Send as E-Mail"
 #~ msgstr "メールで送信"
+
+#~ msgid "Send as internal link"
+#~ msgstr "内部リンクとして送信"
 
 #~ msgid "Send as mail"
 #~ msgstr "メールで送信"
