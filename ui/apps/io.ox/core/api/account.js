@@ -275,6 +275,14 @@ define('io.ox/core/api/account', [
         return typeHash[id] !== undefined;
     };
 
+    api.isMalicious = function (id, blacklist) {
+        // includes simple subfolder checks
+        if (api.is('spam', id)) return true;
+        return _(blacklist).some(function (folder) {
+            return folder === id || (id).indexOf(folder + separator) === 0;
+        });
+    };
+
     api.getType = function (id) {
         if (id === 'virtual/all-unseen') return 'unseen';
         return typeHash[id];

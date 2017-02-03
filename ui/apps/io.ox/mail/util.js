@@ -526,6 +526,15 @@ define('io.ox/mail/util', [
             return data.folder_id === undefined && data.filename !== undefined;
         },
 
+        isMalicious: (function () {
+            if (!settings.get('maliciousCheck')) return _.constant(false);
+            var blacklist = settings.get('maliciousFolders', []).push();
+            return function (data) {
+                if (!_.isObject(data)) return false;
+                return accountAPI.isMalicious(data.folder_id, blacklist);
+            };
+        })(),
+
         byMyself: function (data) {
             data = data || {};
             return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;
