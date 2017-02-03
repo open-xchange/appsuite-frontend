@@ -32,45 +32,7 @@ define('io.ox/settings/accounts/settings/pane', [
         this.save();
     });
 
-    var onAddSubmodule = function (e) {
-            e.preventDefault();
-            var submodule = e.data.submodule;
-            // looks like oauth?
-            if ('reauthorize' in submodule) {
-                var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
-                submodule.createInteractively(win);
-            } else {
-                submodule.createInteractively(e);
-            }
-        },
-
-        drawAddButton = function () {
-            var submodules = _(api.submodules).filter(function (submodule) {
-                return !submodule.canAdd || submodule.canAdd.apply(this);
-            });
-
-            if (submodules.length === 0) return;
-
-            return new Dropdown({
-                className: 'btn-group col-md-4 col-xs-4',
-                $toggle: $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true">').append(
-                    $.txt(gt('Add account')), $.txt(' '),
-                    $('<span class="caret">')
-                ),
-                $ul: $('<ul class="dropdown-menu" role="menu">').append(
-                   _(submodules).map(function (submodule) {
-                       return $('<li role="presentation">').append(
-                           $('<a href="#" role="menuitem">')
-                           .attr('data-actionname', submodule.actionName || submodule.id || '')
-                           .text(submodule.displayName)
-                           .on('click', { submodule: submodule }, onAddSubmodule)
-                       );
-                   })
-               )
-            }).render().$el;
-        },
-
-        drawCertificateValidation = function () {
+    var drawCertificateValidation = function () {
             return $('<div class="form-group">').append(
                 $('<div class="checkbox">').append(
                     $('<label class="control-label">').text(gt('Allow connections with untrusted certificates')).prepend(
@@ -109,8 +71,7 @@ define('io.ox/settings/accounts/settings/pane', [
         drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
                 $('<div>').addClass('row').append(
-                    $('<h1 class="col-md-8 col-xs-8">').text(gt('Accounts')),
-                    drawAddButton()
+                    $('<h1 class="col-md-8 col-xs-8">').text(gt('Accounts'))
                 ),
                 $('<ul class="list-unstyled list-group widget-list">')
             );
