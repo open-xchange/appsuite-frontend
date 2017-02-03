@@ -278,6 +278,7 @@ define('io.ox/core/api/account', [
     api.isMalicious = function (id, blacklist) {
         // includes simple subfolder checks
         if (api.is('spam', id)) return true;
+        if (api.is('confirmed_spam', id)) return true;
         return _(blacklist).some(function (folder) {
             return folder === id || (id).indexOf(folder + separator) === 0;
         });
@@ -557,7 +558,7 @@ define('io.ox/core/api/account', [
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
-                _('sent drafts trash spam archive'.split(' ')).each(function (type) {
+                _('sent drafts trash spam archive confirmed_spam'.split(' ')).each(function (type) {
                     // fullname is favored over short name
                     var short_name = account[type], full_name = account[type + '_fullname'];
                     typeHash[full_name || short_name] = type;
