@@ -44,6 +44,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         resetDropdownOverlay: function () {
             if (!this.$overlay) return;
+            this.$ul.removeAttr('data-original-id');
             this.$placeholder.before(this.$ul).detach();
             this.$el.removeClass('open');
             this.$ul.attr('style', this.$ul.data('style') || '').removeData('style');
@@ -61,6 +62,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$ul.data('style', this.$ul.attr('style'));
             this.adjustBounds();
 
+            this.$ul.attr('data-original-id', this.$placeholder.attr('id'));
             // replaceWith and detach ($.fn.replaceWith is replaceWith and remove)
             this.$ul.before(this.$placeholder).detach();
             $('body').append(
@@ -181,7 +183,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         setup: function () {
             this.$ul = this.options.$ul || $('<ul class="dropdown-menu" role="menu">');
-            this.$placeholder = $('<div class="hidden">');
+            this.$placeholder = $('<div class="hidden">').attr('id', _.uniqueId('dropdown-placeholder-'));
             this.smart = this.options.smart;
             this.margin = this.options.margin || 8;
             // not so nice but we need this for mobile support
