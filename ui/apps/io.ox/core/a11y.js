@@ -11,7 +11,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/core/a11y', [], function () {
+define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
 
     'use strict';
 
@@ -216,7 +216,13 @@ define('io.ox/core/a11y', [], function () {
         hotkey(e, links);
     }
 
+    function use() {
+        // focusFirstTabbable
+        return !!settings.get('features/accessibility', true);
+    }
+
     return {
+        use: use,
         getTabbable: getTabbable,
         trapFocus: trapFocus,
         dropdownTrapFocus: dropdownTrapFocus,

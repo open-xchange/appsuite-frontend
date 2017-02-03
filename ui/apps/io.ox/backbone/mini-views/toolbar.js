@@ -11,7 +11,7 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gettext!io.ox/core'], function (DisposableView, gt) {
+define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'io.ox/core/a11y', 'gettext!io.ox/core'], function (DisposableView, a11y, gt) {
 
     'use strict';
 
@@ -30,9 +30,11 @@ define('io.ox/backbone/mini-views/toolbar', ['io.ox/backbone/disposable', 'gette
         },
 
         createToolbar: function () {
-            return $('<ul class="classic-toolbar" role="toolbar">')
+            var node = $('<ul class="classic-toolbar" role="toolbar">')
                 //#. screenreader label for main toolbar
-                .attr({ 'aria-label': this.options.title ? gt('%1$s Toolbar', this.options.title) : gt('Actions. Use cursor keys to navigate.') })
+                .attr({ 'aria-label': this.options.title ? gt('%1$s Toolbar', this.options.title) : gt('Actions. Use cursor keys to navigate.') });
+            if (!a11y.use('toolbarTooltips')) return node;
+            return node
                 .tooltip({
                     animation: false,
                     container: 'body',

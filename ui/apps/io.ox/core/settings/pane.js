@@ -442,4 +442,28 @@ define('io.ox/core/settings/pane', [
             }
         });
     }());
+
+    // Accessibility feature toggle
+    (function () {
+        point.extend({
+            id: 'accessibilityFeatures',
+            index: 900,
+            className: 'form-group',
+            render: function () {
+                var value = this.baton.model.get('features/accessibility');
+                if (value === '' || value === undefined) {
+                    this.baton.model.set('features/accessibility', true);
+                }
+                this.$el.append(
+                    $('<div class="col-sm-offset-4 col-sm-8">').append(
+                        $('<div class="checkbox">').append(
+                            $('<label class="control-label">').text(gt('Use accessibility improvements')).prepend(
+                                new miniViews.CheckboxView({ name: 'features/accessibility', model: this.baton.model }).render().$el
+                            )
+                        )
+                    )
+                );
+            }
+        });
+    }());
 });

@@ -28,10 +28,11 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
+    'io.ox/core/a11y',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil, a11y) {
 
     'use strict';
 
@@ -1032,12 +1033,17 @@ define('io.ox/mail/compose/view', [
                 return self.signaturesLoading;
             })
             .done(function () {
-                var mode = self.model.get('mode');
+                var target, mode = self.model.get('mode');
                 // set focus in compose and forward mode to recipient tokenfield
-                if (/(compose|forward)/.test(mode)) {
-                    if (_.device('!ios')) _.defer(function () { self.$('a[data-toggle="dropdown"]:first').focus(); });
-                } else {
-                    self.editor.focus();
+                if (_.device('!ios')) {
+                    if (a11y.use('focusFirstTabbable')) {
+                        target = self.$('a[data-toggle="dropdown"]:first');
+                    } else if (/(compose|forward)/.test(mode)) {
+                        target = self.$('.tokenfield:first .token-input');
+                    } else {
+                        target = self.editor;
+                    }
+                    _.defer(function () { target.focus(); });
                 }
                 self.model.setAutoBCC();
                 if (mode === 'replyall' || mode === 'edit') {
