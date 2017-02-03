@@ -109,6 +109,8 @@ define('io.ox/mail/accounts/settings', [
     }
 
     function createUnifiedMailboxInput(data) {
+        if (!mailSettings.get('features/accounts/configureUnifiedInboxOnCreate', false)) return;
+
         data = _.defaults({ unified_inbox_enabled: false }, data);
         return $('<div class="form-group checkbox">').append(
             $('<label for="unified_inbox_enabled">').append(
