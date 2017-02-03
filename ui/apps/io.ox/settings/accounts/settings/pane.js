@@ -47,14 +47,25 @@ define('io.ox/settings/accounts/settings/pane', [
         },
 
         drawRecoveryButton = function () {
-            return $('<div class="hint">').append(
+            var b = $('<a href="#" class="hint col-md-6 col-lg-12">')
+                .text(gt('Info about account recovery...'))
+                .attr({
+                    role: 'button',
+                    title: gt('Show infos about account recovery'),
+                    'aria-label': gt('Show infos about account recovery')
+                }).on('click', function (e) {
+                    e.preventDefault();
+                    hint.show();
+                    $(this).hide();
+                });
+
+            var hint = $('<div class="hint col-md-8 col-lg-12">').append(
                 $.txt(
                     gt('For security reasons, all credentials are encrypted with your primary account password. ' +
                         'If you change your primary password, your external accounts might stop working. In this case, ' +
-                        'you can use your old password to recover all account passwords:')
+                        'you can use your old password to recover all account passwords.')
                 ),
-                $.txt(' '),
-                $('<a href="#" data-action="recover">').text(gt('Recover passwords')).attr({
+                $('<a href="#" class="hint recover" data-action="recover">').text(gt('Recover passwords')).attr({
                     role: 'button',
                     title: gt('Recover passwords'),
                     'aria-label': gt('Recover passwords')
@@ -64,8 +75,10 @@ define('io.ox/settings/accounts/settings/pane', [
                     ox.load(['io.ox/keychain/secretRecoveryDialog']).done(function (srd) {
                         srd.show();
                     });
-                })
-            );
+                }));
+
+            hint.hide();
+            return [b, hint];
         },
 
         drawPane = function () {
