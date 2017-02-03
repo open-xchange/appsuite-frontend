@@ -1096,7 +1096,10 @@ define('io.ox/files/api', [
         })
         .then(function (response) {
             // if id changes after update (e.g. rename files of some storage systems) update model id
-            if (_.isObject(response) && model && model.get('id') !== response.id) model.set('id', response.id);
+            if (_.isObject(response) && model && model.get('id') !== response.id) {
+                model.set('id', response.id);
+                file.id = response.id;
+            }
         })
         .always(_.lfo(process, prev, model))
         .done(function () {
@@ -1386,7 +1389,7 @@ define('io.ox/files/api', [
             // get another copy for array support
             // move, copy, lock, unlock, remove:file handle multiple files at once
             var list = _.isArray(file) ? file : [file];
-
+            folderAPI.isExternalFileStorage(file);
             // reduce attributes
             file = _(file).pick('folder', 'folder_id', 'id', 'version');
 
@@ -1474,9 +1477,15 @@ define('io.ox/files/api', [
                     });
 
                 case 'rename':
-                    api.trigger('rename', _.cid(file));
-                    break;
-
+                    return folderAPI.get(file.folder_id).then(function (fileModel) {
+                        // reload the version if it is an external storage file
+                        if (folderAPI.isExternalFileStorage(fileModel)) {
+                            return reloadVersions(file).done(function () {
+                                api.trigger('rename', _.cid(file));
+                            });
+                        }
+                        api.trigger('rename', _.cid(file));
+                    });
                 case 'permissions':
                     api.trigger('change:permissions', _.cid(file));
                     break;
