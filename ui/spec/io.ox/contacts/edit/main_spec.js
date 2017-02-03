@@ -12,13 +12,11 @@
  */
 
 define([
-    'io.ox/contacts/edit/main',
-    'io.ox/contacts/api',
-    'spec/shared/capabilities'
-], function (main, api, caputil) {
+    'io.ox/contacts/edit/main'
+], function (main) {
 
     'use strict';
-    var capabilities = caputil.preset('common').init('io.ox/contacts/edit/main', main),
+    var //capabilities = caputil.preset('common').init('io.ox/contacts/edit/main', main),
         testObject = {
             folder_id: 1
         };
@@ -30,9 +28,9 @@ define([
     describe('Contact edit', function () {
         var app = null;
 
-        beforeEach(function () {
+        /*beforeEach(function () {
             return capabilities.reset();
-        });
+        });*/
 
         it('should provide a getApp function', function () {
             expect(main.getApp).to.be.a('function');
@@ -56,11 +54,11 @@ define([
 
         it('should paint some form components', function () {
             var createForm = app.getWindow().nodes.main.find('.edit-contact'),
-                header = app.getWindow().nodes.header;
+                footer = app.getWindow().nodes.footer;
 
-            expect(header.find('button.btn.btn-primary.save:disabled').length, 'find disabled save button').to.equal(1);
-            expect(header.find('button.btn.btn-default.discard').length, 'find discard button').to.equal(1);
-            expect(header.find('.checkbox-inline input.toggle-check').length, 'find show all fields checkbox').to.equal(1);
+            expect(footer.find('button.btn.btn-primary.save:disabled').length, 'find disabled save button').to.equal(1);
+            expect(footer.find('button.btn.btn-default.discard').length, 'find discard button').to.equal(1);
+            expect(footer.find('.checkbox-inline input.toggle-check').length, 'find show all fields checkbox').to.equal(1);
             expect(createForm.find('.picture-upload-view').length, 'find picture-upload').to.equal(1);
 
             expect(createForm.find('[data-id="personal"]').length, 'find personal block').to.equal(1);
@@ -69,17 +67,16 @@ define([
             expect(createForm.find('[data-id="phone"]').length, 'find phone block').to.equal(1);
             expect(createForm.find('[data-id="home_address"]').length, 'find home and address block').to.equal(1);
             expect(createForm.find('[data-id="comment"]').length, 'find comment block').to.equal(1);
-            expect(createForm.find('[data-id="attachments"]').length, 'find attachments block').to.equal(1);
 
         });
 
         it('should activate the save button if some data is available', function () {
             var createForm = app.getWindow().nodes.main.find('.edit-contact'),
-                header = app.getWindow().nodes.header;
+                footer = app.getWindow().nodes.footer;
 
             createForm.find('input[name="first_name"]').val('test').change();
-            expect(header.find('button.btn.btn-primary.save:disabled').length, 'find disabled save button').to.equal(0);
-            expect(header.find('button.btn.btn-primary.save').length, 'find active save button').to.equal(1);
+            expect(footer.find('button.btn.btn-primary.save:disabled').length, 'find disabled save button').to.equal(0);
+            expect(footer.find('button.btn.btn-primary.save').length, 'find active save button').to.equal(1);
 
         });
 
