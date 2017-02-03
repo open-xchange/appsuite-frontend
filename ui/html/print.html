@@ -104,6 +104,150 @@
             </div>
         </script>
 
+        <script type="text/template" class="contacts-details">
+            <div class="phonelist-details">
+                <% _.each(data, function(element, index) { %>
+                <div class="no-break">
+                    <div class="contact-head">
+                        <fieldset>
+                            <legend><%- element.name %></legend>
+                            <ul>
+                                <% if (element.original.position) { %><li><%- element.original.position %></li><% } %>
+                                <% if (element.original.department) { %><li><%- element.original.deparment %></li><% } %>
+                                <% if (element.original.company) { %><li><%- element.original.company %></li><% } %>
+                            </ul>
+                        </fieldset>
+                    </div>
+                    <div class="contact-details">
+                        <div>
+                            <% if (element.original.street_business || element.city_business || element.original.state_business || element.original.country_business) { %>
+                            <fieldset>
+                                <legend><%- i18n.businessAddress %></legend>
+                                <ul>
+                                    <% if (element.original.street_business) { %><li><%- element.original.street_business %></li><% } %>
+                                    <% if (element.city_business) { %><li><%- element.city_business %></li><% } %>
+                                    <% if (element.original.state_business) { %><li><%- element.original.state_business %></li><% } %>
+                                    <% if (element.original.country_business) { %><li><%- element.original.country_business %></li><% } %>
+                                </ul>
+                            </fieldset>
+                            <% } %>
+                            <% if (element.original.street_home || element.city_home || element.original.state_home || element.original.country_home) { %>
+                            <fieldset>
+                                <legend><%- i18n.homeAddress %></legend>
+                                <ul>
+                                    <% if (element.original.street_home) { %><li><%- element.original.street_home %></li><% } %>
+                                    <% if (element.city_home) { %><li><%- element.city_home %></li><% } %>
+                                    <% if (element.original.state_home) { %><li><%- element.original.state_home %></li><% } %>
+                                    <% if (element.original.country_home) { %><li><%- element.original.country_home %></li><% } %>
+                                </ul>
+                            </fieldset>
+                            <% } %>
+                            <% if (element.original.street_other || element.city_other || element.original.state_other || element.original.country_other) { %>
+                            <fieldset>
+                                <legend><%- i18n.otherAddress %></legend>
+                                <ul>
+                                    <% if (element.original.street_other) { %><li><%- element.original.street_other %></li><% } %>
+                                    <% if (element.city_other) { %><li><%- element.city_other %></li><% } %>
+                                    <% if (element.original.state_other) { %><li><%- element.original.state_other %></li><% } %>
+                                    <% if (element.original.country_other) { %><li><%- element.original.country_other %></li><% } %>
+                                </ul>
+                            </fieldset>
+                            <% } %>
+                            &nbsp;
+                        </div>
+                        <div>
+                            <% if (element.original.telephone_business1 || element.original.telephone_business2 || element.original.telephone_home1 || element.original.telephone_home2 || element.original.cellular_telephone1 || element.original.cellular_telephone2 || element.original.telephone_other) { %>
+                            <fieldset>
+                                <legend><%- i18n.phone %></legend>
+                                <table>
+                                    <% if (element.original.telephone_business1) { %>
+                                    <tr>
+                                        <td><%- i18n.business %></td>
+                                        <td><%- element.original.telephone_business1 %></td>
+                                    </tr>
+                                    <% } %>
+                                    <% if (element.original.telephone_business2) { %>
+                                    <tr>
+                                        <td><%- i18n.business %></td>
+                                        <td><%- element.original.telephone_business2 %></td>
+                                    </tr>
+                                    <% } %>
+                                    <% if (element.original.telephone_home1) { %>
+                                    <tr>
+                                        <td><%- i18n.home %></td>
+                                        <td><%- element.original.telephone_home1 %></td>
+                                    </tr>
+                                    <% } %>
+                                    <% if (element.original.telephone_home2) { %>
+                                    <tr>
+                                        <td><%- i18n.home %></td>
+                                        <td><%- element.original.telephone_home2 %></td>
+                                    </tr>
+                                    <% } %>
+                                    <% if (element.original.cellular_telephone1) { %>
+                                    <tr>
+                                        <td><%- i18n.cellphone %></td>
+                                        <td><%- element.original.cellular_telephone1 %></td>
+                                    </tr>
+                                    <% } %>
+                                    <% if (element.original.cellular_telephone2) { %>
+                                    <tr>
+                                        <td><%- i18n.cellphone %></td>
+                                        <td><%- element.original.cellular_telephone2 %></td>
+                                    </tr>
+                                    <% } %>
+                                    <% if (element.original.telephone_other) { %>
+                                    <tr>
+                                        <td><%- i18n.otherPhone %></td>
+                                        <td><%- element.original.telephone_other %></td>
+                                    </tr>
+                                    <% } %>
+                                </table>
+                            </fieldset>
+                            <% } %>
+                            <% if (element.original.email1 || element.original.email2 || element.original.email3) { %>
+                            <fieldset>
+                                <legend><%- i18n.email %></legend>
+                                <ul>
+                                    <% if (element.original.email1) { %><li><%- element.original.email1 %></li><% } %>
+                                    <% if (element.original.email2) { %><li><%- element.original.email2 %></li><% } %>
+                                    <% if (element.original.email3) { %><li><%- element.original.email3 %></li><% } %>
+                                </ul>
+                            </fieldset>
+                            <% } %>
+                            <% if (element.original.instant_messenger1 || element.original.instant_messenger1) { %>
+                            <fieldset>
+                                <legend><%- i18n.messenger %></legend>
+                                <ul>
+                                    <% if (element.original.instant_messenger1) { %><li><%- element.original.instant_messenger1 %></li><% } %>
+                                    <% if (element.original.instant_messenger2) { %><li><%- element.original.instant_messenger2 %></li><% } %>
+                                </ul>
+                            </fieldset>
+                            <% } %>
+                            <% if (element.birthday) { %>
+                            <fieldset>
+                                <legend><%- i18n.personalInformation %></legend>
+                                <table>
+                                    <% if (element.birthday) { %>
+                                    <tr>
+                                        <td><%- i18n.birthday %></td>
+                                        <td><%- element.birthday %></li></td>
+                                    </tr>
+                                    <% } %>
+                                </table>
+                            </fieldset>
+                            <% } %>
+                        </div>
+                    </div>
+                    <% if (index < data.length - 1) { %>
+                    <div class="spacer-bottom">&nbsp;</div>
+                    <% } %>
+                </div>
+                <% }); %>
+                </table>
+            </div>
+        </script>
+
         <script type="text/template" class="appointment">
         <% _.each(data, function(element) { %>
             <section class="item">

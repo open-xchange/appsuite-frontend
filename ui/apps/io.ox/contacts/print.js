@@ -69,7 +69,8 @@ define('io.ox/contacts/print', [
             email3: getEmail(data, 2),
             isDistributionList: api.looksLikeDistributionList(data),
             distributionList: getDistributionList(data),
-            thumbIndex: options.thumbIndex
+            thumbIndex: options.thumbIndex,
+            birthday: _.isNumber(data.birthday) ? util.getBirthday(data.birthday) : undefined
         };
     }
 
@@ -93,7 +94,12 @@ define('io.ox/contacts/print', [
 
         open: function (selection, win) {
 
-            var listType = settings.get('features/printList', 'phone');
+            var detailedList = settings.get('contactPrintlist', 'simple'),
+                listType = settings.get('features/printList', 'phone'),
+                selector = '.contacts';
+
+            if (detailedList === 'details') selector = '.contacts-details';
+            else if (listType === 'phone') selector = '.phonelist';
 
             var options = {
                 get: function (obj) {
@@ -115,19 +121,28 @@ define('io.ox/contacts/print', [
                             n
                         ), n);
                     },
-                    notPrinted: gt('This note will not be printed')
+                    notPrinted: gt('This note will not be printed'),
+                    businessAddress: gt('Business Address'),
+                    homeAddress: gt('Home Address'),
+                    otherAddress: gt('Other Address'),
+                    business: gt('Business'),
+                    home: gt('Home'),
+                    otherPhone: gt('Other'),
+                    messenger: gt('Messenger'),
+                    personalInformation: gt('Personal information'),
+                    birthday: gt('Date of birth')
                 },
 
                 process: process,
                 selection: selection,
-                selector: listType === 'phone' ? '.phonelist' : '.contacts',
+                selector: selector,
                 sortBy: 'sort_name',
                 window: win,
 
                 thumbIndex: createThumbIndex()
             };
 
-            if (listType === 'phone') {
+            if (listType === 'phone' && detailedList === 'simple') {
                 options.filter = function (o) {
                     // ignore distribution lists plus
                     // contacts should have at least one phone number to appear on a phone list
