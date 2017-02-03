@@ -158,7 +158,7 @@ define('plugins/core/feedback/register', [
         nps: {
             ratingView: NpsRatingView,
             //#. %1$s is the product name, for example 'OX App Suite'
-            title: gt('How likely is it you would recommend %1$s to a friend?', ox.serverConfig.productName)
+            title: gt('How likely is it that you would recommend %1$s to a friend?', ox.serverConfig.productName)
         },
         stars: {
             ratingView: StarRatingView,
