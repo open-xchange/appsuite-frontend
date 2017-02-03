@@ -90,6 +90,12 @@ define('io.ox/core/folder/favorites', [
                     storeCollection();
                 });
             });
+        } else if (module === 'infostore') {
+            // Add infos for the filesview
+            model.set('title', gt('Favorites'));
+            model.set('folder_id', '9');
+            model.set('own_rights', 1);
+            model.set('standard_folder', true);
         }
 
         // respond to collection remove event to sync favorites

@@ -8,16 +8,16 @@
  *
  * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author David Bauer <david.bauer@open-xchange.com>
+ * @author York Richter <york.richter@open-xchange.com>
  */
 
-define('io.ox/files/share/view-options', [
+define('io.ox/files/favorite/view-options', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/folder/api',
-    'gettext!io.ox/files',
-    'less!io.ox/files/share/style'
+    'gettext!io.ox/core',
+    'less!io.ox/files/favorite/style'
 ], function (ext, Dropdown, Breadcrumb, FolderAPI, gt) {
 
     'use strict';
@@ -26,7 +26,7 @@ define('io.ox/files/share/view-options', [
     // Mark as secondary toolbar
     //
 
-    ext.point('io.ox/files/share/myshares/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/favorite/myfavorites/list-view/toolbar/top').extend({
         id: 'secondary',
         index: 100,
         draw: function () {
@@ -34,7 +34,7 @@ define('io.ox/files/share/view-options', [
         }
     });
 
-    ext.point('io.ox/files/share/myshares/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/favorite/myfavorites/list-view/toolbar/top').extend({
         id: 'dropdown',
         index: 1000,
         draw: function (baton) {
@@ -42,7 +42,7 @@ define('io.ox/files/share/view-options', [
             var dropdown = new Dropdown({
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort by'),
-                model: baton.app.mysharesListView.model,
+                model: baton.app.myFavoriteListView.model,
                 caret: true
             })
             .option('sort', 702, gt('Name'))
@@ -55,19 +55,19 @@ define('io.ox/files/share/view-options', [
         }
     });
 
-    ext.point('io.ox/files/share/myshares/list-view/toolbar/top').extend({
+    ext.point('io.ox/files/favorite/myfavorites/list-view/toolbar/top').extend({
         id: 'title',
         index: 300,
         draw: function (baton) {
             var node = this,
-                breadcrumb = new Breadcrumb({ folder: 'virtual/myshares' });
+                breadcrumb = new Breadcrumb({ folder: 'virtual/favorites/infostore' });
 
             breadcrumb.handler = function (id) {
                 baton.app.folderView.tree.selection.getItems().removeClass('selected');
                 baton.app.folderView.tree.trigger('change', id);
             };
 
-            FolderAPI.multiple(['9', 'virtual/myshares']).then(function success(path) {
+            FolderAPI.multiple(['9', 'virtual/favorites/infostore']).then(function success(path) {
                 breadcrumb.$el.text('\xa0');
                 breadcrumb.renderPath(path);
                 node.append(breadcrumb.$el.addClass('toolbar-item'));
@@ -81,14 +81,14 @@ define('io.ox/files/share/view-options', [
     }
 
     function onFolderViewOpen() {
-        $('.myshares-list').parent().removeClass('toolbar-bottom-visible');
+        $('.myfavorites-list').parent().removeClass('toolbar-bottom-visible');
     }
 
     function onFolderViewClose() {
-        $('.myshares-list').parent().addClass('toolbar-bottom-visible');
+        $('.myfavorites-list').parent().addClass('toolbar-bottom-visible');
     }
 
-    ext.point('io.ox/files/share/myshares/list-view/toolbar/bottom').extend({
+    ext.point('io.ox/files/favorite/myfavorites/list-view/toolbar/bottom').extend({
         id: 'toggle-folderview',
         index: 200,
         draw: function (baton) {
@@ -107,5 +107,4 @@ define('io.ox/files/share/view-options', [
             if (baton.app.folderViewIsVisible()) _.defer(onFolderViewOpen, baton.app);
         }
     });
-
 });
