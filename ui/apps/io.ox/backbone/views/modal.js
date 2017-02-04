@@ -20,7 +20,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
     //
     // options:
     // - async: call busy() instead of close() when invoking an action (except "cancel")
-    // - container: parent DOM element of the dialog
     // - enter: this action is triggered on <enter>
     // - focus: set initial focus on this element
     // - help: link to online help article
@@ -45,7 +44,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // ensure options
             options = _.extend({
                 async: false,
-                container: 'body',
                 context: {},
                 keyboard: true,
                 maximize: false
@@ -86,9 +84,9 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 }.bind(this));
             }
             // track focusin
-            $(document).on('focusin.ox.modal', $.proxy(this.keepFocus, this));
+            $(document).on('focusin', $.proxy(this.keepFocus, this));
             this.on('dispose', function () {
-                $(document).off('focusin.ox.modal', this.keepFocus);
+                $(document).off('focusin', this.keepFocus);
             });
         },
 
@@ -115,13 +113,13 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
 
         open: function () {
             var o = this.options;
-            this.render().$el.appendTo(o.container);
+            this.render().$el.appendTo('body');
             // remember previous focus
             this.previousFocus = o.previousFocus || $(document.activeElement);
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
             this.$el.modal({ keyboard: false }).modal('show');
-            this.$el.siblings(':not(script,noscript)').attr('aria-hidden', true);
+            this.toggleAriaHidden(true);
             this.trigger('open');
             // set initial focus
             var elem = this.$(o.focus);
@@ -133,6 +131,11 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // track open instances
             open.add(this);
             return this;
+        },
+
+        toggleAriaHidden: function (state) {
+            // require for proper screen reader use
+            this.$el.siblings(':not(script,noscript)').attr('aria-hidden', !!state);
         },
 
         disableFormElements: function () {
@@ -228,16 +231,15 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
 
         // hide dialog without disposing it
         pause: function () {
-            $(document).off('focusin.ox.modal', this.keepFocus);
-            // hide backdrop
-            this.$el.prev().hide();
-            this.$el.hide();
+            $(document).off('focusin', this.keepFocus);
+            this.$el.next().addBack().hide();
+            this.toggleAriaHidden(false);
         },
 
         resume: function () {
-            $(document).on('focusin.ox.modal', $.proxy(this.keepFocus, this));
-            this.$el.prev().show();
-            this.$el.show();
+            $(document).on('focusin', $.proxy(this.keepFocus, this));
+            this.$el.next().addBack().show();
+            this.toggleAriaHidden(true);
         }
     });
 
@@ -245,10 +247,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.trigger('before:close');
         // stop listening to hidden event (avoid infinite loops)
         this.$el.off('hidden.bs.modal');
-        if (!e || e.type !== 'hidden') {
-            this.$el.modal('hide');
-        }
-        this.$el.siblings(':not(script,noscript)').removeAttr('aria-hidden');
+        if (!e || e.type !== 'hidden') this.$el.modal('hide');
+        this.toggleAriaHidden(false);
         this.trigger('close');
         var previousFocus = this.previousFocus;
         this.$el.remove();
