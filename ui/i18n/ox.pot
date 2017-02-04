@@ -274,6 +274,7 @@ msgstr ""
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js
 #: module:io.ox/files
 #: apps/io.ox/files/view-options.js
@@ -456,6 +457,8 @@ msgstr ""
 #: apps/io.ox/calendar/week/view.js
 #: module:io.ox/calendar
 #: apps/io.ox/core/folder/favorites.js
+#: apps/io.ox/files/main.js
+#: module:io.ox/files
 msgid "Favorites"
 msgstr ""
 
@@ -1887,6 +1890,8 @@ msgstr ""
 #: apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer
+#: apps/io.ox/files/favorite/view-options.js
+#: module:io.ox/core
 #: apps/io.ox/files/share/view-options.js
 #: module:io.ox/files
 #: apps/io.ox/files/view-options.js
@@ -2919,8 +2924,9 @@ msgstr ""
 #: module:io.ox/core/viewer
 #: apps/io.ox/files/common-extensions.js
 #: module:io.ox/files
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/favorite/toolbar.js
 #: module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/share/toolbar.js
 #: apps/io.ox/find/extensions-api.js
 #: apps/io.ox/mail/detail/links.js
@@ -4336,6 +4342,7 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js
 #: module:io.ox/core
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js
 #: module:io.ox/files
 #: apps/io.ox/files/view-options.js
@@ -4936,7 +4943,6 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/files/main.js
 #: module:io.ox/files
-#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr ""
 
@@ -5048,6 +5054,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/favorites.js
 #: module:io.ox/core
+#: apps/io.ox/files/favorite/toolbar.js
 msgid "Remove from favorites"
 msgstr ""
 
@@ -6011,6 +6018,11 @@ msgstr ""
 #: apps/io.ox/core/settings/pane.js
 #: module:io.ox/core
 msgid "Show desktop notifications"
+msgstr ""
+
+#: apps/io.ox/core/settings/pane.js
+#: module:io.ox/core
+msgid "Use accessibility improvements"
 msgstr ""
 
 #: apps/io.ox/core/settings/user.js
@@ -7421,6 +7433,42 @@ msgstr ""
 msgid "File Details"
 msgstr ""
 
+#. Sort options drop-down
+#: apps/io.ox/files/favorite/view-options.js
+#: module:io.ox/core
+#: apps/io.ox/files/share/view-options.js
+#: module:io.ox/files
+#: apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
+msgctxt "dropdown"
+msgid "Sort by"
+msgstr ""
+
+#: apps/io.ox/files/favorite/view-options.js
+#: module:io.ox/core
+#: apps/io.ox/files/share/view-options.js
+#: module:io.ox/files
+#: apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
+#: apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
+msgid "Ascending"
+msgstr ""
+
+#: apps/io.ox/files/favorite/view-options.js
+#: module:io.ox/core
+#: apps/io.ox/files/share/view-options.js
+#: module:io.ox/files
+#: apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
+#: apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
+msgid "Descending"
+msgstr ""
+
 #: apps/io.ox/files/filepicker.js
 #: module:io.ox/files
 msgid "Add files"
@@ -7824,36 +7872,6 @@ msgstr ""
 #: apps/io.ox/files/share/toolbar.js
 #: module:io.ox/files
 msgid "Revoked access."
-msgstr ""
-
-#. Sort options drop-down
-#: apps/io.ox/files/share/view-options.js
-#: module:io.ox/files
-#: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
-msgctxt "dropdown"
-msgid "Sort by"
-msgstr ""
-
-#: apps/io.ox/files/share/view-options.js
-#: module:io.ox/files
-#: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
-#: apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
-msgid "Ascending"
-msgstr ""
-
-#: apps/io.ox/files/share/view-options.js
-#: module:io.ox/files
-#: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
-#: apps/io.ox/tasks/main.js
-#: module:io.ox/tasks
-msgid "Descending"
 msgstr ""
 
 #: apps/io.ox/files/share/wizard.js
@@ -10892,11 +10910,6 @@ msgstr ""
 
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Add account"
-msgstr ""
-
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr ""
 
@@ -10907,7 +10920,17 @@ msgstr ""
 
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "For security reasons, all credentials are encrypted with your primary account password. If you change your primary password, your external accounts might stop working. In this case, you can use your old password to recover all account passwords:"
+msgid "Info about account recovery..."
+msgstr ""
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Show infos about account recovery"
+msgstr ""
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "For security reasons, all credentials are encrypted with your primary account password. If you change your primary password, your external accounts might stop working. In this case, you can use your old password to recover all account passwords."
 msgstr ""
 
 #: apps/io.ox/settings/accounts/views.js
@@ -11752,7 +11775,7 @@ msgstr ""
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "How likely is it you would recommend %1$s to a friend?"
+msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js

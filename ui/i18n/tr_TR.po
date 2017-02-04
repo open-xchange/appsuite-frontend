@@ -708,11 +708,6 @@ msgstr "Ekle"
 msgid "Add a description"
 msgstr "Tanım ekle"
 
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Add account"
-msgstr "Hesap ekle"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Add action"
@@ -1292,6 +1287,7 @@ msgstr "Bu Tweet'i silmek istediğinizden emin misiniz?"
 msgid "As incoming mail server"
 msgstr "Gelen eposta sunucusu olarak"
 
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -2529,6 +2525,7 @@ msgstr "Veri yalnızca kısmen taşındı (%2$s kayıttan %1$s kadarı)"
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -2751,6 +2748,7 @@ msgstr "Bölüm"
 msgid "Departments"
 msgstr "Bölüm"
 
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -3930,7 +3928,8 @@ msgstr "Tercih edilen"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-#: apps/io.ox/core/folder/favorites.js
+#: apps/io.ox/core/folder/favorites.js apps/io.ox/files/main.js
+#: module:io.ox/files
 msgid "Favorites"
 msgstr "Favoriler"
 
@@ -4107,10 +4106,10 @@ msgstr "Flickr"
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
-#: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/find/extensions-api.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail apps/io.ox/search/main.js
-#: module:io.ox/search
+#: module:io.ox/files apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/toolbar.js
+#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
 msgid "Folder"
 msgstr "Klasör"
 
@@ -4201,7 +4200,7 @@ msgid ""
 "For security reasons, all credentials are encrypted with your primary "
 "account password. If you change your primary password, your external "
 "accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords:"
+"recover all account passwords."
 msgstr ""
 "Güvenlik sebebiyle tüm hesap şifreleri birincil hesap şifreniz ile "
 "korunmaktadır. Birincil şifrenizi değiştirmeniz durumunda harici "
@@ -4580,7 +4579,7 @@ msgstr "Bu nasıl çalışır?"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How likely is it you would recommend %1$s to a friend?"
+msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr ""
 
 #. 2 of 5 star rating
@@ -4752,6 +4751,11 @@ msgstr ""
 #: module:io.ox/core
 msgid "Info"
 msgstr "Bilgi"
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Info about account recovery..."
+msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #, fuzzy
@@ -5677,7 +5681,6 @@ msgstr "Şifrem"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/files/main.js module:io.ox/files
-#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr ""
 
@@ -5691,10 +5694,10 @@ msgstr "Görevlerim"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
+#: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
 msgstr "İsim"
@@ -6252,6 +6255,7 @@ msgid "Open external link"
 msgstr "Harici linki aç"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
@@ -7501,6 +7505,7 @@ msgid "Remove copy from server after retrieving a message"
 msgstr "Mesajı aldıktan sonra sunucudan kopyasını kaldır"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/files/favorite/toolbar.js
 msgid "Remove from favorites"
 msgstr "Terich edilenler arasından çıkar"
 
@@ -8274,6 +8279,11 @@ msgstr "İkonları göster"
 msgid "Show images"
 msgstr "Resimleri göster"
 
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Show infos about account recovery"
+msgstr ""
+
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Listeyi göster"
@@ -8447,6 +8457,7 @@ msgstr ""
 "mesajları okuyabilme izni için bir anahtar edinmesi gerekiyor. "
 
 #. Sort options drop-down
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
@@ -9882,6 +9893,10 @@ msgstr "Aciliyet"
 #, fuzzy
 msgid "Use %1$s"
 msgstr "Sona erme tarihi %1$s"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Use accessibility improvements"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use browser default"
@@ -11331,6 +11346,9 @@ msgstr "yyyy"
 
 #~ msgid "Account Settings"
 #~ msgstr "Hesap Ayarları"
+
+#~ msgid "Add account"
+#~ msgstr "Hesap ekle"
 
 #~ msgid "Add member"
 #~ msgstr "Üye ekle"

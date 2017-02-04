@@ -732,11 +732,6 @@ msgstr "Tilføj"
 msgid "Add a description"
 msgstr "Tilføj en beskrivelse"
 
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Add account"
-msgstr "Tilføj konto"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Add action"
@@ -1311,6 +1306,7 @@ msgstr "Er du sikker på du vil slette denne tweet?"
 msgid "As incoming mail server"
 msgstr "Som indkomne e-mail-server"
 
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -2516,6 +2512,7 @@ msgstr "Oplysninger kun delvist importeret (%1$s af %2$s poster)"
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -2730,6 +2727,7 @@ msgstr "Afdeling"
 msgid "Departments"
 msgstr "Afdelinger"
 
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -3872,7 +3870,8 @@ msgstr "Farvoritiserede"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-#: apps/io.ox/core/folder/favorites.js
+#: apps/io.ox/core/folder/favorites.js apps/io.ox/files/main.js
+#: module:io.ox/files
 msgid "Favorites"
 msgstr "Favoritter"
 
@@ -4038,10 +4037,10 @@ msgstr "Flickr"
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
-#: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/find/extensions-api.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail apps/io.ox/search/main.js
-#: module:io.ox/search
+#: module:io.ox/files apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/toolbar.js
+#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
 msgid "Folder"
 msgstr "Mappe"
 
@@ -4124,11 +4123,17 @@ msgstr "For det bedste resultat, brug venligst "
 
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid ""
+#| "For security reasons, all credentials are encrypted with your primary "
+#| "account password. If you change your primary password, your external "
+#| "accounts might stop working. In this case, you can use your old password "
+#| "to recover all account passwords:"
 msgid ""
 "For security reasons, all credentials are encrypted with your primary "
 "account password. If you change your primary password, your external "
 "accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords:"
+"recover all account passwords."
 msgstr ""
 "Af sikkerhedshensyn er alle loginoplysninger krypterede med din kontos "
 "primære adgangskode. Ændrer du din primære adgangskode, kan dine eksterne "
@@ -4493,7 +4498,7 @@ msgstr "Hvordan virker dette?"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How likely is it you would recommend %1$s to a friend?"
+msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr ""
 
 #. 2 of 5 star rating
@@ -4664,6 +4669,11 @@ msgstr ""
 #: module:io.ox/core
 msgid "Info"
 msgstr "Info"
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Info about account recovery..."
+msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid ""
@@ -5574,7 +5584,6 @@ msgstr "Min adgangskode"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/files/main.js module:io.ox/files
-#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr "Mine delinger"
 
@@ -5588,10 +5597,10 @@ msgstr "Mine opgaver"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
+#: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
 msgstr "Navn"
@@ -6144,6 +6153,7 @@ msgid "Open external link"
 msgstr "Åbn eksternt link"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
@@ -7362,6 +7372,7 @@ msgid "Remove copy from server after retrieving a message"
 msgstr "Fjern serverens kopi efter en besked er blevet hentet"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/files/favorite/toolbar.js
 msgid "Remove from favorites"
 msgstr "Fjern fra favoritter"
 
@@ -8110,6 +8121,11 @@ msgstr "Vis ikoner"
 msgid "Show images"
 msgstr "Vis billeder"
 
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Show infos about account recovery"
+msgstr ""
+
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Vis liste"
@@ -8278,6 +8294,7 @@ msgstr ""
 "fra LinkedIn, med tilladelse til at læse beskeder."
 
 #. Sort options drop-down
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
@@ -9686,6 +9703,10 @@ msgstr "Haster"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "Brug %1$s"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Use accessibility improvements"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #, fuzzy
@@ -11205,6 +11226,9 @@ msgstr "åååå"
 
 #~ msgid "Add OneDrive account"
 #~ msgstr "Tilføj »OneDrive«-konto"
+
+#~ msgid "Add account"
+#~ msgstr "Tilføj konto"
 
 #~ msgid "Add cipher code"
 #~ msgstr "Tilføj nøglekode"

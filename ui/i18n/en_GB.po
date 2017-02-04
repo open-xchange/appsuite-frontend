@@ -734,11 +734,6 @@ msgstr "Add"
 msgid "Add a description"
 msgstr "Add a description"
 
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Add account"
-msgstr "Add account"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Add action"
@@ -1308,6 +1303,7 @@ msgstr "Are you sure you want to delete this Tweet?"
 msgid "As incoming mail server"
 msgstr "As incoming e-mail server"
 
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -2514,6 +2510,7 @@ msgstr "Data only partially imported (%1$s of %2$s records)"
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -2728,6 +2725,7 @@ msgstr "Department"
 msgid "Departments"
 msgstr "Departments"
 
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -3880,7 +3878,8 @@ msgstr "Favourited"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-#: apps/io.ox/core/folder/favorites.js
+#: apps/io.ox/core/folder/favorites.js apps/io.ox/files/main.js
+#: module:io.ox/files
 msgid "Favorites"
 msgstr "Favourites"
 
@@ -4047,10 +4046,10 @@ msgstr "Flickr"
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
-#: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/find/extensions-api.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail apps/io.ox/search/main.js
-#: module:io.ox/search
+#: module:io.ox/files apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/toolbar.js
+#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
 msgid "Folder"
 msgstr "Folder"
 
@@ -4133,11 +4132,17 @@ msgstr "For best results, please use "
 
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid ""
+#| "For security reasons, all credentials are encrypted with your primary "
+#| "account password. If you change your primary password, your external "
+#| "accounts might stop working. In this case, you can use your old password "
+#| "to recover all account passwords:"
 msgid ""
 "For security reasons, all credentials are encrypted with your primary "
 "account password. If you change your primary password, your external "
 "accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords:"
+"recover all account passwords."
 msgstr ""
 "For security reasons, all credentials are encrypted with your primary "
 "account password. If you change your primary password, your external "
@@ -4502,7 +4507,7 @@ msgstr "How does this work?"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How likely is it you would recommend %1$s to a friend?"
+msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr ""
 
 #. 2 of 5 star rating
@@ -4673,6 +4678,11 @@ msgstr ""
 #: module:io.ox/core
 msgid "Info"
 msgstr "Info"
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Info about account recovery..."
+msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid ""
@@ -5584,7 +5594,6 @@ msgstr "My password"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/files/main.js module:io.ox/files
-#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr "My shares"
 
@@ -5598,10 +5607,10 @@ msgstr "My tasks"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
+#: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
 msgstr "Name"
@@ -6151,6 +6160,7 @@ msgid "Open external link"
 msgstr "Open external link"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
@@ -7370,6 +7380,7 @@ msgid "Remove copy from server after retrieving a message"
 msgstr "Remove copy from server after retrieving a message"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/files/favorite/toolbar.js
 msgid "Remove from favorites"
 msgstr "Remove from favourites"
 
@@ -8118,6 +8129,11 @@ msgstr "Show icons"
 msgid "Show images"
 msgstr "Show images"
 
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Show infos about account recovery"
+msgstr ""
+
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "Show list"
@@ -8287,6 +8303,7 @@ msgstr ""
 "LinkedIn with the permission to read messages."
 
 #. Sort options drop-down
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
@@ -9698,6 +9715,10 @@ msgstr "Urgency"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "Use %1$s"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Use accessibility improvements"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #, fuzzy
@@ -11200,6 +11221,9 @@ msgstr "yyyy"
 
 #~ msgid "Add OneDrive account"
 #~ msgstr "Add OneDrive account"
+
+#~ msgid "Add account"
+#~ msgstr "Add account"
 
 #~ msgid "Add cipher code"
 #~ msgstr "Add cipher code"

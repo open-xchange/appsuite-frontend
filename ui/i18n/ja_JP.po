@@ -701,11 +701,6 @@ msgstr "追加"
 msgid "Add a description"
 msgstr "説明を追加"
 
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Add account"
-msgstr "アカウントを追加"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Add action"
@@ -1274,6 +1269,7 @@ msgstr "このツイートを削除しますか？"
 msgid "As incoming mail server"
 msgstr "受信メールサーバ"
 
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -2474,6 +2470,7 @@ msgstr ""
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -2688,6 +2685,7 @@ msgstr "部署"
 msgid "Departments"
 msgstr "部署"
 
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
@@ -3834,7 +3832,8 @@ msgstr "お気に入り"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-#: apps/io.ox/core/folder/favorites.js
+#: apps/io.ox/core/folder/favorites.js apps/io.ox/files/main.js
+#: module:io.ox/files
 msgid "Favorites"
 msgstr "お気に入り"
 
@@ -4005,10 +4004,10 @@ msgstr "Flickr"
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
-#: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/find/extensions-api.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail apps/io.ox/search/main.js
-#: module:io.ox/search
+#: module:io.ox/files apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/toolbar.js
+#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
 msgid "Folder"
 msgstr "フォルダ"
 
@@ -4093,11 +4092,17 @@ msgstr "最良の結果を得るには、次を使用することをお勧めし
 
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
+#, fuzzy
+#| msgid ""
+#| "For security reasons, all credentials are encrypted with your primary "
+#| "account password. If you change your primary password, your external "
+#| "accounts might stop working. In this case, you can use your old password "
+#| "to recover all account passwords:"
 msgid ""
 "For security reasons, all credentials are encrypted with your primary "
 "account password. If you change your primary password, your external "
 "accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords:"
+"recover all account passwords."
 msgstr ""
 "セキュリティ上の理由のため、すべての認証情報は既定のアカウントパスワードで暗"
 "号化されています。既定のパスワードを変更すると、外部アカウントの動作が停止す"
@@ -4464,7 +4469,7 @@ msgstr "アポイントの作成方法について"
 
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "How likely is it you would recommend %1$s to a friend?"
+msgid "How likely is it that you would recommend %1$s to a friend?"
 msgstr ""
 
 #. 2 of 5 star rating
@@ -4637,6 +4642,11 @@ msgstr "インド"
 #: module:io.ox/core
 msgid "Info"
 msgstr "情報"
+
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Info about account recovery..."
+msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid ""
@@ -5548,7 +5558,6 @@ msgstr "自分のパスワード"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/files/main.js module:io.ox/files
-#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr "自分の共有ファイル"
 
@@ -5562,10 +5571,10 @@ msgstr "自分の仕事"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
+#: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
 msgstr "名前"
@@ -6113,6 +6122,7 @@ msgid "Open external link"
 msgstr "外部リンクを開く"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
@@ -7321,6 +7331,7 @@ msgid "Remove copy from server after retrieving a message"
 msgstr "メッセージの取得後にサーバからコピーを削除"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/files/favorite/toolbar.js
 msgid "Remove from favorites"
 msgstr "お気に入りから削除"
 
@@ -8065,6 +8076,11 @@ msgstr "アイコンを表示"
 msgid "Show images"
 msgstr "画像を表示"
 
+#: apps/io.ox/settings/accounts/settings/pane.js
+#: module:io.ox/settings/accounts
+msgid "Show infos about account recovery"
+msgstr ""
+
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
 msgid "Show list"
 msgstr "リストを表示"
@@ -8234,6 +8250,7 @@ msgstr ""
 "イダが LinkedIn から入手する必要があります。"
 
 #. Sort options drop-down
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
@@ -9634,6 +9651,10 @@ msgstr "緊急度"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Use %1$s"
 msgstr "%1$s を使用"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Use accessibility improvements"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #, fuzzy
@@ -11348,6 +11369,9 @@ msgstr "yyyy"
 
 #~ msgid "Add a stream"
 #~ msgstr "ストリームを追加"
+
+#~ msgid "Add account"
+#~ msgstr "アカウントを追加"
 
 #~ msgid "Add cipher code"
 #~ msgstr "暗号コードを追加"
